@@ -107,6 +107,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G93_GW_Mk_VIe/GW_Mk_VIe_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
     </camouflage>
@@ -567,8 +568,7 @@
           <recoil>
             <lodDist>	MEDIUM	</lodDist>
             <amplitude>	0.32	</amplitude>
-            <backoffTime>	0.2	</backoffTime>
-            <returnTime>	0.4	</returnTime>
+            <recoilEffect>	main	</recoilEffect>
           </recoil>
           <models>
             <undamaged>	vehicles/german/G93_GW_Mk_VIe/normal/lod0/Gun_01.model	</undamaged>
@@ -596,14 +596,12 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_GW_Mk_IVe>
   </turrets0>
   <engines>
     <Rolls_Royce_I6>	shared	  <unlocks>
-        <vehicle>	G11_Bison_I	  <cost>	1480	</cost>
-        </vehicle>
         <engine>	Meadows_ESTL	  <cost>	50	</cost>
         </engine>
       </unlocks>
@@ -620,6 +618,8 @@
       </unlocks>
     </FuG2>
     <FuG5>	shared	  <unlocks>
+        <vehicle>	G11_Bison_I	  <cost>	1480	</cost>
+        </vehicle>
         <vehicle>	G19_Wespe	  <cost>	1430	</cost>
         </vehicle>
       </unlocks>

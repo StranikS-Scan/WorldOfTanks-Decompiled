@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PSFX.py
 """This module acts as a bank for particle system effects. All effects from
 this module are temporary effects that dissipate over time."""
@@ -33,7 +33,7 @@ NODE_CLAMP_PSA = 9
 ORBITOR_PSA = 10
 FLARE_PSA = 11
 
-def detachEffect(model, system, store, nodeName = None):
+def detachEffect(model, system, store, nodeName=None):
     if nodeName:
         model.node(nodeName).detach(system)
     else:
@@ -42,7 +42,7 @@ def detachEffect(model, system, store, nodeName = None):
     store.append(system)
 
 
-def attachSparks(model, nodeName = None, numberOfSparks = 1):
+def attachSparks(model, nodeName=None, numberOfSparks=1):
     global sparksList
     if sparksList == None:
         sparksList = generateSparksList(10)
@@ -69,7 +69,7 @@ def generateSparksList(numberOfPS):
     return psList
 
 
-def attachBloodSpray(model, direction = 0, numberOfSprays = 1):
+def attachBloodSpray(model, direction=0, numberOfSprays=1):
     global bloodSprayList
     if bloodSprayList == None:
         bloodSprayList = generateBloodSprayList(10)
@@ -111,7 +111,7 @@ def generateBloodSprayList(numberOfPS):
     return psList
 
 
-def attachRespawnMist(model, density = 100):
+def attachRespawnMist(model, density=100):
     global respawnMistList
     if respawnMistList == None:
         respawnMistList = generateRespawnMistList(10)
@@ -134,7 +134,7 @@ def generateRespawnMistList(numberOfPS):
     return psList
 
 
-def attachArrowTrace(model, nodeName = None, flightTime = 1.0):
+def attachArrowTrace(model, nodeName=None, flightTime=1.0):
     global arrowTraceList
     if arrowTraceList == None:
         arrowTraceList = generateArrowTraceList(10)
@@ -160,7 +160,7 @@ def generateArrowTraceList(numberOfPS):
     return psList
 
 
-def attachFlareTrace(model, nodeName = None, flightTime = 1.0):
+def attachFlareTrace(model, nodeName=None, flightTime=1.0):
     global flareTraceList
     if flareTraceList == None:
         flareTraceList = generateFlareTraceList(10)
@@ -188,7 +188,7 @@ def generateFlareTraceList(numberOfPS):
     return psList
 
 
-def attachSmokeTrail(model, nodeName = None):
+def attachSmokeTrail(model, nodeName=None):
     global smokeTrailList
     if smokeTrailList == None:
         smokeTrailList = generateSmokeTrailList(10)
@@ -213,7 +213,7 @@ def generateSmokeTrailList(numberOfPS):
     return psList
 
 
-def attachExplosion(model, nodeName = None, numberOfSparks = 25):
+def attachExplosion(model, nodeName=None, numberOfSparks=25):
     global explosionList
     if explosionList == None:
         explosionList = generateExplosionList(10)

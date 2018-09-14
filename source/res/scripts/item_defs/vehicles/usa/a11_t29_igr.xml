@@ -16,7 +16,7 @@
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/american/A11_T29/T29_chassis_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -71,6 +71,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A11_T29/T29_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1 1 0.27 0.000000	</tiling>
     </camouflage>
@@ -468,7 +469,6 @@
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.49 0.49 0.52 0.12	</tiling>
-        <exclusionMask>	vehicles/american/A11_T29/T29_chassis_01_AM.dds	</exclusionMask>
       </camouflage>
     </T136_IGR>
   </turrets0>

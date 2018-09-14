@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/StrategicCamera.py
 import BigWorld
 import Math
@@ -51,7 +51,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__prevTime = BigWorld.time()
         self.__aimOffsetFunc = None
         if aim is None:
-            self.__aimOffsetFunc = lambda x = None: (0, 0)
+            self.__aimOffsetFunc = lambda x=None: (0, 0)
         else:
             self.__aimOffsetFunc = aim.offset
         self.__autoUpdatePosition = False
@@ -59,7 +59,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__needReset = 0
         return
 
-    def create(self, onChangeControlMode = None):
+    def create(self, onChangeControlMode=None):
         self.__onChangeControlMode = onChangeControlMode
         self.__camDist = self.__cfg['camDist']
         self.__cam.pivotMaxDist = 0.0
@@ -73,8 +73,9 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.disable()
         self.__onChangeControlMode = None
         self.__cam = None
-        self.__aimingSystem.destroy()
-        self.__aimingSystem = None
+        if self.__aimingSystem is not None:
+            self.__aimingSystem.destroy()
+            self.__aimingSystem = None
         return
 
     def enable(self, targetPos, saveDist):
@@ -117,6 +118,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
 
     def restoreDefaultsState(self):
         LOG_ERROR('StrategiCamera::restoreDefaultState is obsolete!')
+        return None
 
     def getUserConfigValue(self, name):
         return self.__userCfg.get(name)
@@ -130,7 +132,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         else:
             self.__cfg[name] = self.__baseCfg[name] * self.__userCfg[name]
 
-    def update(self, dx, dy, dz, updatedByKeyboard = False):
+    def update(self, dx, dy, dz, updatedByKeyboard=False):
         self.__curSense = self.__cfg['keySensitivity'] if updatedByKeyboard else self.__cfg['sensitivity']
         self.__autoUpdatePosition = updatedByKeyboard
         self.__dxdydz = Vector3(dx, dy, dz)
@@ -168,7 +170,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         arenaZ = arenaUpperRight[1] - arenaBottomLeft[1]
         return ((x0 + x1) * 0.5 / arenaX, (z0 + z1) * 0.5 / arenaZ)
 
-    def applyImpulse(self, position, impulse, reason = ImpulseReason.ME_HIT):
+    def applyImpulse(self, position, impulse, reason=ImpulseReason.ME_HIT):
         adjustedImpulse, noiseMagnitude = self.__dynamicCfg.adjustImpulse(impulse, reason)
         impulseFlatDir = Vector3(adjustedImpulse.x, 0, adjustedImpulse.z)
         impulseFlatDir.normalise()
@@ -177,7 +179,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__positionOscillator.applyImpulse(impulseLocal)
         self.__applyNoiseImpulse(noiseMagnitude)
 
-    def applyDistantImpulse(self, position, impulseValue, reason = ImpulseReason.ME_HIT):
+    def applyDistantImpulse(self, position, impulseValue, reason=ImpulseReason.ME_HIT):
         if reason != ImpulseReason.SPLASH and reason != ImpulseReason.PROJECTILE_HIT:
             return
         impulse = BigWorld.player().getOwnVehiclePosition() - position

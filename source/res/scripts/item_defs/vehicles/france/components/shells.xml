@@ -682,6 +682,51 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_OE_mle_1924>
+  <_90mm_AP_americaine>
+    <id>	106	</id>
+    <userString>	#france_vehicles:_90mm_AP_americaine	</userString>
+    <icon>	ap	</icon>
+    <price>	350	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_AP_americaine>
+  <_90mm_HEAT_americaine>
+    <id>	107	</id>
+    <userString>	#france_vehicles:_90mm_HEAT_americaine	</userString>
+    <icon>	hc	</icon>
+    <price>	12	  <gold></gold>
+    </price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_HEAT_americaine>
+  <_90mm_HE_americaine>
+    <id>	108	</id>
+    <userString>	#france_vehicles:_90mm_HE_americaine	</userString>
+    <icon>	he	</icon>
+    <price>	210	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_HE_americaine>
   <_100mm_FrtPrf1945>
     <id>	43	</id>
     <userString>	#france_vehicles:_100mm_FrtPrf1945	</userString>

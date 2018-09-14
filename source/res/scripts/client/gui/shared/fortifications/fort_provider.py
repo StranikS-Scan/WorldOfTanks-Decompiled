@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/fort_provider.py
 import weakref
 from FortifiedRegionBase import FORT_ERROR, FORT_ERROR_NAMES
@@ -11,7 +11,7 @@ from gui.shared.fortifications import controls, states, getClientFortMgr, getCla
 from gui.shared.fortifications.fort_ext import FortSubscriptionKeeper
 from gui.shared.fortifications.interfaces import IFortListener
 from gui.shared.fortifications.settings import FORT_PROVIDER_INITIAL_FLAGS, CLIENT_FORT_STATE
-from gui.shared.utils.ListenersCollection import ListenersCollection
+from gui.shared.utils.listeners_collection import ListenersCollection
 from helpers import i18n
 
 class _ClientFortListeners(ListenersCollection):
@@ -25,10 +25,6 @@ class _ClientFortListeners(ListenersCollection):
 
     def notify(self, eventType, *args):
         self._invokeListeners(eventType, *args)
-
-    def clear(self):
-        while len(self._listeners):
-            self._listeners.pop()
 
 
 def getFortErrorMessage(errorCode, errorString):
@@ -127,7 +123,7 @@ class ClientFortProvider(object):
         g_playerEvents.onCenterIsLongDisconnected -= self.__onCenterIsLongDisconnected
 
     @async
-    def sendRequest(self, ctx, callback = None):
+    def sendRequest(self, ctx, callback=None):
         isSubscribed = self.isSubscribed()
         if isSubscribed or not self.__keeper.isEnabled():
             if not isSubscribed:
@@ -221,18 +217,18 @@ class ClientFortProvider(object):
             return
 
     @async
-    def __requestSubscribe(self, callback = None):
+    def __requestSubscribe(self, callback=None):
         self.__controller.subscribe(callback)
 
     @async
-    def __requestUnsubscribe(self, callback = None):
+    def __requestUnsubscribe(self, callback=None):
         self.__controller.unsubscribe(callback)
 
     def __onFortResponseReceived(self, _, resultCode, resultString):
         if resultCode != FORT_ERROR.OK:
             SystemMessages.pushMessage(getFortErrorMessage(resultCode, resultString), type=SystemMessages.SM_TYPE.Error)
 
-    def __onFortUpdateReceived(self, isFullUpdate = False):
+    def __onFortUpdateReceived(self, isFullUpdate=False):
         self.updateState()
         self.__listeners.notify('onUpdated', isFullUpdate)
 

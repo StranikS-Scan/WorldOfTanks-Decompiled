@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/GrepDialog.py
 import os
 import fnmatch
@@ -7,7 +7,7 @@ from Tkinter import *
 from idlelib import SearchEngine
 from idlelib.SearchDialogBase import SearchDialogBase
 
-def grep(text, io = None, flist = None):
+def grep(text, io=None, flist=None):
     root = text._root()
     engine = SearchEngine.get(root)
     if not hasattr(engine, '_grepdialog'):
@@ -28,7 +28,7 @@ class GrepDialog(SearchDialogBase):
         self.globvar = StringVar(root)
         self.recvar = BooleanVar(root)
 
-    def open(self, text, searchphrase, io = None):
+    def open(self, text, searchphrase, io=None):
         SearchDialogBase.open(self, text, searchphrase)
         if io:
             path = io.filename or ''
@@ -54,7 +54,7 @@ class GrepDialog(SearchDialogBase):
         SearchDialogBase.create_command_buttons(self)
         self.make_button('Search Files', self.default_command, 1)
 
-    def default_command(self, event = None):
+    def default_command(self, event=None):
         prog = self.engine.getprog()
         if not prog:
             return
@@ -106,7 +106,7 @@ class GrepDialog(SearchDialogBase):
             fn = os.path.join(dir, name)
             if os.path.isdir(fn):
                 subdirs.append(fn)
-            elif fnmatch.fnmatch(name, base):
+            if fnmatch.fnmatch(name, base):
                 list.append(fn)
 
         if rec:
@@ -115,7 +115,7 @@ class GrepDialog(SearchDialogBase):
 
         return list
 
-    def close(self, event = None):
+    def close(self, event=None):
         if self.top:
             self.top.grab_release()
             self.top.withdraw()

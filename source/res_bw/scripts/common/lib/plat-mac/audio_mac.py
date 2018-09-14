@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/Audio_mac.py
 QSIZE = 100000
 error = 'Audio_mac.error'
@@ -6,7 +7,7 @@ warnpy3k('In 3.x, the Play_Audio_mac module is removed.', stacklevel=2)
 
 class Play_Audio_mac:
 
-    def __init__(self, qsize = QSIZE):
+    def __init__(self, qsize=QSIZE):
         self._chan = None
         self._qsize = qsize
         self._outrate = 22254
@@ -30,7 +31,7 @@ class Play_Audio_mac:
         self._gc = []
         return
 
-    def stop(self, quietNow = 1):
+    def stop(self, quietNow=1):
         self._chan = None
         self._gc = []
         return
@@ -55,8 +56,8 @@ class Play_Audio_mac:
         nframes = len(data) / self._nchannels / self._sampwidth
         if len(data) != nframes * self._nchannels * self._sampwidth:
             raise error, 'data is not a whole number of frames'
-        while self._gc and self.getfilled() + nframes > self._qsize / self._nchannels / self._sampwidth:
-            time.sleep(0.1)
+        while 1:
+            self._gc and self.getfilled() + nframes > self._qsize / self._nchannels / self._sampwidth and time.sleep(0.1)
 
         if self._sampwidth == 1:
             import audioop

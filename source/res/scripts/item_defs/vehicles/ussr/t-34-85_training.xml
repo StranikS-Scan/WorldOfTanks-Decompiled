@@ -62,6 +62,7 @@
       <collisionModel>	vehicles/russian/R07_T-34-85_training/collision/Hull.model	</collisionModel>
     </hitTester>
     <emblemSlots></emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R07_T-34-85/T-34-85_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <T-34-85Bis2>
@@ -418,9 +419,9 @@
         <mud>	mediumTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	vehicles_treads_pc_2	</wwsoundPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundNPC>	vehicles_treads_npc_2	</wwsoundNPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.923078 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R07_T-34-85_training/collision/Chassis.model	</collisionModel>
@@ -578,7 +579,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.037 -0.095 1.058 0.000 0.831 -0.096 0.931 0.484 0.375 0.500 0.217 0.500 0.132 0.585 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_05	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
     </T-34_mod_100_2>
   </turrets0>

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/settings_set.py
 from collections import namedtuple
 from messenger.doc_loaders import _xml_helpers
@@ -67,7 +67,7 @@ def _readBattleMessageLifeCycle(xmlCtx, section, settings):
 
 _ReceiverInBattle = namedtuple('_ReceiverInBattle', ('label', 'modifiers', 'order'))
 
-def _readReceiverValue(xmlCtx, section, settings = None):
+def _readReceiverValue(xmlCtx, section, settings=None):
     name = _xml_helpers.readNoEmptyStr(xmlCtx, section, 'name', 'Receiver name is not defined')
     valueSec = section['value']
     if not valueSec:
@@ -117,5 +117,4 @@ def load(xmlCtx, section, messengerSettings):
         loader, setReaders, itemReaders = _SETTINGS_LOADERS[name]
         if hasattr(messengerSettings, name):
             loader(xmlCtx.next(subSec), subSec, getattr(messengerSettings, name), setReaders, itemReaders)
-        else:
-            raise _xml_helpers.XMLError(xmlCtx, 'Settings has not attribute {0:>s}'.format(name))
+        raise _xml_helpers.XMLError(xmlCtx, 'Settings has not attribute {0:>s}'.format(name))

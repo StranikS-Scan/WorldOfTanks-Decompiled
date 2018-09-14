@@ -1,0 +1,33 @@
+<vehicleai.def>
+  <CellMethods>
+    <vehicleAI_receiveVisibilityEvents>
+      <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
+      </Arg>
+    </vehicleAI_receiveVisibilityEvents>
+    <vehicleAI_autoBotScriptStep>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+      </Arg>
+    </vehicleAI_autoBotScriptStep>
+    <vehicleAI_autoBotReroute>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </vehicleAI_autoBotReroute>
+  </CellMethods>
+  <BaseMethods>
+    <vehicleAI_createAutoBotController>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </vehicleAI_createAutoBotController>
+    <vehicleAI_autoBotScriptStep>
+      <Arg>	PYTHON	</Arg>
+    </vehicleAI_autoBotScriptStep>
+    <vehicleAI_autoBotScriptCallback>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </vehicleAI_autoBotScriptCallback>
+  </BaseMethods>
+</vehicleai.def>

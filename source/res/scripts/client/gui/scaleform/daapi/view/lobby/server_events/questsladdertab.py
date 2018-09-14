@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsLadderTab.py
 import re
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
@@ -29,12 +29,10 @@ class QuestsLadderTab(QuestsCurrentTab):
          'isSortable': False,
          'totalTasks': len(svrEvents)})
 
-    def _filterFunc(self, a):
-        return not self._hideCompleted or not a.isCompleted()
+    def _filterFunc(self, event):
+        return not self._hideCompleted or not event.isCompleted()
 
     @classmethod
     def _sortFunc(cls, a, b):
         res = cmp(a.isCompleted(), b.isCompleted())
-        if res:
-            return res
-        return cmp(cls.getDivisionByName(a.getUserName()), cls.getDivisionByName(b.getUserName()))
+        return res if res else cmp(cls.getDivisionByName(a.getUserName()), cls.getDivisionByName(b.getUserName()))

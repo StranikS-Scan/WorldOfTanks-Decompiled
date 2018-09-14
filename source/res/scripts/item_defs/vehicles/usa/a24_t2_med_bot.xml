@@ -79,6 +79,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A24_T2_med/T2_med_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <T2E1_bot>
@@ -288,10 +289,10 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L4	</name>
+          <elasticity>	1105	</elasticity>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3.5	</backwardElastK>
           <offset>	-0.099	</offset>
-          <elasticity>	1105	</elasticity>
         </node>
         <node>
           <isLeft>	false	</isLeft>

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/shared_messages.py
 from messenger.proto.interfaces import IChatMessage
 
@@ -10,7 +10,7 @@ class ACTION_MESSAGE_TYPE(object):
 
 class ClientActionMessage(IChatMessage):
 
-    def __init__(self, msg = None, type_ = ACTION_MESSAGE_TYPE.PLAYER):
+    def __init__(self, msg=None, type_=ACTION_MESSAGE_TYPE.PLAYER):
         super(ClientActionMessage, self).__init__()
         self.__message = msg
         self.__type = type_

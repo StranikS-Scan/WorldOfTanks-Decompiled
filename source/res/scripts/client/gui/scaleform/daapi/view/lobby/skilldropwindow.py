@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/SkillDropWindow.py
 import cPickle as pickle
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
@@ -17,7 +17,7 @@ from helpers import i18n
 
 class SkillDropWindow(SkillDropMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(SkillDropWindow, self).__init__()
         self.tmanInvID = ctx.get('tankmanID')
 

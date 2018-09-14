@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StaticFormationProfileWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -11,25 +11,19 @@ class StaticFormationProfileWindowMeta(AbstractWindowView):
         self._printOverrideError('onClickHyperLink')
 
     def as_setWindowSizeS(self, width, height):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setWindowSize(width, height)
+        return self.flashObject.as_setWindowSize(width, height) if self._isDAAPIInited() else None
 
     def as_setDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(data)
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setFormationEmblemS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setFormationEmblem(value)
+        return self.flashObject.as_setFormationEmblem(value) if self._isDAAPIInited() else None
 
     def as_updateFormationInfoS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateFormationInfo(data)
+        return self.flashObject.as_updateFormationInfo(data) if self._isDAAPIInited() else None
 
     def as_updateActionButtonS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateActionButton(data)
+        return self.flashObject.as_updateActionButton(data) if self._isDAAPIInited() else None
 
     def as_showViewS(self, idx):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showView(idx)
+        return self.flashObject.as_showView(idx) if self._isDAAPIInited() else None

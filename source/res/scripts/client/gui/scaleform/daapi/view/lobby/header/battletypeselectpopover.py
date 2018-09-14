@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/BattleTypeSelectPopover.py
 import BigWorld
 from helpers import i18n
@@ -20,7 +20,7 @@ from predefined_hosts import g_preDefinedHosts
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(BattleTypeSelectPopover, self).__init__()
 
     def selectFight(self, actionName):

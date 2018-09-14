@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortClanListWindow.py
 import BigWorld
 from gui import game_control
@@ -15,7 +15,7 @@ from helpers import i18n
 
 class FortClanListWindow(FortClanListWindowMeta, FortViewHelper):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(FortClanListWindow, self).__init__()
 
     def _populate(self):
@@ -40,7 +40,7 @@ class FortClanListWindow(FortClanListWindowMeta, FortViewHelper):
                          self._createHeader(i18n.makeString(FORTIFICATIONS.FIXEDPLAYERS_LISTHEADER_FIELDALLTIME, icon=icons.nut()), 'intTotalMining', 147, 3, TOOLTIPS.FORTIFICATION_FIXEDPLAYERS_ALLTIME, TEXT_ALIGN.CENTER)]}
         self.as_setDataS(initData)
 
-    def _createHeader(self, label, iconId, buttonWidth, sortOrder, toolTip, textAlign, sortType = 'numeric'):
+    def _createHeader(self, label, iconId, buttonWidth, sortOrder, toolTip, textAlign, sortType='numeric'):
         return {'label': label,
          'id': iconId,
          'sortOrder': sortOrder,
@@ -48,7 +48,7 @@ class FortClanListWindow(FortClanListWindowMeta, FortViewHelper):
          'toolTip': toolTip,
          'textAlign': textAlign,
          'sortType': sortType,
-         'defaultSortDirection': 'ascending'}
+         'defaultSortDirection': 'descending'}
 
     def _getClanMembers(self):
         clanMembers = []

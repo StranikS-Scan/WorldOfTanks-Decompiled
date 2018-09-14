@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DebugMonitorView.py
 import BigWorld
 from gui.DebugView import DebugView
@@ -7,7 +7,7 @@ from debug_utils import *
 
 class DebugMonitorView(DebugView):
 
-    def __init__(self, textureName = '', parentGUI = None):
+    def __init__(self, textureName='', parentGUI=None):
         DebugView.__init__(self, textureName, parentGUI)
         self.__contentInfo = {}
         self.__newContentInfo = {}
@@ -27,7 +27,7 @@ class DebugMonitorView(DebugView):
             self.__updateViewByContentItems(contentItems)
             return
 
-    def __setItem(self, nameStr, valueStr, dividerStr, item = None):
+    def __setItem(self, nameStr, valueStr, dividerStr, item=None):
         if item is None:
             item = DebugViewItem()
             item.setFont(('system_small.font', 'system_small.font'))
@@ -60,7 +60,7 @@ class DebugMonitorView(DebugView):
     def __roolbackContentInfo(self):
         self.__newContentInfo = {}
 
-    def __buildContentItemsBy(self, content, baseIndent = 0, baseKeyname = ''):
+    def __buildContentItemsBy(self, content, baseIndent=0, baseKeyname=''):
         result = []
         try:
             if isinstance(content, dict):

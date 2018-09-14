@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Explorer/Web_Browser_Suite.py
 """Suite Web Browser Suite: Class of events supported by Web Browser applications
 Level 1, version 1
@@ -11,7 +12,7 @@ _code = 'WWW!'
 
 class Web_Browser_Suite_Events:
 
-    def Activate(self, _object = None, _attributes = {}, **_arguments):
+    def Activate(self, _object=None, _attributes={}, **_arguments):
         """Activate: Activate Internet Explorer and optionally select window designated by Window Identifier.
         Required argument: Window Identifier
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -25,10 +26,9 @@ class Web_Browser_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def CloseAllWindows(self, _no_object = None, _attributes = {}, **_arguments):
+    def CloseAllWindows(self, _no_object=None, _attributes={}, **_arguments):
         """CloseAllWindows: Closes all windows
         Keyword argument _attributes: AppleEvent attribute dictionary
         Returns: Success
@@ -42,15 +42,12 @@ class Web_Browser_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_CloseWindow = {'ID': 'WIND',
      'Title': 'TITL'}
 
-    def CloseWindow(self, _no_object = None, _attributes = {}, **_arguments):
+    def CloseWindow(self, _no_object=None, _attributes={}, **_arguments):
         """CloseWindow: Close the window specified by either Window Identifier or Title. If no parameter is specified, close the top window.
         Keyword argument ID: ID of the window to close. (Can use -1 for top window)
         Keyword argument Title: Title of the window to close
@@ -65,12 +62,9 @@ class Web_Browser_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def GetWindowInfo(self, _object, _attributes = {}, **_arguments):
+    def GetWindowInfo(self, _object, _attributes={}, **_arguments):
         """GetWindowInfo: Returns a window info record (URL/Title) for the specified window.
         Required argument: Window Identifier of the window
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -84,10 +78,9 @@ class Web_Browser_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def ListWindows(self, _no_object = None, _attributes = {}, **_arguments):
+    def ListWindows(self, _no_object=None, _attributes={}, **_arguments):
         """ListWindows: Returns list of Window Identifiers for all open windows.
         Keyword argument _attributes: AppleEvent attribute dictionary
         Returns: undocumented, typecode 'list'
@@ -101,10 +94,7 @@ class Web_Browser_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_OpenURL = {'to': 'INTO',
      'toWindow': 'WIND',
@@ -112,7 +102,7 @@ class Web_Browser_Suite_Events:
      'FormData': 'POST',
      'MIME_Type': 'MIME'}
 
-    def OpenURL(self, _object, _attributes = {}, **_arguments):
+    def OpenURL(self, _object, _attributes={}, **_arguments):
         """OpenURL: Retrieves URL off the Web.
         Required argument: Fully-qualified URL
         Keyword argument to: Target file for saving downloaded data
@@ -129,12 +119,11 @@ class Web_Browser_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_ParseAnchor = {'withURL': 'RELA'}
 
-    def ParseAnchor(self, _object, _attributes = {}, **_arguments):
+    def ParseAnchor(self, _object, _attributes={}, **_arguments):
         """ParseAnchor: Combines a base URL and a relative URL to produce a fully-qualified URL
         Required argument: Base URL
         Keyword argument withURL: Relative URL that is combined with the Base URL (in the direct object) to produce a fully-qualified URL.
@@ -148,14 +137,13 @@ class Web_Browser_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_ShowFile = {'MIME_Type': 'MIME',
      'Window_Identifier': 'WIND',
      'URL': 'URL '}
 
-    def ShowFile(self, _object, _attributes = {}, **_arguments):
+    def ShowFile(self, _object, _attributes={}, **_arguments):
         """ShowFile: FileSpec containing data of specified MIME type to be rendered in window specified by Window Identifier.
         Required argument: The file
         Keyword argument MIME_Type: MIME type
@@ -170,8 +158,7 @@ class Web_Browser_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 _classdeclarations = {}

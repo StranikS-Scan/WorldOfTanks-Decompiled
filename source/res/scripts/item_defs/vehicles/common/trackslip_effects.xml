@@ -1,0 +1,2549 @@
+<trackslip_effects.xml>
+  <nodes>
+    <node>
+      <name>	HP_Track_LFront	</name>
+      <model>	chassis	</model>
+      <waterY>	True	</waterY>
+      <drawOrder>	-30	</drawOrder>
+    </node>
+    <node>
+      <name>	HP_Track_RFront	</name>
+      <model>	chassis	</model>
+      <waterY>	True	</waterY>
+      <drawOrder>	40	</drawOrder>
+    </node>
+    <node>
+      <name>	HP_Track_LRear	</name>
+      <model>	chassis	</model>
+      <waterY>	True	</waterY>
+      <drawOrder>	-40	</drawOrder>
+    </node>
+    <node>
+      <name>	HP_Track_RRear	</name>
+      <model>	chassis	</model>
+      <waterY>	True	</waterY>
+      <drawOrder>	30	</drawOrder>
+    </node>
+    <node>
+      <name>	HP_TrackUp_LFront	</name>
+      <model>	hull	</model>
+      <waterY>	False	</waterY>
+      <drawOrder>	-10	</drawOrder>
+    </node>
+    <node>
+      <name>	HP_TrackUp_RFront	</name>
+      <model>	hull	</model>
+      <waterY>	False	</waterY>
+      <drawOrder>	20	</drawOrder>
+    </node>
+    <node>
+      <name>	HP_TrackUp_LRear	</name>
+      <model>	hull	</model>
+      <waterY>	False	</waterY>
+      <drawOrder>	-20	</drawOrder>
+    </node>
+    <node>
+      <name>	HP_TrackUp_RRear	</name>
+      <model>	hull	</model>
+      <waterY>	False	</waterY>
+      <drawOrder>	10	</drawOrder>
+    </node>
+    <node>
+      <name>	HP_turretJoint	</name>
+      <model>	hull	</model>
+      <waterY>	False	</waterY>
+      <drawOrder>	0	</drawOrder>
+    </node>
+  </nodes>
+  <constants>
+    <constantsGroup>
+      <name>	small	</name>
+      <constant>
+        <name>	_fileDescriptor	</name>
+        <value>	small	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle1	</name>
+        <value>	0.2	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle2	</name>
+        <value>	0.8	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle3	</name>
+        <value>	1.3	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle4	</name>
+        <value>	1.9	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle5	</name>
+        <value>	2.4	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle6	</name>
+        <value>	2.9	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMaxCcw	</name>
+        <value>	-0.7	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMedCcw	</name>
+        <value>	-0.4	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMedCw	</name>
+        <value>	0.4	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMaxCw	</name>
+        <value>	0.7	</value>
+      </constant>
+      <constant>
+        <name>	_sandDustStartSpeedOp	</name>
+        <value>	-4	</value>
+      </constant>
+      <constant>
+        <name>	_sandDustStartSpeedPos	</name>
+        <value>	4	</value>
+      </constant>
+      <constant>
+        <name>	_sandSlipMinStart	</name>
+        <value>	0.5	</value>
+      </constant>
+      <constant>
+        <name>	_sandSlipMedStart	</name>
+        <value>	1	</value>
+      </constant>
+      <constant>
+        <name>	_sandSlipMaxStart	</name>
+        <value>	3	</value>
+      </constant>
+      <constant>
+        <name>	_groundDustStartSpeedOp	</name>
+        <value>	-6	</value>
+      </constant>
+      <constant>
+        <name>	_groundDustStartSpeedPos	</name>
+        <value>	6	</value>
+      </constant>
+      <constant>
+        <name>	_groundSlipMinStart	</name>
+        <value>	0.6	</value>
+      </constant>
+      <constant>
+        <name>	_groundSlipMedStart	</name>
+        <value>	1.5	</value>
+      </constant>
+      <constant>
+        <name>	_groundSlipMaxStart	</name>
+        <value>	3.5	</value>
+      </constant>
+      <constant>
+        <name>	_snowDustStartSpeedOp	</name>
+        <value>	-5	</value>
+      </constant>
+      <constant>
+        <name>	_snowDustStartSpeedPos	</name>
+        <value>	5	</value>
+      </constant>
+      <constant>
+        <name>	_snowSlipMinStart	</name>
+        <value>	0.4	</value>
+      </constant>
+      <constant>
+        <name>	_snowSlipMedStart	</name>
+        <value>	2	</value>
+      </constant>
+      <constant>
+        <name>	_snowSlipMaxStart	</name>
+        <value>	3.5	</value>
+      </constant>
+      <constant>
+        <name>	_stoneDustStartSpeedOp	</name>
+        <value>	-8	</value>
+      </constant>
+      <constant>
+        <name>	_stoneDustStartSpeedPos	</name>
+        <value>	8	</value>
+      </constant>
+      <constant>
+        <name>	_stoneSlipMinStart	</name>
+        <value>	1	</value>
+      </constant>
+      <constant>
+        <name>	_stoneSlipMedStart	</name>
+        <value>	3	</value>
+      </constant>
+      <constant>
+        <name>	_stoneSlipMaxStart	</name>
+        <value>	6	</value>
+      </constant>
+    </constantsGroup>
+    <constantsGroup>
+      <name>	medium	</name>
+      <constant>
+        <name>	_fileDescriptor	</name>
+        <value>	medium	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle1	</name>
+        <value>	0.2	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle2	</name>
+        <value>	0.8	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle3	</name>
+        <value>	1.3	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle4	</name>
+        <value>	1.9	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle5	</name>
+        <value>	2.4	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle6	</name>
+        <value>	2.9	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMaxCcw	</name>
+        <value>	-0.7	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMedCcw	</name>
+        <value>	-0.4	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMedCw	</name>
+        <value>	0.4	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMaxCw	</name>
+        <value>	0.7	</value>
+      </constant>
+      <constant>
+        <name>	_sandDustStartSpeedOp	</name>
+        <value>	-4	</value>
+      </constant>
+      <constant>
+        <name>	_sandDustStartSpeedPos	</name>
+        <value>	4	</value>
+      </constant>
+      <constant>
+        <name>	_sandSlipMinStart	</name>
+        <value>	0.5	</value>
+      </constant>
+      <constant>
+        <name>	_sandSlipMedStart	</name>
+        <value>	1	</value>
+      </constant>
+      <constant>
+        <name>	_sandSlipMaxStart	</name>
+        <value>	3	</value>
+      </constant>
+      <constant>
+        <name>	_groundDustStartSpeedOp	</name>
+        <value>	-6	</value>
+      </constant>
+      <constant>
+        <name>	_groundDustStartSpeedPos	</name>
+        <value>	6	</value>
+      </constant>
+      <constant>
+        <name>	_groundSlipMinStart	</name>
+        <value>	0.6	</value>
+      </constant>
+      <constant>
+        <name>	_groundSlipMedStart	</name>
+        <value>	1.5	</value>
+      </constant>
+      <constant>
+        <name>	_groundSlipMaxStart	</name>
+        <value>	3.5	</value>
+      </constant>
+      <constant>
+        <name>	_snowDustStartSpeedOp	</name>
+        <value>	-5	</value>
+      </constant>
+      <constant>
+        <name>	_snowDustStartSpeedPos	</name>
+        <value>	5	</value>
+      </constant>
+      <constant>
+        <name>	_snowSlipMinStart	</name>
+        <value>	0.4	</value>
+      </constant>
+      <constant>
+        <name>	_snowSlipMedStart	</name>
+        <value>	2	</value>
+      </constant>
+      <constant>
+        <name>	_snowSlipMaxStart	</name>
+        <value>	3.5	</value>
+      </constant>
+      <constant>
+        <name>	_stoneDustStartSpeedOp	</name>
+        <value>	-8	</value>
+      </constant>
+      <constant>
+        <name>	_stoneDustStartSpeedPos	</name>
+        <value>	8	</value>
+      </constant>
+      <constant>
+        <name>	_stoneSlipMinStart	</name>
+        <value>	1	</value>
+      </constant>
+      <constant>
+        <name>	_stoneSlipMedStart	</name>
+        <value>	3	</value>
+      </constant>
+      <constant>
+        <name>	_stoneSlipMaxStart	</name>
+        <value>	6	</value>
+      </constant>
+    </constantsGroup>
+    <constantsGroup>
+      <name>	large	</name>
+      <constant>
+        <name>	_fileDescriptor	</name>
+        <value>	large	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle1	</name>
+        <value>	0.2	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle2	</name>
+        <value>	0.8	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle3	</name>
+        <value>	1.3	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle4	</name>
+        <value>	1.9	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle5	</name>
+        <value>	2.4	</value>
+      </constant>
+      <constant>
+        <name>	_hullAngle6	</name>
+        <value>	2.9	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMaxCcw	</name>
+        <value>	-0.7	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMedCcw	</name>
+        <value>	-0.4	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMedCw	</name>
+        <value>	0.4	</value>
+      </constant>
+      <constant>
+        <name>	_rotSpeedMaxCw	</name>
+        <value>	0.7	</value>
+      </constant>
+      <constant>
+        <name>	_sandDustStartSpeedOp	</name>
+        <value>	-4	</value>
+      </constant>
+      <constant>
+        <name>	_sandDustStartSpeedPos	</name>
+        <value>	4	</value>
+      </constant>
+      <constant>
+        <name>	_sandSlipMinStart	</name>
+        <value>	0.5	</value>
+      </constant>
+      <constant>
+        <name>	_sandSlipMedStart	</name>
+        <value>	1	</value>
+      </constant>
+      <constant>
+        <name>	_sandSlipMaxStart	</name>
+        <value>	3	</value>
+      </constant>
+      <constant>
+        <name>	_groundDustStartSpeedOp	</name>
+        <value>	-6	</value>
+      </constant>
+      <constant>
+        <name>	_groundDustStartSpeedPos	</name>
+        <value>	6	</value>
+      </constant>
+      <constant>
+        <name>	_groundSlipMinStart	</name>
+        <value>	0.6	</value>
+      </constant>
+      <constant>
+        <name>	_groundSlipMedStart	</name>
+        <value>	1.5	</value>
+      </constant>
+      <constant>
+        <name>	_groundSlipMaxStart	</name>
+        <value>	3.5	</value>
+      </constant>
+      <constant>
+        <name>	_snowDustStartSpeedOp	</name>
+        <value>	-5	</value>
+      </constant>
+      <constant>
+        <name>	_snowDustStartSpeedPos	</name>
+        <value>	5	</value>
+      </constant>
+      <constant>
+        <name>	_snowSlipMinStart	</name>
+        <value>	0.4	</value>
+      </constant>
+      <constant>
+        <name>	_snowSlipMedStart	</name>
+        <value>	2	</value>
+      </constant>
+      <constant>
+        <name>	_snowSlipMaxStart	</name>
+        <value>	3.5	</value>
+      </constant>
+      <constant>
+        <name>	_stoneDustStartSpeedOp	</name>
+        <value>	-8	</value>
+      </constant>
+      <constant>
+        <name>	_stoneDustStartSpeedPos	</name>
+        <value>	8	</value>
+      </constant>
+      <constant>
+        <name>	_stoneSlipMinStart	</name>
+        <value>	1	</value>
+      </constant>
+      <constant>
+        <name>	_stoneSlipMedStart	</name>
+        <value>	3	</value>
+      </constant>
+      <constant>
+        <name>	_stoneSlipMaxStart	</name>
+        <value>	6	</value>
+      </constant>
+    </constantsGroup>
+  </constants>
+  <templates>
+    <template>
+      <name>	Drift	</name>
+      <selector>
+        <type>	discrete	</type>
+        <variable>	_direction	</variable>
+        <selector>
+          <key>	_const1	</key>
+          <type>	matkind	</type>
+          <variable>	_matkind	</variable>
+          <selector>
+            <key>	sand	</key>
+            <type>	range	</type>
+            <variable>	_hullAngle	</variable>
+            <selector>
+              <key>	_hullAngle1	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/drift_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/drift_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle2	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/drift_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/drift_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle3	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/drift_{0}_trackfront_spd3.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/drift_{0}_trackrear_spd3.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle4	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/drift_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/drift_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle5	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/drift_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/drift_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle6	</key>
+              <type>	union	</type>
+            </selector>
+          </selector>
+          <selector>
+            <key>	ground	</key>
+            <type>	range	</type>
+            <variable>	_hullAngle	</variable>
+            <selector>
+              <key>	_hullAngle1	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/drift_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/drift_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle2	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/drift_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/drift_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle3	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/drift_{0}_trackfront_spd3.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/drift_{0}_trackrear_spd3.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle4	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/drift_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/drift_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle5	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/drift_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/drift_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle6	</key>
+              <type>	union	</type>
+            </selector>
+          </selector>
+          <selector>
+            <key>	snow	</key>
+            <type>	range	</type>
+            <variable>	_hullAngle	</variable>
+            <selector>
+              <key>	_hullAngle1	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/drift_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/drift_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle2	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/drift_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/drift_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle3	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/drift_{0}_trackfront_spd3.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/drift_{0}_trackrear_spd3.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle4	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/drift_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/drift_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle5	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/drift_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/drift_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle6	</key>
+              <type>	union	</type>
+            </selector>
+          </selector>
+          <selector>
+            <key>	stone	</key>
+            <type>	range	</type>
+            <variable>	_hullAngle	</variable>
+            <selector>
+              <key>	_hullAngle1	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/drift_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/drift_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle2	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/drift_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/drift_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle3	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/drift_{0}_trackfront_spd3.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/drift_{0}_trackrear_spd3.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle4	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/drift_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/drift_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle5	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/drift_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/drift_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_hullAngle6	</key>
+              <type>	union	</type>
+            </selector>
+          </selector>
+        </selector>
+      </selector>
+    </template>
+    <template>
+      <name>	Turn	</name>
+      <selector>
+        <type>	matkind	</type>
+        <variable>	_matkind	</variable>
+        <selector>
+          <key>	sand	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_speed	</variable>
+            <selector>
+              <key>	-500	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	-2	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	ground	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_speed	</variable>
+            <selector>
+              <key>	-500	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	-2	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	snow	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_speed	</variable>
+            <selector>
+              <key>	-500	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	-2	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	stone	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_speed	</variable>
+            <selector>
+              <key>	-500	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	-2	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	range	</type>
+              <variable>	_rotSpeed	</variable>
+              <selector>
+                <key>	-10	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCcw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-0.1	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	0.1	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd1.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd1.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMedCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd2.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd2.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_rotSpeedMaxCw	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackfront_out_spd3.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/turn_{0}_trackrear_out_spd3.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+      </selector>
+    </template>
+    <template>
+      <name>	Slip	</name>
+      <selector>
+        <type>	matkind	</type>
+        <variable>	_matkind	</variable>
+        <selector>
+          <key>	sand	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_delta	</variable>
+            <selector>
+              <key>	0	</key>
+              <type>	range	</type>
+              <variable>	_speed	</variable>
+              <selector>
+                <key>	-500	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/dust_{0}.xml	</name>
+                  <effectHP>	_TankDust	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_sandDustStartSpeedOp	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-2	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	2	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_sandDustStartSpeedPos	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/sand/dust_{0}.xml	</name>
+                  <effectHP>	_TankDust	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_sandSlipMinStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_sandSlipMedStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackupfront_spd2.xml	</name>
+                <effectHP>	_TrackUpFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackuprear_spd2.xml	</name>
+                <effectHP>	_TrackUpRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_sandSlipMaxStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackfront_spd3.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackrear_spd3.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackupfront_spd3.xml	</name>
+                <effectHP>	_TrackUpFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/slip_{0}_trackuprear_spd3.xml	</name>
+                <effectHP>	_TrackUpRear	</effectHP>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	ground	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_delta	</variable>
+            <selector>
+              <key>	0	</key>
+              <type>	range	</type>
+              <variable>	_speed	</variable>
+              <selector>
+                <key>	-500	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/dust_{0}.xml	</name>
+                  <effectHP>	_TankDust	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_groundDustStartSpeedOp	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-2	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	2	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_groundDustStartSpeedPos	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/ground/dust_{0}.xml	</name>
+                  <effectHP>	_TankDust	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_groundSlipMinStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_groundSlipMedStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackupfront_spd2.xml	</name>
+                <effectHP>	_TrackUpFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackuprear_spd2.xml	</name>
+                <effectHP>	_TrackUpRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_groundSlipMaxStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackfront_spd3.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackrear_spd3.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackupfront_spd3.xml	</name>
+                <effectHP>	_TrackUpFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/slip_{0}_trackuprear_spd3.xml	</name>
+                <effectHP>	_TrackUpRear	</effectHP>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	snow	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_delta	</variable>
+            <selector>
+              <key>	0	</key>
+              <type>	range	</type>
+              <variable>	_speed	</variable>
+              <selector>
+                <key>	-500	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/dust_{0}.xml	</name>
+                  <effectHP>	_TankDust	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_snowDustStartSpeedOp	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-2	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	2	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_snowDustStartSpeedPos	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/snow/dust_{0}.xml	</name>
+                  <effectHP>	_TankDust	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_snowSlipMinStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_snowSlipMedStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackupfront_spd2.xml	</name>
+                <effectHP>	_TrackUpFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackuprear_spd2.xml	</name>
+                <effectHP>	_TrackUpRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_snowSlipMaxStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackfront_spd3.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackrear_spd3.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackupfront_spd3.xml	</name>
+                <effectHP>	_TrackUpFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/slip_{0}_trackuprear_spd3.xml	</name>
+                <effectHP>	_TrackUpRear	</effectHP>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	stone	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_delta	</variable>
+            <selector>
+              <key>	0	</key>
+              <type>	range	</type>
+              <variable>	_speed	</variable>
+              <selector>
+                <key>	-500	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/dust_{0}.xml	</name>
+                  <effectHP>	_TankDust	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_stoneDustStartSpeedOp	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	-2	</key>
+                <type>	union	</type>
+              </selector>
+              <selector>
+                <key>	2	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_stoneDustStartSpeedPos	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/trail_{0}_front.xml	</name>
+                  <effectHP>	_TrackFront	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/trail_{0}.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/stone/dust_{0}.xml	</name>
+                  <effectHP>	_TankDust	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_stoneSlipMinStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd1.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd1.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_stoneSlipMedStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd2.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd2.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackupfront_spd2.xml	</name>
+                <effectHP>	_TrackUpFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackuprear_spd2.xml	</name>
+                <effectHP>	_TrackUpRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_stoneSlipMaxStart	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackfront_spd3.xml	</name>
+                <effectHP>	_TrackFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackrear_spd3.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackupfront_spd3.xml	</name>
+                <effectHP>	_TrackUpFront	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/slip_{0}_trackuprear_spd3.xml	</name>
+                <effectHP>	_TrackUpRear	</effectHP>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	water	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	discrete	</type>
+            <variable>	_isUnderWater	</variable>
+            <selector>
+              <key>	0	</key>
+              <type>	range	</type>
+              <variable>	_delta	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	range	</type>
+                <variable>	_speed	</variable>
+                <selector>
+                  <key>	-500	</key>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/water/trail_{0}.xml	</name>
+                    <effectHP>	_TrackRear	</effectHP>
+                  </selector>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/water/trail_{0}_front.xml	</name>
+                    <effectHP>	_TrackFront	</effectHP>
+                  </selector>
+                </selector>
+                <selector>
+                  <key>	-2	</key>
+                  <type>	union	</type>
+                </selector>
+                <selector>
+                  <key>	2	</key>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/water/trail_{0}.xml	</name>
+                    <effectHP>	_TrackRear	</effectHP>
+                  </selector>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/water/trail_{0}_front.xml	</name>
+                    <effectHP>	_TrackFront	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+      </selector>
+    </template>
+    <template>
+      <name>	TrackEffect1	</name>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	Drift	</name>
+          <parameters>	_matkind:matkindR;
+				_direction:directionR;
+				_const1:1;
+				_delta:deltaR;
+				_hullAngle:hullAngle;
+				_TrackFront:HP_Track_RFront;
+				_TrackRear:HP_Track_RRear;
+				_Turret:HP_turretJoint	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Drift	</name>
+          <parameters>	_matkind:matkindL;
+				_direction:directionL;
+				_const1:1;
+				_delta:deltaL;
+				_hullAngle:hullAngle;
+				_TrackFront:HP_Track_LFront;
+				_TrackRear:HP_Track_LRear;
+				_Turret:HP_turretJoint	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Drift	</name>
+          <parameters>	_matkind:matkindR;
+				_direction:directionR;
+				_const1:-1;
+				_delta:deltaR;
+				_hullAngle:hullAngle;
+				_TrackFront:HP_Track_RRear;
+				_TrackRear:HP_Track_RFront;
+				_Turret:HP_turretJoint	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Drift	</name>
+          <parameters>	_matkind:matkindL;
+				_direction:directionL;
+				_const1:-1;
+				_delta:deltaL;
+				_hullAngle:hullAngle;
+				_TrackFront:HP_Track_LRear;
+				_TrackRear:HP_Track_LFront;
+				_Turret:HP_turretJoint	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Turn	</name>
+          <parameters>	_matkind:matkindR;
+				_direction:directionR;
+				_speed:speed;
+				_const1:1;
+				_delta:deltaR;
+				_TrackFront:HP_Track_RFront;
+				_TrackRear:HP_Track_RRear;
+				_rotSpeed:rotSpeed	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Turn	</name>
+          <parameters>	_matkind:matkindL;
+				_direction:directionL;
+				_speed:speed;
+				_const1:1;
+				_delta:deltaL;
+				_TrackFront:HP_Track_LFront;
+				_TrackRear:HP_Track_LRear;
+				_rotSpeed:rotSpeed	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Turn	</name>
+          <parameters>	_matkind:matkindR;
+				_direction:directionR;
+				_speed:speed;
+				_const1:-1;
+				_delta:deltaR;
+				_TrackFront:HP_Track_LRear;
+				_TrackRear:HP_Track_LFront;
+				_rotSpeed:rotSpeed	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Turn	</name>
+          <parameters>	_matkind:matkindL;
+				_direction:directionL;
+				_speed:speed;
+				_const1:-1;
+				_delta:deltaL;
+				_TrackFront:HP_Track_RRear;
+				_TrackRear:HP_Track_RFront;
+				_rotSpeed:rotSpeed	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Slip	</name>
+          <parameters>	_matkind:matkindR;
+				_direction:directionR;
+				_const1:1;
+				_delta:deltaR;
+				_speed:speed;
+				_isUnderWater:isUnderWater;
+				_TrackRear:HP_Track_RRear;
+				_TrackFront:HP_Track_RFront;
+				_TrackUpRear:HP_TrackUp_RRear;
+				_TrackUpFront:HP_TrackUp_RFront;
+				_TankDust:HP_turretJoint	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Slip	</name>
+          <parameters>	_matkind:matkindL;
+				_direction:directionL;
+				_const1:1;
+				_delta:deltaL;
+				_speed:speed;
+				_isUnderWater:isUnderWater;
+				_TrackRear:HP_Track_LRear;
+				_TrackFront:HP_Track_LFront;
+				_TrackUpRear:HP_TrackUp_LRear;
+				_TrackUpFront:HP_TrackUp_LFront;
+				_TankDust:HP_turretJoint	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Slip	</name>
+          <parameters>	_matkind:matkindR;
+				_direction:directionR;
+				_const1:-1;
+				_delta:deltaR;
+				_speed:speed;
+				_isUnderWater:isUnderWater;
+				_TrackRear:HP_Track_RFront;
+				_TrackFront:HP_Track_RRear;
+				_TrackUpRear:HP_TrackUp_RFront;
+				_TrackUpFront:HP_TrackUp_RRear;
+				_TankDust:HP_turretJoint	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Slip	</name>
+          <parameters>	_matkind:matkindL;
+				_direction:directionL;
+				_const1:-1;
+				_delta:deltaL;
+				_speed:speed;
+				_isUnderWater:isUnderWater;
+				_TrackRear:HP_Track_LFront;
+				_TrackFront:HP_Track_LRear;
+				_TrackUpRear:HP_TrackUp_LFront;
+				_TrackUpFront:HP_TrackUp_LRear;
+				_TankDust:HP_turretJoint	</parameters>
+        </selector>
+      </selector>
+    </template>
+  </templates>
+  <effects>
+    <default>
+      <selector>
+        <type>	template	</type>
+        <name>	TrackEffect1	</name>
+        <constantsGroup>	medium	</constantsGroup>
+      </selector>
+    </default>
+    <smallTankMud>
+      <selector>
+        <type>	template	</type>
+        <name>	TrackEffect1	</name>
+        <constantsGroup>	small	</constantsGroup>
+      </selector>
+    </smallTankMud>
+    <mediumTankMud>
+      <selector>
+        <type>	template	</type>
+        <name>	TrackEffect1	</name>
+        <constantsGroup>	medium	</constantsGroup>
+      </selector>
+    </mediumTankMud>
+    <largeTankMud>
+      <selector>
+        <type>	template	</type>
+        <name>	TrackEffect1	</name>
+        <constantsGroup>	large	</constantsGroup>
+      </selector>
+    </largeTankMud>
+  </effects>
+</trackslip_effects.xml>

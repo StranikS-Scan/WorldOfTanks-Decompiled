@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/i18n.py
 import types
 import json
@@ -91,8 +91,7 @@ def makeStringJSON(key, argsStr):
         for v in args:
             if isinstance(v, str):
                 utf8args.append(v.encode('utf-8'))
-            else:
-                utf8args.append(v)
+            utf8args.append(v)
 
         return makeString(key, *tuple(utf8args))
     except Exception:
@@ -102,6 +101,4 @@ def makeStringJSON(key, argsStr):
 
 
 def encodeUtf8(string):
-    if isinstance(string, types.UnicodeType):
-        return string.encode('utf-8', 'ignore')
-    return string
+    return string.encode('utf-8', 'ignore') if isinstance(string, types.UnicodeType) else string

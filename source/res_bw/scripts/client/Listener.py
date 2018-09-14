@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Listener.py
 import copy
 import weakref
@@ -95,10 +95,7 @@ class _ListenerFunc(object):
 
     def __call__(self, *args, **kwargs):
         fn = self.get()
-        if fn is not None:
-            return fn(*args, **kwargs)
-        else:
-            return
+        return fn(*args, **kwargs) if fn is not None else None
 
 
 class FunctionListeners(object):

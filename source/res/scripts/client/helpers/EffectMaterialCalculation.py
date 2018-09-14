@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/EffectMaterialCalculation.py
 from collections import namedtuple
 import AreaDestructibles
@@ -8,7 +8,7 @@ from constants import DESTRUCTIBLE_MATKIND
 import material_kinds
 SurfaceMaterial = namedtuple('SurfaceMaterial', ('point', 'surfaceNormal', 'matKind', 'effectIdx'))
 
-def calcSurfaceMaterialNearPoint(point, normal, spaceID, defaultEffectMaterial = 'ground'):
+def calcSurfaceMaterialNearPoint(point, normal, spaceID, defaultEffectMaterial='ground'):
     segStart = point - normal * 3.0
     segStop = point + normal * 2.0
     matInfo = BigWorld.wg_getMatInfoNearPoint(spaceID, segStart, segStop, point, isDestructibleBroken)
@@ -62,6 +62,4 @@ def isDestructibleBroken(chunkID, itemIndex, matKind, itemFilename):
         return False
     else:
         ctrl = AreaDestructibles.g_destructiblesManager.getController(chunkID)
-        if ctrl is None:
-            return False
-        return ctrl.isDestructibleBroken(itemIndex, matKind, desc['type'])
+        return False if ctrl is None else ctrl.isDestructibleBroken(itemIndex, matKind, desc['type'])

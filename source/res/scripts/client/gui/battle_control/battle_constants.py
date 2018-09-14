@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_constants.py
 from enumerations import Enumeration, AttributeEnumItem
 
@@ -35,6 +35,10 @@ class VEHICLE_VIEW_STATE(object):
     SWITCHING = 16384
     SHOW_DEATHZONE_TIMER = 32768
     HIDE_DEATHZONE_TIMER = 65536
+    MAX_SPEED = 131072
+    RPM = 262144
+    VEHICLE_ENGINE_STATE = 524288
+    VEHICLE_MOVEMENT_STATE = 1048576
 
 
 VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftTrack', 'rightTrack', 'surveyingDevice', 'radio', 'fuelTank')
@@ -70,7 +74,7 @@ VEHICLE_WAINING_INTERVAL = 0.05
 VEHICLE_UPDATE_INTERVAL = 0.03
 
 class FEEDBACK_EVENT_ID(object):
-    PLAYER_KILLED_ENEMY, PLAYER_DAMAGED_HP_ENEMY, PLAYER_DAMAGED_DEVICE_ENEMY, PLAYER_SPOTTED_ENEMY, PLAYER_ASSIST_TO_KILL_ENEMY, PLAYER_USED_ARMOR, PLAYER_CAPTURED_BASE, PLAYER_DROPPED_CAPTURE, VEHICLE_HEALTH, VEHICLE_HIT, VEHICLE_ARMOR_PIERCED, VEHICLE_DEAD, VEHICLE_SHOW_MARKER, MINIMAP_SHOW_MARKER, MINIMAP_MARK_CELL = range(1, 16)
+    PLAYER_KILLED_ENEMY, PLAYER_DAMAGED_HP_ENEMY, PLAYER_DAMAGED_DEVICE_ENEMY, PLAYER_SPOTTED_ENEMY, PLAYER_ASSIST_TO_KILL_ENEMY, PLAYER_USED_ARMOR, PLAYER_CAPTURED_BASE, PLAYER_DROPPED_CAPTURE, VEHICLE_HEALTH, VEHICLE_HIT, VEHICLE_ARMOR_PIERCED, VEHICLE_DEAD, VEHICLE_SHOW_MARKER, VEHICLE_ATTRS_CHANGED, SHOW_VEHICLE_DAMAGES_DEVICES, HIDE_VEHICLE_DAMAGES_DEVICES, MINIMAP_SHOW_MARKER, MINIMAP_MARK_CELL = range(1, 19)
 
 
 class COUNTDOWN_STATE(object):
@@ -88,3 +92,40 @@ class MULTIPLE_TEAMS_TYPE(object):
 
 
 NEUTRAL_TEAM = 0
+
+class WinStatus(object):
+    DRAW = 0
+    WIN = 1
+    LOSE = 2
+
+    def __init__(self, status):
+        self._status = status
+
+    def isValid(self):
+        return self._status is not None
+
+    def isWin(self):
+        return self._status == self.WIN
+
+    def isLose(self):
+        return self._status == self.LOSE
+
+    def isDraw(self):
+        return self._status == self.DRAW
+
+    def getStatus(self):
+        return self._status
+
+    @classmethod
+    def fromWinnerTeam(cls, winnerTeam, isAlly):
+        if winnerTeam == 0:
+            status = cls.DRAW
+        elif isAlly:
+            status = cls.WIN
+        else:
+            status = cls.LOSE
+        return cls(status=status)
+
+    @classmethod
+    def empty(cls):
+        return cls(status=None)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/Debugger.py
 import os
 import bdb
@@ -51,7 +51,7 @@ class Idb(bdb.Bdb):
 class Debugger():
     vstack = vsource = vlocals = vglobals = None
 
-    def __init__(self, pyshell, idb = None):
+    def __init__(self, pyshell, idb=None):
         if idb is None:
             idb = Idb(self)
         self.pyshell = pyshell
@@ -68,7 +68,7 @@ class Debugger():
         finally:
             self.interacting = 0
 
-    def close(self, event = None):
+    def close(self, event=None):
         if self.interacting:
             self.top.bell()
             return
@@ -144,7 +144,7 @@ class Debugger():
         if self.vglobals.get():
             self.show_globals()
 
-    def interaction(self, message, frame, info = None):
+    def interaction(self, message, frame, info=None):
         self.frame = frame
         self.status.configure(text=message)
         if info:
@@ -271,7 +271,7 @@ class Debugger():
         self.show_variables()
         return
 
-    def show_variables(self, force = 0):
+    def show_variables(self, force=0):
         lv = self.localsviewer
         gv = self.globalsviewer
         frame = self.frame
@@ -321,7 +321,7 @@ class StackViewer(ScrolledList):
         self.gui = gui
         self.stack = []
 
-    def load_stack(self, stack, index = None):
+    def load_stack(self, stack, index=None):
         self.stack = stack
         self.clear()
         for i in range(len(stack)):
@@ -355,8 +355,7 @@ class StackViewer(ScrolledList):
 
     def popup_event(self, event):
         """override base method"""
-        if self.stack:
-            return ScrolledList.popup_event(self, event)
+        return ScrolledList.popup_event(self, event) if self.stack else None
 
     def fill_menu(self):
         """override base method"""
@@ -396,7 +395,7 @@ class StackViewer(ScrolledList):
 
 class NamespaceViewer():
 
-    def __init__(self, master, title, dict = None):
+    def __init__(self, master, title, dict=None):
         width = 0
         height = 40
         if dict:
@@ -426,7 +425,7 @@ class NamespaceViewer():
 
     dict = -1
 
-    def load_dict(self, dict, force = 0, rpc_client = None):
+    def load_dict(self, dict, force=0, rpc_client=None):
         if dict is self.dict and not force:
             return
         else:

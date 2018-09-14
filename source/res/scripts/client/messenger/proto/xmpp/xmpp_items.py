@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_items.py
 import time
 from messenger.m_constants import USER_TAG as _TAG
@@ -10,7 +10,7 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 class ContactItem(object):
     __slots__ = ('_jid', '_sub', '_tags', '_trusted', '_resources')
 
-    def __init__(self, jid, trusted = False, tags = None, resources = None):
+    def __init__(self, jid, trusted=False, tags=None, resources=None):
         self._jid = jid
         self._sub = (_SUB.OFF, _SUB.OFF)
         self._tags = tags or set()
@@ -42,8 +42,8 @@ class ContactItem(object):
     def removeTags(self, tags):
         return self.getItemType() != XMPP_ITEM_TYPE.EMPTY_ITEM and not self._trusted and _TAG.CACHED in tags
 
-    def isOnline(self, isOnlineInBW = False):
-        return isOnlineInBW or self.getPresence() not in [PRESENCE.UNAVAILABLE, PRESENCE.UNKNOWN]
+    def isOnline(self, isOnlineInBW=False):
+        return isOnlineInBW or self.getPresence() not in PRESENCE.OFFLINE
 
     def getPresence(self):
         resource = self._resources.getHighestPriority()
@@ -88,10 +88,7 @@ class ContactItem(object):
                 self._removeResource(jid)
 
     def replace(self, newItem):
-        if newItem is None:
-            return ContactItem(self._jid)
-        else:
-            return newItem
+        return ContactItem(self._jid) if newItem is None else newItem
 
     def _setResource(self, jid, resource):
         self._resources.setResource(jid, resource)
@@ -118,7 +115,7 @@ _SUB_TO_TAGS = {(_SUB.OFF, _SUB.OFF): {_TAG.SUB_NONE},
 class RosterItem(ContactItem):
     __slots__ = ('_groups', '_sub')
 
-    def __init__(self, jid, groups = None, sub = None, resources = None, trusted = True):
+    def __init__(self, jid, groups=None, sub=None, resources=None, trusted=True):
         super(RosterItem, self).__init__(jid, trusted=trusted, tags={_TAG.FRIEND}, resources=resources)
         self._groups = groups or set()
         self._sub = sub or (_SUB.OFF, _SUB.OFF)
@@ -179,14 +176,14 @@ class RosterItem(ContactItem):
 
 class BlockItem(ContactItem):
 
-    def __init__(self, jid, trusted = True):
+    def __init__(self, jid, trusted=True):
         super(BlockItem, self).__init__(jid, trusted, tags={_TAG.IGNORED})
 
     @classmethod
     def getItemType(cls):
         return XMPP_ITEM_TYPE.BLOCK_ITEM
 
-    def isOnline(self, isOnlineInBW = False):
+    def isOnline(self, isOnlineInBW=False):
         return False
 
     def setTrusted(self, value):
@@ -203,7 +200,7 @@ class BlockItem(ContactItem):
 class RosterBlockItem(BlockItem):
     __slots__ = ('_rosterItem',)
 
-    def __init__(self, jid, rosterItem = None, trusted = True):
+    def __init__(self, jid, rosterItem=None, trusted=True):
         super(RosterBlockItem, self).__init__(jid, trusted)
         self._rosterItem = rosterItem or RosterItem(jid)
 
@@ -232,7 +229,7 @@ class RosterBlockItem(BlockItem):
 class SubPendingItem(ContactItem):
     __slots__ = ('_receivedAt',)
 
-    def __init__(self, jid, trusted = True, tags = None):
+    def __init__(self, jid, trusted=True, tags=None):
         super(SubPendingItem, self).__init__(jid, trusted, tags)
         self._receivedAt = time.time()
 
@@ -257,7 +254,7 @@ _SUPPORTED_ITEMS = (RosterItem,
  RosterBlockItem)
 _SUPPORTED_ITEM_TYPE_TO_CLASS = dict(((clazz.getItemType(), clazz) for clazz in _SUPPORTED_ITEMS))
 
-def createItem(databaseID, itemType = XMPP_ITEM_TYPE.EMPTY_ITEM, trusted = True):
+def createItem(databaseID, itemType=XMPP_ITEM_TYPE.EMPTY_ITEM, trusted=True):
     jid = makeContactJID(databaseID)
     if itemType in _SUPPORTED_ITEM_TYPE_TO_CLASS:
         clazz = _SUPPORTED_ITEM_TYPE_TO_CLASS[itemType]

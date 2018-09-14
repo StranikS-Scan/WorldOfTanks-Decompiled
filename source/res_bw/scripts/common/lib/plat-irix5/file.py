@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-irix5/FILE.py
 from warnings import warnpy3k
 warnpy3k('the FILE module has been removed in Python 3.0', stacklevel=2)
@@ -96,7 +97,7 @@ def MUTEX_HELD(m):
 
 
 def MUTEX_HELD(m):
-    return 1
+    pass
 
 
 RW_READER = MR_ACCESS
@@ -141,15 +142,15 @@ DEF_VNODE_POOL = 1024
 DEF_FILE_POOL = 1024
 
 def ownlock(x):
-    return 1
+    pass
 
 
 def splock(x):
-    return 1
+    pass
 
 
 def io_splock(x):
-    return 1
+    pass
 
 
 def apvsema(x):
@@ -169,19 +170,19 @@ def mp_mrunlock(a):
 
 
 def apvsema(x):
-    return 0
+    pass
 
 
 def apcpsema(x):
-    return 1
+    pass
 
 
 def apcvsema(x):
-    return 0
+    pass
 
 
 def mp_mrunlock(a):
-    return 0
+    pass
 
 
 FNDELAY = 4

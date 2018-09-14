@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/AutoComplete.py
 """AutoComplete.py - An IDLE extension for automatically completing names.
 
@@ -23,7 +23,7 @@ class AutoComplete:
     menudefs = [('edit', [('Show Completions', '<<force-open-completions>>')])]
     popupwait = idleConf.GetOption('extensions', 'AutoComplete', 'popupwait', type='int', default=0)
 
-    def __init__(self, editwin = None):
+    def __init__(self, editwin=None):
         self.editwin = editwin
         if editwin is None:
             return
@@ -37,7 +37,7 @@ class AutoComplete:
     def _make_autocomplete_window(self):
         return AutoCompleteWindow.AutoCompleteWindow(self.text)
 
-    def _remove_autocomplete_window(self, event = None):
+    def _remove_autocomplete_window(self, event=None):
         if self.autocompletewindow:
             self.autocompletewindow.hide_window()
             self.autocompletewindow = None
@@ -71,8 +71,7 @@ class AutoComplete:
             self.autocompletewindow.complete()
             return 'break'
         opened = self.open_completions(False, True, True)
-        if opened:
-            return 'break'
+        return 'break' if opened else None
 
     def _open_completions_later(self, *args):
         self._delayed_completion_index = self.text.index('insert')
@@ -89,7 +88,7 @@ class AutoComplete:
             self.open_completions(*args)
             return
 
-    def open_completions(self, evalfuncs, complete, userWantsWin, mode = None):
+    def open_completions(self, evalfuncs, complete, userWantsWin, mode=None):
         """Find the completions and create the AutoCompleteWindow.
         Return True if successful (no syntax error or so found).
         if complete is True, then if there's nothing to complete and no

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Finder/Finder_Basics.py
 """Suite Finder Basics: Commonly-used Finder commands and object classes
 Level 1, version 1
@@ -11,7 +12,7 @@ _code = 'fndr'
 
 class Finder_Basics_Events:
 
-    def copy(self, _no_object = None, _attributes = {}, **_arguments):
+    def copy(self, _no_object=None, _attributes={}, **_arguments):
         """copy: (NOT AVAILABLE YET) Copy the selected items to the clipboard (the Finder must be the front application)
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -24,14 +25,11 @@ class Finder_Basics_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_sort = {'by': 'by  '}
 
-    def sort(self, _object, _attributes = {}, **_arguments):
+    def sort(self, _object, _attributes={}, **_arguments):
         """sort: (NOT AVAILABLE YET) Return the specified object(s) in a sorted list
         Required argument: a list of finder objects to sort
         Keyword argument by: the property to sort the items by (name, index, date, etc.)
@@ -45,8 +43,7 @@ class Finder_Basics_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class application(aetools.ComponentItem):

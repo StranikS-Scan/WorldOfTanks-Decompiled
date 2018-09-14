@@ -1,6 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/factories/UnitFactory.py
-from constants import PREBATTLE_TYPE, FALLOUT_BATTLE_TYPE
+from UnitBase import ROSTER_TYPE
+from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.prb_control import prb_getters
 from gui.prb_control.context.unit_ctx import LeaveUnitCtx
@@ -15,6 +16,7 @@ _SUPPORTED_ENTRY_BY_ACTION = {_PAN.SQUAD: (unit.SquadEntry, None),
  _PAN.UNIT: (unit.UnitIntro, (PREBATTLE_TYPE.UNIT,)),
  _PAN.FORT: (unit.UnitIntro, (PREBATTLE_TYPE.SORTIE,))}
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: unit.SquadEntry,
+ PREBATTLE_TYPE.FALLOUT: unit.FalloutSquadEntry,
  PREBATTLE_TYPE.UNIT: unit.UnitEntry,
  PREBATTLE_TYPE.SORTIE: unit.UnitEntry,
  PREBATTLE_TYPE.FORT_BATTLE: unit.FortBattleEntry,
@@ -49,9 +51,9 @@ class UnitFactory(ControlFactory):
         return PlayerDecorator(info.isCreator(), info.isReady)
 
     def createStateEntity(self, functional):
-        return FunctionalState(CTRL_ENTITY_TYPE.UNIT, functional.getEntityType(), True, functional.hasLockedState(), isinstance(functional, unit.IntroFunctional), functional.getFlags(), functional.getExtra())
+        return FunctionalState(CTRL_ENTITY_TYPE.UNIT, functional.getEntityType(), True, functional.hasLockedState(), isinstance(functional, unit.IntroFunctional), functional.getFlags(), functional.getFunctionalFlags(), functional.getRosterType())
 
-    def createLeaveCtx(self, flags = FUNCTIONAL_FLAG.UNDEFINED):
+    def createLeaveCtx(self, flags=FUNCTIONAL_FLAG.UNDEFINED):
         return LeaveUnitCtx(waitingID='prebattle/leave', flags=flags)
 
     def _createByAccountState(self, ctx):
@@ -67,9 +69,8 @@ class UnitFactory(ControlFactory):
                         flags |= FUNCTIONAL_FLAG.SWITCH
                     if entity.isSquad():
                         flags |= FUNCTIONAL_FLAG.SQUAD
-                        extra = entity.getExtra()
-                        if extra is not None and extra.eventType != FALLOUT_BATTLE_TYPE.UNDEFINED:
-                            flags |= FUNCTIONAL_FLAG.EVENT_SQUAD
+                    if entity.isFalloutSquad():
+                        flags |= FUNCTIONAL_FLAG.FALLOUT_SQUAD
                     ctx.removeFlags(FUNCTIONAL_FLAG.UNIT_BITMASK | FUNCTIONAL_FLAG.ACTIONS_BITMASK)
                     ctx.addFlags(flags)
                     created = unit.UnitFunctional(entity.getPrebattleType(), unit_items.DynamicRosterSettings(entity), flags=flags)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/__init__.py
 import types
 import BigWorld
@@ -18,10 +18,7 @@ def isPlayerAvatar():
 
 
 def getLanguageCode():
-    if i18n.doesTextExist('#settings:LANGUAGE_CODE'):
-        return i18n.makeString('#settings:LANGUAGE_CODE')
-    else:
-        return None
+    return i18n.makeString('#settings:LANGUAGE_CODE') if i18n.doesTextExist('#settings:LANGUAGE_CODE') else None
 
 
 def getClientLanguage():
@@ -42,13 +39,11 @@ def getClientLanguage():
 def getClientOverride():
     if constants.IS_KOREA:
         return 'KR'
-    elif constants.IS_CHINA:
-        return 'CN'
     else:
-        return None
+        return 'CN' if constants.IS_CHINA else None
 
 
-def getLocalizedData(dataDict, key, defVal = ''):
+def getLocalizedData(dataDict, key, defVal=''):
     resVal = defVal
     if dataDict:
         lng = getClientLanguage()
@@ -106,6 +101,9 @@ def isShowStartupVideo():
     if not BigWorld.wg_isSSE2Supported():
         return False
     else:
+        from gui import GUI_SETTINGS
+        if not GUI_SETTINGS.guiEnabled:
+            return False
         p = Settings.g_instance.userPrefs
         return p is None or p.readInt(Settings.KEY_SHOW_STARTUP_MOVIE, 1) == 1
 
@@ -118,14 +116,14 @@ _g_alphabetOrderExcept = {1105: 1077.5,
  1025: 1045.5}
 
 def _getSymOrderIdx(symbol):
-    assert type(symbol) is types.UnicodeType
+    assert isinstance(symbol, types.UnicodeType)
     symIdx = ord(symbol)
     return _g_alphabetOrderExcept.get(symIdx, symIdx)
 
 
 def strcmp(word1, word2):
-    assert type(word1) is types.UnicodeType
-    assert type(word2) is types.UnicodeType
+    assert isinstance(word1, types.UnicodeType)
+    assert isinstance(word2, types.UnicodeType)
     for sym1, sym2 in zip(word1, word2):
         if sym1 != sym2:
             return int(round(_getSymOrderIdx(sym1) - _getSymOrderIdx(sym2)))

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/BaseTimedCustomizationInterface.py
 import time
 from abc import abstractmethod, ABCMeta
@@ -17,7 +17,7 @@ class BaseTimedCustomizationInterface(CustomizationInterface):
     ZOOM_FACTOR = 0.2
     __metaclass__ = ABCMeta
 
-    def __init__(self, name, nationId, type, position = -1):
+    def __init__(self, name, nationId, type, position=-1):
         super(BaseTimedCustomizationInterface, self).__init__(name, nationId, type, position)
         self._currentItemID = None
         self._currentLifeCycle = None
@@ -50,7 +50,7 @@ class BaseTimedCustomizationInterface(CustomizationInterface):
         pass
 
     @abstractmethod
-    def updateVehicleCustomization(self, itemID = None):
+    def updateVehicleCustomization(self, itemID=None):
         pass
 
     @abstractmethod
@@ -70,9 +70,7 @@ class BaseTimedCustomizationInterface(CustomizationInterface):
         pass
 
     def getRealPosition(self):
-        if not self.isTurret:
-            return self._position - self._positionShift
-        return 2 + self._position
+        return self._position - self._positionShift if not self.isTurret else 2 + self._position
 
     def getDrorStr(self, sectionName, kind):
         items = CustomizationHelper.getItemsOnVehicle(self._type)
@@ -119,14 +117,14 @@ class BaseTimedCustomizationInterface(CustomizationInterface):
         super(BaseTimedCustomizationInterface, self)._dispose()
         return
 
-    def refreshViewData(self, vehType, refresh = False):
+    def refreshViewData(self, vehType, refresh=False):
         if vehType is not None:
             self._groupsDP.buildList()
             self._itemsDP.setVehicleTypeParams(self.getItemPriceFactor(vehType), self.getItemDefaultPriceFactor(vehType), self._currentItemID)
         self._rentalPackageDP.refreshList()
         return
 
-    def invalidateViewData(self, vehType, refresh = False):
+    def invalidateViewData(self, vehType, refresh=False):
         if vehType is not None:
             self._groupsDP.buildList()
             self._itemsDP.setVehicleTypeParams(self.getItemPriceFactor(vehType), self.getItemDefaultPriceFactor(vehType), self._currentItemID)

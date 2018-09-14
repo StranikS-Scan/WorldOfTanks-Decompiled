@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/ArtyHitMarker.py
 from helpers.CallbackDelayer import CallbackDelayer
 from AvatarInputHandler.control_modes import _SuperGunMarker, _SPGFlashGunMarker
@@ -24,7 +24,7 @@ class ArtyHitMarker(_SPGFlashGunMarker, CallbackDelayer):
         self.__trajectoryDrawer.setColors(Math.Vector4(0, 255, 0, 255), Math.Vector4(255, 0, 0, 255), Math.Vector4(128, 128, 128, 255))
         self.__trajectoryDrawer.setGetDynamicCollidersCallback(lambda start, end: [ e.collideSegment for e in getCollidableEntities((BigWorld.player().playerVehicleID,), start, end) ])
 
-    def setupShotParams(self, shotDescr, offset = (0, 0)):
+    def setupShotParams(self, shotDescr, offset=(0, 0)):
         self.__trajectoryDrawer.setParams(shotDescr['maxDistance'], Math.Vector3(0, -shotDescr['gravity'], 0), offset)
 
     def destroy(self):
@@ -43,7 +43,7 @@ class ArtyHitMarker(_SPGFlashGunMarker, CallbackDelayer):
         _SPGFlashGunMarker.disable(self)
         self.stopCallback(self.__tick)
 
-    def setGUIVisible(self, isVisible, valueUpdate = False):
+    def setGUIVisible(self, isVisible, valueUpdate=False):
         _SPGFlashGunMarker.show(self, isVisible)
         self.__trajectoryDrawer.visible = isVisible
 

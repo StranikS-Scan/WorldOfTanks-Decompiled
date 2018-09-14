@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/__init__.py
 import nations
 from collections import namedtuple
@@ -101,12 +101,10 @@ def getVehicleComponentsByType(vehicle, itemTypeIdx):
         return packModules(vehicle.optDevices)
     if itemTypeIdx == vehicles._SHELL:
         return packModules(vehicle.shells)
-    if itemTypeIdx == vehicles._EQUIPMENT:
-        return packModules(vehicle.eqs)
-    return ItemsCollection()
+    return packModules(vehicle.eqs) if itemTypeIdx == vehicles._EQUIPMENT else ItemsCollection()
 
 
-def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID = 0):
+def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0):
     """
     Returns all suitable items for given @vehicle.
     
@@ -170,7 +168,7 @@ def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID = 0):
 
 class GUIItem(object):
 
-    def __init__(self, proxy = None):
+    def __init__(self, proxy=None):
         pass
 
     def __repr__(self):
@@ -202,8 +200,7 @@ class HasIntCD(object):
         if self is other:
             return 1
         res = nationCompareByIndex(self.nationID, other.nationID)
-        if res:
-            return res
+        return res if res else 0
 
 
 class HasStrCD(object):
@@ -236,10 +233,7 @@ class RentalInfoProvider(_RentalInfoProvider):
         return self.battlesLeft or 0
 
     def getExpiryState(self):
-        if self.expiryState is not None:
-            return self.expiryState
-        else:
-            return True
+        return self.expiryState if self.expiryState is not None else True
 
 
 class FittingItem(GUIItem, HasIntCD):
@@ -249,7 +243,7 @@ class FittingItem(GUIItem, HasIntCD):
         IN_INVENTORY = 2
         OTHER = 3
 
-    def __init__(self, intCompactDescr, proxy = None, isBoughtForCredits = False):
+    def __init__(self, intCompactDescr, proxy=None, isBoughtForCredits=False):
         GUIItem.__init__(self, proxy)
         HasIntCD.__init__(self, intCompactDescr)
         self.defaultPrice = (0, 0)
@@ -366,7 +360,7 @@ class FittingItem(GUIItem, HasIntCD):
     def isInInventory(self):
         return self.inventoryCount > 0
 
-    def _getShortInfo(self, vehicle = None, expanded = False):
+    def _getShortInfo(self, vehicle=None, expanded=False):
         try:
             description = i18n.makeString('#menu:descriptions/' + self.itemTypeName + ('Full' if expanded else ''))
             itemParams = dict(ItemsParameters.g_instance.getParameters(self.descriptor, vehicle.descriptor if vehicle is not None else None))
@@ -379,15 +373,13 @@ class FittingItem(GUIItem, HasIntCD):
 
         return
 
-    def getShortInfo(self, vehicle = None, expanded = False):
-        if not GUI_SETTINGS.technicalInfo:
-            return ''
-        return self._getShortInfo(vehicle, expanded)
+    def getShortInfo(self, vehicle=None, expanded=False):
+        return '' if not GUI_SETTINGS.technicalInfo else self._getShortInfo(vehicle, expanded)
 
-    def getParams(self, vehicle = None):
+    def getParams(self, vehicle=None):
         return dict(ItemsParameters.g_instance.get(self.descriptor, vehicle.descriptor if vehicle is not None else None))
 
-    def getRentPackage(self, days = None):
+    def getRentPackage(self, days=None):
         return None
 
     def getGUIEmblemID(self):
@@ -414,13 +406,12 @@ class FittingItem(GUIItem, HasIntCD):
         return 'credits'
 
     def getSellPriceCurrency(self):
-        if self.sellPrice[1]:
-            return 'gold'
+        return 'gold' if self.sellPrice[1] else 'credits'
 
-    def isInstalled(self, vehicle, slotIdx = None):
+    def isInstalled(self, vehicle, slotIdx=None):
         return False
 
-    def mayInstall(self, vehicle, slotIdx = None):
+    def mayInstall(self, vehicle, slotIdx=None):
         return vehicle.descriptor.mayInstallComponent(self.intCD)
 
     def mayRemove(self, vehicle):
@@ -435,9 +426,7 @@ class FittingItem(GUIItem, HasIntCD):
     def mayPurchaseWithExchange(self, money, exchangeRate):
         priceCredits, _ = self.altPrice or self.buyPrice
         moneyCredits, moneyGold = money
-        if priceCredits <= moneyGold * exchangeRate + moneyCredits:
-            return True
-        return False
+        return True if priceCredits <= moneyGold * exchangeRate + moneyCredits else False
 
     def mayPurchase(self, money):
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
@@ -463,9 +452,7 @@ class FittingItem(GUIItem, HasIntCD):
     def getTarget(self, vehicle):
         if self.isInstalled(vehicle):
             return self.TARGETS.CURRENT
-        if self.isInInventory:
-            return self.TARGETS.IN_INVENTORY
-        return self.TARGETS.OTHER
+        return self.TARGETS.IN_INVENTORY if self.isInInventory else self.TARGETS.OTHER
 
     def getConflictedEquipments(self, vehicle):
         pass
@@ -479,29 +466,24 @@ class FittingItem(GUIItem, HasIntCD):
     def __cmp__(self, other):
         if other is None:
             return 1
-        res = HasIntCD.__cmp__(self, other)
-        if res:
-            return res
-        res = self._sortByType(other)
-        if res:
-            return res
-        res = self.level - other.level
-        if res:
-            return res
-        res = self.buyPrice[1] - other.buyPrice[1]
-        if res:
-            return res
-        res = self.buyPrice[0] - other.buyPrice[0]
-        if res:
-            return res
         else:
-            return cmp(self.userName, other.userName)
+            res = HasIntCD.__cmp__(self, other)
+            if res:
+                return res
+            res = self._sortByType(other)
+            if res:
+                return res
+            res = self.level - other.level
+            if res:
+                return res
+            res = self.buyPrice[1] - other.buyPrice[1]
+            if res:
+                return res
+            res = self.buyPrice[0] - other.buyPrice[0]
+            return res if res else cmp(self.userName, other.userName)
 
     def __eq__(self, other):
-        if other is None:
-            return False
-        else:
-            return self.intCompactDescr == other.intCompactDescr
+        return False if other is None else self.intCompactDescr == other.intCompactDescr
 
     def __repr__(self):
         return '%s<intCD:%d, type:%s, nation:%d>' % (self.__class__.__name__,

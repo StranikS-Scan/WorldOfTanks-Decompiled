@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
 import BigWorld
 from debug_utils import *
@@ -15,12 +15,10 @@ class TankmanBerthsBuyer(Processor):
           'count': berthsCount}), plugins.MoneyValidator(berthsPrice)))
         self.berthsPrice = berthsPrice
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('buy_tankmen_berths/%s' % errStr)
-        return makeI18nError('buy_tankmen_berths/server_error')
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('buy_tankmen_berths/%s' % errStr) if len(errStr) else makeI18nError('buy_tankmen_berths/server_error')
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('buy_tankmen_berths/success', money=formatPrice(self.berthsPrice), type=SM_TYPE.PurchaseForGold)
 
     def _request(self, callback):
@@ -30,19 +28,17 @@ class TankmanBerthsBuyer(Processor):
 
 class PremiumAccountBuyer(Processor):
 
-    def __init__(self, period, price, arenaUniqueID = 0, withoutBenefits = False):
+    def __init__(self, period, price, arenaUniqueID=0, withoutBenefits=False):
         self.wasPremium = g_itemsCache.items.stats.isPremium
         super(PremiumAccountBuyer, self).__init__((self.__getConfirmator(withoutBenefits, period, price), plugins.MoneyValidator((0, price))))
         self.premiumPrice = price
         self.period = period
         self.arenaUniqueID = arenaUniqueID
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr) and i18n.doesTextExist('#system_messages:premium/%s' % errStr):
-            return makeI18nError('premium/%s' % errStr, period=self.period, auxData={'errStr': errStr})
-        return makeI18nError('premium/server_error', period=self.period, auxData={'errStr': errStr})
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('premium/%s' % errStr, period=self.period, auxData={'errStr': errStr}) if len(errStr) and i18n.doesTextExist('#system_messages:premium/%s' % errStr) else makeI18nError('premium/server_error', period=self.period, auxData={'errStr': errStr})
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         localKey = 'premium/continueSuccess' if self.wasPremium else 'premium/buyingSuccess'
         return makeI18nSuccess(localKey, period=self.period, money=formatGoldPrice(self.premiumPrice), type=SM_TYPE.PurchaseForGold)
 
@@ -68,12 +64,10 @@ class GoldToCreditsExchanger(Processor):
         super(GoldToCreditsExchanger, self).__init__(plugins=(plugins.HtmlMessageConfirmator('exchangeGoldConfirmation', 'html_templates:lobby/dialogs', 'confirmExchange', {'primaryCurrencyAmount': BigWorld.wg_getGoldFormat(self.gold),
           'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.credits)}), plugins.MoneyValidator((0, self.gold))))
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('exchange/%s' % errStr, gold=self.gold)
-        return makeI18nError('exchange/server_error', gold=self.gold)
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('exchange/%s' % errStr, gold=self.gold) if len(errStr) else makeI18nError('exchange/server_error', gold=self.gold)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('exchange/success', gold=BigWorld.wg_getGoldFormat(self.gold), credits=formatPrice((self.credits, 0)), type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
@@ -83,7 +77,7 @@ class GoldToCreditsExchanger(Processor):
 
 class FreeXPExchanger(Processor):
 
-    def __init__(self, xp, vehiclesCD, freeConversion = False):
+    def __init__(self, xp, vehiclesCD, freeConversion=False):
         rate = g_itemsCache.items.shop.freeXPConversion
         self.xp = xp
         self.__freeConversion = bool(freeConversion)
@@ -91,12 +85,10 @@ class FreeXPExchanger(Processor):
         self.vehiclesCD = vehiclesCD
         super(FreeXPExchanger, self).__init__(plugins=(self.__makeConfirmator(), plugins.MoneyValidator((0, self.gold)), plugins.EliteVehiclesValidator(self.vehiclesCD)))
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('exchangeXP/%s' % errStr, xp=BigWorld.wg_getIntegralFormat(self.xp))
-        return makeI18nError('exchangeXP/server_error', xp=BigWorld.wg_getIntegralFormat(self.xp))
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('exchangeXP/%s' % errStr, xp=BigWorld.wg_getIntegralFormat(self.xp)) if len(errStr) else makeI18nError('exchangeXP/server_error', xp=BigWorld.wg_getIntegralFormat(self.xp))
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('exchangeXP/success', gold=BigWorld.wg_getGoldFormat(self.gold), xp=BigWorld.wg_getIntegralFormat(self.xp), type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
@@ -121,11 +113,11 @@ class BattleResultsGetter(Processor):
         super(BattleResultsGetter, self).__init__()
         self.__arenaUniqueID = arenaUniqueID
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        LOG_ERROR('Error on server request to get battle results ', self.__arenaUniqueID, code, errStr, ctx)
+    def _errorHandler(self, code, errStr='', ctx=None):
+        LOG_WARNING('Error on server request to get battle results ', self.__arenaUniqueID, code, errStr, ctx)
         return makeError()
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeSuccess(auxData=ctx)
 
     def _request(self, callback):

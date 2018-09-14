@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/task_scheduler.py
 import BigWorld
 from helpers import time_utils
@@ -69,9 +69,8 @@ class TaskScheduler(object):
                     if delta > 0:
                         self._registerBigWorldCb(delta)
                         break
-                    else:
-                        self._removeTask(task.getId())
-                        task.execute()
+                    self._removeTask(task.getId())
+                    task.execute()
 
             return
 

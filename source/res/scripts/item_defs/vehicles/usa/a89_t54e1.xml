@@ -80,6 +80,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A89_T54E1/T54E1_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	0.94 0.94 0.49 0.000000	</tiling>
     </camouflage>
@@ -120,8 +121,8 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	usa_02	</textureSet>
-        <size>	0.45 0.76	</size>
+        <textureSet>	t97	</textureSet>
+        <size>	0.7 0.8	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -394,8 +395,8 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	usa_02	</textureSet>
-        <size>	0.45 0.76	</size>
+        <textureSet>	t97	</textureSet>
+        <size>	0.7 0.8	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -723,7 +724,7 @@
             <insigniaOnGun>
               <rayStart>	-0.000773127 -0.14623 3.67249	</rayStart>
               <rayEnd>	-0.077545 -0.161677 3.67225	</rayEnd>
-              <rayUp>	0.102 0.1 4	</rayUp>
+              <rayUp>	0.102 0.099 4	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>

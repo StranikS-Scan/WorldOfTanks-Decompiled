@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/DRRScaleController.py
 import weakref
 import BigWorld
@@ -23,7 +23,7 @@ class DRRScaleController(object):
 
     def stop(self):
         self.__ui = None
-        g_repeatKeyHandlers.remove(self.__handleRepeatKeyEvent)
+        g_repeatKeyHandlers.discard(self.__handleRepeatKeyEvent)
         return
 
     def handleKey(self, key, isDown):

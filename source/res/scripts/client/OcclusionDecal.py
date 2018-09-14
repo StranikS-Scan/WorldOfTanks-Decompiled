@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/OcclusionDecal.py
 import BigWorld
 
@@ -30,7 +30,7 @@ class OcclusionDecal:
         self.detach()
         return
 
-    def attach(self, vehicle, desc, isSettingChanged = False):
+    def attach(self, vehicle, desc, isSettingChanged=False):
         self.__vehicle = vehicle
         self.__desc = desc
         if not isSettingChanged:
@@ -85,7 +85,7 @@ class OcclusionDecal:
             self.attach(self.__vehicle, self.__desc, True)
             return
 
-    def onSettingsChanged(self, diff = None):
+    def onSettingsChanged(self, diff=None):
         enabled = False
         if 'SHADOWS_QUALITY' in diff:
             value = diff['SHADOWS_QUALITY']

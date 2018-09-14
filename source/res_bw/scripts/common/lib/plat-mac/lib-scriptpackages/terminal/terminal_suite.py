@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Terminal/Terminal_Suite.py
 """Suite Terminal Suite: Terms and Events for controlling the Terminal application
 Level 1, version 1
@@ -11,7 +12,7 @@ _code = 'trmx'
 
 class Terminal_Suite_Events:
 
-    def GetURL(self, _object, _attributes = {}, **_arguments):
+    def GetURL(self, _object, _attributes={}, **_arguments):
         """GetURL: Opens a telnet: URL
         Required argument: the object for the command
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -24,13 +25,12 @@ class Terminal_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_do_script = {'in_': 'kfil',
      'with_command': 'cmnd'}
 
-    def do_script(self, _object, _attributes = {}, **_arguments):
+    def do_script(self, _object, _attributes={}, **_arguments):
         """do script: Run a UNIX shell script or command
         Required argument: the object for the command
         Keyword argument in_: the window in which to execute the command
@@ -45,8 +45,7 @@ class Terminal_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class application(aetools.ComponentItem):

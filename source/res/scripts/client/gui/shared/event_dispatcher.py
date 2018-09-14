@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from adisp import process
@@ -62,7 +62,7 @@ def showHangar():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showAwardWindow(award, isUniqueName = True):
+def showAwardWindow(award, isUniqueName=True):
     if isUniqueName:
         name = getUniqueViewName(VIEW_ALIAS.AWARD_WINDOW)
     else:
@@ -106,16 +106,12 @@ def selectVehicleInHangar(itemCD):
     showHangar()
 
 
-def showPersonalCase(tankmanInvID, tabIndex, scope = EVENT_BUS_SCOPE.DEFAULT):
+def showPersonalCase(tankmanInvID, tabIndex, scope=EVENT_BUS_SCOPE.DEFAULT):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_CASE, getViewName(VIEW_ALIAS.PERSONAL_CASE, tankmanInvID), {'tankmanID': tankmanInvID,
      'page': tabIndex}), scope)
 
 
-def showPremiumCongratulationWindow(award):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_CONGRATULATION_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_CONGRATULATION_WINDOW), ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
-
-
-def showPremiumWindow(arenaUniqueID = 0, premiumBonusesDiff = None):
+def showPremiumWindow(arenaUniqueID=0, premiumBonusesDiff=None):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_WINDOW), ctx={'arenaUniqueID': arenaUniqueID,
      'premiumBonusesDiff': premiumBonusesDiff}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -131,6 +127,12 @@ def showChangeDivisionWindow(division):
 
 def runTutorialChain(id):
     g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='TRIGGERS_CHAINS', initialChapter=id, restoreIfRun=True))
+
+
+def changeAppResolution(width, height, scale):
+    g_eventBus.handleEvent(events.GameEvent(events.GameEvent.CHANGE_APP_RESOLUTION, ctx={'width': width,
+     'height': height,
+     'scale': scale}), scope=EVENT_BUS_SCOPE.GLOBAL)
 
 
 @process

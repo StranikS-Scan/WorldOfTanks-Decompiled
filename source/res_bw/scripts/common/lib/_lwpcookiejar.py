@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_LWPCookieJar.py
 """Load / save to libwww-perl (LWP) format files.
 
@@ -61,7 +62,7 @@ class LWPCookieJar(FileCookieJar):
     
     """
 
-    def as_lwp_str(self, ignore_discard = True, ignore_expires = True):
+    def as_lwp_str(self, ignore_discard=True, ignore_expires=True):
         r"""Return cookies as a string of "\n"-separated "Set-Cookie3" headers.
         
         ignore_discard and ignore_expires: see docstring for FileCookieJar.save
@@ -78,7 +79,7 @@ class LWPCookieJar(FileCookieJar):
 
         return '\n'.join(r + [''])
 
-    def save(self, filename = None, ignore_discard = False, ignore_expires = False):
+    def save(self, filename=None, ignore_discard=False, ignore_expires=False):
         if filename is None:
             if self.filename is not None:
                 filename = self.filename
@@ -128,10 +129,9 @@ class LWPCookieJar(FileCookieJar):
                             if v is None:
                                 v = True
                             standard[k] = v
-                        elif k in value_attrs:
+                        if k in value_attrs:
                             standard[k] = v
-                        else:
-                            rest[k] = v
+                        rest[k] = v
 
                     h = standard.get
                     expires = h('expires')

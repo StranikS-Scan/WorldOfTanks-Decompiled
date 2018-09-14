@@ -105,6 +105,7 @@
         <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G19_Wespe/Wespe_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Wespeketten_ausf_A>
@@ -711,7 +712,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.074 0.000 0.840 0.106 1.000 0.489 0.346 0.500 0.282 0.500 0.340 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.46 0.46 0.000000 0.000000	</tiling>

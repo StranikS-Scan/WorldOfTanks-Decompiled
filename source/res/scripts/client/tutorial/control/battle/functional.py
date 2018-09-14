@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/battle/functional.py
 import time
 import weakref
@@ -32,24 +32,6 @@ class _IMarker(object):
         pass
 
 
-class IDirectionIndicator(object):
-
-    def track(self, position):
-        pass
-
-    def setShape(self, shape):
-        pass
-
-    def setDistance(self, distance):
-        pass
-
-    def setPosition(self, position):
-        pass
-
-    def remove(self):
-        pass
-
-
 class _DirectionIndicatorCtrl(_IMarker):
 
     def __init__(self, indicator, shapes, position):
@@ -64,7 +46,7 @@ class _DirectionIndicatorCtrl(_IMarker):
         self.__indicator.track(position)
         g_settingsCore.onSettingsChanged += self.__as_onSettingsChanged
 
-    def update(self, distance, position = None):
+    def update(self, distance, position=None):
         self.__indicator.setDistance(distance)
         if position is not None:
             self.__indicator.setPosition(position)
@@ -91,7 +73,7 @@ class _DirectionIndicatorCtrl(_IMarker):
 
 class _AimMarker(_IMarker):
 
-    def __init__(self, typeID, triggerID, marker2D, marker3D, dIndicator = None):
+    def __init__(self, typeID, triggerID, marker2D, marker3D, dIndicator=None):
         self.__typeID = typeID
         self.__triggerID = triggerID
         self.__marker2D = marker2D
@@ -120,7 +102,7 @@ class _AimMarker(_IMarker):
 
 class _AreaMarker(_AimMarker):
 
-    def __init__(self, typeID, triggerID, worldMarker2D, minimapMarker2D, worldMarker3D, groundMarker3D, dIndicator = None):
+    def __init__(self, typeID, triggerID, worldMarker2D, minimapMarker2D, worldMarker3D, groundMarker3D, dIndicator=None):
         super(_AreaMarker, self).__init__(typeID, triggerID, worldMarker2D, worldMarker3D, dIndicator)
         self.__groundMarker = groundMarker3D
         self.__minimapMarker = minimapMarker2D
@@ -228,7 +210,7 @@ class _StaticObjectMarker3D(_IMarker):
 
 class _VehicleMarker(_IMarker):
 
-    def __init__(self, vehicleID, minimap, period, dIndicator = None):
+    def __init__(self, vehicleID, minimap, period, dIndicator=None):
         super(_VehicleMarker, self).__init__()
         self.__vehicleID = vehicleID
         self.__minimapRef = weakref.ref(minimap)
@@ -239,7 +221,7 @@ class _VehicleMarker(_IMarker):
     def update(self, manager):
         minimap = self.__minimapRef()
         vehicle = BigWorld.entities.get(self.__vehicleID)
-        if vehicle is not None and vehicle.isStarted and not vehicle.isPlayer:
+        if vehicle is not None and vehicle.isStarted and not vehicle.isPlayerVehicle:
             if self.__nextTime <= BigWorld.time():
                 if minimap is not None:
                     minimap.showActionMarker(self.__vehicleID, 'attack')

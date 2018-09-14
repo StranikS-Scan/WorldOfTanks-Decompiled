@@ -1,6 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/CursorDelegator.py
-import BigWorld, GUI
+import BigWorld
+import GUI
 from debug_utils import LOG_DEBUG
 
 class CursorDelegator(object):
@@ -33,7 +34,7 @@ class CursorDelegator(object):
             self.__activated = False
         return
 
-    def syncMousePosition(self, flash, flashX = None, flashY = None, customCall = False):
+    def syncMousePosition(self, flash, flashX=None, flashY=None, customCall=False):
         screenWidth, screenHeight = GUI.screenResolution()
         mouseLeft, mouseTop = GUI.mcursor().position
         if not customCall:
@@ -45,7 +46,7 @@ class CursorDelegator(object):
         flash.call('Cursor.SetPosition', [x, y])
         return
 
-    def setForcedCursor(self, flash, forcedCursor = None):
+    def setForcedCursor(self, flash, forcedCursor=None):
         flash.call('Cursor.SetForcedCursorType', [forcedCursor])
 
     def restoreMousePosition(self):

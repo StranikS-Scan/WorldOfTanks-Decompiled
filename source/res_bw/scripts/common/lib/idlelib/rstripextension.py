@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/RstripExtension.py
 """Provides "Strip trailing whitespace" under the "Format" menu."""
 
@@ -9,7 +9,7 @@ class RstripExtension:
         self.editwin = editwin
         self.editwin.text.bind('<<do-rstrip>>', self.do_rstrip)
 
-    def do_rstrip(self, event = None):
+    def do_rstrip(self, event=None):
         text = self.editwin.text
         undo = self.editwin.undo
         undo.undo_block_start()

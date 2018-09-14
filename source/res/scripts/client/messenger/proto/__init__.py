@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/__init__.py
 import weakref
 from helpers.ro_property import ROPropertyMeta
@@ -10,8 +10,7 @@ from messenger.proto.bw_chat2.BWServerSettings import BWServerSettings as BWServ
 from messenger.proto.interfaces import IProtoPlugin
 from messenger.proto.migration import MigrationPlugin
 from messenger.proto.migration.MigrationServerSettings import MigrationServerSettings
-from messenger.proto.xmpp import XmppPlugin
-from messenger.proto.xmpp.XmppServerSettings import XmppServerSettings
+from messenger.proto.xmpp import XmppPlugin, XmppServerSettings
 __all__ = ('BWProtoPlugin', 'BWProtoPlugin_chat2', 'XmppPlugin', 'MigrationPlugin')
 _SUPPORTED_PROTO_PLUGINS = {PROTO_TYPE.BW: BWProtoPlugin(),
  PROTO_TYPE.BW_CHAT2: BWProtoPlugin_chat2(),
@@ -75,10 +74,26 @@ class ServerSettings(object):
             result = self._isXmppEnabled()
         return result
 
+    def isUserRoomsEnabled(self, protoType):
+        result = False
+        if protoType is PROTO_TYPE.BW:
+            result = not self._isXmppUserRoomsEnabled()
+        elif protoType is PROTO_TYPE.XMPP:
+            result = self._isXmppUserRoomsEnabled()
+        return result
+
     def _isXmppEnabled(self):
         xmppName = PROTO_TYPE_NAMES[PROTO_TYPE.XMPP]
         if xmppName in self.__readonly__:
             result = self.__readonly__[xmppName].isEnabled()
+        else:
+            result = False
+        return result
+
+    def _isXmppUserRoomsEnabled(self):
+        xmppName = PROTO_TYPE_NAMES[PROTO_TYPE.XMPP]
+        if xmppName in self.__readonly__:
+            result = self.__readonly__[xmppName].isMucServiceAllowed()
         else:
             result = False
         return result

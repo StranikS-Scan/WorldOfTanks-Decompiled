@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/FileDialog.py
 """File selection dialog classes.
 
@@ -38,7 +38,7 @@ class FileDialog:
     """
     title = 'File Selection Dialog'
 
-    def __init__(self, master, title = None):
+    def __init__(self, master, title=None):
         if title is None:
             title = self.title
         self.master = master
@@ -85,7 +85,7 @@ class FileDialog:
         self.top.bind('<Alt-W>', self.cancel_command)
         return
 
-    def go(self, dir_or_file = os.curdir, pattern = '*', default = '', key = None):
+    def go(self, dir_or_file=os.curdir, pattern='*', default='', key=None):
         if key and key in dialogstates:
             self.directory, pattern = dialogstates[key]
         else:
@@ -110,7 +110,7 @@ class FileDialog:
         self.top.destroy()
         return self.how
 
-    def quit(self, how = None):
+    def quit(self, how=None):
         self.how = how
         self.master.quit()
 
@@ -136,7 +136,7 @@ class FileDialog:
     def ok_command(self):
         self.quit(self.get_selection())
 
-    def filter_command(self, event = None):
+    def filter_command(self, event=None):
         dir, pat = self.get_filter()
         try:
             names = os.listdir(dir)
@@ -153,7 +153,7 @@ class FileDialog:
             fullname = os.path.join(dir, name)
             if os.path.isdir(fullname):
                 subdirs.append(name)
-            elif fnmatch.fnmatch(name, pat):
+            if fnmatch.fnmatch(name, pat):
                 matchingfiles.append(name)
 
         self.dirs.delete(0, END)
@@ -181,7 +181,7 @@ class FileDialog:
         file = os.path.expanduser(file)
         return file
 
-    def cancel_command(self, event = None):
+    def cancel_command(self, event=None):
         self.quit()
 
     def set_filter(self, dir, pat):

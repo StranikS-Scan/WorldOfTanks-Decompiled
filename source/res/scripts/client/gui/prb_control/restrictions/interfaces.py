@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/restrictions/interfaces.py
 
 
@@ -19,16 +19,16 @@ class IGUIPermissions(object):
 
 class IPrbPermissions(IGUIPermissions):
 
-    def canKick(self, team = 1):
+    def canKick(self, team=1):
         return False
 
-    def canAssignToTeam(self, team = 1):
+    def canAssignToTeam(self, team=1):
         return False
 
     def canChangePlayerTeam(self):
         return False
 
-    def canSetTeamState(self, team = 1):
+    def canSetTeamState(self, team=1):
         return False
 
     def canMakeOpenedClosed(self):

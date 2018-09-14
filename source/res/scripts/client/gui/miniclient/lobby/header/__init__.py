@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/header/__init__.py
 import account_popover as _account_popover
 import create_squad as _create_squad
@@ -11,3 +11,4 @@ def configure_pointcuts(config):
     _fight_button.DisableFightButtonPointcut(config)
     _account_popover.ClanBtnsUnavailable()
     _account_popover.MyClanInvitesBtnUnavailable()
+    _account_popover.CrewButtonStatusPointcut()

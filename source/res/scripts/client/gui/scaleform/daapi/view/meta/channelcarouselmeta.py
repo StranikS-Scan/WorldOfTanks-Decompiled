@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ChannelCarouselMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -13,10 +13,14 @@ class ChannelCarouselMeta(BaseDAAPIComponent):
     def channelCloseClick(self, itemID):
         self._printOverrideError('channelCloseClick')
 
+    def updateItemDataFocus(self, itemID, wndType, isFocusIn):
+        self._printOverrideError('updateItemDataFocus')
+
+    def updateItemDataOpened(self, itemID, wndType, isWindowOpened):
+        self._printOverrideError('updateItemDataOpened')
+
     def as_getDataProviderS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getDataProvider()
+        return self.flashObject.as_getDataProvider() if self._isDAAPIInited() else None
 
     def as_getBattlesDataProviderS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getBattlesDataProvider()
+        return self.flashObject.as_getBattlesDataProvider() if self._isDAAPIInited() else None

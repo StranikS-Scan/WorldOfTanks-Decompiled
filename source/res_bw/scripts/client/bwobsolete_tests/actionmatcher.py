@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_tests/ActionMatcher.py
 """
 This module tests the Action Matcher via visual clues on the screen.
@@ -33,17 +33,17 @@ class ActionDisplay:
         self.actionText = GUI.Text('')
         self.guiAttachment.component = self.actionText
 
-    def angleGizmo(self, red = False):
+    def angleGizmo(self, red=False):
         m = BigWorld.Model('helpers/models/hemisphere.model')
         m.gen_shadow = ['green', 'red'][red]
         return m
 
-    def angleGizmo2(self, red = False):
+    def angleGizmo2(self, red=False):
         m = BigWorld.Model('helpers/models/hemisphere.model')
         m.gen_shadow = ['green_hollow', 'red_hollow'][red]
         return m
 
-    def rulerGizmo(self, red = False):
+    def rulerGizmo(self, red=False):
         f = GUI.Frame2('helpers/maps/ruler.tga')
         f.transform = GUI.MatrixShader()
         f.transform.target = Math.Matrix()
@@ -202,7 +202,7 @@ def velocityVizModel():
     return m
 
 
-def addEntityTransformViz(entity, scale = 0.25):
+def addEntityTransformViz(entity, scale=0.25):
     m = transformVizModel()
     m.empty = 'Custom'
     m.empty.clothesColour4 = (1, 1, 0.5, 0)
@@ -222,7 +222,7 @@ def addEntityTransformViz(entity, scale = 0.25):
     entity.addModel(m)
 
 
-def addModelTransformViz(entity, scale = 0.25):
+def addModelTransformViz(entity, scale=0.25):
     m = transformVizModel()
     m.empty = 'Custom'
     m.empty.clothesColour4 = (1.0, 0.33, 0.33, 1.0)
@@ -294,7 +294,7 @@ def onMatchAction(entity, actionName):
     return
 
 
-def test(entity = None):
+def test(entity=None):
     if entity == None:
         entity = BigWorld.player()
     entity.model.motors[0].matchNotifier = partial(onMatchAction, entity)
@@ -304,7 +304,7 @@ def test(entity = None):
     return
 
 
-def testSSO(entity = None):
+def testSSO(entity=None):
     if entity == None:
         entity = BigWorld.player()
     m = BigWorld.Model('art/characters/foe/guard/guard.model')

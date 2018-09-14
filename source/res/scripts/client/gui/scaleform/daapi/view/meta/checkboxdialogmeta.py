@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CheckBoxDialogMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
@@ -8,13 +8,10 @@ class CheckBoxDialogMeta(BaseDAAPIModule):
         self._printOverrideError('onCheckBoxChange')
 
     def as_setCheckBoxLabelS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCheckBoxLabel(value)
+        return self.flashObject.as_setCheckBoxLabel(value) if self._isDAAPIInited() else None
 
     def as_setCheckBoxSelectedS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCheckBoxSelected(value)
+        return self.flashObject.as_setCheckBoxSelected(value) if self._isDAAPIInited() else None
 
     def as_setCheckBoxEnabledS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCheckBoxEnabled(value)
+        return self.flashObject.as_setCheckBoxEnabled(value) if self._isDAAPIInited() else None

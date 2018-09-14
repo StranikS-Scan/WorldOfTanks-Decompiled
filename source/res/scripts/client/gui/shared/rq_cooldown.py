@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/rq_cooldown.py
 import BigWorld
 import math
@@ -45,20 +45,20 @@ def getRequestCoolDown(scopeID, rqTypeID):
     return result
 
 
-def getRequestInCoolDownMessage(requestName, coolDown = DEFAULT_COOLDOWN_TO_REQUEST):
+def getRequestInCoolDownMessage(requestName, coolDown=DEFAULT_COOLDOWN_TO_REQUEST):
     return i18n.makeString(I18N_SYSTEM_MESSAGES.REQUEST_ISINCOOLDOWN, request=requestName, coolDown=coolDown)
 
 
-def setRequestCoolDown(scopeID, rqTypeID, coolDown = DEFAULT_COOLDOWN_TO_REQUEST):
+def setRequestCoolDown(scopeID, rqTypeID, coolDown=DEFAULT_COOLDOWN_TO_REQUEST):
     _g_coolDowns[scopeID, rqTypeID] = BigWorld.time() + coolDown
     fireCoolDownEvent(scopeID, rqTypeID, coolDown=coolDown)
 
 
-def adjustRequestCoolDown(scopeID, rqTypeID, coolDown = DEFAULT_COOLDOWN_TO_REQUEST):
+def adjustRequestCoolDown(scopeID, rqTypeID, coolDown=DEFAULT_COOLDOWN_TO_REQUEST):
     _g_coolDowns[scopeID, rqTypeID] = BigWorld.time() + coolDown
 
 
-def fireCoolDownEvent(scopeID, rqTypeID, coolDown = DEFAULT_COOLDOWN_TO_REQUEST):
+def fireCoolDownEvent(scopeID, rqTypeID, coolDown=DEFAULT_COOLDOWN_TO_REQUEST):
     if scopeID not in _REQUEST_SCOPE_TO_EVENT:
         LOG_WARNING('Type of event is not found, it is ignored', scopeID)
         return
@@ -67,7 +67,7 @@ def fireCoolDownEvent(scopeID, rqTypeID, coolDown = DEFAULT_COOLDOWN_TO_REQUEST)
 
 class RequestCooldownManager(object):
 
-    def __init__(self, scopeID, commonCooldown = 0.0):
+    def __init__(self, scopeID, commonCooldown=0.0):
         super(RequestCooldownManager, self).__init__()
         self._scopeID = scopeID
         self._commonCooldown = commonCooldown
@@ -81,27 +81,25 @@ class RequestCooldownManager(object):
 
     def isInProcess(self, rqTypeID):
         commonCooldownLeft = self._getCommonCooldownTimeLeft()
-        if commonCooldownLeft:
-            return True
-        return isRequestInCoolDown(self._scopeID, rqTypeID)
+        return True if commonCooldownLeft else isRequestInCoolDown(self._scopeID, rqTypeID)
 
     def getTime(self, rqTypeID):
         return max(getRequestCoolDown(self._scopeID, rqTypeID), self._getCommonCooldownTimeLeft())
 
-    def getCoolDownMessage(self, rqTypeID, coolDown = None):
+    def getCoolDownMessage(self, rqTypeID, coolDown=None):
         requestName = self.lookupName(rqTypeID)
         if coolDown is None:
             coolDown = self.getDefaultCoolDown()
         return i18n.makeString(I18N_SYSTEM_MESSAGES.REQUEST_ISINCOOLDOWN, request=requestName, coolDown=BigWorld.wg_getNiceNumberFormat(coolDown))
 
-    def process(self, rqTypeID, coolDown = None):
+    def process(self, rqTypeID, coolDown=None):
         if coolDown is None:
             coolDown = self.getDefaultCoolDown()
         self._lastRqTime = BigWorld.time()
         setRequestCoolDown(self._scopeID, rqTypeID, coolDown)
         return
 
-    def adjust(self, rqTypeID, coolDown = None):
+    def adjust(self, rqTypeID, coolDown=None):
         if coolDown is None:
             coolDown = self.getDefaultCoolDown()
         self._lastRqTime = BigWorld.time()
@@ -111,14 +109,14 @@ class RequestCooldownManager(object):
     def reset(self, rqTypeID):
         setRequestCoolDown(self._scopeID, rqTypeID, -1)
 
-    def validate(self, rqTypeID, coolDown = None):
+    def validate(self, rqTypeID, coolDown=None):
         result = False
         if self.isInProcess(rqTypeID):
             self._showSysMessage(self.getCoolDownMessage(rqTypeID, coolDown))
             result = True
         return result
 
-    def fireEvent(self, rqTypeID, coolDown = None):
+    def fireEvent(self, rqTypeID, coolDown=None):
         if coolDown is None:
             coolDown = self.getDefaultCoolDown()
         fireCoolDownEvent(self._scopeID, rqTypeID, coolDown)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_team_bases_ctrl.py
 from collections import defaultdict
 import weakref
@@ -10,10 +10,8 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control import arena_info
 from gui.battle_control.arena_info.interfaces import ITeamsBasesController
 from gui.shared.utils.functions import getArenaSubTypeName
-import FMOD
-if FMOD.enabled:
-    _BASE_CAPTURE_SOUND_NAME_ENEMY = '/GUI/notifications_FX/base_capture_2'
-    _BASE_CAPTURE_SOUND_NAME_ALLY = '/GUI/notifications_FX/base_capture_1'
+_BASE_CAPTURE_SOUND_NAME_ENEMY = 'base_capture_2'
+_BASE_CAPTURE_SOUND_NAME_ALLY = 'base_capture_1'
 _AVAILABLE_TEAMS_NUMBERS = range(1, TEAMS_IN_ARENA.MAX_TEAMS + 1)
 _UPDATE_POINTS_DELAY = 1.0
 _ENEMY_OFFSET_DISABLED_BY_GAMEPLAY = ('assault', 'assault2', 'domination')
@@ -74,7 +72,7 @@ class BattleTeamsBasesController(ITeamsBasesController):
         for clientID, (points, stopped) in self.__points.iteritems():
             if clientID in self.__captured:
                 self.__ui.addCapturedTeamBase(clientID, playerTeam)
-            elif points:
+            if points:
                 self.__ui.addCapturingTeamBase(clientID, playerTeam, points, self._getProgressRate(), stopped)
 
     def clearUI(self):
@@ -153,7 +151,7 @@ class BattleTeamsBasesController(ITeamsBasesController):
     def _getProgressRate(self):
         pass
 
-    def __hasBaseID(self, team, exclude = -1):
+    def __hasBaseID(self, team, exclude=-1):
         return len(filter(lambda i: i & team != 0 and i != exclude, self.__clientIDs)) > 0
 
     def __playCaptureSound(self, playerTeam, baseTeam):
@@ -163,15 +161,20 @@ class BattleTeamsBasesController(ITeamsBasesController):
             else:
                 soundID = _BASE_CAPTURE_SOUND_NAME_ALLY
             try:
+                sound = self.__sounds.get(baseTeam, None)
+                if sound is not None:
+                    sound.stop()
                 sound = SoundGroups.g_instance.getSound2D(soundID)
                 sound.play()
                 self.__sounds[baseTeam] = sound
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
+        return
+
     def __stopCaptureSound(self, team):
         sound = self.__sounds.pop(team, None)
-        if sound:
+        if sound is not None:
             try:
                 sound.stop()
             except Exception:

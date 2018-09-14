@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/captcha/__init__.py
 from constants import CAPTCHA_API, CURRENT_CAPTCHA_API
 from helpers import i18n
@@ -11,16 +11,16 @@ class _BASE_CAPTCHA_API(object):
     _RESPONSE_IS_INCORRECT_CODE = None
     _IMAGE_SIZE = (0, 0)
 
-    def getI18nServerErrorText(self, errorCode, defaultErrorCode = 'unknown'):
+    def getI18nServerErrorText(self, errorCode, defaultErrorCode='unknown'):
         key = self._SERVER_ERROR_CODES.get(errorCode)
         if key is None:
             key = self._SERVER_ERROR_CODES.get(defaultErrorCode)
         if key is None:
-            raise Exception, "It is impossible to determine error text for code = '%s', default code = '%s'" % (errorCode, defaultErrorCode)
+            raise Exception("It is impossible to determine error text for code = '%s', default code = '%s'" % (errorCode, defaultErrorCode))
         return i18n.makeString(key)
 
     def getImageSource(self, publicKey, *args):
-        raise NotImplemented, 'method getImageSource must be implement'
+        raise NotImplemented('method getImageSource must be implement')
 
 
 def _CAPTCHA_API_FACTORY():

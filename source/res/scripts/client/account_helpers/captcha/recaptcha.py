@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/captcha/reCAPTCHA.py
 from account_helpers.captcha import _BASE_CAPTCHA_API
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
@@ -30,12 +30,14 @@ class reCAPTCHA(_BASE_CAPTCHA_API):
         challenge = None
         start = time.time()
         try:
-            resp = urllib.urlopen(url)
-            html = resp.read()
-            challenge = re.search(challenge_regexp, html, flags=re.DOTALL).group('challenge')
-        except:
-            LOG_ERROR('client can not load or parse reCAPTCHA html')
-            LOG_CURRENT_EXCEPTION()
+            try:
+                resp = urllib.urlopen(url)
+                html = resp.read()
+                challenge = re.search(challenge_regexp, html, flags=re.DOTALL).group('challenge')
+            except:
+                LOG_ERROR('client can not load or parse reCAPTCHA html')
+                LOG_CURRENT_EXCEPTION()
+
         finally:
             if resp is not None:
                 resp.close()
@@ -44,14 +46,16 @@ class reCAPTCHA(_BASE_CAPTCHA_API):
         if challenge:
             url = '%s/image?c=%s' % (self._SERVER_API_URL, challenge)
             try:
-                resp = urllib.urlopen(url)
-                contentType = resp.headers.get('content-type')
-                if contentType == 'image/jpeg':
-                    data = resp.read()
-                else:
-                    LOG_ERROR('client can not load reCAPTCHA image', contentType)
-            except:
-                LOG_ERROR('client can not load reCAPTCHA image')
+                try:
+                    resp = urllib.urlopen(url)
+                    contentType = resp.headers.get('content-type')
+                    if contentType == 'image/jpeg':
+                        data = resp.read()
+                    else:
+                        LOG_ERROR('client can not load reCAPTCHA image', contentType)
+                except:
+                    LOG_ERROR('client can not load reCAPTCHA image')
+
             finally:
                 if resp is not None:
                     resp.close()

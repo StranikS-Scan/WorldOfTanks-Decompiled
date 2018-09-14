@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/Console.py
 import BigWorld, GUI
 import Keys
@@ -10,7 +10,7 @@ MAX_HISTORY_ENTRIES = 50
 class Console(PyGUIBase):
     factoryString = 'PyGUI.Console'
 
-    def __init__(self, component = None):
+    def __init__(self, component=None):
         PyGUIBase.__init__(self, component)
         self.__history = []
         self.__historyShown = -1

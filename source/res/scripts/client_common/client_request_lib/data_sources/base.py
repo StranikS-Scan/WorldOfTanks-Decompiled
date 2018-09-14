@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/base.py
 """
 Created on Jul 1, 2015
@@ -23,7 +23,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_clans_ratings(self, callback, clan_ids, fields = None):
+    def get_clans_ratings(self, callback, clan_ids, fields=None):
         """
         return clan rating info as dict with possible keys:
         
@@ -50,7 +50,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_clan_invites(self, callback, clan_id, fields = None, statuses = None, offset = 0, limit = 18):
+    def get_clan_invites(self, callback, clan_id, fields=None, statuses=None, offset=0, limit=18):
         """
         return clan invites as dict with 'items' value as dict with possible keys:
         
@@ -68,7 +68,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_account_invites(self, callback, account_id, fields = None, statuses = None, offset = 0, limit = 18):
+    def get_account_invites(self, callback, account_id, fields=None, statuses=None, offset=0, limit=18):
         """
         return clan invites as dict with 'items' value as dict with possible keys:
         
@@ -86,7 +86,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_account_applications_count_since(self, callback, account_id, since = None):
+    def get_account_applications_count_since(self, callback, account_id, since=None):
         """
         return account applications count created since passed date, returned as dict:
         
@@ -95,7 +95,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_clan_invites_count_since(self, callback, clan_id, since = None):
+    def get_clan_invites_count_since(self, callback, clan_id, since=None):
         """
         return clan invitation count created since passed date, returned as dict:
         
@@ -104,7 +104,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_clan_applications(self, callback, clan_id, fields = None, statuses = None, offset = 0, limit = 18):
+    def get_clan_applications(self, callback, clan_id, fields=None, statuses=None, offset=0, limit=18):
         """
         return clan applications as dict with 'items' value as dict with possible keys:
         
@@ -122,7 +122,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def search_clans(self, callback, search, get_total_count = False, fields = None, offset = 0, limit = 18):
+    def search_clans(self, callback, search, get_total_count=False, fields=None, offset=0, limit=18):
         """
         return clan applications as dict with 'items' value as dict with possible keys:
         
@@ -137,7 +137,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_clans_info(self, callback, clan_ids, fields = None):
+    def get_clans_info(self, callback, clan_ids, fields=None):
         """
         return clan info as dict with possible keys:
         
@@ -151,7 +151,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_clan_members(self, callback, clan_id, fields = None):
+    def get_clan_members(self, callback, clan_id, fields=None):
         """
         return clan info as dict with possible keys:
         
@@ -162,7 +162,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_clan_favorite_attributes(self, callback, clan_id, fields = None):
+    def get_clan_favorite_attributes(self, callback, clan_id, fields=None):
         """
         return clans favorite_arena and favorite_primetime as dict with possible keys:
         
@@ -173,7 +173,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_accounts_clans(self, callback, account_ids, fields = None):
+    def get_accounts_clans(self, callback, account_ids, fields=None):
         """
         return clan info as dict with possible keys:"clan_id": 4727,
         
@@ -185,7 +185,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_accounts_info(self, callback, account_ids, fields = None):
+    def get_accounts_info(self, callback, account_ids, fields=None):
         """
         return accounts info as list of dicts with possible keys:
         
@@ -198,7 +198,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_clan_provinces(self, callback, clan_id, fields = None):
+    def get_clan_provinces(self, callback, clan_id, fields=None):
         """
         return clan provinces info as list of dicts with possible keys:
         
@@ -213,7 +213,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_clan_globalmap_stats(self, callback, clan_id, fields = None):
+    def get_clan_globalmap_stats(self, callback, clan_id, fields=None):
         """
         return clan statistic info as dict with possible keys:
         
@@ -232,7 +232,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_fronts_info(self, callback, front_names = None, fields = None):
+    def get_fronts_info(self, callback, front_names=None, fields=None):
         """
         return fronts info as list of dicts with possible keys:
         
@@ -243,7 +243,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_stronghold_info(self, callback, clan_id = None, fields = None):
+    def get_stronghold_info(self, callback, clan_id=None, fields=None):
         """
         return stronghold info as dict with possible keys:
         
@@ -266,7 +266,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_strongholds_statistics(self, callback, clan_id, fields = None):
+    def get_strongholds_statistics(self, callback, clan_id, fields=None):
         """
         return stronghold statistics info as dict with possible keys:
         
@@ -287,7 +287,7 @@ class BaseDataAccessor(object):
         pass
 
     @abstractmethod
-    def get_strongholds_state(self, callback, clan_id, fields = None):
+    def get_strongholds_state(self, callback, clan_id, fields=None):
         """
         return stronghold statistics info as dict with possible keys:
         

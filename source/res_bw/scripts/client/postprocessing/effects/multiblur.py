@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Effects/MultiBlur.py
 from PostProcessing.RenderTargets import *
 from PostProcessing.Phases import *
@@ -6,7 +6,7 @@ from PostProcessing import Effect
 from PostProcessing.Effects import implementEffectFactory
 
 @implementEffectFactory('Multi blur', 'Store multiple levels of blur of the scene in intermediate textures.  This is required by the depthOfField3 Effect.')
-def multiBlur(filterMode = 0):
+def multiBlur(filterMode=0):
     """This method creates and returns an effect that down-samples and
     blurs the back-buffer.  *It relies on the down sample buffers already
     having been created*.  It fills the     downSampleBlur1/2/3 render targets."""

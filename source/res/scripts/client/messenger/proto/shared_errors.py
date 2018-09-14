@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/shared_errors.py
 import BigWorld
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
@@ -85,7 +85,7 @@ class ClientError(IChatError):
 class ClientActionError(ClientError):
     __slots__ = ('_action',)
 
-    def __init__(self, actionID, errorID = None, **kwargs):
+    def __init__(self, actionID, errorID=None, **kwargs):
         super(ClientActionError, self).__init__((errorID or CLIENT_ERROR_ID.GENERIC), **kwargs)
         self._action = self.createAction(actionID)
 
@@ -106,7 +106,7 @@ class ClientActionError(ClientError):
 
 class ChatCoolDownError(ClientActionError):
 
-    def __init__(self, actionID, coolDown = None):
+    def __init__(self, actionID, coolDown=None):
         if coolDown:
             kwargs = {'floatArg1': coolDown}
         else:

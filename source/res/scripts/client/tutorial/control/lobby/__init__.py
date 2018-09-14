@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/lobby/__init__.py
 from tutorial.control import ControlsFactory, functional as core_func
 from tutorial.control import context as core_ctx

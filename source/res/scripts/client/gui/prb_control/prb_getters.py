@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/prb_getters.py
 import BigWorld
 from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTLE_TYPE, DEFAULT_LANGUAGE
@@ -16,6 +16,14 @@ def isInEventBattlesQueue():
     return getattr(BigWorld.player(), 'isInEventBattles', False)
 
 
+def isInFalloutClassic():
+    return getattr(BigWorld.player(), 'isInFalloutClassic', False)
+
+
+def isInFalloutMultiteam():
+    return getattr(BigWorld.player(), 'isInFalloutMultiteam', False)
+
+
 def isInSandboxQueue():
     return getattr(BigWorld.player(), 'isInSandboxQueue', False)
 
@@ -26,6 +34,10 @@ def getQueueType():
         queueType = QUEUE_TYPE.RANDOMS
     elif isInEventBattlesQueue():
         queueType = QUEUE_TYPE.EVENT_BATTLES
+    elif isInFalloutClassic():
+        queueType = QUEUE_TYPE.FALLOUT_CLASSIC
+    elif isInFalloutMultiteam():
+        queueType = QUEUE_TYPE.FALLOUT_MULTITEAM
     elif isInTutorialQueue():
         queueType = QUEUE_TYPE.TUTORIAL
     elif isInSandboxQueue():
@@ -45,22 +57,17 @@ def getPrebattleID():
     return prbID
 
 
-def isPrebattleSettingsReceived(prebattle = None):
+def isPrebattleSettingsReceived(prebattle=None):
     prb = prebattle or getClientPrebattle()
-    if prb is not None:
-        return prb.settings is not None
-    else:
-        return False
+    return prb.settings is not None if prb is not None else False
 
 
-def getPrebattleSettings(prebattle = None):
+def getPrebattleSettings(prebattle=None):
     prb = prebattle or getClientPrebattle()
-    if prb and prb.settings:
-        return makePrebattleSettings(prb.settings)
-    return makePrebattleSettings()
+    return makePrebattleSettings(prb.settings) if prb and prb.settings else makePrebattleSettings()
 
 
-def getPrebattleProps(prebattle = None):
+def getPrebattleProps(prebattle=None):
     prb = prebattle or getClientPrebattle()
     result = {}
     if prb and prb.properties:
@@ -68,7 +75,7 @@ def getPrebattleProps(prebattle = None):
     return result
 
 
-def getPrebattleRosters(prebattle = None):
+def getPrebattleRosters(prebattle=None):
     prb = prebattle or getClientPrebattle()
     result = {}
     if prb:
@@ -76,7 +83,7 @@ def getPrebattleRosters(prebattle = None):
     return result
 
 
-def getPrebattleTeamStates(prebattle = None):
+def getPrebattleTeamStates(prebattle=None):
     prb = prebattle or getClientPrebattle()
     result = [None, 0, 0]
     if prb:
@@ -92,7 +99,7 @@ def getPrebattleAutoInvites():
     return autoInvites
 
 
-def getPrebattleType(prebattle = None, settings = None):
+def getPrebattleType(prebattle=None, settings=None):
     try:
         if settings is None:
             settings = getPrebattleSettings(prebattle=prebattle)
@@ -103,7 +110,7 @@ def getPrebattleType(prebattle = None, settings = None):
     return
 
 
-def getPrebattleTypeName(prbType = None):
+def getPrebattleTypeName(prbType=None):
     if prbType is None:
         prbType = getPrebattleType()
     if prbType in PREBATTLE_TYPE_NAMES:
@@ -117,11 +124,15 @@ _ARENA_GUI_TYPE_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: ARENA_GUI_TYPE.RANDOM,
  PREBATTLE_TYPE.TRAINING: ARENA_GUI_TYPE.TRAINING,
  PREBATTLE_TYPE.COMPANY: ARENA_GUI_TYPE.COMPANY}
 _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
- QUEUE_TYPE.EVENT_BATTLES: ARENA_GUI_TYPE.EVENT_BATTLES}
+ QUEUE_TYPE.EVENT_BATTLES: ARENA_GUI_TYPE.EVENT_BATTLES,
+ QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_GUI_TYPE.FALLOUT_CLASSIC,
+ QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_GUI_TYPE.FALLOUT_MULTITEAM}
 
-def getArenaGUIType(prbType = None, queueType = None):
+def getArenaGUIType(prbType=None, queueType=None):
     if prbType is None:
         prbType = getPrebattleType()
+    if queueType is None:
+        queueType = getQueueType()
     arenaGuiType = ARENA_GUI_TYPE.RANDOM
     if prbType is not None:
         arenaGuiType = ARENA_GUI_TYPE.UNKNOWN
@@ -163,7 +174,7 @@ def getClassLevelLimits(teamLimits, classType):
         return (limit[0], min(limit[1], VEHICLE_MAX_LEVEL))
 
 
-def getPrebattleLocalizedData(extraData = None):
+def getPrebattleLocalizedData(extraData=None):
     led = {}
     if extraData is None:
         extraData = getPrebattleSettings()['extraData']
@@ -202,15 +213,15 @@ def areSpecBattlesHidden():
     return not getattr(BigWorld.player(), 'prebattleAutoInvites', None)
 
 
-def isCompany(settings = None):
+def isCompany(settings=None):
     return getPrebattleType(settings=settings) == PREBATTLE_TYPE.COMPANY
 
 
-def isTraining(settings = None):
+def isTraining(settings=None):
     return getPrebattleType(settings=settings) == PREBATTLE_TYPE.TRAINING
 
 
-def isBattleSession(settings = None):
+def isBattleSession(settings=None):
     return getPrebattleType(settings=settings) in (PREBATTLE_TYPE.TOURNAMENT, PREBATTLE_TYPE.CLAN)
 
 
@@ -239,7 +250,7 @@ def getClientUnitBrowser():
     return getattr(BigWorld.player(), 'unitBrowser', None)
 
 
-def getUnit(unitIdx, safe = False):
+def getUnit(unitIdx, safe=False):
     unitMgr = getClientUnitMgr()
     if not unitMgr:
         if not safe:

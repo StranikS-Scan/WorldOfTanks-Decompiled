@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortOrderConfirmationWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -10,10 +10,8 @@ class FortOrderConfirmationWindowMeta(AbstractWindowView):
     def getTimeStr(self, time):
         self._printOverrideError('getTimeStr')
 
-    def as_setDataS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(value)
+    def as_setDataS(self, data):
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
-    def as_setSettingsS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSettings(value)
+    def as_setSettingsS(self, data):
+        return self.flashObject.as_setSettings(data) if self._isDAAPIInited() else None

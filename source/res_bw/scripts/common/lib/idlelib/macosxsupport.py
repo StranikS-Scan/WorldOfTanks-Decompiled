@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/macosxSupport.py
 """
 A number of functions that enhance IDLE on Mac OSX.
@@ -131,7 +131,7 @@ def overrideRootMenu(root, flist):
     menudict['windows'] = menu = Menu(menubar, name='windows')
     menubar.add_cascade(label='Window', menu=menu, underline=0)
 
-    def postwindowsmenu(menu = menu):
+    def postwindowsmenu(menu=menu):
         end = menu.index('end')
         if end is None:
             end = -1
@@ -142,16 +142,16 @@ def overrideRootMenu(root, flist):
 
     WindowList.register_callback(postwindowsmenu)
 
-    def about_dialog(event = None):
+    def about_dialog(event=None):
         from idlelib import aboutDialog
         aboutDialog.AboutDialog(root, 'About IDLE')
 
-    def config_dialog(event = None):
+    def config_dialog(event=None):
         from idlelib import configDialog
         root.instance_dict = flist.inversedict
         configDialog.ConfigDialog(root, 'Settings')
 
-    def help_dialog(event = None):
+    def help_dialog(event=None):
         from idlelib import textView
         fn = path.join(path.abspath(path.dirname(__file__)), 'help.txt')
         textView.view_file(root, 'Help', fn)

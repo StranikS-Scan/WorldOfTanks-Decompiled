@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/login/Servers.py
 import BigWorld
 import Settings
@@ -57,7 +57,7 @@ class Servers(object):
     def selectedServerIdx(self):
         return self._selectedServerIdx
 
-    def __onCsisUpdate(self, response = None):
+    def __onCsisUpdate(self, response=None):
         self.updateServerList()
         self.onServersStatusChanged(self._serverList)
 

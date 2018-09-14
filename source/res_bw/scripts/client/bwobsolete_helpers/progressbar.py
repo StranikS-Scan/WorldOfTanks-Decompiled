@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/ProgressBar.py
 from PyGUI import PyGUIBase
 import BigWorld
@@ -93,7 +93,7 @@ class ChunkLoadingProgressBar(ProgressBar):
         self.component.bar.clipper.reset()
         self.progressCheck(BigWorld.time() + self.timeout)
 
-    def finish(self, timedOut = False):
+    def finish(self, timedOut=False):
         self.started = False
         if self.callbackFn and not self.cancelled:
             if timedOut:

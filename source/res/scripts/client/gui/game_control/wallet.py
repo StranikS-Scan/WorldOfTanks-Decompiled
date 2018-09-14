@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wallet.py
 import BigWorld
 from adisp import process
@@ -111,7 +111,7 @@ class WalletController(Controller):
             self.__currentCallbackId = None
         return
 
-    def __processStatus(self, status, initialize = False):
+    def __processStatus(self, status, initialize=False):
         if self.__currentStatus != status:
             self.__currentStatus = status
             self.__notify()

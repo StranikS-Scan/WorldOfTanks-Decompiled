@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/tkCommonDialog.py
 from Tkinter import *
 
 class Dialog:
     command = None
 
-    def __init__(self, master = None, **options):
+    def __init__(self, master=None, **options):
         if TkVersion < 4.2:
             raise TclError, 'this module requires Tk 4.2 or newer'
         self.master = master

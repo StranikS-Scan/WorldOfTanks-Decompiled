@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortIntelligenceWindow.py
 import BigWorld
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -16,7 +16,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 
 class FortIntelligenceWindow(FortIntelligenceWindowMeta, FortViewHelper):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(FortIntelligenceWindow, self).__init__()
         self._searchDP = None
         self.__cooldownCB = None

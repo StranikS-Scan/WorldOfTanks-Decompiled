@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/prequeue.py
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -14,7 +14,7 @@ from gui.prb_control.functional import interfaces
 from gui.prb_control.restrictions.permissions import PreQueuePermissions
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
 from gui.prb_control.settings import REQUEST_TYPE
-from gui.shared.utils.ListenersCollection import ListenersCollection
+from gui.shared.utils.listeners_collection import ListenersCollection
 from helpers import isPlayerAccount
 __all__ = ('PreQueueEntry', 'PlayersEventsSubscriber', 'NoPreQueueFunctional', 'AccountQueueFunctional')
 
@@ -29,10 +29,10 @@ class PreQueueEntry(interfaces.IPrbEntry):
     def makeDefCtx(self):
         return pre_queue_ctx.JoinModeCtx(self.__queueType, flags=self.__flags)
 
-    def create(self, ctx, callback = None):
+    def create(self, ctx, callback=None):
         raise Exception('QueueEntry is not create entity')
 
-    def join(self, ctx, callback = None):
+    def join(self, ctx, callback=None):
         result = True
         if not isinstance(ctx, pre_queue_ctx.JoinModeCtx):
             result = False
@@ -43,7 +43,7 @@ class PreQueueEntry(interfaces.IPrbEntry):
             callback(result)
         return
 
-    def select(self, ctx, callback = None):
+    def select(self, ctx, callback=None):
         self.join(ctx, callback=callback)
 
     def _goToFunctional(self):
@@ -60,7 +60,7 @@ class PlayersEventsSubscriber(object):
         raise NotImplementedError
 
 
-class NoPreQueueFunctional(interfaces.IPreQueueFunctional):
+class NoPreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
 
     def getFunctionalFlags(self):
         return FUNCTIONAL_FLAG.NO_QUEUE
@@ -69,9 +69,9 @@ class NoPreQueueFunctional(interfaces.IPreQueueFunctional):
         return (True, '')
 
 
-class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
+class PreQueueFunctional(NoPreQueueFunctional):
 
-    def __init__(self, queueType, subscriber, flags = FUNCTIONAL_FLAG.UNDEFINED):
+    def __init__(self, queueType, subscriber, flags=FUNCTIONAL_FLAG.UNDEFINED):
         super(PreQueueFunctional, self).__init__()
         self._queueType = queueType
         self._subscriber = subscriber
@@ -80,7 +80,7 @@ class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
         self._flags = flags | FUNCTIONAL_FLAG.PRE_QUEUE
         g_prbCtrlEvents.onPreQueueFunctionalChanged()
 
-    def init(self, ctx = None):
+    def init(self, ctx=None):
         self._hasEntity = True
         self._subscriber.subscribe(self)
         self._invokeListeners('onPreQueueFunctionalInited')
@@ -89,15 +89,12 @@ class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
             result |= self._goToQueueUI()
         return result
 
-    def fini(self, woEvents = False):
+    def fini(self, woEvents=False):
         self._hasEntity = False
         if isPlayerAccount():
-            for listener in self._listeners:
-                listener.onPreQueueFunctionalFinished()
-
-        self._setListenerClass(None)
+            self._invokeListeners('onPreQueueFunctionalFinished')
+        self.clear()
         self._subscriber.unsubscribe(self)
-        return
 
     def getFunctionalFlags(self):
         return self._flags
@@ -111,7 +108,7 @@ class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
     def getEntityType(self):
         return self._queueType
 
-    def getPermissions(self, pID = None, **kwargs):
+    def getPermissions(self, pID=None, **kwargs):
         assert pID is None, 'Current player has no any player in that mode'
         return PreQueuePermissions(self.isInQueue())
 
@@ -124,7 +121,7 @@ class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
     def canPlayerDoAction(self):
         return (not self.isInQueue(), '')
 
-    def showGUI(self, ctx = None):
+    def showGUI(self, ctx=None):
         self._goToQueueUI()
 
     def exitFromQueue(self):
@@ -133,7 +130,7 @@ class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
     def hasEntity(self):
         return self._hasEntity
 
-    def request(self, ctx, callback = None):
+    def request(self, ctx, callback=None):
         requestType = ctx.getRequestType()
         if requestType == REQUEST_TYPE.QUEUE:
             self.queue(ctx, callback=callback)
@@ -145,19 +142,19 @@ class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
                 callback(False)
         return
 
-    def queue(self, ctx, callback = None):
+    def queue(self, ctx, callback=None):
         if callback is not None:
             callback(False)
         return
 
-    def dequeue(self, ctx, callback = None):
+    def dequeue(self, ctx, callback=None):
         if callback is not None:
             callback(False)
         return
 
-    def leave(self, ctx, callback = None):
+    def leave(self, ctx, callback=None):
 
-        def __leave(_ = True):
+        def __leave(_=True):
             g_prbCtrlEvents.onPreQueueFunctionalDestroyed()
             if callback is not None:
                 callback(True)
@@ -199,27 +196,27 @@ class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
 
 class AccountQueueFunctional(PreQueueFunctional):
 
-    def __init__(self, queueType, subscriber, flags = FUNCTIONAL_FLAG.UNDEFINED):
+    def __init__(self, queueType, subscriber, flags=FUNCTIONAL_FLAG.UNDEFINED):
         super(AccountQueueFunctional, self).__init__(queueType, subscriber, flags)
         self._requestCtx = PrbCtrlRequestCtx()
 
-    def init(self, ctx = None):
+    def init(self, ctx=None):
         g_gameCtrl.captcha.onCaptchaInputCanceled += self.__onCaptchaInputCanceled
         return super(AccountQueueFunctional, self).init(ctx)
 
-    def fini(self, woEvents = False):
+    def fini(self, woEvents=False):
         self._requestCtx.clear()
         g_gameCtrl.captcha.onCaptchaInputCanceled -= self.__onCaptchaInputCanceled
         super(AccountQueueFunctional, self).fini(woEvents)
 
-    def doAction(self, action = None):
+    def doAction(self, action=None):
         if not self.isInQueue():
             self.queue(self._makeQueueCtxByAction(action))
         else:
             self.dequeue(pre_queue_ctx.DequeueCtx(waitingID='prebattle/leave'))
         return True
 
-    def queue(self, ctx, callback = None):
+    def queue(self, ctx, callback=None):
         if ctx is None:
             ctx = self._makeQueueCtxByAction()
         if self._requestCtx.isProcessing():
@@ -247,7 +244,7 @@ class AccountQueueFunctional(PreQueueFunctional):
 
             return
 
-    def dequeue(self, ctx, callback = None):
+    def dequeue(self, ctx, callback=None):
         if self._requestCtx.isProcessing():
             LOG_ERROR('Request is processing', self._requestCtx)
             if callback:
@@ -295,7 +292,7 @@ class AccountQueueFunctional(PreQueueFunctional):
     def _doDequeue(self, ctx):
         raise NotImplementedError('Routine _doDequeue must be overridden')
 
-    def _makeQueueCtxByAction(self, action = None):
+    def _makeQueueCtxByAction(self, action=None):
         raise NotImplementedError('Routine _makeDefQueueCtx must be overridden')
 
     def _validateParentControl(self):

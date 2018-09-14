@@ -1,5 +1,24 @@
 <quests-shared-scene.xml>
   <runtime-effects>
+    <select-in-hangar>	SelectedVehicleCriteria	  <condition>
+        <inactive>	PveChainShown	</inactive>
+        <active>	InSandbox	</active>
+        <active>	NoPveVehicleInInventory	</active>
+        <effect-not-triggered>	SelectedVehicleCriteria	</effect-not-triggered>
+      </condition>
+    </select-in-hangar>
+    <switch-to-random>
+      <condition>
+        <effect-not-triggered>	BattleSelectorHint	</effect-not-triggered>
+        <effect-triggered>	SelectedVehicleCriteria	</effect-triggered>
+      </condition>
+    </switch-to-random>
+    <show-hint>	BattleSelectorHint	  <condition>
+        <active>	BattleSelectorHintOnScene	</active>
+        <effect-triggered>	SelectedVehicleCriteria	</effect-triggered>
+        <effect-not-triggered>	BattleSelectorHint	</effect-not-triggered>
+      </condition>
+    </show-hint>
     <show-hint>	TankAcademyButtonHint	  <condition>
         <active>	TankAcademyButtonOnScene	</active>
         <active>	PlayerHasTankmanDiscount	</active>
@@ -109,14 +128,21 @@
       </condition>
     </show-award-window>
     <request-bonus>	TutorialQuest_5	  <condition>
-        <active>	SlotBought	</active>
         <bonus-not-received>	TutorialQuest_5	</bonus-not-received>
+        <either>
+          <active>	SlotBought	</active>
+          <global-active>	SlotDiscountUsed	</global-active>
+        </either>
       </condition>
     </request-bonus>
     <activate>	Bonus5Received	  <condition>
         <bonus-received>	TutorialQuest_5	</bonus-received>
       </condition>
     </activate>
+    <global-inactivate>	SlotDiscountUsed	  <condition>
+        <bonus-received>	TutorialQuest_5	</bonus-received>
+      </condition>
+    </global-inactivate>
     <activate>	ShowAward5	  <condition>
         <active>	SlotBought	</active>
         <active>	Bonus5Received	</active>
@@ -401,8 +427,16 @@
         <inactivate>	TankAcademyButtonOnScene	</inactivate>
       </not-on-scene-effects>
     </gui-item>
+    <gui-item>	BattleSelectorBar	  <on-scene-effects>
+        <activate>	BattleSelectorHintOnScene	</activate>
+      </on-scene-effects>
+      <not-on-scene-effects>
+        <inactivate>	BattleSelectorHintOnScene	</inactivate>
+      </not-on-scene-effects>
+    </gui-item>
   </gui-items>
   <post-effects>
+    <inactivate>	CloseChapter8	</inactivate>
     <save-setting>	TutorialStartSetting	  <condition>
         <bonus-not-received>	TutorialQuest_Initial	</bonus-not-received>
       </condition>
@@ -469,10 +503,6 @@
         <bonus-not-received>	TutorialQuest_8	</bonus-not-received>
       </condition>
     </run-trigger>
-    <activate>	CloseChapter8	  <condition>
-        <bonus-received>	TutorialQuest_8	</bonus-received>
-      </condition>
-    </activate>
     <run-trigger>	PremiumDiscountTrigger	  <condition>
         <bonus-not-received>	TutorialQuest_9	</bonus-not-received>
       </condition>
@@ -552,6 +582,7 @@
     <run-trigger>	AwardWindow7CloseTrigger	</run-trigger>
     <run-trigger>	AwardWindow8ProcessTrigger	</run-trigger>
     <run-trigger>	AwardWindow8CloseTrigger	</run-trigger>
+    <run-trigger>	InSandBoxPreQueueTrigger	</run-trigger>
     <run-trigger>	AwardWindow9ProcessTrigger	</run-trigger>
     <run-trigger>	AwardWindow9CloseTrigger	</run-trigger>
     <run-trigger>	AwardWindow10ProcessTrigger	</run-trigger>
@@ -564,6 +595,8 @@
     <run-trigger>	AwardWindow13CloseTrigger	</run-trigger>
     <run-trigger>	AwardWindow14ProcessTrigger	</run-trigger>
     <run-trigger>	AwardWindow14CloseTrigger	</run-trigger>
+    <run-trigger>	InventoryVehicleTrigger	</run-trigger>
+    <run-trigger>	PveChainShownTrigger	</run-trigger>
   </post-effects>
   <vars></vars>
 </quests-shared-scene.xml>

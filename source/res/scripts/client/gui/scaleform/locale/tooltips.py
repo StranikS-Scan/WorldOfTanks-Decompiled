@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/TOOLTIPS.py
 from debug_utils import LOG_WARNING
 
@@ -13,6 +13,7 @@ class TOOLTIPS(object):
     SHOWVECTORONMAP = '#tooltips:showVectorOnMap'
     SHOWSECTORONMAP = '#tooltips:showSectorOnMap'
     SHOWVEHMODELSONMAP = '#tooltips:showVehModelsOnMap'
+    BATTLELOADINGINFO = '#tooltips:battleLoadingInfo'
     PRIVATEQUESTS_AWARDSBUTTON = '#tooltips:privateQuests/awardsButton'
     PRIVATEQUESTS_SLOT_EMPTY = '#tooltips:privateQuests/slot/empty'
     PRIVATEQUESTS_SLOT_MISSION = '#tooltips:privateQuests/slot/mission'
@@ -55,6 +56,7 @@ class TOOLTIPS(object):
     CYBERSPORT_STATICFORMATION_LEGIONNAIRE = '#tooltips:cyberSport/staticFormation/legionnaire'
     CYBERSPORT_STATICFORMATION_WAITLIST_LEGIONNAIRES = '#tooltips:cyberSport/staticFormation/waitList/legionnaires'
     CYBERSPORT_MODECHANGEFROZEN = '#tooltips:cyberSport/modeChangeFrozen'
+    CYBERSPORT_ROSTERSLOTSETTINGS_HEADERTEXT = '#tooltips:cyberSport/rosterSlotSettings/headerText'
     ACHIEVEMENT_ATTR_COUNTER = '#tooltips:achievement/attr/counter'
     ACHIEVEMENT_ATTR_SMALL = '#tooltips:achievement/attr/small'
     ACHIEVEMENT_ATTR_VEHICLERECORD = '#tooltips:achievement/attr/vehicleRecord'
@@ -187,6 +189,7 @@ class TOOLTIPS(object):
     FORTIFICATION_WELCOME_CREATEFORT = '#tooltips:fortification/welcome/createFort'
     FORTIFICATION_WELCOME_CANTCREATEFORT = '#tooltips:fortification/welcome/cantCreateFort'
     FORTIFICATION_WELCOME_CLANSEARCH = '#tooltips:fortification/welcome/clanSearch'
+    FORTIFICATION_WELCOME_CLANSEARCHLABEL = FORTIFICATION_WELCOME_CLANSEARCH + 'Label'
     FORTIFICATION_WELCOME_CLANCREATE = '#tooltips:fortification/welcome/clanCreate'
     FORTIFICATION_TRANPORTINGBUTTON_ACTIVE = '#tooltips:fortification/tranportingButton/active'
     FORTIFICATION_TRANPORTINGBUTTON_INACTIVE = '#tooltips:fortification/tranportingButton/inactive'
@@ -387,6 +390,7 @@ class TOOLTIPS(object):
     HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_UNAVAILABLE = HEADER_ACCOUNT + 'Popover/inviteRequestBtn/unavailable'
     HEADER_ACCOUNTPOPOVER_INVITEBTN_UNAVAILABLE = HEADER_ACCOUNT + 'Popover/inviteBtn/unavailable'
     HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE = HEADER_ACCOUNT + 'Popover/clanProfile/unavailable'
+    HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE = HEADER_ACCOUNT + 'Popover/boostersTitle'
     BATTLESELECTORWINDOW_TOOLTIP_DOMINATION_SELECTBTN = '#tooltips:battleSelectorWindow/tooltip/domination/selectBtn'
     BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN = '#tooltips:battleSelectorWindow/tooltip/multiteam/selectBtn'
     AWARDITEM_CREDITS = '#tooltips:awardItem/credits'
@@ -395,6 +399,14 @@ class TOOLTIPS(object):
     AWARDITEM_PREMDAYS = '#tooltips:awardItem/premDays'
     FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED = '#tooltips:falloutBattleSelectorWindow/btnInSquadDisabled'
     FALLOUTBATTLESELECTORWINDOW_BTNDISABLED = '#tooltips:falloutBattleSelectorWindow/btnDisabled'
+    MASTERVOLUMETOGGLEOFF = '#tooltips:masterVolumeToggleOff'
+    SOUNDQUALITY = '#tooltips:soundQuality'
+    SOUND_DYNAMICRANGE_HELP = '#tooltips:sound/dynamicRange/help'
+    RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked'
+    RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP = '#tooltips:researchPage/module/status/notEnoughXP'
+    MODULEFITS_GOLD_ERROR = '#tooltips:moduleFits/gold_error'
+    MODULEFITS_CREDIT_ERROR = '#tooltips:moduleFits/credit_error'
+    MODULEFITS_OPERATION_ERROR = '#tooltips:moduleFits/operation_error'
     PREMIUM_DAYS_HEADER = '#tooltips:premium/days/header'
     PREMIUM_DAYS_PARAMS_BUY = '#tooltips:premium/days/params/buy'
     PREMIUM_DAYS_PARAMS_OLDPRICE = '#tooltips:premium/days/params/oldPrice'
@@ -436,7 +448,6 @@ class TOOLTIPS(object):
     PRIVATEQUESTS_SHOWVEHICLE_BODY = PRIVATEQUESTS_SHOWVEHICLE + '/body'
     PRIVATEQUESTS_ACTIONPANNEL_PERFORM_HEADER = PRIVATEQUESTS_ACTIONPANNEL_PERFORM + '/header'
     PRIVATEQUESTS_ACTIONPANNEL_PERFORM_BODY = PRIVATEQUESTS_ACTIONPANNEL_PERFORM + '/body'
-    PRIVATEQUESTS_ACTIONPANNEL_PERFORM_NOTE = PRIVATEQUESTS_ACTIONPANNEL_PERFORM + '/note'
     PRIVATEQUESTS_ACTIONPANNEL_ABORT_HEADER = PRIVATEQUESTS_ACTIONPANNEL_ABORT + '/header'
     PRIVATEQUESTS_ACTIONPANNEL_ABORT_BODY = PRIVATEQUESTS_ACTIONPANNEL_ABORT + '/body'
     PRIVATEQUESTS_ACTIONPANNEL_ABORT_NOTE = PRIVATEQUESTS_ACTIONPANNEL_ABORT + '/note'
@@ -530,6 +541,7 @@ class TOOLTIPS(object):
     LOGIN_SOCIAL_VKONTAKTE = '#tooltips:login/social/vkontakte'
     LOGIN_SOCIAL_ODNOKLASSNIKI = '#tooltips:login/social/odnoklassniki'
     LOGIN_SOCIAL_WGNI = '#tooltips:login/social/wgni'
+    LOGIN_SOCIAL_NAVER = '#tooltips:login/social/naver'
     LOGIN_CHANGEACCOUNT_HEADER = LOGIN_CHANGEACCOUNT + '/header'
     LOGIN_CHANGEACCOUNT_BODY = LOGIN_CHANGEACCOUNT + '/body'
     LOGIN_LEGAL_BODY = LOGIN_LEGAL + '/body'
@@ -537,6 +549,14 @@ class TOOLTIPS(object):
     PREBATTLE_NAMEFILTERBUTTON_BODY = PREBATTLE_NAMEFILTERBUTTON + '/body'
     PREBATTLE_INVITATIONS_TOOLTIP_ISONLINE_BODY = PREBATTLE_INVITATIONS_TOOLTIP_ISONLINE + '/body'
     SETTINGSCONTROL_RECOMMENDED = '#tooltips:settingsControl/recommended'
+    SETTINGS_MINIMAPCIRCLES_TITLE = '#tooltips:settings/minimapCircles/title'
+    SETTINGS_MINIMAPCIRCLES_VIEWRANGE_TITLE = '#tooltips:settings/minimapCircles/viewRange/title'
+    SETTINGS_MINIMAPCIRCLES_VIEWRANGE_BODY = '#tooltips:settings/minimapCircles/viewRange/body'
+    SETTINGS_MINIMAPCIRCLES_MAXVIEWRANGE_TITLE = '#tooltips:settings/minimapCircles/maxViewRange/title'
+    SETTINGS_MINIMAPCIRCLES_MAXVIEWRANGE_AS2_BODY = '#tooltips:settings/minimapCircles/maxViewRange/as2/body'
+    SETTINGS_MINIMAPCIRCLES_MAXVIEWRANGE_AS3_BODY = '#tooltips:settings/minimapCircles/maxViewRange/as3/body'
+    SETTINGS_MINIMAPCIRCLES_DRAWRANGE_TITLE = '#tooltips:settings/minimapCircles/drawRange/title'
+    SETTINGS_MINIMAPCIRCLES_DRAWRANGE_BODY = '#tooltips:settings/minimapCircles/drawRange/body'
     LOBBYMENU_VERSIONINFOBUTTON_BODY = LOBBYMENU_VERSIONINFOBUTTON + '/body'
     WINDOWHELP_HEADER = WINDOWHELP + '/header'
     WINDOWHELP_BODY = WINDOWHELP + '/body'
@@ -570,12 +590,22 @@ class TOOLTIPS(object):
     SHOWVEHMODELSONMAP_HEADER = SHOWVEHMODELSONMAP + '/header'
     SHOWVEHMODELSONMAP_BODY = SHOWVEHMODELSONMAP + '/body'
     SHOWVEHMODELSONMAP_ATTENTION = SHOWVEHMODELSONMAP + '/attention'
+    BATTLELOADINGINFO_HEADER = BATTLELOADINGINFO + '/header'
+    BATTLELOADINGINFO_BODY = BATTLELOADINGINFO + '/body'
     SHOWVECTORONMAP_HEADER = SHOWVECTORONMAP + '/header'
     SHOWVECTORONMAP_BODY = SHOWVECTORONMAP + '/body'
     SHOWSECTORONMAP_HEADER = SHOWSECTORONMAP + '/header'
     SHOWSECTORONMAP_BODY = SHOWSECTORONMAP + '/body'
     SHOWBATTLEEFFICIENCYRIBBONS_HEADER = SHOWBATTLEEFFICIENCYRIBBONS + '/header'
     SHOWBATTLEEFFICIENCYRIBBONS_BODY = SHOWBATTLEEFFICIENCYRIBBONS + '/body'
+    MASTERVOLUMETOGGLEOFF_HEADER = MASTERVOLUMETOGGLEOFF + '/header'
+    MASTERVOLUMETOGGLEOFF_BODY = MASTERVOLUMETOGGLEOFF + '/body'
+    SOUNDQUALITYON_HEADER = SOUNDQUALITY + 'On/header'
+    SOUNDQUALITYON_BODY = SOUNDQUALITY + 'On/body'
+    SOUNDQUALITY_HEADER = SOUNDQUALITY + '/header'
+    SOUNDQUALITY_BODY = SOUNDQUALITY + '/body'
+    SOUND_DYNAMICRANGE_HELP_HEADER = SOUND_DYNAMICRANGE_HELP + '/header'
+    SOUND_DYNAMICRANGE_HELP_BODY = SOUND_DYNAMICRANGE_HELP + '/body'
     GOLD_HEADER = '#tooltips:gold/header'
     GOLD_BODY = '#tooltips:gold/body'
     WALLET_NOT_AVAILABLE_GOLD_HEADER = WALLET_NOT_AVAILABLE_GOLD + '/header'
@@ -621,6 +651,7 @@ class TOOLTIPS(object):
     CYBERSPORT_NOVEHICLESINHANGAR_BODY = CYBERSPORT_NOVEHICLESINHANGAR + '/body'
     CYBERSPORT_MODECHANGEFROZEN_HEADER = CYBERSPORT_MODECHANGEFROZEN + '/header'
     CYBERSPORT_MODECHANGEFROZEN_BODY = CYBERSPORT_MODECHANGEFROZEN + '/body'
+    CYBERSPORT_ROSTERSLOTSETTINGS_HEADERTEXT_BODY = CYBERSPORT_ROSTERSLOTSETTINGS_HEADERTEXT + '/body'
     BATTLETYPES_STANDART_HEADER = BATTLETYPES_STANDART + '/header'
     BATTLETYPES_STANDART_BODY = BATTLETYPES_STANDART + '/body'
     BATTLETYPES_FALLOUT_HEADER = BATTLETYPES_FALLOUT + '/header'
@@ -780,6 +811,8 @@ class TOOLTIPS(object):
     HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_UNAVAILABLE_ATTENTION = HEADER_ACCOUNT + 'Popover/inviteRequestBtn/unavailable/attention'
     HEADER_ACCOUNTPOPOVER_INVITEBTN_UNAVAILABLE_ATTENTION = HEADER_ACCOUNT + 'Popover/inviteBtn/unavailable/attention'
     HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE_ATTENTION = HEADER_ACCOUNT + 'Popover/clanProfile/unavailable/attention'
+    HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE_HEADER = HEADER_ACCOUNT + 'Popover/boostersTitle/header'
+    HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE_BODY = HEADER_ACCOUNT + 'Popover/boostersTitle/body'
     HANGAR_UNLOCKBUTTON_HEADER = HANGAR_UNLOCKBUTTON + '/header'
     HANGAR_UNLOCKBUTTON_BODY = HANGAR_UNLOCKBUTTON + '/body'
     HANGAR_MAINTENANCE_HEADER = HANGAR_MAINTENANCE + '/header'
@@ -835,11 +868,11 @@ class TOOLTIPS(object):
     HANGAR_AMMO_PANEL_DEVICE_EMPTY_BODY = HANGAR_AMMO_PANEL_DEVICE_EMPTY + '/body'
     HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY_HEADER = HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY + '/header'
     HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY_BODY = HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY + '/body'
-    MODULEFITS_CREDIT_ERROR_HEADER = '#tooltips:moduleFits/credit_error/header'
-    MODULEFITS_CREDIT_ERROR_TEXT = '#tooltips:moduleFits/credit_error/text'
-    MODULEFITS_GOLD_ERROR_HEADER = '#tooltips:moduleFits/gold_error/header'
-    MODULEFITS_GOLD_ERROR_TEXT = '#tooltips:moduleFits/gold_error/text'
-    MODULEFITS_OPERATION_ERROR_HEADER = '#tooltips:moduleFits/operation_error/header'
+    MODULEFITS_CREDIT_ERROR_HEADER = MODULEFITS_CREDIT_ERROR + '/header'
+    MODULEFITS_CREDIT_ERROR_TEXT = MODULEFITS_CREDIT_ERROR + '/text'
+    MODULEFITS_GOLD_ERROR_HEADER = MODULEFITS_GOLD_ERROR + '/header'
+    MODULEFITS_GOLD_ERROR_TEXT = MODULEFITS_GOLD_ERROR + '/text'
+    MODULEFITS_OPERATION_ERROR_HEADER = MODULEFITS_OPERATION_ERROR + '/header'
     MODULEFITS_NEED_TURRET_HEADER = '#tooltips:moduleFits/need_turret/header'
     MODULEFITS_NEED_TURRET_TEXT = '#tooltips:moduleFits/need_turret/text'
     MODULEFITS_TOO_HEAVY_HEADER = '#tooltips:moduleFits/too_heavy/header'
@@ -1132,6 +1165,11 @@ class TOOLTIPS(object):
     VEHICLESTATUS_GROUPAMMONOTFULL_HEADER = '#tooltips:vehicleStatus/groupAmmoNotFull/header'
     VEHICLESTATUS_FALLOUT_ONLY_HEADER = '#tooltips:vehicleStatus/fallout_only/header'
     ITEMSTATUS_NOTENOUGH = '#tooltips:itemStatus/notEnough'
+    TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK = '#tooltips:tankCaruselTooltip/vehicleType/normal/lightTank'
+    TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK = '#tooltips:tankCaruselTooltip/vehicleType/normal/mediumTank'
+    TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_HEAVYTANK = '#tooltips:tankCaruselTooltip/vehicleType/normal/heavyTank'
+    TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_AT_SPG = '#tooltips:tankCaruselTooltip/vehicleType/normal/AT-SPG'
+    TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_SPG = '#tooltips:tankCaruselTooltip/vehicleType/normal/SPG'
     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_LIGHTTANK = '#tooltips:tankCaruselTooltip/vehicleType/elite/lightTank'
     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_MEDIUMTANK = '#tooltips:tankCaruselTooltip/vehicleType/elite/mediumTank'
     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_HEAVYTANK = '#tooltips:tankCaruselTooltip/vehicleType/elite/heavyTank'
@@ -1149,8 +1187,8 @@ class TOOLTIPS(object):
     RESEARCHPAGE_MODULE_STATUS_ROOTVEHICLEISLOCKED_TEXT = '#tooltips:researchPage/module/status/rootVehicleIsLocked/text'
     RESEARCHPAGE_MODULE_STATUS_PARENTMODULEISLOCKED_HEADER = '#tooltips:researchPage/module/status/parentModuleIsLocked/header'
     RESEARCHPAGE_MODULE_STATUS_PARENTMODULEISLOCKED_TEXT = '#tooltips:researchPage/module/status/parentModuleIsLocked/text'
-    RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP_HEADER = '#tooltips:researchPage/module/status/notEnoughXP/header'
-    RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP_TEXT = '#tooltips:researchPage/module/status/notEnoughXP/text'
+    RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP_HEADER = RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP + '/header'
+    RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP_TEXT = RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP + '/text'
     RESEARCHPAGE_MODULE_STATUS_NEEDTOBUYTANK_HEADER = '#tooltips:researchPage/module/status/needToBuyTank/header'
     RESEARCHPAGE_MODULE_STATUS_NEEDTOBUYTANK_TEXT = '#tooltips:researchPage/module/status/needToBuyTank/text'
     RESEARCHPAGE_MODULE_STATUS_VEHICLEISINBATTLE_HEADER = '#tooltips:researchPage/module/status/vehicleIsInBattle/header'
@@ -1159,8 +1197,8 @@ class TOOLTIPS(object):
     RESEARCHPAGE_MODULE_STATUS_VEHICLEISREADYTOFIGHT_TEXT = '#tooltips:researchPage/module/status/vehicleIsReadyToFight/text'
     RESEARCHPAGE_MODULE_STATUS_VEHICLEISBROKEN_HEADER = '#tooltips:researchPage/module/status/vehicleIsBroken/header'
     RESEARCHPAGE_MODULE_STATUS_VEHICLEISBROKEN_TEXT = '#tooltips:researchPage/module/status/vehicleIsBroken/text'
-    RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_HEADER = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked/header'
-    RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_TEXT = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked/text'
+    RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_HEADER = RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED + '/header'
+    RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_TEXT = RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED + '/text'
     TECHTREEPAGE_NATIONS_USSR = '#tooltips:techTreePage/nations/ussr'
     TECHTREEPAGE_NATIONS_GERMANY = '#tooltips:techTreePage/nations/germany'
     TECHTREEPAGE_NATIONS_USA = '#tooltips:techTreePage/nations/usa'
@@ -1364,6 +1402,8 @@ class TOOLTIPS(object):
     FORTIFICATION_WELCOME_CANTCREATEFORT_BODY = FORTIFICATION_WELCOME_CANTCREATEFORT + '/body'
     FORTIFICATION_WELCOME_CLANSEARCH_HEADER = FORTIFICATION_WELCOME_CLANSEARCH + '/header'
     FORTIFICATION_WELCOME_CLANSEARCH_BODY = FORTIFICATION_WELCOME_CLANSEARCH + '/body'
+    FORTIFICATION_WELCOME_CLANSEARCHLABEL_HEADER = FORTIFICATION_WELCOME_CLANSEARCH + 'Label/header'
+    FORTIFICATION_WELCOME_CLANSEARCHLABEL_BODY = FORTIFICATION_WELCOME_CLANSEARCH + 'Label/body'
     FORTIFICATION_WELCOME_CLANCREATE_HEADER = FORTIFICATION_WELCOME_CLANCREATE + '/header'
     FORTIFICATION_WELCOME_CLANCREATE_BODY = FORTIFICATION_WELCOME_CLANCREATE + '/body'
     FORTIFICATION_TRANPORTINGBUTTON_ACTIVE_HEADER = FORTIFICATION_TRANPORTINGBUTTON_ACTIVE + '/header'
@@ -1770,6 +1810,7 @@ class TOOLTIPS(object):
     BATTLERESULTS_VICTORYSCOREDESCRIPTION_COST = BATTLERESULTS_VICTORYSCOREDESCRIPTION + '/cost'
     BATTLERESULTS_VICTORYSCOREDESCRIPTION_KILLSPATTERN = BATTLERESULTS_VICTORYSCOREDESCRIPTION + '/killsPattern'
     BATTLERESULTS_VICTORYSCOREDESCRIPTION_POINTSPATTERN = BATTLERESULTS_VICTORYSCOREDESCRIPTION + '/pointsPattern'
+    BATTLERESULTS_VICTORYSCOREDESCRIPTION_DAMAGEPATTERN = BATTLERESULTS_VICTORYSCOREDESCRIPTION + '/damagePattern'
     STATICFORMATIONSUMMARYVIEW_STATS_BATTLES_HEADER = STATICFORMATIONSUMMARYVIEW_STATS_BATTLES + '/header'
     STATICFORMATIONSUMMARYVIEW_STATS_BATTLES_BODY = STATICFORMATIONSUMMARYVIEW_STATS_BATTLES + '/body'
     STATICFORMATIONSUMMARYVIEW_STATS_WINSPERCENT_HEADER = STATICFORMATIONSUMMARYVIEW_STATS_WINSPERCENT + '/header'
@@ -2022,6 +2063,31 @@ class TOOLTIPS(object):
     BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN_BODY = BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN + '/body'
     BOOSTER_QUESTLINKBTN_BODY = '#tooltips:booster/questLinkBtn/body'
     BOOSTER_ACTIVEBTN_DISABLED_BODY = '#tooltips:booster/activeBtn/disabled/body'
+    BOOSTER_FILTERS_QUALITYSMALL_BODY = '#tooltips:booster/filters/qualitySmall/body'
+    BOOSTER_FILTERS_QUALITYMEDIUM_BODY = '#tooltips:booster/filters/qualityMedium/body'
+    BOOSTER_FILTERS_QUALITYBIG_BODY = '#tooltips:booster/filters/qualityBig/body'
+    BOOSTER_FILTERS_TYPEXP_BODY = '#tooltips:booster/filters/typeXp/body'
+    BOOSTER_FILTERS_TYPECREWXP_BODY = '#tooltips:booster/filters/typeCrewXp/body'
+    BOOSTER_FILTERS_TYPEFREEXP_BODY = '#tooltips:booster/filters/typeFreeXp/body'
+    BOOSTER_FILTERS_TYPECREDITS_BODY = '#tooltips:booster/filters/typeCredits/body'
+    BOOSTERSWINDOW_BOOSTER_DUEDATE_TITLE = '#tooltips:boostersWindow/booster/dueDate/title'
+    BOOSTERSWINDOW_BOOSTER_DUEDATE_VALUE = '#tooltips:boostersWindow/booster/dueDate/value'
+    BOOSTERSWINDOW_BOOSTER_DUEDATE_UNLIMITED = '#tooltips:boostersWindow/booster/dueDate/unlimited'
+    BOOSTERSWINDOW_BOOSTER_GETCONDITION_TITLE = '#tooltips:boostersWindow/booster/getCondition/title'
+    BOOSTERSWINDOW_BOOSTER_GETCONDITION_VALUE = '#tooltips:boostersWindow/booster/getCondition/value'
+    BOOSTERSWINDOW_BOOSTER_HEADER_XP = '#tooltips:boostersWindow/booster/header/xp'
+    BOOSTERSWINDOW_BOOSTER_HEADER_DESCRIPTION_XP = '#tooltips:boostersWindow/booster/header/description/xp'
+    BOOSTERSWINDOW_BOOSTER_HEADER_FREEXP = '#tooltips:boostersWindow/booster/header/freeXp'
+    BOOSTERSWINDOW_BOOSTER_HEADER_DESCRIPTION_FREEXP = '#tooltips:boostersWindow/booster/header/description/freeXp'
+    BOOSTERSWINDOW_BOOSTER_HEADER_CREWXP = '#tooltips:boostersWindow/booster/header/crewXp'
+    BOOSTERSWINDOW_BOOSTER_HEADER_DESCRIPTION_CREWXP = '#tooltips:boostersWindow/booster/header/description/crewXp'
+    BOOSTERSWINDOW_BOOSTER_HEADER_CREDITS = '#tooltips:boostersWindow/booster/header/credits'
+    BOOSTERSWINDOW_BOOSTER_HEADER_DESCRIPTION_CREDITS = '#tooltips:boostersWindow/booster/header/description/credits'
+    BOOSTERSWINDOW_BOOSTER_QUALITY_SMALL = '#tooltips:boostersWindow/booster/quality/small'
+    BOOSTERSWINDOW_BOOSTER_QUALITY_MEDIUM = '#tooltips:boostersWindow/booster/quality/medium'
+    BOOSTERSWINDOW_BOOSTER_QUALITY_BIG = '#tooltips:boostersWindow/booster/quality/big'
+    BOOSTERSWINDOW_BOOSTER_ACTIVE_TITLE = '#tooltips:boostersWindow/booster/active/title'
+    BOOSTERSWINDOW_BOOSTER_ACTIVE_VALUE = '#tooltips:boostersWindow/booster/active/value'
     BOOSTERSPANEL_OPENBOOSTERSWINDOW_BODY = '#tooltips:boostersPanel/openBoostersWindow/body'
     BOOSTERSPANEL_BOOSTERDESCRIPTION_NOTE = '#tooltips:boostersPanel/boosterDescription/note'
     CLANCOMMONINFO_CLANNAME = '#tooltips:clanCommonInfo/ClanName'
@@ -2044,13 +2110,9 @@ class TOOLTIPS(object):
     AWARDITEM_PREMDAYS_BODY = AWARDITEM_PREMDAYS + '/body'
     CUSTOMIZATION_HEADERCLOSEBTN_HEADER = '#tooltips:customization/headerCloseBtn/header'
     CUSTOMIZATION_HEADERCLOSEBTN_BODY = '#tooltips:customization/headerCloseBtn/body'
-    CUSTOMIZATION_PURCHASESPOPOVERBTN_HEADER = '#tooltips:customization/PurchasesPopoverBtn/header'
-    CUSTOMIZATION_PURCHASESPOPOVERBTN_BODY = '#tooltips:customization/PurchasesPopoverBtn/body'
     CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER = '#tooltips:customization/notEnoughResources/header'
     CUSTOMIZATION_NOTENOUGHRESOURCES_BODY = '#tooltips:customization/notEnoughResources/body'
     CUSTOMIZATION_BUYDISABLED_BODY = '#tooltips:customization/buyDisabled/body'
-    CUSTOMIZATION_PURCHASESPOPOVERCLEARBTN_HEADER = '#tooltips:customization/purchasesPopoverClearBtn/header'
-    CUSTOMIZATION_PURCHASESPOPOVERCLEARBTN_BODY = '#tooltips:customization/purchasesPopoverClearBtn/body'
     CUSTOMIZATION_SLOT_HEADER = '#tooltips:customization/slot/header'
     CUSTOMIZATION_SLOT_BODY = '#tooltips:customization/slot/body'
     CUSTOMIZATION_SLOTREMOVE_HEADER = '#tooltips:customization/slotRemove/header'
@@ -2080,6 +2142,8 @@ class TOOLTIPS(object):
     CUSTOMIZATION_BONUSPANEL_BONUS_LOADER_BODY = '#tooltips:customization/bonusPanel/bonus/loader/body'
     CUSTOMIZATION_BONUSPANEL_BONUS_MASKING_BODY = '#tooltips:customization/bonusPanel/bonus/masking/body'
     CUSTOMIZATION_BONUSPANEL_BONUS_FOOTER = '#tooltips:customization/bonusPanel/bonus/footer'
+    CUSTOMIZATION_BUYWINDOW_COPY_HEADER = '#tooltips:customization/buyWindow/copy/header'
+    CUSTOMIZATION_BUYWINDOW_COPY_BODY = '#tooltips:customization/buyWindow/copy/body'
     CUSTOMIZATION_SLOTREVERT_HEADER = '#tooltips:customization/slotRevert/header'
     CUSTOMIZATION_SLOTREVERT_BODY = '#tooltips:customization/slotRevert/body'
     CONTACT_STATUS_INBATTLE_ENUM = (CONTACT_STATUS_INBATTLE_UNKNOWN,
@@ -2099,6 +2163,7 @@ class TOOLTIPS(object):
      TECHTREEPAGE_NATIONS_UK,
      TECHTREEPAGE_NATIONS_JAPAN,
      TECHTREEPAGE_NATIONS_CZECH)
+    VEHICLE_RENTLEFT_ENUM = (VEHICLE_RENTLEFT_DAYS, VEHICLE_RENTLEFT_HOURS, VEHICLE_RENTLEFT_BATTLES)
     FORTIFICATION_TRANSPORTING_ENUM = (FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_HEADER,
      FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_BODY,
      FORTIFICATION_TRANSPORTING_COOLDOWN_HEADER,
@@ -2128,6 +2193,11 @@ class TOOLTIPS(object):
      SQUADWINDOW_STATUS_READY,
      SQUADWINDOW_STATUS_INBATTLE,
      SQUADWINDOW_STATUS_LOCKED)
+    TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM = (TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_HEAVYTANK,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_AT_SPG,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_SPG)
     TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM = (TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_CREDITS, TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_TANKMAN, TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_VEHICLEWITHTANKMEN)
     LEVEL_ENUM = (LEVEL_1,
      LEVEL_2,
@@ -2245,7 +2315,8 @@ class TOOLTIPS(object):
      LOGIN_SOCIAL_TWITTER,
      LOGIN_SOCIAL_VKONTAKTE,
      LOGIN_SOCIAL_ODNOKLASSNIKI,
-     LOGIN_SOCIAL_WGNI)
+     LOGIN_SOCIAL_WGNI,
+     LOGIN_SOCIAL_NAVER)
     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_ENUM = (TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_LIGHTTANK,
      TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_MEDIUMTANK,
      TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_HEAVYTANK,
@@ -2265,6 +2336,15 @@ class TOOLTIPS(object):
     def techtreepage_nations(key):
         outcome = '#tooltips:techTreePage/nations/%s' % key
         if outcome not in TOOLTIPS.TECHTREEPAGE_NATIONS_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def vehicle_rentleft(key):
+        outcome = '#tooltips:vehicle/rentLeft/%s' % key
+        if outcome not in TOOLTIPS.VEHICLE_RENTLEFT_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
             return None
         else:
@@ -2302,6 +2382,13 @@ class TOOLTIPS(object):
     def squadwindow_status(key):
         outcome = '#tooltips:squadWindow/status/%s' % key
         if outcome not in TOOLTIPS.SQUADWINDOW_STATUS_ENUM:
+            raise Exception, 'locale key "' + outcome + '" was not found'
+        return outcome
+
+    @staticmethod
+    def tankcaruseltooltip_vehicletype_normal(key):
+        outcome = '#tooltips:tankCaruselTooltip/vehicleType/normal/%s' % key
+        if outcome not in TOOLTIPS.TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StaticFormationInvitesAndRequestsMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -14,13 +14,10 @@ class StaticFormationInvitesAndRequestsMeta(AbstractWindowView):
         self._printOverrideError('resolvePlayerRequest')
 
     def as_getDataProviderS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getDataProvider()
+        return self.flashObject.as_getDataProvider() if self._isDAAPIInited() else None
 
     def as_setStaticDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setStaticData(data)
+        return self.flashObject.as_setStaticData(data) if self._isDAAPIInited() else None
 
     def as_setTeamDescriptionS(self, description):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTeamDescription(description)
+        return self.flashObject.as_setTeamDescription(description) if self._isDAAPIInited() else None

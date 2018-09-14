@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/unit_ext.py
 import time
 import weakref
@@ -228,10 +228,9 @@ class UnitAutoSearchHandler(object):
         return timeLeft
 
     def getAcceptDelta(self, acceptDeadlineUTC):
-        if acceptDeadlineUTC:
-            return max(0, int(time_utils.makeLocalServerTime(acceptDeadlineUTC) - time.time()))
+        return max(0, int(time_utils.makeLocalServerTime(acceptDeadlineUTC) - time.time())) if acceptDeadlineUTC else 0
 
-    def start(self, vTypeDescrs = None):
+    def start(self, vTypeDescrs=None):
         if self.__isInSearch:
             LOG_ERROR('Auto search already started.')
             return False
@@ -355,7 +354,7 @@ class InventoryVehiclesWatcher(object):
             if len(vehicles) == 1:
                 self.__functional.request(unit_ctx.SetVehicleUnitCtx(vTypeCD=vehicles[0], waitingID='prebattle/change_settings'))
 
-    def validate(self, update = False):
+    def validate(self, update=False):
         items = g_itemsCache.items
         invVehicles = items.getVehicles(REQ_CRITERIA.INVENTORY)
         vehCDs = invVehicles.keys()
@@ -366,8 +365,7 @@ class InventoryVehiclesWatcher(object):
             if not roster.checkVehicleList(vehCDs, pInfo.slotIdx) and not pInfo.isCreator():
                 self.__functional.request(unit_ctx.AssignUnitCtx(pInfo.dbID, UNIT_SLOT.REMOVE, 'prebattle/assign'))
             else:
-                vInfo = self.__functional.getVehicleInfo()
-                resultCtx = vInfo.updateInventory(vehCDs)
+                resultCtx = self.__functional.invalidateSelectedVehicles(vehCDs)
                 if resultCtx is not None:
                     self.__functional.request(resultCtx)
                 elif update:
@@ -634,6 +632,4 @@ def createUnitScheduler(unit):
     unitPrbtype = unit.getEntityType()
     if unitPrbtype == PREBATTLE_TYPE.FORT_BATTLE:
         return FortBattlesScheduler(unit)
-    if unitPrbtype == PREBATTLE_TYPE.SORTIE:
-        return SortiesScheduler(unit)
-    return UnitScheduler(unit)
+    return SortiesScheduler(unit) if unitPrbtype == PREBATTLE_TYPE.SORTIE else UnitScheduler(unit)

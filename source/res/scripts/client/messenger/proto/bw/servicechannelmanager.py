@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/ServiceChannelManager.py
 from collections import deque
 from chat_shared import CHAT_ACTIONS
@@ -44,10 +44,10 @@ class ServiceChannelManager(ChatActionsListener):
         message = ServiceChannelMessage.fromChatAction(chatAction, personal=True)
         self.__addServerMessage(message)
 
-    def pushClientSysMessage(self, message, msgType, isAlert = False, priority = None):
+    def pushClientSysMessage(self, message, msgType, isAlert=False, priority=None):
         return self.__addClientMessage(message, SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, isAlert=isAlert, auxData=[msgType.name(), priority])
 
-    def pushClientMessage(self, message, msgType, isAlert = False, auxData = None):
+    def pushClientMessage(self, message, msgType, isAlert=False, auxData=None):
         return self.__addClientMessage(message, msgType, isAlert=isAlert, auxData=auxData)
 
     def getReadMessages(self):
@@ -79,8 +79,7 @@ class ServiceChannelManager(ChatActionsListener):
         for clientID, (isServerMsg, formatted, settings) in unread:
             if isServerMsg:
                 serviceChannel.onServerMessageReceived(clientID, formatted, settings)
-            else:
-                serviceChannel.onClientMessageReceived(clientID, formatted, settings)
+            serviceChannel.onClientMessageReceived(clientID, formatted, settings)
 
     @process
     def __addServerMessage(self, message):
@@ -113,7 +112,7 @@ class ServiceChannelManager(ChatActionsListener):
             LOG_WARNING('Formatter not found. Action data : ', message)
         return
 
-    def __addClientMessage(self, message, msgType, isAlert = False, auxData = None):
+    def __addClientMessage(self, message, msgType, isAlert=False, auxData=None):
         if auxData is None:
             auxData = []
         clientID = 0

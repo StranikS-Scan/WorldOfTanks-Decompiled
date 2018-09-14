@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_constants.py
 from debug_utils import LOG_WARNING
 
@@ -21,6 +21,10 @@ class CONTACT_LIMIT(object):
 
 class CHANNEL_LIMIT(object):
     MAX_SEARCH_RESULTS = 50
+    NAME_MIN_CHARS_COUNT = 3
+    NAME_MAX_CHARS_COUNT = 32
+    PWD_MIN_CHARS_COUNT = 3
+    PWD_MAX_CHARS_COUNT = 12
 
 
 class CONTACT_ERROR_ID(object):
@@ -30,10 +34,16 @@ class CONTACT_ERROR_ID(object):
 CONTACT_ERROR_NAMES = {v:k for k, v in CONTACT_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
 
 class LIMIT_ERROR_ID(object):
-    MAX_ROSTER_ITEMS, MAX_GROUP, MAX_BLOCK_ITEMS, GROUP_INVALID_LENGTH, NOTE_INVALID_LENGTH = range(1, 6)
+    MAX_ROSTER_ITEMS, MAX_GROUP, MAX_BLOCK_ITEMS, GROUP_INVALID_LENGTH, NOTE_INVALID_LENGTH, CHANNEL_INVALID_LENGTH, PWD_INVALID_LENGTH = range(1, 8)
 
 
 LIMIT_ERROR_NAMES = {v:k for k, v in LIMIT_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
+
+class CHANNEL_ERROR_ID(object):
+    NAME_EMPTY, NAME_INVALID, PASSWORD_EMPTY, PASSWORD_INVALID, RETYPE_EMPTY, RETYPE_INVALID, PASSWORDS_NOT_EQUALS, NAME_ALREADY_EXISTS = range(1, 9)
+
+
+CHANNEL_ERROR_NAMES = {v:k for k, v in CHANNEL_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
 
 class XMPP_ITEM_TYPE:
     EMPTY_ITEM = 0
@@ -77,7 +87,41 @@ class XMPP_BAN_COMPONENT(object):
                     return cls.ALL
                 if bitmask & bit == 0:
                     bitmask |= bit
-            else:
-                LOG_WARNING('Component is not supported', component)
+            LOG_WARNING('Component is not supported', component)
 
         return bitmask
+
+
+class MUC_STATUS(object):
+    SELF_PRESENCE = 110
+    CREATE_ROOM = 201
+    INCLUDE_PRESENCE_STANZA = (CREATE_ROOM, SELF_PRESENCE)
+
+
+class SERVICE_DISCO_FEATURE(object):
+    MUC_PASSWORD_PROTECTED = 'muc_passwordprotected'
+
+
+class FORM_TYPE(object):
+    UNDEFINED = ''
+    FORM = 'form'
+    SUBMIT = 'submit'
+    CANCEL = 'cancel'
+    RESULT = 'result'
+    RANGE = (FORM,
+     SUBMIT,
+     CANCEL,
+     RESULT)
+
+
+class MUC_CREATION_ERROR(object):
+    UNDEFINED = 0
+    NAME_EXISTS = 201
+    LIMIT_COUNT = 202
+    LIMIT_PASS = 203
+    LIMIT_NAME = 204
+    WRONG_SYMBOL = 205
+    WRONG_WORD = 206
+
+
+MUC_CREATION_ERROR_NAMES = {v:k for k, v in MUC_CREATION_ERROR.__dict__.iteritems() if not k.startswith('_')}

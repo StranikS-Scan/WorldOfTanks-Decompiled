@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/RemoteDebugger.py
 """Support for remote Python debugging.
 
@@ -58,7 +58,7 @@ class GUIProxy:
         self.conn = conn
         self.oid = gui_adap_oid
 
-    def interaction(self, message, frame, info = None):
+    def interaction(self, message, frame, info=None):
         self.conn.remotecall(self.oid, 'interaction', (message, wrap_frame(frame), wrap_info(info)), {})
 
 
@@ -187,9 +187,7 @@ class FrameProxy:
             return self._get_f_code()
         if name == 'f_globals':
             return self._get_f_globals()
-        if name == 'f_locals':
-            return self._get_f_locals()
-        return self._conn.remotecall(self._oid, 'frame_attr', (self._fid, name), {})
+        return self._get_f_locals() if name == 'f_locals' else self._conn.remotecall(self._oid, 'frame_attr', (self._fid, name), {})
 
     def _get_f_code(self):
         cid = self._conn.remotecall(self._oid, 'frame_code', (self._fid,), {})
@@ -221,8 +219,7 @@ class CodeProxy:
     def __getattr__(self, name):
         if name == 'co_name':
             return self._conn.remotecall(self._oid, 'code_name', (self._cid,), {})
-        if name == 'co_filename':
-            return self._conn.remotecall(self._oid, 'code_filename', (self._cid,), {})
+        return self._conn.remotecall(self._oid, 'code_filename', (self._cid,), {}) if name == 'co_filename' else None
 
 
 class DictProxy:

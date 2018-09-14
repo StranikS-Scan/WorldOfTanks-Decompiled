@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/__init__.py
 import math
 import cPickle
@@ -23,7 +23,7 @@ def dumpDossier(dossierItem):
 
 class _Dossier(GUIItem):
 
-    def __init__(self, dossier, dossierType, playerDBID = None):
+    def __init__(self, dossier, dossierType, playerDBID=None):
         super(GUIItem, self).__init__()
         self._dossier = dossier
         self._dossierType = dossierType
@@ -59,7 +59,7 @@ class _Dossier(GUIItem):
 
 class VehicleDossier(_Dossier, stats.VehicleDossierStats):
 
-    def __init__(self, dossier, vehTypeCompDescr, playerDBID = None):
+    def __init__(self, dossier, vehTypeCompDescr, playerDBID=None):
         super(VehicleDossier, self).__init__(dossier, DOSSIER_TYPE.VEHICLE, playerDBID)
         self.__vehTypeCompDescr = vehTypeCompDescr
 
@@ -85,7 +85,7 @@ class VehicleDossier(_Dossier, stats.VehicleDossierStats):
 
 class AccountDossier(_Dossier, stats.AccountDossierStats):
 
-    def __init__(self, dossier, playerDBID = None, rated7x7Seasons = None):
+    def __init__(self, dossier, playerDBID=None, rated7x7Seasons=None):
         super(AccountDossier, self).__init__(dossier, DOSSIER_TYPE.ACCOUNT, playerDBID)
         self._rated7x7Seasons = rated7x7Seasons or {}
 
@@ -126,7 +126,7 @@ class AccountDossier(_Dossier, stats.AccountDossierStats):
 class TankmanDossier(_Dossier, stats.TankmanDossierStats):
     PREMIUM_TANK_DEFAULT_CREW_XP_FACTOR = 1.5
 
-    def __init__(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID = None, currentVehicleItem = None):
+    def __init__(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID=None, currentVehicleItem=None):
         assert extDossier is not None
         super(TankmanDossier, self).__init__(tankmanDossierDescr, DOSSIER_TYPE.TANKMAN, playerDBID)
         currentVehicleType = currentVehicleItem.descriptor.type if currentVehicleItem else None
@@ -152,9 +152,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
     def getAvgXP(self):
         totalXP = self.__totalStats.getXP() - self.__clanStats.getXP() + self.__globalMapStats.getXP()
         totalBattles = self.__totalStats.getBattlesCount() - self.__clanStats.getBattlesCount() + self.__globalMapStats.getBattlesCount()
-        if totalBattles == 0:
-            return 0
-        return totalXP / totalBattles
+        return 0 if totalBattles == 0 else totalXP / totalBattles
 
     def getBattlesCount(self):
         return self.getTotalStats().getBattlesCount()
@@ -176,9 +174,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
     def __getCurrentSkillIcon(self):
         if self.__isNewSkillReady():
             return ('new_skill', 'new_skill.png')
-        if self.tmanDescr.roleLevel != tankmen.MAX_SKILL_LEVEL or not len(self.tmanDescr.skills):
-            return ('role', '%s.png' % self.tmanDescr.role)
-        return ('skill', tankmen.getSkillsConfig()[self.tmanDescr.skills[-1]]['icon'])
+        return ('role', '%s.png' % self.tmanDescr.role) if self.tmanDescr.roleLevel != tankmen.MAX_SKILL_LEVEL or not len(self.tmanDescr.skills) else ('skill', tankmen.getSkillsConfig()[self.tmanDescr.skills[-1]]['icon'])
 
     def __getNextSkillBattlesLeft(self, tankman):
         if not self.getBattlesCount():
@@ -210,7 +206,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
         else:
             return
 
-    def __packStat(self, name, value, imageType = None, image = None, usePremiumXpFactor = False):
+    def __packStat(self, name, value, imageType=None, image=None, usePremiumXpFactor=False):
         if usePremiumXpFactor:
             premiumValue = self.__getBattlesLeftOnPremiumVehicle(value)
         else:
@@ -229,7 +225,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
 
 class FortDossier(_Dossier, stats.FortDossierStats):
 
-    def __init__(self, dossier, playerDBID = False):
+    def __init__(self, dossier, playerDBID=False):
         super(FortDossier, self).__init__(dossier, DOSSIER_TYPE.FORTIFIED_REGIONS, playerDBID)
 
     def pack(self):

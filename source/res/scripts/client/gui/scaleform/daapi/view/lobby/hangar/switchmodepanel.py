@@ -1,10 +1,12 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/SwitchModePanel.py
+from constants import ARENA_GUI_TYPE_LABEL
 from gui.Scaleform.daapi.view.meta.SwitchModePanelMeta import SwitchModePanelMeta
 from gui.Scaleform.genConsts.FALLOUT_ALIASES import FALLOUT_ALIASES
 from gui.Scaleform.locale.FALLOUT import FALLOUT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.game_control import getFalloutCtrl
+from gui.prb_control.prb_getters import getArenaGUIType
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -41,7 +43,7 @@ class SwitchModePanel(SwitchModePanelMeta):
         battleType = self.__falloutCtrl.getBattleType()
         isVisible = self.__falloutCtrl.canChangeBattleType() and self.__falloutCtrl.isSelected()
         if isVisible:
-            self.as_setDataS({'iconSource': RES_ICONS.MAPS_ICONS_BATTLETYPES_64X64_FALLOUT,
+            self.as_setDataS({'iconSource': '../maps/icons/battleTypes/64x64/%s.png' % ARENA_GUI_TYPE_LABEL.LABELS[getArenaGUIType(queueType=battleType)],
              'buttonLabel': FALLOUT.HANGARSWITCH_BTNLBL,
              'label': text_styles.middleTitle('#fallout:hangarSwitch/%d' % battleType),
              'autoSquadEnabled': self.__falloutCtrl.isAutomatch(),

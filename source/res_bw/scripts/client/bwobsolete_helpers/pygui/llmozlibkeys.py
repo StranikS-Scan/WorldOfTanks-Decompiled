@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/LLMozlibKeys.py
 LL_DOM_VK_CANCEL = 3
 LL_DOM_VK_HELP = 6

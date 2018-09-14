@@ -107,6 +107,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/british/GB73_AT2/AT2_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_GB73_AT2>
@@ -216,6 +217,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB73_AT2/collision/Chassis.model	</collisionModel>
@@ -337,6 +340,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB73_AT2/collision/Chassis.model	</collisionModel>
@@ -547,6 +552,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_GB73_AT2>
   </turrets0>

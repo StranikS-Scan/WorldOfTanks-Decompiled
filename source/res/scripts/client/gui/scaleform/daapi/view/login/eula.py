@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/EULA.py
 import BigWorld
 from ConnectionManager import connectionManager
@@ -9,7 +9,7 @@ from gui.shared.events import CloseWindowEvent, OpenLinkEvent
 
 class EULADlg(EULAMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(EULADlg, self).__init__()
         self.__applied = False
         self.__eulaString = ctx.get('text', '')

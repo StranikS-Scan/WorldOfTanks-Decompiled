@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/TokenRequester.py
 import cPickle
 from functools import partial
@@ -17,12 +17,12 @@ def _getAccountRepository():
 class TokenRequester(object):
     __idsGen = SequenceIDGenerator()
 
-    def __init__(self, tokenType, wrapper = TokenResponse, cache = True):
+    def __init__(self, tokenType, wrapper=TokenResponse, cache=True):
         super(TokenRequester, self).__init__()
         if callable(wrapper):
             self.__wrapper = wrapper
         else:
-            raise ValueError, 'Wrapper is invalid: {0}'.format(wrapper)
+            raise ValueError('Wrapper is invalid: {0}'.format(wrapper))
         self.__tokenType = tokenType
         self.__callback = None
         self.__lastResponse = None
@@ -48,7 +48,7 @@ class TokenRequester(object):
         return getattr(REQUEST_COOLDOWN, TOKEN_TYPE.COOLDOWNS[self.__tokenType], 10.0)
 
     @async
-    def request(self, timeout = None, callback = None):
+    def request(self, timeout=None, callback=None):
         requester = getattr(BigWorld.player(), 'requestToken', None)
         if not requester or not callable(requester):
             if callback:

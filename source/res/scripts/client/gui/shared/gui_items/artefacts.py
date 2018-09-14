@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/artefacts.py
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import artefacts
@@ -10,7 +10,7 @@ class VehicleArtefact(FittingItem):
     def icon(self):
         return self.descriptor.icon[0]
 
-    def _getShortInfo(self, vehicle = None, expanded = False):
+    def _getShortInfo(self, vehicle=None, expanded=False):
         return self.shortDescription
 
     @property
@@ -21,9 +21,7 @@ class VehicleArtefact(FittingItem):
     @property
     def crewLevelIncrease(self):
         """ Value of crew role levels increasing. """
-        if not self.isStimulator:
-            return 0
-        return self.descriptor['crewLevelIncrease']
+        return 0 if not self.isStimulator else self.descriptor['crewLevelIncrease']
 
 
 class Equipment(VehicleArtefact):
@@ -48,7 +46,7 @@ class Equipment(VehicleArtefact):
     def defaultLayoutValue(self):
         return (self.intCD if not self.isBoughtForCredits else -self.intCD, 1)
 
-    def isInstalled(self, vehicle, slotIdx = None):
+    def isInstalled(self, vehicle, slotIdx=None):
         for idx, eq in enumerate(vehicle.eqs):
             if eq is not None and self.intCD == eq.intCD:
                 if slotIdx is None:
@@ -57,7 +55,7 @@ class Equipment(VehicleArtefact):
 
         return super(Equipment, self).isInstalled(vehicle, slotIdx)
 
-    def mayInstall(self, vehicle, slotIdx = None):
+    def mayInstall(self, vehicle, slotIdx=None):
         for idx, eq in enumerate(vehicle.eqs):
             if slotIdx is not None and idx == slotIdx or eq is None:
                 continue
@@ -73,7 +71,7 @@ class Equipment(VehicleArtefact):
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            installed = map(lambda x: (x.intCD if x is not None else None), vehicle.eqs)
+            installed = map(lambda x: x.intCD if x is not None else None, vehicle.eqs)
             if self.intCD in installed:
                 result.add(vehicle)
 
@@ -100,7 +98,7 @@ class Equipment(VehicleArtefact):
 
 class OptionalDevice(VehicleArtefact):
 
-    def __init__(self, intCompactDescr, proxy = None, isBoughtForCredits = False):
+    def __init__(self, intCompactDescr, proxy=None, isBoughtForCredits=False):
         super(OptionalDevice, self).__init__(intCompactDescr, proxy, isBoughtForCredits)
         splitIcon = self.icon.split('/')
         labelWithExtension = splitIcon[len(splitIcon) - 1]
@@ -111,7 +109,7 @@ class OptionalDevice(VehicleArtefact):
     def isRemovable(self):
         return self.descriptor['removable']
 
-    def isInstalled(self, vehicle, slotIdx = None):
+    def isInstalled(self, vehicle, slotIdx=None):
         for idx, op in enumerate(vehicle.optDevices):
             if op is not None and self.intCD == op.intCD:
                 if slotIdx is None:
@@ -134,7 +132,7 @@ class OptionalDevice(VehicleArtefact):
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            installed = map(lambda x: (x.intCD if x is not None else None), vehicle.optDevices)
+            installed = map(lambda x: x.intCD if x is not None else None, vehicle.optDevices)
             if self.intCD in installed:
                 result.add(vehicle)
 

@@ -103,6 +103,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G39_Marder_III/Marder_III_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
     </camouflage>
@@ -146,7 +147,7 @@
         <left>	vehicles/german/G39_Marder_III/track/left.track	</left>
         <right>	vehicles/german/G39_Marder_III/track/right.track	</right>
         <segmentLength>	0.101	</segmentLength>
-        <segmentOffset>	0.167	</segmentOffset>
+        <segmentOffset>	0.187	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -251,13 +252,9 @@
         <gravity>	-9	</gravity>
         <elasticity>	2063	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.016	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <elasticity>	2063	</elasticity>
           <forwardElastK>	1.26	</forwardElastK>
           <backwardElastK>	0.81	</backwardElastK>
           <offset>	-0.071	</offset>
@@ -329,7 +326,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <elasticity>	2063	</elasticity>
           <forwardElastK>	1.26	</forwardElastK>
           <backwardElastK>	0.81	</backwardElastK>
           <offset>	-0.071	</offset>
@@ -433,7 +429,7 @@
         <left>	vehicles/german/G39_Marder_III/track/left.track	</left>
         <right>	vehicles/german/G39_Marder_III/track/right.track	</right>
         <segmentLength>	0.101	</segmentLength>
-        <segmentOffset>	0.167	</segmentOffset>
+        <segmentOffset>	0.187	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -538,13 +534,9 @@
         <gravity>	-9	</gravity>
         <elasticity>	2063	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.016	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <elasticity>	2063	</elasticity>
           <forwardElastK>	1.26	</forwardElastK>
           <backwardElastK>	0.81	</backwardElastK>
           <offset>	-0.071	</offset>
@@ -616,7 +608,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <elasticity>	2063	</elasticity>
           <forwardElastK>	1.26	</forwardElastK>
           <backwardElastK>	0.81	</backwardElastK>
           <offset>	-0.071	</offset>
@@ -777,12 +768,12 @@
             <maxPitch>	0 9 1 9	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/german/G39_Marder_III/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G39_Marder_III/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G39_Marder_III/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/german/G39_Marder_III/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G39_Marder_III/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G39_Marder_III/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G39_Marder_III/collision/Gun_02.model	</collisionModel>
+            <collisionModel>	vehicles/german/G39_Marder_III/collision/Gun_03.model	</collisionModel>
           </hitTester>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
@@ -806,12 +797,12 @@
             <maxPitch>	0 9 1 9	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/german/G39_Marder_III/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G39_Marder_III/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G39_Marder_III/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/german/G39_Marder_III/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G39_Marder_III/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G39_Marder_III/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G39_Marder_III/collision/Gun_02.model	</collisionModel>
+            <collisionModel>	vehicles/german/G39_Marder_III/collision/Gun_03.model	</collisionModel>
           </hitTester>
           <camouflage>
             <tiling>	0.415 0.415 0.000000 0.000000	</tiling>
@@ -831,7 +822,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 0.871 0.000 0.966 0.000 1.000 0.530 0.509 0.500 0.397 0.500 0.427 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.565 0.25 0.24 0.58	</tiling>

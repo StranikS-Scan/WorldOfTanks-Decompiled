@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ShopRequester.py
 import BigWorld
 import weakref
@@ -15,7 +15,7 @@ class ShopCommonStats(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def getValue(self, key, defaultValue = None):
+    def getValue(self, key, defaultValue=None):
         pass
 
     def getPrices(self):
@@ -160,7 +160,8 @@ class ShopCommonStats(object):
                                         'credits' : cost in credits,
                                         'gold' : cost in gold,
                                         'baseRoleLoss' : float in [0, 1], fraction of role to drop,
-                                        'classChangeRoleLoss' : float in [0, 1], fraction of role to drop additionally if
+                                        'classChangeRoleLoss' : float in [0, 1], fraction of role to drop
+                                                additionally if
                                                 classes of self.vehicleTypeID and newVehicleTypeID are different,
                                         'isPremium' : tankman becomes premium,
                                         }.
@@ -267,21 +268,21 @@ class ShopCommonStats(object):
     def camouflageCost(self):
         return self.getValue('camouflageCost', {})
 
-    def getCamouflageCost(self, days = 0):
+    def getCamouflageCost(self, days=0):
         return self.camouflageCost.get(days)
 
     @property
     def playerInscriptionCost(self):
         return self.getValue('playerInscriptionCost', {})
 
-    def getInscriptionCost(self, days = 0):
+    def getInscriptionCost(self, days=0):
         return self.playerInscriptionCost.get(days)
 
     @property
     def playerEmblemCost(self):
         return self.getValue('playerEmblemCost', {})
 
-    def getEmblemCost(self, days = 0):
+    def getEmblemCost(self, days=0):
         return self.playerEmblemCost.get(days)
 
     @property
@@ -300,7 +301,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
         self.defaults.clear()
         super(ShopRequester, self).clear()
 
-    def getValue(self, key, defaultValue = None):
+    def getValue(self, key, defaultValue=None):
         return self.getCacheValue(key, defaultValue)
 
     def _response(self, resID, invData, callback):
@@ -329,7 +330,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
     def personalPremiumPacketsDiscounts(self):
         return dict(filter(lambda (discountID, item): discountID in self._goodies.goodies, self.premiumPacketsDiscounts.iteritems()))
 
-    def getPremiumCostWithDiscount(self, premiumPacketDiscounts = None):
+    def getPremiumCostWithDiscount(self, premiumPacketDiscounts=None):
         discounts = premiumPacketDiscounts or self.personalPremiumPacketsDiscounts
         premiumCostWithDiscount = self.premiumCost.copy()
         for discount in discounts.itervalues():
@@ -348,7 +349,8 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
                                         'gold' : default cost in gold,
                                         'defGold' : default cost in gold,
                                         'baseRoleLoss' : float in [0, 1], fraction of role to drop,
-                                        'classChangeRoleLoss' : float in [0, 1], fraction of role to drop additionally if
+                                        'classChangeRoleLoss' : float in [0, 1], fraction of role to drop
+                                        additionally if
                                                 classes of self.vehicleTypeID and newVehicleTypeID are different,
                                         'isPremium' : tankman becomes premium,
                                         }.
@@ -476,7 +478,7 @@ class DefaultShopRequester(ShopCommonStats):
         self.__cache = cache.copy()
         return
 
-    def getValue(self, key, defaultValue = None):
+    def getValue(self, key, defaultValue=None):
         return self.__cache.get(key, defaultValue)
 
     @property
@@ -596,7 +598,8 @@ class DefaultShopRequester(ShopCommonStats):
                                         'credits' : cost in credits,
                                         'gold' : cost in gold,
                                         'baseRoleLoss' : float in [0, 1], fraction of role to drop,
-                                        'classChangeRoleLoss' : float in [0, 1], fraction of role to drop additionally if
+                                        'classChangeRoleLoss' : float in [0, 1], fraction of role to drop
+                                        additionally if
                                                 classes of self.vehicleTypeID and newVehicleTypeID are different,
                                         'isPremium' : tankman becomes premium,
                                         }.
@@ -657,17 +660,11 @@ class DefaultShopRequester(ShopCommonStats):
 
     def getVehCamouflagePriceFactor(self, typeCompDescr):
         value = self.getItemsData().get('vehicleCamouflagePriceFactors', {}).get(typeCompDescr)
-        if value is None:
-            return self.__proxy.getVehCamouflagePriceFactor(typeCompDescr)
-        else:
-            return value
+        return self.__proxy.getVehCamouflagePriceFactor(typeCompDescr) if value is None else value
 
     def getHornPriceFactor(self, hornID):
         value = self.getItemsData().get('vehicleHornPriceFactors', {}).get(hornID)
-        if value is None:
-            return self.__proxy.getVehCamouflagePriceFactor(hornID)
-        else:
-            return value
+        return self.__proxy.getVehCamouflagePriceFactor(hornID) if value is None else value
 
     def getEmblemsGroupPriceFactors(self):
         return self.getItemsData().get('playerEmblemGroupPriceFactors', self.__proxy.getEmblemsGroupPriceFactors())
@@ -677,34 +674,23 @@ class DefaultShopRequester(ShopCommonStats):
 
     def getInscriptionsGroupPriceFactors(self, nationID):
         value = self.getItemsData().get('inscriptionGroupPriceFactors', [])
-        if len(value) <= nationID:
-            return self.__proxy.getInscriptionsGroupPriceFactors(nationID)
-        return value[nationID]
+        return self.__proxy.getInscriptionsGroupPriceFactors(nationID) if len(value) <= nationID else value[nationID]
 
     def getInscriptionsGroupHiddens(self, nationID):
         value = self.getItemsData().get('notInShopInscriptionGroups', [])
-        if len(value) <= nationID:
-            return self.__proxy.getInscriptionsGroupHiddens(nationID)
-        return value[nationID]
+        return self.__proxy.getInscriptionsGroupHiddens(nationID) if len(value) <= nationID else value[nationID]
 
     def getCamouflagesPriceFactors(self, nationID):
         value = self.getItemsData().get('camouflagePriceFactors', [])
-        if len(value) <= nationID:
-            return self.__proxy.getCamouflagesPriceFactors(nationID)
-        return value[nationID]
+        return self.__proxy.getCamouflagesPriceFactors(nationID) if len(value) <= nationID else value[nationID]
 
     def getCamouflagesHiddens(self, nationID):
         value = self.getItemsData().get('notInShopCamouflages', [])
-        if len(value) <= nationID:
-            return self.__proxy.getCamouflagesHiddens(nationID)
-        return value[nationID]
+        return self.__proxy.getCamouflagesHiddens(nationID) if len(value) <= nationID else value[nationID]
 
     def getHornPrice(self, hornID):
         value = self.getItemsData().get('hornPrices', {}).get(hornID)
-        if value is None:
-            return self.__proxy.getHornPrice(hornID)
-        else:
-            return value
+        return self.__proxy.getHornPrice(hornID) if value is None else value
 
     @property
     def premiumCost(self):

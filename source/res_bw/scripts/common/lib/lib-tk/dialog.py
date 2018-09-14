@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/Dialog.py
 from Tkinter import *
 from Tkinter import _cnfmerge
@@ -9,7 +9,7 @@ else:
 
 class Dialog(Widget):
 
-    def __init__(self, master = None, cnf = {}, **kw):
+    def __init__(self, master=None, cnf={}, **kw):
         cnf = _cnfmerge((cnf, kw))
         self.widgetName = '__dialog__'
         Widget._setup(self, master, cnf)

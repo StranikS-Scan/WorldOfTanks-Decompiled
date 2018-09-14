@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/factories/ControlFactory.py
 from debug_utils import LOG_DEBUG
 from gui.prb_control.items import PlayerDecorator
@@ -24,7 +24,7 @@ class ControlFactory(object):
     def createStateEntity(self, functional):
         raise NotImplementedError()
 
-    def createLeaveCtx(self, flags = FUNCTIONAL_FLAG.UNDEFINED):
+    def createLeaveCtx(self, flags=FUNCTIONAL_FLAG.UNDEFINED):
         raise NotImplementedError()
 
     @staticmethod

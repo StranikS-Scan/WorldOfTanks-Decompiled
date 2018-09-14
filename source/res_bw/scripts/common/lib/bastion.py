@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Bastion.py
 """Bastionification utility.
 
@@ -82,7 +82,7 @@ class BastionClass:
         return attribute
 
 
-def Bastion(object, filter = lambda name: name[:1] != '_', name = None, bastionclass = BastionClass):
+def Bastion(object, filter=lambda name: name[:1] != '_', name=None, bastionclass=BastionClass):
     """Create a bastion for an object, using an optional filter.
     
     See the Bastion module's documentation for background.
@@ -98,7 +98,7 @@ def Bastion(object, filter = lambda name: name[:1] != '_', name = None, bastionc
     """
     raise RuntimeError, 'This code is not secure in Python 2.2 and later'
 
-    def get1(name, object = object, filter = filter):
+    def get1(name, object=object, filter=filter):
         """Internal function for Bastion().  See source comments."""
         if filter(name):
             attribute = getattr(object, name)
@@ -106,7 +106,7 @@ def Bastion(object, filter = lambda name: name[:1] != '_', name = None, bastionc
                 return attribute
         raise AttributeError, name
 
-    def get2(name, get1 = get1):
+    def get2(name, get1=get1):
         """Internal function for Bastion().  See source comments."""
         return get1(name)
 

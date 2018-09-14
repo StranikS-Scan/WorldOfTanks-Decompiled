@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/videoFeeds.py
 import BigWorld
 import GUI
@@ -176,8 +176,7 @@ class VideoFeeds:
                     else:
                         amount = (distance - self.staticRange) / (self.range - self.staticRange)
                         feed.setStatic(amount)
-                else:
-                    feed.setStatic(amount)
+                feed.setStatic(amount)
 
             BigWorld.callback(1.0, self.checkFeeds)
             return
@@ -203,7 +202,7 @@ class VideoFeed(PyGUIBase):
         self.guiViewer = None
         return
 
-    def active(self, state, camera = None):
+    def active(self, state, camera=None):
         if state == self.isActive:
             return
         self.isActive = state

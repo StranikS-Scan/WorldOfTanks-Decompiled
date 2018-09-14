@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-irix6/IOCTL.py
 from warnings import warnpy3k
 warnpy3k('the IOCTL module has been removed in Python 3.0', stacklevel=2)

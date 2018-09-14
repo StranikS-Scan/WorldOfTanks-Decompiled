@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/consumables/OptionalDevicesController.py
 import Event
 from PlayerEvents import g_playerEvents
@@ -20,7 +20,7 @@ class OptionalDevicesController(object):
     def __repr__(self):
         return 'OptionalDevicesController({0!r:s})'.format(self.__optionalDevices)
 
-    def clear(self, leave = True):
+    def clear(self, leave=True):
         if leave:
             self.__eManager.clear()
             g_playerEvents.onArenaPeriodChange -= self.__pe_onArenaPeriodChange

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileSummaryMeta.py
 from gui.Scaleform.daapi.view.lobby.profile.ProfileAchievementSection import ProfileAchievementSection
 
@@ -11,5 +11,4 @@ class ProfileSummaryMeta(ProfileAchievementSection):
         self._printOverrideError('getGlobalRating')
 
     def as_setUserDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setUserData(data)
+        return self.flashObject.as_setUserData(data) if self._isDAAPIInited() else None

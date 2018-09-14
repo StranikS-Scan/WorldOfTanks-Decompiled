@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/PPTranslationProperty.py
 from FX.Event import Event
 from FX.Event import IMMEDIATE_EVENT
@@ -14,7 +14,7 @@ class PPTranslationProperty(Event):
     of the SFX source, and sets it on a post-processing chain actor.
     """
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         self.propName = pSection.asString
         return self
 

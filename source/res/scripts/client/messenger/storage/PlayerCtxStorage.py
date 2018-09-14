@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/storage/PlayerCtxStorage.py
 import types
 import Event
@@ -35,12 +35,10 @@ class PlayerCtxStorage(SimpleCachedStorage):
         return self.__clanInfo
 
     def getClanAbbrev(self):
-        if self.__clanInfo:
-            return self.__clanInfo.abbrev
+        return self.__clanInfo.abbrev if self.__clanInfo else ''
 
     def getClanRole(self):
-        if self.__clanInfo:
-            return self.__clanInfo.role
+        return self.__clanInfo.role if self.__clanInfo else 0
 
     def setClanInfo(self, clanInfo):
         self.__clanInfo = clanInfo
@@ -63,7 +61,7 @@ class PlayerCtxStorage(SimpleCachedStorage):
     def isChatAdmin(self):
         return self.__accAttrs & ACCOUNT_ATTR.CHAT_ADMIN != 0
 
-    def isBanned(self, components = None):
+    def isBanned(self, components=None):
         if self.__banInfo:
             result = self.__banInfo.isBanned(game=WG_GAMES.TANKS, components=components)
         else:
@@ -77,7 +75,7 @@ class PlayerCtxStorage(SimpleCachedStorage):
         self.__banInfo = banInfo
 
     def setCachedItem(self, key, value):
-        if type(key) != types.StringType:
+        if not isinstance(key, types.StringType):
             LOG_WARNING('Key is not string', type(key), key)
             return
         if type(value) not in types.StringTypes:
@@ -104,5 +102,5 @@ class PlayerCtxStorage(SimpleCachedStorage):
 
     def _setCachedData(self, data):
         lastVoipUri = data.pop(0)
-        if type(lastVoipUri) is types.StringType:
+        if isinstance(lastVoipUri, types.StringType):
             self.__cachedItems['lastVoipUri'] = lastVoipUri

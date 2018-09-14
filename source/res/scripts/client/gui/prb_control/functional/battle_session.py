@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/battle_session.py
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
@@ -29,24 +29,24 @@ class BattleSessionListEntry(PrbEntry):
     def makeDefCtx(self):
         return prb_ctx.JoinModeCtx(PREBATTLE_TYPE.CLAN)
 
-    def create(self, ctx, callback = None):
-        raise Exception, 'BattleSession can be created through the web only'
+    def create(self, ctx, callback=None):
+        raise Exception('BattleSession can be created through the web only')
 
-    def join(self, ctx, callback = None):
+    def join(self, ctx, callback=None):
         g_eventDispatcher.loadBattleSessionList()
         if callback:
             callback(True)
 
-    def select(self, ctx, callback = None):
+    def select(self, ctx, callback=None):
         self.join(ctx, callback=callback)
 
 
 class BattleSessionEntry(PrbEntry):
 
-    def create(self, ctx, callback = None):
-        raise Exception, 'BattleSession can be created through the web only'
+    def create(self, ctx, callback=None):
+        raise Exception('BattleSession can be created through the web only')
 
-    def join(self, ctx, callback = None):
+    def join(self, ctx, callback=None):
         prbID = ctx.getID()
         if not AutoInvitesNotifier.hasInvite(prbID):
             SystemMessages.pushI18nMessage(I18N_SYSTEM_MESSAGES.ARENA_START_ERRORS_JOIN_NOT_FOUND, type=SystemMessages.SM_TYPE.Error)
@@ -87,7 +87,7 @@ class AutoInvitesRequester(IPrbListRequester):
         self.__callback = None
         return
 
-    def request(self, ctx = None):
+    def request(self, ctx=None):
         self.__fetchList()
 
     def getItem(self, prbID):
@@ -191,7 +191,7 @@ class BattleSessionFunctional(PrbFunctional):
          REQUEST_TYPE.KICK: self.kickPlayer}
         super(BattleSessionFunctional, self).__init__(settings, permClass=BattleSessionPrbPermissions, limits=BattleSessionLimits(self), requestHandlers=requests)
 
-    def init(self, clientPrb = None, ctx = None):
+    def init(self, clientPrb=None, ctx=None):
         result = super(BattleSessionFunctional, self).init(clientPrb=clientPrb)
         g_eventDispatcher.loadHangar()
         g_eventDispatcher.loadBattleSessionWindow(self.getEntityType())
@@ -204,7 +204,7 @@ class BattleSessionFunctional(PrbFunctional):
     def isGUIProcessed(self):
         return True
 
-    def fini(self, clientPrb = None, woEvents = False):
+    def fini(self, clientPrb=None, woEvents=False):
         prbType = self.getEntityType()
         super(BattleSessionFunctional, self).fini(clientPrb=clientPrb, woEvents=woEvents)
         if not woEvents:
@@ -216,13 +216,13 @@ class BattleSessionFunctional(PrbFunctional):
         return FUNCTIONAL_FLAG.UNDEFINED
 
     @vehicleAmmoCheck
-    def setPlayerState(self, ctx, callback = None):
+    def setPlayerState(self, ctx, callback=None):
         super(BattleSessionFunctional, self).setPlayerState(ctx, callback)
 
-    def showGUI(self, ctx = None):
+    def showGUI(self, ctx=None):
         g_eventDispatcher.loadBattleSessionWindow(self.getEntityType())
 
-    def getRosters(self, keys = None):
+    def getRosters(self, keys=None):
         rosters = prb_getters.getPrebattleRosters()
         prbRosters = PREBATTLE_ROSTER.getRange(self.getEntityType(), self.getPlayerTeam())
         result = dict(((r, []) for r in prbRosters))
@@ -246,7 +246,7 @@ class BattleSessionFunctional(PrbFunctional):
             isValid = False
         return (isValid, notValidReason)
 
-    def doAction(self, action = None):
+    def doAction(self, action=None):
         if self.getPlayerInfo().isReady():
             self.setPlayerState(prb_ctx.SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))
         else:

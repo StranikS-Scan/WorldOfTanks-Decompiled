@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/SearchDialogBase.py
 """Define SearchDialogBase used by Search, Replace, and Grep dialogs."""
 from Tkinter import *
@@ -30,7 +30,7 @@ class SearchDialogBase:
         self.top = None
         return
 
-    def open(self, text, searchphrase = None):
+    def open(self, text, searchphrase=None):
         self.text = text
         if not self.top:
             self.create_widgets()
@@ -45,7 +45,7 @@ class SearchDialogBase:
         self.ent.icursor(0)
         self.top.grab_set()
 
-    def close(self, event = None):
+    def close(self, event=None):
         if self.top:
             self.top.grab_release()
             self.top.withdraw()
@@ -74,7 +74,7 @@ class SearchDialogBase:
         self.row = self.row + 1
         return e
 
-    def make_frame(self, labeltext = None):
+    def make_frame(self, labeltext=None):
         if labeltext:
             l = Label(self.top, text=labeltext)
             l.grid(row=self.row, column=0, sticky='nw')
@@ -83,7 +83,7 @@ class SearchDialogBase:
         self.row = self.row + 1
         return f
 
-    def make_button(self, label, command, isdef = 0):
+    def make_button(self, label, command, isdef=0):
         b = Button(self.buttonframe, text=label, command=command, default=isdef and 'active' or 'normal')
         cols, rows = self.buttonframe.grid_size()
         b.grid(pady=1, row=rows, column=0, sticky='ew')

@@ -1,11 +1,15 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/formatters.py
+from gui import makeHtmlString
+from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BATTLE_RESULT_TYPES import BATTLE_RESULT_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items.Vehicle import Vehicle
 TXT_GAP_FOR_BIG_TITLE = 2
 TXT_GAP_FOR_SMALL_TITLE = 3
 
-def packPadding(top = 0, left = 0, bottom = 0, right = 0):
+def packPadding(top=0, left=0, bottom=0, right=0):
     data = {}
     if top != 0:
         data['top'] = top
@@ -18,7 +22,7 @@ def packPadding(top = 0, left = 0, bottom = 0, right = 0):
     return data
 
 
-def packBlockDataItem(linkage, data, padding = None):
+def packBlockDataItem(linkage, data, padding=None):
     data = {'linkage': linkage,
      'data': data}
     if padding is not None:
@@ -26,9 +30,15 @@ def packBlockDataItem(linkage, data, padding = None):
     return data
 
 
-def packTextBlockData(text, useHtml = True, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding = None):
+def packTextBlockData(text, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding=None):
     return packBlockDataItem(linkage, {'text': text,
      'useHtml': useHtml}, padding)
+
+
+def packAlignedTextBlockData(text, align, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, padding=None):
+    return packBlockDataItem(linkage, {'text': makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': align,
+              'message': text}),
+     'useHtml': True}, padding)
 
 
 def packHeadBlockData(title, icon):
@@ -42,7 +52,7 @@ def packTotalItemsBlockData(counter, text, counterVisible):
      'counterVisible': counterVisible})
 
 
-def packTextParameterBlockData(name, value, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth = -1, gap = 5, padding = None):
+def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None):
     data = {'name': name,
      'value': value}
     if valueWidth != -1:
@@ -52,21 +62,33 @@ def packTextParameterBlockData(name, value, linkage = BLOCKS_TOOLTIP_TYPES.TOOLT
     return packBlockDataItem(linkage, data, padding)
 
 
-def packBuildUpBlockData(blocks, gap = 0, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding = None):
-    data = {'blocksData': blocks}
+def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None):
+    data = {'name': name,
+     'value': value,
+     'icon': icon}
+    if valueWidth != -1:
+        data['valueWidth'] = valueWidth
+    if gap != -1:
+        data['gap'] = gap
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packBuildUpBlockData(blocks, gap=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None, stretchBg=True):
+    data = {'blocksData': blocks,
+     'stretchBg': stretchBg}
     if gap != 0:
         data['gap'] = gap
     return packBlockDataItem(linkage, data, padding)
 
 
-def packTitleDescBlock(title, desc = None, gap = TXT_GAP_FOR_BIG_TITLE, useHtml = True, textBlockLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, blocksLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding = None):
+def packTitleDescBlock(title, desc=None, gap=TXT_GAP_FOR_BIG_TITLE, useHtml=True, textBlockLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, blocksLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None):
     blocks = [packTextBlockData(title, useHtml, textBlockLinkage)]
     if desc is not None:
         blocks.append(packTextBlockData(desc, useHtml, textBlockLinkage))
     return packBuildUpBlockData(blocks, gap, blocksLinkage, padding)
 
 
-def packTitleDescBlockSmallTitle(title, desc = None, useHtml = True, textBlockLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, blocksLinkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding = None):
+def packTitleDescBlockSmallTitle(title, desc=None, useHtml=True, textBlockLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, blocksLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None):
     return packTitleDescBlock(title, desc, TXT_GAP_FOR_SMALL_TITLE, useHtml, textBlockLinkage, blocksLinkage, padding)
 
 
@@ -74,7 +96,7 @@ def packResultBlockData(title, text):
     return packBuildUpBlockData([packTextBlockData(title, True, BATTLE_RESULT_TYPES.TOOLTIP_RESULT_TTILE_LEFT_LINKAGE), packTextBlockData(text, True, BATTLE_RESULT_TYPES.TOOLTIP_ICON_TEXT_PARAMETER_LINKAGE)])
 
 
-def packImageTextBlockData(title = None, desc = None, img = None, imgPadding = None, imgAtLeft = True, txtGap = 0, txtOffset = -1, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding = None):
+def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtGap=0, txtOffset=-1, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None):
     data = {'imageAtLeft': imgAtLeft}
     if title is not None:
         data['title'] = title
@@ -91,7 +113,7 @@ def packImageTextBlockData(title = None, desc = None, img = None, imgPadding = N
     return packBlockDataItem(linkage, data, padding)
 
 
-def packImageBlockData(img = None, align = BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_LINKAGE, width = -1, height = -1, padding = None):
+def packImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_LINKAGE, width=-1, height=-1, padding=None):
     data = {'align': align}
     if img is not None:
         data['imagePath'] = img
@@ -102,6 +124,6 @@ def packImageBlockData(img = None, align = BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, link
     return packBlockDataItem(linkage, data, padding)
 
 
-def packSaleTextParameterBlockData(name, saleData, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_SALE_TEXT_PARAMETER_BLOCK_LINKAGE, padding = None):
+def packSaleTextParameterBlockData(name, saleData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_SALE_TEXT_PARAMETER_BLOCK_LINKAGE, padding=None):
     return packBlockDataItem(linkage, {'name': name,
      'saleData': saleData}, padding)

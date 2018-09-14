@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/__init__.py
 from tutorial.control.lobby.context import LobbyBonusesRequester
 from tutorial.control.quests import queries
@@ -15,6 +15,8 @@ class QuestsControlsFactory(ControlsFactory):
     def __init__(self):
         effects = {EFFECT_TYPE.ACTIVATE: core_func.FunctionalActivateEffect,
          EFFECT_TYPE.DEACTIVATE: core_func.FunctionalDeactivateEffect,
+         EFFECT_TYPE.GLOBAL_ACTIVATE: core_func.FunctionalGlobalActivateEffect,
+         EFFECT_TYPE.GLOBAL_DEACTIVATE: core_func.FunctionalGlobalDeactivateEffect,
          EFFECT_TYPE.SET_GUI_ITEM_CRITERIA: core_func.FunctionalSetGuiItemCriteria,
          EFFECT_TYPE.SET_ACTION: core_func.FunctionalSetAction,
          EFFECT_TYPE.REMOVE_ACTION: core_func.FunctionalRemoveAction,
@@ -27,11 +29,13 @@ class QuestsControlsFactory(ControlsFactory):
          EFFECT_TYPE.SHOW_HINT: chains_func.FunctionalShowHint,
          EFFECT_TYPE.CLOSE_HINT: chains_func.FunctionalCloseHint,
          EFFECT_TYPE.SHOW_WINDOW: quests_func.ShowSharedWindowEffect,
+         EFFECT_TYPE.SELECT_VEHICLE_IN_HANGAR: quests_func.SelectVehicleInHangar,
          EFFECT_TYPE.SAVE_TUTORIAL_SETTING: quests_func.SaveTutorialSettingEffect,
          EFFECT_TYPE.SAVE_ACCOUNT_SETTING: quests_func.SaveAccountSettingEffect,
          EFFECT_TYPE.RUN_TRIGGER: quests_func.QuestsFunctionalRunTriggerEffect,
          EFFECT_TYPE.SHOW_UNLOCKED_CHAPTER: chains_func.FunctionalShowUnlockedChapter,
-         EFFECT_TYPE.SHOW_AWARD_WINDOW: chains_func.FunctionalShowAwardWindow}
+         EFFECT_TYPE.SHOW_AWARD_WINDOW: chains_func.FunctionalShowAwardWindow,
+         EFFECT_TYPE.ENTER_QUEUE: chains_func.FunctionalSwitchToRandom}
         _queries = {'awardWindow': queries.AwardWindowContentQuery}
         ControlsFactory.__init__(self, effects, _queries)
 

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/entry_decorator.py
 from __builtin__ import property
 from collections import defaultdict
@@ -77,7 +77,7 @@ class GUIDecorator(IGUIEntryDecorator):
     def isFocused(self):
         return self.__current().isFocused()
 
-    def addClientMessage(self, message, isCurrentPlayer = False):
+    def addClientMessage(self, message, isCurrentPlayer=False):
         self.__current().addClientMessage(message, isCurrentPlayer=isCurrentPlayer)
 
     def __current(self):

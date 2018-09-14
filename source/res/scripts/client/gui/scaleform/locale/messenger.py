@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/MESSENGER.py
 from debug_utils import LOG_WARNING
 
@@ -94,16 +94,6 @@ class MESSENGER(object):
     DIALOGS_CREATECHANNEL_LABELS_RETYPEPASSWORD = '#messenger:dialogs/createChannel/labels/retypePassword'
     DIALOGS_CREATECHANNEL_BUTTONS_CREATE = '#messenger:dialogs/createChannel/buttons/create'
     DIALOGS_CREATECHANNEL_BUTTONS_CLOSE = '#messenger:dialogs/createChannel/buttons/close'
-    DIALOGS_CREATECHANNEL_ERRORS_INVALIDNAME_TITLE = '#messenger:dialogs/createChannel/errors/invalidName/title'
-    DIALOGS_CREATECHANNEL_ERRORS_INVALIDNAME_MESSAGE = '#messenger:dialogs/createChannel/errors/invalidName/message'
-    DIALOGS_CREATECHANNEL_ERRORS_INVALIDPASSWORD_TITLE = '#messenger:dialogs/createChannel/errors/invalidPassword/title'
-    DIALOGS_CREATECHANNEL_ERRORS_INVALIDPASSWORD_MESSAGE = '#messenger:dialogs/createChannel/errors/invalidPassword/message'
-    DIALOGS_CREATECHANNEL_ERRORS_INVALIDRETYPEPASSWORD_TITLE = '#messenger:dialogs/createChannel/errors/invalidRetypePassword/title'
-    DIALOGS_CREATECHANNEL_ERRORS_INVALIDRETYPEPASSWORD_MESSAGE = '#messenger:dialogs/createChannel/errors/invalidRetypePassword/message'
-    DIALOGS_CREATECHANNEL_ERRORS_NOTEQUALSPASSWORDS_TITLE = '#messenger:dialogs/createChannel/errors/notEqualsPasswords/title'
-    DIALOGS_CREATECHANNEL_ERRORS_NOTEQUALSPASSWORDS_MESSAGE = '#messenger:dialogs/createChannel/errors/notEqualsPasswords/message'
-    DIALOGS_CREATECHANNEL_ERRORS_ACTIVECHANNELLIMITREACHED_TITLE = '#messenger:dialogs/createChannel/errors/activeChannelLimitReached/title'
-    DIALOGS_CREATECHANNEL_ERRORS_ACTIVECHANNELLIMITREACHED_MESSAGE = '#messenger:dialogs/createChannel/errors/activeChannelLimitReached/message'
     DIALOGS_SEARCHCHANNEL_TITLE = '#messenger:dialogs/searchChannel/title'
     DIALOGS_SEARCHCHANNEL_LABELS_SEARCH = '#messenger:dialogs/searchChannel/labels/search'
     DIALOGS_SEARCHCHANNEL_LABELS_RESULT = '#messenger:dialogs/searchChannel/labels/result'
@@ -261,12 +251,15 @@ class MESSENGER(object):
     CLIENT_DYNSQUAD_INVITEACCEPTED_USER = '#messenger:client/dynSquad/inviteAccepted/user'
     CLIENT_DYNSQUAD_INVITEACCEPTED_MYSELF_ENABLEVOIP = '#messenger:client/dynSquad/inviteAccepted/myself/enableVOIP'
     CLIENT_DYNSQUAD_INVITEACCEPTED_MYSELF_DISABLEVOIP = '#messenger:client/dynSquad/inviteAccepted/myself/disableVOIP'
+    CLIENT_DYNSQUAD_INVITEACCEPTED_MYSELF_SPECIFYVOIP = '#messenger:client/dynSquad/inviteAccepted/myself/specifyVOIP'
     CLIENT_DYNSQUAD_INVITEACCEPTED_MYSELF_WITHOUTVOIP = '#messenger:client/dynSquad/inviteAccepted/myself/withoutVOIP'
     CLIENT_DYNSQUAD_CREATED_OWNER_ENABLEVOIP = '#messenger:client/dynSquad/created/owner/enableVOIP'
     CLIENT_DYNSQUAD_CREATED_OWNER_DISABLEVOIP = '#messenger:client/dynSquad/created/owner/disableVOIP'
+    CLIENT_DYNSQUAD_CREATED_OWNER_SPECIFYVOIP = '#messenger:client/dynSquad/created/owner/specifyVOIP'
     CLIENT_DYNSQUAD_CREATED_OWNER_WITHOUTVOIP = '#messenger:client/dynSquad/created/owner/withoutVOIP'
     CLIENT_DYNSQUAD_CREATED_RECRUIT_ENABLEVOIP = '#messenger:client/dynSquad/created/recruit/enableVOIP'
     CLIENT_DYNSQUAD_CREATED_RECRUIT_DISABLEVOIP = '#messenger:client/dynSquad/created/recruit/disableVOIP'
+    CLIENT_DYNSQUAD_CREATED_RECRUIT_SPECIFYVOIP = '#messenger:client/dynSquad/created/recruit/specifyVOIP'
     CLIENT_DYNSQUAD_CREATED_RECRUIT_WITHOUTVOIP = '#messenger:client/dynSquad/created/recruit/withoutVOIP'
     CLIENT_DYNSQUAD_ENABLEVOIP = '#messenger:client/dynSquad/enableVOIP'
     CLIENT_DYNSQUAD_DISABLEVOIP = '#messenger:client/dynSquad/disableVOIP'
@@ -380,11 +373,11 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKMEN = '#messenger:serviceChannelMessages/invoiceReceived/tankmen'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_BOOSTERS = '#messenger:serviceChannelMessages/invoiceReceived/boosters'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_PIECES = '#messenger:serviceChannelMessages/invoiceReceived/pieces'
-    SERVICECHANNELMESSAGES_INVOICERECEIVED_CREW = '#messenger:serviceChannelMessages/invoiceReceived/crew'
-    SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWLVL = '#messenger:serviceChannelMessages/invoiceReceived/crewLvl'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_RENTDAYS = '#messenger:serviceChannelMessages/invoiceReceived/rentDays'
-    SERVICECHANNELMESSAGES_INVOICERECEIVED_DROPPEDCREWSTOBARRACKS = '#messenger:serviceChannelMessages/invoiceReceived/droppedCrewsToBarracks'
-    SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLECREWWITHDRAWN = '#messenger:serviceChannelMessages/invoiceReceived/vehicleCrewWithdrawn'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWONVEHICLE = '#messenger:serviceChannelMessages/invoiceReceived/crewOnVehicle'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWWITHLVLDROPPEDTOBARRACKS = '#messenger:serviceChannelMessages/invoiceReceived/crewWithLvlDroppedToBarracks'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWDROPPEDTOBARRACKS = '#messenger:serviceChannelMessages/invoiceReceived/crewDroppedToBarracks'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWWITHDRAWN = '#messenger:serviceChannelMessages/invoiceReceived/crewWithdrawn'
     SERVICECHANNELMESSAGES_DURATIONOFPREMIUMACCOUNEXPIRES = '#messenger:serviceChannelMessages/durationOfPremiumAccounExpires'
     SERVICECHANNELMESSAGES_PREMIUMBOUGHT = '#messenger:serviceChannelMessages/premiumBought'
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'
@@ -481,11 +474,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_VEHICLESRECEIVED = '#messenger:serviceChannelMessages/sysMsg/converter/vehiclesReceived'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_VEHICLESWITHDRAWN = '#messenger:serviceChannelMessages/sysMsg/converter/vehiclesWithdrawn'
     KEYBOARDCHAT = '#messenger:keyboardChat'
-    SERVICECHANNELMESSAGES_SYSMSG_TITLES_HISTORICALCOSTSRESERVED = '#messenger:serviceChannelMessages/sysMsg/titles/historicalCostsReserved'
-    SERVICECHANNELMESSAGES_HISTORICALCOSTSRESERVED_GOLDRETURN = '#messenger:serviceChannelMessages/historicalCostsReserved/goldReturn'
-    SERVICECHANNELMESSAGES_HISTORICALCOSTSRESERVED_GOLDDEBITED = '#messenger:serviceChannelMessages/historicalCostsReserved/goldDebited'
-    SERVICECHANNELMESSAGES_HISTORICALCOSTSRESERVED_CREDITSRETURN = '#messenger:serviceChannelMessages/historicalCostsReserved/creditsReturn'
-    SERVICECHANNELMESSAGES_HISTORICALCOSTSRESERVED_CREDITSDEBITED = '#messenger:serviceChannelMessages/historicalCostsReserved/creditsDebited'
     SERVICECHANNELMESSAGES_CLAN_LEFT_CLAN = '#messenger:serviceChannelMessages/clan/LEFT_CLAN'
     SERVICECHANNELMESSAGES_FORT_FORT_READY = '#messenger:serviceChannelMessages/fort/FORT_READY'
     SERVICECHANNELMESSAGES_FORT_DEF_HOUR_SHUTDOWN = '#messenger:serviceChannelMessages/fort/DEF_HOUR_SHUTDOWN'
@@ -566,6 +554,24 @@ class MESSENGER(object):
     CLIENT_ERROR_LIMIT_NOTE_INVALID_LENGTH = '#messenger:client_error/limit/NOTE_INVALID_LENGTH'
     XMPP_ERROR_SIMPLE = '#messenger:xmpp_error/simple'
     XMPP_ERROR_ACTION = '#messenger:xmpp_error/action'
+    XMPP_ERROR_USER_ROOM_CREATION = '#messenger:xmpp_error/user_room_creation'
+    CLIENT_ERROR_LIMIT_CHANNEL_INVALID_LENGTH = '#messenger:client_error/limit/CHANNEL_INVALID_LENGTH'
+    CLIENT_ERROR_LIMIT_PWD_INVALID_LENGTH = '#messenger:client_error/limit/PWD_INVALID_LENGTH'
+    CLIENT_ERROR_CHANNEL_NAME_EMPTY = '#messenger:client_error/channel/NAME_EMPTY'
+    CLIENT_ERROR_CHANNEL_NAME_INVALID = '#messenger:client_error/channel/NAME_INVALID'
+    CLIENT_ERROR_CHANNEL_PASSWORD_EMPTY = '#messenger:client_error/channel/PASSWORD_EMPTY'
+    CLIENT_ERROR_CHANNEL_PASSWORD_INVALID = '#messenger:client_error/channel/PASSWORD_INVALID'
+    CLIENT_ERROR_CHANNEL_RETYPE_EMPTY = '#messenger:client_error/channel/RETYPE_EMPTY'
+    CLIENT_ERROR_CHANNEL_RETYPE_INVALID = '#messenger:client_error/channel/RETYPE_INVALID'
+    CLIENT_ERROR_CHANNEL_PASSWORDS_NOT_EQUALS = '#messenger:client_error/channel/PASSWORDS_NOT_EQUALS'
+    CLIENT_ERROR_CHANNEL_LIMIT_REACHED = '#messenger:client_error/channel/LIMIT_REACHED'
+    CLIENT_ERROR_CHANNEL_NAME_ALREADY_EXISTS = '#messenger:client_error/channel/NAME_ALREADY_EXISTS'
+    SERVER_ERROR_USER_ROOM_CREATION_NAME_EXISTS = '#messenger:server_error/user_room_creation/NAME_EXISTS'
+    SERVER_ERROR_USER_ROOM_CREATION_LIMIT_COUNT = '#messenger:server_error/user_room_creation/LIMIT_COUNT'
+    SERVER_ERROR_USER_ROOM_CREATION_LIMIT_PASS = '#messenger:server_error/user_room_creation/LIMIT_PASS'
+    SERVER_ERROR_USER_ROOM_CREATION_LIMIT_NAME = '#messenger:server_error/user_room_creation/LIMIT_NAME'
+    SERVER_ERROR_USER_ROOM_CREATION_WRONG_SYMBOL = '#messenger:server_error/user_room_creation/WRONG_SYMBOL'
+    SERVER_ERROR_USER_ROOM_CREATION_WRONG_WORD = '#messenger:server_error/user_room_creation/WRONG_WORD'
     CHAT_ACTION_BROADCAST_UNIT_MESSAGE = '#messenger:chat_action/BROADCAST_UNIT_MESSAGE'
     CHAT_ACTION_BROADCAST_BATTLE_MESSAGE = '#messenger:chat_action/BROADCAST_BATTLE_MESSAGE'
     CHAT_ACTION_BROADCAST_CLUB_MESSAGE = '#messenger:chat_action/BROADCAST_CLUB_MESSAGE'
@@ -586,6 +592,10 @@ class MESSENGER(object):
     CLIENT_ACTION_SET_NOTE = '#messenger:client_action/SET_NOTE'
     CLIENT_ACTION_REMOVE_NOTE = '#messenger:client_action/REMOVE_NOTE'
     CLIENT_ACTION_RQ_HISTORY = '#messenger:client_action/RQ_HISTORY'
+    CLIENT_ACTION_CREATE_USER_ROOM = '#messenger:client_action/CREATE_USER_ROOM'
+    CLIENT_ACTION_JOIN_USER_ROOM = '#messenger:client_action/JOIN_USER_ROOM'
+    CLIENT_ACTION_LEAVE_USER_ROOM = '#messenger:client_action/LEAVE_USER_ROOM'
+    CLIENT_ACTION_SEARCH_USER_ROOM = '#messenger:client_action/SEARCH_USER_ROOM'
     CUSTOM_CLIENT_ACTION_ADMIN_CHAT_COMMAND = '#messenger:custom_client_action/ADMIN_CHAT_COMMAND'
     SERVICECHANNELMESSAGES_VEHICLERENTED = '#messenger:serviceChannelMessages/vehicleRented'
     SERVICECHANNELMESSAGES_RENTALSEXPIRED = '#messenger:serviceChannelMessages/rentalsExpired'
@@ -698,7 +708,24 @@ class MESSENGER(object):
      CLIENT_ERROR_LIMIT_MAX_GROUP,
      CLIENT_ERROR_LIMIT_MAX_BLOCK_ITEMS,
      CLIENT_ERROR_LIMIT_GROUP_INVALID_LENGTH,
-     CLIENT_ERROR_LIMIT_NOTE_INVALID_LENGTH)
+     CLIENT_ERROR_LIMIT_NOTE_INVALID_LENGTH,
+     CLIENT_ERROR_LIMIT_CHANNEL_INVALID_LENGTH,
+     CLIENT_ERROR_LIMIT_PWD_INVALID_LENGTH)
+    SERVER_ERROR_USER_ROOM_CREATION_ENUM = (SERVER_ERROR_USER_ROOM_CREATION_NAME_EXISTS,
+     SERVER_ERROR_USER_ROOM_CREATION_LIMIT_COUNT,
+     SERVER_ERROR_USER_ROOM_CREATION_LIMIT_PASS,
+     SERVER_ERROR_USER_ROOM_CREATION_LIMIT_NAME,
+     SERVER_ERROR_USER_ROOM_CREATION_WRONG_SYMBOL,
+     SERVER_ERROR_USER_ROOM_CREATION_WRONG_WORD)
+    CLIENT_ERROR_CHANNEL_ENUM = (CLIENT_ERROR_CHANNEL_NAME_EMPTY,
+     CLIENT_ERROR_CHANNEL_NAME_INVALID,
+     CLIENT_ERROR_CHANNEL_PASSWORD_EMPTY,
+     CLIENT_ERROR_CHANNEL_PASSWORD_INVALID,
+     CLIENT_ERROR_CHANNEL_RETYPE_EMPTY,
+     CLIENT_ERROR_CHANNEL_RETYPE_INVALID,
+     CLIENT_ERROR_CHANNEL_PASSWORDS_NOT_EQUALS,
+     CLIENT_ERROR_CHANNEL_LIMIT_REACHED,
+     CLIENT_ERROR_CHANNEL_NAME_ALREADY_EXISTS)
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,
      CLIENT_ERROR_SHARED_NOT_CONNECTED,
@@ -745,7 +772,11 @@ class MESSENGER(object):
      CLIENT_ACTION_SEND_MESSAGE,
      CLIENT_ACTION_SET_NOTE,
      CLIENT_ACTION_REMOVE_NOTE,
-     CLIENT_ACTION_RQ_HISTORY)
+     CLIENT_ACTION_RQ_HISTORY,
+     CLIENT_ACTION_CREATE_USER_ROOM,
+     CLIENT_ACTION_JOIN_USER_ROOM,
+     CLIENT_ACTION_LEAVE_USER_ROOM,
+     CLIENT_ACTION_SEARCH_USER_ROOM)
     CHAT_ACTION_ENUM = (CHAT_ACTION_BROADCAST_UNIT_MESSAGE,
      CHAT_ACTION_BROADCAST_BATTLE_MESSAGE,
      CHAT_ACTION_BROADCAST_CLUB_MESSAGE,
@@ -761,6 +792,24 @@ class MESSENGER(object):
     def client_error_limit(key):
         outcome = '#messenger:client_error/limit/%s' % key
         if outcome not in MESSENGER.CLIENT_ERROR_LIMIT_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def server_error_user_room_creation(key):
+        outcome = '#messenger:server_error/user_room_creation/%s' % key
+        if outcome not in MESSENGER.SERVER_ERROR_USER_ROOM_CREATION_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def client_error_channel(key):
+        outcome = '#messenger:client_error/channel/%s' % key
+        if outcome not in MESSENGER.CLIENT_ERROR_CHANNEL_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
             return None
         else:

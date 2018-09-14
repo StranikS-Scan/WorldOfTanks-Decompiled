@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/login/Manager.py
 import time
 import pickle
@@ -60,6 +60,15 @@ class Manager(object):
         else:
             self._preferences['login_type'] = 'credentials'
         connectionManager.initiateConnection(loginParams, password, serverName)
+
+    def initiateRelogin(self, login, token2, serverName):
+        loginParams = {'login': login,
+         'token2': token2,
+         'session': BigWorld.wg_cpsalt(self._preferences['session']),
+         'temporary': str(int(not self._preferences['remember_user'])),
+         'auth_method': CONNECTION_METHOD.TOKEN2}
+        self._preferences['server_name'] = serverName
+        connectionManager.initiateConnection(loginParams, '', serverName)
 
     def getPreference(self, key):
         return self._preferences[key]

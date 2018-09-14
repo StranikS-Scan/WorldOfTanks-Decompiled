@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ArtilleryEquipment.py
 from AvatarInputHandler import mathUtils
 import BigWorld

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/Standard_Suite.py
 """Suite Standard Suite: Common terms for most applications
 Level 1, version 1
@@ -13,7 +14,7 @@ from _builtinSuites.builtin_Suite import *
 class Standard_Suite_Events(builtin_Suite_Events):
     _argmap_class_info = {'in_': 'wrcd'}
 
-    def class_info(self, _object = None, _attributes = {}, **_arguments):
+    def class_info(self, _object=None, _attributes={}, **_arguments):
         """class info: (optional) Get information about an object class
         Required argument: the object class about which information is requested
         Keyword argument in_: the human language and script system in which to return information
@@ -27,13 +28,12 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_close = {'saving': 'savo',
      'saving_in': 'kfil'}
 
-    def close(self, _object, _attributes = {}, **_arguments):
+    def close(self, _object, _attributes={}, **_arguments):
         """close: Close an object
         Required argument: the object to close
         Keyword argument saving: specifies whether changes should be saved before closing
@@ -48,12 +48,11 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_count = {'each': 'kocl'}
 
-    def count(self, _object, _attributes = {}, **_arguments):
+    def count(self, _object, _attributes={}, **_arguments):
         """count: Return the number of elements of an object
         Required argument: the object whose elements are to be counted
         Keyword argument each: if specified, restricts counting to objects of this class
@@ -67,12 +66,11 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_data_size = {'as': 'rtyp'}
 
-    def data_size(self, _object, _attributes = {}, **_arguments):
+    def data_size(self, _object, _attributes={}, **_arguments):
         """data size: (optional) Return the size in bytes of an object
         Required argument: the object whose data size is to be returned
         Keyword argument as: the data type for which the size is calculated
@@ -86,10 +84,9 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def delete(self, _object, _attributes = {}, **_arguments):
+    def delete(self, _object, _attributes={}, **_arguments):
         """delete: Delete an object from its container. Note this does not work on script variables, only on elements of application classes.
         Required argument: the element to delete
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -102,13 +99,12 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_duplicate = {'to': 'insh',
      'with_properties': 'prdt'}
 
-    def duplicate(self, _object, _attributes = {}, **_arguments):
+    def duplicate(self, _object, _attributes={}, **_arguments):
         """duplicate: Duplicate one or more objects
         Required argument: the object(s) to duplicate
         Keyword argument to: the new location for the object(s)
@@ -123,12 +119,11 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_event_info = {'in_': 'wrcd'}
 
-    def event_info(self, _object, _attributes = {}, **_arguments):
+    def event_info(self, _object, _attributes={}, **_arguments):
         """event info: (optional) Get information about the Apple events in a suite
         Required argument: the event class of the Apple events for which to return information
         Keyword argument in_: the human language and script system in which to return information
@@ -142,10 +137,9 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def exists(self, _object, _attributes = {}, **_arguments):
+    def exists(self, _object, _attributes={}, **_arguments):
         """exists: Verify if an object exists
         Required argument: the object in question
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -159,10 +153,9 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def handleBreakpoint(self, _object, _attributes = {}, **_arguments):
+    def handleBreakpoint(self, _object, _attributes={}, **_arguments):
         """handleBreakpoint: return true to stop at a breakpoint
         Required argument: the call frame of the breakpoint
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -176,15 +169,14 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_make = {'new': 'kocl',
      'at': 'insh',
      'with_data': 'data',
      'with_properties': 'prdt'}
 
-    def make(self, _no_object = None, _attributes = {}, **_arguments):
+    def make(self, _no_object=None, _attributes={}, **_arguments):
         """make: Make a new element
         Keyword argument new: the class of the new element
         Keyword argument at: the location at which to insert the element
@@ -201,14 +193,11 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_move = {'to': 'insh'}
 
-    def move(self, _object, _attributes = {}, **_arguments):
+    def move(self, _object, _attributes={}, **_arguments):
         """move: Move object(s) to a new location
         Required argument: the object(s) to move
         Keyword argument to: the new location for the object(s)
@@ -222,10 +211,9 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def open(self, _object, _attributes = {}, **_arguments):
+    def open(self, _object, _attributes={}, **_arguments):
         """open: Open the specified object(s)
         Required argument: list of objects to open
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -238,10 +226,9 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def print_(self, _object, _attributes = {}, **_arguments):
+    def print_(self, _object, _attributes={}, **_arguments):
         """print: Print the specified object(s)
         Required argument: list of objects to print
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -254,12 +241,11 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_quit = {'saving': 'savo'}
 
-    def quit(self, _no_object = None, _attributes = {}, **_arguments):
+    def quit(self, _no_object=None, _attributes={}, **_arguments):
         """quit: Quit an application
         Keyword argument saving: specifies whether to save currently open documents
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -273,12 +259,9 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def reopen(self, _no_object = None, _attributes = {}, **_arguments):
+    def reopen(self, _no_object=None, _attributes={}, **_arguments):
         """reopen: Reactivate a running application.  Some applications will open a new untitled window if no window is open.
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -291,12 +274,9 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def run(self, _no_object = None, _attributes = {}, **_arguments):
+    def run(self, _no_object=None, _attributes={}, **_arguments):
         """run: Run an application.  Most applications will open an empty, untitled window.
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -309,15 +289,12 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_save = {'in_': 'kfil',
      'as': 'fltp'}
 
-    def save(self, _object, _attributes = {}, **_arguments):
+    def save(self, _object, _attributes={}, **_arguments):
         """save: Save an object
         Required argument: the object to save, usually a document or window
         Keyword argument in_: the file or alias in which to save the object
@@ -331,10 +308,9 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def select(self, _object, _attributes = {}, **_arguments):
+    def select(self, _object, _attributes={}, **_arguments):
         """select: Make a selection
         Required argument: the object to select
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -347,12 +323,11 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_suite_info = {'in_': 'wrcd'}
 
-    def suite_info(self, _object, _attributes = {}, **_arguments):
+    def suite_info(self, _object, _attributes={}, **_arguments):
         """suite info: (optional) Get information about event suite(s)
         Required argument: the suite for which to return information
         Keyword argument in_: the human language and script system in which to return information
@@ -366,8 +341,7 @@ class Standard_Suite_Events(builtin_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class alias(aetools.ComponentItem):

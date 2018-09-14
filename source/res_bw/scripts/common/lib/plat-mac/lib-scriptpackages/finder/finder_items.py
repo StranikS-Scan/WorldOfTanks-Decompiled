@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Finder/Finder_items.py
 """Suite Finder items: Commands used with file system items, and basic item definition
 Level 1, version 1
@@ -11,7 +12,7 @@ _code = 'fndr'
 
 class Finder_items_Events:
 
-    def add_to_favorites(self, _object, _attributes = {}, **_arguments):
+    def add_to_favorites(self, _object, _attributes={}, **_arguments):
         """add to favorites: (NOT AVAILABLE YET) Add the items to the user\xd5s Favorites
         Required argument: the items to add to the collection of Favorites
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -24,12 +25,11 @@ class Finder_items_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_clean_up = {'by': 'by  '}
 
-    def clean_up(self, _object, _attributes = {}, **_arguments):
+    def clean_up(self, _object, _attributes={}, **_arguments):
         """clean up: (NOT AVAILABLE YET) Arrange items in window nicely (only applies to open windows in icon view that are not kept arranged)
         Required argument: the window to clean up
         Keyword argument by: the order in which to clean up the objects (name, index, date, etc.)
@@ -42,10 +42,9 @@ class Finder_items_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def eject(self, _object = None, _attributes = {}, **_arguments):
+    def eject(self, _object=None, _attributes={}, **_arguments):
         """eject: Eject the specified disk(s)
         Required argument: the disk(s) to eject
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -58,10 +57,9 @@ class Finder_items_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def empty(self, _object = None, _attributes = {}, **_arguments):
+    def empty(self, _object=None, _attributes={}, **_arguments):
         """empty: Empty the trash
         Required argument: \xd2empty\xd3 and \xd2empty trash\xd3 both do the same thing
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -74,10 +72,9 @@ class Finder_items_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def erase(self, _object, _attributes = {}, **_arguments):
+    def erase(self, _object, _attributes={}, **_arguments):
         """erase: (NOT AVAILABLE) Erase the specified disk(s)
         Required argument: the items to erase
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -90,10 +87,9 @@ class Finder_items_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def reveal(self, _object, _attributes = {}, **_arguments):
+    def reveal(self, _object, _attributes={}, **_arguments):
         """reveal: Bring the specified object(s) into view
         Required argument: the object to be made visible
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -106,13 +102,12 @@ class Finder_items_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_update = {'necessity': 'nec?',
      'registering_applications': 'reg?'}
 
-    def update(self, _object, _attributes = {}, **_arguments):
+    def update(self, _object, _attributes={}, **_arguments):
         """update: Update the display of the specified object(s) to match their on-disk representation
         Required argument: the item to update
         Keyword argument necessity: only update if necessary (i.e. a finder window is open).  default is false
@@ -126,8 +121,7 @@ class Finder_items_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class item(aetools.ComponentItem):

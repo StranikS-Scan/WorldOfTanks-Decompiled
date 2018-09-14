@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/requests.py
 import weakref
 from debug_utils import LOG_WARNING
@@ -77,110 +77,92 @@ class ClubRequestsController(RequestsController):
         self.__handlers.clear()
         super(ClubRequestsController, self).fini()
 
-    def getMyClubs(self, ctx, callback = None):
+    def getMyClubs(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'getMyClubs')
 
-    def getPrivateProfile(self, ctx, callback = None):
+    def getPrivateProfile(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'getAccountProfile')
 
-    def getMyClubsHistory(self, ctx, callback = None):
+    def getMyClubsHistory(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'getMyClubsHistory')
 
-    def getApplications(self, ctx, callback = None):
+    def getApplications(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'getApplications')
 
-    def getInvites(self, ctx, callback = None):
+    def getInvites(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'getInvites')
 
-    def getClubs(self, ctx, callback = None):
+    def getClubs(self, ctx, callback=None):
         if ctx.isOnlyOpened():
             requestMethod = 'getOpenClubs'
         else:
             requestMethod = 'getClubs'
         return self._requester.doRequestEx(ctx, callback, requestMethod, ctx.getOffset(), ctx.getCount())
 
-    def findClubs(self, ctx, callback = None):
+    def findClubs(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'findOpenClubs', ctx.getPattern(), ctx.getOffset(), ctx.getCount())
 
-    def subscribe(self, ctx, callback = None):
+    def subscribe(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'subscribe', ctx.getClubDbID(), ctx.getSubscriptionType(), updater=ctx.getUpdater())
 
-    def unsubscribe(self, ctx, callback = None):
+    def unsubscribe(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'unsubscribe', ctx.getClubDbID())
 
-    def getClub(self, ctx, callback = None):
+    def getClub(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'getClubData', ctx.getClubDbID())
 
-    def createClub(self, ctx, callback = None):
+    def createClub(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         isValid, reason = limits.canCreateClub(self.__clubsCtrl.getProfile())
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'createClub')
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'createClub')
 
-    def acceptInvite(self, ctx, callback = None):
+    def acceptInvite(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         isValid, reason = limits.canAcceptInvite(self.__clubsCtrl.getProfile(), ctx.getInviteID())
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'acceptInvite', ctx.getClubDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'acceptInvite', ctx.getClubDbID())
 
-    def declineInvite(self, ctx, callback = None):
+    def declineInvite(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         isValid, reason = limits.canDeclineInvite(self.__clubsCtrl.getProfile(), ctx.getInviteID())
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'declineInvite', ctx.getClubDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'declineInvite', ctx.getClubDbID())
 
-    def sendApplication(self, ctx, callback = None):
+    def sendApplication(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canSendApplication(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'sendApplication', ctx.getClubDbID(), ctx.getComment())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'sendApplication', ctx.getClubDbID(), ctx.getComment())
 
-    def revokeApplication(self, ctx, callback = None):
+    def revokeApplication(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canRevokeApplication(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'revokeApplication', ctx.getClubDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'revokeApplication', ctx.getClubDbID())
 
-    def destroyClub(self, ctx, callback = None):
+    def destroyClub(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canDestroyClub(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'disbandClub', ctx.getClubDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'disbandClub', ctx.getClubDbID())
 
-    def leaveClub(self, ctx, callback = None):
+    def leaveClub(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canLeaveClub(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'leaveClub', ctx.getClubDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'leaveClub', ctx.getClubDbID())
 
-    def openClub(self, ctx, callback = None):
+    def openClub(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canOpenClub(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'openClub', ctx.getClubDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'openClub', ctx.getClubDbID())
 
-    def closeClub(self, ctx, callback = None):
+    def closeClub(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canCloseClub(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'closeClub', ctx.getClubDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'closeClub', ctx.getClubDbID())
 
-    def sendInvite(self, ctx, callback = None):
+    def sendInvite(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         usersIDs = ctx.getUserDbIDs()
@@ -193,31 +175,25 @@ class ClubRequestsController(RequestsController):
             methodName, args = 'sendInvite', usersIDs
         return self._requester.doRequestEx(ctx, callback, methodName, ctx.getClubDbID(), *args)
 
-    def revokeInvite(self, ctx, callback = None):
+    def revokeInvite(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canRevokeInvite(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'revokeInvite', ctx.getClubDbID(), ctx.getUserDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'revokeInvite', ctx.getClubDbID(), ctx.getUserDbID())
 
-    def acceptApplication(self, ctx, callback = None):
+    def acceptApplication(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canAcceptApplication(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'acceptApplication', ctx.getClubDbID(), ctx.getUserDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'acceptApplication', ctx.getClubDbID(), ctx.getUserDbID())
 
-    def declineApplication(self, ctx, callback = None):
+    def declineApplication(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canDeclineApplication(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'declineApplication', ctx.getClubDbID(), ctx.getUserDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'declineApplication', ctx.getClubDbID(), ctx.getUserDbID())
 
-    def joinUnit(self, ctx, callback = None):
+    def joinUnit(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         club = self.__clubsCtrl.getClub(clubDBID)
@@ -225,69 +201,52 @@ class ClubRequestsController(RequestsController):
             isValid, reason = limits.canCreateUnit(self.__clubsCtrl.getProfile(), club)
         else:
             isValid, reason = limits.canJoinUnit(self.__clubsCtrl.getProfile(), club)
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        else:
-            return self._requester.doRequestEx(ctx, callback, 'joinUnit', ctx.getClubDbID(), ctx.getJoiningTime())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'joinUnit', ctx.getClubDbID(), ctx.getJoiningTime())
 
-    def getClubApplicants(self, ctx, callback = None):
+    def getClubApplicants(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canSeeApplicants(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'getClubApplicants', ctx.getClubDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'getClubApplicants', ctx.getClubDbID())
 
-    def transferOwnership(self, ctx, callback = None):
+    def transferOwnership(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canTransferOwnership(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'transferOwnership', ctx.getClubDbID(), ctx.getUserDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'transferOwnership', ctx.getClubDbID(), ctx.getUserDbID())
 
-    def assignOfficer(self, ctx, callback = None):
+    def assignOfficer(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canAssignOfficer(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'assignOfficer', ctx.getClubDbID(), ctx.getUserDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'assignOfficer', ctx.getClubDbID(), ctx.getUserDbID())
 
-    def assignPrivate(self, ctx, callback = None):
+    def assignPrivate(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canAssignPrivate(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'assignPrivate', ctx.getClubDbID(), ctx.getUserDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'assignPrivate', ctx.getClubDbID(), ctx.getUserDbID())
 
-    def kickMember(self, ctx, callback = None):
+    def kickMember(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         userDbID = ctx.getUserDbID()
         isValid, reason = limits.canKickMember(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID), userDbID)
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'expelMember', ctx.getClubDbID(), ctx.getUserDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'expelMember', ctx.getClubDbID(), ctx.getUserDbID())
 
-    def setApplicantsRequirements(self, ctx, callback = None):
+    def setApplicantsRequirements(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canChangeClubRequirements(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'setClubRequirements', ctx.getClubDbID(), ctx.getMinWinRate(), ctx.getMinBattlesCount(), ctx.getDescription())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'setClubRequirements', ctx.getClubDbID(), ctx.getMinWinRate(), ctx.getMinBattlesCount(), ctx.getDescription())
 
-    def getClubsContenders(self, ctx, callback = None):
+    def getClubsContenders(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canSeeContenders(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'getClubsContenders', ctx.getClubDbID())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'getClubsContenders', ctx.getClubDbID())
 
-    def getPlayerInfo(self, ctx, callback = None):
+    def getPlayerInfo(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         userDBID = ctx.getUserDbID()
         isValid, reason = limits.canSeeOtherPlayerInfo(self.__clubsCtrl.getProfile(), userDbID=userDBID)
@@ -304,15 +263,13 @@ class ClubRequestsController(RequestsController):
 
         return self._requester.doRequestEx(ctx, _cbWrapper, 'getPlayerClubs', userDBID)
 
-    def getClubSeasons(self, ctx, callback = None):
+    def getClubSeasons(self, ctx, callback=None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
         isValid, reason = limits.canGetClubSeasons(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, 'getClubBattleStatsHistory', clubDBID)
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, 'getClubBattleStatsHistory', clubDBID)
 
-    def getCompletedSeasons(self, ctx, callback = None):
+    def getCompletedSeasons(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'getCompletedSeasons')
 
     def _getHandlerByRequestType(self, requestTypeID):

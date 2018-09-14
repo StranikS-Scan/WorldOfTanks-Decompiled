@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/club_helpers.py
 import weakref
 from collections import defaultdict, namedtuple
@@ -49,13 +49,13 @@ class ClubListener(interfaces.IClubListener):
     def clubsState(self):
         return self.clubsCtrl.getState()
 
-    def startClubListening(self, clubDbID = None, subscriptionType = OTHER_CLUB_SUBSCRIPTION):
+    def startClubListening(self, clubDbID=None, subscriptionType=OTHER_CLUB_SUBSCRIPTION):
         self.clubsCtrl.addListener(self)
         if clubDbID is not None:
             self.clubsCtrl.addClubListener(clubDbID, self, subscriptionType)
         return
 
-    def stopClubListening(self, clubDbID = None):
+    def stopClubListening(self, clubDbID=None):
         if clubDbID is not None:
             self.clubsCtrl.removeClubListener(clubDbID, self)
         self.clubsCtrl.removeListener(self)
@@ -72,12 +72,9 @@ class MyClubListener(ClubListener):
         return
 
     def getClub(self):
-        if self.__listedClubDbID is not None:
-            return self.clubsCtrl.getClub(self.__listedClubDbID)
-        else:
-            return
+        return self.clubsCtrl.getClub(self.__listedClubDbID) if self.__listedClubDbID is not None else None
 
-    def startMyClubListening(self, forceResync = False):
+    def startMyClubListening(self, forceResync=False):
         self.clubsCtrl.addListener(self, forceResync=forceResync)
         self._onClubsStateChanged(self.clubsCtrl.getState())
 
@@ -101,7 +98,7 @@ class MyClubListener(ClubListener):
 class ClubListPaginator(ListPaginator):
 
     @process
-    def _request(self, isReset = False):
+    def _request(self, isReset=False):
         result = yield self._requester.sendRequest(GetClubsCtx(self._offset, self._count, onlyOpened=True, waitingID='clubs/club/list'), allowDelay=True)
         if result.isSuccess():
             if not result.data:
@@ -112,7 +109,7 @@ class ClubListPaginator(ListPaginator):
 
 class ClubFinder(ListPaginator):
 
-    def __init__(self, requester, offset = 0, count = 20):
+    def __init__(self, requester, offset=0, count=20):
         super(ClubFinder, self).__init__(requester, offset, count)
         self.__pattern = ''
         self.__lastResult = []
@@ -130,7 +127,7 @@ class ClubFinder(ListPaginator):
         return len(self.__lastResult) > 0
 
     @process
-    def _request(self, isReset = False):
+    def _request(self, isReset=False):
         self._offset = max(self._offset, 0)
         result = yield self._requester.sendRequest(FindClubsCtx(self.__pattern, self._offset, self._count, waitingID='clubs/club/list'), allowDelay=True)
         self.__lastResult = result.data or []
@@ -190,7 +187,7 @@ class ClubsSeasonsCache(object):
     def stop(self):
         pass
 
-    def invalidate(self, clubDbID = None):
+    def invalidate(self, clubDbID=None):
         if clubDbID is None:
             self._cache.clear()
         elif clubDbID in self._cache:
@@ -219,7 +216,7 @@ class ClubsSeasonsCache(object):
         return self._completedSeasonsCache
 
     @process
-    def updateCompletedSeasons(self, force = False):
+    def updateCompletedSeasons(self, force=False):
         if (not self._isCompletedSeasonsInfoReceived or force) and self._clubsCtrl.getState().isAvailable():
             ctx = GetCompletedSeasonsCtx()
             response = yield self._clubsCtrl.sendRequest(ctx, allowDelay=True)

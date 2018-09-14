@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyMainWindow.py
 import BigWorld
 from constants import PREBATTLE_TYPE
@@ -15,7 +15,7 @@ from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
     LEADERSHIP_NOTIFICATION_TIME = 2.5
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(BaseRallyMainWindow, self).__init__()
         self._currentView = None
         self._isBackClicked = False
@@ -32,7 +32,7 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
         if self.unitFunctional and not self.unitFunctional.hasEntity():
             self.destroy()
 
-    def isPlayerInSlot(self, databaseID = None):
+    def isPlayerInSlot(self, databaseID=None):
         pInfo = self.unitFunctional.getPlayerInfo(dbID=databaseID)
         return pInfo.isInSlot
 
@@ -59,7 +59,7 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
         self._isBackClicked = True
         self._goToNextView()
 
-    def _goToNextView(self, closeForced = False):
+    def _goToNextView(self, closeForced=False):
         if NavigationStack.hasHistory(self.getNavigationKey()):
             self._viewToUnload = NavigationStack.current(self.getNavigationKey())
             self._viewToLoad = NavigationStack.prev(self.getNavigationKey())

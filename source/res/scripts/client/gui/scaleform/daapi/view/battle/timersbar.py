@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/TimersBar.py
 import math
 from debug_utils import LOG_DEBUG
@@ -11,7 +11,7 @@ _STATE_TO_MESSAGE = {COUNTDOWN_STATE.WAIT: i18n.makeString('#ingame_gui:timer/wa
 
 class TimersBar(ITimersBar):
 
-    def __init__(self, ui = None, isEvent = False):
+    def __init__(self, ui=None, isEvent=False):
         super(TimersBar, self).__init__()
         self.__ui = ui
         timerPath = 'eventBattleTimer.swf' if isEvent else 'BattleTimer.swf'
@@ -43,6 +43,9 @@ class TimersBar(ITimersBar):
         self.__call('timerBig.setTimer', [_STATE_TO_MESSAGE[state]])
         self.__call('timerBig.hide', [speed])
 
-    def __call(self, funcName, args = None):
+    def setWinConditionText(self, text):
+        pass
+
+    def __call(self, funcName, args=None):
         if self.__ui:
             self.__ui.call('battle.{0}'.format(funcName), args)

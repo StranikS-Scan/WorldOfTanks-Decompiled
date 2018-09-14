@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/gameplay_ctx.py
 import ArenaType
 import constants
@@ -40,8 +40,7 @@ def setMaskByNames(names):
     for name in names:
         if name in ArenaType.g_gameplayNames:
             gameplayNames.add(name)
-        else:
-            LOG_ERROR('Gameplay is not available', name)
+        LOG_ERROR('Gameplay is not available', name)
 
     gameplayMask = ArenaType.getGameplaysMask(gameplayNames)
     LOG_DEBUG('Set gameplay (names, mask)', gameplayNames, gameplayMask)

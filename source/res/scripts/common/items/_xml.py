@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/_xml.py
 
 
@@ -8,7 +8,7 @@ def raiseWrongXml(xmlContext, subsectionName, msg):
         fileName = xmlContext[1] + ('/' + fileName if fileName else '')
         xmlContext = xmlContext[0]
 
-    raise Exception, "error in '" + fileName + "': " + msg
+    raise Exception("error in '" + fileName + "': " + msg)
     return
 
 
@@ -39,10 +39,7 @@ def readString(xmlCtx, section, subsectionName):
 
 def readStringOrNone(xmlCtx, section, subsectionName):
     subsection = section[subsectionName]
-    if subsection is None:
-        return
-    else:
-        return subsection.asString
+    return None if subsection is None else subsection.asString
 
 
 def readNonEmptyString(xmlCtx, section, subsectionName):
@@ -59,7 +56,7 @@ def readBool(xmlCtx, section, subsectionName):
     return subsection.asBool
 
 
-def readInt(xmlCtx, section, subsectionName, minVal = None, maxVal = None):
+def readInt(xmlCtx, section, subsectionName, minVal=None, maxVal=None):
     wrongVal = -123456789
     v = section.readInt(subsectionName, wrongVal)
     if v == wrongVal:
@@ -143,7 +140,7 @@ def readVector3(xmlCtx, section, subsectionName):
     return v
 
 
-def readTupleOfFloats(xmlCtx, section, subsectionName, count = None):
+def readTupleOfFloats(xmlCtx, section, subsectionName, count=None):
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
     if count is not None and len(strings) != count:
         raiseWrongXml(xmlCtx, subsectionName, '%d floats expected' % count)
@@ -155,21 +152,21 @@ def readTupleOfFloats(xmlCtx, section, subsectionName, count = None):
     return
 
 
-def readTupleOfPositiveFloats(xmlCtx, section, subsectionName, count = None):
+def readTupleOfPositiveFloats(xmlCtx, section, subsectionName, count=None):
     floats = readTupleOfFloats(xmlCtx, section, subsectionName, count)
     if sum((1 for val in floats if val <= 0)):
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     return floats
 
 
-def readTupleOfNonNegativeFloats(xmlCtx, section, subsectionName, count = None):
+def readTupleOfNonNegativeFloats(xmlCtx, section, subsectionName, count=None):
     floats = readTupleOfFloats(xmlCtx, section, subsectionName, count)
     if sum((1 for val in floats if val < 0)):
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     return floats
 
 
-def readTupleOfInts(xmlCtx, section, subsectionName, count = None):
+def readTupleOfInts(xmlCtx, section, subsectionName, count=None):
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
     if count is not None and len(strings) != count:
         raiseWrongXml(xmlCtx, subsectionName, '%d ints expected' % count)
@@ -181,14 +178,14 @@ def readTupleOfInts(xmlCtx, section, subsectionName, count = None):
     return
 
 
-def readTupleOfPositiveInts(xmlCtx, section, subsectionName, count = None):
+def readTupleOfPositiveInts(xmlCtx, section, subsectionName, count=None):
     ints = readTupleOfInts(xmlCtx, section, subsectionName, count)
     if sum((1 for val in ints if val <= 0)):
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     return ints
 
 
-def readTupleOfNonNegativeInts(xmlCtx, section, subsectionName, count = None):
+def readTupleOfNonNegativeInts(xmlCtx, section, subsectionName, count=None):
     ints = readTupleOfInts(xmlCtx, section, subsectionName, count)
     if sum((1 for val in ints if val < 0)):
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
@@ -196,10 +193,7 @@ def readTupleOfNonNegativeInts(xmlCtx, section, subsectionName, count = None):
 
 
 def readPrice(xmlCtx, section, subsectionName):
-    if section[subsectionName + '/gold'] is not None:
-        return (0, readInt(xmlCtx, section, subsectionName, 0))
-    else:
-        return (readInt(xmlCtx, section, subsectionName, 0), 0)
+    return (0, readInt(xmlCtx, section, subsectionName, 0)) if section[subsectionName + '/gold'] is not None else (readInt(xmlCtx, section, subsectionName, 0), 0)
 
 
 def readRentPrice(xmlCtx, section, subsectionName):

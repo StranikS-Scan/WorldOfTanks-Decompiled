@@ -1,7 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/ColorSchemeManager.py
 import types
-import Math, ResMgr
+import Math
+import ResMgr
 from debug_utils import LOG_ERROR, LOG_WARNING
 from windows import UIInterface
 
@@ -90,10 +91,9 @@ class _ColorSchemeManager(UIInterface):
         for scheme_name, scheme_section in rootSection.items():
             if scheme_name in self.VECTOR4_NAMES:
                 outcome[scheme_name] = self.__readVector4(rootSection, scheme_name)
-            elif scheme_name in self.STRING_NAMES:
+            if scheme_name in self.STRING_NAMES:
                 outcome[scheme_name] = self.__readString(rootSection, scheme_name)
-            else:
-                outcome[scheme_name] = self.__readHash(scheme_section)
+            outcome[scheme_name] = self.__readHash(scheme_section)
 
         return outcome
 
@@ -114,16 +114,14 @@ class _ColorSchemeManager(UIInterface):
                             LOG_ERROR('schemeGroup tag requires to delete a "default" tag. Failed Tag:\n' + str(baseHash))
                         return baseHash
                     for subKey in insertingSection.keys():
-                        if subKey not in baseHash.keys() or not type(baseHash[subKey]) == types.DictType:
+                        if subKey not in baseHash.keys() or not isinstance(baseHash[subKey], types.DictType):
                             baseHash[subKey] = insertingSection[subKey]
-                        else:
-                            baseHash[subKey].update(insertingSection[subKey])
+                        baseHash[subKey].update(insertingSection[subKey])
 
                 baseHash = self.__overrideTags(rootSection, baseHash)
-            else:
-                section = baseHash[key]
-                if key not in self.VECTOR4_NAMES and key not in self.STRING_NAMES:
-                    baseHash[key] = self.__overrideTags(rootSection, section)
+            section = baseHash[key]
+            if key not in self.VECTOR4_NAMES and key not in self.STRING_NAMES:
+                baseHash[key] = self.__overrideTags(rootSection, section)
 
         return baseHash
 
@@ -192,16 +190,15 @@ class _ColorSchemeManager(UIInterface):
         self.call('colorSchemeManager.setColors', args)
 
     @classmethod
-    def getColorGroup(cls, isColorBlind = False):
-        if isColorBlind:
-            return 'color_blind'
+    def getColorGroup(cls, isColorBlind=False):
+        return 'color_blind' if isColorBlind else 'default'
 
     @classmethod
     def getScheme(cls, schemeName):
         return cls.__colors.get(schemeName)
 
     @classmethod
-    def getSubScheme(cls, schemeName, isColorBlind = False):
+    def getSubScheme(cls, schemeName, isColorBlind=False):
         scheme = cls.getScheme(schemeName)
         if scheme is not None:
             group = cls.getColorGroup(isColorBlind=isColorBlind)
@@ -216,7 +213,7 @@ class _ColorSchemeManager(UIInterface):
         return sub
 
     @classmethod
-    def getRGBA(cls, schemeName, isColorBlind = False):
+    def getRGBA(cls, schemeName, isColorBlind=False):
         return cls.getSubScheme(schemeName, isColorBlind)['rgba']
 
     @classmethod

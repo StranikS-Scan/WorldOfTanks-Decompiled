@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Effects/Persistent.py
 import BigWorld
 from _Effect import Effect
@@ -17,7 +17,7 @@ class Persistent(Effect):
     has properly finished one pass through for all its events.
     """
 
-    def __init__(self, fileName = None, prereqs = None):
+    def __init__(self, fileName=None, prereqs=None):
         Effect.__init__(self, fileName)
         Effect._create(self, prereqs)
         self.timer = EventTimer()
@@ -37,7 +37,7 @@ class Persistent(Effect):
         for actor, attacher in self.joints.items():
             attacher.attach(self.actors[actor], source)
 
-    def go(self, target = None, callbackFn = None, **kargs):
+    def go(self, target=None, callbackFn=None, **kargs):
         """
         This method starts the effect playing, once it is attached.  You may
         call go() and stop() any number of times in between attach() and
@@ -57,7 +57,7 @@ class Persistent(Effect):
         BigWorld.callback(0.001, lambda : self._go2(target, callbackFn, **kargs))
         return
 
-    def _go2(self, target = None, callbackFn = None, **kargs):
+    def _go2(self, target=None, callbackFn=None, **kargs):
         for actorName, event in self.events:
             if event.eventTiming() > 0:
                 try:

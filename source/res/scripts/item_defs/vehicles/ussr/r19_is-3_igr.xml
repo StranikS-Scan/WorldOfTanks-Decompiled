@@ -60,7 +60,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000389 0.595951 0.598185	</turret>
+      <turret>	0.000000 0.559995 0.598698	</turret>
     </turretPositions>
     <hitTester>
       <collisionModel>	vehicles/russian/R19_IS-3/collision/Hull.model	</collisionModel>
@@ -74,6 +74,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R19_IS-3/IS-3_HangarShadowmap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <IS-3M_IGR>
@@ -125,13 +126,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	ussr_01	</textureSet>
-        <size>	0.46 0.72	</size>
+        <size>	0.58 0.68	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.86	</textureScale>
+        <textureScale>	-3	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -417,37 +418,37 @@
       <hitTester>
         <collisionModel>	vehicles/russian/R19_IS-3/collision/Turret_02.model	</collisionModel>
       </hitTester>
-      <gunPosition>	0.011911 0.310516 1.30646	</gunPosition>
+      <gunPosition>	0.0123 0.34932 1.35644	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.39403 0.39798 -0.461437	</rayStart>
-          <rayEnd>	-1.13635 0.100257 -0.391022	</rayEnd>
-          <rayUp>	0.581362 0.787802 0.203434	</rayUp>
-          <size>	0.28	</size>
+          <rayStart>	-0.879046 0.41774 1.06555	</rayStart>
+          <rayEnd>	-0.751148 0.292939 0.975747	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	-1.39696 0.399464 0.265333	</rayStart>
-          <rayEnd>	-1.15625 0.0924905 0.176905	</rayEnd>
-          <rayUp>	0.861846 0.45328 -0.227505	</rayUp>
-          <size>	0.65	</size>
+          <rayStart>	-1.32 0.354763 0.154	</rayStart>
+          <rayEnd>	-1.22475 0.25336 0.138351	</rayEnd>
+          <rayUp>	0.790967 0.603868 -0.0985608	</rayUp>
+          <size>	0.64	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
-        <player>
-          <rayStart>	1.43024 0.412133 -0.260632	</rayStart>
-          <rayEnd>	1.16 0.118006 -0.239255	</rayEnd>
-          <rayUp>	-0.694909 0.715998 0.0667011	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-        </player>
         <inscription>
-          <rayStart>	1.30756 0.427371 0.488207	</rayStart>
-          <rayEnd>	1.05903 0.133549 0.37916	</rayEnd>
-          <rayUp>	-0.81484 0.452549 -0.362264	</rayUp>
-          <size>	0.65	</size>
+          <rayStart>	1.23483 0.421561 0.39948	</rayStart>
+          <rayEnd>	1.1055 0.274967 0.357291	</rayEnd>
+          <rayUp>	-0.825043 0.510074 -0.243161	</rayUp>
+          <size>	0.64	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
+        <player>
+          <rayStart>	0.864764 0.427514 1.08217	</rayStart>
+          <rayEnd>	0.740158 0.303062 0.987399	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 -0.049 1.000 0.000 0.625 0.168 0.628 0.355 0.500 0.500 0.500 0.500 0.233 0.901 0.216	</physicsShape>

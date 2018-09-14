@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/chapter.py
 import types
 import operator
@@ -11,7 +11,7 @@ class VAR_FINDER_TYPE(object):
 
 class Chapter(HasID):
 
-    def __init__(self, entityID, title, descriptions, bonus, forcedLoading, filePaths, sharedScene, predefinedVars = None):
+    def __init__(self, entityID, title, descriptions, bonus, forcedLoading, filePaths, sharedScene, predefinedVars=None):
         super(Chapter, self).__init__(entityID=entityID)
         self.__title = title
         self.__descriptions = descriptions
@@ -34,7 +34,7 @@ class Chapter(HasID):
     def getTitle(self):
         return self.__title
 
-    def getDescription(self, afterBattle = False):
+    def getDescription(self, afterBattle=False):
         return self.__descriptions[1 if afterBattle else 0]
 
     def getBonus(self):
@@ -55,7 +55,7 @@ class Chapter(HasID):
     def isBonusReceived(self, bonusCompleted):
         return 1 << self.__bonus.getID() & bonusCompleted != 0
 
-    def getFilePath(self, afterBattle = False):
+    def getFilePath(self, afterBattle=False):
         return self.__filePaths[1 if afterBattle else 0]
 
     def getSharedScenePath(self):
@@ -96,10 +96,7 @@ class Chapter(HasID):
 
     def isInScene(self, scene, nextSceneID):
         sceneID = scene.getID()
-        if self.__defaultSceneID is not None and self.__initialSceneID is not None and self.__defaultSceneID == self.__initialSceneID and nextSceneID not in self.__sceneMap:
-            return True
-        else:
-            return sceneID == nextSceneID
+        return True if self.__defaultSceneID is not None and self.__initialSceneID is not None and self.__defaultSceneID == self.__initialSceneID and nextSceneID not in self.__sceneMap else sceneID == nextSceneID
 
     def addHasIDEntity(self, entity):
         self.__hasID[entity.getID()] = entity
@@ -144,13 +141,13 @@ class Chapter(HasID):
 
 class Scene(HasID):
 
-    def __init__(self, entityID = None):
+    def __init__(self, entityID=None):
         super(Scene, self).__init__(entityID=entityID)
         self.__postEffects = []
         self.__effects = []
         self.__guiItems = {}
 
-    def addPostEffect(self, postEffect, front = -1):
+    def addPostEffect(self, postEffect, front=-1):
         if front > -1:
             self.__postEffects.insert(front, postEffect)
         else:
@@ -159,7 +156,7 @@ class Scene(HasID):
     def getPostEffects(self):
         return self.__postEffects[:]
 
-    def addEffect(self, effect, front = -1):
+    def addEffect(self, effect, front=-1):
         if front > -1:
             self.__effects.insert(front, effect)
         else:
@@ -234,7 +231,7 @@ class HasIDConditions(HasID):
 
 class Exit(HasID):
 
-    def __init__(self, entityID, nextChapter = None, nextDelay = 0, finishDelay = 0, isSpeakOver = False):
+    def __init__(self, entityID, nextChapter=None, nextDelay=0, finishDelay=0, isSpeakOver=False):
         super(Exit, self).__init__(entityID=entityID)
         self.__nextChapter = nextChapter
         self.__nextDelay = nextDelay
@@ -273,7 +270,7 @@ class Action(HasIDAndTarget):
 
 class ActionsHolder(HasID):
 
-    def __init__(self, entityID = None, **kwargs):
+    def __init__(self, entityID=None, **kwargs):
         super(ActionsHolder, self).__init__(entityID, **kwargs)
         self.__actions = {}
 
@@ -323,7 +320,7 @@ class Message(HasID):
 
 class Query(HasID):
 
-    def __init__(self, entityID, queryType, varRef, extra = None):
+    def __init__(self, entityID, queryType, varRef, extra=None):
         super(Query, self).__init__(entityID=entityID, entityType=queryType)
         self.__varRef = varRef
         self.__extra = extra
@@ -337,7 +334,7 @@ class Query(HasID):
 
 class SimpleImagePath(HasID):
 
-    def __init__(self, entityID = None, image = ''):
+    def __init__(self, entityID=None, image=''):
         super(SimpleImagePath, self).__init__(entityID=entityID)
         self._image = image
 
@@ -378,7 +375,7 @@ class VehicleImagePath(SimpleImagePath):
 
 class SimpleHint(HasID):
 
-    def __init__(self, entityID, text, image, speakID = None):
+    def __init__(self, entityID, text, image, speakID=None):
         super(SimpleHint, self).__init__(entityID=entityID)
         self.__text = text
         self.__image = image
@@ -391,7 +388,7 @@ class SimpleHint(HasID):
         return self.__image
 
     def hasImageRef(self):
-        return type(self.__image) is types.StringType
+        return isinstance(self.__image, types.StringType)
 
     def getSpeakID(self):
         return self.__speakID
@@ -399,7 +396,7 @@ class SimpleHint(HasID):
 
 class ChainHint(ActionsHolder, HasTargetID):
 
-    def __init__(self, entityID, targetID, text, hasBox = None, arrow = None, padding = None):
+    def __init__(self, entityID, targetID, text, hasBox=None, arrow=None, padding=None):
         super(ChainHint, self).__init__(entityID=entityID, targetID=targetID)
         self.__text = text
         self.__hasBox = hasBox
@@ -435,7 +432,7 @@ class TutorialSetting(HasID):
 
 class Greeting(HasID):
 
-    def __init__(self, entityID, title, text, speakID = None):
+    def __init__(self, entityID, title, text, speakID=None):
         super(Greeting, self).__init__(entityID=entityID)
         self.__title = title
         self.__text = text
@@ -450,7 +447,7 @@ class Greeting(HasID):
 
 class PopUp(ActionsHolder):
 
-    def __init__(self, entityID, popUpType, content, varRef = None, forcedQuery = False):
+    def __init__(self, entityID, popUpType, content, varRef=None, forcedQuery=False):
         super(PopUp, self).__init__(entityID=entityID, entityType=popUpType)
         self.__content = content
         self.__varRef = varRef
@@ -468,7 +465,7 @@ class PopUp(ActionsHolder):
 
 class GuiItemRef(HasTargetID):
 
-    def __init__(self, targetID, props, conditions = None):
+    def __init__(self, targetID, props, conditions=None):
         super(GuiItemRef, self).__init__(targetID=targetID)
         self.__props = props
         self.__conditions = conditions
@@ -479,7 +476,7 @@ class GuiItemRef(HasTargetID):
         return self.__props.copy()
 
     def getLifeCycle(self):
-        raise NotImplementedError, 'GuiItemRef.getLifeCycle not implemented'
+        raise NotImplementedError('GuiItemRef.getLifeCycle not implemented')
 
     def getConditions(self):
         return self.__conditions
@@ -511,7 +508,7 @@ class GuiItemRef(HasTargetID):
 
 class GuiItemCriteria(HasIDAndTarget):
 
-    def __init__(self, entityID, targetID, value, cached = False):
+    def __init__(self, entityID, targetID, value, cached=False):
         super(GuiItemCriteria, self).__init__(entityID=entityID, targetID=targetID)
         self.__value = value
         self.__cached = cached
@@ -525,7 +522,7 @@ class GuiItemCriteria(HasIDAndTarget):
 
 class PlayerCommand(HasID):
 
-    def __init__(self, entityID, name, cmdArgs = None, cmdKwargs = None):
+    def __init__(self, entityID, name, cmdArgs=None, cmdKwargs=None):
         super(PlayerCommand, self).__init__(entityID=entityID)
         self.__name = name
         if cmdArgs is None:
@@ -548,13 +545,13 @@ class PlayerCommand(HasID):
 
 class EntityMarker(HasID):
 
-    def __init__(self, entityID, varRef, createInd = True):
+    def __init__(self, entityID, varRef, createInd=True):
         super(EntityMarker, self).__init__(entityID=entityID)
         self.__varRef = varRef
         self.__createInd = createInd
 
     def getTypeID(self):
-        raise NotImplementedError, 'EntityMarker.getTypeID not implemented'
+        raise NotImplementedError('EntityMarker.getTypeID not implemented')
 
     def getVarRef(self):
         return self.__varRef
@@ -565,7 +562,7 @@ class EntityMarker(HasID):
 
 class AimMarker(EntityMarker):
 
-    def __init__(self, entityID, varRef, modelData, worldData, createInd = True):
+    def __init__(self, entityID, varRef, modelData, worldData, createInd=True):
         super(AimMarker, self).__init__(entityID, varRef, createInd=createInd)
         self.__modelData = modelData
         self.__worldData = worldData
@@ -582,7 +579,7 @@ class AimMarker(EntityMarker):
 
 class AreaMarker(AimMarker):
 
-    def __init__(self, entityID, varRef, modelData, groundData, worldData, minimapData, createInd = True):
+    def __init__(self, entityID, varRef, modelData, groundData, worldData, minimapData, createInd=True):
         super(AreaMarker, self).__init__(entityID, varRef, modelData, worldData, createInd=createInd)
         self.__groundData = groundData
         self.__minimapData = minimapData
@@ -599,7 +596,7 @@ class AreaMarker(AimMarker):
 
 class VehicleMarker(EntityMarker):
 
-    def __init__(self, entityID, varRef, period, createInd = True):
+    def __init__(self, entityID, varRef, period, createInd=True):
         super(VehicleMarker, self).__init__(entityID, varRef, createInd=createInd)
         self.__period = period
 
@@ -612,7 +609,7 @@ class VehicleMarker(EntityMarker):
 
 class ChapterTask(HasID):
 
-    def __init__(self, entityID, text, flagID = None):
+    def __init__(self, entityID, text, flagID=None):
         super(ChapterTask, self).__init__(entityID=entityID)
         self.__text = text
         self.__flagID = flagID
@@ -649,7 +646,7 @@ class VarSet(HasID):
 
 class GameAttribute(HasIDAndTarget):
 
-    def __init__(self, entityID, name, varID, args = None):
+    def __init__(self, entityID, name, varID, args=None):
         super(GameAttribute, self).__init__(entityID=entityID, targetID=varID, entityType=VAR_FINDER_TYPE.GAME_ATTRIBUTE)
         self.__name = name
         self.__args = args or ()

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileStatistics.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
@@ -19,11 +19,8 @@ _FRAME_LABELS = {PROFILE_DROPDOWN_KEYS.ALL: 'random',
  PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: 'fortifications',
  PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON: 'team7x7'}
 
-def _packProviderType(mainType, addValue = None):
-    if addValue is not None:
-        return '%s/%s' % (mainType, str(addValue))
-    else:
-        return mainType
+def _packProviderType(mainType, addValue=None):
+    return '%s/%s' % (mainType, str(addValue)) if addValue is not None else mainType
 
 
 def _parseProviderType(value):
@@ -46,7 +43,7 @@ class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
         self._setInitData(PROFILE_DROPDOWN_KEYS.ALL)
         self.startClubListening()
 
-    def _setInitData(self, battlesType, accountDossier = None):
+    def _setInitData(self, battlesType, accountDossier=None):
         dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL),

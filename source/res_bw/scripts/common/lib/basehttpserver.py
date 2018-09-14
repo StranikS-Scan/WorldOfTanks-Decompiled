@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/BaseHTTPServer.py
 """HTTP server base class.
 
@@ -251,7 +251,7 @@ class BaseHTTPRequestHandler(SocketServer.StreamRequestHandler):
         while not self.close_connection:
             self.handle_one_request()
 
-    def send_error(self, code, message = None):
+    def send_error(self, code, message=None):
         """Send and log an error reply.
         
         Arguments are the error code, and a detailed message.
@@ -286,7 +286,7 @@ class BaseHTTPRequestHandler(SocketServer.StreamRequestHandler):
     error_message_format = DEFAULT_ERROR_MESSAGE
     error_content_type = DEFAULT_ERROR_CONTENT_TYPE
 
-    def send_response(self, code, message = None):
+    def send_response(self, code, message=None):
         """Send the response header and log the response code.
         
         Also send two standard headers with the server software
@@ -320,7 +320,7 @@ class BaseHTTPRequestHandler(SocketServer.StreamRequestHandler):
         if self.request_version != 'HTTP/0.9':
             self.wfile.write('\r\n')
 
-    def log_request(self, code = '-', size = '-'):
+    def log_request(self, code='-', size='-'):
         """Log an accepted request.
         
         This is called by send_response().
@@ -363,7 +363,7 @@ class BaseHTTPRequestHandler(SocketServer.StreamRequestHandler):
         """Return the server software version string."""
         return self.server_version + ' ' + self.sys_version
 
-    def date_time_string(self, timestamp = None):
+    def date_time_string(self, timestamp=None):
         """Return the current date and time formatted for a message header."""
         if timestamp is None:
             timestamp = time.time()
@@ -464,7 +464,7 @@ class BaseHTTPRequestHandler(SocketServer.StreamRequestHandler):
      505: ('HTTP Version Not Supported', 'Cannot fulfill request.')}
 
 
-def test(HandlerClass = BaseHTTPRequestHandler, ServerClass = HTTPServer, protocol = 'HTTP/1.0'):
+def test(HandlerClass=BaseHTTPRequestHandler, ServerClass=HTTPServer, protocol='HTTP/1.0'):
     """Test the HTTP request handler class.
     
     This runs an HTTP server on port 8000 (or the first command line

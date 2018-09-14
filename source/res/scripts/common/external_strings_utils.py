@@ -1,9 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/external_strings_utils.py
 import re
 import unicodedata
 from debug_utils import LOG_CURRENT_EXCEPTION
 from constants import CREDENTIALS_RESTRICTION, CREDENTIALS_RESTRICTION_SET
+_MAX_NORMALIZED_NAME_BYTES = 96
 
 class TextRestrictionsBasic(object):
     __slots__ = ('ACCOUNT_NAME_RE', 'ACCOUNT_NAME_MIN_LENGTH', 'ACCOUNT_NAME_MAX_LENGTH', 'ACCOUNT_NAME_MIN_LENGTH_REG', 'LOGIN_NAME_RE', 'LOGIN_NAME_MIN_LENGTH', 'LOGIN_NAME_MAX_LENGTH', 'PASSWORD_RE', 'PASSWORD_MIN_LENGTH', 'PASSWORD_MAX_LENGTH', 'UPPERCASE_CLAN_ABBREV', 'REQUIRE_NORMALIZED_CLAN_ABBREV', 'CLAN_ABBREV_RE', 'CLAN_NAME_MAX_LENGTH', 'CLAN_ABBREV_MAX_LENGTH', 'CLAN_DESCR_MAX_LENGTH', 'CLAN_MOTTO_MAX_LENGTH')
@@ -99,20 +100,21 @@ def getClanAbbrevMaxLength():
 CLAN_DESCR_MAX_BYTES = CLAN_DESCR_MAX_LENGTH * 4
 CLAN_MOTTO_MAX_BYTES = CLAN_MOTTO_MAX_LENGTH * 4
 
-def unicode_from_utf8(utf8str, unicodeNormalForm = 'NFKC'):
+def unicode_from_utf8(utf8str, unicodeNormalForm='NFKC'):
     unicodeStr = unicode(utf8str, 'utf8')
     return (unicodedata.normalize(unicodeNormalForm, unicodeStr), unicodeStr)
 
 
-def utf8_accepted(utf8str, re, minLen, maxLen, unicodeNormalForm = 'NFKC', checkBeforeNormalisation = True):
+def utf8_accepted(utf8str, regExp, minLen, maxLen, unicodeNormalForm='NFKC', checkBeforeNormalisation=True):
     nfkc, plain = unicode_from_utf8(utf8str, unicodeNormalForm)
-    matchFn = lambda uniStr: re.match(uniStr) and minLen <= len(uniStr) <= maxLen
-    if checkBeforeNormalisation and not matchFn(plain):
-        return False
-    return matchFn(nfkc)
+
+    def matchFn(uniStr):
+        return regExp.match(uniStr) and minLen <= len(uniStr) <= maxLen
+
+    return False if checkBeforeNormalisation and not matchFn(plain) else matchFn(nfkc)
 
 
-def normalized_unicode_trim(utf8str, length, unicodeNormalForm = 'NFKC'):
+def normalized_unicode_trim(utf8str, length, unicodeNormalForm='NFKC'):
     try:
         unicodeStr, _ = unicode_from_utf8(utf8str, unicodeNormalForm)
         if len(unicodeStr) > max(0, length):
@@ -125,7 +127,7 @@ def normalized_unicode_trim(utf8str, length, unicodeNormalForm = 'NFKC'):
     return None
 
 
-def normalized_unicode_trim_and_lowercase(utf8str, length, unicodeNormalForm = 'NFKC'):
+def normalized_unicode_trim_and_lowercase(utf8str, length, unicodeNormalForm='NFKC'):
     try:
         unicodeStr, _ = unicode_from_utf8(utf8str, unicodeNormalForm)
         if len(unicodeStr) > max(0, length):
@@ -138,7 +140,7 @@ def normalized_unicode_trim_and_lowercase(utf8str, length, unicodeNormalForm = '
     return None
 
 
-def isAccountNameValid(text, minLength = _ACCOUNT_NAME_MIN_LENGTH):
+def isAccountNameValid(text, minLength=_ACCOUNT_NAME_MIN_LENGTH):
     return utf8_accepted(text, _ACCOUNT_NAME_RE, minLength, _ACCOUNT_NAME_MAX_LENGTH)
 
 
@@ -165,6 +167,11 @@ def normalizedAccountLogin(text):
         return None
 
     return None
+
+
+def forgeAccountNormalizedName(origNormalizedName, centerID):
+    ext = '\x01' + str(centerID)
+    return origNormalizedName[:_MAX_NORMALIZED_NAME_BYTES - len(ext)] + ext
 
 
 def isClanNameValid(text):
@@ -221,11 +228,8 @@ def isChannelNameValid(channelName):
     return test and test[0] not in '[<{('
 
 
-def escapeSQL(text, default = '\\0'):
-    if text is None:
-        return default
-    else:
-        return text.replace('\\', '\\\\').replace("'", "\\'").replace('"', '\\"').replace('\x00', '\\0')
+def escapeSQL(text, default='\\0'):
+    return default if text is None else text.replace('\\', '\\\\').replace("'", "\\'").replace('"', '\\"').replace('\x00', '\\0')
 
 
 def normalize_utf8(utf8str):
@@ -268,5 +272,4 @@ def _decode_utf8_len_byte(byte):
         return 3
     if v >= 192:
         return 2
-    if v < 127:
-        return 1
+    return 1 if v < 127 else 0

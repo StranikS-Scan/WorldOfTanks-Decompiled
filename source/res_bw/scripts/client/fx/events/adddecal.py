@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/AddDecal.py
 from FX.Event import Event
 from FX.Event import TRANSFORM_DEPENDENT_EVENT
@@ -19,7 +19,7 @@ class AddDecal(Event):
         self.decalSize = (0.0, 0.0)
         self.decalExtent = (0, 0, 0)
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """
         This method loads the AddDecal event from a data section.
         It reads decalIndex, decalSize and decalExtent from the data section.

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileSectionMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -14,13 +14,10 @@ class ProfileSectionMeta(BaseDAAPIComponent):
         self._printOverrideError('requestDossier')
 
     def as_updateS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_update(data)
+        return self.flashObject.as_update(data) if self._isDAAPIInited() else None
 
     def as_setInitDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInitData(data)
+        return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_responseDossierS(self, type, data, frameLabel, emptyScreenLabel):
-        if self._isDAAPIInited():
-            return self.flashObject.as_responseDossier(type, data, frameLabel, emptyScreenLabel)
+        return self.flashObject.as_responseDossier(type, data, frameLabel, emptyScreenLabel) if self._isDAAPIInited() else None

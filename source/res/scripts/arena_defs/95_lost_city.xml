@@ -418,55 +418,98 @@
       <endRadius>	85.000000	</endRadius>
     </gameplaySettings>
     <visualSettings>
-      <cloudModel>	particles/mesh_particles/funnel_death/gas_ring_light.model	</cloudModel>
+      <cloudModel>	particles/mesh_particles/funnel_death/fire_storm.model	</cloudModel>
       <cloudClimbTime>	15	</cloudClimbTime>
-      <cloudStartHeight>	-50	</cloudStartHeight>
-      <cloudEndHeight>	60	</cloudEndHeight>
-      <cameraProximityDist>	30	</cameraProximityDist>
+      <cloudStartHeight>	-150	</cloudStartHeight>
+      <cloudEndHeight>	25	</cloudEndHeight>
+      <cameraProximityDist>	20	</cameraProximityDist>
       <windSpeed>	0 -1	</windSpeed>
       <windGustiness>	2	</windGustiness>
+      <edgeToCenterAngle>	0.95	</edgeToCenterAngle>
+      <edgeToCenterAngleDelta>	0.40	</edgeToCenterAngleDelta>
+      <edgeToCenterDistance>	75.0	</edgeToCenterDistance>
+      <centerSunIntensityDef>	5.485000	</centerSunIntensityDef>
+      <centerSunIntensityFwd>	0.700000	</centerSunIntensityFwd>
+      <edgeSunIntensityDef>	2.742500	</edgeSunIntensityDef>
+      <edgeSunIntensityFwd>	0.350000	</edgeSunIntensityFwd>
       <postEffect></postEffect>
       <mapActivities>	gasAttackScenario	</mapActivities>
+      <vehicleGAEffect>
+        <stages>
+          <fire>	1.0	</fire>
+          <noEmission>	4.0	</noEmission>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	fire	</startKey>
+            <file>	particles/Tank/destruction/fire_storm_destruction.xml	</file>
+          </pixie>
+          <stopEmission>
+            <startKey>	noEmission	</startKey>
+          </stopEmission>
+        </effects>
+      </vehicleGAEffect>
+      <cameraGAEffect>
+        <stages>
+          <fire>	1.0	</fire>
+          <noEmission>	4.0	</noEmission>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	fire	</startKey>
+            <file>	particles/Environment/weather/fire_storm.xml	</file>
+          </pixie>
+          <stopEmission>
+            <startKey>	noEmission	</startKey>
+          </stopEmission>
+        </effects>
+      </cameraGAEffect>
+      <shimmerSettings>
+        <windDir>	0.500 1.000 0.5 5.0	</windDir>
+        <waveSpeed>	0.000 0.010 2.0 1.0	</waveSpeed>
+        <spreadFreq>	0.005 0.005 6.0 6.0	</spreadFreq>
+        <displacement>	system/maps/post_processing/distortion_3D.dds	</displacement>
+      </shimmerSettings>
       <centerFogSettings>
         <Fog>
           <version>	1.000000	</version>
           <innerBB>	-50.000000 -50.000000 50.000000 50.000000	</innerBB>
-          <outerBB>	-500.000000 -500.000000 500.000000 727.000000	</outerBB>
+          <outerBB>	-600.000000 -600.000000 600.000000 600.000000	</outerBB>
           <deferred>
             <heightFog>	true	</heightFog>
-            <nearLow>	200.000000	</nearLow>
-            <farLow>	500.000000	</farLow>
-            <nearHigh>	500.000000	</nearHigh>
-            <farHigh>	1000.000000	</farHigh>
-            <altitudeLow>	-6.000000	</altitudeLow>
-            <altitudeMid>	50.000000	</altitudeMid>
-            <altitudeHigh>	1500.000000	</altitudeHigh>
-            <skyAltitudeLow>	-10.000000	</skyAltitudeLow>
-            <skyAltitudeMid>	50.000000	</skyAltitudeMid>
-            <skyAltitudeHigh>	10000.000000	</skyAltitudeHigh>
-            <exponent>	0.650000	</exponent>
+            <nearLow>	0.000000	</nearLow>
+            <farLow>	300.000000	</farLow>
+            <nearHigh>	50.000000	</nearHigh>
+            <farHigh>	600.000000	</farHigh>
+            <altitudeLow>	-300.000000	</altitudeLow>
+            <altitudeMid>	30.000000	</altitudeMid>
+            <altitudeHigh>	1000.000000	</altitudeHigh>
+            <skyAltitudeLow>	-200.000000	</skyAltitudeLow>
+            <skyAltitudeMid>	250.000000	</skyAltitudeMid>
+            <skyAltitudeHigh>	3000.000000	</skyAltitudeHigh>
+            <exponent>	0.400000	</exponent>
             <sunAngle>	35.000000	</sunAngle>
-            <sunExponent>	0.200000	</sunExponent>
-            <colorLow>	0.957500 1.000000 0.490000 0.850000	</colorLow>
-            <colorHigh>	0.957500 1.000000 0.490000 0.800000	</colorHigh>
-            <colorSunLow>	0.957500 1.000000 0.490000 0.850000	</colorSunLow>
-            <colorSunHigh>	0.957500 1.000000 0.490000 0.800000	</colorSunHigh>
+            <sunExponent>	0.500000	</sunExponent>
+            <colorLow>	0.075000 0.010001 0.000000 4.000000	</colorLow>
+            <colorHigh>	0.020000 0.006140 0.000200 1.050000	</colorHigh>
+            <colorSunLow>	0.075000 0.010001 0.000000 4.000000	</colorSunLow>
+            <colorSunHigh>	0.020000 0.006140 0.000200 1.050000	</colorSunHigh>
             <useEdgeFog>	true	</useEdgeFog>
           </deferred>
           <forward>
             <heightFog>	true	</heightFog>
-            <nearLow>	200.000000	</nearLow>
-            <farLow>	500.000000	</farLow>
-            <nearHigh>	500.000000	</nearHigh>
-            <farHigh>	1000.000000	</farHigh>
-            <altitudeLow>	-6.000000	</altitudeLow>
-            <altitudeMid>	40.000000	</altitudeMid>
-            <altitudeHigh>	1000.000000	</altitudeHigh>
-            <skyAltitudeLow>	-10.000000	</skyAltitudeLow>
-            <skyAltitudeMid>	60.000000	</skyAltitudeMid>
-            <skyAltitudeHigh>	2000.000000	</skyAltitudeHigh>
-            <colorLow>	0.639470 0.653000 0.459712 0.000000	</colorLow>
-            <colorHigh>	0.616902 0.630000 0.442890 0.000000	</colorHigh>
+            <nearLow>	0.000000	</nearLow>
+            <farLow>	300.000000	</farLow>
+            <nearHigh>	50.000000	</nearHigh>
+            <farHigh>	600.000000	</farHigh>
+            <altitudeLow>	-300.000000	</altitudeLow>
+            <altitudeMid>	20.000000	</altitudeMid>
+            <altitudeHigh>	1500.000000	</altitudeHigh>
+            <skyAltitudeLow>	-600.000000	</skyAltitudeLow>
+            <skyAltitudeMid>	270.000000	</skyAltitudeMid>
+            <skyAltitudeHigh>	600.000000	</skyAltitudeHigh>
+            <colorLow>	0.490000 0.168535 0.000000 4.000000	</colorLow>
+            <colorHigh>	0.044586 0.013688 0.000446 1.050000	</colorHigh>
             <useEdgeFog>	true	</useEdgeFog>
           </forward>
           <enable>	true	</enable>
@@ -479,44 +522,96 @@
           <outerBB>	-600.000000 -600.000000 600.000000 600.000000	</outerBB>
           <deferred>
             <heightFog>	true	</heightFog>
-            <nearLow>	-150.000000	</nearLow>
-            <farLow>	50.000000	</farLow>
-            <nearHigh>	-50.000000	</nearHigh>
-            <farHigh>	350.000000	</farHigh>
-            <altitudeLow>	-6.000000	</altitudeLow>
-            <altitudeMid>	50.000000	</altitudeMid>
-            <altitudeHigh>	1500.000000	</altitudeHigh>
-            <skyAltitudeLow>	-10.000000	</skyAltitudeLow>
-            <skyAltitudeMid>	50.000000	</skyAltitudeMid>
-            <skyAltitudeHigh>	10000.000000	</skyAltitudeHigh>
-            <exponent>	0.650000	</exponent>
+            <nearLow>	-450.000000	</nearLow>
+            <farLow>	400.000000	</farLow>
+            <nearHigh>	-350.000000	</nearHigh>
+            <farHigh>	150.000000	</farHigh>
+            <altitudeLow>	-300.000000	</altitudeLow>
+            <altitudeMid>	30.000000	</altitudeMid>
+            <altitudeHigh>	1000.000000	</altitudeHigh>
+            <skyAltitudeLow>	-200.000000	</skyAltitudeLow>
+            <skyAltitudeMid>	250.000000	</skyAltitudeMid>
+            <skyAltitudeHigh>	3000.000000	</skyAltitudeHigh>
+            <exponent>	0.400000	</exponent>
             <sunAngle>	35.000000	</sunAngle>
-            <sunExponent>	0.200000	</sunExponent>
-            <colorLow>	0.957500 1.000000 0.490000 0.850000	</colorLow>
-            <colorHigh>	0.957500 1.000000 0.490000 0.800000	</colorHigh>
-            <colorSunLow>	0.957500 1.000000 0.490000 0.850000	</colorSunLow>
-            <colorSunHigh>	0.957500 1.000000 0.490000 0.800000	</colorSunHigh>
+            <sunExponent>	0.500000	</sunExponent>
+            <colorLow>	0.135000 0.018001 0.000000 4.000000	</colorLow>
+            <colorHigh>	0.020000 0.006140 0.000200 1.050000	</colorHigh>
+            <colorSunLow>	0.135000 0.018001 0.000000 4.000000	</colorSunLow>
+            <colorSunHigh>	0.020000 0.006140 0.000200 1.050000	</colorSunHigh>
             <useEdgeFog>	true	</useEdgeFog>
           </deferred>
           <forward>
             <heightFog>	true	</heightFog>
-            <nearLow>	-150.000000	</nearLow>
-            <farLow>	50.000000	</farLow>
-            <nearHigh>	-50.000000	</nearHigh>
-            <farHigh>	332.000000	</farHigh>
-            <altitudeLow>	-2.000000	</altitudeLow>
-            <altitudeMid>	50.000000	</altitudeMid>
+            <nearLow>	-550.000000	</nearLow>
+            <farLow>	450.000000	</farLow>
+            <nearHigh>	-350.000000	</nearHigh>
+            <farHigh>	150.000000	</farHigh>
+            <altitudeLow>	-300.000000	</altitudeLow>
+            <altitudeMid>	20.000000	</altitudeMid>
             <altitudeHigh>	1500.000000	</altitudeHigh>
-            <skyAltitudeLow>	-10.000000	</skyAltitudeLow>
-            <skyAltitudeMid>	50.000000	</skyAltitudeMid>
-            <skyAltitudeHigh>	10000.000000	</skyAltitudeHigh>
-            <colorLow>	0.639470 0.653000 0.459712 0.000000	</colorLow>
-            <colorHigh>	0.616902 0.630000 0.442890 0.000000	</colorHigh>
+            <skyAltitudeLow>	-600.000000	</skyAltitudeLow>
+            <skyAltitudeMid>	270.000000	</skyAltitudeMid>
+            <skyAltitudeHigh>	600.000000	</skyAltitudeHigh>
+            <colorLow>	0.675159 0.232220 0.000000 4.000000	</colorLow>
+            <colorHigh>	0.044586 0.013688 0.000446 1.050000	</colorHigh>
             <useEdgeFog>	true	</useEdgeFog>
           </forward>
           <enable>	true	</enable>
         </Fog>
       </edgeFogSettings>
+      <edgeToCenterFogSettings>
+        <Fog>
+          <version>	1.000000	</version>
+          <innerBB>	-50.000000 -50.000000 50.000000 50.000000	</innerBB>
+          <outerBB>	-600.000000 -600.000000 600.000000 600.000000	</outerBB>
+          <deferred>
+            <heightFog>	true	</heightFog>
+            <nearLow>	-200.000000	</nearLow>
+            <farLow>	300.000000	</farLow>
+            <nearHigh>	-150.000000	</nearHigh>
+            <farHigh>	600.000000	</farHigh>
+            <altitudeLow>	-300.000000	</altitudeLow>
+            <altitudeMid>	30.000000	</altitudeMid>
+            <altitudeHigh>	1000.000000	</altitudeHigh>
+            <skyAltitudeLow>	-200.000000	</skyAltitudeLow>
+            <skyAltitudeMid>	250.000000	</skyAltitudeMid>
+            <skyAltitudeHigh>	3000.000000	</skyAltitudeHigh>
+            <exponent>	0.400000	</exponent>
+            <sunAngle>	35.000000	</sunAngle>
+            <sunExponent>	0.500000	</sunExponent>
+            <colorLow>	0.135000 0.018001 0.000000 4.000000	</colorLow>
+            <colorHigh>	0.020000 0.006140 0.000200 1.050000	</colorHigh>
+            <colorSunLow>	0.135000 0.018001 0.000000 4.000000	</colorSunLow>
+            <colorSunHigh>	0.020000 0.006140 0.000200 1.050000	</colorSunHigh>
+            <useEdgeFog>	true	</useEdgeFog>
+          </deferred>
+          <forward>
+            <heightFog>	true	</heightFog>
+            <nearLow>	-200.000000	</nearLow>
+            <farLow>	300.000000	</farLow>
+            <nearHigh>	-150.000000	</nearHigh>
+            <farHigh>	600.000000	</farHigh>
+            <altitudeLow>	-300.000000	</altitudeLow>
+            <altitudeMid>	20.000000	</altitudeMid>
+            <altitudeHigh>	1500.000000	</altitudeHigh>
+            <skyAltitudeLow>	-600.000000	</skyAltitudeLow>
+            <skyAltitudeMid>	270.000000	</skyAltitudeMid>
+            <skyAltitudeHigh>	600.000000	</skyAltitudeHigh>
+            <colorLow>	0.675159 0.232220 0.000000 4.000000	</colorLow>
+            <colorHigh>	0.044586 0.013688 0.000446 1.050000	</colorHigh>
+            <useEdgeFog>	true	</useEdgeFog>
+          </forward>
+          <enable>	true	</enable>
+        </Fog>
+      </edgeToCenterFogSettings>
+      <soundSettings>
+        <wwalarm>	fallout_gaz_alarm	</wwalarm>
+        <alarm>	/GUI/fallout/fallout_gaz_alarma	</alarm>
+        <gascloud_close>	sauron_burn_close	</gascloud_close>
+        <gascloud_far>	sauron_burn_far	</gascloud_far>
+        <gascloud_inside>	sauron_inside_burn	</gascloud_inside>
+      </soundSettings>
     </visualSettings>
   </gasAttack>
   <mapActivities>
@@ -537,21 +632,21 @@
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
-          <startTime>	5.000000 5.000000	</startTime>
+          <startTime>	9.000000 9.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	lostcity_gas_attack_rocket_flight_3	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
-          <startTime>	4.000000 4.000000	</startTime>
+          <startTime>	8.000000 8.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	lostcity_gas_attack_rocket_flight_4	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
+          <startTime>	7.000000 7.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	lostcity_gas_attack_rocket_explosion_1	</preset>
@@ -565,21 +660,49 @@
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
-          <startTime>	5.900000 5.900000	</startTime>
+          <startTime>	9.900000 9.900000	</startTime>
         </warplane>
         <warplane>
           <preset>	lostcity_gas_attack_rocket_explosion_3	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
-          <startTime>	5.000000 5.000000	</startTime>
+          <startTime>	9.000000 9.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	lostcity_gas_attack_rocket_explosion_4	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
-          <startTime>	1.000000 1.000000	</startTime>
+          <startTime>	8.000000 8.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	lostcity_fire_storm_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	10.000000 10.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	lostcity_fire_storm_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	10.000000 10.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	lostcity_fire_storm_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	10.000000 10.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	lostcity_fire_storm_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	10.000000 10.000000	</startTime>
         </warplane>
         <explosion>
           <preset>	lostcity_gas_attack_rocket_explosion_sound_1	</preset>
@@ -591,19 +714,19 @@
           <preset>	lostcity_gas_attack_rocket_explosion_sound_2	</preset>
           <position>	-413 0 -354	</position>
           <possibility>	1.000000	</possibility>
-          <startTime>	5.900000 5.900000	</startTime>
+          <startTime>	9.900000 9.900000	</startTime>
         </explosion>
         <explosion>
           <preset>	lostcity_gas_attack_rocket_explosion_sound_3	</preset>
           <position>	-333 0 363	</position>
           <possibility>	1.000000	</possibility>
-          <startTime>	5.000000 5.000000	</startTime>
+          <startTime>	9.000000 9.000000	</startTime>
         </explosion>
         <explosion>
           <preset>	lostcity_gas_attack_rocket_explosion_sound_4	</preset>
           <position>	350 0 -402	</position>
           <possibility>	1.000000	</possibility>
-          <startTime>	1.000000 1.000000	</startTime>
+          <startTime>	8.000000 8.000000	</startTime>
         </explosion>
       </trajectories>
     </scenario>

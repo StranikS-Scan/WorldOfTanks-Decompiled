@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/states.py
 from tutorial.control import TutorialProxyHolder
 from tutorial.control import functional
@@ -12,7 +12,7 @@ STATE_RUN_EFFECTS = 4
 class _TutorialState(TutorialProxyHolder):
 
     def tick(self):
-        raise NotImplementedError, 'Method not implemented'
+        raise NotImplementedError('Method not implemented')
 
     def allowedToSwitch(self):
         return True
@@ -94,7 +94,7 @@ class TutorialStateRunEffects(_TutorialState):
                 if currentEffect is None:
                     stop = True
                     self._tutorial.evaluateState()
-                elif currentEffect.isAllConditionsOK():
+                if currentEffect.isAllConditionsOK():
                     LOG_DEBUG('Trigger effect', currentEffect.getEffect())
                     currentEffect.triggerEffect()
                     targetID = currentEffect.getTargetID()

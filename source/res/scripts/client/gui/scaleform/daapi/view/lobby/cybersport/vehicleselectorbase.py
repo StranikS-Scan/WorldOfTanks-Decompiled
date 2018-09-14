@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/VehicleSelectorBase.py
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleBasicVO, makeVehicleVO
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
@@ -27,7 +27,7 @@ class VehicleSelectorBase(object):
     def _getLevelsRange(self):
         return range(11)
 
-    def _updateData(self, allVehicles, levelsRange, vehicleTypes, isVehicleRoster = False):
+    def _updateData(self, allVehicles, levelsRange, vehicleTypes, isVehicleRoster=False):
         criteria = REQ_CRITERIA.EMPTY
         criteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_IGR_RENT
         criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR

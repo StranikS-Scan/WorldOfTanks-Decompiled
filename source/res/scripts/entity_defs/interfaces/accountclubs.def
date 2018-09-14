@@ -26,6 +26,8 @@
       <Arg>	DB_ID	</Arg>
       <Arg>	STRING	</Arg>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </receiveClubUpdate>
     <receiveClubNotification>
       <Arg>	STRING	</Arg>

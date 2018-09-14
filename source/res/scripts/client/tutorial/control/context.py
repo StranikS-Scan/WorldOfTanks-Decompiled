@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/context.py
 from abc import ABCMeta, abstractmethod
 from tutorial.control import TutorialProxyHolder
@@ -36,14 +36,14 @@ class BonusesRequester(TutorialProxyHolder):
     def isStillRunning(self):
         return False
 
-    def getChapter(self, chapterID = None):
+    def getChapter(self, chapterID=None):
         chapter = self._data
         if chapterID is not None and len(chapterID):
             chapter = self._descriptor.getChapter(chapterID)
         return chapter
 
     @abstractmethod
-    def request(self, chapterID = None):
+    def request(self, chapterID=None):
         pass
 
 
@@ -75,14 +75,14 @@ class SoundPlayer(object):
         return self._enabled
 
     @abstractmethod
-    def play(self, event, sndID = None):
+    def play(self, event, sndID=None):
         pass
 
     @abstractmethod
     def stop(self):
         pass
 
-    def isPlaying(self, event, sndID = None):
+    def isPlaying(self, event, sndID=None):
         return False
 
     def goToNextChapter(self):
@@ -91,7 +91,7 @@ class SoundPlayer(object):
 
 class NoSound(SoundPlayer):
 
-    def play(self, event, sndID = None):
+    def play(self, event, sndID=None):
         pass
 
     def stop(self):
@@ -136,11 +136,8 @@ class GlobalStorage(object):
     def __set__(self, _, value):
         self.__storage[self.attribute] = value
 
-    def __get__(self, instance, owner = None):
-        if instance is None:
-            return self
-        else:
-            return self.__storage[self.attribute]
+    def __get__(self, instance, owner=None):
+        return self if instance is None else self.__storage[self.attribute]
 
     def value(self):
         return self.__storage[self.attribute]

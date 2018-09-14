@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/CodeWarrior/Required.py
 """Suite Required: Terms that every application should support
 Level 1, version 1
@@ -13,7 +14,7 @@ from StdSuites.Required_Suite import *
 class Required_Events(Required_Suite_Events):
     _argmap_open = {'converting': 'Conv'}
 
-    def open(self, _object, _attributes = {}, **_arguments):
+    def open(self, _object, _attributes={}, **_arguments):
         """open: Open the specified object(s)
         Required argument: list of objects to open
         Keyword argument converting: Whether to convert project to latest version (yes/no; default is ask).
@@ -27,8 +28,7 @@ class Required_Events(Required_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 _Enum_Conv = {'yes': 'yes ',

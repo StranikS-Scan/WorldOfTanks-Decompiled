@@ -1,48 +1,19 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VehicleEffects.py
 from collections import namedtuple
+from functools import partial
 import BigWorld
 import Math
 import Pixie
-from Math import Vector3, Matrix
-import math
-from constants import VEHICLE_HIT_EFFECT, ARENA_PERIOD
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_CODEPOINT_WARNING, LOG_WARNING, LOG_ERROR
+from Math import Matrix
+from constants import VEHICLE_HIT_EFFECT
+from debug_utils import LOG_CODEPOINT_WARNING, LOG_WARNING, LOG_ERROR
 from items import _xml
-from random import uniform
 import items.vehicles
 import material_kinds
-from functools import partial
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
-
-class RangeTable(object):
-
-    def __init__(self, keys, values):
-        self.keys = keys
-        self.values = values
-
-    def lookup(self, point, defaultValue = None):
-        foundValue = defaultValue
-        idx = -1
-        for leftBound in self.keys:
-            if point < leftBound:
-                break
-            idx += 1
-
-        if idx == -1 or len(self.values) <= idx:
-            return foundValue
-        return self.values[idx]
-
-
-def enablePixie(pixie, turnOn):
-    multiplier = 1.0 if turnOn else 0.0
-    for i in xrange(pixie.nSystems()):
-        try:
-            source = pixie.system(i).action(16)
-            source.MultRate(multiplier)
-        except:
-            LOG_CURRENT_EXCEPTION()
-
+from CustomEffect import RangeTable
+from CustomEffect import enablePixie
 
 class TankComponentNames():
     CHASSIS = 'chassis'
@@ -51,72 +22,7 @@ class TankComponentNames():
     GUN = 'gun'
 
 
-class DetailedEngineState(object):
-    rpm = property(lambda self: self.__rpm)
-    gearNum = property(lambda self: self.__gearNum)
-    gearUp = property(lambda self: self.__gearUp)
-    mode = property(lambda self: self.__mode)
-    starting = property(lambda self: self.__starting)
-    __STOPPED = 0
-    __IDLE = 1
-    __MEDIUM = 2
-    __HIGH = 3
-
-    def __init__(self):
-        self.__rpm = 0.0
-        self.__gearNum = 0
-        self.__mode = DetailedEngineState.__STOPPED
-        self.__starting = False
-        self.__gearUp = False
-        self.__startEngineCbk = None
-        self.__prevArenaPeriod = BigWorld.player().arena.period
-        BigWorld.player().arena.onPeriodChange += self.__arenaPeriodChanged
-        return
-
-    def destroy(self):
-        BigWorld.player().arena.onPeriodChange -= self.__arenaPeriodChanged
-        if self.__startEngineCbk is not None:
-            BigWorld.cancelCallback(self.__startEngineCbk)
-        return
-
-    def __arenaPeriodChanged(self, *args):
-        period = BigWorld.player().arena.period
-        if period != self.__prevArenaPeriod and period == ARENA_PERIOD.PREBATTLE:
-            if period == ARENA_PERIOD.PREBATTLE:
-                self.__mode = DetailedEngineState.__STOPPED
-                self.__prevArenaPeriod = period
-                time = uniform(0.0, (BigWorld.player().arena.periodEndTime - BigWorld.serverTime()) * 0.7)
-                self.__startEngineCbk = BigWorld.callback(time, self.__startEngineFunc)
-            elif period == ARENA_PERIOD.BATTLE:
-                self.__starting = False
-
-    def __startEngineFunc(self):
-        self.__startEngineCbk = None
-        self.__starting = True
-        self.__mode = DetailedEngineState.__IDLE
-        return
-
-    def setMode(self, mode):
-        if mode > DetailedEngineState.__STOPPED:
-            if self.__mode == DetailedEngineState.__STOPPED:
-                self.__starting = True
-        else:
-            self.__starting = False
-        self.__mode = mode
-
-    def refresh(self, vehicleSpeed, vehicleTypeDescriptor):
-        speedRange = vehicleTypeDescriptor.physics['speedLimits'][0] + vehicleTypeDescriptor.physics['speedLimits'][1]
-        speedRangePerGear = speedRange / 3.0
-        if self.__mode == DetailedEngineState.__IDLE:
-            gearNum = 0
-        else:
-            gearNum = math.ceil(math.floor(math.fabs(vehicleSpeed) * 50.0) / 50.0 / speedRangePerGear)
-        self.__rpm = math.fabs(1 + (vehicleSpeed - gearNum * speedRangePerGear) / speedRangePerGear)
-        if gearNum == 0:
-            self.__rpm = 0.0
-        self.__gearUp = gearNum > self.__gearNum
-        self.__gearNum = gearNum
-
+clamp = lambda minVal, maxVal, val: (minVal if val < minVal else maxVal if val > maxVal else val)
 
 class VehicleTrailEffects():
     _DRAW_ORDER_IDX = 102
@@ -319,9 +225,8 @@ class VehicleTrailEffects():
                 if basicEmissionRates[i] < 0:
                     source = pixie.system(i).action(16)
                     source.MultRate(relEmissionRate)
-                else:
-                    source = pixie.system(i).action(1)
-                    source.rate = relEmissionRate * basicEmissionRates[i]
+                source = pixie.system(i).action(1)
+                source.rate = relEmissionRate * basicEmissionRates[i]
 
             effectInactive = relEmissionRate < 0.0001
             if effectInactive:
@@ -356,7 +261,7 @@ class ExhaustEffectsDescriptor(object):
                 self.tables.append(RangeTable(rpm, effects))
 
         except Exception as exp:
-            raise Exception, 'error reading exhaust effects %s, got %s' % (dataSection.name, exp)
+            raise Exception('error reading exhaust effects %s, got %s' % (dataSection.name, exp))
 
 
 class VehicleExhaustDescriptor(object):
@@ -394,7 +299,7 @@ class ExhaustEffectsCache():
     _EXHAUST_E_PIXE_NAME = 0
     _EXHAUST_E_PIXE_LIST = 1
 
-    def __init__(self, exhaustEffectsDescriptor, drawOrder, uniqueEffects = None):
+    def __init__(self, exhaustEffectsDescriptor, drawOrder, uniqueEffects=None):
         if uniqueEffects is None:
             self.__uniqueEffects = {}
         else:
@@ -409,8 +314,7 @@ class ExhaustEffectsCache():
                 if effect is None:
                     elemDesc = [name, effectsValues]
                     Pixie.createBG(name, partial(self._callbackExhaustPixieLoaded, elemDesc))
-                else:
-                    effectsValues.append(effect)
+                effectsValues.append(effect)
 
             self.__tables.append(RangeTable(rangeTable.keys, effectsValues))
 

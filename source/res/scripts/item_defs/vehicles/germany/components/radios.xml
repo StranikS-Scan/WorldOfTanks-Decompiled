@@ -30,13 +30,12 @@
     <R_4_T>	29	</R_4_T>
     <R_5a>	30	</R_5a>
     <Kdo_Funkstation_SE_407>	31	</Kdo_Funkstation_SE_407>
-    <SEM25_1_fallout>	251	</SEM25_1_fallout>
+    <AN_GRC_8>	32	</AN_GRC_8>
     <FuG2_bot>	248	</FuG2_bot>
     <Die_Signalfahnen_bot>	249	</Die_Signalfahnen_bot>
     <FuG5_T>	252	</FuG5_T>
     <Radio_PzIV>	254	</Radio_PzIV>
     <Radio_Auf_Panther>	256	</Radio_Auf_Panther>
-    <Radio_VK4502P>	255	</Radio_VK4502P>
     <FuG7A_IGR>	60001	</FuG7A_IGR>
     <FuG12_IGR>	60002	</FuG12_IGR>
     <FuG7_IGR>	60003	</FuG7_IGR>
@@ -48,6 +47,7 @@
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
+      <notInShop>	true	</notInShop>
       <weight>	1	</weight>
       <distance>	90	</distance>
       <maxHealth>	90	</maxHealth>
@@ -70,7 +70,7 @@
       <userString>	#germany_vehicles:FuG2	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	180	</price>
+      <price>	0	</price>
       <weight>	40	</weight>
       <distance>	265	</distance>
       <maxHealth>	100	</maxHealth>
@@ -217,18 +217,6 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </FuG10>
-    <Radio_VK4502P>
-      <userString>	#germany_vehicles:Radio_VK4502P	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	43200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	150	</weight>
-      <distance>	710	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </Radio_VK4502P>
     <FuG11>
       <userString>	#germany_vehicles:FuG11	</userString>
       <tags></tags>
@@ -389,6 +377,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </AN-GRC-7>
+    <AN_GRC_8>
+      <userString>	#germany_vehicles:AN_GRC_8	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	105	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN_GRC_8>
     <SEM25_1>
       <userString>	#germany_vehicles:SEM25_1	</userString>
       <tags></tags>
@@ -401,18 +401,6 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </SEM25_1>
-    <SEM25_1_fallout>
-      <userString>	#germany_vehicles:SEM25_1_fallout	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	55000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	50	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	0.1	</repairCost>
-    </SEM25_1_fallout>
     <FuG_F>
       <userString>	#germany_vehicles:FuG_F	</userString>
       <tags></tags>

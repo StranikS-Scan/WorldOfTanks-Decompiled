@@ -1,12 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/qualifiers/_xml.py
 import expressions
 
 def parseCondition(section):
-    if not section.has_key('condition'):
-        return (None, None)
-    else:
-        return expressions.parseExpression(section['condition'].asString)
+    return (None, None) if not section.has_key('condition') else expressions.parseExpression(section['condition'].asString)
 
 
 def parseValue(section):

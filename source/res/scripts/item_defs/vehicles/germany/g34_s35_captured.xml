@@ -78,8 +78,9 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G34_S35_captured/S35_captured_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	1.42 0.985 0.000000 0.000000	</tiling>
+      <tiling>	2.26 0.91 0.000000 0.000000	</tiling>
     </camouflage>
   </hull>
   <chassis>
@@ -404,6 +405,9 @@
           <hitTester>
             <collisionModel>	vehicles/german/G34_S35_captured/collision/Gun_01.model	</collisionModel>
           </hitTester>
+          <camouflage>
+            <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
         </_47mm_SA35_L34>
       </guns>
       <models>
@@ -437,7 +441,7 @@
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
-        <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
+        <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
       </camouflage>
     </Somuaturm>
   </turrets0>

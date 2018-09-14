@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/PlaySound.py
 from FX.Event import Event
 from FX.Event import TRANSFORM_DEPENDENT_EVENT
@@ -18,7 +18,7 @@ class PlaySound(Event):
         self.attachToActor = False
         return
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """
         This method loads the PlaySound event via an XML data section. It
         reads the sound tag name from the section name.  It also looks for an
@@ -55,10 +55,7 @@ class PlaySound(Event):
                         ERROR_MSG('error playing sound', self, actor, source, tag)
                         traceback.print_exc()
 
-        if sound:
-            return sound.duration
-        else:
-            return 0.0
+        return sound.duration if sound else 0.0
 
     def eventTiming(self):
         return TRANSFORM_DEPENDENT_EVENT

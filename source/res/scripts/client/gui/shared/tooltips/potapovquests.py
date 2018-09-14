@@ -1,8 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/potapovquests.py
 import BigWorld
 from helpers import i18n
 from gui import makeHtmlString
+from gui.LobbyContext import g_lobbyContext
 from gui.server_events import g_eventsCache
 from gui.shared.tooltips import ToolTipDataField, ToolTipData, TOOLTIP_TYPE, ToolTipMethodField, formatters
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -159,7 +160,32 @@ class PrivateQuestsChainStatusField(ToolTipDataField):
          'level': level}
 
 
-class PrivateQuestsChainTooltipData(ToolTipData):
+class PotapovQuestsData(ToolTipData):
+
+    def buildToolTip(self, *args, **kwargs):
+        if self._areQuestsEnabled():
+            return super(PotapovQuestsData, self).buildToolTip(*args, **kwargs)
+        else:
+            return None
+            return None
+
+    def _areQuestsEnabled(self):
+        pass
+
+
+class RegularQuestsData(PotapovQuestsData):
+
+    def _areQuestsEnabled(self):
+        return g_lobbyContext.getServerSettings().isRegularQuestEnabled()
+
+
+class FalloutQuestsData(PotapovQuestsData):
+
+    def _areQuestsEnabled(self):
+        return g_lobbyContext.getServerSettings().isFalloutQuestEnabled()
+
+
+class PrivateQuestsChainTooltipData(RegularQuestsData):
 
     def __init__(self, context):
         super(PrivateQuestsChainTooltipData, self).__init__(context, TOOLTIP_TYPE.PRIVATE_QUESTS)
@@ -169,7 +195,7 @@ class PrivateQuestsChainTooltipData(ToolTipData):
          PrivateQuestsChainStatusField(self, 'status'))
 
 
-class PrivateQuestsTileTooltipData(ToolTipData):
+class PrivateQuestsTileTooltipData(RegularQuestsData):
 
     def __init__(self, context):
         super(PrivateQuestsTileTooltipData, self).__init__(context, TOOLTIP_TYPE.PRIVATE_QUESTS)
@@ -180,7 +206,7 @@ class PrivateQuestsTileTooltipData(ToolTipData):
          PrivateQuestsTileStatusField(self, 'status'))
 
 
-class PrivateQuestsFalloutTileTooltipData(ToolTipData):
+class PrivateQuestsFalloutTileTooltipData(FalloutQuestsData):
 
     def __init__(self, context):
         super(PrivateQuestsFalloutTileTooltipData, self).__init__(context, TOOLTIP_TYPE.PRIVATE_QUESTS)
@@ -192,7 +218,7 @@ class PrivateQuestsFalloutTileTooltipData(ToolTipData):
 
 class SeasonAwardTooltipData(BlocksTooltipData):
 
-    def __init__(self, context, title, image, imgPadding = None):
+    def __init__(self, context, title, image, imgPadding=None):
         super(SeasonAwardTooltipData, self).__init__(context, TOOLTIP_TYPE.PRIVATE_QUESTS)
         self._setContentMargin(top=16, bottom=23)
         self._setWidth(340)

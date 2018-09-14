@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bw_site.py
 DEFAULT_ENCODING = 'utf-8'
 import BWLogging
@@ -51,30 +51,33 @@ def setDefaultEncoding():
 
 import os
 import traceback
+import ResMgr
 
-def makepath(*paths):
-    dir = os.path.join(*paths)
-    try:
-        dir = os.path.abspath(dir)
-    except OSError:
-        pass
+def resMgrListDir(path, fnpat=None):
+    """ResMgr stacked virtual file system directory listing. This is the
+    union of the set of all files that exist in the matching path at
+    each level of the stack.
+    
+    Optional shell style (not regex) file name filter pattern may be
+    provided.
+    
+    If the path does NOT exist in any layer of the stacked vfs return
+    None.
+    """
+    import fnmatch
+    dir = ResMgr.openSection(path)
+    if not dir:
+        return dir
+    if not fnpat:
+        return dir.keys()
+    return [ n for n in dir.keys() if fnmatch.fnmatch(n, fnpat) ]
 
-    return (dir, os.path.normcase(dir))
 
-
-def removeduppaths():
-    """ Remove duplicate entries from sys.path along with making them
-    absolute"""
-    L = []
-    known_paths = set()
-    for dir in sys.path:
-        dir, dircase = makepath(dir)
-        if dircase not in known_paths:
-            L.append(dir)
-            known_paths.add(dircase)
-
-    sys.path[:] = L
-    return known_paths
+def resMgrDirExists(path):
+    """Predicate returns true if a data section (treated as a virtual dir)
+    exists for the given path.
+    """
+    return ResMgr.openSection(path) != None
 
 
 def getsitepackages():
@@ -98,16 +101,7 @@ def getsitepackages():
 
 def _init_pathinfo():
     """Return a set containing all existing directory entries from sys.path"""
-    d = set()
-    for dir in sys.path:
-        try:
-            if os.path.isdir(dir):
-                dir, dircase = makepath(dir)
-                d.add(dircase)
-        except TypeError:
-            continue
-
-    return d
+    return set(sys.path)
 
 
 def addpackage(sitedir, name, known_paths):
@@ -123,7 +117,8 @@ def addpackage(sitedir, name, known_paths):
     fullname = os.path.join(sitedir, name)
     try:
         f = open(fullname, 'rU')
-    except IOError:
+    except IOError as e:
+        print >> sys.stderr, 'ioerror', e, fullname
         return
 
     with f:
@@ -135,10 +130,10 @@ def addpackage(sitedir, name, known_paths):
                     exec line
                     continue
                 line = line.rstrip()
-                dir, dircase = makepath(sitedir, line)
-                if dircase not in known_paths and os.path.exists(dir):
+                dir = os.path.join(sitedir, line)
+                if dir not in known_paths and resMgrDirExists(dir):
                     sys.path.append(dir)
-                    known_paths.add(dircase)
+                    known_paths.add(dir)
             except Exception as err:
                 print >> sys.stderr, 'Error processing line {:d} of {}:\n'.format(n + 1, fullname)
                 for record in traceback.format_exception(*sys.exc_info()):
@@ -153,7 +148,7 @@ def addpackage(sitedir, name, known_paths):
     return known_paths
 
 
-def addsitedir(sitedir, known_paths = None):
+def addsitedir(sitedir, known_paths=None):
     """Add 'sitedir' argument to sys.path if missing and handle .pth files in
     'sitedir'"""
     if known_paths is None:
@@ -161,35 +156,31 @@ def addsitedir(sitedir, known_paths = None):
         reset = 1
     else:
         reset = 0
-    sitedir, sitedircase = makepath(sitedir)
-    if sitedircase not in known_paths:
+    if sitedir not in known_paths:
         sys.path.append(sitedir)
-    try:
-        names = os.listdir(sitedir)
-    except os.error:
+    names = resMgrListDir(sitedir, '*.pth')
+    if names == None:
         return
+    else:
+        for name in sorted(names):
+            addpackage(sitedir, name, known_paths)
 
-    dotpth = os.extsep + 'pth'
-    names = [ name for name in names if name.endswith(dotpth) ]
-    for name in sorted(names):
-        addpackage(sitedir, name, known_paths)
-
-    if reset:
-        known_paths = None
-    return known_paths
+        if reset:
+            known_paths = None
+        return known_paths
 
 
 def addsitepackages(known_paths):
     """Add site-packages (and possibly site-python) to sys.path"""
     for sitedir in getsitepackages():
-        if os.path.isdir(sitedir):
+        if resMgrDirExists(sitedir):
             addsitedir(sitedir, known_paths)
 
     return known_paths
 
 
-def setUpPaths():
-    known_paths = removeduppaths()
+def setupPaths():
+    known_paths = set(sys.path)
     known_paths = addsitepackages(known_paths)
 
 
@@ -197,7 +188,7 @@ def main():
     sethelper()
     setDefaultEncoding()
     if BigWorld.component not in ('client', 'bot'):
-        setUpPaths()
+        setupPaths()
     import bwpydevd
     bwpydevd.startDebug(isStartUp=True)
 

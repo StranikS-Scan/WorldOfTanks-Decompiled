@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/ToolTip.py
 import BigWorld
 import GUI
@@ -10,7 +10,7 @@ from Window import Window
 
 class ToolTipInfo(object):
 
-    def __init__(self, component = None, templateName = None, infoDictionary = {}, infoArea = None, delayType = None, placement = None):
+    def __init__(self, component=None, templateName=None, infoDictionary={}, infoArea=None, delayType=None, placement=None):
         if templateName:
             self.templateName = templateName
             self.infoDictionary = infoDictionary
@@ -101,8 +101,7 @@ class ToolTip(Window):
 
             if isinstance(component, GUI.Text):
                 component.text = value
-            else:
-                component.textureName = value
+            component.textureName = value
 
         self.doLayout(None)
         return

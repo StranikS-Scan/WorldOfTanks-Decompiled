@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/storage/ChannelsStorage.py
 import types
 from debug_utils import LOG_ERROR
@@ -37,10 +37,7 @@ class ChannelsStorage(SimpleCachedStorage):
 
     def getChannelByCriteria(self, criteria):
         channels = self.getChannelsByCriteria(criteria)
-        if len(channels):
-            return channels[0]
-        else:
-            return None
+        return channels[0] if len(channels) else None
 
     def addChannel(self, channel):
         result = True
@@ -52,7 +49,7 @@ class ChannelsStorage(SimpleCachedStorage):
             result = False
         return result
 
-    def removeChannel(self, channel, clear = True):
+    def removeChannel(self, channel, clear=True):
         result = True
         if channel in self.__channels:
             index = self.__channels.index(channel)
@@ -69,7 +66,7 @@ class ChannelsStorage(SimpleCachedStorage):
         for channel in self.__channels:
             state = channel.getPersistentState()
             if state:
-                data.append((channel.getProtoType(), channel.getID(), state))
+                data.append((channel.getProtoType(), str(channel.getID()), state))
 
         return data[-_CHANNELS_MAX_COUNT:]
 
@@ -80,7 +77,7 @@ class ChannelsStorage(SimpleCachedStorage):
 
             def stateGenerator(requiredType):
                 for item in data:
-                    if type(item) is not types.TupleType:
+                    if not isinstance(item, types.TupleType):
                         continue
                     if len(item) != 3:
                         continue

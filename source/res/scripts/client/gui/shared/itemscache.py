@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/ItemsCache.py
 from Event import Event
 from adisp import async
@@ -41,7 +41,7 @@ class _ItemsCache(object):
         return self.__items
 
     @async
-    def update(self, updateReason, diff = None, callback = None):
+    def update(self, updateReason, diff=None, callback=None):
         if diff is None:
             self.__invalidateFullData(updateReason, callback)
         else:
@@ -59,7 +59,7 @@ class _ItemsCache(object):
     def _onCenterIsLongDisconnected(self, isLongDisconnected):
         self.items.dossiers.onCenterIsLongDisconnected(isLongDisconnected)
 
-    def __invalidateData(self, updateReason, diff, callback = lambda *args: None):
+    def __invalidateData(self, updateReason, diff, callback=lambda *args: None):
         self.__waitForSync = True
         self.onSyncStarted()
         if updateReason != CACHE_SYNC_REASON.DOSSIER_RESYNC:
@@ -74,7 +74,7 @@ class _ItemsCache(object):
 
         self.__items.request()(cbWrapper)
 
-    def __invalidateFullData(self, updateReason, callback = lambda *args: None):
+    def __invalidateFullData(self, updateReason, callback=lambda *args: None):
         self.__waitForSync = True
         self.onSyncStarted()
 

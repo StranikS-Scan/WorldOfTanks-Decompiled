@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationsCounter.py
 from gui.prb_control.prb_helpers import prbInvitesProperty
 from messenger.m_constants import PROTO_TYPE

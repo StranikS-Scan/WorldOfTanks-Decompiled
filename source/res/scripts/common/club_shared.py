@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/club_shared.py
 from itertools import chain
 SUBSCRIPTION_EXPIRY_TIME = 300
@@ -10,7 +10,7 @@ class CLUB_SUBSCRIPTION_TYPE:
     UNIT = 4
 
 
-def _makeID(start = None, range = None):
+def _makeID(start=None, range=None):
     global _g_id
     id = _g_id = _g_id + 1 if start is None else start
     if range is not None:
@@ -192,10 +192,8 @@ class ClubRolesHelper(object):
         return CLUB_ROLE.PRIVATE
 
     @staticmethod
-    def assignOwner(mask = None):
-        if mask:
-            return mask | CLUB_ROLE.DEFAULT_OWNER
-        return CLUB_ROLE.DEFAULT_OWNER
+    def assignOwner(mask=None):
+        return mask | CLUB_ROLE.DEFAULT_OWNER if mask else CLUB_ROLE.DEFAULT_OWNER
 
 
 class ClubStateHelper(object):

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/AOGAS.py
 import Event
 import BigWorld
@@ -77,7 +77,7 @@ class AOGASController(Controller):
         LOG_DEBUG('disableNotifyAccount')
         self.__isNotifyAccount = False
 
-    def __notifyAccount(self, message, collect = False):
+    def __notifyAccount(self, message, collect=False):
         if self.__isNotifyAccount:
             self.onNotifyAccount(message)
         elif collect:

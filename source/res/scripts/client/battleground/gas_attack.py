@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/gas_attack.py
 from collections import namedtuple
 import math
@@ -17,36 +17,46 @@ from helpers import EffectsList
 from helpers.CallbackDelayer import CallbackDelayer
 from GasAttackSettings import GasAttackSettings, GasAttackState
 import BattlegroundElements
+import WWISE
 _ENABLE_DEBUG_LOG = constants.IS_DEVELOPMENT
 _ENABLE_DEBUG_DRAW = constants.IS_DEVELOPMENT and False
 
-class GasAttackMapSettings(namedtuple('GasAttackMapSettings', ('cloudModel', 'cloudClimbTime', 'cloudStartHeight', 'cloudEndHeight', 'cameraProximityDist', 'windSpeed', 'windGustiness', 'mapActivities', 'centerFogSettings', 'edgeFogSettings', 'soundSettings'))):
+class GasAttackMapSettings(namedtuple('GasAttackMapSettings', ('cloudModel', 'cloudClimbTime', 'cloudStartHeight', 'cloudEndHeight', 'cameraProximityDist', 'windSpeed', 'windGustiness', 'mapActivities', 'vehicleGAEffect', 'cameraGAEffect', 'edgeToCenterAngle', 'edgeToCenterAngleDelta', 'edgeToCenterDistance', 'centerSunIntensityDef', 'centerSunIntensityFwd', 'edgeSunIntensityDef', 'edgeSunIntensityFwd', 'shimmerSettings', 'centerFogSettings', 'edgeFogSettings', 'edgeToCenterFogSettings', 'soundSettings'))):
 
     @staticmethod
     def fromSection(dataSection):
         assert isinstance(dataSection, ResMgr.DataSection)
         it = iter(GasAttackMapSettings._fields)
-        return GasAttackMapSettings(dataSection.readString(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readVector2(next(it)), dataSection.readFloat(next(it)), tuple(dataSection.readString(next(it)).split()), dataSection[next(it)], dataSection[next(it)], dataSection[next(it)])
+        return GasAttackMapSettings(dataSection.readString(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readVector2(next(it)), dataSection.readFloat(next(it)), tuple(dataSection.readString(next(it)).split()), EffectsList.effectsFromSection(dataSection[next(it)]), EffectsList.effectsFromSection(dataSection[next(it)]), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection[next(it)], dataSection[next(it)], dataSection[next(it)], dataSection[next(it)], dataSection[next(it)])
 
 
 def _getSoundSettings():
     soundSettings = ResMgr.DataSection()
-    soundSettings.createSectionFromString('\n\t<soundSettings>\n\t\t<wwalarm>fallout_gaz_alarm</wwalarm>\n\t\t<alarm>/GUI/fallout/fallout_gaz_alarm</alarm>\n\t</soundSettings>\n')
+    soundSettings.createSectionFromString('\n        <soundSettings>\n            <wwalarm>fallout_gaz_alarm</wwalarm>\n            <alarm>/GUI/fallout/fallout_gaz_alarma</alarm>\n            <gascloud_close> sauron_burn_close </gascloud_close>\n            <gascloud_far> sauron_burn_far </gascloud_far>\n            <gascloud_inside> sauron_inside_burn </gascloud_inside>\n        </soundSettings>\n        ')
     return soundSettings
+
+
+def _getVehicleEffectsSettings():
+    effectsSettins = ResMgr.DataSection()
+    effectsSettins.createSectionFromString('\n        <vehicleGAEffect>\n            <stages>\n                <fire>\t1.0\t</fire>\n                <noEmission> 4.0 </noEmission>\n            </stages>\n            <effects>\n                <pixie>\n                    <startKey>\tfire </startKey>\n                    <file>\tparticles/Tank/destruction/fire_storm_destruction.xml </file>\n                </pixie>\n                <stopEmission>\n                    <startKey> noEmission </startKey>\n                </stopEmission>\n            </effects>\n        </vehicleGAEffect>\n        ')
+
+
+def _getCameraEffectsSettings():
+    effectsSettings = ResMgr.DataSection()
+    effectsSettings.createSectionFromString('\n        <cameraGAEffect>\n            <stages>\n                <fire>\t1.0\t</fire>\n                <noEmission> 4.0 </noEmission>\n            </stages>\n            <effects>\n                <pixie>\n                    <startKey>\tfire </startKey>\n                    <file>\tparticles/Environment/weather/fire_storm.xml </file>\n                </pixie>\n                <stopEmission>\n                    <startKey> noEmission </startKey>\n                </stopEmission>\n            </effects>\n        </cameraGAEffect>\n        ')
 
 
 def _getDefaultMapSettings():
     edgeFogSettings = ResMgr.DataSection()
-    edgeFogSettings.createSectionFromString('\n<Fog>\n\t<version>\t1.000000\t</version>\n\t<innerBB>\t-0.000000 -0.000000 0.000000 200.000000\t</innerBB>\n\t<outerBB>\t-200.000000 -200.000000 200.000000 400.000000\t</outerBB>\n\t<deferred>\n\t\t<heightFog>\ttrue\t</heightFog>\n\t\t<nearLow>\t0.000000\t</nearLow>\n\t\t<farLow>\t100.000000\t</farLow>\n\t\t<nearHigh>\t10.000000\t</nearHigh>\n\t\t<farHigh>\t100.000000\t</farHigh>\n\t\t<altitudeLow>\t-6.000000\t</altitudeLow>\n\t\t<altitudeMid>\t10.000000\t</altitudeMid>\n\t\t<altitudeHigh>\t100.000000\t</altitudeHigh>\n\t\t<skyAltitudeLow>\t-10.000000\t</skyAltitudeLow>\n\t\t<skyAltitudeMid>\t10.000000\t</skyAltitudeMid>\n\t\t<skyAltitudeHigh>\t1500.000000\t</skyAltitudeHigh>\n\t\t<exponent>\t0.650000\t</exponent>\n\t\t<sunAngle>\t35.000000\t</sunAngle>\n\t\t<sunExponent>\t0.500000\t</sunExponent>\n\t\t<colorLow>\t0.991500 1.000000 0.490000 0.400000\t</colorLow>\n\t\t<colorHigh>\t0.991501 1.000000 0.490000 0.300000\t</colorHigh>\n\t\t<colorSunLow>\t0.991500 1.000000 0.490000 0.500000\t</colorSunLow>\n\t\t<colorSunHigh>\t0.991500 1.000000 0.490000 0.450000\t</colorSunHigh>\n\t\t<useEdgeFog>\ttrue\t</useEdgeFog>\n\t</deferred>\n\t<forward>\n\t\t<heightFog>\ttrue\t</heightFog>\n\t\t<nearLow>\t0.000000\t</nearLow>\n\t\t<farLow>\t100.000000\t</farLow>\n\t\t<nearHigh>\t10.000000\t</nearHigh>\n\t\t<farHigh>\t100.000000\t</farHigh>\n\t\t<altitudeLow>\t-18.000000\t</altitudeLow>\n\t\t<altitudeMid>\t9.000000\t</altitudeMid>\n\t\t<altitudeHigh>\t200.000000\t</altitudeHigh>\n\t\t<skyAltitudeLow>\t0.000000\t</skyAltitudeLow>\n\t\t<skyAltitudeMid>\t10.000000\t</skyAltitudeMid>\n\t\t<skyAltitudeHigh>\t1300.000000\t</skyAltitudeHigh>\n\t\t<colorLow>\t0.684355 0.694268 0.552637 0.000000\t</colorLow>\n\t\t<colorHigh>\t0.684363 0.694268 0.552761 0.000000\t</colorHigh>\n\t\t<useEdgeFog>\ttrue\t</useEdgeFog>\n\t</forward>\n\t<enable>\ttrue\t</enable>\n</Fog>\n')
-    return GasAttackMapSettings(cloudModel='particles/mesh_particles/funnel_death/gas_ring.model', cloudClimbTime=5, cloudStartHeight=0, cloudEndHeight=150, cameraProximityDist=30, windSpeed=Math.Vector2(50, 50), windGustiness=50, mapActivities=(), centerFogSettings=edgeFogSettings, edgeFogSettings=edgeFogSettings, soundSettings=_getSoundSettings())
+    edgeFogSettings.createSectionFromString('\n        <Fog>\n            <version>\t1.000000\t</version>\n            <innerBB>\t-0.000000 -0.000000 0.000000 200.000000\t</innerBB>\n            <outerBB>\t-200.000000 -200.000000 200.000000 400.000000\t</outerBB>\n            <deferred>\n                <heightFog>\ttrue\t</heightFog>\n                <nearLow>\t0.000000\t</nearLow>\n                <farLow>\t100.000000\t</farLow>\n                <nearHigh>\t10.000000\t</nearHigh>\n                <farHigh>\t100.000000\t</farHigh>\n                <altitudeLow>\t-6.000000\t</altitudeLow>\n                <altitudeMid>\t10.000000\t</altitudeMid>\n                <altitudeHigh>\t100.000000\t</altitudeHigh>\n                <skyAltitudeLow>\t-10.000000\t</skyAltitudeLow>\n                <skyAltitudeMid>\t10.000000\t</skyAltitudeMid>\n                <skyAltitudeHigh>\t1500.000000\t</skyAltitudeHigh>\n                <exponent>\t0.650000\t</exponent>\n                <sunAngle>\t35.000000\t</sunAngle>\n                <sunExponent>\t0.500000\t</sunExponent>\n                <colorLow>\t0.991500 1.000000 0.490000 0.400000\t</colorLow>\n                <colorHigh>\t0.991501 1.000000 0.490000 0.300000\t</colorHigh>\n                <colorSunLow>\t0.991500 1.000000 0.490000 0.500000\t</colorSunLow>\n                <colorSunHigh>\t0.991500 1.000000 0.490000 0.450000\t</colorSunHigh>\n                <useEdgeFog>\ttrue\t</useEdgeFog>\n            </deferred>\n            <forward>\n                <heightFog>\ttrue\t</heightFog>\n                <nearLow>\t0.000000\t</nearLow>\n                <farLow>\t100.000000\t</farLow>\n                <nearHigh>\t10.000000\t</nearHigh>\n                <farHigh>\t100.000000\t</farHigh>\n                <altitudeLow>\t-18.000000\t</altitudeLow>\n                <altitudeMid>\t9.000000\t</altitudeMid>\n                <altitudeHigh>\t200.000000\t</altitudeHigh>\n                <skyAltitudeLow>\t0.000000\t</skyAltitudeLow>\n                <skyAltitudeMid>\t10.000000\t</skyAltitudeMid>\n                <skyAltitudeHigh>\t1300.000000\t</skyAltitudeHigh>\n                <colorLow>\t0.684355 0.694268 0.552637 0.000000\t</colorLow>\n                <colorHigh>\t0.684363 0.694268 0.552761 0.000000\t</colorHigh>\n                <useEdgeFog>\ttrue\t</useEdgeFog>\n            </forward>\n            <enable>\ttrue\t</enable>\n        </Fog>\n        ')
+    shimmerSettings = ResMgr.DataSection()
+    shimmerSettings.createSectionFromString('\n        <shimmerSettings>\n            <windDir> 0.500 1.000 0.5 5.0 </windDir>\n            <waveSpeed> 0.000 0.010 2.0 1.0 </waveSpeed>\n            <spreadFreq> 0.005 0.005 6.0 6.0 </spreadFreq>\n            <displacement> system/maps/post_processing/distortion_3D.dds </displacement>\n        </shimmerSettings>\n        ')
+    return GasAttackMapSettings(cloudModel='particles/mesh_particles/funnel_death/gas_ring.model', cloudClimbTime=5, cloudStartHeight=0, cloudEndHeight=150, cameraProximityDist=30, windSpeed=Math.Vector2(50, 50), windGustiness=50, mapActivities=(), vehicleGAEffect=_getVehicleEffectsSettings(), cameraGAEffect=_getCameraEffectsSettings(), centerFogSettings=edgeFogSettings, edgeFogSettings=edgeFogSettings, edgeToCenterFogSettings=edgeFogSettings, shimmerSettings=shimmerSettings, edgeToCenterAngle=0.392699082, edgeToCenterAngleDelta=0.261799388, edgeToCenterDistance=400.0, centerSunIntensityDef=1.0, centerSunIntensityFwd=1.0, edgeSunIntensityDef=0.0, edgeSunIntensityFwd=0.0, soundSettings=_getSoundSettings())
 
 
 def _getDefaultScenario():
     settings = BigWorld.player().arena.arenaType.gasAttackSettings
-    if settings is not None:
-        return (BigWorld.serverTime() + 2, settings)
-    else:
-        return (BigWorld.serverTime() + 2, GasAttackSettings(attackLength=100, preparationPeriod=5, position=Math.Vector3(BigWorld.camera().position.x, 0, BigWorld.camera().position.z), startRadius=300, endRadius=100, compressionTime=10))
+    return (BigWorld.serverTime() + 2, settings) if settings is not None else (BigWorld.serverTime() + 2, GasAttackSettings(attackLength=100, preparationPeriod=5, position=Math.Vector3(BigWorld.camera().position.x, 0, BigWorld.camera().position.z), startRadius=300, endRadius=100, compressionTime=10))
 
 
 class GasCloud(object):
@@ -65,12 +75,15 @@ class GasCloud(object):
     model = property(lambda self: self.__model, __setModel)
     cloudControl = property(lambda self: self.__cloud)
 
-    def __init__(self, mapSettings = None, startTime = None, gasAttackSettings = None, cloudModel = None):
+    def __init__(self, mapSettings=None, startTime=None, gasAttackSettings=None, cloudModel=None):
         if mapSettings is None:
             mapSettings = _getDefaultMapSettings()
         if gasAttackSettings is None or startTime is None:
             startTime, gasAttackSettings = _getDefaultScenario()
         assert isinstance(mapSettings, GasAttackMapSettings)
+        soundSettings = mapSettings.soundSettings
+        if soundSettings is None:
+            soundSettings = _getSoundSettings()['soundSettings']
         gasCloudSettings = (gasAttackSettings.position,
          startTime,
          mapSettings.cameraProximityDist,
@@ -81,8 +94,18 @@ class GasCloud(object):
          mapSettings.cloudStartHeight,
          mapSettings.cloudEndHeight,
          math.radians(36.45),
+         mapSettings.edgeToCenterAngle,
+         mapSettings.edgeToCenterAngleDelta,
+         mapSettings.edgeToCenterDistance,
+         mapSettings.centerSunIntensityDef,
+         mapSettings.centerSunIntensityFwd,
+         mapSettings.edgeSunIntensityDef,
+         mapSettings.edgeSunIntensityFwd,
+         mapSettings.shimmerSettings,
          mapSettings.centerFogSettings,
-         mapSettings.edgeFogSettings)
+         mapSettings.edgeFogSettings,
+         mapSettings.edgeToCenterFogSettings,
+         soundSettings)
         self.__cloud = BattlegroundElements.GasCloud(gasCloudSettings)
         self.__cloud.start()
         self.__model = None
@@ -92,6 +115,7 @@ class GasCloud(object):
         weather.windGustiness(mapSettings.windGustiness)
         self.__cloud.setProximityCallback(self.__onProximity)
         self.__started = False
+        self.__gasAttackEffects = GasAttackEffects(mapSettings.vehicleGAEffect, mapSettings.cameraGAEffect, gasAttackSettings.position)
         if _ENABLE_DEBUG_DRAW:
             import Flock
             d = Flock.DebugGizmo(BigWorld.player().spaceID, 'helpers/models/unit_cube.model')
@@ -103,13 +127,19 @@ class GasCloud(object):
 
     def destroy(self):
         BigWorld.player().inputHandler.onPostmortemVehicleChanged -= self.__onPostmortemVehicleChanged
+        self.__gasAttackEffects.destroy()
+        self.__gasAttackEffects = None
         self.__cloud = None
         if self.__model is not None:
             BigWorld.delModel(self.__model)
         return
 
     def __onProximity(self, entered):
-        pass
+        if entered:
+            self.__gasAttackEffects.play()
+        else:
+            self.__gasAttackEffects.stop()
+        gasAttackManager().soundManager().playInsideSound(entered)
 
     def __onPostmortemVehicleChanged(self, vehicleID):
         self.__cloud.enableEdgeFogEffects = BigWorld.player().vehicle is not None
@@ -119,24 +149,81 @@ class GasCloud(object):
 class GasSoundManager(object):
 
     def __init__(self, settings):
-        import FMOD
         import SoundGroups
         if settings is None:
             settings = _getSoundSettings()['soundSettings']
-        if FMOD.enabled:
-            alarmSnd = settings['alarm'].asString
-        else:
-            alarmSnd = settings['wwalarm'].asString
+        alarmSnd = settings['wwalarm'].asString
         self.__gazAlarm = SoundGroups.g_instance.getSound2D(alarmSnd)
+        self.__gasInside = SoundGroups.g_instance.getSound2D(settings['gascloud_inside'].asString)
         return
 
     def __del__(self):
         self.__gazAlarm.stop()
         self.__gazAlarm = None
+        self.__gasInside.stop()
+        self.__gasInside = None
         return
 
     def playAlarm(self):
         self.__gazAlarm.play()
+
+    def playInsideSound(self, play):
+        if play:
+            self.__gasInside.play()
+        else:
+            self.__gasInside.stop()
+
+
+class GasAttackEffects(object):
+
+    def __init__(self, vehicleEffect, cameraEffect, centerPosition):
+        self.__vehicleTM = Math.WGTranslationOnlyMP()
+        self.__vehicleDirMatrix = BigWorld.DiffDirProvider(self.__vehicleTM, mathUtils.createTranslationMatrix(centerPosition))
+        self.__cameraTM = Math.WGTranslationOnlyMP()
+        self.__cameraDirMatrix = BigWorld.DiffDirProvider(self.__cameraTM, mathUtils.createTranslationMatrix(centerPosition))
+        self.__vehicleFakeModel = BigWorld.Model('')
+        self.__vehicleFakeModel.addMotor(BigWorld.Servo(self.__vehicleDirMatrix))
+        self.__cameraFakeModel = BigWorld.Model('')
+        self.__cameraFakeModel.addMotor(BigWorld.Servo(self.__cameraDirMatrix))
+        self.__vehicleEffects = vehicleEffect
+        self.__vehicleEffectsPlayer = None
+        self.__cameraEffects = cameraEffect
+        self.__cameraEffectsPlayer = None
+        return
+
+    def destroy(self):
+        self.stop()
+
+    def updateVehicleMatrix(self, vehicleMatrix):
+        self.__vehicleTM.source = vehicleMatrix
+
+    def play(self):
+        vehicle = BigWorld.player().getVehicleAttached()
+        if vehicle is not None:
+            self.updateVehicleMatrix(vehicle.matrix)
+        BigWorld.addModel(self.__vehicleFakeModel, BigWorld.player().spaceID)
+        self.__vehicleEffectsPlayer = EffectsList.EffectsListPlayer(self.__vehicleEffects.effectsList, self.__vehicleEffects.keyPoints)
+        self.__vehicleEffectsPlayer.play(self.__vehicleFakeModel, waitForKeyOff=True)
+        camera = BigWorld.camera()
+        if camera is not None:
+            self.__cameraTM.source = camera.invViewMatrix
+        BigWorld.addModel(self.__cameraFakeModel, BigWorld.player().spaceID)
+        self.__cameraEffectsPlayer = EffectsList.EffectsListPlayer(self.__cameraEffects.effectsList, self.__cameraEffects.keyPoints)
+        self.__cameraEffectsPlayer.play(self.__cameraFakeModel, waitForKeyOff=True)
+        return
+
+    def stop(self):
+        if self.__vehicleEffectsPlayer is not None:
+            self.__vehicleEffectsPlayer.stop()
+            self.__vehicleEffectsPlayer = None
+        if self.__vehicleFakeModel in BigWorld.models():
+            BigWorld.delModel(self.__vehicleFakeModel)
+        if self.__cameraEffectsPlayer is not None:
+            self.__cameraEffectsPlayer.stop()
+            self.__cameraEffectsPlayer = None
+        if self.__cameraFakeModel in BigWorld.models():
+            BigWorld.delModel(self.__cameraFakeModel)
+        return
 
 
 class GasAttackManager(CallbackDelayer):
@@ -155,14 +242,11 @@ class GasAttackManager(CallbackDelayer):
     cloudRadius = property(__getCloudRadius)
 
     def __getCloudPosition(self):
-        if self.__gasAttackSettings is None:
-            return Vector3(0, 0, 0)
-        else:
-            return self.__gasAttackSettings.position
+        return Vector3(0, 0, 0) if self.__gasAttackSettings is None else self.__gasAttackSettings.position
 
     cloudPosition = property(__getCloudPosition)
 
-    def __init__(self, mapSettings = None):
+    def __init__(self, mapSettings=None):
         if mapSettings is None:
             mapSettings = _getDefaultMapSettings()
         CallbackDelayer.__init__(self)
@@ -192,7 +276,7 @@ class GasAttackManager(CallbackDelayer):
         self.__state = GasAttackState.DONE
         return
 
-    def launchScenario(self, startTime = None, gasAttackSettings = None):
+    def launchScenario(self, startTime=None, gasAttackSettings=None):
         if self.__gasAttackSettings is not None:
             LOG_DEBUG('Already started gas attack  at %f with settings %s' % (self.__startTime, self.__gasAttackSettings))
             return
@@ -216,7 +300,7 @@ class GasAttackManager(CallbackDelayer):
             self.__soundMgr.playAlarm()
             return
 
-    def __startPreparation(self, alreadyStarted = False):
+    def __startPreparation(self, alreadyStarted=False):
         g_ctfManager.hideAll()
         self.__state = GasAttackState.PREPARE
         attackTime = self.__startTime + self.__gasAttackSettings.preparationPeriod
@@ -236,7 +320,7 @@ class GasAttackManager(CallbackDelayer):
 
         self.onAttackPreparing()
 
-    def __startAttack(self, alreadyStarted = False):
+    def __startAttack(self, alreadyStarted=False):
         curTime = BigWorld.serverTime()
         endTime = self.__startTime + self.__gasAttackSettings.preparationPeriod + self.__gasAttackSettings.compressionTime
         self.delayCallback(endTime - curTime, self.__stopAttack)
@@ -262,6 +346,7 @@ class GasAttackManager(CallbackDelayer):
             values = resources.values()
             if not values:
                 LOG_ERROR('No cloud model found during loading!')
+                return
             self.__cloudModelResource = values[0]
             if self.__cloud is not None:
                 self.__cloud.model = self.__cloudModelResource
@@ -282,7 +367,8 @@ def initAttackManager(arena):
     global _g_instance
     if caps.get(arena.bonusType) & caps.GAS_ATTACK_MECHANICS > 0 and arena.arenaType.gameplayName in ('fallout', 'fallout2', 'fallout3'):
         visual = getattr(arena.arenaType, 'gasAttackVisual', None)
-        assert visual is not None, 'Gas attack visual should be defined for arena bonus type: %d' % arena.bonusType
+        if visual is None:
+            LOG_DEBUG('Gas attack visual should be defined for arena bonus type: %d' % arena.bonusType)
         _g_instance = GasAttackManager(visual)
     return
 

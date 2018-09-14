@@ -99,6 +99,7 @@
         <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G76_Pz_Sfl_IVc/Pz_Sfl_IVc_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_Pz_Sfl_IVc>
@@ -198,6 +199,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.874291 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/german/G76_Pz_Sfl_IVc/collision/Chassis.model	</collisionModel>
@@ -310,6 +313,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.874291 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/german/G76_Pz_Sfl_IVc/collision/Chassis.model	</collisionModel>
@@ -404,7 +409,7 @@
           <unlocks>
             <gun>	_88mm_Flak_41_L74	  <cost>	16500	</cost>
             </gun>
-            <vehicle>	Nashorn	  <cost>	26500	</cost>
+            <vehicle>	G40_Nashorn	  <cost>	26500	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -461,6 +466,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.617 0.000 0.865 0.000 1.000 0.000 0.639 1.000 0.416 0.500 0.000 0.500 0.460 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_07	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_Pz_Sfl_IVc>
     <Turret_2_Pz_Sfl_IVc>
@@ -547,6 +553,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.694 0.000 0.500 0.620 0.182 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.985 0.985 0.000000 0.000000	</tiling>

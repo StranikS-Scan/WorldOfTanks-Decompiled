@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/settings.py
 import time
 from gui.shared import utils, events, g_eventBus
@@ -6,7 +6,7 @@ _LAST_PQ_INTRO_VERSION = 'fallout'
 
 class _PQSettings(utils.SettingRecord):
 
-    def __init__(self, introShown = False, tilesVisited = set(), headerAlert = False):
+    def __init__(self, introShown=False, tilesVisited=set(), headerAlert=False):
         super(_PQSettings, self).__init__(introShown=introShown, tilesVisited=tilesVisited, headerAlert=headerAlert)
 
     def markTileAsVisited(self, tileID):
@@ -15,7 +15,7 @@ class _PQSettings(utils.SettingRecord):
 
 class _QuestSettings(utils.SettingRootRecord):
 
-    def __init__(self, lastVisitTime = -1, visited = set(), naVisited = set(), potapov = None):
+    def __init__(self, lastVisitTime=-1, visited=set(), naVisited=set(), potapov=None):
         super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited, naVisited=naVisited, potapov=_PQSettings(**(potapov or {})))
 
     def updateVisited(self, visitSettingName, eventID):
@@ -47,7 +47,7 @@ def get():
     return _QuestSettings.load()
 
 
-def isNewCommonEvent(svrEvent, settings = None):
+def isNewCommonEvent(svrEvent, settings=None):
     settings = settings or get()
     if svrEvent.isAvailable()[0]:
         setting = 'visited'
@@ -103,7 +103,7 @@ def markPQIntroAsShown():
     _updatePQSettings(introShown=_LAST_PQ_INTRO_VERSION)
 
 
-def isPQTileNew(tileID, pqSettings = None):
+def isPQTileNew(tileID, pqSettings=None):
     pqSettings = pqSettings or get()
     return tileID not in pqSettings.potapov.tilesVisited
 

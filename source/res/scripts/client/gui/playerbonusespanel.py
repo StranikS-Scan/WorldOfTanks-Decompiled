@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/PlayerBonusesPanel.py
 import BigWorld
 from gui import DebugMonitorView
@@ -29,10 +29,7 @@ class PlayerBonusesPanel(object):
         return
 
     def getVisible(self):
-        if self.__monitor is not None:
-            return self.__monitor.getVisible()
-        else:
-            return False
+        return self.__monitor.getVisible() if self.__monitor is not None else False
 
     def setContent(self, content):
         self.__monitor.setContent(content)

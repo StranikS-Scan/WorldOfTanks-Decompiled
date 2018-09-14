@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/ClubSummaryView.py
 import BigWorld
 from gui.Scaleform.daapi.view.lobby.cyberSport.ClubProfileWindow import ClubPage
@@ -101,8 +101,7 @@ class ClubSummaryView(StaticFormationSummaryViewMeta, ClubPage):
 
 def _getLastBattleText(battlesCount, globalStats):
     lastBattleDate = text_styles.main(BigWorld.wg_getShortDateFormat(globalStats.getLastBattleTime()))
-    if battlesCount > 0:
-        return text_styles.standard(_ms(CYBERSPORT.STATICFORMATIONSUMMARYVIEW_LASTBATTLE, date=lastBattleDate))
+    return text_styles.standard(_ms(CYBERSPORT.STATICFORMATIONSUMMARYVIEW_LASTBATTLE, date=lastBattleDate)) if battlesCount > 0 else ''
 
 
 def _getVehiclesList(totalStats):
@@ -176,7 +175,7 @@ def _makeStats(totalStats):
 
 
 def _makeAchievements(dossier):
-    return AchievementsUtils.packAchievementList(dossier.getTotalStats().getSignificantAchievements(), dossier.getDossierType(), dumpDossier(dossier), True, False)
+    return AchievementsUtils.packAchievementList(dossier.getTotalStats().getTopAchievements(), dossier.getDossierType(), dumpDossier(dossier), True, False)
 
 
 def _getMapsList(totalStats):

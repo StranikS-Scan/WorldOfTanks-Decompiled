@@ -1,10 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/Delegator.py
 
 
 class Delegator:
 
-    def __init__(self, delegate = None):
+    def __init__(self, delegate=None):
         self.delegate = delegate
         self.__cache = set()
 

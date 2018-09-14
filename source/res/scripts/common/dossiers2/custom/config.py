@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/config.py
 RECORD_CONFIGS = {'medalKay': (1, 10, 100, 1000),
  'medalCarius': (10, 100, 1000, 10000),

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/app_loader/interfaces.py
 
 
@@ -10,7 +10,7 @@ class IAppFactory(object):
     def hasApp(self, appNS):
         return False
 
-    def getApp(self, appNS = None):
+    def getApp(self, appNS=None):
         return None
 
     def getDefLobbyApp(self):

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/requests/settings.py
 from shared_utils import CONST_CONTAINER
 DEFAULT_COOLDOWN = 1.0

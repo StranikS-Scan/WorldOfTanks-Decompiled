@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/aboutDialog.py
 """About Dialog for IDLE
 
@@ -98,11 +98,11 @@ class AboutDialog(Toplevel):
         text = '\n'.join(printer._Printer__lines)
         textView.view_text(self, title, text)
 
-    def display_file_text(self, title, filename, encoding = None):
+    def display_file_text(self, title, filename, encoding=None):
         fn = os.path.join(os.path.abspath(os.path.dirname(__file__)), filename)
         textView.view_file(self, title, fn, encoding)
 
-    def Ok(self, event = None):
+    def Ok(self, event=None):
         self.destroy()
 
 

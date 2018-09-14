@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/GraphicsResolutions.py
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
@@ -148,13 +148,11 @@ class GraphicsResolutions(object):
 
     @property
     def multisamplingTypeIndex(self):
-        if self.__multisamplingType in self.__multisamplingTypes:
-            return self.__multisamplingTypes.index(self.__multisamplingType)
+        return self.__multisamplingTypes.index(self.__multisamplingType) if self.__multisamplingType in self.__multisamplingTypes else -1
 
     @property
     def customAAModeIndex(self):
-        if self.__customAAMode in self.__customAAModes:
-            return self.__customAAModes.index(self.__customAAMode)
+        return self.__customAAModes.index(self.__customAAMode) if self.__customAAMode in self.__customAAModes else -1
 
     @property
     def videoModesList(self):
@@ -206,15 +204,10 @@ class GraphicsResolutions(object):
         return videoMode[1] >= GraphicsResolutions.MIN_WIDTH and videoMode[2] >= GraphicsResolutions.MIN_HEIGHT and videoMode[3] >= GraphicsResolutions.MIN_COLOR_DEPTH
 
     def getVideoModeByIndex(self, index):
-        if len(self.__videoModes) > index > -1:
-            return self.__videoModes[int(index)][0]
-        else:
-            return None
+        return self.__videoModes[int(index)][0] if len(self.__videoModes) > index > -1 else None
 
     def getWindowSizeByIndex(self, index):
-        if len(self.__windowSizes[self.__curentMonitorIndex]) > index > -1:
-            return self.__windowSizes[self.__curentMonitorIndex][int(index)]
-        return self.__windowSize
+        return self.__windowSizes[self.__curentMonitorIndex][int(index)] if len(self.__windowSizes[self.__curentMonitorIndex]) > index > -1 else self.__windowSize
 
     def getAspectRatioByIndex(self, index):
         if len(self.__aspectRatios) > index > -1:
@@ -224,16 +217,10 @@ class GraphicsResolutions(object):
             return None
 
     def getMultisamplingTypeByIndex(self, index):
-        if len(self.__multisamplingTypes) > index > -1:
-            return self.__multisamplingTypes[int(index)]
-        else:
-            return None
+        return self.__multisamplingTypes[int(index)] if len(self.__multisamplingTypes) > index > -1 else None
 
     def getCustomAAModeByIndex(self, index):
-        if len(self.__customAAModes) > index > -1:
-            return self.__customAAModes[int(index)]
-        else:
-            return None
+        return self.__customAAModes[int(index)] if len(self.__customAAModes) > index > -1 else None
 
     @property
     def gamma(self):

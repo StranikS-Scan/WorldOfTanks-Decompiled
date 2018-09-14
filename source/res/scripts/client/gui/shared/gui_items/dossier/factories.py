@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/factories.py
 import nations
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD
@@ -31,7 +31,7 @@ class _AchieveFactory(object):
     def isValid(self):
         return self._achieveClass.checkIsValid(self._block, self._name, self._dossier)
 
-    def create(self, value = None):
+    def create(self, value=None):
         return self._achieveClass(self._name, self._block, self._dossier, value)
 
     @classmethod
@@ -41,7 +41,7 @@ class _AchieveFactory(object):
 
 class _CustomAchieveFactory(_AchieveFactory):
 
-    def create(self, value = None):
+    def create(self, value=None):
         return self._achieveClass(self._dossier, value)
 
     @classmethod
@@ -54,7 +54,7 @@ class _BlockAchieveFactory(_AchieveFactory):
     def __init__(self, achieveClass, name, block, dossier):
         super(_BlockAchieveFactory, self).__init__(achieveClass, name, block, dossier)
 
-    def create(self, value = None):
+    def create(self, value=None):
         return self._achieveClass(self._name, self._dossier, value)
 
     @classmethod
@@ -64,7 +64,7 @@ class _BlockAchieveFactory(_AchieveFactory):
 
 class _SequenceAchieveFactory(_AchieveFactory):
 
-    def create(self, value = None):
+    def create(self, value=None):
         counts = {}
         achieves = self._dossier.getBlock(self._block)
         for achieveID in set(achieves):
@@ -107,11 +107,11 @@ class _NationAchieveFactory(_AchieveFactory):
     def getNationID(self):
         return self._nationID
 
-    def create(self, value = None):
+    def create(self, value=None):
         return self._achieveClass(self._nationID, self._block, self._dossier, value)
 
     @classmethod
-    def get(cls, achieveClass, nationID = -1):
+    def get(cls, achieveClass, nationID=-1):
         return lambda name, block, dossier: cls(achieveClass, name, nationID, block, dossier)
 
 
@@ -201,13 +201,14 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_a
  (_AB.UNIQUE, 'histBattle6_historyLessons'): _AchieveFactory.get(_abstract_achievements.HistoricalAchievement),
  (_AB.FALLOUT, 'stormLord'): _CustomAchieveFactory.get(_as.StormLordAchievement),
  (_AB.FALLOUT, 'winnerLaurels'): _CustomAchieveFactory.get(_as.WinnerLaurelsAchievement),
+ (_AB.FALLOUT, 'sauronEye'): _CustomAchieveFactory.get(_as.SauronsEyeAchievement),
  WHITE_TIGER_RECORD: _CustomAchieveFactory.get(_as.WhiteTigerAchievement),
  RARE_STORAGE_RECORD: _RareAchievesFactory.get()}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.MechEngineerAchievement, _nID)
 
-def getAchievementFactory(record, dossier = None):
+def getAchievementFactory(record, dossier=None):
     achieveType = getAchieveType(record)
     if record in _ACHIEVEMENTS_BY_NAME:
         factoryMaker = _ACHIEVEMENTS_BY_NAME[record]

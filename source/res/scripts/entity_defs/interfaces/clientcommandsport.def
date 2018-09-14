@@ -59,6 +59,8 @@
       <Arg>	INT16	</Arg>
       <Arg>	STRING	</Arg>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </onCmdResponseExt>
   </ClientMethods>
 </clientcommandsport.def>

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/Tkconstants.py
 NO = FALSE = OFF = 0
 YES = TRUE = ON = 1

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/NotificationPopUpViewerMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -17,29 +17,22 @@ class NotificationPopUpViewerMeta(BaseDAAPIComponent):
         self._printOverrideError('getMessageActualTime')
 
     def as_hasPopUpIndexS(self, typeID, entityID):
-        if self._isDAAPIInited():
-            return self.flashObject.as_hasPopUpIndex(typeID, entityID)
+        return self.flashObject.as_hasPopUpIndex(typeID, entityID) if self._isDAAPIInited() else None
 
     def as_appendMessageS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_appendMessage(data)
+        return self.flashObject.as_appendMessage(data) if self._isDAAPIInited() else None
 
     def as_updateMessageS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateMessage(data)
+        return self.flashObject.as_updateMessage(data) if self._isDAAPIInited() else None
 
     def as_removeMessageS(self, typeID, entityID):
-        if self._isDAAPIInited():
-            return self.flashObject.as_removeMessage(typeID, entityID)
+        return self.flashObject.as_removeMessage(typeID, entityID) if self._isDAAPIInited() else None
 
     def as_removeAllMessagesS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_removeAllMessages()
+        return self.flashObject.as_removeAllMessages() if self._isDAAPIInited() else None
 
     def as_layoutInfoS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_layoutInfo(data)
+        return self.flashObject.as_layoutInfo(data) if self._isDAAPIInited() else None
 
     def as_initInfoS(self, maxMessagessCount, padding):
-        if self._isDAAPIInited():
-            return self.flashObject.as_initInfo(maxMessagessCount, padding)
+        return self.flashObject.as_initInfo(maxMessagessCount, padding) if self._isDAAPIInited() else None

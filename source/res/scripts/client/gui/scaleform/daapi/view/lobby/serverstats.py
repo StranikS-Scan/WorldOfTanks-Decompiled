@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ServerStats.py
 import BigWorld
 import constants
@@ -94,7 +94,7 @@ class ServerStats(ServerStatsMeta, PrbListener):
         if not self.__isGuiUpdateSuppressed:
             self.as_setServersListS(self.__serversList)
 
-    def _updateRoamingCtrl(self, event = None):
+    def _updateRoamingCtrl(self, event=None):
         isRoamingCtrlDisabled = False
         if self.prbDispatcher:
             for func in self.prbDispatcher.getFunctionalCollection().getIterator():
@@ -108,7 +108,7 @@ class ServerStats(ServerStatsMeta, PrbListener):
         if constants.IS_SHOW_SERVER_STATS:
             self.as_setServerStatsS(*game_control.g_instance.serverStats.getFormattedStats())
 
-    def __onCsisUpdate(self, response = None):
+    def __onCsisUpdate(self, response=None):
         self._updateServersList()
 
     def __clearServersList(self):
@@ -116,6 +116,4 @@ class ServerStats(ServerStatsMeta, PrbListener):
             self.__serversList.pop().clear()
 
     def __wrapServerName(self, name):
-        if constants.IS_CHINA:
-            return makeHtmlString('html_templates:lobby/serverStats', 'serverName', {'name': name})
-        return name
+        return makeHtmlString('html_templates:lobby/serverStats', 'serverName', {'name': name}) if constants.IS_CHINA else name

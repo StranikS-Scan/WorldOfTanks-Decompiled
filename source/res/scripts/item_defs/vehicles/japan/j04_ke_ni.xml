@@ -80,6 +80,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/japan/J04_Ke_Ni/Ke_Ni_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.84 0.79 0.000000 0.000000	</tiling>
     </camouflage>
@@ -220,8 +221,8 @@
         <segmentModelRight>	vehicles/japan/J04_Ke_Ni/track/segment.model	</segmentModelRight>
         <left>	vehicles/japan/J04_Ke_Ni/track/left.track	</left>
         <right>	vehicles/japan/J04_Ke_Ni/track/right.track	</right>
-        <segmentLength>	0.078	</segmentLength>
-        <segmentOffset>	0.094	</segmentOffset>
+        <segmentLength>	0.079	</segmentLength>
+        <segmentOffset>	0.032	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -237,9 +238,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
@@ -480,9 +478,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
@@ -848,7 +843,7 @@
       </unlocks>
     </_A6120VDe_S>
     <_Type100_V6_Kakyuu>	shared	  <unlocks>
-        <vehicle>	Ke_Ho	  <cost>	3740	</cost>
+        <vehicle>	J06_Ke_Ho	  <cost>	3740	</cost>
         </vehicle>
       </unlocks>
     </_Type100_V6_Kakyuu>

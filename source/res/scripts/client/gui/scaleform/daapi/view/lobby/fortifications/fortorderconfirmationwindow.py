@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderConfirmationWindow.py
 import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
@@ -81,7 +81,7 @@ class FortOrderConfirmationWindow(FortOrderConfirmationWindowMeta, FortViewHelpe
     def onUpdated(self, isFullUpdate):
         self._prepareAndSendData()
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         if reason == BUILDING_UPDATE_REASON.DELETED:
             order = self.fortCtrl.getFort().getOrder(self.getOrderIDbyUID(self._orderID))
             if order.buildingID == buildingTypeID:

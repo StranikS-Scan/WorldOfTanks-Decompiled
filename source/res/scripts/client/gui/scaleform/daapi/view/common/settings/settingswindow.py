@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsWindow.py
 import functools
 import BigWorld
@@ -19,7 +19,7 @@ from account_helpers.settings_core.options import APPLY_METHOD
 
 class SettingsWindow(SettingsWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
         self.__redefinedKeyModeEnabled = ctx.get('redefinedKeyMode', True)
         self.__initialTabIdx = ctx.get('tabIndex', -1)
@@ -45,13 +45,13 @@ class SettingsWindow(SettingsWindowMeta):
 
         return reformatted_settings
 
-    def __commitSettings(self, settings = None, restartApproved = False, isCloseWnd = False):
+    def __commitSettings(self, settings=None, restartApproved=False, isCloseWnd=False):
         if settings is None:
             settings = {}
         self.__apply(settings, restartApproved, isCloseWnd)
         return
 
-    def __apply(self, settings, restartApproved = False, isCloseWnd = False):
+    def __apply(self, settings, restartApproved=False, isCloseWnd=False):
         LOG_DEBUG('Settings window: apply settings', restartApproved, settings)
         g_settingsCore.isDeviseRecreated = False
         g_settingsCore.isChangesConfirmed = True
@@ -86,7 +86,6 @@ class SettingsWindow(SettingsWindowMeta):
         VibroManager.g_instance.onDisconnect += self.onVibroManagerDisconnect
         g_guiResetters.add(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(self.onRecreateDevice)
-        SoundGroups.g_instance.enableVoiceSounds(True)
 
     def _update(self):
         self.as_setDataS(self.__getSettings())
@@ -94,10 +93,9 @@ class SettingsWindow(SettingsWindowMeta):
         self.as_openTabS(self.__initialTabIdx)
 
     def _dispose(self):
-        if not g_sessionProvider.getCtx().isInBattle:
-            SoundGroups.g_instance.enableVoiceSounds(False)
         g_guiResetters.discard(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(None)
+        self.stopVoicesPreview()
         VibroManager.g_instance.onConnect -= self.onVibroManagerConnect
         VibroManager.g_instance.onDisconnect -= self.onVibroManagerDisconnect
         super(SettingsWindow, self)._dispose()
@@ -183,12 +181,15 @@ class SettingsWindow(SettingsWindowMeta):
             setting.playPreviewSound()
         return
 
-    def isSoundModeValid(self):
+    def stopVoicesPreview(self):
         setting = g_settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
         if setting is not None:
-            return setting.isSoundModeValid()
-        else:
-            return False
+            setting.clearPreviewSound()
+        return
+
+    def isSoundModeValid(self):
+        setting = g_settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
+        return setting.isSoundModeValid() if setting is not None else False
 
     def showWarningDialog(self, dialogID, settings, isCloseWnd):
 
@@ -212,6 +213,4 @@ class SettingsWindow(SettingsWindowMeta):
                 isGraphicsQualitySettings = True
                 break
 
-        if isGraphicsQualitySettings:
-            return self.as_isPresetAppliedS()
-        return True
+        return self.as_isPresetAppliedS() if isGraphicsQualitySettings else True

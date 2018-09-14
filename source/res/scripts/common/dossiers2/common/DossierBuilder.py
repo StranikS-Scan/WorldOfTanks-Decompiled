@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/common/DossierBuilder.py
 import struct
 from DossierDescr import DossierDescr
@@ -14,7 +14,7 @@ class DossierBuilder(object):
         self.__initializer = initializer
         self.__emptyCompDescr = struct.pack(self.__headerFormat, version, *([0] * len(blockBuilders)))
 
-    def build(self, compDescr = ''):
+    def build(self, compDescr=''):
         if compDescr == '':
             dossier = DossierDescr(self.__emptyCompDescr, self.__blockBuilders, self.__headerFormat)
             self.__initializer(dossier)

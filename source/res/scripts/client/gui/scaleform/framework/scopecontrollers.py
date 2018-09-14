@@ -1,6 +1,5 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/ScopeControllers.py
-__author__ = 'd_trofimov'
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ComponentEvent
 from gui.Scaleform.framework.entities.DisposableEntity import DisposableEntity
@@ -20,7 +19,7 @@ class ScopeController(DisposableEntity):
     def _dispose(self):
         self.__mainView = None
         self.__removeAllSubControllers()
-        self.__subControllers = None
+        self.__subControllers = []
         self.__destroyViews()
         self.__views = None
         super(ScopeController, self)._dispose()
@@ -57,8 +56,7 @@ class ScopeController(DisposableEntity):
             if removingScopeController.getCurrentType() == scopeType:
                 self.__removeSubController(removingScopeController)
                 removingScopeController.destroy()
-            else:
-                removingScopeController.removeSubScopeController(scopeType)
+            removingScopeController.removeSubScopeController(scopeType)
 
     def isViewLoading(self, pyView):
         outcome = pyView in self.__loadingViews
@@ -138,8 +136,7 @@ class ScopeController(DisposableEntity):
                 if newController is None:
                     newController = ScopeController(scope)
                 ownController.addSubController(newController)
-            else:
-                raise Exception('could not create a controllers chain!')
+            raise Exception('could not create a controllers chain!')
 
         return newController
 

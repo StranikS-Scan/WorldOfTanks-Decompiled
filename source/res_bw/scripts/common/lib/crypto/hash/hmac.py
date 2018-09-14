@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Hash/HMAC.py
 """HMAC (Hash-based Message Authentication Code) algorithm
 
@@ -51,7 +51,7 @@ class HMAC:
     """Class that implements HMAC"""
     digest_size = None
 
-    def __init__(self, key, msg = None, digestmod = None):
+    def __init__(self, key, msg=None, digestmod=None):
         """Create a new HMAC object.
         
         :Parameters:
@@ -186,7 +186,7 @@ class HMAC:
         self.verify(unhexlify(tobytes(hex_mac_tag)))
 
 
-def new(key, msg = None, digestmod = None):
+def new(key, msg=None, digestmod=None):
     """Create a new HMAC object.
     
     :Parameters:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
 import BigWorld
 from gui.shared import g_itemsCache
@@ -42,10 +42,7 @@ class TankmanCurrentVehicleAttrField(ToolTipAttrField):
 
     def _getItem(self):
         tankman = self._tooltip.item
-        if tankman.isInTank:
-            return g_itemsCache.items.getVehicle(tankman.vehicleInvID)
-        else:
-            return None
+        return g_itemsCache.items.getVehicle(tankman.vehicleInvID) if tankman.isInTank else None
 
 
 class TankmanNativeVehicleAttrField(ToolTipAttrField):

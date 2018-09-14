@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MapActivities.py
 import BigWorld
 import ResMgr
@@ -10,7 +10,7 @@ import SoundGroups
 from constants import ARENA_PERIOD
 from debug_utils import *
 from functools import partial
-import FMOD
+import WWISE
 
 class Timer:
     __timeMethod = None
@@ -93,7 +93,7 @@ class MapActivities(object):
         self.__currActivities = []
         self.__pendingActivities = []
 
-    def generateOfflineActivities(self, spacePath, usePossibility = True):
+    def generateOfflineActivities(self, spacePath, usePossibility=True):
         xmlName = spacePath.split('/')[-1]
         settings = ResMgr.openSection('scripts/arena_defs/' + xmlName + '.xml/mapActivities')
         chooser = random.uniform if usePossibility else (lambda a, b: (a + b) / 2)
@@ -108,8 +108,7 @@ class MapActivities(object):
             possibility = activityXML.readFloat('possibility', 1.0)
             if possibility < chooser(0, 1) and usePossibility:
                 startTimes.append(-1)
-            else:
-                startTimes.append(Timer.getTime() + chooser(timeframe[0], timeframe[1]))
+            startTimes.append(Timer.getTime() + chooser(timeframe[0], timeframe[1]))
 
         self.__generateActivities(settings, startTimes)
         self.__onPeriodicTimer()
@@ -214,8 +213,7 @@ class WarplaneActivity(IMapActivity):
         self.__model = None
         self.__motor = None
         self.__sound = None
-        self.__particles = None
-        self.__particlesNode = None
+        self.__particle = (None, None)
         self.__cbID = None
         self.__startTime = startTime
         self.__fadedIn = False
@@ -302,10 +300,9 @@ class WarplaneActivity(IMapActivity):
         if self.__sound is not None:
             self.__sound.stop()
             self.__sound = None
-        if self.__particles is not None:
-            self.__particlesNode.detach(self.__particles)
-            self.__particlesNode = None
-            self.__particles = None
+        if self.__particle[1] is not None:
+            self.__particle[0].detach(self.__particle[1])
+        self.__particle = (None, None)
         self.__firstLaunch = True
         return
 
@@ -313,10 +310,9 @@ class WarplaneActivity(IMapActivity):
         if self.__sound is not None:
             self.__sound.stop()
             self.__sound = None
-        if self.__particles is not None:
-            self.__particlesNode.detach(self.__particles)
-            self.__particlesNode = None
-            self.__particles = None
+        if self.__particle[1] is not None:
+            self.__particle[0].detach(self.__particle[1])
+        self.__particle = (None, None)
         if self.__model is not None:
             if self.__motor is not None and self.__motor in self.__model.motors:
                 self.__model.delMotor(self.__motor)
@@ -335,12 +331,10 @@ class WarplaneActivity(IMapActivity):
     def __update(self):
         self.__cbID = None
         visibility = self.__motor.warplaneAlpha
+        if visibility > 0.7:
+            self.__loadEffects()
         if visibility == 1.0 and not self.__fadedIn:
             self.__fadedIn = True
-            ds = self.__curve.getChannelProperty(0, 'effectName')
-            effectName = ds.asString if ds is not None else ''
-            if effectName != '':
-                Pixie.createBG(effectName, partial(self.__onParticlesLoaded, effectName))
         elif visibility <= 0.1 and self.__fadedIn or Timer.getTime() > self.__endTime:
             self.pause()
             return
@@ -358,26 +352,34 @@ class WarplaneActivity(IMapActivity):
         else:
             LOG_ERROR('Could not load model %s' % self.__modelName)
 
+    def __loadEffects(self):
+        if self.__particle[0] is None and self.__particle[1] is None:
+            if self.__curve is None:
+                return
+            propValue = self.__curve.getChannelProperty(0, 'effectHardpoint')
+            hardPointName = propValue.asString if propValue is not None else ''
+            if hardPointName == '':
+                return
+            ds = self.__curve.getChannelProperty(0, 'effectName')
+            effectName = ds.asString if ds is not None else ''
+            if effectName != '':
+                modelNode = self.__model.node(hardPointName)
+                Pixie.createBG(effectName, partial(self.__onParticlesLoaded, effectName))
+                self.__particle = (modelNode, None)
+        return
+
     def __onParticlesLoaded(self, effectName, particles):
-        if self.__curve is None:
+        if particles is None:
+            LOG_ERROR("Can't create pixie '%s'." % effectName)
             return
         else:
-            propValue = self.__curve.getChannelProperty(0, 'effectHardpoint')
-            if particles is None:
-                LOG_ERROR("Can't create pixie '%s'." % effectName)
-                return
-            if propValue is None:
-                return
-            hardPointName = propValue.asString
-            if hardPointName != '':
-                self.__particles = particles
-                self.__particlesNode = self.__model.node(hardPointName)
-                self.__particlesNode.attach(self.__particles)
+            if self.__particle[0] is not None:
+                self.__particle[0].attach(particles)
+                self.__particle = (self.__particle[0], particles)
             return
 
     def __playSound(self):
-        if FMOD.enabled:
-            ds = self.__curve.getChannelProperty(0, 'soundName')
+        ds = self.__curve.getChannelProperty(0, 'wwsoundName')
         soundName = ds.asString if ds is not None else ''
         if soundName != '':
             try:
@@ -405,8 +407,7 @@ class ExplosionActivity(IMapActivity):
         self.__position = self.__settings.readVector3('position', (0.0, 0.0, 0.0))
         curveSettings = BigWorld.WGActionCurve(self.__settings)
         self.__soundName = None
-        if FMOD.enabled:
-            self.__soundName = curveSettings.getChannelProperty(0, 'soundName')
+        self.__soundName = curveSettings.getChannelProperty(0, 'wwsoundName')
         if self.__soundName is not None:
             self.__soundName = self.__soundName.asString
         else:
@@ -530,8 +531,7 @@ class ExplosionActivity(IMapActivity):
         if self.__soundName != '':
             try:
                 self.__sound = SoundGroups.g_instance.getSound3D(self.__model.root, self.__soundName)
-                if FMOD.enabled:
-                    self.__sound.setCallback('EVENTFINISHED', self.__endEventCallback)
+                self.__sound.setCallback(self.__endEventCallback)
                 self.__sound.play()
             except:
                 self.__sound = None
@@ -633,10 +633,8 @@ def _createActivity(typeName):
         return WarplaneActivity()
     elif typeName == 'scenario':
         return ScenarioActivity()
-    elif typeName == 'explosion':
-        return ExplosionActivity()
     else:
-        return None
+        return ExplosionActivity() if typeName == 'explosion' else None
 
 
 def startActivity(name):

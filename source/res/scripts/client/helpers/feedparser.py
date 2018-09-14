@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/feedparser.py
 """Universal feed parser
 
@@ -152,7 +152,7 @@ try:
 except ImportError:
     _XML_AVAILABLE = 0
 
-    def _xmlescape(data, entities = {}):
+    def _xmlescape(data, entities={}):
         data = data.replace('&', '&amp;')
         data = data.replace('>', '&gt;')
         data = data.replace('<', '&lt;')
@@ -203,12 +203,9 @@ else:
         def __init__(self):
             self.endbracket = re.compile('([^\'"<>]|"[^"]*"(?=>|/|\\s|\\w+=)|\'[^\']*\'(?=>|/|\\s|\\w+=))*(?=[<>])|.*?(?=[<>])')
 
-        def search(self, target, index = 0):
+        def search(self, target, index=0):
             match = self.endbracket.match(target, index)
-            if match is not None:
-                return EndBracketMatch(match)
-            else:
-                return
+            return EndBracketMatch(match) if match is not None else None
 
 
     class EndBracketMatch():
@@ -350,7 +347,7 @@ class FeedParserDict(dict):
 
     has_key = __contains__
 
-    def get(self, key, default = None):
+    def get(self, key, default=None):
         try:
             return self.__getitem__(key)
         except KeyError:
@@ -412,9 +409,7 @@ def _urljoin(base, uri):
     if not isinstance(uri, unicode):
         uri = uri.decode('utf-8', 'ignore')
     uri = urlparse.urljoin(base, uri)
-    if not isinstance(uri, unicode):
-        return uri.decode('utf-8', 'ignore')
-    return uri
+    return uri.decode('utf-8', 'ignore') if not isinstance(uri, unicode) else uri
 
 
 class _FeedParserMixin():
@@ -510,7 +505,7 @@ class _FeedParserMixin():
      'description'])
     html_types = [u'text/html', u'application/xhtml+xml']
 
-    def __init__(self, baseuri = None, baselang = None, encoding = u'utf-8'):
+    def __init__(self, baseuri=None, baselang=None, encoding=u'utf-8'):
         if not self._matchnamespaces:
             for k, v in self.namespaces.items():
                 self._matchnamespaces[k.lower()] = v
@@ -580,7 +575,7 @@ class _FeedParserMixin():
         for prefix, uri in attrs:
             if prefix.startswith('xmlns:'):
                 self.trackNamespace(prefix[6:], uri)
-            elif prefix == 'xmlns':
+            if prefix == 'xmlns':
                 self.trackNamespace(None, uri)
 
         if self.incontent and not self.contentparams.get('type', u'xml').endswith(u'xml'):
@@ -692,7 +687,7 @@ class _FeedParserMixin():
 
         self.elementstack[-1][2].append(text)
 
-    def handle_data(self, text, escape = 1):
+    def handle_data(self, text, escape=1):
         if not self.elementstack:
             return
         if escape and self.contentparams.get('type') == u'application/xhtml+xml':
@@ -763,7 +758,7 @@ class _FeedParserMixin():
     def push(self, element, expectingText):
         self.elementstack.append([element, expectingText, []])
 
-    def pop(self, element, stripWhitespace = 1):
+    def pop(self, element, stripWhitespace=1):
         if not self.elementstack:
             return
         elif self.elementstack[-1][0] != element:
@@ -784,7 +779,7 @@ class _FeedParserMixin():
                             depth -= 1
                             if depth == 0:
                                 break
-                        elif piece.startswith('<') and not piece.endswith('/>'):
+                        if piece.startswith('<') and not piece.endswith('/>'):
                             depth += 1
                     else:
                         pieces = pieces[1:-1]
@@ -859,8 +854,8 @@ class _FeedParserMixin():
                 output = output.translate(_cp1252)
             if element == 'category':
                 return output
-            elif element == 'title' and -1 < self.title_depth <= self.depth:
-                return output
+            elif element == 'title':
+                return -1 < self.title_depth <= self.depth and output
             if self.inentry and not self.insource:
                 if element == 'content':
                     self.entries[-1].setdefault(element, [])
@@ -921,8 +916,7 @@ class _FeedParserMixin():
             return
         if filter(lambda t: t.lower() not in _HTMLSanitizer.acceptable_elements, re.findall('</?(\\w+)', s)):
             return
-        if filter(lambda e: e not in entitydefs.keys(), re.findall('&(\\w+);', s)):
-            return
+        return None if filter(lambda e: e not in entitydefs.keys(), re.findall('&(\\w+);', s)) else 1
 
     def _mapToStandardPrefix(self, name):
         colonpos = name.find(':')
@@ -943,8 +937,7 @@ class _FeedParserMixin():
             return 0
         if self.contentparams['type'].endswith(u'+xml'):
             return 0
-        if self.contentparams['type'].endswith(u'/xml'):
-            return 0
+        return 0 if self.contentparams['type'].endswith(u'/xml') else 1
 
     def _itsAnHrefDamnIt(self, attrsD):
         href = attrsD.get('url', attrsD.get('uri', attrsD.get('href', None)))
@@ -962,7 +955,7 @@ class _FeedParserMixin():
             attrsD['href'] = href
         return attrsD
 
-    def _save(self, key, value, overwrite = False):
+    def _save(self, key, value, overwrite=False):
         context = self._getContext()
         if overwrite:
             context[key] = value
@@ -1188,7 +1181,7 @@ class _FeedParserMixin():
             context = self.feeddata
         return context
 
-    def _save_author(self, key, value, prefix = 'author'):
+    def _save_author(self, key, value, prefix='author'):
         context = self._getContext()
         context.setdefault(prefix + '_detail', FeedParserDict())
         context[prefix + '_detail'][key] = value
@@ -1201,7 +1194,7 @@ class _FeedParserMixin():
         context.setdefault('contributors', [FeedParserDict()])
         context['contributors'][-1][key] = value
 
-    def _sync_author_detail(self, key = 'author'):
+    def _sync_author_detail(self, key='author'):
         context = self._getContext()
         detail = context.get('%s_detail' % key)
         if detail:
@@ -2111,7 +2104,7 @@ class _MicroformatsParser():
     def toISO8601(self, dt):
         return time.strftime('%Y-%m-%dT%H:%M:%SZ', dt)
 
-    def getPropertyValue(self, elmRoot, sProperty, iPropertyType = 4, bAllowMultiple = 0, bAutoEscape = 0):
+    def getPropertyValue(self, elmRoot, sProperty, iPropertyType=4, bAllowMultiple=0, bAutoEscape=0):
         all = lambda x: 1
         sProperty = sProperty.lower()
         bFound = 0
@@ -2204,12 +2197,11 @@ class _MicroformatsParser():
                 sValue = _parse_date_iso8601(sValue)
             if bAllowMultiple:
                 arValues.append(bAutoEscape and self.vcardEscape(sValue) or sValue)
-            else:
-                return bAutoEscape and self.vcardEscape(sValue) or sValue
+            return bAutoEscape and self.vcardEscape(sValue) or sValue
 
         return arValues
 
-    def findVCards(self, elmRoot, bAgentParsing = 0):
+    def findVCards(self, elmRoot, bAgentParsing=0):
         sVCards = ''
         if not bAgentParsing:
             arCards = self.getPropertyValue(elmRoot, 'vcard', bAllowMultiple=1)
@@ -2247,7 +2239,7 @@ class _MicroformatsParser():
                         sContentType = ';TYPE=' + sContentType.upper()
                     arLines.append(self.vcardFold(sProperty.upper() + sEncoding + sContentType + sValueKey + ':' + sValue))
 
-            def processTypeValue(sProperty, arDefaultType, arForceType = None):
+            def processTypeValue(sProperty, arDefaultType, arForceType=None):
                 arResults = self.getPropertyValue(elmCard, sProperty, bAllowMultiple=1)
                 for elmResult in arResults:
                     arType = self.getPropertyValue(elmResult, 'type', self.STRING, 1, 1)
@@ -2268,10 +2260,9 @@ class _MicroformatsParser():
                     if sAgentValue:
                         arLines.append(self.vcardFold('AGENT:' + sAgentValue))
                     elmAgent.extract()
-                else:
-                    sAgentValue = self.getPropertyValue(elmAgent, 'value', self.URI, bAutoEscape=1)
-                    if sAgentValue:
-                        arLines.append(self.vcardFold('AGENT;VALUE=uri:' + sAgentValue))
+                sAgentValue = self.getPropertyValue(elmAgent, 'value', self.URI, bAutoEscape=1)
+                if sAgentValue:
+                    arLines.append(self.vcardFold('AGENT;VALUE=uri:' + sAgentValue))
 
             sFN = processSingleString('fn')
             elmName = self.getPropertyValue(elmCard, 'n')
@@ -2491,7 +2482,7 @@ def _resolveRelativeURIs(htmlSource, baseURI, encoding, _type):
     return p.output()
 
 
-def _makeSafeAbsoluteURI(base, rel = None):
+def _makeSafeAbsoluteURI(base, rel=None):
     if not ACCEPTABLE_URI_SCHEMES:
         try:
             return _urljoin(base, rel or u'')
@@ -2514,9 +2505,7 @@ def _makeSafeAbsoluteURI(base, rel = None):
     except ValueError:
         return u''
 
-    if uri.strip().split(':', 1)[0] not in ACCEPTABLE_URI_SCHEMES:
-        return u''
-    return uri
+    return u'' if uri.strip().split(':', 1)[0] not in ACCEPTABLE_URI_SCHEMES else uri
 
 
 class _HTMLSanitizer(_BaseHTMLProcessor):
@@ -3161,7 +3150,7 @@ class _HTMLSanitizer(_BaseHTMLProcessor):
                 if key == u'href':
                     value = _makeSafeAbsoluteURI(value)
                 clean_attrs.append((key, value))
-            elif key == 'style':
+            if key == 'style':
                 clean_value = self.sanitize_style(value)
                 if clean_value:
                     clean_attrs.append((key, clean_value))
@@ -3205,26 +3194,24 @@ class _HTMLSanitizer(_BaseHTMLProcessor):
                 continue
             if prop.lower() in self.acceptable_css_properties:
                 clean.append(prop + ': ' + value + ';')
-            elif prop.split('-')[0].lower() in ('background', 'border', 'margin', 'padding'):
+            if prop.split('-')[0].lower() in ('background', 'border', 'margin', 'padding'):
                 for keyword in value.split():
                     if keyword not in self.acceptable_css_keywords and not self.valid_css_values.match(keyword):
                         break
                 else:
                     clean.append(prop + ': ' + value + ';')
 
-            elif self.svgOK and prop.lower() in self.acceptable_svg_properties:
+            if self.svgOK and prop.lower() in self.acceptable_svg_properties:
                 clean.append(prop + ': ' + value + ';')
 
         return ' '.join(clean)
 
-    def parse_comment(self, i, report = 1):
+    def parse_comment(self, i, report=1):
         ret = _BaseHTMLProcessor.parse_comment(self, i, report)
         if ret >= 0:
             return ret
         match = re.compile('--[^>]*>').search(self.rawdata, i + 4)
-        if match:
-            return match.end()
-        return len(self.rawdata)
+        return match.end() if match else len(self.rawdata)
 
 
 def _sanitizeHTML(htmlSource, encoding, _type):
@@ -3338,41 +3325,39 @@ def _open_resource(url_file_stream_or_string, etag, modified, agent, referrer, h
     """
     if hasattr(url_file_stream_or_string, 'read'):
         return url_file_stream_or_string
-    if isinstance(url_file_stream_or_string, basestring) and urlparse.urlparse(url_file_stream_or_string)[0] in ('http', 'https', 'ftp', 'file', 'feed'):
-        if url_file_stream_or_string.startswith('feed:http'):
-            url_file_stream_or_string = url_file_stream_or_string[5:]
-        elif url_file_stream_or_string.startswith('feed:'):
-            url_file_stream_or_string = 'http:' + url_file_stream_or_string[5:]
-        if not agent:
-            agent = USER_AGENT
-        auth = None
-        if base64:
-            urltype, rest = urllib.splittype(url_file_stream_or_string)
-            realhost, rest = urllib.splithost(rest)
-            if realhost:
-                user_passwd, realhost = urllib.splituser(realhost)
-                if user_passwd:
-                    url_file_stream_or_string = '%s://%s%s' % (urltype, realhost, rest)
-                    auth = base64.standard_b64encode(user_passwd).strip()
-        if isinstance(url_file_stream_or_string, unicode):
-            url_file_stream_or_string = _convert_to_idn(url_file_stream_or_string)
-        request = _build_urllib2_request(url_file_stream_or_string, agent, etag, modified, referrer, auth, request_headers)
-        opener = urllib2.build_opener(*tuple(handlers + [_FeedURLHandler()]))
-        opener.addheaders = []
-        try:
-            return opener.open(request)
-        finally:
-            opener.close()
-
-    try:
-        return open(url_file_stream_or_string, 'rb')
-    except (IOError, UnicodeEncodeError, TypeError):
-        pass
-
-    if isinstance(url_file_stream_or_string, unicode):
-        return _StringIO(url_file_stream_or_string.encode('utf-8'))
     else:
-        return _StringIO(url_file_stream_or_string)
+        if isinstance(url_file_stream_or_string, basestring) and urlparse.urlparse(url_file_stream_or_string)[0] in ('http', 'https', 'ftp', 'file', 'feed'):
+            if url_file_stream_or_string.startswith('feed:http'):
+                url_file_stream_or_string = url_file_stream_or_string[5:]
+            elif url_file_stream_or_string.startswith('feed:'):
+                url_file_stream_or_string = 'http:' + url_file_stream_or_string[5:]
+            if not agent:
+                agent = USER_AGENT
+            auth = None
+            if base64:
+                urltype, rest = urllib.splittype(url_file_stream_or_string)
+                realhost, rest = urllib.splithost(rest)
+                if realhost:
+                    user_passwd, realhost = urllib.splituser(realhost)
+                    if user_passwd:
+                        url_file_stream_or_string = '%s://%s%s' % (urltype, realhost, rest)
+                        auth = base64.standard_b64encode(user_passwd).strip()
+            if isinstance(url_file_stream_or_string, unicode):
+                url_file_stream_or_string = _convert_to_idn(url_file_stream_or_string)
+            request = _build_urllib2_request(url_file_stream_or_string, agent, etag, modified, referrer, auth, request_headers)
+            opener = urllib2.build_opener(*tuple(handlers + [_FeedURLHandler()]))
+            opener.addheaders = []
+            try:
+                return opener.open(request)
+            finally:
+                opener.close()
+
+        try:
+            return open(url_file_stream_or_string, 'rb')
+        except (IOError, UnicodeEncodeError, TypeError):
+            pass
+
+        return _StringIO(url_file_stream_or_string.encode('utf-8')) if isinstance(url_file_stream_or_string, unicode) else _StringIO(url_file_stream_or_string)
 
 
 def _convert_to_idn(url):
@@ -3735,7 +3720,7 @@ def _parse_date_w3dtf(dateString):
                         else:
                             month = month - 1
                             day = 31
-                    elif jday < julian:
+                    if jday < julian:
                         if day + diff < 28:
                             day = day + diff
                         else:
@@ -3786,9 +3771,7 @@ def _parse_date_w3dtf(dateString):
         else:
             minutes = 0
         offset = (hours * 60 + minutes) * 60
-        if tzd[0] == '+':
-            return -offset
-        return offset
+        return -offset if tzd[0] == '+' else offset
 
     __date_re = '(?P<year>\\d\\d\\d\\d)(?:(?P<dsep>-|)(?:(?P<month>\\d\\d)(?:(?P=dsep)(?P<day>\\d\\d))?|(?P<julian>\\d\\d\\d)))?'
     __tzd_re = ' ?(?P<tzd>[-+](?P<tzdhours>\\d\\d)(?::?(?P<tzdminutes>\\d\\d))|Z)?'
@@ -3800,9 +3783,7 @@ def _parse_date_w3dtf(dateString):
         return
     else:
         gmt = __extract_date(m) + __extract_time(m) + (0, 0, 0)
-        if gmt[0] == 0:
-            return
-        return time.gmtime(time.mktime(gmt) + __extract_tzd(m) - time.timezone)
+        return None if gmt[0] == 0 else time.gmtime(time.mktime(gmt) + __extract_tzd(m) - time.timezone)
 
 
 registerDateHandler(_parse_date_w3dtf)
@@ -3910,32 +3891,30 @@ def _parse_date_perforce(aDateString):
     m = _my_date_pattern.search(aDateString)
     if m is None:
         return
-    dow, year, month, day, hour, minute, second, tz = m.groups()
-    months = ['Jan',
-     'Feb',
-     'Mar',
-     'Apr',
-     'May',
-     'Jun',
-     'Jul',
-     'Aug',
-     'Sep',
-     'Oct',
-     'Nov',
-     'Dec']
-    dateString = '%s, %s %s %s %s:%s:%s %s' % (dow,
-     day,
-     months[int(month) - 1],
-     year,
-     hour,
-     minute,
-     second,
-     tz)
-    tm = rfc822.parsedate_tz(dateString)
-    if tm:
-        return time.gmtime(rfc822.mktime_tz(tm))
     else:
-        return
+        dow, year, month, day, hour, minute, second, tz = m.groups()
+        months = ['Jan',
+         'Feb',
+         'Mar',
+         'Apr',
+         'May',
+         'Jun',
+         'Jul',
+         'Aug',
+         'Sep',
+         'Oct',
+         'Nov',
+         'Dec']
+        dateString = '%s, %s %s %s %s:%s:%s %s' % (dow,
+         day,
+         months[int(month) - 1],
+         year,
+         hour,
+         minute,
+         second,
+         tz)
+        tm = rfc822.parsedate_tz(dateString)
+        return time.gmtime(rfc822.mktime_tz(tm)) if tm else None
 
 
 registerDateHandler(_parse_date_perforce)
@@ -4180,7 +4159,7 @@ def _stripDoctype(data):
     return (version, data, dict(replacement and [ (k.decode('utf-8'), v.decode('utf-8')) for k, v in safe_pattern.findall(replacement) ]))
 
 
-def parse(url_file_stream_or_string, etag = None, modified = None, agent = None, referrer = None, handlers = None, request_headers = None, response_headers = None):
+def parse(url_file_stream_or_string, etag=None, modified=None, agent=None, referrer=None, handlers=None, request_headers=None, response_headers=None):
     """Parse a feed from a URL, file, stream, or string.
     
     request_headers, if given, is a dict from http header name to value to add

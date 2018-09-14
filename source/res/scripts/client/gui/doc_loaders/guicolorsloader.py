@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/GuiColorsLoader.py
 import Math
 import ResMgr
 from debug_utils import *
 from items import _xml
 
-class GuiColorsLoader(object):
+class _GuiColorsLoader(object):
     XML_PATH = 'gui/gui_colors.xml'
     DEFAULT_ALIAS_COLOR = None
     DEFAULT_RGBA_COLOR = Math.Vector4(255, 255, 255, 255)
@@ -53,10 +53,9 @@ class GuiColorsLoader(object):
         for scheme_name, scheme_section in rootSection.items():
             if scheme_name in self.VECTOR4_NAMES:
                 outcome[scheme_name] = self.__readVector4(rootSection, scheme_name)
-            elif scheme_name in self.STRING_NAMES:
+            if scheme_name in self.STRING_NAMES:
                 outcome[scheme_name] = self.__readString(rootSection, scheme_name)
-            else:
-                outcome[scheme_name] = self.__readHash(scheme_section)
+            outcome[scheme_name] = self.__readHash(scheme_section)
 
         return outcome
 
@@ -79,14 +78,12 @@ class GuiColorsLoader(object):
                     for subKey in insertingSection.keys():
                         if subKey not in baseHash.keys():
                             baseHash[subKey] = insertingSection[subKey]
-                        else:
-                            baseHash[subKey].update(insertingSection[subKey])
+                        baseHash[subKey].update(insertingSection[subKey])
 
                 baseHash = self.__overrideTags(rootSection, baseHash)
-            else:
-                section = baseHash[key]
-                if key not in self.VECTOR4_NAMES and key not in self.STRING_NAMES:
-                    baseHash[key] = self.__overrideTags(rootSection, section)
+            section = baseHash[key]
+            if key not in self.VECTOR4_NAMES and key not in self.STRING_NAMES:
+                baseHash[key] = self.__overrideTags(rootSection, section)
 
         return baseHash
 
@@ -116,8 +113,8 @@ class GuiColorsLoader(object):
         offset = self.DEFAULT_TRANSFORM_COLOR_OFFSET
         processed = section['transform']
         if processed is not None:
-            mult = self.__readVector4(processed, 'mult', self.DEFAULT_TRANSFORM_COLOR_MULT)
-            offset = self.__readVector4(processed, 'offset', self.DEFAULT_TRANSFORM_COLOR_OFFSET)
+            mult = self.__readVector4(processed, 'mult')
+            offset = self.__readVector4(processed, 'offset')
         return {'mult': mult,
          'offset': offset}
 
@@ -170,7 +167,20 @@ class GuiColorsLoader(object):
         if scheme is None:
             LOG_WARNING('Color scheme not found', schemeName, group)
             return self.DEFAULT_SCHEME
-        elif group in scheme:
-            return scheme[group]
         else:
-            return scheme['default']
+            return scheme[group] if group in scheme else scheme['default']
+
+
+_g_instance = None
+
+def load():
+    global _g_instance
+    if _g_instance is None:
+        _g_instance = _GuiColorsLoader()
+        try:
+            _g_instance.load()
+        except Exception:
+            LOG_ERROR('There is error while loading colors xml data')
+            LOG_CURRENT_EXCEPTION()
+
+    return _g_instance

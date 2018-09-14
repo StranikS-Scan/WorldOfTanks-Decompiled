@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/func_utils.py
 from time import sleep
 import BigWorld
@@ -35,7 +35,7 @@ def logFunc(func):
     return wrapped
 
 
-def freeze(seconds, nextFrame = True):
+def freeze(seconds, nextFrame=True):
     if nextFrame:
         LOG_DEBUG('Freeze call at', BigWorld.time())
         BigWorld.callback(0, partial(freeze, seconds, False))

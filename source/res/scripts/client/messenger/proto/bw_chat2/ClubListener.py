@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/ClubListener.py
 from debug_utils import LOG_ERROR
 from gui.clubs.club_helpers import MyClubListener
@@ -105,9 +105,8 @@ class ClubListener(MyClubListener):
             contact = getter(dbID)
             if contact:
                 contact.addTags(_TAGS)
-            else:
-                unresolved.add(dbID)
-                setter(SharedUserEntity(dbID, tags={USER_TAG.CLUB_MEMBER}))
+            unresolved.add(dbID)
+            setter(SharedUserEntity(dbID, tags={USER_TAG.CLUB_MEMBER}))
 
         if unresolved:
             from messenger.proto import proto_getter
@@ -128,13 +127,13 @@ class ClubListener(MyClubListener):
                 if not isOnline:
                     user.update(name=member.getName(), gosBit=bit)
                     events.onUserStatusUpdated(user)
-            elif isOnline:
+            if isOnline:
                 user.update(gosBit=-bit)
                 events.onUserStatusUpdated(user)
 
         return
 
-    def __onClubMembersReceived(self, result = None, error = None):
+    def __onClubMembersReceived(self, result=None, error=None):
         g_messengerEvents.users.onUsersListReceived(_TAGS)
 
     def __ce_onChannelInited(self, channel):

@@ -1,10 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/live_crc.py
 from types import *
-import zlib, cPickle
+import zlib
+import cPickle
 
-def _iterDict__skip(x, skip = set()):
-    a = x.items()
+def _iterDict__skip(x, skip=set()):
+    a = list(x.items())
     a.sort()
     for i in a:
         if i[0] not in skip and i[1] is not None:
@@ -14,7 +15,7 @@ def _iterDict__skip(x, skip = set()):
     return
 
 
-def _iterDict2__skip(x, skip = set()):
+def _iterDict2__skip(x, skip=set()):
     a = x.items()
     a.sort()
     for i in a:
@@ -24,7 +25,7 @@ def _iterDict2__skip(x, skip = set()):
     return
 
 
-def _iterSet__skip(x, skip = set()):
+def _iterSet__skip(x, skip=set()):
     a = list(x)
     a.sort()
     for i in a:
@@ -32,7 +33,7 @@ def _iterSet__skip(x, skip = set()):
             yield i
 
 
-def _iterList__skip(x, skip = set()):
+def _iterList__skip(x, skip=set()):
     for i in x:
         if i not in skip:
             yield i
@@ -119,7 +120,7 @@ def iterAny(x):
         yield LEAVE
 
 
-def iterAny__skip(x, skip = set()):
+def iterAny__skip(x, skip=set()):
     iterator = t2sort__skip.get(type(x), True)
     if iterator is True:
         yield x
@@ -140,7 +141,7 @@ def convert(x):
     return ret
 
 
-def convert__skip(x, skip = set()):
+def convert__skip(x, skip=set()):
     iterator = t2sort__skip.get(type(x), True)
     if iterator is True:
         return x
@@ -152,7 +153,7 @@ def livehashA(x):
     return hash(tuple([ i for i in iterAny(x) ]))
 
 
-def livehashA__skip(x, skip = set()):
+def livehashA__skip(x, skip=set()):
     return hash(tuple([ i for i in iterAny__skip(x, skip) ]))
 
 
@@ -160,7 +161,7 @@ def livehashC(x):
     return hash(convert(x))
 
 
-def livehashC__skip(x, skip = set()):
+def livehashC__skip(x, skip=set()):
     return hash(convert__skip(x, skip))
 
 
@@ -171,7 +172,7 @@ def livehash1(x):
     return hash(tuple([ livehash1(i) for i in iterator(x) ]))
 
 
-def livehash1__skip(x, skip = set()):
+def livehash1__skip(x, skip=set()):
     iterator = t2sort__skip.get(type(x), True)
     if iterator is True:
         return hash(x)
@@ -186,7 +187,7 @@ def livehashZ(x):
     return zlib.adler32(cPickle.dumps(convert(x), -1))
 
 
-def livehashZ__skip(x, skip = set()):
+def livehashZ__skip(x, skip=set()):
     return zlib.adler32(cPickle.dumps(convert__skip(x, skip), -1))
 
 
@@ -238,7 +239,7 @@ livehash__skip = livehashZ__skip
 livehash_combine = livehashZ_combine
 livehash_emptyVal = livehash(None)
 
-def livehash__skipDeep_fn1(skip = {}):
+def livehash__skipDeep_fn1(skip={}):
     if not skip:
         return livehash
     if isinstance(skip, set):
@@ -295,7 +296,7 @@ def __addIfPresent(d1, key, d2):
         d2[key] = d1[key]
 
 
-def gen_livehash_fn(use = {}):
+def gen_livehash_fn(use={}):
     if not use:
         return livehash
     if not isinstance(use, dict):
@@ -319,7 +320,7 @@ def gen_livehash_fn(use = {}):
 
 from copy import copy
 
-def gen_delSubkeys_fn(use = {}):
+def gen_delSubkeys_fn(use={}):
     if not use:
         return lambda data: data
     if not isinstance(use, dict):
@@ -392,7 +393,7 @@ def gen_delSubkeys_fn(use = {}):
         return lambda data: data
 
 
-def gen_mergeCache_fn(overwrite = False):
+def gen_mergeCache_fn(overwrite=False):
     if overwrite:
 
         def _mergeAll_overwrite(data, cache):
@@ -408,8 +409,7 @@ def gen_mergeCache_fn(overwrite = False):
                         _mergeAll_overwrite(d, v)
                     else:
                         data[k] = v
-                else:
-                    data[k] = v
+                data[k] = v
 
             return data
 
@@ -427,15 +427,14 @@ def gen_mergeCache_fn(overwrite = False):
                     d = data[k]
                     if __is_iterable(v) and __is_iterable(d):
                         _mergeAll_nooverwrite(d, v)
-                else:
-                    data[k] = v
+                data[k] = v
 
             return data
 
         return _mergeAll_nooverwrite
 
 
-def gen_extract_fn(use = {}):
+def gen_extract_fn(use={}):
     if not use:
         return lambda data: data
     if not isinstance(use, dict):

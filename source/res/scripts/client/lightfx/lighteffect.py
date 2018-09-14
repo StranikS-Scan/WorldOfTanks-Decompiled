@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/LightFx/LightEffect.py
 import BigWorld
 import weakref
@@ -17,7 +17,7 @@ class OneLightAction:
 
 class LightEffect:
 
-    def __init__(self, name, lightActions, duration = None):
+    def __init__(self, name, lightActions, duration=None):
         self.name = name
         self.lightActions = lightActions
         self.__duration = duration

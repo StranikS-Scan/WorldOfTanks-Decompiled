@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/PostmortemDelay.py
 import BigWorld
 import Math
@@ -75,25 +75,25 @@ class PostmortemDelay:
 
             return
 
-    def __fadeScreen(self, bFade = True):
+    def __fadeScreen(self, bFade=True):
         if self.__bFadeScreenActive == bFade:
             return
         self.__bFadeScreenActive = bFade
         if bFade:
             pass
 
-    def __showChoiceWindow(self, bShow = True):
+    def __showChoiceWindow(self, bShow=True):
         if self.__bChoiceWindowActive == bShow:
             return
         self.__bChoiceWindowActive = bShow
         if bShow:
             self.__onContinueBattle()
 
-    def __moveCameraTo(self, vehicleID, sourceVehicleID = None):
+    def __moveCameraTo(self, vehicleID, sourceVehicleID=None):
         vehicle = BigWorld.entity(vehicleID)
         if vehicle is None:
             if vehicleID == BigWorld.player().playerVehicleID:
-                targetMatrix = BigWorld.player().getOwnVehicleMatrix()
+                targetMatrix = BigWorld.player().getOwnVehicleStabilisedMatrix()
                 self.__setCameraSettings(targetMP=targetMatrix, pivotSettings=self.__savedPivotSettings, cameraDistance=self.__savedCameraDistance, yawPitch=self.__savedYawPitch)
                 return True
             return False
@@ -116,7 +116,7 @@ class PostmortemDelay:
                     self.__setCameraSettings(pivotSettings=self.KILLER_VEHICLE_CAMERA_PIVOT_SETTINGS, cameraDistance=self.KILLER_VEHICLE_CAMERA_DISTANCE, yawPitch=(yaw, pitch))
             return True
 
-    def __setCameraSettings(self, targetMP = None, pivotSettings = None, cameraDistance = None, yawPitch = None):
+    def __setCameraSettings(self, targetMP=None, pivotSettings=None, cameraDistance=None, yawPitch=None):
         if targetMP is not None:
             self.__arcadeCamera.vehicleMProv = targetMP
         if pivotSettings is not None:

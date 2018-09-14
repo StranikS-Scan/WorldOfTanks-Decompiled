@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/account_shared.py
 import time
 import collections
@@ -98,14 +98,12 @@ def getCustomizedComponentInIGR(igrCustomizationLayout, vehInvID, custType, acco
     vehInfo = igrCustomizationLayout.get(vehInvID, None)
     if vehInfo is None:
         return default
-    igrTypeInfo = vehInfo.get(accountIGRType, None)
-    if igrTypeInfo is None:
-        return default
-    customInfo = igrTypeInfo.get(custType, None)
-    if customInfo is None:
-        return default
     else:
-        return customInfo.get(position, default)
+        igrTypeInfo = vehInfo.get(accountIGRType, None)
+        if igrTypeInfo is None:
+            return default
+        customInfo = igrTypeInfo.get(custType, None)
+        return default if customInfo is None else customInfo.get(position, default)
 
 
 def getIGRCustomizedVehCompDescr(igrCustomizationLayout, vehInvID, accountIGRType, vehCompDescr):
@@ -123,11 +121,11 @@ def getIGRCustomizedVehCompDescr(igrCustomizationLayout, vehInvID, accountIGRTyp
                     data = getCustomizedComponentInIGR(igrCustomizationLayout, vehInvID, 'emblems', accountIGRType, pos, defID)
                     if data[0] != defID:
                         vehDescr.setPlayerEmblem(pos, *data)
-                elif propName == 'playerInscriptions':
+                if propName == 'playerInscriptions':
                     data = getCustomizedComponentInIGR(igrCustomizationLayout, vehInvID, 'inscriptions', accountIGRType, pos, None)
                     if data[0] is not None:
                         vehDescr.setPlayerInscription(pos, *data)
-                elif propName == 'camouflages':
+                if propName == 'camouflages':
                     data = getCustomizedComponentInIGR(igrCustomizationLayout, vehInvID, 'camouflages', accountIGRType, pos, None)
                     if data[0] is not None:
                         vehDescr.setCamouflage(pos, *data)
@@ -156,7 +154,7 @@ def getCamouflageIGRType(nationID, camouflageID):
     else:
         descr = vehicles.g_cache.customization(nationID)['camouflages'].get(camouflageID)
         if descr is None:
-            raise Exception, 'Wrong camouflage idx'
+            raise Exception('Wrong camouflage idx')
         return descr['igrType']
 
 
@@ -167,7 +165,7 @@ def getPlayerInscriptionIGRType(nationID, inscriptionID):
         customizationCache = vehicles.g_cache.customization(nationID)
         descr = customizationCache['inscriptions'].get(inscriptionID)
         if descr is None:
-            raise Exception, 'Wrong inscription id'
+            raise Exception('Wrong inscription id')
         return descr[1]
 
 
@@ -177,7 +175,7 @@ def getPlayerEmblemIGRType(emblemID):
     else:
         descr = vehicles.g_cache.playerEmblems()[1].get(emblemID)
         if descr is None:
-            raise Exception, 'Wrong emblem idx'
+            raise Exception('Wrong emblem idx')
         return descr[1]
 
 
@@ -283,10 +281,8 @@ class NotificationItem(object):
         right = other.asString
         if left == right:
             return 0
-        elif left < right:
-            return -1
         else:
-            return 1
+            return -1 if left < right else 1
 
     def __hash__(self):
         return hash(self.asString)
@@ -324,3 +320,23 @@ def isValidClientVersion(clientVersion, serverVersion):
         if clientPatchVersion < serverPatchVersion:
             return False
     return True
+
+
+def readClientServerVersion():
+    import ResMgr
+    fileName = 'scripts/entity_defs/Account.def'
+    section = ResMgr.openSection(fileName)
+    if section is None:
+        raise Exception('Cannot open ' + fileName)
+    for attrName, section in section['Properties'].items():
+        if not attrName.startswith('requiredVersion_'):
+            continue
+        version = section.readString('Default')
+        if not version:
+            raise Exception('Subsection Account.def/Properties/%s/Default is missing or empty' % attrName)
+        section = None
+        ResMgr.purge(fileName)
+        return (attrName, version)
+
+    raise Exception('Field Account.def/Properties/requiredVersion_* is not found')
+    return

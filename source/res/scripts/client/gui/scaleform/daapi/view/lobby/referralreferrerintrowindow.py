@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ReferralReferrerIntroWindow.py
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.ReferralReferrerIntroWindowMeta import ReferralReferrerIntroWindowMeta
@@ -11,7 +11,7 @@ from helpers import i18n
 
 class ReferralReferrerIntroWindow(ReferralReferrerIntroWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(ReferralReferrerIntroWindow, self).__init__(ctx)
         self.__invitesCount = ctx.get('invitesCount', 0)
 
@@ -31,7 +31,7 @@ class ReferralReferrerIntroWindow(ReferralReferrerIntroWindowMeta):
         self.as_setDataS({'titleMsg': text_styles.promoTitle(i18n.makeString(MENU.REFERRALREFERRERINTROWINDOW_TITLEMESSAGE)),
          'blocksVOs': blocks})
 
-    def __packContentBlock(self, localeKey, iconSource, ctx = None, showLinkBtn = False):
+    def __packContentBlock(self, localeKey, iconSource, ctx=None, showLinkBtn=False):
         return {'iconSource': iconSource,
          'titleTF': text_styles.highTitle(i18n.makeString(MENU.referralreferrerintrowindow_textblock_title(localeKey))),
          'bodyTF': text_styles.main(i18n.makeString(MENU.referralreferrerintrowindow_textblock_body(localeKey), **(ctx or {}))),

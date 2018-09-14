@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/wrappers.py
 from collections import namedtuple
 import types
@@ -11,10 +11,10 @@ from messenger_common_chat2 import messageArgs
 class _MessageVO(object):
     __slots__ = ('accountDBID', 'text', 'sentAt')
 
-    def __init__(self, floatArg1 = 0, int32Arg1 = False, int64Arg1 = 0L, strArg1 = '', **kwargs):
+    def __init__(self, floatArg1=0, int32Arg1=False, int64Arg1=0, strArg1='', **kwargs):
         super(_MessageVO, self).__init__()
         self.accountDBID = int64Arg1
-        if type(strArg1) is types.UnicodeType:
+        if isinstance(strArg1, types.UnicodeType):
             self.text = strArg1
         else:
             self.text = unicode(strArg1, 'utf-8', errors='ignore')
@@ -27,7 +27,7 @@ class _MessageVO(object):
 class ArenaMessageVO(_MessageVO):
     __slots__ = ('isCommonChannel', 'accountName')
 
-    def __init__(self, floatArg1 = 0, int32Arg1 = False, int64Arg1 = 0L, strArg1 = '', **kwargs):
+    def __init__(self, floatArg1=0, int32Arg1=False, int64Arg1=0, strArg1='', **kwargs):
         super(ArenaMessageVO, self).__init__(floatArg1=floatArg1, int64Arg1=int64Arg1, strArg1=strArg1, **kwargs)
         self.isCommonChannel = int32Arg1
         self.accountName = None
@@ -37,9 +37,9 @@ class ArenaMessageVO(_MessageVO):
 class UnitMessageVO(_MessageVO):
     __slots__ = ('accountName',)
 
-    def __init__(self, floatArg1 = 0, int64Arg1 = 0L, strArg1 = '', strArg2 = '', **kwargs):
+    def __init__(self, floatArg1=0, int64Arg1=0, strArg1='', strArg2='', **kwargs):
         super(UnitMessageVO, self).__init__(floatArg1=floatArg1, int64Arg1=int64Arg1, strArg1=strArg1, **kwargs)
-        if type(strArg2) is types.UnicodeType:
+        if isinstance(strArg2, types.UnicodeType):
             self.accountName = strArg2
         else:
             self.accountName = unicode(strArg2, 'utf-8', errors='ignore')

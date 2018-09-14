@@ -1,7 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/subscriptions.py
 from gui.clans.interfaces import IClanListener
-from gui.shared.utils.ListenersCollection import ListenersCollection
+from gui.shared.utils.listeners_collection import ListenersCollection
 
 class ClansListeners(ListenersCollection):
 
@@ -11,10 +11,6 @@ class ClansListeners(ListenersCollection):
 
     def notify(self, eventType, *args):
         self._invokeListeners(eventType, *args)
-
-    def clear(self):
-        while len(self._listeners):
-            self._listeners.pop()
 
     def addListener(self, listener):
         if not self.hasListener(listener):

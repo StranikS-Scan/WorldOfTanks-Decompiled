@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/SocketServer.py
 """Generic socket server classes.
 
@@ -216,7 +217,7 @@ class BaseServer:
         """
         pass
 
-    def serve_forever(self, poll_interval = 0.5):
+    def serve_forever(self, poll_interval=0.5):
         """Handle one request at a time until shutdown.
         
         Polls for shutdown every poll_interval seconds. Ignores
@@ -389,7 +390,7 @@ class TCPServer(BaseServer):
     request_queue_size = 5
     allow_reuse_address = False
 
-    def __init__(self, server_address, RequestHandlerClass, bind_and_activate = True):
+    def __init__(self, server_address, RequestHandlerClass, bind_and_activate=True):
         """Constructor.  May be extended, do not override."""
         BaseServer.__init__(self, server_address, RequestHandlerClass)
         self.socket = socket.socket(self.address_family, self.socket_type)

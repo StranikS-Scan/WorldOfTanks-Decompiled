@@ -75,6 +75,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A19_T2_lt/T2_lt_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <T16E2>
@@ -181,6 +182,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.652442 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/american/A19_T2_lt/collision/Chassis.model	</collisionModel>
@@ -294,6 +297,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.973 0.000 0.940 0.000 0.357 0.473 0.637 0.393 0.511 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.925 0.925 0.12 0.000000	</tiling>

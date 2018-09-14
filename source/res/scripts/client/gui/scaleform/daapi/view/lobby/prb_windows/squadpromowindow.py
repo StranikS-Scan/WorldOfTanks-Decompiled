@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/SquadPromoWindow.py
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from helpers.i18n import makeString as _ms
@@ -10,7 +10,7 @@ class SquadPromoWindow(SquadPromoWindowMeta):
     _BTN_WIDTH = 120
     _CLOSE_BTN_ACTION = 'closeAction'
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(SquadPromoWindow, self).__init__()
 
     def onBtnClick(self, action):

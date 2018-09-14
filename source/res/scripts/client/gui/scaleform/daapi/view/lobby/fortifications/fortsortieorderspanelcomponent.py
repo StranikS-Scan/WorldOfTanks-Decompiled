@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortSortieOrdersPanelComponent.py
 import UnitBase
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -8,7 +8,7 @@ class FortSortieOrdersPanelComponent(FortBattleRoomOrdersPanelComponent):
 
     def _isConsumablesAvailable(self):
         _, unit = self.unitFunctional.getUnit(self.unitFunctional.getUnitIdx())
-        return unit.getRosterTypeID() == UnitBase.ROSTER_TYPE.SORTIE_ROSTER_10
+        return unit is not None and unit.getRosterTypeID() == UnitBase.ROSTER_TYPE.SORTIE_ROSTER_10
 
     def _getSlotsProps(self):
         props = super(FortSortieOrdersPanelComponent, self)._getSlotsProps()

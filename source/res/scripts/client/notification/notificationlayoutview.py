@@ -1,10 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationLayoutView.py
 from notification.BaseNotificationView import BaseNotificationView
 
 class NotificationLayoutView(BaseNotificationView):
 
-    def __init__(self, model = None):
+    def __init__(self, model=None):
         super(NotificationLayoutView, self).__init__(model)
 
     def setModel(self, value):

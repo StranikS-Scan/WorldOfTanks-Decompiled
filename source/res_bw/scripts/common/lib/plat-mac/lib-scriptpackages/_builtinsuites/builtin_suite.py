@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/_builtinSuites/builtin_Suite.py
 """Suite builtin_Suite: Every application supports open, reopen, print, run, and quit
 Level 1, version 1
@@ -8,7 +9,7 @@ _code = 'aevt'
 
 class builtin_Suite_Events:
 
-    def open(self, _object, _attributes = {}, **_arguments):
+    def open(self, _object, _attributes={}, **_arguments):
         """open: Open the specified object(s)
         Required argument: list of objects to open
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -21,10 +22,9 @@ class builtin_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def run(self, _no_object = None, _attributes = {}, **_arguments):
+    def run(self, _no_object=None, _attributes={}, **_arguments):
         """run: Run an application.      Most applications will open an empty, untitled window.
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -37,12 +37,9 @@ class builtin_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def reopen(self, _no_object = None, _attributes = {}, **_arguments):
+    def reopen(self, _no_object=None, _attributes={}, **_arguments):
         """reopen: Reactivate a running application.  Some applications will open a new untitled window if no window is open.
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -55,12 +52,9 @@ class builtin_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _print(self, _object, _attributes = {}, **_arguments):
+    def _print(self, _object, _attributes={}, **_arguments):
         """print: Print the specified object(s)
         Required argument: list of objects to print
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -73,12 +67,11 @@ class builtin_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_quit = {'saving': 'savo'}
 
-    def quit(self, _no_object = None, _attributes = {}, **_arguments):
+    def quit(self, _no_object=None, _attributes={}, **_arguments):
         """quit: Quit an application
         Keyword argument saving: specifies whether to save currently open documents
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -92,10 +85,7 @@ class builtin_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_close = {'saving': 'savo',
      'saving_in': 'kfil'}

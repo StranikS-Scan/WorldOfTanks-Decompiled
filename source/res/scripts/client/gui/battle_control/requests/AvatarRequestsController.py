@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/requests/AvatarRequestsController.py
 from collections import namedtuple
 import BigWorld
@@ -51,7 +51,7 @@ class _AvatarRequester(RequestsByIDProcessor):
         method(callback=_callback, *args, **kwargs)
         return requestID
 
-    def _makeResponse(self, code = 0, errMsg = '', data = None, ctx = None):
+    def _makeResponse(self, code=0, errMsg='', data=None, ctx=None):
         response = self._Response(code, errMsg, data)
         if not response.isSuccess():
             LOG_WARNING('Avatar request error', ctx, response)
@@ -68,7 +68,7 @@ class AvatarRequestsController(RequestsController):
         self.__handlers.clear()
         super(AvatarRequestsController, self).fini()
 
-    def sendInvites(self, ctx, callback = None):
+    def sendInvites(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'sendInvitation', ctx.getDatabaseIDs())
 
     def _getHandlerByRequestType(self, requestTypeID):

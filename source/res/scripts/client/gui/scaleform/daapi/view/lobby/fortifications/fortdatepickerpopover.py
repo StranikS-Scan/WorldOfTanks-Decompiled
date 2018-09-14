@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortDatePickerPopover.py
 import fortified_regions
 from helpers import i18n, time_utils
@@ -88,7 +88,7 @@ class FortDatePickerPopover(FortDatePickerPopoverMeta, FortViewHelper):
         return
 
     @classmethod
-    def _isValidTime(cls, timestampToCheck, rootTimestamp = None):
+    def _isValidTime(cls, timestampToCheck, rootTimestamp=None):
         rootTimestamp = rootTimestamp or time_utils.getCurrentTimestamp()
         minLimit = rootTimestamp - cls.TIME_LIMITS.LOW
         dayStart, _ = time_utils.getDayTimeBoundsForLocal(minLimit)

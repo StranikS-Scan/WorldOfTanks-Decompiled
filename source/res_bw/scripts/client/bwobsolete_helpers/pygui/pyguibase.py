@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/PyGUIBase.py
 import BigWorld, GUI
 import weakref
@@ -8,7 +8,7 @@ from Listener import Listenable
 
 class PyGUIBase(object, Listenable):
 
-    def __init__(self, component = None):
+    def __init__(self, component=None):
         Listenable.__init__(self)
         self.component = component
         self.eventHandler = None

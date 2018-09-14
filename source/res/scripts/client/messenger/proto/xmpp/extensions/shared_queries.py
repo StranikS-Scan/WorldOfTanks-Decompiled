@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/shared_queries.py
 from messenger.proto.xmpp.extensions import PyQuery
 from messenger.proto.xmpp.extensions.wg_items import WgClientExtension
@@ -6,7 +6,7 @@ from messenger.proto.xmpp.extensions.wg_items import WgClientExtension
 class MessageQuery(PyQuery):
     __slots__ = ('_body',)
 
-    def __init__(self, msgType, to, msgBody = '', ext = None):
+    def __init__(self, msgType, to, msgBody='', ext=None):
         super(MessageQuery, self).__init__(msgType, ext, to)
         self._body = msgBody
 
@@ -16,8 +16,14 @@ class MessageQuery(PyQuery):
 
 class PresenceQuery(PyQuery):
 
-    def __init__(self, queryType, to = ''):
+    def __init__(self, queryType, to=''):
         super(PresenceQuery, self).__init__(queryType, WgClientExtension(), to)
+
+    def getStatus(self):
+        pass
+
+    def isMucNsUsed(self):
+        return False
 
     def setIgrID(self, igrID):
         if self._ext:

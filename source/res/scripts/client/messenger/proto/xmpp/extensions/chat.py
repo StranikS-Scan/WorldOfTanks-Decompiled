@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/chat.py
 import calendar
 from datetime import datetime
@@ -6,16 +6,19 @@ import json
 import time
 from debug_utils import LOG_CURRENT_EXCEPTION
 from messenger.proto.xmpp.extensions import PyExtension, PyHandler, PyQuery
+from messenger.proto.xmpp.extensions.dataform import DataForm, Field
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG
+from messenger.proto.xmpp.extensions.shared_handlers import IQHandler
 from messenger.proto.xmpp.extensions.shared_queries import MessageQuery
+from messenger.proto.xmpp.extensions.shared_queries import PresenceQuery
 from messenger.proto.xmpp.extensions.wg_items import WgSharedExtension
-from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE, IQ_TYPE, CHAT_STATE, MESSAGE_TYPE_ATTR
+from messenger.proto.xmpp.gloox_constants import IQ_TYPE, CHAT_STATE, MESSAGE_TYPE_ATTR, PRESENCE
 from messenger.proto.xmpp.wrappers import ChatMessage
 
 class ChatStateExtension(PyExtension):
 
-    def __init__(self, state = CHAT_STATE.UNDEFINED):
+    def __init__(self, state=CHAT_STATE.UNDEFINED):
         super(ChatStateExtension, self).__init__(state)
         self.setXmlNs(_NS.CHAT_STATES)
 
@@ -23,7 +26,7 @@ class ChatStateExtension(PyExtension):
     def getDefaultData(cls):
         return CHAT_STATE.UNDEFINED
 
-    def getXPath(self, index = None, suffix = '', name = None):
+    def getXPath(self, index=None, suffix='', name=None):
         if self.getName() == CHAT_STATE.UNDEFINED:
             paths = []
             getXPath = super(ChatStateExtension, self).getXPath
@@ -121,7 +124,7 @@ class PrivateHistoryItem(PyExtension):
 
 class _MessageCustomExtension(PyExtension):
 
-    def __init__(self, msgType, state = CHAT_STATE.UNDEFINED):
+    def __init__(self, msgType, state=CHAT_STATE.UNDEFINED):
         super(_MessageCustomExtension, self).__init__(_TAG.MESSAGE)
         self.setAttribute('type', msgType)
         self.setChild(ChatStateExtension(state))
@@ -149,12 +152,12 @@ class _MessageCustomExtension(PyExtension):
 
 class ChatMessageHolder(MessageQuery):
 
-    def __init__(self, to, msgBody = '', state = CHAT_STATE.UNDEFINED):
+    def __init__(self, msgType, to, msgBody='', state=CHAT_STATE.UNDEFINED):
         if state:
             ext = ChatStateExtension(state)
         else:
             ext = None
-        super(ChatMessageHolder, self).__init__(MESSAGE_TYPE.CHAT, to, msgBody, ext)
+        super(ChatMessageHolder, self).__init__(msgType, to, msgBody, ext)
         return
 
 
@@ -179,3 +182,62 @@ class GetChatHistoryQuery(PyQuery):
 
     def __init__(self, jid, limit):
         super(GetChatHistoryQuery, self).__init__(IQ_TYPE.GET, ChatHistoryQuery(jid, limit))
+
+
+class MUCEntryQuery(PresenceQuery):
+
+    def __init__(self, to):
+        super(MUCEntryQuery, self).__init__(PRESENCE.AVAILABLE, to)
+
+
+class MUCLeaveQuery(PresenceQuery):
+
+    def __init__(self, to):
+        super(MUCLeaveQuery, self).__init__(PRESENCE.UNAVAILABLE, to)
+
+
+class OwnerConfigurationForm(PyExtension):
+
+    def __init__(self, fields=None):
+        super(OwnerConfigurationForm, self).__init__(_TAG.QUERY)
+        self.setXmlNs(_NS.MUC_OWNER)
+        self.setChild(DataForm(fields))
+
+    @classmethod
+    def getDefaultData(cls):
+        return DataForm.getDefaultData()
+
+    def parseTag(self, pyGlooxTag):
+        return self._getChildData(pyGlooxTag, 0, DataForm.getDefaultData())
+
+
+class OwnerConfigurationFormQuery(PyQuery):
+
+    def __init__(self, to):
+        super(OwnerConfigurationFormQuery, self).__init__(IQ_TYPE.GET, OwnerConfigurationForm(), to)
+
+
+class OwnerConfigurationFormSet(PyQuery):
+
+    def __init__(self, to, fields):
+        super(OwnerConfigurationFormSet, self).__init__(IQ_TYPE.SET, OwnerConfigurationForm(fields), to)
+
+
+class OwnerConfigurationFormHandler(IQHandler):
+
+    def __init__(self):
+        super(OwnerConfigurationFormHandler, self).__init__(OwnerConfigurationForm())
+
+
+class UserRoomConfigurationFormSet(OwnerConfigurationFormSet):
+
+    def __init__(self, to, room, password=''):
+        fields = (Field('text-single', 'muc#roomconfig_roomname', room),
+         Field('boolean', 'muc#roomconfig_persistentroom', 1),
+         Field('boolean', 'muc#roomconfig_publicroom', 1),
+         Field('boolean', 'muc#roomconfig_membersonly', 0),
+         Field('boolean', 'muc#roomconfig_allowinvites', 1),
+         Field('boolean', 'muc#roomconfig_survive_reboot', 1))
+        if password:
+            fields += (Field('boolean', 'muc#roomconfig_passwordprotectedroom', 1), Field('text-single', 'muc#roomconfig_roomsecret', password))
+        super(UserRoomConfigurationFormSet, self).__init__(to, fields)

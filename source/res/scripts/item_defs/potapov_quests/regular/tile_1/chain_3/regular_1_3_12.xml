@@ -9,8 +9,8 @@
           <and>
             <vehicleDamage>
               <fireStarted></fireStarted>
-              <greaterOrEqual>	1	</greaterOrEqual>
               <eventCount></eventCount>
+              <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleDamage>
           </and>
         </postBattle>
@@ -26,15 +26,15 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <fireStarted></fireStarted>
-              <greaterOrEqual>	1	</greaterOrEqual>
-              <eventCount></eventCount>
-            </vehicleDamage>
             <results>
               <key>	xp	</key>
               <max>	5	</max>
             </results>
+            <vehicleDamage>
+              <fireStarted></fireStarted>
+              <eventCount></eventCount>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>

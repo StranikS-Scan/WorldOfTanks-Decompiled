@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/AppleScript_Suite.py
 """Suite AppleScript Suite: Standard terms for AppleScript
 Level 1, version 1
@@ -11,7 +12,7 @@ _code = 'ascr'
 
 class AppleScript_Suite_Events():
 
-    def _26_(self, _object, _attributes = {}, **_arguments):
+    def _26_(self, _object, _attributes={}, **_arguments):
         """&: Concatenation
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -25,10 +26,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _2a_(self, _object, _attributes = {}, **_arguments):
+    def _2a_(self, _object, _attributes={}, **_arguments):
         """*: Multiplication
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -42,10 +42,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _2b_(self, _object, _attributes = {}, **_arguments):
+    def _2b_(self, _object, _attributes={}, **_arguments):
         """+: Addition
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -59,10 +58,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _2d_(self, _object, _attributes = {}, **_arguments):
+    def _2d_(self, _object, _attributes={}, **_arguments):
         """-: Subtraction
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -76,10 +74,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _3c_(self, _object, _attributes = {}, **_arguments):
+    def _3c_(self, _object, _attributes={}, **_arguments):
         """<: Less than
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -93,10 +90,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _3d_(self, _object, _attributes = {}, **_arguments):
+    def _3d_(self, _object, _attributes={}, **_arguments):
         """=: Equality
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -110,10 +106,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _3e_(self, _object, _attributes = {}, **_arguments):
+    def _3e_(self, _object, _attributes={}, **_arguments):
         """>: Greater than
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -127,8 +122,7 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Call_a5_subroutine = {'at': 'at  ',
      'from_': 'from',
@@ -159,7 +153,7 @@ class AppleScript_Suite_Events():
      'with': 'with',
      'without': 'wout'}
 
-    def Call_a5_subroutine(self, _object = None, _attributes = {}, **_arguments):
+    def Call_a5_subroutine(self, _object=None, _attributes={}, **_arguments):
         """Call\xa5subroutine: A subroutine call
         Required argument: anything
         Keyword argument at: a preposition
@@ -200,10 +194,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _5e_(self, _object, _attributes = {}, **_arguments):
+    def _5e_(self, _object, _attributes={}, **_arguments):
         """^: Exponentiation
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -217,10 +210,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def activate(self, _no_object = None, _attributes = {}, **_arguments):
+    def activate(self, _no_object=None, _attributes={}, **_arguments):
         """activate: Bring the targeted application program to the front
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -233,12 +225,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def and_(self, _object, _attributes = {}, **_arguments):
+    def and_(self, _object, _attributes={}, **_arguments):
         """and: Logical conjunction
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -252,10 +241,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def as_(self, _object, _attributes = {}, **_arguments):
+    def as_(self, _object, _attributes={}, **_arguments):
         """as: Coercion
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -269,10 +257,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def contains(self, _object, _attributes = {}, **_arguments):
+    def contains(self, _object, _attributes={}, **_arguments):
         """contains: Containment
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -286,10 +273,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def div(self, _object, _attributes = {}, **_arguments):
+    def div(self, _object, _attributes={}, **_arguments):
         """div: Quotient
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -303,10 +289,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def end_tell(self, _no_object = None, _attributes = {}, **_arguments):
+    def end_tell(self, _no_object=None, _attributes={}, **_arguments):
         """end tell: Record or log an \xd4end tell\xd5 statement
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -319,12 +304,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def ends_with(self, _object, _attributes = {}, **_arguments):
+    def ends_with(self, _object, _attributes={}, **_arguments):
         """ends with: Ends with
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -338,15 +320,14 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_error = {'number': 'errn',
      'partial_result': 'ptlr',
      'from_': 'erob',
      'to': 'errt'}
 
-    def error(self, _object = None, _attributes = {}, **_arguments):
+    def error(self, _object=None, _attributes={}, **_arguments):
         """error: Raise an error
         Required argument: anything
         Keyword argument number: an error number
@@ -362,10 +343,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def idle(self, _no_object = None, _attributes = {}, **_arguments):
+    def idle(self, _no_object=None, _attributes={}, **_arguments):
         """idle: Sent to a script application when it is idle
         Keyword argument _attributes: AppleEvent attribute dictionary
         Returns: the number of seconds to wait for next idle event
@@ -379,12 +359,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def launch(self, _no_object = None, _attributes = {}, **_arguments):
+    def launch(self, _no_object=None, _attributes={}, **_arguments):
         """launch: Start an application for scripting
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -397,12 +374,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def log(self, _object, _attributes = {}, **_arguments):
+    def log(self, _object, _attributes={}, **_arguments):
         """log: Cause a comment to be logged
         Required argument: undocumented, typecode 'TEXT'
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -415,10 +389,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def mod(self, _object, _attributes = {}, **_arguments):
+    def mod(self, _object, _attributes={}, **_arguments):
         """mod: Remainder
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -432,10 +405,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def negate(self, _object, _attributes = {}, **_arguments):
+    def negate(self, _object, _attributes={}, **_arguments):
         """negate: Numeric negation
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -449,10 +421,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def not_(self, _object, _attributes = {}, **_arguments):
+    def not_(self, _object, _attributes={}, **_arguments):
         """not: Logical negation
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -466,10 +437,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def or_(self, _object, _attributes = {}, **_arguments):
+    def or_(self, _object, _attributes={}, **_arguments):
         """or: Logical disjunction
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -483,10 +453,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def start_log(self, _no_object = None, _attributes = {}, **_arguments):
+    def start_log(self, _no_object=None, _attributes={}, **_arguments):
         """start log: Start event logging in the script editor
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -499,12 +468,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def starts_with(self, _object, _attributes = {}, **_arguments):
+    def starts_with(self, _object, _attributes={}, **_arguments):
         """starts with: Starts with
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -518,10 +484,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def stop_log(self, _no_object = None, _attributes = {}, **_arguments):
+    def stop_log(self, _no_object=None, _attributes={}, **_arguments):
         """stop log: Stop event logging in the script editor
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -534,12 +499,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def tell(self, _no_object = None, _attributes = {}, **_arguments):
+    def tell(self, _no_object=None, _attributes={}, **_arguments):
         """tell: Record or log a \xd4tell\xd5 statement
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -552,12 +514,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _ad_(self, _object, _attributes = {}, **_arguments):
+    def _ad_(self, _object, _attributes={}, **_arguments):
         """\xad: Inequality
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -571,10 +530,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _b2_(self, _object, _attributes = {}, **_arguments):
+    def _b2_(self, _object, _attributes={}, **_arguments):
         """\xb2: Less than or equal to
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -588,10 +546,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _b3_(self, _object, _attributes = {}, **_arguments):
+    def _b3_(self, _object, _attributes={}, **_arguments):
         """\xb3: Greater than or equal to
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -605,10 +562,9 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def _d6_(self, _object, _attributes = {}, **_arguments):
+    def _d6_(self, _object, _attributes={}, **_arguments):
         """\xd6: Division
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -622,8 +578,7 @@ class AppleScript_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class anything(aetools.ComponentItem):

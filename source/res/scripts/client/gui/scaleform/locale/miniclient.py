@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/MINICLIENT.py
 
 
@@ -23,6 +23,7 @@ class MINICLIENT(object):
     BUY_VEHICLE_TITLE = '#miniclient:buy_vehicle/title'
     BUY_VEHICLE_MESSAGE = '#miniclient:buy_vehicle/message'
     INVITATION_NOTE_SQUAD = '#miniclient:invitation/note/SQUAD'
+    INVITATION_NOTE_FALLOUT = '#miniclient:invitation/note/FALLOUT'
     INVITATION_NOTE_TRAINING = '#miniclient:invitation/note/TRAINING'
     INVITATION_NOTE_COMPANY = '#miniclient:invitation/note/COMPANY'
     INVITATION_NOTE_TOURNAMENT = '#miniclient:invitation/note/TOURNAMENT'

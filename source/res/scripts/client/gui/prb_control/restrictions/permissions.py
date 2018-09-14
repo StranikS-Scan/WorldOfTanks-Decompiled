@@ -1,8 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/restrictions/permissions.py
 from UnitBase import UNIT_ROLE, UNIT_FLAGS
 import account_helpers
-from constants import PREBATTLE_ROLE, PREBATTLE_TEAM_STATE, QUEUE_TYPE, FALLOUT_BATTLE_TYPE
+from constants import PREBATTLE_ROLE, PREBATTLE_TEAM_STATE, QUEUE_TYPE
 from constants import PREBATTLE_ACCOUNT_STATE
 from gui.prb_control import prb_getters
 from gui.prb_control.items.prb_items import TeamStateInfo
@@ -19,7 +19,7 @@ class IntroPrbPermissions(interfaces.IPrbPermissions):
 
 class DefaultPrbPermissions(interfaces.IPrbPermissions):
 
-    def __init__(self, roles = 0, pState = PREBATTLE_ACCOUNT_STATE.UNKNOWN, teamState = None, hasLockedState = False):
+    def __init__(self, roles=0, pState=PREBATTLE_ACCOUNT_STATE.UNKNOWN, teamState=None, hasLockedState=False):
         super(DefaultPrbPermissions, self).__init__()
         self._roles = roles
         self._pState = pState
@@ -39,7 +39,7 @@ class DefaultPrbPermissions(interfaces.IPrbPermissions):
     def canSendInvite(self):
         return self._roles & PREBATTLE_ROLE.INVITE != 0 and self._teamState.isNotReady()
 
-    def canKick(self, team = 1):
+    def canKick(self, team=1):
         result = False
         if team is 1:
             result = self._roles & PREBATTLE_ROLE.KICK_1 != 0
@@ -47,7 +47,7 @@ class DefaultPrbPermissions(interfaces.IPrbPermissions):
             result = self._roles & PREBATTLE_ROLE.KICK_2 != 0
         return result
 
-    def canAssignToTeam(self, team = 1):
+    def canAssignToTeam(self, team=1):
         if self._teamState.isInQueue():
             return False
         result = False
@@ -60,7 +60,7 @@ class DefaultPrbPermissions(interfaces.IPrbPermissions):
     def canChangePlayerTeam(self):
         return self._roles & PREBATTLE_ROLE.ASSIGNMENT_1_2 != 0
 
-    def canSetTeamState(self, team = 1):
+    def canSetTeamState(self, team=1):
         result = False
         if team is 1:
             result = self._roles & PREBATTLE_ROLE.TEAM_READY_1 != 0
@@ -144,7 +144,7 @@ class BattleSessionPrbPermissions(DefaultPrbPermissions):
     def isCreator(cls, roles):
         return False
 
-    def canAssignToTeam(self, team = 1):
+    def canAssignToTeam(self, team=1):
         result = super(BattleSessionPrbPermissions, self).canAssignToTeam(team)
         if not result:
             return False
@@ -176,7 +176,7 @@ class IntroUnitPermissions(interfaces.IUnitPermissions):
 
 class UnitPermissions(interfaces.IUnitPermissions):
 
-    def __init__(self, roles = 0, flags = UNIT_FLAGS.DEFAULT, isCurrentPlayer = False, isPlayerReady = False, hasLockedState = False):
+    def __init__(self, roles=0, flags=UNIT_FLAGS.DEFAULT, isCurrentPlayer=False, isPlayerReady=False, hasLockedState=False):
         super(UnitPermissions, self).__init__()
         self._roles = roles
         self._flags = UnitFlags(flags)
@@ -279,12 +279,12 @@ class PreQueuePermissions(interfaces.IGUIPermissions):
 
 class FalloutQueuePermissions(PreQueuePermissions):
 
-    @prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)
+    @prequeue_storage_getter(QUEUE_TYPE.FALLOUT)
     def storage(self):
         return None
 
     def canCreateSquad(self):
         canDo = super(FalloutQueuePermissions, self).canCreateSquad()
         if canDo:
-            canDo = self.storage.getBattleType() != FALLOUT_BATTLE_TYPE.UNDEFINED
+            canDo = self.storage.getBattleType() in QUEUE_TYPE.FALLOUT
         return canDo

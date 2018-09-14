@@ -1,10 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Event.py
 from debug_utils import *
 
 class Event(object):
 
-    def __init__(self, manager = None):
+    def __init__(self, manager=None):
         self.__delegates = set()
         if manager is not None:
             manager.register(self)
@@ -34,17 +34,14 @@ class Event(object):
 
 class Handler(object):
 
-    def __init__(self, manager = None):
+    def __init__(self, manager=None):
         self.__delegate = None
         if manager is not None:
             manager.register(self)
         return
 
     def __call__(self, *args):
-        if self.__delegate is not None:
-            return self.__delegate(*args)
-        else:
-            return
+        return self.__delegate(*args) if self.__delegate is not None else None
 
     def set(self, delegate):
         self.__delegate = delegate

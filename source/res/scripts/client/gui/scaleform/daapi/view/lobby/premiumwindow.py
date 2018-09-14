@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PremiumWindow.py
 import BigWorld
 from debug_utils import LOG_DEBUG
@@ -21,7 +21,7 @@ PREMIUM_PACKET_LOCAL_KEY = '#menu:premium/packet/days%s'
 
 class PremiumWindow(PremiumWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(PremiumWindow, self).__init__()
         self._items = g_itemsCache.items
         self._actualPremiumCost = None
@@ -95,14 +95,10 @@ class PremiumWindow(PremiumWindowMeta):
         self.as_setButtonsS(self.__getBtnData(), TEXT_ALIGN.RIGHT, BTN_WIDTH)
 
     def __getTitle(self):
-        if self.__isPremiumAccount():
-            return MENU.PREMIUM_CONTINUEMESSAGE
-        return MENU.PREMIUM_BUYMESSAGE
+        return MENU.PREMIUM_CONTINUEMESSAGE if self.__isPremiumAccount() else MENU.PREMIUM_BUYMESSAGE
 
     def __getSubmitBtnLabel(self):
-        if self.__isPremiumAccount():
-            return MENU.PREMIUM_SUBMITCONTINUE
-        return MENU.PREMIUM_SUBMITBUY
+        return MENU.PREMIUM_SUBMITCONTINUE if self.__isPremiumAccount() else MENU.PREMIUM_SUBMITBUY
 
     def __isPremiumAccount(self):
         return self._items.stats.isPremium
@@ -136,15 +132,12 @@ class PremiumWindow(PremiumWindowMeta):
          'haveMoney': isEnoughMoney}
 
     def __getAction(self, cost, defaultCost, period):
-        if cost != defaultCost:
-            return {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-             'key': 'premiumPacket%dCost' % period,
-             'isBuying': True,
-             'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
-             'newPrice': (0, cost),
-             'oldPrice': (0, defaultCost)}
-        else:
-            return None
+        return {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
+         'key': 'premiumPacket%dCost' % period,
+         'isBuying': True,
+         'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
+         'newPrice': (0, cost),
+         'oldPrice': (0, defaultCost)} if cost != defaultCost else None
 
     def __canBuyPremium(self):
         if self.__isPremiumAccount():

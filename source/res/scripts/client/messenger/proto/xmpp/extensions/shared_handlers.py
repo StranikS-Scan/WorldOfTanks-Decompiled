@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/shared_handlers.py
 from messenger.proto.xmpp.extensions import PyHandler
 
@@ -11,7 +11,7 @@ class IQHandler(PyHandler):
 class IQChildHandler(PyHandler):
     __slots__ = ('_index',)
 
-    def __init__(self, ext, index = 0):
+    def __init__(self, ext, index=0):
         super(IQChildHandler, self).__init__(ext)
         self._index = index
 
@@ -27,3 +27,9 @@ class IQChildHandler(PyHandler):
             data = child.parseTag(tag)
             if data:
                 yield data
+
+
+class ProxyHandler(PyHandler):
+
+    def getFilterString(self):
+        return self._ext.getXPath()

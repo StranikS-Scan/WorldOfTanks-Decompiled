@@ -7,15 +7,15 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <greaterOrEqual>	6	</greaterOrEqual>
-              <attackReason>	0	</attackReason>
-              <eventCount></eventCount>
-            </vehicleDamage>
             <results>
               <key>	spotted	</key>
               <greaterOrEqual>	7	</greaterOrEqual>
             </results>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <eventCount></eventCount>
+              <greaterOrEqual>	6	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>
@@ -30,15 +30,15 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <greaterOrEqual>	6	</greaterOrEqual>
-              <attackReason>	0	</attackReason>
-              <eventCount></eventCount>
-            </vehicleDamage>
             <results>
               <key>	spotted	</key>
               <greaterOrEqual>	7	</greaterOrEqual>
             </results>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <eventCount></eventCount>
+              <greaterOrEqual>	6	</greaterOrEqual>
+            </vehicleDamage>
             <vehicleKills>
               <greaterOrEqual>	4	</greaterOrEqual>
             </vehicleKills>

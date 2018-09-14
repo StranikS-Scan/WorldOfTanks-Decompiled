@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/PlayAction.py
 from FX.Event import Event
 from FX.Event import TRANSFORM_DEPENDENT_EVENT
@@ -18,7 +18,7 @@ class PlayAction(Event):
     def __init__(self):
         self.actions = []
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """This method loads the PlayAction event from an XML data section.
         It reads in a list of "Action" tags, which are string names of the
         actions to play, in sequence, on the actor, which must be a model."""

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/m_settings.py
 from collections import namedtuple, defaultdict
 import Event
@@ -14,7 +14,7 @@ def _getAccountRepository():
 
 class _ColorScheme(defaultdict):
 
-    def __init__(self, names, default_factory = None, **kwargs):
+    def __init__(self, names, default_factory=None, **kwargs):
         self.__colorsNames = names
         self.__current = names[0]
         super(_ColorScheme, self).__init__(default_factory, **kwargs)

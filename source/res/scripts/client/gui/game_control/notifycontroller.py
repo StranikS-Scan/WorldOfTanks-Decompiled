@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/NotifyController.py
 import cPickle
 import base64
@@ -106,7 +106,7 @@ class NotifyController(Controller):
         return DialogsInterface.showI18nConfirmDialog(key, callback)
 
     @classmethod
-    def __showSettingsWindow(cls, tabIdx = 0):
+    def __showSettingsWindow(cls, tabIdx=0):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SETTINGS_WINDOW, ctx={'redefinedKeyMode': False,
          'tabIndex': tabIdx}))
 
@@ -121,7 +121,7 @@ class NotifyController(Controller):
             window.onWindowClose()
         return
 
-    def __updatePresetSetting(self, presetIdx = None):
+    def __updatePresetSetting(self, presetIdx=None):
         window = self.__getSettingsWindow()
         if window is not None:
             if presetIdx is None:

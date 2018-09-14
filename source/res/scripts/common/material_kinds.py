@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/material_kinds.py
 import ResMgr
 IDS_BY_NAMES = None
@@ -56,7 +56,7 @@ def _init():
 
 
 def _raiseWrongXml(fileName, msg):
-    raise Exception, "error in '" + fileName + "': " + msg
+    raise Exception("error in '" + fileName + "': " + msg)
 
 
 _init()

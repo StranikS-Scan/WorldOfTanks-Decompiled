@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
 import BigWorld
 import nations
@@ -16,7 +16,7 @@ class VehicleModule(FittingItem):
     Root vehicle module class.
     """
 
-    def __init__(self, intCompactDescr, proxy = None, descriptor = None):
+    def __init__(self, intCompactDescr, proxy=None, descriptor=None):
         super(VehicleModule, self).__init__(intCompactDescr, proxy)
         self._vehicleModuleDescriptor = descriptor
 
@@ -26,10 +26,7 @@ class VehicleModule(FittingItem):
 
     @property
     def descriptor(self):
-        if self._vehicleModuleDescriptor is not None:
-            return self._vehicleModuleDescriptor
-        else:
-            return super(VehicleModule, self).descriptor
+        return self._vehicleModuleDescriptor if self._vehicleModuleDescriptor is not None else super(VehicleModule, self).descriptor
 
     def _sortByType(self, other):
         return MODULE_TYPES_ORDER_INDICES[self.itemTypeName] - MODULE_TYPES_ORDER_INDICES[other.itemTypeName]
@@ -43,14 +40,12 @@ class VehicleChassis(VehicleModule):
     Vehicle chassis class.
     """
 
-    def isInstalled(self, vehicle, slotIdx = None):
+    def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.chassis.intCD
 
-    def mayInstall(self, vehicle, slotIdx = None):
+    def mayInstall(self, vehicle, slotIdx=None):
         installPossible, reason = FittingItem.mayInstall(self, vehicle, slotIdx)
-        if not installPossible and reason == 'too heavy':
-            return (False, 'too heavy chassis')
-        return (installPossible, reason)
+        return (False, 'too heavy chassis') if not installPossible and reason == 'too heavy' else (installPossible, reason)
 
     def getInstalledVehicles(self, vehicles):
         result = set()
@@ -66,14 +61,12 @@ class VehicleTurret(VehicleModule):
     Vehicle turret class.
     """
 
-    def isInstalled(self, vehicle, slotIdx = None):
+    def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.turret.intCD
 
-    def mayInstall(self, vehicle, slotIdx = None, gunCD = 0):
+    def mayInstall(self, vehicle, slotIdx=None, gunCD=0):
         installPossible, reason = vehicle.descriptor.mayInstallTurret(self.intCD, gunCD)
-        if not installPossible and reason == 'not for this vehicle type':
-            return (False, 'need gun')
-        return (installPossible, reason)
+        return (False, 'need gun') if not installPossible and reason == 'not for this vehicle type' else (installPossible, reason)
 
     def getInstalledVehicles(self, vehicles):
         result = set()
@@ -89,24 +82,22 @@ class VehicleGun(VehicleModule):
     Vehicle gun class.
     """
 
-    def __init__(self, intCompactDescr, proxy = None, descriptor = None):
+    def __init__(self, intCompactDescr, proxy=None, descriptor=None):
         super(VehicleGun, self).__init__(intCompactDescr, proxy, descriptor)
         self.defaultAmmo = self._getDefaultAmmo(proxy)
         self.maxAmmo = self._getMaxAmmo(proxy)
 
-    def isInstalled(self, vehicle, slotIdx = None):
+    def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.gun.intCD
 
-    def mayInstall(self, vehicle, slotIdx = None):
+    def mayInstall(self, vehicle, slotIdx=None):
         installPossible, reason = FittingItem.mayInstall(self, vehicle)
-        if not installPossible and reason == 'not for current vehicle':
-            return (False, 'need turret')
-        return (installPossible, reason)
+        return (False, 'need turret') if not installPossible and reason == 'not for current vehicle' else (installPossible, reason)
 
-    def getReloadingType(self, vehicleDescr = None):
+    def getReloadingType(self, vehicleDescr=None):
         return ParametersCache.g_instance.getGunReloadingSystemType(self.intCD, vehicleDescr.type.compactDescr if vehicleDescr is not None else None)
 
-    def isClipGun(self, vehicleDescr = None):
+    def isClipGun(self, vehicleDescr=None):
         typeToCheck = ParametersCache.GUN_CLIP if vehicleDescr is not None else ParametersCache.GUN_CAN_BE_CLIP
         return self.getReloadingType(vehicleDescr) == typeToCheck
 
@@ -135,7 +126,7 @@ class VehicleEngine(VehicleModule):
     Vehicle engine class.
     """
 
-    def isInstalled(self, vehicle, slotIdx = None):
+    def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.engine.intCD
 
     def getInstalledVehicles(self, vehicles):
@@ -165,7 +156,7 @@ class VehicleFuelTank(VehicleModule):
     Vehicle fuel tank class.
     """
 
-    def isInstalled(self, vehicle, slotIdx = None):
+    def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.fuelTank.intCD
 
     def getInstalledVehicles(self, vehicles):
@@ -182,7 +173,7 @@ class VehicleRadio(VehicleModule):
     Vehicle radio class.
     """
 
-    def isInstalled(self, vehicle, slotIdx = None):
+    def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.radio.intCD
 
     def getInstalledVehicles(self, vehicles):
@@ -199,7 +190,7 @@ class Shell(FittingItem):
     Vehicle shells class.
     """
 
-    def __init__(self, intCompactDescr, count = 0, defaultCount = 0, proxy = None, isBoughtForCredits = False):
+    def __init__(self, intCompactDescr, count=0, defaultCount=0, proxy=None, isBoughtForCredits=False):
         """
         Ctor.
         
@@ -261,7 +252,7 @@ class Shell(FittingItem):
     def defaultLayoutValue(self):
         return (self.intCD if not self.isBoughtForCredits else -self.intCD, self.defaultCount)
 
-    def isInstalled(self, vehicle, slotIdx = None):
+    def isInstalled(self, vehicle, slotIdx=None):
         for shell in vehicle.shells:
             if self.intCD == shell.intCD:
                 return True

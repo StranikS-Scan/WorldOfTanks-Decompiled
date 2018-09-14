@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -17,25 +17,19 @@ class ProfileWindowMeta(AbstractWindowView):
         self._printOverrideError('userCreatePrivateChannel')
 
     def as_setInitDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInitData(data)
+        return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_addFriendAvailableS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_addFriendAvailable(value)
+        return self.flashObject.as_addFriendAvailable(value) if self._isDAAPIInited() else None
 
     def as_addToClanAvailableS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_addToClanAvailable(value)
+        return self.flashObject.as_addToClanAvailable(value) if self._isDAAPIInited() else None
 
     def as_addToClanVisibleS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_addToClanVisible(value)
+        return self.flashObject.as_addToClanVisible(value) if self._isDAAPIInited() else None
 
     def as_setIgnoredAvailableS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setIgnoredAvailable(value)
+        return self.flashObject.as_setIgnoredAvailable(value) if self._isDAAPIInited() else None
 
     def as_setCreateChannelAvailableS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCreateChannelAvailable(value)
+        return self.flashObject.as_setCreateChannelAvailable(value) if self._isDAAPIInited() else None

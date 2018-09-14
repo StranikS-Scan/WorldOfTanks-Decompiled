@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/ContactsListPopover.py
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
@@ -16,7 +16,7 @@ from messenger.storage import storage_getter
 
 class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(ContactsListPopover, self).__init__(ctx)
 
     @proto_getter(PROTO_TYPE.MIGRATION)

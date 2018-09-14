@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/AccountSettings.py
 import base64
 import copy
@@ -31,11 +31,15 @@ CONTACTS = 'CONTACTS'
 BOOSTERS = 'BOOSTERS'
 FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
-JOIN_COMMAND_PRESSED = 'joinCommandPressed'
+BOOSTERS_FILTER = 'boostersFilter'
+LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
+LAST_CLUB_OPENED_FOR_APPS = 'lastClubOpenedForApps'
 SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
 DEFAULT_QUEUE = 'defaultQueue'
+STORE_TAB = 'store_tab'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
-DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
+DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
+               'shop_current': (-1, 'vehicle'),
                'shop_vehicle': (5, 'lightTank', 'mediumTank', 'heavyTank', 'at-spg', 'spg', 'locked'),
                'shop_module': (5, 'vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'myVehicles', 0, 'locked', 'inHangar'),
                'shop_shell': (4, 'ARMOR_PIERCING', 'ARMOR_PIERCING_CR', 'HOLLOW_CHARGE', 'HIGH_EXPLOSIVE', 'myVehicleGun', 0),
@@ -69,6 +73,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                CONTACTS: {'showOfflineUsers': True,
                           'showOthersCategory': True},
                GOLD_FISH_LAST_SHOW_TIME: 0,
+               BOOSTERS_FILTER: 0,
                'cs_intro_view_vehicle': {'nation': -1,
                                          'vehicleType': 'none',
                                          'isMain': False,
@@ -94,7 +99,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                         'victoryAward': -1,
                         'battlesCountAward': -1,
                         'pveBattlesCountAward': -1},
-               JOIN_COMMAND_PRESSED: False,
+               LAST_CLUB_OPENED_FOR_APPS: 0,
                SHOW_INVITE_COMMAND_BTN_ANIMATION: True},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
@@ -202,6 +207,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                 'minimapAlpha': 0,
                 'minimapSize': 0,
                 'minimapRespawnSize': 0,
+                'minimapViewRange': True,
+                'minimapMaxViewRange': True,
+                'minimapDrawRange': True,
                 'nationalVoices': False,
                 'enableVoIP': True,
                 'replayEnabled': 1,
@@ -223,11 +231,15 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                 'checkBoxConfirmator': {'questsConfirmDialogShow': True},
                 'customization': {},
                 'showVehModelsOnMap': 0,
+                'battleLoadingInfo': 1,
                 'interfaceScale': 0,
                 DEFAULT_QUEUE: constants.QUEUE_TYPE.SANDBOX,
                 'medKitInstalled': False,
                 'repairKitInstalled': False,
-                'fireExtinguisherInstalled': False}}
+                'fireExtinguisherInstalled': False,
+                'PveTriggerShown': False,
+                LAST_PROMO_PATCH_VERSION: '',
+                'dynamicRange': 0}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -245,7 +257,7 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 18
+    version = 21
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -453,12 +465,48 @@ class AccountSettings(object):
             if currVersion < 18:
                 cmSection = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
                 for command, section in cmSection.items()[:]:
+                    newSection = None
+                    satelliteKeys = ''
+                    fireKey = AccountSettings.__readSection(section, 'fireKey').asString
+                    if fireKey == 'KEY_SPACE':
+                        if command == 'CMD_BLOCK_TRACKS':
+                            pass
+                        elif command == 'CMD_STOP_UNTIL_FIRE':
+                            satelliteKeys = AccountSettings.__readSection(section, 'satelliteKeys').asString
+                            cmSection.deleteSection('CMD_STOP_UNTIL_FIRE')
+                            newSection = cmSection.createSection('CMD_STOP_UNTIL_FIRE')
+                        else:
+                            newSection = cmSection.createSection('CMD_BLOCK_TRACKS')
+                    if newSection is not None:
+                        newSection.writeString('fireKey', 'KEY_NONE')
+                        newSection.writeString('satelliteKeys', satelliteKeys)
+
+                CommandMapping.g_instance.restoreUserConfig()
+            if currVersion < 19:
+                cmSection = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
+                for command, section in cmSection.items()[:]:
                     fireKey = AccountSettings.__readSection(section, 'fireKey').asString
                     if fireKey == 'KEY_G':
                         cmSection.deleteSection(command)
 
                 CommandMapping.g_instance.restoreUserConfig()
+            if currVersion < 20:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    accSettings.write('battleLoadingInfo', base64.b64encode(pickle.dumps(0)))
+                    AccountSettings.__readSection(section, KEY_FILTERS).deleteSection('joinCommandPressed')
+
+            if currVersion < 21:
+                import SoundGroups
+                SoundGroups.g_instance.setMasterVolume(1.0)
+                SoundGroups.g_instance.setVolume('music', 1.0)
+                SoundGroups.g_instance.setVolume('vehicles', 1.0)
+                SoundGroups.g_instance.setVolume('effects', 1.0)
+                SoundGroups.g_instance.setVolume('gui', 1.0)
+                SoundGroups.g_instance.setVolume('ambient', 1.0)
+                SoundGroups.g_instance.savePreferences()
             ads.writeInt('version', AccountSettings.version)
+        return
 
     @staticmethod
     def getFilterDefault(name):

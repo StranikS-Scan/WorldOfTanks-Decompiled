@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/recruitWindow/RecruitWindow.py
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
@@ -19,7 +19,7 @@ from gui.shared.gui_items.processors.tankman import TankmanRecruit, TankmanEquip
 
 class RecruitWindow(RecruitWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(RecruitWindow, self).__init__()
         self._initData = ctx.get('data', None)
         self._menuEnabled = ctx.get('menuEnabled', False)

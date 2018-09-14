@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ShadowForwardDecal.py
 import BigWorld
 from debug_utils import *
@@ -31,7 +31,7 @@ class ShadowForwardDecal:
         self.detach()
         return
 
-    def attach(self, vehicle, desc, isSettingsChaged = False):
+    def attach(self, vehicle, desc, isSettingsChaged=False):
         self.__vehicle = vehicle
         self.__desc = desc
         if not isSettingsChaged:
@@ -86,7 +86,7 @@ class ShadowForwardDecal:
             self.attach(self.__vehicle, self.__desc, True)
             return
 
-    def onSettingsChanged(self, diff = None):
+    def onSettingsChanged(self, diff=None):
         enabled = False
         if 'SHADOWS_QUALITY' in diff:
             value = diff['SHADOWS_QUALITY']

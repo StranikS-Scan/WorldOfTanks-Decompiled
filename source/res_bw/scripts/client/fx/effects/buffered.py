@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Effects/Buffered.py
 import BigWorld
 import ResMgr
@@ -40,7 +40,7 @@ class _BufferedOneShot(OneShot):
     """This class is a buffered version of OneShot.  It is private
     ( don't create one of these yourself! )"""
 
-    def __init__(self, fileName, maxDuration, queue, prereqs = None):
+    def __init__(self, fileName, maxDuration, queue, prereqs=None):
         OneShot.__init__(self, fileName, maxDuration, prereqs)
         self.queue = queue
 
@@ -54,7 +54,7 @@ def _onAsyncLoadBufferedEffect(fileName, maxDuration, resourceRefs):
     queue.put(_BufferedOneShot(fileName, maxDuration, queue, resourceRefs))
 
 
-def _preloadBufferedOneShotEffect(fileName, maxDuration = 10.0, prereqs = None):
+def _preloadBufferedOneShotEffect(fileName, maxDuration=10.0, prereqs=None):
     """This method preloads the whole effect buffer given by fileName.
     If no prerequisites are passed in, then the entire buffer is synchronously
     created.  This may create a pause in the rendering thread.
@@ -86,7 +86,7 @@ def _preloadBufferedOneShotEffect(fileName, maxDuration = 10.0, prereqs = None):
         return True
 
 
-def getBufferedOneShotEffect(fileName, maxDuration = 10.0, prereqs = None):
+def getBufferedOneShotEffect(fileName, maxDuration=10.0, prereqs=None):
     """This method returns an instance of a buffered effect.  You should call
     this if you need access to a buffered effect, but do not want the effect
     to play immediately."""
@@ -109,7 +109,7 @@ def getBufferedOneShotEffect(fileName, maxDuration = 10.0, prereqs = None):
         return None
 
 
-def bufferedOneShotEffect(fileName, source, target = None, callbackFn = None, maxDuration = 10.0, prereqs = None, **kargs):
+def bufferedOneShotEffect(fileName, source, target=None, callbackFn=None, maxDuration=10.0, prereqs=None, **kargs):
     """This method plays an effect, retrieving it from an interally managed
     fixed-size cirular buffer.  If there are none available to play, it
     fails silently and internally reports it as a buffer overrun."""

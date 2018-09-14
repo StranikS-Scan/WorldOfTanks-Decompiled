@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/RandomDelay.py
 from FX.Event import Event
 from FX import s_sectionProcessors
@@ -22,7 +22,7 @@ class RandomDelayEvent(Event):
         self.maxDelay = 1.0
         self.nextDelay = 1.0
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """
         This method loads a RampTimeTriggeredParticles event from an XML
         data section.  It reads in "MinDelay" and "MaxDelay" as floats. All

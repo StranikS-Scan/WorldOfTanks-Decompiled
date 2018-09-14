@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrdersPanelComponent.py
 import itertools
 import operator
@@ -45,7 +45,7 @@ class FortOrdersPanelComponent(SlotsPanelMeta, FortViewHelper):
         self.as_setSlotsS(result)
         return
 
-    def _buildData(self, buildingID, isRecharged = False):
+    def _buildData(self, buildingID, isRecharged=False):
         orderID = self.fortCtrl.getFort().getBuildingOrder(buildingID)
         if orderID is None:
             return
@@ -149,7 +149,7 @@ class FortOrdersPanelComponent(SlotsPanelMeta, FortViewHelper):
         buildingTypeID, _, _, _ = self.fortCtrl.getFort().getOrderData(orderTypeID)
         self.as_updateSlotS(self._buildData(buildingTypeID, reason == ORDER_UPDATE_REASON.ADDED))
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         data = self._buildData(buildingTypeID)
         if data is not None:
             self.as_updateSlotS(data)

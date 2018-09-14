@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/training.py
 from functools import partial
 import BigWorld
@@ -27,7 +27,7 @@ from prebattle_shared import decodeRoster
 
 class TrainingEntry(default.PrbEntry):
 
-    def create(self, ctx, callback = None):
+    def create(self, ctx, callback=None):
         if not isinstance(ctx, prb_ctx.TrainingSettingsCtx):
             LOG_ERROR('Invalid context to create training', ctx)
             if callback is not None:
@@ -110,14 +110,14 @@ class TrainingIntroFunctional(default.IntroPrbFunctional):
     def __init__(self):
         super(TrainingIntroFunctional, self).__init__(PREBATTLE_TYPE.TRAINING, _TrainingListRequester())
 
-    def init(self, clientPrb = None, ctx = None):
+    def init(self, clientPrb=None, ctx=None):
         result = super(TrainingIntroFunctional, self).init()
         g_eventDispatcher.loadTrainingList()
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
         g_eventDispatcher.updateUI()
         return result
 
-    def fini(self, clientPrb = None, woEvents = False):
+    def fini(self, clientPrb=None, woEvents=False):
         super(TrainingIntroFunctional, self).fini()
         if self._flags & FUNCTIONAL_FLAG.SWITCH == 0 and not woEvents:
             g_eventDispatcher.loadHangar()
@@ -125,7 +125,7 @@ class TrainingIntroFunctional(default.IntroPrbFunctional):
             g_eventDispatcher.updateUI()
         return FUNCTIONAL_FLAG.UNDEFINED
 
-    def doAction(self, action = None):
+    def doAction(self, action=None):
         g_eventDispatcher.loadTrainingList()
         return True
 
@@ -140,7 +140,7 @@ class TrainingIntroFunctional(default.IntroPrbFunctional):
 class TrainingFunctional(default.PrbFunctional):
     __loadEvents = (VIEW_ALIAS.LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_INVENTORY,
-     VIEW_ALIAS.LOBBY_SHOP,
+     VIEW_ALIAS.LOBBY_STORE,
      VIEW_ALIAS.LOBBY_TECHTREE,
      VIEW_ALIAS.LOBBY_BARRACKS,
      VIEW_ALIAS.LOBBY_PROFILE,
@@ -163,7 +163,7 @@ class TrainingFunctional(default.PrbFunctional):
     def storage(self):
         return None
 
-    def init(self, clientPrb = None, ctx = None):
+    def init(self, clientPrb=None, ctx=None):
         result = super(TrainingFunctional, self).init(clientPrb=clientPrb)
         add = g_eventBus.addListener
         for event in self.__loadEvents:
@@ -175,7 +175,7 @@ class TrainingFunctional(default.PrbFunctional):
         g_eventDispatcher.updateUI()
         return result
 
-    def fini(self, clientPrb = None, woEvents = False):
+    def fini(self, clientPrb=None, woEvents=False):
         super(TrainingFunctional, self).fini(clientPrb=clientPrb, woEvents=woEvents)
         remove = g_eventBus.removeListener
         for event in self.__loadEvents:
@@ -189,6 +189,8 @@ class TrainingFunctional(default.PrbFunctional):
                 g_eventDispatcher.removeTrainingFromCarousel(False)
                 g_eventDispatcher.updateUI()
             self.storage.suspend()
+        else:
+            g_eventDispatcher.removeTrainingFromCarousel(False)
         g_eventDispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.TRAINING)
         return FUNCTIONAL_FLAG.UNDEFINED
 
@@ -196,7 +198,7 @@ class TrainingFunctional(default.PrbFunctional):
         super(TrainingFunctional, self).reset()
         g_eventDispatcher.loadHangar()
 
-    def getRosters(self, keys = None):
+    def getRosters(self, keys=None):
         rosters = prb_getters.getPrebattleRosters()
         if keys is None:
             result = {PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1: [],
@@ -207,8 +209,7 @@ class TrainingFunctional(default.PrbFunctional):
             for key in keys:
                 if PREBATTLE_ROSTER.UNASSIGNED & key != 0:
                     result[PREBATTLE_ROSTER.UNASSIGNED] = []
-                else:
-                    result[key] = []
+                result[key] = []
 
         hasTeam1 = PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in result
         hasTeam2 = PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in result
@@ -221,7 +222,7 @@ class TrainingFunctional(default.PrbFunctional):
                     result[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1] = accounts
                 elif hasTeam2 and team is 2:
                     result[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2] = accounts
-            elif hasUnassigned:
+            if hasUnassigned:
                 result[PREBATTLE_ROSTER.UNASSIGNED].extend(accounts)
 
         return result
@@ -229,7 +230,7 @@ class TrainingFunctional(default.PrbFunctional):
     def canPlayerDoAction(self):
         return (True, '')
 
-    def doAction(self, action = None):
+    def doAction(self, action=None):
         self.__enterTrainingRoom()
         return True
 
@@ -243,10 +244,10 @@ class TrainingFunctional(default.PrbFunctional):
     def hasGUIPage(self):
         return True
 
-    def showGUI(self, ctx = None):
+    def showGUI(self, ctx=None):
         self.__enterTrainingRoom()
 
-    def changeSettings(self, ctx, callback = None):
+    def changeSettings(self, ctx, callback=None):
         if ctx.getRequestType() != REQUEST_TYPE.CHANGE_SETTINGS:
             LOG_ERROR('Invalid context for request changeSettings', ctx)
             if callback is not None:
@@ -314,7 +315,7 @@ class TrainingFunctional(default.PrbFunctional):
                 self._cooldown.process(REQUEST_TYPE.CHANGE_SETTINGS)
             return
 
-    def changeUserObserverStatus(self, ctx, callback = None):
+    def changeUserObserverStatus(self, ctx, callback=None):
         if self._cooldown.validate(REQUEST_TYPE.CHANGE_USER_STATUS):
             if callback is not None:
                 callback(False)
@@ -327,7 +328,7 @@ class TrainingFunctional(default.PrbFunctional):
             self._cooldown.process(REQUEST_TYPE.CHANGE_USER_STATUS)
             return
 
-    def changeArenaVoip(self, ctx, callback = None):
+    def changeArenaVoip(self, ctx, callback=None):
         setting = self._settings[PREBATTLE_SETTING_NAME.ARENA_VOIP_CHANNELS]
         if ctx.getChannels() == setting:
             if callback is not None:
@@ -370,7 +371,7 @@ class TrainingFunctional(default.PrbFunctional):
             g_eventDispatcher.removeTrainingFromCarousel()
             g_eventDispatcher.addTrainingToCarousel(False)
 
-    def __onSettingChanged(self, code, record = '', callback = None):
+    def __onSettingChanged(self, code, record='', callback=None):
         if code < 0:
             LOG_ERROR('Server return error for training change', code, record)
             if callback is not None:

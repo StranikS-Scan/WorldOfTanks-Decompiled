@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortWelcomeInfoViewMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -10,22 +10,17 @@ class FortWelcomeInfoViewMeta(BaseDAAPIComponent):
     def onNavigate(self, code):
         self._printOverrideError('onNavigate')
 
-    def as_setWarningTextS(self, text, disabledBtnTooltip):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setWarningText(text, disabledBtnTooltip)
+    def openClanResearch(self):
+        self._printOverrideError('openClanResearch')
 
-    def as_setHyperLinksS(self, searchClanLink, createClanLink, detailLink):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setHyperLinks(searchClanLink, createClanLink, detailLink)
+    def as_setWarningTextS(self, text, disabledBtnTooltip):
+        return self.flashObject.as_setWarningText(text, disabledBtnTooltip) if self._isDAAPIInited() else None
 
     def as_setCommonDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCommonData(data)
+        return self.flashObject.as_setCommonData(data) if self._isDAAPIInited() else None
 
     def as_setRequirementTextS(self, text):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setRequirementText(text)
+        return self.flashObject.as_setRequirementText(text) if self._isDAAPIInited() else None
 
     def as_showMiniClientInfoS(self, description, hyperlink):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showMiniClientInfo(description, hyperlink)
+        return self.flashObject.as_showMiniClientInfo(description, hyperlink) if self._isDAAPIInited() else None

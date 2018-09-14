@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/SimpleDialog.py
 import BigWorld
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
@@ -7,7 +7,7 @@ from gui.Scaleform.framework import ScopeTemplates
 
 class SimpleDialog(SimpleDialogMeta):
 
-    def __init__(self, message, title, buttons, handler, dialogScope = ScopeTemplates.DEFAULT_SCOPE, timer = 0):
+    def __init__(self, message, title, buttons, handler, dialogScope=ScopeTemplates.DEFAULT_SCOPE, timer=0):
         super(SimpleDialog, self).__init__()
         self.__message = message
         self.__title = title

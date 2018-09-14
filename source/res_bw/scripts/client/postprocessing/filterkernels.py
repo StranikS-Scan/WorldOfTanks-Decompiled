@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/FilterKernels.py
 
 
@@ -74,7 +74,7 @@ def normaliseWeights(samples):
     return samples2
 
 
-def gaussianBlurNTap(horiz, n, stddev, width = 1.0):
+def gaussianBlurNTap(horiz, n, stddev, width=1.0):
     samples = []
     import math
     twopi = math.pi * 2.0
@@ -92,7 +92,7 @@ def gaussianBlurNTap(horiz, n, stddev, width = 1.0):
     return samples
 
 
-def gaussianBlur24Tap(horiz, width = 1.0):
+def gaussianBlur24Tap(horiz, width=1.0):
     samples = []
     if horiz:
         samples.append([-10.6 * width, 0.0, 0.3327])
@@ -147,7 +147,7 @@ def gaussianBlur24Tap(horiz, width = 1.0):
     return normaliseWeights(samples)
 
 
-def sharpFilter(k = 1):
+def sharpFilter(k=1):
     samples = []
     samples.append((-1.0, -1.0, -1))
     samples.append((0.0, -1.0, -1))
@@ -164,7 +164,7 @@ def sharpFilter(k = 1):
     return samples
 
 
-def edgeDetectFilter(k = 1):
+def edgeDetectFilter(k=1):
     samples = []
     samples.append((-1.0, -1.0, -1))
     samples.append((0.0, -1.0, -1))
@@ -181,7 +181,7 @@ def edgeDetectFilter(k = 1):
     return samples
 
 
-def embossFilter(k = 1):
+def embossFilter(k=1):
     samples = []
     samples.append((-1.0, 1.0, 2))
     samples.append((0.0, 1.0, 0))

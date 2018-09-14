@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-beos5/IN.py
 B_BEOS_VERSION_4 = 1024
 B_BEOS_VERSION_4_5 = 1104

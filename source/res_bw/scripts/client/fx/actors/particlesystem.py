@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Actors/ParticleSystem.py
 import Pixie
 import BigWorld
@@ -11,7 +11,7 @@ class ParticleSystem(Actor):
     This class implements an Actor that is a PyMetaParticleSystem.
     """
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """
         This method loads the ParticleSystem Actor from a data section. The
         the particle system resource ID is read from the section name.

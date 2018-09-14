@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/entities.py
 from constants import PREBATTLE_TYPE_NAMES
 from messenger.ext import channel_num_gen
@@ -80,8 +80,11 @@ class BWClubChannelEntity(_BWChannelEntity):
 
 class BWMemberEntity(MemberEntity):
 
-    def __init__(self, memberID, nickName, status = None):
-        super(BWMemberEntity, self).__init__(memberID, nickName, status)
+    def __init__(self, jid, nickName, status=None):
+        super(BWMemberEntity, self).__init__(jid, nickName, status)
+
+    def getDatabaseID(self):
+        return self.getID()
 
     def getProtoType(self):
         return PROTO_TYPE.BW_CHAT2

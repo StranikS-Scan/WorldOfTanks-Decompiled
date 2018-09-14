@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyView.py
 import BigWorld
 import VOIP
@@ -27,7 +27,7 @@ from helpers import i18n
 class LobbyView(LobbyPageMeta):
     VIEW_WAITING = (VIEW_ALIAS.LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_INVENTORY,
-     VIEW_ALIAS.LOBBY_SHOP,
+     VIEW_ALIAS.LOBBY_STORE,
      VIEW_ALIAS.LOBBY_PROFILE,
      VIEW_ALIAS.LOBBY_BARRACKS,
      PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY,
@@ -42,7 +42,7 @@ class LobbyView(LobbyPageMeta):
     class COMPONENTS:
         HEADER = 'lobbyHeader'
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
         self.__currIgrType = constants.IGR_TYPE.NONE
 

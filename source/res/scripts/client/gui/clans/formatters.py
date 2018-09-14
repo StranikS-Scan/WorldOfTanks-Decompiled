@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/formatters.py
 import BigWorld
 from client_request_lib.exceptions import ResponseCodes
@@ -11,13 +11,13 @@ ERROR_SYS_MSG_TPL = '#system_messages:clans/request/errors/%s'
 DUMMY_UNAVAILABLE_DATA = '--'
 DUMMY_NULL_DATA = '--'
 
-def _makeHtmlString(style, ctx = None):
+def _makeHtmlString(style, ctx=None):
     if ctx is None:
         ctx = {}
     return makeHtmlString('html_templates:lobby/clans', style, ctx)
 
 
-def getHtmlLineDivider(margin = 3):
+def getHtmlLineDivider(margin=3):
     return _makeHtmlString('lineDivider', {'margin': margin})
 
 
@@ -34,10 +34,7 @@ def formatInvitesCount(count):
 
 
 def formatDataToString(data):
-    if data is None:
-        return DUMMY_UNAVAILABLE_DATA
-    else:
-        return str(data)
+    return DUMMY_UNAVAILABLE_DATA if data is None else str(data)
 
 
 def formatShortDateShortTimeString(timestamp):
@@ -46,7 +43,12 @@ def formatShortDateShortTimeString(timestamp):
 
 _CUSTOM_ERR_MESSAGES_BY_REQUEST = {REQUEST_TYPE.CREATE_INVITES: lambda result, ctx: ''}
 _CUSTOM_ERR_MESSAGES = {(REQUEST_TYPE.CLAN_GLOBAL_MAP_STATS, ResponseCodes.GLOBAL_MAP_ERROR): '',
+ (REQUEST_TYPE.CLAN_GLOBAL_MAP_STATS, ResponseCodes.CLAN_DOES_NOT_EXIST): '',
  (REQUEST_TYPE.CLAN_INFO, ResponseCodes.WGCCBE_ERROR): '',
+ (REQUEST_TYPE.CLAN_APPLICATIONS, ResponseCodes.WGCCBE_ERROR): '',
+ (REQUEST_TYPE.CLAN_INVITES, ResponseCodes.WGCCBE_ERROR): '',
+ (REQUEST_TYPE.ACCOUNT_INVITES, ResponseCodes.WGCCBE_ERROR): '',
+ (REQUEST_TYPE.CLAN_ACCOUNTS, ResponseCodes.WGCCBE_ERROR): '',
  (REQUEST_TYPE.ACCEPT_INVITE, ResponseCodes.CLAN_IN_TRANSACTION): 'DEFAULT',
  (REQUEST_TYPE.DECLINE_INVITE, ResponseCodes.CLAN_IN_TRANSACTION): 'DEFAULT',
  (REQUEST_TYPE.DECLINE_INVITES, ResponseCodes.CLAN_IN_TRANSACTION): 'DEFAULT',
@@ -55,7 +57,7 @@ _CUSTOM_ERR_MESSAGES = {(REQUEST_TYPE.CLAN_GLOBAL_MAP_STATS, ResponseCodes.GLOBA
 
 def getRequestErrorMsg(result, ctx):
     msgReqKey = ctx.getRequestType()
-    msgKey = (ctx.getRequestType(), result.code)
+    msgKey = (msgReqKey, result.code)
     if msgKey in _CUSTOM_ERR_MESSAGES:
         errorMsg = _CUSTOM_ERR_MESSAGES[msgKey]
     elif msgReqKey in _CUSTOM_ERR_MESSAGES_BY_REQUEST:
@@ -77,13 +79,11 @@ def getRequestUserName(rqTypeID):
 
 
 def getClanRoleString(position):
-    if position in CLAN_MEMBERS:
-        return makeString('#menu:profile/header/clan/position/%s' % CLAN_MEMBERS[position])
+    return makeString('#menu:profile/header/clan/position/%s' % CLAN_MEMBERS[position]) if position in CLAN_MEMBERS else ''
 
 
 def getClanRoleIcon(role):
-    if role in CLAN_MEMBERS:
-        return '../maps/icons/clans/roles/%s.png' % CLAN_MEMBERS[role]
+    return '../maps/icons/clans/roles/%s.png' % CLAN_MEMBERS[role] if role in CLAN_MEMBERS else ''
 
 
 def getClanAbbrevString(clanAbbrev):
@@ -98,21 +98,25 @@ def getAppSentSysMsg(clanName, clanAbbrev):
     return _sysMsg('clans/notifications/requestSent', clanName=getClanFullName(clanName, clanAbbrev))
 
 
+def getInviteNotSentSysMsg(accountName, specKey=None):
+    key = specKey or 'clans/notifications/inviteSendError'
+    return _sysMsg(key, userName=accountName)
+
+
 def getInvitesNotSentSysMsg(accountNames):
-    count = len(accountNames)
-    if count == 1:
-        msg = _sysMsg('clans/notifications/inviteSendError', userName=accountNames[0])
-    else:
-        msg = _sysMsg('clans/notifications/invitesSendError', userCount=count)
-    return msg
+    return _formatMsg(accountNames, 'clans/notifications/inviteSendError', 'clans/notifications/invitesSendError')
 
 
 def getInvitesSentSysMsg(accountNames):
-    count = len(accountNames)
+    return _formatMsg(accountNames, 'clans/notifications/inviteSent', 'clans/notifications/invitesSent')
+
+
+def _formatMsg(items, singleKey, multiKey):
+    count = len(items)
     if count == 1:
-        msg = _sysMsg('clans/notifications/inviteSent', userName=accountNames[0])
+        msg = _sysMsg(singleKey, userName=items[0])
     else:
-        msg = _sysMsg('clans/notifications/invitesSent', userCount=count)
+        msg = _sysMsg(multiKey, userCount=count)
     return msg
 
 

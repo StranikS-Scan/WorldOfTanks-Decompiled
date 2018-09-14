@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PersonalCaseMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -44,21 +44,16 @@ class PersonalCaseMeta(AbstractWindowView):
         self._printOverrideError('openChangeRoleWindow')
 
     def as_setCommonDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCommonData(data)
+        return self.flashObject.as_setCommonData(data) if self._isDAAPIInited() else None
 
     def as_setDossierDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setDossierData(data)
+        return self.flashObject.as_setDossierData(data) if self._isDAAPIInited() else None
 
     def as_setRetrainingDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setRetrainingData(data)
+        return self.flashObject.as_setRetrainingData(data) if self._isDAAPIInited() else None
 
     def as_setSkillsDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSkillsData(data)
+        return self.flashObject.as_setSkillsData(data) if self._isDAAPIInited() else None
 
     def as_setDocumentsDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setDocumentsData(data)
+        return self.flashObject.as_setDocumentsData(data) if self._isDAAPIInited() else None

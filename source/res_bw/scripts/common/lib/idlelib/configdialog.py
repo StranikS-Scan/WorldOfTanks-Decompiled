@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/configDialog.py
 """IDLE Configuration Dialog: support user customization of IDLE by GUI
 
@@ -173,7 +173,7 @@ class ConfigDialog(Toplevel):
             text.insert(END, txTa[0], txTa[1])
 
         for element in self.themeElements.keys():
-            text.tag_bind(self.themeElements[element][0], '<ButtonPress-1>', lambda event, elem = element: event.widget.winfo_toplevel().highlightTarget.set(elem))
+            text.tag_bind(self.themeElements[element][0], '<ButtonPress-1>', lambda event, elem=element: event.widget.winfo_toplevel().highlightTarget.set(elem))
 
         text.config(state=DISABLED)
         self.frameColourSet = Frame(frameCustom, relief=SOLID, borderwidth=1)
@@ -692,7 +692,7 @@ class ConfigDialog(Toplevel):
         self.fontName.set(font.lower())
         self.SetFontSample()
 
-    def SetFontSample(self, event = None):
+    def SetFontSample(self, event=None):
         fontName = self.fontName.get()
         if self.fontBold.get():
             fontWeight = tkFont.BOLD

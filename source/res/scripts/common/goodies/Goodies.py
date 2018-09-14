@@ -1,8 +1,12 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/Goodies.py
+import collections
 from WeakMethod import WeakMethod
 from goodie_constants import GOODIE_STATE, MAX_ACTIVE_GOODIES
-import collections
+
+class GoodieException(Exception):
+    pass
+
 
 class ActualGoodiesDict(collections.MutableMapping, dict):
 
@@ -48,20 +52,16 @@ class ActualGoodiesDict(collections.MutableMapping, dict):
             return
         else:
             defined = self._definedGoodiesDict.get(goodieID, None)
-            if defined is None:
-                return
-            return (defined.resource, defined.value)
+            return None if defined is None else (defined.resource, defined.value)
 
     def checkResource(self, goodieID):
         resourceTuple = self.getResource(goodieID)
         if resourceTuple is None:
             return
-        resource, value = resourceTuple
-        anotherGoodieID = self._resourceIndexDict.get(resource)
-        if anotherGoodieID is not None:
-            return anotherGoodieID
         else:
-            return
+            resource, value = resourceTuple
+            anotherGoodieID = self._resourceIndexDict.get(resource)
+            return anotherGoodieID if anotherGoodieID is not None else None
 
     def compareByResource(self, goodieID, anotherGoodieID):
         resourceTuple = self.getResource(goodieID)
@@ -81,7 +81,7 @@ class ActualGoodiesDict(collections.MutableMapping, dict):
 
 class Goodies(object):
 
-    def __init__(self, definedGoodies, updateCallback = None, removeCallback = None):
+    def __init__(self, definedGoodies, updateCallback=None, removeCallback=None):
         self.definedGoodies = definedGoodies
         self.resourceIndex = {}
         self.actualGoodies = ActualGoodiesDict(self.definedGoodies, self.resourceIndex)
@@ -95,7 +95,7 @@ class Goodies(object):
             self._removeCallback = None
         return
 
-    def __updateCallback(self, goodie, showRemoveNotification = False):
+    def __updateCallback(self, goodie, showRemoveNotification=False):
         if self._updateCallback is not None:
             callbackRef = self._updateCallback()
             if callbackRef:
@@ -109,7 +109,7 @@ class Goodies(object):
                 callbackRef(goodieID)
         return
 
-    def __append(self, goodieDefinition, state = None, expiration = None, counter = None):
+    def __append(self, goodieDefinition, state=None, expiration=None, counter=None):
         goodie = goodieDefinition.createGoodie(state, expiration, counter)
         if goodie is None:
             return
@@ -179,7 +179,11 @@ class Goodies(object):
         return set(self.actualGoodies.iterkeys())
 
     def load(self, goodieID, state, expiration, counter):
-        goodieDefinition = self.definedGoodies[goodieID]
+        try:
+            goodieDefinition = self.definedGoodies[goodieID]
+        except KeyError:
+            raise GoodieException('Goodie is not found', goodieID)
+
         self.__append(goodieDefinition, state, expiration, counter)
 
     def extend(self, goodieID, state, expiration, counter):
@@ -193,10 +197,10 @@ class Goodies(object):
         self.__append(goodieDefinition, state, expiration, counter)
         return
 
-    def test(self, target, resources, returnDeltas = False, applyToZero = False):
+    def test(self, target, resources, returnDeltas=False, applyToZero=False):
         return self.__show(target, resources, returnDeltas, applyToZero)
 
-    def apply(self, target, resources, returnDeltas = False, applyToZero = False):
+    def apply(self, target, resources, returnDeltas=False, applyToZero=False):
         toUpdate = self.__show(target, resources, returnDeltas, applyToZero)
         for goodieID in toUpdate:
             self.__update(goodieID)
@@ -275,7 +279,7 @@ class Goodies(object):
             self.__erase(goodieID)
             return
 
-    def remove(self, goodieID, goodie = None, goodieDefinition = None, count = 1):
+    def remove(self, goodieID, goodie=None, goodieDefinition=None, count=1):
         if goodie is None:
             goodie = self.actualGoodies.get(goodieID, None)
             if goodie is None:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VOIP/VOIPHandler.py
 from VOIPLog import LOG_VOIP_INT
 from wotdecorators import noexcept
@@ -80,7 +80,7 @@ class VOIPHandler:
         pass
 
     @noexcept
-    def __call__(self, message, data = {}):
+    def __call__(self, message, data={}):
         if message is not MSG_PARTICIPANT_UPDATED:
             LOG_VOIP_INT('Message: %d [%s], Data: %s' % (message, MESSAGE_IDS[message], data))
         if message == MSG_VOIP_INITED:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PrebattleWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -38,33 +38,25 @@ class PrebattleWindowMeta(AbstractWindowView):
         self._printOverrideError('getClientID')
 
     def as_setRosterListS(self, team, assigned, rosters):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setRosterList(team, assigned, rosters)
+        return self.flashObject.as_setRosterList(team, assigned, rosters) if self._isDAAPIInited() else None
 
     def as_setPlayerStateS(self, team, assigned, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setPlayerState(team, assigned, data)
+        return self.flashObject.as_setPlayerState(team, assigned, data) if self._isDAAPIInited() else None
 
     def as_enableLeaveBtnS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_enableLeaveBtn(value)
+        return self.flashObject.as_enableLeaveBtn(value) if self._isDAAPIInited() else None
 
     def as_enableReadyBtnS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_enableReadyBtn(value)
+        return self.flashObject.as_enableReadyBtn(value) if self._isDAAPIInited() else None
 
     def as_setCoolDownForReadyButtonS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCoolDownForReadyButton(value)
+        return self.flashObject.as_setCoolDownForReadyButton(value) if self._isDAAPIInited() else None
 
     def as_resetReadyButtonCoolDownS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_resetReadyButtonCoolDown()
+        return self.flashObject.as_resetReadyButtonCoolDown() if self._isDAAPIInited() else None
 
     def as_toggleReadyBtnS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_toggleReadyBtn(value)
+        return self.flashObject.as_toggleReadyBtn(value) if self._isDAAPIInited() else None
 
     def as_refreshPermissionsS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_refreshPermissions()
+        return self.flashObject.as_refreshPermissions() if self._isDAAPIInited() else None

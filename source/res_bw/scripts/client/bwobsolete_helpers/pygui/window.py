@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/Window.py
 import BigWorld, GUI, Keys
 from PyGUIBase import PyGUIBase
@@ -26,7 +26,7 @@ class Window(PyGUIBase):
 class EscapableWindow(Window):
     factoryString = 'PyGUI.EscapableWindow'
 
-    def __init__(self, component = None):
+    def __init__(self, component=None):
         Window.__init__(self, component)
         component.script = self
         self.onEscape = None
@@ -44,7 +44,7 @@ class EscapableWindow(Window):
 class DraggableWindow(Window, DraggableComponent):
     factoryString = 'PyGUI.DraggableWindow'
 
-    def __init__(self, component, horzDrag = True, vertDrag = True, restrictToParent = True):
+    def __init__(self, component, horzDrag=True, vertDrag=True, restrictToParent=True):
         Window.__init__(self, component)
         DraggableComponent.__init__(self, horzDrag, vertDrag, restrictToParent)
         component.script = self

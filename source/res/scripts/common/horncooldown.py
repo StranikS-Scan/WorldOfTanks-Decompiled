@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/HornCooldown.py
 import BigWorld
 import Event
 
 class HornCooldown:
 
-    def __init__(self, windowSize, maxSignals, state = None):
+    def __init__(self, windowSize, maxSignals, state=None):
         self.__windowSize = windowSize
         self.__maxSignals = maxSignals
         if state is not None:
@@ -46,9 +46,7 @@ class HornCooldown:
             if past < self.__banPeriod:
                 return self.__banPeriod - past
             self.__banPeriod = 0.0
-        if len(self.__signals) < self.__maxSignals:
-            return 0.0
-        return max(0.0, self.__signals[0] + self.__windowSize - curTime)
+        return 0.0 if len(self.__signals) < self.__maxSignals else max(0.0, self.__signals[0] + self.__windowSize - curTime)
 
     def ban(self, period):
         if self.banTime() < period:

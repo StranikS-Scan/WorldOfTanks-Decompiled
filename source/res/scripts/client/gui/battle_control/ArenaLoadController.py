@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/ArenaLoadController.py
 import BigWorld
 from gui import game_control
@@ -8,7 +8,7 @@ from gui.battle_control.arena_info.interfaces import IArenaLoadController
 
 class ArenaLoadController(IArenaLoadController):
 
-    def __init__(self, isMultiTeam = False):
+    def __init__(self, isMultiTeam=False):
         super(ArenaLoadController, self).__init__()
         self.__isMultiTeam = isMultiTeam
 

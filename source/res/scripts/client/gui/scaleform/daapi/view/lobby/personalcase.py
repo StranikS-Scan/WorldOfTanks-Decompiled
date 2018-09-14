@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PersonalCase.py
 import constants
 from adisp import async
@@ -30,7 +30,7 @@ from account_helpers.settings_core.settings_constants import TUTORIAL
 
 class PersonalCase(PersonalCaseMeta, GlobalListener):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(PersonalCase, self).__init__()
         self.tmanInvID = ctx.get('tankmanID')
         self.tabIndex = ctx.get('page', -1)
@@ -152,10 +152,7 @@ class PersonalCase(PersonalCaseMeta, GlobalListener):
     def changeTankmanPassport(self, invengoryID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
 
         def checkFlashInt(value):
-            if value == -1:
-                return None
-            else:
-                return value
+            return None if value == -1 else value
 
         firstNameID = checkFlashInt(firstNameID)
         lastNameID = checkFlashInt(lastNameID)
@@ -376,7 +373,7 @@ class PersonalCaseDataProvider(object):
         return
 
     @staticmethod
-    def __getDocGroupValues(tankman, config, subGroupName, sortNeeded = True):
+    def __getDocGroupValues(tankman, config, subGroupName, sortNeeded=True):
         result = []
         isPremium, isFemale = tankman.descriptor.isPremium, tankman.descriptor.isFemale
         groupName = 'premiumGroups' if isPremium else 'normalGroups'

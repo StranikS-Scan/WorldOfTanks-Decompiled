@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BaseRallyRoomViewMeta.py
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyView import BaseRallyView
 
@@ -32,41 +32,31 @@ class BaseRallyRoomViewMeta(BaseRallyView):
         self._printOverrideError('showFAQWindow')
 
     def as_updateRallyS(self, rally):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateRally(rally)
+        return self.flashObject.as_updateRally(rally) if self._isDAAPIInited() else None
 
     def as_setMembersS(self, hasRestrictions, slots):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMembers(hasRestrictions, slots)
+        return self.flashObject.as_setMembers(hasRestrictions, slots) if self._isDAAPIInited() else None
 
     def as_setMemberStatusS(self, slotIndex, status):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMemberStatus(slotIndex, status)
+        return self.flashObject.as_setMemberStatus(slotIndex, status) if self._isDAAPIInited() else None
 
     def as_setMemberOfflineS(self, slotIndex, isOffline):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMemberOffline(slotIndex, isOffline)
+        return self.flashObject.as_setMemberOffline(slotIndex, isOffline) if self._isDAAPIInited() else None
 
     def as_setMemberVehicleS(self, slotIdx, slotCost, veh):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMemberVehicle(slotIdx, slotCost, veh)
+        return self.flashObject.as_setMemberVehicle(slotIdx, slotCost, veh) if self._isDAAPIInited() else None
 
     def as_setActionButtonStateS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setActionButtonState(data)
+        return self.flashObject.as_setActionButtonState(data) if self._isDAAPIInited() else None
 
     def as_setCommentS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setComment(value)
+        return self.flashObject.as_setComment(value) if self._isDAAPIInited() else None
 
     def as_getCandidatesDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getCandidatesDP()
+        return self.flashObject.as_getCandidatesDP() if self._isDAAPIInited() else None
 
     def as_highlightSlotsS(self, slotsIdx):
-        if self._isDAAPIInited():
-            return self.flashObject.as_highlightSlots(slotsIdx)
+        return self.flashObject.as_highlightSlots(slotsIdx) if self._isDAAPIInited() else None
 
     def as_setVehiclesTitleS(self, value, tooltip):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setVehiclesTitle(value, tooltip)
+        return self.flashObject.as_setVehiclesTitle(value, tooltip) if self._isDAAPIInited() else None

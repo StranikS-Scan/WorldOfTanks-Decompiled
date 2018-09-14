@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CyberSportIntroMeta.py
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyIntroView import BaseRallyIntroView
 
@@ -26,17 +26,13 @@ class CyberSportIntroMeta(BaseRallyIntroView):
         self._printOverrideError('joinClubUnit')
 
     def as_setSelectedVehicleS(self, selectedVehicleData, selectedVehicleIsReady, warnTooltip):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSelectedVehicle(selectedVehicleData, selectedVehicleIsReady, warnTooltip)
+        return self.flashObject.as_setSelectedVehicle(selectedVehicleData, selectedVehicleIsReady, warnTooltip) if self._isDAAPIInited() else None
 
     def as_setTextsS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTexts(data)
+        return self.flashObject.as_setTexts(data) if self._isDAAPIInited() else None
 
     def as_setStaticTeamDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setStaticTeamData(data)
+        return self.flashObject.as_setStaticTeamData(data) if self._isDAAPIInited() else None
 
     def as_setNoVehiclesS(self, warnTooltip):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setNoVehicles(warnTooltip)
+        return self.flashObject.as_setNoVehicles(warnTooltip) if self._isDAAPIInited() else None

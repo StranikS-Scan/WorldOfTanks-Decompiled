@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/restrictions.py
 import operator
 from itertools import chain
@@ -120,10 +120,7 @@ class _Restriction(namedtuple('Restriction', ['reason',
         return self.expires
 
     def getExpiryTimeLeft(self):
-        if not self.isInfinite():
-            return self.expires - getCurrentTimestamp()
-        else:
-            return None
+        return self.expires - getCurrentTimestamp() if not self.isInfinite() else None
 
     def isExpired(self):
         expLeft = self.getExpiryTimeLeft()
@@ -150,19 +147,14 @@ class RestrictionsCollection(object):
         return self.__restrictions
 
     def isRequestValid(self, requestTypeID):
-        if requestTypeID in self.__restrictions:
-            return error(first(self.__restrictions[requestTypeID]).getReasonString())
-        return success()
+        return error(first(self.__restrictions[requestTypeID]).getReasonString()) if requestTypeID in self.__restrictions else success()
 
     def getRequestRestrictions(self, requestTypeID):
         return self.__restrictions[requestTypeID]
 
     def getNearestRestriction(self):
         valid = filter(lambda a: not a.isExpired(), chain(*self.__restrictions.values()))
-        if len(valid):
-            return min(valid, key=operator.methodcaller('getExpiryTime'))
-        else:
-            return None
+        return min(valid, key=operator.methodcaller('getExpiryTime')) if len(valid) else None
 
 
 class _AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
@@ -184,9 +176,7 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
         stateID = profile.getState().getStateID()
         if stateID == _CCB.HAS_CLUB:
             return error(_CCR.ACCOUNT_ALREADY_IN_TEAM)
-        if stateID == _CCB.SENT_APP:
-            return error(_CCR.APPLICATION_FOR_USER_EXCEEDED)
-        return self._isAccountRequestValid(_CRT.CREATE_CLUB)
+        return error(_CCR.APPLICATION_FOR_USER_EXCEEDED) if stateID == _CCB.SENT_APP else self._isAccountRequestValid(_CRT.CREATE_CLUB)
 
     def canAcceptInvite(self, profile, inviteID):
         if profile.getState().getStateID() == _CCB.HAS_CLUB:
@@ -194,19 +184,15 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
         invite = profile.getInvite(inviteID)
         if not invite:
             return error(_CCR.INVITE_DOES_NOT_EXIST)
-        if not invite.isActive():
-            return error(_CCR.INVITE_IS_NOT_ACTIVE)
-        return self._isAccountRequestValid(_CRT.ACCEPT_INVITE)
+        return error(_CCR.INVITE_IS_NOT_ACTIVE) if not invite.isActive() else self._isAccountRequestValid(_CRT.ACCEPT_INVITE)
 
     def canDeclineInvite(self, profile, inviteID):
         invite = profile.getInvite(inviteID)
         if not invite:
             return error(_CCR.INVITE_DOES_NOT_EXIST)
-        if not invite.isActive():
-            return error(_CCR.INVITE_IS_NOT_ACTIVE)
-        return self._isAccountRequestValid(_CRT.DECLINE_INVITE)
+        return error(_CCR.INVITE_IS_NOT_ACTIVE) if not invite.isActive() else self._isAccountRequestValid(_CRT.DECLINE_INVITE)
 
-    def canSendApplication(self, profile, club = None):
+    def canSendApplication(self, profile, club=None):
         stateID = profile.getState().getStateID()
         if stateID == _CCB.HAS_CLUB:
             return error(_CCR.ACCOUNT_ALREADY_IN_TEAM)
@@ -221,31 +207,24 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
 
         return self._isClubRequestValid(_CRT.SEND_APPLICATION, club, 'canSendApplication')
 
-    def canRevokeApplication(self, profile, club = None):
+    def canRevokeApplication(self, profile, club=None):
         stateID = profile.getState().getStateID()
-        if stateID != _CCB.SENT_APP or club is not None and profile.getState().getClubDbID() != club.getClubDbID():
-            return error(_CCR.NOT_IN_APPLICANTS)
-        else:
-            return self._isClubRequestValid(_CRT.REVOKE_APPLICATION, club, 'canRevokeApplication')
+        return error(_CCR.NOT_IN_APPLICANTS) if stateID != _CCB.SENT_APP or club is not None and profile.getState().getClubDbID() != club.getClubDbID() else self._isClubRequestValid(_CRT.REVOKE_APPLICATION, club, 'canRevokeApplication')
 
-    def canSeeContenders(self, profile, club = None):
-        if club and not club.getLadderInfo().isInLadder():
-            return error(_CCR.CLUB_IS_NOT_IN_LADDER)
-        return self._isClubRequestValid(_CRT.GET_CLUBS_CONTENDERS, club, 'canSeeContenders')
+    def canSeeContenders(self, profile, club=None):
+        return error(_CCR.CLUB_IS_NOT_IN_LADDER) if club and not club.getLadderInfo().isInLadder() else self._isClubRequestValid(_CRT.GET_CLUBS_CONTENDERS, club, 'canSeeContenders')
 
-    def canSeeOtherPlayerInfo(self, profile, club = None, userDbID = None):
+    def canSeeOtherPlayerInfo(self, profile, club=None, userDbID=None):
         return self._isAccountRequestValid(_CRT.GET_PLAYER_INFO)
 
-    def canGetClubSeasons(self, profile, club = None):
+    def canGetClubSeasons(self, profile, club=None):
         return self._isAccountRequestValid(_CRT.GET_SEASONS)
 
-    def canDestroyClub(self, profile, club = None):
+    def canDestroyClub(self, profile, club=None):
         stateID = profile.getState().getStateID()
-        if stateID != _CCB.HAS_CLUB:
-            return error(_CCR.HAS_NO_CLUB)
-        return self._isClubRequestValid(_CRT.DESTROY_CLUB, club, 'canDestroyClub')
+        return error(_CCR.HAS_NO_CLUB) if stateID != _CCB.HAS_CLUB else self._isClubRequestValid(_CRT.DESTROY_CLUB, club, 'canDestroyClub')
 
-    def canLeaveClub(self, profile, club = None):
+    def canLeaveClub(self, profile, club=None):
         stateID = profile.getState().getStateID()
         if stateID != _CCB.HAS_CLUB:
             return error(_CCR.HAS_NO_CLUB)
@@ -255,19 +234,15 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
                     return error(_CCR.NOT_A_CLUB_MEMBER)
             return self._isClubRequestValid(_CRT.LEAVE_CLUB, club, 'canLeaveClub')
 
-    def canOpenClub(self, profile, club = None):
+    def canOpenClub(self, profile, club=None):
         stateID = profile.getState().getStateID()
-        if stateID != _CCB.HAS_CLUB:
-            return error(_CCR.HAS_NO_CLUB)
-        return self._isClubRequestValid(_CRT.OPEN_CLUB, club, 'canOpenClub')
+        return error(_CCR.HAS_NO_CLUB) if stateID != _CCB.HAS_CLUB else self._isClubRequestValid(_CRT.OPEN_CLUB, club, 'canOpenClub')
 
-    def canCloseClub(self, profile, club = None):
+    def canCloseClub(self, profile, club=None):
         stateID = profile.getState().getStateID()
-        if stateID != _CCB.HAS_CLUB:
-            return error(_CCR.HAS_NO_CLUB)
-        return self._isClubRequestValid(_CRT.CLOSE_CLUB, club, 'canCloseClub')
+        return error(_CCR.HAS_NO_CLUB) if stateID != _CCB.HAS_CLUB else self._isClubRequestValid(_CRT.CLOSE_CLUB, club, 'canCloseClub')
 
-    def canSendInvite(self, profile, club = None, accountsToInvite = None):
+    def canSendInvite(self, profile, club=None, accountsToInvite=None):
         stateID = profile.getState().getStateID()
         if stateID != _CCB.HAS_CLUB:
             return error(_CCR.HAS_NO_CLUB)
@@ -281,61 +256,51 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
                         return error(_CCR.TOO_MANY_ACTIVE_INVITES)
             return self._isClubRequestValid(_CRT.SEND_INVITE, club, 'canSendInvite')
 
-    def canRevokeInvite(self, profile, club = None):
+    def canRevokeInvite(self, profile, club=None):
+        stateID = profile.getState().getStateID()
+        return error(_CCR.HAS_NO_CLUB) if stateID != _CCB.HAS_CLUB else self._isClubRequestValid(_CRT.REVOKE_INVITE, club, 'canRevokeInvite')
+
+    def canAcceptApplication(self, profile, club=None):
+        stateID = profile.getState().getStateID()
+        return error(_CCR.HAS_NO_CLUB) if stateID != _CCB.HAS_CLUB else self._isClubRequestValid(_CRT.ACCEPT_APPLICATION, club, 'canAcceptApplication')
+
+    def canDeclineApplication(self, profile, club=None):
+        stateID = profile.getState().getStateID()
+        return error(_CCR.HAS_NO_CLUB) if stateID != _CCB.HAS_CLUB else self._isClubRequestValid(_CRT.DECLINE_APPLICATION, club, 'canDeclineApplication')
+
+    def canJoinUnit(self, profile, club=None):
+        stateID = profile.getState().getStateID()
+        return error(_CCR.HAS_NO_CLUB) if stateID != _CCB.HAS_CLUB else self._isClubRequestValid(_CRT.JOIN_UNIT, club, 'canJoinUnit')
+
+    def canCreateUnit(self, profile, club=None):
         stateID = profile.getState().getStateID()
         if stateID != _CCB.HAS_CLUB:
             return error(_CCR.HAS_NO_CLUB)
-        return self._isClubRequestValid(_CRT.REVOKE_INVITE, club, 'canRevokeInvite')
+        return error(_CCR.NOT_ENOUGH_MEMBERS) if not club.canParticipateBattles() else self._isClubRequestValid(_CRT.JOIN_UNIT, club, 'canCreateUnit')
 
-    def canAcceptApplication(self, profile, club = None):
-        stateID = profile.getState().getStateID()
-        if stateID != _CCB.HAS_CLUB:
-            return error(_CCR.HAS_NO_CLUB)
-        return self._isClubRequestValid(_CRT.ACCEPT_APPLICATION, club, 'canAcceptApplication')
-
-    def canDeclineApplication(self, profile, club = None):
-        stateID = profile.getState().getStateID()
-        if stateID != _CCB.HAS_CLUB:
-            return error(_CCR.HAS_NO_CLUB)
-        return self._isClubRequestValid(_CRT.DECLINE_APPLICATION, club, 'canDeclineApplication')
-
-    def canJoinUnit(self, profile, club = None):
-        stateID = profile.getState().getStateID()
-        if stateID != _CCB.HAS_CLUB:
-            return error(_CCR.HAS_NO_CLUB)
-        return self._isClubRequestValid(_CRT.JOIN_UNIT, club, 'canJoinUnit')
-
-    def canCreateUnit(self, profile, club = None):
-        stateID = profile.getState().getStateID()
-        if stateID != _CCB.HAS_CLUB:
-            return error(_CCR.HAS_NO_CLUB)
-        if not club.canParticipateBattles():
-            return error(_CCR.NOT_ENOUGH_MEMBERS)
-        return self._isClubRequestValid(_CRT.JOIN_UNIT, club, 'canCreateUnit')
-
-    def canSeeApplicants(self, profile, club = None):
+    def canSeeApplicants(self, profile, club=None):
         return self._isClubRequestValid(_CRT.GET_CLUB_APPLICANTS, club, 'canSeeApplicants')
 
-    def canTransferOwnership(self, profile, club = None):
+    def canTransferOwnership(self, profile, club=None):
         return self._isClubRequestValid(_CRT.TRANSFER_OWNERSHIP, club, 'canTransferOwnership')
 
-    def canAssignOfficer(self, profile, club = None):
+    def canAssignOfficer(self, profile, club=None):
         return self._isClubRequestValid(_CRT.ASSIGN_OFFICER, club, 'canAssignOfficer')
 
-    def canAssignPrivate(self, profile, club = None):
+    def canAssignPrivate(self, profile, club=None):
         return self._isClubRequestValid(_CRT.ASSIGN_PRIVATE, club, 'canAssignPrivate')
 
-    def canKickMember(self, profile, club = None, memberDbID = None):
+    def canKickMember(self, profile, club=None, memberDbID=None):
         if club is not None:
             if memberDbID is not None:
                 if not club.hasMember(memberDbID):
                     return error(_CCR.NOT_A_CLUB_MEMBER)
         return self._isClubRequestValid(_CRT.KICK_MEMBER, club, 'canKickMember')
 
-    def canChangeClubRequirements(self, profile, club = None):
+    def canChangeClubRequirements(self, profile, club=None):
         return self._isClubRequestValid(_CRT.SET_APPLICANT_REQUIREMENTS, club, 'canChangeClubRequirements')
 
-    def canChangeWebSettings(self, profile, club = None):
+    def canChangeWebSettings(self, profile, club=None):
         url = GUI_SETTINGS.lookup('clubSettings')
         if not url:
             return error(_CCR.DEFAULT)

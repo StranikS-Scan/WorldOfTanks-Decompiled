@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Finder/Legacy_suite.py
 """Suite Legacy suite: Operations formerly handled by the Finder, but now automatically delegated to other applications
 Level 1, version 1
@@ -11,7 +12,7 @@ _code = 'fleg'
 
 class Legacy_suite_Events:
 
-    def restart(self, _no_object = None, _attributes = {}, **_arguments):
+    def restart(self, _no_object=None, _attributes={}, **_arguments):
         """restart: Restart the computer
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -24,12 +25,9 @@ class Legacy_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def shut_down(self, _no_object = None, _attributes = {}, **_arguments):
+    def shut_down(self, _no_object=None, _attributes={}, **_arguments):
         """shut down: Shut Down the computer
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -42,12 +40,9 @@ class Legacy_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def sleep(self, _no_object = None, _attributes = {}, **_arguments):
+    def sleep(self, _no_object=None, _attributes={}, **_arguments):
         """sleep: Put the computer to sleep
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -60,10 +55,7 @@ class Legacy_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class application(aetools.ComponentItem):

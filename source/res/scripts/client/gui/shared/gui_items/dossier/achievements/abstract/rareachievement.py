@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/RareAchievement.py
 import uuid
 import imghdr
@@ -11,7 +11,7 @@ from gui.shared.gui_items.dossier.achievements import validators
 class RareAchievement(RegularAchievement):
     SHOW_COUNTER = True
 
-    def __init__(self, rareID, dossier, value = None):
+    def __init__(self, rareID, dossier, value=None):
         self._rareID = int(rareID)
         super(RareAchievement, self).__init__(rareID, _AB.RARE, dossier, value)
 
@@ -29,10 +29,7 @@ class RareAchievement(RegularAchievement):
 
     @classmethod
     def checkIsInDossier(cls, block, rareID, dossier):
-        if dossier is not None:
-            return rareID in dossier.getBlock(_AB.RARE)
-        else:
-            return False
+        return rareID in dossier.getBlock(_AB.RARE) if dossier is not None else False
 
     @classmethod
     def checkIsValid(cls, block, name, dossier):

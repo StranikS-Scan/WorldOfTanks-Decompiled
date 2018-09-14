@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/parsers/quests.py
 import ResMgr
 from tutorial.data.quest import QuestChapter, ProgressCondition
@@ -28,7 +28,7 @@ class QuestsChapterParser(ChapterParser):
     def __init__(self):
         super(QuestsChapterParser, self).__init__()
 
-    def parse(self, chapter, afterBattle = False, initial = False):
+    def parse(self, chapter, afterBattle=False, initial=False):
         chapter = super(QuestsChapterParser, self).parse(chapter, afterBattle, initial)
         self.__parseSharedTriggers(chapter)
         self.__parseSharedEntities(chapter)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/EmblemInterface.py
 import BigWorld
 from abc import abstractmethod, ABCMeta
@@ -42,10 +42,7 @@ class EmblemInterface(BaseTimedCustomizationInterface):
 
     def isEnabled(self):
         serverSettings = g_lobbyContext.getServerSettings()
-        if serverSettings is not None and serverSettings.roaming.isInRoaming():
-            return False
-        else:
-            return self._isEnabled
+        return False if serverSettings is not None and serverSettings.roaming.isInRoaming() else self._isEnabled
 
     def locateCameraOnSlot(self):
         res = g_hangarSpace.space.locateCameraOnEmblem(not self.isTurret, 'player', self._position - self._positionShift, self.ZOOM_FACTOR)
@@ -72,7 +69,7 @@ class EmblemInterface(BaseTimedCustomizationInterface):
     def isNewItemIGR(self):
         return self._itemsDP.isIGRItem(self._newItemID)
 
-    def updateVehicleCustomization(self, itemID = None):
+    def updateVehicleCustomization(self, itemID=None):
         space = g_hangarSpace.space
         if space is not None and g_currentVehicle.isInHangar():
             VehicleCustomizationModel.updateVehicleSticker('player', itemID, self.getRealPosition(), self._rentalPackageDP.selectedPackage.get('periodDays'))

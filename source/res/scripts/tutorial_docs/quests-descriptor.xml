@@ -27,7 +27,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_1	</chapter-id>
       <bonus-ref>	Bonus11	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-1.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_1	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-1-2.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -58,7 +62,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_2	</chapter-id>
       <bonus-ref>	Bonus12	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-2.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_2	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-1-2.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -90,7 +98,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_3	</chapter-id>
       <bonus-ref>	Bonus13	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-3.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_3	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -122,7 +134,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_4	</chapter-id>
       <bonus-ref>	Bonus14	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-4.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_4	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -154,7 +170,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_5	</chapter-id>
       <bonus-ref>	Bonus15	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-5.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_5	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -167,7 +187,7 @@
         <condition>
           <asDict>
             <text>
-              <asString>	_(#tutorial:tutorialQuest/condition/quest6)	</asString>
+              <asString>	_(tutorialQuest/condition/quest6)	</asString>
             </text>
             <btnLabel>
               <asString>	_(#quests:beginnerQuests/details/buttonStartQuest)	</asString>
@@ -199,7 +219,11 @@
       </progress-condition>
       <chapter-id>	TutorialQuest_6	</chapter-id>
       <bonus-ref>	Bonus16	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-6.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_6	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -231,7 +255,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_7	</chapter-id>
       <bonus-ref>	Bonus17	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-7.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_7	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -263,7 +291,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_8	</chapter-id>
       <bonus-ref>	Bonus18	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-8.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_8	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -295,7 +327,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_9	</chapter-id>
       <bonus-ref>	Bonus19	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-9.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_9	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -327,7 +363,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_10	</chapter-id>
       <bonus-ref>	Bonus20	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-10.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_10	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -375,7 +415,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_11	</chapter-id>
       <bonus-ref>	Bonus21	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-11.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_11	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -423,7 +467,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_12	</chapter-id>
       <bonus-ref>	Bonus22	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-12.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_12	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -471,7 +519,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_13	</chapter-id>
       <bonus-ref>	Bonus23	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-13.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_13	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>
@@ -503,7 +555,11 @@
       <progress-condition></progress-condition>
       <chapter-id>	TutorialQuest_14	</chapter-id>
       <bonus-ref>	Bonus24	</bonus-ref>
-      <file-path>	scripts/tutorial_docs/tutorial-quest-14.xml	</file-path>
+      <vars>
+        <var-set>	ChapterVar	  <asString>	TutorialQuest_14	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tutorial-quest-3-14.xml	</file-path>
       <shared-scene>	scripts/tutorial_docs/quests-shared-scene.xml	</shared-scene>
       <shared-triggers>	scripts/tutorial_docs/quests-shared-triggers.xml	</shared-triggers>
       <shared-entities>	scripts/tutorial_docs/quests-shared-entities.xml	</shared-entities>

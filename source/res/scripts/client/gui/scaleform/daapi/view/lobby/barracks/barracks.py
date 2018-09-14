@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/barracks/Barracks.py
 import BigWorld
 from AccountCommands import LOCK_REASON
@@ -21,10 +21,12 @@ from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload
 from gui.shared.utils import decorators
+from gui.sounds.ambients import LobbySubViewEnv
 
 class Barracks(BarracksMeta, LobbySubView, GlobalListener):
+    __sound_env__ = LobbySubViewEnv
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(Barracks, self).__init__()
         self.filter = dict(AccountSettings.getFilter(BARRACKS_FILTER))
 
@@ -125,7 +127,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
                     LOG_ERROR('Cannot find vehicle for tankman: ', tankman, tankman.descriptor.role, tankman.vehicle.name, tankman.firstname, tankman.lastname)
                     continue
                 slot = tankman.vehicleSlotIdx
-            if self.filter['nation'] != -1 and tankman.nationID != self.filter['nation'] or self.filter['role'] != 'None' and tankman.descriptor.role != self.filter['role'] or self.filter['tankType'] != 'None' and tankman.vehicleNativeType != self.filter['tankType'] or self.filter['location'] == 'tanks' and tankman.isInTank != True or self.filter['location'] == 'barracks' and tankman.isInTank == True or self.filter['nationID'] is not None and (self.filter['location'] != str(vehicleInnationID) or self.filter['nationID'] != str(tankman.nationID)):
+            if self.filter['nation'] != -1 and tankman.nationID != self.filter['nation'] or self.filter['role'] != 'None' and tankman.descriptor.role != self.filter['role'] or self.filter['tankType'] != 'None' and tankman.vehicleNativeType != self.filter['tankType'] or self.filter['location'] == 'tanks' and tankman.isInTank is not True or self.filter['location'] == 'barracks' and tankman.isInTank is True or self.filter['nationID'] is not None and (self.filter['location'] != str(vehicleInnationID) or self.filter['nationID'] != str(tankman.nationID)):
                 continue
             isLocked, msg = self.getTankmanLockMessage(vehicle) if tankman.isInTank else (False, '')
             tankmanVehicle = g_itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)

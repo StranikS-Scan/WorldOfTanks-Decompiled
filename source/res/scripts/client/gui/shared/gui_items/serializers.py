@@ -1,10 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/serializers.py
 import cPickle
 from items import tankmen
 from gui.shared.gui_items import _ICONS_MASK, Tankman, Vehicle
 
-def packTankmanSkill(skill, isPermanent = False):
+def packTankmanSkill(skill, isPermanent=False):
     if skill.roleType in tankmen.getSkillsConfig():
         roleIconPath = Tankman.getRoleSmallIconPath(skill.roleType)
     else:
@@ -24,9 +24,9 @@ def packTankmanSkill(skill, isPermanent = False):
      'isPermanent': isPermanent}
 
 
-def packTankman(tankman, isCountPermanentSkills = True):
+def packTankman(tankman, isCountPermanentSkills=True):
 
-    def vehicleIcon(vDescr, subtype = ''):
+    def vehicleIcon(vDescr, subtype=''):
         return _ICONS_MASK % {'type': 'vehicle',
          'subtype': subtype,
          'unicName': vDescr.name.replace(':', '-')}

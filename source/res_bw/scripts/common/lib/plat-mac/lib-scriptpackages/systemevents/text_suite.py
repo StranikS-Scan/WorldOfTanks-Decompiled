@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/SystemEvents/Text_Suite.py
 """Suite Text Suite: A set of basic classes for text processing.
 Level 1, version 1

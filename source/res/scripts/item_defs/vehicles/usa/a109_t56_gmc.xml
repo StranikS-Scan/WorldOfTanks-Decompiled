@@ -107,6 +107,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A109_T56_GMC/T56_GMC_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_A109_T56_GMC>
@@ -684,7 +685,7 @@
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.281 0.157 1.020 -0.017 0.586 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
     </Turret_1_A109_T56_GMC>
@@ -715,7 +716,7 @@
       </surveyingDeviceHealth>
       <guns>
         <_57mm_Gun_M1_L50>	shared	  <unlocks>
-            <vehicle>	T40	  <cost>	3300	</cost>
+            <vehicle>	A29_T40	  <cost>	3300	</cost>
             </vehicle>
             <vehicle>	M8A1	  <cost>	3350	</cost>
             </vehicle>
@@ -760,7 +761,7 @@
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.177 0.000 1.000 0.052 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
     </Turret_2_A109_T56_GMC>

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/obfuscators.py
 import base64
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -8,7 +8,7 @@ class XORObfuscator:
 
     def __init__(self, key):
         if len(key) < 1:
-            raise ValueError, 'Key length must be at least one character'
+            raise ValueError('Key length must be at least one character')
         self.__key = key
 
     def __doXor(self, data):
@@ -32,9 +32,7 @@ class XORObfuscator:
             LOG_CURRENT_EXCEPTION()
             return data
 
-        if decode.startswith(self.__PREFIX):
-            return self.__doXor(decode[len(self.__PREFIX):])
-        return data
+        return self.__doXor(decode[len(self.__PREFIX):]) if decode.startswith(self.__PREFIX) else data
 
 
 class PasswordObfuscator(XORObfuscator):

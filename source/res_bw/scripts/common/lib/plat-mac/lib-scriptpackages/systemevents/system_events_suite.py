@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/SystemEvents/System_Events_Suite.py
 """Suite System Events Suite: Terms and Events for controlling the System Events application
 Level 1, version 1
@@ -11,7 +12,7 @@ _code = 'sevs'
 
 class System_Events_Suite_Events:
 
-    def do_script(self, _object, _attributes = {}, **_arguments):
+    def do_script(self, _object, _attributes={}, **_arguments):
         """do script: Execute an OSA script.
         Required argument: the object for the command
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -24,8 +25,7 @@ class System_Events_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class application(aetools.ComponentItem):

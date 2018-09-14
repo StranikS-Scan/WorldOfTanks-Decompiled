@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/TweenSystem.py
 from gui.Scaleform.framework.entities.abstract.TweenManagerMeta import TweenManagerMeta
 import BigWorld
@@ -205,7 +205,7 @@ class TweenManager(TweenManagerMeta):
                         BigWorld.cancelCallback(self.__animCallback)
                         self.__animCallback = None
                 tween.complete()
-            elif tween.getPaused():
+            if tween.getPaused():
                 self.__clearPlayStackElement(self.__playStack[tweenIdx])
                 del self.__playStack[tweenIdx]
                 if len(self.__playStack):
@@ -213,18 +213,17 @@ class TweenManager(TweenManagerMeta):
                 else:
                     BigWorld.cancelCallback(self.__animCallback)
                     self.__animCallback = None
-            else:
-                position = tween.position
-                deltaTime = self.__lastUpdateTime - locLastUpdateTime
-                position += deltaTime
-                tween.position = position
-                if position > 0:
-                    ratio = position / duration
-                    if ratio >= 1:
-                        tween.isComplete = True
-                        ratio = 1
-                    tween.setPropToTargetDO(self.checkAnimProps(startData, deltaData, ratio), ratio)
-                tweenIdx += 1
+            position = tween.position
+            deltaTime = self.__lastUpdateTime - locLastUpdateTime
+            position += deltaTime
+            tween.position = position
+            if position > 0:
+                ratio = position / duration
+                if ratio >= 1:
+                    tween.isComplete = True
+                    ratio = 1
+                tween.setPropToTargetDO(self.checkAnimProps(startData, deltaData, ratio), ratio)
+            tweenIdx += 1
 
         return
 
@@ -335,8 +334,7 @@ class _AbstractTween(AbstractTweenMeta):
         for prop in _AbstractTween.PROPS_IN_USE.keys():
             if self.__animTargetProps.has_key(prop) and self.__animTargetProps[prop] is not None:
                 deltaProps[prop] = self.__animTargetProps[prop] - self.__startTargetProps[prop]
-            else:
-                deltaProps[prop] = 0
+            deltaProps[prop] = 0
 
         return deltaProps
 

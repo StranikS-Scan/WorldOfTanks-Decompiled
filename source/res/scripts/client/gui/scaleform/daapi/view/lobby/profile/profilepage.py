@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfilePage.py
 import BigWorld
 from gui.Scaleform.daapi import LobbySubView
@@ -7,12 +7,14 @@ from gui.Scaleform.daapi.view.meta.ProfileMeta import ProfileMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.sounds.ambients import LobbySubViewEnv
 from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers.i18n import makeString
 
 class ProfilePage(LobbySubView, ProfileMeta):
+    __sound_env__ = LobbySubViewEnv
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         self.__ctx = ctx
         LobbySubView.__init__(self)
         self.__tabNavigator = None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/GetPremiumPopover.py
 import BigWorld
 from gui.LobbyContext import g_lobbyContext
@@ -12,7 +12,7 @@ from helpers.i18n import makeString as _ms
 
 class GetPremiumPopover(GetPremiumPopoverMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(GetPremiumPopover, self).__init__()
         self.__context = ctx.get('data')
 

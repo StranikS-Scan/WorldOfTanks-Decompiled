@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Event.py
 """
 Interface FX.Event
@@ -39,7 +39,7 @@ DURATION_DEPENDENT_EVENT = 2
 
 class Event:
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """The method loads the event from an XML section.  The method must
         return the event that should be added to the effect, or None if the
         load failed and no event should be created."""

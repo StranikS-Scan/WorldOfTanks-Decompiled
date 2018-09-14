@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Phases.py
 from _PostProcessing import CopyBackBuffer
 from _PostProcessing import FilterQuad
@@ -77,7 +77,7 @@ def buildBackBufferCopyPhase(renderTarget):
         return c
 
 
-def buildPhase(input, output, fxFile, sampleProvider = straightTransfer4Tap, srcBlend = BW_BLEND_ONE, destBlend = BW_BLEND_ZERO):
+def buildPhase(input, output, fxFile, sampleProvider=straightTransfer4Tap, srcBlend=BW_BLEND_ONE, destBlend=BW_BLEND_ZERO):
     if input == None:
         from RenderTargets import rt
         input = rt('PostProcessing/backBufferCopy').texture
@@ -99,14 +99,14 @@ def buildPhase(input, output, fxFile, sampleProvider = straightTransfer4Tap, src
 
 
 @implementPhaseFactory('Transfer', 'Transfer a texture to the screen or an intermediate texture.', None)
-def buildTransferPhase(input, srcBlend = BW_BLEND_ONE, destBlend = BW_BLEND_ZERO):
+def buildTransferPhase(input, srcBlend=BW_BLEND_ONE, destBlend=BW_BLEND_ZERO):
     p = buildPhase(input, None, 'shaders/post_processing/transfer.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.name = 'transfer'
     return p
 
 
 @implementPhaseFactory('Greyscale', 'Apply a greyscale pixel shader.', None, None)
-def buildGreyscalePhase(input, output, srcBlend = BW_BLEND_ONE, destBlend = BW_BLEND_ZERO):
+def buildGreyscalePhase(input, output, srcBlend=BW_BLEND_ONE, destBlend=BW_BLEND_ZERO):
     p = buildPhase(input, output, 'shaders/post_processing/greyscale.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.name = 'greyscale'
     return p
@@ -121,13 +121,13 @@ def buildDownSamplePhase(input, output):
 
 
 @implementPhaseFactory('Colour scale', 'Apply a colour scaling shader, detecting highlights in the scene.', None, None)
-def buildColourScalePhase(input, output, srcBlend = BW_BLEND_ONE, destBlend = BW_BLEND_ZERO):
+def buildColourScalePhase(input, output, srcBlend=BW_BLEND_ONE, destBlend=BW_BLEND_ZERO):
     p = buildPhase(input, output, 'shaders/post_processing/colour_scale.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.name = 'colour scale'
     return p
 
 
-def buildBlurPhase(input, output, horiz, filterMode = 0, width = 1.0):
+def buildBlurPhase(input, output, horiz, filterMode=0, width=1.0):
     if filterMode == 0:
         sampleProv = partial(gaussianBlur4Tap, horiz, width)
     else:
@@ -153,7 +153,7 @@ def buildVerticalBlurPhase():
 
 
 @implementPhaseFactory('Colour correction', 'Apply tone mapping using a lookup texture', None, 'system/maps/post_processing/colour_correct.dds', None)
-def buildColourCorrectionPhase(input, lookupTexture, output, srcBlend = BW_BLEND_SRCALPHA, destBlend = BW_BLEND_INVSRCALPHA):
+def buildColourCorrectionPhase(input, lookupTexture, output, srcBlend=BW_BLEND_SRCALPHA, destBlend=BW_BLEND_INVSRCALPHA):
     p = buildPhase(input, output, 'shaders/post_processing/colour_correct.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.material.lookupTexture = lookupTexture
     p.name = 'colour correct'
@@ -161,14 +161,14 @@ def buildColourCorrectionPhase(input, lookupTexture, output, srcBlend = BW_BLEND
 
 
 @implementPhaseFactory('HSV colour correction', 'Adjust the hue, saturation or value (brightness) of the scene.', None, None)
-def buildHSVColourCorrectionPhase(input, output, srcBlend = BW_BLEND_SRCALPHA, destBlend = BW_BLEND_INVSRCALPHA):
+def buildHSVColourCorrectionPhase(input, output, srcBlend=BW_BLEND_SRCALPHA, destBlend=BW_BLEND_INVSRCALPHA):
     p = buildPhase(input, output, 'shaders/post_processing/colour_correct_hsv.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.name = 'HSV colour correct'
     return p
 
 
 @implementPhaseFactory('N-tap filter', 'Apply an arbitrary n-tap filter kernel.', None, None, mean9Tap)
-def buildNTapFilterPhase(input, output, filter, srcBlend = BW_BLEND_ONE, destBlend = BW_BLEND_ZERO):
+def buildNTapFilterPhase(input, output, filter, srcBlend=BW_BLEND_ONE, destBlend=BW_BLEND_ZERO):
     p = buildPhase(input, output, 'shaders/post_processing/n-tap_filter.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.name = 'n-tap filter'
     taps = filter()
@@ -184,7 +184,7 @@ def buildNTapFilterPhase(input, output, filter, srcBlend = BW_BLEND_ONE, destBle
 
 
 @implementPhaseFactory('9-tap filter', 'Apply a 9-tap filter kernel.', None, None, mean9Tap)
-def build9TapFilterPhase(input, output, filter, srcBlend = BW_BLEND_SRCALPHA, destBlend = BW_BLEND_INVSRCALPHA):
+def build9TapFilterPhase(input, output, filter, srcBlend=BW_BLEND_SRCALPHA, destBlend=BW_BLEND_INVSRCALPHA):
     p = buildPhase(input, output, 'shaders/post_processing/nine-tap_filter.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.name = '9-tap filter'
     taps = filter()
@@ -228,7 +228,7 @@ def build9TapFilterPhase(input, output, filter, srcBlend = BW_BLEND_SRCALPHA, de
 
 
 @implementPhaseFactory('Edge dilation', 'Apply a dilation filter to the scene.', None, None)
-def buildEdgeDilationPhase(input, output, srcBlend = BW_BLEND_ONE, destBlend = BW_BLEND_ZERO):
+def buildEdgeDilationPhase(input, output, srcBlend=BW_BLEND_ONE, destBlend=BW_BLEND_ZERO):
     p = buildPhase(input, output, 'shaders/post_processing/dilate.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.name = 'dilation'
     p.material.tap1 = (-1, 0, 1, 0)

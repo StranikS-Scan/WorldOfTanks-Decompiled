@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/__init__.py
 import time
 import BigWorld
@@ -13,7 +13,7 @@ def makePrebattleWaitingID(requestName):
     return '{0:>s}/{1:>s}'.format(prb_getters.getPrebattleTypeName().lower(), requestName)
 
 
-def getPrebattleLocalizedString(string, led = None, escapeHtml = False):
+def getPrebattleLocalizedString(string, led=None, escapeHtml=False):
     result = ''
     if led:
         result = i18n.encodeUtf8(led.get(string, ''))
@@ -22,25 +22,22 @@ def getPrebattleLocalizedString(string, led = None, escapeHtml = False):
     return result
 
 
-def getPrebattleEventName(extraData = None, escapeHtml = False):
+def getPrebattleEventName(extraData=None, escapeHtml=False):
     led = prb_getters.getPrebattleLocalizedData(extraData)
-    if led:
-        return getPrebattleLocalizedString('event_name', led, escapeHtml)
+    return getPrebattleLocalizedString('event_name', led, escapeHtml) if led else ''
 
 
-def getPrebattleSessionName(extraData = None, escapeHtml = False):
+def getPrebattleSessionName(extraData=None, escapeHtml=False):
     led = prb_getters.getPrebattleLocalizedData(extraData)
-    if led:
-        return getPrebattleLocalizedString('session_name', led, escapeHtml)
+    return getPrebattleLocalizedString('session_name', led, escapeHtml) if led else ''
 
 
-def getPrebattleDescription(extraData = None, escapeHtml = False):
+def getPrebattleDescription(extraData=None, escapeHtml=False):
     led = prb_getters.getPrebattleLocalizedData(extraData)
-    if led:
-        return getPrebattleLocalizedString('desc', led, escapeHtml)
+    return getPrebattleLocalizedString('desc', led, escapeHtml) if led else ''
 
 
-def getPrebattleFullDescription(extraData = None, escapeHtml = False):
+def getPrebattleFullDescription(extraData=None, escapeHtml=False):
     led = prb_getters.getPrebattleLocalizedData(extraData)
     description = ''
     if led:
@@ -50,7 +47,7 @@ def getPrebattleFullDescription(extraData = None, escapeHtml = False):
     return description
 
 
-def getPrebattleOpponents(extraData, escapeHtml = False):
+def getPrebattleOpponents(extraData, escapeHtml=False):
     first = ''
     second = ''
     if 'opponents' in extraData:
@@ -63,7 +60,7 @@ def getPrebattleOpponents(extraData, escapeHtml = False):
     return (first, second)
 
 
-def getPrebattleOpponentsString(extraData, escapeHtml = False):
+def getPrebattleOpponentsString(extraData, escapeHtml=False):
     first, second = getPrebattleOpponents(extraData, escapeHtml=escapeHtml)
     result = ''
     if len(first) and len(second):

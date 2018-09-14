@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/StaticFormationInvitesAndRequestsWindow.py
 from collections import namedtuple
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -32,8 +32,7 @@ def _formatInviteStatus(invitation):
         return text_styles.success('#cybersport:InvitesAndRequestsWindow/accepted')
     if invitation.isDeclined():
         return text_styles.error('#cybersport:InvitesAndRequestsWindow/rejected')
-    if invitation.isCancelled():
-        return text_styles.error('#cybersport:InvitesAndRequestsWindow/cancelled')
+    return text_styles.error('#cybersport:InvitesAndRequestsWindow/cancelled') if invitation.isCancelled() else ''
 
 
 class _DataProvider(SortableDAAPIDataProvider):
@@ -70,7 +69,7 @@ class _DataProvider(SortableDAAPIDataProvider):
 
 class StaticFormationInvitesAndRequestsWindow(StaticFormationInvitesAndRequestsMeta, ClubListener, UsersInfoHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(StaticFormationInvitesAndRequestsWindow, self).__init__()
         assert 'clubDbID' in ctx
         self.__clubDbID = ctx['clubDbID']
@@ -189,7 +188,7 @@ class StaticFormationInvitesAndRequestsWindow(StaticFormationInvitesAndRequestsM
     def _createTableHeader(self):
         return [self._createTableBtnInfo('name', CYBERSPORT.INVITESANDREQUESTSWINDOW_PLAYERNAME, CYBERSPORT.INVITESANDREQUESTSWINDOW_PLAYERNAME, 175), self._createTableBtnInfo('rating', '', CYBERSPORT.INVITESANDREQUESTSWINDOW_PLAYERNAME, 81, iconSource=RES_ICONS.MAPS_ICONS_STATISTIC_RATING24), self._createTableBtnInfo('status', CYBERSPORT.INVITESANDREQUESTSWINDOW_STATUS, CYBERSPORT.INVITESANDREQUESTSWINDOW_STATUS, 139, showSeparator=False)]
 
-    def _createTableBtnInfo(self, id, label, toolTip, buttonWidth, iconSource = '', showSeparator = True):
+    def _createTableBtnInfo(self, id, label, toolTip, buttonWidth, iconSource='', showSeparator=True):
         return {'id': id,
          'label': label,
          'iconSource': iconSource,
@@ -198,7 +197,7 @@ class StaticFormationInvitesAndRequestsWindow(StaticFormationInvitesAndRequestsM
          'showSeparator': showSeparator,
          'buttonHeight': 30}
 
-    def __updateMembers(self, syncUserData = False):
+    def __updateMembers(self, syncUserData=False):
         club = self.clubsCtrl.getClub(self.__clubDbID)
         if club is not None:
             invites = []

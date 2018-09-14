@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/VehicleQualifiersApplier.py
 import BigWorld
 from constants import IS_QUALIFIERS_ENABLED
@@ -12,7 +12,7 @@ class _QualifiersChainApplier(object):
     def __init__(self, conditions, qualifiers):
         self.__qualifiers = qualifiers
         self.__conditions = conditions
-        self.__lastCheckCondition = {}
+        self._lastCheckCondition = {}
 
     def __call__(self, value):
         qualifiers = self.__qualifiers
@@ -21,7 +21,7 @@ class _QualifiersChainApplier(object):
         else:
             conditions = self.__conditions
             conditionsKeys = frozenset(conditions.iterkeys())
-            lastCheckCondition = self.__lastCheckCondition
+            lastCheckCondition = self._lastCheckCondition
             for qualifier in qualifiers:
                 if not qualifier.conditionParams <= conditionsKeys:
                     continue
@@ -35,7 +35,7 @@ class _QualifiersChainApplier(object):
             return value
 
     def testConditionsChange(self):
-        lastCheckCondition = self.__lastCheckCondition
+        lastCheckCondition = self._lastCheckCondition
         conditions = self.__conditions
         conditionsKeys = frozenset(conditions.iterkeys())
         for qualifier in self.__qualifiers:
@@ -83,7 +83,7 @@ class _SubApplier(object):
 
 class VehicleQualifiersApplier(object):
 
-    def __init__(self, conditions, vehDescr, arenaCamouflageKind = None):
+    def __init__(self, conditions, vehDescr, arenaCamouflageKind=None):
         self.__requiredParams = requiredParams = set()
         self.__qualifiersApplier = qualifiersApplier = {}
         if not IS_QUALIFIERS_ENABLED:
@@ -130,7 +130,7 @@ class VehicleQualifiersApplier(object):
 
         return activatedQualifierIDs
 
-    def __createApplier(self, qualifierType, qualifiers = {}, conditions = {}):
+    def __createApplier(self, qualifierType, qualifiers={}, conditions={}):
         if qualifierType == QUALIFIER_TYPE.MAIN_SKILL:
             return _SubApplier(conditions, qualifierType, qualifiers)
         elif not qualifiers:

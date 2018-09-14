@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortRosterIntroWindow.py
 import BigWorld
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -16,7 +16,7 @@ class FortRosterIntroWindow(FortRosterIntroWindowMeta, FortViewHelper):
     TYPE_FORT_UPGRADE = 'fort upgrade'
     TYPE_DEFENCE_START = 'defence start'
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortRosterIntroWindow, self).__init__()
         self._type = ctx.get('type', FortRosterIntroWindow.TYPE_DEFENCE_START)
 

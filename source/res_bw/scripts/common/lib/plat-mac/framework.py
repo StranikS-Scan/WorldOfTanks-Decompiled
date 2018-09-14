@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/FrameWork.py
 """A sort of application framework for the Mac"""
 DEBUG = 0
@@ -94,7 +95,7 @@ def setarrowcursor():
 class Application():
     """Application framework -- your application should be a derived class"""
 
-    def __init__(self, nomenubar = 0):
+    def __init__(self, nomenubar=0):
         self._doing_asyncevents = 0
         self.quitting = 0
         self.needmenubarredraw = 0
@@ -149,7 +150,7 @@ class Application():
     schedparams = (0, 0)
     default_wait = None
 
-    def mainloop(self, mask = everyEvent, wait = None):
+    def mainloop(self, mask=everyEvent, wait=None):
         self.quitting = 0
         if hasattr(MacOS, 'SchedParams'):
             saveparams = MacOS.SchedParams(*self.schedparams)
@@ -164,12 +165,12 @@ class Application():
             if hasattr(MacOS, 'SchedParams'):
                 MacOS.SchedParams(*saveparams)
 
-    def dopendingevents(self, mask = everyEvent):
+    def dopendingevents(self, mask=everyEvent):
         """dopendingevents - Handle all pending events"""
         while self.do1event(mask, wait=0):
             pass
 
-    def do1event(self, mask = everyEvent, wait = None):
+    def do1event(self, mask=everyEvent, wait=None):
         ok, event = self.getevent(mask, wait)
         if IsDialogEvent(event):
             if self.do_dialogevent(event):
@@ -182,7 +183,7 @@ class Application():
     def idle(self, event):
         pass
 
-    def getevent(self, mask = everyEvent, wait = None):
+    def getevent(self, mask=everyEvent, wait=None):
         if self.needmenubarredraw:
             DrawMenuBar()
             self.needmenubarredraw = 0
@@ -233,7 +234,6 @@ class Application():
             else:
                 print 'Dialog event for unknown dialog'
             return 1
-        return 0
 
     def do_mouseDown(self, event):
         what, message, when, where, modifiers = event
@@ -433,7 +433,7 @@ class MenuBar():
         MenuBar.nextid = id + 1
         return id
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         self.parent = parent
         ClearMenuBar()
         self.bar = GetMenuBar()
@@ -445,7 +445,7 @@ class MenuBar():
         self.menus = None
         return
 
-    def addmenu(self, title, after = 0, id = None):
+    def addmenu(self, title, after=0, id=None):
         if id is None:
             id = self.getnextid()
         if DEBUG:
@@ -464,7 +464,7 @@ class MenuBar():
             print 'Delmenu', id
         DeleteMenu(id)
 
-    def addpopup(self, title = ''):
+    def addpopup(self, title=''):
         return self.addmenu(title, -1)
 
     def fixmenudimstate(self):
@@ -488,7 +488,7 @@ class MenuBar():
                         menu.menu.EnableMenuItem(i + 1)
                     else:
                         menu.menu.DisableMenuItem(i + 1)
-                elif callback:
+                if callback:
                     pass
 
     def dispatch(self, id, item, window, event):
@@ -504,7 +504,7 @@ class MenuBar():
 class Menu():
     """One menu."""
 
-    def __init__(self, bar, title, after = 0, id = None):
+    def __init__(self, bar, title, after=0, id=None):
         self.bar = bar
         self.id, self.menu = self.bar.addmenu(title, after, id)
         bar.menus[self.id] = self
@@ -522,7 +522,7 @@ class Menu():
         del self.id
         del self._parent
 
-    def additem(self, label, shortcut = None, callback = None, kind = None):
+    def additem(self, label, shortcut=None, callback=None, kind=None):
         self.menu.AppendMenu('x')
         self.items.append((label,
          shortcut,
@@ -549,10 +549,10 @@ class Menu():
         self.menu.DeleteMenuItem(item)
         del self.items[item - 1]
 
-    def addcheck(self, label, shortcut = None, callback = None):
+    def addcheck(self, label, shortcut=None, callback=None):
         return self.additem(label, shortcut, callback, 'check')
 
-    def addradio(self, label, shortcut = None, callback = None):
+    def addradio(self, label, shortcut=None, callback=None):
         return self.additem(label, shortcut, callback, 'radio')
 
     def addseparator(self):
@@ -560,7 +560,7 @@ class Menu():
         self.items.append(('', None, None, 'separator'))
         return None
 
-    def addsubmenu(self, label, title = ''):
+    def addsubmenu(self, label, title=''):
         sub = Menu(self.bar, title, -1)
         item = self.additem(label, '\x1b', None, 'submenu')
         self.menu.SetItemMark(item, sub.id)
@@ -607,7 +607,7 @@ class PopupMenu(Menu):
     def __init__(self, bar):
         Menu.__init__(self, bar, '(popup)', -1)
 
-    def popup(self, x, y, event, default = 1, window = None):
+    def popup(self, x, y, event, default=1, window=None):
         reply = self.menu.PopUpMenuSelect(x, y, default)
         if not reply:
             return
@@ -625,7 +625,7 @@ class PopupMenu(Menu):
 
 class MenuItem():
 
-    def __init__(self, menu, title, shortcut = None, callback = None, kind = None):
+    def __init__(self, menu, title, shortcut=None, callback=None, kind=None):
         self.item = menu.additem(title, shortcut, callback)
         self.menu = menu
 
@@ -661,13 +661,13 @@ class MenuItem():
 
 class RadioItem(MenuItem):
 
-    def __init__(self, menu, title, shortcut = None, callback = None):
+    def __init__(self, menu, title, shortcut=None, callback=None):
         MenuItem.__init__(self, menu, title, shortcut, callback, 'radio')
 
 
 class CheckItem(MenuItem):
 
-    def __init__(self, menu, title, shortcut = None, callback = None):
+    def __init__(self, menu, title, shortcut=None, callback=None):
         MenuItem.__init__(self, menu, title, shortcut, callback, 'check')
 
 
@@ -675,13 +675,13 @@ def Separator(menu):
     menu.addseparator()
 
 
-def SubMenu(menu, label, title = ''):
+def SubMenu(menu, label, title=''):
     return menu.addsubmenu(label, title)
 
 
 class AppleMenu(Menu):
 
-    def __init__(self, bar, abouttext = 'About me...', aboutcallback = None):
+    def __init__(self, bar, abouttext='About me...', aboutcallback=None):
         Menu.__init__(self, bar, '\x14', id=SIOUX_APPLEMENU_ID)
         if MacOS.runtimemodel == 'ppc':
             self.additem(abouttext, None, aboutcallback)
@@ -723,7 +723,7 @@ class Window():
         self.parent = parent
         return
 
-    def open(self, bounds = (40, 40, 400, 400), resid = None):
+    def open(self, bounds=(40, 40, 400, 400), resid=None):
         if resid != None:
             self.wid = GetNewWindow(resid, -1)
         else:
@@ -889,7 +889,7 @@ class ScrolledWindow(ControlsWindow):
         ControlsWindow.__init__(self, parent)
         return
 
-    def scrollbars(self, wantx = 1, wanty = 1):
+    def scrollbars(self, wantx=1, wanty=1):
         SetPort(self.wid)
         self.barx = self.bary = None
         self.barx_enabled = self.bary_enabled = 1
@@ -985,7 +985,6 @@ class ScrolledWindow(ControlsWindow):
                 self.updatescrollbars()
             else:
                 print 'funny part', pcode
-        return 1
 
     def do_controltrack(self, control, pcode):
         if control == self.barx:
@@ -1045,7 +1044,7 @@ class ScrolledWindow(ControlsWindow):
             return int(perc * 32767)
 
     def getscrollbarvalues(self):
-        return (0, 0)
+        pass
 
     def scrollbar_callback(self, which, what, value):
         print 'scroll', which, what, value

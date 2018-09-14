@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/events_notifications.py
 from collections import namedtuple
 import BigWorld
@@ -30,7 +30,7 @@ class EventsNotificationsController(Controller):
     def onDisconnected(self):
         self.__stop()
 
-    def getEventsNotifications(self, filterFunc = None):
+    def getEventsNotifications(self, filterFunc=None):
         return filter(filterFunc or (lambda a: True), map(EventNotification.make, BigWorld.player().eventNotifications))
 
     def __stop(self):

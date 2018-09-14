@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_string_grep.py
 import stringprep
 import types
@@ -9,15 +9,11 @@ class XmppStringPrepError(StandardError):
 
 
 def doMappingToNothing(char):
-    if stringprep.in_table_b1(char):
-        return u''
-    return char
+    return u'' if stringprep.in_table_b1(char) else char
 
 
 def doMappingSpaceChars(char):
-    if stringprep.in_table_c12(char):
-        return u' '
-    return char
+    return u' ' if stringprep.in_table_c12(char) else char
 
 
 def normalizeToNFKC(data):
@@ -50,7 +46,7 @@ def _isCharUnassigned(table, char):
 class _StringPrepProfile(object):
     __slots__ = ('_unassigned', '_mapping', '_normalization', '_prohibited', '_bidi')
 
-    def __init__(self, mapping = None, unassigned = None, normalization = None, prohibited = None, bidi = True):
+    def __init__(self, mapping=None, unassigned=None, normalization=None, prohibited=None, bidi=True):
         self._unassigned = unassigned or []
         self._mapping = mapping or []
         self._normalization = normalization
@@ -58,7 +54,7 @@ class _StringPrepProfile(object):
         self._bidi = bidi
 
     def prepare(self, data):
-        if type(data) is not types.UnicodeType:
+        if not isinstance(data, types.UnicodeType):
             data = unicode(data, 'utf8')
         result = self._doMapping(data)
         result = self._doNormalization(result)
@@ -97,7 +93,7 @@ class _StringPrepProfile(object):
         for char in data:
             if stringprep.in_table_d1(char):
                 hasRorAL = True
-            elif stringprep.in_table_d2(char):
+            if stringprep.in_table_d2(char):
                 hasL = True
 
         if hasL and hasRorAL:

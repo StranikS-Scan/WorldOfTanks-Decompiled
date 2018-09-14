@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/diff_utils.py
 
 
@@ -30,11 +30,10 @@ def synchronizeDicts(diff, cache):
         value = diff[key_u]
         if value is None:
             cache.pop(key_u, None)
-        elif isinstance(value, dict):
+        if isinstance(value, dict):
             updates, replaces, deletes = [ i + j for i, j in zip((updates, replaces, deletes), synchronizeDicts(value, cache.setdefault(key_u, {}))) ]
-        elif isinstance(value, set):
+        if isinstance(value, set):
             cache.setdefault(key_u, set()).update(value)
-        else:
-            cache[key_u] = value
+        cache[key_u] = value
 
     return (updates, replaces, deletes)

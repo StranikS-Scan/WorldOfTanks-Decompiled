@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/awards.py
 import random
 from collections import namedtuple
@@ -85,10 +85,12 @@ class AchievementsAward(AwardAbstract):
 
 class TokenAward(AwardAbstract):
 
-    def __init__(self, potapovQuest, tokenID, count):
+    def __init__(self, potapovQuest, tokenID, count, proxyEvent):
+        super(TokenAward, self).__init__()
         self.__potapovQuest = potapovQuest
         self.__tokenID = tokenID
         self.__tokenCount = count
+        self.__proxyEvent = proxyEvent
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_TOKENS)
@@ -106,10 +108,9 @@ class TokenAward(AwardAbstract):
         return text_styles.main(i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_DESCRIPTION))
 
     def handleBodyButton(self):
-        from gui.server_events import events_dispatcher as quests_events
         nextQuestID = _getNextQuestInTileByID(int(self.__potapovQuest.getID()))
         if nextQuestID is not None:
-            quests_events.showEventsWindow(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
+            self.__proxyEvent(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
         return
 
     def getBodyButtonText(self):
@@ -127,6 +128,7 @@ class TokenAward(AwardAbstract):
 class VehicleAward(AwardAbstract):
 
     def __init__(self, vehicle):
+        super(VehicleAward, self).__init__()
         self.__vehicle = vehicle
 
     def getWindowTitle(self):
@@ -147,9 +149,11 @@ class VehicleAward(AwardAbstract):
 
 class TankwomanAward(AwardAbstract):
 
-    def __init__(self, questID, tankmanData):
+    def __init__(self, questID, tankmanData, proxyEvent):
+        super(TankwomanAward, self).__init__()
         self.__questID = questID
         self.__tankmanData = tankmanData
+        self.__proxyEvent = proxyEvent
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_NEWTANKMAN)
@@ -170,8 +174,7 @@ class TankwomanAward(AwardAbstract):
         return i18n.makeString(MENU.AWARDWINDOW_RECRUITBUTTON)
 
     def handleOkButton(self):
-        from gui.server_events import events_dispatcher as quests_events
-        quests_events.showTankwomanRecruitWindow(self.__questID, self.__tankmanData.isPremium, self.__tankmanData.fnGroupID, self.__tankmanData.lnGroupID, self.__tankmanData.iGroupID)
+        self.__proxyEvent(self.__questID, self.__tankmanData.isPremium, self.__tankmanData.fnGroupID, self.__tankmanData.lnGroupID, self.__tankmanData.iGroupID)
 
 
 class FormattedAward(AwardAbstract):
@@ -184,7 +187,7 @@ class FormattedAward(AwardAbstract):
 
     class _SimpleFormatter(_BonusFormatter):
 
-        def __init__(self, icon, tooltip = ''):
+        def __init__(self, icon, tooltip=''):
             self._icon = icon
             self._tooltip = tooltip
 
@@ -213,7 +216,7 @@ class FormattedAward(AwardAbstract):
             result = []
             for booster, count in bonus.getBoosters().iteritems():
                 if booster is not None and count:
-                    tooltip = makeTooltip(header=booster.userName, body=booster.description)
+                    tooltip = TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO
                     result.append(self._BonusFmt('', BigWorld.wg_getIntegralFormat(count), tooltip, self.__makeBoosterVO(booster)))
 
             return result
@@ -224,7 +227,8 @@ class FormattedAward(AwardAbstract):
              'showCount': False,
              'qualityIconSrc': booster.getQualityIcon(),
              'slotLinkage': BOOSTER_CONSTANTS.SLOT_UI,
-             'showLeftTime': False}
+             'showLeftTime': False,
+             'boosterId': booster.boosterID}
 
     def __init__(self):
         self._formatters = {'gold': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG, tooltip=TOOLTIPS.AWARDITEM_GOLD),
@@ -239,10 +243,7 @@ class FormattedAward(AwardAbstract):
 
     def getRibbonInfo(self):
         awards, strAwards = self._getMainAwards(self._getBonuses())
-        if strAwards or awards:
-            return packRibbonInfo(awardForCompleteText=i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDFORCOMLETE), awardBonusStrText=strAwards, awards=awards)
-        else:
-            return None
+        return packRibbonInfo(awardForCompleteText=i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDFORCOMLETE), awardBonusStrText=strAwards, awards=awards) if strAwards or awards else None
 
     def _getBonuses(self):
         return []
@@ -260,8 +261,9 @@ class FormattedAward(AwardAbstract):
                      'tooltip': bonus.tooltip,
                      'boosterVO': bonus.bonusVO})
 
-            else:
-                strAwardsList.append(text_styles.warning(b.format()))
+            formattedBonus = b.format()
+            if formattedBonus:
+                strAwardsList.append(text_styles.warning(formattedBonus))
 
         if len(strAwardsList):
             strAwards = ', '.join(strAwardsList)
@@ -270,12 +272,13 @@ class FormattedAward(AwardAbstract):
 
 class RegularAward(FormattedAward):
 
-    def __init__(self, potapovQuest, isMainReward = False, isAddReward = False):
+    def __init__(self, potapovQuest, proxyEvent, isMainReward=False, isAddReward=False):
         super(RegularAward, self).__init__()
         assert True in (isMainReward, isAddReward)
         self.__potapovQuest = potapovQuest
         self.__isMainReward = isMainReward
         self.__isAddReward = isAddReward
+        self.__proxyEvent = proxyEvent
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_TASKCOMPLETE)
@@ -285,9 +288,7 @@ class RegularAward(FormattedAward):
             return _BG_IMG_FALLOUT[self.__potapovQuest.getMajorTag()]
         else:
             vehType = findFirst(None, self.__potapovQuest.getVehicleClasses())
-            if vehType in _BG_IMG_BY_VEH_TYPE:
-                return _BG_IMG_BY_VEH_TYPE[vehType]
-            return random.choice(_BG_IMG_BY_VEH_TYPE.values())
+            return _BG_IMG_BY_VEH_TYPE[vehType] if vehType in _BG_IMG_BY_VEH_TYPE else random.choice(_BG_IMG_BY_VEH_TYPE.values())
 
     def getAwardImage(self):
         pass
@@ -330,11 +331,60 @@ class RegularAward(FormattedAward):
             return packRibbonInfo(awardReceivedText=i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDRECIEVED))
 
     def handleBodyButton(self):
-        from gui.server_events import events_dispatcher as quests_events
         nextQuestID = _getNextQuestInTileByID(int(self.__potapovQuest.getID()))
         if nextQuestID is not None:
-            quests_events.showEventsWindow(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
+            self.__proxyEvent(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
         return
 
     def _getBonuses(self):
         return self.__potapovQuest.getBonuses(isMain=True)
+
+
+class MotiveQuestAward(FormattedAward):
+
+    def __init__(self, motiveQuest, proxyEvent):
+        super(MotiveQuestAward, self).__init__()
+        self.__quest = motiveQuest
+        self.__proxyEvent = proxyEvent
+
+    def clear(self):
+        super(MotiveQuestAward, self).clear()
+        self.__quest = None
+        return
+
+    def getButtonStates(self):
+        return (False, True, self.__getNextMotiveQuest() is not None)
+
+    def getWindowTitle(self):
+        return i18n.makeString('#tutorial:tutorialQuest/awardWindow/title')
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_HANGARTUTORIAL_GOALSQUEST
+
+    def getHeader(self):
+        return i18n.makeString('#tutorial:tutorialQuest/awardWindow/header', qName=i18n.makeString(self.__quest.getUserName()))
+
+    def getDescription(self):
+        return self.__quest.getAwardMsg()
+
+    def getBodyButtonText(self):
+        return i18n.makeString('#tutorial:tutorialQuest/awardWindow/nextQuest')
+
+    def _getBonuses(self):
+        return self.__quest.getBonuses()
+
+    def __getNextMotiveQuest(self):
+        quests = g_eventsCache.getMotiveQuests(lambda q: q.isAvailable() and not q.isCompleted())
+        sortedQuests = sorted(quests.values(), key=lambda q: q.getPriority())
+        nextQuest = findFirst(None, sortedQuests)
+        for quest in sortedQuests:
+            if quest.getPriority() > self.__quest.getPriority():
+                return quest
+
+        return nextQuest
+
+    def handleBodyButton(self):
+        nextQuest = self.__getNextMotiveQuest()
+        if nextQuest is not None:
+            self.__proxyEvent(nextQuest.getID(), constants.EVENT_TYPE.MOTIVE_QUEST)
+        return

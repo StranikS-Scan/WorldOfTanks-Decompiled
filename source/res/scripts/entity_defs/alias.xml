@@ -13,9 +13,6 @@
       </regionCCU>
     </Properties>
   </SERVER_STATISTICS>
-  <ASSISTANT_INFO>	TUPLE	  <of>	OBJECT_ID	</of>
-    <size>	2	</size>
-  </ASSISTANT_INFO>
   <CLIENT_STATISTICS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <fpsMin>
@@ -156,8 +153,12 @@
       <gpuDriverVersion>
         <Type>	INT64	</Type>
       </gpuDriverVersion>
+      <soundQuality>
+        <Type>	UINT8	</Type>
+      </soundQuality>
     </Properties>
   </CLIENT_STATISTICS>
+  <QUEUE_INFO>	PYTHON	</QUEUE_INFO>
   <RANDOMS_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <classes>
@@ -178,7 +179,7 @@
       </divisionsTotal>
     </Properties>
   </COMPANIES_QUEUE_INFO>
-  <EVENT_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  <FALLOUT_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <classes>
         <Type>	ARRAY	  <of>	UINT32	</of>
@@ -187,6 +188,16 @@
       <players>
         <Type>	UINT32	</Type>
       </players>
+    </Properties>
+  </FALLOUT_QUEUE_INFO>
+  <EVENT_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <falloutClassic>
+        <Type>	FALLOUT_QUEUE_INFO	</Type>
+      </falloutClassic>
+      <falloutMultiTeam>
+        <Type>	FALLOUT_QUEUE_INFO	</Type>
+      </falloutMultiTeam>
     </Properties>
   </EVENT_QUEUE_INFO>
   <PUBLIC_ARENA_INFO>	FIXED_DICT	  <Properties>
@@ -211,6 +222,9 @@
       <compDescr>
         <Type>	STRING	</Type>
       </compDescr>
+      <index>
+        <Type>	UINT8	</Type>
+      </index>
       <team>
         <Type>	UINT8	</Type>
       </team>
@@ -226,6 +240,9 @@
       <targetID>
         <Type>	OBJECT_ID	</Type>
       </targetID>
+      <targetVehicleIndex>
+        <Type>	UINT8	</Type>
+      </targetVehicleIndex>
       <targetTeam>
         <Type>	UINT8	</Type>
       </targetTeam>
@@ -296,7 +313,7 @@
         <Type>	FLOAT32	</Type>
       </droppedCapturePoints>
       <trackAssistants>
-        <Type>	ARRAY	  <of>	ASSISTANT_INFO	</of>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
         </Type>
       </trackAssistants>
       <distance>
@@ -555,6 +572,9 @@
       <fairplayState>
         <Type>	PYTHON	</Type>
       </fairplayState>
+      <battlesNum>
+        <Type>	UINT32	</Type>
+      </battlesNum>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -603,6 +623,9 @@
       <attackerTypeCompactDescr>
         <Type>	UINT16	</Type>
       </attackerTypeCompactDescr>
+      <attackerVehicleIndex>
+        <Type>	UINT8	</Type>
+      </attackerVehicleIndex>
       <equipmentID>
         <Type>	UINT16	</Type>
       </equipmentID>
@@ -642,4 +665,20 @@
       </prebattleID>
     </Properties>
   </VEHICLE_SPATIAL_INFO>
+  <VEHICLE_SYNC_ATTRS>	FIXED_DICT	  <Properties>
+      <circularVisionRadius>
+        <Type>	UINT16	</Type>
+      </circularVisionRadius>
+    </Properties>
+  </VEHICLE_SYNC_ATTRS>
+  <SpaceToD>	FIXED_DICT	  <TypeName>	SpaceToD	</TypeName>
+    <Properties>
+      <initialTimeOfDay>
+        <Type>	FLOAT	</Type>
+      </initialTimeOfDay>
+      <gameSecondsPerSecond>
+        <Type>	FLOAT	</Type>
+      </gameSecondsPerSecond>
+    </Properties>
+  </SpaceToD>
 </alias.xml>

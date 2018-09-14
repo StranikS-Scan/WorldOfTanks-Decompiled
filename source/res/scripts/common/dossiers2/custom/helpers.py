@@ -1,9 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/helpers.py
 from dossiers2.custom.records import RECORDS, RECORD_INDICES
 from dossiers2.custom.cache import getCache
 
-def getTankExpertRequirements(vehTypeFrags, nationID = -1):
+def getTankExpertRequirements(vehTypeFrags, nationID=-1):
     cache = getCache()
     killedVehTypes = set(vehTypeFrags.iterkeys())
     res = {'tankExpert': cache['vehiclesInTrees'] - killedVehTypes}
@@ -18,7 +18,7 @@ def getTankExpertRequirements(vehTypeFrags, nationID = -1):
     return res
 
 
-def getMechanicEngineerRequirements(defaultUnlocks, unlocks, nationID = -1):
+def getMechanicEngineerRequirements(defaultUnlocks, unlocks, nationID=-1):
     cache = getCache()
     vehiclesInTreesByNation = cache['vehiclesInTreesByNation']
     res = {'mechanicEngineer': cache['vehiclesInTrees'] - defaultUnlocks - unlocks}
@@ -53,7 +53,7 @@ def updateRareAchievements(dossierDescr, achievements):
     for achievement in achievements:
         if achievement > 0:
             block.append(achievement)
-        elif achievement < 0:
+        if achievement < 0:
             try:
                 block.remove(abs(achievement))
             except:

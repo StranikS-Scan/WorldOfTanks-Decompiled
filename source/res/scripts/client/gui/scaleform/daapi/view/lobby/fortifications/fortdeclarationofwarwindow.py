@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortDeclarationOfWarWindow.py
 import BigWorld
 from adisp import process
@@ -17,7 +17,7 @@ from helpers.i18n import makeString as _ms
 
 class FortDeclarationOfWarWindow(FortDeclarationOfWarWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortDeclarationOfWarWindow, self).__init__()
         self.__direction = ctx.get('direction')
         self.__selectedDayStart, self.__selectedDayFinish = ctx.get('dateSelected', (None, None))

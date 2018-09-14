@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/quest.py
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EVENT_STATUS
 from tutorial.data.has_id import HasID
@@ -47,9 +47,7 @@ class QuestChapter(Chapter):
             return EVENT_STATUS.NOT_AVAILABLE
         elif self.isBonusReceived(completed):
             return EVENT_STATUS.COMPLETED
-        elif unlockChapter is None:
-            return EVENT_STATUS.NONE
-        elif unlockChapter is not None and unlockChapter.isBonusReceived(completed):
+        elif unlockChapter is None or unlockChapter.isBonusReceived(completed):
             return EVENT_STATUS.NONE
         else:
             return EVENT_STATUS.NOT_AVAILABLE

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/CompanyWindow.py
 from adisp import process
 from messenger.ext import passCensor
@@ -16,7 +16,7 @@ from items.vehicles import VEHICLE_CLASS_TAGS
 
 class CompanyWindow(CompanyWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(CompanyWindow, self).__init__(prbName='company')
         self._isInvitesOpen = ctx.get('isInvitesOpen', False)
 
@@ -60,9 +60,7 @@ class CompanyWindow(CompanyWindowMeta):
         return formatters.getCompanyName()
 
     def canKickPlayer(self):
-        if self.prbFunctional.getTeamState(team=1).isInQueue():
-            return False
-        return self.prbFunctional.getPermissions().canKick(team=1)
+        return False if self.prbFunctional.getTeamState(team=1).isInQueue() else self.prbFunctional.getPermissions().canKick(team=1)
 
     def canMoveToAssigned(self):
         result = self.prbFunctional.getPermissions().canAssignToTeam(team=1)

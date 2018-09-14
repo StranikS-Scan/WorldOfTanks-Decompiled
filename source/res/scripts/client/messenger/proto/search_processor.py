@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/search_processor.py
 import weakref
 import BigWorld
@@ -28,7 +28,7 @@ class SearchProcessor(ISearchProcessor):
         if isinstance(handler, ISearchHandler):
             self._handlers.add(weakref.ref(handler))
         else:
-            raise ValueError, 'Handler must implement ISearchHandler'
+            raise ValueError('Handler must implement ISearchHandler')
 
     def removeHandler(self, handler):
         handlerRef = weakref.ref(handler)
@@ -36,10 +36,10 @@ class SearchProcessor(ISearchProcessor):
             self._handlers.remove(handlerRef)
 
     def find(self, token, **kwargs):
-        raise NotImplementedError, 'Routine SearchProcessor.find must be implemented'
+        raise NotImplementedError('Routine SearchProcessor.find must be implemented')
 
     def getSearchResultLimit(self):
-        raise NotImplementedError, 'Routine SearchProcessor.getSearchResultLimit must be implemented'
+        raise NotImplementedError('Routine SearchProcessor.getSearchResultLimit must be implemented')
 
     def _makeRequestID(self):
         return BigWorld.player().acquireRequestID()

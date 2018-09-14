@@ -1,14 +1,14 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/unit_helpers/ExtrasHandler.py
 import cPickle
-from debug_utils import LOG_OGNICK_DEV
+from debug_utils import LOG_DEBUG_DEV
 
 class EmptyExtrasHandler(object):
 
     def __init__(self, unit):
         pass
 
-    def new(self, initial = None):
+    def new(self, initial=None):
         result = {}
         if initial:
             result.update(initial)
@@ -27,14 +27,14 @@ class EmptyExtrasHandler(object):
         pass
 
 
-class FortBattleExtrasHandler(EmptyExtrasHandler):
+class ClanBattleExtrasHandler(EmptyExtrasHandler):
 
-    def __init__(self, unit = None):
+    def __init__(self, unit=None):
         self._unit = unit
-        from unit_helpers.MsgProcessor import FortBattleMgrMsgProcessor
-        self._processor = FortBattleMgrMsgProcessor(unit)
+        from unit_helpers.MsgProcessor import ClanBattleMgrMsgProcessor
+        self._processor = ClanBattleMgrMsgProcessor(unit)
 
-    def new(self, initial = None):
+    def new(self, initial=None):
         result = {'battleID': 0,
          'scheduleTime': 0,
          'isBattleRound': 0,
@@ -44,7 +44,8 @@ class FortBattleExtrasHandler(EmptyExtrasHandler):
          'battleResultList': [],
          'isEnemyReadyForBattle': 0,
          'clanEquipments': None,
-         'lastEquipRev': 0}
+         'lastEquipRev': 0,
+         'localizedData': None}
         if initial:
             result.update(initial)
         return result
@@ -64,10 +65,10 @@ class FortBattleExtrasHandler(EmptyExtrasHandler):
 
 class ClubExtrasHandler(EmptyExtrasHandler):
 
-    def __init__(self, unit = None):
+    def __init__(self, unit=None):
         self._unit = unit
 
-    def new(self, initial = None):
+    def new(self, initial=None):
         result = {'clubDBID': None,
          'divisionID': None,
          'clubName': None,
@@ -112,10 +113,10 @@ class ClubExtrasHandler(EmptyExtrasHandler):
 
 class SortieExtrasHandler(EmptyExtrasHandler):
 
-    def __init__(self, unit = None):
+    def __init__(self, unit=None):
         self._unit = unit
 
-    def new(self, initial = None):
+    def new(self, initial=None):
         result = {'clanEquipments': None,
          'lastEquipRev': 0}
         if initial:
@@ -133,13 +134,13 @@ class SortieExtrasHandler(EmptyExtrasHandler):
 
     def updateUnitExtras(self, extras, updateStr):
         update = cPickle.loads(updateStr)
-        LOG_OGNICK_DEV('updateUnitExtras', update)
+        LOG_DEBUG_DEV('updateUnitExtras', update)
         extras.update(update)
 
 
 class SquadExtrasHandler(EmptyExtrasHandler):
 
-    def new(self, initial = None):
+    def new(self, initial=None):
         result = {}
         if initial:
             result.update(initial)

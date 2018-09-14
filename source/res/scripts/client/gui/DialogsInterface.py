@@ -1,5 +1,6 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DialogsInterface.py
+from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.battle_control import g_sessionProvider
 from gui.shared import events, g_eventBus
@@ -13,8 +14,8 @@ def showDialog(meta, callback):
 
 
 @dialog
-def showI18nInfoDialog(i18nKey, callback, meta = None):
-    if g_sessionProvider.isBattleUILoaded():
+def showI18nInfoDialog(i18nKey, callback, meta=None):
+    if g_sessionProvider.isBattleUILoaded() and not GUI_SETTINGS.useAS3Battle:
         customMsg = None
         if meta is not None:
             customMsg.getMessage()
@@ -25,8 +26,8 @@ def showI18nInfoDialog(i18nKey, callback, meta = None):
 
 
 @dialog
-def showI18nConfirmDialog(i18nKey, callback, meta = None, focusedID = None):
-    if g_sessionProvider.isBattleUILoaded():
+def showI18nConfirmDialog(i18nKey, callback, meta=None, focusedID=None):
+    if g_sessionProvider.isBattleUILoaded() and not GUI_SETTINGS.useAS3Battle:
         customMsg = None
         if meta is not None:
             customMsg.getMessage()
@@ -38,7 +39,7 @@ def showI18nConfirmDialog(i18nKey, callback, meta = None, focusedID = None):
 
 __ifDisconnectDialogShown = False
 
-def showDisconnect(reason = None, isBan = False, expiryTime = None):
+def showDisconnect(reason=None, isBan=False, expiryTime=None):
     global __ifDisconnectDialogShown
     if __ifDisconnectDialogShown:
         return

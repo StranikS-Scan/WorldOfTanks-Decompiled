@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/PhysicsTurretShape.py
 import BigWorld
 import Math
@@ -163,9 +163,7 @@ class PhysicsTurretShape:
 
 def _intersectPlaneSegment(planePt, planeN, seg1, seg2):
     dot = planeN.dot(seg2 - seg1)
-    if dot * dot < 1e-08:
-        return 0.0
-    return planeN.dot(planePt - seg1) / dot
+    return 0.0 if dot * dot < 1e-08 else planeN.dot(planePt - seg1) / dot
 
 
 def createPhysicsTurretShape(bbMin, bbMax):
@@ -174,7 +172,7 @@ def createPhysicsTurretShape(bbMin, bbMax):
 
 class _Scene:
 
-    def __init__(self, name = 'scene', height = 400, width = 400):
+    def __init__(self, name='scene', height=400, width=400):
         self.name = name
         self.items = []
         self.height = height
@@ -194,7 +192,7 @@ class _Scene:
         var += [' </g>\n</svg>\n']
         return var
 
-    def write_svg(self, filename = None):
+    def write_svg(self, filename=None):
         if filename:
             self.svgname = filename
         else:
@@ -203,7 +201,7 @@ class _Scene:
         file.writelines(self.strarray())
         file.close()
 
-    def display(self, prog = 'explorer'):
+    def display(self, prog='explorer'):
         import os
         os.system('%s %s' % (prog, self.svgname))
 

@@ -106,6 +106,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R100_SU122A/SU122A_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_R100_SU122A>
@@ -658,8 +659,7 @@
           <recoil>
             <lodDist>	MEDIUM	</lodDist>
             <amplitude>	0.25	</amplitude>
-            <backoffTime>	0.1	</backoffTime>
-            <returnTime>	0.6	</returnTime>
+            <recoilEffect>	large	</recoilEffect>
           </recoil>
           <effects>	shot_main	</effects>
           <models>
@@ -711,8 +711,7 @@
           <recoil>
             <lodDist>	MEDIUM	</lodDist>
             <amplitude>	0.22	</amplitude>
-            <backoffTime>	0.2	</backoffTime>
-            <returnTime>	0.4	</returnTime>
+            <recoilEffect>	huge	</recoilEffect>
           </recoil>
           <effects>	shot_large_mb	</effects>
           <models>
@@ -751,7 +750,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.240 -0.027 1.247 0.055 1.000 0.000 0.500 0.100 0.000 0.500 0.000 0.500 0.611 0.100 0.216	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_R100_SU122A>
   </turrets0>

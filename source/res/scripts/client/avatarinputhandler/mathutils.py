@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/mathUtils.py
 import functools
 import BigWorld
@@ -42,8 +42,7 @@ def createSRTMatrix(scale, rotation, translation):
     return result
 
 
-clamp = lambda minVal, maxVal, val: if val < minVal:
-minVal(maxVal if val > maxVal else val)
+clamp = lambda minVal, maxVal, val: (minVal if val < minVal else maxVal if val > maxVal else val)
 
 def clampVector3(minVal, maxVal, val):
     return Vector3(clamp(minVal.x, maxVal.x, val.x), clamp(minVal.y, maxVal.y, val.y), clamp(minVal.z, maxVal.z, val.z))
@@ -63,7 +62,7 @@ def matrixScale(vector, scaleCoeff):
     return Vector3(vector.x * scaleCoeff.x, vector.y * scaleCoeff.y, vector.z * scaleCoeff.z)
 
 
-def almostZero(val, epsilon = 0.0004):
+def almostZero(val, epsilon=0.0004):
     return -epsilon < val < epsilon
 
 
@@ -136,7 +135,7 @@ class MatrixProviders:
 class RandomVectors:
 
     @staticmethod
-    def random2(magnitude = 1.0, randomGenerator = None):
+    def random2(magnitude=1.0, randomGenerator=None):
         if randomGenerator is None:
             randomGenerator = random
         u = randomGenerator.random()
@@ -144,12 +143,12 @@ class RandomVectors:
         return Vector2(math.sin(yaw) * magnitude, math.cos(yaw) * magnitude)
 
     @staticmethod
-    def random3Flat(magnitude = 1.0, randomGenerator = None):
+    def random3Flat(magnitude=1.0, randomGenerator=None):
         randomVec2 = RandomVectors.random2(magnitude, randomGenerator)
         return Vector3(randomVec2.x, 0.0, randomVec2.y)
 
     @staticmethod
-    def random3(magnitude = 1.0, randomGenerator = None):
+    def random3(magnitude=1.0, randomGenerator=None):
         if randomGenerator is None:
             randomGenerator = random
         u = randomGenerator.random()
@@ -162,7 +161,7 @@ class RandomVectors:
 
 class FIRFilter(object):
 
-    def __init__(self, coeffs = None):
+    def __init__(self, coeffs=None):
         self.coeffs = coeffs
         self.values = [ Vector3(0) for x in xrange(len(self.coeffs)) ]
         self.__id = 0

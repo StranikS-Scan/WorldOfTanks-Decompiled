@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/keybindingDialog.py
 """
 Dialog for building Tkinter accelerator key bindings
@@ -206,12 +206,12 @@ class GetKeysDialog(Toplevel):
         key = 'Key-' + key
         return key
 
-    def OK(self, event = None):
+    def OK(self, event=None):
         if self.advanced or self.KeysOK():
             self.result = self.keyString.get()
             self.destroy()
 
-    def Cancel(self, event = None):
+    def Cancel(self, event=None):
         self.result = ''
         self.destroy()
 

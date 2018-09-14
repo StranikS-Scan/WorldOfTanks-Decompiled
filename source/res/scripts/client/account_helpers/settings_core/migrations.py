@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 from account_helpers.settings_core.SettingsCache import g_settingsCache
 import constants
@@ -84,10 +84,10 @@ def _initializeDefaultSettings(core, data, initialized):
 
 @async
 @process
-def _reinitializeDefaultSettings(core, data, initialized, callback = None):
+def _reinitializeDefaultSettings(core, data, initialized, callback=None):
 
     @async
-    def wrapper(callback = None):
+    def wrapper(callback=None):
         BigWorld.player().intUserSettings.delIntSettings(range(1, 60), callback)
 
     yield wrapper()
@@ -174,6 +174,24 @@ def _migrateTo17(core, data, initialized):
     data['gameExtData'][GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS] = True
 
 
+def _migrateTo18(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    from constants import QUEUE_TYPE
+    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.FALLOUT, 0)
+    currentType = storedValue & 3
+    if currentType > 0:
+        oldTypeToNewType = {1: QUEUE_TYPE.FALLOUT_CLASSIC,
+         2: QUEUE_TYPE.FALLOUT_MULTITEAM}
+        newType = oldTypeToNewType.get(currentType, QUEUE_TYPE.UNKNOWN)
+        data['fallout']['falloutBattleType'] = newType
+
+
+def _migrateTo19(core, data, initialized):
+    data['gameExtData'][GAME.MINIMAP_DRAW_RANGE] = True
+    data['gameExtData'][GAME.MINIMAP_MAX_VIEW_RANGE] = True
+    data['gameExtData'][GAME.MINIMAP_VIEW_RANGE] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -237,11 +255,19 @@ _versions = ((1,
  (17,
   _migrateTo17,
   False,
+  False),
+ (18,
+  _migrateTo18,
+  False,
+  False),
+ (19,
+  _migrateTo19,
+  False,
   False))
 
 @async
 @process
-def migrateToVersion(fromVersion, core, data, callback = None):
+def migrateToVersion(fromVersion, core, data, callback=None):
     yield lambda callback: callback(None)
     initialized = False
     for version, migration, isInitialize, isAsync in _versions:

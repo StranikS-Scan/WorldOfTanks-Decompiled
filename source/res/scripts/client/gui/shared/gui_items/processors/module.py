@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/module.py
 import BigWorld
 import AccountCommands
@@ -21,7 +21,7 @@ class ModuleProcessor(ItemProcessor):
      GUI_ITEM_TYPE.OPTIONALDEVICE: 'artefact'}
     DEFAULT_PREFIX = 'module'
 
-    def __init__(self, item, opType, plugs = tuple()):
+    def __init__(self, item, opType, plugs=tuple()):
         """
         Ctor.
         
@@ -47,7 +47,7 @@ class ModuleTradeProcessor(ModuleProcessor):
     Root module trade
     """
 
-    def __init__(self, item, count, opType, plugs = tuple()):
+    def __init__(self, item, count, opType, plugs=tuple()):
         """
         Ctor.
         
@@ -97,15 +97,13 @@ class ModuleBuyer(ModuleTradeProcessor):
 
     def _getOpPrice(self):
         price = self.item.altPrice or self.item.buyPrice
-        if self.buyForCredits:
-            return (price[0] * self.count, 0)
-        return (0, price[1] * self.count)
+        return (price[0] * self.count, 0) if self.buyForCredits else (0, price[1] * self.count)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         sysMsgType = SM_TYPE.PurchaseForCredits if self.buyForCredits else SM_TYPE.PurchaseForGold
         return makeI18nSuccess(self._formMessage('success'), type=sysMsgType, **self._getMsgCtx())
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         if not len(errStr):
             msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
         else:
@@ -134,10 +132,10 @@ class ModuleSeller(ModuleTradeProcessor):
     def _getOpPrice(self):
         return (self.item.sellPrice[0] * self.count, self.item.sellPrice[1] * self.count)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess(self._formMessage('success'), type=SM_TYPE.Selling, **self._getMsgCtx())
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         if not len(errStr):
             msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
         else:
@@ -154,7 +152,7 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
     Root modules installer.
     """
 
-    def __init__(self, vehicle, item, itemType, slotIdx, install = True, conflictedEqs = None, plugs = tuple()):
+    def __init__(self, vehicle, item, itemType, slotIdx, install=True, conflictedEqs=None, plugs=tuple()):
         """
         Ctor.
         
@@ -183,10 +181,10 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         return {'name': self.item.userName,
          'kind': self.item.userType}
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess(self._formMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         if not len(errStr):
             msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
         else:
@@ -199,7 +197,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
     Vehicle opt devices installer.
     """
 
-    def __init__(self, vehicle, item, slotIdx, install = True, isUseGold = False, conflictedEqs = None):
+    def __init__(self, vehicle, item, slotIdx, install=True, isUseGold=False, conflictedEqs=None):
         """
         Ctor.
         
@@ -231,13 +229,10 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         self.useGold = isUseGold
         return
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         item = self.item if self.install else None
         self.vehicle.optDevices[self.slotIdx] = item
-        if not self.install and not self.item.isRemovable and self.useGold:
-            return makeI18nSuccess(self._formMessage('gold_success'), type=SM_TYPE.DismantlingForGold, **self._getMsgCtx())
-        else:
-            return super(OptDeviceInstaller, self)._successHandler(code, ctx)
+        return makeI18nSuccess(self._formMessage('gold_success'), type=SM_TYPE.DismantlingForGold, **self._getMsgCtx()) if not self.install and not self.item.isRemovable and self.useGold else super(OptDeviceInstaller, self)._successHandler(code, ctx)
 
     def _request(self, callback):
         itemCD = self.item.intCD if self.install else 0
@@ -254,7 +249,7 @@ class EquipmentInstaller(ModuleInstallProcessor):
     Vehicle equipment installer.
     """
 
-    def __init__(self, vehicle, item, slotIdx, install = True, conflictedEqs = None):
+    def __init__(self, vehicle, item, slotIdx, install=True, conflictedEqs=None):
         """
         Ctor.
         
@@ -266,14 +261,14 @@ class EquipmentInstaller(ModuleInstallProcessor):
         """
         super(EquipmentInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.EQUIPMENT,), slotIdx, install, conflictedEqs)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         item = self.item if self.install else None
         self.vehicle.eqs[self.slotIdx] = item
         return super(EquipmentInstaller, self)._successHandler(code, ctx)
 
     def _request(self, callback):
         itemCD = self.item.intCD if self.install else 0
-        newEqsLayout = map(lambda item: (item.intCD if item is not None else 0), self.vehicle.eqs)
+        newEqsLayout = map(lambda item: item.intCD if item is not None else 0, self.vehicle.eqs)
         newEqsLayout[self.slotIdx] = itemCD
         BigWorld.player().inventory.equipEquipments(self.vehicle.invID, newEqsLayout, lambda code: self._response(code, callback))
 
@@ -283,7 +278,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
     Vehicle other modules installer.
     """
 
-    def __init__(self, vehicle, item, itemType, install = True, conflictedEqs = None, plugs = tuple()):
+    def __init__(self, vehicle, item, itemType, install=True, conflictedEqs=None, plugs=tuple()):
         """
         Ctor.
         
@@ -306,7 +301,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         return {'name': self.item.userName,
          'kind': self.item.userType}
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         additionalMessages = []
         removedItems = []
         for eqKd in ctx.get('incompatibleEqs', []):
@@ -318,7 +313,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         additionalMessages.append(makeI18nSuccess(self._formMessage('success'), type=SM_TYPE.Information, auxData=additionalMessages, **self._getMsgCtx()))
         return makeSuccess(auxData=additionalMessages)
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         if not len(errStr):
             msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
         else:
@@ -331,7 +326,7 @@ class TurretInstaller(CommonModuleInstallProcessor):
     Vehicle turret installer.
     """
 
-    def __init__(self, vehicle, item, conflictedEqs = None):
+    def __init__(self, vehicle, item, conflictedEqs=None):
         """
         Ctor.
         
@@ -356,7 +351,7 @@ class TurretInstaller(CommonModuleInstallProcessor):
     def _request(self, callback):
         BigWorld.player().inventory.equipTurret(self.vehicle.invID, self.item.intCD, self.gunCD, lambda code, ext: self._response(code, callback, ctx=ext))
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         if self.gunCD:
             gun = g_itemsCache.items.getItemByCD(self.gunCD)
             return makeI18nSuccess(self._formMessage('success_gun_change'), type=SM_TYPE.Information, gun=gun.userName, **self._getMsgCtx())
@@ -368,7 +363,7 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
     Vehicle rest modules installer: sheels, fuel tanks, etc.
     """
 
-    def __init__(self, vehicle, item, conflictedEqs = None):
+    def __init__(self, vehicle, item, conflictedEqs=None):
         """
         Ctor.
         
@@ -391,7 +386,7 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
 
 class BuyAndInstallItemProcessor(ModuleBuyer):
 
-    def __init__(self, vehicle, item, slotIdx, gunCompDescr, conflictedEqs = None):
+    def __init__(self, vehicle, item, slotIdx, gunCompDescr, conflictedEqs=None):
         self.__vehInvID = vehicle.inventoryID
         self.__slotIdx = int(slotIdx)
         self.__gunCompDescr = gunCompDescr
@@ -430,7 +425,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
             reasonTxt = '#menu:moduleFits/' + installReason.replace(' ', '_')
         return i18n.makeString(reasonTxt)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         if self.__mayInstall:
             LOG_DEBUG('code, ctx', code, ctx)
             if self.item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
@@ -476,7 +471,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
             super(BuyAndInstallItemProcessor, self)._request(callback)
 
 
-def getInstallerProcessor(vehicle, newComponentItem, slotIdx = 0, install = True, isUseGold = False, conflictedEqs = None):
+def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, isUseGold=False, conflictedEqs=None):
     """
     Select proper installer by type
     """

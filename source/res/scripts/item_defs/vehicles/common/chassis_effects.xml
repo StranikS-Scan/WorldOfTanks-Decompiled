@@ -2,15 +2,15 @@
   <decals>
     <bufferPrefs>
       <smallTank>
-        <lifeTime>	6	</lifeTime>
+        <lifeTime>	3	</lifeTime>
         <trianglesCount>	10000	</trianglesCount>
       </smallTank>
       <mediumTank>
-        <lifeTime>	7	</lifeTime>
+        <lifeTime>	4	</lifeTime>
         <trianglesCount>	10000	</trianglesCount>
       </mediumTank>
       <largeTank>
-        <lifeTime>	8	</lifeTime>
+        <lifeTime>	5	</lifeTime>
         <trianglesCount>	10000	</trianglesCount>
       </largeTank>
     </bufferPrefs>
@@ -59,6 +59,50 @@
           <GMM>	maps/fx/ussr02_stone_GMM.dds	</GMM>
         </stone>
       </ussr_02>
+      <ussr_R124>
+        <default>
+          <AM>	maps/fx/R124_ground_AM.dds	</AM>
+          <ANM>	maps/fx/R124_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/R124_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/R124_snow_AM.dds	</AM>
+          <ANM>	maps/fx/R124_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/R124_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/R124_sand_AM.dds	</AM>
+          <ANM>	maps/fx/R124_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/R124_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/R124_stone_AM.dds	</AM>
+          <ANM>	maps/fx/R124_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/R124_stone_GMM.dds	</GMM>
+        </stone>
+      </ussr_R124>
+      <ussr_R11>
+        <default>
+          <AM>	maps/fx/R11_ground_AM.dds	</AM>
+          <ANM>	maps/fx/R11_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/R11_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/R11_snow_AM.dds	</AM>
+          <ANM>	maps/fx/R11_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/R11_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/R11_sand_AM.dds	</AM>
+          <ANM>	maps/fx/R11_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/R11_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/R11_stone_AM.dds	</AM>
+          <ANM>	maps/fx/R11_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/R11_stone_GMM.dds	</GMM>
+        </stone>
+      </ussr_R11>
       <germany_01>
         <default>
           <AM>	maps/fx/german01_ground_AM.dds	</AM>
@@ -191,6 +235,50 @@
           <GMM>	maps/fx/usa03_right_stone_GMM.dds   ;     maps/fx/usa03_left_stone_GMM.dds	</GMM>
         </stone>
       </usa_03>
+      <usa_04>
+        <default>
+          <AM>	maps/fx/usa04_ground_AM.dds	</AM>
+          <ANM>	maps/fx/usa04_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/usa04_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/usa04_snow_AM.dds	</AM>
+          <ANM>	maps/fx/usa04_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/usa04_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/usa04_sand_AM.dds	</AM>
+          <ANM>	maps/fx/usa04_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/usa04_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/usa04_stone_AM.dds	</AM>
+          <ANM>	maps/fx/usa04_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/usa04_stone_GMM.dds	</GMM>
+        </stone>
+      </usa_04>
+      <usa_a23>
+        <default>
+          <AM>	maps/fx/A23_ground_AM.dds	</AM>
+          <ANM>	maps/fx/A23_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/A23_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/A23_snow_AM.dds	</AM>
+          <ANM>	maps/fx/A23_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/A23_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/A23_sand_AM.dds	</AM>
+          <ANM>	maps/fx/A23_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/A23_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/A23_stone_AM.dds	</AM>
+          <ANM>	maps/fx/A23_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/A23_stone_GMM.dds	</GMM>
+        </stone>
+      </usa_a23>
       <usa_T95>
         <default>
           <AM>	maps/fx/usaT95_ground_AM.dds	</AM>
@@ -213,6 +301,50 @@
           <GMM>	maps/fx/usaT95_stone_GMM.dds	</GMM>
         </stone>
       </usa_T95>
+      <gb_24>
+        <default>
+          <AM>	maps/fx/GB24_ground_AM.dds	</AM>
+          <ANM>	maps/fx/GB24_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/GB24_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/GB24_snow_AM.dds	</AM>
+          <ANM>	maps/fx/GB24_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/GB24_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/GB24_sand_AM.dds	</AM>
+          <ANM>	maps/fx/GB24_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/GB24_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/GB24_stone_AM.dds	</AM>
+          <ANM>	maps/fx/GB24_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/GB24_stone_GMM.dds	</GMM>
+        </stone>
+      </gb_24>
+      <t97>
+        <default>
+          <AM>	maps/fx/T97_ground_AM.dds	</AM>
+          <ANM>	maps/fx/T97_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/T97_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/T97_snow_AM.dds	</AM>
+          <ANM>	maps/fx/T97_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/T97_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/T97_sand_AM.dds	</AM>
+          <ANM>	maps/fx/T97_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/T97_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/T97_stone_AM.dds	</AM>
+          <ANM>	maps/fx/T97_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/T97_stone_GMM.dds	</GMM>
+        </stone>
+      </t97>
     </textureSets>
   </decals>
   <particles>

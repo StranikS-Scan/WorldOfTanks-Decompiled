@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Joint.py
 """
         Interface FX.Joint
@@ -15,18 +15,18 @@
 
 class Joint:
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """The method loads the joint from an XML section.  The method must
         return the joint that should be added to the effect, or None if the
         load failed and no joint could be created."""
         return self
 
-    def attach(self, actor, source, target = None):
+    def attach(self, actor, source, target=None):
         """This method uses the joint to attach an actor to a source, and
         possibly a target as well."""
         pass
 
-    def detach(self, actor, source, target = None):
+    def detach(self, actor, source, target=None):
         """This method asjs the joint to detach the actor from the source, and
         possibly a target as well."""
         pass

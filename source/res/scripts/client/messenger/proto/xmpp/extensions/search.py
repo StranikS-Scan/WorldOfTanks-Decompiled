@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/search.py
 from messenger.proto.xmpp.extensions import PyQuery, PyExtension
 from messenger.proto.xmpp.extensions.shared_handlers import IQChildHandler
@@ -16,7 +16,7 @@ class _SimpleCriterionExtension(PyExtension):
 
 class ChannelSearchQuery(PyQuery):
 
-    def __init__(self, token, to = '', count = 50):
+    def __init__(self, token, to='', count=50):
         super(ChannelSearchQuery, self).__init__(IQ_TYPE.GET, to=to)
         self._token = token
         self._results_count = count

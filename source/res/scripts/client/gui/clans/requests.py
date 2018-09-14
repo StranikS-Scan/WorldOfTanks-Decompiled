@@ -1,11 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/requests.py
 from functools import partial
 import types
 import weakref
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.clans.contexts import GetFrontsCtx
-from shared_utils import makeTupleByDict
 from client_request_lib.exceptions import ResponseCodes
 from gui.clans import formatters as clan_fmts, contexts, items
 from gui.clans.settings import DEFAULT_COOLDOWN, CLAN_REQUESTED_DATA_TYPE
@@ -22,7 +21,7 @@ class ClanRequestResponse(Response):
     def getCode(self):
         return self.code
 
-    def clone(self, data = None):
+    def clone(self, data=None):
         return ClanRequestResponse(self.code, self.errStr, data or self.data)
 
 
@@ -84,10 +83,13 @@ class ClanCooldownManager(RequestCooldownManager):
     def getDefaultCoolDown(self):
         return DEFAULT_COOLDOWN
 
+    def adjust(self, rqTypeID, coolDown=None):
+        self.process(rqTypeID, coolDown)
+
 
 class ClanRequestsController(RequestsController):
 
-    def __init__(self, clansCtrl, requester, cooldown = ClanCooldownManager()):
+    def __init__(self, clansCtrl, requester, cooldown=ClanCooldownManager()):
         super(ClanRequestsController, self).__init__(requester, cooldown)
         self.__clansCtrl = weakref.proxy(clansCtrl)
         self.__handlers = {CLAN_REQUESTED_DATA_TYPE.LOGIN: self.__login,
@@ -126,10 +128,7 @@ class ClanRequestsController(RequestsController):
         return
 
     def _getHandlerByRequestType(self, requestTypeID):
-        if self.__handlers:
-            return self.__handlers.get(requestTypeID)
-        else:
-            return None
+        return self.__handlers.get(requestTypeID) if self.__handlers else None
 
     def _getRequestTimeOut(self):
         return REQUEST_TIMEOUT
@@ -157,31 +156,31 @@ class ClanRequestsController(RequestsController):
         else:
             callback(clansResponse)
 
-    def __login(self, ctx, callback = None):
+    def __login(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'login', ctx.getUserDatabaseID(), ctx.getTokenID())
 
-    def __logout(self, ctx, callback = None):
+    def __logout(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'logout')
 
-    def __ping(self, ctx, callback = None):
+    def __ping(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, 'get_alive_status')
 
-    def __getClanInfo(self, ctx, callback = None):
+    def __getClanInfo(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, ('clans', 'get_clans_info'), (ctx.getClanID(),), fields=ctx.getFields())
 
-    def __getClansInfo(self, ctx, callback = None):
+    def __getClansInfo(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, ('clans', 'get_clans_info'), ctx.getClanIDs(), fields=ctx.getFields())
 
-    def __getClanRatings(self, ctx, callback = None):
+    def __getClanRatings(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, ('ratings', 'get_clans_ratings'), ctx.getClanIDs())
 
-    def __getClanGlobalMapStats(self, ctx, callback = None):
+    def __getClanGlobalMapStats(self, ctx, callback=None):
         return self.__doClanRequest(ctx, callback, ('global_map', 'get_statistics'))
 
-    def __getClanFort(self, ctx, callback = None):
+    def __getClanFort(self, ctx, callback=None):
         return self.__doClanRequest(ctx, callback, ('strongholds', 'get_statistics'))
 
-    def __getProvinces(self, ctx, callback = None):
+    def __getProvinces(self, ctx, callback=None):
 
         def __onProvincesReceived(response):
             if response.isSuccess() and response.data:
@@ -203,13 +202,13 @@ class ClanRequestsController(RequestsController):
 
         return self.__doClanRequest(ctx, __onProvincesReceived, ('global_map', 'get_provinces'))
 
-    def __getGMFronts(self, ctx, callback = None):
+    def __getGMFronts(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, ('global_map', 'get_fronts_info'), ctx.getProvincesIDs())
 
-    def __getClanAccounts(self, ctx, callback = None):
+    def __getClanAccounts(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, ('clans', 'get_accounts_clans'), ctx.getAccountsIDs())
 
-    def __getClanMembers(self, ctx, callback = None):
+    def __getClanMembers(self, ctx, callback=None):
 
         def _onMembersReceived(membersResponse):
             if membersResponse.isSuccess():
@@ -231,10 +230,10 @@ class ClanRequestsController(RequestsController):
 
         return self.__doClanRequest(ctx, _onMembersReceived, ('clans', 'get_clan_members'))
 
-    def __getClanMembersRating(self, ctx, callback = None):
+    def __getClanMembersRating(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, ('exporter', 'get_accounts_info'), ctx.getAccountsIDs())
 
-    def __getStronholdInfo(self, ctx, callback = None):
+    def __getStronholdInfo(self, ctx, callback=None):
         return self.__doClanRequest(ctx, callback, ('strongholds', 'get_info'))
 
     def __accountApplications(self, ctx, callback):
@@ -246,9 +245,7 @@ class ClanRequestsController(RequestsController):
     def __searchClans(self, ctx, callback):
         limits = self.__clansCtrl.getLimits()
         isValid, reason = limits.canSearchClans(ctx.getSearchCriteria())
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, partial(self._onClansReceived, callback=callback), ('clans', 'search_clans'), search=ctx.getSearchCriteria(), get_total_count=ctx.isGetTotalCount(), fields=ctx.getFields(), offset=ctx.getOffset(), limit=ctx.getLimit())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, partial(self._onClansReceived, callback=callback), ('clans', 'search_clans'), search=ctx.getSearchCriteria(), get_total_count=ctx.isGetTotalCount(), fields=ctx.getFields(), offset=ctx.getOffset(), limit=ctx.getLimit())
 
     def __getRecommendedClans(self, ctx, callback):
         return self._requester.doRequestEx(ctx, partial(self._onClansReceived, callback=callback), ('clans', 'get_recommended_clans'), get_total_count=ctx.isGetTotalCount(), fields=ctx.getFields(), offset=ctx.getOffset(), limit=ctx.getLimit())
@@ -283,9 +280,7 @@ class ClanRequestsController(RequestsController):
     def __createInvites(self, ctx, callback):
         limits = self.__clansCtrl.getLimits()
         isValid, reason = limits.canSendInvite(self.__clansCtrl.getClanDossier(ctx.getClanDbID()))
-        if not isValid:
-            return self.__doFail(ctx, reason, callback)
-        return self._requester.doRequestEx(ctx, callback, ('clans', 'create_invites'), clan_id=ctx.getClanDbID(), account_ids=ctx.getAccountDbIDs(), comment=ctx.getComment())
+        return self.__doFail(ctx, reason, callback) if not isValid else self._requester.doRequestEx(ctx, callback, ('clans', 'create_invites'), clan_id=ctx.getClanDbID(), account_ids=ctx.getAccountDbIDs(), comment=ctx.getComment())
 
     def __declineApplication(self, ctx, callback):
         return self._requester.doRequestEx(ctx, callback, ('clans', 'decline_application'), application_id=ctx.getApplicationDbID())
@@ -296,7 +291,7 @@ class ClanRequestsController(RequestsController):
     def __declineInvites(self, ctx, callback):
         return self._requester.doRequestEx(ctx, callback, ('clans', 'bulk_decline_invites'), invite_ids=ctx.getInviteDbIDs())
 
-    def __getClanFavoriteAttributes(self, ctx, callback = None):
+    def __getClanFavoriteAttributes(self, ctx, callback=None):
         return self._requester.doRequestEx(ctx, callback, ('clans', 'get_clan_favorite_attributes'), ctx.getClanID())
 
     def __doFail(self, ctx, reason, callback):

@@ -1,0 +1,14 @@
+<teambase_arena.def>
+  <BaseMethods>
+    <teamBase_receivePoints>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	ARRAY	  <of>	UINT16	</of>
+      </Arg>
+    </teamBase_receivePoints>
+    <teamBase_onCaptured>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+    </teamBase_onCaptured>
+  </BaseMethods>
+</teambase_arena.def>

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-atheos/TYPES.py
 _SYS_TYPES_H = 1
 _FEATURES_H = 1
@@ -54,11 +55,11 @@ def __PMT(args):
 
 
 def __P(args):
-    return ()
+    pass
 
 
 def __PMT(args):
-    return ()
+    pass
 
 
 def __STRING(x):
@@ -66,7 +67,7 @@ def __STRING(x):
 
 
 def __STRING(x):
-    return 'x'
+    pass
 
 
 def __ASMNAME(cname):

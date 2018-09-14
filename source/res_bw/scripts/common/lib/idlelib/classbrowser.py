@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ClassBrowser.py
 """Class browser.
 
@@ -26,7 +26,7 @@ class ClassBrowser:
         self.file = os.path.join(path[0], self.name + '.py')
         self.init(flist)
 
-    def close(self, event = None):
+    def close(self, event=None):
         self.top.destroy()
         self.node.destroy()
 

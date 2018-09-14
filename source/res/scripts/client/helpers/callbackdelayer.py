@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/CallbackDelayer.py
 import BigWorld
 import functools
@@ -46,7 +46,7 @@ class CallbackDelayer:
 
 class TimeDeltaMeter(object):
 
-    def __init__(self, timeFunc = BigWorld.time):
+    def __init__(self, timeFunc=BigWorld.time):
         self.__timeFunc = timeFunc
         self.__prevTime = timeFunc()
 

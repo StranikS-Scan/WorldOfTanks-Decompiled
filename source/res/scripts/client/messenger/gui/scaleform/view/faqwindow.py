@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/FAQWindow.py
 from gui.shared.events import OpenLinkEvent
 from messenger.gui.Scaleform.data.faq_data import FAQList
@@ -8,7 +8,7 @@ FAQ_BATCH_SIZE = 5
 
 class FAQWindow(FAQWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FAQWindow, self).__init__()
         self.__list = None
         return

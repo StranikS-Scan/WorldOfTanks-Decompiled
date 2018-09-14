@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/StrategicAimingSystem.py
 import BigWorld
 import Math
@@ -26,7 +26,7 @@ class StrategicAimingSystem(IAimingSystem):
     def disable(self):
         pass
 
-    def getDesiredShotPoint(self, terrainOnlyCheck = False):
+    def getDesiredShotPoint(self, terrainOnlyCheck=False):
         return AimingSystems.getDesiredShotPoint(self._matrix.translation, Vector3(0, -1, 0), True, True, terrainOnlyCheck)
 
     def handleMovement(self, dx, dy):

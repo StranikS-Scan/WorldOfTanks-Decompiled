@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from messenger.formatters import service_channel as _sc
@@ -12,8 +12,6 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.accountTypeChanged.index(): _sc.AccountTypeChangedFormatter(),
  _SM_TYPE.giftReceived.index(): _sc.GiftReceivedFormatter(),
  _SM_TYPE.autoMaintenance.index(): _sc.AutoMaintenanceFormatter(),
- _SM_TYPE.waresSold.index(): _sc.WaresSoldFormatter(),
- _SM_TYPE.waresBought.index(): _sc.WaresBoughtFormatter(),
  _SM_TYPE.premiumBought.index(): _sc.PremiumBoughtFormatter(),
  _SM_TYPE.premiumExtended.index(): _sc.PremiumExtendedFormatter(),
  _SM_TYPE.premiumExpired.index(): _sc.PremiumExpiredFormatter(),

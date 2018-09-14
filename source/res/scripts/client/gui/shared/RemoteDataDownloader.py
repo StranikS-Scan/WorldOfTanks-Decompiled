@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/RemoteDataDownloader.py
 import time
 import httplib
@@ -122,10 +122,7 @@ class _LocalCache(local_cache.ShelfLocalCache):
         return
 
     def _get(self, key):
-        if key in self._cache:
-            return self._Record(*self._cache[key])
-        else:
-            return None
+        return self._Record(*self._cache[key]) if key in self._cache else None
 
     def _put(self, key, data, lastModified, expires):
         self._cache[key] = (data,

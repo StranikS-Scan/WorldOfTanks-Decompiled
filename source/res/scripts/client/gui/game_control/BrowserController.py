@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/BrowserController.py
 import Event
 from WebBrowser import WebBrowser
@@ -46,8 +46,8 @@ class BrowserController(Controller):
 
     @async
     @process
-    def load(self, url = None, title = None, showActionBtn = True, showWaiting = True, browserID = None, isAsync = False, browserSize = None, isDefault = True, callback = None, showCloseBtn = False):
-        url = url or GUI_SETTINGS.browser.url
+    def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False):
+        url = yield self.__urlMacros.parse(url or GUI_SETTINGS.browser.url)
         suffix = yield self.__urlMacros.parse(GUI_SETTINGS.browser.params)
         concatenator = '&' if '?' in url else '?'
         if suffix not in url:
@@ -83,7 +83,7 @@ class BrowserController(Controller):
                 LOG_WARNING('Browser async request url was not loaded!', url)
 
         if isAsync:
-            self.__browsersCallbacks[browserID] = (None, browserCallback)
+            self.__browsersCallbacks[browserID] = (None, browserAsyncCallback)
             self.__browsers[browserID].onLoadEnd += browserAsyncCallback
         else:
             self.__browsersCallbacks[browserID] = (browserCallback, None)
@@ -119,12 +119,11 @@ class BrowserController(Controller):
         return
 
     def __clearCallback(self, browserID):
-        if browserID in self.__browsersCallbacks:
-            loadStart, loadEnd = self.__browsersCallbacks.pop(browserID, (None, None))
-            if loadStart is not None:
-                self.__browsers[browserID].onLoadStart -= loadStart
-            if loadEnd is not None:
-                self.__browsers[browserID].onLoadEnd -= loadEnd
+        loadStart, loadEnd = self.__browsersCallbacks.pop(browserID, (None, None))
+        if loadStart is not None:
+            self.__browsers[browserID].onLoadStart -= loadStart
+        if loadEnd is not None:
+            self.__browsers[browserID].onLoadEnd -= loadEnd
         return
 
     def __showBrowser(self, browserID, ctx):

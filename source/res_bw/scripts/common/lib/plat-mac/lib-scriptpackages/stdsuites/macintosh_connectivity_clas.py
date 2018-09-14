@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/StdSuites/Macintosh_Connectivity_Clas.py
 """Suite Macintosh Connectivity Classes: Classes relating to Apple Macintosh personal computer connectivity
 Level 1, version 1

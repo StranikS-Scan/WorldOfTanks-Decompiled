@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/VibroManager.py
 import copy
 from EffectsSettings import EffectsSettings
@@ -92,8 +92,9 @@ class VibroManager:
             for groupName in EffectsSettings.Groups.AllGroupNames:
                 groupSection = groupsSettingsSection[groupName]
                 if groupSection is not None:
-                    self.__groupsSettings[groupName].enabled = groupSection.readBool('enabled', True)
-                    self.__groupsSettings[groupName].gain = groupSection.readFloat('gain', 1.0)
+                    gain = groupSection.readFloat('gain', 1.0)
+                    self.__groupsSettings[groupName].enabled = gain > 0
+                    self.__groupsSettings[groupName].gain = gain
 
             return
 
@@ -114,14 +115,13 @@ class VibroManager:
     def __clampGain(self, gain):
         if gain > 1.0:
             return 1.0
-        if gain < 0.0:
-            return 0.0
-        return gain
+        return 0.0 if gain < 0.0 else gain
 
     def setGroupsSettings(self, settings):
         self.__groupsSettings = copy.deepcopy(settings)
         for groupSettings in self.__groupsSettings.values():
             groupSettings.gain = self.__clampGain(groupSettings.gain)
+            groupSettings.enabled = groupSettings.gain > 0
 
     def isGroupEnabled(self, groupName):
         if groupName in self.__groupsSettings:
@@ -129,15 +129,14 @@ class VibroManager:
         LOG_DEBUG('group not found: ' + groupName)
         return False
 
-    def getGroupGain(self, groupName, default = 1.0):
-        if groupName in self.__groupsSettings:
-            return self.__groupsSettings[groupName].gain
-        return default
+    def getGroupGain(self, groupName, default=1.0):
+        return self.__groupsSettings[groupName].gain if groupName in self.__groupsSettings else default
 
     def setGroupGain(self, groupName, value):
         if groupName in self.__groupsSettings:
             groupSettings = self.__groupsSettings[groupName]
             groupSettings.gain = self.__clampGain(value)
+            groupSettings.enabled = groupSettings.gain > 0
 
     def isEnabledByUser(self):
         return self.__isEnabledByUser
@@ -191,7 +190,7 @@ class VibroManager:
     def getOverlappedGainMultiplier(self):
         return EffectsSettings.getOverlappedGainMultiplier()
 
-    def loadEffectFromFile(self, effectName, priority = 0):
+    def loadEffectFromFile(self, effectName, priority=0):
         if not self.__isConnected:
             return VibroEffect(effectName, None, EffectsSettings.getEffectPriority(effectName), self.__vibrationObject, EffectsSettings.getGroupForEffect(effectName))
         else:
@@ -208,7 +207,7 @@ class VibroManager:
         self.__effects[effectName] = effect
         return effect
 
-    def launchQuickEffect(self, effectName, count = 1, gain = 100):
+    def launchQuickEffect(self, effectName, count=1, gain=100):
         if not self.canWork():
             return
         elif count is None:
@@ -234,7 +233,7 @@ class VibroManager:
             self.startEffect(effectToLaunch, count)
             return
 
-    def startEffect(self, vibroEffect, count = None):
+    def startEffect(self, vibroEffect, count=None):
         if not self.canWork() or not self.isGroupEnabled(vibroEffect.group):
             return
         elif vibroEffect.isRunning() or vibroEffect.handle is None:
@@ -275,7 +274,7 @@ class VibroManager:
             for vibroEffect in self.__runningEffects.values()[:]:
                 if not vibroEffect.isRunning():
                     del self.__runningEffects[vibroEffect.handle]
-                elif curTopEffect is None or curTopEffect.getPriority() < vibroEffect.getPriority():
+                if curTopEffect is None or curTopEffect.getPriority() < vibroEffect.getPriority():
                     curTopEffect = vibroEffect
 
             shouldRecalcGain = self.__topEffect is None or not self.__topEffect.isRunning()
@@ -284,7 +283,7 @@ class VibroManager:
             for vibroEffect in self.__runningEffects.values():
                 if (shouldRecalcGain or vibroEffect.requiresGainChange()) and vibroEffect != self.__topEffect:
                     self.__drownEffect(vibroEffect)
-                elif vibroEffect.requiresGainChange() or shouldRecalcGain:
+                if vibroEffect.requiresGainChange() or shouldRecalcGain:
                     self.__vibrationObject.setEffectGain(vibroEffect.handle, self.getGroupGain(vibroEffect.group) * vibroEffect.getRelativeGain())
 
             return

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/TextField.py
 import BigWorld, GUI, Keys
 from PyGUIBase import PyGUIBase
@@ -6,7 +6,7 @@ from PyGUIBase import PyGUIBase
 class TextField(PyGUIBase):
     factoryString = 'PyGUI.TextField'
 
-    def __init__(self, component = None):
+    def __init__(self, component=None):
         PyGUIBase.__init__(self, component)
         self.lines = []
         self.lines.append(GUI.Text(''))

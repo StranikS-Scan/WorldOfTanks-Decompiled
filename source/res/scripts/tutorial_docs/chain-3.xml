@@ -31,6 +31,7 @@
         <inactivate>	InSandbox	</inactivate>
         <set-var>	SelectedVehicleSetter	</set-var>
         <set-var>	FirstFoundVehicleSetter	</set-var>
+        <run-trigger>	FreeSlotTrigger	</run-trigger>
         <run-trigger>	CurrentVehicleRequiredLevelTrigger	</run-trigger>
         <run-trigger>	InSandBoxPreQueueTrigger	  <condition>
             <bonus-not-received>	Chain_3_2	</bonus-not-received>
@@ -338,6 +339,11 @@
       <off-effects>
         <refuse-training></refuse-training>
       </off-effects>
+    </trigger>
+    <trigger>	FreeSlotTrigger	  <type>	freeSlot	</type>
+      <on-effects>
+        <global-activate>	SlotDiscountUsed	</global-activate>
+      </on-effects>
     </trigger>
     <trigger>	TankmanDiscountTrigger	  <type>	tankmanDiscount	</type>
       <validate-var>	TankmanCostIndex	</validate-var>

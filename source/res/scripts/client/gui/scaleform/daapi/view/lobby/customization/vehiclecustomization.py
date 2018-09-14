@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/VehicleCustomization.py
 import BigWorld
 from collections import defaultdict
@@ -31,7 +31,7 @@ from account_helpers.settings_core.settings_constants import TUTORIAL
 
 class VehicleCustomization(VehicleCustomizationMeta, View):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(VehicleCustomization, self).__init__()
         self.__interfaces = {}
         self.__prevCameraLocation = None
@@ -326,10 +326,10 @@ class VehicleCustomization(VehicleCustomizationMeta, View):
     def applyCustomization(self, sections):
         if g_currentVehicle.isLocked():
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CUSTOMIZATION_VEHICLE_LOCKED, type=SystemMessages.SM_TYPE.Error)
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         if g_currentVehicle.isBroken():
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.customization_vehicle(g_currentVehicle.item.getState()), type=SystemMessages.SM_TYPE.Error)
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         notSelected = []
         selected = []
         remove = []
@@ -353,7 +353,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View):
                     hasMatches = self.__hasNewItemsDuplicates(newItemsByType, newItems, interface._type)
                     if not hasMatches:
                         costValue = interface.getSelectedItemCost()
-                        if type(costValue) is list:
+                        if isinstance(costValue, list):
                             for price in costValue:
                                 cost = price.get('cost')
                                 isGold = price.get('isGold')
@@ -378,12 +378,11 @@ class VehicleCustomization(VehicleCustomizationMeta, View):
                         remove.extend(removeStr)
                 else:
                     notSelected.append(i18n.makeString('#menu:customization/items/{0:>s}'.format(section.sectionName)))
-            else:
-                LOG_ERROR('Section not found', section.sectionName)
+            LOG_ERROR('Section not found', section.sectionName)
 
         if len(notSelected) > 0:
             DialogsInterface.showI18nInfoDialog('customization/selectNewItems', lambda success: None, I18nInfoDialogMeta('customization/selectNewItems', messageCtx={'items': ', '.join(notSelected)}))
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         if totalGold or totalCredits:
             titleKey = DIALOGS.CUSTOMIZATION_CHANGECONFIRMATION_BUY
         else:
@@ -401,7 +400,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View):
                 else:
                     key = SYSTEM_MESSAGES.CUSTOMIZATION_CREDITS_NOT_ENOUGH
                 SystemMessages.pushI18nMessage(key, type=SystemMessages.SM_TYPE.Error)
-                yield lambda callback = None: callback
+                yield lambda callback=None: callback
             self.__returnHangar = True
             vehInvID = g_currentVehicle.invID
             self.__steps = 0
@@ -421,9 +420,8 @@ class VehicleCustomization(VehicleCustomizationMeta, View):
                         if section.sectionName not in selectedNames:
                             interface.change(vehInvID, section, hasMatches)
                             selectedNames.append(section.sectionName)
-                else:
-                    LOG_ERROR('Change operation, section not found', section)
-                    self.__steps -= 1
+                LOG_ERROR('Change operation, section not found', section)
+                self.__steps -= 1
 
             if not self.__steps:
                 self.__onServerResponsesReceived()

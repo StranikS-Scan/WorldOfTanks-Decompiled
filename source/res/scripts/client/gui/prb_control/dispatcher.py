@@ -1,13 +1,12 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/dispatcher.py
 import types
-import weakref
 import time
 from functools import partial
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import async, process
-from constants import IGR_TYPE, QUEUE_TYPE
+from constants import IGR_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from FortifiedRegionBase import FORT_ERROR
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS, game_control
@@ -33,8 +32,10 @@ from PlayerEvents import g_playerEvents
 from gui.server_events import g_eventsCache
 from gui.shared import actions
 from gui.shared.fortifications import getClientFortMgr
+from gui.shared.utils.listeners_collection import ListenersCollection
+from UnitBase import UNIT_ERROR
 
-class _PrebattleDispatcher(object):
+class _PrebattleDispatcher(ListenersCollection):
 
     def __init__(self):
         super(_PrebattleDispatcher, self).__init__()
@@ -42,7 +43,7 @@ class _PrebattleDispatcher(object):
         self.__collection = FunctionalCollection()
         self.__factories = ControlFactoryDecorator()
         self.__nextPrbFunctional = None
-        self._globalListeners = set()
+        self._setListenerClass(IGlobalListener)
         return
 
     def __del__(self):
@@ -94,7 +95,7 @@ class _PrebattleDispatcher(object):
 
     @async
     @process
-    def create(self, ctx, callback = None):
+    def create(self, ctx, callback=None):
         if ctx.getRequestType() == _RQ_TYPE.CREATE:
             if not self.__requestCtx.isProcessing():
                 result = yield self.unlock(ctx)
@@ -114,17 +115,17 @@ class _PrebattleDispatcher(object):
                 LOG_ERROR('Request is processing', self.__requestCtx)
                 if callback is not None:
                     callback(False)
-                yield lambda callback = None: callback
+                yield lambda callback=None: callback
         else:
             LOG_ERROR('Invalid context to create', ctx)
             if callback is not None:
                 callback(False)
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         return
 
     @async
     @process
-    def join(self, ctx, callback = None):
+    def join(self, ctx, callback=None):
         if self.__validateJoinOp(ctx):
             result = yield self.unlock(ctx)
             ctx.setForced(result)
@@ -141,11 +142,11 @@ class _PrebattleDispatcher(object):
         else:
             if callback is not None:
                 callback(False)
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         return
 
     @async
-    def leave(self, ctx, callback = None):
+    def leave(self, ctx, callback=None):
         if ctx.getRequestType() != _RQ_TYPE.LEAVE:
             LOG_ERROR('Invalid context to leave prebattle/unit', ctx)
             if callback is not None:
@@ -177,10 +178,20 @@ class _PrebattleDispatcher(object):
 
     @async
     @process
-    def unlock(self, unlockCtx, callback = None):
+    def unlock(self, unlockCtx, callback=None):
         state = self.getFunctionalState()
         result = True
-        if not state.isIntroMode or not unlockCtx.hasFlags(FUNCTIONAL_FLAG.SWITCH):
+        if not state.isIntroMode:
+            canDoLeave = True
+        elif unlockCtx.hasFlags(FUNCTIONAL_FLAG.SWITCH):
+            if state.ctrlTypeID == unlockCtx.getCtrlType() and state.entityTypeID != unlockCtx.getEntityType():
+                canDoLeave = True
+                unlockCtx.removeFlags(FUNCTIONAL_FLAG.SWITCH)
+            else:
+                canDoLeave = False
+        else:
+            canDoLeave = True
+        if canDoLeave:
             factory = self.__factories.get(state.ctrlTypeID)
             result = False
             if factory:
@@ -199,12 +210,12 @@ class _PrebattleDispatcher(object):
                 LOG_ERROR('Factory is not found', state)
         if callback is not None:
             callback(result)
-        yield lambda callback = None: callback
+        yield lambda callback=None: callback
         return
 
     @async
     @process
-    def select(self, entry, callback = None):
+    def select(self, entry, callback=None):
         ctx = entry.makeDefCtx()
         if ctx and self.__validateJoinOp(ctx):
             result = yield self.unlock(ctx)
@@ -218,11 +229,11 @@ class _PrebattleDispatcher(object):
         else:
             if callback is not None:
                 callback(False)
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         return
 
     @async
-    def sendPrbRequest(self, ctx, callback = None):
+    def sendPrbRequest(self, ctx, callback=None):
         prbFunctional = self.getFunctional(_CTRL_TYPE.PREBATTLE)
         if prbFunctional:
             prbFunctional.request(ctx, callback=callback)
@@ -233,7 +244,7 @@ class _PrebattleDispatcher(object):
         return
 
     @async
-    def sendUnitRequest(self, ctx, callback = None):
+    def sendUnitRequest(self, ctx, callback=None):
         unitFunctional = self.getFunctional(_CTRL_TYPE.UNIT)
         if unitFunctional:
             unitFunctional.request(ctx, callback=callback)
@@ -244,7 +255,7 @@ class _PrebattleDispatcher(object):
         return
 
     @async
-    def sendPreQueueRequest(self, ctx, callback = None):
+    def sendPreQueueRequest(self, ctx, callback=None):
         preQueueFunctional = self.getFunctional(_CTRL_TYPE.PREQUEUE)
         if preQueueFunctional is not None:
             preQueueFunctional.request(ctx, callback=callback)
@@ -260,8 +271,7 @@ class _PrebattleDispatcher(object):
     def canPlayerDoAction(self):
         canDo, restriction = self.__collection.canPlayerDoAction(False)
         if canDo:
-            isEventBattles = self.getFunctionalState().isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
-            if not g_currentVehicle.isReadyToFight() and not isEventBattles:
+            if not g_currentVehicle.isReadyToFight():
                 if not g_currentVehicle.isPresent():
                     canDo = False
                     restriction = PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT
@@ -300,7 +310,7 @@ class _PrebattleDispatcher(object):
     def getPlayerInfo(self):
         return self.__collection.getPlayerInfo(self.__factories)
 
-    def doAction(self, action = None):
+    def doAction(self, action=None):
         if not g_currentVehicle.isPresent():
             SystemMessages.pushMessage(messages.getInvalidVehicleMessage(PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT), type=SystemMessages.SM_TYPE.Error)
             return False
@@ -330,25 +340,6 @@ class _PrebattleDispatcher(object):
         if isConfirmed:
             yield self.leave(ctx)
         return
-
-    def addGlobalListener(self, listener):
-        if isinstance(listener, IGlobalListener):
-            listenerRef = weakref.ref(listener)
-            if listenerRef not in self._globalListeners:
-                self._globalListeners.add(listenerRef)
-                self.__collection.addListener(listener)
-            else:
-                LOG_ERROR('Listener already added', listener)
-        else:
-            LOG_ERROR('Object is not extend IPrbListener', listener)
-
-    def removeGlobalListener(self, listener):
-        listenerRef = weakref.ref(listener)
-        if listenerRef in self._globalListeners:
-            self._globalListeners.remove(listenerRef)
-        else:
-            LOG_ERROR('Listener not found', listener)
-        self.__collection.removeListener(listener)
 
     def getGUIPermissions(self):
         return self.__collection.getGUIPermissions()
@@ -511,6 +502,11 @@ class _PrebattleDispatcher(object):
             unitFunctional.setLastError(errorCode)
             if errorCode in RETURN_INTRO_UNIT_MGR_ERRORS and unitFunctional.canSwitchToIntro():
                 self.__requestCtx.addFlags(FUNCTIONAL_FLAG.SWITCH)
+            if errorCode == UNIT_ERROR.CANT_PICK_LEADER:
+                self.__requestCtx.removeFlags(FUNCTIONAL_FLAG.SWITCH)
+            elif errorCode == UNIT_ERROR.REMOVED_PLAYER:
+                if self.__requestCtx.getCtrlType() == _CTRL_TYPE.UNIT and unitFunctional.getEntityType() != self.__requestCtx.getEntityType():
+                    self.__requestCtx.removeFlags(FUNCTIONAL_FLAG.SWITCH)
         else:
             LOG_ERROR('Unit functional is not found')
         if errorCode not in IGNORED_UNIT_MGR_ERRORS:
@@ -613,7 +609,7 @@ class _PrebattleDispatcher(object):
             fortMgr.onFortStateChanged -= self.forMgr_onFortStateChanged
         g_prbCtrlEvents.clear()
 
-    def __clear(self, woEvents = False):
+    def __clear(self, woEvents=False):
         if self.__requestCtx:
             self.__requestCtx.clear()
             self.__requestCtx = None
@@ -624,19 +620,19 @@ class _PrebattleDispatcher(object):
             self.__factories.clear()
             self.__factories = None
         g_eventDispatcher.removeSpecBattlesFromCarousel()
-        self._globalListeners.clear()
+        self.clear()
         return
 
-    def __changePrbFunctional(self, flags = FUNCTIONAL_FLAG.UNDEFINED, prbType = 0, stop = True):
+    def __changePrbFunctional(self, flags=FUNCTIONAL_FLAG.UNDEFINED, prbType=0, stop=True):
         self.__setFunctional(CreateFunctionalCtx(_CTRL_TYPE.PREBATTLE, prbType, flags=flags))
         if stop:
             self.__requestCtx.stopProcessing(result=True)
 
-    def __changeUnitFunctional(self, flags = FUNCTIONAL_FLAG.UNDEFINED, prbType = 0):
+    def __changeUnitFunctional(self, flags=FUNCTIONAL_FLAG.UNDEFINED, prbType=0):
         self.__setFunctional(CreateFunctionalCtx(_CTRL_TYPE.UNIT, prbType, flags=flags, initCtx=self.__requestCtx))
         self.__requestCtx.stopProcessing(result=True)
 
-    def __changePreQueueFunctional(self, flags = FUNCTIONAL_FLAG.UNDEFINED, queueType = 0):
+    def __changePreQueueFunctional(self, flags=FUNCTIONAL_FLAG.UNDEFINED, queueType=0):
         self.__setFunctional(CreateFunctionalCtx(_CTRL_TYPE.PREQUEUE, queueType, flags=flags))
         self.__requestCtx.stopProcessing(result=True)
 
@@ -664,9 +660,7 @@ class _PrebattleDispatcher(object):
         items = []
         for created in self.__factories.createFunctional(ctx):
             if ctx.hasFlags(FUNCTIONAL_FLAG.SET_GLOBAL_LISTENERS):
-                for listener in self._globalListeners:
-                    created.addListener(listener())
-
+                created.addMutualListeners(self)
             items.append(created)
 
         for item in items:
@@ -703,7 +697,7 @@ class _PrbPeripheriesHandler(object):
         self.__enableAction = None
         return
 
-    def join(self, peripheryID, ctx, postActions = None, finishActions = None):
+    def join(self, peripheryID, ctx, postActions=None, finishActions=None):
         if not g_lobbyContext.isAnotherPeriphery(peripheryID):
             LOG_ERROR('Player is in given periphery', peripheryID)
             return

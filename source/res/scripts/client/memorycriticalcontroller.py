@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MemoryCriticalController.py
 import BigWorld
 from debug_utils import LOG_NOTE
@@ -43,18 +43,18 @@ class MemoryCriticalController:
         terrainMinQuality = len(terrainSettings) - 1
         if textureSettings[textureMinQuality][0] == 'OFF':
             textureMinQuality -= 1
-        while textureSettings[textureMinQuality][1] == False or pipelineType == 1 and textureSettings[textureMinQuality][2] == True:
-            textureMinQuality -= 1
+        while 1:
+            (textureSettings[textureMinQuality][1] is False or pipelineType == 1 and textureSettings[textureMinQuality][2] is True) and textureMinQuality -= 1
 
         if textureMinQuality < texQuality:
             textureMinQuality = texQuality
-        while floraSettings[floraMinQuality][1] == False or pipelineType == 1 and floraSettings[floraMinQuality][2] == True:
-            floraMinQuality -= 1
+        while 1:
+            (floraSettings[floraMinQuality][1] is False or pipelineType == 1 and floraSettings[floraMinQuality][2] is True) and floraMinQuality -= 1
 
         if floraMinQuality < floraQuality:
             floraMinQuality = floraQuality
-        while terrainSettings[terrainMinQuality][1] == False or pipelineType == 1 and terrainSettings[terrainMinQuality][2] == True:
-            terrainMinQuality -= 1
+        while 1:
+            (terrainSettings[terrainMinQuality][1] is False or pipelineType == 1 and terrainSettings[terrainMinQuality][2] is True) and terrainMinQuality -= 1
 
         if terrainMinQuality < terrainQuality:
             terrainMinQuality = terrainQuality

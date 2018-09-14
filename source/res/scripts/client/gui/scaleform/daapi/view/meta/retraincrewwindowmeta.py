@@ -1,19 +1,23 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RetrainCrewWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class RetrainCrewWindowMeta(AbstractWindowView):
 
-    def submit(self, data):
+    def submit(self, operationId):
         self._printOverrideError('submit')
 
     def changeRetrainType(self, retrainTypeIndex):
         self._printOverrideError('changeRetrainType')
 
-    def as_setCommonDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCommonData(data)
+    def as_setCrewDataS(self, data):
+        return self.flashObject.as_setCrewData(data) if self._isDAAPIInited() else None
 
-    def as_updateDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateData(data)
+    def as_setVehicleDataS(self, data):
+        return self.flashObject.as_setVehicleData(data) if self._isDAAPIInited() else None
+
+    def as_setCrewOperationDataS(self, data):
+        return self.flashObject.as_setCrewOperationData(data) if self._isDAAPIInited() else None
+
+    def as_setAllCrewDataS(self, data):
+        return self.flashObject.as_setAllCrewData(data) if self._isDAAPIInited() else None

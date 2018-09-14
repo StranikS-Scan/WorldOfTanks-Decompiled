@@ -10,8 +10,8 @@
   <minimap>	spaces/100_thepit/mmap.dds	</minimap>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <maxPlayersInTeam>	15	</maxPlayersInTeam>
-  <loadingMusic>	/music/intro/rus_village	</loadingMusic>
-  <wwloadingMusic>	music_malinovka	</wwloadingMusic>
+  <loadingMusic>	/music/intro/rus_city	</loadingMusic>
+  <wwloadingMusic>	music_rus_city	</wwloadingMusic>
   <ambientSound>	/wind/wind/wind_summer_01	</ambientSound>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
   <umbraEnabled>	1	</umbraEnabled>
@@ -49,13 +49,18 @@
           <position1>	-34.68 100.709	</position1>
         </team2>
       </teamBasePositions>
-      <battleScenario>
-        <level>	1	  <scenario>	spaces/100_thepit/bot_scenarios_1_lv1.xml	</scenario>
+      <battleScenarios>
+        <level>
+          <id>	1	</id>
+          <scenario>	spaces/100_thepit/bot_scenarios_1_lv1.xml	</scenario>
         </level>
-        <level>	2	  <scenario>	spaces/100_thepit/bot_scenarios_1_lv2.xml	</scenario>
+        <level>
+          <id>	2	</id>
+          <scenario>	spaces/100_thepit/bot_scenarios_1_lv2.xml	</scenario>
         </level>
-      </battleScenario>
+      </battleScenarios>
     </sandbox>
   </gameplayTypes>
   <waypoints>	spaces/100_thepit/paths.xml	</waypoints>
+  <wwloadingMusic>	music_malinovka	</wwloadingMusic>
 </100_thepit.xml>

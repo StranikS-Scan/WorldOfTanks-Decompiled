@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_dispatcher.py
 import constants
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
@@ -17,12 +17,12 @@ def showTankwomanRecruitWindow(questID, isPremium, fnGroup, lnGroup, iGroup):
      'iGroupID': iGroup}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showEventsWindow(eventID = None, eventType = None):
+def showEventsWindow(eventID=None, eventType=None):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EVENTS_WINDOW, ctx={'eventID': eventID,
      'eventType': eventType}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showTutorialTabInEventsWindow(eventID = ''):
+def showTutorialTabInEventsWindow(eventID=''):
     showEventsWindow(eventID, constants.EVENT_TYPE.TUTORIAL)
 
 
@@ -31,16 +31,20 @@ def showAchievementsAward(achievements):
 
 
 def showTokenAward(potapovQuest, tokenID, tokensCount):
-    shared_events.showAwardWindow(awards.TokenAward(potapovQuest, tokenID, tokensCount))
+    shared_events.showAwardWindow(awards.TokenAward(potapovQuest, tokenID, tokensCount, showEventsWindow))
 
 
 def showVehicleAward(vehicle):
     shared_events.showAwardWindow(awards.VehicleAward(vehicle))
 
 
+def showMotiveAward(quest):
+    shared_events.showAwardWindow(awards.MotiveQuestAward(quest, showEventsWindow))
+
+
 def showTankwomanAward(questID, tankmanData):
-    shared_events.showAwardWindow(awards.TankwomanAward(questID, tankmanData), isUniqueName=False)
+    shared_events.showAwardWindow(awards.TankwomanAward(questID, tankmanData, showTankwomanRecruitWindow), isUniqueName=False)
 
 
-def showRegularAward(quest, isMainReward = True, isAddReward = False):
-    shared_events.showAwardWindow(awards.RegularAward(quest, isMainReward, isAddReward))
+def showRegularAward(quest, isMainReward=True, isAddReward=False):
+    shared_events.showAwardWindow(awards.RegularAward(quest, showEventsWindow, isMainReward, isAddReward))

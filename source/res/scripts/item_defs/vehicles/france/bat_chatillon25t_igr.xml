@@ -81,6 +81,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/french/F18_Bat_Chatillon25t/Bat_Chatillon25t_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_Bat_Chatillon25t_2_IGR>
@@ -186,7 +187,9 @@
         <mud>	mediumTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.763199 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/french/F18_Bat_Chatillon25t/collision/Chassis.model	</collisionModel>
@@ -328,6 +331,7 @@
       <showEmblemsOnGun>	true	</showEmblemsOnGun>
       <physicsShape>	1.215 -0.045 0.893 0.000 1.226 0.056 0.249 0.000 0.500 0.500 0.000 0.500 0.367 0.000 0.014	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
     </Turret_1_Bat_Chatillon25t_IGR>
   </turrets0>

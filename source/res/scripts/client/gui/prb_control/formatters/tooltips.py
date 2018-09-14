@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/tooltips.py
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR
@@ -42,7 +42,7 @@ def getTotalLevelInvalidTooltip(teamsLimit, restriction):
     return makeTooltip(i18n.makeString('#tooltips:redButton/disabled/{0:>s}/header'.format(restriction)), i18n.makeString('#tooltips:redButton/disabled/{0:>s}/body'.format(restriction), minLevel, maxLevel))
 
 
-def getActionDisabledTooltip(restriction, functional = None):
+def getActionDisabledTooltip(restriction, functional=None):
     if not len(restriction):
         return
     else:

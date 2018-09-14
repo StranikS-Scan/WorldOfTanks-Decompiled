@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/ICON_TEXT_FRAMES.py
 
 
@@ -6,6 +6,8 @@ class ICON_TEXT_FRAMES(object):
     EMPTY = 'empty'
     CREDITS = 'credits'
     GOLD = 'gold'
+    CREDITS_BIG = 'creditsBig'
+    GOLD_BIG = 'goldBig'
     GOLD_DISCOUNT = 'goldDiscount'
     XP = 'xp'
     ELITE_XP = 'eliteXp'

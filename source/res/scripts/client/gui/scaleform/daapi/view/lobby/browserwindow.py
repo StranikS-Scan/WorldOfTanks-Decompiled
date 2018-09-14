@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/BrowserWindow.py
 from gui import game_control
 from gui.game_control.gc_constants import BROWSER
@@ -12,7 +12,7 @@ from helpers import i18n
 
 class BrowserWindow(BrowserMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(BrowserWindow, self).__init__()
         self.__url = ctx.get('url')
         self.__customTitle = ctx.get('title')
@@ -46,7 +46,7 @@ class BrowserWindow(BrowserMeta):
     def browserFocusOut(self):
         self.__browser.browserFocusOut()
 
-    def onBrowserShow(self, needRefresh = False):
+    def onBrowserShow(self, needRefresh=False):
         self.__browser.onBrowserShow(needRefresh)
 
     def onBrowserHide(self):
@@ -86,7 +86,7 @@ class BrowserWindow(BrowserMeta):
         if self.__showWaiting:
             self.as_showWaitingS(WAITING.LOADCONTENT, {})
 
-    def __onLoadEnd(self, url, isLoaded = True):
+    def __onLoadEnd(self, url, isLoaded=True):
         self.as_loadingStopS()
         if self.__showWaiting:
             self.as_hideWaitingS()
@@ -104,10 +104,7 @@ class BrowserWindow(BrowserMeta):
             self.__customTitle = event.ctx.get('title', self.__customTitle)
             self.__showActionBtn = event.ctx.get('showActionBtn', self.__showActionBtn)
             self.as_configureS(self.__isDefault, self.__customTitle, self.__showActionBtn, self.__showCloseBtn)
-            browserUrl = self.__browser.url
-            if browserUrl[-1] == '/':
-                browserUrl = browserUrl[:-1]
-            if self.__url and self.__url != browserUrl:
+            if self.__url and self.__url.rstrip('/') != self.__browser.url.rstrip('/'):
                 self.__browser.navigate(self.__url)
             else:
                 self.__browser.onBrowserShow(False)

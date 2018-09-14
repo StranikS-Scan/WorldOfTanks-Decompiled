@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/TUTORIAL.py
 
 
@@ -144,3 +144,4 @@ class TUTORIAL(object):
     CHAIN9_HINT_OPEN = '#tutorial:chain9/hint/open'
     CHAIN9_HINT_SELECT = '#tutorial:chain9/hint/select'
     CHAIN9_HINT_SUBMIT = '#tutorial:chain9/hint/submit'
+    CUSTOMIZATION_SLOTS = '#tutorial:customization/slots'

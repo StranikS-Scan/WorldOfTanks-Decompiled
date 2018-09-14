@@ -1,13 +1,13 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/chains/functional.py
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EVENT_STATUS
 from gui.shared.ItemsCache import g_itemsCache
+from gui.server_events import events_dispatcher
 from tutorial.control.functional import FunctionalEffect
 from tutorial.data.hints import HintProps
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.logger import LOG_ERROR
-from gui.server_events import events_dispatcher
 
 class FunctionalShowHint(FunctionalEffect):
 

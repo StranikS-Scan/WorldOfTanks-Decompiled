@@ -1,10 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_msgs_ctrl.py
 import BattleReplay
 import BigWorld
 import Event
 from constants import ATTACK_REASON_INDICES as _AR_INDICES
-from gui.battle_control.arena_info import isEventBattle
 
 class _ENTITY_TYPE(object):
     UNKNOWN = 'unknown'
@@ -19,7 +18,8 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['ramming']: 'DEATH_FROM_RAMMING',
  _AR_INDICES['world_collision']: 'DEATH_FROM_WORLD_COLLISION',
  _AR_INDICES['death_zone']: 'DEATH_FROM_DEATH_ZONE',
- _AR_INDICES['drowning']: 'DEATH_FROM_DROWNING'}
+ _AR_INDICES['drowning']: 'DEATH_FROM_DROWNING',
+ _AR_INDICES['gas_attack']: 'DEATH_FROM_GAS_ATTACK'}
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 
@@ -77,15 +77,15 @@ class BattleMessagesController(object):
         self.onShowPlayerMessageByCode(code, postfix, targetID, entityID, equipmentID)
         self.onShowVehicleMessageByCode(code, postfix, entityID, extra, equipmentID)
 
-    def showVehicleMessage(self, key, args = None):
+    def showVehicleMessage(self, key, args=None):
         self.onShowVehicleMessageByKey(key, args, None)
         return
 
-    def showVehicleError(self, key, args = None):
+    def showVehicleError(self, key, args=None):
         self.onShowVehicleErrorByKey(key, args, None)
         return
 
-    def showAllyHitMessage(self, vehicleID = None):
+    def showAllyHitMessage(self, vehicleID=None):
         self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self.__battleCtx.getFullPlayerName(vID=vehicleID)}, (('entity', vehicleID),))
 
     def __getEntityString(self, avatar, entityID):
@@ -139,22 +139,22 @@ class BattleMessagesPlayer(BattleMessagesController):
             return
         super(BattleMessagesPlayer, self).showVehicleDamageInfo(avatar, code, entityID, extra, equipmentID)
 
-    def showVehicleMessage(self, key, args = None):
+    def showVehicleMessage(self, key, args=None):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
         super(BattleMessagesPlayer, self).showVehicleMessage(key, args)
 
-    def showVehicleError(self, key, args = None):
+    def showVehicleError(self, key, args=None):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
         super(BattleMessagesPlayer, self).showVehicleError(key, args)
 
-    def showAllyHitMessage(self, vehicleID = None):
+    def showAllyHitMessage(self, vehicleID=None):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
         super(BattleMessagesPlayer, self).showAllyHitMessage(vehicleID)
 
-    def showInfoMessage(self, key, withBuffer = False, args = None):
+    def showInfoMessage(self, key, withBuffer=False, args=None):
         if withBuffer and not self._isUIPopulated:
             self._buffer.append((key, args))
         else:

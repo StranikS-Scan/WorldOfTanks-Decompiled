@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/Waiting.py
 import BigWorld
 from helpers import i18n
@@ -29,7 +29,7 @@ class Waiting(object):
         return msg in cls.__waitingStack
 
     @staticmethod
-    def show(message, isSingle = False, interruptCallback = lambda : None):
+    def show(message, isSingle=False, interruptCallback=lambda : None):
         BigWorld.Screener.setEnabled(False)
         if not (isSingle and message in Waiting.__waitingStack):
             Waiting.__waitingStack.append(message)

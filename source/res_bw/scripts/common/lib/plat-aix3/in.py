@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-aix3/IN.py
 LITTLE_ENDIAN = 1234
 BIG_ENDIAN = 4321

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/GraphicsPresetsLoader.py
 import types
 import BigWorld
@@ -35,7 +35,5 @@ class GraphicsPresetsLoader(object):
     def getPreset(self, key):
         if isinstance(key, types.IntType):
             return self.__presets[self.__presetsKeys[key]]
-        elif isinstance(key, types.StringType):
-            return self.__presets[key]
         else:
-            return None
+            return self.__presets[key] if isinstance(key, types.StringType) else None

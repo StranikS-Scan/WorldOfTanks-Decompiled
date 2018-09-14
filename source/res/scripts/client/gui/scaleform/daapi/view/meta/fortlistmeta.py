@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortListMeta.py
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyListView import BaseRallyListView
 
@@ -8,29 +8,22 @@ class FortListMeta(BaseRallyListView):
         self._printOverrideError('changeDivisionIndex')
 
     def as_getDivisionsDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getDivisionsDP()
+        return self.flashObject.as_getDivisionsDP() if self._isDAAPIInited() else None
 
     def as_setSelectedDivisionS(self, index):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSelectedDivision(index)
+        return self.flashObject.as_setSelectedDivision(index) if self._isDAAPIInited() else None
 
     def as_setCreationEnabledS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCreationEnabled(value)
+        return self.flashObject.as_setCreationEnabled(value) if self._isDAAPIInited() else None
 
     def as_setRegulationInfoS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setRegulationInfo(data)
+        return self.flashObject.as_setRegulationInfo(data) if self._isDAAPIInited() else None
 
     def as_setTableHeaderS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTableHeader(data)
+        return self.flashObject.as_setTableHeader(data) if self._isDAAPIInited() else None
 
     def as_tryShowTextMessageS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_tryShowTextMessage()
+        return self.flashObject.as_tryShowTextMessage() if self._isDAAPIInited() else None
 
     def as_setCurfewEnabledS(self, showWarning):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCurfewEnabled(showWarning)
+        return self.flashObject.as_setCurfewEnabled(showWarning) if self._isDAAPIInited() else None

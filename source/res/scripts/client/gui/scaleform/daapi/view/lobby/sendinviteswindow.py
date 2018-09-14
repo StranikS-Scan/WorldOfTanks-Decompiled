@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/SendInvitesWindow.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.SendInvitesWindowMeta import SendInvitesWindowMeta
@@ -17,7 +17,7 @@ from messenger.proto.events import g_messengerEvents
 
 class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(SendInvitesWindow, self).__init__()
         self._onlineMode = True
         self._ctx = ctx

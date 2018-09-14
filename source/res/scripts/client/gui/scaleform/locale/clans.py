@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/CLANS.py
 from debug_utils import LOG_WARNING
 
@@ -99,6 +99,12 @@ class CLANS(object):
     CLANPROFILE_MAINWINDOWTAB_GLOBALMAP = '#clans:clanProfile/mainWindowTab/globalMap'
     CLANPROFILE_MAINWINDOW_DUMMY_HEADER = '#clans:clanProfile/mainWindow/dummy/header'
     CLANPROFILE_MAINWINDOW_DUMMY_BODY = '#clans:clanProfile/mainWindow/dummy/body'
+    CLANPROFILE_CLANJOINAWARD_TITLE = '#clans:clanProfile/clanJoinAward/title'
+    CLANPROFILE_CLANJOINAWARD_HEADER = '#clans:clanProfile/clanJoinAward/header'
+    CLANPROFILE_CLANJOINAWARD_YOURCLAN = '#clans:clanProfile/clanJoinAward/yourClan'
+    CLANPROFILE_CLANJOINAWARD_SECONDARYTEXT = '#clans:clanProfile/clanJoinAward/secondaryText'
+    CLANPROFILE_CLANJOINAWARD_BTNACTION = '#clans:clanProfile/clanJoinAward/btnAction'
+    CLANPROFILE_CLANJOINAWARD_BTNCLOSE = '#clans:clanProfile/clanJoinAward/btnClose'
     CLAN_HEADER_CREATIONDATE = '#clans:clan/header/creationDate'
     CLAN_HEADER_SENDREQUESTBTN = '#clans:clan/header/sendRequestBtn'
     CLAN_HEADER_SENDREQUESTBTN_TOOLTIP_HEADER = CLAN_HEADER_SENDREQUESTBTN_TOOLTIP + '/header'
@@ -419,6 +425,8 @@ class CLANS(object):
     GLOBALMAPVIEW_TABLE_INCOME = '#clans:globalMapView/table/income'
     GLOBALMAPVIEW_TABLE_INCOME_TOOLTIP_HEADER = GLOBALMAPVIEW_TABLE_INCOME_TOOLTIP + '/header'
     GLOBALMAPVIEW_TABLE_INCOME_TOOLTIP_BODY = GLOBALMAPVIEW_TABLE_INCOME_TOOLTIP + '/body'
+    GLOBALMAPVIEW_TABLE_PROVINCEROBBED_TOOLTIP_NOINCOME = '#clans:globalMapView/table/provinceRobbed/tooltip/noIncome'
+    GLOBALMAPVIEW_TABLE_PROVINCEROBBED_TOOLTIP_RESTORETIME = '#clans:globalMapView/table/provinceRobbed/tooltip/restoreTime'
     GLOBALMAPVIEW_NOINCOME_TOOLTIP_HEADER = GLOBALMAPVIEW_NOINCOME_TOOLTIP + '/header'
     GLOBALMAPVIEW_NOINCOME_TOOLTIP_BODY = GLOBALMAPVIEW_NOINCOME_TOOLTIP + '/body'
     GLOBALMAPVIEW_TOTALINCOME = '#clans:globalMapView/totalIncome'
@@ -521,6 +529,10 @@ class CLANS(object):
     SEARCH_EMPTYRESULT_BUTTON = '#clans:search/emptyResult/button'
     SEARCH_EMPTYRESULT_BUTTON_TOOLTIP_HEADER = SEARCH_EMPTYRESULT_BUTTON_TOOLTIP + '/header'
     SEARCH_EMPTYRESULT_BUTTON_TOOLTIP_BODY = SEARCH_EMPTYRESULT_BUTTON_TOOLTIP + '/body'
+    SEARCH_REQUESTTOOSHORT_HEADER = '#clans:search/requestTooShort/header'
+    SEARCH_REQUESTTOOSHORT_BODY = '#clans:search/requestTooShort/body'
+    SEARCH_REQUESTTOOSHORT_BUTTON = '#clans:search/requestTooShort/button'
+    SEARCH_REQUESTTOOSHORT_BUTTON_TOOLTIP_HEADER = '#clans:search/requestTooShort/button/tooltip/header'
     SEARCH_PROMOTEXT_HEADER = '#clans:search/promoText/header'
     SEARCH_PROMOTEXT_BODY = '#clans:search/promoText/body'
     SEARCH_INFO_CREATIONDATE = '#clans:search/info/creationDate'

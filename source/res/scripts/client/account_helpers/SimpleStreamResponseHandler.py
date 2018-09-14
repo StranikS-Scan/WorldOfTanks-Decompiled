@@ -1,17 +1,19 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/SimpleStreamResponseHandler.py
-import weakref, zlib, cPickle
+import weakref
+import zlib
+import cPickle
 import AccountCommands
 from debug_utils import *
 
 class SimpleStreamResponseHandler(object):
 
-    def __init__(self, account, callback, default = None):
+    def __init__(self, account, callback, default=None):
         self.__accountRef = weakref.ref(account)
         self.__callback = callback
         self.__default = default
 
-    def __call__(self, requestID, resultID, errorStr, ext = {}):
+    def __call__(self, requestID, resultID, errorStr, ext={}):
         if resultID != AccountCommands.RES_STREAM:
             self.__callback(resultID, self.__default)
         else:

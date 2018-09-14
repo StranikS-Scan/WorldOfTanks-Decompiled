@@ -72,6 +72,14 @@
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
       <periphery_id>	109	</periphery_id>
     </host>
+    <host>
+      <name>	WOT RU10	</name>
+      <short_name>	RU10	</short_name>
+      <url>	login.p10.worldoftanks.net:20014	</url>
+      <url_token>	login2.p10.worldoftanks.net:20014	</url_token>
+      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
+      <periphery_id>	110	</periphery_id>
+    </host>
   </login>
   <updateUrl>	http://worldoftanks.ru/update	</updateUrl>
   <csisUrl>	http://csis.worldoftanks.ru/csis/wotru1/	</csisUrl>
@@ -147,6 +155,15 @@
       <explosion_stone_NO_GMM>
         <texture>	maps/fx/decal_stone_NO_GMM.dds	</texture>
       </explosion_stone_NO_GMM>
+      <explosion_metal_AM>
+        <texture>	maps/fx/dark_hole_AM.dds	</texture>
+      </explosion_metal_AM>
+      <explosion_metal_NM>
+        <texture>	maps/fx/dark_hole_NM.dds	</texture>
+      </explosion_metal_NM>
+      <explosion_metal_GMM>
+        <texture>	maps/fx/dark_hole_GMM.dds	</texture>
+      </explosion_metal_GMM>
     </textures>
   </decal>
   <camouflage>

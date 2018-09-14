@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/EULADispatcher.py
 import ResMgr
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
@@ -29,7 +29,7 @@ class EULADispatcher(EventSystemEntity):
 
     def _populate(self):
         EventSystemEntity._populate(self)
-        if self.isShow == False:
+        if self.isShow is False:
             return
         isShowFullEULA = GUI_SETTINGS.eula.full
         if isShowFullEULA:
@@ -48,7 +48,7 @@ class EULADispatcher(EventSystemEntity):
             self.__saveVersionFile()
 
     @async
-    def processLicense(self, callback = None):
+    def processLicense(self, callback=None):
         self.EULACallback = callback
         from account_helpers.AccountSettings import AccountSettings, EULA_VERSION
         from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -199,7 +199,7 @@ class _LicenseXMLProcessor(object):
 
         return
 
-    def execute(self, section, processor = None, result = None):
+    def execute(self, section, processor=None, result=None):
         template = self.__templates.get(section.name)
         if result is None:
             result = []

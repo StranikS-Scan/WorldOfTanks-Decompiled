@@ -1,18 +1,18 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/win_points.py
 import ResMgr
 from constants import FLAG_TYPES
 from items import vehicles
 _CONFIG_FILE = 'scripts/item_defs/win_points.xml'
 
-class DamageSettings:
+class DamageSettings(object):
 
     def __init__(self, section):
         self.pointsForKill = section['winPointsForKill'].asInt
         self.pointsForDamage = (section['winPointsForDamage']['damageToDeal'].asInt, section['winPointsForDamage']['pointsToGrant'].asInt)
 
 
-class WinPointsTeamOrSoloSettings:
+class WinPointsTeamOrSoloSettings(object):
 
     def __init__(self, section):
         self.vehicleDamageSettings = DamageSettings(section['vehicle'])
@@ -22,7 +22,7 @@ class WinPointsTeamOrSoloSettings:
             name = name.upper()
             flagTypeId = getattr(FLAG_TYPES, name, None)
             if flagTypeId is None:
-                raise Exception, 'Unknown flag type name (%s)' % (name,)
+                raise Exception('Unknown flag type name (%s)' % (name,))
             self.pointsForFlag[flagTypeId] = subsection.asInt
 
         self.pointsForOneResource = section['winPointsForOneResource'].asInt
@@ -32,7 +32,7 @@ class WinPointsTeamOrSoloSettings:
 WinPointsTeamSettings = WinPointsTeamOrSoloSettings
 WinPointsSoloSettings = WinPointsTeamOrSoloSettings
 
-class WinPointsSettings:
+class WinPointsSettings(object):
 
     def __init__(self, section):
         self.pointsCAP = section['winPointsCAP'].asInt
@@ -51,8 +51,9 @@ class WinPointsSettings:
 
     def __getattr__(self, item):
         if item in ('pointsForFlag', 'pointsForOneResource'):
-            return lambda isSolo: (getattr(self.soloSettings, item) if isSolo else getattr(self.teamSettings, item))
-        raise Exception, 'Wrong item to access from WinPointsSettings:%s' % item
+            return lambda isSolo: getattr(self.soloSettings, item) if isSolo else getattr(self.teamSettings, item)
+        else:
+            return super(WinPointsSettings, self).__getattr__(item)
 
 
 g_cache = None

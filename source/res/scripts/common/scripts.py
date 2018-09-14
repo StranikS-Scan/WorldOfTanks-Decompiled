@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/scripts.py
 import weakref
 from functools import partial
@@ -376,6 +376,9 @@ class ScriptDriver(object):
 
         cancelledTasks.clear()
 
+    def beginInterrupt(self, interrupt):
+        self.__beginInterrupt(interrupt)
+
     def __beginInterrupt(self, interrupt):
         self.suspend()
         self.__interruptDriver = ScriptDriver(self.__script)
@@ -431,7 +434,7 @@ class ScriptDriver(object):
             self.__beginInterrupt(e)
             self.__interruptDriver.restore(backup)
 
-    def addTask(self, task, name = None, parent = None, predecessors = None):
+    def addTask(self, task, name=None, parent=None, predecessors=None):
         if self.__interruptDriver:
             return self.__interruptDriver.addTask(task, name=name, parent=parent, predecessors=predecessors)
         else:
@@ -477,10 +480,7 @@ class ScriptDriver(object):
             return
 
     def lookupTask(self, name):
-        if self.__interruptDriver:
-            return self.__interruptDriver.lookupTask(name)
-        else:
-            return self.__namedTasks.get(name, None)
+        return self.__interruptDriver.lookupTask(name) if self.__interruptDriver else self.__namedTasks.get(name, None)
 
     def __registerActiveTask(self, task):
         name = task.name
@@ -582,7 +582,7 @@ class ScriptDriver(object):
 
 class ScriptTask(object):
 
-    def __init__(self, tags = None):
+    def __init__(self, tags=None):
         self.result = None
         self.tags = tags
         self.subtasks = []
@@ -602,7 +602,7 @@ class ScriptTask(object):
         self.subtasks.remove(task)
 
     def process(self):
-        raise Exception, 'Task must implement process method'
+        raise Exception('Task must implement process method')
 
     def suspend(self, cancel):
         pass
@@ -613,7 +613,7 @@ class ScriptTask(object):
 
 class SimpleScriptTask(ScriptTask):
 
-    def __init__(self, routine, tags = None):
+    def __init__(self, routine, tags=None):
         ScriptTask.__init__(self, tags)
         self.__routine = routine
 
@@ -629,9 +629,7 @@ class _WaitCompletionTask(ScriptTask):
         self.__waiting = True
 
     def process(self):
-        if self.__waiting:
-            return TASK_STATUS.RUNNING
-        return TASK_STATUS.SUCCESS
+        return TASK_STATUS.RUNNING if self.__waiting else TASK_STATUS.SUCCESS
 
     def complete(self):
         self.__waiting = False

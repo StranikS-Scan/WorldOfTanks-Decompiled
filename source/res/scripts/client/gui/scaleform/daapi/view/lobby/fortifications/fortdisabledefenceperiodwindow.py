@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortDisableDefencePeriodWindow.py
 import BigWorld
 from adisp import process
@@ -14,7 +14,7 @@ from helpers import i18n
 
 class FortDisableDefencePeriodWindow(FortDisableDefencePeriodWindowMeta, FortViewHelper):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(FortDisableDefencePeriodWindow, self).__init__()
         self.__inputChecker = None
         self.__controlNumber = self.fortCtrl.getFort().getTotalDefRes()

@@ -1,11 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleSellDialogMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class VehicleSellDialogMeta(AbstractWindowView):
-
-    def getDialogSettings(self):
-        self._printOverrideError('getDialogSettings')
 
     def setDialogSettings(self, isOpen):
         self._printOverrideError('setDialogSettings')
@@ -22,30 +19,17 @@ class VehicleSellDialogMeta(AbstractWindowView):
     def checkControlQuestion(self, dismiss):
         self._printOverrideError('checkControlQuestion')
 
-    def as_setDataS(self, vehicle, onVehicle, inInventory, removePrices, gold):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(vehicle, onVehicle, inInventory, removePrices, gold)
+    def as_setDataS(self, data):
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_checkGoldS(self, gold):
-        if self._isDAAPIInited():
-            return self.flashObject.as_checkGold(gold)
+        return self.flashObject.as_checkGold(gold) if self._isDAAPIInited() else None
 
     def as_visibleControlBlockS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_visibleControlBlock(value)
+        return self.flashObject.as_visibleControlBlock(value) if self._isDAAPIInited() else None
 
     def as_enableButtonS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_enableButton(value)
+        return self.flashObject.as_enableButton(value) if self._isDAAPIInited() else None
 
-    def as_setCtrlQuestionS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCtrlQuestion(value)
-
-    def as_setControlNumberS(self, isGold, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setControlNumber(isGold, value)
-
-    def as_cleanInputSummS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_cleanInputSumm()
+    def as_setControlQuestionDataS(self, isGold, value, question):
+        return self.flashObject.as_setControlQuestionData(isGold, value, question) if self._isDAAPIInited() else None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/MembersDataProvider.py
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from messenger import g_settings
@@ -25,7 +25,7 @@ class MembersDataProvider(DAAPIDataProvider):
         getUser = self.usersStorage.getUser
         getColors = g_settings.getColorScheme('rosters').getColors
         for member in members:
-            dbID = member.getID()
+            dbID = member.getDatabaseID()
             isOnline = member.isOnline()
             user = getUser(dbID)
             if user:

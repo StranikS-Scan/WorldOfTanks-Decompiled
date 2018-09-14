@@ -8,8 +8,8 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <lvlDiff>	1	</lvlDiff>
               <classes>	AT-SPG	</classes>
+              <lvlDiff>	1	</lvlDiff>
               <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
           </and>
@@ -29,7 +29,7 @@
         </token>
         <berths>	1	</berths>
         <tankmen>
-          <tman1>
+          <tman>
             <isPremium>	true	</isPremium>
             <isFemale>	true	</isFemale>
             <role>	commander	</role>
@@ -41,7 +41,7 @@
             <nationID>	0	</nationID>
             <vehicleTypeID>	0	</vehicleTypeID>
             <freeSkills>	brotherhood	</freeSkills>
-          </tman1>
+          </tman>
         </tankmen>
       </bonus>
     </potapovQuest>
@@ -52,17 +52,17 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleKills>
-              <lvlDiff>	1	</lvlDiff>
-              <classes>	AT-SPG	</classes>
-              <greaterOrEqual>	2	</greaterOrEqual>
-            </vehicleKills>
-            <isAlive></isAlive>
-            <win></win>
             <results>
               <key>	damageDealt	</key>
               <greaterOrEqual>	2000	</greaterOrEqual>
             </results>
+            <vehicleKills>
+              <classes>	AT-SPG	</classes>
+              <lvlDiff>	1	</lvlDiff>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleKills>
+            <isAlive></isAlive>
+            <win></win>
           </and>
         </postBattle>
       </conditions>

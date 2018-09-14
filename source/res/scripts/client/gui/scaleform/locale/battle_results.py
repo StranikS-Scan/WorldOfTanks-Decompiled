@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/BATTLE_RESULTS.py
 
 
@@ -104,6 +104,7 @@ class BATTLE_RESULTS(object):
     COMMON_TOOLTIP_KILL3_DESCRIPTION = '#battle_results:common/tooltip/kill3/description'
     COMMON_TOOLTIP_KILL4_DESCRIPTION = '#battle_results:common/tooltip/kill4/description'
     COMMON_TOOLTIP_KILL5_DESCRIPTION = '#battle_results:common/tooltip/kill5/description'
+    COMMON_TOOLTIP_KILL6_DESCRIPTION = '#battle_results:common/tooltip/kill6/description'
     COMMON_TOOLTIP_TEAMKILL_HEADER = '#battle_results:common/tooltip/teamKill/header'
     COMMON_TOOLTIP_TEAMKILL_1_DESCRIPTION = '#battle_results:common/tooltip/teamKill-1/description'
     COMMON_TOOLTIP_TEAMKILL0_DESCRIPTION = '#battle_results:common/tooltip/teamKill0/description'
@@ -249,6 +250,9 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_IGRBONUS = '#battle_results:details/calculations/igrBonus'
     DETAILS_CALCULATIONS_FORTORDER = '#battle_results:details/calculations/fortOrder'
     DETAILS_CALCULATIONS_REFERRALBONUS = '#battle_results:details/calculations/referralBonus'
+    DETAILS_CALCULATIONS_MULTIPLIERINFO_HEADER = '#battle_results:details/calculations/multiplierInfo/header'
+    DETAILS_CALCULATIONS_MULTIPLIERINFO_BODY = '#battle_results:details/calculations/multiplierInfo/body'
+    DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR = '#battle_results:details/calculations/multiplierInfo/vehicleSeparator'
     TANKSELECTOR_NEXT = '#battle_results:tankSelector/next'
     VICTORYSCORE = '#battle_results:victoryScore'
     EXTERMINATIONVICTORY_ALLIES = '#battle_results:exterminationVictory/allies'
@@ -306,6 +310,7 @@ class BATTLE_RESULTS(object):
      COMMON_TOOLTIP_KILL3_DESCRIPTION,
      COMMON_TOOLTIP_KILL4_DESCRIPTION,
      COMMON_TOOLTIP_KILL5_DESCRIPTION,
+     COMMON_TOOLTIP_KILL6_DESCRIPTION,
      COMMON_TOOLTIP_TEAMKILL_HEADER,
      COMMON_TOOLTIP_TEAMKILL_1_DESCRIPTION,
      COMMON_TOOLTIP_TEAMKILL0_DESCRIPTION,

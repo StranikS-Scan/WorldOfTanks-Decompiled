@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ExchangeXPWindow.py
 import BigWorld
 from gui import SystemMessages, game_control
@@ -81,9 +81,9 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         return
 
     def _getTableHeader(self):
-        return [self._createTableBtnInfo('isSelectCandidate', 40, 2, DIALOGS.GATHERINGXPFORM_SORTBY_SELECTION, 'ascending', RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_OK), self._createTableBtnInfo('vehicleName', 179, 1, DIALOGS.GATHERINGXPFORM_SORTBY_VEHICLE, 'ascending', RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_TANK, sortType='string'), self._createTableBtnInfo('xp', 103, 0, DIALOGS.GATHERINGXPFORM_SORTBY_XP, 'descending', RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_STAR)]
+        return [self._createTableBtnInfo('isSelectCandidate', 40, 2, DIALOGS.GATHERINGXPFORM_SORTBY_SELECTION, 'ascending', RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_OK), self._createTableBtnInfo('vehicleName', 179, 1, DIALOGS.GATHERINGXPFORM_SORTBY_VEHICLE, 'ascending', RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_TANK, sortType='string'), self._createTableBtnInfo('xp', 103, 0, DIALOGS.GATHERINGXPFORM_SORTBY_XP, 'descending', RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_XP)]
 
-    def _createTableBtnInfo(self, id, buttonWidth, sortOrder, toolTip, defaultSortDirection, iconSource, sortType = 'numeric'):
+    def _createTableBtnInfo(self, id, buttonWidth, sortOrder, toolTip, defaultSortDirection, iconSource, sortType='numeric'):
         return {'id': id,
          'buttonWidth': buttonWidth,
          'sortOrder': sortOrder,
@@ -139,5 +139,4 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
     def __getActionStyle(self):
         rate = g_itemsCache.items.shop.defaults.freeXPConversion
         actionRate = g_itemsCache.items.shop.freeXPConversionWithDiscount
-        if rate != actionRate and actionRate > 0:
-            return 'statsText'
+        return 'statsText' if rate != actionRate and actionRate > 0 else 'alertText'

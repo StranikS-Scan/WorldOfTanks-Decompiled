@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleInfoWindow.py
 from items import tankmen
 from helpers import i18n
@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 
 class VehicleInfoWindow(VehicleInfoMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(VehicleInfoWindow, self).__init__()
         vehicleCompactDescr = ctx.get('vehicleCompactDescr', 0)
         self.vehicleCompactDescr = vehicleCompactDescr

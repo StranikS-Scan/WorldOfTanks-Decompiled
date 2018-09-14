@@ -1,14 +1,14 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/gui_config.py
 from collections import namedtuple
 import resource_helper
 __all__ = ('readConfig', 'clearConfig')
 _cache = {}
 
-def readConfig(path, forced = False):
+def readConfig(path, forced=False):
     global _cache
-    if not forced:
-        return path in _cache and _cache[path]
+    if not forced and path in _cache:
+        return _cache[path]
     else:
         scenes, items, commands = (None, None, None)
         with resource_helper.root_generator(path) as ctx, root:
@@ -31,7 +31,7 @@ _CommandData = namedtuple('_CommandData', ('type', 'name', 'args'))
 class _TutorialConfig(object):
     __slots__ = ('__scenes', '__guiItems', '__commands')
 
-    def __init__(self, scenes = None, items = None, commands = None):
+    def __init__(self, scenes=None, items=None, commands=None):
         super(_TutorialConfig, self).__init__()
         self.__scenes = scenes or {}
         self.__guiItems = items or {}

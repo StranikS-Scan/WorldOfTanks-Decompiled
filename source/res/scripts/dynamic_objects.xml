@@ -45,4 +45,29 @@
       </pixie>
     </effects>
   </resourcePointEffect>
+  <referencesForTools>
+    <item>
+      <type>	FlagAbsorptionPoint	</type>
+      <fields>
+        <field>	radiusModel	</field>
+        <field>	greenFlagModel	</field>
+        <field>	redFlagModel	</field>
+      </fields>
+    </item>
+    <item>
+      <type>	RepairPoint	</type>
+      <fields>
+        <field>	radiusModel	</field>
+        <field>	flagModel	</field>
+      </fields>
+    </item>
+    <item>
+      <type>	ResourcePoint	</type>
+      <fields>
+        <field>	radiusModel	</field>
+        <field>	pointModel	</field>
+        <field>	pointEffect	</field>
+      </fields>
+    </item>
+  </referencesForTools>
 </dynamic_objects.xml>

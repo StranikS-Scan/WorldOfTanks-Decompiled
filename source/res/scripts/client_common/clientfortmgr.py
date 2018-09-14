@@ -1,15 +1,15 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientFortMgr.py
 from FortifiedRegionBase import FORT_CLIENT_METHOD, makeDirPosByte, SECONDS_PER_DAY, SECONDS_PER_HOUR, ALL_DIRS
 from ClientFortifiedRegion import ClientFortifiedRegion
 import Event
-from debug_utils import LOG_DAN, LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_DEBUG, LOG_DEBUG, LOG_ERROR
 import time
 import fortified_regions
 
 class ClientFortMgr(object):
 
-    def __init__(self, account = None):
+    def __init__(self, account=None):
         self.__eManager = Event.EventManager()
         self.onFortResponseReceived = Event.Event(self.__eManager)
         self.onFortUpdateReceived = Event.Event(self.__eManager)
@@ -23,14 +23,14 @@ class ClientFortMgr(object):
 
     def __callFortMethod(self, *args):
         requestID = self.__getNextRequestID()
-        LOG_DAN('base.callFortMethod', requestID, args)
-        self.__account.base.callFortMethod(requestID, *args)
+        LOG_DEBUG('base.callFortMethod', requestID, args)
+        self.__account.base.accountFortConnector_callFortMethod(requestID, *args)
         return requestID
 
     def callCustomFortMethod(self, *args):
         return self.__callFortMethod(*args)
 
-    def _setAccount(self, account = None):
+    def _setAccount(self, account=None):
         self._fort.setAccount(account)
         self.__account = account
 
@@ -45,11 +45,11 @@ class ClientFortMgr(object):
         return self.__requestID
 
     def onFortReply(self, reqID, resultCode, resultString):
-        LOG_DAN('onFortReply: reqID=%s, resultCode=%s, resultString=%r' % (reqID, resultCode, resultString))
+        LOG_DEBUG('onFortReply: reqID=%s, resultCode=%s, resultString=%r' % (reqID, resultCode, resultString))
         self.onFortResponseReceived(reqID, resultCode, resultString)
 
     def onFortUpdate(self, packedOps, packedUpdate):
-        LOG_DAN('onFortUpdate: packedOps len=%s, packedUpdate len=%s' % (len(packedOps), len(packedUpdate)))
+        LOG_DEBUG('onFortUpdate: packedOps len=%s, packedUpdate len=%s' % (len(packedOps), len(packedUpdate)))
         isFullUpdate = False
         if packedUpdate:
             self._fort.unpack(packedUpdate)
@@ -58,10 +58,10 @@ class ClientFortMgr(object):
             self._fort.unpackOps(packedOps)
         self._fort.refresh()
         self.onFortUpdateReceived(isFullUpdate)
-        LOG_DAN('after onFortUpdate:', self._fort)
+        LOG_DEBUG('after onFortUpdate:', self._fort)
 
     def onFortStateDiff(self, newState):
-        LOG_DAN('onFortStateDiff: state %s (was %s)' % (newState, self.state))
+        LOG_DEBUG('onFortStateDiff: state %s (was %s)' % (newState, self.state))
         self.state = newState
         self.onFortStateChanged()
 
@@ -89,7 +89,7 @@ class ClientFortMgr(object):
     def dmgBuilding(self, buildingTypeID, damage):
         return self.__callFortMethod(FORT_CLIENT_METHOD.DMG_BUILDING, buildingTypeID, damage, 0)
 
-    def deletePlannedBattles(self, timeStart = 1, timeFinish = 2000000000, dir = ALL_DIRS):
+    def deletePlannedBattles(self, timeStart=1, timeFinish=2000000000, dir=ALL_DIRS):
         return self.__callFortMethod(FORT_CLIENT_METHOD.DELETE_PLANNED_BATTLES, timeStart, timeFinish, dir)
 
     def changeAttackResult(self, attackResult, attackResource, attackTime):
@@ -116,10 +116,10 @@ class ClientFortMgr(object):
     def closeDir(self, direction):
         return self.__callFortMethod(FORT_CLIENT_METHOD.CLOSE_DIR, direction, 0, 0)
 
-    def createSortie(self, divisionLevel = 10):
+    def createSortie(self, divisionLevel=10):
         return self.__callFortMethod(FORT_CLIENT_METHOD.CREATE_SORTIE, divisionLevel, 0, 0)
 
-    def createOrJoinFortBattle(self, battleID, slotIdx = -1):
+    def createOrJoinFortBattle(self, battleID, slotIdx=-1):
         return self.__callFortMethod(FORT_CLIENT_METHOD.CREATE_JOIN_FORT_BATTLE, battleID, slotIdx, 0)
 
     def _scheduleBattle(self, battleID, direction, isDefence, attackTime):
@@ -154,10 +154,10 @@ class ClientFortMgr(object):
     def changeVacation(self, timeVacationStart, timeVacationDuration):
         return self.__callFortMethod(FORT_CLIENT_METHOD.CHANGE_VACATION, timeVacationStart, timeVacationDuration, 0)
 
-    def setDevMode(self, isOn = True, fortBattleMgrDevMode = False):
+    def setDevMode(self, isOn=True, fortBattleMgrDevMode=False):
         return self.__callFortMethod(FORT_CLIENT_METHOD.SET_DEV_MODE, int(isOn), int(fortBattleMgrDevMode), 0)
 
-    def addTimeShift(self, timeShiftSeconds = 3600):
+    def addTimeShift(self, timeShiftSeconds=3600):
         return self.__callFortMethod(FORT_CLIENT_METHOD.ADD_TIME_SHIFT, timeShiftSeconds, 0, 0)
 
     def keepalive(self):
@@ -191,7 +191,7 @@ class ClientFortMgr(object):
             LOG_DEBUG('timeAttack<0: plan attack for earliest possible defHour(%s), timeAttack=%s' % (defHour, timeAttack))
         return self.__callFortMethod(FORT_CLIENT_METHOD.PLAN_ATTACK, enemyClanDBID, timeAttack, dirFromToByte)
 
-    def activateConsumable(self, consumableTypeID, slotIndex = -1):
+    def activateConsumable(self, consumableTypeID, slotIndex=-1):
         return self.__callFortMethod(FORT_CLIENT_METHOD.ACTIVATE_CONSUMABLE, 0, consumableTypeID, slotIndex)
 
     def returnConsumable(self, consumableTypeID):

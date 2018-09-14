@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/RoleChangeWindow.py
 import BigWorld
 from helpers.i18n import makeString
@@ -45,8 +45,7 @@ def _isRoleSlotTaken(tankmen, vehicle, role):
 
 
 def _getTooltipHeader(tankmenCountWithSameRole, isAvailable):
-    if tankmenCountWithSameRole > 0 and isAvailable:
-        return makeString(TOOLTIPS.ROLECHANGE_ROLEANDVEHICLETAKEN_HEADER)
+    return makeString(TOOLTIPS.ROLECHANGE_ROLEANDVEHICLETAKEN_HEADER) if tankmenCountWithSameRole > 0 and isAvailable else ''
 
 
 def _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, role, selectedVehicle):
@@ -61,7 +60,7 @@ def _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, role, selectedVeh
 
 class RoleChangeWindow(RoleChangeMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(RoleChangeWindow, self).__init__()
         self.__items = g_itemsCache.items
         self.__tankman = self.__items.getTankman(ctx.get('tankmanID', None))
@@ -167,4 +166,4 @@ class RoleChangeWindow(RoleChangeMeta):
 
         return {'items': items,
          'nativeVehicleId': nativeVehicleCD,
-         'currentVehicleId': self.__currentVehicleCD if self.__currentVehicleCD != None else -1}
+         'currentVehicleId': self.__currentVehicleCD or -1}

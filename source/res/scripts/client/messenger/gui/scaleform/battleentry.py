@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/BattleEntry.py
 import Keys
 import VOIP
@@ -130,7 +130,7 @@ class BattleEntry(IGUIEntry):
         else:
             LOG_ERROR('Method is not specific', method)
 
-    def addClientMessage(self, message, isCurrentPlayer = False):
+    def addClientMessage(self, message, isCurrentPlayer=False):
         if isCurrentPlayer:
             fillColor = FILL_COLORS.BROWN
         else:
@@ -227,7 +227,7 @@ class BattleEntry(IGUIEntry):
     def __downHistory(self, *args):
         parser = CommandArgsParser(self.__downHistory.__name__, 1, [bool])
         toLastMessage = parser.parse(*args)
-        if toLastMessage == False:
+        if toLastMessage is False:
             self.__sharedHistory.syncCursor(False)
             self.__sharedHistory.next()
         else:
@@ -244,14 +244,14 @@ class BattleEntry(IGUIEntry):
         if len(args) > 0:
             parser = CommandArgsParser(self.__getLatestHistory.__name__, 1, [bool])
             toLastMessage = parser.parse(*args)
-        if toLastMessage is not None and toLastMessage == True:
+        if toLastMessage is not None and toLastMessage is True:
             self.__sharedHistory.syncCursor(True)
             self.__updateHistoryControls()
         historyList = self.__sharedHistory.getHistory()
         if len(historyList) == 0:
             return
         else:
-            if toLastMessage is not None and toLastMessage == True:
+            if toLastMessage is not None and toLastMessage is True:
                 self.__flashCall(BTMS_COMMANDS.ClearMessages(), [])
             numberOfMessages = self.__sharedHistory.numberOfMessages()
             idx = len(historyList)
@@ -282,11 +282,11 @@ class BattleEntry(IGUIEntry):
         for message, fillColor in historyList:
             self.__flashCall(BTMS_COMMANDS.ShowLatestMessages(), [message, fillColor])
 
-    def __flashCall(self, funcName, args = None):
+    def __flashCall(self, funcName, args=None):
         if self.__ui:
             self.__ui.call(funcName, args)
 
-    def __flashRespond(self, args = None):
+    def __flashRespond(self, args=None):
         self.__ui.respond(args)
 
     def __onChangeFocus(self, _, focused):

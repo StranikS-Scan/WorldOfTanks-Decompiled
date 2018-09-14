@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/prb_items.py
 from collections import namedtuple
 from account_helpers import getAccountDatabaseID, getPlayerID
@@ -8,7 +8,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 class PlayerPrbInfo(object):
     __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode')
 
-    def __init__(self, accID, name = '', dbID = 0L, state = PREBATTLE_ACCOUNT_STATE.UNKNOWN, time = 0.0, vehCompDescr = 0, igrType = 0L, clanDBID = 0L, clanAbbrev = '', roster = 0, functional = None):
+    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, functional=None):
         self.accID = accID
         self.name = name
         self.dbID = dbID
@@ -28,7 +28,7 @@ class PlayerPrbInfo(object):
     def __repr__(self):
         return 'PlayerPrbInfo(accID = {0:n}, dbID = {1:n}, fullName = {2:>s}, state = {3:n}, isCreator = {4!r:s}, time = {5:n}, vehCompDescr = {6!r:s})'.format(self.accID, self.dbID, self.getFullName(), self.state, self.isCreator, self.time, self.getVehicle().name if self.isVehicleSpecified() else None)
 
-    def getFullName(self, isClan = True, isRegion = True):
+    def getFullName(self, isClan=True, isRegion=True):
         if isClan:
             clanAbbrev = self.clanAbbrev
         else:
@@ -91,7 +91,7 @@ PlayersStateStats = namedtuple('PlayersStateStats', ('notReadyCount', 'haveInBat
 class PrbPropsInfo(object):
     __slots__ = ('wins', 'battlesCount', 'createTime')
 
-    def __init__(self, wins = None, battlesCount = 0, createTime = None):
+    def __init__(self, wins=None, battlesCount=0, createTime=None):
         super(PrbPropsInfo, self).__init__()
         self.wins = wins or [0, 0, 0]
         self.battlesCount = battlesCount

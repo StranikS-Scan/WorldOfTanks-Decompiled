@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/Inventory.py
 from account_helpers.AccountSettings import AccountSettings
 from constants import IS_RENTALS_ENABLED
@@ -23,7 +23,7 @@ from items import vehicles
 
 class Inventory(InventoryMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(Inventory, self).__init__(ctx)
         self.__tableType = None
         return
@@ -91,7 +91,7 @@ class Inventory(InventoryMeta):
                     if module.repairCost > 0:
                         continue
                 if type == self._VEHICLE and 'locked' not in extra:
-                    if not module.isUnlocked:
+                    if module.isLocked:
                         continue
                 if type == self._VEHICLE and 'premiumIGR' not in extra:
                     if module.isPremiumIGR:
@@ -245,7 +245,7 @@ class Inventory(InventoryMeta):
             if module.isRented:
                 isRented = True
                 formatter = RentLeftFormatter(module.rentInfo, module.isPremiumIGR)
-                rentLeftTimeStr = formatter.getRentLeftStr('#tooltips:vehicle/rentLeft/%s', formatter=lambda key, countType, count, _ = None: ''.join([makeString(key % countType), ': ', str(count)]))
+                rentLeftTimeStr = formatter.getRentLeftStr('#tooltips:vehicle/rentLeft/%s', formatter=lambda key, countType, count, _=None: ''.join([makeString(key % countType), ': ', str(count)]))
             if module.isInInventory:
                 inventoryId = module.invID
         name = module.userName if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS else module.longUserName

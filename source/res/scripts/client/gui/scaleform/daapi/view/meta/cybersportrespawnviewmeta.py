@@ -1,17 +1,14 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CyberSportRespawnViewMeta.py
 from gui.Scaleform.framework.entities.View import View
 
 class CyberSportRespawnViewMeta(View):
 
     def as_setMapBGS(self, imgsource):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMapBG(imgsource)
+        return self.flashObject.as_setMapBG(imgsource) if self._isDAAPIInited() else None
 
     def as_changeAutoSearchStateS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_changeAutoSearchState(value)
+        return self.flashObject.as_changeAutoSearchState(value) if self._isDAAPIInited() else None
 
     def as_hideAutoSearchS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_hideAutoSearch()
+        return self.flashObject.as_hideAutoSearch() if self._isDAAPIInited() else None

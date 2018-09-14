@@ -1,20 +1,20 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicles.py
-import types
+import BigWorld
+import ResMgr
+from Math import Vector2, Vector3
 from collections import namedtuple
 from math import radians, cos, atan, pi
 from functools import partial
 import struct
 import itertools
-import ResMgr
-from Math import Vector2, Vector3
-import nations, items
-from items import _xml
-from debug_utils import *
+import copy
+import nations
+import items
+from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT, IS_CELLAPP, IS_BASEAPP, IS_WEB, ITEM_DEFS_PATH
 from constants import IGR_TYPE, IS_RENTALS_ENABLED
-import BigWorld
-import copy
+from debug_utils import *
 if IS_CELLAPP or IS_CLIENT or IS_BOT:
     from ModelHitTester import ModelHitTester
 if IS_CELLAPP or IS_CLIENT or IS_WEB:
@@ -23,7 +23,7 @@ if IS_CELLAPP or IS_CLIENT or IS_WEB:
 if IS_CLIENT:
     from helpers import i18n
     from helpers import EffectsList
-    from VehicleEffects import ExhaustEffectsDescriptor, VehicleExhaustDescriptor
+    from CustomEffect import SelectorDescFactory, CustomEffectsDescriptor, ExhaustEffectDescriptor
     import ReloadEffect
 elif IS_WEB:
     from web_stubs import *
@@ -83,11 +83,13 @@ MaterialInfo = namedtuple('MaterialInfo', ['kind',
  'useAntifragmentationLining',
  'mayRicochet',
  'collideOnceOnly',
+ 'checkCaliberForRichet',
+ 'checkCaliberForHitAngleNorm',
  'damageKind',
  'chanceToHitByProjectile',
  'chanceToHitByExplosion',
  'continueTraceIfNoHit'])
-_defMaterialInfo = MaterialInfo(0, 0, None, 0.0, False, False, False, False, False, 0, 0.0, 0.0, False)
+_defMaterialInfo = MaterialInfo(0, 0, None, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False)
 EmblemSlot = namedtuple('EmblemSlot', ['rayStart',
  'rayEnd',
  'rayUp',
@@ -97,6 +99,26 @@ EmblemSlot = namedtuple('EmblemSlot', ['rayStart',
  'isMirrored',
  'isUVProportional',
  'emblemId'])
+VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
+ 'turret/rotationSpeed': 1.0,
+ 'circularVisionRadius': 1.0,
+ 'invisibility': [0.0, 1.0],
+ 'radio/distance': 1.0,
+ 'gun/rotationSpeed': 1.0,
+ 'chassis/shotDispersionFactors/movement': 1.0,
+ 'gun/shotDispersionFactors/turretRotation': 1.0,
+ 'gun/reloadTime': 1.0,
+ 'gun/aimingTime': 1.0,
+ 'gun/canShoot': True,
+ 'engine/fireStartingChance': 1.0,
+ 'healthBurnPerSecLossFraction': 1.0,
+ 'repairSpeed': 1.0,
+ 'brokenTrack': None,
+ 'vehicle/rotationSpeed': 1.0,
+ 'chassis/terrainResistance': [1.0, 1.0, 1.0],
+ 'ramming': 1.0,
+ 'crewLevelIncrease': 0,
+ 'crewChanceToHitFactor': 1.0}
 
 def init(preloadEverything, pricesToCollect):
     global g_list
@@ -105,22 +127,6 @@ def init(preloadEverything, pricesToCollect):
     if IS_CLIENT or IS_CELLAPP:
         import vehicle_extras
     _g_prices = pricesToCollect
-    if pricesToCollect is not None:
-        pricesToCollect['itemPrices'] = {}
-        pricesToCollect['vehiclesRentPrices'] = {}
-        pricesToCollect['notInShopItems'] = set()
-        pricesToCollect['vehiclesNotToBuy'] = set()
-        pricesToCollect['vehiclesToSellForGold'] = set()
-        pricesToCollect['vehicleSellPriceFactors'] = {}
-        pricesToCollect['vehicleCamouflagePriceFactors'] = {}
-        pricesToCollect['vehicleHornPriceFactors'] = {}
-        pricesToCollect['hornPrices'] = {}
-        pricesToCollect['camouflagePriceFactors'] = [ {} for x in nations.NAMES ]
-        pricesToCollect['notInShopCamouflages'] = [ set() for x in nations.NAMES ]
-        pricesToCollect['inscriptionGroupPriceFactors'] = [ {} for x in nations.NAMES ]
-        pricesToCollect['notInShopInscriptionGroups'] = [ set() for x in nations.NAMES ]
-        pricesToCollect['playerEmblemGroupPriceFactors'] = {}
-        pricesToCollect['notInShopPlayerEmblemGroups'] = set()
     g_list = VehicleList()
     g_cache = Cache()
     if preloadEverything:
@@ -143,12 +149,13 @@ def reload():
     from sys import modules
     import __builtin__
     __builtin__.reload(modules[reload.__module__])
-    init(True, {})
+    init(True, None)
+    return
 
 
 class VehicleDescr(object):
 
-    def __init__(self, compactDescr = None, typeID = None, typeName = None):
+    def __init__(self, compactDescr=None, typeID=None, typeName=None):
         if compactDescr is None:
             if typeID is not None:
                 nationID, vehicleTypeID = typeID
@@ -179,7 +186,7 @@ class VehicleDescr(object):
         if id is not None:
             descr = g_cache.horns()[id]
             if not self.type.tags.intersection(descr['vehicleTags']):
-                raise Exception, 'horn is incompatible with vehicle'
+                raise Exception('horn is incompatible with vehicle')
         self.__hornID = id
         return
 
@@ -215,18 +222,18 @@ class VehicleDescr(object):
             if position is None:
                 position = descr['kind']
             elif position != descr['kind']:
-                raise Exception, 'wrong camouflage kind'
+                raise Exception('wrong camouflage kind')
             cd = self.type.compactDescr
             if cd in descr['deny']:
-                raise Exception, 'camouflage is incompatible with vehicle'
+                raise Exception('camouflage is incompatible with vehicle')
             if descr['allow'] and cd not in descr['allow']:
-                raise Exception, 'camouflage is incompatible with vehicle'
+                raise Exception('camouflage is incompatible with vehicle')
             startTime = int(startTime / 60) * 60
             if startTime < _CUSTOMIZATION_EPOCH:
-                raise Exception, 'wrong camouflage start time'
+                raise Exception('wrong camouflage start time')
             durationDays = int(durationDays)
             if not 0 <= durationDays <= 255:
-                raise Exception, 'wrong camouflage duration'
+                raise Exception('wrong camouflage duration')
         self.camouflages = p[:position] + ((camouflageID, startTime, durationDays),) + p[position + 1:]
         return
 
@@ -245,19 +252,19 @@ class VehicleDescr(object):
             group = groups[groupName]
             nations = group[3]
             if nations is not None and self.type.customizationNationID not in nations:
-                raise Exception, 'emblem nation mismatch'
+                raise Exception('emblem nation mismatch')
             allow, deny = group[4:6]
             cd = self.type.compactDescr
             if cd in deny:
-                raise Exception, 'emblem is incompatible with vehicle'
+                raise Exception('emblem is incompatible with vehicle')
             if allow and cd not in allow:
-                raise Exception, 'emblem is incompatible with vehicle'
+                raise Exception('emblem is incompatible with vehicle')
             startTime = int(startTime / 60) * 60
             if startTime < _CUSTOMIZATION_EPOCH:
-                raise Exception, 'wrong emblem start time'
+                raise Exception('wrong emblem start time')
             durationDays = int(durationDays)
             if not 0 <= durationDays <= 255:
-                raise Exception, 'wrong emblem duration'
+                raise Exception('wrong emblem duration')
         self.playerEmblems = p[:position] + ((emblemID, startTime, durationDays),) + p[position + 1:]
         return
 
@@ -275,22 +282,22 @@ class VehicleDescr(object):
             allow, deny = customization['inscriptionGroups'][groupName][3:5]
             cd = self.type.compactDescr
             if cd in deny:
-                raise Exception, 'inscription is incompatible with vehicle'
+                raise Exception('inscription is incompatible with vehicle')
             if allow and cd not in allow:
-                raise Exception, 'inscription is incompatible with vehicle'
+                raise Exception('inscription is incompatible with vehicle')
             startTime = int(startTime / 60) * 60
             if startTime < _CUSTOMIZATION_EPOCH:
-                raise Exception, 'wrong inscription start time'
+                raise Exception('wrong inscription start time')
             durationDays = int(durationDays)
             if not 0 <= durationDays <= 255:
-                raise Exception, 'wrong inscription duration'
+                raise Exception('wrong inscription duration')
         self.playerInscriptions = p[:position] + ((inscriptionID,
           startTime,
           durationDays,
           color),) + p[position + 1:]
         return
 
-    def getComponentsByType(self, itemTypeName, positionIndex = 0):
+    def getComponentsByType(self, itemTypeName, positionIndex=0):
         if itemTypeName == 'vehicleChassis':
             return (self.chassis, self.type.chassis)
         if itemTypeName == 'vehicleEngine':
@@ -306,7 +313,7 @@ class VehicleDescr(object):
             return (gunDescr, turretDescr['guns'])
         assert False
 
-    def mayInstallTurret(self, turretCompactDescr, gunCompactDescr, positionIndex = 0):
+    def mayInstallTurret(self, turretCompactDescr, gunCompactDescr, positionIndex=0):
         selfType = self.type
         selfTurrets = self.turrets
         itemTypeID, nationID, turretID = parseIntCompactDescr(turretCompactDescr)
@@ -352,7 +359,7 @@ class VehicleDescr(object):
 
             return (True, None)
 
-    def installTurret(self, turretCompactDescr, gunCompactDescr, positionIndex = 0):
+    def installTurret(self, turretCompactDescr, gunCompactDescr, positionIndex=0):
         turretID = parseIntCompactDescr(turretCompactDescr)[2]
         if gunCompactDescr == 0:
             gunID = self.turrets[positionIndex][1]['id'][1]
@@ -372,7 +379,7 @@ class VehicleDescr(object):
             removed.append(prevGunDescr['compactDescr'])
         return removed
 
-    def mayInstallComponent(self, compactDescr, positionIndex = 0):
+    def mayInstallComponent(self, compactDescr, positionIndex=0):
         itemTypeID, nationID, compID = parseIntCompactDescr(compactDescr)
         itemTypeName = items.ITEM_TYPE_NAMES[itemTypeID]
         selfType = self.type
@@ -429,11 +436,11 @@ class VehicleDescr(object):
 
             return (True, None)
 
-    def installComponent(self, compactDescr, positionIndex = 0):
+    def installComponent(self, compactDescr, positionIndex=0):
         itemTypeID, nationID, compID = parseIntCompactDescr(compactDescr)
         itemTypeName = items.ITEM_TYPE_NAMES[itemTypeID]
         if nationID != self.type.id[0]:
-            raise Exception, 'incompatible nation of component'
+            raise Exception('incompatible nation of component')
         if itemTypeName == 'vehicleGun':
             return self.__installGun(compID, positionIndex)
         if itemTypeName == 'vehicleChassis':
@@ -493,10 +500,8 @@ class VehicleDescr(object):
         self.__updateAttributes()
         if prevDevice is None:
             return ((), ())
-        elif prevDevice['removable']:
-            return ((prevDevice.compactDescr,), ())
         else:
-            return ((), (prevDevice.compactDescr,))
+            return ((prevDevice.compactDescr,), ()) if prevDevice['removable'] else ((), (prevDevice.compactDescr,))
 
     def mayRemoveOptionalDevice(self, slotIdx):
         prevDevices = self.optionalDevices
@@ -520,10 +525,8 @@ class VehicleDescr(object):
         self.__updateAttributes()
         if device is None:
             return ((), ())
-        elif device['removable']:
-            return ((device.compactDescr,), ())
         else:
-            return ((), (device.compactDescr,))
+            return ((device.compactDescr,), ()) if device['removable'] else ((), (device.compactDescr,))
 
     def makeCompactDescr(self):
         type = self.type
@@ -622,14 +625,14 @@ class VehicleDescr(object):
 
         return hitTesters
 
-    def prerequisites(self):
+    def prerequisites(self, newPhysic=False):
         prereqs = set()
         for effGroup in self.type.effects.values():
             for keyPoints, effects, readyPrereqs in effGroup:
                 if not readyPrereqs:
                     prereqs.update(effects.prerequisites())
 
-        if self.chassis['effects'] is not None:
+        if self.chassis['effects'] is not None and not newPhysic:
             if self.chassis['effects']['dust'] is not None:
                 effGroup, readyPrereqs = self.chassis['effects']['dust']
                 if not readyPrereqs:
@@ -667,7 +670,7 @@ class VehicleDescr(object):
                     prereqs.update(effectsDescr['armorHit'][1].prerequisites())
                     prereqs.update(effectsDescr['armorCriticalHit'][1].prerequisites())
 
-        if self.type._prereqs is None:
+        if self.type._prereqs is None and not newPhysic:
             prereqs.update(self.hull['exhaust'].prerequisites())
             for extra in self.extras:
                 prereqs.update(extra.prerequisites())
@@ -675,12 +678,11 @@ class VehicleDescr(object):
         for elem in copy.copy(prereqs):
             if elem in g_cache.requestOncePrereqs:
                 prereqs.remove(elem)
-            else:
-                g_cache.requestOncePrereqs.add(elem)
+            g_cache.requestOncePrereqs.add(elem)
 
         return list(prereqs)
 
-    def keepPrereqs(self, prereqs):
+    def keepPrereqs(self, prereqs, newPhysic=False):
         if not prereqs:
             return
         else:
@@ -689,7 +691,7 @@ class VehicleDescr(object):
                     if not readyPrereqs:
                         readyPrereqs.update(_extractNeededPrereqs(prereqs, effects.prerequisites()))
 
-            if self.chassis['effects'] is not None:
+            if self.chassis['effects'] is not None and not newPhysic:
                 if self.chassis['effects']['dust'] is not None:
                     effGroup, readyPrereqs = self.chassis['effects']['dust']
                     if not readyPrereqs:
@@ -727,7 +729,10 @@ class VehicleDescr(object):
                         readyPrereqs.update(_extractNeededPrereqs(prereqs, effectsDescr['armorCriticalHit'][1].prerequisites()))
 
             if self.type._prereqs is None:
-                resourceNames = list(self.hull['exhaust'].prerequisites())
+                if not newPhysic:
+                    resourceNames = list(self.hull['exhaust'].prerequisites())
+                else:
+                    resourceNames = []
                 for extra in self.extras:
                     resourceNames += extra.prerequisites()
 
@@ -741,8 +746,7 @@ class VehicleDescr(object):
                 for s in v:
                     ret.append(s)
 
-            else:
-                ret.append(v)
+            ret.append(v)
 
         return ret
 
@@ -779,9 +783,8 @@ class VehicleDescr(object):
                     continue
                 if turretID == turretToMatchID:
                     matchWeight += 1
-                else:
-                    matchWeight = -1
-                    break
+                matchWeight = -1
+                break
 
             if bestMatchWeight < matchWeight:
                 bestMatchWeight = matchWeight
@@ -857,8 +860,7 @@ class VehicleDescr(object):
                         slots[idx] = _unpackIDAndDuration(emblems[:6])
                         emblems = emblems[6:]
                         emblemCache[slots[idx][0]]
-                    else:
-                        slots[idx] = type._defEmblem
+                    slots[idx] = type._defEmblem
 
                 self.playerEmblems = tuple(slots)
             if not emblemPositions & 240:
@@ -874,8 +876,7 @@ class VehicleDescr(object):
                         inscriptions = inscriptions[7:]
                         customization['inscriptions'][slots[idx][0]]
                         customization['inscriptionColors'][slots[idx][3]]
-                    else:
-                        slots[idx] = _EMPTY_INSCRIPTION
+                    slots[idx] = _EMPTY_INSCRIPTION
 
                 self.playerInscriptions = tuple(slots)
             if not camouflages:
@@ -981,7 +982,7 @@ class VehicleDescr(object):
             if not chassis['rotationIsAroundCenter']:
                 rotationEnergy -= trackCenterOffset * weight * chassis['specificFriction'] / defResistance
                 if rotationEnergy <= 0.0:
-                    raise Exception, 'wrong parameters of rotation of ' + type.name
+                    raise Exception('wrong parameters of rotation of ' + type.name)
             if chassis['rotationSpeedLimit'] is not None:
                 rotationSpeedLimit = min(rotationSpeedLimit, chassis['rotationSpeedLimit'])
             physics['rotationSpeedLimit'] = rotationSpeedLimit
@@ -1127,13 +1128,15 @@ class VehicleType(object):
         self.installableComponents = compactDescrs
         self.unlocksDescrs = self.__convertAndValidateUnlocksDescrs(unlocksDescrs)
         self.autounlockedItems = self.__collectDefaultUnlocks()
-        if IS_CELLAPP or IS_CLIENT:
+        if IS_CELLAPP:
             try:
                 self.xphysics = _readXPhysics(xmlCtx, section, 'physics')
             except:
                 LOG_CURRENT_EXCEPTION()
                 self.xphysics = None
 
+        else:
+            self.xphysics = None
         if IS_CLIENT and section.has_key('repaintParameters'):
             self.repaintParameters = _readRepaintParams(xmlCtx, _xml.getSubsection(xmlCtx, section, 'repaintParameters'))
         section = None
@@ -1165,11 +1168,11 @@ class VehicleType(object):
                     itemID = g_cache.radioIDs(nationID)[itemName]
             except Exception:
                 LOG_CURRENT_EXCEPTION()
-                raise Exception, "wrong name '%s' in <unlocks> of '%s'" % (itemName, self.name)
+                raise Exception("wrong name '%s' in <unlocks> of '%s'" % (itemName, self.name))
 
             compactDescr = makeIntCompactDescrByID(itemTypeName, nationID, itemID)
             if itemTypeName != 'vehicle' and compactDescr not in self.installableComponents:
-                raise Exception, "component '%s' in <unlocks> is not for '%s'" % (itemName, self.name)
+                raise Exception("component '%s' in <unlocks> is not for '%s'" % (itemName, self.name))
             reqItems.setdefault(compactDescr, set()).update(descr[3:])
             destList.append((descr[0], compactDescr))
 
@@ -1233,9 +1236,11 @@ class Cache(object):
             self.__vehicleEffects = None
             self.__gunEffects = None
             self.__gunReloadEffects = None
+            self.__gunRecoilEffects = None
             self.__chassisEffects = None
             self.__exhaustEffects = None
             self.__turretDetachmentEffects = None
+            self.__customEffects = None
             self.__requestOncePrereqs = set()
         return
 
@@ -1416,6 +1421,12 @@ class Cache(object):
         return self.__gunReloadEffects
 
     @property
+    def _gunRecoilEffects(self):
+        if self.__gunRecoilEffects is None:
+            self.__gunRecoilEffects = _readRecoilEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/gun_recoil_effects.xml')
+        return self.__gunRecoilEffects
+
+    @property
     def _exhaustEffects(self):
         if self.__exhaustEffects is None:
             self.__exhaustEffects = _readExhaustEffectsGroups(_VEHICLE_TYPE_XML_PATH + 'common/exhaust_effects.xml')
@@ -1426,6 +1437,14 @@ class Cache(object):
         if self.__chassisEffects is None:
             self.__chassisEffects = _readChassisEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/chassis_effects.xml')
         return self.__chassisEffects
+
+    @property
+    def _customEffects(self):
+        if self.__customEffects is None:
+            self.__customEffects = dict()
+            self.__customEffects['slip'] = _readCustomEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/trackSlip_effects.xml')
+            self.__customEffects['exhaust'] = _readCustomEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/exhaust_effects_np.xml')
+        return self.__customEffects
 
     @property
     def _turretDetachmentEffects(self):
@@ -1498,12 +1517,12 @@ class VehicleList(object):
             if fullName in self.__ids:
                 return self.__ids[fullName]
 
-        raise Exception, "unknown vehicle name '%s'" % name
+        raise Exception("unknown vehicle name '%s'" % name)
 
     def getIDsByName(self, name):
         ids = self.__ids.get(name)
         if ids is None:
-            raise Exception, "unknown vehicle type name '%s'" % name
+            raise Exception("unknown vehicle type name '%s'" % name)
         return ids
 
     def __readVehicleList(self, nation, section, xmlPath):
@@ -1559,15 +1578,6 @@ class VehicleList(object):
         return res
 
 
-def makeIntCompactDescrByID(itemTypeName, nationID, itemID):
-    header = items.ITEM_TYPES[itemTypeName] + (nationID << 4)
-    return (itemID << 8) + header
-
-
-def parseIntCompactDescr(compactDescr):
-    return (compactDescr & 15, compactDescr >> 4 & 15, compactDescr >> 8 & 65535)
-
-
 def parseVehicleCompactDescr(compactDescr):
     header, vehicleTypeID = struct.unpack('2B', compactDescr[0:2])
     return (header >> 4 & 15, vehicleTypeID)
@@ -1610,7 +1620,7 @@ _dictDescrGetters = {'shell': lambda nationID, compTypeID: g_cache.shells(nation
 
 def getVehicleType(compactDescr):
     cdType = type(compactDescr)
-    if cdType is types.IntType or cdType is types.LongType:
+    if cdType is int or cdType is long:
         nationID = compactDescr >> 4 & 15
         vehicleTypeID = compactDescr >> 8 & 65535
     else:
@@ -1626,7 +1636,7 @@ def getVehicleClass(compactDescr):
     assert False
 
 
-def stripCustomizationFromVehicleCompactDescr(compactDescr, stripEmblems = True, stripInscriptions = True, stripCamouflages = True, keepInfinite = False):
+def stripCustomizationFromVehicleCompactDescr(compactDescr, stripEmblems=True, stripInscriptions=True, stripCamouflages=True, keepInfinite=False):
     type, components, optionalDevicesSlots, optionalDevices, emblemSlots, emblems, inscriptions, camouflages, horn = _splitVehicleCompactDescr(compactDescr)
     resEmblems = {}
     if stripEmblems and emblems:
@@ -1710,7 +1720,7 @@ def getUniformAmmoForGun(gunDescr):
     return _getAmmoForGun(gunDescr, defaultPortion)
 
 
-def _getAmmoForGun(gunDescr, defaultPortion = None):
+def _getAmmoForGun(gunDescr, defaultPortion=None):
     ammo = []
     maxCount = gunDescr['maxAmmo']
     clipSize = gunDescr['clip'][0]
@@ -1781,7 +1791,7 @@ def _readComponents(xmlPath, reader, nationID, itemTypeName):
     return (descrs, ids)
 
 
-def _readInstallableComponents(xmlCtx, section, subsectionName, nationID, reader, localReader, cachedDescrs, cachedIDs, unlocksDescrs, parentItem = None):
+def _readInstallableComponents(xmlCtx, section, subsectionName, nationID, reader, localReader, cachedDescrs, cachedIDs, unlocksDescrs, parentItem=None):
     res = []
     for sname, subsection in _xml.getChildren(xmlCtx, section, subsectionName):
         ctx = (xmlCtx, subsectionName + '/' + sname)
@@ -1793,12 +1803,11 @@ def _readInstallableComponents(xmlCtx, section, subsectionName, nationID, reader
             if descr['status'] != 'shared':
                 _xml.raiseWrongXml(ctx, sname, 'the component is not shared')
             res.append(localReader(ctx, subsection, descr, unlocksDescrs, parentItem))
-        else:
-            if descr['status'] != 'empty':
-                _xml.raiseWrongXml(ctx, '', 'the component is already defined somewhere')
-            descr.update(reader(ctx, subsection, descr['compactDescr'], unlocksDescrs, parentItem))
-            descr['status'] = 'local'
-            res.append(descr)
+        if descr['status'] != 'empty':
+            _xml.raiseWrongXml(ctx, '', 'the component is already defined somewhere')
+        descr.update(reader(ctx, subsection, descr['compactDescr'], unlocksDescrs, parentItem))
+        descr['status'] = 'local'
+        res.append(descr)
 
     if not res:
         _xml.raiseWrongXml(xmlCtx, subsectionName, 'should be at least one subsection')
@@ -1846,6 +1855,40 @@ def _readNations(xmlCtx, section):
         return tuple(result)
 
 
+def _readFakeGearBox(xmlCtx, section):
+    res = {'fwdgears': {'switchSpeed': (2, 5, 15),
+                  'switchHysteresis': (1, 2, 3),
+                  'lowRpm': (0.2, 0.2, 0.2),
+                  'highRpm': (0.9, 0.9, 0.9)},
+     'bkwdgears': {'switchSpeed': (2, 5, 15),
+                   'switchHysteresis': (1, 2, 3),
+                   'lowRpm': (0.2, 0.2, 0.2),
+                   'highRpm': (0.9, 0.9, 0.9)}}
+    fakeGeadBoxSection = section['fakegearbox']
+    if fakeGeadBoxSection is None:
+        return res
+    else:
+        fwdGears = dict()
+        fwdGearsSection = fakeGeadBoxSection['fwdgears']
+        fwdGears['switchSpeed'] = _xml.readTupleOfNonNegativeFloats(xmlCtx, fwdGearsSection, 'switchSpeed')
+        fwdGears['switchHysteresis'] = _xml.readTupleOfNonNegativeFloats(xmlCtx, fwdGearsSection, 'switchHysteresis')
+        fwdGears['lowRpm'] = _xml.readTupleOfNonNegativeFloats(xmlCtx, fwdGearsSection, 'lowRpm')
+        fwdGears['highRpm'] = _xml.readTupleOfNonNegativeFloats(xmlCtx, fwdGearsSection, 'highRpm')
+        bkwdGears = dict()
+        bkwdGearsSection = fakeGeadBoxSection['bkwdgears']
+        bkwdGears['switchSpeed'] = _xml.readTupleOfNonNegativeFloats(xmlCtx, bkwdGearsSection, 'switchSpeed')
+        bkwdGears['switchHysteresis'] = _xml.readTupleOfNonNegativeFloats(xmlCtx, bkwdGearsSection, 'switchHysteresis')
+        bkwdGears['lowRpm'] = _xml.readTupleOfNonNegativeFloats(xmlCtx, bkwdGearsSection, 'lowRpm')
+        bkwdGears['highRpm'] = _xml.readTupleOfNonNegativeFloats(xmlCtx, bkwdGearsSection, 'highRpm')
+        if not len(fwdGears['switchSpeed']) == len(fwdGears['switchHysteresis']) == len(fwdGears['lowRpm']) == len(fwdGears['highRpm']):
+            _xml.raiseWrongSection(xmlCtx, 'fwdGears')
+        if not len(bkwdGears['switchSpeed']) == len(bkwdGears['switchHysteresis']) == len(bkwdGears['lowRpm']) == len(bkwdGears['highRpm']):
+            _xml.raiseWrongSection(xmlCtx, 'bkwdGears')
+        res['fwdgears'] = fwdGears
+        res['bkwdgears'] = bkwdGears
+        return res
+
+
 def _readHull(xmlCtx, section):
     res = {'variantName': '',
      'hitTester': _readHitTester(xmlCtx, section, 'hitTester'),
@@ -1877,15 +1920,21 @@ def _readHull(xmlCtx, section):
     if IS_CLIENT or IS_BOT:
         res['emblemSlots'] = _readEmblemSlots(xmlCtx, section, 'emblemSlots')
     if IS_CLIENT:
+        from VehicleEffects import VehicleExhaustDescriptor
         res['models'] = _readModels(xmlCtx, section, 'models')
         res['swinging'] = {'lodDist': _readLodDist(xmlCtx, section, 'swinging/lodDist'),
          'sensitivityToImpulse': _xml.readNonNegativeFloat(xmlCtx, section, 'swinging/sensitivityToImpulse'),
          'pitchParams': _xml.readTupleOfFloats(xmlCtx, section, 'swinging/pitchParams', 6),
          'rollParams': _xml.readTupleOfFloats(xmlCtx, section, 'swinging/rollParams', 7)}
         res['exhaust'] = VehicleExhaustDescriptor(section, g_cache._exhaustEffects, xmlCtx)
+        res['customEffects'] = [ExhaustEffectDescriptor(section, xmlCtx, CustomEffectsDescriptor.getDescriptor(section, g_cache._customEffects['exhaust'], xmlCtx, 'exhaust/pixie'), 'exhaust/nodes')]
         res['AODecals'] = _readAODecals(xmlCtx, section, 'AODecals')
         if section.has_key('camouflage'):
             res['camouflageTiling'], res['camouflageExclusionMask'] = _readCamouflageTilingAndMask(xmlCtx, section, 'camouflage', (None, None))
+        if section.has_key('hangarShadowTexture'):
+            res['hangarShadowTexture'] = _xml.readString(xmlCtx, section, 'hangarShadowTexture')
+        else:
+            res['hangarShadowTexture'] = None
     if IS_CLIENT or IS_WEB or IS_CELLAPP:
         res['primaryArmor'] = _readPrimaryArmor(xmlCtx, section, 'primaryArmor', res['materials'])
     return res
@@ -2009,7 +2058,7 @@ def _readHullVariants(xmlCtx, section, defHull, chassis, turrets):
     return tuple(res)
 
 
-def _readChassis(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem = None):
+def _readChassis(xmlCtx, section, compactDescr, unlocksDescrs=None, parentItem=None):
     res = {'tags': _readTags(xmlCtx, section, 'tags', 'vehicleChassis'),
      'level': _readLevel(xmlCtx, section),
      'hullPosition': _xml.readVector3(xmlCtx, section, 'hullPosition'),
@@ -2057,7 +2106,7 @@ def _readChassis(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem
                  subsection.readInt('startIndex', 0),
                  _xml.readPositiveFloat(ctx, subsection, 'radius'))
                 wheelGroups.append(v)
-            elif sname == 'wheel':
+            if sname == 'wheel':
                 ctx = (xmlCtx, 'wheels/wheel')
                 v = (_xml.readBool(ctx, subsection, 'isLeft'),
                  _xml.readNonEmptyString(ctx, subsection, 'name'),
@@ -2096,7 +2145,7 @@ def _readChassis(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem
                      _xml.readFloat(ctx, subsection, 'minOffset'),
                      _xml.readFloat(ctx, subsection, 'maxOffset'))
                     groundGroups.append(v)
-                elif sname == 'node':
+                if sname == 'node':
                     ctx = (xmlCtx, 'groundNodes/node')
                     v = (_xml.readBool(ctx, subsection, 'isLeft'),
                      _xml.readNonEmptyString(ctx, subsection, 'name'),
@@ -2194,22 +2243,20 @@ def _readChassis(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem
         res['effects'] = {'lodDist': _readLodDist(xmlCtx, section, 'effects/lodDist'),
          'dust': _readChassisEffects(xmlCtx, section, 'effects/dust'),
          'mud': _readChassisEffects(xmlCtx, section, 'effects/mud')}
-        res['sound'] = section.readString('sound', '')
-        res['soundPC'] = section.readString('soundPC', '')
-        res['soundNPC'] = section.readString('soundNPC', '')
         res['wwsound'] = section.readString('wwsound', '')
         res['wwsoundPC'] = section.readString('wwsoundPC', '')
         res['wwsoundNPC'] = section.readString('wwsoundNPC', '')
-        if res['sound'] == '' and (res['soundPC'] == '' or res['soundNPC'] == '') and res['wwsound'] == '' and (res['wwsoundPC'] == '' or res['wwsoundNPC'] == ''):
-            raise Exception, 'chassis sound tags are wrong for vehicle ' + res['userString']
+        if res['wwsound'] == '' and (res['wwsoundPC'] == '' or res['wwsoundNPC'] == ''):
+            raise Exception('chassis sound tags are wrong for vehicle ' + res['userString'])
         res['wheels']['groups'] = wheelGroups
         res['wheels']['wheels'] = wheels
+        res['customEffects'] = [CustomEffectsDescriptor.getDescriptor(section, g_cache._customEffects['slip'], xmlCtx, 'effects/mud')]
         res['AODecals'] = _readAODecals(xmlCtx, section, 'AODecals')
     res['unlocks'] = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, compactDescr)
     return res
 
 
-def _readChassisLocals(xmlCtx, section, sharedDescr, unlocksDescrs, parentItem = None):
+def _readChassisLocals(xmlCtx, section, sharedDescr, unlocksDescrs, parentItem=None):
     hasOverride = False
     if IS_CLIENT:
         sharedCam = (sharedDescr.get('camouflageTiling'), sharedDescr.get('camouflageExclusionMask'))
@@ -2231,7 +2278,7 @@ def _readChassisLocals(xmlCtx, section, sharedDescr, unlocksDescrs, parentItem =
     return descr
 
 
-def _readEngine(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem = None):
+def _readEngine(xmlCtx, section, compactDescr, unlocksDescrs=None, parentItem=None):
     res = {'tags': _readTags(xmlCtx, section, 'tags', 'vehicleEngine'),
      'level': _readLevel(xmlCtx, section),
      'power': _xml.readPositiveFloat(xmlCtx, section, 'power') * HP_TO_WATTS,
@@ -2244,20 +2291,17 @@ def _readEngine(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem 
     if IS_CLIENT:
         res['rpm_min'] = section.readInt('rpm_min', 1000)
         res['rpm_max'] = section.readInt('rpm_max', 2600)
-        res['sound'] = section.readString('sound', '')
-        res['soundPC'] = section.readString('soundPC', '')
-        res['soundNPC'] = section.readString('soundNPC', '')
         res['wwsound'] = section.readString('wwsound', '')
         res['wwsoundPC'] = section.readString('wwsoundPC', '')
         res['wwsoundNPC'] = section.readString('wwsoundNPC', '')
-        if res['sound'] == '' and (res['soundPC'] == '' or res['soundNPC'] == '') and res['wwsound'] == '' and (res['wwsoundPC'] == '' or res['wwsoundNPC'] == ''):
+        if res['wwsound'] == '' and (res['wwsoundPC'] == '' or res['wwsoundNPC'] == ''):
             _xml.raiseWrongXml(xmlCtx, '', 'chassis sound tags are wrong')
     res.update(_readDeviceHealthParams(xmlCtx, section))
     res['unlocks'] = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, compactDescr)
     return res
 
 
-def _readFuelTank(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem = None):
+def _readFuelTank(xmlCtx, section, compactDescr, unlocksDescrs=None, parentItem=None):
     res = {'tags': _readTags(xmlCtx, section, 'tags', 'vehicleEngine'),
      'level': _readLevel(xmlCtx, section),
      'weight': _xml.readPositiveFloat(xmlCtx, section, 'weight')}
@@ -2269,7 +2313,7 @@ def _readFuelTank(xmlCtx, section, compactDescr, unlocksDescrs = None, parentIte
     return res
 
 
-def _readRadio(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem = None):
+def _readRadio(xmlCtx, section, compactDescr, unlocksDescrs=None, parentItem=None):
     res = {'tags': _readTags(xmlCtx, section, 'tags', 'vehicleEngine'),
      'level': _readLevel(xmlCtx, section),
      'weight': _xml.readNonNegativeFloat(xmlCtx, section, 'weight'),
@@ -2282,7 +2326,7 @@ def _readRadio(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem =
     return res
 
 
-def _parseSectionList(ctx, section, listItemParser, listSubSectionTag = None):
+def _parseSectionList(ctx, section, listItemParser, listSubSectionTag=None):
     if listSubSectionTag:
         subsection = _xml.getSubsection(ctx, section, listSubSectionTag)
         ctx = (ctx, listSubSectionTag)
@@ -2300,29 +2344,28 @@ def _parseFloatList(ctx, sec, floatList):
     return dict(((pn, _xml.readFloat(ctx, sec, pn)) for pn in floatList))
 
 
+def _tryParseFloatList(ctx, sec, nameList):
+    return dict(((pn, _xml.readFloat(ctx, sec, pn)) for pn in nameList if sec.has_key(pn)))
+
+
 def _parseFloatArrList(ctx, sec, floatArrList):
     return dict(((pn, _xml.readTupleOfFloats(ctx, sec, pn, sz)) for pn, sz in floatArrList))
 
 
-def _xphysicsParse_engine(isDetailed, ctx, sec):
+def _xphysicsParse_engine(ctx, sec):
     res = {}
     floatParamsCommon = ('startRPM',)
     res.update(_parseFloatList(ctx, sec, floatParamsCommon))
-    if isDetailed:
-        floatParamsDetailed = ('engineInertia', 'idleRPM', 'gearChangeTimeout', 'gearIncreaseFactor', 'gearDecreaseFactor', 'idleChoker')
-        res.update(_parseFloatList(ctx, sec, floatParamsDetailed))
-        floatArrParamsDetailed = (('engineLoses', 2), ('gearVelocities', 11), ('engineTorque', 8))
-        res.update(_parseFloatArrList(ctx, sec, floatArrParamsDetailed))
-        res['engineTorque'] = tuple(zip(res['engineTorque'][0::2], res['engineTorque'][1::2]))
-        res['gearVelocities'] = tuple((KMH_TO_MS * v for v in res['gearVelocities']))
-        res['powerFactor'] = sec.readFloat('powerFactor', 1.0)
-        res['rotationFactor'] = sec.readFloat('rotationFactor', 1.0)
-        res['smplEnginePower'] = sec.readFloat('smplEnginePower', 600.0)
-        res['smplFwMaxSpeed'] = KMH_TO_MS * sec.readFloat('smplFwMaxSpeed', 55.0)
-        res['smplBkMaxSpeed'] = KMH_TO_MS * sec.readFloat('smplBkMaxSpeed', 15.0)
-    else:
-        floatParamsSimplified = ('minRPM', 'smplEngPower')
-        res.update(_parseFloatList(ctx, sec, floatParamsSimplified))
+    floatParamsDetailed = ('engineInertia', 'idleRPM', 'idleChoker')
+    res.update(_parseFloatList(ctx, sec, floatParamsDetailed))
+    floatArrParamsDetailed = (('engineLoses', 2), ('engineTorque', 8))
+    res.update(_parseFloatArrList(ctx, sec, floatArrParamsDetailed))
+    res['engineTorque'] = tuple(zip(res['engineTorque'][0::2], res['engineTorque'][1::2]))
+    res['powerFactor'] = sec.readFloat('powerFactor', 1.0)
+    res['rotationFactor'] = sec.readFloat('rotationFactor', 1.0)
+    res['smplEnginePower'] = sec.readFloat('smplEnginePower', 600.0)
+    res['smplFwMaxSpeed'] = KMH_TO_MS * sec.readFloat('smplFwMaxSpeed', 55.0)
+    res['smplBkMaxSpeed'] = KMH_TO_MS * sec.readFloat('smplBkMaxSpeed', 15.0)
     return res
 
 
@@ -2339,7 +2382,7 @@ def _xphysicsParse_ground(ctx, sec):
     return res
 
 
-def _xphysicsParse_chassis(isDetailed, ctx, sec):
+def _xphysicsParse_chassis(ctx, sec):
     res = {}
     res['grounds'] = _parseSectionList(ctx, sec, _xphysicsParse_ground, 'grounds')
     floatParamsCommon = ('chassisMassFraction', 'hullCOMShiftY', 'wheelRadius', 'bodyHeight', 'clearance', 'wheelStroke', 'stiffness0', 'stiffness1', 'damping', 'movementRevertSpeed', 'comSideFriction', 'wheelInertiaFactor', 'rotationBrake', 'brake', 'angVelocityFactor')
@@ -2349,11 +2392,18 @@ def _xphysicsParse_chassis(isDetailed, ctx, sec):
     res['comFrictionYOffs'] = sec.readFloat('comFrictionYOffs', 0.7)
     res['rotFritionFactor'] = sec.readFloat('rotFritionFactor', 0.0)
     res['wheelSinkageResistFactor'] = sec.readFloat('wheelSinkageResistFactor', 0.0)
-    res['wPushedRot'] = sec.readFloat('wPushedRot', 0.0)
-    res['wPushedDiag'] = sec.readFloat('wPushedDiag', 0.0)
-    res['pushRot'] = sec.readFloat('pushRot', 0.0)
-    res['pushDiag'] = sec.readFloat('pushDiag', 0.0)
+    res['gimletGoalWOnSpot'] = sec.readFloat('gimletGoalWOnSpot', sec.readFloat('wPushedRot', 0.0))
+    res['gimletGoalWOnMove'] = sec.readFloat('gimletGoalWOnMove', sec.readFloat('wPushedDiag', 0.0))
+    res['wPushedRot'] = res['gimletGoalWOnSpot']
+    res['wPushedDiag'] = res['gimletGoalWOnMove']
     res['pushStop'] = sec.readFloat('pushStop', 0.0)
+    res['gimletPushOnSpotInit'] = sec.readFloat('gimletPushOnSpotInit', sec.readFloat('pushRot', 0.0))
+    res['gimletPushOnSpotFinal'] = sec.readFloat('gimletPushOnSpotFinal', sec.readFloat('pushDiag', 0.0))
+    res['gimletPushOnMoveInit'] = sec.readFloat('gimletPushOnMoveInit', res['gimletPushOnSpotInit'])
+    res['gimletPushOnMoveFinal'] = sec.readFloat('gimletPushOnMoveFinal', res['gimletPushOnSpotFinal'])
+    gimletParams = ('gimletVelScaleMin', 'gimletVelScaleMax', 'pushRotOnSpotFixedPeriod', 'pushRotOnMoveFixedPeriod', 'pushRotOnSpotGrowPeriod', 'pushRotOnMoveGrowPeriod')
+    res.update(_tryParseFloatList(ctx, sec, gimletParams))
+    res['chsDmgMultiplier'] = sec.readFloat('chsDmgMultiplier', 1.0)
     res['wPushedMediumFactor'] = sec.readFloat('wPushedMediumFactor', 1.0)
     res['wPushedSoftFactor'] = sec.readFloat('wPushedSoftFactor', 1.0)
     res['sideFrictionConstantRatio'] = sec.readFloat('sideFrictionConstantRatio', 0.0)
@@ -2363,19 +2413,13 @@ def _xphysicsParse_chassis(isDetailed, ctx, sec):
      ('stiffnessFactors', 5),
      ('hullInertiaFactors', 3))
     res.update(_parseFloatArrList(ctx, sec, floatArrParamsCommon))
-    if isDetailed:
-        floatParamsDetailed = ('centerRotationFwdSpeed', 'rotationByLockChoker', 'fwLagRatio', 'bkLagRatio')
-        res.update(_parseFloatList(ctx, sec, floatParamsDetailed))
-        res['centerRotationFwdSpeed'] *= KMH_TO_MS
-    else:
-        floatParamsSimplified = ('smplRotSpeed', 'smplMaxSpeed', 'smplRotSpeed')
-        res.update(_parseFloatList(ctx, sec, floatParamsSimplified))
-        res['smplMaxSpeed'] *= KMH_TO_MS
-        res['smplRotSpeed'] *= KMH_TO_MS
+    floatParamsDetailed = ('centerRotationFwdSpeed', 'rotationByLockChoker', 'fwLagRatio', 'bkLagRatio')
+    res.update(_parseFloatList(ctx, sec, floatParamsDetailed))
+    res['centerRotationFwdSpeed'] *= KMH_TO_MS
     return res
 
 
-def _readXPhysicsMode(xmlCtx, sec, subsectionName, isDetailed):
+def _readXPhysicsMode(xmlCtx, sec, subsectionName):
     subsec = sec[subsectionName]
     if subsec is None:
         return
@@ -2383,8 +2427,9 @@ def _readXPhysicsMode(xmlCtx, sec, subsectionName, isDetailed):
         ctx = (xmlCtx, subsectionName)
         res = {}
         res['gravityFactor'] = subsec.readFloat('gravityFactor', 1.0)
-        res['engines'] = _parseSectionList(ctx, subsec, partial(_xphysicsParse_engine, isDetailed), 'engines')
-        res['chassis'] = _parseSectionList(ctx, subsec, partial(_xphysicsParse_chassis, isDetailed), 'chassis')
+        res['fakegearbox'] = _readFakeGearBox(ctx, subsec)
+        res['engines'] = _parseSectionList(ctx, subsec, _xphysicsParse_engine, 'engines')
+        res['chassis'] = _parseSectionList(ctx, subsec, _xphysicsParse_chassis, 'chassis')
         return res
 
 
@@ -2397,11 +2442,11 @@ def _readXPhysics(xmlCtx, section, subsectionName):
         res = {}
         res['mode'] = _xml.readInt(ctx, xsec, 'mode', 1)
         res['useSimplifiedGearbox'] = _xml.readBool(ctx, xsec, 'useSimplifiedGearbox')
-        res['detailed'] = _readXPhysicsMode(ctx, xsec, 'detailed', True)
+        res['detailed'] = _readXPhysicsMode(ctx, xsec, 'detailed')
         return res
 
 
-def _readTurret(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem = None):
+def _readTurret(xmlCtx, section, compactDescr, unlocksDescrs=None, parentItem=None):
     res = {'tags': _readTags(xmlCtx, section, 'tags', 'vehicleTurret'),
      'level': _readLevel(xmlCtx, section),
      'hitTester': _readHitTester(xmlCtx, section, 'hitTester'),
@@ -2431,8 +2476,7 @@ def _readTurret(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem 
         res['showEmblemsOnGun'] = section.readBool('showEmblemsOnGun', False)
         if section.has_key('camouflage'):
             res['camouflageTiling'], res['camouflageExclusionMask'] = _readCamouflageTilingAndMask(xmlCtx, section, 'camouflage', (None, None))
-        res['turretRotatorSoundManual'] = section.readString('turretRotatorSoundManual')
-        res['turretRotatorSoundGear'] = section.readString('turretRotatorSoundGear')
+        res['turretRotatorSoundManual'] = section.readString('wwturretRotatorSoundManual')
         res['AODecals'] = _readAODecals(xmlCtx, section, 'AODecals')
         commonConfig = g_cache.commonConfig
         res['turretDetachmentEffects'] = _readTurretDetachmentEffects(xmlCtx, section, 'turretDetachmentEffects', commonConfig['defaultTurretDetachmentEffects'])
@@ -2448,7 +2492,7 @@ def _readTurret(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem 
     return res
 
 
-def _readTurretLocals(xmlCtx, section, sharedDescr, unlocksDescrs, parentItem = None):
+def _readTurretLocals(xmlCtx, section, sharedDescr, unlocksDescrs, parentItem=None):
     hasOverride = False
     nationID = sharedDescr['id'][0]
     if not section.has_key('guns'):
@@ -2477,7 +2521,7 @@ def _readTurretLocals(xmlCtx, section, sharedDescr, unlocksDescrs, parentItem = 
     return descr
 
 
-def _readGun(xmlCtx, section, compactDescr, unlocksDescrs = None, turretCompactDescr = None):
+def _readGun(xmlCtx, section, compactDescr, unlocksDescrs=None, turretCompactDescr=None):
     res = {'tags': _readTags(xmlCtx, section, 'tags', 'vehicleGun'),
      'level': _readLevel(xmlCtx, section),
      'rotationSpeed': radians(_xml.readPositiveFloat(xmlCtx, section, 'rotationSpeed')),
@@ -2508,10 +2552,7 @@ def _readGun(xmlCtx, section, compactDescr, unlocksDescrs = None, turretCompactD
                 _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % effName)
             res['reloadEffect'] = reloadEff
         res['impulse'] = _xml.readNonNegativeFloat(xmlCtx, section, 'impulse')
-        res['recoil'] = {'lodDist': _readLodDist(xmlCtx, section, 'recoil/lodDist'),
-         'amplitude': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/amplitude'),
-         'backoffTime': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/backoffTime'),
-         'returnTime': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/returnTime')}
+        res['recoil'] = _readRecoilEffect(xmlCtx, section)
         if section.has_key('camouflage'):
             res['camouflageTiling'], res['camouflageExclusionMask'] = _readCamouflageTilingAndMask(xmlCtx, section, 'camouflage', (None, None))
         res['animateEmblemSlots'] = section.readBool('animateEmblemSlots', True)
@@ -2570,6 +2611,23 @@ def _readGun(xmlCtx, section, compactDescr, unlocksDescrs = None, turretCompactD
     res['shots'] = tuple(v)
     res['unlocks'] = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, compactDescr)
     return res
+
+
+def _readRecoilEffect(xmlCtx, section):
+    recoil = {'lodDist': _readLodDist(xmlCtx, section, 'recoil/lodDist'),
+     'amplitude': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/amplitude'),
+     'backoffTime': 0.0,
+     'returnTime': 0.0}
+    effName = _xml.readStringOrNone(xmlCtx, section, 'recoil/recoilEffect')
+    if effName is not None:
+        recoilEff = g_cache._gunRecoilEffects.get(effName, None)
+        if recoilEff is not None:
+            recoil['backoffTime'] = recoilEff[0]
+            recoil['returnTime'] = recoilEff[1]
+    else:
+        recoil['backoffTime'] = _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/backoffTime')
+        recoil['returnTime'] = _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/returnTime')
+    return recoil
 
 
 def _readGunLocals(xmlCtx, section, sharedDescr, unlocksDescrs, turretCompactDescr):
@@ -2655,10 +2713,7 @@ def _readGunLocals(xmlCtx, section, sharedDescr, unlocksDescrs, turretCompactDes
             recoil = sharedDescr['recoil']
         else:
             hasOverride = True
-            recoil = {'lodDist': _readLodDist(xmlCtx, section, 'recoil/lodDist'),
-             'amplitude': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/amplitude'),
-             'backoffTime': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/backoffTime'),
-             'returnTime': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/returnTime')}
+            recoil = _readRecoilEffect(xmlCtx, section)
         reloadEffect = sharedDescr.get('reloadEffect', None)
         if section.has_key('reloadEffect'):
             hasOverride = True
@@ -2906,7 +2961,7 @@ def _readShot(xmlCtx, section, nationID, projectileSpeedFactor):
     return res
 
 
-def _defaultLocalReader(xmlCtx, section, sharedDescr, unlocksDescrs, parentItem = None):
+def _defaultLocalReader(xmlCtx, section, sharedDescr, unlocksDescrs, parentItem=None):
     if not section.has_key('unlocks'):
         return sharedDescr
     descr = sharedDescr.copy()
@@ -2959,11 +3014,11 @@ def _readArmor(xmlCtx, section, subsectionName):
             for paramName in matKindSection.keys():
                 if paramName in _g_boolMatInfoParams:
                     vals[paramName] = _xml.readBool(ctx, matKindSection, paramName)
-                elif paramName == 'vehicleDamageFactor':
+                if paramName == 'vehicleDamageFactor':
                     vals[paramName] = _xml.readFraction(ctx, matKindSection, paramName)
-                elif isDevice and paramName in ('chanceToHitByProjectile', 'chanceToHitByExplosion'):
+                if isDevice and paramName in ('chanceToHitByProjectile', 'chanceToHitByExplosion'):
                     vals[paramName] = _xml.readFraction(ctx, matKindSection, paramName)
-                elif paramName == 'damageKind':
+                if paramName == 'damageKind':
                     damageKindName = _xml.readString(ctx, matKindSection, 'damageKind')
                     if damageKindName == 'armor':
                         damageKind = 0
@@ -2975,8 +3030,7 @@ def _readArmor(xmlCtx, section, subsectionName):
                         _xml.raiseWrongXml(ctx, 'damageKind', 'wrong damage kind name')
                     if damageKind is not None:
                         vals['damageKind'] = damageKind
-                else:
-                    _xml.raiseWrongXml(ctx, paramName, 'unknown parameter')
+                _xml.raiseWrongXml(ctx, paramName, 'unknown parameter')
 
             if damageKind is None:
                 damageKind = 0 if vals['armor'] else 1
@@ -2991,7 +3045,9 @@ _g_boolMatInfoParams = ('useArmorHomogenization',
  'useAntifragmentationLining',
  'mayRicochet',
  'collideOnceOnly',
- 'continueTraceIfNoHit')
+ 'continueTraceIfNoHit',
+ 'checkCaliberForRichet',
+ 'checkCaliberForHitAngleNorm')
 
 def _readPrimaryArmor(xmlCtx, section, subsectionName, materials):
     if not section.has_key(subsectionName):
@@ -3020,7 +3076,7 @@ def _readFakeTurretIndices(xmlCtx, section, subsectionName, numTurrets):
     return res
 
 
-def _readDeviceHealthParams(xmlCtx, section, subsectionName = '', withHysteresis = True):
+def _readDeviceHealthParams(xmlCtx, section, subsectionName='', withHysteresis=True):
     if subsectionName:
         section = _xml.getSubsection(xmlCtx, section, subsectionName)
         xmlCtx = (xmlCtx, subsectionName)
@@ -3181,7 +3237,7 @@ def __readEffectsTimeLine(xmlCtx, section):
     return EffectsList.EffectsTimeLinePrereqs(effectsTimeLine.keyPoints, effectsTimeLine.effectsList, set())
 
 
-def _readEffectGroups(xmlPath, withSubgroups = False):
+def _readEffectGroups(xmlPath, withSubgroups=False):
     res = {}
     section = ResMgr.openSection(xmlPath)
     if section is None:
@@ -3209,6 +3265,20 @@ def _readEffectGroups(xmlPath, withSubgroups = False):
     return res
 
 
+def _readRecoilEffectGroups(xmlPath):
+    res = {}
+    section = ResMgr.openSection(xmlPath)
+    if section is None:
+        _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
+    xmlCtx = (None, xmlPath)
+    for sname, subsection in section.items():
+        sname = intern(sname)
+        ctx = (xmlCtx, sname)
+        res[sname] = (_xml.readNonNegativeFloat(ctx, subsection, 'backoffTime'), _xml.readNonNegativeFloat(ctx, subsection, 'returnTime'))
+
+    return res
+
+
 def __readReloadEffect(xmlCtx, section):
     try:
         reloadEffect = ReloadEffect.effectFromSection(section)
@@ -3232,6 +3302,7 @@ def _readReloadEffectGroups(xmlPath):
 
 
 def _readExhaustEffectsGroups(xmlPath):
+    from VehicleEffects import ExhaustEffectsDescriptor
     res = {}
     section = ResMgr.openSection(xmlPath)
     defaultEffect = None
@@ -3282,6 +3353,29 @@ def _readChassisEffectGroups(xmlPath):
     section = None
     subsection = None
     ResMgr.purge(xmlPath, True)
+    return res
+
+
+def _readCustomEffectGroups(xmlPath):
+    res = {}
+    section = ResMgr.openSection(xmlPath)
+    try:
+        defaultEffect = None
+        if section is not None:
+            SelectorDescFactory.initFactory(section)
+            effectsSection = section['effects']
+            for name, subsection in effectsSection.items():
+                effect = CustomEffectsDescriptor(subsection)
+                res[name] = effect
+                if defaultEffect is None:
+                    defaultEffect = effect
+
+            if defaultEffect is not None:
+                res['default'] = defaultEffect
+            SelectorDescFactory.releseFactory()
+    except Exception:
+        LOG_CURRENT_EXCEPTION()
+
     return res
 
 
@@ -3371,8 +3465,7 @@ def _readShotEffects(xmlCtx, section):
                 subEffName += 'Hit'
                 if section.has_key(subEffName):
                     res[subEffName] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, subEffName))
-                else:
-                    res[subEffName] = res[defSubEffName]
+                res[subEffName] = res[defSubEffName]
 
             if section.has_key('deepWaterHit'):
                 res['deepWaterHit'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'deepWaterHit'))
@@ -3410,8 +3503,7 @@ def _readDamageStickers(xmlPath):
                 name = 'variant%d' % i
                 if not subsection.has_key(name):
                     break
-                else:
-                    stickerID = _readAndRegisterDamageStickerTextureParams(ctx, subsection[name], sname, True)
+                stickerID = _readAndRegisterDamageStickerTextureParams(ctx, subsection[name], sname, True)
 
         descr['id'] = stickerID
         ids[sname] = stickerID
@@ -3571,7 +3663,7 @@ def _readMaterials(xmlCtx, section, subsectionName, extrasDict):
                 autoDamageKindMaterials.add(materialKind)
             else:
                 _xml.raiseWrongXml(ctx, 'damageKind', 'wrong damage kind name')
-        materials[materialKind] = MaterialInfo(kind=materialKind, armor=None if extraIsNone else 0, extra=extra, vehicleDamageFactor=_xml.readFraction(ctx, subsection, 'vehicleDamageFactor'), useArmorHomogenization=_xml.readBool(ctx, subsection, 'useArmorHomogenization'), useHitAngle=_xml.readBool(ctx, subsection, 'useHitAngle'), useAntifragmentationLining=_xml.readBool(ctx, subsection, 'useAntifragmentationLining'), mayRicochet=_xml.readBool(ctx, subsection, 'mayRicochet'), collideOnceOnly=_xml.readBool(ctx, subsection, 'collideOnceOnly'), damageKind=damageKind, chanceToHitByProjectile=1.0 if extraIsNone else _xml.readFraction(ctx, subsection, 'chanceToHitByProjectile'), chanceToHitByExplosion=1.0 if extraIsNone else _xml.readFraction(ctx, subsection, 'chanceToHitByExplosion'), continueTraceIfNoHit=True if extraIsNone else _xml.readBool(ctx, subsection, 'continueTraceIfNoHit'))
+        materials[materialKind] = MaterialInfo(kind=materialKind, armor=None if extraIsNone else 0, extra=extra, vehicleDamageFactor=_xml.readFraction(ctx, subsection, 'vehicleDamageFactor'), useArmorHomogenization=_xml.readBool(ctx, subsection, 'useArmorHomogenization'), useHitAngle=_xml.readBool(ctx, subsection, 'useHitAngle'), useAntifragmentationLining=_xml.readBool(ctx, subsection, 'useAntifragmentationLining'), mayRicochet=_xml.readBool(ctx, subsection, 'mayRicochet'), collideOnceOnly=_xml.readBool(ctx, subsection, 'collideOnceOnly'), checkCaliberForRichet=_xml.readBool(ctx, subsection, 'checkCaliberForRichet'), checkCaliberForHitAngleNorm=_xml.readBool(ctx, subsection, 'checkCaliberForHitAngleNorm'), damageKind=damageKind, chanceToHitByProjectile=1.0 if extraIsNone else _xml.readFraction(ctx, subsection, 'chanceToHitByProjectile'), chanceToHitByExplosion=1.0 if extraIsNone else _xml.readFraction(ctx, subsection, 'chanceToHitByExplosion'), continueTraceIfNoHit=True if extraIsNone else _xml.readBool(ctx, subsection, 'continueTraceIfNoHit'))
 
     return (materials, autoDamageKindMaterials)
 
@@ -3611,17 +3703,17 @@ def _readArtefacts(xmlPath):
 def _joinCustomizationParams(nationID, commonDescr, customDescr):
     if 'inscriptionColors' not in customDescr:
         if 'inscriptionColors' not in commonDescr:
-            raise Exception, 'inscriptionColors is not specified for nation=%s' % (nations.NAMES[nationID],)
+            raise Exception('inscriptionColors is not specified for nation=%s' % (nations.NAMES[nationID],))
         customDescr['inscriptionColors'] = commonDescr['inscriptionColors']
     if IS_CLIENT:
         if 'armorColor' not in customDescr:
             if 'armorColor' not in commonDescr:
-                raise Exception, 'armorColor is not specified  for nation=%s' % (nations.NAMES[nationID],)
+                raise Exception('armorColor is not specified  for nation=%s' % (nations.NAMES[nationID],))
             customDescr['armorColor'] = commonDescr['armorColor']
     for name in ('inscriptionGroups', 'inscriptions', 'camouflageGroups', 'camouflages'):
         intersection = set(commonDescr[name].iterkeys()).intersection(customDescr[name].iterkeys())
         if intersection:
-            raise Exception, 'there is unexpected intersection in %s, %s (%s)' % (name, nationID, intersection)
+            raise Exception('there is unexpected intersection in %s, %s (%s)' % (name, nationID, intersection))
         customDescr[name].update(commonDescr[name])
 
     return customDescr
@@ -3753,7 +3845,7 @@ def _readColor(xmlCtx, section, sectionName):
     return rgbaTuple[0] + (rgbaTuple[1] << 8) + (rgbaTuple[2] << 16) + (rgbaTuple[3] << 24)
 
 
-def _readCamouflageTilingAndMask(xmlCtx, section, sectionName, default = None):
+def _readCamouflageTilingAndMask(xmlCtx, section, sectionName, default=None):
     tilingKey = sectionName + '/tiling'
     if not default or section.has_key(tilingKey):
         tiling = _xml.readTupleOfFloats(xmlCtx, section, tilingKey, 4)
@@ -4003,7 +4095,7 @@ def _readPlayerInscriptions(xmlCtx, section, subsectionName, priceFactors, notIn
     return (groups, inscrs)
 
 
-def _readVehicleEffects(xmlCtx, section, subsectionName, defaultEffects = None):
+def _readVehicleEffects(xmlCtx, section, subsectionName, defaultEffects=None):
     res = {}
     section = _xml.getSubsection(xmlCtx, section, subsectionName)
     xmlCtx = (xmlCtx, subsectionName)
@@ -4044,7 +4136,7 @@ def _readVehicleEffects(xmlCtx, section, subsectionName, defaultEffects = None):
     return res
 
 
-def _readTurretDetachmentEffects(xmlCtx, section, subsectionName, defaultEffects = None):
+def _readTurretDetachmentEffects(xmlCtx, section, subsectionName, defaultEffects=None):
     if defaultEffects is None:
         defaultEffects = {}
     res = {}

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortModernizationWindow.py
 import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
@@ -22,6 +22,7 @@ from gui.shared.fortifications import isFortificationBattlesEnabled
 from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.fortifications.context import UpgradeCtx
 from gui.shared.fortifications.settings import FORT_RESTRICTION, FORT_BATTLE_DIVISIONS
+from gui.shared.utils.functions import makeTooltip
 from gui.shared import events
 from gui.shared.formatters import icons, text_styles
 from helpers import i18n
@@ -35,7 +36,7 @@ class MAX_LEVEL:
 
 class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortModernizationWindow, self).__init__()
         self.__uid = ctx.get('data', None)
         self.intBuildingID = None
@@ -131,7 +132,7 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
     def onUpdated(self, isFullUpdate):
         self.__buildData()
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         if self.intBuildingID == buildingTypeID and reason == BUILDING_UPDATE_REASON.DELETED:
             self.destroy()
 
@@ -195,22 +196,23 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
             result['conditionIcon'] = conditionIcon
         result['canUpgrade'] = isCanModernization
         if not isCanModernization:
-            btnToolTip = {}
+            ttHeader = ''
+            ttBody = ''
             if not canUpgradeByDefPeriod and self.__isFortBattleAvailable:
-                btnToolTip['header'] = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_NOTACTIVATEDDEFPERIOD_HEADER)
-                btnToolTip['body'] = i18n.makeString(i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_NOTACTIVATEDDEFPERIOD_BODY))
+                ttHeader = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_NOTACTIVATEDDEFPERIOD_HEADER)
+                ttBody = i18n.makeString(i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_NOTACTIVATEDDEFPERIOD_BODY))
             else:
-                btnToolTip['header'] = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_APPLYBUTTON_HEADER)
+                ttHeader = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_APPLYBUTTON_HEADER)
                 if not self.__isFortBattleAvailable and isBaseBuilding and self.__buildingLevel == baseBuildingMaxLevel:
-                    btnToolTip['header'] = i18n.makeString('#tooltips:fortification/popOver/upgradeFoundationBtn_Disabled/header')
-                    btnToolTip['body'] = i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_FORTMAXLEVEL)
+                    ttHeader = i18n.makeString('#tooltips:fortification/popOver/upgradeFoundationBtn_Disabled/header')
+                    ttBody = i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_FORTMAXLEVEL)
                 elif upgradeRestriction == FORT_RESTRICTION.BUILDING_NOT_ENOUGH_RESOURCE_AND_LOW_LEVEL:
-                    btnToolTip['body'] = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_APPLYBUTTON_LOWLEVELANDRESOURCE, baseLevel=fort_formatters.getTextLevel(self.__baseBuildingLevel + 1))
+                    ttBody = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_APPLYBUTTON_LOWLEVELANDRESOURCE, baseLevel=fort_formatters.getTextLevel(self.__baseBuildingLevel + 1))
                 elif upgradeRestriction == FORT_RESTRICTION.BUILDING_FORT_LEVEL_TOO_LOW:
-                    btnToolTip['body'] = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_APPLYBUTTON_LOWBASELEVEL, baseLevel=fort_formatters.getTextLevel(self.__baseBuildingLevel + 1))
+                    ttBody = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_APPLYBUTTON_LOWBASELEVEL, baseLevel=fort_formatters.getTextLevel(self.__baseBuildingLevel + 1))
                 elif upgradeRestriction == FORT_RESTRICTION.BUILDING_NOT_ENOUGH_RESOURCE:
-                    btnToolTip['body'] = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_APPLYBUTTON_NETENOUGHRESOURCE)
-            result['btnToolTip'] = btnToolTip
+                    ttBody = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_APPLYBUTTON_NETENOUGHRESOURCE)
+            result['btnToolTip'] = makeTooltip(ttHeader, ttBody)
         fort = self.fortCtrl.getFort()
         newCount = 0
         resLeft = 0
@@ -222,7 +224,6 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         inProcess, _ = fort.getDefenceHourProcessing()
         isDefenceOn = fort.isDefenceHourEnabled() or inProcess
         before = {}
-        before['buildingType'] = self.__uid
         before['buildingLevel'] = self.__buildingLevel
         before['buildingIcon'] = FortViewHelper.getMapIconSource(self.__uid, self.__buildingLevel, isDefenceOn=isDefenceOn)
         before['buildingIndicators'] = self.__prepareIndicatorData(isCanModernization, False)
@@ -230,7 +231,6 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         before['titleText'] = text_styles.middleTitle(i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_BEFORELABEL))
         result['beforeUpgradeData'] = before
         after = {}
-        after['buildingType'] = self.__uid
         after['buildingLevel'] = self.__buildingLevel + 1
         after['buildingIcon'] = FortViewHelper.getMapIconSource(self.__uid, self.__buildingLevel + 1)
         after['buildingIndicators'] = self.__prepareIndicatorData(isCanModernization, True, resLeft)
@@ -239,17 +239,17 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         result['afterUpgradeData'] = after
         return result
 
-    def __prepareIndicatorData(self, isCanModernization, increment = False, resLeft = 0):
+    def __prepareIndicatorData(self, isCanModernization, increment=False, resLeft=0):
         if increment:
             hpTotalVal = self.nextLevel.levelRef.hp
             hpVal = self.nextLevel.hp
             defResVal = self.__defResVal - self.__cost + resLeft
-            maxDerResVal = self.nextLevel.levelRef.storage
+            maxDefResVal = self.nextLevel.levelRef.storage
         else:
             hpTotalVal = self.__hpTotalVal
             hpVal = self.__hpVal
             defResVal = self.__defResVal
-            maxDerResVal = self.__maxDerResVal
+            maxDefResVal = self.__maxDerResVal
         formatter = text_styles.defRes
         if self.__progress == FORTIFICATION_ALIASES.STATE_FOUNDATION_DEF or self.__progress == FORTIFICATION_ALIASES.STATE_FOUNDATION:
             formatter = text_styles.alert
@@ -272,8 +272,8 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         else:
             currentDefResLabel = str(BigWorld.wg_getIntegralFormat(defResVal))
             currentDefResValue = defResVal
-        defResValueFormatter = text_styles.alert(FORMAT_PATTERN) if defResVal > maxDerResVal else text_styles.defRes(FORMAT_PATTERN)
-        formattedDefResTotal = formatter(str(BigWorld.wg_getIntegralFormat(maxDerResVal)))
+        defResValueFormatter = text_styles.alert(FORMAT_PATTERN) if defResVal > maxDefResVal else text_styles.defRes(FORMAT_PATTERN)
+        formattedDefResTotal = formatter(str(BigWorld.wg_getIntegralFormat(maxDefResVal)))
         formattedDefResTotal += ' ' + icons.nut()
         result = {}
         result['hpLabel'] = i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_INDICATORS_HPLBL)
@@ -281,7 +281,9 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         result['hpCurrentValue'] = currentHpValue
         result['hpTotalValue'] = hpTotalVal
         result['defResCurrentValue'] = currentDefResValue
-        result['defResTotalValue'] = maxDerResVal
+        result['defResTotalValue'] = maxDefResVal
+        result['defResTotalValue'] = maxDefResVal
+        result['defResCompensationValue'] = max(0, defResVal - maxDefResVal)
         hpProgressLabels = {}
         hpProgressLabels['currentValue'] = currentHpLabel
         hpProgressLabels['currentValueFormatter'] = formattedHpValue
@@ -296,7 +298,7 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         result['defResProgressLabels'] = storeProgressLabels
         return result
 
-    def __prepareOrderInfo(self, increment = False, orderCount = 0, orderLevel = 1):
+    def __prepareOrderInfo(self, increment=False, orderCount=0, orderLevel=1):
         result = {}
         if self.intBuildingID == FORT_BUILDING_TYPE.MILITARY_BASE:
             if increment:

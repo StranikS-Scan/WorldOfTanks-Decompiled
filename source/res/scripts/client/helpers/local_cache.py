@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/local_cache.py
 import base64
 import shelve
@@ -27,7 +27,7 @@ class CacheIO(object):
 
 class RedirectIO(CacheIO):
 
-    def __init__(self, redirect = None):
+    def __init__(self, redirect=None):
         super(CacheIO, self).__init__()
         self._redirect = redirect or CacheIO()
 
@@ -38,15 +38,11 @@ class RedirectIO(CacheIO):
 
     def read(self, src):
         result = self._doRead(src)
-        if not result:
-            return result
-        return self._redirect.read(result)
+        return result if not result else self._redirect.read(result)
 
     def write(self, dst):
         result = self._redirect.write(dst)
-        if not result:
-            return result
-        return self._doWrite(result)
+        return result if not result else self._doWrite(result)
 
     def _doRead(self, src):
         raise NotImplementedError
@@ -56,7 +52,7 @@ class RedirectIO(CacheIO):
 
 
 @contextmanager
-def _open_file(fileName, mode = 'r'):
+def _open_file(fileName, mode='r'):
     try:
         fd = open(fileName, mode)
     except IOError as error:
@@ -64,9 +60,11 @@ def _open_file(fileName, mode = 'r'):
         yield (None, error)
     else:
         try:
-            yield (fd, None)
-        except:
-            LOG_CURRENT_EXCEPTION()
+            try:
+                yield (fd, None)
+            except:
+                LOG_CURRENT_EXCEPTION()
+
         finally:
             fd.close()
 
@@ -76,7 +74,7 @@ def _open_file(fileName, mode = 'r'):
 class _FileIO(RedirectIO):
     __internal = {}
 
-    def __init__(self, filePath, redirect = None):
+    def __init__(self, filePath, redirect=None):
         super(_FileIO, self).__init__(redirect)
         self._filePath = filePath
 
@@ -166,7 +164,7 @@ def _writeWorker(uniqueID, io, dst):
 
 class _AsyncIO(RedirectIO):
 
-    def __init__(self, uniqueID, redirect = None):
+    def __init__(self, uniqueID, redirect=None):
         super(_AsyncIO, self).__init__(redirect)
         self._uniqueID = uniqueID
         self.onRead = Event.Event()
@@ -235,7 +233,7 @@ class CryptIO(RedirectIO):
         return BigWorld.wg_cpdata(dst)
 
 
-def makeFileLocalCachePath(space, tags, fileFormat = '.dat'):
+def makeFileLocalCachePath(space, tags, fileFormat='.dat'):
     p = os.path
     prefsFilePath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
     dirPath = p.join(p.dirname(prefsFilePath), space)
@@ -265,7 +263,7 @@ class FileLocalCache(object):
     __internal = {}
     __slots__ = ('_io', 'onRead')
 
-    def __init__(self, space, tags, io = None, async = False):
+    def __init__(self, space, tags, io=None, async=False):
         super(FileLocalCache, self).__init__()
         filePath = makeFileLocalCachePath(space, tags)
         if io:
@@ -303,7 +301,7 @@ class FileLocalCache(object):
 class ShelfLocalCache(object):
     __slots__ = ('_io', '_cache', '_autoflush', 'onRead', '__flushCbID')
 
-    def __init__(self, space, tags, autoflush = 0):
+    def __init__(self, space, tags, autoflush=0):
         super(ShelfLocalCache, self).__init__()
         filePath = makeFileLocalCachePath(space, tags, fileFormat='')
         self._io = _AsyncIO(filePath, redirect=_ShelveIO(filePath))

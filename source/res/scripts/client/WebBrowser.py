@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/WebBrowser.py
 import weakref
 import BigWorld
@@ -7,6 +7,7 @@ from gui.Scaleform.CursorDelegator import CursorDelegator
 from Event import Event
 from debug_utils import _doLog, LOG_CURRENT_EXCEPTION
 from constants import IS_DEVELOPMENT
+from functools import reduce
 _BROWSER_LOGGING = True
 _BROWSER_KEY_LOGGING = False
 
@@ -17,15 +18,15 @@ def LOG_BROWSER(msg, *kargs):
 
 class WebBrowser(object):
     hasBrowser = property(lambda self: self.__browser is not None)
-    baseUrl = property(lambda self: ('' if self.__browser is None else self.__baseUrl))
-    url = property(lambda self: ('' if self.__browser is None else self.__browser.url))
-    width = property(lambda self: (0 if self.__browser is None else self.__browser.width))
-    height = property(lambda self: (0 if self.__browser is None else self.__browser.height))
+    baseUrl = property(lambda self: '' if self.__browser is None else self.__baseUrl)
+    url = property(lambda self: '' if self.__browser is None else self.__browser.url)
+    width = property(lambda self: 0 if self.__browser is None else self.__browser.width)
+    height = property(lambda self: 0 if self.__browser is None else self.__browser.height)
     isNavigationComplete = property(lambda self: self.__isNavigationComplete)
     isFocused = property(lambda self: self.__isFocused)
     updateInterval = 0.01
 
-    def __init__(self, browserID, uiObj, texName, size, url = 'about:blank', isFocused = False):
+    def __init__(self, browserID, uiObj, texName, size, url='about:blank', isFocused=False):
         self.__browserID = browserID
         self.__cbID = None
         self.__baseUrl = url
@@ -40,6 +41,7 @@ class WebBrowser(object):
         else:
             self.__ui = weakref.ref(uiObj)
             self.__keysDown = set()
+            self.__readyToShow = False
 
             def injectBrowserKeyEvent(me, e):
                 LOG_BROWSER('injectBrowserKeyEvent', (e.key,
@@ -174,7 +176,7 @@ class WebBrowser(object):
                 ui.cursorMgr.setCursorForced(None)
         return
 
-    def refresh(self, ignoreCache = True):
+    def refresh(self, ignoreCache=True):
         if BigWorld.time() - self.__loadStartTime < 0.5:
             LOG_BROWSER('refresh - called too soon')
             return
@@ -208,7 +210,7 @@ class WebBrowser(object):
             return
         if self.hasBrowser:
             self.__browser.stop()
-            self.__onLoadEnd()
+            self.__onLoadEnd(self.__browser.url)
 
     def update(self):
         self.__cbID = BigWorld.callback(self.updateInterval, self.update)
@@ -314,21 +316,28 @@ class WebBrowser(object):
         self.enableUpdate = False
         self.unfocus()
 
-    def __onLoadStart(self):
-        self.__isNavigationComplete = False
-        self.__loadStartTime = BigWorld.time()
-        LOG_BROWSER('onLoadStart', self.__browser.url)
-        self.onLoadStart(self.__browser.url)
+    def __onLoadStart(self, url):
+        if url == self.__browser.url:
+            self.__isNavigationComplete = False
+            self.__loadStartTime = BigWorld.time()
+            LOG_BROWSER('onLoadStart', self.__browser.url)
+            self.onLoadStart(self.__browser.url)
+            self.__readyToShow = False
 
-    def __onLoadEnd(self, isLoaded = True):
-        self.__isNavigationComplete = True
-        if not self.__processDelayedNavigation():
-            LOG_BROWSER('onLoadEnd', self.__browser.url)
-            self.onLoadEnd(self.__browser.url, isLoaded)
+    def __onLoadEnd(self, url, isLoaded=True):
+        if url == self.__browser.url:
+            self.__isNavigationComplete = True
+            if not self.__processDelayedNavigation():
+                LOG_BROWSER('onLoadEnd', self.__browser.url)
+                if self.__readyToShow and isLoaded:
+                    self.onReadyToShowContent(self.__browser.url)
+                    self.__readyToShow = isLoaded
+                self.onLoadEnd(self.__browser.url, isLoaded)
 
-    def __onReadyToShowContent(self):
-        LOG_BROWSER('onReadyToShowContent', self.__browser.url)
-        self.onReadyToShowContent(self.__browser.url)
+    def __onReadyToShowContent(self, url):
+        if url == self.__browser.url:
+            LOG_BROWSER('onReadyToShowContent', self.__browser.url)
+            self.__readyToShow = True
 
     def __onCursorUpdated(self):
         if self.hasBrowser and self.isFocused:
@@ -375,21 +384,21 @@ class EventListener():
     def onBeginLoadingFrame(self, frameId, isMainFrame, url):
         if isMainFrame:
             LOG_BROWSER('onBeginLoadingFrame(isMainFrame)', url)
-            self.onLoadStart()
+            self.onLoadStart(url)
 
     def onFailLoadingFrame(self, frameId, isMainFrame, errorCode, errorDesc, url):
         if isMainFrame:
             LOG_BROWSER('onFailLoadingFrame(isMainFrame)', url, errorCode, errorDesc)
-            self.onLoadEnd(False)
+            self.onLoadEnd(url, False)
 
     def onFinishLoadingFrame(self, frameId, isMainFrame, url):
         if isMainFrame:
             LOG_BROWSER('onFinishLoadingFrame(isMainFrame)', url)
-            self.onLoadEnd()
+            self.onLoadEnd(url)
 
     def onDocumentReady(self, url):
         LOG_BROWSER('onDocumentReady', url)
-        self.onDOMReady()
+        self.onDOMReady(url)
 
     def onAddConsoleMessage(self, message, lineNumber, source):
         pass

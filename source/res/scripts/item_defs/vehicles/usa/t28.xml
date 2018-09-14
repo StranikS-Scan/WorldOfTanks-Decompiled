@@ -103,6 +103,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A39_T28/T28_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
     </camouflage>
@@ -215,6 +216,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/american/A39_T28/collision/Chassis.model	</collisionModel>
@@ -336,6 +339,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/american/A39_T28/collision/Chassis.model	</collisionModel>
@@ -540,6 +545,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_T28>
   </turrets0>

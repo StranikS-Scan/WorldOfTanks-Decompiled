@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/TimeInterval.py
 import weakref
 import BigWorld
@@ -27,6 +27,9 @@ class TimeInterval(object):
             BigWorld.cancelCallback(self.__callbackID)
             self.__callbackID = None
         return
+
+    def isStarted(self):
+        return self.__callbackID is not None
 
     def __invoke(self):
         self.__callbackID = None

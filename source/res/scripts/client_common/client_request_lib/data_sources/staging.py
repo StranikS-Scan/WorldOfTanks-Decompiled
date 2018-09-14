@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/staging.py
 """
 Created on Jul 1, 2015
@@ -21,7 +21,7 @@ def _doResponse(callback, result, status_code, response_code):
 EXAMPLES = {}
 SUCCESS_STATUSES = [200, 201]
 
-def convert_data(data_mapping, paginated = False):
+def convert_data(data_mapping, paginated=False):
 
     def wrapper(func):
 
@@ -62,7 +62,7 @@ def timestamp_to_datetime(timestamp):
     return timestamp and datetime.fromtimestamp(timestamp)
 
 
-def translate_field_names(response, field_mapping, requested_fields = None):
+def translate_field_names(response, field_mapping, requested_fields=None):
     if requested_fields:
         field_mapping = {k:v for k, v in field_mapping.iteritems() if k in requested_fields}
     if isinstance(response, list):
@@ -78,7 +78,7 @@ def translate_field_names(response, field_mapping, requested_fields = None):
                     inner_mapping[our.split('.', 1)[1]] = their.split('.', 1)[1]
                 else:
                     sibling_mapping[our] = their.split('.', 1)[1]
-            elif their in response:
+            if their in response:
                 result[our] = response[their]
 
         if key in response:
@@ -93,15 +93,15 @@ def translate_field_names(response, field_mapping, requested_fields = None):
 
 
 def generate_docstring_mapping(field_mapping):
-    result = ['\n\t\t.. list-table::\n\t\t\t:widths: 50 50\n\t\t\t:header-rows: 1\n\n\t\t\t* - client_request_lib\n\t\t\t- Backend\n\t']
+    result = ['\n        .. list-table::\n            :widths: 50 50\n            :header-rows: 1\n\n            * - client_request_lib\n            - Backend\n    ']
     for our, their in field_mapping.iteritems():
-        row = '\n\t\t\t* - ``{our}``\n\t\t\t- ``{their}``\n\t\t'.format(our=our, their=their)
+        row = '\n            * - ``{our}``\n            - ``{their}``\n        '.format(our=our, their=their)
         result.append(row)
 
     return ''.join(result)
 
 
-def mapped_fields(field_mapping, paginated = False, accept_fields_argument = True):
+def mapped_fields(field_mapping, paginated=False, accept_fields_argument=True):
 
     def wrapper(func):
 
@@ -189,9 +189,7 @@ def get_global_map_error(data):
 
 def get_exporter_error(data):
     error = 'Ensure each value is less than or equal to 9223372036854775807.'
-    if data and error in data.get('account_ids', []):
-        return exceptions.BadRequest
-    return exceptions.ExporterError
+    return exceptions.BadRequest if data and error in data.get('account_ids', []) else exceptions.ExporterError
 
 
 def get_ratings_error(data):
@@ -209,7 +207,7 @@ def preprocess_callback(callback, service):
 
     def wrapper(something):
 
-        def wrapped(response, func = something):
+        def wrapped(response, func=something):
             if response.responseCode not in SUCCESS_STATUSES:
                 try:
                     data = json.loads(response.body)
@@ -272,7 +270,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
     """
     requests_before_logout = -1
 
-    def __init__(self, url_fetcher, staging_hosts = {}, client_lang = None):
+    def __init__(self, url_fetcher, staging_hosts={}, client_lang=None):
         """
         url_fetcher is fetch_url method with following signature
         staging_hosts is dict of staging hosts for example
@@ -323,7 +321,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
         response_code = exceptions.ResponseCodes.NO_ERRORS
         callback(result, status_code, response_code)
 
-    def _request_data(self, callback, service, url, method = 'GET', postData = None):
+    def _request_data(self, callback, service, url, method='GET', postData=None):
         service_host = self.staging_hosts[service].strip('/')
         url = '/'.join([service_host] + url.strip('/').split('/'))
         if '?' not in url:
@@ -352,7 +350,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'gm_battles_count_28d': 'gm_battles_count_28d',
      'fs_battles_count_28d': 'fs_battles_count_28d',
      'fb_battles_count_28d': 'fb_battles_count_28d'})
-    def get_clans_ratings(self, callback, clan_ids, fields = None):
+    def get_clans_ratings(self, callback, clan_ids, fields=None):
         """
         return data from ratings backend using `bulks API method`_
         
@@ -379,7 +377,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'clan_id': 'id',
      'treasury': 'treasury',
      'accepts_join_requests': 'accepts_join_requests'})
-    def get_clans_info(self, callback, clan_ids, fields = None):
+    def get_clans_info(self, callback, clan_ids, fields=None):
         """
         return data from WGCCBE backend using `clans API method`_
         
@@ -397,11 +395,12 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
     @mapped_fields({'id': 'id',
      'name': 'name'})
-    def get_accounts_names(self, callback, account_ids, fields = None):
+    def get_accounts_names(self, callback, account_ids, fields=None):
         """
         return data from SPA backend using `account id/name mappings API method`_
         
-                .. _account id/name mappings API method: https://confluence.wargaming.net/display/WEBDEV/%5BWGNSPA%5D+-+SPA+HTTP+API+Examples#id-[WGNSPA]-SPAHTTPAPIExamples-Byids
+                .. _account id/name mappings API method: https://confluence.wargaming.net/display/
+                WEBDEV/%5BWGNSPA%5D+-+SPA+HTTP+API+Examples#id-[WGNSPA]-SPAHTTPAPIExamples-Byids
         """
         get_params = {'id': account_ids}
         url = '/spa/accounts/names/?%s' % urlencode(get_params, doseq=True)
@@ -419,11 +418,12 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'clan_id': 'clan_id',
      'role_bw_flag': 'role.bw_flag',
      'role_name': 'role.name'})
-    def get_clan_members(self, callback, clan_id, fields = None):
+    def get_clan_members(self, callback, clan_id, fields=None):
         """
         return data from WGCCBE backend using `clan members API method`_
         
-                .. _clan members API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/api-common/clans_id_members.html
+                .. _clan members API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/api-common/
+                clans_id_members.html
         """
         get_params = {'fields': ','.join(fields)}
         url = '/clans/%s/members?%s' % (clan_id, urlencode(get_params))
@@ -435,11 +435,12 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'favorite_arena_10': 'favorite_arena_10',
      'clan_id': 'clan_id',
      'favorite_primetime': 'favorite_primetime'})
-    def get_clan_favorite_attributes(self, callback, clan_id, fields = None):
+    def get_clan_favorite_attributes(self, callback, clan_id, fields=None):
         """
         return data from WGCCBE backend using `favorite_attributes API method`_
         
-                .. _favorite_attributes API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/statistics/favorite_attributes.html
+                .. _favorite_attributes API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/statistics/
+                favorite_attributes.html
         """
         url = '/gm/clans/%s/favorite_attributes' % clan_id
 
@@ -466,7 +467,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'role_bw_flag': 'role.bw_flag',
      'role_name': 'role.name',
      'in_clan_cooldown_till': 'in_clan_cooldown_till'})
-    def get_accounts_clans(self, callback, account_ids, fields = None):
+    def get_accounts_clans(self, callback, account_ids, fields=None):
         """
         return data from WGCCBE backend using `accounts API method`_
         
@@ -483,7 +484,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
         return self._request_data(inner_callback, 'clans', url)
 
     @mapped_fields({'total': 'total'}, accept_fields_argument=False)
-    def get_account_applications_count_since(self, callback, account_id, since = None):
+    def get_account_applications_count_since(self, callback, account_id, since=None):
         """
         return data from WGCCBE backend using `applications API method`_
         
@@ -496,7 +497,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
         return self._request_data(preprocess_callback(callback, 'clans'), 'clans', url)
 
     @mapped_fields({'total': 'total'}, accept_fields_argument=False)
-    def get_clan_invites_count_since(self, callback, clan_id, since = None):
+    def get_clan_invites_count_since(self, callback, clan_id, since=None):
         """
         return data from WGCCBE backend using `invites API method`_
         
@@ -519,7 +520,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'clan_id': 'clan_id',
      'comment': 'data.comment',
      'status_changer_id': 'data.status_changer_id'}, paginated=True)
-    def get_account_applications(self, callback, fields = None, statuses = None, get_total_count = False, limit = 18, offset = 0):
+    def get_account_applications(self, callback, fields=None, statuses=None, get_total_count=False, limit=18, offset=0):
         """
         return data from WGCCBE backend using `applications API method`_
         
@@ -550,7 +551,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'clan_id': 'clan_id',
      'comment': 'data.comment',
      'status_changer_id': 'data.status_changer_id'}, paginated=True)
-    def get_clan_applications(self, callback, clan_id, fields = None, statuses = None, get_total_count = False, limit = 18, offset = 0):
+    def get_clan_applications(self, callback, clan_id, fields=None, statuses=None, get_total_count=False, limit=18, offset=0):
         """
         return data from WGCCBE backend using `applications API method`_
         
@@ -573,10 +574,11 @@ class StagingDataAccessor(base.BaseDataAccessor):
     @mapped_fields({'clan_id': 'clan_id',
      'id': 'id',
      'account_id': 'account_id'})
-    def create_applications(self, callback, clan_ids, comment, fields = None):
+    def create_applications(self, callback, clan_ids, comment, fields=None):
         """
         create applications for accounts into clan using `create applications API method`_
-                .. _create applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/applications.html
+                .. _create applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/
+                applications.html
         """
         url = '/applications/'
         data = {'account_id': self._account,
@@ -593,10 +595,11 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'id': 'id',
      'account_id': 'account_id',
      'clan_id': 'clan_id'})
-    def accept_application(self, callback, application_id, fields = None):
+    def accept_application(self, callback, application_id, fields=None):
         """
         accept application for accounts into clan using `accept applications API method`_
-                .. _accept applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/applications_id.html
+                .. _accept applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/
+                applications_id.html
         """
         url = '/applications/%s/' % application_id
         data = {'initiator_id': self._account,
@@ -615,10 +618,11 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'id': 'id',
      'account_id': 'account_id',
      'clan_id': 'clan_id'})
-    def decline_application(self, callback, application_id, fields = None):
+    def decline_application(self, callback, application_id, fields=None):
         """
         decline application for accounts into clan using `decline applications API method`_
-                .. _decline applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/applications_id.html
+                .. _decline applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/
+                applications_id.html
         """
         url = '/applications/%s/' % application_id
         data = {'initiator_id': self._account,
@@ -635,7 +639,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
     @mapped_fields({'clan_id': 'clan_id',
      'id': 'id',
      'account_id': 'account_id'})
-    def create_invites(self, callback, clan_id, account_ids, comment, fields = None):
+    def create_invites(self, callback, clan_id, account_ids, comment, fields=None):
         """
         create applications for accounts into clan using `create invites API method`_
                 .. _create invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites.html
@@ -656,7 +660,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'id': 'id',
      'account_id': 'account_id',
      'clan_id': 'clan_id'})
-    def accept_invite(self, callback, invite_id, fields = None):
+    def accept_invite(self, callback, invite_id, fields=None):
         """
         accept application for accounts into clan using `accept invite API method`_
                 .. _accept invite API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites_id.html
@@ -678,7 +682,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'id': 'id',
      'account_id': 'account_id',
      'clan_id': 'clan_id'})
-    def decline_invite(self, callback, invite_id, fields = None):
+    def decline_invite(self, callback, invite_id, fields=None):
         """
         decline application for accounts into clan using `decline invites API method`_
                 .. _decline invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites_id.html
@@ -698,7 +702,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
     @mapped_fields({'id': 'id',
      'clan_id': 'clan_id',
      'account_id': 'account_id'})
-    def bulk_decline_invites(self, callback, invite_ids, fields = None):
+    def bulk_decline_invites(self, callback, invite_ids, fields=None):
         """
         decline invites for clan using `decline invites API method`_
                 .. _decline invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wgcc/invites.html#patch
@@ -725,7 +729,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'clan_id': 'id',
      'treasury': 'treasury',
      'accepts_join_requests': 'accepts_join_requests'}, paginated=True)
-    def search_clans(self, callback, search, get_total_count = False, fields = None, offset = 0, limit = 18):
+    def search_clans(self, callback, search, get_total_count=False, fields=None, offset=0, limit=18):
         """
         return data from WGCCBE backend using `clans API method`_
         
@@ -749,7 +753,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'clan_id': 'id',
      'treasury': 'treasury',
      'accepts_join_requests': 'accepts_join_requests'}, paginated=True)
-    def get_recommended_clans(self, callback, get_total_count = False, fields = None, offset = 0, limit = 18):
+    def get_recommended_clans(self, callback, get_total_count=False, fields=None, offset=0, limit=18):
         """
         return data from WGCCBE backend using `clans API method`_
         
@@ -773,7 +777,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'clan_id': 'clan_id',
      'comment': 'data.comment',
      'status_changer_id': 'data.status_changer_id'}, paginated=True)
-    def get_clan_invites(self, callback, clan_id, fields = None, statuses = None, get_total_count = False, limit = 18, offset = 0):
+    def get_clan_invites(self, callback, clan_id, fields=None, statuses=None, get_total_count=False, limit=18, offset=0):
         """
         return data from WGCCBE backend using `invites API method`_
         
@@ -804,7 +808,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'clan_id': 'clan_id',
      'comment': 'data.comment',
      'status_changer_id': 'data.status_changer_id'}, paginated=True)
-    def get_account_invites(self, callback, fields = None, statuses = None, get_total_count = False, limit = 18, offset = 0):
+    def get_account_invites(self, callback, fields=None, statuses=None, get_total_count=False, limit=18, offset=0):
         """
         return data from WGCCBE backend using `invites API method`_
         
@@ -830,11 +834,12 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'battle_avg_performance': 'summary.battle_avg_performance',
      'xp_amount': 'summary.xp_amount',
      'account_id': 'account_id'})
-    def get_accounts_info(self, callback, account_ids, fields = None):
+    def get_accounts_info(self, callback, account_ids, fields=None):
         """
         return data from exporter backend using `accounts detailed information`_
         
-                .. _accounts detailed information: http://rtd.wargaming.net/docs/exporter/en/latest/api_wot.html#accounts-detailed-information
+                .. _accounts detailed information: http://rtd.wargaming.net/docs/exporter/en/latest/
+                api_wot.html#accounts-detailed-information
         """
         fields = [ i.split('.', 1) for i in fields if i != 'account_id' ]
         grouped = groupby(sorted(fields), key=lambda x: x[0])
@@ -854,7 +859,8 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
         return self._request_data(inner_callback, 'exporter', url)
 
-    @convert_data({'prime_time': lambda x: x and datetime.strptime(x, '%H:%M').time()})
+    @convert_data({'pillage_end_datetime': from_iso,
+     'prime_time': lambda x: x and datetime.strptime(x, '%H:%M').time()})
     @mapped_fields({'front_name': 'frontname',
      'province_id': 'province_id',
      'front_name_localized': 'frontname_localized',
@@ -864,12 +870,15 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'prime_time': 'primetime',
      'game_map': 'game_map',
      'periphery': 'periphery_id',
-     'turns_owned': 'turns_owned'})
-    def get_clan_provinces(self, callback, clan_id, fields = None):
+     'turns_owned': 'turns_owned',
+     'pillage_cooldown': 'pillage_cooldown',
+     'pillage_end_datetime': 'pillage_end_datetime'})
+    def get_clan_provinces(self, callback, clan_id, fields=None):
         """
         return data from WGCW backend using `clans provinces API method`_
         
-                .. _clans provinces API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/wgapi.html?highlight=stats#clans-provinces
+                .. _clans provinces API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/
+                wgapi.html?highlight=stats#clans-provinces
         """
         get_params = {'clans': ','.join(map(str, [clan_id]))}
         url = '/clans/provinces/?%s' % urlencode(get_params)
@@ -897,11 +906,12 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'influence_points': 'influence_points',
      'provinces_captured': 'provinces_captured',
      'provinces_count': 'provinces_count'})
-    def get_clan_globalmap_stats(self, callback, clan_id, fields = None):
+    def get_clan_globalmap_stats(self, callback, clan_id, fields=None):
         """
         return data from WGCW backend using `clans stats API method`_
         
-                .. _clans stats API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/wgapi.html?highlight=stats#clans-stats
+                .. _clans stats API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/
+                wgapi.html?highlight=stats#clans-stats
         """
         get_params = {'clans': ','.join(map(str, [clan_id]))}
         url = '/clans/stats?%s' % urlencode(get_params)
@@ -916,11 +926,12 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'front_name_localized': 'id_localized',
      'min_vehicle_level': 'min_vehicle_level',
      'max_vehicle_level': 'max_vehicle_level'})
-    def get_fronts_info(self, callback, front_names = None, fields = None):
+    def get_fronts_info(self, callback, front_names=None, fields=None):
         """
         return data from WGCW backend using `fronts info API method`_
         
-                .. _fronts info API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/wgapi.html?highlight=stats#id1
+                .. _fronts info API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/
+                wgapi.html?highlight=stats#id1
         """
         url = '/fronts/'
 
@@ -934,7 +945,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
         return self._request_data(inner_callback, 'global_map', url)
 
-    @convert_data({'defence_hour': lambda x: (dt_time(x, 0) if x >= 0 else None)})
+    @convert_data({'defence_hour': lambda x: dt_time(x, 0) if x >= 0 else None})
     @mapped_fields({'buildings.direction': 'buildings.direction',
      'buildings.type': 'buildings.type',
      'buildings.level': 'buildings.level',
@@ -967,11 +978,12 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'fb_battles_count_10': 'fb_battles_count_10',
      'fb_battles_count_8': 'fb_battles_count_8',
      'total_resource_amount': 'total_resource_amount'})
-    def get_stronghold_info(self, callback, clan_id, fields = None):
+    def get_stronghold_info(self, callback, clan_id, fields=None):
         """
         return data from WGCCFE backend using `stronghold info API method`_
         
-                .. _stronghold info API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/strongholds.html#strongholds-clan-id
+                .. _stronghold info API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/
+                strongholds.html#strongholds-clan-id
         """
         get_params = urlencode({'performer_id': self._account})
         try:
@@ -1013,11 +1025,12 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'sortie_battles_wins_percentage_period': 'sortie_battles_wins_percentage_period',
      'sortie_battles_count_period': 'sortie_battles_count_period',
      'defence_battles_count_period': 'defence_battles_count_period'})
-    def get_strongholds_statistics(self, callback, clan_id, fields = None):
+    def get_strongholds_statistics(self, callback, clan_id, fields=None):
         """
         return data from WGCCFE backend using `stronghold statistics API method`_
         
-                .. _stronghold statistics API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/strongholds.html#strongholds-statistics-clan-id
+                .. _stronghold statistics API method: http://rtd.wargaming.net/docs/wgccfe/en/
+                latest/rst/strongholds.html#strongholds-statistics-clan-id
         """
         get_params = urlencode({'performer_id': self._account})
         try:
@@ -1036,14 +1049,15 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
         return self._request_data(inner_callback, 'strongholds', url)
 
-    @convert_data({'defence_hour': lambda x: (dt_time(x, 0) if x >= 0 else None)})
+    @convert_data({'defence_hour': lambda x: dt_time(x, 0) if x >= 0 else None})
     @mapped_fields({'clan_id': 'clan_id',
      'defence_hour': 'defence_hour'})
-    def get_strongholds_state(self, callback, clan_id, fields = None):
+    def get_strongholds_state(self, callback, clan_id, fields=None):
         """
         return data from WGCCFE backend using `stronghold state API method`_
         
-                .. _stronghold state API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/strongholds.html#strongholds-state
+                .. _stronghold state API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/
+                rst/strongholds.html#strongholds-state
         """
         get_params = {'clan_id': clan_id}
         try:

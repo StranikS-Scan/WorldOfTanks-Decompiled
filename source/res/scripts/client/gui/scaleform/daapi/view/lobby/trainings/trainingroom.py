@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/TrainingRoom.py
 import ArenaType
 import BigWorld
@@ -20,6 +20,7 @@ from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.sounds.ambients import LobbySubViewEnv
 from helpers import int2roman, i18n
 from messenger.ext import passCensor
 from messenger.proto.events import g_messengerEvents
@@ -31,8 +32,9 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import text_styles
 
 class TrainingRoom(LobbySubView, TrainingRoomMeta, PrbListener):
+    __sound_env__ = LobbySubViewEnv
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(TrainingRoom, self).__init__()
 
     @storage_getter('users')
@@ -80,29 +82,19 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, PrbListener):
         return True
 
     def canSendInvite(self):
-        if self.prbFunctional:
-            return self.prbFunctional.getPermissions().canSendInvite()
-        return False
+        return self.prbFunctional.getPermissions().canSendInvite() if self.prbFunctional else False
 
     def canChangePlayerTeam(self):
-        if self.prbFunctional:
-            return self.prbFunctional.getPermissions().canChangePlayerTeam()
-        return False
+        return self.prbFunctional.getPermissions().canChangePlayerTeam() if self.prbFunctional else False
 
     def canChangeSetting(self):
-        if self.prbFunctional:
-            return self.prbFunctional.getPermissions().canChangeSetting()
-        return False
+        return self.prbFunctional.getPermissions().canChangeSetting() if self.prbFunctional else False
 
     def canStartBattle(self):
-        if self.prbFunctional:
-            return self.prbFunctional.getPermissions().canStartBattle()
-        return False
+        return self.prbFunctional.getPermissions().canStartBattle() if self.prbFunctional else False
 
     def canAssignToTeam(self, team):
-        if self.prbFunctional:
-            return self.prbFunctional.getPermissions().canAssignToTeam(int(team))
-        return False
+        return self.prbFunctional.getPermissions().canAssignToTeam(int(team)) if self.prbFunctional else False
 
     def canDestroyRoom(self):
         if self.prbFunctional:
@@ -325,7 +317,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, PrbListener):
         if VIEW_ALIAS.MINIMAP_LOBBY in self.components:
             self.components[VIEW_ALIAS.MINIMAP_LOBBY].swapTeams(team)
 
-    def __makeAccountsData(self, accounts, label = None):
+    def __makeAccountsData(self, accounts, label=None):
         listData = []
         isPlayerSpeaking = self.app.voiceChatManager.isPlayerSpeaking
         accounts = sorted(accounts, cmp=getPlayersComparator())

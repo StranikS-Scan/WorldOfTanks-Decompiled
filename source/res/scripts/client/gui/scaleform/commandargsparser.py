@@ -1,10 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/CommandArgsParser.py
 
 
 class CommandArgsParser(object):
 
-    def __init__(self, callbackName, count = 0, converters = None):
+    def __init__(self, callbackName, count=0, converters=None):
         self.__callbackName = callbackName
         self.__count = count
         self.__converters = converters if converters is not None else []
@@ -22,20 +22,19 @@ class CommandArgsParser(object):
             for index in xrange(1, len(args)):
                 if convertersLen >= index:
                     result.append(self.__converters[index - 1](args[index]))
-                else:
-                    result.append(args[index])
+                result.append(args[index])
 
             return result
-        raise ValueError, 'Callback %s takes %d arguments' % (self.__callbackName, self.__count)
+        raise ValueError('Callback %s takes %d arguments' % (self.__callbackName, self.__count))
 
-    def addArgs(self, values, converters = None):
+    def addArgs(self, values, converters=None):
         if converters is None:
             converters = []
-        parsed = map(lambda item: (converters[item[0]](item[1]) if len(converters) > item[0] else item[1]), enumerate(values))
+        parsed = map(lambda item: converters[item[0]](item[1]) if len(converters) > item[0] else item[1], enumerate(values))
         self.__responseArgs.extend(parsed)
         return
 
-    def addArg(self, value, converter = None):
+    def addArg(self, value, converter=None):
         parsed = converter(value) if converter else value
         self.__responseArgs.append(parsed)
 

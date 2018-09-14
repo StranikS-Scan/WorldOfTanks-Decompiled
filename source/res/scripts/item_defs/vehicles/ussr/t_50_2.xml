@@ -69,6 +69,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R70_T_50_2/T-50_2_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_T_50_2_1>
@@ -175,6 +176,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.870697 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R70_T_50_2/collision/Chassis.model	</collisionModel>
@@ -193,128 +196,6 @@
         </decal>
       </AODecals>
     </Chassis_T_50_2_1>
-    <Chassis_T_50_2_2>
-      <userString>	#ussr_vehicles:Chassis_T_50_2_2	</userString>
-      <tags></tags>
-      <level>	6	</level>
-      <price>	17100	</price>
-      <notInShop>	true	</notInShop>
-      <armor>
-        <leftTrack>	20	</leftTrack>
-        <rightTrack>	20	</rightTrack>
-      </armor>
-      <weight>	2000	</weight>
-      <maxLoad>	18000	</maxLoad>
-      <terrainResistance>	0.9 1 1.9	</terrainResistance>
-      <brakeForce>	40500	</brakeForce>
-      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
-      <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
-      </shotDispersionFactors>
-      <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	90	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
-      <models>
-        <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Chassis.model	</undamaged>
-        <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Chassis.model	</destroyed>
-        <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Chassis.model	</exploded>
-      </models>
-      <traces>
-        <lodDist>	FAR	</lodDist>
-        <bufferPrefs>	smallTank	</bufferPrefs>
-        <textureSet>	ussr_01	</textureSet>
-        <size>	0.4 0.38	</size>
-      </traces>
-      <tracks>
-        <lodDist>	MEDIUM_TRACK	</lodDist>
-        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
-        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.16	</textureScale>
-      </tracks>
-      <wheels>
-        <lodDist>	MEDIUM	</lodDist>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.246392	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.112767	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	3	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R4	</name>
-          <radius>	0.347595	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.221891	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	6	</count>
-        </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L0	</name>
-          <radius>	0.246392	</radius>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.112767	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	3	</count>
-        </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L4	</name>
-          <radius>	0.347595	</radius>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.221891	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	6	</count>
-        </group>
-      </wheels>
-      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
-        <mud>	smallTankMud	</mud>
-      </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <hullPosition>	0.000000 0.870697 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModel>	vehicles/russian/R70_T_50_2/collision/Chassis.model	</collisionModel>
-      </hitTester>
-      <topRightCarryingPoint>	0.914765 1.82754	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	3.141950 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.306050 0.000000	</row1>
-            <row2>	0.000000 0.000000 6.944650	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
-    </Chassis_T_50_2_2>
   </chassis>
   <turrets0>
     <Turret_1_T_50_2>
@@ -427,125 +308,9 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.070 0.000 1.000 0.000 0.880 0.000 0.500 0.500 0.500 0.500 0.000 0.500 0.000 0.500 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_800-1999	</turretRotatorSoundGear>
     </Turret_1_T_50_2>
-    <Turret_2_T_50_2>
-      <userString>	#ussr_vehicles:Turret_2_T_50_2	</userString>
-      <tags></tags>
-      <level>	6	</level>
-      <price>	16500	</price>
-      <notInShop>	true	</notInShop>
-      <armor>
-        <armor_1>	45	</armor_1>
-        <armor_2>	45	</armor_2>
-        <armor_3>	40	</armor_3>
-        <armor_4>	40	</armor_4>
-        <armor_5>	15	</armor_5>
-        <armor_6>	15	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	15	</armor_8>
-        <armor_9>	20	</armor_9>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	3200	</weight>
-      <maxHealth>	160	</maxHealth>
-      <rotationSpeed>	45	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	120	</maxHealth>
-        <maxRegenHealth>	60	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	70	</maxHealth>
-        <maxRegenHealth>	35	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </surveyingDeviceHealth>
-      <invisibilityFactor>	0.916	</invisibilityFactor>
-      <guns>
-        <Gun_T-50-2>	shared	  <maxAmmo>	140	</maxAmmo>
-          <aimingTime>	2.3	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/russian/R70_T_50_2/collision/Gun_05.model	</collisionModel>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	-0.000218052 0.0109647 0.63	</rayStart>
-              <rayEnd>	0.0491682 0.00168493 0.695837	</rayEnd>
-              <rayUp>	0.055 0.057 1	</rayUp>
-              <size>	0.323	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-        </Gun_T-50-2>
-      </guns>
-      <models>
-        <undamaged>	vehicles/russian/R70_T_50_2/normal/lod0/Turret_02.model	</undamaged>
-        <destroyed>	vehicles/russian/R70_T_50_2/crash/lod0/Turret_02.model	</destroyed>
-        <exploded>	vehicles/russian/R70_T_50_2/crash/lod0/Turret_02.model	</exploded>
-      </models>
-      <hitTester>
-        <collisionModel>	vehicles/russian/R70_T_50_2/collision/Turret_02.model	</collisionModel>
-      </hitTester>
-      <gunPosition>	-0.000011 0.336206 0.6448	</gunPosition>
-      <emblemSlots>
-        <player>
-          <rayStart>	-0.954605 0.461741 0.291777	</rayStart>
-          <rayEnd>	-0.38347 0.320091 0.174598	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
-          <rayStart>	0.954605 0.461741 0.291777	</rayStart>
-          <rayEnd>	0.38347 0.320091 0.174598	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
-          <rayStart>	0.837186 0.428247 -0.686927	</rayStart>
-          <rayEnd>	0.306023 0.277575 -0.452084	</rayEnd>
-          <rayUp>	0.0137955 0.999429 0.0308362	</rayUp>
-          <size>	0.7	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
-          <rayStart>	-0.837186 0.428247 -0.686927	</rayStart>
-          <rayEnd>	-0.306023 0.277575 -0.452084	</rayEnd>
-          <rayUp>	0.0137955 0.999429 0.0308362	</rayUp>
-          <size>	0.7	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.550 0.061 0.708 0.654 0.500 0.500 0.201 0.500 0.047 0.833 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
-    </Turret_2_T_50_2>
   </turrets0>
   <engines>
     <Engine_T-50-2>	shared	</Engine_T-50-2>

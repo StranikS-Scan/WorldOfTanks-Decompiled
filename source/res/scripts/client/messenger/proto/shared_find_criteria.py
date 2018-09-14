@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/shared_find_criteria.py
 from debug_utils import LOG_WARNING
 from messenger.m_constants import USER_TAG
@@ -17,7 +17,7 @@ class ProtoFindCriteria(IEntityFindCriteria):
 
 class OnlineFindCriteria(IEntityFindCriteria):
 
-    def __init__(self, onlineMode = None):
+    def __init__(self, onlineMode=None):
         super(OnlineFindCriteria, self).__init__()
         self.__onlineMode = onlineMode
 
@@ -42,7 +42,7 @@ class OnlineFindCriteria(IEntityFindCriteria):
 
 class UserTagsFindCriteria(OnlineFindCriteria):
 
-    def __init__(self, tags, onlineMode = None):
+    def __init__(self, tags, onlineMode=None):
         super(UserTagsFindCriteria, self).__init__(onlineMode=onlineMode)
         self._tags = tags
 
@@ -58,13 +58,13 @@ class UserTagsFindCriteria(OnlineFindCriteria):
 
 class FriendsFindCriteria(UserTagsFindCriteria):
 
-    def __init__(self, onlineMode = None):
+    def __init__(self, onlineMode=None):
         super(FriendsFindCriteria, self).__init__({USER_TAG.FRIEND}, onlineMode=onlineMode)
 
 
 class PendingFriendsCandidatesFindCriteria(UserTagsFindCriteria):
 
-    def __init__(self, onlineMode = None):
+    def __init__(self, onlineMode=None):
         super(PendingFriendsCandidatesFindCriteria, self).__init__({USER_TAG.SUB_PENDING_IN}, onlineMode)
 
 
@@ -84,5 +84,5 @@ class IgnoredFindCriteria(UserTagsFindCriteria):
 
 class MutedFindCriteria(UserTagsFindCriteria):
 
-    def __init__(self, onlineMode = None):
+    def __init__(self, onlineMode=None):
         super(MutedFindCriteria, self).__init__({USER_TAG.MUTED}, onlineMode=onlineMode)

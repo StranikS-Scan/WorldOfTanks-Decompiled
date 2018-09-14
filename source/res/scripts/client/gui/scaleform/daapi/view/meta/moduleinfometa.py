@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ModuleInfoMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -11,9 +11,7 @@ class ModuleInfoMeta(AbstractWindowView):
         self._printOverrideError('onActionButtonClick')
 
     def as_setModuleInfoS(self, moduleInfo):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setModuleInfo(moduleInfo)
+        return self.flashObject.as_setModuleInfo(moduleInfo) if self._isDAAPIInited() else None
 
     def as_setActionButtonS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setActionButton(data)
+        return self.flashObject.as_setActionButton(data) if self._isDAAPIInited() else None

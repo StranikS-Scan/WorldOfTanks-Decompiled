@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/common/updater_utils.py
 import struct
 
@@ -91,7 +91,7 @@ def setVersion(updateCtx, version):
     updateCtx['dossierCompDescr'] = struct.pack(versionFormat, version) + updateCtx['dossierCompDescr'][versionLength:]
 
 
-def addBlock(updateCtx, block, blockFormat = '', blockValues = None):
+def addBlock(updateCtx, block, blockFormat='', blockValues=None):
     blockSize = struct.calcsize(blockFormat) if bool(blockFormat) else 0
     header = updateCtx['header']
     header.append(blockSize)

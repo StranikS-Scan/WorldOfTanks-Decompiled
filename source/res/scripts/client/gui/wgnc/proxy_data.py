@@ -1,5 +1,6 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
+from gui.awards.event_dispatcher import showClanJoinAward
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from account_helpers import getAccountDatabaseID
@@ -110,6 +111,10 @@ class ClanAppAcceptedItem(_ClanPersonalAppItem):
 
     def getType(self):
         return WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED
+
+    def show(self, notID):
+        showClanJoinAward(self.getClanTag(), self.getClanName(), self.getClanId())
+        super(ClanAppAcceptedItem, self).show(notID)
 
 
 class _ClanInviteActionResultItem(_ProxyDataItem):

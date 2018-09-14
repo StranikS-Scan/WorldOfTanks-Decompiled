@@ -72,6 +72,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G88_Indien_Panzer/Indien_Panzer_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_Indien_Panzer>
@@ -166,7 +167,9 @@
         <mud>	largeTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/german/G88_Indien_Panzer/collision/Chassis.model	</collisionModel>
@@ -273,7 +276,9 @@
         <mud>	largeTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/german/G88_Indien_Panzer/collision/Chassis.model	</collisionModel>
@@ -517,6 +522,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.908 0.000 1.000 0.000 0.825 0.050 0.682 0.415 0.421 0.500 0.323 0.500 0.162 0.958 0.181	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
     </Turret_2_Indien_Panzer>
   </turrets0>

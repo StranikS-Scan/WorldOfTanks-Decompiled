@@ -97,6 +97,7 @@
         <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R10_AT-1/AT-1_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <AT-1>
@@ -113,7 +114,7 @@
         <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1550	</weight>
-      <maxLoad>	9900	</maxLoad>
+      <maxLoad>	10170	</maxLoad>
       <terrainResistance>	1.3 1.6 2.6	</terrainResistance>
       <brakeForce>	37000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -206,6 +207,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.858712 -0.032833	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R10_AT-1/collision/Chassis.model	</collisionModel>
@@ -327,6 +330,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.858712 -0.032833	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R10_AT-1/collision/Chassis.model	</collisionModel>
@@ -385,8 +390,6 @@
           <maxAmmo>	80	</maxAmmo>
           <unlocks>
             <gun>	_76mm_L-10_S	  <cost>	400.0	</cost>
-            </gun>
-            <gun>	_37mm_ZiS-19_S	  <cost>	160.0	</cost>
             </gun>
             <gun>	_57mm_ZiS-8_S	  <cost>	550.0	</cost>
             </gun>
@@ -449,39 +452,6 @@
             <collisionModel>	vehicles/russian/R10_AT-1/collision/Gun_04.model	</collisionModel>
           </hitTester>
         </_76mm_L-10_S>
-        <_37mm_ZiS-19_S>	shared	  <pitchLimits>
-            <minPitch>	0 -45 1 -45	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <maxAmmo>	78	</maxAmmo>
-          <armor>
-            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	2.1	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <turretYawLimits>	-11 11	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/russian/R10_AT-1/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R10_AT-1/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R10_AT-1/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/russian/R10_AT-1/collision/Gun_02.model	</collisionModel>
-          </hitTester>
-          <camouflage>
-            <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_37mm_ZiS-19_S>
         <_57mm_ZiS-8_S>	shared	  <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -533,31 +503,22 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </AT-1>
   </turrets0>
   <engines>
     <T-26>	shared	  <unlocks>
-        <engine>	T-26M	  <cost>	95.0	</cost>
-        </engine>
-      </unlocks>
-    </T-26>
-    <T-26M>	shared	  <unlocks>
         <engine>	T-26F	  <cost>	130.0	</cost>
         </engine>
       </unlocks>
-    </T-26M>
+    </T-26>
     <T-26F>	shared	</T-26F>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <_71-TK-1>	shared	  <unlocks>
-        <radio>	_71-TK-3	  <cost>	95.0	</cost>
-        </radio>
-      </unlocks>
-    </_71-TK-1>
     <_71-TK-3>	shared	</_71-TK-3>
   </radios>
   <effects>

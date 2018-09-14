@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ops_pack.py
 import struct
 from external_strings_utils import truncate_utf8
@@ -13,7 +13,7 @@ def packPascalString(s):
     return buffer
 
 
-def unpackPascalString(bufferString, offset = 0):
+def unpackPascalString(bufferString, offset=0):
     lenString = struct.unpack_from('<H', bufferString, offset)[0]
     start = offset + 2
     fin = start + lenString
@@ -108,19 +108,19 @@ class OpsPacker:
                 ofs += 1
                 if formatSym == 'S':
                     pack += packPascalString(arg)
-                elif formatSym in ('T', 'L'):
+                if formatSym in ('T', 'L'):
                     lenFormat, elemFormat = adds[:2]
                     lenElements = len(arg)
                     format = lenFormat + str(lenElements) + elemFormat
                     pack += struct.pack(format, lenElements, *arg)
-                elif formatSym == 'N':
+                if formatSym == 'N':
                     lenFormat, elemFormat = adds[:2]
                     lenElements = len(arg)
                     pack += struct.pack(lenFormat, lenElements)
                     for elements in arg:
                         pack += struct.pack(elemFormat, *elements)
 
-                elif formatSym == 'D':
+                if formatSym == 'D':
                     lenFormat, keyFormat, valFormat = adds[:3]
                     keys = arg.keys()
                     lenElements = len(keys)
@@ -128,7 +128,7 @@ class OpsPacker:
                     pack += struct.pack(format, lenElements, *keys)
                     format = '<' + str(lenElements) + valFormat
                     pack += struct.pack(format, *arg.values())
-                elif formatSym == 'M':
+                if formatSym == 'M':
                     lenFormat, elemFormat, subkeyNames = adds[:3]
                     lenElements = len(arg)
                     pack += struct.pack(lenFormat, lenElements)
@@ -139,8 +139,7 @@ class OpsPacker:
 
                         pack += struct.pack(elemFormat, key, *vals)
 
-                else:
-                    assert 0
+                assert 0
 
         return pack
 
@@ -165,14 +164,14 @@ class OpsUnpacker:
     def _onUnpackedOp(self, opCode):
         pass
 
-    def unpackOps(self, packedOps = ''):
+    def unpackOps(self, packedOps=''):
         invokedOps = set()
         while len(packedOps):
             opCode = struct.unpack_from('<B', packedOps)[0]
             try:
                 unpackFormat, methodName, specialFormat, additionals, calcSize, packFormat = self._opsFormatDefs[opCode]
             except:
-                raise Exception, '%s unpackOps: unknown opcode %s' % (self.__class__, opCode)
+                raise Exception('%s unpackOps: unknown opcode %s' % (self.__class__, opCode))
 
             method = getattr(self, methodName)
             if unpackFormat or specialFormat:

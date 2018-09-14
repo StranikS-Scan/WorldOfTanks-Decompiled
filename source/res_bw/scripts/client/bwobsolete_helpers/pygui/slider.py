@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/Slider.py
 """
 """
@@ -80,7 +80,7 @@ class SliderVisualState(VisualState):
 class SliderThumb(PyGUIBase, DraggableComponent):
     factoryString = 'PyGUI.SliderThumb'
 
-    def __init__(self, component, isHorizontal = True):
+    def __init__(self, component, isHorizontal=True):
         PyGUIBase.__init__(self, component)
         DraggableComponent.__init__(self, isHorizontal, not isHorizontal, True)
         self.component.focus = True
@@ -147,7 +147,7 @@ class SliderThumb(PyGUIBase, DraggableComponent):
         return True
 
     @staticmethod
-    def create(slider, thumbTexture = '', isHorizontal = True):
+    def create(slider, thumbTexture='', isHorizontal=True):
         c = GUI.Window(thumbTexture)
         c.materialFX = 'BLEND'
         c.widthMode = slider.component.widthMode
@@ -236,7 +236,7 @@ class Slider(PyGUIBase, VisualStateComponent):
         self._updateVisualState(hover=False)
 
     @staticmethod
-    def create(texture, thumbTexture = '', isHorizontal = True, **kwargs):
+    def create(texture, thumbTexture='', isHorizontal=True, **kwargs):
         c = GUI.Window(texture)
         c.materialFX = 'BLEND'
         c.widthMode = 'CLIP'

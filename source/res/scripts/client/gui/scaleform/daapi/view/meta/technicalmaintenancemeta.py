@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TechnicalMaintenanceMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -23,29 +23,19 @@ class TechnicalMaintenanceMeta(AbstractWindowView):
         self._printOverrideError('updateEquipmentCurrency')
 
     def as_setDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(data)
-
-    def as_setHistoricalDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setHistoricalData(data)
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setEquipmentS(self, installed, setup, modules):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setEquipment(installed, setup, modules)
+        return self.flashObject.as_setEquipment(installed, setup, modules) if self._isDAAPIInited() else None
 
     def as_onAmmoInstallS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_onAmmoInstall()
+        return self.flashObject.as_onAmmoInstall() if self._isDAAPIInited() else None
 
     def as_setCreditsS(self, credits):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCredits(credits)
+        return self.flashObject.as_setCredits(credits) if self._isDAAPIInited() else None
 
     def as_setGoldS(self, gold):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setGold(gold)
+        return self.flashObject.as_setGold(gold) if self._isDAAPIInited() else None
 
     def as_resetEquipmentS(self, equipmentCD):
-        if self._isDAAPIInited():
-            return self.flashObject.as_resetEquipment(equipmentCD)
+        return self.flashObject.as_resetEquipment(equipmentCD) if self._isDAAPIInited() else None

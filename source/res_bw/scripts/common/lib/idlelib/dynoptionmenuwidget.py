@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/dynOptionMenuWidget.py
 """
 OptionMenu widget modified to allow dynamic menu reconfiguration
@@ -22,7 +22,7 @@ class DynOptionMenu(OptionMenu):
         self.variable = variable
         self.command = kwargs.get('command')
 
-    def SetMenu(self, valueList, value = None):
+    def SetMenu(self, valueList, value=None):
         """
         clear and reload the menu with a new set of options.
         valueList - list of new options

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PlayerEvents.py
 import Event
 from constants import ARENA_PERIOD
@@ -32,8 +32,14 @@ class _PlayerEvents(object):
         self.onDequeuedUnitAssembler = Event.Event()
         self.onEnqueueUnitAssemblerFailure = Event.Event()
         self.onEnqueuedEventBattles = Event.Event()
+        self.onEnqueuedFalloutClassic = Event.Event()
+        self.onEnqueuedFalloutMultiteam = Event.Event()
         self.onDequeuedEventBattles = Event.Event()
+        self.onDequeuedFalloutClassic = Event.Event()
+        self.onDequeuedFalloutMultiteam = Event.Event()
         self.onEnqueueEventBattlesFailure = Event.Event()
+        self.onEnqueueFalloutClassicFailure = Event.Event()
+        self.onEnqueueFalloutMultiteamFailure = Event.Event()
         self.onEnqueuedSandbox = Event.Event()
         self.onDequeuedSandbox = Event.Event()
         self.onEnqueuedSandboxFailure = Event.Event()
@@ -45,7 +51,10 @@ class _PlayerEvents(object):
         self.onKickedFromRandomQueue = Event.Event()
         self.onKickedFromTutorialQueue = Event.Event()
         self.onKickedFromUnitAssembler = Event.Event()
+        self.onKickedFromUnitsQueue = Event.Event()
         self.onKickedFromEventBattles = Event.Event()
+        self.onKickedFromFalloutClassic = Event.Event()
+        self.onKickedFromFalloutMultiteam = Event.Event()
         self.onKickedFromSandboxQueue = Event.Event()
         self.onKickedFromPrebattle = Event.Event()
         self.onKickedFromArena = Event.Event()

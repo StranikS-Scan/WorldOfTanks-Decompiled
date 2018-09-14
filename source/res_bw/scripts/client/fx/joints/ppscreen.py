@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Joints/PPScreen.py
 from FX import s_sectionProcessors
 from FX import typeCheck
@@ -15,15 +15,15 @@ class PPScreen(Joint):
     The actor must be a PPChain.
     """
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         return self
 
-    def attach(self, actor, source, target = None):
+    def attach(self, actor, source, target=None):
         ch = PostProcessing.chain()
         ch += actor
         PostProcessing.chain(ch)
 
-    def detach(self, actor, source, target = None):
+    def detach(self, actor, source, target=None):
         ch = PostProcessing.chain()
         for effect in actor:
             try:

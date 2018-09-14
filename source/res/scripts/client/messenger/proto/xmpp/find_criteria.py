@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/find_criteria.py
 from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto.interfaces import IEntityFindCriteria
@@ -48,5 +48,29 @@ class MutedOnlyFindCriteria(IEntityFindCriteria):
 
 class XMPPChannelFindCriteria(IEntityFindCriteria):
 
+    def __init__(self, msgType=None):
+        super(XMPPChannelFindCriteria, self).__init__()
+        self.__msgType = msgType
+
     def filter(self, entity):
-        return entity.getProtoType() == PROTO_TYPE.XMPP
+        return entity.getProtoType() == PROTO_TYPE.XMPP and (self.__msgType is None or entity.getMessageType() == self.__msgType)
+
+
+class XMPPChannelByJIDFindCriteria(IEntityFindCriteria):
+
+    def __init__(self, jid):
+        super(XMPPChannelByJIDFindCriteria, self).__init__()
+        self.__jid = str(jid)
+
+    def filter(self, channel):
+        return channel.getProtoType() == PROTO_TYPE.XMPP and channel.getID() == self.__jid
+
+
+class XMPPChannelByNameFindCriteria(IEntityFindCriteria):
+
+    def __init__(self, name):
+        super(XMPPChannelByNameFindCriteria, self).__init__()
+        self.__name = name
+
+    def filter(self, channel):
+        return channel.getProtoType() == PROTO_TYPE.XMPP and channel.getName() == self.__name

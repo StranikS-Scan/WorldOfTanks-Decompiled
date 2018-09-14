@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationsModel.py
 import Event
 from notification.NotificationsCollection import NotificationsCollection
@@ -28,10 +28,10 @@ class NotificationsModel:
     def collection(self):
         return self.__collection
 
-    def setListDisplayState(self, data = None):
+    def setListDisplayState(self, data=None):
         self.__setDisplayState(NOTIFICATION_STATE.LIST, data)
 
-    def setPopupsDisplayState(self, data = None):
+    def setPopupsDisplayState(self, data=None):
         self.__setDisplayState(NOTIFICATION_STATE.POPUPS, data)
 
     def __setDisplayState(self, newState, data):

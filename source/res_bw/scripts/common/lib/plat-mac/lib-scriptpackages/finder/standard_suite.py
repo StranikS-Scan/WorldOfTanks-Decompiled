@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Finder/Standard_Suite.py
 """Suite Standard Suite: Common terms that most applications should support
 Level 1, version 1
@@ -12,7 +13,7 @@ from StdSuites.Standard_Suite import *
 
 class Standard_Suite_Events(Standard_Suite_Events):
 
-    def close(self, _object, _attributes = {}, **_arguments):
+    def close(self, _object, _attributes={}, **_arguments):
         """close: Close an object
         Required argument: the object to close
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -25,12 +26,11 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_count = {'each': 'kocl'}
 
-    def count(self, _object, _attributes = {}, **_arguments):
+    def count(self, _object, _attributes={}, **_arguments):
         """count: Return the number of elements of a particular class within an object
         Required argument: the object whose elements are to be counted
         Keyword argument each: the class of the elements to be counted
@@ -44,12 +44,11 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_data_size = {'as': 'rtyp'}
 
-    def data_size(self, _object, _attributes = {}, **_arguments):
+    def data_size(self, _object, _attributes={}, **_arguments):
         """data size: Return the size in bytes of an object
         Required argument: the object whose data size is to be returned
         Keyword argument as: the data type for which the size is calculated
@@ -63,10 +62,9 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def delete(self, _object, _attributes = {}, **_arguments):
+    def delete(self, _object, _attributes={}, **_arguments):
         """delete: Move an item from its container to the trash
         Required argument: the item to delete
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -80,14 +78,13 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_duplicate = {'to': 'insh',
      'replacing': 'alrp',
      'routing_suppressed': 'rout'}
 
-    def duplicate(self, _object, _attributes = {}, **_arguments):
+    def duplicate(self, _object, _attributes={}, **_arguments):
         """duplicate: Duplicate one or more object(s)
         Required argument: the object(s) to duplicate
         Keyword argument to: the new location for the object(s)
@@ -105,10 +102,9 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def exists(self, _object, _attributes = {}, **_arguments):
+    def exists(self, _object, _attributes={}, **_arguments):
         """exists: Verify if an object exists
         Required argument: the object in question
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -122,15 +118,14 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_make = {'new': 'kocl',
      'at': 'insh',
      'to': 'to  ',
      'with_properties': 'prdt'}
 
-    def make(self, _no_object = None, _attributes = {}, **_arguments):
+    def make(self, _no_object=None, _attributes={}, **_arguments):
         """make: Make a new element
         Keyword argument new: the class of the new element
         Keyword argument at: the location at which to insert the element
@@ -147,17 +142,14 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_move = {'to': 'insh',
      'replacing': 'alrp',
      'positioned_at': 'mvpl',
      'routing_suppressed': 'rout'}
 
-    def move(self, _object, _attributes = {}, **_arguments):
+    def move(self, _object, _attributes={}, **_arguments):
         """move: Move object(s) to a new location
         Required argument: the object(s) to move
         Keyword argument to: the new location for the object(s)
@@ -177,13 +169,12 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_open = {'using': 'usin',
      'with_properties': 'prdt'}
 
-    def open(self, _object, _attributes = {}, **_arguments):
+    def open(self, _object, _attributes={}, **_arguments):
         """open: Open the specified object(s)
         Required argument: list of objects to open
         Keyword argument using: the application file to open the object with
@@ -197,12 +188,11 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_print_ = {'with_properties': 'prdt'}
 
-    def print_(self, _object, _attributes = {}, **_arguments):
+    def print_(self, _object, _attributes={}, **_arguments):
         """print: Print the specified object(s)
         Required argument: list of objects to print
         Keyword argument with_properties: optional properties to be included with the print command sent to the application that prints the direct object
@@ -215,10 +205,9 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def quit(self, _no_object = None, _attributes = {}, **_arguments):
+    def quit(self, _no_object=None, _attributes={}, **_arguments):
         """quit: Quit the Finder
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -231,12 +220,9 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def select(self, _object, _attributes = {}, **_arguments):
+    def select(self, _object, _attributes={}, **_arguments):
         """select: Select the specified object(s)
         Required argument: the object to select
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -249,8 +235,7 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 _Enum_list = None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortOrderPopoverMeta.py
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
@@ -26,9 +26,7 @@ class FortOrderPopoverMeta(SmartPopOverView):
         self._printOverrideError('openOrderDetailsWindow')
 
     def as_setInitDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInitData(data)
+        return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_disableOrderS(self, daisable):
-        if self._isDAAPIInited():
-            return self.flashObject.as_disableOrder(daisable)
+        return self.flashObject.as_disableOrder(daisable) if self._isDAAPIInited() else None

@@ -73,6 +73,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R39_KV-3/KV-3_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <KV-3>
@@ -245,9 +246,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1099	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -506,9 +504,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1099	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -714,15 +709,15 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.00278673 0.0197689 0.842809	</rayStart>
-              <rayEnd>	0.00655021 0.0150475 0.840143	</rayEnd>
-              <rayUp>	0.108 0.102 4	</rayUp>
+              <rayStart>	-0.00246133 0.0195973 0.857958	</rayStart>
+              <rayEnd>	0.0926468 0.0437329 0.857831	</rayEnd>
+              <rayUp>	0.108 0.103 4	</rayUp>
               <size>	0.58	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_main_mb	</effects>
+          <effects>	shot_mainext	</effects>
           <camouflage>
             <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
           </camouflage>
@@ -889,8 +884,8 @@
             <insigniaOnGun>
               <rayStart>	-0.00200887 0.0746097 1.17008	</rayStart>
               <rayEnd>	0.122527 0.0873499 1.16991	</rayEnd>
-              <rayUp>	0.075 0.075 3	</rayUp>
-              <size>	0.55	</size>
+              <rayUp>	0.077 0.076 3	</rayUp>
+              <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
@@ -934,7 +929,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_mainext	</effects>
           <camouflage>
             <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
           </camouflage>
@@ -966,15 +961,15 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.00262534 0.0738926 0.948635	</rayStart>
-              <rayEnd>	-0.021602 0.0821268 0.946659	</rayEnd>
+              <rayStart>	-0.00246133 0.0732198 0.863296	</rayStart>
+              <rayEnd>	-0.0779667 0.128592 0.863051	</rayEnd>
               <rayUp>	0.109 0.102 4	</rayUp>
               <size>	0.55	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_main_mb	</effects>
+          <effects>	shot_mainext	</effects>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>

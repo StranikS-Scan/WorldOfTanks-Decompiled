@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/UnitUserCMHandler.py
 from account_helpers import getAccountDatabaseID
 from adisp import process
@@ -13,9 +13,12 @@ TAKE_LEADERSHIP = 'takeLeadership'
 
 class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
 
-    def __init__(self, cmProxy, ctx = None):
+    def __init__(self, cmProxy, ctx=None):
         super(UnitUserCMHandler, self).__init__(cmProxy, ctx)
         self.startUnitListening()
+
+    def isSquadCreator(self):
+        return self.unitFunctional.isCreator()
 
     def fini(self):
         self.stopUnitListening()
@@ -43,9 +46,7 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
         return option
 
     def _addSquadInfo(self, options, isIgnored):
-        if self.unitFunctional.getEntityType() != PREBATTLE_TYPE.SQUAD or not self.unitFunctional.isCreator():
-            return super(UnitUserCMHandler, self)._addSquadInfo(options, isIgnored)
-        return options
+        return super(UnitUserCMHandler, self)._addSquadInfo(options, isIgnored) if self.unitFunctional.getEntityType() not in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.FALLOUT) else options
 
     def _addPrebattleInfo(self, options, userCMInfo):
         if self.unitFunctional.getPermissions().canKick():

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/BasePrebattleRoomView.py
 from CurrentVehicle import g_currentVehicle
 from adisp import process
@@ -25,7 +25,7 @@ from prebattle_shared import decodeRoster
 
 class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener):
 
-    def __init__(self, prbName = 'prebattle'):
+    def __init__(self, prbName='prebattle'):
         super(BasePrebattleRoomView, self).__init__()
         self.__prbName = prbName
         self.__clientID = channel_num_gen.getClientID4Prebattle(self.prbFunctional.getEntityType())

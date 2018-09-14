@@ -68,6 +68,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G85_Auf_Panther/Auf_Panther_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_Auf_Panther>
@@ -172,6 +173,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/german/G85_Auf_Panther/collision/Chassis.model	</collisionModel>
@@ -190,126 +193,6 @@
         </decal>
       </AODecals>
     </Chassis_Auf_Panther>
-    <Chassis_Auf_Panther_2>
-      <userString>	#germany_vehicles:Chassis_Auf_Panther_2	</userString>
-      <tags></tags>
-      <level>	7	</level>
-      <price>	18200	</price>
-      <notInShop>	true	</notInShop>
-      <armor>
-        <leftTrack>	25	</leftTrack>
-        <rightTrack>	25	</rightTrack>
-      </armor>
-      <weight>	12500	</weight>
-      <maxLoad>	45000	</maxLoad>
-      <terrainResistance>	0.7 0.8 1.6	</terrainResistance>
-      <brakeForce>	44000	</brakeForce>
-      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
-      <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
-      </shotDispersionFactors>
-      <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	175	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
-      <models>
-        <undamaged>	vehicles/german/G85_Auf_Panther/normal/lod0/Chassis.model	</undamaged>
-        <destroyed>	vehicles/german/G85_Auf_Panther/crash/lod0/Chassis.model	</destroyed>
-        <exploded>	vehicles/german/G85_Auf_Panther/crash/lod0/Chassis.model	</exploded>
-      </models>
-      <traces>
-        <lodDist>	FAR	</lodDist>
-        <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	germany_01	</textureSet>
-        <size>	0.44 0.58	</size>
-      </traces>
-      <tracks>
-        <lodDist>	MEDIUM_TRACK	</lodDist>
-        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
-        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.88	</textureScale>
-      </tracks>
-      <wheels>
-        <lodDist>	MEDIUM	</lodDist>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L0	</name>
-          <radius>	0.39926	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L1	</name>
-          <radius>	0.137147	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L2	</name>
-          <radius>	0.334639	</radius>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.44	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	8	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.39926	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R1	</name>
-          <radius>	0.137147	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R2	</name>
-          <radius>	0.334639	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.44	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	8	</count>
-        </group>
-      </wheels>
-      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
-        <mud>	mediumTankMud	</mud>
-      </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModel>	vehicles/german/G85_Auf_Panther/collision/Chassis.model	</collisionModel>
-      </hitTester>
-      <topRightCarryingPoint>	1.31 1.96459	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.571200 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.350000 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.465440	</row2>
-            <row3>	0.000000 0.000000 0.000001	</row3>
-          </transform>
-        </decal>
-      </AODecals>
-    </Chassis_Auf_Panther_2>
   </chassis>
   <turrets0>
     <Turret_1_Auf_Panther>
@@ -439,139 +322,9 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.025 -0.014 1.000 0.000 0.440 0.225 0.827 0.468 0.362 0.500 0.301 0.500 0.290 0.682 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_03	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
     </Turret_1_Auf_Panther>
-    <Turret_2_Auf_Panther>
-      <userString>	#germany_vehicles:Turret_2_Auf_Panther	</userString>
-      <tags></tags>
-      <level>	6	</level>
-      <price>	17500	</price>
-      <notInShop>	true	</notInShop>
-      <armor>
-        <armor_1>	50	</armor_1>
-        <armor_2>	50	</armor_2>
-        <armor_3>	30	</armor_3>
-        <armor_4>	30	</armor_4>
-        <armor_5>	15	</armor_5>
-        <armor_6>	15	</armor_6>
-        <armor_7>	50	</armor_7>
-        <armor_8>	15	</armor_8>
-        <armor_9>	0	</armor_9>
-        <armor_10>	50	</armor_10>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	5500	</weight>
-      <maxHealth>	270	</maxHealth>
-      <rotationSpeed>	44	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	130	</maxHealth>
-        <maxRegenHealth>	65	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	90	</maxHealth>
-        <maxRegenHealth>	45	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </surveyingDeviceHealth>
-      <invisibilityFactor>	0.893	</invisibilityFactor>
-      <guns>
-        <Gun_Auf_Panther>	shared	  <maxAmmo>	110	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 4.8 0.083333 4.8 0.166667 10 0.333333 10 0.416667 -2.5 0.583333 -2.5 0.666667 10 0.833333 10 0.916667 4.8 1 4.8	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	10	</gun>
-          </armor>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <effects>	shot_medium	</effects>
-          <models>
-            <undamaged>	vehicles/german/G85_Auf_Panther/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/german/G85_Auf_Panther/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/german/G85_Auf_Panther/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/german/G85_Auf_Panther/collision/Gun_01.model	</collisionModel>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	-0.0352103 -0.0214043 2.08355	</rayStart>
-              <rayEnd>	0.338855 -0.303634 2.07539	</rayEnd>
-              <rayUp>	0.04 0.038 3	</rayUp>
-              <size>	0.296	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.85 0.85 0.000000 0.000000	</tiling>
-          </camouflage>
-        </Gun_Auf_Panther>
-      </guns>
-      <models>
-        <undamaged>	vehicles/german/G85_Auf_Panther/normal/lod0/Turret_02.model	</undamaged>
-        <destroyed>	vehicles/german/G85_Auf_Panther/crash/lod0/Turret_02.model	</destroyed>
-        <exploded>	vehicles/german/G85_Auf_Panther/crash/lod0/Turret_02.model	</exploded>
-      </models>
-      <hitTester>
-        <collisionModel>	vehicles/german/G85_Auf_Panther/collision/Turret_02.model	</collisionModel>
-      </hitTester>
-      <gunPosition>	0.000000 0.316026 0.937988	</gunPosition>
-      <emblemSlots>
-        <player>
-          <rayStart>	-1.27564 0.589701 0.579688	</rayStart>
-          <rayEnd>	-0.364751 0.180881 0.52366	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <inscription>
-          <rayStart>	-1.25897 0.535595 -0.258976	</rayStart>
-          <rayEnd>	-0.372752 0.130029 -0.0350729	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.78	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <player>
-          <rayStart>	1.27564 0.589701 0.579688	</rayStart>
-          <rayEnd>	0.364751 0.180881 0.52366	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-        </player>
-        <inscription>
-          <rayStart>	1.25897 0.535595 -0.258976	</rayStart>
-          <rayEnd>	0.372752 0.130029 -0.0350729	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.78	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.953 0.028 1.000 0.000 0.524 0.082 0.421 1.000 0.500 0.500 0.331 0.500 0.131 0.593 0.217	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
-    </Turret_2_Auf_Panther>
   </turrets0>
   <engines>
     <Engine_Auf_Panther>	shared	</Engine_Auf_Panther>

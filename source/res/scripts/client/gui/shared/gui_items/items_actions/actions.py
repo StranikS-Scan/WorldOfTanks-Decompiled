@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
 import BigWorld
 from items import vehicles
@@ -16,7 +16,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats, Reques
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta, BuyModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta, ExchangeCreditsMeta
 
-def showMessage(scopeMsg, msg, item, msgType = SystemMessages.SM_TYPE.Error, **kwargs):
+def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     kwargs['userString'] = item.userName
     kwargs['type'] = msgType
     if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
@@ -28,17 +28,17 @@ def showMessage(scopeMsg, msg, item, msgType = SystemMessages.SM_TYPE.Error, **k
     SystemMessages.pushI18nMessage(key, **kwargs)
 
 
-def showInventoryMsg(msg, item, msgType = SystemMessages.SM_TYPE.Error, **kwargs):
+def showInventoryMsg(msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     scopeMsg = '#system_messages:inventory/{0:>s}/{1:>s}'
     showMessage(scopeMsg, msg, item, msgType=msgType, **kwargs)
 
 
-def showUnlockMsg(msg, item, msgType = SystemMessages.SM_TYPE.Error, **kwargs):
+def showUnlockMsg(msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     scopeMsg = '#system_messages:unlocks/{0:>s}/{1:>s}'
     showMessage(scopeMsg, msg, item, msgType=msgType, **kwargs)
 
 
-def showShopMsg(msg, item, msgType = SystemMessages.SM_TYPE.Error, **kwargs):
+def showShopMsg(msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     scopeMsg = '#system_messages:shop/{0:>s}/{1:>s}'
     showMessage(scopeMsg, msg, item, msgType=msgType, **kwargs)
 
@@ -99,7 +99,7 @@ class SellItemAction(IGUIItemAction):
             yield DialogsInterface.showDialog(LocalSellModuleMeta(self.__itemTypeCD))
         else:
             showInventoryMsg('not_found', item)
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         return
 
 
@@ -122,7 +122,7 @@ class ModuleBuyAction(BuyAction):
         if self._canBuy(item):
             yield DialogsInterface.showDialog(BuyModuleMeta(self.__intCD, g_itemsCache.items.stats.money))
         else:
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         return
 
 
@@ -155,7 +155,7 @@ class VehicleBuyAction(BuyAction):
                         showShopMsg('common_rent_or_buy_error', item)
                 if self._canRentOrBuy(item):
                     shared_events.showVehicleBuyDialog(item)
-                yield lambda callback = None: callback
+                yield lambda callback=None: callback
             return
 
     def _canRentOrBuy(self, item):
@@ -243,7 +243,7 @@ class InstallItemAction(BuyAction):
                 yield tryToLoadDefaultShellsLayout(vehicle)
             Waiting.hide('applyModule')
         RequestState.received(state)
-        yield lambda callback = None: callback
+        yield lambda callback=None: callback
         return
 
 
@@ -279,7 +279,7 @@ class BuyAndInstallItemAction(InstallItemAction):
                     yield tryToLoadDefaultShellsLayout(vehicle)
             Waiting.hide('buyAndInstall')
         RequestState.received(state)
-        yield lambda callback = None: callback
+        yield lambda callback=None: callback
         return
 
 
@@ -332,7 +332,7 @@ class SetVehicleModuleAction(BuyAction):
                             yield tryToLoadDefaultShellsLayout(vehicle)
                     Waiting.hide('buyAndInstall')
                 else:
-                    yield lambda callback = None: callback
+                    yield lambda callback=None: callback
             else:
                 Waiting.show('applyModule')
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)

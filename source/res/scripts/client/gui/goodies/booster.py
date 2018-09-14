@@ -1,14 +1,16 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/goodies/Booster.py
 import BigWorld
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE
 from gui import GUI_SETTINGS
 from gui.Scaleform.locale.MENU import MENU
+from gui.shared.formatters import text_styles
 from shared_utils import CONST_CONTAINER
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 _BOOSTER_ICON_PATH = '../maps/icons/boosters/%s.png'
 _BOOSTER_BIG_ICON_PATH = '../maps/icons/boosters/%s_big.png'
+_BOOSTER_TT_BIG_ICON_PATH = '../maps/icons/boosters/%s_tt_big.png'
 _BOOSTER_QUALITY_SOURCE_PATH = '../maps/icons/boosters/booster_quality_%s.png'
 _BOOSTER_TYPE_LOCALE = '#menu:booster/userName/%s'
 _BOOSTER_DESCRIPTION_LOCALE = '#menu:booster/description/%s'
@@ -28,6 +30,11 @@ _BOOSTER_TYPE_NAMES = {GOODIE_RESOURCE_TYPE.GOLD: 'booster_gold',
  GOODIE_RESOURCE_TYPE.XP: 'booster_xp',
  GOODIE_RESOURCE_TYPE.CREW_XP: 'booster_crew_xp',
  GOODIE_RESOURCE_TYPE.FREE_XP: 'booster_free_xp'}
+BOOSTERS_ORDERS = {GOODIE_RESOURCE_TYPE.XP: 0,
+ GOODIE_RESOURCE_TYPE.CREW_XP: 1,
+ GOODIE_RESOURCE_TYPE.FREE_XP: 2,
+ GOODIE_RESOURCE_TYPE.CREDITS: 3,
+ GOODIE_RESOURCE_TYPE.GOLD: 4}
 
 class Booster(object):
 
@@ -56,6 +63,10 @@ class Booster(object):
     @property
     def bigIcon(self):
         return _BOOSTER_BIG_ICON_PATH % self.boosterGuiType
+
+    @property
+    def bigTooltipIcon(self):
+        return _BOOSTER_TT_BIG_ICON_PATH % self.boosterGuiType
 
     @property
     def boosterGuiType(self):
@@ -90,9 +101,7 @@ class Booster(object):
     @property
     def isReadyToUse(self):
         activeBoosterTypes = [ boosterType for boosterType, _, _ in self.__activeBoostersValues ]
-        if self.enabled:
-            return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and len(self.__activeBoostersValues) < MAX_ACTIVE_BOOSTERS_COUNT and self.boosterType not in activeBoosterTypes
-        return False
+        return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and len(self.__activeBoostersValues) < MAX_ACTIVE_BOOSTERS_COUNT and self.boosterType not in activeBoosterTypes if self.enabled else False
 
     @property
     def isReadyToUpdate(self):
@@ -108,8 +117,12 @@ class Booster(object):
         return _ms(_BOOSTER_TYPE_LOCALE % self.boosterGuiType)
 
     @property
+    def fullUserName(self):
+        return _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER, boosterName=self.userName, quality=self.qualityStr)
+
+    @property
     def description(self):
-        return _ms(_BOOSTER_DESCRIPTION_LOCALE % self.boosterGuiType, effectValue=self.effectValue) + _ms(MENU.BOOSTER_DESCRIPTION_EFFECTTIME, effectTime=self.getEffectTimeStr())
+        return _ms(_BOOSTER_DESCRIPTION_LOCALE % self.boosterGuiType, effectValue=self.getFormattedValue(text_styles.neutral)) + _ms(MENU.BOOSTER_DESCRIPTION_EFFECTTIME, effectTime=self.getEffectTimeStr())
 
     def getCooldownAsPercent(self):
         percent = 0
@@ -119,10 +132,7 @@ class Booster(object):
         return percent
 
     def getUsageLeftTime(self):
-        if self.finishTime is not None:
-            return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.finishTime))
-        else:
-            return 0
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.finishTime)) if self.finishTime is not None else 0
 
     def getUsageLeftTimeStr(self):
         return self._getLocalizedTime(self.getUsageLeftTime(), MENU.TIME_TIMEVALUE)
@@ -137,10 +147,14 @@ class Booster(object):
         return _BOOSTER_QUALITY_SOURCE_PATH % self.quality
 
     def getExpiryDate(self):
-        if self.expiryTime is not None:
-            return BigWorld.wg_getLongDateFormat(self.expiryTime)
-        else:
-            return ''
+        return BigWorld.wg_getLongDateFormat(self.expiryTime) if self.expiryTime is not None else ''
 
     def _getLocalizedTime(self, seconds, locale):
         return time_utils.getTillTimeString(seconds, locale)
+
+    def getFormattedValue(self, formatter):
+        if self.effectValue > 0:
+            value = '+%s%%' % self.effectValue
+        else:
+            value = '%s%%' % self.effectValue
+        return formatter(value)

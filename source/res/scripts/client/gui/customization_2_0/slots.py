@@ -1,10 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/slots.py
 import copy
 import time
+from CurrentVehicle import g_currentVehicle
 from Event import Event
 from helpers.i18n import makeString as _ms
-from gui import makeHtmlString
+from gui import makeHtmlString, g_tankActiveCamouflage
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
@@ -51,12 +52,12 @@ class Slots(object):
     def getSelectedSlotItemID(self):
         return self.__data['data'][self.__currentType]['data'][self.__currentIdx]['itemID']
 
-    def getInstalledItem(self, idx = None, type_ = None):
+    def getInstalledItem(self, idx=None, type_=None):
         idx = self.__currentIdx if idx is None else idx
         type_ = self.__currentType if type_ is None else type_
         return self.__aData.installed[type_][idx]
 
-    def getSlotItem(self, slotIdx = None, cType = None):
+    def getSlotItem(self, slotIdx=None, cType=None):
         slotIdx = self.__currentIdx if slotIdx is None else slotIdx
         cType = self.__currentType if cType is None else cType
         itemID = self.__data['data'][cType]['data'][slotIdx]['itemID']
@@ -107,34 +108,15 @@ class Slots(object):
             self.cart.buyItem(cType, initialSlotItem['spot'], self.__getAdjustedIndex(slotIdx, cType), initialSlotItem['itemID'], 0, price=-1)
 
     def dropAppliedItem(self, cType, slotIdx):
-        typedData = self.__data['data'][cType]['data']
-        if len(typedData) == 2:
-            thisItemSlotIdx = slotIdx
-            anotherSlotIdx = 1 - slotIdx
-            if typedData[thisItemSlotIdx]['itemID'] == typedData[anotherSlotIdx]['itemID']:
-                typedData[anotherSlotIdx]['price'] = self.getSlotItem(cType=cType, slotIdx=anotherSlotIdx).getPrice(typedData[anotherSlotIdx]['duration'])
         initialSlotItem = self.__initialData['data'][cType]['data'][slotIdx]
         self.__setSlotAndUpdateView(cType, slotIdx, copy.deepcopy(initialSlotItem))
 
-    def applyItem(self, item, duration = 0):
+    def applyItem(self, item, duration=0):
         cType = self.__currentType
         slotIdx = self.__currentIdx
         img = item['object'].getTexturePath()
-        price = item['object'].getPrice(duration)
         isInDossier = item['object'].isInDossier
         bonus = self.__getSlotBonusString(item['object'].qualifier, isInDossier)
-        typedData = self.__data['data'][cType]['data']
-        if len(typedData) == 2:
-            anotherSlotIdx = 1 - slotIdx
-            if item['id'] == typedData[anotherSlotIdx]['itemID']:
-                if duration == 0:
-                    typedData[anotherSlotIdx]['price'] = 0
-                elif typedData[anotherSlotIdx]['duration'] == 0:
-                    price = 0
-            else:
-                itemInAnotherSlot = self.getSlotItem(cType=cType, slotIdx=anotherSlotIdx)
-                if itemInAnotherSlot is not None:
-                    typedData[anotherSlotIdx]['price'] = itemInAnotherSlot.getPrice(typedData[anotherSlotIdx]['duration'])
         initialSlotItem = self.__initialData['data'][cType]['data'][slotIdx]
         currentSlotItem = self.__data['data'][cType]['data'][slotIdx]
         if item['isInQuests']:
@@ -149,7 +131,6 @@ class Slots(object):
          'bonus': bonus,
          'duration': duration,
          'spot': currentSlotItem['spot'],
-         'price': price,
          'isInDossier': isInDossier,
          'slotTooltip': makeTooltip(_ms(TOOLTIPS.CUSTOMIZATION_SLOT_HEADER, groupName=_ms(_SLOT_TOOLTIP_MAPPING[self.__currentType])), TOOLTIPS.CUSTOMIZATION_SLOT_BODY),
          'removeBtnTooltip': makeTooltip(TOOLTIPS.CUSTOMIZATION_SLOTREMOVE_HEADER, TOOLTIPS.CUSTOMIZATION_SLOTREMOVE_BODY),
@@ -253,7 +234,6 @@ class Slots(object):
                     purchaseTypeIcon = RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2
                 slotData['purchaseTypeIcon'] = purchaseTypeIcon
                 slotData['duration'] = installedItem.duration
-                slotData['price'] = 0
             selectorSlotsData.append(slotData)
 
         return selectorSlotsData
@@ -280,7 +260,7 @@ class Slots(object):
                     self.updated({'type': cType,
                      'idx': slotIdx,
                      'data': newSlotItem})
-                elif initialSlotItem['itemID'] != currentSlotItem['itemID']:
+                if initialSlotItem['itemID'] != currentSlotItem['itemID']:
                     self.updated({'type': cType,
                      'idx': slotIdx,
                      'data': currentSlotItem})

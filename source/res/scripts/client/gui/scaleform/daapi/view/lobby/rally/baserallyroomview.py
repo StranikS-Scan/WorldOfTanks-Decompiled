@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyRoomView.py
 import account_helpers
 from CurrentVehicle import g_currentVehicle
@@ -283,15 +283,15 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
 
         return result
 
-    def isPlayerInSlot(self, databaseID = None):
+    def isPlayerInSlot(self, databaseID=None):
         pInfo = self.unitFunctional.getPlayerInfo(dbID=databaseID)
         return pInfo.isInSlot
 
     def __getRosterSlotCtx(self, item):
         if item is None:
             return unit_ctx.RosterSlotCtx()
-        elif type(item) == long:
-            return unit_ctx.RosterSlotCtx(item)
+        elif item.selectedVehicle > 0:
+            return unit_ctx.RosterSlotCtx(item.selectedVehicle)
         else:
             settings = self.unitFunctional.getRosterSettings()
             levels = (settings.getMinLevel(), settings.getMaxLevel())

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/qualifiers/_qualifier.py
 from _xml import *
 
@@ -50,10 +50,10 @@ _PARSERS = {QUALIFIER_TYPE.MAIN_SKILL: _parseMainSkill}
 def parseQualifier(section):
     qualifierType = section['type'].asString
     if qualifierType not in _PARSERS:
-        raise Exception, 'Qualifier "{0}" is not supported.'.format(qualifierType)
+        raise Exception('Qualifier "{0}" is not supported.'.format(qualifierType))
     res = _PARSERS[qualifierType](section)
     if not res or not all((res.id, res.qualifierType)) or res.value is None:
-        raise Exception, 'Bonus attributes (id, type, value) are required.'
+        raise Exception('Bonus attributes (id, type, value) are required.')
     return res
 
 
@@ -80,10 +80,7 @@ class Qualifier(object):
         return 'Qualifier {0} with id={1}'.format(self.qualifierType, self.id)
 
     def __call__(self, initialValue, **kwargs):
-        if self.conditionFunc is None or self.conditionFunc(kwargs):
-            return self.__qualifierFunc(initialValue)
-        else:
-            return initialValue
+        return self.__qualifierFunc(initialValue) if self.conditionFunc is None or self.conditionFunc(kwargs) else initialValue
 
 
 class MainSkillQualifier(Qualifier):

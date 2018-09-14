@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortIntelligenceClanFilterPopover.py
 import time
 from gui.LobbyContext import g_lobbyContext
@@ -17,7 +17,7 @@ from FortifiedRegionBase import NOT_ACTIVATED
 
 class FortIntelligenceClanFilterPopover(FortIntelligenceClanFilterPopoverMeta, FortViewHelper):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(FortIntelligenceClanFilterPopover, self).__init__()
 
     def _populate(self):

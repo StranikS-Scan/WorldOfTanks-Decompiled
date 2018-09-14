@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_MozillaCookieJar.py
 """Mozilla / Netscape cookie loading / saving."""
 import re, time
@@ -59,10 +60,10 @@ class MozillaCookieJar(FileCookieJar):
                     name = value
                     value = None
                 initial_dot = domain.startswith('.')
-                if not domain_specified == initial_dot:
-                    raise AssertionError
-                    discard = False
-                    expires = expires == '' and None
+                assert domain_specified == initial_dot
+                discard = False
+                if expires == '':
+                    expires = None
                     discard = True
                 c = Cookie(0, name, value, None, False, domain, domain_specified, initial_dot, path, False, secure, expires, discard, None, None, {})
                 if not ignore_discard and c.discard:
@@ -79,7 +80,7 @@ class MozillaCookieJar(FileCookieJar):
 
         return
 
-    def save(self, filename = None, ignore_discard = False, ignore_expires = False):
+    def save(self, filename=None, ignore_discard=False, ignore_expires=False):
         if filename is None:
             if self.filename is not None:
                 filename = self.filename

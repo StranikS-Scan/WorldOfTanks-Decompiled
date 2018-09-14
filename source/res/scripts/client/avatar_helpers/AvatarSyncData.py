@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/avatar_helpers/AvatarSyncData.py
 import AccountCommands
 from debug_utils import *
@@ -29,7 +29,7 @@ class AvatarSyncData(object):
             self.__subscribers.append(callback)
         return
 
-    def __onSyncResponse(self, syncID, resultID, ext = {}):
+    def __onSyncResponse(self, syncID, resultID, ext={}):
         self.__isSynchronized = True
         subscribers = self.__subscribers
         self.__subscribers = []

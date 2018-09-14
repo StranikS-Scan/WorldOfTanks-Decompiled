@@ -53,7 +53,7 @@
     <tags>	lightTank wetCombatPack_class1_user enhancedVertical_springs_user	</tags>
     <level>	2	</level>
   </D1>
-  <_105_leFH18B2>
+  <F28_105_leFH18B2>
     <id>	8	</id>
     <userString>	#france_vehicles:_105_leFH18B2	</userString>
     <shortUserString>	#france_vehicles:_105_leFH18B2_short	</shortUserString>
@@ -61,9 +61,9 @@
     <price>	1500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	SPG lightSPG noImprovedVentilation mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSprings_class3_user	</tags>
+    <tags>	SPG lightSPG noImprovedVentilation mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSprings_class3_user HD	</tags>
     <level>	5	</level>
-  </_105_leFH18B2>
+  </F28_105_leFH18B2>
   <FCM_36Pak40>
     <id>	9	</id>
     <userString>	#france_vehicles:FCM_36Pak40	</userString>
@@ -336,15 +336,15 @@
     <tags>	mediumTank wetCombatPack_class1_user enhancedSprings_class2_user HD	</tags>
     <level>	3	</level>
   </F44_Somua_S35>
-  <AMX_50Fosh_155>
+  <F64_AMX_50Fosh_155>
     <id>	54	</id>
     <userString>	#france_vehicles:AMX_50Fosh_155	</userString>
     <description>	#france_vehicles:AMX_50Fosh_155_descr	</description>
     <shortUserString>	#france_vehicles:AMX_50Fosh_155_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	AT-SPG heavyAT-SPG enhancedLongitudinalTorsions_user  wetCombatPack_class2_user	</tags>
+    <tags>	AT-SPG heavyAT-SPG enhancedLongitudinalTorsions_user  wetCombatPack_class2_user HD	</tags>
     <level>	10	</level>
-  </AMX_50Fosh_155>
+  </F64_AMX_50Fosh_155>
   <ELC_AMX>
     <id>	55	</id>
     <userString>	#france_vehicles:ELC_AMX	</userString>
@@ -417,6 +417,17 @@
     <tags>	lightTank wetCombatPack_class1_user enhancedHorizontal_springs_user HD	</tags>
     <level>	2	</level>
   </F49_RenaultR35>
+  <F75_Char_de_25t>
+    <id>	244	</id>
+    <userString>	#france_vehicles:F75_Char_de_25t	</userString>
+    <shortUserString>	#france_vehicles:F75_Char_de_25t_short	</shortUserString>
+    <description>	#france_vehicles:F75_Char_de_25t_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD secret testTank	</tags>
+    <level>	9	</level>
+  </F75_Char_de_25t>
   <F74_AMX_M4_1949>
     <id>	245	</id>
     <userString>	#france_vehicles:F74_AMX_M4_1949	</userString>
@@ -487,18 +498,9 @@
     <description>	#france_vehicles:AMX_50_68t_fallout_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank wetCombatPack_class2_user aimingStabilizer_Mk2_user enhancedTorsions5t_user HD event_battles secret	</tags>
+    <tags>	heavyTank wetCombatPack_class2_user aimingStabilizer_Mk2_user enhancedTorsions5t_user HD fallout secret	</tags>
     <level>	10	</level>
   </F10_AMX_50B_fallout>
-  <F36_AMX_AC_Mle1948_IGR>
-    <id>	151	</id>
-    <userString>	#igr_vehicles:AMX_AC_Mle1948_IGR	</userString>
-    <description>	#igr_vehicles:AMX_AC_Mle1948_IGR_descr	</description>
-    <shortUserString>	#igr_vehicles:AMX_AC_Mle1948_IGR_short	</shortUserString>
-    <price>	1	</price>
-    <tags>	AT-SPG heavyAT-SPG largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user premiumIGR secret HD	</tags>
-    <level>	8	</level>
-  </F36_AMX_AC_Mle1948_IGR>
   <AMX_13_90_IGR>
     <id>	152	</id>
     <userString>	#igr_vehicles:AMX_13_90_IGR	</userString>
@@ -508,6 +510,15 @@
     <tags>	lightTank scout wetCombatPack_class1_user enhancedTorsions1t_user premiumIGR secret	</tags>
     <level>	8	</level>
   </AMX_13_90_IGR>
+  <F36_AMX_AC_Mle1948_IGR>
+    <id>	151	</id>
+    <userString>	#igr_vehicles:AMX_AC_Mle1948_IGR	</userString>
+    <description>	#igr_vehicles:AMX_AC_Mle1948_IGR_descr	</description>
+    <shortUserString>	#igr_vehicles:AMX_AC_Mle1948_IGR_short	</shortUserString>
+    <price>	1	</price>
+    <tags>	AT-SPG heavyAT-SPG largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user premiumIGR secret HD	</tags>
+    <level>	8	</level>
+  </F36_AMX_AC_Mle1948_IGR>
   <F08_AMX_50_100_IGR>
     <id>	153	</id>
     <userString>	#igr_vehicles:AMX_50_100_IGR	</userString>
@@ -517,16 +528,16 @@
     <tags>	heavyTank aimingStabilizer_Mk2_user wetCombatPack_class2_user enhancedTorsions5t_user premiumIGR secret	</tags>
     <level>	8	</level>
   </F08_AMX_50_100_IGR>
-  <_105_leFH18B2_IGR>
+  <F28_105_leFH18B2_IGR>
     <id>	154	</id>
     <userString>	#igr_vehicles:_105_leFH18B2_IGR	</userString>
     <shortUserString>	#igr_vehicles:_105_leFH18B2_IGR_short	</shortUserString>
     <description>	#igr_vehicles:_105_leFH18B2_IGR_descr	</description>
     <price>	1	  <gold></gold>
     </price>
-    <tags>	SPG lightSPG noImprovedVentilation mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSprings_class3_user premiumIGR secret	</tags>
+    <tags>	SPG lightSPG noImprovedVentilation mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSprings_class3_user premiumIGR secret HD	</tags>
     <level>	5	</level>
-  </_105_leFH18B2_IGR>
+  </F28_105_leFH18B2_IGR>
   <S_35CA_IGR>
     <id>	155	</id>
     <userString>	#igr_vehicles:S_35CA_IGR	</userString>

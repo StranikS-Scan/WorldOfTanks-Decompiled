@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/inputChecker/InputChecker.py
 from gui.Scaleform.daapi.view.meta.InputCheckerMeta import InputCheckerMeta
 
@@ -28,7 +28,7 @@ class InputChecker(InputCheckerMeta):
         self.__errorMsg = None
         return
 
-    def setControlNumbers(self, controlNumber, formatFunction = None):
+    def setControlNumbers(self, controlNumber, formatFunction=None):
         if self.__originalControlNumber != str(controlNumber):
             self.as_invalidUserTextS(False)
         if formatFunction is not None:

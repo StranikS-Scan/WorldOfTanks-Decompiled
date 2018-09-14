@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/cache.py
 from helpers.local_cache import FileLocalCache
 from tutorial.settings import TUTORIAL_VERSION, PLAYER_XP_LEVEL
@@ -19,7 +19,7 @@ class TutorialCache(FileLocalCache):
     def getSpace(self):
         return self.__space
 
-    def setSpace(self, space, init = None):
+    def setSpace(self, space, init=None):
         self.__space = space
         self.__cache.setdefault(space, {'finished': False,
          'refused': False,
@@ -79,7 +79,7 @@ class TutorialCache(FileLocalCache):
     def getLocalCtx(self):
         return self.__current()['localCtx']
 
-    def setLocalCtx(self, ctx, flush = True):
+    def setLocalCtx(self, ctx, flush=True):
         self.__current()['localCtx'] = ctx
         if flush:
             self.write()

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FilterUtilities.py
 """This module contains a number of useful script functions for working with the
 entity filters shipped with BigWorld.

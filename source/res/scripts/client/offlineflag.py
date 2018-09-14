@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/OfflineFlag.py
 import BigWorld
 from OfflineEntity import OfflineEntity
@@ -43,9 +43,10 @@ class OfflineFlag(OfflineEntity):
             return
 
     def onLeaveWorld(self):
-        self.show(False)
-        self.__parent.flagLeaveWorld()
-        self.__parent = None
+        if self.__parent is not None:
+            self.show(False)
+            self.__parent.flagLeaveWorld()
+            self.__parent = None
         return
 
     def show(self, isVisible):

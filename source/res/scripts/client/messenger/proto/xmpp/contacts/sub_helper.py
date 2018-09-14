@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/sub_helper.py
 from messenger import g_settings
 from messenger.m_constants import USER_TAG, PROTO_TYPE
@@ -151,13 +151,10 @@ class SubscriptionsRestrictions(object):
             length = self._cachedRosterCount
         else:
             length = self._getRosterCount()
-        if length >= CONTACT_LIMIT.ROSTER_MAX_COUNT:
-            return (False, ClientIntLimitError(LIMIT_ERROR_ID.MAX_ROSTER_ITEMS, CONTACT_LIMIT.ROSTER_MAX_COUNT))
-        else:
-            return (True, None)
+        return (False, ClientIntLimitError(LIMIT_ERROR_ID.MAX_ROSTER_ITEMS, CONTACT_LIMIT.ROSTER_MAX_COUNT)) if length >= CONTACT_LIMIT.ROSTER_MAX_COUNT else (True, None)
 
     def canApproveFriendship(self, contact):
-        if not contact:
+        if not contact or contact.getItemType() == XMPP_ITEM_TYPE.EMPTY_ITEM:
             return (False, ClientContactError(CONTACT_ERROR_ID.CONTACT_ITEM_NOT_FOUND))
         tags = contact.getTags()
         if USER_TAG.SUB_APPROVED in tags:
@@ -180,7 +177,7 @@ class SubscriptionsRestrictions(object):
             return (False, ClientContactError(CONTACT_ERROR_ID.CONTACT_ITEM_NOT_FOUND))
 
     def canCancelFriendship(self, contact):
-        if not contact:
+        if not contact or contact.getItemType() == XMPP_ITEM_TYPE.EMPTY_ITEM:
             return (False, ClientContactError(CONTACT_ERROR_ID.CONTACT_ITEM_NOT_FOUND))
         tags = contact.getTags()
         if USER_TAG.SUB_APPROVED in tags:
@@ -191,10 +188,8 @@ class SubscriptionsRestrictions(object):
             return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_RQ_PROCESS, contact.getFullName()))
         elif USER_TAG.SUB_CANCELED in tags:
             return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_CANCELED, contact.getFullName()))
-        elif contact.getItemType() == XMPP_ITEM_TYPE.ROSTER_ITEM:
-            return (False, ClientContactError(CONTACT_ERROR_ID.ROSTER_ITEM_EXISTS, contact.getFullName()))
         else:
-            return (True, None)
+            return (False, ClientContactError(CONTACT_ERROR_ID.ROSTER_ITEM_EXISTS, contact.getFullName())) if contact.getItemType() == XMPP_ITEM_TYPE.ROSTER_ITEM else (True, None)
 
     def _getRosterCount(self):
         return self.usersStorage.getCount(ItemsFindCriteria((XMPP_ITEM_TYPE.ROSTER_ITEM,)))

@@ -29,9 +29,8 @@
     <AN_GRC_8>	63	</AN_GRC_8>
     <AN_PRC_8>	65	</AN_PRC_8>
     <Alarm_flags_bot>	68	</Alarm_flags_bot>
-    <AN_VRC-3_fallout>	67	</AN_VRC-3_fallout>
-    <T23radio>	1000	</T23radio>
     <SCR_200_bot>	69	</SCR_200_bot>
+    <T23radio>	1000	</T23radio>
     <Development_Radio>	65535	</Development_Radio>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
@@ -58,6 +57,7 @@
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
+      <notInShop>	true	</notInShop>
       <weight>	1	</weight>
       <distance>	90	</distance>
       <maxHealth>	90	</maxHealth>
@@ -68,25 +68,13 @@
       <userString>	#usa_vehicles:SCR_200	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	180	</price>
+      <price>	0	</price>
       <weight>	40	</weight>
       <distance>	265	</distance>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </SCR_200>
-    <SCR_200A>
-      <userString>	#usa_vehicles:SCR_200A	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	180	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	325	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </SCR_200A>
     <SCR_200_bot>
       <userString>	#usa_vehicles:SCR_200_bot	</userString>
       <tags></tags>
@@ -99,6 +87,18 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </SCR_200_bot>
+    <SCR_200A>
+      <userString>	#usa_vehicles:SCR_200A	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	180	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	325	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </SCR_200A>
     <SCR_508_1>
       <userString>	#usa_vehicles:SCR_508_1	</userString>
       <tags></tags>
@@ -226,18 +226,6 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </AN_VRC-3>
-    <AN_VRC-3_fallout>
-      <userString>	#usa_vehicles:AN_VRC-3_fallout	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <notInShop>	true	</notInShop>
-      <price>	51600	</price>
-      <weight>	160	</weight>
-      <distance>	745	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	0.1	</repairCost>
-    </AN_VRC-3_fallout>
     <AN_VRC-24>
       <userString>	#usa_vehicles:AN_VRC-24	</userString>
       <tags></tags>

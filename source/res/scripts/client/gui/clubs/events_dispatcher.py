@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/events_dispatcher.py
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getViewName
@@ -6,7 +6,7 @@ from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 
-def showClubProfile(clubDbID, viewIdx = 0):
+def showClubProfile(clubDbID, viewIdx=0):
     assert clubDbID
     alias = CYBER_SPORT_ALIASES.CYBER_SPORT_STATIC_PROFILE_PY
     g_eventBus.handleEvent(events.LoadViewEvent(alias, getViewName(alias, int(clubDbID)), ctx={'clubDbID': clubDbID,

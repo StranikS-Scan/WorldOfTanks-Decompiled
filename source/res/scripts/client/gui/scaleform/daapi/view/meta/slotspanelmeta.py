@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SlotsPanelMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -8,13 +8,10 @@ class SlotsPanelMeta(BaseDAAPIComponent):
         self._printOverrideError('getSlotTooltipBody')
 
     def as_setPanelPropsS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setPanelProps(data)
+        return self.flashObject.as_setPanelProps(data) if self._isDAAPIInited() else None
 
     def as_setSlotsS(self, orders):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSlots(orders)
+        return self.flashObject.as_setSlots(orders) if self._isDAAPIInited() else None
 
     def as_updateSlotS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateSlot(data)
+        return self.flashObject.as_updateSlot(data) if self._isDAAPIInited() else None

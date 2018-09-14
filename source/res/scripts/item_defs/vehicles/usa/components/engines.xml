@@ -30,8 +30,8 @@
     <Ford_GAC_1>	32	</Ford_GAC_1>
     <Liberty>	33	</Liberty>
     <Ford_GAA_1>	34	</Ford_GAA_1>
-    <GMC_6046>	36	</GMC_6046>
     <Continental_AV-1790-1M2>	35	</Continental_AV-1790-1M2>
+    <GMC_6046>	36	</GMC_6046>
     <Ford_GAF>	37	</Ford_GAF>
     <Ford_GAFM2>	38	</Ford_GAFM2>
     <Ford_GAFM4>	39	</Ford_GAFM4>
@@ -69,11 +69,10 @@
     <Continental_AVI-1790-8>	84	</Continental_AVI-1790-8>
     <Cunningham_bot>	86	</Cunningham_bot>
     <Liberty_bot>	87	</Liberty_bot>
-    <Continental_AV_1790_5C_fallout>	85	</Continental_AV_1790_5C_fallout>
-    <Ford_GAN_T23>	1000	</Ford_GAN_T23>
     <LaSalle_V8_75>	88	</LaSalle_V8_75>
     <LaSalle_V8_89>	89	</LaSalle_V8_89>
     <Continental_AV_1790_5A>	91	</Continental_AV_1790_5A>
+    <Ford_GAN_T23>	1000	</Ford_GAN_T23>
     <Development_Engine>	65535	</Development_Engine>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
     <Continental_AOSI-895-5_IGR>	60002	</Continental_AOSI-895-5_IGR>
@@ -100,8 +99,8 @@
       <maxRegenHealth>	169	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	2600	</rpm_max>
+      <rpm_min>	537	</rpm_min>
+      <rpm_max>	2570	</rpm_max>
     </Ford_GAC>
     <Ford_GAC_1>
       <userString>	#usa_vehicles:Ford_GAC	</userString>
@@ -110,13 +109,17 @@
       <level>	7	</level>
       <price>	43500	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	720	</power>
       <weight>	556	</weight>
       <maxHealth>	338	</maxHealth>
       <maxRegenHealth>	169	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	537	</rpm_min>
+      <rpm_max>	2570	</rpm_max>
     </Ford_GAC_1>
     <Guiberson_T-1020-4>
       <userString>	#usa_vehicles:Guiberson_T-1020-4	</userString>
@@ -125,13 +128,17 @@
       <level>	3	</level>
       <price>	5000	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	245	</power>
       <weight>	331	</weight>
       <maxHealth>	78	</maxHealth>
       <maxRegenHealth>	41	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	290	</rpm_min>
+      <rpm_max>	2118	</rpm_max>
     </Guiberson_T-1020-4>
     <Continental_W-670>
       <userString>	#usa_vehicles:Continental_W-670	</userString>
@@ -140,13 +147,17 @@
       <level>	3	</level>
       <price>	8200	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	262	</power>
       <weight>	256	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	461	</rpm_min>
+      <rpm_max>	2324	</rpm_max>
     </Continental_W-670>
     <Continental_W-670-9A>
       <userString>	#usa_vehicles:Continental_W-670-9A	</userString>
@@ -156,13 +167,17 @@
       <price>	8100	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	262	</power>
       <weight>	256	</weight>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	461	</rpm_min>
+      <rpm_max>	2324	</rpm_max>
     </Continental_W-670-9A>
     <Twin_Cadillac_42series>
       <userString>	#usa_vehicles:Twin_Cadillac_42series	</userString>
@@ -171,31 +186,36 @@
       <level>	4	</level>
       <price>	10350	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	320	</power>
       <weight>	530	</weight>
       <maxHealth>	123	</maxHealth>
       <maxRegenHealth>	58	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	424	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
     </Twin_Cadillac_42series>
     <Cunningham>
       <userString>	#usa_vehicles:Cunningham	</userString>
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	0	</price>
+      <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	110	</power>
       <weight>	200	</weight>
       <maxHealth>	32	</maxHealth>
       <maxRegenHealth>	15	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	361	</rpm_min>
+      <rpm_max>	2442	</rpm_max>
     </Cunningham>
     <Cunningham_bot>
       <userString>	#usa_vehicles:Cunningham_bot	</userString>
@@ -220,15 +240,20 @@
       <userString>	#usa_vehicles:Cunningham_type_3	</userString>
       <tags>	gasoline	</tags>
       <level>	2	</level>
-      <price>	650	</price>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	132	</power>
       <weight>	300	</weight>
       <maxHealth>	58	</maxHealth>
       <maxRegenHealth>	26	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	334	</rpm_min>
+      <rpm_max>	2530	</rpm_max>
     </Cunningham_type_3>
     <LaSalle_V8_75>
       <userString>	#usa_vehicles:LaSalle_V8_75	</userString>
@@ -245,8 +270,8 @@
       <maxRegenHealth>	26	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	900	</rpm_min>
-      <rpm_max>	2400	</rpm_max>
+      <rpm_min>	405	</rpm_min>
+      <rpm_max>	2301	</rpm_max>
     </LaSalle_V8_75>
     <LaSalle_V8_89>
       <userString>	#usa_vehicles:LaSalle_V8_89	</userString>
@@ -263,8 +288,8 @@
       <maxRegenHealth>	26	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	900	</rpm_min>
-      <rpm_max>	2400	</rpm_max>
+      <rpm_min>	388	</rpm_min>
+      <rpm_max>	2357	</rpm_max>
     </LaSalle_V8_89>
     <Continental_R-670-5>
       <userString>	#usa_vehicles:Continental_R-670-5	</userString>
@@ -274,13 +299,17 @@
       <price>	8600	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	265	</power>
       <weight>	256	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	459	</rpm_min>
+      <rpm_max>	2330	</rpm_max>
     </Continental_R-670-5>
     <Wright_G200_m_795C9GC1>
       <userString>	#usa_vehicles:Wright_G200_m_795C9GC1	</userString>
@@ -289,13 +318,17 @@
       <level>	5	</level>
       <price>	22500	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	700	</power>
       <weight>	612	</weight>
       <maxHealth>	247	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
     </Wright_G200_m_795C9GC1>
     <Wright_G2X_m_781C9GC1>
       <userString>	#usa_vehicles:Wright_G2X_m_781C9GC1	</userString>
@@ -304,13 +337,17 @@
       <level>	6	</level>
       <price>	30000	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	825	</power>
       <weight>	612	</weight>
       <maxHealth>	247	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	395	</rpm_min>
+      <rpm_max>	2894	</rpm_max>
     </Wright_G2X_m_781C9GC1>
     <Wright_G200_m_781C9GC1>
       <userString>	#usa_vehicles:Wright_G200_m_781C9GC1	</userString>
@@ -319,13 +356,17 @@
       <level>	7	</level>
       <price>	47600	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	960	</power>
       <weight>	612	</weight>
       <maxHealth>	247	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	471	</rpm_min>
+      <rpm_max>	2089	</rpm_max>
     </Wright_G200_m_781C9GC1>
     <Wright_G200A>
       <userString>	#usa_vehicles:Wright_G200A	</userString>
@@ -334,17 +375,17 @@
       <notInShop>	true	</notInShop>
       <price>	22500	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	640	</power>
       <weight>	612	</weight>
       <maxHealth>	247	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	645	</rpm_min>
+      <rpm_max>	2323	</rpm_max>
     </Wright_G200A>
     <Wright_G200_m_781C9GC5>
       <userString>	#usa_vehicles:Wright_G200_m_781C9GC5	</userString>
@@ -354,17 +395,17 @@
       <notInShop>	true	</notInShop>
       <price>	100000	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
       <power>	960	</power>
       <weight>	612	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	471	</rpm_min>
+      <rpm_max>	2089	</rpm_max>
     </Wright_G200_m_781C9GC5>
     <Wright_Continental_R-975EC2>
       <userString>	#usa_vehicles:Wright_Continental_R-975EC2	</userString>
@@ -373,17 +414,17 @@
       <level>	4	</level>
       <price>	10500	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	350	</power>
       <weight>	515	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	406	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
     </Wright_Continental_R-975EC2>
     <Wright_Continental_R-975C1>
       <userString>	#usa_vehicles:Wright_Continental_R-975C1	</userString>
@@ -401,8 +442,8 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1200	</rpm_min>
-      <rpm_max>	2400	</rpm_max>
+      <rpm_min>	374	</rpm_min>
+      <rpm_max>	2601	</rpm_max>
     </Wright_Continental_R-975C1>
     <Wright_Continental_R-975C4>
       <userString>	#usa_vehicles:Wright_Continental_R-975C4	</userString>
@@ -420,8 +461,8 @@
       <maxRegenHealth>	67	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1200	</rpm_min>
-      <rpm_max>	2400	</rpm_max>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
     </Wright_Continental_R-975C4>
     <Wright_Continental_R-975EC2_A>
       <userString>	#usa_vehicles:Wright_Continental_R-975EC2_A	</userString>
@@ -431,13 +472,17 @@
       <price>	13900	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	400	</power>
       <weight>	516	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	374	</rpm_min>
+      <rpm_max>	2601	</rpm_max>
     </Wright_Continental_R-975EC2_A>
     <Ford_GAA>
       <userString>	#usa_vehicles:Ford_GAA	</userString>
@@ -445,17 +490,17 @@
       <level>	7	</level>
       <price>	36000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	520	</power>
       <weight>	569	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2841	</rpm_max>
     </Ford_GAA>
     <Ford_GAN>
       <userString>	#usa_vehicles:Ford_GAN	</userString>
@@ -463,17 +508,17 @@
       <level>	7	</level>
       <price>	37200	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	560	</power>
       <weight>	569	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	274	</rpm_min>
+      <rpm_max>	2921	</rpm_max>
     </Ford_GAN>
     <Ford_GAN_T>
       <userString>	#usa_vehicles:Ford_GAN_T	</userString>
@@ -482,17 +527,17 @@
       <price>	37200	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	569	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
     </Ford_GAN_T>
     <Cuiberson_T-10204>
       <userString>	#usa_vehicles:Cuiberson_T-10204	</userString>
@@ -501,17 +546,17 @@
       <level>	3	</level>
       <price>	500	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	220	</power>
       <weight>	331	</weight>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	32	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	487	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </Cuiberson_T-10204>
     <Buick_series_60>
       <userString>	#usa_vehicles:Buick_series_60	</userString>
@@ -519,13 +564,17 @@
       <level>	4	</level>
       <price>	10400	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	330	</power>
       <weight>	756	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	418	</rpm_min>
+      <rpm_max>	2460	</rpm_max>
     </Buick_series_60>
     <Continental_W670-7>
       <userString>	#usa_vehicles:Continental_W670-7	</userString>
@@ -534,17 +583,17 @@
       <level>	3	</level>
       <price>	5600	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	262	</power>
       <weight>	256	</weight>
       <maxHealth>	58	</maxHealth>
       <maxRegenHealth>	32	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	461	</rpm_min>
+      <rpm_max>	2324	</rpm_max>
     </Continental_W670-7>
     <Continental_R670-7>
       <userString>	#usa_vehicles:Continental_R670-7	</userString>
@@ -552,18 +601,19 @@
       <tags>	gasoline	</tags>
       <level>	3	</level>
       <price>	2000	</price>
+      <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	250	</power>
       <weight>	256	</weight>
       <maxHealth>	58	</maxHealth>
       <maxRegenHealth>	32	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	468	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
     </Continental_R670-7>
     <Continental_R-975-C1>
       <userString>	#usa_vehicles:Continental_R-975-C1	</userString>
@@ -572,17 +622,17 @@
       <level>	4	</level>
       <price>	10500	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	350	</power>
       <weight>	500	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	406	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
     </Continental_R-975-C1>
     <Continental_AV-1790-1>
       <userString>	#usa_vehicles:Continental_AV-1790-1	</userString>
@@ -600,8 +650,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	2800	</rpm_max>
+      <rpm_min>	559	</rpm_min>
+      <rpm_max>	2521	</rpm_max>
     </Continental_AV-1790-1>
     <Continental_AV-1790-1M2>
       <userString>	#usa_vehicles:Continental_AV-1790-1M2	</userString>
@@ -613,14 +663,14 @@
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	820	</power>
       <weight>	569	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	402	</rpm_min>
+      <rpm_max>	2879	</rpm_max>
     </Continental_AV-1790-1M2>
     <GMC_Allison_V1710-E32>
       <userString>	#usa_vehicles:GMC_Allison_V1710-E32	</userString>
@@ -638,8 +688,8 @@
       <maxRegenHealth>	169	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1200	</rpm_min>
-      <rpm_max>	3200	</rpm_max>
+      <rpm_min>	483	</rpm_min>
+      <rpm_max>	2694	</rpm_max>
     </GMC_Allison_V1710-E32>
     <Continental_AV-1790-3>
       <userString>	#usa_vehicles:Continental_AV-1790-3	</userString>
@@ -657,8 +707,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	2800	</rpm_max>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
     </Continental_AV-1790-3>
     <Continental_AV-1790-3A1>
       <userString>	#usa_vehicles:Continental_AV-1790-3A1	</userString>
@@ -668,13 +718,17 @@
       <notInShop>	true	</notInShop>
       <price>	67000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	810	</power>
       <weight>	1057	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
     </Continental_AV-1790-3A1>
     <Continental_AV-1790-5>
       <userString>	#usa_vehicles:Continental_AV-1790-5	</userString>
@@ -692,8 +746,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	2800	</rpm_max>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </Continental_AV-1790-5>
     <Continental_AV_1790_5A>
       <userString>	#usa_vehicles:Continental_AV_1790_5A	</userString>
@@ -712,8 +766,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	2800	</rpm_max>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
     </Continental_AV_1790_5A>
     <AOI-1490>
       <userString>	#usa_vehicles:AOI-1490	</userString>
@@ -723,17 +777,17 @@
       <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	875	</power>
       <weight>	1200	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	495	</rpm_min>
+      <rpm_max>	2013	</rpm_max>
     </AOI-1490>
     <Continental_AV_1790_5C>
       <userString>	#usa_vehicles:Continental_AV_1790_5C	</userString>
@@ -744,33 +798,17 @@
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	810	</power>
       <weight>	1159	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
     </Continental_AV_1790_5C>
-    <Continental_AV_1790_5C_fallout>
-      <userString>	#usa_vehicles:Continental_AV_1790_5C_fallout	</userString>
-      <shortUserString>	#usa_vehicles:Continental_AV_1790_5C_fallout_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <price>	99000	</price>
-      <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <power>	810	</power>
-      <weight>	1159	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	0.1	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-    </Continental_AV_1790_5C_fallout>
     <Continental_AV-1790-5B>
       <userString>	#usa_vehicles:Continental_AV-1790-5B	</userString>
       <shortUserString>	#usa_vehicles:Continental_AV-1790-5B_short	</shortUserString>
@@ -787,8 +825,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	2800	</rpm_max>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
     </Continental_AV-1790-5B>
     <Continental_AV-1790-7C>
       <userString>	#usa_vehicles:Continental_AV-1790-7C	</userString>
@@ -797,17 +835,17 @@
       <level>	10	</level>
       <price>	100000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	860	</power>
       <weight>	569	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </Continental_AV-1790-7C>
     <Wright_R-975EC2>
       <userString>	#usa_vehicles:Wright_R-975EC2	</userString>
@@ -815,17 +853,17 @@
       <level>	4	</level>
       <price>	11600	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	400	</power>
       <weight>	515	</weight>
       <maxHealth>	156	</maxHealth>
       <maxRegenHealth>	78	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	374	</rpm_min>
+      <rpm_max>	2601	</rpm_max>
     </Wright_R-975EC2>
     <Crysler_A57>
       <userString>	#usa_vehicles:Crysler_A57	</userString>
@@ -833,17 +871,17 @@
       <level>	5	</level>
       <price>	13900	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	440	</power>
       <weight>	570	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2681	</rpm_max>
     </Crysler_A57>
     <Twin_Cadillac_series_44T4>
       <userString>	#usa_vehicles:Twin_Cadillac_series_44T4	</userString>
@@ -852,17 +890,17 @@
       <level>	4	</level>
       <price>	10200	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	296	</power>
       <weight>	530	</weight>
       <maxHealth>	123	</maxHealth>
       <maxRegenHealth>	58	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	439	</rpm_min>
+      <rpm_max>	2392	</rpm_max>
     </Twin_Cadillac_series_44T4>
     <Wright_Continental_R-975C2>
       <userString>	#usa_vehicles:Wright_Continental_R-975C2	</userString>
@@ -871,13 +909,17 @@
       <level>	3	</level>
       <price>	9200	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	340	</power>
       <weight>	549	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	412	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
     </Wright_Continental_R-975C2>
     <Hercules_HXE>
       <userString>	#usa_vehicles:Hercules_HXE	</userString>
@@ -886,13 +928,17 @@
       <price>	6500	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	240	</power>
       <weight>	331	</weight>
       <maxHealth>	78	</maxHealth>
       <maxRegenHealth>	39	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
     </Hercules_HXE>
     <Liberty>
       <userString>	#usa_vehicles:Liberty	</userString>
@@ -900,30 +946,18 @@
       <level>	2	</level>
       <price>	990	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	330	</power>
       <weight>	450	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	418	</rpm_min>
+      <rpm_max>	2460	</rpm_max>
     </Liberty>
-    <Ford_GAA_1>
-      <userString>	#usa_vehicles:Wright_Continental_R-975C3	</userString>
-      <shortUserString>	#usa_vehicles:Wright_Continental_R-975C3_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	5	</level>
-      <price>	33000	</price>
-      <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <power>	440	</power>
-      <weight>	569	</weight>
-      <maxHealth>	234	</maxHealth>
-      <maxRegenHealth>	123	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-    </Ford_GAA_1>
     <Liberty_bot>
       <userString>	#usa_vehicles:Liberty_bot	</userString>
       <tags>	gasoline	</tags>
@@ -940,9 +974,29 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	700	</rpm_min>
-      <rpm_max>	1500	</rpm_max>
+      <rpm_min>	418	</rpm_min>
+      <rpm_max>	2460	</rpm_max>
     </Liberty_bot>
+    <Ford_GAA_1>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C3	</userString>
+      <shortUserString>	#usa_vehicles:Wright_Continental_R-975C3_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	33000	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	440	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2681	</rpm_max>
+    </Ford_GAA_1>
     <Ford_GAA_R>
       <userString>	#usa_vehicles:Ford_GAA_R	</userString>
       <tags>	gasoline	</tags>
@@ -958,8 +1012,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	2600	</rpm_max>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
     </Ford_GAA_R>
     <GMC_6046>
       <userString>	#usa_vehicles:GMC_6046	</userString>
@@ -967,17 +1021,17 @@
       <level>	5	</level>
       <price>	13500	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	420	</power>
       <weight>	549	</weight>
       <maxHealth>	176	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	212	</rpm_min>
+      <rpm_max>	2274	</rpm_max>
     </GMC_6046>
     <General_Motors_6046>
       <userString>	#usa_vehicles:General_Motors_6046	</userString>
@@ -986,13 +1040,17 @@
       <price>	13500	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	420	</power>
       <weight>	549	</weight>
       <maxHealth>	176	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	212	</rpm_min>
+      <rpm_max>	2274	</rpm_max>
     </General_Motors_6046>
     <Ford_GAF>
       <userString>	#usa_vehicles:Ford_GAF	</userString>
@@ -1000,17 +1058,17 @@
       <level>	6	</level>
       <price>	25300	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	440	</power>
       <weight>	569	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2681	</rpm_max>
     </Ford_GAF>
     <Ford_GAF_V8>
       <userString>	#usa_vehicles:Ford_GAF_V8	</userString>
@@ -1019,17 +1077,17 @@
       <price>	34600	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	641	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
     </Ford_GAF_V8>
     <Ford_GAFM2>
       <userString>	#usa_vehicles:Ford_GAFM2	</userString>
@@ -1037,17 +1095,17 @@
       <level>	6	</level>
       <price>	34600	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	510	</power>
       <weight>	569	</weight>
-      <maxHealth>	280.8	</maxHealth>
-      <maxRegenHealth>	147.6	</maxRegenHealth>
+      <maxHealth>	280.0	</maxHealth>
+      <maxRegenHealth>	147.0	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	305	</rpm_min>
+      <rpm_max>	2821	</rpm_max>
     </Ford_GAFM2>
     <Ford_GAFM4>
       <userString>	#usa_vehicles:Ford_GAFM4	</userString>
@@ -1065,8 +1123,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	2600	</rpm_max>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2861	</rpm_max>
     </Ford_GAFM4>
     <Ford_GAA_2>
       <userString>	#usa_vehicles:Ford_GAA_2	</userString>
@@ -1075,13 +1133,17 @@
       <price>	29000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	708	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
     </Ford_GAA_2>
     <Licoming_0-435t>
       <userString>	#usa_vehicles:Licoming_0-435t	</userString>
@@ -1090,13 +1152,17 @@
       <notInShop>	true	</notInShop>
       <price>	7600	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	192	</power>
       <weight>	256	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	258	</rpm_min>
+      <rpm_max>	2771	</rpm_max>
     </Licoming_0-435t>
     <Continental_AOS-895-1>
       <userString>	#usa_vehicles:Continental_AOS-895-1	</userString>
@@ -1105,17 +1171,17 @@
       <level>	6	</level>
       <price>	30000	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	450	</power>
       <weight>	756	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	343	</rpm_min>
+      <rpm_max>	2701	</rpm_max>
     </Continental_AOS-895-1>
     <Maybach_HL_230P45>
       <userString>	#usa_vehicles:Maybach_HL_230P45	</userString>
@@ -1133,8 +1199,8 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1100	</rpm_min>
-      <rpm_max>	3000	</rpm_max>
+      <rpm_min>	497	</rpm_min>
+      <rpm_max>	2663	</rpm_max>
     </Maybach_HL_230P45>
     <American_LFF_Corporation_V12>
       <userString>	#usa_vehicles:American_LFF_Corporation_V12	</userString>
@@ -1144,13 +1210,17 @@
       <price>	8100	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	244	</power>
       <weight>	800	</weight>
       <maxHealth>	123	</maxHealth>
       <maxRegenHealth>	58	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	472	</rpm_min>
+      <rpm_max>	2288	</rpm_max>
     </American_LFF_Corporation_V12>
     <Continental_AOI-1195-5>
       <userString>	#usa_vehicles:Continental_AOI-1195-5	</userString>
@@ -1169,8 +1239,8 @@
       <maxRegenHealth>	142	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	3200	</rpm_max>
+      <rpm_min>	274	</rpm_min>
+      <rpm_max>	2921	</rpm_max>
     </Continental_AOI-1195-5>
     <Continental_AV-1790-7B>
       <userString>	#usa_vehicles:Continental_AV-1790-7B	</userString>
@@ -1179,17 +1249,17 @@
       <level>	10	</level>
       <price>	100000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	810	</power>
       <weight>	1171	</weight>
       <maxHealth>	285	</maxHealth>
       <maxRegenHealth>	142	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
     </Continental_AV-1790-7B>
     <Continental_AVI-1790-8>
       <userString>	#usa_vehicles:Continental_AVI-1790-8	</userString>
@@ -1202,14 +1272,14 @@
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	825	</power>
       <weight>	1349	</weight>
       <maxHealth>	285	</maxHealth>
       <maxRegenHealth>	142	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	395	</rpm_min>
+      <rpm_max>	2894	</rpm_max>
     </Continental_AVI-1790-8>
     <Continental_AOS-895-3>
       <userString>	#usa_vehicles:Continental_AOS-895-3	</userString>
@@ -1227,8 +1297,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	3000	</rpm_max>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
     </Continental_AOS-895-3>
     <Continental_AOSI-895-5>
       <userString>	#usa_vehicles:Continental_AOSI-895-5	</userString>
@@ -1246,8 +1316,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	3000	</rpm_max>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2901	</rpm_max>
     </Continental_AOSI-895-5>
     <Continental_AOI-628-1>
       <userString>	#usa_vehicles:Continental_AOI-628-1	</userString>
@@ -1256,17 +1326,17 @@
       <level>	5	</level>
       <price>	14000	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	340	</power>
       <weight>	498	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	412	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
     </Continental_AOI-628-1>
     <Continental_AOI-628-2>
       <userString>	#usa_vehicles:Continental_AOI-628-2	</userString>
@@ -1275,17 +1345,17 @@
       <level>	7	</level>
       <price>	34000	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	400	</power>
       <weight>	498	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	374	</rpm_min>
+      <rpm_max>	2601	</rpm_max>
     </Continental_AOI-628-2>
     <Continental_AOI-402-5>
       <userString>	#usa_vehicles:Continental_AOI-402-5	</userString>
@@ -1295,17 +1365,17 @@
       <price>	34000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	200	</power>
       <weight>	338	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </Continental_AOI-402-5>
     <Continental_AVDS-1790-2>
       <userString>	#usa_vehicles:Continental_AVDS-1790-2	</userString>
@@ -1316,12 +1386,16 @@
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	750	</power>
       <weight>	2053	</weight>
       <maxHealth>	285	</maxHealth>
       <maxRegenHealth>	142	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	342	</rpm_min>
+      <rpm_max>	2171	</rpm_max>
     </Continental_AVDS-1790-2>
     <Ford_GAF_R1>
       <userString>	#usa_vehicles:Ford_GAF_R1	</userString>
@@ -1330,13 +1404,17 @@
       <price>	38700	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	641	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
     </Ford_GAF_R1>
     <Continental_W-670-12>
       <userString>	#usa_vehicles:Continental_W-670-12	</userString>
@@ -1345,13 +1423,17 @@
       <level>	3	</level>
       <price>	8300	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	288	</power>
       <weight>	256	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	444	</rpm_min>
+      <rpm_max>	2376	</rpm_max>
     </Continental_W-670-12>
     <Ford_GAC_R>
       <userString>	#usa_vehicles:Ford_GAC_R	</userString>
@@ -1359,13 +1441,17 @@
       <level>	8	</level>
       <price>	59000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	770	</power>
       <weight>	839	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	470	</rpm_min>
+      <rpm_max>	2725	</rpm_max>
     </Ford_GAC_R>
     <Ford_GAN_T23>
       <userString>	#usa_vehicles:Ford_GAN_T23	</userString>
@@ -1374,13 +1460,17 @@
       <price>	37200	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	569	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
     </Ford_GAN_T23>
     <Development_Engine>
       <userString>	Development Engine	</userString>
@@ -1389,13 +1479,17 @@
       <level>	5	</level>
       <price>	1	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	540	</power>
       <weight>	750	</weight>
       <maxHealth>	105	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	382	</rpm_min>
+      <rpm_max>	2051	</rpm_max>
     </Development_Engine>
     <Continental_AOI-628-2_IGR>
       <userString>	#igr_vehicles:Continental_AOI-628-2_IGR	</userString>
@@ -1405,17 +1499,17 @@
       <price>	34000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	400	</power>
       <weight>	498	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	374	</rpm_min>
+      <rpm_max>	2601	</rpm_max>
     </Continental_AOI-628-2_IGR>
     <Continental_AOSI-895-5_IGR>
       <userString>	#igr_vehicles:Continental_AOSI-895-5_IGR	</userString>
@@ -1426,12 +1520,16 @@
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	550	</power>
       <weight>	771	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2901	</rpm_max>
     </Continental_AOSI-895-5_IGR>
     <Continental_AV-1790-3A1_IGR>
       <userString>	#igr_vehicles:Continental_AV-1790-3A1_IGR	</userString>
@@ -1441,13 +1539,17 @@
       <notInShop>	true	</notInShop>
       <price>	67000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	810	</power>
       <weight>	1057	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
     </Continental_AV-1790-3A1_IGR>
     <Ford_GAA_IGR>
       <userString>	#igr_vehicles:Ford_GAA_IGR	</userString>
@@ -1456,17 +1558,17 @@
       <price>	36000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	520	</power>
       <weight>	569	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2841	</rpm_max>
     </Ford_GAA_IGR>
     <Wright_Continental_R-975C4_IGR>
       <userString>	#igr_vehicles:Wright_Continental_R-975C4_IGR	</userString>
@@ -1476,17 +1578,17 @@
       <price>	13900	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	460	</power>
       <weight>	550	</weight>
       <maxHealth>	136	</maxHealth>
       <maxRegenHealth>	67	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2721	</rpm_max>
     </Wright_Continental_R-975C4_IGR>
     <Continental_AV-1790-1_IGR>
       <userString>	#igr_vehicles:Continental_AV-1790-1_IGR	</userString>
@@ -1496,17 +1598,17 @@
       <price>	45000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
       <power>	704	</power>
       <weight>	569	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	559	</rpm_min>
+      <rpm_max>	2521	</rpm_max>
     </Continental_AV-1790-1_IGR>
     <Continental_AV-1790-3_IGR>
       <userString>	#igr_vehicles:Continental_AV-1790-3_IGR	</userString>
@@ -1525,8 +1627,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1000	</rpm_min>
-      <rpm_max>	2800	</rpm_max>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
     </Continental_AV-1790-3_IGR>
     <Continental_AV-1790-7B_IGR>
       <userString>	#igr_vehicles:Continental_AV-1790-7B_IGR	</userString>
@@ -1536,17 +1638,17 @@
       <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	810	</power>
       <weight>	1171	</weight>
       <maxHealth>	285	</maxHealth>
       <maxRegenHealth>	142	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
     </Continental_AV-1790-7B_IGR>
   </shared>
 </engines.xml>

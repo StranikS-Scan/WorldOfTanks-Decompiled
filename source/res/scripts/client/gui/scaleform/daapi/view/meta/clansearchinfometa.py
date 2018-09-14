@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ClanSearchInfoMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -14,29 +14,22 @@ class ClanSearchInfoMeta(BaseDAAPIComponent):
         self._printOverrideError('requestData')
 
     def as_setInitDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInitData(data)
+        return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_setDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(data)
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setStateDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setStateData(data)
+        return self.flashObject.as_setStateData(data) if self._isDAAPIInited() else None
 
     def as_setEmblemS(self, emblem):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setEmblem(emblem)
+        return self.flashObject.as_setEmblem(emblem) if self._isDAAPIInited() else None
 
     def as_setWaitingVisibleS(self, visible):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setWaitingVisible(visible)
+        return self.flashObject.as_setWaitingVisible(visible) if self._isDAAPIInited() else None
 
     def as_setDummyS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setDummy(data)
+        return self.flashObject.as_setDummy(data) if self._isDAAPIInited() else None
 
     def as_setDummyVisibleS(self, visible):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setDummyVisible(visible)
+        return self.flashObject.as_setDummyVisible(visible) if self._isDAAPIInited() else None

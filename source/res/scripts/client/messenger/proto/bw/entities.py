@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/entities.py
 import cgi
 import types
@@ -12,6 +12,7 @@ from messenger.proto.entities import UserEntity
 from messenger.m_constants import PROTO_TYPE, LAZY_CHANNEL, PRIMARY_CHANNEL_ORDER
 from messenger.proto.bw.wrappers import ChannelDataWrapper
 PREBATTLE_TYPE_CHAT_FLAG = {PREBATTLE_TYPE.SQUAD: chat_shared.CHAT_CHANNEL_SQUAD,
+ PREBATTLE_TYPE.FALLOUT: chat_shared.CHAT_CHANNEL_SQUAD,
  PREBATTLE_TYPE.COMPANY: chat_shared.CHAT_CHANNEL_TEAM,
  PREBATTLE_TYPE.TRAINING: chat_shared.CHAT_CHANNEL_TRAINING,
  PREBATTLE_TYPE.CLAN: chat_shared.CHAT_CHANNEL_PREBATTLE_CLAN,
@@ -127,10 +128,13 @@ class BWChannelLightEntity(ChatEntity):
 
 class BWMemberEntity(MemberEntity):
 
-    def __init__(self, memberID, nickName = 'Unknown', status = None):
+    def __init__(self, memberID, nickName='Unknown', status=None):
         if nickName and type(nickName) is not types.UnicodeType:
             nickName = unicode(nickName, 'utf-8', errors='ignore')
         super(BWMemberEntity, self).__init__(memberID, nickName, status)
+
+    def getDatabaseID(self):
+        return self.getID()
 
     def getProtoType(self):
         return PROTO_TYPE.BW
@@ -139,7 +143,7 @@ class BWMemberEntity(MemberEntity):
 class BWUserEntity(UserEntity):
     __slots__ = ('_isOnline',)
 
-    def __init__(self, databaseID, name = None, tags = None, isOnline = False, clanInfo = None):
+    def __init__(self, databaseID, name=None, tags=None, isOnline=False, clanInfo=None):
         super(BWUserEntity, self).__init__(databaseID, name, tags, clanInfo)
         self._isOnline = isOnline
 
@@ -150,9 +154,7 @@ class BWUserEntity(UserEntity):
         return PROTO_TYPE.BW
 
     def isOnline(self):
-        if self.isIgnored():
-            return False
-        return self._isOnline
+        return False if self.isIgnored() else self._isOnline
 
     def update(self, **kwargs):
         if 'isOnline' in kwargs:

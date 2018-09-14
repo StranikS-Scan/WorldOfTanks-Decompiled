@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Login.py
 import BigWorld
 from PlayerEvents import g_playerEvents
@@ -17,11 +17,11 @@ class PlayerLogin(BigWorld.Entity):
         pass
 
     def onKickedFromServer(self, checkoutPeripheryID):
-        LOG_MX('onKickedFromServer', checkoutPeripheryID)
+        LOG_DEBUG('onKickedFromServer', checkoutPeripheryID)
         g_playerEvents.onKickWhileLoginReceived(checkoutPeripheryID)
 
     def receiveLoginQueueNumber(self, queueNumber):
-        LOG_MX('receiveLoginQueueNumber', queueNumber)
+        LOG_DEBUG('receiveLoginQueueNumber', queueNumber)
         g_playerEvents.onLoginQueueNumberReceived(queueNumber)
 
     def handleKeyEvent(self, event):

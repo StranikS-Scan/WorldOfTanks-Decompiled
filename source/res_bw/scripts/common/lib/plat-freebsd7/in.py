@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-freebsd7/IN.py
 __GNUCLIKE_ASM = 3
 __GNUCLIKE_ASM = 2
@@ -35,11 +36,11 @@ def __XSTRING(x):
 
 
 def __P(protos):
-    return ()
+    pass
 
 
 def __STRING(x):
-    return 'x'
+    pass
 
 
 def __aligned(x):
@@ -335,7 +336,7 @@ IPPORT_RESERVEDSTART = 600
 IPPORT_MAX = 65535
 
 def IN_CLASSA(i):
-    return u_int32_t(i) & -0x80000000 == 0
+    return u_int32_t(i) & -2147483648 == 0
 
 
 IN_CLASSA_NET = -16777216
@@ -344,7 +345,7 @@ IN_CLASSA_HOST = 16777215
 IN_CLASSA_MAX = 128
 
 def IN_CLASSB(i):
-    return u_int32_t(i) & -1073741824 == -0x80000000
+    return u_int32_t(i) & -1073741824 == -2147483648
 
 
 IN_CLASSB_NET = -65536

@@ -1,9 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/items.py
-import BigWorld
 from collections import namedtuple
 from datetime import datetime
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
+import BigWorld
 from helpers import time_utils
 from messenger.ext import passCensor
 from shared_utils import makeTupleByDict
@@ -19,14 +18,16 @@ def _getTimestamp(datetimeValue):
 
 
 def _toPercents(value):
-    if value:
-        return 100 * value
-    return value
+    return 100 * value if value else value
+
+
+def _getEfficiency(dividend, delimiter):
+    return float(dividend) / delimiter
 
 
 _defDateTime = datetime.fromtimestamp(0)
 
-def formatField(getter, dummy = None, formatter = None):
+def formatField(getter, dummy=None, formatter=None):
     return str(getter(doFmt=True, dummy=dummy, formatter=formatter))
 
 
@@ -60,7 +61,7 @@ class FieldsCheckerMixin(object):
         return tuple()
 
 
-def fmtUnavailableValue(fields = tuple(), dummy = clans_fmts.DUMMY_UNAVAILABLE_DATA):
+def fmtUnavailableValue(fields=tuple(), dummy=clans_fmts.DUMMY_UNAVAILABLE_DATA):
 
     def decorator(func):
 
@@ -99,7 +100,7 @@ def fmtUnavailableValue(fields = tuple(), dummy = clans_fmts.DUMMY_UNAVAILABLE_D
     return decorator
 
 
-def fmtNullValue(nullValue = 0, dummy = clans_fmts.DUMMY_NULL_DATA):
+def fmtNullValue(nullValue=0, dummy=clans_fmts.DUMMY_NULL_DATA):
 
     def decorator(func):
 
@@ -116,13 +117,31 @@ def fmtNullValue(nullValue = 0, dummy = clans_fmts.DUMMY_NULL_DATA):
     return decorator
 
 
+def fmtZeroDivisionValue(defValue=0, dummy=clans_fmts.DUMMY_NULL_DATA):
+
+    def decorator(func):
+
+        def wrapper(*args, **kwargs):
+            try:
+                value = func(*args, **kwargs)
+            except ZeroDivisionError:
+                if kwargs.get('doFmt', False):
+                    return kwargs.get('dummy', dummy) or dummy
+                else:
+                    return defValue
+
+            return value
+
+        return wrapper
+
+    return decorator
+
+
 def _formatString(value):
-    if not value or not len(value):
-        return clans_fmts.DUMMY_UNAVAILABLE_DATA
-    return passCensor(value)
+    return clans_fmts.DUMMY_UNAVAILABLE_DATA if not value or not len(value) else passCensor(value)
 
 
-def fmtDelegat(path, dummy = clans_fmts.DUMMY_UNAVAILABLE_DATA):
+def fmtDelegat(path, dummy=clans_fmts.DUMMY_UNAVAILABLE_DATA):
 
     def decorator(func):
 
@@ -137,17 +156,15 @@ def fmtDelegat(path, dummy = clans_fmts.DUMMY_UNAVAILABLE_DATA):
             formatter = kwargs.pop('formatter', None)
             if checkAvailability:
                 return _getGetter(path)(checkAvailability=checkAvailability)
-            elif doFmt:
-                return _getGetter(path)(doFmt=doFmt, dummy=placeholder, formatter=formatter)
             else:
-                return func(self, *args, **kwargs)
+                return _getGetter(path)(doFmt=doFmt, dummy=placeholder, formatter=formatter) if doFmt else func(self, *args, **kwargs)
 
         return wrapper
 
     return decorator
 
 
-def formatter(formatter = None):
+def formatter(formatter=None):
 
     def decorator(func):
 
@@ -195,11 +212,7 @@ class ClanExtInfoData(_ClanExtInfoData, FieldsCheckerMixin):
 
     @fmtUnavailableValue(fields=('name', 'tag'))
     def getFullName(self):
-        if self.tag:
-            return '%s %s' % (clans_fmts.getClanAbbrevString(self.getTag()), self.getClanName())
-
-    def _getCriticalFields(self):
-        return _ClanExtInfoDataCritical
+        return '%s %s' % (clans_fmts.getClanAbbrevString(self.getTag()), self.getClanName()) if self.tag else ''
 
     @fmtUnavailableValue(fields=('tag',))
     def getTag(self):
@@ -233,8 +246,10 @@ class ClanExtInfoData(_ClanExtInfoData, FieldsCheckerMixin):
 
     @fmtUnavailableValue(fields=('created_at',))
     def getCreatedAt(self):
-        if self.created_at:
-            return _getTimestamp(self.created_at)
+        return _getTimestamp(self.created_at) if self.created_at else 0
+
+    def _getCriticalFields(self):
+        return _ClanExtInfoDataCritical
 
 
 _ClanRatingsData = namedtuple('ClanRatingsData', ['clan_id',
@@ -295,17 +310,19 @@ class ClanRatingsData(_ClanRatingsData, FieldsCheckerMixin):
     def getBattlesCountAvg(self):
         return self.battles_count_avg
 
-    @fmtNullValue()
-    @fmtUnavailableValue(fields=('wins_ratio_avg',))
+    @fmtZeroDivisionValue()
+    @fmtUnavailableValue(fields=('wins_ratio_avg', 'battles_count_avg'))
     def getWinsRatioAvg(self):
-        return self.wins_ratio_avg
+        if self.battles_count_avg > 0:
+            return self.wins_ratio_avg
+        raise ZeroDivisionError
 
-    def isActive(self):
-        return self.gm_battles_count_28d > 0
-
-    @fmtUnavailableValue(fields=('xp_avg',))
+    @fmtZeroDivisionValue()
+    @fmtUnavailableValue(fields=('xp_avg', 'battles_count_avg'))
     def getBattlesPerformanceAvg(self):
-        return self.xp_avg
+        if self.battles_count_avg > 0:
+            return self.xp_avg
+        raise ZeroDivisionError
 
     @fmtUnavailableValue(fields=('gm_elo_rating_10_rank',))
     def getGlobalMapEloRatingRank10(self):
@@ -318,6 +335,9 @@ class ClanRatingsData(_ClanRatingsData, FieldsCheckerMixin):
     @fmtUnavailableValue(fields=('gm_elo_rating_6_rank',))
     def getGlobalMapEloRatingRank6(self):
         return self.gm_elo_rating_6_rank
+
+    def isActive(self):
+        return self.gm_battles_count_28d > 0
 
     def isGlobalMapOutdated(self):
         return self.gm_battles_count_28d <= 0
@@ -367,9 +387,10 @@ class ClanGlobalMapStatsData(_ClanGlobalMapStatsData, FieldsCheckerMixin):
     def getWinsCount(self):
         return self.battles_won
 
+    @fmtZeroDivisionValue()
     @fmtUnavailableValue(fields=('battles_won', 'battles_played'))
     def getWinsEfficiency(self):
-        return ProfileUtils.getEfficiencyPercent(self.battles_won, self.battles_played, clans_fmts.DUMMY_UNAVAILABLE_DATA)
+        return _getEfficiency(self.battles_won, self.battles_played)
 
     @fmtUnavailableValue(fields=('battles_lost',))
     def getLoosesCount(self):
@@ -395,9 +416,10 @@ class ClanGlobalMapStatsData(_ClanGlobalMapStatsData, FieldsCheckerMixin):
     def getWins6LevelCount(self):
         return self.battles_won_on_6_level
 
+    @fmtZeroDivisionValue()
     @fmtUnavailableValue(fields=('battles_won_on_6_level', 'battles_played_on_6_level'))
     def getWins6LevelEfficiency(self):
-        return ProfileUtils.getEfficiencyPercent(self.battles_won_on_6_level, self.battles_played_on_6_level, clans_fmts.DUMMY_UNAVAILABLE_DATA)
+        return _getEfficiency(self.battles_won_on_6_level, self.battles_played_on_6_level)
 
     @fmtUnavailableValue(fields=('battles_played_on_8_level',))
     def getBattles8LevelCount(self):
@@ -407,9 +429,10 @@ class ClanGlobalMapStatsData(_ClanGlobalMapStatsData, FieldsCheckerMixin):
     def getWins8LevelCount(self):
         return self.battles_won_on_8_level
 
+    @fmtZeroDivisionValue()
     @fmtUnavailableValue(fields=('battles_won_on_8_level', 'battles_played_on_8_level'))
     def getWins8LevelEfficiency(self):
-        return ProfileUtils.getEfficiencyPercent(self.battles_won_on_8_level, self.battles_played_on_8_level, clans_fmts.DUMMY_UNAVAILABLE_DATA)
+        return _getEfficiency(self.battles_won_on_8_level, self.battles_played_on_8_level)
 
     @fmtUnavailableValue(fields=('battles_played_on_10_level',))
     def getBattles10LevelCount(self):
@@ -419,9 +442,10 @@ class ClanGlobalMapStatsData(_ClanGlobalMapStatsData, FieldsCheckerMixin):
     def getWins10LevelCount(self):
         return self.battles_won_on_10_level
 
+    @fmtZeroDivisionValue()
     @fmtUnavailableValue(fields=('battles_won_on_10_level', 'battles_played_on_10_level'))
     def getWins10LevelEfficiency(self):
-        return ProfileUtils.getEfficiencyPercent(self.battles_won_on_10_level, self.battles_played_on_10_level, clans_fmts.DUMMY_UNAVAILABLE_DATA)
+        return _getEfficiency(self.battles_won_on_10_level, self.battles_played_on_10_level)
 
 
 Building = namedtuple('Building', 'type direction level position')
@@ -652,10 +676,7 @@ class ClanStrongholdStatisticsData(_ClanStrongholdStatisticsData, FieldsCheckerM
 
     @fmtUnavailableValue(fields=('vacation_start', 'vacation_finish'))
     def getVacationInfo(self):
-        if self.vacation_start is not None:
-            return (_getTimestamp(self.vacation_start), _getTimestamp(self.vacation_finish))
-        else:
-            return (None, None)
+        return (_getTimestamp(self.vacation_start), _getTimestamp(self.vacation_finish)) if self.vacation_start is not None else (None, None)
 
     @fmtUnavailableValue(fields=('off_day',))
     def getOffDay(self):
@@ -754,13 +775,19 @@ class AccountClanRatingsData(_AccountClanRatingsData, FieldsCheckerMixin):
     def getBattlesCount(self):
         return self.battles_count
 
-    @fmtUnavailableValue(fields=('battle_avg_xp',))
+    @fmtZeroDivisionValue()
+    @fmtUnavailableValue(fields=('battle_avg_xp', 'battles_count'))
     def getBattleXpAvg(self):
-        return self.battle_avg_xp
+        if self.battles_count > 0:
+            return self.battle_avg_xp
+        raise ZeroDivisionError
 
-    @fmtUnavailableValue(fields=('battle_avg_performance',))
+    @fmtZeroDivisionValue()
+    @fmtUnavailableValue(fields=('battle_avg_performance', 'battles_count'))
     def getBattlesPerformanceAvg(self):
-        return _toPercents(self.battle_avg_performance)
+        if self.battles_count > 0:
+            return _toPercents(self.battle_avg_performance)
+        raise ZeroDivisionError
 
     @fmtUnavailableValue(fields=('xp_amount',))
     def getXp(self):
@@ -777,7 +804,9 @@ _ClanProvinceData = namedtuple('_ClanProvinceData', ['front_name',
  'turns_owned',
  'province_id_localized',
  'front_name_localized',
- 'frontInfo'])
+ 'frontInfo',
+ 'pillage_cooldown',
+ 'pillage_end_datetime'])
 _ClanProvinceData.__new__.__defaults__ = ('',
  0,
  0,
@@ -787,6 +816,8 @@ _ClanProvinceData.__new__.__defaults__ = ('',
  '',
  0,
  '',
+ None,
+ None,
  None)
 
 class ClanProvinceData(_ClanProvinceData, FieldsCheckerMixin):
@@ -823,10 +854,7 @@ class ClanProvinceData(_ClanProvinceData, FieldsCheckerMixin):
     @fmtUnavailableValue(fields=('periphery',))
     def getPeripheryName(self):
         periphery = g_preDefinedHosts.periphery(self.periphery)
-        if periphery is not None:
-            return periphery.name
-        else:
-            return ''
+        return periphery.name if periphery is not None else ''
 
     @fmtUnavailableValue(fields=('game_map',))
     def getArenaName(self):
@@ -835,6 +863,17 @@ class ClanProvinceData(_ClanProvinceData, FieldsCheckerMixin):
     @fmtUnavailableValue(fields=('turns_owned',))
     def getTurnsOwned(self):
         return self.turns_owned
+
+    @fmtUnavailableValue(fields=('pillage_cooldown',))
+    def getPillageCooldown(self):
+        return self.pillage_cooldown
+
+    @fmtUnavailableValue(fields=('pillage_end_datetime',))
+    def getPillageEndDatetime(self):
+        if self.pillage_end_datetime:
+            return _getTimestamp(self.pillage_end_datetime)
+        else:
+            return 0
 
 
 _GlobalMapFrontInfoData = namedtuple('_GlobalMapFrontInfoData', ['front_name', 'min_vehicle_level', 'max_vehicle_level'])
@@ -1069,6 +1108,8 @@ class ClanInviteWrapper(object):
         self.__accountName = accountName
         self.__senderName = senderName
         self.__changerName = changerName
+        self.__statusCode = None
+        return
 
     @property
     def status(self):
@@ -1192,6 +1233,9 @@ class ClanInviteWrapper(object):
     def getComment(self):
         return self.__invite.getComment()
 
+    def getStatusCode(self):
+        return self.__statusCode
+
     def setInvite(self, invite):
         self.__invite = invite
 
@@ -1206,6 +1250,9 @@ class ClanInviteWrapper(object):
 
     def setUserName(self, name):
         self.__accountName = name
+
+    def setStatusCode(self, code):
+        self.__statusCode = code
 
 
 class ClanPersonalInviteWrapper(object):

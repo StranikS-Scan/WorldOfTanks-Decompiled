@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/http/__init__.py
 import urllib2
 from debug_utils import LOG_WARNING, LOG_ERROR
@@ -58,17 +58,11 @@ class _HttpResponse(object):
 
     def getLastModified(self):
         modified = self._getHeader('Last-Modified')
-        if modified:
-            return parsedate(modified)
-        else:
-            return None
+        return parsedate(modified) if modified else None
 
     def getExpires(self):
         expires = self._getHeader('Expires')
-        if expires:
-            return parsedate(expires)
-        else:
-            return None
+        return parsedate(expires) if expires else None
 
     def isNotModified(self):
         return self._getCode() == _IS_NOT_MODIFIED
@@ -102,43 +96,36 @@ class _HttpResponse(object):
 class _HttpConnResponse(_HttpResponse):
 
     def _getHeader(self, header):
-        if self._response:
-            return self._response.getheader(header)
-        else:
-            return None
+        return self._response.getheader(header) if self._response else None
 
     def _getCode(self):
-        if self._response:
-            return self._response.status
-        else:
-            return None
+        return self._response.status if self._response else None
 
     def _readData(self, response):
-        if response:
-            return response.read()
-        else:
-            return None
+        return response.read() if response else None
 
 
-def openUrl(url, timeout = _DEFAULT_TIMEOUT, modified = None, agent = _CLIENT_VERSION):
+def openUrl(url, timeout=_DEFAULT_TIMEOUT, modified=None, agent=_CLIENT_VERSION):
     response = None
     try:
-        request = urllib2.Request(url)
-        request.add_header('User-Agent', agent)
-        if modified:
-            request.add_header('If-Modified-Since', formatdate(modified))
-            urlOpener = urllib2.build_opener(_NotModifiedHandler())
-            response = urlOpener.open(request, timeout=timeout)
-        else:
-            urlOpener = urllib2.build_opener(urllib2.BaseHandler())
-            response = urlOpener.open(request, timeout=timeout)
-        return _HttpResponse(response)
-    except urllib2.HTTPError as e:
-        LOG_WARNING('urllib2.HTTPError', e.code, url)
-    except urllib2.URLError as e:
-        LOG_WARNING('urllib2.URLError', e.reason, url)
-    except Exception as e:
-        LOG_ERROR("Client couldn't download file", e, url)
+        try:
+            request = urllib2.Request(url)
+            request.add_header('User-Agent', agent)
+            if modified:
+                request.add_header('If-Modified-Since', formatdate(modified))
+                urlOpener = urllib2.build_opener(_NotModifiedHandler())
+                response = urlOpener.open(request, timeout=timeout)
+            else:
+                urlOpener = urllib2.build_opener(urllib2.BaseHandler())
+                response = urlOpener.open(request, timeout=timeout)
+            return _HttpResponse(response)
+        except urllib2.HTTPError as e:
+            LOG_WARNING('urllib2.HTTPError', e.code, url)
+        except urllib2.URLError as e:
+            LOG_WARNING('urllib2.URLError', e.reason, url)
+        except Exception as e:
+            LOG_ERROR("Client couldn't download file", e, url)
+
     finally:
         if response:
             response.close()
@@ -146,7 +133,7 @@ def openUrl(url, timeout = _DEFAULT_TIMEOUT, modified = None, agent = _CLIENT_VE
     return _HttpResponse(response)
 
 
-def openPage(connection, page, modified = None, agent = _CLIENT_VERSION):
+def openPage(connection, page, modified=None, agent=_CLIENT_VERSION):
     response = None
     try:
         headers = {'User-Agent': agent,

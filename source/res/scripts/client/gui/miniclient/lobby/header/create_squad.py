@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/header/create_squad.py
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from helpers import aop

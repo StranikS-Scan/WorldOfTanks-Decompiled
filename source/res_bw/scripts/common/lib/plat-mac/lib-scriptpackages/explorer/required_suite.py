@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Explorer/Required_Suite.py
 """Suite Required Suite: Events that every application should support
 Level 1, version 1
@@ -12,7 +13,7 @@ from StdSuites.Required_Suite import *
 
 class Required_Suite_Events(Required_Suite_Events):
 
-    def open(self, _object, _attributes = {}, **_arguments):
+    def open(self, _object, _attributes={}, **_arguments):
         """open: Open documents
         Required argument: undocumented, typecode 'alis'
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -25,10 +26,9 @@ class Required_Suite_Events(Required_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def print_(self, _object, _attributes = {}, **_arguments):
+    def print_(self, _object, _attributes={}, **_arguments):
         """print: Print documents
         Required argument: undocumented, typecode 'alis'
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -41,10 +41,9 @@ class Required_Suite_Events(Required_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def quit(self, _no_object = None, _attributes = {}, **_arguments):
+    def quit(self, _no_object=None, _attributes={}, **_arguments):
         """quit: Quit application
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -57,12 +56,9 @@ class Required_Suite_Events(Required_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def run(self, _no_object = None, _attributes = {}, **_arguments):
+    def run(self, _no_object=None, _attributes={}, **_arguments):
         """run:
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -75,10 +71,7 @@ class Required_Suite_Events(Required_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 _classdeclarations = {}

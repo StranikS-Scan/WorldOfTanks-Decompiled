@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/LogitechMonitor.py
 import BigWorld
 from collections import defaultdict
@@ -27,7 +27,7 @@ TOTAL_BLOCKS = (('common', (('a15x15', 'battlesCount'),
    ('', 'effectiveShots'),
    ('a15x15', 'damageDealt'))), ('credits', (('a15x15', 'xp'), ('', 'avgExperience'), ('max15x15', 'maxXP'))))
 
-def getDossierTotalBlocksSummary(dossier, isCompact = False):
+def getDossierTotalBlocksSummary(dossier, isCompact=False):
     data = []
     for blockType, fields in TOTAL_BLOCKS:
         for field in fields:
@@ -51,7 +51,7 @@ def __getData(blockName, fieldType, dossier):
     return BigWorld.wg_getIntegralFormat(dossier[blockName][fieldType])
 
 
-def __getDataExtra(blockType, blockName, fieldType, dossier, isTotal = False, isCompact = False):
+def __getDataExtra(blockType, blockName, fieldType, dossier, isTotal=False, isCompact=False):
     extra = ''
     if blockType == 'common':
         if fieldType != 'battlesCount' and dossier['a15x15']['battlesCount'] != 0:
@@ -137,7 +137,7 @@ class _LogitechScreen(object):
     def onChangeView(self):
         self.call('logitech.changeView', [])
 
-    def call(self, methodName, args = None):
+    def call(self, methodName, args=None):
         self.uiHolder.call(methodName, args)
 
 
@@ -194,7 +194,7 @@ class _BattleScreen(_LogitechScreen):
     __timerCallBackId = None
     __debugCallBackId = None
 
-    def __init__(self, component, frame = 'battle'):
+    def __init__(self, component, frame='battle'):
         super(_BattleScreen, self).__init__(component, frame)
         self._colorManager = None
         return
@@ -440,7 +440,7 @@ class LogitechMonitor(object):
         return
 
     @staticmethod
-    def onScreenChange(currentScreen = None):
+    def onScreenChange(currentScreen=None):
         if not currentScreen and isPlayerAccount():
             currentScreen = 'hangar'
         if currentScreen in LogitechMonitor.SCREEN_TO_FRAME.keys():

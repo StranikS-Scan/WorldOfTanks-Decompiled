@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesSortieListView.py
 import BigWorld
 from constants import PREBATTLE_TYPE
@@ -53,7 +53,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
     def onClientStateChanged(self, state):
         self.__updateSearchDP(state)
         self.__validateCreation()
-        self.__registerSortiesCurfewController()
+        self.__updateForbiddenSortiesData()
         if state.getStateID() not in (CLIENT_FORT_STATE.HAS_FORT, CLIENT_FORT_STATE.CENTER_UNAVAILABLE):
             self.as_selectByIndexS(-1)
             self._searchDP.setSelectedID(None)
@@ -119,9 +119,9 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
         self._divisionsDP = sorties_dps.DivisionsDataProvider()
         self._divisionsDP.init(self.as_getDivisionsDPS())
         self.__updateSearchDP(self.fortProvider.getState())
-        self.__validateCreation()
         g_messengerEvents.users.onUserActionReceived += self.onContactsUpdated
-        self.__registerSortiesCurfewController()
+        self.__validateCreation()
+        self.__updateForbiddenSortiesData()
         self._initListColumns()
 
     def _initListColumns(self):
@@ -224,21 +224,21 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
         self.as_setCurfewEnabledS(not sortiesAvailable or not servAvailable)
 
     def __onSortieStatusChanged(self):
-        self.__updateForbiddenSortiesData()
         self.__validateCreation()
+        self.__updateForbiddenSortiesData()
 
     def __registerSortiesCurfewController(self):
-        if not self.__sortiesCurfewCtrl:
+        if self.__sortiesCurfewCtrl is None:
             self.__sortiesCurfewCtrl = self.fortProvider.getController().getSortiesCurfewCtrl()
-            if self.__sortiesCurfewCtrl:
+            if self.__sortiesCurfewCtrl is not None:
                 self.__sortiesCurfewCtrl.onStatusChanged += self.__onSortieStatusChanged
-                self.__validateCreation()
-                self.__updateForbiddenSortiesData()
+        else:
+            sortiesCurfewCtrl = self.fortProvider.getController().getSortiesCurfewCtrl()
+            if sortiesCurfewCtrl is None:
+                self.__sortiesCurfewCtrl.onStatusChanged -= self.__onSortieStatusChanged
+                self.__sortiesCurfewCtrl = None
         return self.__sortiesCurfewCtrl
 
     def __getSortieCurfewStatus(self):
         controller = self.__registerSortiesCurfewController()
-        if controller is None:
-            return (True, True)
-        else:
-            return controller.getStatus()
+        return (True, True) if controller is None else controller.getStatus()

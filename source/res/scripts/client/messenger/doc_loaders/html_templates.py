@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/html_templates.py
 import types
 from debug_utils import LOG_WARNING
@@ -12,9 +12,9 @@ class _MessageTemplate(templates.Template):
         self.data = data
         self.priority = priority
 
-    def format(self, ctx = None, data = None):
+    def format(self, ctx=None, data=None):
         vo = self.data.copy()
-        if type(data) is types.DictionaryType:
+        if isinstance(data, types.DictionaryType):
             for key, value in data.iteritems():
                 if key in vo:
                     vo[key] = value
@@ -34,7 +34,7 @@ class _MessageTemplate(templates.Template):
 
 class MessageTemplates(templates.XMLCollection):
 
-    def format(self, key, ctx = None, **kwargs):
+    def format(self, key, ctx=None, **kwargs):
         bgIconSource = kwargs.pop('bgIconSource', None)
         formatted = super(MessageTemplates, self).format(key, ctx, **kwargs)
         source = formatted['bgIcon']

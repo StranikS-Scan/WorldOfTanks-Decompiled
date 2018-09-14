@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortClanBattleRoomMeta.py
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyRoomView import BaseRallyRoomView
 
@@ -8,29 +8,22 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
         self._printOverrideError('onTimerAlert')
 
     def as_updateTeamHeaderTextS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateTeamHeaderText(value)
+        return self.flashObject.as_updateTeamHeaderText(value) if self._isDAAPIInited() else None
 
     def as_setBattleRoomDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setBattleRoomData(data)
+        return self.flashObject.as_setBattleRoomData(data) if self._isDAAPIInited() else None
 
     def as_updateReadyStatusS(self, mineValue, enemyValue):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateReadyStatus(mineValue, enemyValue)
+        return self.flashObject.as_updateReadyStatus(mineValue, enemyValue) if self._isDAAPIInited() else None
 
     def as_setTimerDeltaS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTimerDelta(data)
+        return self.flashObject.as_setTimerDelta(data) if self._isDAAPIInited() else None
 
     def as_updateDirectionsS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateDirections(data)
+        return self.flashObject.as_updateDirections(data) if self._isDAAPIInited() else None
 
     def as_setMineClanIconS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMineClanIcon(value)
+        return self.flashObject.as_setMineClanIcon(value) if self._isDAAPIInited() else None
 
     def as_setEnemyClanIconS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setEnemyClanIcon(value)
+        return self.flashObject.as_setEnemyClanIcon(value) if self._isDAAPIInited() else None

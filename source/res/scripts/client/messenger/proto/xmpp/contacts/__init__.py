@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/__init__.py
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
@@ -37,12 +37,12 @@ class _UserPresence(ClientHolder):
     def getUserScope(self):
         return self.__scope
 
-    def switch(self, scope = None):
+    def switch(self, scope=None):
         if scope:
             self.__scope = scope
         self.sendPresence()
 
-    def sendPresence(self, initial = False):
+    def sendPresence(self, initial=False):
         client = self.client()
         if not client or not client.isConnected():
             return False
@@ -128,7 +128,7 @@ class _VoipHandler(object):
 
 
 class ContactsManager(ClientEventsHandler):
-    __slots__ = ('__seq', '__tasks', '__cooldown', '__presence', '__voip', '__rqRestrictions')
+    __slots__ = ('__seq', '__tasks', '__cooldown', '__presence', '__voip', '__rqRestrictions', '__subsBatch', '__subsRestrictions')
 
     def __init__(self):
         super(ContactsManager, self).__init__()
@@ -197,7 +197,7 @@ class ContactsManager(ClientEventsHandler):
         self.__tasks.clear()
 
     @xmpp_query(QUERY_SIGN.DATABASE_ID, QUERY_SIGN.ACCOUNT_NAME, QUERY_SIGN.OPT_GROUP_NAME)
-    def addFriend(self, dbID, name, group = None):
+    def addFriend(self, dbID, name, group=None):
         error = self.__checkCooldown(CLIENT_ACTION_ID.ADD_FRIEND)
         if error:
             return (False, error)
@@ -271,7 +271,7 @@ class ContactsManager(ClientEventsHandler):
         return self.__addTasks(CLIENT_ACTION_ID.REMOVE_FRIEND, jid, *tasks)
 
     @xmpp_query(QUERY_SIGN.DATABASE_ID, QUERY_SIGN.OPT_GROUP_NAME, QUERY_SIGN.OPT_GROUP_NAME)
-    def moveFriendToGroup(self, dbID, include = None, exclude = None):
+    def moveFriendToGroup(self, dbID, include=None, exclude=None):
         error = self.__checkCooldown(CLIENT_ACTION_ID.CHANGE_GROUP)
         if error:
             return (False, error)
@@ -330,7 +330,7 @@ class ContactsManager(ClientEventsHandler):
             return self.__addTasks(CLIENT_ACTION_ID.CHANGE_GROUP, task.getJID(), task)
 
     @xmpp_query(QUERY_SIGN.GROUP_NAME)
-    def removeGroup(self, name, isForced = False):
+    def removeGroup(self, name, isForced=False):
         error = self.__checkCooldown(CLIENT_ACTION_ID.CHANGE_GROUP)
         if error:
             return (False, error)
@@ -366,14 +366,10 @@ class ContactsManager(ClientEventsHandler):
         return self.__addTasks(CLIENT_ACTION_ID.RQ_FRIENDSHIP, jid, sub_tasks.AskSubscriptionTask(jid))
 
     def canApproveFriendship(self, contact):
-        if not self.client() or not self.client().isConnected():
-            return (False, ClientError(CLIENT_ERROR_ID.NOT_CONNECTED))
-        return self.__subsRestrictions.canApproveFriendship(contact)
+        return (False, ClientError(CLIENT_ERROR_ID.NOT_CONNECTED)) if not self.client() or not self.client().isConnected() else self.__subsRestrictions.canApproveFriendship(contact)
 
     def canCancelFriendship(self, contact):
-        if not self.client() or not self.client().isConnected():
-            return (False, ClientError(CLIENT_ERROR_ID.NOT_CONNECTED))
-        return self.__subsRestrictions.canCancelFriendship(contact)
+        return (False, ClientError(CLIENT_ERROR_ID.NOT_CONNECTED)) if not self.client() or not self.client().isConnected() else self.__subsRestrictions.canCancelFriendship(contact)
 
     @xmpp_query(QUERY_SIGN.DATABASE_ID)
     def approveFriendship(self, dbID):
@@ -514,7 +510,7 @@ class ContactsManager(ClientEventsHandler):
         self.__cooldown.process(CLIENT_ACTION_ID.REMOVE_NOTE)
         return self.__addTasks(CLIENT_ACTION_ID.SET_NOTE, jid, note_tasks.RemoveNoteTask(jid))
 
-    def __makeChangeGroupsChain(self, exclude, include = None):
+    def __makeChangeGroupsChain(self, exclude, include=None):
         chain = []
         for contact in self.usersStorage.getList(GroupFindCriteria(exclude)):
             jid = contact.getJID()

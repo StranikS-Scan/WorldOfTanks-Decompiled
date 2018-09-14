@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientChat.py
 import cPickle
 import zlib
@@ -31,7 +31,7 @@ class ClientChat(object):
     def requestSystemChatChannels(self):
         self.__baseChatCommand(CHAT_COMMANDS.requestSystemChatChannels)
 
-    def findChatChannels(self, sample, requestID = None):
+    def findChatChannels(self, sample, requestID=None):
         if requestID is None:
             requestID = self.acquireRequestID()
         try:
@@ -50,7 +50,7 @@ class ClientChat(object):
     def requestChatChannelMembersCount(self, channelId):
         self.__baseChannelChatCommand(channelId, CHAT_COMMANDS.getMembersCount)
 
-    def createChatChannel(self, channelName, password = None):
+    def createChatChannel(self, channelName, password=None):
         try:
             self.__baseChatCommand(CHAT_COMMANDS.createChatChannel, stringArg1=channelName, stringArg2=password if password is not None else '', ignoreCooldown=False)
         except ChatError as ex:
@@ -61,7 +61,7 @@ class ClientChat(object):
     def destroyChatChannel(self, channelId):
         self.__baseChannelChatCommand(channelId, CHAT_COMMANDS.destroyChatChannel)
 
-    def enterChat(self, channelId, password = None):
+    def enterChat(self, channelId, password=None):
         self.__baseChannelChatCommand(channelId, CHAT_COMMANDS.enterChatChannel, stringArg1=password if password is not None else '')
         return
 
@@ -118,7 +118,7 @@ class ClientChat(object):
     def requestLastSysMessages(self):
         self.__baseChatCommand(CHAT_COMMANDS.requestLastSysMessages)
 
-    def findUsers(self, userNamePattern, onlineMode = None, requestID = None):
+    def findUsers(self, userNamePattern, onlineMode=None, requestID=None):
         if onlineMode is None:
             searchMode = USER_SEARCH_MODE.ALL
         elif onlineMode:
@@ -128,13 +128,13 @@ class ClientChat(object):
         self.__baseChatCommand(CHAT_COMMANDS.findUser, int16Arg=searchMode, stringArg1=userNamePattern, requestID=requestID)
         return
 
-    def requestUsersRoster(self, flags = 0):
+    def requestUsersRoster(self, flags=0):
         self.__baseChatCommand(CHAT_COMMANDS.requestUsersRoster, int16Arg=flags)
 
     def logVivoxLogin(self):
         self.__baseChatCommand(CHAT_COMMANDS.logVivoxLogin)
 
-    def requestFriendStatus(self, friendID = -1):
+    def requestFriendStatus(self, friendID=-1):
         self.__baseChatCommand(CHAT_COMMANDS.requestFriendStatus, int64Arg=friendID)
 
     def addFriend(self, friendID, friendName):
@@ -158,19 +158,19 @@ class ClientChat(object):
     def unsetMuted(self, mutedID):
         self.__baseChatCommand(CHAT_COMMANDS.unsetMuted, int64Arg=mutedID)
 
-    def createPrebattleInvite(self, receiverName, auxText, prebattleID, prebattleType, requestID = None):
+    def createPrebattleInvite(self, receiverName, auxText, prebattleID, prebattleType, requestID=None):
         self.__baseInviteCommand(CHAT_COMMANDS.createInvite, INVITE_TYPES.PREBATTLE, receiverName, prebattleID, prebattleType, stringArg2=auxText, requestID=requestID)
 
-    def createBarterInvite(self, receiverName, auxText, itemID, requestID = None):
+    def createBarterInvite(self, receiverName, auxText, itemID, requestID=None):
         self.__baseInviteCommand(CHAT_COMMANDS.createInvite, INVITE_TYPES.BARTER, receiverName, itemID, stringArg2=auxText, requestID=requestID)
 
-    def acceptPrebattleInvite(self, inviteID, requestID = None):
+    def acceptPrebattleInvite(self, inviteID, requestID=None):
         if requestID is None:
             requestID = self.acquireRequestID()
         self.base.ackCommand(requestID, CHAT_COMMANDS.acceptInvite.index(), time.time(), inviteID, -1)
         return
 
-    def rejectInvite(self, inviteID, requestID = None):
+    def rejectInvite(self, inviteID, requestID=None):
         if requestID is None:
             requestID = self.acquireRequestID()
         self.base.ackCommand(requestID, CHAT_COMMANDS.rejectInvite.index(), time.time(), inviteID, -1)
@@ -182,24 +182,24 @@ class ClientChat(object):
     def getArchiveInvites(self):
         self.__baseInviteCommand(CHAT_COMMANDS.getArchiveInvites)
 
-    def requestVOIPCredentials(self, changePwd = 0):
+    def requestVOIPCredentials(self, changePwd=0):
         self.__baseChatCommand(CHAT_COMMANDS.requestVOIPCredentials, int16Arg=changePwd)
 
-    def subscribeChatAction(self, callback, action, channelId = None):
+    def subscribeChatAction(self, callback, action, channelId=None):
         cbs = self.__getChatActionCallbacks(action, channelId)
         cbs += callback
 
-    def unsubscribeChatAction(self, callback, action, channelId = None):
+    def unsubscribeChatAction(self, callback, action, channelId=None):
         cbs = self.__getChatActionCallbacks(action, channelId)
         cbs -= callback
 
     def setChatActionsCallbacks(self, callbacks):
         self.__chatActionCallbacks = callbacks
 
-    def sendChannelChatCommand(self, channelID, command, int64Arg = 0, int16Arg = 0, stringArg1 = '', stringArg2 = ''):
+    def sendChannelChatCommand(self, channelID, command, int64Arg=0, int16Arg=0, stringArg1='', stringArg2=''):
         self.__baseChannelChatCommand(channelID, command, int64Arg, int16Arg, stringArg1, stringArg2)
 
-    def _processChatError(self, action, channelId, chatError, requestID = -1):
+    def _processChatError(self, action, channelId, chatError, requestID=-1):
         if isinstance(chatError, ChatError):
             actionData = chatError.messageArgs if chatError.messageArgs is not None else chatError.message
         else:
@@ -239,7 +239,7 @@ class ClientChat(object):
 
         self.__baseChatCommand(CHAT_COMMANDS.initAck, int64Arg=streamID, int16Arg=failed)
 
-    def __baseChannelChatCommand(self, channelID, command, int64Arg = 0, int16Arg = 0, stringArg1 = '', stringArg2 = '', ignoreCooldown = True):
+    def __baseChannelChatCommand(self, channelID, command, int64Arg=0, int16Arg=0, stringArg1='', stringArg2='', ignoreCooldown=True):
         if 0 == channelID:
             LOG_ERROR('Can`t execute chat channel command for channelId: %s' % (channelID,))
         else:
@@ -249,7 +249,7 @@ class ClientChat(object):
                 raise ChatCommandInCooldown(command)
             self.__baseChatCommand(command, channelID, int64Arg, int16Arg, stringArg1, stringArg2)
 
-    def __baseChatCommand(self, command, channelID = 0, int64Arg = 0, int16Arg = 0, stringArg1 = '', stringArg2 = '', ignoreCooldown = True, requestID = None):
+    def __baseChatCommand(self, command, channelID=0, int64Arg=0, int16Arg=0, stringArg1='', stringArg2='', ignoreCooldown=True, requestID=None):
         if requestID is None:
             requestID = self.acquireRequestID()
         if chat_shared.isOperationInCooldown(chat_shared.g_chatCooldownData, command):
@@ -258,7 +258,7 @@ class ClientChat(object):
         self.base.chatCommandFromClient(requestID, command.index(), channelID, int64Arg, int16Arg, stringArg1, stringArg2)
         return
 
-    def __baseInviteCommand(self, command, inviteType = None, receiverName = '', int64Arg = 0, int16Arg = 0, stringArg1 = '', stringArg2 = '', requestID = None):
+    def __baseInviteCommand(self, command, inviteType=None, receiverName='', int64Arg=0, int16Arg=0, stringArg1='', stringArg2='', requestID=None):
         if requestID is None:
             requestID = self.acquireRequestID()
         self.base.inviteCommand(requestID, command.index(), inviteType.index() if inviteType is not None else -1, receiverName, int64Arg, int16Arg, stringArg1, stringArg2)

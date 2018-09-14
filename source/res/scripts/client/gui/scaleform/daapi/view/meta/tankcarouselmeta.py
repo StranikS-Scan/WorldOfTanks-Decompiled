@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TankCarouselMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -25,30 +25,23 @@ class TankCarouselMeta(BaseDAAPIComponent):
     def moveVehiclesSelectionSlot(self, vehicleInventoryId):
         self._printOverrideError('moveVehiclesSelectionSlot')
 
-    def as_setMultiselectionModeS(self, enabled, formattedMessage, showSlots, slots):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMultiselectionMode(enabled, formattedMessage, showSlots, slots)
+    def as_setMultiselectionModeS(self, data):
+        return self.flashObject.as_setMultiselectionMode(data) if self._isDAAPIInited() else None
 
     def as_setMultiselectionButtonLabelsS(self, activateLabel, deactivateLabel, disabledTooltip):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMultiselectionButtonLabels(activateLabel, deactivateLabel, disabledTooltip)
+        return self.flashObject.as_setMultiselectionButtonLabels(activateLabel, deactivateLabel, disabledTooltip) if self._isDAAPIInited() else None
 
     def as_updateMultiselectionDataS(self, multiselectData):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateMultiselectionData(multiselectData)
+        return self.flashObject.as_updateMultiselectionData(multiselectData) if self._isDAAPIInited() else None
 
     def as_setCarouselFilterS(self, filter):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCarouselFilter(filter)
+        return self.flashObject.as_setCarouselFilter(filter) if self._isDAAPIInited() else None
 
     def as_setParamsS(self, params):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setParams(params)
+        return self.flashObject.as_setParams(params) if self._isDAAPIInited() else None
 
     def as_updateVehiclesS(self, vehiclesData, isSet):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateVehicles(vehiclesData, isSet)
+        return self.flashObject.as_updateVehicles(vehiclesData, isSet) if self._isDAAPIInited() else None
 
     def as_showVehiclesS(self, compactDescrList):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showVehicles(compactDescrList)
+        return self.flashObject.as_showVehicles(compactDescrList) if self._isDAAPIInited() else None

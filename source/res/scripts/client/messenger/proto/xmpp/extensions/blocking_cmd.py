@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/blocking_cmd.py
 from messenger.proto.xmpp.extensions import PyExtension, PyQuery
 from messenger.proto.xmpp.extensions.contact_item import ContactItemExtension
@@ -11,11 +11,11 @@ def _createBlockListExt():
     return PyExtension(_TAG.BLOCK_LIST).setXmlNs(_NS.BLOCKING_CMD)
 
 
-def _createBlockItemExt(jid = None):
+def _createBlockItemExt(jid=None):
     return PyExtension(_TAG.BLOCK_ITEM).setXmlNs(_NS.BLOCKING_CMD).setChild(ContactItemExtension(jid))
 
 
-def _createUnblockItemExt(jid = None):
+def _createUnblockItemExt(jid=None):
     return PyExtension(_TAG.UNBLOCK_ITEM).setXmlNs(_NS.BLOCKING_CMD).setChild(ContactItemExtension(jid))
 
 

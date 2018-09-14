@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fo_precache.py
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
 _IS_ENABLED = True
 if _IS_ENABLED:
 
-    def add(path, forced = False):
+    def add(path, forced=False):
         result = True
         try:
             result = BigWorld.wg_precacheScaleformResource(path, forced)
@@ -17,7 +17,7 @@ if _IS_ENABLED:
         return result
 
 
-    def clear(path = ''):
+    def clear(path=''):
         try:
             BigWorld.wg_eraseScaleformResFromCache(path)
             LOG_DEBUG('Resource(s) is(are) cleared from precache', path)
@@ -27,9 +27,9 @@ if _IS_ENABLED:
 
 else:
 
-    def add(path, forced = False):
+    def add(path, forced=False):
         return True
 
 
-    def clear(path = ''):
+    def clear(path=''):
         pass

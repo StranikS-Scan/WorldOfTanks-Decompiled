@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/MiniclientDescriptionWindow.py
 import os
 from gui import GUI_SETTINGS
@@ -13,5 +13,5 @@ class MiniclientDescriptionWindow(object):
 
     def __openDescriptionInBrowser(self, event):
         current_working_dir = os.getcwd()
-        getBrowserCtrl().load(url='{0}/{1}/greeting/mini_wot/'.format(GUI_SETTINGS.miniclient['webBridgeRootURL'], _ms('#settings:LANGUAGE_CODE')), title=_ms('#miniclient:hangar/miniclient_description_window/title'), browserSize=(780, 450), showCloseBtn=True, showActionBtn=False)(lambda success: True)
+        getBrowserCtrl().load(url='{0}/$LANGUAGE_CODE/greeting/mini_wot/'.format(GUI_SETTINGS.miniclient['webBridgeRootURL']), title=_ms('#miniclient:hangar/miniclient_description_window/title'), browserSize=(780, 450), showCloseBtn=True, showActionBtn=False, isAsync=True)(lambda success: True)
         g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__openDescriptionInBrowser)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/Button.py
 """
 """
@@ -159,7 +159,7 @@ class Button(PyGUIBase, VisualStateComponent):
         self._makeActive(state)
         self._updateVisualState()
 
-    def _makeActive(self, active = True):
+    def _makeActive(self, active=True):
         if self.buttonStyle == Button.RADIOBUTTON_STYLE:
             if self.buttonActive == active:
                 return
@@ -223,7 +223,7 @@ class Button(PyGUIBase, VisualStateComponent):
         return
 
     @staticmethod
-    def create(texture, text = '', **kwargs):
+    def create(texture, text='', **kwargs):
         c = GUI.Window(texture)
         c.materialFX = 'BLEND'
         c.widthMode = 'CLIP'

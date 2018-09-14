@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/__init__.py
 import imghdr
 import itertools
@@ -37,9 +37,7 @@ EXTRA_MODULE_INFO = 'extraModuleInfo'
 _FLASH_OBJECT_SYS_ATTRS = ('isPrototypeOf', 'propertyIsEnumerable', 'hasOwnProperty')
 
 def flashObject2Dict(obj):
-    if hasattr(obj, 'children'):
-        return dict(map(lambda (k, v): (k, flashObject2Dict(v)), itertools.ifilter(lambda (x, y): x not in _FLASH_OBJECT_SYS_ATTRS, obj.children.iteritems())))
-    return obj
+    return dict(map(lambda (k, v): (k, flashObject2Dict(v)), itertools.ifilter(lambda (x, y): x not in _FLASH_OBJECT_SYS_ATTRS, obj.children.iteritems()))) if hasattr(obj, 'children') else obj
 
 
 def code2str(code):
@@ -61,8 +59,7 @@ def code2str(code):
         return 'Identical requests cooldown'
     if code == AccountCommands.RES_HIDDEN_DOSSIER:
         return 'Player dossier is hidden'
-    if code == AccountCommands.RES_CENTER_DISCONNECTED:
-        return 'Dossiers are unavailable'
+    return 'Dossiers are unavailable' if code == AccountCommands.RES_CENTER_DISCONNECTED else 'Unknown error code'
 
 
 def isVehicleObserver(vehTypeCompDescr):
@@ -84,7 +81,7 @@ def class_for_name(module_name, class_name):
         return c
 
 
-def sortByFields(fields, sequence, valueGetter = dict.get):
+def sortByFields(fields, sequence, valueGetter=dict.get):
 
     def comparator(x, y):
         for field, order in fields:
@@ -155,9 +152,7 @@ class SettingRecord(dict):
         self.__setitem__(name, value)
 
     def __getattr__(self, item):
-        if item in self:
-            return self.__getitem__(item)
-        return dict.__getattribute__(self, item)
+        return self.__getitem__(item) if item in self else dict.__getattribute__(self, item)
 
     def _asdict(self):
         return dict(self)
@@ -187,7 +182,7 @@ class SettingRootRecord(SettingRecord):
         raise NotImplemented
 
 
-def mapTextureToTheMemory(textureData, uniqueID = None):
+def mapTextureToTheMemory(textureData, uniqueID=None):
     if textureData and imghdr.what(None, textureData) is not None:
         uniqueID = str(uniqueID or uuid.uuid4())
         BigWorld.wg_addTempScaleformTexture(uniqueID, textureData)
@@ -230,8 +225,7 @@ def getPlayerName():
 
 
 def avg(devidend, devider):
-    if devider > 0:
-        return float(devidend) / devider
+    return float(devidend) / devider if devider > 0 else 0
 
 
 def weightedAvg(*args):

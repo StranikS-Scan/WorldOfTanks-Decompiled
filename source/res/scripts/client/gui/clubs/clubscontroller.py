@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/ClubsController.py
 import weakref
 from functools import partial
@@ -85,7 +85,7 @@ class _AccountClubProfile(object):
     def getState(self):
         return self.__state
 
-    def resync(self, firstInit = False, forceResync = False, callback = None):
+    def resync(self, firstInit=False, forceResync=False, callback=None):
         if not isClubsEnabled():
             LOG_DEBUG('Clubs is not enabled on this server. Skip profile resync.')
             return
@@ -126,24 +126,18 @@ class _AccountClubProfile(object):
     def wasSentApplication(self):
         return bool(self.getApplications(onlyActive=True))
 
-    def getClubInfo(self, idx = 0):
-        if idx < len(self._clubs):
-            return self._clubs[idx]
-        else:
-            return None
+    def getClubInfo(self, idx=0):
+        return self._clubs[idx] if idx < len(self._clubs) else None
 
-    def getApplications(self, onlyActive = False):
+    def getApplications(self, onlyActive=False):
         if onlyActive:
             return filter(lambda app: app.isActive(), self._apps.itervalues())
         else:
             return self._apps
 
-    def getApplication(self, appID = None):
+    def getApplication(self, appID=None):
         apps = self.getApplications(onlyActive=True)
-        if appID is None:
-            return apps[0]
-        else:
-            return apps.get(appID)
+        return apps[0] if appID is None else apps.get(appID)
 
     def getInvites(self):
         return self._invites
@@ -172,7 +166,7 @@ class _AccountClubProfile(object):
     def isInvitesAvailable(self):
         return self._contactsState & _CONTACTS_LIST.ALL == _CONTACTS_LIST.ALL
 
-    def _clear(self, stop = False):
+    def _clear(self, stop=False):
         self._changeState(states.UnavailableClubsState(), stop=stop)
         self._contactsState = _CONTACTS_LIST.EMPTY
         self._clubs = []
@@ -182,7 +176,7 @@ class _AccountClubProfile(object):
         self._waitForSync = 0
         self._isSynced = False
 
-    def _changeState(self, newState, stop = False):
+    def _changeState(self, newState, stop=False):
         oldState, self.__state = self.__state, newState
         if oldState.getStateID() != newState.getStateID():
             if not stop:
@@ -240,7 +234,7 @@ class _AccountClubProfile(object):
                 for uniqueID, invite in invites.iteritems():
                     if uniqueID not in prevInvites:
                         added.append(invite)
-                    elif invite.getStatus() != prevInvites[uniqueID].getStatus() or invite.getUpdatingTime() != prevInvites[uniqueID].getUpdatingTime():
+                    if invite.getStatus() != prevInvites[uniqueID].getStatus() or invite.getUpdatingTime() != prevInvites[uniqueID].getUpdatingTime():
                         changed.append(invite)
 
                 for uniqueID, invite in prevInvites.iteritems():
@@ -260,9 +254,7 @@ class _AccountClubProfile(object):
             return BROKEN_WEB_CHECK_PERIOD
         else:
             r = self.__state.getLimits().getNearestRestriction()
-            if r:
-                return r.getExpiryTimeLeft()
-            return None
+            return r.getExpiryTimeLeft() if r else None
 
     def __loadResyncCallback(self):
         self.__cancelResyncCallback()
@@ -363,19 +355,21 @@ class ClubsController(subscriptions.ClubsListeners):
             clubsMgr.onClientClubsNotification += self.__onClientClubsNotification
             clubsMgr.onClientClubsUnitInfoChanged += self.__onClientClubsUnitInfoChanged
         g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
+        g_playerEvents.onIGRTypeChanged += self.__onIGRTypeChanged
         g_clientUpdateManager.addCallbacks({'cache.relatedToClubs': self.__onSpaAttrChanged,
          'cache.eSportSeasonState': self.__onSeasonStateChanged})
         self._accountProfile.resync(firstInit=True, callback=lambda : self._seasonsCache.start())
         self._availabilityCtrl.start()
         return
 
-    def stop(self, isDisconnected = False):
+    def stop(self, isDisconnected=False):
         self._seasonsCache.stop()
         if isDisconnected:
             self.__isAppsNotifyShown = False
             clearInvitesIDs()
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_playerEvents.onCenterIsLongDisconnected -= self.__onCenterIsLongDisconnected
+        g_playerEvents.onIGRTypeChanged -= self.__onIGRTypeChanged
         clubsMgr = getClientClubsMgr()
         if clubsMgr is not None:
             clubsMgr.onClientClubsNotification -= self.__onClientClubsNotification
@@ -399,12 +393,12 @@ class ClubsController(subscriptions.ClubsListeners):
     def getAvailabilityCtrl(self):
         return self._availabilityCtrl
 
-    def addListener(self, listener, forceResync = False):
+    def addListener(self, listener, forceResync=False):
         if not self._accountProfile.isSynced():
             self._accountProfile.resync(forceResync=forceResync)
         super(ClubsController, self).addListener(listener)
 
-    def addClubListener(self, clubDbID, listener, subscriptionType, forceResync = False):
+    def addClubListener(self, clubDbID, listener, subscriptionType, forceResync=False):
         if not self._accountProfile.isSynced():
             self._accountProfile.resync(forceResync=forceResync)
         s = self.__subscriptions.setdefault(clubDbID, subscriptions._Subscription(clubDbID, subscriptionType, self))
@@ -417,10 +411,7 @@ class ClubsController(subscriptions.ClubsListeners):
             s.removeListener(listener)
 
     def getClub(self, clubDbID):
-        if clubDbID in self.__subscriptions:
-            return self.__subscriptions[clubDbID].getClub()
-        else:
-            return None
+        return self.__subscriptions[clubDbID].getClub() if clubDbID in self.__subscriptions else None
 
     @async
     def requestClubSeasons(self, clubDbID, callback):
@@ -447,18 +438,12 @@ class ClubsController(subscriptions.ClubsListeners):
     @classmethod
     def getSeasonState(cls):
         clubsMgr = getClientClubsMgr()
-        if clubsMgr is not None:
-            return SeasonState(clubsMgr.getESportSeasonState())
-        else:
-            return SeasonState(CLUBS_SEASON_STATE.INACTIVE)
+        return SeasonState(clubsMgr.getESportSeasonState()) if clubsMgr is not None else SeasonState(CLUBS_SEASON_STATE.INACTIVE)
 
     @classmethod
     def getSeasons(cls):
         clubsMgr = getClientClubsMgr()
-        if clubsMgr is not None:
-            return sorted(map(lambda (sID, d): SeasonInfo(sID, 0, 0, d), clubsMgr.getESportSeasons().iteritems()))
-        else:
-            return []
+        return sorted(map(lambda (sID, d): SeasonInfo(sID, 0, 0, d), clubsMgr.getESportSeasons().iteritems())) if clubsMgr is not None else []
 
     @classmethod
     def getSeasonInfo(cls, seasonID):
@@ -471,7 +456,7 @@ class ClubsController(subscriptions.ClubsListeners):
 
     @async
     @process
-    def sendRequest(self, ctx, callback, allowDelay = None):
+    def sendRequest(self, ctx, callback, allowDelay=None):
         yield lambda callback: callback(None)
         if ctx.getConfirmID():
             success = yield DialogsInterface.showI18nConfirmDialog(ctx.getConfirmID())
@@ -500,8 +485,7 @@ class ClubsController(subscriptions.ClubsListeners):
 
     def getSeasonUserName(self, seasonID):
         season = self._seasonsCache.getSeasonCommonInfo(seasonID)
-        if season:
-            return season.getSeasonUserName()
+        return season.getSeasonUserName() if season else ''
 
     def getCompletedSeasons(self):
         return self._seasonsCache.getCompletedSeasons()
@@ -534,6 +518,9 @@ class ClubsController(subscriptions.ClubsListeners):
         self._accountProfile.resync()
         if seasonState.isFinished():
             self._seasonsCache.updateCompletedSeasons(force=True)
+
+    def __onIGRTypeChanged(self, *args):
+        self.notify('onIGRTypeChanged')
 
     def __onClientClubsUnitInfoChanged(self, clubDbID, unit):
         if clubDbID in self.__subscriptions:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_tests/Fonts.py
 import BigWorld
 import ResMgr
@@ -14,7 +14,7 @@ def removeAll():
     fontTestGUIs = []
 
 
-def _showFont(fontName, pos = (-1, -1, 0.5), size = (2, 2)):
+def _showFont(fontName, pos=(-1, -1, 0.5), size=(2, 2)):
     import GUI
     s = GUI.Simple('')
     GUI.addRoot(s)

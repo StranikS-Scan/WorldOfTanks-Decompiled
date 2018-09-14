@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tutorial.py
 from gui.Scaleform.locale.RES_COMMON import RES_COMMON
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -121,8 +121,6 @@ class NationsPacker(HeaderPacker):
         items = super(NationsPacker, self)._packBlocks(*args, **kwargs)
         nationItems = []
         for nation in GUI_NATIONS:
-            if nation == 'czech':
-                continue
             nationItems.append(formatters.packImageTextBlockData(desc=text_styles.main('#tooltips:hangarTutorial/nations/%s' % nation), img='../maps/icons/filters/nations/%s.png' % nation, imgPadding={'left': 4,
              'top': 4}, txtGap=1, txtOffset=36))
 

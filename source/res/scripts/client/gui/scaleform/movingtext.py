@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/MovingText.py
 import time
 import BigWorld
@@ -147,7 +147,7 @@ class MovingText(UIInterface):
                 if browser is not None:
                     openBrowser = browser.openBrowser
                 else:
-                    LOG_ERROR('Attempting to open internal browser with page: `%s`, but\t\t\t\t\t\tbrowser is not exist. External browser will be opened.' % str(link))
+                    LOG_ERROR('Attempting to open internal browser with page: `%s`, but browser is not exist. External browser will be opened.' % str(link))
             if len(link):
                 LOG_DEBUG('Open browser at page: ', link)
                 openBrowser(link)

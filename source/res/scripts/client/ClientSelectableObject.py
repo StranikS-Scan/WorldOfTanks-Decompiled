@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientSelectableObject.py
 import BigWorld
 import Math
@@ -39,7 +39,7 @@ class ClientSelectableObject(BigWorld.Entity):
         self.highlight(False)
         return
 
-    def collideSegment(self, startPoint, endPoint, skipGun = False):
+    def collideSegment(self, startPoint, endPoint, skipGun=False):
         worldToVehMatrix = Math.Matrix(self.model.matrix)
         worldToVehMatrix.invert()
         startPoint = worldToVehMatrix.applyPoint(startPoint)

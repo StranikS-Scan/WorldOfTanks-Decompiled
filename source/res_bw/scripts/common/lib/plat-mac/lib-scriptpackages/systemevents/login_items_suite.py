@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/SystemEvents/Login_Items_Suite.py
 """Suite Login Items Suite: Terms and Events for controlling the Login Items application
 Level 1, version 1

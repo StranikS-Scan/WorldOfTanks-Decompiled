@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/FormatParagraph.py
 """Extension to format a paragraph or selection to a max width.
 
@@ -29,7 +29,7 @@ class FormatParagraph:
         self.editwin = None
         return
 
-    def format_paragraph_event(self, event, limit = None):
+    def format_paragraph_event(self, event, limit=None):
         """Formats paragraph to a max width specified in idleConf.
         
         If text is selected, format_paragraph_event will start breaking lines
@@ -82,15 +82,15 @@ def find_paragraph(text, mark):
     first_lineno = lineno
     comment_header = get_comment_header(line)
     comment_header_len = len(comment_header)
-    while get_comment_header(line) == comment_header and not is_all_white(line[comment_header_len:]):
-        lineno = lineno + 1
+    while 1:
+        lineno = get_comment_header(line) == comment_header and not is_all_white(line[comment_header_len:]) and lineno + 1
         line = text.get('%d.0' % lineno, '%d.end' % lineno)
 
     last = '%d.0' % lineno
     lineno = first_lineno - 1
     line = text.get('%d.0' % lineno, '%d.end' % lineno)
-    while lineno > 0 and get_comment_header(line) == comment_header and not is_all_white(line[comment_header_len:]):
-        lineno = lineno - 1
+    while 1:
+        lineno = lineno > 0 and get_comment_header(line) == comment_header and not is_all_white(line[comment_header_len:]) and lineno - 1
         line = text.get('%d.0' % lineno, '%d.end' % lineno)
 
     first = '%d.0' % (lineno + 1)
@@ -169,10 +169,7 @@ def get_comment_header(line):
     a comment block with the same  indent.
     """
     m = re.match('^([ \\t]*#*)', line)
-    if m is None:
-        return ''
-    else:
-        return m.group(1)
+    return '' if m is None else m.group(1)
 
 
 if __name__ == '__main__':

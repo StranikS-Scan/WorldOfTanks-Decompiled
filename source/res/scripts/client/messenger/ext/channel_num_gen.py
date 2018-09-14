@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/channel_num_gen.py
 import BigWorld
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
@@ -13,6 +13,7 @@ class SPECIAL_CLIENT_WINDOWS(CONST_CONTAINER):
     TRAINING_LIST = 1
     TRAINING_ROOM = 2
     CLUB_CHAT = 3
+    FALLOUT = 4
 
 
 _idGen = SequenceIDGenerator()
@@ -20,7 +21,8 @@ _PRB_CLIENT_IDS = {}
 _PRB_CLIENT_COMBINED_IDS = {PREBATTLE_TYPE.SORTIE: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.FORT_BATTLE: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.CLUBS: PREBATTLE_TYPE.UNIT,
- PREBATTLE_TYPE.SQUAD: PREBATTLE_TYPE.UNIT}
+ PREBATTLE_TYPE.SQUAD: PREBATTLE_TYPE.UNIT,
+ PREBATTLE_TYPE.FALLOUT: PREBATTLE_TYPE.UNIT}
 for idx, prbType in enumerate(PREBATTLE_TYPE.RANGE):
     index = idx
     if prbType in _PRB_CLIENT_COMBINED_IDS:

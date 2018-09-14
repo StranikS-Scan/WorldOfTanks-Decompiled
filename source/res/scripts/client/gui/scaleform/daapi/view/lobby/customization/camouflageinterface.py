@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/CamouflageInterface.py
 import BigWorld
 import functools
@@ -74,14 +74,14 @@ class CamouflageInterface(BaseTimedCustomizationInterface):
     def getItemDefaultPriceFactor(self, vehType):
         return g_itemsCache.items.shop.defaults.getVehCamouflagePriceFactor(vehType.compactDescr)
 
-    def refreshViewData(self, vehType, refresh = False):
+    def refreshViewData(self, vehType, refresh=False):
         if vehType is not None:
             self._groupsDP.buildList()
             self._itemsDP.setVehicleTypeParams(self.getItemPriceFactor(vehType), self.getItemDefaultPriceFactor(vehType), self.currentItemsByKind.get(CAMOUFLAGE_KINDS.get(self._itemsDP.currentGroup, 0), {'id': None}).get('id'))
         self._rentalPackageDP.refreshList()
         return
 
-    def invalidateViewData(self, vehType, refresh = False):
+    def invalidateViewData(self, vehType, refresh=False):
         if vehType is not None:
             self._groupsDP.buildList()
             self._itemsDP.setVehicleTypeParams(self.getItemPriceFactor(vehType), self.getItemDefaultPriceFactor(vehType), self.currentItemsByKind.get(0, {'id': None}).get('id'))
@@ -193,7 +193,7 @@ class CamouflageInterface(BaseTimedCustomizationInterface):
                     result = i18n.makeString(MENU.CUSTOMIZATION_LABELS_TIMELEFT_LASTMINUTE)
         return result
 
-    def updateVehicleCustomization(self, itemID = None):
+    def updateVehicleCustomization(self, itemID=None):
         space = g_hangarSpace.space
         if space is not None and g_currentVehicle.isInHangar():
             space.updateVehicleCamouflage(camouflageID=itemID)

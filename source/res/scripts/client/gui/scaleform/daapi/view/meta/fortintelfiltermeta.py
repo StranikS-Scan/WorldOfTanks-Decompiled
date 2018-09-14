@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortIntelFilterMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -11,29 +11,22 @@ class FortIntelFilterMeta(BaseDAAPIComponent):
         self._printOverrideError('onClearClanTagSearch')
 
     def as_setDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(data)
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setMaxClanAbbreviateLengthS(self, length):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMaxClanAbbreviateLength(length)
+        return self.flashObject.as_setMaxClanAbbreviateLength(length) if self._isDAAPIInited() else None
 
     def as_setSearchResultS(self, status):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSearchResult(status)
+        return self.flashObject.as_setSearchResult(status) if self._isDAAPIInited() else None
 
     def as_setFilterStatusS(self, filterStatus):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setFilterStatus(filterStatus)
+        return self.flashObject.as_setFilterStatus(filterStatus) if self._isDAAPIInited() else None
 
     def as_setFilterButtonStatusS(self, filterButtonStatus, showEffect):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setFilterButtonStatus(filterButtonStatus, showEffect)
+        return self.flashObject.as_setFilterButtonStatus(filterButtonStatus, showEffect) if self._isDAAPIInited() else None
 
     def as_setupCooldownS(self, isOnCooldown):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setupCooldown(isOnCooldown)
+        return self.flashObject.as_setupCooldown(isOnCooldown) if self._isDAAPIInited() else None
 
     def as_setClanAbbrevS(self, clanAbbrev):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setClanAbbrev(clanAbbrev)
+        return self.flashObject.as_setClanAbbrev(clanAbbrev) if self._isDAAPIInited() else None

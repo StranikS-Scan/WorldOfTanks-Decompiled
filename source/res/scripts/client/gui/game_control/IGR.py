@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/IGR.py
 import Event
 import constants
@@ -21,7 +21,7 @@ class IGRController(Controller):
         self.onIgrTypeChanged.clear()
         super(IGRController, self).fini()
 
-    def onLobbyStarted(self, ctx = None):
+    def onLobbyStarted(self, ctx=None):
         data = (ctx or {}).get('igrData', {})
         self.__roomType = data.get('roomType', constants.IGR_TYPE.NONE)
         self.__xpFactor = data.get('igrXPFactor', 1.0)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/common/DossierBlockBuilders.py
 import struct
 from dossiers2.custom.records import RECORDS, RECORD_INDICES, BIT_STORAGES
@@ -39,7 +39,7 @@ class StaticSizeBlockBuilder(object):
         self.__blockSize = struct.calcsize(self.__format)
         return
 
-    def build(self, dossierDescr, compDescr = ''):
+    def build(self, dossierDescr, compDescr=''):
         return StaticDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, popUpRecords=self.__popUpRecords, recordsLayout=self.__layout, packing=self.__packing, format=self.__format, blockSize=self.__blockSize, initialData=self.__initialData)
 
 
@@ -53,7 +53,7 @@ class DictBlockBuilder(object):
         assert _SUPPORTED_FORMATS.issuperset(self.__keyFormat)
         assert _SUPPORTED_FORMATS.issuperset(self.__valueFormat)
 
-    def build(self, dossierDescr, compDescr = ''):
+    def build(self, dossierDescr, compDescr=''):
         return DictDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, keyFormat=self.__keyFormat, valueFormat=self.__valueFormat)
 
 
@@ -65,7 +65,7 @@ class ListBlockBuilder(object):
         self.__eventsHandlers = eventsHandlers
         assert _SUPPORTED_FORMATS.issuperset(self.__itemFormat)
 
-    def build(self, dossierDescr, compDescr = ''):
+    def build(self, dossierDescr, compDescr=''):
         return ListDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, itemFormat=self.__itemFormat)
 
 
@@ -79,7 +79,7 @@ class BinarySetDossierBlockBuilder(object):
         self.__eventHandlers = eventHandlers
         self.__popUpRecords = popUpRecords
 
-    def build(self, dossierDescr, compDescr = ''):
+    def build(self, dossierDescr, compDescr=''):
         return BinarySetDossierBlockDescr(self.name, dossierDescr, compDescr, self.__eventHandlers, self.__popUpRecords, self.recordsLayout, self.__valueToPosition)
 
     def __buildValueToPosition(self, valueNames):

@@ -108,6 +108,7 @@
         <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G71_JagdPantherII/JagdPantherII_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
     </camouflage>
@@ -154,18 +155,18 @@
         <right>	vehicles/german/G71_JagdPantherII/track/right.track	</right>
         <segmentLength>	0.3	</segmentLength>
         <segmentOffset>	0.084	</segmentOffset>
+        <segment2Offset>	0.154	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
-        <segment2Offset>	0.154	</segment2Offset>
       </splineDesc>
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_02	</textureSet>
-        <size>	0.52 0.65	</size>
+        <size>	0.52 0.62	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -241,14 +242,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-7.4	</gravity>
         <elasticity>	1094	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1.01	</forwardElastK>
-        <backwardElastK>	0.61	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -460,18 +458,18 @@
         <right>	vehicles/german/G71_JagdPantherII/track/right.track	</right>
         <segmentLength>	0.3	</segmentLength>
         <segmentOffset>	0.084	</segmentOffset>
+        <segment2Offset>	0.154	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
-        <segment2Offset>	0.154	</segment2Offset>
       </splineDesc>
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_02	</textureSet>
-        <size>	0.52 0.65	</size>
+        <size>	0.52 0.62	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -547,14 +545,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-7.4	</gravity>
         <elasticity>	1094	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1.01	</forwardElastK>
-        <backwardElastK>	0.61	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -911,7 +906,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_JagdPantherII>
   </turrets0>

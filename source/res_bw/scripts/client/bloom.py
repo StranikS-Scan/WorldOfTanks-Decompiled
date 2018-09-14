@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Bloom.py
 """
 This Module implements some utility functions to help manipulate and 
@@ -49,7 +49,7 @@ def removeEffect(effect):
         pass
 
 
-def loadStyle(ds, fadeSpeed = 1.0):
+def loadStyle(ds, fadeSpeed=1.0):
     """
     This function loads a bloom style from the given data section.  It smoothly
     changes from the current bloom settings to the new settings over
@@ -93,7 +93,7 @@ def loadStyle(ds, fadeSpeed = 1.0):
     return
 
 
-def selectPreset(name, fadeSpeed = 1.0):
+def selectPreset(name, fadeSpeed=1.0):
     """
     This function loads the named bloom settings from the bloom.xml
     data section that is referenced at the top of this file.  It loads settings

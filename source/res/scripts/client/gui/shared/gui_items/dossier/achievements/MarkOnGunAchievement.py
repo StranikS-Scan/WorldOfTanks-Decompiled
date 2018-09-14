@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/MarkOnGunAchievement.py
 from helpers import i18n
 import BigWorld
@@ -11,7 +11,7 @@ from nations import NAMES as NATION_NAMES
 class MarkOnGunAchievement(RegularAchievement):
     IT_95X85 = '95x85'
 
-    def __init__(self, dossier, value = None):
+    def __init__(self, dossier, value=None):
         super(MarkOnGunAchievement, self).__init__('marksOnGun', _AB.TOTAL, dossier, value)
         self.__nationId = self._readVehicleNationID(dossier)
         self.__damageRating = self._readDamageRating(dossier)
@@ -38,25 +38,18 @@ class MarkOnGunAchievement(RegularAchievement):
          self.IT_95X85: self.__getIconPath(self.IT_95X85)}
 
     def getI18nValue(self):
-        if self.__damageRating > 0:
-            return makeHtmlString('html_templates:lobby/tooltips/achievements', 'marksOnGun', {'count': BigWorld.wg_getNiceNumberFormat(self.__damageRating)})
+        return makeHtmlString('html_templates:lobby/tooltips/achievements', 'marksOnGun', {'count': BigWorld.wg_getNiceNumberFormat(self.__damageRating)}) if self.__damageRating > 0 else ''
 
     def _getActualName(self):
         return '%s%d' % (self._name, self._value)
 
     @classmethod
     def _readDamageRating(cls, dossier):
-        if dossier is not None:
-            return dossier.getRecordValue(_AB.TOTAL, 'damageRating') / 100.0
-        else:
-            return 0.0
+        return dossier.getRecordValue(_AB.TOTAL, 'damageRating') / 100.0 if dossier is not None else 0.0
 
     @classmethod
     def _readVehicleNationID(cls, dossier):
-        if dossier is not None:
-            return vehicles.parseIntCompactDescr(dossier.getCompactDescriptor())[1]
-        else:
-            return 0
+        return vehicles.parseIntCompactDescr(dossier.getCompactDescriptor())[1] if dossier is not None else 0
 
     def __getIconPath(self, dir_):
         currentValue = 3 if self._value == 0 else self._value

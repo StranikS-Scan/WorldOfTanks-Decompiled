@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/context_menu/AbstractContextMenuHandler.py
 from abc import ABCMeta, abstractmethod
 import weakref
@@ -9,7 +9,7 @@ _SEPARATOR_ID = 'separate'
 class AbstractContextMenuHandler(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self, cmProxy, ctx = None, handlers = None):
+    def __init__(self, cmProxy, ctx=None, handlers=None):
         self._eManager = EventManager()
         self.onContextMenuHide = Event(self._eManager)
         super(AbstractContextMenuHandler, self).__init__()
@@ -28,7 +28,7 @@ class AbstractContextMenuHandler(object):
         self._clearFlashValues()
         return
 
-    def getOptions(self, ctx = None):
+    def getOptions(self, ctx=None):
         return self._generateOptions(ctx)
 
     def onOptionSelect(self, optionId):
@@ -42,7 +42,7 @@ class AbstractContextMenuHandler(object):
         return
 
     @classmethod
-    def _makeItem(cls, optId, optLabel = None, optInitData = None, optSubMenu = None):
+    def _makeItem(cls, optId, optLabel=None, optInitData=None, optSubMenu=None):
         return {'id': optId,
          'label': optLabel,
          'initData': optInitData,
@@ -52,7 +52,7 @@ class AbstractContextMenuHandler(object):
         return self._makeItem(_SEPARATOR_ID)
 
     @abstractmethod
-    def _generateOptions(self, ctx = None):
+    def _generateOptions(self, ctx=None):
         raise NotImplementedError
 
     def _initFlashValues(self, ctx):

@@ -1,9 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/restrictions/limits.py
 from collections import defaultdict
 import weakref
 from CurrentVehicle import g_currentVehicle
-from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE, FALLOUT_BATTLE_TYPE
+from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE, QUEUE_TYPE
 from gui.game_control import getFalloutCtrl
 from gui.prb_control import prb_getters
 from gui.prb_control.restrictions.interfaces import IVehicleLimit, ITeamLimit
@@ -13,6 +13,7 @@ from gui.shared.ItemsCache import g_itemsCache
 from items import vehicles
 from items.vehicles import VehicleDescr, VEHICLE_CLASS_TAGS
 from prebattle_shared import isTeamValid, isVehicleValid
+from shared_utils import findFirst
 
 class VehicleIsValid(IVehicleLimit):
 
@@ -56,9 +57,7 @@ class ObserverInTeamIsValid(AbstractTeamIsValid):
         accountsInfo = self._getAccountsInfo(rosters, team)
         if len(accountsInfo) < teamLimits['minCount']:
             return (False, 'limit/minCount')
-        if self.__isAllObservers(accountsInfo):
-            return (False, 'observers')
-        return (True, '')
+        return (False, 'observers') if self.__isAllObservers(accountsInfo) else (True, '')
 
     @classmethod
     def __isAllObservers(cls, accountsInfo):
@@ -99,7 +98,7 @@ class TeamNoPlayersInBattle(ITeamLimit):
 
 class MaxCount(ITeamLimit):
 
-    def __init__(self, assigned = True):
+    def __init__(self, assigned=True):
         super(MaxCount, self).__init__()
         self.__assigned = assigned
 
@@ -117,9 +116,7 @@ class MaxCount(ITeamLimit):
             else:
                 key = PREBATTLE_ROSTER.UNASSIGNED_IN_TEAM2
         maxCount = prb_getters.getMaxSizeLimits(teamLimits)[index]
-        if key in rosters and len(rosters[key]) >= maxCount:
-            return (False, PREBATTLE_RESTRICTION.LIMIT_MAX_COUNT)
-        return (True, '')
+        return (False, PREBATTLE_RESTRICTION.LIMIT_MAX_COUNT) if key in rosters and len(rosters[key]) >= maxCount else (True, '')
 
 
 class TotalMaxCount(ITeamLimit):
@@ -209,7 +206,7 @@ class LimitsCollection(object):
 
         return (result, errorCode)
 
-    def isTeamValid(self, team = None):
+    def isTeamValid(self, team=None):
         result, errorCode = True, ''
         if team is None:
             team = self.__functional.getPlayerTeam()
@@ -276,7 +273,7 @@ class BattleSessionLimits(LimitsCollection):
 
 class _UnitActionValidator(object):
 
-    def __init__(self, rosterSettings, hasPlayersSearch = False):
+    def __init__(self, rosterSettings, hasPlayersSearch=False):
         super(_UnitActionValidator, self).__init__()
         self._hasPlayersSearch = hasPlayersSearch
         self._rosterSettings = weakref.proxy(rosterSettings)
@@ -288,25 +285,23 @@ class _UnitActionValidator(object):
     def canDoAction(self, functional):
         flags = functional.getFlags()
         stats = functional.getStats()
-        vInfo = functional.getVehicleInfo()
+        vInfos = functional.getVehiclesInfo()
         pInfo = functional.getPlayerInfo()
         slots = functional.getSlotsIterator(*functional.getUnit())
         if pInfo.isCreator():
-            valid, restriction = self.canCreatorDoAction(pInfo, stats, flags, vInfo, slots)
+            valid, restriction = self.canCreatorDoAction(pInfo, stats, flags, vInfos, slots)
         else:
-            valid, restriction = self.canPlayerDoAction(pInfo, flags, vInfo)
+            valid, restriction = self.canPlayerDoAction(pInfo, flags, vInfos)
         return (valid, restriction)
 
-    def canCreatorDoAction(self, pInfo, stats, flags, vInfo, slots):
-        valid, restriction = self.canPlayerDoAction(pInfo, flags, vInfo)
+    def canCreatorDoAction(self, pInfo, stats, flags, vInfos, slots):
+        valid, restriction = self.canPlayerDoAction(pInfo, flags, vInfos)
         if not valid:
             return (valid, restriction)
         valid, restriction = self._validateLevels(stats, flags)
-        if not valid:
-            return (valid, restriction)
-        return self._validateSlots(stats, flags, slots)
+        return (valid, restriction) if not valid else self._validateSlots(stats, flags, slots)
 
-    def canPlayerDoAction(self, pInfo, flags, vInfo):
+    def canPlayerDoAction(self, pInfo, flags, vInfos):
         if not pInfo.isInSlot:
             if flags.isLocked():
                 return (False, UNIT_RESTRICTION.UNIT_IS_LOCKED)
@@ -317,10 +312,8 @@ class _UnitActionValidator(object):
             return (False, UNIT_RESTRICTION.IS_IN_IDLE)
         if not pInfo.isCreator() and flags.isInPreArena():
             return (False, UNIT_RESTRICTION.IS_IN_PRE_ARENA)
-        valid, restriction = self.validateVehicles(vInfo, flags)
-        if not valid:
-            return (False, restriction)
-        return (True, UNIT_RESTRICTION.UNDEFINED)
+        valid, restriction = self.validateVehicles(vInfos, flags)
+        return (False, restriction) if not valid else (True, UNIT_RESTRICTION.UNDEFINED)
 
     def getRestrictionByLevel(self, stats, flags):
         return self._validateLevels(stats, flags)[1]
@@ -328,36 +321,34 @@ class _UnitActionValidator(object):
     def getUnitInvalidLevels(self, stats):
         return []
 
-    def validateVehicles(self, vInfo, flags):
-        if vInfo.isEmpty():
+    def validateVehicles(self, vInfos, flags):
+        if not findFirst(lambda v: not v.isEmpty(), vInfos, False):
             return (False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
-        vehicle = vInfo.getVehicle()
-        if vehicle and not vehicle.isReadyToPrebattle(checkForRent=not flags.isInPreArena()):
-            if vehicle.isBroken:
-                return (False, UNIT_RESTRICTION.VEHICLE_BROKEN)
-            if not vehicle.isCrewFull:
-                return (False, UNIT_RESTRICTION.VEHICLE_CREW_NOT_FULL)
-            if not flags.isInPreArena() and vehicle.rentalIsOver:
-                return (False, UNIT_RESTRICTION.VEHICLE_RENT_IS_OVER)
-            if vehicle.isInBattle:
-                return (False, UNIT_RESTRICTION.VEHICLE_IS_IN_BATTLE)
-            if vehicle.isFalloutOnly() and not getFalloutCtrl().isSelected():
-                return (False, UNIT_RESTRICTION.VEHICLE_WRONG_MODE)
-            return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
+        for vInfo in vInfos:
+            vehicle = vInfo.getVehicle()
+            if vehicle and not vehicle.isReadyToPrebattle(checkForRent=not flags.isInPreArena()):
+                if vehicle.isBroken:
+                    return (False, UNIT_RESTRICTION.VEHICLE_BROKEN)
+                if not vehicle.isCrewFull:
+                    return (False, UNIT_RESTRICTION.VEHICLE_CREW_NOT_FULL)
+                if not flags.isInPreArena() and vehicle.rentalIsOver:
+                    return (False, UNIT_RESTRICTION.VEHICLE_RENT_IS_OVER)
+                if vehicle.isInBattle:
+                    return (False, UNIT_RESTRICTION.VEHICLE_IS_IN_BATTLE)
+                if vehicle.isFalloutOnly() and not getFalloutCtrl().isSelected():
+                    return (False, UNIT_RESTRICTION.VEHICLE_WRONG_MODE)
+                return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
+
         return (True, UNIT_RESTRICTION.UNDEFINED)
 
     def validateStateToStartBattle(self, flags):
-        if not flags.isReady() and not flags.isInPreArena():
-            return (False, 'team have player who status is "not ready"')
-        return (True, UNIT_RESTRICTION.UNDEFINED)
+        return (False, 'team have player who status is "not ready"') if not flags.isReady() and not flags.isInPreArena() else (True, UNIT_RESTRICTION.UNDEFINED)
 
     def _areVehiclesSelected(self, stats):
         return not stats.freeSlotsCount and len(stats.levelsSeq) == stats.occupiedSlotsCount
 
     def _validateSlots(self, stats, flags, slots):
-        if stats.readyCount != stats.occupiedSlotsCount:
-            return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS)
-        return (True, UNIT_RESTRICTION.UNDEFINED)
+        return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS) if stats.readyCount != stats.occupiedSlotsCount else (True, UNIT_RESTRICTION.UNDEFINED)
 
     def _validateLevels(self, stats, flags):
         if not stats.curTotalLevel:
@@ -435,9 +426,7 @@ class SortieActionValidator(_UnitActionValidator):
             return (True, UNIT_RESTRICTION.UNDEFINED)
         if self._rosterSettings.getMinSlots() > stats.occupiedSlotsCount:
             return (False, UNIT_RESTRICTION.MIN_SLOTS)
-        if stats.readyCount != stats.occupiedSlotsCount:
-            return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS)
-        return (True, UNIT_RESTRICTION.UNDEFINED)
+        return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS) if stats.readyCount != stats.occupiedSlotsCount else (True, UNIT_RESTRICTION.UNDEFINED)
 
 
 class FortBattleActionValidator(_UnitActionValidator):
@@ -458,9 +447,7 @@ class ClubsActionValidator(_UnitActionValidator):
         _, unit = self.__proxy.getUnit()
         if unit.isRated() and self._rosterSettings.getMinSlots() > stats.occupiedSlotsCount:
             return (False, UNIT_RESTRICTION.MIN_SLOTS)
-        if not flags.isInPreArena() and stats.readyCount != stats.occupiedSlotsCount:
-            return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS)
-        return (True, UNIT_RESTRICTION.UNDEFINED)
+        return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS) if not flags.isInPreArena() and stats.readyCount != stats.occupiedSlotsCount else (True, UNIT_RESTRICTION.UNDEFINED)
 
     def _validateLevels(self, stats, flags):
         if not stats.curTotalLevel:
@@ -476,13 +463,19 @@ class ClubsActionValidator(_UnitActionValidator):
 
 class SquadActionValidator(_UnitActionValidator):
 
-    def __init__(self, rosterSettings, hasPlayersSearch = False):
+    def __init__(self, rosterSettings, hasPlayersSearch=False):
         super(SquadActionValidator, self).__init__(rosterSettings, hasPlayersSearch)
+
+    def canPlayerDoAction(self, pInfo, flags, vInfo):
+        isValid, restriction = super(SquadActionValidator, self).canPlayerDoAction(pInfo, flags, vInfo)
+        if not isValid and restriction == UNIT_RESTRICTION.IS_IN_ARENA:
+            isValid, restriction = self.validateVehicles(vInfo, flags)
+        return (isValid, restriction)
 
     def validateVehicles(self, vInfo, flags):
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            vInfo = unit_items.VehicleInfo(vehicle.invID, vehicle.intCD, vehicle.level)
+            vInfo = (unit_items.VehicleInfo(vehicle.invID, vehicle.intCD, vehicle.level),)
         elif vInfo is None:
             vInfo = unit_items.VehicleInfo()
         return super(SquadActionValidator, self).validateVehicles(vInfo, flags)
@@ -499,7 +492,7 @@ class SquadActionValidator(_UnitActionValidator):
 
 class FalloutSquadActionValidator(SquadActionValidator):
 
-    def __init__(self, rosterSettings, hasPlayersSearch = False):
+    def __init__(self, rosterSettings, hasPlayersSearch=False):
         super(FalloutSquadActionValidator, self).__init__(rosterSettings, hasPlayersSearch)
         self.__falloutCtrl = getFalloutCtrl()
 
@@ -508,12 +501,13 @@ class FalloutSquadActionValidator(SquadActionValidator):
         super(FalloutSquadActionValidator, self).clear()
         return
 
-    def validateVehicles(self, vInfo, flags):
+    def validateVehicles(self, vInfos, flags):
         from gui.shared.gui_items.Vehicle import Vehicle
-        if vInfo.isEmpty():
+        if not findFirst(lambda v: not v.isEmpty(), vInfos, False):
             return (False, UNIT_RESTRICTION.FALLOUT_VEHICLE_MIN)
         else:
-            for vehicle in vInfo.getVehicles():
+            for vInfo in vInfos:
+                vehicle = vInfo.getVehicle()
                 if vehicle is None:
                     continue
                 isReadyToBattle = vehicle.isReadyToPrebattle(checkForRent=not flags.isInPreArena())
@@ -541,15 +535,9 @@ class FalloutSquadActionValidator(SquadActionValidator):
             return (True, UNIT_RESTRICTION.UNDEFINED)
 
     def _validateSlots(self, stats, flags, slots):
-        if self.__falloutCtrl.getBattleType() == FALLOUT_BATTLE_TYPE.MULTITEAM:
-            emptySlots = 0
-            readySlots = 0
-            for slotInfo in slots:
-                if slotInfo.player is None:
-                    emptySlots += 1
-                elif slotInfo.player.isReady:
-                    readySlots += 1
-
-            if emptySlots > 1 or readySlots < 2:
+        if self.__falloutCtrl.getBattleType() == QUEUE_TYPE.FALLOUT_MULTITEAM:
+            if stats.freeSlotsCount > self._rosterSettings.getMaxEmptySlots():
+                return (False, UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS)
+            if stats.readyCount != stats.occupiedSlotsCount:
                 return (False, UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS)
         return (True, UNIT_RESTRICTION.UNDEFINED)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/ClubProfileWindow.py
 import account_helpers
 from adisp import process
@@ -45,7 +45,7 @@ STATE_MAP = [(CYBER_SPORT_ALIASES.STATIC_FORMATION_SUMMARY_UI, CYBER_SPORT_ALIAS
 
 class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, GlobalListener, ClubEmblemsHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(ClubProfileWindow, self).__init__()
         self.__clubDbID = ctx.get('clubDbID', None)
         self.__viewToShow = ctx.get('viewIdx', -1)
@@ -204,14 +204,14 @@ class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, GlobalLi
         tryToConnectClubBattle(self.clubsCtrl.getClub(self.__clubDbID), self.clubsState.getJoiningTime())
 
     def __updateActionButton(self, club):
-        labels, isEnableActionBtn, action = self.__getButtonInfo(club)
+        labels, isEnableActionBtn, action, canPerformAction = self.__getButtonInfo(club)
         data = {'buttonLabel': labels[0],
          'statusLbl': labels[1],
          'tooltipHeader': labels[2],
          'tooltipBody': labels[3],
          'action': action,
          'enabled': isEnableActionBtn}
-        if isHourInForbiddenList(self.clubsCtrl.getAvailabilityCtrl().getForbiddenHours()):
+        if canPerformAction and isHourInForbiddenList(self.clubsCtrl.getAvailabilityCtrl().getForbiddenHours()):
             data['statusLbl'] = '{0}{1}'.format(icons.alert(), text_styles.main(CYBERSPORT.LADDERREGULATIONS_WARNING))
             data['isTooltipStatus'] = True
             data['tooltipStatus'] = TOOLTIPS_CONSTANTS.LADDER_REGULATIONS
@@ -243,7 +243,10 @@ class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, GlobalLi
             textFormatter = text_styles.error
             if joinReason == CLIENT_CLUB_RESTRICTIONS.NOT_ENOUGH_MEMBERS:
                 status = 'notEnoughMembers'
-        return (self.__getButtonLabels(status, textFormatter), canJoin, action)
+        return (self.__getButtonLabels(status, textFormatter),
+         canJoin,
+         action,
+         canJoin)
 
     def __getNotMemberBtnInfo(self, club):
         limits = self.clubsState.getLimits()
@@ -273,7 +276,10 @@ class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, GlobalLi
                 tooltipArgs = {'clubName': ''}
             elif appReason == RESTRICTION_REASONS_NAMES[RESTRICTION_REASONS.CANCEL_APPLICATION_COOLDOWN]:
                 status = 'applicationCooldown'
-        return (self.__getButtonLabels(status, textFormatter, statusArgs=statusArgs, tooltipArgs=tooltipArgs), isBtnEnabled, action)
+        return (self.__getButtonLabels(status, textFormatter, statusArgs=statusArgs, tooltipArgs=tooltipArgs),
+         isBtnEnabled,
+         action,
+         canSendApp)
 
     def __getButtonInfo(self, club):
         dbID = account_helpers.getAccountDatabaseID()
@@ -282,7 +288,7 @@ class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, GlobalLi
         else:
             return self.__getNotMemberBtnInfo(club)
 
-    def __getButtonLabels(self, state, formatter, statusArgs = None, tooltipArgs = None):
+    def __getButtonLabels(self, state, formatter, statusArgs=None, tooltipArgs=None):
         statusArgs = statusArgs or {}
         tooltipArgs = tooltipArgs or {}
         actionBtnLbl = i18n.makeString('#cyberSport:StaticFormationProfileWindow/actionBtnLbl/%s' % state)

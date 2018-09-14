@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/scheduled_notifications.py
 import operator
 import BigWorld
@@ -82,7 +82,7 @@ class _Notifier(object):
 
 class PeriodicNotifier(_Notifier):
 
-    def __init__(self, deltaFunc, updateFunc, periods = None):
+    def __init__(self, deltaFunc, updateFunc, periods=None):
         super(PeriodicNotifier, self).__init__(deltaFunc, updateFunc)
         self.__periods = periods or (time_utils.ONE_DAY, time_utils.ONE_HOUR, time_utils.ONE_MINUTE)
 
@@ -98,8 +98,7 @@ class DeltaNotifier(_Notifier):
         self.__delta = delta
 
     def _getNextNotificationDelta(self, delta):
-        if delta >= self.__delta:
-            return delta - self.__delta
+        return delta - self.__delta if delta >= self.__delta else 0
 
 
 class SimpleNotifier(_Notifier):

@@ -1,9 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/messenger_common_chat2.py
 from collections import namedtuple
 from constants import IS_CLIENT, IS_CHINA
+from string import Template
 
-def _makeID(start = None, range = None):
+def _makeID(start=None, range=None):
     global _g_id
     id = _g_id = _g_id + 1 if start is None else start
     if range is not None:
@@ -14,7 +15,7 @@ def _makeID(start = None, range = None):
 
 _COOLDOWN_OFFSET = 0.0 if IS_CLIENT else -0.1
 
-def messageArgs(int32Arg1 = 0, int64Arg1 = 0, floatArg1 = 0, strArg1 = '', strArg2 = ''):
+def messageArgs(int32Arg1=0, int64Arg1=0, floatArg1=0, strArg1='', strArg2=''):
     return {'int32Arg1': int32Arg1,
      'int64Arg1': int64Arg1,
      'floatArg1': floatArg1,
@@ -40,10 +41,7 @@ class MESSENGER_ERRORS():
     @staticmethod
     def getErrorName(errorCode):
         name = _MESSENGER_ERROR_NAMES.get(errorCode)
-        if name is not None:
-            return name
-        else:
-            return 'ERROR_CODE_' + str(errorCode)
+        return name if name is not None else 'ERROR_CODE_' + str(errorCode)
 
 
 class MESSENGER_LIMITS():
@@ -96,18 +94,16 @@ class MESSENGER_ACTION_IDS():
         name = _MESSENGER_ACTION_NAMES.get(actionID)
         if name is not None:
             return name
-        actions = MESSENGER_ACTION_IDS
-        cmd = actions.adminChatCommandFromActionID(actionID)
-        if cmd is not None:
-            return 'command:' + cmd.name
-        cmd = actions.battleChatCommandFromActionID(actionID)
-        if cmd is not None:
-            return 'command:' + cmd.name
-        offs = actionID - actions.CUSTOM_ACTION_ID
-        if offs >= 0:
-            return 'CUSTOM_ACTION_ID+' + str(offs)
         else:
-            return str(actionID)
+            actions = MESSENGER_ACTION_IDS
+            cmd = actions.adminChatCommandFromActionID(actionID)
+            if cmd is not None:
+                return 'command:' + cmd.name
+            cmd = actions.battleChatCommandFromActionID(actionID)
+            if cmd is not None:
+                return 'command:' + cmd.name
+            offs = actionID - actions.CUSTOM_ACTION_ID
+            return 'CUSTOM_ACTION_ID+' + str(offs) if offs >= 0 else str(actionID)
 
     @staticmethod
     def isBattleChatAction(actionID):
@@ -130,9 +126,7 @@ class MESSENGER_ACTION_IDS():
         if actionID == actions.BROADCAST_BATTLE_MESSAGE or actionID == actions.BROADCAST_UNIT_MESSAGE or actionID == actions.BROADCAST_CLUB_MESSAGE:
             return True
         battleChatCmdStartID = actions._BATTLE_CHAT_COMMAND_START_ID
-        if battleChatCmdStartID <= actionID < battleChatCmdStartID + len(BATTLE_CHAT_COMMANDS):
-            return True
-        return False
+        return True if battleChatCmdStartID <= actionID < battleChatCmdStartID + len(BATTLE_CHAT_COMMANDS) else False
 
     @staticmethod
     def isChatActionSusceptibleToBan(actionID):
@@ -143,29 +137,21 @@ class MESSENGER_ACTION_IDS():
             return actions.battleChatCommandFromActionID(actionID) is None
         elif actions.isUnitChatAction(actionID):
             return True
-        elif actions.isClubChatAction(actionID):
-            return True
         else:
-            return False
+            return True if actions.isClubChatAction(actionID) else False
 
     @staticmethod
     def battleChatCommandFromActionID(actionID):
         startID = MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID
-        if startID <= actionID < startID + len(BATTLE_CHAT_COMMANDS):
-            return BATTLE_CHAT_COMMANDS[actionID - startID]
-        else:
-            return None
+        return BATTLE_CHAT_COMMANDS[actionID - startID] if startID <= actionID < startID + len(BATTLE_CHAT_COMMANDS) else None
 
     @staticmethod
     def adminChatCommandFromActionID(actionID):
         startID = MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID
-        if startID <= actionID < startID + len(ADMIN_CHAT_COMMANDS):
-            return ADMIN_CHAT_COMMANDS[actionID - startID]
-        else:
-            return None
+        return ADMIN_CHAT_COMMANDS[actionID - startID] if startID <= actionID < startID + len(ADMIN_CHAT_COMMANDS) else None
 
 
-_MESSENGER_ACTION_NAMES = {_id:_name for _name, _id in MESSENGER_ACTION_IDS.__dict__.iteritems() if type(_id) is int and not _name.startswith('_')}
+_MESSENGER_ACTION_NAMES = {_id:_name for _name, _id in MESSENGER_ACTION_IDS.__dict__.iteritems() if isinstance(_id, int) and not _name.startswith('_')}
 _MESSENGER_ERROR_NAMES = {_id:_name for _name, _id in MESSENGER_ERRORS.__dict__.iteritems() if not _name.startswith('_')}
 AdminChatCommand = namedtuple('AdminChatCommand', ('id', 'name', 'timeout'))
 ADMIN_CHAT_COMMANDS = (AdminChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID), name='USERBAN', timeout=30.0), AdminChatCommand(id=_makeID(), name='USERUNBAN', timeout=30.0))
@@ -196,3 +182,28 @@ BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS.
  BattleChatCommand(id=_makeID(), name='RELOADING_UNAVAILABLE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_unavailable', vehMarker=None, soundNotification=None))
 BATTLE_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in BATTLE_CHAT_COMMANDS}
 assert len(BATTLE_CHAT_COMMANDS) <= MESSENGER_ACTION_IDS._BATTLE_ACTION_END_ID - MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID
+
+class MUC_SERVICE_TYPE(object):
+    STANDARD = 1
+    USER = 2
+    CLAN = 3
+
+
+MUC_SERVICE_TYPES = frozenset((MUC_SERVICE_TYPE.CLAN, MUC_SERVICE_TYPE.STANDARD, MUC_SERVICE_TYPE.USER))
+
+def resolveMucRoomsOfService(service):
+    t = Template(service['format'])
+    return t.substitute(service)
+
+
+def canResolveMucRoomsOfService(service):
+    canResolve = False
+    try:
+        try:
+            Template(service['format']).substitute(service)
+            canResolve = True
+        except:
+            pass
+
+    finally:
+        return canResolve

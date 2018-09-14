@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/users_messages.py
 from gui import GUI_SETTINGS, makeHtmlString
 from helpers import i18n

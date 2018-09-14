@@ -8,9 +8,9 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <greaterOrEqual>	4	</greaterOrEqual>
               <attackReason>	0	</attackReason>
               <eventCount></eventCount>
+              <greaterOrEqual>	4	</greaterOrEqual>
             </vehicleDamage>
           </and>
         </postBattle>
@@ -32,9 +32,9 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <greaterOrEqual>	4	</greaterOrEqual>
               <attackReason>	0	</attackReason>
               <eventCount></eventCount>
+              <greaterOrEqual>	4	</greaterOrEqual>
             </vehicleDamage>
             <vehicleKills>
               <greaterOrEqual>	2	</greaterOrEqual>

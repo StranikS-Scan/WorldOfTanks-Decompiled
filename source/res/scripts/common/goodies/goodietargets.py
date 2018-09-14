@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/GoodieTargets.py
 
 
@@ -25,29 +25,29 @@ class GoodieTarget(object):
 
 class BuyPremiumAccount(GoodieTarget):
 
-    def __init__(self, targetID, limit = None):
+    def __init__(self, targetID, limit=None):
         super(BuyPremiumAccount, self).__init__(targetID, limit)
 
 
 class BuySlot(GoodieTarget):
 
-    def __init__(self, targetID = None, limit = None):
+    def __init__(self, targetID=None, limit=None):
         super(BuySlot, self).__init__(targetID, limit)
 
 
 class PostBattle(GoodieTarget):
 
-    def __init__(self, targetID = None, limit = None):
+    def __init__(self, targetID=None, limit=None):
         super(PostBattle, self).__init__(targetID, limit)
 
 
 class BuyGoldTankmen(GoodieTarget):
 
-    def __init__(self, targetID = None, limit = None):
+    def __init__(self, targetID=None, limit=None):
         super(BuyGoldTankmen, self).__init__(targetID, limit)
 
 
 class FreeExperienceConversion(GoodieTarget):
 
-    def __init__(self, targetID = None, limit = None):
+    def __init__(self, targetID=None, limit=None):
         super(FreeExperienceConversion, self).__init__(targetID, limit)

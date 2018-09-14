@@ -1,6 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/BaseDAAPIComponent.py
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 from gui.Scaleform.framework.entities.abstract.BaseDAAPIComponentMeta import BaseDAAPIComponentMeta
 from gui.shared import g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -17,6 +18,13 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
     def components(self):
         return self.__components
 
+    def getComponent(self, alias):
+        if alias in self.__components:
+            component = self.__components[alias]
+        else:
+            component = None
+        return component
+
     def registerFlashComponent(self, component, alias, *args):
         from gui.Scaleform.framework import g_entitiesFactories
         componentPy, idx = g_entitiesFactories.factory(alias, *args)
@@ -25,12 +33,12 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         else:
             LOG_ERROR('Component %s not found in python'.format(alias), alias)
             return
-        if not isinstance(componentPy, BaseDAAPIComponent):
-            LOG_ERROR('registered component {0} should extend a BaseDAAPIComponent class!'.format(str(componentPy)))
+        if not isinstance(componentPy, BaseDAAPIModule):
+            LOG_ERROR('registered component {0} should extend a BaseDAAPIModule class!'.format(str(componentPy)))
             return
         else:
             if alias in self.__components.keys():
-                LOG_WARNING('Class with alias `%s` already registered in object %s.\t\t\t\tIt will be rewritten.' % (alias, str(self)))
+                LOG_WARNING('Class with alias `%s` already registered in object %s.It will be rewritten.' % (alias, str(self)))
             self.__components[alias] = componentPy
             componentPy.seEnvironment(self.app)
             componentPy.create()

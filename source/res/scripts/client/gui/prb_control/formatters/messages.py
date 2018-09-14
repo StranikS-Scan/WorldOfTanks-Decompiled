@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/messages.py
 from CurrentVehicle import g_currentVehicle
 from constants import JOIN_FAILURE_NAMES, KICK_REASON_NAMES, PREBATTLE_TYPE, QUEUE_TYPE
@@ -97,7 +97,7 @@ _INVALID_TEAM = {PREBATTLE_RESTRICTION.LIMIT_MIN_COUNT: getMinCountLimitMessage4
  PREBATTLE_RESTRICTION.LIMIT_TOTAL_LEVEL: getTotalLevelLimitMessage4Team,
  PREBATTLE_RESTRICTION.LIMIT_LEVEL: getLevelLimitMessage4Team}
 
-def getInvalidTeamMessage(reason, functional = None):
+def getInvalidTeamMessage(reason, functional=None):
     if reason in PREBATTLE_RESTRICTION.SERVER_LIMITS:
         if reason in _INVALID_TEAM:
             if functional:
@@ -114,14 +114,11 @@ def getInvalidTeamMessage(reason, functional = None):
     return message
 
 
-def getInvalidTeamServerMessage(errStr, functional = None):
-    if errStr in ('INVALID_EVENT_TEAM', 'EVENT_DISABLED'):
-        return i18n.makeString(SYSTEM_MESSAGES.PREBATTLE_TEAMINVALID_EVENT_BATTLE)
-    else:
-        return None
+def getInvalidTeamServerMessage(errStr, functional=None):
+    return i18n.makeString(SYSTEM_MESSAGES.PREBATTLE_TEAMINVALID_EVENT_BATTLE) if errStr in ('INVALID_EVENT_TEAM', 'EVENT_DISABLED') else None
 
 
-def getInvalidVehicleMessage(reason, functional = None):
+def getInvalidVehicleMessage(reason, functional=None):
     if reason in _INVALID_VEHICLE_STATE:
         message = _INVALID_VEHICLE_STATE[reason]()
     elif reason in PREBATTLE_RESTRICTION.SERVER_LIMITS:
@@ -202,7 +199,7 @@ def getUnitPlayerNotification(key, pInfo):
 
 def makeEntityI18nKey(ctrlType, entityType, prefix):
     if ctrlType in (CTRL_ENTITY_TYPE.PREBATTLE, CTRL_ENTITY_TYPE.UNIT):
-        if entityType == PREBATTLE_TYPE.SQUAD:
+        if entityType in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.FALLOUT):
             name = 'squad'
         else:
             name = 'rally'

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/QuestProgress.py
 import AccountCommands
 from functools import partial
@@ -33,7 +33,7 @@ class QuestProgress(object):
 
         return
 
-    def getCache(self, callback = None):
+    def getCache(self, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, None)

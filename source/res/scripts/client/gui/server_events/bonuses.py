@@ -1,12 +1,13 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
 from collections import namedtuple
 import BigWorld
 import Math
 from constants import EVENT_TYPE as _ET
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.goodies.GoodiesCache import g_goodiesCache
+from gui.goodies import g_goodiesCache
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils
@@ -36,10 +37,7 @@ class SimpleBonus(object):
         return self._value
 
     def formatValue(self):
-        if self._value:
-            return str(self._value)
-        else:
-            return None
+        return str(self._value) if self._value else None
 
     def format(self):
         formattedValue = self.formatValue()
@@ -51,9 +49,7 @@ class SimpleBonus(object):
 
     def formattedList(self):
         formattedObj = self.format()
-        if formattedObj:
-            return [formattedObj]
-        return []
+        return [formattedObj] if formattedObj else []
 
     def isShowInGUI(self):
         return True
@@ -83,19 +79,13 @@ class FakeTextBonus(SimpleBonus):
 class IntegralBonus(SimpleBonus):
 
     def formatValue(self):
-        if self._value:
-            return BigWorld.wg_getIntegralFormat(self._value)
-        else:
-            return None
+        return BigWorld.wg_getIntegralFormat(self._value) if self._value else None
 
 
 class FloatBonus(SimpleBonus):
 
     def formatValue(self):
-        if self._value:
-            return BigWorld.wg_getNiceNumberFormat(self._value)
-        else:
-            return None
+        return BigWorld.wg_getNiceNumberFormat(self._value) if self._value else None
 
 
 class CreditsBonus(IntegralBonus):
@@ -118,10 +108,7 @@ class CreditsBonus(IntegralBonus):
 class GoldBonus(SimpleBonus):
 
     def formatValue(self):
-        if self._value:
-            return BigWorld.wg_getGoldFormat(self._value)
-        else:
-            return None
+        return BigWorld.wg_getGoldFormat(self._value) if self._value else None
 
     def getIcon(self):
         return RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_1
@@ -224,10 +211,7 @@ class ItemsBonus(SimpleBonus):
             if item is not None and count:
                 result.append(i18n.makeString('#quests:bonuses/items/name', name=item.userName, count=count))
 
-        if result:
-            return ', '.join(result)
-        else:
-            return
+        return ', '.join(result) if result else None
 
     def getList(self):
         result = []
@@ -266,7 +250,8 @@ class BoosterBonus(SimpleBonus):
          'showCount': False,
          'qualityIconSrc': booster.getQualityIcon(),
          'slotLinkage': BOOSTER_CONSTANTS.SLOT_UI,
-         'showLeftTime': False}
+         'showLeftTime': False,
+         'boosterId': booster.boosterID}
 
     def hasIconFormat(self):
         return True
@@ -276,7 +261,7 @@ class BoosterBonus(SimpleBonus):
         for booster, count in sorted(self.getBoosters().iteritems(), key=lambda (booster, count): booster.boosterType):
             if booster is not None:
                 result.append({'value': BigWorld.wg_getIntegralFormat(count),
-                 'tooltip': makeTooltip(header=booster.userName, body=booster.description),
+                 'tooltip': TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
                  'boosterVO': self.__makeBoosterVO(booster)})
 
         return result
@@ -321,8 +306,7 @@ class VehiclesBonus(SimpleBonus):
                 vInfoLabels.append(crewLvl)
             if len(vInfoLabels):
                 result.append(text_styles.standard(i18n.makeString('#quests:bonuses/vehicles/name', name=text_styles.main(item.userName), vehInfo='; '.join(vInfoLabels))))
-            else:
-                result.append(text_styles.main(item.userName))
+            result.append(text_styles.main(item.userName))
 
         return result
 
@@ -347,10 +331,7 @@ class VehiclesBonus(SimpleBonus):
 class DossierBonus(SimpleBonus):
 
     def getRecords(self):
-        if self._value is not None:
-            return set((name for name in self._value.iterkeys()))
-        else:
-            return set()
+        return set((name for name in self._value.iterkeys())) if self._value is not None else set()
 
     def format(self):
         return ', '.join(self.formattedList())
@@ -406,10 +387,9 @@ class TankmenBonus(SimpleBonus):
                 groups[tmanInfo.vehicleTypeID] = {'vehName': g_itemsCache.items.getItemByCD(vehIntCD).shortUserName,
                  'skills': len(tmanInfo.skills),
                  'roleLevel': roleLevel}
-            else:
-                group = groups[tmanInfo.vehicleTypeID]
-                group['skills'] += len(tmanInfo.skills)
-                group['roleLevel'] = min(group['roleLevel'], roleLevel)
+            group = groups[tmanInfo.vehicleTypeID]
+            group['skills'] += len(tmanInfo.skills)
+            group['roleLevel'] = min(group['roleLevel'], roleLevel)
 
         result = []
         for group in groups.itervalues():
@@ -427,8 +407,7 @@ class TankmenBonus(SimpleBonus):
             for tankmanData in self._value:
                 if type(tankmanData) is str:
                     result.append(self._makeTmanInfoByDescr(tankmen.TankmanDescr(compactDescr=tankmanData)))
-                else:
-                    result.append(makeTupleByDict(self._TankmanInfoRecord, tankmanData))
+                result.append(makeTupleByDict(self._TankmanInfoRecord, tankmanData))
 
         return result
 
@@ -436,6 +415,10 @@ class TankmenBonus(SimpleBonus):
         return RES_ICONS.MAPS_ICONS_LIBRARY_TANKMAN
 
     def getTooltipIcon(self):
+        for tmanInfo in self.getTankmenData():
+            if tmanInfo.isFemale:
+                return RES_ICONS.MAPS_ICONS_QUESTS_TANKMANFEMALEGRAY
+
         return RES_ICONS.MAPS_ICONS_REFERRAL_REFSYS_MEN_BW
 
     @classmethod
@@ -450,8 +433,7 @@ class PotapovTankmenBonus(TankmenBonus):
         for tmanInfo in self.getTankmenData():
             if tmanInfo.isFemale:
                 result.append(i18n.makeString('#quests:bonuses/item/tankwoman'))
-            else:
-                result.append(i18n.makeString('#quests:bonuses/tankmen/description', value=getRoleUserName(tmanInfo.role)))
+            result.append(i18n.makeString('#quests:bonuses/tankmen/description', value=getRoleUserName(tmanInfo.role)))
 
         return ', '.join(result)
 
@@ -461,6 +443,8 @@ class RefSystemTankmenBonus(TankmenBonus):
     def formatValue(self):
         result = []
         for tmanInfo in self.getTankmenData():
+            if tmanInfo.isFemale:
+                return '%s %s' % (i18n.makeString('#quests:bonuses/item/tankwoman'), i18n.makeString('#quests:bonuses/tankmen/description', value=getRoleUserName(tmanInfo.role)))
             result.append(i18n.makeString('#quests:bonuses/tankmen/description', value=getRoleUserName(tmanInfo.role)))
 
         return ', '.join(result)

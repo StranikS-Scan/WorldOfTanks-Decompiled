@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/decorators.py
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -36,7 +36,7 @@ def _getClanName(clanInfo):
 class _NotificationDecorator(object):
     __slots__ = ('_entityID', '_entity', '_settings', '_vo', '_isOrderChanged')
 
-    def __init__(self, entityID, entity = None, settings = None):
+    def __init__(self, entityID, entity=None, settings=None):
         super(_NotificationDecorator, self).__init__()
         self._isOrderChanged = False
         self._entityID = entityID
@@ -128,7 +128,7 @@ class _NotificationDecorator(object):
     def getOrder(self):
         return (self.showAt(), 0)
 
-    def _make(self, entity = None, settings = None):
+    def _make(self, entity=None, settings=None):
         self._vo = {}
         self._settings = settings
 
@@ -166,7 +166,7 @@ class MessageDecorator(_NotificationDecorator):
     def getOrder(self):
         return (self.showAt(), self._entityID)
 
-    def _make(self, formatted = None, settings = None):
+    def _make(self, formatted=None, settings=None):
         if settings:
             self._settings = settings
             if not self._settings.showAt:
@@ -175,8 +175,7 @@ class MessageDecorator(_NotificationDecorator):
         for key in _ICONS_FIELDS:
             if key in formatted:
                 message[key] = makePathToIcon(message[key])
-            else:
-                message[key] = ''
+            message[key] = ''
 
         self._vo = {'typeID': self.getType(),
          'entityID': self.getID(),
@@ -212,7 +211,7 @@ class PrbInviteDecorator(_NotificationDecorator):
     def getOrder(self):
         return (self.showAt(), self._createdAt)
 
-    def _make(self, invite = None, settings = None):
+    def _make(self, invite=None, settings=None):
         invite = invite or self.prbInvites.getInvite(self._entityID)
         if not invite:
             LOG_ERROR('Invite not found', self._entityID)
@@ -272,7 +271,7 @@ class FriendshipRequestDecorator(_NotificationDecorator):
         super(FriendshipRequestDecorator, self).update(user)
         self._make(user=user, settings=NotificationGuiSettings(False, NotificationPriorityLevel.LOW, showAt=self.showAt()))
 
-    def _make(self, user = None, settings = None):
+    def _make(self, user=None, settings=None):
         if settings:
             self._settings = settings
         contacts = self.proto.contacts
@@ -307,7 +306,7 @@ class FriendshipRequestDecorator(_NotificationDecorator):
 class WGNCPopUpDecorator(_NotificationDecorator):
     __slots__ = ('_itemName',)
 
-    def __init__(self, entityID, item, offset = 0):
+    def __init__(self, entityID, item, offset=0):
         super(WGNCPopUpDecorator, self).__init__(entityID, item, NotificationGuiSettings(True, item.getPriority(), showAt=_makeShowTime() + offset))
 
     def getType(self):
@@ -323,7 +322,7 @@ class WGNCPopUpDecorator(_NotificationDecorator):
         super(WGNCPopUpDecorator, self).update(item)
         self._make(item)
 
-    def _make(self, item = None, settings = None):
+    def _make(self, item=None, settings=None):
         assert item, 'Item is not defined'
         self._itemName = item.getName()
         if settings:
@@ -404,7 +403,7 @@ class ClubInviteDecorator(_NotificationDecorator):
     def getOrder(self):
         return (self.showAt(), self._createdAt)
 
-    def _make(self, invite = None, settings = None):
+    def _make(self, invite=None, settings=None):
         invite = invite or g_clubsCtrl.getProfile().getInvite(self._entityID)
         if not invite:
             LOG_ERROR('Invite not found', self._entityID)
@@ -466,7 +465,7 @@ class ClubAppsDecorator(_NotificationDecorator):
     def getOrder(self):
         return (self.showAt(), self._createdAt)
 
-    def _make(self, activeApps = None, settings = None):
+    def _make(self, activeApps=None, settings=None):
         self._settings = NotificationGuiSettings(True, NotificationPriorityLevel.HIGH, showAt=_makeShowTime())
         activeApps = activeApps or []
         formatter = ClubAppsHtmlTextFormatter()
@@ -484,7 +483,7 @@ class ClubAppsDecorator(_NotificationDecorator):
 class _ClanBaseDecorator(_NotificationDecorator):
     __slots__ = ('_createdAt',)
 
-    def __init__(self, entityID, entity = None, settings = None):
+    def __init__(self, entityID, entity=None, settings=None):
         self._createdAt = time_utils.getCurrentTimestamp()
         super(_ClanBaseDecorator, self).__init__(entityID, entity, settings)
 
@@ -501,7 +500,7 @@ class _ClanBaseDecorator(_NotificationDecorator):
 
 class _ClanDecorator(_ClanBaseDecorator):
 
-    def __init__(self, entityID, entity = None, settings = None):
+    def __init__(self, entityID, entity=None, settings=None):
         self._settings = None
         super(_ClanDecorator, self).__init__(entityID, entity, settings)
         return
@@ -510,7 +509,7 @@ class _ClanDecorator(_ClanBaseDecorator):
         super(_ClanBaseDecorator, self).update(entity)
         self._make(entity)
 
-    def _make(self, entity = None, settings = None):
+    def _make(self, entity=None, settings=None):
         if self._settings is None:
             self._settings = NotificationGuiSettings(True, NotificationPriorityLevel.MEDIUM, showAt=_makeShowTime())
         formatter = self._getFormatter()
@@ -540,7 +539,7 @@ class _ClanDecorator(_ClanBaseDecorator):
 
 class _ClanSingleDecorator(_ClanDecorator):
 
-    def __init__(self, entityID, entity = None, settings = None):
+    def __init__(self, entityID, entity=None, settings=None):
         self._state = self._getDefState()
         super(_ClanSingleDecorator, self).__init__(entityID, entity, settings)
 
@@ -553,7 +552,7 @@ class _ClanSingleDecorator(_ClanDecorator):
 
 class ClanSingleAppDecorator(_ClanSingleDecorator):
 
-    def __init__(self, entityID, entity = None, userName = None, settings = None):
+    def __init__(self, entityID, entity=None, userName=None, settings=None):
         self.__userName = userName
         super(ClanSingleAppDecorator, self).__init__(entityID, entity, settings)
 
@@ -595,7 +594,7 @@ class ClanSingleAppDecorator(_ClanSingleDecorator):
 
 class ClanSingleInviteDecorator(_ClanSingleDecorator):
 
-    def __init__(self, entityID, entity = None, settings = None):
+    def __init__(self, entityID, entity=None, settings=None):
         super(ClanSingleInviteDecorator, self).__init__(entityID, entity, settings)
 
     def getInviteID(self):
@@ -681,14 +680,14 @@ class ClanInvitesDecorator(_ClanMultiDecorator):
 
 class _ClassBaseActionDecorator(_ClanBaseDecorator):
 
-    def __init__(self, entityID, actionType, userName = None, settings = None):
+    def __init__(self, entityID, actionType, userName=None, settings=None):
         self._actionType = actionType
         super(_ClassBaseActionDecorator, self).__init__(entityID, userName, settings)
 
     def _getName(self, entity):
         raise NotImplementedError
 
-    def _make(self, entity = None, settings = None):
+    def _make(self, entity=None, settings=None):
         self._settings = NotificationGuiSettings(True, NotificationPriorityLevel.MEDIUM, showAt=_makeShowTime())
         name = self._getName(entity)
         formatter = ClanAppActionHtmlTextFormatter(self._actionType)

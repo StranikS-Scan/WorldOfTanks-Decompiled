@@ -1,33 +1,26 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CyberSportRespawnFormMeta.py
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyRoomView import BaseRallyRoomView
 
 class CyberSportRespawnFormMeta(BaseRallyRoomView):
 
     def as_updateEnemyStatusS(self, statusID, enemyStatusLabel):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateEnemyStatus(statusID, enemyStatusLabel)
+        return self.flashObject.as_updateEnemyStatus(statusID, enemyStatusLabel) if self._isDAAPIInited() else None
 
     def as_setTeamNameS(self, name):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTeamName(name)
+        return self.flashObject.as_setTeamName(name) if self._isDAAPIInited() else None
 
     def as_setTeamEmblemS(self, teamEmblemId):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTeamEmblem(teamEmblemId)
+        return self.flashObject.as_setTeamEmblem(teamEmblemId) if self._isDAAPIInited() else None
 
     def as_setArenaTypeIdS(self, mapName, arenaTypeID):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setArenaTypeId(mapName, arenaTypeID)
+        return self.flashObject.as_setArenaTypeId(mapName, arenaTypeID) if self._isDAAPIInited() else None
 
     def as_timerUpdateS(self, timeLeft):
-        if self._isDAAPIInited():
-            return self.flashObject.as_timerUpdate(timeLeft)
+        return self.flashObject.as_timerUpdate(timeLeft) if self._isDAAPIInited() else None
 
     def as_statusUpdateS(self, status, level, tooltip):
-        if self._isDAAPIInited():
-            return self.flashObject.as_statusUpdate(status, level, tooltip)
+        return self.flashObject.as_statusUpdate(status, level, tooltip) if self._isDAAPIInited() else None
 
     def as_setTotalLabelS(self, hasTotalLevelError, totalLevelLabel, totalLevel):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTotalLabel(hasTotalLevelError, totalLevelLabel, totalLevel)
+        return self.flashObject.as_setTotalLabel(hasTotalLevelError, totalLevelLabel, totalLevel) if self._isDAAPIInited() else None

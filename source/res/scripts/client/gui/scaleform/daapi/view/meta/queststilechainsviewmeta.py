@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/QuestsTileChainsViewMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -29,21 +29,16 @@ class QuestsTileChainsViewMeta(BaseDAAPIComponent):
         self._printOverrideError('showAwardVehicleInHangar')
 
     def as_setHeaderDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setHeaderData(data)
+        return self.flashObject.as_setHeaderData(data) if self._isDAAPIInited() else None
 
     def as_updateTileDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateTileData(data)
+        return self.flashObject.as_updateTileData(data) if self._isDAAPIInited() else None
 
     def as_updateChainProgressS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateChainProgress(data)
+        return self.flashObject.as_updateChainProgress(data) if self._isDAAPIInited() else None
 
     def as_updateTaskDetailsS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateTaskDetails(data)
+        return self.flashObject.as_updateTaskDetails(data) if self._isDAAPIInited() else None
 
     def as_setSelectedTaskS(self, taskId):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSelectedTask(taskId)
+        return self.flashObject.as_setSelectedTask(taskId) if self._isDAAPIInited() else None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBuildingCardPopover.py
 import BigWorld
 import ArenaType
@@ -54,7 +54,7 @@ class FortBuildingCardPopover(FortViewHelper, FortBuildingCardPopoverMeta):
         NOT_BASE_COMMANDER_ORDERED = 4
         NOT_BASE_COMMANDER_NOT_ORDERED = 5
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortBuildingCardPopover, self).__init__()
         data = ctx.get('data', None)
         self._buildingUID = data.uid
@@ -154,11 +154,11 @@ class FortBuildingCardPopover(FortViewHelper, FortBuildingCardPopoverMeta):
         DialogsInterface.showDialog(BuyOrderDialogMeta(self.getOrderUIDbyID(currentOrderID)), None)
         return
 
-    def onBuildingsUpdated(self, buildingsTypeIDs, cooldownPassed = False):
+    def onBuildingsUpdated(self, buildingsTypeIDs, cooldownPassed=False):
         if self._buildingID in buildingsTypeIDs:
             self.__updateData()
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         if self._buildingID == buildingTypeID:
             if reason == BUILDING_UPDATE_REASON.DELETED:
                 self.destroy()
@@ -266,13 +266,11 @@ class FortBuildingCardPopover(FortViewHelper, FortBuildingCardPopoverMeta):
 
     @classmethod
     def __getMapUserName(cls, arenaTypeID):
-        if arenaTypeID in ArenaType.g_cache:
-            return ArenaType.g_cache[arenaTypeID].name
+        return ArenaType.g_cache[arenaTypeID].name if arenaTypeID in ArenaType.g_cache else ''
 
     @classmethod
     def __getMapImage(cls, arenaTypeID):
-        if arenaTypeID in ArenaType.g_cache:
-            return '../maps/icons/map/small/%s.png' % ArenaType.g_cache[arenaTypeID].geometryName
+        return '../maps/icons/map/small/%s.png' % ArenaType.g_cache[arenaTypeID].geometryName if arenaTypeID in ArenaType.g_cache else ''
 
     def __setDefaultEnabling(self):
         demountEnabling = False

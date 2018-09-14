@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/__init__.py
 import types
 import BigWorld
@@ -28,7 +28,7 @@ def getClanFortState():
 def isStartingScriptDone():
     state = getClanFortState()
     result = False
-    if type(state) is types.IntType:
+    if isinstance(state, types.IntType):
         result = state & FORT_STATE.FIRST_BUILD_DONE > 0
     return result
 
@@ -36,7 +36,7 @@ def isStartingScriptDone():
 def isStartingScriptNotStarted():
     state = getClanFortState()
     result = False
-    if type(state) is types.IntType:
+    if isinstance(state, types.IntType):
         result = state & FORT_STATE.FIRST_DIR_OPEN == 0
     return result
 

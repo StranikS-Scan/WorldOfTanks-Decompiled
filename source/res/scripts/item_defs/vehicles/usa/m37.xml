@@ -100,6 +100,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A17_M37/M37_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <T85E1>
@@ -209,6 +210,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.914225 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/american/A17_M37/collision/Chassis.model	</collisionModel>
@@ -330,6 +333,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.914225 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/american/A17_M37/collision/Chassis.model	</collisionModel>
@@ -461,6 +466,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.060 0.035 0.912 -0.000 1.039 -0.029 0.321 0.100 0.209 0.500 0.000 0.500 0.393 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </M37D1>
   </turrets0>

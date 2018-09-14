@@ -1,10 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/clan_controller.py
 from collections import defaultdict
 import BigWorld
 from client_request_lib.exceptions import ResponseCodes
 from PlayerEvents import g_playerEvents
-from debug_utils import LOG_DEBUG
 from gui.clans import contexts
 from gui.clans.clan_account_profile import MyClanAccountProfile
 from gui.clans.settings import CLAN_INVITE_STATES, CLAN_REQUESTED_DATA_TYPE
@@ -69,7 +68,7 @@ class _ClanDossier(object):
         self.__syncState = 0
         return
 
-    def isSynced(self, key = None):
+    def isSynced(self, key=None):
         if key is None:
             for key in self.__vitalInfo.keys():
                 if not self.__syncState & key:
@@ -95,22 +94,18 @@ class _ClanDossier(object):
         return self._clansCtrl.getLimits()
 
     def hasClanApplication(self, accountDbID):
-        if self.__cache[_CACHE_KEYS.APPS]:
-            return accountDbID in self.__cache[_CACHE_KEYS.APPS]
-        return False
+        return accountDbID in self.__cache[_CACHE_KEYS.APPS] if self.__cache[_CACHE_KEYS.APPS] else False
 
     def isClanInviteSent(self, accountDbID):
-        if self.__cache[_CACHE_KEYS.INVITES]:
-            return accountDbID in self.__cache[_CACHE_KEYS.INVITES]
-        return False
+        return accountDbID in self.__cache[_CACHE_KEYS.INVITES] if self.__cache[_CACHE_KEYS.INVITES] else False
 
-    def resync(self, force = False):
+    def resync(self, force=False):
         self.resyncClanInfo(force=force)
         self.resyncAppsCount(force=force)
         self.resyncInvitesCount(force=force)
 
     @process
-    def resyncClanInfo(self, force = False):
+    def resyncClanInfo(self, force=False):
         if self.__waitForSync & SYNC_KEYS.CLAN_INFO:
             return
         else:
@@ -127,7 +122,7 @@ class _ClanDossier(object):
             self.__waitForSync ^= SYNC_KEYS.CLAN_INFO
             return
 
-    def resyncAppsCount(self, force = False):
+    def resyncAppsCount(self, force=False):
         if self.__waitForSync & SYNC_KEYS.APPS:
             return
         if self.isSynced(SYNC_KEYS.APPS) and not force:
@@ -140,7 +135,7 @@ class _ClanDossier(object):
             self.__syncState |= SYNC_KEYS.APPS
         self.__waitForSync ^= SYNC_KEYS.APPS
 
-    def resyncInvitesCount(self, force = False):
+    def resyncInvitesCount(self, force=False):
         if self.__waitForSync & SYNC_KEYS.INVITES:
             return
         if self.isSynced(SYNC_KEYS.INVITES) and not force:
@@ -156,10 +151,7 @@ class _ClanDossier(object):
     def getClanInfo(self):
         self.resyncClanInfo()
         cachedValue = self.__webCache.get(CLAN_REQUESTED_DATA_TYPE.CLAN_INFO, None)
-        if cachedValue is not None:
-            return cachedValue.getCachedValue()
-        else:
-            return items.ClanExtInfoData()
+        return cachedValue.getCachedValue() if cachedValue is not None else items.ClanExtInfoData()
 
     def canAcceptsJoinRequests(self):
         return self.getClanInfo().isOpened()
@@ -352,12 +344,9 @@ class _ClanDossier(object):
                 self.__changeWebInfo(SYNC_KEYS.INVITES, count - 1, 'onClanInvitesCountReceived')
 
     def processClanMembersListChange(self, memberIDs):
-        from debug_utils import LOG_DEBUG
-        LOG_DEBUG('IHAR processClanMembersListChange: memberIDs', memberIDs)
         cachedValue = self.__webCache.get(CLAN_REQUESTED_DATA_TYPE.CLAN_INFO, None)
         if cachedValue is not None:
             needResync = cachedValue.getCachedValue().getMembersCount() != len(memberIDs)
-            LOG_DEBUG('IHAR Will clear cache: current member count-', cachedValue.getCachedValue().getMembersCount())
         else:
             needResync = True
         if needResync:
@@ -471,21 +460,21 @@ class _ClanController(ClansListeners):
     def invalidate(self):
         self.__state.update()
 
-    def getClanDossier(self, clanDbID = None):
+    def getClanDossier(self, clanDbID=None):
         if clanDbID in self.__cache:
             dossier = self.__cache[clanDbID]
         else:
             dossier = self.__cache[clanDbID] = _ClanDossier(clanDbID, self, isMy=clanDbID == self.__profile.getClanDbID())
         return dossier
 
-    def resyncLogin(self, forceLogin = False):
+    def resyncLogin(self, forceLogin=False):
         perms = self.__profile.getMyClanPermissions()
         if forceLogin or perms.canHandleClanInvites() and perms.canTrade() and perms.canExchangeMoney():
             self.__state.login()
 
     @async
     @process
-    def sendRequest(self, ctx, callback, allowDelay = None):
+    def sendRequest(self, ctx, callback, allowDelay=None):
         result = yield self.__state.sendRequest(ctx, allowDelay=allowDelay)
         if self.__profile is not None:
             self.__profile.processRequestResponse(ctx, result)
@@ -499,10 +488,7 @@ class _ClanController(ClansListeners):
 
     def isEnabled(self):
         settings = g_lobbyContext.getServerSettings()
-        if settings is not None:
-            return settings.clanProfile.isEnabled()
-        else:
-            return True
+        return settings.clanProfile.isEnabled() if settings is not None else True
 
     def isAvailable(self):
         return self.__state.isAvailable()
@@ -517,10 +503,7 @@ class _ClanController(ClansListeners):
         return self.__state.getLimits(self.__profile)
 
     def getClanDbID(self):
-        if self.__profile:
-            return self.__profile.getClanDbID()
-        else:
-            return None
+        return self.__profile.getClanDbID() if self.__profile else None
 
     def changeState(self, state):
         oldState = self.__state
@@ -566,7 +549,7 @@ class _ClanController(ClansListeners):
         memberIDs = getattr(BigWorld.player(), 'clanMembers', {}).keys()
         if self.__profile is not None:
             self.__profile.processClanMembersListChange(memberIDs)
-        self.notify('onClanMembersListChanged', memberIDs)
+        self.notify('onMembersListChanged', memberIDs)
         return
 
     def _onClanCacheRead(self):

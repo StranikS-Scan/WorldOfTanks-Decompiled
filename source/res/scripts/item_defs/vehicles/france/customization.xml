@@ -1,4 +1,4 @@
-<root xmlns:ussr="ussr" xmlns:germany="germany" xmlns:usa="usa" xmlns:france="france" xmlns:uk="uk" xmlns:czech="czech" xmlns:china="china" xmlns:japan="japan">
+<root xmlns:ussr="ussr" xmlns:germany="germany" xmlns:usa="usa" xmlns:france="france" xmlns:uk="uk" xmlns:czech="czech" xmlns:china="china" xmlns:japan="japan"> 
 	<!-- The namespaces enable tags like <ussr:T-43> -->
 	<!-- RGB of typical armor color. Is used for showing of previews. -->
 	<armorColor> 15 36 36 0 </armorColor>
@@ -661,7 +661,7 @@
 				<AMX_13_75> 4.5 4.7 0.17 0.000000 </AMX_13_75>
 				<AMX_13_90> 5.1 5.1 0.37 0.33 </AMX_13_90>
 				<D1> 2.7 2.7 0.1 0.18 </D1>
-				<_105_leFH18B2> 4.7 4.7 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.2 6.2 0.000000 0.000000 </F28_105_leFH18B2>
 				<F11_Renault_G1R> 5.2 5.2 0.45 0.11 </F11_Renault_G1R>
 				<Lorraine40t> 3 3 0.21 0.000000 </Lorraine40t>
 				<FCM_36Pak40> 3.5 3.5 0.48 0.88 </FCM_36Pak40>
@@ -685,7 +685,7 @@
 				<F36_AMX_AC_Mle1948> 6.5 6.5 0.000000 0.22 </F36_AMX_AC_Mle1948>
 				<F44_Somua_S35> 7.8 7.8 0.000000 0.8 </F44_Somua_S35>
 				<F35_AMX_AC_Mle1946> 6 6 0.06 0.000000 </F35_AMX_AC_Mle1946>
-				<AMX_50Fosh_155> 2.5 2.7 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.8 4.8 0.5 0.46 </F64_AMX_50Fosh_155>
 				<ELC_AMX> 5 5 0.04 0.000000 </ELC_AMX>
 				<AMX_105AM> 4.7 4.7 0.3 0.1 </AMX_105AM>
 				<F65_FCM_50t> 4.4 4.4 0.34 0.22 </F65_FCM_50t>
@@ -693,9 +693,9 @@
 				<AMX_Ob_Am105> 6.6 6.5 0.000000 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 4.7 4.7 0.15 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 5.1 5.1 0.37 0.33 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3 3.1 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 6.5 6.5 0.000000 0.22 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3.3 3.4 0.19 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 4.7 4.7 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.2 6.2 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.8 4.9 0.28 0.34 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3.3 3.2 0.19 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 1.8 1.8 0.14 0.18 </F68_AMX_Chasseur_de_char_46>
@@ -708,6 +708,7 @@
 				<F72_AMX_30> 6.1 6.1 0.6 0.36 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3.3 3.3 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.4 3.4 0.000000 0.000000 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 2.2 2.2 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</franch_1>
@@ -739,7 +740,7 @@
 				<AMX_13_75> 3.6 3.6 0.44 0.43 </AMX_13_75>
 				<AMX_13_90> 3 3 0.58 0.04 </AMX_13_90>
 				<D1> 3.2 3.3 0.68 0.78 </D1>
-				<_105_leFH18B2> 3.5 3.4 0.72 0.57 </_105_leFH18B2>
+				<F28_105_leFH18B2> 8.6 8.6 0.72 0.57 </F28_105_leFH18B2>
 				<F11_Renault_G1R> 6.5 6.5 0.4 0.38 </F11_Renault_G1R>
 				<Lorraine40t> 3.1 3.2 0.58 0.4 </Lorraine40t>
 				<FCM_36Pak40> 3.1 3.1 0.4 0.28 </FCM_36Pak40>
@@ -763,16 +764,16 @@
 				<F36_AMX_AC_Mle1948> 7.3 7.3 0.000000 0.76 </F36_AMX_AC_Mle1948>
 				<F44_Somua_S35> 7 7 0.72 0.56 </F44_Somua_S35>
 				<F35_AMX_AC_Mle1946> 7.2 7.2 0.76 0.000000 </F35_AMX_AC_Mle1946>
-				<AMX_50Fosh_155> 2.2 3.4 0.27 0.08 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 6 6 0.25 0.42 </F64_AMX_50Fosh_155>
 				<ELC_AMX> 4.6 4.6 0.24 0.26 </ELC_AMX>
 				<F65_FCM_50t> 4.8 5 0.72 0.88 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 7.2 6.7 0.84 0.33 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 7 6.8 0.22 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 4.2 4.1 0.6 0.2 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 3 3 0.58 0.04 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.8 3.7 0.000000 0.7 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.3 7.3 0.000000 0.76 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 4.5 4.5 1 0.27 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.5 3.4 0.72 0.57 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 8.6 8.6 0.72 0.57 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.8 4.8 0.8 0.3 </S_35CA_IGR>
 				<ELC_AMX_IGR> 4.1 4.1 0.17 0.25 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 1.6 1.6 0.26 0.54 </F68_AMX_Chasseur_de_char_46>
@@ -785,6 +786,7 @@
 				<F72_AMX_30> 7 7 0.52 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3 3 0.000000 0.04 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.1 3.1 0.24 0.46 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.7 1.7 0.000000 0.82 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</franch_2>
@@ -816,7 +818,7 @@
 				<AMX_13_75> 3.3 3.1 0.22 0.04 </AMX_13_75>
 				<AMX_13_90> 2.9 2.9 0.26 0.000000 </AMX_13_90>
 				<D1> 2.7 2.8 0.34 0.000000 </D1>
-				<_105_leFH18B2> 3.7 3.7 0.6 0.26 </_105_leFH18B2>
+				<F28_105_leFH18B2> 5.9 5.9 0.6 0.26 </F28_105_leFH18B2>
 				<F11_Renault_G1R> 5 5 0.42 0.34 </F11_Renault_G1R>
 				<Lorraine40t> 2.3 2.3 0.32 0.4 </Lorraine40t>
 				<FCM_36Pak40> 3 3 0.36 0.96 </FCM_36Pak40>
@@ -840,16 +842,16 @@
 				<F36_AMX_AC_Mle1948> 7.6 7.6 0.98 0.66 </F36_AMX_AC_Mle1948>
 				<F44_Somua_S35> 7.2 7.2 0.34 0.58 </F44_Somua_S35>
 				<F35_AMX_AC_Mle1946> 7.3 7.3 0.44 0.06 </F35_AMX_AC_Mle1946>
-				<AMX_50Fosh_155> 2.9 3 0.87 0.27 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4 4 0.87 0.26 </F64_AMX_50Fosh_155>
 				<ELC_AMX> 4.3 4.3 0.1 0.28 </ELC_AMX>
 				<F65_FCM_50t> 3.8 3.8 0.68 0.5 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 4.6 4.6 0.000000 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 5.4 5.2 0.22 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 2.9 2.9 0.92 0.78 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.9 2.9 0.26 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3.2 3.4 0.98 0.26 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.6 7.6 0.98 0.66 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 2.7 2.6 0.58 0.84 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.7 3.7 0.6 0.26 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 5.9 5.9 0.6 0.26 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.1 4.1 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 2.4 2.5 0.000000 0.16 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 1.8 2.2 0.4 0.54 </F68_AMX_Chasseur_de_char_46>
@@ -862,6 +864,7 @@
 				<F72_AMX_30> 7 7 0.000000 0.1 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2.6 2.6 0.000000 1 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.4 3.4 0.06 0.42 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.7 1.7 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</franch_3>
@@ -893,7 +896,7 @@
 				<AMX_13_75> 2.6 1.6 0.52 0.02 </AMX_13_75>
 				<AMX_13_90> 3.1 2.1 0.23 0.12 </AMX_13_90>
 				<D1> 2.5 2.7 0.06 0.000000 </D1>
-				<_105_leFH18B2> 3 2.9 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 5.3 5.3 0.000000 0.000000 </F28_105_leFH18B2>
 				<F11_Renault_G1R> 4.4 4.4 0.08 0.72 </F11_Renault_G1R>
 				<Lorraine40t> 3 3 0.38 0.08 </Lorraine40t>
 				<FCM_36Pak40> 3.7 2.3 0.16 0.06 </FCM_36Pak40>
@@ -917,16 +920,16 @@
 				<F36_AMX_AC_Mle1948> 7.2 7.2 0.5 0.34 </F36_AMX_AC_Mle1948>
 				<F44_Somua_S35> 9 9 0.47 0.12 </F44_Somua_S35>
 				<F35_AMX_AC_Mle1946> 6.9 6.9 0.41 0.14 </F35_AMX_AC_Mle1946>
-				<AMX_50Fosh_155> 2.9 1.3 0.31 0.45 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 5.7 5.7 0.31 0.45 </F64_AMX_50Fosh_155>
 				<ELC_AMX> 3.4 3.4 0.16 0.78 </ELC_AMX>
 				<F65_FCM_50t> 4.6 4.6 0.12 0.16 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 6.1 6 0.000000 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 4.3 4.5 0.52 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 3 3.1 0.4 0.36 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 3.1 2.1 0.23 0.12 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.9 1.3 0.5 0.34 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.2 7.2 0.5 0.34 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3.3 3.5 0.44 0.62 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3 2.9 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 5.3 5.3 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.5 2.3 0.000000 0.02 </S_35CA_IGR>
 				<ELC_AMX_IGR> 2.9 2.4 0.52 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2.6 1.4 0.36 0.000000 </F68_AMX_Chasseur_de_char_46>
@@ -939,6 +942,7 @@
 				<F72_AMX_30> 7 7 0.000000 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3.3 3.3 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.8 3.8 0.000000 0.2 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.3 1.3 0.04 0.85 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</franch_4>
@@ -970,7 +974,7 @@
 				<AMX_13_75> 2.8 2.9 0.18 0.14 </AMX_13_75>
 				<AMX_13_90> 2.9 2.8 0.76 0.36 </AMX_13_90>
 				<D1> 3.3 3.3 0.1 0.000000 </D1>
-				<_105_leFH18B2> 3.1 2.3 0.36 0.62 </_105_leFH18B2>
+				<F28_105_leFH18B2> 5.5 5.5 0.36 0.62 </F28_105_leFH18B2>
 				<F11_Renault_G1R> 4.3 4.3 0.22 0.49 </F11_Renault_G1R>
 				<Lorraine40t> 3.3 3.9 0.63 0.38 </Lorraine40t>
 				<FCM_36Pak40> 3.3 3.5 0.38 0.26 </FCM_36Pak40>
@@ -994,16 +998,16 @@
 				<F36_AMX_AC_Mle1948> 7.2 7.2 0.06 0.82 </F36_AMX_AC_Mle1948>
 				<F44_Somua_S35> 9 9 0.02 0.14 </F44_Somua_S35>
 				<F35_AMX_AC_Mle1946> 6.4 6.4 1 0.44 </F35_AMX_AC_Mle1946>
-				<AMX_50Fosh_155> 3 2.5 0.72 0.52 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 5.4 5.4 0.94 0.42 </F64_AMX_50Fosh_155>
 				<ELC_AMX> 3 3 0.000000 0.6 </ELC_AMX>
 				<F65_FCM_50t> 4 4 0.68 0.66 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 4.3 4.3 0.24 0.34 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 4.5 4.3 0.1 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 3.1 2.9 0.12 0.14 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.9 2.8 0.76 0.36 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3.7 3.4 0.22 0.64 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.2 7.2 0.06 0.82 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 2.2 4.6 0.06 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.1 2.3 0.36 0.62 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 5.5 5.5 0.36 0.62 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 5.1 5.1 0.1 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3.5 3 0.14 0.7 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2 2 0.4 0.58 </F68_AMX_Chasseur_de_char_46>
@@ -1016,6 +1020,7 @@
 				<F72_AMX_30> 6.4 6.4 0.36 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3.9 3.9 0.23 0.26 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 2.7 2.7 0.57 0.82 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.7 1.7 0.17 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</franch_5>
@@ -1047,7 +1052,7 @@
 				<AMX_13_75> 2.9 2.9 0.69 0.24 </AMX_13_75>
 				<AMX_13_90> 2.9 3 0.62 0.32 </AMX_13_90>
 				<D1> 2.9 3 0.22 0.000000 </D1>
-				<_105_leFH18B2> 3.1 3.1 0.66 0.52 </_105_leFH18B2>
+				<F28_105_leFH18B2> 7.1 7.1 0.66 0.52 </F28_105_leFH18B2>
 				<F11_Renault_G1R> 4.7 4.7 0.72 0.16 </F11_Renault_G1R>
 				<Lorraine40t> 5 5 0.34 0.03 </Lorraine40t>
 				<FCM_36Pak40> 5.5 5.5 0.15 0.2 </FCM_36Pak40>
@@ -1071,16 +1076,16 @@
 				<F36_AMX_AC_Mle1948> 7.7 7.7 0.24 0.87 </F36_AMX_AC_Mle1948>
 				<F44_Somua_S35> 8.4 8.4 0.72 0.000000 </F44_Somua_S35>
 				<F35_AMX_AC_Mle1946> 7.5 7.5 0.54 0.12 </F35_AMX_AC_Mle1946>
-				<AMX_50Fosh_155> 2.6 3.8 0.27 0.54 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 5.8 5.8 0.1 0.58 </F64_AMX_50Fosh_155>
 				<ELC_AMX> 3.3 3.3 0.76 0.000000 </ELC_AMX>
 				<F65_FCM_50t> 4.2 4.2 0.14 0.5 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 5.9 6 0.000000 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 6.9 6.9 0.000000 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 2.3 3.1 0.96 0.18 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.9 3 0.62 0.32 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.7 4.9 0.24 0.27 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.7 7.7 0.24 0.87 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3.7 3.7 0.75 0.74 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.1 3.1 0.66 0.52 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 7.1 7.1 0.66 0.52 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 6.5 6.5 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 2.7 2.7 0.76 0.43 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 1.8 3.2 0.36 0.7 </F68_AMX_Chasseur_de_char_46>
@@ -1093,6 +1098,7 @@
 				<F72_AMX_30> 7 7 0.6 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2.9 2.9 0.47 0.24 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 5 5 0.42 0.36 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.1 1.1 0.38 0.74 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</franch_6>
@@ -1124,7 +1130,7 @@
 				<AMX_13_75> 2.5 2.5 0.48 0.000000 </AMX_13_75>
 				<AMX_13_90> 2.7 2.6 0.46 0.000000 </AMX_13_90>
 				<D1> 3 3 0.56 0.4 </D1>
-				<_105_leFH18B2> 3.5 3.5 0.16 0.58 </_105_leFH18B2>
+				<F28_105_leFH18B2> 5.7 5.7 0.16 0.58 </F28_105_leFH18B2>
 				<F11_Renault_G1R> 4.2 4.2 0.42 0.5 </F11_Renault_G1R>
 				<Lorraine40t> 2.9 2.7 1 0.38 </Lorraine40t>
 				<FCM_36Pak40> 3.6 3.3 0.26 0.2 </FCM_36Pak40>
@@ -1148,16 +1154,16 @@
 				<F36_AMX_AC_Mle1948> 7.9 7.9 0.36 0.82 </F36_AMX_AC_Mle1948>
 				<F44_Somua_S35> 9.3 9.3 0.44 0.18 </F44_Somua_S35>
 				<F35_AMX_AC_Mle1946> 7.8 7.8 0.24 0.12 </F35_AMX_AC_Mle1946>
-				<AMX_50Fosh_155> 2.9 3 0.38 0.32 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 5.3 5.3 0.38 0.32 </F64_AMX_50Fosh_155>
 				<ELC_AMX> 2.9 2.9 0.52 0.22 </ELC_AMX>
 				<F65_FCM_50t> 3.6 3.7 0.26 0.000000 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 4.8 4.8 0.21 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 4.7 4.8 0.000000 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 2.8 2.8 0.26 0.87 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.7 2.6 0.46 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.9 3.1 0.36 0.26 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.9 7.9 0.36 0.82 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3.1 3 0.35 0.1 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.5 3.5 0.16 0.58 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 5.7 5.7 0.16 0.58 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4 4.3 0.34 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 2.9 2.9 0.66 0.22 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 1.6 2 0.64 0.7 </F68_AMX_Chasseur_de_char_46>
@@ -1170,6 +1176,7 @@
 				<F72_AMX_30> 7 7 0.000000 0.46 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3.3 3.3 0.56 0.18 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.6 3.6 0.000000 0.14 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.4 1.4 0.14 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</franch_7>
@@ -1201,7 +1208,7 @@
 				<AMX_13_75> 2.7 5 0.31 0.68 </AMX_13_75>
 				<AMX_13_90> 3.4 3.3 0.94 0.1 </AMX_13_90>
 				<D1> 2.8 2.7 0.6 0.96 </D1>
-				<_105_leFH18B2> 3.9 3.9 0.75 0.74 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.3 6.3 0.75 0.74 </F28_105_leFH18B2>
 				<F11_Renault_G1R> 5.6 5.6 0.1 0.5 </F11_Renault_G1R>
 				<Lorraine40t> 3.3 3.3 0.32 0.68 </Lorraine40t>
 				<FCM_36Pak40> 4.4 4.3 0.26 0.34 </FCM_36Pak40>
@@ -1225,16 +1232,16 @@
 				<F36_AMX_AC_Mle1948> 7.1 7.1 0.000000 0.1 </F36_AMX_AC_Mle1948>
 				<F44_Somua_S35> 9 9 0.76 0.32 </F44_Somua_S35>
 				<F35_AMX_AC_Mle1946> 8.3 8.3 0.34 0.000000 </F35_AMX_AC_Mle1946>
-				<AMX_50Fosh_155> 3 3.1 0.3 0.07 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 5.7 5.7 0.3 0.07 </F64_AMX_50Fosh_155>
 				<ELC_AMX> 4.3 3.9 1 0.47 </ELC_AMX>
 				<F65_FCM_50t> 4.9 4.9 0.4 0.18 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 4.5 4.4 0.4 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 5.4 5.4 0.47 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 3.6 2.9 0.37 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 3.4 3.3 0.94 0.1 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.8 3.1 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.1 7.1 0.000000 0.1 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3.4 2.5 0.57 0.26 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.9 3.9 0.75 0.74 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.3 6.3 0.75 0.74 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 5.8 5.6 0.04 0.02 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3.3 3.3 0.36 0.43 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2.2 2.4 0.89 0.4 </F68_AMX_Chasseur_de_char_46>
@@ -1247,6 +1254,7 @@
 				<F72_AMX_30> 7.9 7.9 0.2 0.22 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 4.4 4.4 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.4 3.4 0.64 0.08 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 2.7 2.7 0.45 0.62 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</franch_8>
@@ -1279,8 +1287,8 @@
 				<Hotchkiss_H35> 3.6 2.3 0.64 0.76 </Hotchkiss_H35>
 				<AMX38> 3.1 3.3 0.4 0.14 </AMX38>
 				<AMX40> 2.8 3 0.04 0.46 </AMX40>
-				<F15_AMX_12t> 2.7 2.8 0.3 0.45 </F15_AMX_12t>
 				<AMX_13_75> 2.8 3 0.6 0.16 </AMX_13_75>
+				<F15_AMX_12t> 2.7 2.8 0.3 0.45 </F15_AMX_12t>
 				<AMX_13_90> 2.6 2.7 0.17 0.12 </AMX_13_90>
 				<Bat_Chatillon25t> 2.6 2.6 0.31 0.51 </Bat_Chatillon25t>
 				<Lorraine40t> 3.4 3.5 0.34 0.46 </Lorraine40t>
@@ -1291,7 +1299,7 @@
 				<Lorraine155_50> 3.3 3.1 0.36 0.78 </Lorraine155_50>
 				<Lorraine155_51> 3.5 3.7 0.8 0.52 </Lorraine155_51>
 				<FCM_36Pak40> 2.8 2.8 0.24 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 3.2 3.3 0.63 0.52 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.3 6.3 0.63 0.52 </F28_105_leFH18B2>
 				<RenaultFT_AC> 2.8 3 0.18 0.18 </RenaultFT_AC>
 				<Somua_Sau_40> 2.8 2.8 0.02 0.000000 </Somua_Sau_40>
 				<S_35CA> 3.5 3.5 0.43 0.24 </S_35CA>
@@ -1301,7 +1309,7 @@
 				<F36_AMX_AC_Mle1948> 8 8 0.47 0.58 </F36_AMX_AC_Mle1948>
 				<F44_Somua_S35> 7 7 0.28 0.02 </F44_Somua_S35>
 				<F35_AMX_AC_Mle1946> 6.8 6.8 0.22 0.000000 </F35_AMX_AC_Mle1946>
-				<AMX_50Fosh_155> 2.5 2.7 0.41 0.78 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 6.7 6.7 0.41 0.78 </F64_AMX_50Fosh_155>
 				<AMX50_Foch> 2.9 3 0.08 0.06 </AMX50_Foch>
 				<ELC_AMX> 3.7 3.7 0.36 0.02 </ELC_AMX>
 				<F65_FCM_50t> 4.1 4.1 0.1 0.000000 </F65_FCM_50t>
@@ -1309,9 +1317,9 @@
 				<AMX_Ob_Am105> 5.2 5.2 0.19 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 3.1 3.1 0.98 0.44 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.6 2.7 0.17 0.12 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.5 2.6 0.47 0.59 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 8 8 0.47 0.58 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 2.6 2.6 0.31 0.51 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.2 3.3 0.63 0.52 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.3 6.3 0.63 0.52 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 3.5 3.5 0.43 0.24 </S_35CA_IGR>
 				<ELC_AMX_IGR> 2.9 2.9 0.12 0.02 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 1.8 1.8 0.38 0.24 </F68_AMX_Chasseur_de_char_46>
@@ -1324,6 +1332,7 @@
 				<F72_AMX_30> 7 7 0.4 0.32 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3 3 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.8 3.8 0.000000 0.000000 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.5 1.5 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</franch_9>
@@ -1358,8 +1367,8 @@
 				<Hotchkiss_H35> 3.8 2.6 0.32 0.4 </Hotchkiss_H35>
 				<AMX38> 4.1 3.7 0.07 0.25 </AMX38>
 				<AMX40> 2.8 2.9 0.000000 0.000000 </AMX40>
-				<F15_AMX_12t> 4.5 4.5 0.56 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 2.7 2.8 0.14 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 4.5 4.5 0.56 0.000000 </F15_AMX_12t>
 				<Lorraine40t> 3.3 3.4 0.52 0.000000 </Lorraine40t>
 				<RenaultBS> 3.1 2 0.000000 0.000000 </RenaultBS>
 				<Lorraine39_L_AM> 3.9 2.8 0.24 0.000000 </Lorraine39_L_AM>
@@ -1368,7 +1377,7 @@
 				<Lorraine155_50> 3.8 3.9 0.45 0.1 </Lorraine155_50>
 				<Lorraine155_51> 4.1 4.1 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 3.7 3.8 0.2 0.28 </FCM_36Pak40>
-				<_105_leFH18B2> 3.4 3.6 0.8 0.39 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.4 6.4 0.8 0.39 </F28_105_leFH18B2>
 				<RenaultFT_AC> 2.9 2.9 0.2 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 3.3 3.4 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 4.3 4.3 0.1 0.2 </S_35CA>
@@ -1379,16 +1388,16 @@
 				<Bat_Chatillon155_58> 3.8 3.9 0.000000 0.000000 </Bat_Chatillon155_58>
 				<F44_Somua_S35> 7.2 7.2 0.52 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 3.8 3.8 0.34 0.26 </RenaultUE57>
-				<AMX_50Fosh_155> 2.8 3 0.23 0.22 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.8 4.8 0.54 0.32 </F64_AMX_50Fosh_155>
 				<ELC_AMX> 3.4 3.4 0.4 0.32 </ELC_AMX>
 				<F65_FCM_50t> 3.3 3.3 0.76 0.26 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 5.9 5.9 0.2 0.26 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 5.1 5.1 0.48 0.56 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 3.6 3.7 0.35 0.03 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.6 2.7 0.38 0.5 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3 3.1 0.46 0.04 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 5.8 5.8 0.6 0.76 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3.2 3.2 0.28 0.46 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.4 3.6 0.8 0.39 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.4 6.4 0.8 0.39 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.3 4.3 0.1 0.2 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3.3 3.2 0.18 0.32 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 1.8 2 0.06 0.07 </F68_AMX_Chasseur_de_char_46>
@@ -1401,6 +1410,7 @@
 				<F72_AMX_30> 5.7 5.7 0.48 0.24 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2.1 2.1 0.15 0.32 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 4 4 0.000000 0.000000 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.6 1.6 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</franch_10>
@@ -1433,8 +1443,8 @@
 				<Hotchkiss_H35> 3.6 3.7 0.22 0.15 </Hotchkiss_H35>
 				<AMX38> 3.6 3.7 0.26 0.000000 </AMX38>
 				<AMX40> 4 3.9 0.3 0.14 </AMX40>
-				<F15_AMX_12t> 3.5 3.4 0.19 0.4 </F15_AMX_12t>
 				<AMX_13_75> 4.2 3.9 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 3.5 3.4 0.19 0.4 </F15_AMX_12t>
 				<AMX_13_90> 3.3 3.1 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 4.4 4.8 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 3.4 3.4 0.000000 0.24 </Lorraine40t>
@@ -1445,7 +1455,7 @@
 				<Lorraine155_50> 4.3 4.2 0.000000 0.26 </Lorraine155_50>
 				<Lorraine155_51> 5 5 0.2 0.33 </Lorraine155_51>
 				<FCM_36Pak40> 3.8 4 0.18 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 4 4.1 0.08 0.6 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.1 6.1 0.08 0.6 </F28_105_leFH18B2>
 				<RenaultFT_AC> 5 3.9 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 4.3 4.2 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 4.2 4.6 0.000000 0.4 </S_35CA>
@@ -1456,16 +1466,16 @@
 				<Bat_Chatillon155_58> 3.9 3.9 0.3 0.27 </Bat_Chatillon155_58>
 				<F44_Somua_S35> 6.1 6.1 0.32 0.21 </F44_Somua_S35>
 				<RenaultUE57> 3.5 3.7 0.22 0.36 </RenaultUE57>
-				<AMX_50Fosh_155> 4.4 4.2 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.4 4.2 0.000000 0.2 </F64_AMX_50Fosh_155>
 				<ELC_AMX> 3.7 3.7 0.38 0.000000 </ELC_AMX>
 				<F65_FCM_50t> 5 5 0.4 0.2 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 5.1 5.3 0.000000 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 4.1 4.1 0.000000 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 2.9 2.8 0.13 0.33 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 3.3 3.1 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3.9 3.9 0.18 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.1 7.1 0.18 0.000000 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 4.4 4.8 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 4 4.1 0.08 0.6 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.1 6.1 0.08 0.6 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.2 4.6 0.000000 0.4 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3.7 3.7 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 4.7 4.6 0.000000 0.000000 </F68_AMX_Chasseur_de_char_46>
@@ -1507,8 +1517,8 @@
 				<Hotchkiss_H35> 3.7 3.9 0.5 0.000000 </Hotchkiss_H35>
 				<AMX38> 3.3 3.3 0.28 0.000000 </AMX38>
 				<AMX40> 2.5 2.7 0.000000 0.000000 </AMX40>
-				<F15_AMX_12t> 2.6 2.5 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 3 2.9 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 2.6 2.5 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 3.4 3.4 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 3 2.9 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 3.6 3.5 0.000000 0.000000 </Lorraine40t>
@@ -1519,7 +1529,7 @@
 				<Lorraine155_50> 3.5 3.5 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 4 4.2 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 4 3.9 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 3.9 3.7 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.5 6.5 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 3.1 3 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 3.5 3.5 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 4 4.2 0.000000 0.000000 </S_35CA>
@@ -1531,15 +1541,15 @@
 				<F44_Somua_S35> 7 7 0.82 0.6 </F44_Somua_S35>
 				<RenaultUE57> 3.5 3.5 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.6 3.6 0.36 0.54 </ELC_AMX>
-				<AMX_50Fosh_155> 3.4 3.4 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 5.4 5.4 0.55 0.06 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 3.1 3.1 0.15 0.28 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 4.2 3.8 0.000000 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 5.5 5.3 0.000000 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 3 3.2 0.24 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 3.4 3.4 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3.5 3.5 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 6.1 6.1 0.000000 0.36 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3 2.9 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.9 3.7 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.5 6.5 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4 4.2 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3 3 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2.4 2.4 0.000000 0.000000 </F68_AMX_Chasseur_de_char_46>
@@ -1552,6 +1562,7 @@
 				<F72_AMX_30> 5.8 5.8 0.36 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2.9 2.9 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 2.9 2.9 0.11 0.4 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.6 1.6 0.36 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<notInShop> true </notInShop>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
@@ -1585,8 +1596,8 @@
 				<Hotchkiss_H35> 3.2 3.2 0.4 0.5 </Hotchkiss_H35>
 				<AMX38> 3.7 3.7 0.000000 0.000000 </AMX38>
 				<AMX40> 3 3.1 0.000000 0.000000 </AMX40>
-				<F15_AMX_12t> 2.8 2.8 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 3 3 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 2.8 2.8 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 3 2.9 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 3.1 3.1 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 3.4 3.4 0.000000 0.000000 </Lorraine40t>
@@ -1597,7 +1608,7 @@
 				<Lorraine155_50> 3.3 3.3 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 3.3 3.4 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 3.7 3.7 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 3.5 3.3 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.7 6.7 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 3.4 3.3 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 3 3.1 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 4.2 4.3 0.27 0.000000 </S_35CA>
@@ -1609,15 +1620,15 @@
 				<F44_Somua_S35> 7 7 0.21 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 3.6 3.5 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.5 3.5 0.000000 0.000000 </ELC_AMX>
-				<AMX_50Fosh_155> 2.9 3 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.9 3 0.25 0.4 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 3.6 3.4 0.000000 0.000000 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 4.2 4.4 0.000000 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 4.6 4.8 0.000000 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 3.4 3.5 0.000000 0.25 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 3 2.9 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.7 2.7 0.5 0.14 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 6.7 6.7 0.5 0.64 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3.1 3.1 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.5 3.3 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.7 6.7 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.2 4.3 0.27 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3 2.9 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2 2 0.2 0.74 </F68_AMX_Chasseur_de_char_46>
@@ -1630,6 +1641,7 @@
 				<F72_AMX_30> 5.5 5.5 0.000000 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2.7 2.7 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.6 3.6 0.15 0.34 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.4 1.4 0.09 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<notInShop> true </notInShop>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
@@ -1663,8 +1675,8 @@
 				<Hotchkiss_H35> 3.2 3.3 0.000000 0.000000 </Hotchkiss_H35>
 				<AMX38> 3.1 3.1 0.000000 0.000000 </AMX38>
 				<AMX40> 2.5 2.7 0.000000 0.000000 </AMX40>
-				<F15_AMX_12t> 2.8 2.7 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 3.1 3.1 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 2.8 2.7 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 3.4 3.3 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 3.4 3.4 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 3 3.1 0.000000 0.000000 </Lorraine40t>
@@ -1675,7 +1687,7 @@
 				<Lorraine155_50> 3.6 3.6 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 3.3 3.2 0.6 0.32 </Lorraine155_51>
 				<FCM_36Pak40> 4.3 4.4 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 3.6 3.6 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6 6 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 3.2 3.3 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 3.6 3.5 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 4.7 4.8 0.000000 0.000000 </S_35CA>
@@ -1687,15 +1699,15 @@
 				<F44_Somua_S35> 7 7 0.54 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 3.7 3.9 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.5 3.5 0.000000 0.000000 </ELC_AMX>
-				<AMX_50Fosh_155> 3.1 3.1 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.3 4.3 0.2 0.47 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 3.4 3.4 0.000000 0.000000 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 4.5 4.4 0.000000 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 5.1 5.2 0.000000 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 3.2 3.2 0.23 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 3.4 3.3 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3.3 3.4 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.4 7.4 0.000000 0.4 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3.4 3.4 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.6 3.6 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6 6 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.7 4.8 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3.5 3.5 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2 2 0.000000 0.000000 </F68_AMX_Chasseur_de_char_46>
@@ -1708,6 +1720,7 @@
 				<F72_AMX_30> 5.9 5.9 0.34 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2.4 2.4 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.2 3.2 0.07 0.22 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.5 1.5 0.1 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<notInShop> true </notInShop>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
@@ -1741,8 +1754,8 @@
 				<Hotchkiss_H35> 3.8 3.9 0.000000 0.000000 </Hotchkiss_H35>
 				<AMX38> 3.9 3.8 0.000000 0.000000 </AMX38>
 				<AMX40> 2.6 2.6 0.000000 0.000000 </AMX40>
-				<F15_AMX_12t> 2.9 3 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 3.1 3.2 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 2.9 3 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 3.4 3.1 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 2.7 2.8 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 3.1 2.8 0.000000 0.000000 </Lorraine40t>
@@ -1753,7 +1766,7 @@
 				<Lorraine155_50> 3.3 3.4 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 3.5 3.5 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 4.1 4 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 3.4 3.4 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.4 6.4 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 3.4 3.5 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 3.4 3.5 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 3.9 4 0.56 0.25 </S_35CA>
@@ -1765,15 +1778,15 @@
 				<F44_Somua_S35> 7 7 0.1 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 3.9 4 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.4 3.4 0.2 0.52 </ELC_AMX>
-				<AMX_50Fosh_155> 2.8 2.7 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.8 4.8 0.38 0.52 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 3.9 3.9 0.000000 0.000000 </F65_FCM_50t>
 				<Bat_Chatillon155_55> 4.3 4.2 0.000000 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 5.4 5.4 0.000000 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 2.8 2.9 0.2 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 3.4 3.1 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.9 3 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7 7 0.000000 0.26 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 2.7 2.8 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.4 3.4 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.4 6.4 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 3.9 4 0.56 0.25 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3.4 3.4 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2 2 0.000000 0.000000 </F68_AMX_Chasseur_de_char_46>
@@ -1786,6 +1799,7 @@
 				<F72_AMX_30> 5.8 5.8 0.000000 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2.8 2.8 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3 3 0.1 0.25 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.5 1.5 0.13 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<notInShop> true </notInShop>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
@@ -1820,8 +1834,8 @@
 				<Hotchkiss_H35> 4.8 3.2 0.25 0.000000 </Hotchkiss_H35>
 				<AMX38> 4.5 4.6 0.000000 0.000000 </AMX38>
 				<AMX40> 4 4 0.4 0.64 </AMX40>
-				<F15_AMX_12t> 4.7 4.8 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 4.3 4.3 0.4 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 4.7 4.8 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 4.5 4.5 0.26 0.19 </AMX_13_90>
 				<Bat_Chatillon25t> 4 4 0.33 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 4.3 4.3 0.28 0.000000 </Lorraine40t>
@@ -1832,7 +1846,7 @@
 				<Lorraine155_50> 4.8 4.9 0.4 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 4.5 4.6 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 4.2 4.4 0.45 0.17 </FCM_36Pak40>
-				<_105_leFH18B2> 4.5 4.3 0.44 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 7.3 7.3 0.44 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 4.3 4 0.47 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 4.8 4.9 0.36 0.000000 </Somua_Sau_40>
 				<S_35CA> 5.8 6 0.28 0.36 </S_35CA>
@@ -1844,14 +1858,14 @@
 				<F44_Somua_S35> 6.6 6.6 0.19 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 3.7 3.8 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 4.2 4.2 0.62 0.18 </ELC_AMX>
-				<AMX_50Fosh_155> 4.1 4 0.26 0.32 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 8 8 0.26 0.63 </F64_AMX_50Fosh_155>
 				<Bat_Chatillon155_55> 5.2 5.2 0.63 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 6 6 0.28 0.41 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 4.8 4.9 0.000000 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 4.5 4.5 0.26 0.19 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 4.3 4.5 0.16 0.14 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 6.5 6.5 0.16 0.46 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 4 4 0.33 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 4.5 4.3 0.44 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 7.3 7.3 0.44 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 5.8 6 0.28 0.36 </S_35CA_IGR>
 				<ELC_AMX_IGR> 4.2 4.2 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2.8 2.5 0.19 0.07 </F68_AMX_Chasseur_de_char_46>
@@ -1864,6 +1878,7 @@
 				<F72_AMX_30> 6.3 6.3 0.000000 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3 3 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 4.2 4.2 0.000000 0.04 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.6 1.6 0.2 0.02 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</Branches_and_Leaves>
@@ -1897,8 +1912,8 @@
 				<Hotchkiss_H35> 4.4 2.7 0.44 0.000000 </Hotchkiss_H35>
 				<AMX38> 3 3.2 0.000000 0.000000 </AMX38>
 				<AMX40> 2.7 2.9 0.08 0.06 </AMX40>
-				<F15_AMX_12t> 3.4 3.4 0.06 0.37 </F15_AMX_12t>
 				<AMX_13_75> 2.7 2.8 0.06 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 3.4 3.4 0.06 0.37 </F15_AMX_12t>
 				<AMX_13_90> 3.2 3.2 0.04 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 2.8 2.8 0.55 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 2.7 2.8 0.5 0.17 </Lorraine40t>
@@ -1909,7 +1924,7 @@
 				<Lorraine155_50> 3 3.1 0.16 0.16 </Lorraine155_50>
 				<Lorraine155_51> 3.2 3.2 0.2 0.56 </Lorraine155_51>
 				<FCM_36Pak40> 3.3 3.4 0.48 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 4.3 4.2 0.04 0.6 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.8 6.8 0.04 0.6 </F28_105_leFH18B2>
 				<RenaultFT_AC> 3.2 3.4 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 2.8 2.7 0.06 0.000000 </Somua_Sau_40>
 				<S_35CA> 3.6 3.7 0.000000 0.000000 </S_35CA>
@@ -1921,14 +1936,14 @@
 				<F44_Somua_S35> 7.9 7.9 0.8 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 4.1 3.9 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.9 3.5 0.86 0.62 </ELC_AMX>
-				<AMX_50Fosh_155> 2.5 2.6 0.7 0.15 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 3.7 3.7 0.5 0.36 </F64_AMX_50Fosh_155>
 				<Bat_Chatillon155_55> 3.7 4 0.000000 0.000000 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 3.7 3.9 0.25 0.06 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 3.2 3.3 0.000000 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 3.2 3.2 0.04 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.6 2.7 0.22 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 8.5 8.5 0.22 0.12 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 2.8 2.8 0.55 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 4.3 4.2 0.04 0.6 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.8 6.8 0.04 0.6 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 3.6 3.7 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 2.5 2.7 0.27 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 1.8 1.8 0.6 0.62 </F68_AMX_Chasseur_de_char_46>
@@ -1941,6 +1956,7 @@
 				<F72_AMX_30> 7 7 0.34 0.24 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3.6 3.6 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 2.8 2.8 0.2 0.8 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 2.3 2.3 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</Geometric_Shapes>
@@ -1974,8 +1990,8 @@
 				<Hotchkiss_H35> 4.1 2.5 0.08 0.000000 </Hotchkiss_H35>
 				<AMX38> 3.6 3.5 0.000000 0.000000 </AMX38>
 				<AMX40> 3 3.4 0.36 0.28 </AMX40>
-				<F15_AMX_12t> 3.7 3.7 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 2.8 2.8 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 3.7 3.7 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 3.3 3.4 0.23 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 3.3 3.3 0.31 0.6 </Bat_Chatillon25t>
 				<Lorraine40t> 3.8 3.9 0.17 0.000000 </Lorraine40t>
@@ -1986,7 +2002,7 @@
 				<Lorraine155_50> 3.7 3.7 0.07 1 </Lorraine155_50>
 				<Lorraine155_51> 3.9 4 0.14 0.62 </Lorraine155_51>
 				<FCM_36Pak40> 4.5 4.5 0.61 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 4.1 4.1 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.5 6.5 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 3.8 3.8 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 3.8 4 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 4.7 4.8 0.000000 0.000000 </S_35CA>
@@ -1998,14 +2014,14 @@
 				<F44_Somua_S35> 7.8 7.8 0.39 0.52 </F44_Somua_S35>
 				<RenaultUE57> 4.5 4.6 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.1 3.1 0.66 0.56 </ELC_AMX>
-				<AMX_50Fosh_155> 2.9 2.7 0.2 0.4 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 5.5 5.5 0.2 0.4 </F64_AMX_50Fosh_155>
 				<Bat_Chatillon155_55> 5.2 5.2 0.6 0.82 </Bat_Chatillon155_55>
 				<AMX_Ob_Am105> 5.3 5.4 0.31 0.000000 </AMX_Ob_Am105>
 				<F08_AMX_50_100_IGR> 3 3.1 0.36 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 3.3 3.4 0.23 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3.4 3.4 0.2 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.5 7.5 0.8 0.86 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3.3 3.3 0.31 0.6 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 4.1 4.1 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.5 6.5 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.7 4.8 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3.5 3.7 0.37 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2 1.8 0.34 0.08 </F68_AMX_Chasseur_de_char_46>
@@ -2018,6 +2034,7 @@
 				<F72_AMX_30> 7 7 0.32 0.48 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 4 4 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.8 3.8 0.08 0.000000 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 2 2 0.29 0.25 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</Gyrus>
@@ -2052,8 +2069,8 @@
 				<Hotchkiss_H35> 4.5 2.8 0.2 0.000000 </Hotchkiss_H35>
 				<AMX38> 4.1 4.2 0.000000 0.000000 </AMX38>
 				<AMX40> 3.4 3.5 0.000000 0.000000 </AMX40>
-				<F15_AMX_12t> 3.2 3.3 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 2.6 2.6 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 3.2 3.3 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 2.8 3 0.14 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 3 3 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 3.8 3.8 0.000000 0.000000 </Lorraine40t>
@@ -2064,7 +2081,7 @@
 				<Lorraine155_50> 3.6 3.6 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 4.1 4.1 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 3.8 3.7 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 4 4.2 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 5.2 5.2 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 3.4 3.4 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 2.9 2.9 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 4.9 5 0.31 0.000000 </S_35CA>
@@ -2076,15 +2093,15 @@
 				<F44_Somua_S35> 5.6 5.6 0.83 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 4.3 4.2 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3 2.9 0.04 0.42 </ELC_AMX>
-				<AMX_50Fosh_155> 2.6 2.6 0.06 0.26 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 3.2 3.2 0.37 0.46 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 3.6 3.7 0.04 0.13 </F65_FCM_50t>
 				<AMX_Ob_Am105> 3.8 3.8 0.000000 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 4.2 4.3 0.000000 0.000000 </Bat_Chatillon155_55>
 				<F08_AMX_50_100_IGR> 3.8 3.9 0.000000 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.8 3 0.14 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.9 3 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 8 8 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3 3 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 4 4.2 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 5.2 5.2 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.9 5 0.31 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3 2.9 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2.6 2.4 0.000000 0.46 </F68_AMX_Chasseur_de_char_46>
@@ -2097,6 +2114,7 @@
 				<F72_AMX_30> 5.4 5.4 0.000000 0.12 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2 2 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 4.6 4.6 0.3 0.88 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.6 1.6 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 			<notInShop> false </notInShop>
@@ -2130,8 +2148,8 @@
 				<Hotchkiss_H35> 3.2 3.2 0.000000 0.000000 </Hotchkiss_H35>
 				<AMX38> 3.2 3.4 0.000000 0.000000 </AMX38>
 				<AMX40> 3 3 0.000000 0.000000 </AMX40>
-				<F15_AMX_12t> 2.9 3 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 3 3 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 2.9 3 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 2.7 2.7 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 2.9 3 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 3.3 3.4 0.000000 0.000000 </Lorraine40t>
@@ -2142,7 +2160,7 @@
 				<Lorraine155_50> 3 3 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 3.1 3.3 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 3.6 3.7 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 3.1 3.2 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 5.6 5.6 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 2.8 2.7 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 2.7 2.9 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 3.4 3.3 0.000000 0.000000 </S_35CA>
@@ -2154,15 +2172,15 @@
 				<F44_Somua_S35> 7 7 0.38 0.44 </F44_Somua_S35>
 				<RenaultUE57> 2.4 2.5 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 4.3 4.3 0.2 0.3 </ELC_AMX>
-				<AMX_50Fosh_155> 2.4 2.4 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.8 4.8 0.000000 0.6 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 3.9 3.9 0.000000 0.14 </F65_FCM_50t>
 				<AMX_Ob_Am105> 2.8 2.9 0.000000 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 3.8 3.8 0.28 0.000000 </Bat_Chatillon155_55>
 				<F08_AMX_50_100_IGR> 2.6 2.7 0.000000 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.7 2.7 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3.1 3.1 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.7 7.7 0.000000 0.72 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 2.9 3 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3.1 3.2 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 5.6 5.6 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 3.4 3.3 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 2.3 2.3 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2.2 2.2 0.000000 0.58 </F68_AMX_Chasseur_de_char_46>
@@ -2175,6 +2193,7 @@
 				<F72_AMX_30> 6.3 6.3 0.04 0.22 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2.4 2.4 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 4.4 4.4 0.04 0.64 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.4 1.4 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 			<notInShop> false </notInShop>
@@ -2208,8 +2227,8 @@
 				<Hotchkiss_H35> 3.8 2.3 0.000000 0.000000 </Hotchkiss_H35>
 				<AMX38> 3.6 3.7 0.000000 0.000000 </AMX38>
 				<AMX40> 3 3 0.000000 0.000000 </AMX40>
-				<F15_AMX_12t> 2.6 2.6 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 2.7 2.8 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 2.6 2.6 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 2.5 2.4 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 2.7 2.8 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 2.9 2.9 0.000000 0.000000 </Lorraine40t>
@@ -2220,7 +2239,7 @@
 				<Lorraine155_50> 3.4 3.4 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 3.4 3.7 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 2.8 3 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 3 3 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 4.4 4.4 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 2.9 3 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 3 3.1 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 3.1 3 0.000000 0.000000 </S_35CA>
@@ -2232,15 +2251,15 @@
 				<F44_Somua_S35> 6.6 6.6 0.000000 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 3.2 3.3 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3 3 0.3 0.32 </ELC_AMX>
-				<AMX_50Fosh_155> 2.3 2.3 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 3.9 3.9 0.24 0.000000 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 2.7 2.7 0.000000 0.000000 </F65_FCM_50t>
 				<AMX_Ob_Am105> 3.3 3.3 0.000000 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 3.1 3.2 0.000000 0.000000 </Bat_Chatillon155_55>
 				<F08_AMX_50_100_IGR> 2.8 2.9 0.000000 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.5 2.4 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3 3 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 6.4 6.4 0.000000 0.13 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 2.7 2.8 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3 3 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 4.4 4.4 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 3.1 3 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3 3 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 1.6 1.6 0.44 0.38 </F68_AMX_Chasseur_de_char_46>
@@ -2253,6 +2272,7 @@
 				<F72_AMX_30> 5.6 5.6 0.2 0.4 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3 3 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 2.4 2.4 0.000000 0.000000 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.4 1.4 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 			<notInShop> false </notInShop>
@@ -2286,8 +2306,8 @@
 				<Hotchkiss_H35> 5 3 0.000000 0.000000 </Hotchkiss_H35>
 				<AMX38> 5 5 0.000000 0.000000 </AMX38>
 				<AMX40> 5 5 0.000000 0.000000 </AMX40>
-				<F15_AMX_12t> 5 5 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 5 5 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 5 5 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 5 5 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 5 5 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 5 5 0.000000 0.000000 </Lorraine40t>
@@ -2298,7 +2318,7 @@
 				<Lorraine155_50> 5 5 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 5 5 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 5 5 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 5 5 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.6 6.6 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 5 5 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 5 5 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 5 5 0.000000 0.000000 </S_35CA>
@@ -2310,15 +2330,15 @@
 				<F44_Somua_S35> 8.3 8.3 0.36 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 5 5 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 5.6 5.6 0.06 0.44 </ELC_AMX>
-				<AMX_50Fosh_155> 5 5 0.2 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 5 5 0.42 0.26 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 5 5 0.000000 0.000000 </F65_FCM_50t>
 				<AMX_Ob_Am105> 5 5 0.32 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 5 5 0.26 0.000000 </Bat_Chatillon155_55>
 				<F08_AMX_50_100_IGR> 5 5 0.000000 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 5 5 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 5 5 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7 7 0.000000 0.08 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 5 5 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 5 5 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.6 6.6 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 5 5 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 5 5 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 3.5 3.6 0.9 0.62 </F68_AMX_Chasseur_de_char_46>
@@ -2331,6 +2351,7 @@
 				<F72_AMX_30> 5.9 5.9 0.000000 0.48 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3 3 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 6 6 0.000000 0.32 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 3 3 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 			<notInShop> false </notInShop>
@@ -2364,8 +2385,8 @@
 				<Hotchkiss_H35> 5 3 0.000000 0.000000 </Hotchkiss_H35>
 				<AMX38> 5 5 0.000000 0.000000 </AMX38>
 				<AMX40> 5 5 0.000000 0.000000 </AMX40>
-				<F15_AMX_12t> 5 5 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 5 5 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 5 5 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 5 5 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 5 5 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 5 5 0.000000 0.000000 </Lorraine40t>
@@ -2375,7 +2396,7 @@
 				<AMX_13F3AM> 5 5 0.000000 0.000000 </AMX_13F3AM>
 				<Lorraine155_50> 5 5 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 5 5 0.000000 0.000000 </Lorraine155_51>
-				<_105_leFH18B2> 5 5 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.4 6.4 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 5 5 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 5 5 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 5 5 0.000000 0.000000 </S_35CA>
@@ -2387,15 +2408,15 @@
 				<F44_Somua_S35> 6.4 6.4 0.02 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 5 5 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 5.2 5.2 0.000000 0.000000 </ELC_AMX>
-				<AMX_50Fosh_155> 5 5 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 5.7 5.7 0.11 0.000000 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 5 5 0.000000 0.000000 </F65_FCM_50t>
 				<AMX_Ob_Am105> 5 5 0.000000 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 5 5 0.000000 0.000000 </Bat_Chatillon155_55>
 				<F08_AMX_50_100_IGR> 5 5 0.000000 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 5 5 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 5 5 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.2 7.2 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 5 5 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 5 5 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.4 6.4 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 5 5 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 5 5 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 3.4 3.4 0.38 0.24 </F68_AMX_Chasseur_de_char_46>
@@ -2409,6 +2430,7 @@
 				<F73_M4A1_Revalorise> 2.5 2.5 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 4.2 4.2 0.000000 0.04 </F74_AMX_M4_1949>
 				<FCM_36Pak40> 4 4 0.000000 0.000000 </FCM_36Pak40>
+				<F75_Char_de_25t> 1.2 1.2 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 			<notInShop> false </notInShop>
@@ -2447,8 +2469,8 @@
 				<Hotchkiss_H35> 3 1.6 0.2 0.000000 </Hotchkiss_H35>
 				<AMX38> 2.8 2.7 0.56 0.000000 </AMX38>
 				<AMX40> 2.2 2.2 0.2 0.62 </AMX40>
-				<F15_AMX_12t> 2.2 2.2 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 2.4 2.5 0.28 0.4 </AMX_13_75>
+				<F15_AMX_12t> 2.2 2.2 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 2.4 2.4 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 2.3 2.3 0.2 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 3 3 0.000000 0.000000 </Lorraine40t>
@@ -2459,7 +2481,7 @@
 				<Lorraine155_50> 2.2 2.2 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 2.4 2.4 0.2 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 3 3 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 3 3 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 5.6 5.6 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 2.3 2.4 0.72 0.4 </RenaultFT_AC>
 				<Somua_Sau_40> 2.3 2.4 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 3 3 0.2 0.000000 </S_35CA>
@@ -2471,14 +2493,14 @@
 				<F44_Somua_S35> 7.2 7.2 0.12 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 2.7 2.7 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.5 3.5 0.08 0.000000 </ELC_AMX>
-				<AMX_50Fosh_155> 2.3 2.5 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 3.9 3.9 0.000000 0.14 </F64_AMX_50Fosh_155>
 				<AMX_Ob_Am105> 2.3 2.5 0.000000 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 3 3 0.000000 0.000000 </Bat_Chatillon155_55>
 				<F08_AMX_50_100_IGR> 3 3 0.42 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.4 2.4 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.2 2.2 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 3.6 3.6 0.000000 0.07 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 2.3 2.3 0.2 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3 3 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 5.6 5.6 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 3 3 0.2 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 2.2 2.3 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2 2.2 0.34 0.000000 </F68_AMX_Chasseur_de_char_46>
@@ -2536,7 +2558,7 @@
 				<Lorraine155_50> 3 3 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 3 3 0.54 0.22 </Lorraine155_51>
 				<FCM_36Pak40> 3 3 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 3 3 0.000000 0.2 </_105_leFH18B2>
+				<F28_105_leFH18B2> 3 3 0.000000 0.2 </F28_105_leFH18B2>
 				<RenaultFT_AC> 3 3 0.2 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 3 3 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 3.8 3.7 0.000000 0.000000 </S_35CA>
@@ -2548,15 +2570,15 @@
 				<F44_Somua_S35> 7 7 0.26 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 3 3 0.2 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.4 3.4 0.14 0.000000 </ELC_AMX>
-				<AMX_50Fosh_155> 2.7 2.8 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 2.7 2.8 0.05 0.4 </F64_AMX_50Fosh_155>
 				<AMX_Ob_Am105> 3 3 0.000000 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 3.5 3.5 0.6 0.44 </Bat_Chatillon155_55>
 				<AMX_13_90> 3 3 0.000000 0.000000 </AMX_13_90>
 				<F08_AMX_50_100_IGR> 3 3 0.000000 0.000000 </F08_AMX_50_100_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.2 7.2 0.000000 0.38 </F36_AMX_AC_Mle1948_IGR>
 				<AMX_13_90_IGR> 3 3 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3 3 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 3 3 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3 3 0.000000 0.2 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 3 3 0.000000 0.2 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 3.8 3.7 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3 3 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 1.8 1.8 0.46 0.2 </F68_AMX_Chasseur_de_char_46>
@@ -2614,7 +2636,7 @@
 				<Lorraine155_50> 3.9 4 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 4.3 4.4 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 4.3 4.3 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 4.6 4.6 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6.6 6.6 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 4.2 4.1 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 4.2 4.1 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 4.2 4.2 0.000000 0.000000 </S_35CA>
@@ -2626,15 +2648,15 @@
 				<F44_Somua_S35> 5.1 5.1 0.000000 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 4.2 4.2 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.7 3.7 0.000000 0.000000 </ELC_AMX>
-				<AMX_50Fosh_155> 3.9 3.8 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 5.1 5.1 0.000000 0.000000 </F64_AMX_50Fosh_155>
 				<AMX_Ob_Am105> 4.3 4.6 0.000000 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 4.7 4.7 0.000000 0.000000 </Bat_Chatillon155_55>
 				<AMX_13_90> 3 3 0.000000 0.000000 </AMX_13_90>
 				<F08_AMX_50_100_IGR> 3.8 3.9 0.000000 0.000000 </F08_AMX_50_100_IGR>
-				<AMX_13_90_IGR> 3 3 0.000000 0.000000 </AMX_13_90_IGR>
 				<F36_AMX_AC_Mle1948_IGR> 4.2 4.2 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<AMX_13_90_IGR> 3 3 0.000000 0.000000 </AMX_13_90_IGR>
 				<Bat_Chatillon25t_IGR> 4.1 4 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 4.6 4.6 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6.6 6.6 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 4.2 4.2 0.000000 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 4.2 4.3 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 2.8 2.6 0.000000 0.000000 </F68_AMX_Chasseur_de_char_46>
@@ -2647,6 +2669,7 @@
 				<F72_AMX_30> 5.4 5.4 0.000000 0.08 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2 2 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 2.4 2.4 0.000000 0.000000 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.5 1.5 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 			<notInShop> false </notInShop>
@@ -2682,8 +2705,8 @@
 				<Hotchkiss_H35> 5.8 3.8 0.000000 0.000000 </Hotchkiss_H35>
 				<AMX38> 5.3 4.2 0.000000 0.000000 </AMX38>
 				<AMX40> 4.6 4.5 0.1 0.09 </AMX40>
-				<F15_AMX_12t> 4.4 4.3 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 3.9 3.7 0.000000 0.56 </AMX_13_75>
+				<F15_AMX_12t> 4.4 4.3 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 4 4 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 5.4 5.6 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 4.5 4.5 0.000000 0.000000 </Lorraine40t>
@@ -2694,7 +2717,7 @@
 				<Lorraine155_50> 5 4.9 0.56 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 4.2 4.3 0.000000 0.18 </Lorraine155_51>
 				<FCM_36Pak40> 6.8 6.8 0.000000 0.48 </FCM_36Pak40>
-				<_105_leFH18B2> 6.4 6.4 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 6 6 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 5.1 5.2 0.36 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 4.8 4.8 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 5.7 5.7 0.94 0.000000 </S_35CA>
@@ -2706,16 +2729,16 @@
 				<F44_Somua_S35> 7.8 7.8 0.42 0.62 </F44_Somua_S35>
 				<RenaultUE57> 5.2 5.1 0.48 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.9 3.9 0.42 0.2 </ELC_AMX>
-				<AMX_50Fosh_155> 4.1 4 0.11 0.34 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.1 4 0.93 0.34 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 4.4 4.4 0.66 0.1 </F65_FCM_50t>
 				<AMX_Ob_Am105> 4.7 4.7 0.21 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 5.9 5.8 0.27 0.72 </Bat_Chatillon155_55>
 				<F10_AMX_50B> 1.2 1.2 0.77 0.000000 </F10_AMX_50B>
 				<F08_AMX_50_100_IGR> 4.5 4.4 0.000000 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 4 4 0.000000 0.000000 </AMX_13_90_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 3.7 3.7 1 0.8 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 7.9 7.9 1 0.8 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 5.4 5.6 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 6.4 6.4 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 6 6 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 5.7 5.7 0.94 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 3.6 3.3 0.000000 0.000000 </ELC_AMX_IGR>
 				<F68_AMX_Chasseur_de_char_46> 3 3 0.84 0.62 </F68_AMX_Chasseur_de_char_46>
@@ -2728,6 +2751,7 @@
 				<F72_AMX_30> 7 7 0.14 0.4 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3.2 3.2 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 5.2 5.2 0.26 0.000000 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 2.7 2.7 0.2 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</Clan_camuflage_01>
@@ -2760,8 +2784,8 @@
 				<Hotchkiss_H35> 3.6 1.8 0.28 0.000000 </Hotchkiss_H35>
 				<AMX38> 2.4 2.4 0.28 0.69 </AMX38>
 				<AMX40> 2.4 2.4 0.45 0.09 </AMX40>
-				<F15_AMX_12t> 2.3 2.3 0.19 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 2.4 2.4 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 2.3 2.3 0.19 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 2.3 2.3 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 2.4 2.4 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 2.2 3.6 0.000000 0.000000 </Lorraine40t>
@@ -2772,7 +2796,7 @@
 				<Lorraine155_50> 3 3 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 3 3 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 2.6 2.5 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 3 2.9 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 5.5 5.5 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 2.6 2.7 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 2.8 2.7 0.000000 0.06 </Somua_Sau_40>
 				<S_35CA> 3.4 3.3 0.27 1 </S_35CA>
@@ -2784,7 +2808,7 @@
 				<F44_Somua_S35> 7 7 0.000000 0.36 </F44_Somua_S35>
 				<RenaultUE57> 3.1 3 0.37 0.2 </RenaultUE57>
 				<ELC_AMX> 3 2.5 0.08 0.16 </ELC_AMX>
-				<AMX_50Fosh_155> 2.8 2.7 0.000000 0.94 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.7 4.7 0.3 0.94 </F64_AMX_50Fosh_155>
 				<AMX_Ob_Am105> 3 3 0.000000 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 3.2 3.2 0.43 0.75 </Bat_Chatillon155_55>
 				<F68_AMX_Chasseur_de_char_46> 2.2 2.2 0.14 0.14 </F68_AMX_Chasseur_de_char_46>
@@ -2793,9 +2817,9 @@
 				<F08_AMX_50_100_IGR> 3 3 0.000000 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 2.3 2.3 0.000000 0.000000 </AMX_13_90_IGR>
 				<Bat_Chatillon25t_IGR> 2.3 2.3 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 3 3 0.58 0.27 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 5.5 5.5 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 3.4 3.4 0.52 0.22 </S_35CA_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.4 2.4 0.56 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 6 6 0.000000 0.39 </F36_AMX_AC_Mle1948_IGR>
 				<ELC_AMX_IGR> 2.5 2.5 0.000000 0.000000 </ELC_AMX_IGR>
 				<F65_FCM_50t> 2.9 3 0.08 0.48 </F65_FCM_50t>
 				<F10_AMX_50B> 2.1 2.1 0.000000 0.000000 </F10_AMX_50B>
@@ -2806,6 +2830,7 @@
 				<F72_AMX_30> 5.5 5.5 0.16 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 2.3 2.3 0.000000 0.000000 </F73_M4A1_Revalorise>
 				<F74_AMX_M4_1949> 3.5 3.5 0.000000 0.000000 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.2 1.2 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</Clan_camuflage_02>
@@ -2838,8 +2863,8 @@
 				<Hotchkiss_H35> 2.4 1.8 0.000000 0.000000 </Hotchkiss_H35>
 				<AMX38> 2.4 2.4 0.000000 0.000000 </AMX38>
 				<AMX40> 1.9 1.8 0.43 0.43 </AMX40>
-				<F15_AMX_12t> 1.9 1.8 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 2.1 2 0.000000 0.000000 </AMX_13_75>
+				<F15_AMX_12t> 1.9 1.8 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 2.2 2.1 0.000000 0.000000 </AMX_13_90>
 				<Bat_Chatillon25t> 2.1 2 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 2.3 2.3 0.000000 0.000000 </Lorraine40t>
@@ -2850,7 +2875,7 @@
 				<Lorraine155_50> 2.6 2.3 0.000000 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 2.6 2.5 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 2.4 2.4 0.000000 0.000000 </FCM_36Pak40>
-				<_105_leFH18B2> 2.2 2.2 0.12 0.5 </_105_leFH18B2>
+				<F28_105_leFH18B2> 4.6 4.6 0.12 0.5 </F28_105_leFH18B2>
 				<RenaultFT_AC> 2.3 2.2 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 2.1 2.2 0.000000 0.000000 </Somua_Sau_40>
 				<S_35CA> 2.7 2.7 0.37 0.000000 </S_35CA>
@@ -2862,7 +2887,7 @@
 				<F44_Somua_S35> 6.3 6.3 0.16 0.000000 </F44_Somua_S35>
 				<RenaultUE57> 2.4 2.3 0.16 0.000000 </RenaultUE57>
 				<ELC_AMX> 2.4 2.4 0.000000 0.34 </ELC_AMX>
-				<AMX_50Fosh_155> 1.7 1.6 0.79 0.23 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 3.4 3.4 0.89 0.63 </F64_AMX_50Fosh_155>
 				<AMX_Ob_Am105> 1.7 1.7 0.22 0.16 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 2.6 2.5 0.29 0.54 </Bat_Chatillon155_55>
 				<F68_AMX_Chasseur_de_char_46> 1 1 0.06 0.46 </F68_AMX_Chasseur_de_char_46>
@@ -2871,9 +2896,9 @@
 				<F08_AMX_50_100_IGR> 2.3 2.3 0.22 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 1.8 1.9 0.18 0.000000 </AMX_13_90_IGR>
 				<Bat_Chatillon25t_IGR> 2.2 2.3 0.000000 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 1.9 1.9 0.28 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 4.6 4.6 0.12 0.5 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 3 3 0.000000 0.000000 </S_35CA_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 2.2 2.2 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 5 5 0.000000 0.24 </F36_AMX_AC_Mle1948_IGR>
 				<ELC_AMX_IGR> 2.2 2.2 0.000000 0.000000 </ELC_AMX_IGR>
 				<F65_FCM_50t> 2.4 2.4 0.000000 0.13 </F65_FCM_50t>
 				<F10_AMX_50B> 2.4 2.4 0.000000 0.37 </F10_AMX_50B>
@@ -2915,9 +2940,9 @@
 				<Hotchkiss_H35> 3.6 1.6 0.000000 0.000000 </Hotchkiss_H35>
 				<AMX38> 2.8 1.8 0.000000 0.000000 </AMX38>
 				<AMX40> 2.1 2 0.66 0.000000 </AMX40>
-				<F15_AMX_12t> 1.8 2 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_75> 1.9 1.9 0.000000 0.000000 </AMX_13_75>
 				<AMX_13_90> 2 2 0.000000 0.000000 </AMX_13_90>
+				<F15_AMX_12t> 1.8 2 0.000000 0.000000 </F15_AMX_12t>
 				<Bat_Chatillon25t> 2.2 2.2 0.000000 0.000000 </Bat_Chatillon25t>
 				<Lorraine40t> 2.6 2.6 0.000000 0.000000 </Lorraine40t>
 				<RenaultBS> 3.4 1.8 0.000000 0.000000 </RenaultBS>
@@ -2927,7 +2952,7 @@
 				<Lorraine155_50> 2.9 2.8 0.25 0.000000 </Lorraine155_50>
 				<Lorraine155_51> 2.3 2.3 0.000000 0.000000 </Lorraine155_51>
 				<FCM_36Pak40> 2.4 2.4 0.16 0.15 </FCM_36Pak40>
-				<_105_leFH18B2> 2.8 2.3 0.000000 0.000000 </_105_leFH18B2>
+				<F28_105_leFH18B2> 4.8 4.8 0.000000 0.000000 </F28_105_leFH18B2>
 				<RenaultFT_AC> 2.2 2.2 0.000000 0.000000 </RenaultFT_AC>
 				<Somua_Sau_40> 2.3 2.3 0.2 0.32 </Somua_Sau_40>
 				<S_35CA> 3.1 3 0.56 0.9 </S_35CA>
@@ -2938,7 +2963,7 @@
 				<Bat_Chatillon155_58> 2.3 2.3 0.000000 0.000000 </Bat_Chatillon155_58>
 				<RenaultUE57> 2.6 2.5 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 1.9 1.9 0.08 0.000000 </ELC_AMX>
-				<AMX_50Fosh_155> 1.8 1.9 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.3 4.3 0.000000 0.29 </F64_AMX_50Fosh_155>
 				<AMX_Ob_Am105> 2.6 2.5 0.000000 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 3.4 2.6 0.41 0.000000 </Bat_Chatillon155_55>
 				<F68_AMX_Chasseur_de_char_46> 1.2 1.2 0.94 0.59 </F68_AMX_Chasseur_de_char_46>
@@ -2947,9 +2972,9 @@
 				<F08_AMX_50_100_IGR> 2.3 2.4 0.42 0.000000 </F08_AMX_50_100_IGR>
 				<AMX_13_90_IGR> 1.8 1.8 0.000000 0.000000 </AMX_13_90_IGR>
 				<Bat_Chatillon25t_IGR> 1.7 1.8 0.3 0.000000 </Bat_Chatillon25t_IGR>
-				<_105_leFH18B2_IGR> 1.9 2.1 0.46 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2_IGR> 4.8 4.8 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<S_35CA_IGR> 2.4 2.6 0.22 0.000000 </S_35CA_IGR>
-				<F36_AMX_AC_Mle1948_IGR> 1.9 2 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 6.9 6.9 0.000000 0.46 </F36_AMX_AC_Mle1948_IGR>
 				<ELC_AMX_IGR> 2 2.1 0.000000 0.000000 </ELC_AMX_IGR>
 				<F65_FCM_50t> 3.3 3.3 0.31 0.33 </F65_FCM_50t>
 				<F10_AMX_50B> 1.2 1.2 0.000000 0.000000 </F10_AMX_50B>
@@ -3021,7 +3046,7 @@
 				<RenaultUE57> 5.1 5.1 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 3.3 3.3 0.48 0.000000 </ELC_AMX>
 				<ELC_AMX_IGR> 3 3 0.64 0.36 </ELC_AMX_IGR>
-				<AMX_50Fosh_155> 4.1 4.1 0.38 0.01 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 4.4 4.4 0.11 0.000000 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 2.4 2.4 0.2 0.58 </F65_FCM_50t>
 				<AMX_Ob_Am105> 4.8 4.8 0.000000 0.000000 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 5.8 5.8 0.87 0.36 </Bat_Chatillon155_55>
@@ -3034,13 +3059,14 @@
 				<F73_M4A1_Revalorise> 2.7 2.7 0.44 0.94 </F73_M4A1_Revalorise>
 				<F15_AMX_12t> 2.7 2.7 0.9 0.75 </F15_AMX_12t>
 				<F10_AMX_50B_fallout> 2.2 2.2 0.000000 0.000000 </F10_AMX_50B_fallout>
-				<_105_leFH18B2> 3.2 3.2 0.000000 0.37 </_105_leFH18B2>
-				<_105_leFH18B2_IGR> 3.2 3.2 0.000000 0.36 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2> 5.6 5.6 0.000000 0.37 </F28_105_leFH18B2>
+				<F28_105_leFH18B2_IGR> 5.6 5.6 0.000000 0.37 </F28_105_leFH18B2_IGR>
 				<F36_AMX_AC_Mle1948> 5.8 5.8 0.000000 0.000000 </F36_AMX_AC_Mle1948>
-				<F36_AMX_AC_Mle1948_IGR> 3.3 3.3 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
 				<AMX_13_90> 2.8 2.8 0.000000 0.000000 </AMX_13_90>
 				<AMX_13_90_IGR> 2.8 2.8 0.000000 0.000000 </AMX_13_90_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 5.8 5.8 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
 				<F74_AMX_M4_1949> 4.1 4.1 0.24 0.43 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1 1 0.25 0.09 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</Cracked_ice>
@@ -3096,7 +3122,7 @@
 				<F50_FCM36_20t> 1.5 1.5 0.000000 0.000000 </F50_FCM36_20t>
 				<RenaultUE57> 3 3 0.000000 0.000000 </RenaultUE57>
 				<ELC_AMX> 2.1 2.1 0.24 0.000000 </ELC_AMX>
-				<AMX_50Fosh_155> 1.9 1.9 0.000000 0.000000 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 1.7 1.7 0.000000 0.18 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 1.2 1.2 0.28 0.000000 </F65_FCM_50t>
 				<AMX_Ob_Am105> 2.5 2.5 0.26 0.2 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 3 3 0.000000 0.000000 </Bat_Chatillon155_55>
@@ -3106,18 +3132,19 @@
 				<F71_AMX_30_prototype> 2.1 2.1 0.22 0.000000 </F71_AMX_30_prototype>
 				<F72_AMX_30> 2 2 0.2 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 1.2 1.2 0.000000 0.000000 </F73_M4A1_Revalorise>
-				<F15_AMX_12t> 1.5 1.5 0.000000 0.000000 </F15_AMX_12t>
 				<AMX_13_90> 2.4 2.4 0.000000 0.000000 </AMX_13_90>
 				<AMX_13_90_IGR> 2.4 2.4 0.000000 0.000000 </AMX_13_90_IGR>
-				<_105_leFH18B2> 2.7 2.7 0.000000 0.000000 </_105_leFH18B2>
-				<_105_leFH18B2_IGR> 2.6 2.6 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F15_AMX_12t> 1.5 1.5 0.000000 0.000000 </F15_AMX_12t>
+				<F28_105_leFH18B2> 4.9 4.9 0.000000 0.000000 </F28_105_leFH18B2>
+				<F28_105_leFH18B2_IGR> 4.9 4.9 0.000000 0.000000 </F28_105_leFH18B2_IGR>
 				<F36_AMX_AC_Mle1948> 3.8 3.8 0.000000 0.000000 </F36_AMX_AC_Mle1948>
-				<F36_AMX_AC_Mle1948_IGR> 2.1 2.1 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 3.8 3.8 0.000000 0.000000 </F36_AMX_AC_Mle1948_IGR>
 				<Bat_Chatillon25t_IGR> 2 2 0.38 0.000000 </Bat_Chatillon25t_IGR>
 				<S_35CA_IGR> 2.2 2.2 0.16 0.000000 </S_35CA_IGR>
 				<ELC_AMX_IGR> 2 2 0.25 0.000000 </ELC_AMX_IGR>
 				<F08_AMX_50_100_IGR> 1.3 1.3 0.52 0.81 </F08_AMX_50_100_IGR>
 				<F74_AMX_M4_1949> 3 3 0.000000 0.000000 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1 1 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</summer_camo>
@@ -3179,7 +3206,7 @@
 				<RenaultUE57> 7 7 0.04 0.46 </RenaultUE57>
 				<ELC_AMX> 5.2 5.2 0.88 0.48 </ELC_AMX>
 				<ELC_AMX_IGR> 5.4 5.4 0.84 0.3 </ELC_AMX_IGR>
-				<AMX_50Fosh_155> 6.8 6.8 0.82 0.62 </AMX_50Fosh_155>
+				<F64_AMX_50Fosh_155> 7.8 7.8 0.82 0.62 </F64_AMX_50Fosh_155>
 				<F65_FCM_50t> 4.6 4.6 0.52 0.000000 </F65_FCM_50t>
 				<AMX_Ob_Am105> 8.1 8.1 0.4 0.92 </AMX_Ob_Am105>
 				<Bat_Chatillon155_55> 10.2 10.2 0.12 0.36 </Bat_Chatillon155_55>
@@ -3190,14 +3217,14 @@
 				<F72_AMX_30> 7.2 7.2 0.58 0.000000 </F72_AMX_30>
 				<F73_M4A1_Revalorise> 3.8 3.8 0.38 0.72 </F73_M4A1_Revalorise>
 				<F15_AMX_12t> 3.1 4.7 0.12 0.92 </F15_AMX_12t>
-				<F10_AMX_50B_fallout> 3.2 3.2 0.9 0.3 </F10_AMX_50B_fallout>
-				<_105_leFH18B2> 11 11 0.32 0.1 </_105_leFH18B2>
-				<_105_leFH18B2_IGR> 11 11 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<F28_105_leFH18B2> 10.4 10.4 0.32 0.1 </F28_105_leFH18B2>
+				<F28_105_leFH18B2_IGR> 10.4 10.4 0.32 0.1 </F28_105_leFH18B2_IGR>
 				<F36_AMX_AC_Mle1948> 10.6 10.6 0.88 0.72 </F36_AMX_AC_Mle1948>
-				<F36_AMX_AC_Mle1948_IGR> 7.4 7.4 0.000000 0.84 </F36_AMX_AC_Mle1948_IGR>
 				<AMX_13_90> 7.2 7.2 0.5 0.48 </AMX_13_90>
 				<AMX_13_90_IGR> 8.2 8.2 1 0.84 </AMX_13_90_IGR>
+				<F36_AMX_AC_Mle1948_IGR> 10.6 10.6 0.88 0.72 </F36_AMX_AC_Mle1948_IGR>
 				<F74_AMX_M4_1949> 6.6 6.6 0.000000 0.000000 </F74_AMX_M4_1949>
+				<F75_Char_de_25t> 1.6 1.6 0.000000 0.000000 </F75_Char_de_25t>
 			</tiling>
 			<deny> F69_AMX13_57_100_GrandFinal </deny>
 		</Desert_camou>

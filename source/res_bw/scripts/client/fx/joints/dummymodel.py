@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Joints/DummyModel.py
 from FX import s_sectionProcessors
 from FX import typeCheck
@@ -22,7 +22,7 @@ class DummyModel(Joint):
             self.followPlayer = False
         return
 
-    def attach(self, actor, source, target = None):
+    def attach(self, actor, source, target=None):
         if actor.attached:
             ERROR_MSG('actor is already attached!', self, actor, source)
             return 0
@@ -32,7 +32,7 @@ class DummyModel(Joint):
         except:
             ERROR_MSG('error in addModel to dummy', self, actor, source)
 
-    def detach(self, actor, source, target = None):
+    def detach(self, actor, source, target=None):
         if not actor.attached:
             return
         self.dummy.root.detach(actor)

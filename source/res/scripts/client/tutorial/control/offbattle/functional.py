@@ -1,12 +1,13 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/offbattle/functional.py
 import collections
+import urllib
 import MusicController
 import ResMgr
 from adisp import process
 from constants import QUEUE_TYPE
-from gui.prb_control.context import pre_queue_ctx
-from gui.prb_control.functional.battle_tutorial import TutorialPreQueueEntry
+from gui.prb_control.context import pre_queue_ctx, PrebattleAction
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from helpers.i18n import makeString as _ms
 from gui.game_control import getBrowserCtrl
 from gui.prb_control.dispatcher import g_prbLoader
@@ -22,6 +23,10 @@ from tutorial.settings import PLAYER_XP_LEVEL
 
 class FunctionalEnterQueueEffect(FunctionalEffect):
 
+    def __init__(self, effect):
+        super(FunctionalEnterQueueEffect, self).__init__(effect)
+        self.__stillRunning = False
+
     def triggerEffect(self):
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
@@ -35,20 +40,31 @@ class FunctionalEnterQueueEffect(FunctionalEffect):
             self._tutorial.refuse()
         return
 
-    @process
     def _doSelect(self, dispatcher):
-        result = yield dispatcher.select(TutorialPreQueueEntry())
+        result = dispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL))
         if result:
             self._doEffect(dispatcher)
 
     @process
     def _doEffect(self, dispatcher):
+        self.__stillRunning = True
         result = yield dispatcher.sendPreQueueRequest(pre_queue_ctx.QueueCtx())
+        self.__stillRunning = False
         if not result:
             self._tutorial.refuse()
 
+    def isInstantaneous(self):
+        return False
+
+    def isStillRunning(self):
+        return self.__stillRunning
+
 
 class FunctionalExitQueueEffect(FunctionalEffect):
+
+    def __init__(self, effect):
+        super(FunctionalExitQueueEffect, self).__init__(effect)
+        self.__stillRunning = False
 
     def triggerEffect(self):
         dispatcher = g_prbLoader.getDispatcher()
@@ -61,9 +77,17 @@ class FunctionalExitQueueEffect(FunctionalEffect):
 
     @process
     def _doEffect(self, dispatcher):
+        self.__stillRunning = True
         result = yield dispatcher.sendPreQueueRequest(pre_queue_ctx.DequeueCtx())
+        self.__stillRunning = False
         if result:
             self._tutorial.getFlags().deactivateFlag(self._effect.getTargetID())
+
+    def isInstantaneous(self):
+        return False
+
+    def isStillRunning(self):
+        return self.__stillRunning
 
 
 class ContentChangedEvent(TutorialProxyHolder):
@@ -123,7 +147,8 @@ class FunctionalOpenInternalBrowser(FunctionalEffect):
     def triggerEffect(self):
         browserID = self._effect.getTargetID()
         if getBrowserCtrl().getBrowser(browserID) is None:
-            getBrowserCtrl().load(url='file:///{0}'.format(ResMgr.resolveToAbsolutePath('gui/html/video_tutorial/index_{0}.html'.format(_ms('#settings:LANGUAGE_CODE')))), title=_ms('#miniclient:tutorial/video/title'), showCloseBtn=True, showActionBtn=False, browserSize=(780, 470), browserID=browserID)(lambda success: True)
+            pageDir = urllib.quote(ResMgr.resolveToAbsolutePath('gui/html/video_tutorial/'))
+            getBrowserCtrl().load(url='file:///{0}'.format('{pageDir}/index_{lang}.html'.format(pageDir=pageDir, lang=_ms('#settings:LANGUAGE_CODE'))), title=_ms('#miniclient:tutorial/video/title'), showCloseBtn=True, showActionBtn=False, browserSize=(780, 470), browserID=browserID)(lambda success: True)
         return
 
 
@@ -164,12 +189,12 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
         descriptor = getBattleDescriptor()
         if descriptor is not None and descriptor.areAllBonusesReceived(self._bonuses.getCompleted()):
             self._cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
-        self._cache.setAfterBattle(False).write()
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            dispatcher.doLeaveAction(pre_queue_ctx.LeavePreQueueCtx())
+            dispatcher.doLeaveAction(pre_queue_ctx.LeavePreQueueCtx(flags=FUNCTIONAL_FLAG.BATTLE_TUTORIAL))
         else:
             LOG_WARNING('Prebattle dispatcher is not defined')
+        self._cache.setAfterBattle(False).write()
         self._tutorial.refuse()
         return
 

@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/ListPaginator.py
 import weakref
 import Event
 
 class ListPaginator(object):
 
-    def __init__(self, requester, offset = None, count = 20):
+    def __init__(self, requester, offset=None, count=20):
         super(ListPaginator, self).__init__()
         self._eManager = Event.EventManager()
         self.onListUpdated = Event.Event(self._eManager)
@@ -68,5 +68,5 @@ class ListPaginator(object):
     def getSelectedID(self):
         return self._selectedID
 
-    def _request(self, isReset = False):
+    def _request(self, isReset=False):
         raise NotImplementedError

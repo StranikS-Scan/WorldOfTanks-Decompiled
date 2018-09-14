@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/UsersManager.py
 import BigWorld
 import chat_shared
@@ -102,7 +102,7 @@ class UsersManager(ChatActionsListener):
         BigWorld.player().requestUsersRoster()
 
     @notations.contacts(PROTO_TYPE.BW, log=False)
-    def requestFriendStatus(self, dbID = -1):
+    def requestFriendStatus(self, dbID=-1):
         BigWorld.player().requestFriendStatus(dbID)
 
     def createPrivateChannel(self, friendID, friendName):
@@ -121,7 +121,7 @@ class UsersManager(ChatActionsListener):
         self.addListener(self.__onSetMuted, _ACTIONS.setMuted)
         self.addListener(self.__onUnsetMuted, _ACTIONS.unsetMuted)
 
-    def __onUserRosterChange(self, chatAction, actionID, include, exclude = None):
+    def __onUserRosterChange(self, chatAction, actionID, include, exclude=None):
         userData = [-1, 'Unknown', 0]
         if chatAction.has_key('data'):
             userData = list(chatAction['data'])
@@ -199,8 +199,7 @@ class UsersManager(ChatActionsListener):
             tags = _getTagsByRoster(roster)
             if user:
                 user.addTags(tags)
-            else:
-                setter(entities.BWUserEntity(dbID, name=name, tags=tags))
+            setter(entities.BWUserEntity(dbID, name=name, tags=tags))
 
         g_messengerEvents.users.onUsersListReceived({_TAG.FRIEND, _TAG.IGNORED, _TAG.MUTED})
         return
@@ -211,7 +210,7 @@ class UsersManager(ChatActionsListener):
         result = False
         if data['command'] == 'findUser':
             result = True
-            g_messengerEvents.users.onFindUsersFailed(chatAction.get('requestID', -1L), actionResponse, data)
+            g_messengerEvents.users.onFindUsersFailed(chatAction.get('requestID', -1), actionResponse, data)
         return result
 
     def __onIncorrectCharacter(self, actionResponse, chatAction):
@@ -219,7 +218,7 @@ class UsersManager(ChatActionsListener):
         result = False
         if action == chat_shared.CHAT_ACTIONS.findUsers.index():
             result = True
-            g_messengerEvents.users.onFindUsersFailed(chatAction.get('requestID', -1L), actionResponse, None)
+            g_messengerEvents.users.onFindUsersFailed(chatAction.get('requestID', -1), actionResponse, None)
         return result
 
     def __ce_onConnectStateChanged(self, channel):

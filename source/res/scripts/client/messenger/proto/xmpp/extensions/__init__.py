@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/__init__.py
 _XML_NAMESPACE_ATTR = 'xmlns'
 
@@ -52,7 +52,7 @@ class PyExtension(object):
     def getChildCount(self):
         return len(self._children)
 
-    def getXPath(self, index = None, suffix = '', name = None):
+    def getXPath(self, index=None, suffix='', name=None):
         if name is None:
             name = self._name
         attrName, attrValue = self._getXPathAttr()
@@ -101,7 +101,7 @@ class PyExtension(object):
 
         return ''.join(result)
 
-    def _addChildToXPath(self, xPath, child, suffix = ''):
+    def _addChildToXPath(self, xPath, child, suffix=''):
         childPath = child.getXPath()
         if hasattr(childPath, '__iter__'):
             xPath = '|'.join(map(lambda path: '/'.join((xPath, path)), childPath))
@@ -109,17 +109,17 @@ class PyExtension(object):
             xPath = '/'.join((xPath, childPath))
         return self._addSuffixToXPath(xPath, suffix)
 
-    def _addSuffixToXPath(self, xPath, suffix = ''):
+    def _addSuffixToXPath(self, xPath, suffix=''):
         if suffix:
             xPath = '{0}/{1}'.format(xPath, suffix)
         return xPath
 
-    def _getChildTags(self, pyGlooxTag, index = 0):
+    def _getChildTags(self, pyGlooxTag, index=0):
         result = pyGlooxTag.filterXPath(self.getXPath(index))
         for tag in result:
             yield tag
 
-    def _getChildData(self, pyGlooxTag, index = 0, default = None):
+    def _getChildData(self, pyGlooxTag, index=0, default=None):
         result = pyGlooxTag.filterXPath(self.getXPath(index))
         if result:
             data = self.getChild(index).parseTag(result[0])
@@ -142,7 +142,7 @@ class SimpleExtension(PyExtension):
 class PyQuery(object):
     __slots__ = ('_type', '_to', '_ext')
 
-    def __init__(self, queryType, queryExt = None, to = ''):
+    def __init__(self, queryType, queryExt=None, to=''):
         super(PyQuery, self).__init__()
         self._type = queryType
         self._ext = queryExt

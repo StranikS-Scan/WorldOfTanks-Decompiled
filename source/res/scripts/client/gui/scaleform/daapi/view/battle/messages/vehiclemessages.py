@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/messages/VehicleMessages.py
 from gui.battle_control import g_sessionProvider
 from gui.shared import g_eventBus
@@ -63,5 +63,5 @@ class VehicleMessages(FadingMessages):
         self.showMessage(code, names, postfix=postfix)
         return
 
-    def __onShowVehicleMessageByKey(self, key, args = None, extra = None):
+    def __onShowVehicleMessageByKey(self, key, args=None, extra=None):
         self.showMessage(key, args, extra)

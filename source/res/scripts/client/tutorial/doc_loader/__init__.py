@@ -1,14 +1,13 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/__init__.py
 import ResMgr
-from debug_utils import LOG_DEBUG
 from tutorial import settings
 from tutorial.doc_loader import gui_config
 from tutorial.doc_loader.parsers import DescriptorParser, ChapterParser
 from tutorial.settings import GLOBAL_REFS_FILE_PATH, TUTORIAL_SETTINGS
 from tutorial.logger import LOG_CURRENT_EXCEPTION
 
-def loadDescriptorData(setting, exParsers = None, clearCache = False):
+def loadDescriptorData(setting, exParsers=None, clearCache=False):
     try:
         if exParsers is not None:
             imported = __import__(exParsers, globals(), locals(), ['init'])
@@ -25,7 +24,7 @@ def loadDescriptorData(setting, exParsers = None, clearCache = False):
     return
 
 
-def loadChapterData(chapter, chapterParser, afterBattle = False, initial = False):
+def loadChapterData(chapter, chapterParser, afterBattle=False, initial=False):
     if chapter is not None and not chapter.isValid():
         try:
             parser = settings.createTutorialElement(chapterParser)

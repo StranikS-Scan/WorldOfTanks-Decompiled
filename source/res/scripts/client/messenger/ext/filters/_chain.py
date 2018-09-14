@@ -1,5 +1,6 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/filters/_chain.py
+from itertools import ifilter
 from debug_utils import LOG_WARNING, LOG_DEBUG
 
 class IIncomingMessageFilter(object):
@@ -25,7 +26,7 @@ class FiltersChain(object):
         self.__prepareInFilters()
         self.__prepareOutFilters()
 
-    def addFilter(self, name, filterObj, order = -1, removed = None):
+    def addFilter(self, name, filterObj, order=-1, removed=None):
         inFilter = isinstance(filterObj, IIncomingMessageFilter)
         outFilter = isinstance(filterObj, IOutgoingMessageFilter)
         if removed is None:
@@ -86,6 +87,14 @@ class FiltersChain(object):
             text = filterInfo['filter'].filter(text, limits)
 
         return text
+
+    def reset(self, contactId):
+        if self.__getInFilterByName('floodFilter') is not None:
+            self.__getInFilterByName('floodFilter')['filter'].resetHistory(contactId)
+        return
+
+    def __getInFilterByName(self, name):
+        return next(ifilter(lambda inFilter: inFilter['name'] == name, self.__inFilters), None)
 
     def __doRemoveInFilter(self, name):
         result = False

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/VehicleDescrCrew.py
 import tankmen
 from debug_utils import *
@@ -7,13 +7,14 @@ _DO_DEBUG_LOG = False
 
 class VehicleDescrCrew(object):
 
-    def __init__(self, vehicleDescr, crewCompactDescrs, mainSkillQualifiersApplier, activityFlags = None, isFire = False):
+    def __init__(self, vehicleDescr, crewCompactDescrs, mainSkillQualifiersApplier, activityFlags=None, isFire=False, stunFactors=None):
         if activityFlags is None:
             activityFlags = [True] * len(crewCompactDescrs)
         self._vehicleDescr = vehicleDescr
         self._crewCompactDescrs = crewCompactDescrs
         self._activityFlags = activityFlags
         self._isFire = isFire
+        self._stunFactors = stunFactors
         self._mainSkillQualifiersApplier = mainSkillQualifiersApplier
         skills, femaleCount = self._validateAndComputeCrew()
         self._skills = skills
@@ -26,8 +27,8 @@ class VehicleDescrCrew(object):
         self.__factorsDirty = True
         self._levelIncreaseByVehicle = 0.0
         skillData = skills.get('brotherhood')
-        if skillData is None or len(skillData) != len(crewCompactDescrs) or 0 < femaleCount < len(skillData):
-            self._levelIncreaseByBrotherhood = 0.0
+        if not (skillData is None or len(skillData) != len(crewCompactDescrs)):
+            self._levelIncreaseByBrotherhood = 0 < femaleCount < len(skillData) and 0.0
         else:
             self._levelIncreaseByBrotherhood = tankmen.getSkillsConfig()['brotherhood']['crewLevelIncrease']
         self._camouflageFactor = 1.0
@@ -158,6 +159,7 @@ class VehicleDescrCrew(object):
                         processor(self, idxInCrew, level, levelIncrease, activityFlags[idxInCrew], isFire, skillsConfig[skillName], markers)
 
             except:
+                LOG_ERROR('Failed to compute skill (arenaUniqueID, vehicleID, skillName, skillData):', self.__getUniqueArenaID(), self.__getVehicleID(), skillName, skillData, stack=True)
                 LOG_CURRENT_EXCEPTION()
 
         self._factorsDirty = False
@@ -178,6 +180,9 @@ class VehicleDescrCrew(object):
 
     def _updateLoaderFactors(self, factor):
         self._factors['gun/reloadTime'] = 1.0 / factor
+        if self._stunFactors is not None:
+            self._factors['gun/reloadTime'] *= self._stunFactors['reloadTime']
+        return
 
     def _updateGunnerFactors(self, factor):
         factors = self._factors
@@ -185,6 +190,13 @@ class VehicleDescrCrew(object):
         factors['gun/rotationSpeed'] = factor
         factors['gun/aimingTime'] = 1.0 / factor
         self._shotDispFactor = 1.0 / factor
+        if self._stunFactors is not None:
+            sf = self._stunFactors
+            factors['turret/rotationSpeed'] *= sf['turretRotationSpeed']
+            factors['gun/rotationSpeed'] *= sf['gunRotationSpeed']
+            factors['gun/aimingTime'] *= sf['aimingTime']
+            self._shotDispFactor *= sf['shotDispersion']
+        return
 
     def _updateRepairFactors(self, factor):
         self._factors['repairSpeed'] = factor
@@ -195,7 +207,7 @@ class VehicleDescrCrew(object):
     def _updateCamouflageFactors(self, factor):
         self._camouflageFactor = factor
 
-    def _process_commander_eagleEye(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig, markers, factorPerLevel = None):
+    def _process_commander_eagleEye(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig, markers, factorPerLevel=None):
         if not isActive or isFire:
             return
         else:
@@ -278,16 +290,16 @@ class VehicleDescrCrew(object):
         MAX_SKILL_LEVEL = tankmen.MAX_SKILL_LEVEL
         PERKS = tankmen.PERKS
         if len(crewCompactDescrs) != len(crewRoles):
-            raise Exception, makeError('wrong number or tankmen')
+            raise Exception(makeError('wrong number or tankmen'))
         res = {}
         idxInCrew = 0
         femaleCount = 0
         for compactDescr, roles in zip(crewCompactDescrs, crewRoles):
             descr = tankmen.TankmanDescr(compactDescr, True)
             if descr.nationID != vehicleNationID:
-                raise Exception, makeError('wrong tankman nation')
+                raise Exception(makeError('wrong tankman nation'))
             if descr.role != roles[0]:
-                raise Exception, makeError('wrong tankman role')
+                raise Exception(makeError('wrong tankman role'))
             femaleCount += int(descr.isFemale)
             factor, addition = descr.efficiencyOnVehicle(vehicleDescr)
             activeSkills = set()
@@ -302,14 +314,14 @@ class VehicleDescrCrew(object):
                 if skillName not in PERKS:
                     level = level * factor + addition
                     res.setdefault(skillName, []).append((idxInCrew, level))
-                elif level == MAX_SKILL_LEVEL:
+                if level == MAX_SKILL_LEVEL:
                     res.setdefault(skillName, []).append((idxInCrew, level))
 
             idxInCrew += 1
 
         return (res, femaleCount)
 
-    def _computeSummSkillLevel(self, skillData, nonCommanderLevelIncrease = 0.0, commanderLevelIncrease = 0.0):
+    def _computeSummSkillLevel(self, skillData, nonCommanderLevelIncrease=0.0, commanderLevelIncrease=0.0):
         summLevel = 0.0
         numInactive = 0
         for idx, level in skillData:
@@ -351,3 +363,9 @@ class VehicleDescrCrew(object):
      'radioman_inventor': _process_radioman_inventor,
      'radioman_lastEffort': None,
      'radioman_retransmitter': None}
+
+    def __getUniqueArenaID(self):
+        return -1 if not hasattr(self, '_vehicle') else self._vehicle.arenaUniqueID
+
+    def __getVehicleID(self):
+        return -1 if not hasattr(self, '_vehicle') else self._vehicle.id

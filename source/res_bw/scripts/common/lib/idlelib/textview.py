@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/textView.py
 """Simple text browser for IDLE
 
@@ -11,7 +11,7 @@ class TextViewer(Toplevel):
     
     """
 
-    def __init__(self, parent, title, text, modal = True):
+    def __init__(self, parent, title, text, modal=True):
         """Show the given text in a scrollable window with a 'close' button
         
         """
@@ -51,15 +51,15 @@ class TextViewer(Toplevel):
         frameButtons.pack(side=BOTTOM, fill=X)
         frameText.pack(side=TOP, expand=TRUE, fill=BOTH)
 
-    def Ok(self, event = None):
+    def Ok(self, event=None):
         self.destroy()
 
 
-def view_text(parent, title, text, modal = True):
+def view_text(parent, title, text, modal=True):
     return TextViewer(parent, title, text, modal)
 
 
-def view_file(parent, title, filename, encoding = None, modal = True):
+def view_file(parent, title, filename, encoding=None, modal=True):
     try:
         if encoding:
             import codecs

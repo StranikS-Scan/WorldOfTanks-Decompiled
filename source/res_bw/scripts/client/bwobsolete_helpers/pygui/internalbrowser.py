@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/InternalBrowser.py
 import BigWorld
 import Math
@@ -16,7 +16,7 @@ class InternalBrowser(PyGUIBase):
     factoryString = 'PyGUI.InternalBrowser'
     visualStateString = 'PyGUI.ButtonVisualState'
 
-    def __init__(self, component = None):
+    def __init__(self, component=None):
         PyGUIBase.__init__(self, component)
         self.component.script = self
         self.mozillaHandlesKeyboard = True

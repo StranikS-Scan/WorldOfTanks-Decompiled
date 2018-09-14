@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortModernizationWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -11,17 +11,13 @@ class FortModernizationWindowMeta(AbstractWindowView):
         self._printOverrideError('openOrderDetailsWindow')
 
     def as_setDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(data)
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_applyButtonLblS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_applyButtonLbl(value)
+        return self.flashObject.as_applyButtonLbl(value) if self._isDAAPIInited() else None
 
     def as_cancelButtonS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_cancelButton(value)
+        return self.flashObject.as_cancelButton(value) if self._isDAAPIInited() else None
 
     def as_windowTitleS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_windowTitle(value)
+        return self.flashObject.as_windowTitle(value) if self._isDAAPIInited() else None

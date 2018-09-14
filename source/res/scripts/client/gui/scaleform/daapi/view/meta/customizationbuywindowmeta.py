@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CustomizationBuyWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -13,14 +13,14 @@ class CustomizationBuyWindowMeta(AbstractWindowView):
     def deselectItem(self, id):
         self._printOverrideError('deselectItem')
 
+    def changePriceItem(self, id, priceMode):
+        self._printOverrideError('changePriceItem')
+
     def as_getPurchaseDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getPurchaseDP()
+        return self.flashObject.as_getPurchaseDP() if self._isDAAPIInited() else None
 
     def as_setInitDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInitData(data)
+        return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_setTotalDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTotalData(data)
+        return self.flashObject.as_setTotalData(data) if self._isDAAPIInited() else None

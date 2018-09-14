@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderInfoWindow.py
 from helpers.i18n import makeString as _ms
 from constants import MAX_FORTIFICATION_LEVEL
@@ -14,7 +14,7 @@ def _newLine(fontSize):
 
 class FortOrderInfoWindow(FortOrderInfoWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortOrderInfoWindow, self).__init__()
         assert 'orderID' in ctx
         self.__orderID = ctx['orderID']
@@ -47,7 +47,7 @@ class FortOrderInfoWindow(FortOrderInfoWindowMeta, FortViewHelper):
         result.append(self.__makeColumnParamLabels())
         return result
 
-    def __makeColumnParamValues(self, level, isCurrentLevel = False, isShowSeparator = True):
+    def __makeColumnParamValues(self, level, isCurrentLevel=False, isShowSeparator=True):
         battleOrder = FortOrder(self.__orderID, level=level)
         if isCurrentLevel:
             paramsStyle, levelStyle = text_styles.stats, text_styles.neutral

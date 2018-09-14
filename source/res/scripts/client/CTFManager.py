@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CTFManager.py
 import BigWorld
 import Math
@@ -70,7 +70,7 @@ class Flag(object):
 
 
 class _CTFConfigReader():
-    name = property(lambda self: ('empty' if self.__configSection is None else self.__configSection.name))
+    name = property(lambda self: 'empty' if self.__configSection is None else self.__configSection.name)
 
     def __init__(self):
         self.__configSection = ResMgr.openSection(_DYNAMIC_OBJECTS_CONFIG_FILE)
@@ -101,15 +101,10 @@ class _CTFConfigReader():
             return
         else:
             radiusModel = self.__configSection.readString(name, '')
-            if len(radiusModel) > 0:
-                return radiusModel
-            return
+            return radiusModel if len(radiusModel) > 0 else None
 
     def readFirstLvlSection(self, name):
-        if self.__configSection is None:
-            return
-        else:
-            return self.__configSection[name]
+        return None if self.__configSection is None else self.__configSection[name]
 
 
 _g_ctfConfig = _CTFConfigReader()
@@ -203,12 +198,12 @@ class _CTFManager():
     def getFlagInfo(self, flagID):
         return self.__flags[flagID]
 
-    def isFlagBearer(self, vehicleID):
-        for flag in self.__flags.itervalues():
+    def getVehicleCarriedFlagID(self, vehicleID):
+        for flagID, flag in self.__flags.iteritems():
             if flag['vehicle'] == vehicleID:
-                return True
+                return flagID
 
-        return False
+        return None
 
     def getFlagMinimapPos(self, flagID):
         if flagID not in self.__flags:
@@ -493,7 +488,7 @@ class _CTFCheckPoint():
         self.__radiusModelName = None
         return
 
-    def _createTerrainSelectedArea(self, position, size, overTerrainHeight, color):
+    def _createTerrainSelectedArea(self, position, size, overTerrainHeight, color, terrainSelected=True):
         if self.__radiusModelName is None:
             return
         elif g_ctfManager.isNeedHideAll:
@@ -505,7 +500,7 @@ class _CTFCheckPoint():
             self.__fakeModel.addMotor(BigWorld.Servo(Math.Matrix(self.__fakeModel.matrix)))
             rootNode = self.__fakeModel.node('')
             self.__terrainSelectedArea = BigWorld.PyTerrainSelectedArea()
-            self.__terrainSelectedArea.setup(self.__radiusModelName, Vector2(size, size), overTerrainHeight, color)
+            self.__terrainSelectedArea.setup(self.__radiusModelName, Vector2(size, size), overTerrainHeight, color, terrainSelected)
             rootNode.attach(self.__terrainSelectedArea)
             self.__hideListener = _GlobalHideListener(self.__hideCheckPoint)
             return
@@ -574,7 +569,7 @@ class _CTFPointFlag():
         self.__flagPos = None
         return
 
-    def _createFlag(self, applyOverlay = False):
+    def _createFlag(self, applyOverlay=False):
         if g_ctfManager.isNeedHideAll:
             return
         else:

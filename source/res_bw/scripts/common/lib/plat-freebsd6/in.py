@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-freebsd6/IN.py
 __GNUCLIKE_ASM = 3
 __GNUCLIKE_ASM = 2
@@ -35,11 +36,11 @@ def __XSTRING(x):
 
 
 def __P(protos):
-    return ()
+    pass
 
 
 def __STRING(x):
-    return 'x'
+    pass
 
 
 def __aligned(x):

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/GoldFishWindowMeta.py
 from gui.Scaleform.daapi.view.meta.SimpleWindowMeta import SimpleWindowMeta
 
@@ -8,5 +8,4 @@ class GoldFishWindowMeta(SimpleWindowMeta):
         self._printOverrideError('eventHyperLinkClicked')
 
     def as_setWindowTextsS(self, header, eventTitle, eventText, eventLink):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setWindowTexts(header, eventTitle, eventText, eventLink)
+        return self.flashObject.as_setWindowTexts(header, eventTitle, eventText, eventLink) if self._isDAAPIInited() else None

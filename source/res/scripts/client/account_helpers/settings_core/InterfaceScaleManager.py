@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/InterfaceScaleManager.py
 import weakref
 import Event
@@ -57,7 +57,7 @@ class InterfaceScaleManager(object):
         else:
             return options[0][currMonitor][self.proxy.getSetting(settings_constants.GRAPHICS.WINDOW_SIZE)]
 
-    def getScaleByIndex(self, ind, powerOfTwo = True):
+    def getScaleByIndex(self, ind, powerOfTwo=True):
         scaleLength = len(self.getScaleOptions())
         if powerOfTwo:
             if ind == 0:
@@ -72,7 +72,7 @@ class InterfaceScaleManager(object):
     def _getOptions(self):
         return [self.__getScales(graphics.getSuitableWindowSizes(), BigWorld.wg_getCurrentResolution(True)), self.__getScales(graphics.getSuitableVideoModes())]
 
-    def __getScales(self, modesVariety, additionalSize = None):
+    def __getScales(self, modesVariety, additionalSize=None):
         result = []
         for i in xrange(len(modesVariety)):
             modes = sorted(set([ (mode.width, mode.height) for mode in modesVariety[i] ]))

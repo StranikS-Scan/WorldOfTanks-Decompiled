@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarPositionControl.py
 from AvatarInputHandler import mathUtils
 import BigWorld
@@ -43,7 +43,7 @@ class ConsistentMatrices(object):
         elif vehicle.id == avatar.playerVehicleID:
             self.__linkOwnVehicle(vehicle)
 
-    def notifyPreBind(self, avatar, targetVehicleID = None):
+    def notifyPreBind(self, avatar, targetVehicleID=None):
         bindMatrix = Math.Matrix(self.attachedVehicleMatrix)
         useStatic = True
         if avatar.vehicle is not None and avatar.vehicle.id == targetVehicleID:
@@ -63,12 +63,12 @@ class ConsistentMatrices(object):
             self.__setTarget(avatar.vehicle.matrix, False)
             return
 
-    def notifyViewPointChanged(self, avatar, staticPosition = None):
+    def notifyViewPointChanged(self, avatar, staticPosition=None):
         if staticPosition is not None:
             self.__setTarget(mathUtils.createTranslationMatrix(staticPosition))
         return
 
-    def __setTarget(self, matrix, asStatic = True):
+    def __setTarget(self, matrix, asStatic=True):
         if asStatic:
             self.__attachedVehicleMatrix.setStaticTransform(Math.Matrix(matrix))
             self.__attachedVehicleMatrix.target = None
@@ -98,7 +98,7 @@ class AvatarPositionControl(CallbackDelayer):
         CallbackDelayer.destroy(self)
         return
 
-    def bindToVehicle(self, bValue = True, vehicleID = None):
+    def bindToVehicle(self, bValue=True, vehicleID=None):
         if vehicleID is None:
             vehicleID = self.__avatar.playerVehicleID
         BigWorld.player().consistentMatrices.notifyPreBind(BigWorld.player(), vehicleID)
@@ -108,7 +108,7 @@ class AvatarPositionControl(CallbackDelayer):
             self.__doUnbind()
         return
 
-    def followCamera(self, bValue = True):
+    def followCamera(self, bValue=True):
         self.__bFollowCamera = bValue
         if bValue:
             self.delayCallback(constants.SERVER_TICK_LENGTH, self.__followCameraTick)

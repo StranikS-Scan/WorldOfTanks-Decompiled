@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportRespawnView.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi import LobbySubView
@@ -16,7 +16,7 @@ class CyberSportRespawnView(CyberSportRespawnViewMeta, LobbySubView, UnitListene
     __background_alpha__ = 1.0
     MAP_BG_SOURCE = '../maps/icons/map/screen/%s.dds'
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         CyberSportRespawnViewMeta.__init__(self)
         LobbySubView.__init__(self)
         self.currentState = ''
@@ -78,7 +78,7 @@ class CyberSportRespawnView(CyberSportRespawnViewMeta, LobbySubView, UnitListene
     def getClientID(self):
         return channel_num_gen.getClientID4Prebattle(self.getPrbType())
 
-    def __initState(self, timeLeft = 0, acceptDelta = 0):
+    def __initState(self, timeLeft=0, acceptDelta=0):
         model = None
         if self.currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_RESPAWN_STATE:
             model = self.__createAutoUpdateModel(self.currentState, timeLeft, '', [])

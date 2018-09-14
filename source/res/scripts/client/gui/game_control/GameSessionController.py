@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/GameSessionController.py
 import time
 import sys
@@ -162,7 +162,7 @@ class GameSessionController(Controller, Notifiable):
             return I18nInfoDialogMeta('koreaParentNotification', messageCtx={'preBlockTime': formatter(notifyStartTime),
              'blockTime': formatter(blockTime)})
 
-    def _stop(self, doNotifyInStart = False):
+    def _stop(self, doNotifyInStart=False):
         LOG_DEBUG('GameSessionController::stop')
         self.stopNotification()
         self.__curfewBlockTime = None
@@ -201,7 +201,7 @@ class GameSessionController(Controller, Notifiable):
             curfewTimeLeft = sys.maxint
         return (playTimeLeft, _checkForNegative(curfewTimeLeft))
 
-    def __loadBanCallback(self, banTimeLeft = 0):
+    def __loadBanCallback(self, banTimeLeft=0):
         self.__clearBanCallback()
         if not banTimeLeft:
             banTimeLeft = min(*self.__getBlockTimeLeft()) - self.PLAY_TIME_LEFT_NOTIFY

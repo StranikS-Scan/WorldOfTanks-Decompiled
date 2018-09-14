@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/SniperCamera.py
 import BigWorld
 import Math
@@ -17,6 +17,7 @@ import Settings
 import constants
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from AvatarInputHandler.DynamicCameras import CameraDynamicConfig
+from account_helpers.settings_core.SettingsCore import g_settingsCore
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return SniperCamera(settingsDataSec, None, None)
@@ -66,15 +67,22 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__autoUpdateDxDyDz = Vector3(0, 0, 0)
             return
 
-    def create(self, onChangeControlMode = None):
+    def __onSettingsChanged(self, diff):
+        if 'fov' in diff:
+            self.delayCallback(0.01, self.__applyZoom, self.__cfg['zoom'])
+
+    def create(self, onChangeControlMode=None):
         self.__onChangeControlMode = onChangeControlMode
+        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def destroy(self):
+        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.disable()
         self.__onChangeControlMode = None
         self.__cam = None
-        self.__aimingSystem.destroy()
-        self.__aimingSystem = None
+        if self.__aimingSystem is not None:
+            self.__aimingSystem.destroy()
+            self.__aimingSystem = None
         self.__aim = None
         CallbackDelayer.destroy(self)
         return
@@ -128,7 +136,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         else:
             self.__cfg[name] = self.__baseCfg[name] * self.__userCfg[name]
 
-    def update(self, dx, dy, dz, updatedByKeyboard = False):
+    def update(self, dx, dy, dz, updatedByKeyboard=False):
         self.__curSense = self.__cfg['keySensitivity'] if updatedByKeyboard else self.__cfg['sensitivity']
         self.__curScrollSense = self.__cfg['keySensitivity'] if updatedByKeyboard else self.__cfg['scrollSensitivity']
         self.__curSense *= 1.0 / self.__zoom
@@ -141,7 +149,7 @@ class SniperCamera(ICamera, CallbackDelayer):
     def onRecreateDevice(self):
         self.__applyZoom(self.__zoom)
 
-    def applyImpulse(self, position, impulse, reason = ImpulseReason.ME_HIT):
+    def applyImpulse(self, position, impulse, reason=ImpulseReason.ME_HIT):
         adjustedImpulse, noiseMagnitude = self.__dynamicCfg.adjustImpulse(impulse, reason)
         camMatrix = Matrix(self.__cam.matrix)
         impulseLocal = camMatrix.applyVector(adjustedImpulse)
@@ -152,7 +160,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__impulseOscillator.applyImpulse(impulseAsYPR)
         self.__applyNoiseImpulse(noiseMagnitude)
 
-    def applyDistantImpulse(self, position, impulseValue, reason = ImpulseReason.ME_HIT):
+    def applyDistantImpulse(self, position, impulseValue, reason=ImpulseReason.ME_HIT):
         impulse = self.__cam.position - position
         distance = impulse.length
         if distance < 1.0:
@@ -227,7 +235,7 @@ class SniperCamera(ICamera, CallbackDelayer):
                 self.__applyZoom(self.__zoom)
             return
 
-    def __cameraUpdate(self, allowModeChange = True):
+    def __cameraUpdate(self, allowModeChange=True):
         curTime = BigWorld.time()
         deltaTime = curTime - self.__prevTime
         self.__prevTime = curTime
@@ -261,7 +269,7 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__onChangeControlMode(False)
             return -1
 
-    def __calcAimOffset(self, aimLocalTransform = None):
+    def __calcAimOffset(self, aimLocalTransform=None):
         worldCrosshair = Matrix(self.__crosshairMatrix)
         aimingSystemMatrix = self.__aimingSystem.matrix
         if aimLocalTransform is not None:

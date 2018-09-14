@@ -1,8 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/unit_roster_config.py
-import fortified_regions, clubs_settings
-from UnitBase import BaseUnitRosterSlot
-from UnitRoster import BaseUnitRoster
+import fortified_regions
+import clubs_settings
+from UnitRoster import BaseUnitRoster, BaseUnitRosterSlot, BaseUnitRosterLimits
 
 class UnitRosterSlot(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (6, 8)
@@ -16,6 +16,7 @@ class UnitRoster(BaseUnitRoster):
     MIN_UNIT_POINTS_SUM = 54
     MAX_UNIT_POINTS_SUM = 54
     MAX_UNIT_ASSEMBLER_ARTY = 2
+    LIMITS_TYPE = BaseUnitRosterLimits
 
 
 class RosterSlot6(BaseUnitRosterSlot):
@@ -54,6 +55,7 @@ class SortieRoster6(BaseSortieRoster):
     SLOT_TYPE = SortieSlot6
     DEFAULT_SLOT_PACK = SortieSlot6().pack()
     MAX_UNIT_POINTS_SUM = 42
+    LIMITS_TYPE = BaseUnitRosterLimits
 
 
 class SortieRoster8(BaseSortieRoster):
@@ -62,6 +64,7 @@ class SortieRoster8(BaseSortieRoster):
     SLOT_TYPE = SortieSlot8
     DEFAULT_SLOT_PACK = SortieSlot8().pack()
     MAX_UNIT_POINTS_SUM = 80
+    LIMITS_TYPE = BaseUnitRosterLimits
 
 
 class SortieRoster10(BaseSortieRoster):
@@ -70,6 +73,7 @@ class SortieRoster10(BaseSortieRoster):
     SLOT_TYPE = SortieSlot10
     DEFAULT_SLOT_PACK = SortieSlot10().pack()
     MAX_UNIT_POINTS_SUM = 150
+    LIMITS_TYPE = BaseUnitRosterLimits
 
 
 class FortRoster8(BaseUnitRoster):
@@ -78,6 +82,7 @@ class FortRoster8(BaseUnitRoster):
     SLOT_TYPE = RosterSlot8
     DEFAULT_SLOT_PACK = RosterSlot8().pack()
     MAX_UNIT_POINTS_SUM = 80
+    LIMITS_TYPE = BaseUnitRosterLimits
 
 
 class FortRoster10(BaseUnitRoster):
@@ -86,6 +91,7 @@ class FortRoster10(BaseUnitRoster):
     SLOT_TYPE = RosterSlot10
     DEFAULT_SLOT_PACK = RosterSlot10().pack()
     MAX_UNIT_POINTS_SUM = 150
+    LIMITS_TYPE = BaseUnitRosterLimits
 
 
 class ClubRoster(UnitRoster):
@@ -99,3 +105,33 @@ class SquadRoster(BaseUnitRoster):
     MAX_EMPTY_SLOTS = 2
     SLOT_TYPE = RosterSlot10
     DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    LIMITS_TYPE = BaseUnitRosterLimits
+
+
+class FalloutClassicRoster(BaseUnitRoster):
+    MAX_SLOTS = 3
+    MAX_EMPTY_SLOTS = 2
+    SLOT_TYPE = RosterSlot10
+    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    LIMITS_TYPE = BaseUnitRosterLimits
+    MIN_VEHICLES = 3
+    MAX_VEHICLES = 3
+
+
+class FalloutMultiteamRoster(BaseUnitRoster):
+    MAX_SLOTS = 3
+    MAX_EMPTY_SLOTS = 1
+    SLOT_TYPE = RosterSlot10
+    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    LIMITS_TYPE = BaseUnitRosterLimits
+    MIN_VEHICLES = 1
+    MAX_VEHICLES = 3
+
+
+class SpecRoster(BaseUnitRoster):
+    MAX_SLOTS = 15
+    MAX_EMPTY_SLOTS = 14
+    SLOT_TYPE = RosterSlot10
+    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    MAX_UNIT_POINTS_SUM = 150
+    LIMITS_TYPE = BaseUnitRosterLimits

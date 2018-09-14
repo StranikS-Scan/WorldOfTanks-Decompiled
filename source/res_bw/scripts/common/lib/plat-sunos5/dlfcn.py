@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-sunos5/DLFCN.py
 from TYPES import *
 RTLD_LAZY = 1

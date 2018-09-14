@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/ExchangeDialogMeta.py
 import math
 import Event
@@ -53,7 +53,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
     def getTypeCompDescr(self):
         return self.__typeCompactDescr
 
-    def submit(self, gold, valueToExchange, callback = None):
+    def submit(self, gold, valueToExchange, callback=None):
         raise NotImplementedError()
 
     def getExchangeRate(self):
@@ -173,13 +173,10 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
         return ''.join(text_styles.gold(BigWorld.wg_getGoldFormat(gold)) + icons.gold())
 
     def __getGoldToExchange(self, resToExchange):
-        if resToExchange > 0:
-            return int(math.ceil(float(resToExchange) / self.getExchangeRate()))
+        return int(math.ceil(float(resToExchange) / self.getExchangeRate())) if resToExchange > 0 else 0
 
     def __getIconType(self, item):
-        if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-            return CONFIRM_EXCHANGE_DIALOG_TYPES.VEHICLE_ICON
-        return CONFIRM_EXCHANGE_DIALOG_TYPES.MODULE_ICON
+        return CONFIRM_EXCHANGE_DIALOG_TYPES.VEHICLE_ICON if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE else CONFIRM_EXCHANGE_DIALOG_TYPES.MODULE_ICON
 
     def __getIcon(self, item):
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
@@ -187,14 +184,12 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
             if item.isElite:
                 icon += '_elite'
             return icon
-        if item.itemTypeID not in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.SHELL, GUI_ITEM_TYPE.EQUIPMENT):
-            return str(item.level)
-        return item.icon
+        return str(item.level) if item.itemTypeID not in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.SHELL, GUI_ITEM_TYPE.EQUIPMENT) else item.icon
 
 
 class ExchangeCreditsMeta(_ExchangeDialogMeta):
 
-    def __init__(self, itemCD, installVehicle = None):
+    def __init__(self, itemCD, installVehicle=None):
         super(ExchangeCreditsMeta, self).__init__('confirmExchangeDialog/exchangeCredits', itemCD)
         item = self._items.getItemByCD(self.getTypeCompDescr())
         self.__installVehicleCD = installVehicle
@@ -219,7 +214,7 @@ class ExchangeCreditsMeta(_ExchangeDialogMeta):
 
     @async
     @decorators.process('transferMoney')
-    def submit(self, gold, exchangedCredits, callback = None):
+    def submit(self, gold, exchangedCredits, callback=None):
         result = yield GoldToCreditsExchanger(gold).request()
         if callback is not None:
             callback(result)
@@ -292,7 +287,7 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
 
     @async
     @decorators.process('exchangeVehiclesXP')
-    def submit(self, gold, xpToExchange, callback = None):
+    def submit(self, gold, xpToExchange, callback=None):
         criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | ~REQ_CRITERIA.IN_CD_LIST([self._parentCD])
         eliteVehicles = self._items.getVehicles(criteria).keys()
         result = yield FreeXPExchanger(xpToExchange, eliteVehicles).request()

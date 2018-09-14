@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/sortie_items.py
 from UnitBase import SORTIE_DIVISION_NAMES, SORTIE_DIVISION, SORTIE_DIVISION_NAME_TO_FLAGS
 from debug_utils import LOG_ERROR
@@ -25,8 +25,7 @@ def getDivisionLevel(name):
 
 def getDivisionLevelByUnit(unit):
     divisionName = getDivisionNameByType(unit.getRosterTypeID())
-    if divisionName:
-        return getattr(SORTIE_DIVISION, getDivisionNameByType(unit.getRosterTypeID()))
+    return getattr(SORTIE_DIVISION, getDivisionNameByType(unit.getRosterTypeID())) if divisionName else None
 
 
 def getDivisionNameByType(rosterTypeID):

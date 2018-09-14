@@ -69,6 +69,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R56_T-127/T-127_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_T-127>
@@ -176,6 +177,8 @@
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hitTester>
         <collisionModel>	vehicles/russian/R56_T-127/collision/Chassis.model	</collisionModel>
       </hitTester>
@@ -297,6 +300,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.466 0.122 0.723 0.660 0.412 0.500 0.276 0.500 0.155 0.677 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_T-127>
   </turrets0>

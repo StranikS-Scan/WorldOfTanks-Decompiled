@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/PPAnimateProperty.py
 from FX.Event import Event
 from FX.Event import IMMEDIATE_EVENT
@@ -16,7 +16,7 @@ class PPAnimateProperty(Event):
     def __init__(self):
         self.animation = Math.Vector4Animation()
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """
         This method loads the PPAnimateProperty event from a data section.
         It reads a list of keyframes of (time,value)

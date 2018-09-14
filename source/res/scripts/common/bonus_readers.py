@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bonus_readers.py
 import time
 import items
@@ -6,26 +6,27 @@ import calendar
 from account_shared import validateCustomizationItem
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, DictBlockBuilder, ListBlockBuilder, BinarySetDossierBlockBuilder
 from items import vehicles, tankmen
+from constants import EVENT_TYPE
 __all__ = ['getBonusReaders', 'readUTC', 'SUPPORTED_BONUSES']
 
 def getBonusReaders(bonusTypes):
     return dict(((k, __BONUS_READERS[k]) for k in bonusTypes))
 
 
-def readUTC(section, field, default = None):
+def readUTC(section, field, default=None):
     timeData = section.readString(field, '')
     try:
         if timeData is None:
-            raise Exception, 'Wrong timeData'
+            raise Exception('Wrong timeData')
         if timeData != '':
             timeData = time.strptime(timeData, '%d.%m.%Y %H:%M')
             timeData = int(calendar.timegm(timeData))
         else:
             if default is None:
-                raise Exception, 'Wrong default'
+                raise Exception('Wrong default')
             return default
     except:
-        raise Exception, 'Invalid %s format (%s). Format must be like %s, for example 23.01.2011 00:00.' % (field, timeData, "'%d.%m.%Y %H:%M'")
+        raise Exception('Invalid %s format (%s). Format must be like %s, for example 23.01.2011 00:00.' % (field, timeData, "'%d.%m.%Y %H:%M'"))
 
     return timeData
 
@@ -37,14 +38,14 @@ def __readBonus_bool(bonus, name, section):
 def __readBonus_int(bonus, name, section):
     value = section.asInt
     if value < 0:
-        raise Exception, 'Negative value (%s)' % name
+        raise Exception('Negative value (%s)' % name)
     bonus[name] = section.asInt
 
 
 def __readBonus_factor(bonus, name, section):
     value = section.asFloat
     if value < 0:
-        raise Exception, 'Negative value (%s)' % name
+        raise Exception('Negative value (%s)' % name)
     bonus[name] = value
 
 
@@ -53,7 +54,7 @@ def __readBonus_equipment(bonus, _name, section):
     cache = vehicles.g_cache
     eqID = cache.equipmentIDs().get(eqName)
     if eqID is None:
-        raise Exception, "Unknown equipment '%s'" % eqName
+        raise Exception("Unknown equipment '%s'" % eqName)
     eqCompDescr = cache.equipments()[eqID].compactDescr
     count = 1
     if section.has_key('count'):
@@ -67,7 +68,7 @@ def __readBonus_optionalDevice(bonus, _name, section):
     cache = vehicles.g_cache
     odID = cache.optionalDeviceIDs().get(name)
     if odID is None:
-        raise Exception, "Unknown optional device '%s'" % name
+        raise Exception("Unknown optional device '%s'" % name)
     odCompDescr = cache.optionalDevices()[odID].compactDescr
     count = 1
     if section.has_key('count'):
@@ -81,9 +82,9 @@ def __readBonus_item(bonus, _name, section):
     try:
         descr = vehicles.getDictDescr(compDescr)
         if descr['itemTypeName'] not in items.SIMPLE_ITEM_TYPE_NAMES:
-            raise Exception, 'Wrong compact descriptor (%d). Not simple item.' % compDescr
+            raise Exception('Wrong compact descriptor (%d). Not simple item.' % compDescr)
     except:
-        raise Exception, 'Wrong compact descriptor (%d)' % compDescr
+        raise Exception('Wrong compact descriptor (%d)' % compDescr)
 
     count = 1
     if section.has_key('count'):
@@ -129,9 +130,9 @@ def __readBonus_tankmen(bonus, vehTypeCompDescr, section):
                 if type(vehTypeCompDescr) == int:
                     _, vehNationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
                     if vehNationID != tman.nationID or vehicleTypeID != tman.vehicleTypeID:
-                        raise Exception, 'Vehicle and tankman mismatch.'
+                        raise Exception('Vehicle and tankman mismatch.')
             except Exception as e:
-                raise Exception, 'Invalid tankmen compact descr. Error: %s' % (e,)
+                raise Exception('Invalid tankmen compact descr. Error: %s' % (e,))
 
             lst.append(tmanDescr)
             continue
@@ -158,10 +159,10 @@ def __readBonus_tankmen(bonus, vehTypeCompDescr, section):
             if type(vehTypeCompDescr) == int:
                 _, vehNationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
                 if vehNationID != tmanData['nationID'] or vehicleTypeID != tmanData['vehicleTypeID']:
-                    raise Exception, 'Vehicle and tankman mismatch.'
+                    raise Exception('Vehicle and tankman mismatch.')
             lst.append(tmanData)
         except Exception as e:
-            raise Exception, '%s: %s' % (e, tmanData)
+            raise Exception('%s: %s' % (e, tmanData))
 
     bonus['tankmen'] = lst
     return
@@ -181,7 +182,7 @@ def __readBonus_rent(bonus, _name, section):
         elif subsection.has_key('state'):
             rent['expires']['state'] = subsection['state'].asBool
         else:
-            raise Exception, "'expires' section must contain 'at', 'after', 'battles' or 'state' sub-section"
+            raise Exception("'expires' section must contain 'at', 'after', 'battles' or 'state' sub-section")
     if section.has_key('compensation'):
         credits = section['compensation'].readInt('credits', 0)
         gold = section['compensation'].readInt('gold', 0)
@@ -204,26 +205,26 @@ def __readBonus_customizations(bonus, _name, section):
             custData['id'] = custData['id'][1]
         isValid, reason = validateCustomizationItem(custData)
         if not isValid:
-            raise Exception, reason
+            raise Exception(reason)
         if 'boundToCurrentVehicle' in custData:
             customization = vehicles.g_cache.customization
             if custData['custType'] == 'camouflages':
                 nationID, innationID = custData['id']
                 descr = customization(nationID)['camouflages'][innationID]
                 if descr['allow'] or descr['deny']:
-                    raise Exception, 'Unsupported camouflage because allow and deny tags %s, %s, %s' % (custData, descr['allow'], descr['deny'])
+                    raise Exception('Unsupported camouflage because allow and deny tags %s, %s, %s' % (custData, descr['allow'], descr['deny']))
             elif custData['custType'] == 'inscriptions':
                 nationID, innationID = custData['id']
                 groupName = customization(nationID)['inscriptions'][innationID][0]
                 allow, deny = customization(nationID)['inscriptionGroups'][groupName][3:5]
                 if allow or deny:
-                    raise Exception, 'Unsupported inscription because allow and deny tags %s, %s, %s' % (custData, allow, deny)
+                    raise Exception('Unsupported inscription because allow and deny tags %s, %s, %s' % (custData, allow, deny))
             elif custData['custType'] == 'emblems':
                 innationID = custData['id']
                 groups, emblems, _ = vehicles.g_cache.playerEmblems()
                 allow, deny = groups[emblems[innationID][0]][4:6]
                 if allow or deny:
-                    raise Exception, 'Unsupported inscription because allow and deny tags %s, %s, %s' % (custData, allow, deny)
+                    raise Exception('Unsupported inscription because allow and deny tags %s, %s, %s' % (custData, allow, deny))
         lst.append(custData)
 
     bonus['customizations'] = lst
@@ -236,6 +237,7 @@ def __readBonus_tokens(bonus, _name, section):
     __readBonus_expires(id, expires, section)
     if section.has_key('limit'):
         token['limit'] = section['limit'].asInt
+    token['count'] = 1
     if section.has_key('count'):
         token['count'] = section['count'].asInt
 
@@ -264,7 +266,7 @@ def __readBonus_dossier(bonus, _name, section):
     if section.has_key('type'):
         operation = section['type'].asString
     if operation not in ('add', 'append', 'set'):
-        raise Exception, 'Invalid dossier record %s' % operation
+        raise Exception('Invalid dossier record %s' % operation)
     value = section['value'].asInt
     unique = False
     if section.has_key('unique'):
@@ -280,11 +282,67 @@ def __readBonus_dossier(bonus, _name, section):
             elif blockType == ListBlockBuilder and operation == 'append':
                 break
     else:
-        raise Exception, 'Invalid dossier record %s or unsupported block' % (blockName + ':' + record,)
+        raise Exception('Invalid dossier record %s or unsupported block' % (blockName + ':' + record,))
 
     bonus.setdefault('dossier', {})[blockName, record] = {'value': value,
      'unique': unique,
      'type': operation}
+
+
+def __readBonus_optional(bonusReaders, bonusRange, bonus, section, hasOneOf, isOneOf):
+    subBonus = __readBonusSubSection(bonusReaders, bonusRange, section)
+    probabilityAttr = section['probability']
+    if not isOneOf and probabilityAttr is None:
+        raise Exception('Missing probability attribute in optional')
+    if probabilityAttr is None:
+        probability = 0
+    else:
+        probability = probabilityAttr.asInt / 100.0
+    if not 0 <= probability <= 100:
+        raise Exception('Probability is out of range: {}'.format(probability))
+    if isOneOf:
+        bonus.setdefault('oneof', []).append((probability, subBonus))
+    else:
+        bonus.setdefault('allof', []).append((probability, subBonus))
+    return
+
+
+def __readBonus_oneof(bonusReaders, bonusRange, bonus, section, hasOneOf, isOneOf):
+    equalProbabilityCount = 0
+    equalProbabilityValue = 0
+    bonuses = __readBonusSubSection(bonusReaders, bonusRange, section, True)
+    oneOfBonus = bonuses['oneof']
+    for probability, subBonus in oneOfBonus:
+        if probability == 0:
+            equalProbabilityCount += 1
+        equalProbabilityValue += probability
+
+    if equalProbabilityCount:
+        equalProbabilityValue = (1.0 - equalProbabilityValue) / equalProbabilityCount
+    oneOfTemp = []
+    maximumProbability = 0
+    for probability, subBonus in oneOfBonus:
+        if probability == 0:
+            maximumProbability += equalProbabilityValue
+        else:
+            maximumProbability += probability
+        oneOfTemp.append((maximumProbability, subBonus))
+
+    lastProbability, lastSubBonus = oneOfTemp[-1]
+    if abs(1.0 - lastProbability) < 1e-06:
+        oneOfTemp[-1] = (1.0, lastSubBonus)
+    else:
+        raise Exception('Sum of probabilities > 100')
+    if hasOneOf:
+        bonus.setdefault('groups', []).append({'oneof': oneOfTemp})
+    else:
+        bonus['oneof'] = oneOfTemp
+    return True
+
+
+def __readBonus_group(bonusReaders, bonusRange, bonus, section, hasOneOf, isOneOf):
+    subBonus = __readBonusSubSection(bonusReaders, bonusRange, section)
+    bonus.setdefault('groups', []).append(subBonus)
 
 
 __BONUS_READERS = {'buyAllVehicles': __readBonus_bool,
@@ -315,4 +373,68 @@ __BONUS_READERS = {'buyAllVehicles': __readBonus_bool,
  'dossier': __readBonus_dossier,
  'tankmen': __readBonus_tankmen,
  'customizations': __readBonus_customizations}
+__PROBABILITY_READERS = {'optional': __readBonus_optional,
+ 'oneof': __readBonus_oneof,
+ 'group': __readBonus_group}
 SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
+
+def readBonusSection(bonusRange, section, eventType=None):
+    if section is None:
+        return {}
+    else:
+        bonusReaders = getBonusReaders(bonusRange)
+        bonus = {}
+        if eventType == EVENT_TYPE.FORT_QUEST:
+            for name, sub in section.items():
+                if name.startswith('pack_'):
+                    words = name.split('_')
+                    if len(words) != 2:
+                        raise Exception('Invalid pack format (pack_id, where id between 1 and 10)')
+                    packID = int(words[1])
+                    if not 1 <= packID <= 10:
+                        raise Exception('Invalid pack format (pack_id, where id between 1 and 10)')
+                    if packID in bonus:
+                        raise Exception('Invalid pack. Already defined.')
+                    bonus[packID] = __readBonusSubSection(bonusReaders, bonusRange, sub)
+
+        else:
+            bonus = __readBonusSubSection(bonusReaders, bonusRange, section)
+        return bonus
+
+
+def __readMetaSection(section):
+    if section is None:
+        return {}
+    else:
+        meta = {}
+        for local, sub in section.items():
+            meta[local.strip()] = sub.readString('', '').strip()
+
+        return meta
+
+
+def __readBonusSubSection(bonusReaders, bonusRange, section, isOneOf=False):
+    if section is None:
+        return {}
+    else:
+        hasOneOf = False
+        bonus = {}
+        for name, sub in section.items():
+            if isOneOf and name != 'optional':
+                raise Exception('The only possible subsection of oneof is optional')
+            elif name in __PROBABILITY_READERS:
+                if __PROBABILITY_READERS[name](bonusReaders, bonusRange, bonus, sub, hasOneOf, isOneOf):
+                    hasOneOf = True
+                continue
+            elif name == 'meta':
+                bonus['meta'] = __readMetaSection(sub)
+                continue
+            elif name == 'probability':
+                continue
+            elif name not in bonusReaders:
+                raise Exception('Bonus not in bonus readers {}'.format(name))
+            elif bonusRange is not None and name not in bonusRange:
+                raise Exception('Bonus {} is not in the range: ({})'.format(name, bonusRange))
+            bonusReaders[name](bonus, name, sub)
+
+        return bonus

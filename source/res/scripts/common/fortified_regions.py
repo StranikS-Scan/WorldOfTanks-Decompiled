@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/fortified_regions.py
 import ResMgr
 import ArenaType
@@ -7,20 +7,14 @@ from constants import FORT_BUILDING_TYPE, FORT_ORDER_TYPE
 from items import vehicles
 _CONFIG_FILE = 'scripts/item_defs/fortified_regions.xml'
 
-def _getInt(section, name, default = 0):
+def _getInt(section, name, default=0):
     field = section[name]
-    if field is None:
-        return default
-    else:
-        return field.asInt
+    return default if field is None else field.asInt
 
 
-def _getString(section, name, default = ''):
+def _getString(section, name, default=''):
     field = section[name]
-    if field is None:
-        return default
-    else:
-        return field.asString
+    return default if field is None else field.asString
 
 
 class BuildingType(object):
@@ -34,7 +28,7 @@ class BuildingType(object):
         orderName = _getString(section, 'order')
         self.orderType = orderType = getattr(FORT_ORDER_TYPE, orderName, None)
         if orderName and not orderType:
-            raise Exception, 'Unknown order name (%s)' % (orderName,)
+            raise Exception('Unknown order name (%s)' % (orderName,))
         levelsSection = section['levels'] or {}
         for name, subsection in levelsSection.items():
             level = subsection.asInt
@@ -96,7 +90,7 @@ class OrderTypeLevel(object):
             equipments = cache.equipments()
             eqID = equipmentIDs.get(equipmentName)
             if eqID is None:
-                raise Exception, "Unknown equipment '%s'" % equipmentName
+                raise Exception("Unknown equipment '%s'" % equipmentName)
             self.equipment = equipments[eqID].compactDescr
         return
 
@@ -138,7 +132,7 @@ class FortDivision(object):
 
 
 class FortifiedRegionCache(object):
-    __slots__ = ('isSupported', 'clanMembersForStart', 'startResource', 'maxDirections', 'clanMembersPerDirection', 'defenseHourPreorderTime', 'defenseHourCooldownTime', 'defenseHourShutdownTime', 'offdayPreorderTime', 'offdayCooldownTime', 'minVacationPreorderTime', 'maxVacationPreorderTime', 'minVacationDuration', 'maxVacationDuration', 'vacationCooldownTime', 'vacationCooldownTime', 'allowSortieLegionaries', 'maxLegionariesCount', 'battleConsumablesCount', 'buildings', 'orders', 'orderTypeIDToBuildTypeID', 'transportLevels', 'defenceConditions', 'divisions', 'fort_divisions', 'fortBattleMaps', 'isFirstDirectionFree', 'openDirAttacksTime', 'attackCooldownTime', 'attackPreorderTime', 'attackMaxTime', 'mapCooldownTime', 'changePeripheryCooldownTime', 'maxSorties', 'consumablesSlotCount', 'maxLifetimeConsumable', 'bonusFactors', 'equipmentToOrder')
+    __slots__ = ('isSupported', 'clanMembersForStart', 'startResource', 'maxDirections', 'clanMembersPerDirection', 'defenseHourPreorderTime', 'defenseHourCooldownTime', 'defenseHourShutdownTime', 'offdayPreorderTime', 'offdayCooldownTime', 'minVacationPreorderTime', 'maxVacationPreorderTime', 'minVacationDuration', 'maxVacationDuration', 'vacationCooldownTime', 'vacationCooldownTime', 'allowSortieLegionaries', 'maxLegionariesCount', 'battleConsumablesCount', 'buildings', 'orders', 'orderTypeIDToBuildTypeID', 'transportLevels', 'defenceConditions', 'divisions', 'fort_divisions', 'fortBattleMaps', 'isFirstDirectionFree', 'openDirAttacksTime', 'attackCooldownTime', 'attackPreorderTime', 'attackMaxTime', 'mapCooldownTime', 'changePeripheryCooldownTime', 'maxSorties', 'consumablesSlotCount', 'maxLifetimeConsumable', 'bonusFactors', 'equipmentToOrder', 'fortInfluencePointsFactors')
 
     def __init__(self):
         self.isSupported = False
@@ -179,6 +173,7 @@ class FortifiedRegionCache(object):
         self.fortBattleMaps = set()
         self.bonusFactors = {}
         self.equipmentToOrder = {}
+        self.fortInfluencePointsFactors = {}
         return
 
 
@@ -235,9 +230,9 @@ def init():
 
     for name in _getString(section, 'fort_battle_maps').split():
         if name not in geometryNamesToIDs:
-            raise Exception, 'Unknown fort battle map name (%s)' % (name,)
+            raise Exception('Unknown fort battle map name (%s)' % (name,))
         if geometryNamesToIDs[name] == 0:
-            raise Exception, 'Zero geometryID is detected for battle map name %s' % (name,)
+            raise Exception('Zero geometryID is detected for battle map name %s' % (name,))
         g_cache.fortBattleMaps.add(geometryNamesToIDs[name])
 
     g_cache.buildings = buildings = {}
@@ -245,9 +240,9 @@ def init():
     for buildName, subsection in section['buildings'].items():
         buildTypeID = getattr(FORT_BUILDING_TYPE, buildName, None)
         if not buildTypeID:
-            raise Exception, 'Unknown building name (%s)' % (buildName,)
+            raise Exception('Unknown building name (%s)' % (buildName,))
         if buildTypeID in buildings:
-            raise Exception, 'Duplicate building type (%s)' % (buildTypeID,)
+            raise Exception('Duplicate building type (%s)' % (buildTypeID,))
         buildings[buildTypeID] = buildingType = BuildingType(buildTypeID, buildName, subsection)
         orderTypeIDToBuildTypeID[buildingType.orderType] = buildTypeID
 
@@ -255,9 +250,9 @@ def init():
     for orderName, subsection in section['orders'].items():
         orderTypeID = getattr(FORT_ORDER_TYPE, orderName, None)
         if not orderTypeID:
-            raise Exception, 'Unknown order name (%s)' % (orderName,)
+            raise Exception('Unknown order name (%s)' % (orderName,))
         if orderTypeID in orders:
-            raise Exception, 'Duplicate order type (%s)' % (orderTypeID,)
+            raise Exception('Duplicate order type (%s)' % (orderTypeID,))
         orders[orderTypeID] = OrderType(orderTypeID, orderName, subsection)
 
     g_cache.equipmentToOrder = equipmentToOrder = {}
@@ -266,7 +261,7 @@ def init():
             equipment = order.equipment
             if equipment:
                 if equipmentToOrder.get(equipment) is not None:
-                    raise Exception, 'Duplicate order equipment (%s)' % (equipment,)
+                    raise Exception('Duplicate order equipment (%s)' % (equipment,))
                 equipmentToOrder[equipment] = (orderTypeID, level)
 
     g_cache.bonusFactors = factors = {}
@@ -275,9 +270,13 @@ def init():
         factors.setdefault(level, {})
         for bonusName, bonusSubsection in subsection.items():
             if bonusName not in ('tankmenXP', 'tankmenXPFactor', 'xp', 'credits', 'freeXP', 'premium', 'gold', 'items'):
-                raise Exception, 'Unsupported fort bonus factor (%s)' % (bonusName,)
+                raise Exception('Unsupported fort bonus factor (%s)' % (bonusName,))
             factors[level][bonusName] = bonusSubsection.asFloat
 
     if len(factors) != len(buildings[FORT_BUILDING_TYPE.OFFICE].levels):
-        raise Exception, 'Number of levels in fort_bonus_factors must be equal to number of OFFICE levels'
+        raise Exception('Number of levels in fort_bonus_factors must be equal to number of OFFICE levels')
+    g_cache.fortInfluencePointsFactors = fortInfluencePointsFactors = {}
+    for division, subsection in section['fortSortiesProfitRate'].items():
+        fortInfluencePointsFactors[division] = subsection['fortInfluencePointsFactor'].asFloat
+
     return

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Params.py
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.ParamsMeta import ParamsMeta
@@ -24,7 +24,7 @@ class Params(ParamsMeta):
     def update(self):
         self._update()
 
-    def _update(self, vDescr = None):
+    def _update(self, vDescr=None):
         data = []
         if g_currentVehicle.isPresent():
             if vDescr is None:

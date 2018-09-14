@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/restrictions.py
 import weakref
 from constants import CLAN_MEMBER_FLAGS
@@ -7,6 +7,7 @@ from account_helpers import isOutOfWallet, isClanEnabled
 from gui.shared import g_itemsCache
 from gui.clans.settings import error, success, CLIENT_CLAN_RESTRICTIONS as _CCR
 from gui.clans.settings import isValidPattern
+MAY_SEE_TREASURY = CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER | CLAN_MEMBER_FLAGS.TREASURER
 
 class ClanMemberPermissions(object):
 
@@ -35,7 +36,7 @@ class ClanMemberPermissions(object):
         return self.__checkFlags(CLAN_MEMBER_FLAGS.MAY_REMOVE_CLAN)
 
     def canTrade(self):
-        return self.__checkFlags(CLAN_MEMBER_FLAGS.MAY_TRADE)
+        return self.__checkFlags(MAY_SEE_TREASURY)
 
     def canExchangeMoney(self):
         return self.__checkFlags(CLAN_MEMBER_FLAGS.MAY_EXCHANGE_MONEY)
@@ -139,9 +140,7 @@ class AccountClanLimits(BaseAccountClanLimits):
             return error(_CCR.CLAN_CONSCRIPTION_CLOSED)
         if not self.__profile.getPermissions(clan).isValidAccountType():
             return error(_CCR.FORBIDDEN_ACCOUNT_TYPE)
-        if not clan.hasFreePlaces():
-            return error(_CCR.CLAN_IS_FULL)
-        return self.__checkPermissions('canSendApplication', clan)
+        return error(_CCR.CLAN_IS_FULL) if not clan.hasFreePlaces() else self.__checkPermissions('canSendApplication', clan)
 
     def canRevokeApplication(self, clan):
         return self.__checkPermissions('canRevokeApplication', clan)
@@ -168,15 +167,11 @@ class AccountClanLimits(BaseAccountClanLimits):
         return self.__checkPermissions('canDeclineInvite', clan)
 
     def canSearchClans(self, pattern):
-        if not isValidPattern(pattern):
-            return error(_CCR.SEARCH_PATTERN_INVALID)
-        return self.__checkPermissions('canSeeClans')
+        return error(_CCR.SEARCH_PATTERN_INVALID) if not isValidPattern(pattern) else self.__checkPermissions('canSeeClans')
 
-    def __checkPermissions(self, permName, clan = None):
+    def __checkPermissions(self, permName, clan=None):
         perms = self.__profile.getPermissions(clan)
         if not hasattr(perms, permName):
             LOG_WARNING('There is error while checking account clan permissions', clan, permName)
             return error(_CCR.DEFAULT)
-        if not getattr(perms, permName)():
-            return error(_CCR.DEFAULT)
-        return success()
+        return error(_CCR.DEFAULT) if not getattr(perms, permName)() else success()

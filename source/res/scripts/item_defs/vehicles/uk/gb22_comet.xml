@@ -27,9 +27,6 @@
         <turretHardPoints>
           <hardPoint>	HP_turretJoint_2	</hardPoint>
         </turretHardPoints>
-        <camouflage>
-          <tiling>	2.2 2.2 0.06 0.000000	</tiling>
-        </camouflage>
         <emblemSlots>
           <clan>
             <rayStart>	1.63491 0.0729774 2.49829	</rayStart>
@@ -102,6 +99,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/british/GB22_Comet/Comet_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.84 1.84 0.000000 0.000000	</tiling>
     </camouflage>
@@ -781,9 +779,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0737653 -0.035178 1.19347	</rayStart>
-              <rayEnd>	0.0551393 -0.06716 1.19343	</rayEnd>
-              <rayUp>	0.068 0.068 4	</rayUp>
+              <rayStart>	0.0737653 -0.035178 1.87973	</rayStart>
+              <rayEnd>	0.053686 -0.00480016 1.87973	</rayEnd>
+              <rayUp>	0.056 0.056 4	</rayUp>
               <size>	0.4	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -982,7 +980,7 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 12 0.416667 12 0.427778 7 0.572222 7 0.583333 12 1 12	</maxPitch>
+            <maxPitch>	0 12 0.416667 12 0.427778 5.5 0.572222 5.5 0.583333 12 1 12	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	3.9	</reloadTime>
@@ -1002,9 +1000,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0182987 0.0112904 1.311	</rayStart>
-              <rayEnd>	0.0106655 -0.0337011 1.31101	</rayEnd>
-              <rayUp>	0.068 0.068 4	</rayUp>
+              <rayStart>	-0.0182987 0.0112904 1.97397	</rayStart>
+              <rayEnd>	-0.0456799 0.000036 1.97397	</rayEnd>
+              <rayUp>	0.056 0.056 4	</rayUp>
               <size>	0.4	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Effects/Properties.py
 from PostProcessing import chain
 import Math
@@ -39,13 +39,13 @@ def linkMaterialAndBypass(effect, material, attributeName):
 
 class BypassProperty:
 
-    def __init__(self, effectName, primary = False):
+    def __init__(self, effectName, primary=False):
         self.effectName = effectName
         if primary:
             from PostProcessing import chainListeners
             chainListeners.append(self.onSetChain)
 
-    def set(self, amt, speed = 0.01):
+    def set(self, amt, speed=0.01):
         e = getEffect(self.effectName)
         try:
             e.bypass.target = (amt,
@@ -88,7 +88,7 @@ class BypassProperty:
 
 class MaterialProperty:
 
-    def __init__(self, effectName, phaseIdx, materialAttribute, primary = False):
+    def __init__(self, effectName, phaseIdx, materialAttribute, primary=False):
         self.effectName = effectName
         self.phaseIdx = phaseIdx
         self.materialAttribute = materialAttribute
@@ -112,11 +112,11 @@ class MaterialProperty:
 
 class MaterialFloatProperty(MaterialProperty):
 
-    def __init__(self, effectName, phaseIdx, materialAttribute, precis = 2, primary = False):
+    def __init__(self, effectName, phaseIdx, materialAttribute, precis=2, primary=False):
         MaterialProperty.__init__(self, effectName, phaseIdx, materialAttribute, primary)
         self.fmtString = '%%0.%df' % (precis,)
 
-    def set(self, amt, speed = 0.01, makeVec4Prov = False):
+    def set(self, amt, speed=0.01, makeVec4Prov=False):
         material = self.getMaterial()
         try:
             v4p = getattr(material, self.materialAttribute)
@@ -161,7 +161,7 @@ class MaterialTextureProperty(MaterialProperty):
         i %= len(self.textureList)
         return i
 
-    def set(self, amt, speed = 0.01):
+    def set(self, amt, speed=0.01):
         self.idx = amt
         material = self.getMaterial()
         idx = self.idxFromVal(amt)

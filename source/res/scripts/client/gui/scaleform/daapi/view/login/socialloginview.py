@@ -1,8 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/SocialLoginView.py
 import BigWorld
+from ConnectionManager import connectionManager, LOGIN_STATUS
 from gui import makeHtmlString
 from gui.login import g_loginManager, SOCIAL_NETWORKS
+from gui.Scaleform.Waiting import Waiting
 from LoginView import LoginView, INVALID_FIELDS
 from helpers.i18n import makeString as _ms
 from predefined_hosts import AUTO_LOGIN_QUERY_URL
@@ -17,7 +19,7 @@ _SOCIAL_NETWORK_TO_DOMAIN_MAPPING = {SOCIAL_NETWORKS.FACEBOOK: 'https://fb.com',
 
 class SocialLoginView(LoginView):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         LoginView.__init__(self, ctx=ctx)
         self.__userName = g_loginManager.getPreference('name')
         self.__lastLoginType = g_loginManager.getPreference('login_type')
@@ -42,8 +44,10 @@ class SocialLoginView(LoginView):
 
     def _populate(self):
         LoginView._populate(self)
+        connectionManager.onLoggedOn += self.__onLoggedOn
 
     def _dispose(self):
+        connectionManager.onLoggedOn -= self.__onLoggedOn
         LoginView._dispose(self)
 
     def _showForm(self):
@@ -53,14 +57,33 @@ class SocialLoginView(LoginView):
         else:
             self.as_showSimpleFormS(True, self.__setSocialDataList(socialList))
 
+    def _onLoginRejected(self, loginStatus, responseData):
+        socialList = g_loginManager.getAvailableSocialNetworks()
+        if self.__lastLoginType in socialList and loginStatus == LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD:
+            Waiting.hide('login')
+            g_loginManager.clearToken2Preference()
+            self._showForm()
+            self.as_setErrorMessageS(_ms('#menu:login/status/SOCIAL_SESSION_END'), INVALID_FIELDS.PWD_INVALID)
+            self._dropLoginQueue(loginStatus)
+        else:
+            super(SocialLoginView, self)._onLoginRejected(loginStatus, responseData)
+
     def __initiateSocialLogin(self, socialNetworkName, serverName, isRegistration):
-        self.__lastLoginType = socialNetworkName
         self._autoSearchVisited = serverName == AUTO_LOGIN_QUERY_URL
         if g_loginManager.initiateSocialLogin(socialNetworkName, serverName, self._rememberUser, isRegistration=isRegistration):
             initLoginError = ''
         else:
             initLoginError = _ms('#menu:login/social/status/SYSTEM_ERROR')
         self.as_setErrorMessageS(initLoginError, INVALID_FIELDS.ALL_VALID)
+
+    def __onLoggedOn(self, *args):
+        """Event handler that sets an actual last login type.
+        
+        Last login type should be set at the very end instead of beginning in order
+        to handle cases like choosing wrong social network, or misclicking on social
+        network and then typing wrong password using basic login.
+        """
+        self.__lastLoginType = g_loginManager.getPreference('login_type')
 
     def __setSocialDataList(self, socialList):
         socialDataList = []

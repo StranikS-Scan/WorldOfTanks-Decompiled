@@ -1,9 +1,10 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/UserDict.py
 """A more or less complete user-defined wrapper around dictionary objects."""
 
 class UserDict:
 
-    def __init__(self, dict = None, **kwargs):
+    def __init__(self, dict=None, **kwargs):
         self.data = {}
         if dict is not None:
             self.update(dict)
@@ -76,7 +77,7 @@ class UserDict:
     def has_key(self, key):
         return key in self.data
 
-    def update(self, dict = None, **kwargs):
+    def update(self, dict=None, **kwargs):
         if dict is None:
             pass
         elif isinstance(dict, UserDict):
@@ -91,12 +92,10 @@ class UserDict:
             self.data.update(kwargs)
         return
 
-    def get(self, key, failobj = None):
-        if key not in self:
-            return failobj
-        return self[key]
+    def get(self, key, failobj=None):
+        return failobj if key not in self else self[key]
 
-    def setdefault(self, key, failobj = None):
+    def setdefault(self, key, failobj=None):
         if key not in self:
             self[key] = failobj
         return self[key]
@@ -111,7 +110,7 @@ class UserDict:
         return key in self.data
 
     @classmethod
-    def fromkeys(cls, iterable, value = None):
+    def fromkeys(cls, iterable, value=None):
         d = cls()
         for key in iterable:
             d[key] = value
@@ -166,7 +165,7 @@ class DictMixin:
         for key in self.keys():
             del self[key]
 
-    def setdefault(self, key, default = None):
+    def setdefault(self, key, default=None):
         try:
             return self[key]
         except KeyError:
@@ -196,7 +195,7 @@ class DictMixin:
         del self[k]
         return (k, v)
 
-    def update(self, other = None, **kwargs):
+    def update(self, other=None, **kwargs):
         if other is None:
             pass
         elif hasattr(other, 'iteritems'):
@@ -215,7 +214,7 @@ class DictMixin:
             self.update(kwargs)
         return
 
-    def get(self, key, default = None):
+    def get(self, key, default=None):
         try:
             return self[key]
         except KeyError:

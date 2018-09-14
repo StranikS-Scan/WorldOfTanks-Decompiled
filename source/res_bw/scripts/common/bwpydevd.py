@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bwpydevd.py
 import os
 import sys
@@ -22,15 +22,15 @@ else:
         scriptConfig = None
 
         @staticmethod
-        def readString(key, default = ''):
+        def readString(key, default=''):
             return BWConfig.scriptConfig.readString(key, default)
 
         @staticmethod
-        def readBool(key, default = False):
+        def readBool(key, default=False):
             return BWConfig.scriptConfig.readBool(key, default)
 
         @staticmethod
-        def readInt(key, default = 0):
+        def readInt(key, default=0):
             return BWConfig.scriptConfig.readInt(key, default)
 
         @staticmethod
@@ -61,7 +61,7 @@ def BWConfigWrapper(fn):
 
 
 @BWConfigWrapper
-def startDebug(isStartUp = False):
+def startDebug(isStartUp=False):
     if not HAS_BW_CONFIG:
         return
     if isStartUp and not BWConfig.readBool('pydevd/autoConnect/%s' % BigWorld.component, False):
@@ -81,7 +81,7 @@ def startDebug(isStartUp = False):
 
 bwPyDevDStarted = False
 
-def startPyDevD(ide, host = '127.0.0.1', port = 5678, suspend = False, traceOnlyCurrentThread = False):
+def startPyDevD(ide, host='127.0.0.1', port=5678, suspend=False, traceOnlyCurrentThread=False):
     global bwPyDevDStarted
     if not bwPyDevDStarted:
         bwPyDevDStarted = True

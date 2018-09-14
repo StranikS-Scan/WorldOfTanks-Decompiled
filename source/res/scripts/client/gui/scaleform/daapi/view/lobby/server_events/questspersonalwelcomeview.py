@@ -1,6 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsPersonalWelcomeView.py
 import weakref
+from gui.LobbyContext import g_lobbyContext
 from helpers import i18n
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.shared.formatters import text_styles
@@ -30,13 +31,23 @@ class QuestsPersonalWelcomeView(QuestsPersonalWelcomeViewMeta):
 
     def _populate(self):
         super(QuestsPersonalWelcomeView, self)._populate()
+        falloutEnabled = g_lobbyContext.getServerSettings().isFalloutQuestEnabled()
+        if falloutEnabled:
+            announcementIcon = ARENA_GUI_TYPE_LABEL.LABELS[ARENA_GUI_TYPE.FALLOUT_CLASSIC]
+            announcementText = text_styles.promoSubTitle(QUESTS.QUESTSPERSONALWELCOMEVIEW_ANNOUNCEMENTTEXT)
+            background = RES_ICONS.MAPS_ICONS_QUESTS_PROMOSCREEN_FALLOUT
+        else:
+            announcementIcon = None
+            announcementText = None
+            background = RES_ICONS.MAPS_ICONS_QUESTS_PROMOSCREEN
         self.as_setDataS({'buttonLbl': QUESTS.QUESTSPERSONALWELCOMEVIEW_BTNLABEL,
          'titleText': text_styles.promoTitle(i18n.makeString(QUESTS.QUESTSPERSONALWELCOMEVIEW_MAINTITLE_TEXTLABEL)),
          'blockData': self.__makeBlocksData(),
-         'showAnnouncement': True,
-         'announcementIcon': ARENA_GUI_TYPE_LABEL.LABELS[ARENA_GUI_TYPE.EVENT_BATTLES],
-         'announcementText': text_styles.promoSubTitle(QUESTS.QUESTSPERSONALWELCOMEVIEW_ANNOUNCEMENTTEXT),
-         'background': RES_ICONS.MAPS_ICONS_QUESTS_PROMOSCREEN})
+         'showAnnouncement': falloutEnabled,
+         'announcementIcon': announcementIcon,
+         'announcementText': announcementText,
+         'background': background})
+        return
 
     def _dispose(self):
         self.__proxy = None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileUtils.py
 import BigWorld
 from debug_utils import LOG_ERROR
@@ -203,9 +203,7 @@ class _MaxDamageField(_AbstractField):
         return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, tooltipData)
 
     def _buildData(self, targetData, isCurrentUser):
-        if targetData.getBattlesCountVer3() > 0:
-            return BigWorld.wg_getIntegralFormat(targetData.getMaxDamage())
-        return ProfileUtils.UNAVAILABLE_VALUE
+        return BigWorld.wg_getIntegralFormat(targetData.getMaxDamage()) if targetData.getBattlesCountVer3() > 0 else ProfileUtils.UNAVAILABLE_VALUE
 
     def _buildTooltipData(self, targetData, isCurrentUser):
         maxDamageVehicle = g_itemsCache.items.getItemByCD(targetData.getMaxDamageVehicle())
@@ -369,7 +367,7 @@ class ProfileUtils(object):
     def formatFloatPercent(value):
         if value != ProfileUtils.UNAVAILABLE_VALUE:
             value = value * 100
-            value = BigWorld.wg_getNiceNumberFormat(value) + '%'
+            value = text_styles.concatStylesWithSpace(BigWorld.wg_getNiceNumberFormat(value), ProfileUtils.PERCENT_SYMBOL)
         return str(value)
 
     @staticmethod
@@ -386,14 +384,14 @@ class ProfileUtils(object):
             return ProfileUtils.UNAVAILABLE_VALUE
 
     @staticmethod
-    def getEfficiencyPercent(dividend, delimiter, unavailableValue = UNAVAILABLE_VALUE):
+    def getEfficiencyPercent(dividend, delimiter, unavailableValue=UNAVAILABLE_VALUE):
         if delimiter != 0:
             return BigWorld.wg_getNiceNumberFormat(float(dividend) / delimiter * 100) + ProfileUtils.PERCENT_SYMBOL
         else:
             return unavailableValue
 
     @staticmethod
-    def packLditItemData(text, description, tooltip, icon, tooltipData = None):
+    def packLditItemData(text, description, tooltip, icon, tooltipData=None):
         finalText = text
         enabled = True
         if text == -1 or text == '-1':
@@ -408,10 +406,7 @@ class ProfileUtils(object):
 
     @staticmethod
     def getValueOrUnavailable(targetValue):
-        if targetValue is not None:
-            return targetValue
-        else:
-            return ProfileUtils.UNAVAILABLE_VALUE
+        return targetValue if targetValue is not None else ProfileUtils.UNAVAILABLE_VALUE
 
     @staticmethod
     def getLabelDataObject(label, data):
@@ -464,16 +459,11 @@ class ProfileUtils(object):
 
     @staticmethod
     def getRecordTooltipDataByVehicle(vehicle):
-        if vehicle is not None:
-            return ProfileUtils.createToolTipData([vehicle.shortUserName])
-        else:
-            return ProfileUtils.createToolTipData(None)
+        return ProfileUtils.createToolTipData([vehicle.shortUserName]) if vehicle is not None else ProfileUtils.createToolTipData(None)
 
     @staticmethod
     def getAvailableValueStr(value):
-        if value != -1:
-            return value
-        return ProfileUtils.UNAVAILABLE_SYMBOL
+        return value if value != -1 else ProfileUtils.UNAVAILABLE_SYMBOL
 
     @staticmethod
     def getAvgDamageBlockedValue(targetData):
@@ -484,7 +474,7 @@ class ProfileUtils(object):
 class DetailedStatisticsUtils(object):
 
     @staticmethod
-    def getDetailedDataObject(label, value, tooltip, tooltipData = None):
+    def getDetailedDataObject(label, value, tooltip, tooltipData=None):
         dataObject = ProfileUtils.getLabelDataObject(label, value)
         dataObject['tooltip'] = tooltip
         dataObject['tooltipData'] = tooltipData

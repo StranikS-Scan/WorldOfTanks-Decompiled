@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/TreeWidget.py
 import os
 from Tkinter import *
@@ -16,7 +16,7 @@ if os.path.isdir(_icondir):
 elif not os.path.isdir(ICONDIR):
     raise RuntimeError, "can't find icon directory (%r)" % (ICONDIR,)
 
-def listicons(icondir = ICONDIR):
+def listicons(icondir=ICONDIR):
     """Utility to display the available icons."""
     root = Tk()
     import glob
@@ -74,7 +74,7 @@ class TreeNode:
         self.iconimages[name] = image
         return image
 
-    def select(self, event = None):
+    def select(self, event=None):
         if self.selected:
             return
         self.deselectall()
@@ -83,7 +83,7 @@ class TreeNode:
         self.drawicon()
         self.drawtext()
 
-    def deselect(self, event = None):
+    def deselect(self, event=None):
         if not self.selected:
             return
         self.selected = False
@@ -103,14 +103,14 @@ class TreeNode:
         for child in self.children:
             child.deselecttree()
 
-    def flip(self, event = None):
+    def flip(self, event=None):
         if self.state == 'expanded':
             self.collapse()
         else:
             self.expand()
         self.item.OnDoubleClick()
 
-    def expand(self, event = None):
+    def expand(self, event=None):
         if not self.item._IsExpandable():
             return
         if self.state != 'expanded':
@@ -118,7 +118,7 @@ class TreeNode:
             self.update()
             self.view()
 
-    def collapse(self, event = None):
+    def collapse(self, event=None):
         if self.state != 'collapsed':
             self.state = 'collapsed'
             self.update()
@@ -243,13 +243,13 @@ class TreeNode:
         self.label.bind('<Double-1>', self.flip)
         self.text_id = id
 
-    def select_or_edit(self, event = None):
+    def select_or_edit(self, event=None):
         if self.selected and self.item.IsEditable():
             self.edit(event)
         else:
             self.select(event)
 
-    def edit(self, event = None):
+    def edit(self, event=None):
         self.entry = Entry(self.label, bd=0, highlightthickness=1, width=0)
         self.entry.insert(0, self.label['text'])
         self.entry.selection_range(0, END)
@@ -258,7 +258,7 @@ class TreeNode:
         self.entry.bind('<Return>', self.edit_finish)
         self.entry.bind('<Escape>', self.edit_cancel)
 
-    def edit_finish(self, event = None):
+    def edit_finish(self, event=None):
         try:
             entry = self.entry
             del self.entry
@@ -274,7 +274,7 @@ class TreeNode:
         self.drawtext()
         self.canvas.focus_set()
 
-    def edit_cancel(self, event = None):
+    def edit_cancel(self, event=None):
         try:
             entry = self.entry
             del self.entry
@@ -376,8 +376,7 @@ class FileTreeItem(TreeItem):
             pass
 
     def GetIconName(self):
-        if not self.IsExpandable():
-            return 'python'
+        return 'python' if not self.IsExpandable() else None
 
     def IsExpandable(self):
         return os.path.isdir(self.path)

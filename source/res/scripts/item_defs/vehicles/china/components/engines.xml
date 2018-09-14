@@ -42,17 +42,17 @@
       <notInShop>	true	</notInShop>
       <price>	79290	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	520	</power>
       <weight>	750	</weight>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	500	</rpm_min>
-      <rpm_max>	1850	</rpm_max>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2039	</rpm_max>
     </NORINCO_12150L7>
     <_12150L-3_V-12>
       <userString>	#china_vehicles:_12150L-3_V-12	</userString>
@@ -61,15 +61,17 @@
       <notInShop>	true	</notInShop>
       <price>	17000	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	430	</power>
       <weight>	700	</weight>
       <maxHealth>	105	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	208	</rpm_min>
+      <rpm_max>	2283	</rpm_max>
     </_12150L-3_V-12>
     <_12150LZ>
       <userString>	#china_vehicles:_12150LZ	</userString>
@@ -78,17 +80,17 @@
       <notInShop>	true	</notInShop>
       <price>	79290	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	520	</power>
       <weight>	750	</weight>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	500	</rpm_min>
-      <rpm_max>	1850	</rpm_max>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2039	</rpm_max>
     </_12150LZ>
     <_12150L>
       <userString>	#china_vehicles:_12150L	</userString>
@@ -96,17 +98,17 @@
       <level>	8	</level>
       <price>	48000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	520	</power>
       <weight>	750	</weight>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	500	</rpm_min>
-      <rpm_max>	1850	</rpm_max>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2039	</rpm_max>
     </_12150L>
     <_12150L3>
       <userString>	#china_vehicles:_12150L3	</userString>
@@ -114,17 +116,17 @@
       <level>	5	</level>
       <price>	17000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	430	</power>
       <weight>	700	</weight>
       <maxHealth>	105	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	1800	</rpm_max>
+      <rpm_min>	208	</rpm_min>
+      <rpm_max>	2283	</rpm_max>
     </_12150L3>
     <_Type_102S>
       <userString>	#china_vehicles:_Type_102S	</userString>
@@ -132,13 +134,17 @@
       <level>	6	</level>
       <price>	15000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	480	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	394	</rpm_min>
+      <rpm_max>	2017	</rpm_max>
     </_Type_102S>
     <_Type_102S1>
       <userString>	#china_vehicles:_Type_102S1	</userString>
@@ -146,15 +152,17 @@
       <level>	7	</level>
       <price>	38000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	750	</weight>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	390	</rpm_min>
+      <rpm_max>	2028	</rpm_max>
     </_Type_102S1>
     <_12150LS>
       <userString>	#china_vehicles:_12150LS	</userString>
@@ -162,13 +170,17 @@
       <level>	9	</level>
       <price>	99500	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	580	</power>
       <weight>	750	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	375	</rpm_min>
+      <rpm_max>	2074	</rpm_max>
     </_12150LS>
     <_Renault_M26_27_bot>
       <userString>	#china_vehicles:_Renault_M26_27_bot	</userString>
@@ -186,8 +198,8 @@
       <maxRegenHealth>	17	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	800	</rpm_min>
-      <rpm_max>	1400	</rpm_max>
+      <rpm_min>	443	</rpm_min>
+      <rpm_max>	2180	</rpm_max>
     </_Renault_M26_27_bot>
     <_12150LT>
       <userString>	#china_vehicles:_12150LT	</userString>
@@ -195,55 +207,74 @@
       <level>	10	</level>
       <price>	120000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	750	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	371	</rpm_min>
+      <rpm_max>	2085	</rpm_max>
     </_12150LT>
     <_Renault_M26_27>
       <userString>	#china_vehicles:_Renault_M26_27	</userString>
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	0	</price>
+      <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	45	</power>
       <weight>	266	</weight>
       <maxHealth>	25	</maxHealth>
       <maxRegenHealth>	17	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	443	</rpm_min>
+      <rpm_max>	2180	</rpm_max>
     </_Renault_M26_27>
     <_Renault_62CV>
       <userString>	#china_vehicles:_Renault_62CV	</userString>
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	350	</price>
+      <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	62	</power>
       <weight>	266	</weight>
       <maxHealth>	25	</maxHealth>
       <maxRegenHealth>	17	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	422	</rpm_min>
+      <rpm_max>	2249	</rpm_max>
     </_Renault_62CV>
     <_Renault_NC>
       <userString>	#china_vehicles:_Renault_NC	</userString>
       <tags>	gasoline	</tags>
       <level>	1	</level>
-      <price>	370	</price>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	75	</power>
       <weight>	266	</weight>
       <maxHealth>	25	</maxHealth>
       <maxRegenHealth>	17	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	405	</rpm_min>
+      <rpm_max>	2301	</rpm_max>
     </_Renault_NC>
     <Armstrong_Siddeley>
       <userString>	#china_vehicles:Armstrong_Siddeley	</userString>
@@ -251,13 +282,17 @@
       <level>	1	</level>
       <price>	770	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	92	</power>
       <weight>	545	</weight>
       <maxHealth>	40	</maxHealth>
       <maxRegenHealth>	20	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	384	</rpm_min>
+      <rpm_max>	2369	</rpm_max>
     </Armstrong_Siddeley>
     <Franklin>
       <userString>	#china_vehicles:Franklin	</userString>
@@ -265,13 +300,17 @@
       <level>	2	</level>
       <price>	800	</price>
       <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	100	</power>
       <weight>	266	</weight>
       <maxHealth>	25	</maxHealth>
       <maxRegenHealth>	17	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	374	</rpm_min>
+      <rpm_max>	2402	</rpm_max>
     </Franklin>
     <Twin_Cadillac_42series>
       <userString>	#china_vehicles:Twin_Cadillac_42series	</userString>
@@ -279,13 +318,17 @@
       <level>	4	</level>
       <price>	10350	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	296	</power>
       <weight>	530	</weight>
       <maxHealth>	123	</maxHealth>
       <maxRegenHealth>	58	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	439	</rpm_min>
+      <rpm_max>	2392	</rpm_max>
     </Twin_Cadillac_42series>
     <Continental_R-975-C1>
       <userString>	#china_vehicles:Continental_R-975-C1	</userString>
@@ -293,13 +336,17 @@
       <level>	4	</level>
       <price>	10500	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	400	</power>
       <weight>	516	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	374	</rpm_min>
+      <rpm_max>	2601	</rpm_max>
     </Continental_R-975-C1>
     <_Type97>
       <userString>	#china_vehicles:_Type97	</userString>
@@ -307,17 +354,17 @@
       <level>	3	</level>
       <price>	5000	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	170	</power>
       <weight>	650	</weight>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	32	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	1800	</rpm_max>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2051	</rpm_max>
     </_Type97>
     <_Type100_W>
       <userString>	#china_vehicles:_Type100_W	</userString>
@@ -325,17 +372,17 @@
       <level>	4	</level>
       <price>	8600	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	200	</power>
       <weight>	630	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	1800	</rpm_max>
+      <rpm_min>	310	</rpm_min>
+      <rpm_max>	2078	</rpm_max>
     </_Type100_W>
     <_Type100_A>
       <userString>	#china_vehicles:_Type100_A	</userString>
@@ -343,17 +390,17 @@
       <level>	4	</level>
       <price>	10500	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	240	</power>
       <weight>	630	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	1800	</rpm_max>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2113	</rpm_max>
     </_Type100_A>
     <V-2>
       <userString>	#china_vehicles:V-2	</userString>
@@ -361,15 +408,17 @@
       <level>	5	</level>
       <price>	18750	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	480	</power>
       <weight>	750	</weight>
       <maxHealth>	105	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	394	</rpm_min>
+      <rpm_max>	2017	</rpm_max>
     </V-2>
     <V-2-34>
       <userString>	#china_vehicles:V-2-34	</userString>
@@ -377,15 +426,17 @@
       <level>	6	</level>
       <price>	27860	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	390	</rpm_min>
+      <rpm_max>	2028	</rpm_max>
     </V-2-34>
     <_V-2-54SC>
       <userString>	#china_vehicles:_V-2-54SC	</userString>
@@ -394,13 +445,17 @@
       <notInShop>	true	</notInShop>
       <price>	25000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	750	</power>
       <weight>	1045	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	342	</rpm_min>
+      <rpm_max>	2171	</rpm_max>
     </_V-2-54SC>
     <_V-2IS>
       <userString>	#china_vehicles:_V-2IS	</userString>
@@ -408,13 +463,17 @@
       <level>	7	</level>
       <price>	36000	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	520	</power>
       <weight>	750	</weight>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2039	</rpm_max>
     </_V-2IS>
     <_Type_102>
       <userString>	#china_vehicles:_Type_102	</userString>
@@ -422,13 +481,17 @@
       <level>	5	</level>
       <price>	10000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	400	</power>
       <weight>	700	</weight>
       <maxHealth>	105	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	221	</rpm_min>
+      <rpm_max>	2256	</rpm_max>
     </_Type_102>
     <_12150L7>
       <userString>	#china_vehicles:_12150L7	</userString>
@@ -437,15 +500,17 @@
       <notInShop>	true	</notInShop>
       <price>	25000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	580	</power>
       <weight>	935	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	375	</rpm_min>
+      <rpm_max>	2074	</rpm_max>
     </_12150L7>
     <_8V135>
       <userString>	#china_vehicles:_8V135	</userString>
@@ -453,13 +518,17 @@
       <level>	8	</level>
       <price>	49000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	520	</power>
       <weight>	740	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2039	</rpm_max>
     </_8V135>
     <_Type_102S_T>
       <userString>	#china_vehicles:_Type_102S	</userString>
@@ -468,13 +537,17 @@
       <price>	15000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	480	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	394	</rpm_min>
+      <rpm_max>	2017	</rpm_max>
     </_Type_102S_T>
     <_12150LS_1>
       <userString>	#china_vehicles:_12150LS	</userString>
@@ -483,13 +556,17 @@
       <price>	99500	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	580	</power>
       <weight>	1068	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	375	</rpm_min>
+      <rpm_max>	2074	</rpm_max>
     </_12150LS_1>
     <Continental_AOSI_895_5_Prem>
       <userString>	#usa_vehicles:Continental_AOSI-895-5	</userString>
@@ -499,13 +576,17 @@
       <price>	25000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	862	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
     </Continental_AOSI_895_5_Prem>
     <_8V135_IGR>
       <userString>	#igr_vehicles:_8V135_IGR	</userString>
@@ -514,13 +595,17 @@
       <price>	49000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	520	</power>
       <weight>	740	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2039	</rpm_max>
     </_8V135_IGR>
     <_12150LS_IGR>
       <userString>	#igr_vehicles:_12150LS_IGR	</userString>
@@ -529,13 +614,17 @@
       <price>	99500	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	580	</power>
       <weight>	750	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	375	</rpm_min>
+      <rpm_max>	2074	</rpm_max>
     </_12150LS_IGR>
     <_12150L7_IGR>
       <userString>	#igr_vehicles:_12150L7_IGR	</userString>
@@ -544,13 +633,17 @@
       <notInShop>	true	</notInShop>
       <price>	25000	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	580	</power>
       <weight>	935	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	375	</rpm_min>
+      <rpm_max>	2074	</rpm_max>
     </_12150L7_IGR>
   </shared>
 </engines.xml>

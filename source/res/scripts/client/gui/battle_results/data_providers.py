@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/data_providers.py
 import BigWorld
 import ArenaType
@@ -11,7 +11,7 @@ from messenger.proto.xmpp.spa_requesters import NicknameResolver
 
 class _PlayerData(namedtuple('_PlayerData', 'dbID team name prebattleID igrType clanAbbrev clanDBID')):
 
-    def __new__(cls, dbID = 0, team = 0, name = results_fmts.getUnknownPlayerName(), prebattleID = 0, igrType = 0, clanAbbrev = '', clanDBID = 0):
+    def __new__(cls, dbID=0, team=0, name=results_fmts.getUnknownPlayerName(), prebattleID=0, igrType=0, clanAbbrev='', clanDBID=0):
         return super(_PlayerData, cls).__new__(cls, dbID, team, name, prebattleID, igrType, clanAbbrev, clanDBID)
 
     def getFullName(self):
@@ -74,7 +74,7 @@ class _PlayersInfoFromXmppGetter(_PlayersInfoGetter):
 
 class _AsyncPostBattleResultsDataProvider(AbstractRequester):
 
-    def __init__(self, arenaUniqueID, playerInfoGetter = None):
+    def __init__(self, arenaUniqueID, playerInfoGetter=None):
         super(_AsyncPostBattleResultsDataProvider, self).__init__()
         self._arenaUniqueID = arenaUniqueID
         self._playerInfoGetter = playerInfoGetter or _PlayersInfoFromDataGetter()

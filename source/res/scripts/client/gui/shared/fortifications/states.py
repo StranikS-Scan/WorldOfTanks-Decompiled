@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/states.py
 import BigWorld
 from FortifiedRegionBase import FORT_STATE
@@ -9,7 +9,7 @@ from gui.LobbyContext import g_lobbyContext
 
 class _ClientFortState(object):
 
-    def __init__(self, stateID, isInitial = False, isDisabled = False):
+    def __init__(self, stateID, isInitial=False, isDisabled=False):
         super(_ClientFortState, self).__init__()
         self._stateID = stateID
         self._isInitial = isInitial
@@ -30,7 +30,7 @@ class _ClientFortState(object):
     def update(self, provider):
         raise NotImplementedError
 
-    def getUIMode(self, provider, transportingProgress = None):
+    def getUIMode(self, provider, transportingProgress=None):
         raise NotImplementedError
 
 
@@ -139,7 +139,7 @@ class WizardState(_ClientFortState):
                 provider.changeState(state)
         return result
 
-    def getUIMode(self, provider, transportingProgress = None):
+    def getUIMode(self, provider, transportingProgress=None):
         fort = getClientFort()
         if fort.state & FORT_STATE.FIRST_DIR_OPEN == 0:
             return FORTIFICATION_ALIASES.MODE_DIRECTIONS_TUTORIAL
@@ -164,7 +164,7 @@ class HasFortState(_ClientFortState):
     def update(self, provider):
         return False
 
-    def getUIMode(self, provider, transportingProgress = None):
+    def getUIMode(self, provider, transportingProgress=None):
         fort = getClientFort()
         if not fort.getOpenedDirections() and provider.getController().getPermissions().canOpenDirection():
             return FORTIFICATION_ALIASES.MODE_DIRECTIONS

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_storages.py
 import functools
 import weakref
@@ -25,7 +25,7 @@ class ISettingsStorage(object):
         settingValue = setting['value']
         self._settings[settingOption] = settingValue
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         return self._settings.get(settingOption, default)
 
     def apply(self, restartApproved):
@@ -148,7 +148,7 @@ class VideoSettingsStorage(ISettingsStorage):
                 if isPlayerAccount():
 
                     @async
-                    def confirmator(callback = None):
+                    def confirmator(callback=None):
                         BigWorld.callback(0.0, lambda : DialogsInterface.showI18nConfirmDialog('graphicsChangeConfirmation', callback, TimerConfirmDialogMeta('graphicsChangeConfirmation', timer=15)))
 
                 else:
@@ -164,7 +164,7 @@ class GameSettingsStorage(ISettingsStorage):
             self._manager.setGameSettings(self._settings)
         return super(GameSettingsStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         default = self._manager.getGameSetting(settingOption, default)
         return self._settings.get(settingOption, default)
 
@@ -176,7 +176,7 @@ class ExtendedGameSettingsStorage(ISettingsStorage):
             self._manager.setExtendedGameSettings(self._settings)
         return super(ExtendedGameSettingsStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         default = self._manager.getExtendedGameSetting(settingOption, default)
         return self._settings.get(settingOption, default)
 
@@ -188,7 +188,7 @@ class TutorialStorage(ISettingsStorage):
             self._manager.setTutorialSetting(self._settings)
         return super(TutorialStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         default = self._manager.getTutorialSetting(settingOption, default)
         return self._settings.get(settingOption, default)
 
@@ -200,14 +200,14 @@ class GameplaySettingsStorage(ISettingsStorage):
             self._manager.setGameplaySettings(self._settings)
         return super(GameplaySettingsStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         default = self._manager.getGameplaySetting(settingOption, default)
         return self._settings.get(settingOption, default)
 
 
 class MessengerSettingsStorage(object):
 
-    def __init__(self, proxy = None):
+    def __init__(self, proxy=None):
         self._proxy = weakref.proxy(proxy)
         self._settings = {}
 
@@ -217,7 +217,7 @@ class MessengerSettingsStorage(object):
         self._settings[settingOption] = settingValue
         self._proxy.store(setting)
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         return self._proxy.extract(settingOption, default)
 
     def apply(self, restartApproved):
@@ -235,7 +235,7 @@ class GraphicsSettingsStorage(ISettingsStorage):
             self._manager.setGraphicsSettings(self._settings)
         return super(GraphicsSettingsStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         default = self._manager.getGraphicsSetting(settingOption, default)
         return self._settings.get(settingOption, default)
 
@@ -247,7 +247,7 @@ class SoundSettingsStorage(ISettingsStorage):
             self._manager.setSoundSettings(self._settings)
         return super(SoundSettingsStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         default = self._manager.getSoundSetting(settingOption, default)
         return self._settings.get(settingOption, default)
 
@@ -259,7 +259,7 @@ class KeyboardSettingsStorage(ISettingsStorage):
             self._manager.setSettings(self._settings)
         return super(KeyboardSettingsStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         default = self._manager.getSetting(settingOption, default)
         return self._settings.get(settingOption, default)
 
@@ -271,7 +271,7 @@ class ControlsSettingsStorage(ISettingsStorage):
             self._manager.setControlsSettings(self._settings)
         return super(ControlsSettingsStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         default = self._manager.getControlsSetting(settingOption, default)
         return self._settings.get(settingOption, default)
 
@@ -283,7 +283,7 @@ class AimSettingsStorage(ISettingsStorage):
             self._manager.setAimSettings(self._settings)
         return super(AimSettingsStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, key = None, default = None):
+    def extract(self, settingOption, key=None, default=None):
         default = self._manager.getAimSetting(settingOption, key, default)
         return self._settings.get(settingOption, {}).get(key, default)
 
@@ -295,7 +295,7 @@ class MarkersSettingsStorage(ISettingsStorage):
             self._manager.setMarkersSettings(self._settings)
         return super(MarkersSettingsStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, key = None, default = None):
+    def extract(self, settingOption, key=None, default=None):
         default = self._manager.getMarkersSetting(settingOption, key, default)
         return self._settings.get(settingOption, {}).get(key, default)
 
@@ -307,14 +307,14 @@ class MarksOnGunSettingsStorage(ISettingsStorage):
             self._manager.setMarksOnGunSettings(self._settings)
         return super(MarksOnGunSettingsStorage, self).apply(restartApproved)
 
-    def extract(self, settingOption, default = None):
+    def extract(self, settingOption, default=None):
         default = self._manager.getMarksOnGunSetting(settingOption, default)
         return self._settings.get(settingOption, default)
 
 
 class FOVSettingsStorage(ISettingsStorage):
 
-    def __init__(self, manager = None, core = None):
+    def __init__(self, manager=None, core=None):
         super(FOVSettingsStorage, self).__init__(manager, core)
         self.__dynamicFOVEnabled = None
         self.__FOV = None
@@ -346,7 +346,7 @@ class FOVSettingsStorage(ISettingsStorage):
         self.store({'option': 'FOV',
          'value': value})
 
-    def apply(self, restartApproved, forceApply = False):
+    def apply(self, restartApproved, forceApply=False):
         if self._settings or forceApply:
             staticFOV, dynamicFOVLow, dynamicFOVTop = self.FOV
             dynamicFOVEnabled = self.dynamicFOVEnabled

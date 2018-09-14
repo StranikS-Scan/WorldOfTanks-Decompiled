@@ -1,0 +1,13 @@
+<accountauthtokenprovider.def>
+  <BaseMethods>
+    <requestToken>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Exposed></Exposed>
+    </requestToken>
+    <accountAuthTokenProvider_setToken>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT32	</Arg>
+    </accountAuthTokenProvider_setToken>
+  </BaseMethods>
+</accountauthtokenprovider.def>

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/ui/achievements.py
 import resource_helper
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -111,31 +111,19 @@ BATTLE_APPROACHABLE_ACHIEVES = []
 
 def getType(record):
     global ACHIEVEMENTS
-    if record in ACHIEVEMENTS:
-        return ACHIEVEMENTS[record]['type']
-    else:
-        return None
+    return ACHIEVEMENTS[record]['type'] if record in ACHIEVEMENTS else None
 
 
 def getSection(record):
-    if record in ACHIEVEMENTS:
-        return ACHIEVEMENTS[record]['section']
-    else:
-        return None
+    return ACHIEVEMENTS[record]['section'] if record in ACHIEVEMENTS else None
 
 
 def getMode(record):
-    if record in ACHIEVEMENTS:
-        return ACHIEVEMENTS[record]['mode']
-    else:
-        return None
+    return ACHIEVEMENTS[record]['mode'] if record in ACHIEVEMENTS else None
 
 
 def getWeight(record):
-    if record in ACHIEVEMENTS:
-        return ACHIEVEMENTS[record]['weight']
-    else:
-        return None
+    return ACHIEVEMENTS[record]['weight'] if record in ACHIEVEMENTS else None
 
 
 def init(achievesMappingXmlPath):

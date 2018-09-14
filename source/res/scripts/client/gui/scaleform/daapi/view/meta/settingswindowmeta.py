@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SettingsWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -32,37 +32,28 @@ class SettingsWindowMeta(AbstractWindowView):
         self._printOverrideError('onTabSelected')
 
     def as_setDataS(self, settingsData):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(settingsData)
+        return self.flashObject.as_setData(settingsData) if self._isDAAPIInited() else None
 
     def as_setCaptureDevicesS(self, captureDeviceIdx, devicesData):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCaptureDevices(captureDeviceIdx, devicesData)
+        return self.flashObject.as_setCaptureDevices(captureDeviceIdx, devicesData) if self._isDAAPIInited() else None
 
     def as_onVibroManagerConnectS(self, isConnect):
-        if self._isDAAPIInited():
-            return self.flashObject.as_onVibroManagerConnect(isConnect)
+        return self.flashObject.as_onVibroManagerConnect(isConnect) if self._isDAAPIInited() else None
 
     def as_updateVideoSettingsS(self, videoSettings):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateVideoSettings(videoSettings)
+        return self.flashObject.as_updateVideoSettings(videoSettings) if self._isDAAPIInited() else None
 
     def as_confirmWarningDialogS(self, isOk, dialogID):
-        if self._isDAAPIInited():
-            return self.flashObject.as_confirmWarningDialog(isOk, dialogID)
+        return self.flashObject.as_confirmWarningDialog(isOk, dialogID) if self._isDAAPIInited() else None
 
     def as_ConfirmationOfApplicationS(self, isApplied):
-        if self._isDAAPIInited():
-            return self.flashObject.as_ConfirmationOfApplication(isApplied)
+        return self.flashObject.as_ConfirmationOfApplication(isApplied) if self._isDAAPIInited() else None
 
     def as_openTabS(self, tabIndex):
-        if self._isDAAPIInited():
-            return self.flashObject.as_openTab(tabIndex)
+        return self.flashObject.as_openTab(tabIndex) if self._isDAAPIInited() else None
 
     def as_setGraphicsPresetS(self, presetNum):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setGraphicsPreset(presetNum)
+        return self.flashObject.as_setGraphicsPreset(presetNum) if self._isDAAPIInited() else None
 
     def as_isPresetAppliedS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_isPresetApplied()
+        return self.flashObject.as_isPresetApplied() if self._isDAAPIInited() else None

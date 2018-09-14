@@ -76,6 +76,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G16_PzVIB_Tiger_II/PzVIB_Tiger_II_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
     </camouflage>
@@ -219,18 +220,18 @@
       <splineDesc>
         <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</segmentModelLeft>
         <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_L.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_R.model	</segment2ModelRight>
         <left>	vehicles/german/G16_PzVIB_Tiger_II/track/left.track	</left>
         <right>	vehicles/german/G16_PzVIB_Tiger_II/track/right.track	</right>
         <segmentLength>	0.29	</segmentLength>
         <segmentOffset>	0.058	</segmentOffset>
+        <segment2Offset>	0.142	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
-        <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_L.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_R.model	</segment2ModelRight>
-        <segment2Offset>	0.142	</segment2Offset>
       </splineDesc>
       <trackNodes>
         <enable>	true	</enable>
@@ -317,8 +318,8 @@
           <forwardElastK>	1.6	</forwardElastK>
           <backwardElastK>	0.89	</backwardElastK>
           <offset>	-0.232	</offset>
-          <rightSibling>	Track_VT_L6	</rightSibling>
           <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -335,8 +336,8 @@
           <forwardElastK>	1.41	</forwardElastK>
           <backwardElastK>	0.89	</backwardElastK>
           <offset>	-0.175	</offset>
-          <rightSibling>	Track_VT_L8	</rightSibling>
           <leftSibling>	Track_VT_L6	</leftSibling>
+          <rightSibling>	Track_VT_L8	</rightSibling>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -562,18 +563,18 @@
       <splineDesc>
         <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</segmentModelLeft>
         <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_L.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_R.model	</segment2ModelRight>
         <left>	vehicles/german/G16_PzVIB_Tiger_II/track/left.track	</left>
         <right>	vehicles/german/G16_PzVIB_Tiger_II/track/right.track	</right>
         <segmentLength>	0.29	</segmentLength>
         <segmentOffset>	0.058	</segmentOffset>
+        <segment2Offset>	0.142	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
-        <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_L.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_R.model	</segment2ModelRight>
-        <segment2Offset>	0.142	</segment2Offset>
       </splineDesc>
       <trackNodes>
         <enable>	true	</enable>
@@ -627,8 +628,8 @@
           <forwardElastK>	1.7	</forwardElastK>
           <backwardElastK>	0.89	</backwardElastK>
           <offset>	-0.252	</offset>
-          <rightSibling>	Track_VT_L5	</rightSibling>
           <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -856,7 +857,7 @@
             <insigniaOnGun>
               <rayStart>	0.0437177 -0.0636021 4.20505	</rayStart>
               <rayEnd>	0.188498 -0.0977738 4.20061	</rayEnd>
-              <rayUp>	0.074 0.07 3	</rayUp>
+              <rayUp>	0.074 0.07 4	</rayUp>
               <size>	0.405	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -906,7 +907,7 @@
             <insigniaOnGun>
               <rayStart>	0.0432072 -0.0630648 3.95622	</rayStart>
               <rayEnd>	0.133232 -0.162533 3.94849	</rayEnd>
-              <rayUp>	0.082 0.074 4	</rayUp>
+              <rayUp>	0.083 0.075 4	</rayUp>
               <size>	0.405	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -950,9 +951,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0434349 -0.0632559 5.73595	</rayStart>
-              <rayEnd>	0.178979 -0.0659935 5.73096	</rayEnd>
-              <rayUp>	0.08 0.074 4	</rayUp>
+              <rayStart>	0.0434351 -0.063256 5.07588	</rayStart>
+              <rayEnd>	0.035134 -0.0659693 5.07402	</rayEnd>
+              <rayUp>	0.081 0.075 4	</rayUp>
               <size>	0.449	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -1173,9 +1174,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000078 -0.0707155 5.71852	</rayStart>
-              <rayEnd>	0.132275 -0.154689 5.71391	</rayEnd>
-              <rayUp>	0.079 0.074 5	</rayUp>
+              <rayStart>	0.000078 -0.0707155 5.02237	</rayStart>
+              <rayEnd>	-0.00581684 -0.0758677 5.02039	</rayEnd>
+              <rayUp>	0.08 0.075 5	</rayUp>
               <size>	0.405	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>

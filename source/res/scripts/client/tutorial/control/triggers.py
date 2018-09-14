@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/triggers.py
 from tutorial.control import TutorialProxyHolder
 from tutorial.data.has_id import IHasID
@@ -40,7 +40,7 @@ class Trigger(TutorialProxyHolder, IHasID):
     def isOn(self, *args):
         return True
 
-    def toggle(self, isOn = True, benefit = True, **kwargs):
+    def toggle(self, isOn=True, benefit=True, **kwargs):
         effects = self.__offEffects
         if isOn:
             effects = self.__onEffects
@@ -49,8 +49,7 @@ class Trigger(TutorialProxyHolder, IHasID):
                 trigger = getter(triggerID)
                 if trigger is not None:
                     trigger.clear()
-                else:
-                    LOG_ERROR('Trigger not found', triggerID)
+                LOG_ERROR('Trigger not found', triggerID)
 
         if effects and self._tutorial is not None:
             self._tutorial.storeEffectsInQueue(effects, benefit=benefit)
@@ -75,7 +74,7 @@ class Trigger(TutorialProxyHolder, IHasID):
 
 class TriggerWithValidateVar(Trigger):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, validateUpdateOnly = False):
+    def __init__(self, triggerID, validateVarID, setVarID=None, validateUpdateOnly=False):
         super(TriggerWithValidateVar, self).__init__(triggerID)
         self._validateVarID = validateVarID
         self._setVarID = setVarID
@@ -84,7 +83,7 @@ class TriggerWithValidateVar(Trigger):
     def vars(self):
         return self._tutorial.getVars()
 
-    def getVar(self, varID = None):
+    def getVar(self, varID=None):
         if varID is None:
             varID = self._validateVarID
         return self._tutorial.getVars().get(varID)

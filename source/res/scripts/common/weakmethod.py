@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/WeakMethod.py
 from weakref import ref
 
@@ -9,7 +9,7 @@ class WeakMethod(ref):
     """
     __slots__ = ('_func_ref', '_meth_type', '_alive', '__weakref__')
 
-    def __new__(cls, meth, callback = None):
+    def __new__(cls, meth, callback=None):
         try:
             obj = meth.__self__
             func = meth.__func__
@@ -34,10 +34,7 @@ class WeakMethod(ref):
     def __call__(self):
         obj = super(WeakMethod, self).__call__()
         func = self._func_ref()
-        if obj is None or func is None:
-            return
-        else:
-            return self._meth_type(func, obj)
+        return None if obj is None or func is None else self._meth_type(func, obj)
 
     def __eq__(self, other):
         if isinstance(other, WeakMethod):

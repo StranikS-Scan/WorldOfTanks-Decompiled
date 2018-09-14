@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/threads.py
 import time
 import weakref
@@ -20,7 +20,7 @@ class TerminateJob(Job):
 
 class Worker(threading.Thread):
 
-    def __init__(self, jobsQueue, name = None):
+    def __init__(self, jobsQueue, name=None):
         super(Worker, self).__init__(name=name)
         self._jobsQueue = weakref.proxy(jobsQueue)
         self._terminated = False
@@ -50,7 +50,7 @@ class Worker(threading.Thread):
 
 class ThreadPool(object):
 
-    def __init__(self, workersLimit, queueLimit = -1):
+    def __init__(self, workersLimit, queueLimit=-1):
         self._jobs = Queue(queueLimit)
         self._running = False
         self._workers = []

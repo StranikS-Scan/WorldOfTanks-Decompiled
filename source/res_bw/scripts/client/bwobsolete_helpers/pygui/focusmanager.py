@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/FocusManager.py
 _focusedComponent = None
 
@@ -19,7 +19,4 @@ def setFocusedComponent(newFocus):
 
 
 def isFocusedComponent(component):
-    if _focusedComponent is None or component is None:
-        return _focusedComponent is component
-    else:
-        return _focusedComponent.__str__() == component.__str__()
+    return _focusedComponent is component if _focusedComponent is None or component is None else _focusedComponent.__str__() == component.__str__()

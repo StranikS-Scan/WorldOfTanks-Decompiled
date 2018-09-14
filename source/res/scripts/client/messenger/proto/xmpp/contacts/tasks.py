@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/tasks.py
 from collections import defaultdict
 import Event
@@ -18,7 +18,7 @@ class TASK_RESULT(object):
     CREATE_SEQ = 16
 
 
-class _Task(object):
+class _Task(ClientHolder):
     __slots__ = ('_result',)
 
     def __init__(self):
@@ -42,7 +42,7 @@ class _Task(object):
         raise NotImplementedError
 
 
-class IQTask(_Task, ClientHolder):
+class IQTask(_Task):
     __slots__ = ('_iqID',)
 
     def __init__(self):
@@ -134,8 +134,7 @@ class SeqTaskQueue(object):
                 assert isinstance(task, SeqTask), 'Task must be SeqTask'
                 if task.isRequired():
                     self.__wait.append(index)
-                else:
-                    self.__others.append(index)
+                self.__others.append(index)
 
             self.__queue[0].run()
 
@@ -207,7 +206,7 @@ class SeqTaskQueue(object):
 class ContactTask(IQTask):
     __slots__ = ('_jid', '_name')
 
-    def __init__(self, jid, name = ''):
+    def __init__(self, jid, name=''):
         super(ContactTask, self).__init__()
         self._jid = jid
         self._name = name
@@ -230,18 +229,18 @@ class ContactTask(IQTask):
         super(ContactTask, self).clear()
         return
 
-    def sync(self, name, groups, sub = None, clanInfo = None):
+    def sync(self, name, groups, sub=None, clanInfo=None):
         self._doSync(name, groups, sub, clanInfo)
         self._result = TASK_RESULT.REMOVE
         return self._result
 
-    def _doSync(self, name, groups = None, sub = None, clanInfo = None):
+    def _doSync(self, name, groups=None, sub=None, clanInfo=None):
         raise NotImplementedError
 
-    def _getUser(self, protoType = PROTO_TYPE.XMPP):
+    def _getUser(self, protoType=PROTO_TYPE.XMPP):
         return self.usersStorage.getUser(self._jid.getDatabaseID(), protoType)
 
-    def _doNotify(self, actionID, user, nextRev = True):
+    def _doNotify(self, actionID, user, nextRev=True):
         g_messengerEvents.users.onUserActionReceived(actionID, user)
         if nextRev:
             self.usersStorage.nextRev()
@@ -250,7 +249,7 @@ class ContactTask(IQTask):
 class ContactTaskQueue(object):
     __slots__ = ('__queue', '__isSuspend', '__pending', '__syncByIQ', 'onSeqTaskRequested')
 
-    def __init__(self, syncByIQ = None):
+    def __init__(self, syncByIQ=None):
         super(ContactTaskQueue, self).__init__()
         self.__queue = defaultdict(list)
         self.__isSuspend = False
@@ -297,7 +296,7 @@ class ContactTaskQueue(object):
         else:
             self._doRunFirstTask(jid)
 
-    def sync(self, jid, name = '', groups = None, sub = None, clanInfo = None, defaultTask = None):
+    def sync(self, jid, name='', groups=None, sub=None, clanInfo=None, defaultTask=None):
         if not jid.getDatabaseID():
             g_logOutput.error(_LOG_AREA.SYNC, 'JID "{0}" is invalid'.format(jid))
             return

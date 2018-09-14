@@ -73,6 +73,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A66_M103/M103_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.12 1.12 0.09 0.27	</tiling>
     </camouflage>
@@ -282,6 +283,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.923078 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/american/A66_M103/collision/Chassis.model	</collisionModel>
@@ -500,6 +503,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.923078 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/american/A66_M103/collision/Chassis.model	</collisionModel>
@@ -710,7 +715,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.899 -0.080 0.593 0.290 0.500 0.500 0.466 0.500 0.130 0.569 0.354	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_07	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_12000-more	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
@@ -952,7 +957,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.942 0.000 0.535 0.380 0.500 0.500 0.500 0.500 0.125 0.476 0.351	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_07	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_12000-more	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.565 0.565 0.04 0.56	</tiling>

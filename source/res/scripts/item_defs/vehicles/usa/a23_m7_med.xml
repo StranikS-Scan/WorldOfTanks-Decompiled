@@ -79,6 +79,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A23_M7_med/M7_med_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <VVSS_T48>
@@ -116,8 +117,8 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	usa_02	</textureSet>
-        <size>	0.4 0.4	</size>
+        <textureSet>	usa_a23	</textureSet>
+        <size>	0.35 0.47	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -382,8 +383,8 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	usa_02	</textureSet>
-        <size>	0.4 0.4	</size>
+        <textureSet>	usa_a23	</textureSet>
+        <size>	0.35 0.47	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -864,7 +865,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
+            <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_37mm_M-6_L53>
         <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	155	</maxAmmo>
@@ -910,7 +911,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
+            <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </QF_6_pounder_Mk_III>
         <_75mm_Gun_M2_L28>	shared	  <maxAmmo>	71	</maxAmmo>
@@ -955,7 +956,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+            <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_75mm_Gun_M2_L28>
         <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	71	</maxAmmo>
@@ -1000,7 +1001,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.58 0.415 0.000000 0.000000	</tiling>
+            <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_75mm_Gun_M3_L37>
       </guns>

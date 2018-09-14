@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/WhiteTigerAchievement.py
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from abstract import RegularAchievement
@@ -7,15 +7,12 @@ import validators
 class WhiteTigerAchievement(RegularAchievement):
     WHITE_TIGER_COMP_DESCR = 56337
 
-    def __init__(self, dossier, value = None):
+    def __init__(self, dossier, value=None):
         super(WhiteTigerAchievement, self).__init__('whiteTiger', _AB.CLIENT, dossier, value)
 
     @classmethod
     def checkIsInDossier(cls, block, name, dossier):
-        if dossier is not None:
-            return bool(cls.__getWhiteTigerKillings(dossier))
-        else:
-            return False
+        return bool(cls.__getWhiteTigerKillings(dossier)) if dossier is not None else False
 
     @classmethod
     def checkIsValid(cls, block, name, dossier):

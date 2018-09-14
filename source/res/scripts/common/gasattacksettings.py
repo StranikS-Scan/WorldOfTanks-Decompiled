@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/GasAttackSettings.py
 import Math
 
@@ -13,22 +13,21 @@ class GasAttackSettings:
     DEATH_DELAY = 10
 
     def __init__(self, attackLength, preparationPeriod, position, startRadius, endRadius, compressionTime):
-        self.attackLength, self.preparationPeriod, self.position, self.startRadius, self.endRadius, self.compressionTime = (attackLength,
-         preparationPeriod,
-         Math.Vector3(position),
-         startRadius,
-         endRadius,
-         compressionTime)
+        self.attackLength = attackLength
+        self.preparationPeriod = preparationPeriod
+        self.position = Math.Vector3(position)
+        self.startRadius = startRadius
+        self.endRadius = endRadius
+        self.compressionTime = compressionTime
         if compressionTime == 0:
             self.compressionSpeed = 0
             self.startRadius = self.endRadius
         else:
             self.compressionSpeed = float(startRadius - endRadius) / compressionTime
 
-    def stateFor(self, timeFromActivation):
-        if timeFromActivation <= self.preparationPeriod:
-            return (GasAttackState.PREPARE, (self.position, self.startRadius))
-        currentRadius = self.startRadius - (timeFromActivation - self.preparationPeriod) * self.compressionSpeed
-        if currentRadius <= self.endRadius:
-            return (GasAttackState.DONE, (self.position, self.endRadius))
-        return (GasAttackState.ATTACK, (self.position, currentRadius))
+
+def gasAttackStateFor(settings, timeFromActivation):
+    if timeFromActivation <= settings.preparationPeriod:
+        return (GasAttackState.PREPARE, (settings.position, settings.startRadius))
+    currentRadius = settings.startRadius - (timeFromActivation - settings.preparationPeriod) * settings.compressionSpeed
+    return (GasAttackState.DONE, (settings.position, settings.endRadius)) if currentRadius <= settings.endRadius else (GasAttackState.ATTACK, (settings.position, currentRadius))

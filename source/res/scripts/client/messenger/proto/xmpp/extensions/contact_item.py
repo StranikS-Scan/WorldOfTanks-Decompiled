@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/contact_item.py
 from messenger.proto.xmpp.extensions import PyExtension
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG
@@ -7,7 +7,7 @@ from messenger.proto.xmpp.jid import ContactJID
 
 class ContactItemExtension(PyExtension):
 
-    def __init__(self, jid = None):
+    def __init__(self, jid=None):
         super(ContactItemExtension, self).__init__(_TAG.ITEM)
         if jid:
             self.setAttribute('jid', str(jid))

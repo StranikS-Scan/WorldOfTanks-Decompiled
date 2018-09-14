@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VehicleStickers.py
 import BigWorld
 from collections import namedtuple
@@ -32,7 +32,7 @@ class SlotTypes():
 
 class ModelStickers():
 
-    def __init__(self, vDesc, emblemSlots, onHull = True, insigniaRank = 0):
+    def __init__(self, vDesc, emblemSlots, onHull=True, insigniaRank=0):
         self.__slotsByType = {}
         self.__texParamsBySlotType = {}
         self.__isLoadingClanEmblems = False
@@ -114,7 +114,7 @@ class ModelStickers():
             if slotType != SlotTypes.CLAN or self.__clanID == 0 or replayCtrl.isPlaying and replayCtrl.isOffline:
                 if slotType != SlotTypes.CLAN:
                     self.__doAttachStickers(slotType)
-            elif slotType == SlotTypes.CLAN:
+            if slotType == SlotTypes.CLAN:
                 serverSettings = g_lobbyContext.getServerSettings()
                 if serverSettings is not None and serverSettings.roaming.isInRoaming() or self.__isLoadingClanEmblems:
                     continue
@@ -151,10 +151,7 @@ class ModelStickers():
             return
 
     def addDamageSticker(self, stickerID, segStart, segEnd):
-        if self.__model is None:
-            return 0
-        else:
-            return self.__stickerModel.addDamageSticker(stickerID, self.__model, segStart, segEnd)
+        return 0 if self.__model is None else self.__stickerModel.addDamageSticker(stickerID, self.__model, segStart, segEnd)
 
     def delDamageSticker(self, handle):
         if self.__model is not None:
@@ -257,7 +254,7 @@ class VehicleStickers(object):
     COMPONENT_NAMES = (TankComponentNames.HULL, TankComponentNames.TURRET, TankComponentNames.GUN)
     __INSIGNIA_NODE_NAME = 'G'
 
-    def __init__(self, vehicleDesc, insigniaRank = 0):
+    def __init__(self, vehicleDesc, insigniaRank=0):
         self.__showEmblemsOnGun = vehicleDesc.turret['showEmblemsOnGun']
         self.__defaultAlpha = vehicleDesc.type.emblemsAlpha
         self.__show = True

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/UsersInfoHelper.py
 from collections import defaultdict
 from debug_utils import LOG_DEBUG
@@ -70,7 +70,7 @@ class UsersInfoHelper(object):
     def getUserRegionCode(self, userDbID):
         return g_lobbyContext.getRegionCode(userDbID)
 
-    def getUserFullName(self, userDbID, isClan = True, isRegion = True):
+    def getUserFullName(self, userDbID, isClan=True, isRegion=True):
         user = self.getContact(userDbID)
         if not user.hasValidName():
             self._invalid['names'].add(userDbID)
@@ -84,8 +84,8 @@ class UsersInfoHelper(object):
             self._invalid['ratings'].add(userDbID)
         return user.getGlobalRating()
 
-    def getGuiUserData(self, userDbID):
-        user = self.getContact(userDbID)
+    def buildGuiUserData(self, user):
+        userDbID = user.getID()
         colorGetter = g_settings.getColorScheme('rosters').getColors
         return {'userName': self.getGuiUserName(userDbID),
          'clanAbbrev': self.getUserClanAbbrev(userDbID),
@@ -94,20 +94,25 @@ class UsersInfoHelper(object):
          'dbID': userDbID,
          'colors': colorGetter(user.getGuiType() if user else USER_GUI_TYPE.OTHER)}
 
-    def getGuiUserName(self, userDbID, formatter = lambda v: v):
+    def getGuiUserData(self, userDbID):
+        user = self.getContact(userDbID)
+        return self.buildGuiUserData(user)
+
+    def getGuiUserDataWithStatus(self, userDbID):
+        user = self.getContact(userDbID)
+        return (user.hasValidName() and user.hasValidRating(), self.buildGuiUserData(user))
+
+    def getGuiUserName(self, userDbID, formatter=lambda v: v):
         userName = self.getUserName(userDbID)
-        if userName:
-            return formatter(userName)
+        return formatter(userName) if userName else ''
 
-    def getGuiUserFullName(self, userDbID, isClan = True, isRegion = True, formatter = lambda v: v):
+    def getGuiUserFullName(self, userDbID, isClan=True, isRegion=True, formatter=lambda v: v):
         userFullName = self.getUserFullName(userDbID, isClan=isClan, isRegion=isRegion)
-        if userFullName:
-            return formatter(userFullName)
+        return formatter(userFullName) if userFullName else ''
 
-    def getGuiUserRating(self, userDbID, formatter = lambda v: v):
+    def getGuiUserRating(self, userDbID, formatter=lambda v: v):
         userRating = self.getUserRating(userDbID)
-        if userRating != '0':
-            return formatter(shared_fmts.getGlobalRatingFmt(userRating))
+        return formatter(shared_fmts.getGlobalRatingFmt(userRating)) if userRating != '0' else '-1'
 
     def syncUsersInfo(self):
         if len(self._invalid['names']):

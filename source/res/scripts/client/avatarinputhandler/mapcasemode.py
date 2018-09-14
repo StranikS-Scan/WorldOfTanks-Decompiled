@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/MapCaseMode.py
 from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler.ArtyHitMarker import ArtyHitMarker
@@ -38,10 +38,10 @@ class _DefaultStrikeSelector(object, CallbackDelayer):
     def onRecreateDevice(self):
         pass
 
-    def processSelection(self, position, reset = False):
+    def processSelection(self, position, reset=False):
         return False
 
-    def processHover(self, position, force = False):
+    def processHover(self, position, force=False):
         pass
 
     def processReplayHover(self):
@@ -86,7 +86,7 @@ class _VehiclesSelector():
         vehicles = [ v for v in BigWorld.player().vehicles if v.isAlive() ]
         selected = self.__intersectChecker(vehicles)
         for v in selected:
-            if v.isPlayer:
+            if v.isPlayerVehicle:
                 edgeType = 0
             elif BigWorld.player().team == v.publicInfo['team']:
                 edgeType = 2
@@ -149,7 +149,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
         gravity = Vector3(0, -self.__artyEquipmentUDO.gravity, 0)
         return (launchPosition, launchVelocity, gravity)
 
-    def processSelection(self, position, reset = False):
+    def processSelection(self, position, reset=False):
         self.hitPosition = position
         if reset:
             return False
@@ -157,16 +157,16 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
         return True
 
     def __markerForceUpdate(self):
-        self.__marker.update(self.hitPosition, Vector3(0, 0, 1), 10, 1000, None)
+        self.__marker.update(self.hitPosition, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), 1000.0, None)
         return
 
-    def processHover(self, position, force = False):
+    def processHover(self, position, force=False):
         if force:
             position = AimingSystems.getDesiredShotPoint(Math.Vector3(position[0], 500.0, position[2]), Math.Vector3(0.0, -1.0, 0.0), True, True, True)
             self.__marker.setPosition(position)
             BigWorld.callback(SERVER_TICK_LENGTH, self.__markerForceUpdate)
         else:
-            self.__marker.update(position, Vector3(0, 0, 1), 10, SERVER_TICK_LENGTH, None)
+            self.__marker.update(position, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), SERVER_TICK_LENGTH, None)
         self.hitPosition = position
         self.writeStateToReplay()
         return
@@ -177,7 +177,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
     def processReplayHover(self):
         replayCtrl = BattleReplay.g_replayCtrl
         _, self.hitPosition, direction = replayCtrl.getGunMarkerParams(self.hitPosition, Math.Vector3(0.0, 0.0, 0.0))
-        self.__marker.update(self.hitPosition, Vector3(0, 0, 1), 10, SERVER_TICK_LENGTH, None)
+        self.__marker.update(self.hitPosition, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), SERVER_TICK_LENGTH, None)
         return
 
     def writeStateToReplay(self):
@@ -199,7 +199,7 @@ _DEFAULT_STRIKE_DIRECTION = Vector3(1, 0, 0)
 
 class _AreaStrikeSelector(_DefaultStrikeSelector):
 
-    def __init__(self, position, equipment, direction = _DEFAULT_STRIKE_DIRECTION):
+    def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
         _DefaultStrikeSelector.__init__(self, position, equipment)
         self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment)
         self.direction = direction
@@ -226,14 +226,14 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
             self.area.setGUIVisible(isVisible)
         return
 
-    def processSelection(self, position, reset = False):
+    def processSelection(self, position, reset=False):
         direction = Vector2(self.direction.x, self.direction.z)
         direction.normalise()
         BigWorld.player().setEquipmentApplicationPoint(self.equipment.id[1], self.area.position, direction)
         self.writeStateToReplay()
         return True
 
-    def processHover(self, position, force = False):
+    def processHover(self, position, force=False):
         self.area.relocate(position, self.direction)
         self.writeStateToReplay()
 
@@ -266,7 +266,7 @@ class _BomberStrikeSelector(_AreaStrikeSelector, _VehiclesSelector):
         _AreaStrikeSelector.destroy(self)
         _VehiclesSelector.destroy(self)
 
-    def processSelection(self, position, reset = False):
+    def processSelection(self, position, reset=False):
         if reset:
             self.selectingPosition = True
             self.direction = _DEFAULT_STRIKE_DIRECTION
@@ -286,7 +286,7 @@ class _BomberStrikeSelector(_AreaStrikeSelector, _VehiclesSelector):
             self.area.setSelectingDirection(True)
             return False
 
-    def processHover(self, position, force = False):
+    def processHover(self, position, force=False):
         if self.selectingPosition:
             _AreaStrikeSelector.processHover(self, position)
         else:
@@ -339,7 +339,9 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
     def destroy(self):
         CallbackDelayer.destroy(self)
         self.disable()
-        self.__activeSelector = None
+        if self.__activeSelector is not None:
+            self.__activeSelector.destroy()
+            self.__activeSelector = None
         self.__cam.destroy()
         self.__aih = None
         return
@@ -380,7 +382,7 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
                 BigWorld.player().gunRotator.clientMode = True
             return
 
-    def handleKeyEvent(self, isDown, key, mods, event = None):
+    def handleKeyEvent(self, isDown, key, mods, event=None):
         assert self.__isEnabled
         cmdMap = CommandMapping.g_instance
         if key == Keys.KEY_LEFTMOUSE and isDown:
@@ -474,10 +476,7 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
 
     def getDesiredShotPoint(self):
         assert self.__isEnabled
-        if self.__aimingMode == 0:
-            return self.__getDesiredShotPoint()
-        else:
-            return None
+        return self.__getDesiredShotPoint() if self.__aimingMode == 0 else None
 
     def __getDesiredShotPoint(self):
         defaultPoint = self.__cam.aimingSystem.getDesiredShotPoint(True)
@@ -505,7 +504,7 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             assert self.__isEnabled
             self.__activeSelector.processReplayHover()
 
-    def turnOff(self, sendStopEquipment = True):
+    def turnOff(self, sendStopEquipment=True):
         if sendStopEquipment and MapCaseControlMode.deactivateCallback is not None:
             MapCaseControlMode.deactivateCallback()
             MapCaseControlMode.deactivateCallback = None

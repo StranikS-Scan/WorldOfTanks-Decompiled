@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BrowserMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -26,25 +26,19 @@ class BrowserMeta(AbstractWindowView):
         self._printOverrideError('onBrowserHide')
 
     def as_loadingStartS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_loadingStart()
+        return self.flashObject.as_loadingStart() if self._isDAAPIInited() else None
 
     def as_loadingStopS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_loadingStop()
+        return self.flashObject.as_loadingStop() if self._isDAAPIInited() else None
 
     def as_configureS(self, isDefaultBrowser, title, showActionBtn, showCloseBtn):
-        if self._isDAAPIInited():
-            return self.flashObject.as_configure(isDefaultBrowser, title, showActionBtn, showCloseBtn)
+        return self.flashObject.as_configure(isDefaultBrowser, title, showActionBtn, showCloseBtn) if self._isDAAPIInited() else None
 
     def as_setBrowserSizeS(self, width, height):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setBrowserSize(width, height)
+        return self.flashObject.as_setBrowserSize(width, height) if self._isDAAPIInited() else None
 
     def as_showServiceViewS(self, header, description):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showServiceView(header, description)
+        return self.flashObject.as_showServiceView(header, description) if self._isDAAPIInited() else None
 
     def as_hideServiceViewS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_hideServiceView()
+        return self.flashObject.as_hideServiceView() if self._isDAAPIInited() else None

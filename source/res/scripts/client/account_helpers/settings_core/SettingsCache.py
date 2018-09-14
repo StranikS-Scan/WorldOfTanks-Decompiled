@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/SettingsCache.py
 from Event import Event
 from adisp import async
@@ -33,10 +33,10 @@ class _SettingsCache(object):
         self.__invalidateData()
 
     @async
-    def update(self, callback = None):
+    def update(self, callback=None):
         self.__invalidateData(callback)
 
-    def getSectionSettings(self, section, defaultValue = 0):
+    def getSectionSettings(self, section, defaultValue=0):
         return self.__intSettings.getSetting(section, defaultValue)
 
     def setSectionSettings(self, section, value):
@@ -45,16 +45,16 @@ class _SettingsCache(object):
     def setSettings(self, settings):
         self.__intSettings.setSettings(settings)
 
-    def getSetting(self, key, defaultValue = 0):
+    def getSetting(self, key, defaultValue=0):
         return self.__intSettings.getSetting(key, defaultValue)
 
-    def getVersion(self, defaultValue = 0):
+    def getVersion(self, defaultValue=0):
         return self.__intSettings.getSetting('VERSION', defaultValue)
 
     def setVersion(self, value):
         self.__intSettings.setSetting('VERSION', value)
 
-    def __invalidateData(self, callback = lambda *args: None):
+    def __invalidateData(self, callback=lambda *args: None):
 
         def cbWrapper(*args):
             self.__waitForSync = False

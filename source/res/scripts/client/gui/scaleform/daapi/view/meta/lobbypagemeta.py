@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/LobbyPageMeta.py
 from gui.Scaleform.framework.entities.View import View
 
@@ -14,9 +14,7 @@ class LobbyPageMeta(View):
         self._printOverrideError('notifyCursorOver3dScene')
 
     def as_showHelpLayoutS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showHelpLayout()
+        return self.flashObject.as_showHelpLayout() if self._isDAAPIInited() else None
 
     def as_closeHelpLayoutS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_closeHelpLayout()
+        return self.flashObject.as_closeHelpLayout() if self._isDAAPIInited() else None

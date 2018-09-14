@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/CodeWarrior/Metrowerks_Shell_Suite.py
 """Suite Metrowerks Shell Suite: Events supported by the Metrowerks Project Shell
 Level 1, version 1
@@ -12,7 +13,7 @@ _code = 'MMPR'
 class Metrowerks_Shell_Suite_Events():
     _argmap_Add_Files = {'To_Segment': 'Segm'}
 
-    def Add_Files(self, _object, _attributes = {}, **_arguments):
+    def Add_Files(self, _object, _attributes={}, **_arguments):
         """Add Files: Add the specified file(s) to the current project
         Required argument: List of files to add
         Keyword argument To_Segment: Segment number into which to add the file(s)
@@ -26,12 +27,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Check_Syntax = {'ExternalEditor': 'Errs'}
 
-    def Check_Syntax(self, _object, _attributes = {}, **_arguments):
+    def Check_Syntax(self, _object, _attributes={}, **_arguments):
         """Check Syntax: Check the syntax of the specified file(s)
         Required argument: List of files to check the syntax of
         Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
@@ -45,10 +45,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Close_Project(self, _no_object = None, _attributes = {}, **_arguments):
+    def Close_Project(self, _no_object=None, _attributes={}, **_arguments):
         """Close Project: Close the current project
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -61,14 +60,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Close_Window = {'Saving': 'savo'}
 
-    def Close_Window(self, _object, _attributes = {}, **_arguments):
+    def Close_Window(self, _object, _attributes={}, **_arguments):
         """Close Window: Close the windows showing the specified files
         Required argument: The files to close
         Keyword argument Saving: Whether to save changes to each file before closing its window
@@ -82,12 +78,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Compile = {'ExternalEditor': 'Errs'}
 
-    def Compile(self, _object, _attributes = {}, **_arguments):
+    def Compile(self, _object, _attributes={}, **_arguments):
         """Compile: Compile the specified file(s)
         Required argument: List of files to compile
         Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
@@ -101,12 +96,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Create_Project = {'from_stationery': 'Tmpl'}
 
-    def Create_Project(self, _object, _attributes = {}, **_arguments):
+    def Create_Project(self, _object, _attributes={}, **_arguments):
         """Create Project: Create a new project file
         Required argument: New project file specifier
         Keyword argument from_stationery: undocumented, typecode 'alis'
@@ -119,10 +113,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Get_Definition(self, _object, _attributes = {}, **_arguments):
+    def Get_Definition(self, _object, _attributes={}, **_arguments):
         """Get Definition: Returns the location(s) of a globally scoped function or data object.
         Required argument: undocumented, typecode 'TEXT'
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -136,10 +129,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Get_Open_Documents(self, _no_object = None, _attributes = {}, **_arguments):
+    def Get_Open_Documents(self, _no_object=None, _attributes={}, **_arguments):
         """Get Open Documents: Returns the list of open documents
         Keyword argument _attributes: AppleEvent attribute dictionary
         Returns: The list of documents
@@ -153,15 +145,12 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Get_Preferences = {'of': 'PRec',
      'from_panel': 'PNam'}
 
-    def Get_Preferences(self, _no_object = None, _attributes = {}, **_arguments):
+    def Get_Preferences(self, _no_object=None, _attributes={}, **_arguments):
         """Get Preferences: Get the preferences for the current project
         Keyword argument of: Names of requested preferences
         Keyword argument from_panel: Name of the preference panel
@@ -176,14 +165,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Get_Project_File = {'Segment': 'Segm'}
 
-    def Get_Project_File(self, _object, _attributes = {}, **_arguments):
+    def Get_Project_File(self, _object, _attributes={}, **_arguments):
         """Get Project File: Returns a description of a file in the project window.
         Required argument: The index of the file within its segment.
         Keyword argument Segment: The segment containing the file.
@@ -197,10 +183,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Get_Project_Specifier(self, _no_object = None, _attributes = {}, **_arguments):
+    def Get_Project_Specifier(self, _no_object=None, _attributes={}, **_arguments):
         """Get Project Specifier: Return the File Specifier for the current project
         Keyword argument _attributes: AppleEvent attribute dictionary
         Returns: File Specifier for the current project
@@ -214,12 +199,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Get_Segments(self, _no_object = None, _attributes = {}, **_arguments):
+    def Get_Segments(self, _no_object=None, _attributes={}, **_arguments):
         """Get Segments: Returns a description of each segment in the project.
         Keyword argument _attributes: AppleEvent attribute dictionary
         Returns: undocumented, typecode 'Seg '
@@ -233,12 +215,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Get_member_function_names(self, _object, _attributes = {}, **_arguments):
+    def Get_member_function_names(self, _object, _attributes={}, **_arguments):
         """Get member function names: Returns a list containing the names of all the member functions of a class object
         Required argument: must be a class object
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -252,10 +231,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Get_nonsimple_classes(self, _no_object = None, _attributes = {}, **_arguments):
+    def Get_nonsimple_classes(self, _no_object=None, _attributes={}, **_arguments):
         """Get nonsimple classes: Returns an alphabetical list of classes with member functions, bases classes, or subclasses
         Keyword argument _attributes: AppleEvent attribute dictionary
         Returns: undocumented, typecode 'list'
@@ -269,12 +247,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Goto_Function(self, _object, _attributes = {}, **_arguments):
+    def Goto_Function(self, _object, _attributes={}, **_arguments):
         """Goto Function: Goto Specified Function Name
         Required argument: undocumented, typecode 'TEXT'
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -287,10 +262,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Goto_Line(self, _object, _attributes = {}, **_arguments):
+    def Goto_Line(self, _object, _attributes={}, **_arguments):
         """Goto Line: Goto Specified Line Number
         Required argument: The requested source file line number
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -303,10 +277,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Is_In_Project(self, _object, _attributes = {}, **_arguments):
+    def Is_In_Project(self, _object, _attributes={}, **_arguments):
         """Is In Project: Whether or not the specified file(s) is in the current project
         Required argument: List of files to check for project membership
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -320,12 +293,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Make_Project = {'ExternalEditor': 'Errs'}
 
-    def Make_Project(self, _no_object = None, _attributes = {}, **_arguments):
+    def Make_Project(self, _no_object=None, _attributes={}, **_arguments):
         """Make Project: Make the current project
         Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -339,12 +311,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Open_browser(self, _object, _attributes = {}, **_arguments):
+    def Open_browser(self, _object, _attributes={}, **_arguments):
         """Open browser: Display a class, member function, or data member object in a single class browser window
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -357,13 +326,12 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Precompile = {'Saving_As': 'Targ',
      'ExternalEditor': 'Errs'}
 
-    def Precompile(self, _object, _attributes = {}, **_arguments):
+    def Precompile(self, _object, _attributes={}, **_arguments):
         """Precompile: Precompile the specified file to the specified destination file
         Required argument: File to precompile
         Keyword argument Saving_As: Destination file for precompiled header
@@ -378,12 +346,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Preprocess = {'ExternalEditor': 'Errs'}
 
-    def Preprocess(self, _object, _attributes = {}, **_arguments):
+    def Preprocess(self, _object, _attributes={}, **_arguments):
         """Preprocess: Preprocesses the specified file(s)
         Required argument: undocumented, typecode 'alis'
         Keyword argument ExternalEditor: undocumented, typecode 'bool'
@@ -397,10 +364,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Remove_Binaries(self, _no_object = None, _attributes = {}, **_arguments):
+    def Remove_Binaries(self, _no_object=None, _attributes={}, **_arguments):
         """Remove Binaries: Remove the binary object code from the current project
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -413,12 +379,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Remove_Files(self, _object, _attributes = {}, **_arguments):
+    def Remove_Files(self, _object, _attributes={}, **_arguments):
         """Remove Files: Remove the specified file(s) from the current project
         Required argument: List of files to remove
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -432,10 +395,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Reset_File_Paths(self, _no_object = None, _attributes = {}, **_arguments):
+    def Reset_File_Paths(self, _no_object=None, _attributes={}, **_arguments):
         """Reset File Paths: Resets access paths for all files belonging to open project.
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -448,15 +410,12 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Run_Project = {'ExternalEditor': 'Errs',
      'SourceDebugger': 'DeBg'}
 
-    def Run_Project(self, _no_object = None, _attributes = {}, **_arguments):
+    def Run_Project(self, _no_object=None, _attributes={}, **_arguments):
         """Run Project: Run the current project
         Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
         Keyword argument SourceDebugger: Run the application under the control of the source-level debugger
@@ -471,12 +430,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Save_Error_Window_As(self, _object, _attributes = {}, **_arguments):
+    def Save_Error_Window_As(self, _object, _attributes={}, **_arguments):
         """Save Error Window As: Saves the Errors & Warnings window as a text file
         Required argument: Destination file for Save Message Window As
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -489,10 +445,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Set_Current_Target(self, _object = None, _attributes = {}, **_arguments):
+    def Set_Current_Target(self, _object=None, _attributes={}, **_arguments):
         """Set Current Target: Set the current target of a project
         Required argument: Name of target
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -505,10 +460,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Set_Default_Project(self, _object, _attributes = {}, **_arguments):
+    def Set_Default_Project(self, _object, _attributes={}, **_arguments):
         """Set Default Project: Set the default project
         Required argument: Name of project
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -521,12 +475,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Set_Modification_Date = {'to': 'MDat'}
 
-    def Set_Modification_Date(self, _object, _attributes = {}, **_arguments):
+    def Set_Modification_Date(self, _object, _attributes={}, **_arguments):
         """Set Modification Date: Changes the internal modification date of the specified file(s)
         Required argument: List of files
         Keyword argument to: undocumented, typecode 'ldt '
@@ -540,13 +493,12 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Set_Preferences = {'of_panel': 'PNam',
      'to': 'PRec'}
 
-    def Set_Preferences(self, _no_object = None, _attributes = {}, **_arguments):
+    def Set_Preferences(self, _no_object=None, _attributes={}, **_arguments):
         """Set Preferences: Set the preferences for the current project
         Keyword argument of_panel: Name of the preference panel
         Keyword argument to: Preferences settings
@@ -560,14 +512,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Set_Project_File = {'to': 'SrcS'}
 
-    def Set_Project_File(self, _object, _attributes = {}, **_arguments):
+    def Set_Project_File(self, _object, _attributes={}, **_arguments):
         """Set Project File: Changes the settings for a given file in the project.
         Required argument: The name of the file
         Keyword argument to: The new settings for the file
@@ -580,12 +529,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Set_Segment = {'to': 'Segm'}
 
-    def Set_Segment(self, _object, _attributes = {}, **_arguments):
+    def Set_Segment(self, _object, _attributes={}, **_arguments):
         """Set Segment: Changes the name and attributes of a segment.
         Required argument: The segment to change
         Keyword argument to: The new name and attributes for the segment.
@@ -598,10 +546,9 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def Touch(self, _object, _attributes = {}, **_arguments):
+    def Touch(self, _object, _attributes={}, **_arguments):
         """Touch: Force recompilation of the specified file(s)
         Required argument: List of files to compile
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -615,12 +562,11 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_Update_Project = {'ExternalEditor': 'Errs'}
 
-    def Update_Project(self, _no_object = None, _attributes = {}, **_arguments):
+    def Update_Project(self, _no_object=None, _attributes={}, **_arguments):
         """Update Project: Update the current project
         Keyword argument ExternalEditor: Should the contents of the message window be returned to the caller?
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -634,10 +580,7 @@ class Metrowerks_Shell_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class Browser_Coloring(aetools.ComponentItem):

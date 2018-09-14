@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/BombersWing.py
 from collections import namedtuple
 import math
@@ -9,7 +9,6 @@ import BigWorld
 import ResMgr
 from Math import Vector3
 import SoundGroups
-import FMOD
 CurveControlPoint = namedtuple('CurveControlPoint', ['position', 'direction', 'time'])
 BomberDesc = namedtuple('BomberDesc', ['modelName',
  'soundEvent',
@@ -84,11 +83,10 @@ class Bomber(object):
         if self.__sound is None:
             return
         else:
-            if FMOD.enabled:
-                self.__sound.setParameterByName('bombing', 1 if isAttacking else 0)
+            self.__sound.setRTPC('RTPC_ext_plane_bombing', 1 if isAttacking else 0)
             return
 
-    def addControlPoint(self, position, velocity, time, attackEnded = False):
+    def addControlPoint(self, position, velocity, time, attackEnded=False):
         callback = None
         if attackEnded:
             callback = self.__onAttackEnded

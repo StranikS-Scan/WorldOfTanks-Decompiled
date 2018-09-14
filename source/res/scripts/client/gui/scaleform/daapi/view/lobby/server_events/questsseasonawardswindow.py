@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsSeasonAwardsWindow.py
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from helpers.i18n import makeString as _ms
@@ -14,7 +14,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
 class QuestsSeasonAwardsWindow(QuestsSeasonAwardsWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(QuestsSeasonAwardsWindow, self).__init__()
         assert 'questsType' in ctx
         self.__questsType = ctx['questsType']
@@ -57,6 +57,7 @@ class QuestsSeasonAwardsWindow(QuestsSeasonAwardsWindowMeta):
              'extraAward': extraAward})
 
         self.as_setDataS({'windowTitle': _ms(QUESTS.SEASONAWARDSWINDOW_TITLE),
+         'visibleTabs': self._contentTabs.isVisible(),
          'awards': awards})
 
     def __packBasicAward(self, tile):

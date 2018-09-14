@@ -78,6 +78,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/japan/J03_Ha_Go/Ha_Go_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_Ha_Go>
@@ -930,17 +931,7 @@
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <_Type94_Otsu>	shared	  <unlocks>
-        <radio>	_Type94_Hei	  <cost>	430	</cost>
-        </radio>
-      </unlocks>
-    </_Type94_Otsu>
-    <_Type94_Hei>	shared	  <unlocks>
-        <radio>	_Type96_Bo	  <cost>	1400	</cost>
-        </radio>
-      </unlocks>
-    </_Type94_Hei>
-    <_Type96_Bo>	shared	</_Type96_Bo>
+    <_Type94_Hei>	shared	</_Type94_Hei>
   </radios>
   <effects>
     <collision></collision>

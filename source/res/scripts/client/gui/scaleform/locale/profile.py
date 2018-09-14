@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/PROFILE.py
 
 
@@ -531,5 +531,5 @@ class PROFILE(object):
     def profile_dropdown_labels(key):
         outcome = '#profile:profile/dropdown/labels/%s' % key
         if outcome not in PROFILE.PROFILE_DROPDOWN_LABELS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

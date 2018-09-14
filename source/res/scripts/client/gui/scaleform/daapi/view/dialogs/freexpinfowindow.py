@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/FreeXPInfoWindow.py
 from gui.Scaleform.daapi.view.meta.FreeXPInfoWindowMeta import FreeXPInfoWindowMeta
 __author__ = 'd_savitski'
 
 class FreeXPInfoWindow(FreeXPInfoWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FreeXPInfoWindow, self).__init__()
         self.meta = ctx.get('meta')
         self.handler = ctx.get('handler')

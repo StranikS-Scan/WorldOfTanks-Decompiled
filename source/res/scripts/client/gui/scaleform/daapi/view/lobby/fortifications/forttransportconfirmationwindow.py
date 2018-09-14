@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortTransportConfirmationWindow.py
 import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
@@ -20,7 +20,7 @@ from helpers import i18n
 
 class FortTransportConfirmationWindow(FortTransportConfirmationWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortTransportConfirmationWindow, self).__init__()
         self.__fromId = ctx.get('fromId')
         self.__toId = ctx.get('toId')
@@ -65,7 +65,7 @@ class FortTransportConfirmationWindow(FortTransportConfirmationWindowMeta, FortV
     def onUpdated(self, isFullUpdate):
         self._update()
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         if buildingTypeID in (self.getServerBuildId(), self.getServerBuildId(False)) and reason == BUILDING_UPDATE_REASON.DELETED:
             self.__changeStateAndDestroy()
 
@@ -101,10 +101,10 @@ class FortTransportConfirmationWindow(FortTransportConfirmationWindowMeta, FortV
             restriction = self.fortCtrl.getFort().getTransportationLevel().maxResource
             return min(storages, restriction)
 
-    def getBuildDescr(self, isSource = True):
+    def getBuildDescr(self, isSource=True):
         return self.fortCtrl.getFort().getBuilding(self.getServerBuildId(isSource))
 
-    def getServerBuildId(self, isSource = True):
+    def getServerBuildId(self, isSource=True):
         return self.getBuildingIDbyUID(self.__fromId if isSource else self.__toId)
 
     def __forcedCloseWindow(self, _):

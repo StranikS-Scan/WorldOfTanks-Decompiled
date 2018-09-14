@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ModuleInfoWindow.py
 import BigWorld
 from gui.shared import g_itemsCache
@@ -13,7 +13,7 @@ from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
 
 class ModuleInfoWindow(ModuleInfoMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(ModuleInfoWindow, self).__init__()
         self.moduleCompactDescr = int(ctx.get('moduleCompactDescr'))
         self.__vehicleDescr = ctx.get('vehicleDescr')

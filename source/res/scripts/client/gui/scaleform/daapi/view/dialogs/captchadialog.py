@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/CaptchaDialog.py
 import threading
 import time
@@ -76,10 +76,10 @@ class CaptchaDialog(CAPTCHAMeta):
         controller = self.controller
         if self.__challenge is None:
             self.as_setErrorMessageS(controller.getCaptchaClientError('challenge-is-empty'))
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         if not len(response):
             self.as_setErrorMessageS(controller.getCaptchaClientError('response-is-empty'))
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         Waiting.show('verifyCaptcha')
         result, errorCode = yield controller.verify(self.__challenge, response)
         Waiting.hide('verifyCaptcha')

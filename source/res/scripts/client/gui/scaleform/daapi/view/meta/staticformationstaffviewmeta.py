@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StaticFormationStaffViewMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -26,17 +26,13 @@ class StaticFormationStaffViewMeta(BaseDAAPIComponent):
         self._printOverrideError('assignPrivate')
 
     def as_setStaticHeaderDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setStaticHeaderData(data)
+        return self.flashObject.as_setStaticHeaderData(data) if self._isDAAPIInited() else None
 
     def as_updateHeaderDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateHeaderData(data)
+        return self.flashObject.as_updateHeaderData(data) if self._isDAAPIInited() else None
 
     def as_updateStaffDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateStaffData(data)
+        return self.flashObject.as_updateStaffData(data) if self._isDAAPIInited() else None
 
     def as_setRecruitmentAvailabilityS(self, available):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setRecruitmentAvailability(available)
+        return self.flashObject.as_setRecruitmentAvailability(available) if self._isDAAPIInited() else None

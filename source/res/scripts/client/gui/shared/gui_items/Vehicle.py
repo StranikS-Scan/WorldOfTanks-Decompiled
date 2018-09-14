@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/Vehicle.py
 from itertools import izip
 import BigWorld
@@ -63,6 +63,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     EVENT = 'event_battles'
     EXCLUDED_FROM_SANDBOX = 'excluded_from_sandbox'
     TELECOM = 'telecom'
+    FALLOUT = 'fallout'
 
 
 class Vehicle(FittingItem, HasStrCD):
@@ -119,7 +120,7 @@ class Vehicle(FittingItem, HasStrCD):
         WARNING = 'warning'
         RENTED = 'rented'
 
-    def __init__(self, strCompactDescr = None, inventoryID = -1, typeCompDescr = None, proxy = None):
+    def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         if strCompactDescr is not None:
             vehDescr = vehicles.VehicleDescr(compactDescr=strCompactDescr)
         else:
@@ -139,6 +140,7 @@ class Vehicle(FittingItem, HasStrCD):
         self.rentPackages = []
         self.hasRentPackages = False
         self.isDisabledForBuy = False
+        self.isSelected = False
         invData = dict()
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced():
             invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
@@ -154,6 +156,7 @@ class Vehicle(FittingItem, HasStrCD):
             self.clanLock = clanDamageLock or clanNewbieLock
             self.isDisabledForBuy = self.intCD in proxy.shop.getNotToBuyVehicles()
             self.hasRentPackages = bool(proxy.shop.getVehicleRentPrices().get(self.intCD, {}))
+            self.isSelected = bool(self.invID in proxy.stats.oldVehInvIDs)
         self.inventoryCount = 1 if len(invData.keys()) else 0
         data = invData.get('rent')
         if data is not None:
@@ -189,9 +192,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def buyPrice(self):
-        if self.isRented and not self.rentalIsOver:
-            return (self._buyPrice[0] - self.rentCompensation[0], self._buyPrice[1] - self.rentCompensation[1])
-        return self._buyPrice
+        return (self._buyPrice[0] - self.rentCompensation[0], self._buyPrice[1] - self.rentCompensation[1]) if self.isRented and not self.rentalIsOver else self._buyPrice
 
     def getUnlockDescrByIntCD(self, intCD):
         for unlockIdx, data in enumerate(self.descriptor.type.unlocksDescrs):
@@ -278,10 +279,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @staticmethod
     def __crewSort(t1, t2):
-        if t1 is None or t2 is None:
-            return 0
-        else:
-            return t1.__cmp__(t2)
+        return 0 if t1 is None or t2 is None else t1.__cmp__(t2)
 
     def _parseCompDescr(self, compactDescr):
         nId, innID = vehicles.parseVehicleCompactDescr(compactDescr)
@@ -364,10 +362,7 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def minRentPrice(self):
         minRentPackage = self.getRentPackage()
-        if minRentPackage is not None:
-            return minRentPackage.get('rentPrice', None)
-        else:
-            return
+        return minRentPackage.get('rentPrice', None) if minRentPackage is not None else None
 
     @property
     def isRented(self):
@@ -379,17 +374,15 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def maxRentDuration(self):
-        if len(self.rentPackages) > 0:
-            return max((item['days'] for item in self.rentPackages)) * self.MAX_RENT_MULTIPLIER * time_utils.ONE_DAY
+        return max((item['days'] for item in self.rentPackages)) * self.MAX_RENT_MULTIPLIER * time_utils.ONE_DAY if len(self.rentPackages) > 0 else 0
 
     @property
     def minRentDuration(self):
-        if len(self.rentPackages) > 0:
-            return min((item['days'] for item in self.rentPackages)) * time_utils.ONE_DAY
+        return min((item['days'] for item in self.rentPackages)) * time_utils.ONE_DAY if len(self.rentPackages) > 0 else 0
 
     @property
     def rentalIsOver(self):
-        return self.isRented and self.rentLimitIsReached
+        return self.isRented and self.rentLimitIsReached and not self.isSelected
 
     @property
     def rentalIsActive(self):
@@ -449,11 +442,9 @@ class Vehicle(FittingItem, HasStrCD):
     def modelState(self):
         if self.health < 0:
             return Vehicle.VEHICLE_STATE.EXPLODED
-        if self.repairCost > 0 and self.health == 0:
-            return Vehicle.VEHICLE_STATE.DESTROYED
-        return Vehicle.VEHICLE_STATE.UNDAMAGED
+        return Vehicle.VEHICLE_STATE.DESTROYED if self.repairCost > 0 and self.health == 0 else Vehicle.VEHICLE_STATE.UNDAMAGED
 
-    def getState(self, isCurrnentPlayer = True):
+    def getState(self, isCurrnentPlayer=True):
         ms = self.modelState
         if self.isInBattle:
             ms = Vehicle.VEHICLE_STATE.BATTLE
@@ -486,7 +477,7 @@ class Vehicle(FittingItem, HasStrCD):
     def clearCustomState(self):
         self.__customState = ''
 
-    def __checkUndamagedState(self, state, isCurrnentPlayer = True):
+    def __checkUndamagedState(self, state, isCurrnentPlayer=True):
         if state == Vehicle.VEHICLE_STATE.UNDAMAGED and isCurrnentPlayer:
             if self.isBroken:
                 return Vehicle.VEHICLE_STATE.DAMAGED
@@ -509,14 +500,12 @@ class Vehicle(FittingItem, HasStrCD):
     @classmethod
     def __getFalloutSelectedVehInvIDs(cls):
         from gui.game_control import getFalloutCtrl
-        if Vehicle.__isFalloutEnabled():
-            return getFalloutCtrl().getSelectedSlots()
+        return getFalloutCtrl().getSelectedSlots() if Vehicle.__isFalloutEnabled() else ()
 
     @classmethod
     def __getFalloutAvailableVehIDs(cls):
         from gui.game_control import getFalloutCtrl
-        if Vehicle.__isFalloutEnabled():
-            return getFalloutCtrl().getConfig().allowedVehicles
+        return getFalloutCtrl().getConfig().allowedVehicles if Vehicle.__isFalloutEnabled() else ()
 
     @classmethod
     def __isFalloutEnabled(cls):
@@ -524,7 +513,7 @@ class Vehicle(FittingItem, HasStrCD):
         return getFalloutCtrl().isSelected()
 
     def isFalloutOnly(self):
-        return self.isOnlyForEventBattles
+        return _checkForTags(self.tags, VEHICLE_TAGS.FALLOUT)
 
     def isGroupReady(self):
         from gui.game_control import getFalloutCtrl
@@ -558,9 +547,7 @@ class Vehicle(FittingItem, HasStrCD):
          Vehicle.VEHICLE_STATE.NOT_SUITABLE,
          Vehicle.VEHICLE_STATE.DEAL_IS_OVER):
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
-        if state in (Vehicle.VEHICLE_STATE.UNDAMAGED,):
-            return Vehicle.VEHICLE_STATE_LEVEL.INFO
-        return Vehicle.VEHICLE_STATE_LEVEL.WARNING
+        return Vehicle.VEHICLE_STATE_LEVEL.INFO if state in (Vehicle.VEHICLE_STATE.UNDAMAGED,) else Vehicle.VEHICLE_STATE_LEVEL.WARNING
 
     @property
     def isPremium(self):
@@ -596,7 +583,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isFalloutAvailable(self):
-        return self.intCD in self.__getFalloutAvailableVehIDs()
+        return not self.isOnlyForEventBattles and self.intCD in self.__getFalloutAvailableVehIDs()
 
     @property
     def isDisabledInRoaming(self):
@@ -635,8 +622,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def fullDescription(self):
-        if self.descriptor.type.description.find('_descr') == -1:
-            return self.descriptor.type.description
+        return self.descriptor.type.description if self.descriptor.type.description.find('_descr') == -1 else ''
 
     @property
     def tags(self):
@@ -713,7 +699,7 @@ class Vehicle(FittingItem, HasStrCD):
                 return True
         return False
 
-    def isReadyToPrebattle(self, checkForRent = True):
+    def isReadyToPrebattle(self, checkForRent=True):
         if checkForRent and self.rentalIsOver:
             return False
         if self.isFalloutOnly() and not self.__isFalloutEnabled():
@@ -727,6 +713,8 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isReadyToFight(self):
+        if self.__isFalloutEnabled() and not self.isFalloutSelected:
+            return True
         if self.rentalIsOver:
             return False
         if self.isFalloutOnly() and not self.__isFalloutEnabled():
@@ -777,9 +765,7 @@ class Vehicle(FittingItem, HasStrCD):
     def mayPurchase(self, money):
         if self.isDisabledForBuy:
             return (False, 'isDisabledForBuy')
-        if self.isPremiumIGR:
-            return (False, 'premiumIGR')
-        return super(Vehicle, self).mayPurchase(money)
+        return (False, 'premiumIGR') if self.isPremiumIGR else super(Vehicle, self).mayPurchase(money)
 
     def mayRentOrBuy(self, money):
         if self.isDisabledForBuy and not self.isRentable:
@@ -801,7 +787,7 @@ class Vehicle(FittingItem, HasStrCD):
             return (False, '%s_rent_error' % currency)
         return self.mayPurchase(money)
 
-    def getRentPackage(self, days = None):
+    def getRentPackage(self, days=None):
         if days is not None:
             for package in self.rentPackages:
                 if package.get('days', None) == days:
@@ -814,10 +800,9 @@ class Vehicle(FittingItem, HasStrCD):
     def getGUIEmblemID(self):
         return self.icon
 
-    def getRentPackageActionPrc(self, days = None):
+    def getRentPackageActionPrc(self, days=None):
         package = self.getRentPackage(days)
-        if package:
-            return getActionPrc(package['rentPrice'], package['defaultRentPrice'])
+        return getActionPrc(package['rentPrice'], package['defaultRentPrice']) if package else 0
 
     def getAutoUnlockedItems(self):
         return self.descriptor.type.autounlockedItems[:]
@@ -841,10 +826,7 @@ class Vehicle(FittingItem, HasStrCD):
         return (data[0], data[1], set(data[2:]))
 
     def __eq__(self, other):
-        if other is None:
-            return False
-        else:
-            return self.descriptor.type.id == other.descriptor.type.id
+        return False if other is None else self.descriptor.type.id == other.descriptor.type.id
 
     def __repr__(self):
         return 'Vehicle<id:%d, intCD:%d, nation:%d, lock:%s>' % (self.invID,
@@ -852,7 +834,7 @@ class Vehicle(FittingItem, HasStrCD):
          self.nationID,
          self.lock)
 
-    def _getShortInfo(self, vehicle = None, expanded = False):
+    def _getShortInfo(self, vehicle=None, expanded=False):
         description = i18n.makeString('#menu:descriptions/' + self.itemTypeName)
         caliber = self.descriptor.gun['shots'][0]['shell']['caliber']
         armor = findVehicleArmorMinMax(self.descriptor)
@@ -875,7 +857,7 @@ def getTypeShortUserName(vehType):
     return i18n.makeString('#menu:classes/short/%s' % vehType)
 
 
-def _getLevelIconName(vehLevel, postfix = ''):
+def _getLevelIconName(vehLevel, postfix=''):
     return 'tank_level_%s%d.png' % (postfix, int(vehLevel))
 
 
@@ -903,7 +885,7 @@ def getSmallIconPath(vehicleName):
     return '../maps/icons/vehicle/small/%s' % getItemIconName(vehicleName)
 
 
-def getUniqueIconPath(vehicleName, withLightning = False):
+def getUniqueIconPath(vehicleName, withLightning=False):
     if withLightning:
         return '../maps/icons/vehicle/unique/%s' % getItemIconName(vehicleName)
     else:
@@ -918,15 +900,15 @@ def getTypeSmallIconPath(vehicleType):
     return '../maps/icons/vehicleTypes/%s' % getTypeIconName(vehicleType)
 
 
-def getUserName(vehicleType, textPrefix = False):
+def getUserName(vehicleType, textPrefix=False):
     return _getActualName(vehicleType.userString, vehicleType.tags, textPrefix)
 
 
-def getShortUserName(vehicleType, textPrefix = False):
+def getShortUserName(vehicleType, textPrefix=False):
     return _getActualName(vehicleType.shortUserString, vehicleType.tags, textPrefix)
 
 
-def _getActualName(name, tags, textPrefix = False):
+def _getActualName(name, tags, textPrefix=False):
     if _checkForTags(tags, VEHICLE_TAGS.PREMIUM_IGR):
         if textPrefix:
             return i18n.makeString(ITEM_TYPES.MARKER_IGR, vehName=name)

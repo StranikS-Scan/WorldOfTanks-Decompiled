@@ -105,6 +105,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A18_M41/M41_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
     </camouflage>
@@ -678,7 +679,7 @@
       <circularVisionRadius>	310	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	55	</maxHealth>
-        <maxRegenHealth>	27.5	</maxRegenHealth>
+        <maxRegenHealth>	27.0	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -736,7 +737,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	2.000 0.000 0.966 -0.011 1.268 0.045 0.550 0.299 0.131 0.500 0.257 0.500 0.159 0.000 0.581	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
@@ -763,7 +764,7 @@
     <SCR_610>	shared	  <unlocks>
         <radio>	SCR_619	  <cost>	9000	</cost>
         </radio>
-        <vehicle>	M44	  <cost>	33800	</cost>
+        <vehicle>	A87_M44	  <cost>	33800	</cost>
         </vehicle>
       </unlocks>
     </SCR_610>

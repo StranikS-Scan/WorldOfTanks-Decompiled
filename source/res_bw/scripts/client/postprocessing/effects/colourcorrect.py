@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Effects/ColourCorrect.py
 from PostProcessing.RenderTargets import *
 from PostProcessing.Phases import *
@@ -23,7 +23,7 @@ types = ['system/maps/post_processing/colour_correct.bmp',
 toneMap = MaterialTextureProperty(_colourCorrectEffectName, -1, 'lookupTexture', types)
 
 @implementEffectFactory('Colour correct', 'Apply a tone-map to the colours in the scene using a lookup texture.')
-def colourCorrect(texName = 'system/maps/post_processing/colour_correct.dds'):
+def colourCorrect(texName='system/maps/post_processing/colour_correct.dds'):
     """This method creates and returns a post-process effect that performs
     colour correction, or tone mapping, based on the colour_correct.fx effect.
     """

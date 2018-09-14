@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/gun_rotation_shared.py
 import BigWorld
 import Math
@@ -46,9 +46,7 @@ def decodeGunAngles(code, pitchLimits):
 def _clamp(minBound, value, maxBound):
     if value < minBound:
         return minBound
-    if value > maxBound:
-        return maxBound
-    return value
+    return maxBound if value > maxBound else value
 
 
 def isShootPositionInsideOtherVehicle(vehicle, turretPosition, shootPosition):
@@ -59,7 +57,7 @@ def isShootPositionInsideOtherVehicle(vehicle, turretPosition, shootPosition):
             arenaVehicles = BigWorld.player().arena.vehicles
             for id in arenaVehicles.iterkeys():
                 v = BigWorld.entities.get(id)
-                if v and not v.isPlayer:
+                if v and not v.isPlayerVehicle:
                     nearVehicles.append(v)
 
             return nearVehicles

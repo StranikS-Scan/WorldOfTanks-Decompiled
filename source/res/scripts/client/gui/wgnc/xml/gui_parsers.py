@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/gui_parsers.py
 from debug_utils import LOG_WARNING
 from gui.wgnc.settings import WGNC_POP_UP_PRIORITIES
@@ -54,7 +54,7 @@ class _PopUpParser(SectionParser):
 class _WindowParser(SectionParser):
     __slots__ = ('_itemClass',)
 
-    def __init__(self, itemClass = gui_items.WindowItem):
+    def __init__(self, itemClass=gui_items.WindowItem):
         super(_WindowParser, self).__init__()
         self._itemClass = itemClass
 
@@ -109,7 +109,7 @@ class _RecruitParser(SectionParser):
 
 class _PollParser(_WindowParser):
 
-    def __init__(self, itemClass = gui_items.PollItem):
+    def __init__(self, itemClass=gui_items.PollItem):
         super(_PollParser, self).__init__(itemClass)
 
     def getTagName(self):

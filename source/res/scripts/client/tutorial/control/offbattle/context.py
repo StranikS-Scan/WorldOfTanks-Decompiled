@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/offbattle/context.py
 from constants import FINISH_REASON, IS_TUTORIAL_ENABLED
 from tutorial import doc_loader
@@ -112,12 +112,9 @@ class OffbattleStartReqs(context.StartReqs):
 
 class OffbattleBonusesRequester(LobbyBonusesRequester):
 
-    def __init__(self, completed, chapter = None):
+    def __init__(self, completed, chapter=None):
         super(OffbattleBonusesRequester, self).__init__(completed)
         self.__chapter = chapter
 
-    def getChapter(self, chapterID = None):
-        if self.__chapter is not None:
-            return self.__chapter
-        else:
-            return self._data
+    def getChapter(self, chapterID=None):
+        return self.__chapter if self.__chapter is not None else self._data

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/HTMLParser.py
 """A parser for HTML and XHTML."""
 import markupbase
@@ -20,7 +20,7 @@ endtagfind = re.compile('</\\s*([a-zA-Z][-.a-zA-Z0-9:_]*)\\s*>')
 class HTMLParseError(Exception):
     """Exception raised for all parse errors."""
 
-    def __init__(self, msg, position = (None, None)):
+    def __init__(self, msg, position=(None, None)):
         assert msg
         self.msg = msg
         self.lineno = position[0]
@@ -146,7 +146,7 @@ class HTMLParser(markupbase.ParserBase):
                         k += 1
                     self.handle_data(rawdata[i:k])
                 i = self.updatepos(i, k)
-            elif startswith('&#', i):
+            if startswith('&#', i):
                 match = charref.match(rawdata, i)
                 if match:
                     name = match.group()[2:-1]
@@ -161,7 +161,7 @@ class HTMLParser(markupbase.ParserBase):
                         self.handle_data(rawdata[i:i + 2])
                         i = self.updatepos(i, i + 2)
                     break
-            elif startswith('&', i):
+            if startswith('&', i):
                 match = entityref.match(rawdata, i)
                 if match:
                     name = match.group(1)
@@ -181,8 +181,7 @@ class HTMLParser(markupbase.ParserBase):
                     i = self.updatepos(i, i + 1)
                 else:
                     break
-            else:
-                assert 0, 'interesting.search() lied'
+            assert 0, 'interesting.search() lied'
 
         if end and i < n and not self.cdata_elem:
             self.handle_data(rawdata[i:n])
@@ -206,7 +205,7 @@ class HTMLParser(markupbase.ParserBase):
         else:
             return self.parse_bogus_comment(i)
 
-    def parse_bogus_comment(self, i, report = 1):
+    def parse_bogus_comment(self, i, report=1):
         rawdata = self.rawdata
         if rawdata[i:i + 2] not in ('<!', '</'):
             self.error('unexpected call to parse_comment()')
@@ -248,8 +247,8 @@ class HTMLParser(markupbase.ParserBase):
                 attrname, rest, attrvalue = m.group(1, 2, 3)
                 if not rest:
                     attrvalue = None
-                elif attrvalue[:1] == "'" == attrvalue[-1:] or attrvalue[:1] == '"' == attrvalue[-1:]:
-                    attrvalue = attrvalue[1:-1]
+                elif not attrvalue[:1] == "'" == attrvalue[-1:]:
+                    attrvalue = attrvalue[:1] == '"' == attrvalue[-1:] and attrvalue[1:-1]
                 if attrvalue:
                     attrvalue = self.unescape(attrvalue)
                 attrs.append((attrname.lower(), attrvalue))

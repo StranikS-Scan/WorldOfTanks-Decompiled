@@ -61,6 +61,8 @@
   <ClientMethods>
     <onChatAction>
       <Arg>	CHAT_ACTION_DATA	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </onChatAction>
   </ClientMethods>
 </chat.def>

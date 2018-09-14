@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/AbstractRallyWindow.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
@@ -12,7 +12,7 @@ class AbstractRallyWindow(AbstractRallyWindowMeta):
         self._viewToLoad = None
         return
 
-    def _requestViewLoad(self, flashAlias, itemID, closeForced = False):
+    def _requestViewLoad(self, flashAlias, itemID, closeForced=False):
         flashAliases = self.getFlashAliases()
         pythonAliases = self.getPythonAliases()
         if flashAlias in flashAliases:
@@ -22,7 +22,7 @@ class AbstractRallyWindow(AbstractRallyWindowMeta):
         else:
             LOG_ERROR('Passed flash alias is not registered:', flashAlias)
 
-    def _processStacks(self, closeForced = False):
+    def _processStacks(self, closeForced=False):
         if self._viewToUnload is not None:
             flashAlias, pyAlias, itemID = self._viewToUnload
             pyView = self.components.get(pyAlias)

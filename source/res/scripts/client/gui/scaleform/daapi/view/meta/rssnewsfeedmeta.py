@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RssNewsFeedMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -8,5 +8,4 @@ class RssNewsFeedMeta(BaseDAAPIComponent):
         self._printOverrideError('openBrowser')
 
     def as_updateFeedS(self, feed):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateFeed(feed)
+        return self.flashObject.as_updateFeed(feed) if self._isDAAPIInited() else None

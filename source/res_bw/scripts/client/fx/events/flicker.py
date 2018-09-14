@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/Flicker.py
 from FX.Event import Event
 from FX import s_sectionProcessors
@@ -25,7 +25,7 @@ class Flicker(Event):
         self.speed = 1.0
         return
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """This method loads the Flicker event from an XML data section.  It
         reads in two values:
         - speed ( multiplier on standard speed of the standard effect )

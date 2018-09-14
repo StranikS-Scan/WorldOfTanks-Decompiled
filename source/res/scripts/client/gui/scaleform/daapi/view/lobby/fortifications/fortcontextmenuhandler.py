@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortContextMenuHandler.py
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.locale.MENU import MENU
@@ -10,7 +10,7 @@ from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 
 class FortContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity, FortViewHelper):
 
-    def __init__(self, cmProxy, ctx = None):
+    def __init__(self, cmProxy, ctx=None):
         super(FortContextMenuHandler, self).__init__(cmProxy, ctx, {FORTIFICATION_ALIASES.CTX_ACTION_DIRECTION_CONTROL: 'fortDirection',
          FORTIFICATION_ALIASES.CTX_ACTION_PREPARE_ORDER: 'fortPrepareOrder',
          FORTIFICATION_ALIASES.CTX_ACTION_ASSIGN_PLAYERS: 'fortAssignPlayers',
@@ -42,7 +42,7 @@ class FortContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity, Fort
         self.buildingID = None
         return
 
-    def _generateOptions(self, ctx = None):
+    def _generateOptions(self, ctx=None):
         result = []
         buildingDescr = self.fortCtrl.getFort().getBuilding(FortViewHelper.getBuildingIDbyUID(self.buildingID))
         if buildingDescr is not None and self.fortCtrl.getPermissions().canViewContext():

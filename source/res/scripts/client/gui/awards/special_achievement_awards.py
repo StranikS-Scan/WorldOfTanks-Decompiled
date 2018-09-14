@@ -1,20 +1,22 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
 import BigWorld
 import constants
 from debug_utils import LOG_ERROR
+from gui.Scaleform.locale.CLANS import CLANS
 from gui.goodies.Booster import _BOOSTER_DESCRIPTION_LOCALE
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
-from helpers import i18n, int2roman
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract
+from helpers import i18n
 
 class ResearchAward(AwardAbstract):
 
     def __init__(self, vehiclesCount, messageNumber):
+        super(ResearchAward, self).__init__()
         self.vehiclesCount = vehiclesCount
         self.messageNumber = messageNumber
 
@@ -37,6 +39,7 @@ class ResearchAward(AwardAbstract):
 class VictoryAward(AwardAbstract):
 
     def __init__(self, victoriesCount, messageNumber):
+        super(VictoryAward, self).__init__()
         self.victoriesCount = victoriesCount
         self.messageNumber = messageNumber
 
@@ -53,12 +56,13 @@ class VictoryAward(AwardAbstract):
         return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_SPECIALACHIEVEMENT_HEADER))
 
     def getDescription(self):
-        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/victory/description%d' % self.messageNumber, victoriesCount=self.victoriesCount))
+        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/victory/description%d' % self.messageNumber, victoriesCount=BigWorld.wg_getIntegralFormat(self.victoriesCount)))
 
 
 class BattleAward(AwardAbstract):
 
     def __init__(self, battlesCount, messageNumber):
+        super(BattleAward, self).__init__()
         self.battlesCount = battlesCount
         self.messageNumber = messageNumber
 
@@ -75,7 +79,7 @@ class BattleAward(AwardAbstract):
         return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_SPECIALACHIEVEMENT_HEADER))
 
     def getDescription(self):
-        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/battle/description%d' % self.messageNumber, battlesCount=self.battlesCount))
+        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/battle/description%d' % self.messageNumber, battlesCount=BigWorld.wg_getIntegralFormat(self.battlesCount)))
 
 
 class PvEBattleAward(BattleAward):
@@ -93,47 +97,10 @@ class PvEBattleAward(BattleAward):
         shared_events.runTutorialChain('PvE_Chain')
 
 
-class PremiumDiscountAward(AwardAbstract):
-
-    def __init__(self, researchLvl, premiumPacket, discount):
-        self.researchLvl = researchLvl
-        self.premiumPacket = premiumPacket
-        self.discount = discount
-
-    def getWindowTitle(self):
-        return i18n.makeString(MENU.PREMIUMCONGRATULATION_TITLE)
-
-    def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
-
-    def getAwardImage(self):
-        return '../maps/icons/windows/prem/icon_prem%s_256.png' % self.premiumPacket
-
-    def getHeader(self):
-        return text_styles.highTitle(MENU.PREMIUMCONGRATULATION_HEDER)
-
-    def getBodyButtonText(self):
-        return i18n.makeString(MENU.PREMIUMCONGRATULATION_BTNLABEL)
-
-    def getCloseButtonText(self):
-        return i18n.makeString(MENU.PREMIUMCONGRATULATION_CLOSEBTN)
-
-    def getPercentDiscount(self):
-        return '%d%%' % self.discount
-
-    def getDuration(self):
-        return i18n.makeString('#menu:premium/packet/days%s' % self.premiumPacket)
-
-    def getDescription(self):
-        return text_styles.main(i18n.makeString(MENU.PREMIUMCONGRATULATION_DESCRIPTION, level=int2roman(self.researchLvl), duration=self.getDuration(), discount=self.getPercentDiscount()))
-
-    def handleBodyButton(self):
-        event_dispatcher.showPremiumWindow()
-
-
 class BoosterAward(AwardAbstract):
 
     def __init__(self, booster):
+        super(BoosterAward, self).__init__()
         self._booster = booster
 
     def getWindowTitle(self):
@@ -146,7 +113,7 @@ class BoosterAward(AwardAbstract):
         return self._booster.bigIcon
 
     def getHeader(self):
-        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_BOOSTERAWARD_HEADER, boosterName=i18n.makeString(_BOOSTER_DESCRIPTION_LOCALE % self._booster.boosterGuiType, effectValue=self._booster.effectValue)))
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_BOOSTERAWARD_HEADER, boosterName=i18n.makeString(_BOOSTER_DESCRIPTION_LOCALE % self._booster.boosterGuiType, effectValue=self._booster.getFormattedValue(text_styles.highTitle))))
 
     def getDescription(self):
         localKey = '#menu:awardWindow/boosterAward/description/timeValue/%s'
@@ -182,7 +149,7 @@ class FalloutAwardWindow(AwardAbstract):
     BTN_ACTION_KEY = '#fallout:awardWindow/btnAction/'
     BTN_CLOSE_KEY = '#fallout:awardWindow/btnClose/'
 
-    def __init__(self, lvls, isRequiredVehicle = False):
+    def __init__(self, lvls, isRequiredVehicle=False):
         self._lvls = lvls
         self._isMaxLvl = isRequiredVehicle
         if self._isMaxLvl:
@@ -242,6 +209,43 @@ class FalloutAwardWindow(AwardAbstract):
             from gui.server_events.events_dispatcher import showEventsWindow
             showEventsWindow(eventType=constants.EVENT_TYPE.BATTLE_QUEST)
         return
+
+
+class ClanJoinAward(AwardAbstract):
+
+    def __init__(self, clanAbbrev, clanName, clanDbID):
+        super(ClanJoinAward, self).__init__()
+        self.clanAbbrev = clanAbbrev
+        self.clanName = clanName
+        self.clanDbID = clanDbID
+        self.rank = i18n.makeString(CLANS.CLAN_POST_RECRUIT)
+
+    def getWindowTitle(self):
+        return i18n.makeString(CLANS.CLANPROFILE_CLANJOINAWARD_TITLE)
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_CLANS_PIC_CLAN_IVITATION_BACK
+
+    def getHeader(self):
+        return text_styles.highTitle(i18n.makeString(CLANS.CLANPROFILE_CLANJOINAWARD_HEADER))
+
+    def getDescription(self):
+        return text_styles.main(i18n.makeString(CLANS.CLANPROFILE_CLANJOINAWARD_YOURCLAN, tag=text_styles.stats(self.clanAbbrev), clanName=text_styles.stats(self.clanName)))
+
+    def getAdditionalText(self):
+        return text_styles.main(i18n.makeString(CLANS.CLANPROFILE_CLANJOINAWARD_SECONDARYTEXT))
+
+    def getBodyButtonText(self):
+        return i18n.makeString(CLANS.CLANPROFILE_CLANJOINAWARD_BTNACTION)
+
+    def getButtonStates(self):
+        return (False, True, True)
+
+    def handleBodyButton(self):
+        shared_events.showClanProfileWindow(self.clanDbID, self.clanAbbrev)
+
+    def clear(self):
+        pass
 
 
 class TelecomAward(AwardAbstract):

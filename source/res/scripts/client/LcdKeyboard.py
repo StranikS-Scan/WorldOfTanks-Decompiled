@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/LcdKeyboard.py
 import BigWorld
 _g_instance = None
@@ -31,11 +31,8 @@ def enableLcdKeyboardSpecificKeys(bValue):
     return True
 
 
-def getKeys(mask = 4294967295L):
-    if _g_instance is None:
-        return 0
-    else:
-        return _g_instance.getKeys() & mask
+def getKeys(mask=4294967295L):
+    return 0 if _g_instance is None else _g_instance.getKeys() & mask
 
 
 def finalize():

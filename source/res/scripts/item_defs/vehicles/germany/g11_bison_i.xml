@@ -1,4 +1,17 @@
 <g11_bison_i.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	6.12	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -74,6 +87,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G11_Bison_I/Bison_I_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Sturmpanzerketten_I>
@@ -591,6 +605,36 @@
   </chassis>
   <turrets0>
     <T_Bison>
+      <ceilless>	true	</ceilless>
+      <userString>	#germany_vehicles:T_Bison	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	3	</level>
+      <price>	50	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	26	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	290	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
       <guns>
         <_150mm_sIG33L11>	shared	  <maxAmmo>	12	</maxAmmo>
           <reloadTime>	22.8	</reloadTime>
@@ -623,36 +667,6 @@
           </camouflage>
         </_150mm_sIG33L11>
       </guns>
-      <ceilless>	true	</ceilless>
-      <userString>	#germany_vehicles:T_Bison	</userString>
-      <tags>	cannotDetach	</tags>
-      <level>	3	</level>
-      <price>	50	</price>
-      <notInShop>	true	</notInShop>
-      <armor>
-        <armor_1>	0	</armor_1>
-        <armor_2>	0	</armor_2>
-        <armor_3>	0	</armor_3>
-        <armor_4>	0	</armor_4>
-        <armor_5>	0	</armor_5>
-        <armor_6>	0	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	0	</armor_8>
-      </armor>
-      <weight>	100	</weight>
-      <maxHealth>	26	</maxHealth>
-      <rotationSpeed>	16	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	290	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	40	</maxHealth>
-        <maxRegenHealth>	20	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </surveyingDeviceHealth>
       <models>
         <undamaged>	vehicles/german/G11_Bison_I/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G11_Bison_I/crash/lod0/Turret_01.model	</destroyed>
@@ -666,34 +680,16 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.056 0.000 1.000 0.000 0.073 -0.285 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </T_Bison>
   </turrets0>
-  <crew>
-    <commander>	radioman	</commander>
-    <driver></driver>
-    <gunner></gunner>
-    <loader></loader>
-    <loader></loader>
-  </crew>
-  <speedLimits>
-    <forward>	40	</forward>
-    <backward>	10	</backward>
-  </speedLimits>
-  <repairCost>	6.12	</repairCost>
-  <crewXpFactor>	1.0	</crewXpFactor>
   <engines>
     <Krupp_M305>	shared	  <unlocks>
-        <engine>	Krupp_M311	  <cost>	50	</cost>
-        </engine>
-      </unlocks>
-    </Krupp_M305>
-    <Krupp_M311>	shared	  <unlocks>
         <engine>	Maybach_NL38TR	  <cost>	80	</cost>
         </engine>
       </unlocks>
-    </Krupp_M311>
+    </Krupp_M305>
     <Maybach_NL38TR>	shared	</Maybach_NL38TR>
   </engines>
   <fuelTanks>

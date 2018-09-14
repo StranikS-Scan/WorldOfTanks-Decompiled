@@ -1,12 +1,13 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/EventsWindow.py
 import BigWorld
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core.settings_constants import TUTORIAL
 import constants
 from debug_utils import LOG_WARNING
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
-from gui.server_events import g_eventsCache, settings as quest_settings, caches, isPotapovQuestEnabled
+from gui.server_events import g_eventsCache, settings as quest_settings, caches
 from gui.Scaleform.daapi.view.meta.QuestsWindowMeta import QuestsWindowMeta
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES as _QA
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -14,7 +15,7 @@ from gui.shared.ItemsCache import g_itemsCache
 
 class EventsWindow(QuestsWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(EventsWindow, self).__init__()
         self._navInfo = caches.getNavInfo()
         self._updateNavInfo(ctx.get('eventType'), ctx.get('eventID'))
@@ -23,7 +24,7 @@ class EventsWindow(QuestsWindowMeta):
         caches.clearVehiclesData()
         self.destroy()
 
-    def navigate(self, eventType = None, eventID = None):
+    def navigate(self, eventType=None, eventID=None):
         if self._updateNavInfo(eventType, eventID):
             tabID = self._selectLastTab()
             self.onTabSelected(tabID)
@@ -46,7 +47,7 @@ class EventsWindow(QuestsWindowMeta):
             LOG_WARNING('Unknown personal quests tab id', tabID)
         return
 
-    def showTileChainsView(self, tileID, questID = None):
+    def showTileChainsView(self, tileID, questID=None):
         self._navInfo.selectPotapovQuest(tileID, questID)
         quest_settings.markPQTileAsVisited(tileID)
         return self._loadView(_QA.TILE_CHAINS_VIEW_LINKAGE, self.__getChainsViewAlias())
@@ -58,7 +59,7 @@ class EventsWindow(QuestsWindowMeta):
 
     def __initWindow(self):
         tabs = []
-        if isPotapovQuestEnabled():
+        if g_lobbyContext.getServerSettings().isPotapovQuestEnabled():
             tabs.append(self.__packTabDataItem(QUESTS.QUESTS_TABS_PERSONAL, _QA.TAB_PERSONAL_QUESTS))
         tabs.append(self.__packTabDataItem(QUESTS.QUESTS_TABS_CURRENT, _QA.TAB_COMMON_QUESTS))
         if g_eventsCache.getQuests(lambda x: x.getType() == constants.EVENT_TYPE.CLUBS_QUEST):
@@ -74,11 +75,14 @@ class EventsWindow(QuestsWindowMeta):
     def _selectLastTab(self):
         tabID = self._navInfo.tabID
         if not tabID:
-            tabID = _QA.TAB_PERSONAL_QUESTS if isPotapovQuestEnabled() else _QA.TAB_COMMON_QUESTS
+            if g_lobbyContext.getServerSettings().isPotapovQuestEnabled():
+                tabID = _QA.TAB_PERSONAL_QUESTS
+            else:
+                tabID = _QA.TAB_COMMON_QUESTS
         self.as_selectTabS(tabID)
         return tabID
 
-    def _updateNavInfo(self, eventType = None, eventID = None):
+    def _updateNavInfo(self, eventType=None, eventID=None):
         if eventType is not None:
             if eventID is not None:
                 if eventType == constants.EVENT_TYPE.POTAPOV_QUEST:
@@ -88,6 +92,8 @@ class EventsWindow(QuestsWindowMeta):
                         self._navInfo.selectRandomQuest(pQuest.getTileID(), pQuest.getID())
                     else:
                         self._navInfo.selectFalloutQuest(pQuest.getTileID(), pQuest.getID())
+                elif eventType == constants.EVENT_TYPE.CLUBS_QUEST:
+                    self._navInfo.selectLadderQuest(eventID)
                 elif eventType in (constants.EVENT_TYPE.TUTORIAL, constants.EVENT_TYPE.MOTIVE_QUEST):
                     self._navInfo.selectTutorialQuest(eventID)
                 else:
@@ -118,19 +124,19 @@ class EventsWindow(QuestsWindowMeta):
         self._navInfo.selectTab(_QA.TAB_PERSONAL_QUESTS)
         return self._loadView(_QA.PERSONAL_WELCOME_VIEW_LINKAGE, _QA.PERSONAL_WELCOME_VIEW_ALIAS)
 
-    def _showSeasonsView(self, doResetNavInfo = False):
+    def _showSeasonsView(self, doResetNavInfo=False):
         self._navInfo.selectTab(_QA.TAB_PERSONAL_QUESTS, doResetNavInfo)
         return self._loadView(_QA.SEASONS_VIEW_LINKAGE, _QA.SEASONS_VIEW_ALIAS)
 
-    def _showCommonQuestsView(self, questID = None):
+    def _showCommonQuestsView(self, questID=None):
         self._navInfo.selectCommonQuest(questID)
         return self._loadView(_QA.COMMON_QUESTS_VIEW_LINKAGE, _QA.COMMON_QUESTS_VIEW_ALIAS)
 
-    def _showLadderQuestsView(self, questID = None):
+    def _showLadderQuestsView(self, questID=None):
         self._navInfo.selectCommonQuest(questID)
         return self._loadView(_QA.COMMON_QUESTS_VIEW_LINKAGE, _QA.LADDER_QUESTS_VIEW_ALIAS)
 
-    def _showBeginnerQuestsView(self, questID = None):
+    def _showBeginnerQuestsView(self, questID=None):
         self._navInfo.selectTutorialQuest(questID)
         return self._loadView(_QA.BEGINNER_QUESTS_VIEW_LINKAGE, _QA.BEGINNER_QUESTS_VIEW_ALIAS)
 

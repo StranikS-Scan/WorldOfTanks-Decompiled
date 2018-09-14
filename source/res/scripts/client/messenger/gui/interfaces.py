@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/interfaces.py
 
 
@@ -29,7 +29,7 @@ class IGUIEntry(object):
     def isEditing(self, event):
         return False
 
-    def addClientMessage(self, message, isCurrentPlayer = False):
+    def addClientMessage(self, message, isCurrentPlayer=False):
         pass
 
 
@@ -101,7 +101,7 @@ class IChannelController(IEntityController):
     def activate(self):
         pass
 
-    def deactivate(self, entryClosing = False):
+    def deactivate(self, entryClosing=False):
         pass
 
     def isJoined(self):
@@ -131,7 +131,7 @@ class IChannelController(IEntityController):
     def sendCommand(self, command):
         pass
 
-    def addMessage(self, message, doFormatting = True):
+    def addMessage(self, message, doFormatting=True):
         return False
 
     def addCommand(self, command):
@@ -149,5 +149,5 @@ class IBattleChannelView(object):
     def removeController(self, ctrl):
         pass
 
-    def addMessage(self, text, isCurrentPlayer = False):
+    def addMessage(self, text, isCurrentPlayer=False):
         pass

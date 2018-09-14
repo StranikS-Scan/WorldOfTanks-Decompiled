@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CompanyWindowMeta.py
 from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattleWindow import PrebattleWindow
 
@@ -38,37 +38,28 @@ class CompanyWindowMeta(PrebattleWindow):
         self._printOverrideError('canChangeDivision')
 
     def as_setDivisionsListS(self, data, selected):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setDivisionsList(data, selected)
+        return self.flashObject.as_setDivisionsList(data, selected) if self._isDAAPIInited() else None
 
     def as_setOpenedS(self, isOpened):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setOpened(isOpened)
+        return self.flashObject.as_setOpened(isOpened) if self._isDAAPIInited() else None
 
     def as_setCommentS(self, comment):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setComment(comment)
+        return self.flashObject.as_setComment(comment) if self._isDAAPIInited() else None
 
     def as_setDivisionS(self, divisionID):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setDivision(divisionID)
+        return self.flashObject.as_setDivision(divisionID) if self._isDAAPIInited() else None
 
     def as_setTotalLimitLabelsS(self, totalLevel, levelRange):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTotalLimitLabels(totalLevel, levelRange)
+        return self.flashObject.as_setTotalLimitLabels(totalLevel, levelRange) if self._isDAAPIInited() else None
 
     def as_setMaxCountLimitLabelS(self, label):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMaxCountLimitLabel(label)
+        return self.flashObject.as_setMaxCountLimitLabel(label) if self._isDAAPIInited() else None
 
     def as_setClassesLimitsS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setClassesLimits(data)
+        return self.flashObject.as_setClassesLimits(data) if self._isDAAPIInited() else None
 
     def as_setInvalidVehiclesS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInvalidVehicles(data)
+        return self.flashObject.as_setInvalidVehicles(data) if self._isDAAPIInited() else None
 
     def as_setChangeSettingCoolDownS(self, coolDown):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setChangeSettingCoolDown(coolDown)
+        return self.flashObject.as_setChangeSettingCoolDown(coolDown) if self._isDAAPIInited() else None

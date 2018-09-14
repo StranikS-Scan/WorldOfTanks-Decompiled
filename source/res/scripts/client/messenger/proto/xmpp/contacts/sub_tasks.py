@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/sub_tasks.py
 from messenger.m_constants import USER_TAG, USER_ACTION_ID, CLIENT_ACTION_ID
 from messenger.proto.xmpp import errors
@@ -8,7 +8,7 @@ from messenger.proto.xmpp.gloox_constants import SUBSCRIPTION as _SUB
 
 class AskSubscriptionTask(SyncSubscriptionTask):
 
-    def sync(self, name, groups, sub = None, clanInfo = None):
+    def sync(self, name, groups, sub=None, clanInfo=None):
         if sub[0] != _SUB.OFF:
             self._result = TASK_RESULT.REMOVE
         self._doSync(name, groups, sub, clanInfo)
@@ -18,13 +18,13 @@ class AskSubscriptionTask(SyncSubscriptionTask):
         client.askSubscription(self._jid)
 
     def _getError(self, pyGlooxTag):
-        return errors.createServerActionError(CLIENT_ACTION_ID.RQ_FRIENDSHIP, pyGlooxTag)
+        return errors.createServerActionIQError(CLIENT_ACTION_ID.RQ_FRIENDSHIP, pyGlooxTag)
 
 
 class _ChangeSubscriptionTask(SyncSubscriptionTask):
     __slots__ = ('_auto',)
 
-    def __init__(self, jid, name = '', auto = False):
+    def __init__(self, jid, name='', auto=False):
         super(_ChangeSubscriptionTask, self).__init__(jid, name)
         self._auto = auto
 
@@ -32,15 +32,15 @@ class _ChangeSubscriptionTask(SyncSubscriptionTask):
 class ApproveSubscriptionTask(_ChangeSubscriptionTask):
     __slots__ = ('_tasks',)
 
-    def __init__(self, jid, name = '', auto = False):
+    def __init__(self, jid, name='', auto=False):
         super(ApproveSubscriptionTask, self).__init__(jid, name, auto)
         self._tasks = []
 
     def clone(self):
         return self._tasks
 
-    def sync(self, name, groups, sub = None, clanInfo = None):
-        if sub[1] == _SUB.ON:
+    def sync(self, name, groups, sub=None, clanInfo=None):
+        if sub is not None and sub[1] == _SUB.ON:
             user = self._getUser()
             self._result = TASK_RESULT.REMOVE
             if user and not self._auto:
@@ -60,7 +60,7 @@ class ApproveSubscriptionTask(_ChangeSubscriptionTask):
         client.approveSubscription(self._jid)
 
     def _getError(self, pyGlooxTag):
-        return errors.createServerActionError(CLIENT_ACTION_ID.APPROVE_FRIENDSHIP, pyGlooxTag)
+        return errors.createServerActionIQError(CLIENT_ACTION_ID.APPROVE_FRIENDSHIP, pyGlooxTag)
 
 
 class CancelSubscriptionTask(_ChangeSubscriptionTask):

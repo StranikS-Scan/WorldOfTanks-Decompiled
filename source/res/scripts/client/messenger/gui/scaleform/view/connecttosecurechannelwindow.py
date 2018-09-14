@@ -1,20 +1,19 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/ConnectToSecureChannelWindow.py
-from external_strings_utils import unicode_from_utf8
-from gui import SystemMessages
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from helpers import i18n
 from messenger.gui.Scaleform.meta.ConnectToSecureChannelWindowMeta import ConnectToSecureChannelWindowMeta
-from messenger.m_constants import CHANNEL_PWD_MIN_LENGTH, CHANNEL_PWD_MAX_LENGTH, PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
+from messenger.proto.events import g_messengerEvents
 
 class ConnectToSecureChannelWindow(ConnectToSecureChannelWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(ConnectToSecureChannelWindow, self).__init__()
         self._channel = ctx.get('channel')
 
-    @proto_getter(PROTO_TYPE.BW)
+    @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
         return None
 
@@ -22,11 +21,12 @@ class ConnectToSecureChannelWindow(ConnectToSecureChannelWindowMeta):
         self.destroy()
 
     def sendPassword(self, value):
-        pwdRange = xrange(CHANNEL_PWD_MIN_LENGTH, CHANNEL_PWD_MAX_LENGTH + 1)
-        if value is None or len(unicode_from_utf8(value)[0]) not in pwdRange:
-            SystemMessages.pushI18nMessage(MESSENGER.DIALOGS_CREATECHANNEL_ERRORS_INVALIDPASSWORD_MESSAGE, CHANNEL_PWD_MIN_LENGTH, CHANNEL_PWD_MAX_LENGTH, type=SystemMessages.SM_TYPE.Error)
+        validator = self.proto.messages.getUserRoomValidator()
+        password, error = validator.validateUserRoomPwd(value)
+        if error is not None:
+            g_messengerEvents.onErrorReceived(error)
         else:
-            self.proto.channels.joinToChannel(self._channel.getID(), password=value)
+            self.proto.messages.joinToUserRoom(self._channel.getID(), password=password)
             self.destroy()
         return
 

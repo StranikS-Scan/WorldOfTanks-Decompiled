@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/LobbyMenuMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -23,5 +23,4 @@ class LobbyMenuMeta(AbstractWindowView):
         self._printOverrideError('versionInfoClick')
 
     def as_setVersionMessageS(self, message, showLinkButton):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setVersionMessage(message, showLinkButton)
+        return self.flashObject.as_setVersionMessage(message, showLinkButton) if self._isDAAPIInited() else None

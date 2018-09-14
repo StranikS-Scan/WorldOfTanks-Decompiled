@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/ResearchView.py
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
@@ -18,7 +18,7 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         self._listener = TTListenerDecorator()
 
     def redraw(self):
-        raise NotImplementedError, 'Must be overridden in subclass'
+        raise NotImplementedError('Must be overridden in subclass')
 
     def showSystemMessage(self, typeString, message):
         msgType = SystemMessages.SM_TYPE.lookup(typeString)
@@ -75,13 +75,13 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             self.as_setNodesStatesS(NODE_STATE.VEHICLE_CAN_BE_CHANGED, result)
 
     def invalidateVehLocks(self, locks):
-        raise NotImplementedError, 'Must be overridden in subclass'
+        raise NotImplementedError('Must be overridden in subclass')
 
     def invalidateWalletStatus(self, status):
-        raise NotImplementedError, 'Must be overridden in subclass'
+        raise NotImplementedError('Must be overridden in subclass')
 
     def invalidateRent(self, vehicles):
-        raise NotImplementedError, 'Must be overridden in subclass'
+        raise NotImplementedError('Must be overridden in subclass')
 
     def request4SelectInHangar(self, itemCD):
         shared_events.selectVehicleInHangar(itemCD)

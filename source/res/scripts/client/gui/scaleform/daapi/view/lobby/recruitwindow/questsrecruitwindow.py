@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/recruitWindow/QuestsRecruitWindow.py
 import nations
 from items import tankmen
@@ -12,7 +12,7 @@ from gui.Scaleform.daapi.view.meta.QuestRecruitWindowMeta import QuestRecruitWin
 
 class QuestsRecruitWindow(QuestRecruitWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(QuestsRecruitWindow, self).__init__()
         self.__currentSelectedNationID = None
         assert len({'isPremium',

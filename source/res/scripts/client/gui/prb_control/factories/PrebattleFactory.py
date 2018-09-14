@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/factories/PrebattleFactory.py
 import inspect
 from constants import PREBATTLE_TYPE
@@ -61,9 +61,9 @@ class PrebattleFactory(ControlFactory):
         return PlayerDecorator(info.isCreator, info.isReady())
 
     def createStateEntity(self, functional):
-        return FunctionalState(CTRL_ENTITY_TYPE.PREBATTLE, functional.getEntityType(), True, functional.hasLockedState(), isinstance(functional, default.IntroPrbFunctional))
+        return FunctionalState(CTRL_ENTITY_TYPE.PREBATTLE, functional.getEntityType(), True, functional.hasLockedState(), isinstance(functional, default.IntroPrbFunctional), funcFlags=functional.getFunctionalFlags())
 
-    def createLeaveCtx(self, flags = FUNCTIONAL_FLAG.UNDEFINED):
+    def createLeaveCtx(self, flags=FUNCTIONAL_FLAG.UNDEFINED):
         return prb_ctx.LeavePrbCtx(waitingID='prebattle/leave', flags=flags)
 
     def _createByAccountState(self, ctx):

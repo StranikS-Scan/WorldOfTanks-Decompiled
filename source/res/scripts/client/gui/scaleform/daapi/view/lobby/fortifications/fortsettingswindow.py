@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortSettingsWindow.py
 import BigWorld
 from adisp import process
@@ -32,7 +32,7 @@ class VIEW_ALIASES:
 
 class FortSettingsWindow(FortSettingsWindowMeta, FortViewHelper):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(FortSettingsWindow, self).__init__()
         self.__defencePeriod = False
         self.__isActivatedDisableProcess = False
@@ -290,7 +290,7 @@ class FortSettingsWindow(FortSettingsWindowMeta, FortViewHelper):
          'lvlIconSource': lvlIconSource,
          'divisionID': divisionID}
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         if reason == BUILDING_UPDATE_REASON.UPGRADED and buildingTypeID == FORT_BUILDING_TYPE.MILITARY_BASE:
             if self.fortCtrl.getFort().getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE).level == FORT_BATTLE_DIVISIONS.CHAMPION.minFortLevel:
                 self.updateData()

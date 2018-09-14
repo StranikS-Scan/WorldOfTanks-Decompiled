@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/ServerSettingsManager.py
 import weakref
 from collections import namedtuple
@@ -33,7 +33,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
 
 
 class ServerSettingsManager(object):
-    __version = 17
+    __version = 19
     GAME = settings_constants.GAME
     GRAPHICS = settings_constants.GRAPHICS
     SOUND = settings_constants.SOUND
@@ -62,7 +62,10 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.GAME_EXTENDED: Section(masks={GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS: 0,
                                        GAME.CHAT_CONTACTS_LIST_ONLY: 1,
                                        GAME.RECEIVE_INVITES_IN_BATTLE: 2,
-                                       GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS: 3}, offsets={}),
+                                       GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS: 3,
+                                       GAME.MINIMAP_VIEW_RANGE: 6,
+                                       GAME.MINIMAP_MAX_VIEW_RANGE: 7,
+                                       GAME.MINIMAP_DRAW_RANGE: 8}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GRAPHICS.FPS_PERFOMANCER: 0,
                                   GAME.LENS_EFFECT: 1}, offsets={}),
@@ -113,7 +116,7 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.FALLOUT: Section(masks={'isEnabled': 3,
                                  'isAutomatch': 4,
                                  'hasVehicleLvl8': 5,
-                                 'hasVehicleLvl10': 6}, offsets={'falloutBattleType': Offset(0, 3)}),
+                                 'hasVehicleLvl10': 6}, offsets={'falloutBattleType': Offset(8, 65280)}),
      SETTINGS_SECTIONS.TUTORIAL: Section(masks={TUTORIAL.CUSTOMIZATION: 0,
                                   TUTORIAL.TECHNICAL_MAINTENANCE: 1,
                                   TUTORIAL.PERSONAL_CASE: 2,
@@ -123,7 +126,8 @@ class ServerSettingsManager(object):
                                   TUTORIAL.REPAIRKIT_USED: 8,
                                   TUTORIAL.FIRE_EXTINGUISHER_USED: 10,
                                   TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED: 11}, offsets={}),
-     SETTINGS_SECTIONS.ONCE_ONLY_HINTS: Section(masks={'FalloutQuestsTab': 0}, offsets={})}
+     SETTINGS_SECTIONS.ONCE_ONLY_HINTS: Section(masks={'FalloutQuestsTab': 0,
+                                         'CustomizationSlotsHint': 1}, offsets={})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -161,49 +165,49 @@ class ServerSettingsManager(object):
         user_prefs.loadFromServer(messenger_settings)
         self._core.storages.get('FOV').apply(False, True)
 
-    def getGameSetting(self, key, default = None):
+    def getGameSetting(self, key, default=None):
         return self._getSectionSettings(SETTINGS_SECTIONS.GAME, key, default)
 
     def setGameSettings(self, settings):
         self._setSectionSettings(SETTINGS_SECTIONS.GAME, settings)
 
-    def getExtendedGameSetting(self, key, default = None):
+    def getExtendedGameSetting(self, key, default=None):
         return self._getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, key, default)
 
     def setExtendedGameSettings(self, settings):
         self._setSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, settings)
 
-    def getTutorialSetting(self, key, default = None):
+    def getTutorialSetting(self, key, default=None):
         return self._getSectionSettings(SETTINGS_SECTIONS.TUTORIAL, key, default)
 
     def setTutorialSetting(self, settings):
         self._setSectionSettings(SETTINGS_SECTIONS.TUTORIAL, settings)
 
-    def getGameplaySetting(self, key, default = None):
+    def getGameplaySetting(self, key, default=None):
         return self._getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, key, default)
 
     def setGameplaySettings(self, settings):
         self._setSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, settings)
 
-    def getGraphicsSetting(self, key, default = None):
+    def getGraphicsSetting(self, key, default=None):
         return self._getSectionSettings(SETTINGS_SECTIONS.GRAPHICS, key, default)
 
     def setGraphicsSettings(self, settings):
         self._setSectionSettings(SETTINGS_SECTIONS.GRAPHICS, settings)
 
-    def getSoundSetting(self, key, default = None):
+    def getSoundSetting(self, key, default=None):
         return self._getSectionSettings(SETTINGS_SECTIONS.SOUND, key, default)
 
     def setSoundSettings(self, settings):
         self._setSectionSettings(SETTINGS_SECTIONS.SOUND, settings)
 
-    def getControlsSetting(self, key, default = None):
+    def getControlsSetting(self, key, default=None):
         return self._getSectionSettings(SETTINGS_SECTIONS.CONTROLS, key, default)
 
     def setControlsSettings(self, settings):
         self._setSectionSettings(SETTINGS_SECTIONS.CONTROLS, settings)
 
-    def getAimSetting(self, section, key, default = None):
+    def getAimSetting(self, section, key, default=None):
         number = self.AIM_MAPPING[key]
         storageKey = 'AIM_%(section)s_%(number)d' % {'section': section.upper(),
          'number': number}
@@ -211,12 +215,9 @@ class ServerSettingsManager(object):
         storedValue = g_settingsCache.getSectionSettings(storageKey, None)
         masks = self.SECTIONS[settingsKey].masks
         offsets = self.SECTIONS[settingsKey].offsets
-        if storedValue is not None:
-            return self._extractValue(key, storedValue, default, masks, offsets)
-        else:
-            return default
+        return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
 
-    def getOnceOnlyHintsSetting(self, key, default = None):
+    def getOnceOnlyHintsSetting(self, key, default=None):
         return self._getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, key, default)
 
     def getOnceOnlyHintsSettings(self):
@@ -255,15 +256,12 @@ class ServerSettingsManager(object):
         self.setVersion()
         self._core.onSettingsChanged(settings)
 
-    def getMarkersSetting(self, section, key, default = None):
+    def getMarkersSetting(self, section, key, default=None):
         storageKey = 'MARKERS_%(section)s' % {'section': section.upper()}
         storedValue = g_settingsCache.getSectionSettings(storageKey, None)
         masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
         offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
-        if storedValue is not None:
-            return self._extractValue(key, storedValue, default, masks, offsets)
-        else:
-            return default
+        return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
 
     def _buildMarkersSettings(self, settings):
         settingToServer = {}
@@ -299,10 +297,10 @@ class ServerSettingsManager(object):
         self.setVersion()
         self._core.onSettingsChanged(settings)
 
-    def getSetting(self, key, default = None):
+    def getSetting(self, key, default=None):
         return g_settingsCache.getSetting(key, default)
 
-    def getSection(self, section, defaults = None):
+    def getSection(self, section, defaults=None):
         result = {}
         defaults = defaults or {}
         masks = self.SECTIONS[section].masks
@@ -321,20 +319,17 @@ class ServerSettingsManager(object):
         if section in self.SECTIONS:
             self._setSectionSettings(section, settings)
 
-    def getMarksOnGunSetting(self, key, default = None):
+    def getMarksOnGunSetting(self, key, default=None):
         return self._getSectionSettings(SETTINGS_SECTIONS.MARKS_ON_GUN, key, default)
 
     def setMarksOnGunSettings(self, settings):
         self._setSectionSettings(SETTINGS_SECTIONS.MARKS_ON_GUN, settings)
 
-    def _getSectionSettings(self, section, key, default = None):
+    def _getSectionSettings(self, section, key, default=None):
         storedValue = g_settingsCache.getSectionSettings(section, None)
         masks = self.SECTIONS[section].masks
         offsets = self.SECTIONS[section].offsets
-        if storedValue is not None:
-            return self._extractValue(key, storedValue, default, masks, offsets)
-        else:
-            return default
+        return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
 
     def _buildSectionSettings(self, section, settings):
         storedValue = g_settingsCache.getSectionSettings(section, None)
@@ -344,15 +339,22 @@ class ServerSettingsManager(object):
         return self._mapValues(settings, storingValue, masks, offsets)
 
     def _setSectionSettings(self, section, settings):
+        storedSettings = self.getSection(section)
         storedValue = g_settingsCache.getSectionSettings(section, None)
         storingValue = self._buildSectionSettings(section, settings)
         if storedValue == storingValue:
             return
         else:
-            LOG_DEBUG('Applying %s server settings: ' % section, settings)
             g_settingsCache.setSectionSettings(section, storingValue)
             self.setVersion()
-            self._core.onSettingsChanged(settings)
+            settingsDiff = {}
+            for k, v in settings.iteritems():
+                sV = storedSettings.get(k)
+                if sV != v:
+                    settingsDiff[k] = v
+
+            LOG_DEBUG('Applying %s server settings: ' % section, settingsDiff)
+            self._core.onSettingsChanged(settingsDiff)
             return
 
     def _extractValue(self, key, storedValue, default, masks, offsets):
@@ -381,7 +383,7 @@ class ServerSettingsManager(object):
 
     @async
     @process
-    def _updateToVersion(self, callback = None):
+    def _updateToVersion(self, callback=None):
         currentVersion = g_settingsCache.getVersion()
         data = {'gameData': {},
          'gameExtData': {},
@@ -392,35 +394,49 @@ class ServerSettingsManager(object):
          'keyboardData': {},
          'graphicsData': {},
          'marksOnGun': {},
+         'fallout': {},
          'clear': {}}
         yield migrateToVersion(currentVersion, self._core, data)
-        self._setSettingsSections(**data)
+        self._setSettingsSections(data)
         callback(self)
 
-    def _setSettingsSections(self, gameData, gameExtData, gameplayData, controlsData, aimData, markersData, keyboardData, graphicsData, marksOnGun, clear):
+    def _setSettingsSections(self, data):
         settings = {}
+        clear = data.get('clear', {})
+        gameData = data.get('gameData', {})
         clearGame = clear.get(SETTINGS_SECTIONS.GAME, 0)
         if gameData or clearGame:
             settings[SETTINGS_SECTIONS.GAME] = self._buildSectionSettings(SETTINGS_SECTIONS.GAME, gameData) ^ clearGame
+        gameExtData = data.get('gameExtData', {})
         clearGameExt = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
         if gameExtData or clearGameExt:
             settings[SETTINGS_SECTIONS.GAME_EXTENDED] = self._buildSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, gameExtData) ^ clearGameExt
+        gameplayData = data.get('gameplayData', {})
         clearGameplay = clear.get(SETTINGS_SECTIONS.GAMEPLAY, 0)
         if gameplayData or clearGameplay:
             settings[SETTINGS_SECTIONS.GAMEPLAY] = self._buildSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, gameplayData) ^ clearGameplay
+        controlsData = data.get('controlsData', {})
         clearControls = clear.get(SETTINGS_SECTIONS.CONTROLS, 0)
         if controlsData or clearControls:
             settings[SETTINGS_SECTIONS.CONTROLS] = self._buildSectionSettings(SETTINGS_SECTIONS.CONTROLS, controlsData) ^ clearControls
+        graphicsData = data.get('graphicsData', {})
         clearGraphics = clear.get(SETTINGS_SECTIONS.GRAPHICS, 0)
         if graphicsData or clearGraphics:
             settings[SETTINGS_SECTIONS.GRAPHICS] = self._buildSectionSettings(SETTINGS_SECTIONS.GRAPHICS, graphicsData) ^ clearGraphics
+        aimData = data.get('aimData', {})
         if aimData:
             settings.update(self._buildAimSettings(aimData))
+        markersData = data.get('markersData', {})
         if markersData:
             settings.update(self._buildMarkersSettings(markersData))
+        keyboardData = data.get('keyboardData', {})
         if keyboardData:
             settings.update(keyboardData)
+        marksOnGun = data.get('marksOnGun', {})
         if marksOnGun:
             settings[SETTINGS_SECTIONS.MARKS_ON_GUN] = self._buildSectionSettings(SETTINGS_SECTIONS.MARKS_ON_GUN, marksOnGun)
+        fallout = data.get('fallout', {})
+        if fallout:
+            settings[SETTINGS_SECTIONS.FALLOUT] = self._buildSectionSettings(SETTINGS_SECTIONS.FALLOUT, fallout)
         if settings:
             self.setSettings(settings)

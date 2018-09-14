@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/elements/qualifier.py
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers.i18n import makeString as _ms

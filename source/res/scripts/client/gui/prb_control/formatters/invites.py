@@ -1,6 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/invites.py
-from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
+from UnitBase import UNIT_MGR_FLAGS
+from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE, QUEUE_TYPE
 from constants import QUEUE_TYPE_NAMES
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
@@ -16,7 +17,7 @@ from gui.shared.fortifications import formatters as fort_fmt
 from helpers import i18n, html
 from messenger.ext import passCensor
 
-def getPrbName(prbType, lowercase = False):
+def getPrbName(prbType, lowercase=False):
     try:
         prbName = PREBATTLE_TYPE_NAMES[prbType]
         if lowercase:
@@ -28,7 +29,7 @@ def getPrbName(prbType, lowercase = False):
     return prbName
 
 
-def getPreQueueName(queueType, lowercase = False):
+def getPreQueueName(queueType, lowercase=False):
     try:
         queueName = QUEUE_TYPE_NAMES[queueType]
         if lowercase:
@@ -50,7 +51,7 @@ def getPrbInviteStateName(state):
     return stateName
 
 
-def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive = True, isAlreadyJoined = False):
+def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlreadyJoined=False):
     key, kwargs = None, {}
     isAnotherPeriphery = g_lobbyContext.isAnotherPeriphery(peripheryID)
     if isInviteActive:
@@ -131,9 +132,7 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
 
     def getComment(self, invite):
         comment = passCensor(invite.comment)
-        if not comment:
-            return ''
-        return makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': i18n.makeString(I18N_INVITES.INVITES_COMMENT, comment=html.escape(comment))})
+        return '' if not comment else makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': i18n.makeString(I18N_INVITES.INVITES_COMMENT, comment=html.escape(comment))})
 
     def getNote(self, invite):
         note = ''
@@ -187,8 +186,7 @@ class PrbFortBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
          'time': fort_fmt.getDefencePeriodString(extraData['attackTime'])}, sourceKey='defence' if extraData.get('isDefence') else 'offence')
 
     def getIconName(self, invite):
-        if invite.getExtraData('isDefence'):
-            return 'fortBattleDefenceInviteIcon'
+        return 'fortBattleDefenceInviteIcon' if invite.getExtraData('isDefence') else 'fortBattleOffenceInviteIcon'
 
 
 class FalloutInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
@@ -198,16 +196,20 @@ class FalloutInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
             creatorName = makeHtmlString('html_templates:lobby/prebattle', 'inviteTitleCreatorName', ctx={'name': invite.senderFullName})
         else:
             creatorName = ''
+        unitMgrFlags = invite.getExtraData().get('unitMgrFlags', 0)
+        queueType = QUEUE_TYPE.UNKNOWN
+        if unitMgrFlags & UNIT_MGR_FLAGS.FALLOUT_CLASSIC:
+            queueType = QUEUE_TYPE.FALLOUT_CLASSIC
+        elif unitMgrFlags & UNIT_MGR_FLAGS.FALLOUT_MULTITEAM:
+            queueType = QUEUE_TYPE.FALLOUT_MULTITEAM
         return makeHtmlString('html_templates:lobby/prebattle', 'inviteTitle', ctx={'sender': creatorName,
-         'battleType': i18n.makeString('#invites:invites/text/fallout/%d' % invite.getExtraData().get('falloutBattleType'))}, sourceKey='FALLOUT')
+         'battleType': i18n.makeString('#invites:invites/text/FALLOUT/%s' % getPreQueueName(queueType))}, sourceKey='FALLOUT')
 
 
 def getPrbInviteHtmlFormatter(invite):
     if invite.type == PREBATTLE_TYPE.FORT_BATTLE:
         return PrbFortBattleInviteHtmlTextFormatter()
-    if invite.getExtraData().get('falloutBattleType'):
-        return FalloutInviteHtmlTextFormatter()
-    return PrbInviteHtmlTextFormatter()
+    return FalloutInviteHtmlTextFormatter() if invite.type == PREBATTLE_TYPE.FALLOUT else PrbInviteHtmlTextFormatter()
 
 
 class PrbInviteTitleFormatter(InviteFormatter):

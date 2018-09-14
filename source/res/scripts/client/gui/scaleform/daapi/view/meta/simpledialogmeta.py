@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SimpleDialogMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -8,21 +8,16 @@ class SimpleDialogMeta(AbstractWindowView):
         self._printOverrideError('onButtonClick')
 
     def as_setTextS(self, text):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setText(text)
+        return self.flashObject.as_setText(text) if self._isDAAPIInited() else None
 
     def as_setTitleS(self, title):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTitle(title)
+        return self.flashObject.as_setTitle(title) if self._isDAAPIInited() else None
 
     def as_setButtonsS(self, buttonNames):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setButtons(buttonNames)
+        return self.flashObject.as_setButtons(buttonNames) if self._isDAAPIInited() else None
 
     def as_setButtonEnablingS(self, id, isEnabled):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setButtonEnabling(id, isEnabled)
+        return self.flashObject.as_setButtonEnabling(id, isEnabled) if self._isDAAPIInited() else None
 
     def as_setButtonFocusS(self, id):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setButtonFocus(id)
+        return self.flashObject.as_setButtonFocus(id) if self._isDAAPIInited() else None

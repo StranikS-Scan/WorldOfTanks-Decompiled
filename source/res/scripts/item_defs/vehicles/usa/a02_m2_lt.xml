@@ -71,6 +71,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A02_M2_lt/M2_lt_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
     </camouflage>
@@ -708,7 +709,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.969 0.018 1.000 0.000 0.529 0.151 0.764 0.396 0.500 0.500 0.000 0.500 0.000 0.500 0.233	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_01	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
@@ -882,7 +883,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.940 0.000 0.934 0.000 0.556 0.160 0.749 0.415 0.544 0.500 0.000 0.500 0.066 0.100 0.202	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_02	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.415 0.25 0.000000 0.000000	</tiling>
@@ -891,32 +892,17 @@
   </turrets0>
   <engines>
     <Cuiberson_T-10204>	shared	  <unlocks>
-        <engine>	Continental_R670-7	  <cost>	40	</cost>
-        </engine>
-      </unlocks>
-    </Cuiberson_T-10204>
-    <Continental_R670-7>	shared	  <unlocks>
         <engine>	Continental_W670-7	  <cost>	190	</cost>
         </engine>
       </unlocks>
-    </Continental_R670-7>
+    </Cuiberson_T-10204>
     <Continental_W670-7>	shared	</Continental_W670-7>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <SCR_200>	shared	  <unlocks>
-        <radio>	SCR_210	  <cost>	330	</cost>
-        </radio>
-      </unlocks>
-    </SCR_200>
-    <SCR_210>	shared	  <unlocks>
-        <radio>	SCR_506	  <cost>	5600.0	</cost>
-        </radio>
-      </unlocks>
-    </SCR_210>
-    <SCR_506>	shared	</SCR_506>
+    <SCR_200>	shared	</SCR_200>
   </radios>
   <effects>
     <collision></collision>

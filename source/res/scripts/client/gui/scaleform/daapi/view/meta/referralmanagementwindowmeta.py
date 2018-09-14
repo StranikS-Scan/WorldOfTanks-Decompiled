@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ReferralManagementWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -11,21 +11,16 @@ class ReferralManagementWindowMeta(AbstractWindowView):
         self._printOverrideError('inviteIntoSquad')
 
     def as_setDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(data)
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setTableDataS(self, referrals):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTableData(referrals)
+        return self.flashObject.as_setTableData(referrals) if self._isDAAPIInited() else None
 
     def as_setAwardDataDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setAwardDataData(data)
+        return self.flashObject.as_setAwardDataData(data) if self._isDAAPIInited() else None
 
     def as_setProgressDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setProgressData(data)
+        return self.flashObject.as_setProgressData(data) if self._isDAAPIInited() else None
 
     def as_showAlertS(self, alertStr):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showAlert(alertStr)
+        return self.flashObject.as_showAlert(alertStr) if self._isDAAPIInited() else None

@@ -6,17 +6,29 @@
     <Interface>	TransactionUser	</Interface>
     <Interface>	InterclusterSender	</Interface>
     <Interface>	ClientCommandsPort	</Interface>
+    <Interface>	AccountAdmin	</Interface>
+    <Interface>	AccountClan	</Interface>
+    <Interface>	AccountClubs	</Interface>
+    <Interface>	AccountAuthTokenProvider	</Interface>
+    <Interface>	AccountAuthTokenProviderClient	</Interface>
+    <Interface>	BattleResultProcessor	</Interface>
     <Interface>	Invitations	</Interface>
     <Interface>	InvitationsClient	</Interface>
-    <Interface>	AccountClubs	</Interface>
-    <Interface>	BattleResultProcessor	</Interface>
+    <Interface>	Invoicing	</Interface>
+    <Interface>	AccountPrebattle	</Interface>
+    <Interface>	AccountSpaProcessor	</Interface>
+    <Interface>	RefSystem	</Interface>
+    <Interface>	AccountIGRProcessing	</Interface>
+    <Interface>	SessionTracker	</Interface>
+    <Interface>	AccountFortConnector	</Interface>
+    <Interface>	AccountGlobalMapConnector	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_91300>
+    <requiredVersion_91400>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_0.9.13_2	</Default>
-    </requiredVersion_91300>
+      <Default>	eu_0.9.14_1	</Default>
+    </requiredVersion_91400>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -210,11 +222,6 @@
     <onCenterIsLongDisconnected>
       <Arg>	BOOL	</Arg>
     </onCenterIsLongDisconnected>
-    <onTokenReceived>
-      <Arg>	UINT16	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	STRING	</Arg>
-    </onTokenReceived>
     <showGUI>
       <Arg>	STRING	</Arg>
     </showGUI>
@@ -226,21 +233,25 @@
       <Arg>	SERVER_STATISTICS	</Arg>
     </receiveServerStats>
     <receiveQueueInfo>
-      <Arg>	RANDOMS_QUEUE_INFO	</Arg>
-      <Arg>	COMPANIES_QUEUE_INFO	</Arg>
-      <Arg>	EVENT_QUEUE_INFO	</Arg>
+      <Arg>	QUEUE_INFO	</Arg>
     </receiveQueueInfo>
     <updatePrebattle>
       <Arg>	UINT8	</Arg>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </updatePrebattle>
     <responseFortPublicInfo>
       <Arg>	INT32	</Arg>
       <Arg>	INT8	</Arg>
       <Arg>	PYTHON	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </responseFortPublicInfo>
     <update>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </update>
     <resyncDossiers></resyncDossiers>
     <reloadShop></reloadShop>
@@ -248,6 +259,8 @@
       <Arg>	UINT64	</Arg>
       <Arg>	STRING	</Arg>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </onUnitUpdate>
     <onUnitCallOk>
       <Arg>	INT32	</Arg>
@@ -257,6 +270,8 @@
       <Arg>	UINT64	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </onUnitError>
     <onUnitBrowserError>
       <Arg>	INT32	</Arg>
@@ -264,9 +279,13 @@
     </onUnitBrowserError>
     <onUnitBrowserResultsSet>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </onUnitBrowserResultsSet>
     <onUnitBrowserResultsUpdate>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </onUnitBrowserResultsUpdate>
     <onFortReply>
       <Arg>	UINT64	</Arg>
@@ -276,7 +295,18 @@
     <onFortUpdate>
       <Arg>	STRING	</Arg>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </onFortUpdate>
+    <onGlobalMapUpdate>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </onGlobalMapUpdate>
+    <onGlobalMapReply>
+      <Arg>	UINT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </onGlobalMapReply>
     <onSendPrebattleInvites>
       <Arg>	DB_ID	</Arg>
       <Arg>	STRING	</Arg>
@@ -291,9 +321,13 @@
       <Arg>	STRING	</Arg>
       <Arg>	STRING	</Arg>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </onClanInfoReceived>
     <receiveNotification>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </receiveNotification>
   </ClientMethods>
   <BaseMethods>
@@ -323,24 +357,24 @@
       <Arg>	UINT8	</Arg>
       <Arg>	PYTHON	</Arg>
     </onArenaCreated>
+    <onUnitArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onUnitArenaCreated>
     <onTutorialCreated>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
     </onTutorialCreated>
-    <onPrebattleJoined>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT32	</Arg>
-    </onPrebattleJoined>
-    <onPrebattleJoinFailure>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-    </onPrebattleJoinFailure>
-    <onPrebattleLeft>
-      <Arg>	OBJECT_ID	</Arg>
-    </onPrebattleLeft>
     <onKickedFromQueue>
       <Arg>	UINT8	</Arg>
     </onKickedFromQueue>
@@ -348,63 +382,6 @@
       <Arg>	UINT64	</Arg>
       <Arg>	UINT8	</Arg>
     </onKickedFromArena>
-    <onKickedFromPrebattle>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-    </onKickedFromPrebattle>
-    <onPrebattleResponse>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	INT16	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	INT32	</Arg>
-    </onPrebattleResponse>
-    <onPrebattleVehicleChanged>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-    </onPrebattleVehicleChanged>
-    <onBattleResultsReceived>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-    </onBattleResultsReceived>
-    <makeTradeOfferByClient>
-      <Arg>	INT16	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	UINT16	</Arg>
-      <Arg>	DB_ID	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Exposed></Exposed>
-    </makeTradeOfferByClient>
-    <createTraining>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	STRING	</Arg>
-      <Exposed></Exposed>
-    </createTraining>
-    <createCompany>
-      <Arg>	BOOL	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	INT8	</Arg>
-      <Exposed></Exposed>
-    </createCompany>
-    <createDevPrebattle>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Exposed></Exposed>
-    </createDevPrebattle>
-    <sendPrebattleInvites>
-      <Arg>	ARRAY	  <of>	INT64	</of>
-      </Arg>
-      <Arg>	STRING	</Arg>
-      <Exposed></Exposed>
-    </sendPrebattleInvites>
     <logStreamCorruption>
       <Arg>	INT16	</Arg>
       <Arg>	INT32	</Arg>
@@ -413,25 +390,6 @@
       <Arg>	INT32	</Arg>
       <Exposed></Exposed>
     </logStreamCorruption>
-    <requestToken>
-      <Arg>	UINT16	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Exposed></Exposed>
-    </requestToken>
-    <receivePrebattleRoster>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </receivePrebattleRoster>
-    <updatePrebattle>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	STRING	</Arg>
-    </updatePrebattle>
-    <addPrebattleInvite>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	PREBATTLE_INVITE	</Arg>
-    </addPrebattleInvite>
     <createAvatar>
       <Arg>	MAILBOX	</Arg>
       <Arg>	MAILBOX	</Arg>
@@ -469,242 +427,21 @@
       <Arg>	INT32	</Arg>
       <Arg>	MAILBOX	</Arg>
     </destroySelfForPeriphery>
-    <processInvoices></processInvoices>
     <fetchPrebattleAutoInvites></fetchPrebattleAutoInvites>
-    <setRestriction>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	UINT32	</Arg>
-      <Arg>	UINT32	</Arg>
-      <Arg>	UINT32	</Arg>
-      <Arg>	UINT16	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </setRestriction>
-    <setLoginPriority>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	ARRAY	  <of>	STRING	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	STRING	</of>
-      </Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </setLoginPriority>
-    <delRestriction>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </delRestriction>
-    <setType>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT16	</Arg>
-      <Arg>	INT16	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </setType>
-    <changeFairPlay>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </changeFairPlay>
-    <excludeFromFairPlay>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </excludeFromFairPlay>
-    <setFinPassword>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </setFinPassword>
-    <setAutoBanTime>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </setAutoBanTime>
-    <setNextBanLevel>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </setNextBanLevel>
-    <lockVehicleType>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </lockVehicleType>
-    <unlockVehicleType>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </unlockVehicleType>
-    <addRemoveRareAchievements>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	ARRAY	  <of>	INT32	</of>
-      </Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </addRemoveRareAchievements>
-    <restoreAccountFromPoint>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	ARRAY	  <of>	UINT64	</of>
-      </Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT32	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </restoreAccountFromPoint>
-    <processSessionTrackerData>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	STRING	</Arg>
-    </processSessionTrackerData>
-    <contributeXPToReferrer>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	DB_ID	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	DB_ID	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </contributeXPToReferrer>
-    <addReferral>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	DB_ID	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </addReferral>
-    <delReferral>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	DB_ID	</Arg>
-    </delReferral>
     <sendPropertiesTo>
       <Arg>	MAILBOX	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	ARRAY	  <of>	STRING	</of>
       </Arg>
     </sendPropertiesTo>
-    <wipe>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </wipe>
-    <resetDailyLimits>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	ARRAY	  <of>	UINT8	</of>
-      </Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </resetDailyLimits>
-    <setPlayLimits>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </setPlayLimits>
-    <processSpaAttributes>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </processSpaAttributes>
     <processWalletResponse>
       <Arg>	MAILBOX	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	PYTHON	</Arg>
     </processWalletResponse>
-    <processIGRData>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </processIGRData>
-    <exportToWeb></exportToWeb>
-    <syncWallet></syncWallet>
-    <resetWalletIDs>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </resetWalletIDs>
-    <resetWalletAssets>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	UINT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </resetWalletAssets>
     <extraWriteToDB>
       <Arg>	BOOL	</Arg>
     </extraWriteToDB>
-    <createClan>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	DB_ID	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </createClan>
-    <enterLeaveClan>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	DB_ID	</Arg>
-      <Arg>	DB_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </enterLeaveClan>
     <receiveClanMemberInfo>
       <Arg>	DB_ID	</Arg>
       <Arg>	DB_ID	</Arg>
@@ -722,78 +459,15 @@
       <Arg>	DB_ID	</Arg>
       <Arg>	STRING	</Arg>
     </receiveClanMembersListDiff>
-    <callFortMethod>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT64	</Arg>
-      <Exposed></Exposed>
-    </callFortMethod>
-    <onFortReply>
-      <Arg>	INT64	</Arg>
+    <createSpecBattleUnitMgr>
+      <Arg>	UINT64	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	STRING	</Arg>
-    </onFortReply>
-    <onFortUpdate>
-      <Arg>	STRING	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	BOOL	</Arg>
-    </onFortUpdate>
-    <onPickupEquipments>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT64	</Arg>
-    </onPickupEquipments>
-    <onFortBattleRoundEnd>
-      <Arg>	STRING	</Arg>
-    </onFortBattleRoundEnd>
-    <onFortBattleEnd>
-      <Arg>	STRING	</Arg>
-    </onFortBattleEnd>
-    <onFortNotification>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </onFortNotification>
-    <requestFortPublicInfo>
-      <Exposed></Exposed>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	INT16	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	ARRAY	  <of>	INT64	</of>
-      </Arg>
-    </requestFortPublicInfo>
+    </createSpecBattleUnitMgr>
     <debugRunMethod>
       <Arg>	STRING	</Arg>
       <Arg>	PYTHON	</Arg>
     </debugRunMethod>
-    <setToken>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT32	</Arg>
-    </setToken>
     <updateVehDossiersCut></updateVehDossiersCut>
     <updateVehicleDossiers></updateVehicleDossiers>
     <createUnitMgr>
@@ -801,11 +475,11 @@
       <Arg>	INT32	</Arg>
       <Exposed></Exposed>
     </createUnitMgr>
-    <createEventSquadUnitMgr>
+    <createFalloutUnitMgr>
       <Arg>	INT32	</Arg>
       <Arg>	INT32	</Arg>
       <Exposed></Exposed>
-    </createEventSquadUnitMgr>
+    </createFalloutUnitMgr>
     <createSquadUnitMgr>
       <Arg>	INT32	</Arg>
       <Exposed></Exposed>
@@ -950,14 +624,6 @@
     <createDynamicFalloutUnit>
       <Arg>	UINT32	</Arg>
     </createDynamicFalloutUnit>
-    <onSendPrebattleInvites>
-      <Arg>	DB_ID	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	DB_ID	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT8	</Arg>
-    </onSendPrebattleInvites>
     <receiveExternalNotification>
       <Arg>	PYTHON	</Arg>
     </receiveExternalNotification>
@@ -966,5 +632,14 @@
       <Arg>	STRING	</Arg>
       <Arg>	UINT8	</Arg>
     </sendExternalNotificationReply>
+    <createUnitAssemblerUnit>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+    </createUnitAssemblerUnit>
+    <joinUnitAssemblerUnit>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+    </joinUnitAssemblerUnit>
   </BaseMethods>
 </account.def>

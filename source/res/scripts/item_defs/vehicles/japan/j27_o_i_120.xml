@@ -78,6 +78,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/japan/J27_O_I_120/O_I_120_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	3.22 3.22 0.000000 0.000000	</tiling>
     </camouflage>
@@ -600,8 +601,7 @@
           <recoil>
             <lodDist>	MEDIUM	</lodDist>
             <amplitude>	0.4	</amplitude>
-            <backoffTime>	0.15	</backoffTime>
-            <returnTime>	0.52	</returnTime>
+            <recoilEffect>	main	</recoilEffect>
           </recoil>
           <models>
             <undamaged>	vehicles/japan/J27_O_I_120/normal/lod0/Gun_01.model	</undamaged>
@@ -766,7 +766,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
       <physicsShape>	0.965 0.000 0.948 0.000 0.894 -0.068 0.728 0.578 0.491 0.500 0.000 0.500 0.098 0.000 0.000	</physicsShape>
       <camouflage>

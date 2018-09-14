@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bwdeprecations.py
 """
 This module is imported by the BigWorld engine before BWAutoImport, and handles
@@ -53,3 +53,5 @@ if BigWorld.component == 'client':
         BigWorld.cachedEntities = {}
     if not hasattr(BigWorld, 'allEntities'):
         BigWorld.allEntities = BigWorld.entities
+if BigWorld.component == 'cell':
+    import OldSpaceData

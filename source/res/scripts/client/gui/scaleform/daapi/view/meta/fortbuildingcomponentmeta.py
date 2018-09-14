@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortBuildingComponentMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -17,17 +17,13 @@ class FortBuildingComponentMeta(BaseDAAPIComponent):
         self._printOverrideError('requestBuildingToolTipData')
 
     def as_setDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(data)
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setBuildingDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setBuildingData(data)
+        return self.flashObject.as_setBuildingData(data) if self._isDAAPIInited() else None
 
-    def as_setBuildingToolTipDataS(self, uid, type, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setBuildingToolTipData(uid, type, value)
+    def as_setBuildingToolTipDataS(self, uid, type, header, value):
+        return self.flashObject.as_setBuildingToolTipData(uid, type, header, value) if self._isDAAPIInited() else None
 
     def as_refreshTransportingS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_refreshTransporting()
+        return self.flashObject.as_refreshTransporting() if self._isDAAPIInited() else None

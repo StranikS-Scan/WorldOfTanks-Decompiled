@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/SETTINGS.py
 
 
@@ -137,8 +137,16 @@ class SETTINGS(object):
     GAME_SHOWVEHMODELSONMAP_NEVER = '#settings:game/showVehModelsOnMap/never'
     GAME_SHOWVEHMODELSONMAP_ALT = '#settings:game/showVehModelsOnMap/alt'
     GAME_SHOWVEHMODELSONMAP_ALWAYS = '#settings:game/showVehModelsOnMap/always'
+    GAME_BATTLELOADINGINFO = '#settings:game/battleLoadingInfo'
+    GAME_BATTLELOADINGINFO_TEXTTIP = '#settings:game/battleLoadingInfo/textTip'
+    GAME_BATTLELOADINGINFO_VISUALTIP = '#settings:game/battleLoadingInfo/visualTip'
+    GAME_BATTLELOADINGINFO_MINIMAP = '#settings:game/battleLoadingInfo/minimap'
     GAME_SHOWVECTORONMAP = '#settings:game/showVectorOnMap'
     GAME_SHOWSECTORONMAP = '#settings:game/showSectorOnMap'
+    GAME_MINIMAPGROUPTITLE = '#settings:game/minimapGroupTitle'
+    GAME_MINIMAPVIEWRANGE = '#settings:game/minimapViewRange'
+    GAME_MINIMAPMAXVIEWRANGE = '#settings:game/minimapMaxViewRange'
+    GAME_MINIMAPDRAWRANGE = '#settings:game/minimapDrawRange'
     GAME_DYNAMICCAMERA = '#settings:game/dynamicCamera'
     MONITOR = '#settings:monitor'
     MONITOR_DESCRIPTION = '#settings:monitor/description'
@@ -186,15 +194,17 @@ class SETTINGS(object):
     CUSTOMAAMODE_MODE1 = '#settings:customAAMode/mode1'
     CUSTOMAAMODE_MODE2 = '#settings:customAAMode/mode2'
     CUSTOMAAMODE_MODE3 = '#settings:customAAMode/mode3'
+    SOUNDS_MASTERVOLUMETOGGLE = '#settings:sounds/masterVolumeToggle'
+    SOUNDS_SOUNDQUALITY = '#settings:sounds/soundQuality'
+    SOUNDQUALITY = '#settings:soundQuality'
+    SOUNDQUALITY_DESCRIPTION = '#settings:soundQuality/description'
     SOUNDS_MASTERVOLUME = '#settings:sounds/masterVolume'
     SOUNDS_ARENA = '#settings:sounds/arena'
-    SOUNDS_VOICE = '#settings:sounds/voice'
     SOUNDS_VEHICLES = '#settings:sounds/vehicles'
     SOUNDS_EFFECTS = '#settings:sounds/effects'
     SOUNDS_GUI = '#settings:sounds/gui'
     SOUNDS_AMBIENT = '#settings:sounds/ambient'
     SOUND_PLAYERS_NOTIFICATIONS = '#settings:sound/players_notifications'
-    SOUND_NATIONALVOICES = '#settings:sound/nationalVoices'
     SOUND_VIVOX_MIC_SENSITIVITY = '#settings:sound/vivox/mic_sensitivity'
     SOUND_VIVOX_MASTER_VOLUME = '#settings:sound/vivox/master_volume'
     SOUND_VIVOX_FADE_VOLUME = '#settings:sound/vivox/fade_volume'
@@ -203,6 +213,9 @@ class SETTINGS(object):
     SOUND_VIVOX_BUTTONS_CAPTURE_DEVICES_REFRESH = '#settings:sound/vivox/buttons/capture_devices_refresh'
     SOUND_VIVOX_BUTTONS_TEST_FINISH = '#settings:sound/vivox/buttons/test_finish'
     SOUND_FIELDSET_HEADER = '#settings:sound/fieldset/header'
+    SOUND_DYNAMICRANGE_BROAD = '#settings:sound/dynamicRange/broad'
+    SOUND_DYNAMICRANGE_NARROW = '#settings:sound/dynamicRange/narrow'
+    SOUND_DYNAMICRANGE_NIGHTMODE = '#settings:sound/dynamicRange/nightMode'
     SOUND_SOUNDMODES_DEFAULT = '#settings:sound/soundModes/default'
     SOUND_SOUNDMODES_NATIONALDEFAULT = '#settings:sound/soundModes/nationalDefault'
     SOUND_SOUNDMODES_U01 = '#settings:sound/soundModes/U01'
@@ -379,6 +392,7 @@ class SETTINGS(object):
     KEYBOARD_KEYSBLOCKS_COMMAND_LEFT = '#settings:keyboard/keysBlocks/command/left'
     KEYBOARD_KEYSBLOCKS_COMMAND_RIGHT = '#settings:keyboard/keysBlocks/command/right'
     KEYBOARD_KEYSBLOCKS_COMMAND_AUTO_ROTATION = '#settings:keyboard/keysBlocks/command/auto_rotation'
+    KEYBOARD_KEYSBLOCKS_COMMAND_BLOCK_TRACKS = '#settings:keyboard/keysBlocks/command/block_tracks'
     KEYBOARD_KEYSBLOCKS_GROUP_CRUIS_CONTROL = '#settings:keyboard/keysBlocks/group/cruis_control'
     KEYBOARD_KEYSBLOCKS_COMMAND_STOP_FIRE = '#settings:keyboard/keysBlocks/command/stop_fire'
     KEYBOARD_KEYSBLOCKS_GROUP_FIRING = '#settings:keyboard/keysBlocks/group/firing'
@@ -422,6 +436,7 @@ class SETTINGS(object):
     KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_RIGHT = '#settings:keyboard/keysBlocks/command/camera_right'
     KEYBOARD_KEYSBLOCKS_GROUP_VOICECHAT = '#settings:keyboard/keysBlocks/group/voicechat'
     KEYBOARD_KEYSBLOCKS_COMMAND_PUSHTOTALK = '#settings:keyboard/keysBlocks/command/pushToTalk'
+    KEYBOARD_KEYSBLOCKS_COMMAND_VOICECHAT_ENABLE = '#settings:keyboard/keysBlocks/command/voicechat_enable'
     KEYBOARD_KEYSBLOCKS_GROUP_LOGITECH_KEYBOARD = '#settings:keyboard/keysBlocks/group/logitech_keyboard'
     KEYBOARD_KEYSBLOCKS_GROUP_VEHICLE_OTHER = '#settings:keyboard/keysBlocks/group/vehicle_other'
     KEYBOARD_KEYSBLOCKS_COMMAND_USEHORN = '#settings:keyboard/keysBlocks/command/useHorn'
@@ -461,6 +476,8 @@ class SETTINGS(object):
     ALTERNATIVEVOICES_FIELDSET_HEADER = '#settings:alternativeVoices/fieldset/header'
     ALTERNATIVEVOICES_LABELS_VOICEBATTLE = '#settings:alternativeVoices/labels/voiceBattle'
     DEFAULTNAMEPREFIX = '#settings:defaultNamePrefix'
+    SOUND_DYNAMICRANGE_TITLE = '#settings:sound/dynamicRange/title'
+    SOUND_DYNAMICRANGE_LABEL = '#settings:sound/dynamicRange/label'
     ARCADE_ENUM = (ARCADE_MIXING,
      ARCADE_MIXING_TYPE0,
      ARCADE_MIXING_TYPE1,
@@ -515,6 +532,7 @@ class SETTINGS(object):
      KEYBOARD_KEYSBLOCKS_COMMAND_LEFT,
      KEYBOARD_KEYSBLOCKS_COMMAND_RIGHT,
      KEYBOARD_KEYSBLOCKS_COMMAND_AUTO_ROTATION,
+     KEYBOARD_KEYSBLOCKS_COMMAND_BLOCK_TRACKS,
      KEYBOARD_KEYSBLOCKS_COMMAND_STOP_FIRE,
      KEYBOARD_KEYSBLOCKS_COMMAND_FIRE,
      KEYBOARD_KEYSBLOCKS_COMMAND_LOCK_TARGET,
@@ -552,6 +570,7 @@ class SETTINGS(object):
      KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_LEFT,
      KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_RIGHT,
      KEYBOARD_KEYSBLOCKS_COMMAND_PUSHTOTALK,
+     KEYBOARD_KEYSBLOCKS_COMMAND_VOICECHAT_ENABLE,
      KEYBOARD_KEYSBLOCKS_COMMAND_USEHORN,
      KEYBOARD_KEYSBLOCKS_COMMAND_SHOWHUD,
      KEYBOARD_KEYSBLOCKS_COMMAND_SHOWRADIALMENU,

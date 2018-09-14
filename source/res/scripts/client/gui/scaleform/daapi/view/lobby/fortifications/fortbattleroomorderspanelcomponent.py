@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBattleRoomOrdersPanelComponent.py
 import fortified_regions
 from helpers import i18n
@@ -24,7 +24,7 @@ _SlotDataVO = namedtuple('_SlotDataVO', ['id',
  'fortOrderTypeID',
  'isInactive'])
 
-def _makeSlotVO(orderID, slotIdx, buildingLabel = '', level = None, orderIcon = '', orderTypeID = None, isInactive = False, orderType = ORDER_TYPES.FORT_ORDER_CONSUMABLES_ACTIVE_TYPE, orderGroup = ORDER_TYPES.FORT_ORDER_CONSUMABLES_GROUP):
+def _makeSlotVO(orderID, slotIdx, buildingLabel='', level=None, orderIcon='', orderTypeID=None, isInactive=False, orderType=ORDER_TYPES.FORT_ORDER_CONSUMABLES_ACTIVE_TYPE, orderGroup=ORDER_TYPES.FORT_ORDER_CONSUMABLES_GROUP):
     return _SlotDataVO(orderID, slotIdx, buildingLabel, level, orderType, orderIcon, orderGroup, orderTypeID, isInactive)._asdict()
 
 
@@ -34,14 +34,11 @@ def _makeEmptySlotVO(slotIdx):
 
 class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, UnitListener):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(FortBattleRoomOrdersPanelComponent, self).__init__()
 
     def getSlotTooltipBody(self, orderID):
-        if orderID == ORDER_TYPES.EMPTY_ORDER:
-            return makeTooltip(i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(orderID)), i18n.makeString(TOOLTIPS.FORTORDERSPANELCOMPONENT_EMPTYSLOT_BODY), None)
-        else:
-            return ''
+        return makeTooltip(i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(orderID)), i18n.makeString(TOOLTIPS.FORTORDERSPANELCOMPONENT_EMPTYSLOT_BODY), None) if orderID == ORDER_TYPES.EMPTY_ORDER else ''
 
     def onOrderChanged(self, orderTypeID, reason):
         if self.fortCtrl.getFort().getOrder(orderTypeID).isConsumable:
@@ -88,7 +85,7 @@ class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, UnitLis
                         orderItem = FortOrder(orderTypeID)
                         building = FortBuilding(typeID=orderItem.buildingID)
                         result.append(_makeSlotVO(self.getOrderUIDbyID(orderTypeID), slotIdx, building.userName, level, orderItem.icon, orderTypeID, not canActivateConsumables))
-                    elif canActivateConsumables:
+                    if canActivateConsumables:
                         result.append(_makeEmptySlotVO(slotIdx))
 
             self.as_setPanelPropsS(dict(self._getSlotsProps()))

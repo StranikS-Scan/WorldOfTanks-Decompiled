@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/goodies/GoodiesCache.py
 import weakref
 from collections import defaultdict
@@ -47,7 +47,7 @@ class _GoodiesCache(object):
         boosterValues = self.personalGoodies.get(boosterID, None)
         return self.__makeBooster(boosterID, boosterDescription, boosterValues, self.getActiveBoostersTypes())
 
-    def getBoosters(self, criteria = REQ_CRITERIA.EMPTY):
+    def getBoosters(self, criteria=REQ_CRITERIA.EMPTY):
         results = {}
         activeBoosterTypes = self.getActiveBoostersTypes()
         for boosterID, boosterDescription in self.shopBoosters.iteritems():

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/graphics.py
 import BigWorld
 import math
@@ -128,7 +128,7 @@ def getGraphicsSetting(settingName):
         return GraphicSetting(*BigWorld.graphicsSettings()[index])
 
 
-def getGraphicsPresets(presetIdx = None):
+def getGraphicsPresets(presetIdx=None):
     __initPresetsData()
     if presetIdx is not None:
         return _g_graphPresets.getPreset(presetIdx)
@@ -159,7 +159,7 @@ def getResolution():
     return WindowSize(min(width, MIN_SCREEN_WIDTH), min(height, MIN_SCREEN_HEIGHT), currWindowSize.refreshRate)
 
 
-def getInterfaceScalesList(size, powerOfTwo = True):
+def getInterfaceScalesList(size, powerOfTwo=True):
     result = [SCALE_PREFIX[0]]
     if powerOfTwo:
         scale = max(min(int(math.log(max(size[0] / getResolution().width, 1.0), 2)), int(math.log(max(size[1] / getResolution().height, 1.0), 2))), 0)
@@ -227,7 +227,7 @@ class MonitorSettings(object):
         if curWindowSize.width != width or curWindowSize.height != height:
             BigWorld.resizeWindow(width, height)
 
-    def setGlyphCache(self, scale = 1):
+    def setGlyphCache(self, scale=1):
         textureSize = 1024 * math.ceil(scale)
         assert hasattr(GUI, 'wg_setGlyphCacheParams'), 'GUI.wg_setGlyphCacheParams() is not defined'
         GUI.wg_setGlyphCacheParams(1, textureSize, textureSize)

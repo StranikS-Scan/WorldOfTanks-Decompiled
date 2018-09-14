@@ -89,6 +89,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/french/F50_FCM36_20t/FCM36_20t_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	2.44 0.97 0.000000 0.000000	</tiling>
     </camouflage>
@@ -217,6 +218,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.905126 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/french/F50_FCM36_20t/collision/Chassis.model	</collisionModel>
@@ -488,6 +491,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.905126 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/french/F50_FCM36_20t/collision/Chassis.model	</collisionModel>
@@ -812,8 +817,8 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_01	</wwturretRotatorSoundManual>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.026 -0.010 1.026 -0.010 0.487 0.383 0.580 0.549 0.383 0.534 0.632 0.497 0.663 0.466 0.000	</physicsShape>
       <camouflage>
@@ -823,32 +828,17 @@
   </turrets0>
   <engines>
     <Berliet_MDPA>	shared	  <unlocks>
-        <engine>	Berliet_ACRO	  <cost>	95	</cost>
-        </engine>
-      </unlocks>
-    </Berliet_MDPA>
-    <Berliet_ACRO>	shared	  <unlocks>
         <engine>	Berliet_Ricardo	  <cost>	110	</cost>
         </engine>
       </unlocks>
-    </Berliet_ACRO>
+    </Berliet_MDPA>
     <Berliet_Ricardo>	shared	</Berliet_Ricardo>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <Fanions_de_signaux>	shared	  <unlocks>
-        <radio>	ER_54	  <cost>	90	</cost>
-        </radio>
-      </unlocks>
-    </Fanions_de_signaux>
-    <ER_54>	shared	  <unlocks>
-        <radio>	ER_28	  <cost>	115	</cost>
-        </radio>
-      </unlocks>
-    </ER_54>
-    <ER_28>	shared	</ER_28>
+    <ER_54>	shared	</ER_54>
   </radios>
   <effects>
     <collision></collision>

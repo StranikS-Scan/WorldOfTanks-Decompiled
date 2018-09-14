@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/chat_handlers.py
 from collections import namedtuple
 import weakref
@@ -205,8 +205,7 @@ class ArenaChatHandler(_EntityChatHandler):
         return channel
 
     def _getClientIDForCommand(self):
-        if self.__teamChannel:
-            return self.__teamChannel.getClientID()
+        return self.__teamChannel.getClientID() if self.__teamChannel else 0
 
     def __doRemoveChannels(self):
         self.__teamChannel = self._removeChannel(self.__teamChannel)
@@ -255,8 +254,7 @@ class UnitChatHandler(_EntityChatHandler):
         return self.__channel
 
     def _getClientIDForCommand(self):
-        if self.__channel:
-            return self.__channel.getClientID()
+        return self.__channel.getClientID() if self.__channel else 0
 
     def _onMessageBroadcast(self, _, args):
         self.addHistory()
@@ -267,7 +265,7 @@ class UnitChatHandler(_EntityChatHandler):
             return
         else:
             settings = None
-            if prbType == PREBATTLE_TYPE.SQUAD:
+            if prbType in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.FALLOUT):
                 settings = BATTLE_CHANNEL.SQUAD
             self.__channel = self._addChannel(entities.BWUnitChannelEntity(settings, prbType))
             return
@@ -311,8 +309,7 @@ class ClubChatHandler(_EntityChatHandler):
         return self.__channel
 
     def _getClientIDForCommand(self):
-        if self.__channel:
-            return self.__channel.getClientID()
+        return self.__channel.getClientID() if self.__channel else 0
 
     def _onMembersListUpdated(self, _, args):
         if not self.__channel:
@@ -433,7 +430,7 @@ class AdminChatCommandHandler(provider.ResponseDictHandler):
     def __init__(self, provider):
         super(AdminChatCommandHandler, self).__init__(provider)
 
-    def parseLine(self, text, clientID = 0):
+    def parseLine(self, text, clientID=0):
         cmd, result = None, admin_chat_cmd.parseCommandLine(text)
         if not result:
             return (False, None)

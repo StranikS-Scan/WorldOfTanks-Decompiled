@@ -1,13 +1,14 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/QuestsControl.py
 from collections import namedtuple
 from account_helpers.AccountSettings import AccountSettings, IGR_PROMO
+from gui.LobbyContext import g_lobbyContext
 from gui.shared.formatters import text_styles
 from helpers import i18n
 from gui import game_control
 from gui.server_events.events_dispatcher import showEventsWindow
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.server_events import g_eventsCache, isPotapovQuestEnabled, settings as quest_settings
+from gui.server_events import g_eventsCache, settings as quest_settings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -15,7 +16,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.meta.QuestsControlMeta import QuestsControlMeta
 _QuestButtonInfo = namedtuple('QuestButtonInfo', 'text tooltip alert highlight')
 
-def _createBtnInfo(text = '', tooltip = '', alert = False, highlight = True):
+def _createBtnInfo(text='', tooltip='', alert=False, highlight=True):
     return _QuestButtonInfo(text, tooltip, alert, highlight)
 
 
@@ -46,7 +47,7 @@ class QuestsControl(QuestsControlMeta):
         svrEvents = g_eventsCache.getEvents()
         quest_settings.updateCommonEventsSettings(svrEvents)
         btnInfo = _createBtnInfo(QUESTS.QUESTSCONTROL_ADDITIONALTITLE_EMPTY, TOOLTIPS.PRIVATEQUESTS_QUESTCONTROL_EMPTY, highlight=False)
-        if isPotapovQuestEnabled():
+        if g_lobbyContext.getServerSettings().isPotapovQuestEnabled():
             if not quest_settings.isNeedToShowHeaderAlert():
                 quest_settings.markHeaderAlertAsVisited()
                 btnInfo = _createBtnInfo(QUESTS.QUESTSCONTROL_ADDITIONALTITLE_FIRSTRUN, TOOLTIPS.PRIVATEQUESTS_QUESTCONTROL_NEW)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/BWKeyBindings.py
 """
 Utility methods for managing keybindings
@@ -155,8 +155,7 @@ class BWKeyBindings:
         for downKeys, notDownKeysList, actionName in self.bindList:
             if bindListByName.has_key(actionName):
                 bindListByName[actionName] += [(downKeys, notDownKeysList)]
-            else:
-                bindListByName[actionName] = [(downKeys, notDownKeysList)]
+            bindListByName[actionName] = [(downKeys, notDownKeysList)]
 
         actionNames = sorted(bindListByName.keys())
         for actionName in actionNames:
@@ -319,8 +318,7 @@ def _buildReverseKeysLookup():
         value = BigWorld.stringToKey(name)
         if value != 0 or name == 'NONE':
             _reverseKeysLookup[value] = name
-        else:
-            TRACE_MSG('Synonym "%s" is missing from BigWorlds key list' % (name,))
+        TRACE_MSG('Synonym "%s" is missing from BigWorlds key list' % (name,))
 
     for name in Keys.__dict__.keys():
         value = BigWorld.stringToKey(name[4:])
@@ -329,8 +327,7 @@ def _buildReverseKeysLookup():
         if _reverseKeysLookup.has_key(value):
             if _reverseKeysLookup[value] not in preferredSynonyms:
                 TRACE_MSG('Unexpected synonym for "%s": "%s"' % (_reverseKeysLookup[value], BigWorld.keyToString(value)))
-        else:
-            _reverseKeysLookup[value] = BigWorld.keyToString(value)
+        _reverseKeysLookup[value] = BigWorld.keyToString(value)
 
     for aliasName, aliasKeys in keyAliases.iteritems():
         _reverseKeysLookup[aliasKeys] = aliasName

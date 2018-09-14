@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/ApplicationMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
@@ -59,25 +59,19 @@ class ApplicationMeta(BaseDAAPIModule):
         self._printOverrideError('onAsInitializationCompleted')
 
     def as_isDAAPIInitedS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_isDAAPIInited()
+        return self.flashObject.as_isDAAPIInited() if self._isDAAPIInited() else None
 
     def as_populateS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_populate()
+        return self.flashObject.as_populate() if self._isDAAPIInited() else None
 
     def as_disposeS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_dispose()
+        return self.flashObject.as_dispose() if self._isDAAPIInited() else None
 
     def as_registerManagersS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_registerManagers()
+        return self.flashObject.as_registerManagers() if self._isDAAPIInited() else None
 
     def as_setLibrariesListS(self, list):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setLibrariesList(list)
+        return self.flashObject.as_setLibrariesList(list) if self._isDAAPIInited() else None
 
     def as_updateStageS(self, w, h, scale):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateStage(w, h, scale)
+        return self.flashObject.as_updateStage(w, h, scale) if self._isDAAPIInited() else None

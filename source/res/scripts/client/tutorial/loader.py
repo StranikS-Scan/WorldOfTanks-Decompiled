@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/loader.py
 import weakref
 import BigWorld
@@ -22,7 +22,7 @@ class RunCtx(object):
     def __init__(self, cache, **kwargs):
         super(RunCtx, self).__init__()
         self.cache = cache
-        self.databaseID = kwargs.get('databaseID', 0L)
+        self.databaseID = kwargs.get('databaseID', 0)
         self.restart = kwargs.get('restart', False)
         self.isFirstStart = kwargs.get('isFirstStart', False)
         self.isAfterBattle = kwargs.get('isAfterBattle', False)
@@ -100,7 +100,7 @@ class TutorialLoader(object):
             result = self.__tutorial.isStopped()
         return result
 
-    def run(self, settingsID, state = None):
+    def run(self, settingsID, state=None):
         """
         Try to run tutorial.
         
@@ -160,7 +160,7 @@ class TutorialLoader(object):
         else:
             return _settings.createTutorialElement(settings.reqs).isEnabled()
 
-    def stop(self, restore = True):
+    def stop(self, restore=True):
         self.__doStop(reason=_STOP_REASON.PLAYER_ACTION)
         self.__doStopHints()
         if restore:
@@ -179,7 +179,7 @@ class TutorialLoader(object):
             if self.__doRun(settings, runCtx):
                 return
 
-    def __doRun(self, settings, runCtx, byRequest = False):
+    def __doRun(self, settings, runCtx, byRequest=False):
         if not settings.enabled:
             return False
         else:
@@ -204,7 +204,7 @@ class TutorialLoader(object):
                 self.__tutorial.onStopped += self.__onTutorialStopped
             return result
 
-    def __doStop(self, reason = _STOP_REASON.DEFAULT):
+    def __doStop(self, reason=_STOP_REASON.DEFAULT):
         if self.__tutorial is not None:
             self.__tutorial.onStopped -= self.__onTutorialStopped
             self.__tutorial.stop(reason=reason)
@@ -216,7 +216,7 @@ class TutorialLoader(object):
             self.__hintsManager.stop()
         return
 
-    def __doClear(self, reason = _STOP_REASON.DEFAULT):
+    def __doClear(self, reason=_STOP_REASON.DEFAULT):
         self.__restoreID = None
         self.__doStop(reason=reason)
         self.__doStopHints()

@@ -1,17 +1,17 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/MultiStatusBar.py
 from Tkinter import *
 
 class MultiStatusBar(Frame):
 
-    def __init__(self, master = None, **kw):
+    def __init__(self, master=None, **kw):
         if master is None:
             master = Tk()
         Frame.__init__(self, master, **kw)
         self.labels = {}
         return
 
-    def set_label(self, name, text = '', side = LEFT):
+    def set_label(self, name, text='', side=LEFT):
         if name not in self.labels:
             label = Label(self, bd=1, relief=SUNKEN, anchor=W)
             label.pack(side=side)

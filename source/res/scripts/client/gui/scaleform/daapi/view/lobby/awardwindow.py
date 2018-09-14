@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/AwardWindow.py
 from collections import namedtuple
 from helpers import i18n
@@ -14,7 +14,7 @@ AwardsRibbonInfo = namedtuple('AwardsRibbonInfo', ['awardForCompleteText',
  'ribbonSource',
  'awards'])
 
-def packRibbonInfo(awards = None, awardForCompleteText = '', awardReceivedText = '', awardBonusStrText = ''):
+def packRibbonInfo(awards=None, awardForCompleteText='', awardReceivedText='', awardBonusStrText=''):
     return AwardsRibbonInfo(awardForCompleteText=awardForCompleteText, isAwardForCompleteVisible=bool(len(awardForCompleteText)), awardReceivedText=awardReceivedText, isAwardsReceivedVisible=bool(len(awardReceivedText)), awardBonusStrText=awardBonusStrText, isAwardBonusStrVisible=bool(len(awardBonusStrText)), ribbonSource=RES_ICONS.MAPS_ICONS_QUESTS_AWARDRIBBON, awards=awards or [])
 
 

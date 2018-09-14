@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/Utils.py
 import BigWorld, GUI, Math
 import string
@@ -72,7 +72,7 @@ def recurseSetColour(colour, c):
         recurseSetColour(colour, i)
 
 
-def nearestRelativeParent(component, depth = 0):
+def nearestRelativeParent(component, depth=0):
     if depth > 0 and hasattr(component, 'maxScroll'):
         return component
     elif component.parent is None:
@@ -175,7 +175,7 @@ def containWithinRectangle(position, width, height, mins, maxs):
     return (x, y)
 
 
-def createTextWithBackground(text, font, bgcolour, fgcolour = (255, 255, 255, 255)):
+def createTextWithBackground(text, font, bgcolour, fgcolour=(255, 255, 255, 255)):
     w = GUI.Window('system/maps/col_white.bmp')
     w.colour = bgcolour
     w.materialFX = 'BLEND'
@@ -218,7 +218,7 @@ class Budget:
 
 class GridLayoutManager:
 
-    def __init__(self, horiziontalFirst = 1):
+    def __init__(self, horiziontalFirst=1):
         self.horiziontalFirst = horiziontalFirst
         self.windowlessChildren = 0
         self.margin = 0.0
@@ -312,7 +312,7 @@ class BlinkingCursor(object):
         self.comp.blinker.colourProvider.a.time = CURSOR_BLINK_PERIOD / 2.0
         self.comp.width = CURSOR_WIDTH * getHPixelScalar()
 
-    def getScreenClipPosition(self, bottomLeft = False):
+    def getScreenClipPosition(self, bottomLeft=False):
         y = -self.comp.height / 2.0 if bottomLeft else 0
         return self.comp.localToScreen((0, y))
 

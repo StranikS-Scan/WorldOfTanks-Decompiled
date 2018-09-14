@@ -83,6 +83,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/french/F17_AMX_13_90/AMX_13_90_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_AMX_13_90>
@@ -192,6 +193,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.767352 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/french/F17_AMX_13_90/collision/Chassis.model	</collisionModel>
@@ -313,6 +316,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.767352 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/french/F17_AMX_13_90/collision/Chassis.model	</collisionModel>
@@ -497,6 +502,7 @@
       <showEmblemsOnGun>	true	</showEmblemsOnGun>
       <physicsShape>	1.410 -0.254 0.803 0.000 1.948 0.185 0.090 0.000 0.500 0.500 0.104 0.500 0.289 0.000 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
     </Turret_1_AMX_13_90>
   </turrets0>

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Joints/HardPoint.py
 from FX import s_sectionProcessors
 from FX import typeCheck
@@ -16,7 +16,7 @@ class HardPoint(Joint):
     should use the Node Joint instead.
     """
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """
         This method loads the HardPoint Joint from a data section.  The hard-
         point name is read from the section name.
@@ -24,7 +24,7 @@ class HardPoint(Joint):
         self.hpName = pSection.asString
         return self
 
-    def attach(self, actor, source, target = None):
+    def attach(self, actor, source, target=None):
         if actor.attached:
             ERROR_MSG('actor is already attached!', actor, self.hpName)
             return 0
@@ -42,7 +42,7 @@ class HardPoint(Joint):
             except:
                 ERROR_MSG('Unknown error', source, self.hpName)
 
-    def detach(self, actor, source, target = None):
+    def detach(self, actor, source, target=None):
         if not actor.attached:
             return
         try:

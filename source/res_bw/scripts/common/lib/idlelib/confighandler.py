@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/configHandler.py
 """Provides access to stored IDLE configuration information.
 
@@ -45,14 +45,14 @@ class IdleConfParser(ConfigParser):
     A ConfigParser specialised for idle configuration file handling
     """
 
-    def __init__(self, cfgFile, cfgDefaults = None):
+    def __init__(self, cfgFile, cfgDefaults=None):
         """
         cfgFile - string, fully specified configuration file name
         """
         self.file = cfgFile
         ConfigParser.__init__(self, defaults=cfgDefaults)
 
-    def Get(self, section, option, type = None, default = None, raw = False):
+    def Get(self, section, option, type=None, default=None, raw=False):
         """
         Get an option value for given section/option or return default.
         If type is specified, return as type.
@@ -118,8 +118,7 @@ class IdleUserConfParser(IdleConfParser):
         If section/option exists, remove it.
         Returns 1 if option was removed, 0 otherwise.
         """
-        if self.has_section(section):
-            return self.remove_option(section, option)
+        return self.remove_option(section, option) if self.has_section(section) else None
 
     def SetOption(self, section, option, value):
         """
@@ -238,7 +237,7 @@ class IdleConf():
 
         return userDir
 
-    def GetOption(self, configType, section, option, default = None, type = None, warn_on_default = True, raw = False):
+    def GetOption(self, configType, section, option, default=None, type=None, warn_on_default=True, raw=False):
         """
         Get an option value for given config type and given general
         configuration section/option or return a default. If type is specified,
@@ -302,7 +301,7 @@ class IdleConf():
             raise InvalidConfigSet, 'Invalid configSet specified'
         return cfgParser.sections()
 
-    def GetHighlight(self, theme, element, fgBg = None):
+    def GetHighlight(self, theme, element, fgBg=None):
         """
         return individual highlighting theme elements.
         fgBg - string ('fg'or'bg') or None, if None return a dictionary
@@ -395,7 +394,7 @@ class IdleConf():
         """
         return self.GetOption('main', 'Keys', 'name', default='')
 
-    def GetExtensions(self, active_only = True, editor_only = False, shell_only = False):
+    def GetExtensions(self, active_only=True, editor_only=False, shell_only=False):
         """
         Gets a list of all idle extensions declared in the config files.
         active_only - boolean, if true only return active (enabled) extensions
@@ -554,7 +553,7 @@ class IdleConf():
         """
         return '<<' + virtualEvent + '>>' in self.GetCoreKeys().keys()
 
-    def GetCoreKeys(self, keySetName = None):
+    def GetCoreKeys(self, keySetName=None):
         """
         returns the requested set of core keybindings, with fallbacks if
         required.
@@ -617,12 +616,11 @@ class IdleConf():
                 binding = self.GetKeyBinding(keySetName, event)
                 if binding:
                     keyBindings[event] = binding
-                else:
-                    warning = '\n Warning: configHandler.py - IdleConf.GetCoreKeys -\n problem retrieving key binding for event %r\n from key set %r.\n returning default value: %r\n' % (event, keySetName, keyBindings[event])
-                    try:
-                        sys.stderr.write(warning)
-                    except IOError:
-                        pass
+                warning = '\n Warning: configHandler.py - IdleConf.GetCoreKeys -\n problem retrieving key binding for event %r\n from key set %r.\n returning default value: %r\n' % (event, keySetName, keyBindings[event])
+                try:
+                    sys.stderr.write(warning)
+                except IOError:
+                    pass
 
         return keyBindings
 

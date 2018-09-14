@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SimpleWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -8,17 +8,13 @@ class SimpleWindowMeta(AbstractWindowView):
         self._printOverrideError('onBtnClick')
 
     def as_setWindowTitleS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setWindowTitle(value)
+        return self.flashObject.as_setWindowTitle(value) if self._isDAAPIInited() else None
 
     def as_setTextS(self, header, descrition):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setText(header, descrition)
+        return self.flashObject.as_setText(header, descrition) if self._isDAAPIInited() else None
 
     def as_setImageS(self, imgPath, imgBottomMargin):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setImage(imgPath, imgBottomMargin)
+        return self.flashObject.as_setImage(imgPath, imgBottomMargin) if self._isDAAPIInited() else None
 
     def as_setButtonsS(self, buttonsList, align, btnWidth):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setButtons(buttonsList, align, btnWidth)
+        return self.flashObject.as_setButtons(buttonsList, align, btnWidth) if self._isDAAPIInited() else None

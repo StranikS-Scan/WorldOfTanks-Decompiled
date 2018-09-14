@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/goodies.py
 import BigWorld
 from debug_utils import LOG_DEBUG
@@ -12,12 +12,10 @@ class BoosterActivator(Processor):
         self.__effectTime = booster.getEffectTimeStr()
         super(BoosterActivator, self).__init__((plugins.BoosterActivateValidator(booster),))
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('booster/%s' % errStr, boosterName=self.__boosterName)
-        return makeI18nError('booster/server_error', boosterName=self.__boosterName)
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('booster/%s' % errStr, boosterName=self.__boosterName) if len(errStr) else makeI18nError('booster/server_error', boosterName=self.__boosterName)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         localKey = 'booster/activationSuccess'
         return makeI18nSuccess(localKey, boosterName=self.__boosterName, time=self.__effectTime)
 

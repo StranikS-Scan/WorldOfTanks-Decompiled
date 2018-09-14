@@ -1,6 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/IntSettingsRequester.py
 import BigWorld
+import copy
 import constants
 from adisp import async, process
 from debug_utils import LOG_ERROR
@@ -74,7 +75,9 @@ class IntSettingsRequester(object):
      'TUTORIAL': 61,
      'FALLOUT_CAROUSEL_FILTER': 62,
      'MARKS_ON_GUN': constants.USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN,
-     'ONCE_ONLY_HINTS': 70}
+     'ONCE_ONLY_HINTS': 70,
+     'CMD_BLOCK_TRACKS': 71,
+     'CMD_VOICECHAT_ENABLE': 72}
 
     def __init__(self):
         self.__cache = dict()
@@ -94,7 +97,7 @@ class IntSettingsRequester(object):
         callback(value)
 
     @async
-    def _requestCache(self, callback = None):
+    def _requestCache(self, callback=None):
         """
         Request data from server
         """
@@ -102,7 +105,7 @@ class IntSettingsRequester(object):
 
     @async
     @process
-    def request(self, callback = None):
+    def request(self, callback=None):
         """
         Public request method. Validate player entity to request
         possibility and itself as single callback argument.
@@ -110,7 +113,7 @@ class IntSettingsRequester(object):
         self.__cache = yield self._requestCache()
         callback(self)
 
-    def getCacheValue(self, key, defaultValue = None):
+    def getCacheValue(self, key, defaultValue=None):
         """
         Public interface method to get value from cache.
         
@@ -129,11 +132,12 @@ class IntSettingsRequester(object):
         intSettings = dict(map(lambda item: (self.SETTINGS[item[0]], int(item[1])), settings.iteritems()))
         yield self._addIntSettings(intSettings)
 
-    def getSetting(self, key, defaultValue = None):
+    def getSetting(self, key, defaultValue=None):
         return self.getCacheValue(self.SETTINGS[key], defaultValue)
 
     @async
-    def _addIntSettings(self, settings, callback = None):
+    def _addIntSettings(self, settings, callback=None):
         import BattleReplay
         if not BattleReplay.g_replayCtrl.isPlaying:
+            self.__cache.update(settings)
             BigWorld.player().intUserSettings.addIntSettings(settings, callback)

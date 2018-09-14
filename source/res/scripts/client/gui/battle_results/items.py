@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/items.py
 from functools import partial
 from gui.shared.utils import mapTextureToTheMemory
 
 class TeamInfo(object):
 
-    def __init__(self, name = '', emblemRq = None):
+    def __init__(self, name='', emblemRq=None):
         self.__name = name
         self.__emblemRq = emblemRq or (lambda cb: cb(None))
 

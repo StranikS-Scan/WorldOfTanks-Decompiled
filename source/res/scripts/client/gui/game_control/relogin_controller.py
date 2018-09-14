@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/relogin_controller.py
 from debug_utils import LOG_DEBUG
 from gui.game_control.controllers import Controller
@@ -15,7 +15,7 @@ class ReloginController(Controller):
         self.__clearReloginChain()
         super(ReloginController, self).fini()
 
-    def doRelogin(self, peripheryID, onStoppedHandler = None, extraChainSteps = None):
+    def doRelogin(self, peripheryID, onStoppedHandler=None, extraChainSteps=None):
         from gui.shared import actions
         LOG_DEBUG('Attempt to relogin to the another periphery', peripheryID)
         chain = [actions.LeavePrbModalEntity(), actions.DisconnectFromPeriphery(), actions.ConnectToPeriphery(peripheryID)]

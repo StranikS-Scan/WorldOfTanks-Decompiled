@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/captcha/Kong.py
 from account_helpers.captcha import _BASE_CAPTCHA_API
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
@@ -20,18 +20,20 @@ class Kong(_BASE_CAPTCHA_API):
         challenge = ''
         resp = None
         try:
-            resp = urllib.urlopen('%s/captcha.jsp' % self._SERVER_API_URL)
-            challenge = resp.read()
-            params = urllib.urlencode({'s': challenge})
-            resp = urllib.urlopen('%s/verifyCodeServlet?%s' % (self._SERVER_API_URL, params))
-            contentType = resp.headers.get('content-type')
-            if contentType == 'image/jpeg':
-                pic = resp.read()
-            else:
-                LOG_ERROR('client can not load KONG CAPTCHA image', contentType)
-        except:
-            LOG_ERROR('client can not load KONG CAPTCHA image')
-            LOG_CURRENT_EXCEPTION()
+            try:
+                resp = urllib.urlopen('%s/captcha.jsp' % self._SERVER_API_URL)
+                challenge = resp.read()
+                params = urllib.urlencode({'s': challenge})
+                resp = urllib.urlopen('%s/verifyCodeServlet?%s' % (self._SERVER_API_URL, params))
+                contentType = resp.headers.get('content-type')
+                if contentType == 'image/jpeg':
+                    pic = resp.read()
+                else:
+                    LOG_ERROR('client can not load KONG CAPTCHA image', contentType)
+            except:
+                LOG_ERROR('client can not load KONG CAPTCHA image')
+                LOG_CURRENT_EXCEPTION()
+
         finally:
             if resp is not None:
                 resp.close()

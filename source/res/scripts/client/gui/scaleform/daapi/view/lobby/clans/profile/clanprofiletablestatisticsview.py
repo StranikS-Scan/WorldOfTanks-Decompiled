@@ -1,12 +1,13 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileTableStatisticsView.py
 import BigWorld
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.clans.profile import getI18ArenaById
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.clans.clan_controller import g_clanCtrl
-from gui.clans.items import formatField
+from gui.clans.items import formatField, isValueAvailable
 from gui.shared.utils import sortByFields
+from gui.shared.utils.functions import makeTooltip
 from helpers.i18n import makeString as _ms
 from adisp import process
 from gui.shared.formatters import icons, text_styles
@@ -15,8 +16,9 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIData
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
 from helpers import time_utils
+from gui.clans import formatters
 
-def _packColumn(columndID, label, buttonWidth, tooltip, enabled, icon = '', sortOrder = -1, showSeparator = True, textAlign = 'left'):
+def _packColumn(columndID, label, buttonWidth, tooltip, enabled, icon='', sortOrder=-1, showSeparator=True, textAlign='left'):
     return {'id': columndID,
      'label': _ms(label),
      'iconSource': icon,
@@ -135,8 +137,7 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
         self._dispose()
 
     def getSelectedIdx(self):
-        if self.__selectedID in self.__mapping:
-            return self.__mapping[self.__selectedID]
+        return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1
 
     def setSelectedID(self, id):
         self.__selectedID = id
@@ -157,7 +158,7 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
         self.__dataList = provinces
         for province in provinces:
             self._list.append(self._makeVO(province))
-            if province.isHqConnected():
+            if province.isHqConnected() and not self.__isRobbed(province):
                 self.__commonRevenue += self.__getIncome(province)
 
     def rebuildList(self, cache):
@@ -167,9 +168,7 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
     def refreshItem(self, cache, clanDBID):
         isSelected = self.__selectedID == clanDBID
         self.buildList(cache)
-        if isSelected and clanDBID not in self.__mapping:
-            return True
-        return False
+        return True if isSelected and clanDBID not in self.__mapping else False
 
     def pyGetSelectedIdx(self):
         return self.getSelectedIdx()
@@ -182,14 +181,19 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
             self.refresh()
 
     def _makeVO(self, province):
+        isRobbed = self.__isRobbed(province)
         result = {'front': '%s %s' % (self.__getFront(province), text_styles.standard(formatField(province.getFrontLevel, formatter=fort_formatters.getTextLevel))),
          'province': self.__getProvinceName(province),
          'map': self.__getMap(province),
          'primeTime': text_styles.main(province.getUserPrimeTime()),
-         'days': text_styles.main(BigWorld.wg_getIntegralFormat(self.__getDays(province)))}
+         'days': text_styles.main(BigWorld.wg_getIntegralFormat(self.__getDays(province))),
+         'isRobbed': isRobbed}
+        if isRobbed:
+            restoreTime = province.getPillageEndDatetime()
+            result.update({'robbedTooltip': makeTooltip(None, text_styles.concatStylesToMultiLine(text_styles.main(_ms(CLANS.GLOBALMAPVIEW_TABLE_PROVINCEROBBED_TOOLTIP_NOINCOME)), text_styles.neutral(_ms(CLANS.GLOBALMAPVIEW_TABLE_PROVINCEROBBED_TOOLTIP_RESTORETIME, date=text_styles.main(formatters.formatShortDateShortTimeString(restoreTime))))))})
         if self.__showTreasuryData:
             result.update({'income': text_styles.gold(BigWorld.wg_getIntegralFormat(self.__getIncome(province))),
-             'noIncomeIconVisible': not province.isHqConnected(),
+             'noIncomeIconVisible': not province.isHqConnected() or isRobbed,
              'noIncomeTooltip': CLANS.GLOBALMAPVIEW_NOINCOME_TOOLTIP})
         return result
 
@@ -215,3 +219,9 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
 
     def __getIncome(self, province):
         return province.getRevenue()
+
+    def __isRobbed(self, province):
+        isRobbed = False
+        if isValueAvailable(province.getPillageCooldown):
+            isRobbed = bool(province.pillage_cooldown)
+        return isRobbed

@@ -1,8 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/errors.py
 import BigWorld
 from chat_shared import CHAT_RESPONSES
 from debug_utils import LOG_ERROR, LOG_WARNING
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from helpers import i18n
 from helpers.time_utils import makeLocalServerTime
 import messenger
@@ -22,7 +23,7 @@ class ChannelNotFound(messenger.error):
 
 class ChatActionError(IChatError):
 
-    def __init__(self, title, message, isModal = False):
+    def __init__(self, title, message, isModal=False):
         super(ChatActionError, self).__init__()
         self._title = title
         self._message = message
@@ -117,3 +118,20 @@ class CommandInCooldownError(ChatActionError):
         else:
             LOG_ERROR('CommandInCooldown', chatActionDict)
         return result
+
+
+class I18nError(IChatError):
+    __slots__ = ('__message',)
+
+    def __init__(self, key, **kwargs):
+        super(I18nError, self).__init__()
+        self.__message = i18n.makeString(key, **kwargs)
+
+    def getMessage(self):
+        return self.__message
+
+
+class ChannelLimitReachedError(I18nError):
+
+    def __init__(self):
+        super(ChannelLimitReachedError, self).__init__(MESSENGER.CLIENT_ERROR_CHANNEL_LIMIT_REACHED)

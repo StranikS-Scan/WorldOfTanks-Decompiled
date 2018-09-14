@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VOIP/VOIPManager.py
 import BigWorld
 import Event
@@ -239,17 +239,17 @@ class VOIPManager(VOIPHandler):
         self.setMicrophoneVolume(int(round(SoundGroups.g_instance.getVolume(KEY_VOIP_MIC) * 100)))
 
     def __muffleMasterVolume(self):
-        SoundGroups.g_instance.muffleFMODVolume()
+        SoundGroups.g_instance.muffleVolume()
 
     def __restoreMasterVolume(self):
-        SoundGroups.g_instance.restoreFMODVolume()
+        SoundGroups.g_instance.restoreVolume()
 
     def setVoiceActivation(self, enabled):
         LOG_VOIP_INT('VOIPManager.SetVoiceActivation: %s' % str(enabled))
         self.__activateMicByVoice = enabled
         self.setMicMute(not enabled)
 
-    def setMicMute(self, muted = True):
+    def setMicMute(self, muted=True):
         if not self.__initialized:
             return
         if muted and self.__activateMicByVoice:
@@ -275,7 +275,7 @@ class VOIPManager(VOIPHandler):
         outcome = self.__channelUsers.get(dbid, {}).get('talking', False)
         return outcome
 
-    def __requestCredentials(self, reset = 0):
+    def __requestCredentials(self, reset=0):
         LOG_VOIP_INT('VOIPManager.RequestUserCredentials')
         self.bwProto.voipProvider.requestCredentials(reset)
 

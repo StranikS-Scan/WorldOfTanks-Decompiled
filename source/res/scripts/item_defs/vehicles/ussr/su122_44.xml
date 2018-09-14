@@ -94,6 +94,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R89_SU122_44/SU122_44_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_SU122_44_2>
@@ -192,6 +193,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.916845 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R89_SU122_44/collision/Chassis.model	</collisionModel>
@@ -302,6 +305,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_SU122_44>
   </turrets0>

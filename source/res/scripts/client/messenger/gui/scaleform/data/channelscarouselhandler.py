@@ -1,21 +1,20 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/ChannelsCarouselHandler.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.ChannelCarouselMeta import ChannelCarouselMeta
 from gui.Scaleform.framework import ViewTypes
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework.managers.containers import ExternalCriteria
+from gui.Scaleform.genConsts.MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES import MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES
 from gui.app_loader.decorators import sf_lobby
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelManagementEvent, ChannelCarouselEvent, PreBattleChannelEvent
-from gui.shared.events import FocusEvent, ComponentEvent
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.data.ChannelsDataProvider import ChannelsDataProvider
 
 class ChannelFindCriteria(ExternalCriteria):
 
-    def __init__(self, criteria = None):
+    def __init__(self, criteria=None):
         super(ChannelFindCriteria, self).__init__(criteria)
 
     def find(self, name, obj):
@@ -47,40 +46,6 @@ class ChannelsCarouselHandler(object):
         add(ChannelManagementEvent.REQUEST_TO_REMOVE, self.__handleRequestToRemove, scope=EVENT_BUS_SCOPE.LOBBY)
         add(ChannelManagementEvent.REQUEST_TO_CHANGE, self.__handleRequestToChange, scope=EVENT_BUS_SCOPE.LOBBY)
         add(ChannelManagementEvent.REQUEST_TO_SHOW, self.__handleRequestToShow, scope=EVENT_BUS_SCOPE.LOBBY)
-        add(FocusEvent.COMPONENT_FOCUSED, self.__handleComponentFocusIn)
-        add(ComponentEvent.COMPONENT_REGISTERED, self.__handleComponentRegistered)
-        add(ComponentEvent.COMPONENT_UNREGISTERED, self.__handleComponentUnregistered)
-
-    def __handleComponentRegistered(self, _):
-        self.__checkOpenedWindows()
-
-    def __handleComponentUnregistered(self, _):
-        self.__checkOpenedWindows()
-
-    def __checkOpenedWindows(self):
-        self.___checkOpenedWindows(self.__channelsDP)
-        self.___checkOpenedWindows(self.__preBattleChannelsDP)
-
-    def ___checkOpenedWindows(self, targetDataProvider):
-        listItems = targetDataProvider.collection
-        for item in listItems:
-            clientID = item['clientID']
-            if not clientID:
-                return
-            if clientID not in self.__handlers:
-                return
-            criteria, openHandler, viewType = self.__handlers[clientID]
-            app = self.app
-            if not app:
-                return
-            containerMgr = app.containerManager
-            if containerMgr is not None:
-                container = containerMgr.getContainer(viewType)
-                if container is not None:
-                    window = container.getView(criteria)
-                    targetDataProvider.setItemField(clientID, 'isWindowOpened', window is not None)
-
-        return
 
     def clear(self):
         self.__guiEntry = None
@@ -100,9 +65,6 @@ class ChannelsCarouselHandler(object):
         remove(ChannelManagementEvent.REQUEST_TO_REMOVE, self.__handleRequestToRemove, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelManagementEvent.REQUEST_TO_CHANGE, self.__handleRequestToChange, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelManagementEvent.REQUEST_TO_SHOW, self.__handleRequestToShow, scope=EVENT_BUS_SCOPE.LOBBY)
-        remove(FocusEvent.COMPONENT_FOCUSED, self.__handleComponentFocusIn)
-        remove(ComponentEvent.COMPONENT_REGISTERED, self.__handleComponentRegistered)
-        remove(ComponentEvent.COMPONENT_UNREGISTERED, self.__handleComponentUnregistered)
         return
 
     def start(self):
@@ -113,6 +75,8 @@ class ChannelsCarouselHandler(object):
         add(ChannelCarouselEvent.MINIMIZE_ALL_CHANNELS, self.__handlerMinimizeAll, scope=EVENT_BUS_SCOPE.LOBBY)
         add(ChannelCarouselEvent.CLOSE_ALL_EXCEPT_CURRENT, self.__handlerCloseAllExceptCurrent, scope=EVENT_BUS_SCOPE.LOBBY)
         add(ChannelCarouselEvent.CLOSE_BUTTON_CLICK, self.__handleCloseButtonClick, scope=EVENT_BUS_SCOPE.LOBBY)
+        add(ChannelCarouselEvent.ON_WINDOW_CHANGE_FOCUS, self.__handleOnWindowChangeFocus, scope=EVENT_BUS_SCOPE.LOBBY)
+        add(ChannelCarouselEvent.ON_WINDOW_CHANGE_OPEN_STATE, self.__handleOnWindowChangeOpenState, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def stop(self):
         remove = g_eventBus.removeListener
@@ -122,11 +86,13 @@ class ChannelsCarouselHandler(object):
         remove(ChannelCarouselEvent.MINIMIZE_ALL_CHANNELS, self.__handlerMinimizeAll, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelCarouselEvent.CLOSE_ALL_EXCEPT_CURRENT, self.__handlerCloseAllExceptCurrent, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(ChannelCarouselEvent.CLOSE_BUTTON_CLICK, self.__handleCloseButtonClick, scope=EVENT_BUS_SCOPE.LOBBY)
+        remove(ChannelCarouselEvent.ON_WINDOW_CHANGE_FOCUS, self.__handleOnWindowChangeFocus, scope=EVENT_BUS_SCOPE.LOBBY)
+        remove(ChannelCarouselEvent.ON_WINDOW_CHANGE_OPEN_STATE, self.__handleOnWindowChangeOpenState, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__channelsDP.finiGUI()
         self.__preBattleChannelsDP.finiGUI()
         self.__showByReqs.clear()
 
-    def addChannel(self, channel, lazy = False, isNotified = False):
+    def addChannel(self, channel, lazy=False, isNotified=False):
         clientID = channel.getClientID()
         isSystem = channel.isSystem()
         if lazy:
@@ -157,7 +123,7 @@ class ChannelsCarouselHandler(object):
         self.__channelsDP.removeItem(clientID)
         return
 
-    def notifyChannel(self, channel, isNotified = True):
+    def notifyChannel(self, channel, isNotified=True):
         clientID = channel.getClientID()
         self.__setItemField(clientID, 'isNotified', isNotified)
 
@@ -269,18 +235,6 @@ class ChannelsCarouselHandler(object):
                 self.__showByReqs.pop(clientID, None)
             return
 
-    def __handleComponentFocusIn(self, event):
-        clientID = event.ctx.get('clientID', None)
-        self.__checkFocusedWindow(clientID, self.__channelsDP)
-        self.__checkFocusedWindow(clientID, self.__preBattleChannelsDP)
-        return
-
-    def __checkFocusedWindow(self, targetClientID, targetDataProvider):
-        listItems = targetDataProvider.collection
-        for item in listItems:
-            clientID = item['clientID']
-            targetDataProvider.setItemField(clientID, 'isWindowFocused', clientID == targetClientID)
-
     def __handleRequestToShow(self, event):
         ctx = event.ctx
         show = ctx.get('show')
@@ -361,6 +315,20 @@ class ChannelsCarouselHandler(object):
         channel = self.__guiEntry.channelsCtrl.getController(clientID).getChannel()
         if not channel.isSystem():
             self.__closeChannel(clientID)
+
+    def __handleOnWindowChangeFocus(self, event):
+        self.__updateItemField(event.clientID, event.wndType, 'isWindowFocused', event.flag)
+
+    def __handleOnWindowChangeOpenState(self, event):
+        self.__updateItemField(event.clientID, event.wndType, 'isWindowOpened', event.flag)
+
+    def __updateItemField(self, clientID, wndType, key, flag):
+        if wndType is not None:
+            if wndType == MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES.CHANNEL_CAROUSEL_ITEM_TYPE_MESSENGER:
+                self.__channelsDP.setItemField(clientID, key, flag)
+            elif wndType == MESSENGER_CHANNEL_CAROUSEL_ITEM_TYPES.CHANNEL_CAROUSEL_ITEM_TYPE_PREBATTLE:
+                self.__preBattleChannelsDP.setItemField(clientID, key, flag)
+        return
 
     def __closeChannel(self, clientID):
         if not clientID:

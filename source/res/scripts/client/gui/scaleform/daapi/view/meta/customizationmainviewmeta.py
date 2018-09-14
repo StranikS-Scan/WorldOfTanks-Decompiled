@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CustomizationMainViewMeta.py
 from gui.Scaleform.framework.entities.View import View
 
@@ -41,61 +41,40 @@ class CustomizationMainViewMeta(View):
         self._printOverrideError('backToSelectorGroup')
 
     def as_showBuyingPanelS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showBuyingPanel()
+        return self.flashObject.as_showBuyingPanel() if self._isDAAPIInited() else None
 
     def as_hideBuyingPanelS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_hideBuyingPanel()
+        return self.flashObject.as_hideBuyingPanel() if self._isDAAPIInited() else None
 
     def as_setHeaderDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setHeaderData(data)
+        return self.flashObject.as_setHeaderData(data) if self._isDAAPIInited() else None
 
     def as_setBonusPanelDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setBonusPanelData(data)
-
-    def as_setBuyingPanelDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setBuyingPanelData(data)
-
-    def as_setBuyingPanelInitDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setBuyingPanelInitData(data)
+        return self.flashObject.as_setBonusPanelData(data) if self._isDAAPIInited() else None
 
     def as_setCarouselDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCarouselData(data)
+        return self.flashObject.as_setCarouselData(data) if self._isDAAPIInited() else None
 
     def as_setCarouselInitS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCarouselInit(data)
+        return self.flashObject.as_setCarouselInit(data) if self._isDAAPIInited() else None
 
     def as_setCarouselFilterDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCarouselFilterData(data)
+        return self.flashObject.as_setCarouselFilterData(data) if self._isDAAPIInited() else None
 
-    def as_setBottomPanelHeaderS(self, newHeaderText):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setBottomPanelHeader(newHeaderText)
+    def as_setBottomPanelHeaderS(self, data):
+        return self.flashObject.as_setBottomPanelHeader(data) if self._isDAAPIInited() else None
 
     def as_setSlotsPanelDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSlotsPanelData(data)
+        return self.flashObject.as_setSlotsPanelData(data) if self._isDAAPIInited() else None
 
     def as_showSelectorItemS(self, id):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showSelectorItem(id)
+        return self.flashObject.as_showSelectorItem(id) if self._isDAAPIInited() else None
 
     def as_showSelectorGroupS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showSelectorGroup()
+        return self.flashObject.as_showSelectorGroup() if self._isDAAPIInited() else None
 
     def as_updateSlotS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateSlot(data)
+        return self.flashObject.as_updateSlot(data) if self._isDAAPIInited() else None
 
     def as_setBottomPanelInitDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setBottomPanelInitData(data)
+        return self.flashObject.as_setBottomPanelInitData(data) if self._isDAAPIInited() else None

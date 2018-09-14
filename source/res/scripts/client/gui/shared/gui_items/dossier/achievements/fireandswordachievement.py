@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/FireAndSwordAchievement.py
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from abstract import ClassProgressAchievement
@@ -7,7 +7,7 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 
 class FireAndSwordAchievement(Fortification, ClassProgressAchievement):
 
-    def __init__(self, dossier, value = None):
+    def __init__(self, dossier, value=None):
         ClassProgressAchievement.__init__(self, 'fireAndSword', _AB.FORT, dossier, value)
 
     def getNextLevelInfo(self):

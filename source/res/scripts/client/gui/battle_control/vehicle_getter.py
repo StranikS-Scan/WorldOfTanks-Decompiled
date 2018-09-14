@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/vehicle_getter.py
 from collections import defaultdict
 from gui import TANKMEN_ROLES_ORDER_DICT
@@ -18,10 +18,7 @@ def hasTurretRotator(vDesc):
 
 
 def getYawLimits(vDesc):
-    if vDesc is None:
-        return
-    else:
-        return vDesc.gun['turretYawLimits']
+    return None if vDesc is None else vDesc.gun['turretYawLimits']
 
 
 def hasYawLimits(vDesc):
@@ -55,7 +52,7 @@ def isAutoRotationOn(vDesc):
 def getCrewMainRolesWoIndexes(crewRoles):
     order = TANKMEN_ROLES_ORDER_DICT['plain']
     default = len(order)
-    return sorted(map(lambda roles: roles[0], crewRoles), key=lambda item: (order.index(item) if item in order else default))
+    return sorted(map(lambda roles: roles[0], crewRoles), key=lambda item: order.index(item) if item in order else default)
 
 
 def getCrewMainRolesWithIndexes(crewRoles):
@@ -74,7 +71,7 @@ def getCrewMainRolesWithIndexes(crewRoles):
 
 class TankmenStatesIterator(object):
 
-    def __init__(self, states = None, vDesc = None):
+    def __init__(self, states=None, vDesc=None):
         super(TankmenStatesIterator, self).__init__()
         if vDesc is None:
             crewRoles = []
@@ -104,7 +101,7 @@ class TankmenStatesIterator(object):
 
 class VehicleDeviceStatesIterator(object):
 
-    def __init__(self, states = None, vDesc = None, devices = None):
+    def __init__(self, states=None, vDesc=None, devices=None):
         super(VehicleDeviceStatesIterator, self).__init__()
         self._states = defaultdict(lambda : 'normal', states or {})
         self._hasTurret = hasTurretRotator(vDesc)
@@ -131,7 +128,7 @@ class VehicleDeviceStatesIterator(object):
 
 class VehicleGUIItemStatesIterator(VehicleDeviceStatesIterator):
 
-    def __init__(self, states = None, vDesc = None):
+    def __init__(self, states=None, vDesc=None):
         super(VehicleGUIItemStatesIterator, self).__init__(states, vDesc, VEHICLE_GUI_ITEMS)
 
     def next(self):
@@ -144,7 +141,7 @@ class VehicleGUIItemStatesIterator(VehicleDeviceStatesIterator):
                     deviceState = state
                     deviceName = name
                     break
-                elif state == 'critical':
+                if state == 'critical':
                     deviceState = state
                     deviceName = name
 

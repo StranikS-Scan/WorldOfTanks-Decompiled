@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CompanyListMeta.py
 from gui.Scaleform.daapi.view.lobby.prb_windows.BasePrebattleListView import BasePrebattleListView
 
@@ -26,17 +26,13 @@ class CompanyListMeta(BasePrebattleListView):
         self._printOverrideError('getClientID')
 
     def as_showPlayersListS(self, index):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showPlayersList(index)
+        return self.flashObject.as_showPlayersList(index) if self._isDAAPIInited() else None
 
     def as_setDefaultFilterS(self, creatorMask, isNotInBattle, division):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setDefaultFilter(creatorMask, isNotInBattle, division)
+        return self.flashObject.as_setDefaultFilter(creatorMask, isNotInBattle, division) if self._isDAAPIInited() else None
 
     def as_setRefreshCoolDownS(self, time):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setRefreshCoolDown(time)
+        return self.flashObject.as_setRefreshCoolDown(time) if self._isDAAPIInited() else None
 
     def as_disableCreateButtonS(self, isDisable):
-        if self._isDAAPIInited():
-            return self.flashObject.as_disableCreateButton(isDisable)
+        return self.flashObject.as_disableCreateButton(isDisable) if self._isDAAPIInited() else None

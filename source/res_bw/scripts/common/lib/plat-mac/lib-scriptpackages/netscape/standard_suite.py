@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Netscape/Standard_Suite.py
 """Suite Standard Suite: Common terms for most applications
 Level 1, version 1
@@ -12,7 +13,7 @@ from StdSuites.Standard_Suite import *
 
 class Standard_Suite_Events(Standard_Suite_Events):
 
-    def close(self, _object, _attributes = {}, **_arguments):
+    def close(self, _object, _attributes={}, **_arguments):
         """close: Close an object
         Required argument: the objects to close
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -25,10 +26,9 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def data_size(self, _object, _attributes = {}, **_arguments):
+    def data_size(self, _object, _attributes={}, **_arguments):
         """data size: Return the size in bytes of an object
         Required argument: the object whose data size is to be returned
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -42,10 +42,9 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def get(self, _object, _attributes = {}, **_arguments):
+    def get(self, _object, _attributes={}, **_arguments):
         """get: Get the data for an object
         Required argument: the object whose data is to be returned
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -59,12 +58,11 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_set = {'to': 'data'}
 
-    def set(self, _object, _attributes = {}, **_arguments):
+    def set(self, _object, _attributes={}, **_arguments):
         """set: Set an object\xd5s data
         Required argument: the object to change
         Keyword argument to: the new value
@@ -77,8 +75,7 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class application(aetools.ComponentItem):

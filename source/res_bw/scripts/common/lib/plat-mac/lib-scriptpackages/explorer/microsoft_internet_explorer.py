@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Explorer/Microsoft_Internet_Explorer.py
 """Suite Microsoft Internet Explorer Suite: Events defined by Internet Explorer
 Level 1, version 1
@@ -11,7 +12,7 @@ _code = 'MSIE'
 
 class Microsoft_Internet_Explorer_Events:
 
-    def GetSource(self, _object = None, _attributes = {}, **_arguments):
+    def GetSource(self, _object=None, _attributes={}, **_arguments):
         """GetSource: Get the HTML source of a browser window
         Required argument: Window Identifier of window from which to get the source. No value means get the source from the frontmost window.
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -25,10 +26,9 @@ class Microsoft_Internet_Explorer_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def PrintBrowserWindow(self, _object = None, _attributes = {}, **_arguments):
+    def PrintBrowserWindow(self, _object=None, _attributes={}, **_arguments):
         """PrintBrowserWindow: Print contents of browser window (HTML)
         Required argument: Window Identifier of the window to print. No value means print the frontmost browser window.
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -41,12 +41,11 @@ class Microsoft_Internet_Explorer_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_do_script = {'window': 'WIND'}
 
-    def do_script(self, _object, _attributes = {}, **_arguments):
+    def do_script(self, _object, _attributes={}, **_arguments):
         """do script: Execute script commands
         Required argument: JavaScript text to execute
         Keyword argument window: optional Window Identifier (as supplied by the ListWindows event) specifying context in which to execute the script
@@ -60,8 +59,7 @@ class Microsoft_Internet_Explorer_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 _classdeclarations = {}

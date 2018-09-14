@@ -1,9 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ClientHangarSpace.py
 from collections import namedtuple
 import functools
 from AvatarInputHandler.cameras import FovExtended
-import BigWorld, Math, ResMgr
+import BigWorld
+import Math
+import ResMgr
 import Keys
 import copy
 import MusicController
@@ -28,15 +30,22 @@ import MapActivities
 from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
 import TankHangarShadowProxy
 import weakref
-import FMOD
+import SoundGroups
 import json
-if FMOD.enabled:
-    import VehicleAppearance
+import VehicleAppearance
 from VehicleEffects import RepaintParams
-_DEFAULT_HANGAR_SPACE_PATH_BASIC = 'spaces/hangar_v2'
-_DEFAULT_HANGAR_SPACE_PATH_PREM = 'spaces/hangar_premium_v2'
+_DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
+
+def _getDefaultHangarPath(isPremium):
+    if isPremium:
+        template = '%s/hangar_premium_v2'
+    else:
+        template = '%s/hangar_v2'
+    return template % _DEFAULT_SPACES_PATH
+
+
 _HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT = math.pi / 4
 _CAMOUFLAGE_MIN_INTENSITY = 1.0
 _CFG = {}
@@ -70,9 +79,7 @@ class HangarCameraYawFilter():
             return inAngle
         delta1 = self.__start - inAngle
         delta2 = self.__end - inAngle
-        if math.fabs(delta1) > math.fabs(delta2):
-            return self.__end
-        return self.__start
+        return self.__end if math.fabs(delta1) > math.fabs(delta2) else self.__start
 
     def getNextYaw(self, currentYaw, targetYaw, delta):
         if delta == 0.0 or self.__prevDirection * delta < 0:
@@ -106,12 +113,84 @@ class HangarCameraYawFilter():
         return nextYaw
 
 
+def readHangarSettings(igrKey):
+    global _HANGAR_CFGS
+    global _DEFAULT_CFG
+    global _CFG
+    hangarsXml = ResMgr.openSection('gui/hangars.xml')
+    for isPremium in (False, True):
+        spacePath = _getDefaultHangarPath(isPremium)
+        settingsXmlPath = spacePath + '/space.settings'
+        ResMgr.purge(settingsXmlPath, True)
+        settingsXml = ResMgr.openSection(settingsXmlPath)
+        settingsXml = settingsXml['hangarSettings']
+        cfg = {'path': spacePath,
+         'cam_yaw_constr': Math.Vector2(-180, 180),
+         'cam_pitch_constr': Math.Vector2(-70, -5)}
+        loadConfig(cfg, settingsXml)
+        loadConfigValue('shadow_model_name', hangarsXml, hangarsXml.readString, cfg)
+        loadConfigValue('shadow_default_texture_name', hangarsXml, hangarsXml.readString, cfg)
+        loadConfigValue('shadow_empty_texture_name', hangarsXml, hangarsXml.readString, cfg)
+        loadConfigValue(igrKey, hangarsXml, hangarsXml.readString, cfg)
+        _DEFAULT_CFG[getSpaceType(isPremium)] = cfg
+        _HANGAR_CFGS[spacePath.lower()] = settingsXml
+
+    for folderName, folderDS in ResMgr.openSection(_DEFAULT_SPACES_PATH).items():
+        settingsXml = ResMgr.openSection(_DEFAULT_SPACES_PATH + '/' + folderName + '/space.settings/hangarSettings')
+        if settingsXml is not None:
+            _HANGAR_CFGS[('spaces/' + folderName).lower()] = settingsXml
+
+    _CFG = copy.copy(_DEFAULT_CFG[getSpaceType(False)])
+    return
+
+
+def loadConfig(cfg, xml, defaultCfg=None):
+    if defaultCfg is None:
+        defaultCfg = cfg
+    loadConfigValue('v_scale', xml, xml.readFloat, cfg, defaultCfg)
+    loadConfigValue('v_start_angles', xml, xml.readVector3, cfg, defaultCfg)
+    loadConfigValue('v_start_pos', xml, xml.readVector3, cfg, defaultCfg)
+    loadConfigValue('cam_start_target_pos', xml, xml.readVector3, cfg, defaultCfg)
+    loadConfigValue('cam_start_dist', xml, xml.readFloat, cfg, defaultCfg)
+    loadConfigValue('cam_start_angles', xml, xml.readVector2, cfg, defaultCfg)
+    loadConfigValue('cam_dist_constr', xml, xml.readVector2, cfg, defaultCfg)
+    loadConfigValue('cam_pitch_constr', xml, xml.readVector2, cfg, defaultCfg)
+    loadConfigValue('cam_yaw_constr', xml, xml.readVector2, cfg, defaultCfg)
+    loadConfigValue('preview_cam_dist_constr', xml, xml.readVector2, cfg, defaultCfg)
+    loadConfigValue('cam_sens', xml, xml.readFloat, cfg, defaultCfg)
+    loadConfigValue('cam_pivot_pos', xml, xml.readVector3, cfg, defaultCfg)
+    loadConfigValue('cam_fluency', xml, xml.readFloat, cfg, defaultCfg)
+    loadConfigValue('emblems_alpha_damaged', xml, xml.readFloat, cfg, defaultCfg)
+    loadConfigValue('emblems_alpha_undamaged', xml, xml.readFloat, cfg, defaultCfg)
+    loadConfigValue('shadow_light_dir', xml, xml.readVector3, cfg, defaultCfg)
+    loadConfigValue('preview_cam_start_dist', xml, xml.readFloat, cfg, defaultCfg)
+    loadConfigValue('preview_cam_start_angles', xml, xml.readVector2, cfg, defaultCfg)
+    loadConfigValue('preview_cam_pivot_pos', xml, xml.readVector3, cfg, defaultCfg)
+    loadConfigValue('preview_cam_start_target_pos', xml, xml.readVector3, cfg, defaultCfg)
+    loadConfigValue('shadow_model_name', xml, xml.readString, cfg, defaultCfg)
+    loadConfigValue('shadow_default_texture_name', xml, xml.readString, cfg, defaultCfg)
+    loadConfigValue('shadow_empty_texture_name', xml, xml.readString, cfg, defaultCfg)
+    for i in range(0, 3):
+        cfg['v_start_angles'][i] = math.radians(cfg['v_start_angles'][i])
+
+    return
+
+
+def loadConfigValue(name, xml, fn, cfg, defaultCfg=None):
+    if xml.has_key(name):
+        cfg[name] = fn(name)
+    else:
+        cfg[name] = defaultCfg.get(name) if defaultCfg is not None else None
+    return
+
+
+def getSpaceType(isPremium):
+    return 'premium' if isPremium else 'basic'
+
+
 class ClientHangarSpace():
 
     def __init__(self):
-        global _HANGAR_CFGS
-        global _DEFAULT_CFG
-        global _CFG
         self.__spaceId = None
         self.__cam = None
         self.__waitCallback = None
@@ -132,39 +211,18 @@ class ClientHangarSpace():
         self.__prevDirection = 0.0
         self.__camDistConstr = ((0.0, 0.0), (0.0, 0.0))
         self.__locatedOnEmbelem = False
-        hangarsXml = ResMgr.openSection('gui/hangars.xml')
-        for isPremium in (False, True):
-            spacePath = _DEFAULT_HANGAR_SPACE_PATH_PREM if isPremium else _DEFAULT_HANGAR_SPACE_PATH_BASIC
-            settingsXml = ResMgr.openSection(spacePath + '/space.settings')
-            settingsXml = settingsXml['hangarSettings']
-            cfg = {'path': spacePath,
-             'cam_yaw_constr': Math.Vector2(-180, 180),
-             'cam_pitch_constr': Math.Vector2(-70, -5)}
-            self.__loadConfig(cfg, settingsXml)
-            self.__loadConfigValue('shadow_model_name', hangarsXml, hangarsXml.readString, cfg)
-            self.__loadConfigValue('shadow_default_texture_name', hangarsXml, hangarsXml.readString, cfg)
-            self.__loadConfigValue('shadow_empty_texture_name', hangarsXml, hangarsXml.readString, cfg)
-            self.__loadConfigValue(self.__igrHangarPathKey, hangarsXml, hangarsXml.readString, cfg)
-            _DEFAULT_CFG[self.getSpaceType(isPremium)] = cfg
-            _HANGAR_CFGS[spacePath.lower()] = settingsXml
-
-        for folderName, folderDS in ResMgr.openSection('spaces').items():
-            settingsXml = ResMgr.openSection('spaces/' + folderName + '/space.settings/hangarSettings')
-            if settingsXml is not None:
-                _HANGAR_CFGS[('spaces/' + folderName).lower()] = settingsXml
-
-        _CFG = copy.copy(_DEFAULT_CFG[self.getSpaceType(False)])
+        readHangarSettings(self.__igrHangarPathKey)
         self.__yawCameraFilter = HangarCameraYawFilter(math.radians(_CFG['cam_yaw_constr'][0]), math.radians(_CFG['cam_yaw_constr'][1]), _CFG['cam_sens'])
         return
 
-    def create(self, isPremium, onSpaceLoadedCallback = None):
+    def create(self, isPremium, onSpaceLoadedCallback=None):
         global _EVENT_HANGAR_PATHS
         global _CFG
         BigWorld.worldDrawEnabled(False)
         BigWorld.wg_setSpecialFPSMode()
         self.__onLoadedCallback = onSpaceLoadedCallback
         self.__spaceId = BigWorld.createSpace()
-        type = self.getSpaceType(isPremium)
+        type = getSpaceType(isPremium)
         _CFG = copy.copy(_DEFAULT_CFG[type])
         spacePath = _DEFAULT_CFG[type]['path']
         LOG_DEBUG('load hangar: hangar type = <{0:>s}>, space = <{1:>s}>'.format(type, spacePath))
@@ -198,7 +256,7 @@ class ClientHangarSpace():
 
         spacePathLC = spacePath.lower()
         if _HANGAR_CFGS.has_key(spacePathLC):
-            self.__loadConfig(_CFG, _HANGAR_CFGS[spacePathLC], _CFG)
+            loadConfig(_CFG, _HANGAR_CFGS[spacePathLC], _CFG)
         self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
         self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
         self.__yawCameraFilter = HangarCameraYawFilter(math.radians(_CFG['cam_yaw_constr'][0]), math.radians(_CFG['cam_yaw_constr'][1]), _CFG['cam_sens'])
@@ -221,12 +279,7 @@ class ClientHangarSpace():
         BigWorld.pauseDRRAutoscaling(True)
         return
 
-    def playHangarMusic(self, restart = False):
-        MusicController.g_musicController.setAccountAttrs(g_itemsCache.items.stats.attributes, restart)
-        MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
-        MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_LOBBY)
-
-    def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback = None):
+    def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback=None):
         if self.__vAppearance is None:
             LOG_ERROR('ClientHangarSpace.recreateVehicle failed because hangar space has not been loaded correctly.')
             return
@@ -258,7 +311,7 @@ class ClientHangarSpace():
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
-    def updateVehicleCamouflage(self, camouflageID = None):
+    def updateVehicleCamouflage(self, camouflageID=None):
         self.__vAppearance.updateCamouflage(camouflageID=camouflageID)
 
     def updateVehicleSticker(self, model):
@@ -309,7 +362,7 @@ class ClientHangarSpace():
          'pitch': sourceMat.pitch,
          'dist': self.__cam.pivotMaxDist}
 
-    def setCameraLocation(self, targetPos = None, pivotPos = None, yaw = None, pitch = None, dist = None, ignoreConstraints = False):
+    def setCameraLocation(self, targetPos=None, pivotPos=None, yaw=None, pitch=None, dist=None, ignoreConstraints=False):
         sourceMat = Math.Matrix(self.__cam.source)
         if yaw is None:
             yaw = sourceMat.yaw
@@ -340,7 +393,7 @@ class ClientHangarSpace():
     def locateCameraToPreview(self):
         self.setCameraLocation(targetPos=_CFG['preview_cam_start_target_pos'], pivotPos=_CFG['preview_cam_pivot_pos'], yaw=math.radians(_CFG['preview_cam_start_angles'][0]), pitch=math.radians(_CFG['preview_cam_start_angles'][1]), dist=_CFG['preview_cam_start_dist'])
 
-    def locateCameraOnEmblem(self, onHull, emblemType, emblemIdx, relativeSize = 0.5):
+    def locateCameraOnEmblem(self, onHull, emblemType, emblemIdx, relativeSize=0.5):
         self.__selectedEmblemInfo = (onHull,
          emblemType,
          emblemIdx,
@@ -406,10 +459,6 @@ class ClientHangarSpace():
 
     def spaceLoading(self):
         return self.__waitCallback is not None
-
-    def getSpaceType(self, isPremium):
-        if isPremium:
-            return 'premium'
 
     def __destroy(self):
         LOG_DEBUG('Hangar successfully destroyed.')
@@ -478,44 +527,7 @@ class ClientHangarSpace():
             if self.__destroyFunc:
                 self.__destroyFunc()
                 self.__destroyFunc = None
-        return
-
-    def __loadConfig(self, cfg, xml, defaultCfg = None):
-        if defaultCfg is None:
-            defaultCfg = cfg
-        self.__loadConfigValue('v_scale', xml, xml.readFloat, cfg, defaultCfg)
-        self.__loadConfigValue('v_start_angles', xml, xml.readVector3, cfg, defaultCfg)
-        self.__loadConfigValue('v_start_pos', xml, xml.readVector3, cfg, defaultCfg)
-        self.__loadConfigValue('cam_start_target_pos', xml, xml.readVector3, cfg, defaultCfg)
-        self.__loadConfigValue('cam_start_dist', xml, xml.readFloat, cfg, defaultCfg)
-        self.__loadConfigValue('cam_start_angles', xml, xml.readVector2, cfg, defaultCfg)
-        self.__loadConfigValue('cam_dist_constr', xml, xml.readVector2, cfg, defaultCfg)
-        self.__loadConfigValue('cam_pitch_constr', xml, xml.readVector2, cfg, defaultCfg)
-        self.__loadConfigValue('cam_yaw_constr', xml, xml.readVector2, cfg, defaultCfg)
-        self.__loadConfigValue('preview_cam_dist_constr', xml, xml.readVector2, cfg, defaultCfg)
-        self.__loadConfigValue('cam_sens', xml, xml.readFloat, cfg, defaultCfg)
-        self.__loadConfigValue('cam_pivot_pos', xml, xml.readVector3, cfg, defaultCfg)
-        self.__loadConfigValue('cam_fluency', xml, xml.readFloat, cfg, defaultCfg)
-        self.__loadConfigValue('emblems_alpha_damaged', xml, xml.readFloat, cfg, defaultCfg)
-        self.__loadConfigValue('emblems_alpha_undamaged', xml, xml.readFloat, cfg, defaultCfg)
-        self.__loadConfigValue('shadow_light_dir', xml, xml.readVector3, cfg, defaultCfg)
-        self.__loadConfigValue('preview_cam_start_dist', xml, xml.readFloat, cfg, defaultCfg)
-        self.__loadConfigValue('preview_cam_start_angles', xml, xml.readVector2, cfg, defaultCfg)
-        self.__loadConfigValue('preview_cam_pivot_pos', xml, xml.readVector3, cfg, defaultCfg)
-        self.__loadConfigValue('preview_cam_start_target_pos', xml, xml.readVector3, cfg, defaultCfg)
-        self.__loadConfigValue('shadow_model_name', xml, xml.readString, cfg, defaultCfg)
-        self.__loadConfigValue('shadow_default_texture_name', xml, xml.readString, cfg, defaultCfg)
-        self.__loadConfigValue('shadow_empty_texture_name', xml, xml.readString, cfg, defaultCfg)
-        for i in range(0, 3):
-            cfg['v_start_angles'][i] = math.radians(cfg['v_start_angles'][i])
-
-        return
-
-    def __loadConfigValue(self, name, xml, fn, cfg, defaultCfg = None):
-        if xml.has_key(name):
-            cfg[name] = fn(name)
-        else:
-            cfg[name] = defaultCfg.get(name) if defaultCfg is not None else None
+            SoundGroups.LSstartAll()
         return
 
     def __requestFakeShadowModel(self):
@@ -595,7 +607,7 @@ class _VehicleAppearance():
         g_itemsCache.onSyncCompleted += self.__onItemsCacheSyncCompleted
         return
 
-    def recreate(self, vDesc, vState, onVehicleLoadedCallback = None):
+    def recreate(self, vDesc, vState, onVehicleLoadedCallback=None):
         self.__onLoadedCallback = onVehicleLoadedCallback
         self.__isLoaded = False
         self.__startBuild(vDesc, vState)
@@ -673,9 +685,8 @@ class _VehicleAppearance():
         for resID, resource in resourceRefs.items():
             if resID not in failedIDs:
                 resources[resID] = resource
-            else:
-                LOG_ERROR('Could not load %s' % resID)
-                succesLoaded = False
+            LOG_ERROR('Could not load %s' % resID)
+            succesLoaded = False
 
         if succesLoaded:
             self.__setupModel(buildInd)
@@ -713,16 +724,11 @@ class _VehicleAppearance():
         self.__setupEmblems(self.__vDesc)
         self.__vehicleStickers.show = False
         if not self.__isVehicleDestroyed:
-            fashion = BigWorld.WGVehicleFashion(False, _CFG['v_scale'])
-            import FMOD
-            if FMOD.enabled:
-                import VehicleAppearance
-                VehicleAppearance.setupTracksFashion(fashion, self.__vDesc, self.__isVehicleDestroyed)
+            fashion = BigWorld.WGVehicleFashion(False, _CFG['v_scale'], False)
+            VehicleAppearance.setupTracksFashion(fashion, self.__vDesc, self.__isVehicleDestroyed)
             chassis.wg_fashion = fashion
             fashion.initialUpdateTracks(1.0, 10.0)
-            if FMOD.enabled:
-                import VehicleAppearance
-                VehicleAppearance.setupSplineTracks(fashion, self.__vDesc, chassis, self.__resources)
+            VehicleAppearance.setupSplineTracks(fashion, self.__vDesc, chassis, self.__resources)
         for model in self.__models:
             model.visible = False
             model.visibleAttachments = False
@@ -753,22 +759,16 @@ class _VehicleAppearance():
             BigWorld.cancelCallback(self.__smRemoveCb)
             self.__smRemoveCb = None
         if BigWorld.spaceLoadStatus() < 1.0:
-            self.__smCb = BigWorld.callback(0, self.__setupHangarShadowMap)
+            self.__smCb = BigWorld.callback(0.0, self.__setupHangarShadowMap)
             return
         else:
             self.__smCb = None
             if 'observer' in self.__vDesc.type.tags:
                 self.__removeHangarShadowMap()
                 return
-            vehiclePath = self.__vDesc.chassis['models']['undamaged']
-            vehiclePath = vehiclePath[:vehiclePath.rfind('/normal')]
-            dsVehicle = ResMgr.openSection(vehiclePath)
-            shadowMapTexFileName = _CFG['shadow_default_texture_name']
-            if dsVehicle is not None:
-                for fileName, _ in dsVehicle.items():
-                    if fileName.lower().find('_hangarshadowmap.dds') != -1:
-                        shadowMapTexFileName = vehiclePath + '/' + fileName
-
+            shadowMapTexFileName = self.__vDesc.hull['hangarShadowTexture']
+            if shadowMapTexFileName is None:
+                shadowMapTexFileName = _CFG['shadow_default_texture_name']
             self.__hangarSpace.modifyFakeShadowAsset(shadowMapTexFileName)
             return
 
@@ -951,7 +951,7 @@ class _VehicleAppearance():
         dir = dirRot.applyVector(Math.Vector3(0, 0, 1))
         return dir
 
-    def updateCamouflage(self, camouflageID = None):
+    def updateCamouflage(self, camouflageID=None):
         texture = ''
         colors = [0,
          0,
@@ -1015,8 +1015,8 @@ class _VehicleAppearance():
                         if tiling is not None:
                             tiling = (tiling[0] * coeff[0],
                              tiling[1] * coeff[1],
-                             tiling[2] * coeff[2],
-                             tiling[3] * coeff[3])
+                             tiling[2] + coeff[2],
+                             tiling[3] + coeff[3])
                         else:
                             tiling = coeff
                     if compDesc.get('camouflageExclusionMask'):
@@ -1074,7 +1074,7 @@ class _ClientHangarSpacePathOverride():
         from gui.shared.utils.HangarSpace import g_hangarSpace
         g_hangarSpace.refreshSpace(isPremium, True)
 
-    def setPath(self, path, isPremium = None):
+    def setPath(self, path, isPremium=None):
         if path is not None and not path.startswith('spaces/'):
             path = 'spaces/' + path
         from gui.shared.utils.HangarSpace import g_hangarSpace
@@ -1084,6 +1084,7 @@ class _ClientHangarSpacePathOverride():
             _EVENT_HANGAR_PATHS[isPremium] = path
         elif _EVENT_HANGAR_PATHS.has_key(isPremium):
             del _EVENT_HANGAR_PATHS[isPremium]
+        readHangarSettings('igrPremHangarPath' + ('CN' if constants.IS_CHINA else ''))
         g_hangarSpace.refreshSpace(g_hangarSpace.isPremium, True)
         return
 
@@ -1101,7 +1102,7 @@ class _ClientHangarSpacePathOverride():
                     del _EVENT_HANGAR_PATHS[False]
                 if not isPremium:
                     hasChanged = True
-            elif notification['type'] == _SERVER_CMD_CHANGE_HANGAR_PREM:
+            if notification['type'] == _SERVER_CMD_CHANGE_HANGAR_PREM:
                 if _EVENT_HANGAR_PATHS.has_key(True):
                     del _EVENT_HANGAR_PATHS[True]
                 if isPremium:
@@ -1124,7 +1125,7 @@ class _ClientHangarSpacePathOverride():
                 _EVENT_HANGAR_VISIBILITY_MASK[False] = visibilityMask
                 if not isPremium:
                     hasChanged = True
-            elif notification['type'] == _SERVER_CMD_CHANGE_HANGAR_PREM:
+            if notification['type'] == _SERVER_CMD_CHANGE_HANGAR_PREM:
                 _EVENT_HANGAR_PATHS[True] = path
                 _EVENT_HANGAR_VISIBILITY_MASK[True] = visibilityMask
                 if isPremium:

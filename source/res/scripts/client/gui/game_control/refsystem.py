@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/RefSystem.py
 from collections import defaultdict
 from operator import methodcaller, itemgetter
@@ -44,6 +44,7 @@ def _getMaxNumberOfReferrals():
 class CreditsAward(AwardAbstract):
 
     def __init__(self, creditsValue):
+        super(CreditsAward, self).__init__()
         self.__creditsValue = long(creditsValue)
 
     def getWindowTitle(self):
@@ -66,6 +67,7 @@ class CreditsAward(AwardAbstract):
 class VehicleAward(AwardAbstract):
 
     def __init__(self, vehicle, boughtVehicle, achievedXp):
+        super(VehicleAward, self).__init__()
         self.__vehicle = vehicle
         self.__boughtVehicle = boughtVehicle
         self.__achievedXp = achievedXp
@@ -102,6 +104,7 @@ class VehicleAward(AwardAbstract):
 class TankmanAward(AwardAbstract):
 
     def __init__(self, tankman, achievedXp, nextXp):
+        super(TankmanAward, self).__init__()
         self.__tankman = tankman
         self.__achievedXp = achievedXp
         self.__nextXp = nextXp
@@ -113,16 +116,23 @@ class TankmanAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
 
     def getAwardImage(self):
-        return RES_ICONS.MAPS_ICONS_REFERRAL_TANKMANMALE
+        if self.__tankman.isFemale:
+            return RES_ICONS.MAPS_ICONS_QUESTS_TANKMANFEMALEORANGE
+        else:
+            return RES_ICONS.MAPS_ICONS_REFERRAL_TANKMANMALE
 
     def getHeader(self):
         return text_styles.highTitle(_ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_HEADER))
 
     def getDescription(self):
-        if self.__achievedXp is not None:
-            description = _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NORMAL, expCount=BigWorld.wg_getIntegralFormat(self.__achievedXp), tankman=self.__tankman.roleUserName)
+        if self.__tankman.isFemale:
+            tankman = '%s %s' % (_ms('#quests:bonuses/item/tankwoman'), self.__tankman.roleUserName)
         else:
-            description = _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NOXP, tankman=self.__tankman.roleUserName)
+            tankman = self.__tankman.roleUserName
+        if self.__achievedXp is not None:
+            description = _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NORMAL, expCount=BigWorld.wg_getIntegralFormat(self.__achievedXp), tankman=tankman)
+        else:
+            description = _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NOXP, tankman=tankman)
         return text_styles.main(description)
 
     def getAdditionalText(self):
@@ -240,7 +250,7 @@ class RefSystem(Controller):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW, ctx={'invitesCount': invitesCount}), EVENT_BUS_SCOPE.LOBBY)
         self.onPlayerBecomeReferrer()
 
-    def showReferralIntroWindow(self, nickname, isNewbie = False):
+    def showReferralIntroWindow(self, nickname, isNewbie=False):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRALS_INTRO_WINDOW, ctx={'referrerName': nickname,
          'newbie': isNewbie}), EVENT_BUS_SCOPE.LOBBY)
         self.onPlayerBecomeReferral()
@@ -257,8 +267,7 @@ class RefSystem(Controller):
             if completedQuestID in map(methodcaller('getID'), quests):
                 currentXP = xp
                 break
-            else:
-                nextXP = xp
+            nextXP = xp
 
         return (currentXP, nextXP, self.getReferralsXPPool() < self.getTotalXP())
 
@@ -318,10 +327,9 @@ class RefSystem(Controller):
         for key, item in (data.get('referrals') or {}).iteritems():
             if key == 'xpPoolOfDeletedRals':
                 self.__xpPoolOfDeletedRals = item
-            else:
-                referral = self.__makeRefItem(key, **item)
-                if referral is not None:
-                    yield referral
+            referral = self.__makeRefItem(key, **item)
+            if referral is not None:
+                yield referral
 
         return
 
@@ -419,7 +427,7 @@ class _RefItem(object):
                 periodTime = 0
                 for period, bonus in _getRefSystemPeriods():
                     periodTime += period * time_utils.ONE_HOUR
-                    if delta <= periodTime and self.__xpPool < maxXPPool:
+                    if delta < periodTime and self.__xpPool < maxXPPool:
                         timeLeft = 0
                         if periodTime <= time_utils.ONE_YEAR:
                             timeLeft = periodTime - delta
@@ -433,5 +441,4 @@ class _RefItem(object):
 
     def getBonusTimeLeftStr(self):
         _, timeLeft = self.getBonus()
-        if timeLeft:
-            return time_utils.getTillTimeString(timeLeft, MENU.TIME_TIMEVALUE)
+        return time_utils.getTillTimeString(timeLeft, MENU.TIME_TIMEVALUE) if timeLeft else ''

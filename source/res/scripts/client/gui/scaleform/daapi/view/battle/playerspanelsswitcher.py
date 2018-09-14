@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/PlayersPanelsSwitcher.py
 from account_helpers.settings_core import g_settingsCore
 from debug_utils import LOG_DEBUG
@@ -6,7 +6,7 @@ from gui.battle_control.battle_period_ctrl import IPlayersPanelsSwitcher
 
 class PlayersPanelsSwitcher(IPlayersPanelsSwitcher):
 
-    def __init__(self, ui = None):
+    def __init__(self, ui=None):
         super(PlayersPanelsSwitcher, self).__init__()
         self.__ui = ui
         self.__ui.addExternalCallback('Battle.playersPanelStateChange', self.__onPlayersPanelStateChange)
@@ -33,6 +33,6 @@ class PlayersPanelsSwitcher(IPlayersPanelsSwitcher):
         self.__isChanged = True
         g_settingsCore.applySetting('ppState', state)
 
-    def __call(self, funcName, args = None):
+    def __call(self, funcName, args=None):
         if self.__ui:
             self.__ui.call('players_panel.{0}'.format(funcName), args)

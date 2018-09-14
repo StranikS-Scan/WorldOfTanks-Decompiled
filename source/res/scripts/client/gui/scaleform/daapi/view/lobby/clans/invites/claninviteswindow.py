@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanInvitesWindow.py
 import weakref
 from functools import partial
@@ -74,7 +74,7 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
     def clanInfo(self):
         return self.__clanDossier.getClanInfo()
 
-    def resyncClanInfo(self, force = False):
+    def resyncClanInfo(self, force=False):
         self.__clanDossier.resyncClanInfo(force=force)
 
     def showWaiting(self, show):
@@ -200,9 +200,10 @@ class _PaginatorsController(object):
         for v in self.__paginators.itervalues():
             v.reset()
 
-    def markPanginatorsAsUnSynced(self):
-        for v in self.__paginators.itervalues():
-            v.markAsUnSynced()
+    def markPanginatorsAsUnSynced(self, viewAlias):
+        for (alias, filter), paginator in self.__paginators.iteritems():
+            if alias == viewAlias:
+                paginator.markAsUnSynced()
 
     def isInProgress(self):
         inProgress = False

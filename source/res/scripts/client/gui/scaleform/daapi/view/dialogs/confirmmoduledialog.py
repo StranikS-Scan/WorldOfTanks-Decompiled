@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/ConfirmModuleDialog.py
 from PlayerEvents import g_playerEvents
 from adisp import process
@@ -101,9 +101,7 @@ class ConfirmModuleDialog(ConfirmModuleWindowMeta):
                                 for vehicle modules the value of icon is the level of
                                 particular module
         """
-        if module.itemTypeID not in (vehicles._OPTIONALDEVICE, vehicles._SHELL, vehicles._EQUIPMENT):
-            return str(module.level)
-        return module.icon
+        return str(module.level) if module.itemTypeID not in (vehicles._OPTIONALDEVICE, vehicles._SHELL, vehicles._EQUIPMENT) else module.icon
 
     def onWindowClose(self):
         self._callHandler(False)

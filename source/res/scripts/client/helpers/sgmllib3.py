@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/sgmllib3.py
 """A parser for SGML, using the derived class as a static DTD."""
 import _markupbase
@@ -24,7 +24,7 @@ class SGMLParseError(RuntimeError):
 class SGMLParser(_markupbase.ParserBase):
     entity_or_charref = re.compile('&(?:([a-zA-Z][-.a-zA-Z0-9]*)|#([0-9]+))(;?)')
 
-    def __init__(self, verbose = 0):
+    def __init__(self, verbose=0):
         """Initialize and reset this instance."""
         self.verbose = verbose
         self.reset()
@@ -113,8 +113,7 @@ class SGMLParser(_markupbase.ParserBase):
                     if n > i + 1:
                         self.handle_data('<')
                         i = i + 1
-                    else:
-                        break
+                    break
                     continue
                 if rawdata.startswith('<!--', i):
                     k = self.parse_comment(i)
@@ -229,8 +228,8 @@ class SGMLParser(_markupbase.ParserBase):
                 if not rest:
                     attrvalue = attrname
                 else:
-                    if attrvalue[:1] == "'" == attrvalue[-1:] or attrvalue[:1] == '"' == attrvalue[-1:]:
-                        attrvalue = attrvalue[1:-1]
+                    if not attrvalue[:1] == "'" == attrvalue[-1:]:
+                        attrvalue = attrvalue[:1] == '"' == attrvalue[-1:] and attrvalue[1:-1]
                     attrvalue = self.entity_or_charref.sub(self._convert_ref, attrvalue)
                 attrs.append((attrname.lower(), attrvalue))
                 k = match.end(0)
@@ -337,9 +336,7 @@ class SGMLParser(_markupbase.ParserBase):
         except ValueError:
             return
 
-        if not 0 <= n <= 127:
-            return
-        return self.convert_codepoint(n)
+        return None if not 0 <= n <= 127 else self.convert_codepoint(n)
 
     def convert_codepoint(self, codepoint):
         return chr(codepoint)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/m_constants.py
 from collections import namedtuple
 from helpers import i18n
@@ -10,10 +10,6 @@ BREAKERS_MAX_LENGTH = 1
 MESSAGES_HISTORY_MAX_LEN = 50
 BATTLE_SHARED_HISTORY_MAX_LEN = 250
 SCH_MSGS_MAX_LENGTH = 250
-CHANNEL_NAME_MIN_LENGTH = 3
-CHANNEL_NAME_MAX_LENGTH = 32
-CHANNEL_PWD_MIN_LENGTH = 3
-CHANNEL_PWD_MAX_LENGTH = 12
 
 class MESSENGER_SCOPE(object):
     UNKNOWN = 0
@@ -82,6 +78,8 @@ class USER_TAG(object):
     IGR_PREMIUM = 'igr/premium'
     INVALID_NAME = 'invalid/name'
     INVALID_RATING = 'invalid/rating'
+    SEARCH = 'search'
+    TEMP = 'temp'
     SUB_NONE = 'sub/none'
     SUB_PENDING_IN = 'sub/pendingIn'
     SUB_PENDING_OUT = 'sub/pendingOut'
@@ -95,7 +93,9 @@ class USER_TAG(object):
     _SHARED_TAGS = {CLAN_MEMBER,
      CLUB_MEMBER,
      REFERRER,
-     REFERRAL}
+     REFERRAL,
+     SEARCH,
+     TEMP}
     _CLOSED_CONTACTS = _SHARED_TAGS | {FRIEND}
     _ALL_CONTACTS = _SHARED_TAGS | {IGNORED, SUB_PENDING_IN}
     _STORED_TO_CACHE = {MUTED}
@@ -143,7 +143,7 @@ class CLIENT_ERROR_ID(object):
 CLIENT_ERROR_NAMES = {v:k for k, v in CLIENT_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
 
 class CLIENT_ACTION_ID(object):
-    ADD_FRIEND, REMOVE_FRIEND, ADD_IGNORED, REMOVE_IGNORED, SET_MUTE, UNSET_MUTE, ADD_GROUP, CHANGE_GROUP, RQ_FRIENDSHIP, APPROVE_FRIENDSHIP, CANCEL_FRIENDSHIP, SET_NOTE, REMOVE_NOTE, SEND_MESSAGE, RQ_HISTORY = range(1, 16)
+    ADD_FRIEND, REMOVE_FRIEND, ADD_IGNORED, REMOVE_IGNORED, SET_MUTE, UNSET_MUTE, ADD_GROUP, CHANGE_GROUP, RQ_FRIENDSHIP, APPROVE_FRIENDSHIP, CANCEL_FRIENDSHIP, SET_NOTE, REMOVE_NOTE, SEND_MESSAGE, RQ_HISTORY, CREATE_USER_ROOM, JOIN_USER_ROOM, LEAVE_USER_ROOM, SEARCH_USER_ROOM = range(1, 20)
 
 
 CLIENT_ACTION_NAMES = {v:k for k, v in CLIENT_ACTION_ID.__dict__.iteritems() if not k.startswith('_')}

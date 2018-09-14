@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ScriptBinding.py
 """Extension to execute code outside the Python shell window.
 
@@ -46,8 +46,7 @@ class ScriptBinding:
             return 'break'
         if not self.checksyntax(filename):
             return 'break'
-        if not self.tabnanny(filename):
-            return 'break'
+        return 'break' if not self.tabnanny(filename) else None
 
     def tabnanny(self, filename):
         f = open(filename, 'r')
@@ -79,22 +78,24 @@ class ScriptBinding:
         text = self.editwin.text
         text.tag_remove('ERROR', '1.0', 'end')
         try:
-            return compile(source, filename, 'exec')
-        except (SyntaxError, OverflowError, ValueError) as err:
             try:
-                msg, (errorfilename, lineno, offset, line) = err
-                if not errorfilename:
-                    err.args = (msg, (filename,
-                      lineno,
-                      offset,
-                      line))
-                    err.filename = filename
-                self.colorize_syntax_error(msg, lineno, offset)
-            except:
-                msg = '*** ' + str(err)
+                return compile(source, filename, 'exec')
+            except (SyntaxError, OverflowError, ValueError) as err:
+                try:
+                    msg, (errorfilename, lineno, offset, line) = err
+                    if not errorfilename:
+                        err.args = (msg, (filename,
+                          lineno,
+                          offset,
+                          line))
+                        err.filename = filename
+                    self.colorize_syntax_error(msg, lineno, offset)
+                except:
+                    msg = '*** ' + str(err)
 
-            self.errorbox('Syntax error', "There's an error in your program:\n" + msg)
-            return False
+                self.errorbox('Syntax error', "There's an error in your program:\n" + msg)
+                return False
+
         finally:
             shell.set_warning_stream(saved_stream)
 

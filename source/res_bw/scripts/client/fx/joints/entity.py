@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Joints/Entity.py
 from FX import s_sectionProcessors
 from FX import typeCheck
@@ -21,7 +21,7 @@ class Entity(Joint):
     current location of the Entity, but will not move around once attached.
     """
 
-    def attach(self, actor, source, target = None):
+    def attach(self, actor, source, target=None):
         if actor.attached:
             ERROR_MSG('actor is already attached!', self, actor, source)
             return 0
@@ -54,7 +54,7 @@ class Entity(Joint):
                 ERROR_MSG('Unknown error trying to move actor to the correct location', actor, source)
             return
 
-    def detach(self, actor, source, target = None):
+    def detach(self, actor, source, target=None):
         if not actor.attached:
             return
         try:

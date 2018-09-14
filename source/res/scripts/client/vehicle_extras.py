@@ -1,16 +1,14 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_extras.py
 import BigWorld
+import Math
 import random
-import SoundGroups
+from functools import partial
+from helpers.EffectsList import EffectsListPlayer
 from AvatarInputHandler import ShakeReason
-import items
-import constants
-from Vibroeffects.Controllers.ShootingController import ShootingController
-from debug_utils import *
+from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from helpers import i18n
 from helpers.EntityExtra import EntityExtra
-import BattleReplay
 
 def reload():
     modNames = (reload.__module__,)
@@ -25,13 +23,9 @@ def reload():
 class NoneExtra(EntityExtra):
 
     def _start(self, data, args):
-        debug_utils.LOG_CODEPOINT_WARNING()
+        LOG_CODEPOINT_WARNING()
         self.stop(data)
 
-
-import Math
-from functools import partial
-from helpers.EffectsList import EffectsListPlayer
 
 class ShowShooting(EntityExtra):
 
@@ -75,7 +69,7 @@ class ShowShooting(EntityExtra):
                 data['_burst'] = (burstCount - 1, burstInterval)
                 data['_timerID'] = BigWorld.callback(burstInterval, partial(self.__doShot, data))
                 effPlayer.play(gunModel)
-                if data['entity'].isPlayer:
+                if data['entity'].isPlayerVehicle:
                     avatar = BigWorld.player()
                     avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, 2)
             if not vehicle.appearance.isInWater:
@@ -83,7 +77,7 @@ class ShowShooting(EntityExtra):
                 if groundWaveEff is not None:
                     self.__doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
             self.__doRecoil(vehicle, gunModel)
-            if vehicle.isPlayer:
+            if vehicle.isPlayerVehicle:
                 appearance = vehicle.appearance
                 appearance.executeShootingVibrations(vehicle.typeDescriptor.shot['shell']['caliber'])
         except Exception:
@@ -98,7 +92,7 @@ class ShowShooting(EntityExtra):
         appearance = vehicle.appearance
         appearance.gunRecoil.recoil()
         appearance.receiveShotImpulse(impulseDir, impulseValue)
-        if vehicle.isPlayer:
+        if vehicle.isPlayerVehicle:
             node = gunModel.node('HP_gunFire')
             gunPos = Math.Matrix(node).translation
         else:
@@ -207,7 +201,8 @@ class Fire(EntityExtra):
         if '_effectsPlayer' in data:
             data['_effectsPlayer'].detachAllFrom(data)
 
-    def checkUnderwater(self, data, vehicle, isVehicleUnderwater):
+    def checkUnderwater(self, vehicle, isVehicleUnderwater):
+        data = vehicle.extras[self.index]
         wasUnderwater = data.get('wasUnderwater', False)
         if isVehicleUnderwater and not wasUnderwater:
             if '_effectsPlayer' in data:

@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/BattleTestedAchievement.py
 from abstract import ClassProgressAchievement
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 
 class BattleTestedAchievement(ClassProgressAchievement):
 
-    def __init__(self, dossier, value = None):
+    def __init__(self, dossier, value=None):
         super(BattleTestedAchievement, self).__init__('battleTested', _AB.TEAM_7X7, dossier, value)
 
     def getNextLevelInfo(self):

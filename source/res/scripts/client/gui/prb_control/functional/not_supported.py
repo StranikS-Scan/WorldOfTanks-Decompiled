@@ -1,17 +1,17 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/not_supported.py
 from debug_utils import LOG_ERROR
 from gui.prb_control.functional import interfaces
 
 class NotSupportedEntry(interfaces.IPrbEntry):
 
-    def create(self, ctx, callback = None):
+    def create(self, ctx, callback=None):
         LOG_ERROR('NotSupportedEntry.create', ctx)
 
-    def join(self, ctx, callback = None):
+    def join(self, ctx, callback=None):
         LOG_ERROR('NotSupportedEntry.join', ctx)
 
-    def select(self, ctx, callback = None):
+    def select(self, ctx, callback=None):
         LOG_ERROR('NotSupportedEntry.select', ctx)
 
 

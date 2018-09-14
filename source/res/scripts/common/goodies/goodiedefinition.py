@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/GoodieDefinition.py
 import time
 from Goodie import Goodie
@@ -60,13 +60,13 @@ class GoodieDefinition(object):
                 if self.variety == GOODIE_VARIETY.DISCOUNT:
                     result = self.value.reduce(resource.value)
                     if self.target.limit is not None and resource.value - result > self.target.limit:
-                        raise OverLimitException, 'Discount is over the limit' % self.target.limit
+                        raise OverLimitException('Discount is over the limit' % self.target.limit)
                     else:
                         return resource.__class__(result)
                 else:
                     if self.variety == GOODIE_VARIETY.BOOSTER:
                         return resource.__class__(self.value.increase(resource.value))
-                    raise Exception, 'Programming error, Goodie is not a discount or booster' % self.variety
+                    raise Exception('Programming error, Goodie is not a discount or booster' % self.variety)
 
         return
 
@@ -81,7 +81,7 @@ class GoodieDefinition(object):
 
         return None
 
-    def createGoodie(self, state = None, expiration = None, counter = None):
+    def createGoodie(self, state=None, expiration=None, counter=None):
         if not self.enabled:
             return
         else:

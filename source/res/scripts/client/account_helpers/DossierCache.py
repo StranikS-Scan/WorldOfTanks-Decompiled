@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/DossierCache.py
 import BigWorld
 import AccountCommands
@@ -58,7 +58,7 @@ class DossierCache(object):
             return
 
     def resynchronize(self):
-        LOG_MX('resynchronize', self.__maxChangeTime)
+        LOG_DEBUG('resynchronize', self.__maxChangeTime)
         if self.__ignore:
             return
         else:
@@ -79,11 +79,11 @@ class DossierCache(object):
             self.__syncController.request(self.__syncID, proxy)
             return
 
-    def get(self, dossierType, ownerID, callback = None):
+    def get(self, dossierType, ownerID, callback=None):
         getter = lambda cache: cache.get((dossierType, ownerID), (0, ''))[1]
         self.__get(getter, '', callback)
 
-    def getCache(self, callback = None):
+    def getCache(self, callback=None):
         getter = lambda cache: cache
         self.__get(getter, None, callback)
         return
@@ -101,7 +101,7 @@ class DossierCache(object):
             self.__syncController.request(self.__syncID, proxy)
             return
 
-    def __onSyncResponse(self, syncID, resultID, ext = {}):
+    def __onSyncResponse(self, syncID, resultID, ext={}):
         if resultID == AccountCommands.RES_NON_PLAYER:
             return
         if syncID != self.__syncID:
@@ -116,7 +116,7 @@ class DossierCache(object):
             return
         else:
             actualCacheVersion, dossiersList = data
-            LOG_MX('__onSyncComplete', actualCacheVersion, len(dossiersList))
+            LOG_DEBUG('__onSyncComplete', actualCacheVersion, len(dossiersList))
             if actualCacheVersion != self.__version:
                 self.__cache.clear()
                 self.__version = actualCacheVersion

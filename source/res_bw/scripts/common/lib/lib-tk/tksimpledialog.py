@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/tkSimpleDialog.py
 """Dialog boxes
 
@@ -21,7 +21,7 @@ class Dialog(Toplevel):
     This class is intended as a base class for custom dialogs
     """
 
-    def __init__(self, parent, title = None):
+    def __init__(self, parent, title=None):
         """Initialize a dialog.
         
         Arguments:
@@ -83,7 +83,7 @@ class Dialog(Toplevel):
         self.bind('<Escape>', self.cancel)
         box.pack()
 
-    def ok(self, event = None):
+    def ok(self, event=None):
         if not self.validate():
             self.initial_focus.focus_set()
             return
@@ -94,7 +94,7 @@ class Dialog(Toplevel):
         finally:
             self.cancel()
 
-    def cancel(self, event = None):
+    def cancel(self, event=None):
         if self.parent is not None:
             self.parent.focus_set()
         self.destroy()
@@ -119,7 +119,7 @@ class Dialog(Toplevel):
 
 class _QueryDialog(Dialog):
 
-    def __init__(self, title, prompt, initialvalue = None, minvalue = None, maxvalue = None, parent = None):
+    def __init__(self, title, prompt, initialvalue=None, minvalue=None, maxvalue=None, parent=None):
         if not parent:
             import Tkinter
             parent = Tkinter._default_root

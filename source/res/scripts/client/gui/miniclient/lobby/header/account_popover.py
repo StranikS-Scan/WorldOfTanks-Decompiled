@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/header/account_popover.py
 from gui.Scaleform.locale.MINICLIENT import MINICLIENT
 from gui.shared.utils.functions import makeTooltip
@@ -38,3 +38,17 @@ class MyClanInvitesBtnUnavailable(aop.Pointcut):
 
     def __init__(self):
         aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.header.AccountPopover', 'AccountPopover', '_getMyInvitesBtnParams', aspects=(MyClanInvitesBtnUnavailableAspect,))
+
+
+class CrewButtonStatusAspect(aop.Aspect):
+
+    def atCall(self, cd):
+        cd.avoid()
+        return {'isEnabled': False,
+         'disabledTooltip': _ms('#menu:header/account/popover/crew_button/disabledTooltip')}
+
+
+class CrewButtonStatusPointcut(aop.Pointcut):
+
+    def __init__(self):
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.header.AccountPopover', 'AccountPopover', '_crewDataButtonStatus', aspects=(CrewButtonStatusAspect,))

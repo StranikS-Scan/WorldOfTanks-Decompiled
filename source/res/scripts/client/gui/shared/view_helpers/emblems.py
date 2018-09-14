@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/emblems.py
 import BigWorld
 import ResMgr
@@ -13,10 +13,7 @@ from gui.clans import settings as clan_settings
 
 def _readEmblem(filePath):
     data = ResMgr.openSection(filePath)
-    if data is not None:
-        return data.asBinary
-    else:
-        return
+    return data.asBinary if data is not None else None
 
 
 def _getClubEmblemUrl(emblemID, size):
@@ -43,7 +40,7 @@ class _EmblemsHelper(object):
         return mapTextureToTheMemory(emblem)
 
     @classmethod
-    def requestEmblemByUrl(cls, url, size, callback, defaultEmblemGetter = None):
+    def requestEmblemByUrl(cls, url, size, callback, defaultEmblemGetter=None):
         defaultEmblemGetter = defaultEmblemGetter or (lambda v: None)
 
         def _onEmblemReceived(_, emblem):
@@ -123,13 +120,13 @@ class ClubEmblemsHelper(_EmblemsHelper):
      32: _readEmblem(club_settings.getStubEmblem32x32()),
      64: _readEmblem(club_settings.getStubEmblem64x64())}
 
-    def requestClubEmblem24x24(self, clubDbID, emblemID, callback = None):
+    def requestClubEmblem24x24(self, clubDbID, emblemID, callback=None):
         self._requestClubEmblem(clubDbID, emblemID, 24, self.onClubEmblem24x24Received, callback)
 
-    def requestClubEmblem32x32(self, clubDbID, emblemID, callback = None):
+    def requestClubEmblem32x32(self, clubDbID, emblemID, callback=None):
         self._requestClubEmblem(clubDbID, emblemID, 32, self.onClubEmblem32x32Received, callback)
 
-    def requestClubEmblem64x64(self, clubDbID, emblemID, callback = None):
+    def requestClubEmblem64x64(self, clubDbID, emblemID, callback=None):
         self._requestClubEmblem(clubDbID, emblemID, 64, self.onClubEmblem64x64Received, callback)
 
     def onClubEmblem24x24Received(self, clubDbID, emblem):

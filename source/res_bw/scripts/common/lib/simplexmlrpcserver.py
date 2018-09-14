@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/SimpleXMLRPCServer.py
 r"""Simple XML-RPC Server.
 
@@ -109,7 +110,7 @@ try:
 except ImportError:
     fcntl = None
 
-def resolve_dotted_attribute(obj, attr, allow_dotted_names = True):
+def resolve_dotted_attribute(obj, attr, allow_dotted_names=True):
     """resolve_dotted_attribute(a, 'b.c.d') => a.b.c.d
     
     Resolves a dotted attribute name to an object.  Raises
@@ -125,8 +126,7 @@ def resolve_dotted_attribute(obj, attr, allow_dotted_names = True):
     for i in attrs:
         if i.startswith('_'):
             raise AttributeError('attempt to access private attribute "%s"' % i)
-        else:
-            obj = getattr(obj, i)
+        obj = getattr(obj, i)
 
     return obj
 
@@ -160,14 +160,14 @@ class SimpleXMLRPCDispatcher():
     can be instanced when used by the MultiPathXMLRPCServer.
     """
 
-    def __init__(self, allow_none = False, encoding = None):
+    def __init__(self, allow_none=False, encoding=None):
         self.funcs = {}
         self.instance = None
         self.allow_none = allow_none
         self.encoding = encoding
         return
 
-    def register_instance(self, instance, allow_dotted_names = False):
+    def register_instance(self, instance, allow_dotted_names=False):
         """Registers an instance to respond to XML-RPC requests.
         
         Only one instance can be installed at a time.
@@ -202,7 +202,7 @@ class SimpleXMLRPCDispatcher():
         self.instance = instance
         self.allow_dotted_names = allow_dotted_names
 
-    def register_function(self, function, name = None):
+    def register_function(self, function, name=None):
         """Registers a function to respond to XML-RPC requests.
         
         The optional name argument can be used to set a Unicode name
@@ -230,7 +230,7 @@ class SimpleXMLRPCDispatcher():
         see http://www.xmlrpc.com/discuss/msgReader$1208"""
         self.funcs.update({'system.multicall': self.system_multicall})
 
-    def _marshaled_dispatch(self, data, dispatch_method = None, path = None):
+    def _marshaled_dispatch(self, data, dispatch_method=None, path=None):
         """Dispatches an XML-RPC method from marshalled (XML) data.
         
         XML-RPC methods are dispatched from the marshalled (XML) data
@@ -278,7 +278,7 @@ class SimpleXMLRPCDispatcher():
         and returns a double result.
         
         This server does NOT support system.methodSignature."""
-        return 'signatures not supported'
+        pass
 
     def system_methodHelp(self, method_name):
         """system.methodHelp('add') => "Adds two integers together"
@@ -474,7 +474,7 @@ class SimpleXMLRPCRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response)
 
-    def log_request(self, code = '-', size = '-'):
+    def log_request(self, code='-', size='-'):
         """Selectively log an accepted request."""
         if self.server.logRequests:
             BaseHTTPServer.BaseHTTPRequestHandler.log_request(self, code, size)
@@ -492,7 +492,7 @@ class SimpleXMLRPCServer(SocketServer.TCPServer, SimpleXMLRPCDispatcher):
     allow_reuse_address = True
     _send_traceback_header = False
 
-    def __init__(self, addr, requestHandler = SimpleXMLRPCRequestHandler, logRequests = True, allow_none = False, encoding = None, bind_and_activate = True):
+    def __init__(self, addr, requestHandler=SimpleXMLRPCRequestHandler, logRequests=True, allow_none=False, encoding=None, bind_and_activate=True):
         self.logRequests = logRequests
         SimpleXMLRPCDispatcher.__init__(self, allow_none, encoding)
         SocketServer.TCPServer.__init__(self, addr, requestHandler, bind_and_activate)
@@ -512,7 +512,7 @@ class MultiPathXMLRPCServer(SimpleXMLRPCServer):
     Make sure that the requestHandler accepts the paths in question.
     """
 
-    def __init__(self, addr, requestHandler = SimpleXMLRPCRequestHandler, logRequests = True, allow_none = False, encoding = None, bind_and_activate = True):
+    def __init__(self, addr, requestHandler=SimpleXMLRPCRequestHandler, logRequests=True, allow_none=False, encoding=None, bind_and_activate=True):
         SimpleXMLRPCServer.__init__(self, addr, requestHandler, logRequests, allow_none, encoding, bind_and_activate)
         self.dispatchers = {}
         self.allow_none = allow_none
@@ -525,7 +525,7 @@ class MultiPathXMLRPCServer(SimpleXMLRPCServer):
     def get_dispatcher(self, path):
         return self.dispatchers[path]
 
-    def _marshaled_dispatch(self, data, dispatch_method = None, path = None):
+    def _marshaled_dispatch(self, data, dispatch_method=None, path=None):
         try:
             response = self.dispatchers[path]._marshaled_dispatch(data, dispatch_method, path)
         except:
@@ -538,7 +538,7 @@ class MultiPathXMLRPCServer(SimpleXMLRPCServer):
 class CGIXMLRPCRequestHandler(SimpleXMLRPCDispatcher):
     """Simple handler for XML-RPC data passed through CGI."""
 
-    def __init__(self, allow_none = False, encoding = None):
+    def __init__(self, allow_none=False, encoding=None):
         SimpleXMLRPCDispatcher.__init__(self, allow_none, encoding)
 
     def handle_xmlrpc(self, request_text):
@@ -566,7 +566,7 @@ class CGIXMLRPCRequestHandler(SimpleXMLRPCDispatcher):
         print
         sys.stdout.write(response)
 
-    def handle_request(self, request_text = None):
+    def handle_request(self, request_text=None):
         """Handle a single XML-RPC request passed through a CGI post method.
         
         If no XML data is given then it is read from stdin. The resulting

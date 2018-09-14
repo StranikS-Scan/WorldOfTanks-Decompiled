@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/quests.py
 from tutorial.control.quests import triggers
 from tutorial.doc_loader import sub_parsers
@@ -37,6 +37,10 @@ def _readBuyVehicleTriggerSection(xmlCtx, section, chapter, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.BuyVehicleTrigger)
 
 
+def _readInventoryVehicleTriggerSection(xmlCtx, section, chapter, triggerID):
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.InventoryVehicleTrigger)
+
+
 def _readXpExchangeTriggerSection(xmlCtx, section, chapter, triggerID):
     return triggers.XpExchangeTrigger(triggerID)
 
@@ -47,6 +51,10 @@ def _readVehicleBattlesCountTriggerSection(xmlCtx, section, chapter, triggerID):
 
 def readTutorialIntSettingTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.TutorialIntSettingsTrigger)
+
+
+def _readTutorialAccountSettingTriggerSection(xmlCtx, section, _, triggerID):
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.TutorialAccountSettingsTrigger)
 
 
 def _readChapterBonusTriggerSection(xmlCtx, section, _, triggerID):
@@ -105,14 +113,17 @@ def _readSimpleWindowProcessTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.SimpleWindowProcessTrigger, validateUpdateOnly='validate-update-only' in section.keys())
 
 
-def _readFightBtnDisableTriggerSection(xmlCtx, section, _, triggerID):
-    return triggers.FightButtonDisabledTrigger(triggerID)
+def _readSelectVehicleInHangarSection(xmlCtx, section, flags, conditions):
+    targetID = section.asString
+    return effects.HasTargetEffect(targetID, effects.EFFECT_TYPE.SELECT_VEHICLE_IN_HANGAR, conditions=conditions)
 
 
 def init():
     sub_parsers.setEffectsParsers({'save-setting': readSaveTutorialSettingSection,
      'save-account-setting': readSaveAccountSettingSection,
-     'show-unlocked-chapter': chains.readShowUnlockedChapterSection})
+     'show-unlocked-chapter': chains.readShowUnlockedChapterSection,
+     'switch-to-random': lobby.readSwitchToRandomSection,
+     'select-in-hangar': _readSelectVehicleInHangarSection})
     sub_parsers.setEntitiesParsers({'hint': chains.readHintSection,
      'tutorial-setting': readTutorialSettingSection})
     sub_parsers.setTriggersParsers({'bonus': lobby.readBonusTriggerSection,
@@ -124,10 +135,12 @@ def init():
      'installModule': _readInstallModuleTriggerSection,
      'researchVehicle': _readResearchVehicleTriggerSection,
      'buyVehicle': _readBuyVehicleTriggerSection,
+     'inventoryVehicle': _readInventoryVehicleTriggerSection,
      'buySlot': lobby.readFreeVehicleSlotTriggerSection,
      'vehicleBattlesCount': _readVehicleBattlesCountTriggerSection,
      'xpExchange': _readXpExchangeTriggerSection,
      'tutorialIntSetting': readTutorialIntSettingTriggerSection,
+     'tutorialAccountSetting': _readTutorialAccountSettingTriggerSection,
      'chapterBonus': _readChapterBonusTriggerSection,
      'installItems': _readItemsInstallTriggerSection,
      'invalidateFlags': _readInvalidateFlagsTriggerSection,

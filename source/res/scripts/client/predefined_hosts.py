@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/predefined_hosts.py
 import operator
 import random
@@ -78,7 +78,7 @@ def _CSISResponseParser(out):
 
 class _CSISRequestWorker(threading.Thread):
 
-    def __init__(self, url, callback, params = None):
+    def __init__(self, url, callback, params=None):
         super(_CSISRequestWorker, self).__init__()
         self.__url = url
         self.__callback = callback
@@ -98,15 +98,17 @@ class _CSISRequestWorker(threading.Thread):
             response = {}
             info = None
             try:
-                url = self._makeUrl()
-                LOG_DEBUG('CSIS url', url)
-                req = urllib2.Request(url=url)
-                urllib2.build_opener(urllib2.HTTPHandler())
-                info = urllib2.urlopen(req, timeout=CSIS_REQUEST_TIMEOUT)
-                if info.code == 200 and info.headers.type == 'text/xml':
-                    response = _CSISResponseParser(info.read())
-            except IOError:
-                LOG_CURRENT_EXCEPTION()
+                try:
+                    url = self._makeUrl()
+                    LOG_DEBUG('CSIS url', url)
+                    req = urllib2.Request(url=url)
+                    urllib2.build_opener(urllib2.HTTPHandler())
+                    info = urllib2.urlopen(req, timeout=CSIS_REQUEST_TIMEOUT)
+                    if info.code == 200 and info.headers.type == 'text/xml':
+                        response = _CSISResponseParser(info.read())
+                except IOError:
+                    LOG_CURRENT_EXCEPTION()
+
             finally:
                 if info is not None:
                     info.close()
@@ -158,7 +160,7 @@ _HostItem = namedtuple('HostItem', ' '.join(['name',
  'areaID',
  'peripheryID']))
 
-def getHostURL(item, token2 = None, useIterator = False):
+def getHostURL(item, token2=None, useIterator=False):
     result = item.url
     if token2 and item.urlToken:
         result = item.urlToken
@@ -323,9 +325,7 @@ class _PreDefinedHostList(object):
         return url in [ p.url for p in self.roamingHosts() ]
 
     def first(self):
-        if len(self._hosts):
-            return self._hosts[0]
-        return self._makeHostItem('', '', '')
+        return self._hosts[0] if len(self._hosts) else self._makeHostItem('', '', '')
 
     def byUrl(self, url):
         result = self._makeHostItem('', '', url)
@@ -388,7 +388,7 @@ class _PreDefinedHostList(object):
             result = self._hosts[index].urlIterator
         return result
 
-    def periphery(self, peripheryID, useRoaming = True):
+    def periphery(self, peripheryID, useRoaming=True):
         if peripheryID in self._peripheryMap:
             index = self._peripheryMap[peripheryID]
             return self._hosts[index]
@@ -424,7 +424,7 @@ class _PreDefinedHostList(object):
     def isRoamingPeriphery(self, peripheryID):
         return peripheryID not in [ p.peripheryID for p in self.peripheries() ]
 
-    def _makeHostItem(self, name, shortName, url, urlToken = '', urlIterator = None, keyPath = None, areaID = None, peripheryID = 0):
+    def _makeHostItem(self, name, shortName, url, urlToken='', urlIterator=None, keyPath=None, areaID=None, peripheryID=0):
         if not len(shortName):
             shortName = name
         return _HostItem(name, shortName, url, urlToken, urlIterator, keyPath, areaID, peripheryID)

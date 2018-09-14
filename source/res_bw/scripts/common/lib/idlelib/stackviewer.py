@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/StackViewer.py
 import os
 import sys
@@ -6,7 +6,7 @@ import linecache
 from idlelib.TreeWidget import TreeNode, TreeItem, ScrolledCanvas
 from idlelib.ObjectBrowser import ObjectTreeItem, make_objecttreeitem
 
-def StackBrowser(root, flist = None, tb = None, top = None):
+def StackBrowser(root, flist=None, tb=None, top=None):
     if top is None:
         from Tkinter import Toplevel
         top = Toplevel(root)
@@ -20,7 +20,7 @@ def StackBrowser(root, flist = None, tb = None, top = None):
 
 class StackTreeItem(TreeItem):
 
-    def __init__(self, flist = None, tb = None):
+    def __init__(self, flist=None, tb=None):
         self.flist = flist
         self.stack = self.get_stack(tb)
         self.text = self.get_exception()
@@ -126,7 +126,7 @@ class VariablesTreeItem(ObjectTreeItem):
             except KeyError:
                 continue
 
-            def setfunction(value, key = key, object = self.object):
+            def setfunction(value, key=key, object=self.object):
                 object[key] = value
 
             item = make_objecttreeitem(key + ' =', value, setfunction)

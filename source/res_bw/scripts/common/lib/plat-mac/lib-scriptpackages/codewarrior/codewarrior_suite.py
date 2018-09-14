@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/CodeWarrior/CodeWarrior_suite.py
 """Suite CodeWarrior suite: Terms for scripting the CodeWarrior IDE
 Level 0, version 0
@@ -15,7 +16,7 @@ class CodeWarrior_suite_Events:
      'to_targets': 'TTGT',
      'to_group': 'TGRP'}
 
-    def add(self, _object, _attributes = {}, **_arguments):
+    def add(self, _object, _attributes={}, **_arguments):
         """add: add elements to a project or target
         Required argument: an AE object reference
         Keyword argument new: the class of the new element or elements to add
@@ -31,10 +32,9 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def build(self, _no_object = None, _attributes = {}, **_arguments):
+    def build(self, _no_object=None, _attributes={}, **_arguments):
         """build: build a project or target (equivalent of the Make menu command)
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -47,12 +47,9 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def check(self, _object = None, _attributes = {}, **_arguments):
+    def check(self, _object=None, _attributes={}, **_arguments):
         """check: check the syntax of a file in a project or target
         Required argument: the file or files to be checked
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -65,10 +62,9 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def compile_file(self, _object = None, _attributes = {}, **_arguments):
+    def compile_file(self, _object=None, _attributes={}, **_arguments):
         """compile file: compile a file in a project or target
         Required argument: the file or files to be compiled
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -81,10 +77,9 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def disassemble_file(self, _object = None, _attributes = {}, **_arguments):
+    def disassemble_file(self, _object=None, _attributes={}, **_arguments):
         """disassemble file: disassemble a file in a project or target
         Required argument: the file or files to be disassembled
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -97,12 +92,11 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_export = {'in_': 'kfil'}
 
-    def export(self, _no_object = None, _attributes = {}, **_arguments):
+    def export(self, _no_object=None, _attributes={}, **_arguments):
         """export: Export the project file as an XML file
         Keyword argument in_: the XML file in which to export the project
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -115,12 +109,9 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def remove_object_code(self, _no_object = None, _attributes = {}, **_arguments):
+    def remove_object_code(self, _no_object=None, _attributes={}, **_arguments):
         """remove object code: remove object code from a project or target
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -133,12 +124,9 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def remove_target_files(self, _object, _attributes = {}, **_arguments):
+    def remove_target_files(self, _object, _attributes={}, **_arguments):
         """remove target files: remove files from a target
         Required argument: an AE object reference
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -151,10 +139,9 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def run_target(self, _no_object = None, _attributes = {}, **_arguments):
+    def run_target(self, _no_object=None, _attributes={}, **_arguments):
         """run target: run a project or target
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -167,12 +154,9 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def touch_file(self, _object = None, _attributes = {}, **_arguments):
+    def touch_file(self, _object=None, _attributes={}, **_arguments):
         """touch file: touch a file in a project or target for compilation
         Required argument: the file or files to be touched
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -185,10 +169,9 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def update(self, _no_object = None, _attributes = {}, **_arguments):
+    def update(self, _no_object=None, _attributes={}, **_arguments):
         """update: bring a project or target up to date
         Keyword argument _attributes: AppleEvent attribute dictionary
         """
@@ -201,10 +184,7 @@ class CodeWarrior_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class single_class_browser(aetools.ComponentItem):

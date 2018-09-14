@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/LobbyContext.py
 import BigWorld
 from constants import CURRENT_REALM
@@ -82,7 +82,7 @@ class _LobbyContext(object):
     def setServerSettings(self, serverSettings):
         self.__serverSettings = ServerSettings(serverSettings)
 
-    def getPlayerFullName(self, pName, clanInfo = None, clanAbbrev = None, regionCode = None, pDBID = None):
+    def getPlayerFullName(self, pName, clanInfo=None, clanAbbrev=None, regionCode=None, pDBID=None):
         fullName = pName
         if clanInfo and len(clanInfo) > 1:
             clanAbbrev = clanInfo[1]

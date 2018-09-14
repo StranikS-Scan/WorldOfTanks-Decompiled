@@ -8,10 +8,10 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <eventCount></eventCount>
-              <whileEnemyMoving>	30	</whileEnemyMoving>
-              <greaterOrEqual>	1	</greaterOrEqual>
               <attackReason>	0	</attackReason>
+              <whileEnemyMoving>	30	</whileEnemyMoving>
+              <eventCount></eventCount>
+              <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleDamage>
           </and>
         </postBattle>
@@ -33,10 +33,10 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <eventCount></eventCount>
-              <whileEnemyMoving>	30	</whileEnemyMoving>
-              <greaterOrEqual>	1	</greaterOrEqual>
               <attackReason>	0	</attackReason>
+              <whileEnemyMoving>	30	</whileEnemyMoving>
+              <eventCount></eventCount>
+              <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleDamage>
             <isAlive></isAlive>
             <win></win>

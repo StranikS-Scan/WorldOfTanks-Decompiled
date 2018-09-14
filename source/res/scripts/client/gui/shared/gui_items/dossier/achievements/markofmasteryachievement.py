@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/MarkOfMasteryAchievement.py
 from helpers import i18n
 from abstract import ClassProgressAchievement
@@ -13,7 +13,7 @@ class MarkOfMasteryAchievement(ClassProgressAchievement):
         STEP_2 = 2
         STEP_3 = 1
 
-    def __init__(self, dossier, value = None):
+    def __init__(self, dossier, value=None):
         super(MarkOfMasteryAchievement, self).__init__('markOfMastery', _AB.TOTAL, dossier, value)
         self.__prevMarkOfMastery = self.MIN_LVL
         self.__compDescr = None
@@ -39,6 +39,4 @@ class MarkOfMasteryAchievement(ClassProgressAchievement):
         return super(ClassProgressAchievement, self).getUserName() % {'name': i18nRank}
 
     def _getIconName(self):
-        if self.__prevMarkOfMastery < self._value:
-            return 'markOfMastery%drecord' % (self._value or self.MIN_LVL)
-        return 'markOfMastery%d' % (self._value or self.MIN_LVL)
+        return 'markOfMastery%drecord' % (self._value or self.MIN_LVL) if self.__prevMarkOfMastery < self._value else 'markOfMastery%d' % (self._value or self.MIN_LVL)

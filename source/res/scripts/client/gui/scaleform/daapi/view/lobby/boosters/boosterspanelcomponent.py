@@ -1,11 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/boosters/BoostersPanelComponent.py
 from gui import game_control
-from helpers import i18n
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.goodies.Booster import MAX_ACTIVE_BOOSTERS_COUNT
-from gui.goodies.GoodiesCache import g_goodiesCache
-from gui.Scaleform.locale.MENU import MENU
+from gui.goodies import g_goodiesCache
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -33,7 +32,7 @@ class BoostersPanelComponent(SlotsPanelMeta):
         self._wasPopulated = False
         self._slotsMap = {}
 
-    def setSettings(self, isPanelInactive = True):
+    def setSettings(self, isPanelInactive=True):
         self._isPanelInactive = isPanelInactive
         if self._wasPopulated:
             self._buildList()
@@ -49,8 +48,7 @@ class BoostersPanelComponent(SlotsPanelMeta):
                 body = TOOLTIPS.BOOSTERSPANEL_OPENBOOSTERSWINDOW_BODY
                 tooltip = makeTooltip(None, body)
         else:
-            booster = g_goodiesCache.getBooster(int(boosterID))
-            tooltip = makeTooltip(i18n.makeString(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER, boosterName=booster.userName, quality=booster.qualityStr), booster.description, i18n.makeString(TOOLTIPS.BOOSTERSPANEL_BOOSTERDESCRIPTION_NOTE, time=booster.getUsageLeftTimeStr()))
+            tooltip = TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO
         return tooltip
 
     def _populate(self):
@@ -109,7 +107,8 @@ class BoostersPanelComponent(SlotsPanelMeta):
         return (emptyBoosterID, slotLinkage)
 
     def __makeBoosterVO(self, idx, booster):
-        return {'id': str(idx),
+        return {'boosterId': booster.boosterID,
+         'id': str(idx),
          'icon': booster.icon,
          'inCooldown': booster.inCooldown,
          'cooldownPercent': booster.getCooldownAsPercent(),

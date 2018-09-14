@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/FileList.py
 import os
 from Tkinter import *
@@ -13,7 +13,7 @@ class FileList:
         self.inversedict = {}
         self.vars = {}
 
-    def open(self, filename, action = None):
+    def open(self, filename, action=None):
         assert filename
         filename = self.canonize(filename)
         if os.path.isdir(filename):
@@ -30,13 +30,13 @@ class FileList:
             return self.EditorWindow(self, filename, key)
             return None
 
-    def gotofileline(self, filename, lineno = None):
+    def gotofileline(self, filename, lineno=None):
         edit = self.open(filename)
         if edit is not None and lineno is not None:
             edit.gotoline(lineno)
         return
 
-    def new(self, filename = None):
+    def new(self, filename=None):
         return self.EditorWindow(self, filename)
 
     def close_all_callback(self, *args, **kwds):

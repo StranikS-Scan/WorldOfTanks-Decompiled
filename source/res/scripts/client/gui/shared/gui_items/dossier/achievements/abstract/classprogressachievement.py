@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/ClassProgressAchievement.py
 import BigWorld
 from SimpleProgressAchievement import SimpleProgressAchievement
@@ -9,7 +9,7 @@ class ClassProgressAchievement(SimpleProgressAchievement):
     MIN_LVL = 4
     NO_LVL = 5
 
-    def __init__(self, name, block, dossier, value = None):
+    def __init__(self, name, block, dossier, value=None):
         if dossier is not None:
             self._currentProgressValue = self._readCurrentProgressValue(dossier)
         else:
@@ -40,8 +40,7 @@ class ClassProgressAchievement(SimpleProgressAchievement):
 
     def getNotificationInfo(self):
         notificationKey = '#achievements:%s_notification%d' % (self._getActualName(), self._value)
-        if i18n.doesTextExist(notificationKey):
-            return i18n.makeString(notificationKey)
+        return i18n.makeString(notificationKey) if i18n.doesTextExist(notificationKey) else ''
 
     def _readLevelUpTotalValue(self, dossier):
         if self._name not in RECORD_CONFIGS:

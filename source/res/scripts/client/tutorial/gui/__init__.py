@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/__init__.py
 import Event
 from debug_utils import LOG_ERROR
@@ -26,7 +26,7 @@ class GUIProxy(object):
     def show(self):
         pass
 
-    def fini(self, isItemsRevert = True):
+    def fini(self, isItemsRevert=True):
         pass
 
     def clear(self):
@@ -50,22 +50,22 @@ class GUIProxy(object):
     def goToScene(self, sceneID):
         pass
 
-    def playEffect(self, effectName, args, itemRef = None, containerRef = None):
+    def playEffect(self, effectName, args, itemRef=None, containerRef=None):
         return False
 
     def stopEffect(self, effectName, effectID):
         pass
 
-    def isEffectRunning(self, effectName, effectID = None):
+    def isEffectRunning(self, effectName, effectID=None):
         return False
 
-    def showWaiting(self, messageID, isSingle = False):
+    def showWaiting(self, messageID, isSingle=False):
         pass
 
-    def hideWaiting(self, messageID = None):
+    def hideWaiting(self, messageID=None):
         pass
 
-    def showMessage(self, text, lookupType = None):
+    def showMessage(self, text, lookupType=None):
         pass
 
     def showI18nMessage(self, key, *args, **kwargs):
@@ -77,7 +77,7 @@ class GUIProxy(object):
     def getItemsOnScene(self):
         return set()
 
-    def setItemProps(self, itemRef, props, revert = False):
+    def setItemProps(self, itemRef, props, revert=False):
         pass
 
     def closePopUps(self):
@@ -152,7 +152,7 @@ class GUIDispatcher(object):
             self._loader = None
             return True
 
-    def findGUI(self, root = None):
+    def findGUI(self, root=None):
         return False
 
     def clearGUI(self):

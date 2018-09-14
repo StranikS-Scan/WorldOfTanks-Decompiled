@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/gateway.py
 """
 Created on Jul 1, 2015
@@ -13,7 +13,6 @@ from client_request_lib.data_sources import base
 from base64 import b64encode
 import urllib
 import zlib
-from debug_utils import LOG_CURRENT_EXCEPTION
 EXAMPLES = {}
 DEFAULT_SINCE_DELAY = timedelta(days=1)
 SUCCESS_STATUSES = [200, 201]
@@ -72,26 +71,22 @@ class GatewayDataAccessor(base.BaseDataAccessor):
                     if prefix in portion:
                         self._apply_converters(portion[prefix], {body: convert})
 
-            else:
-                for portion in data:
-                    if k in portion:
-                        portion[k] = convert(portion[k])
+            for portion in data:
+                if k in portion:
+                    portion[k] = convert(portion[k])
 
-    def _preprocess_callback(self, callback, converters = None):
+    def _preprocess_callback(self, callback, converters=None):
 
         def wrapper(something):
 
-            def wrapped(response, func = something):
+            def wrapped(response, func=something):
                 try:
                     data = response.body
-                    try:
+                    content_encoding = response.headers().get('Content-Encoding')
+                    if content_encoding == 'gzip':
                         data = zlib.decompress(data, 16 + zlib.MAX_WBITS)
-                    except zlib.error:
-                        pass
-
                     data = json.loads(data)
                 except:
-                    LOG_CURRENT_EXCEPTION()
                     data = None
 
                 if response.responseCode not in SUCCESS_STATUSES:
@@ -113,14 +108,11 @@ class GatewayDataAccessor(base.BaseDataAccessor):
                     callback(data, response.responseCode, response_code)
                     return
 
-            if not callable(something):
-                return wrapped(something, func=None)
-            else:
-                return wrapped
+            return wrapped(something, func=None) if not callable(something) else wrapped
 
         return wrapper
 
-    def __init__(self, url_fetcher, gateway_host, client_lang = None):
+    def __init__(self, url_fetcher, gateway_host, client_lang=None):
         """
         url_fetcher is fetch_url method with following signature
         staging_hosts is dict of staging hosts for example
@@ -161,7 +153,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         self._session_id = None
         return
 
-    def _request_data(self, callback, url, get_data = {}, method = 'GET', post_data = None, headers = None, converters = None):
+    def _request_data(self, callback, url, get_data={}, method='GET', post_data=None, headers=None, converters=None):
         get_data = {k:v for k, v in get_data.iteritems() if v}
         url = '/'.join([self.gateway_host.strip('/'), url.strip('/'), ''])
         if get_data:
@@ -185,7 +177,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             args.append(json.dumps(post_data))
         self.url_fetcher(url, self._preprocess_callback(callback, converters=converters), *args)
 
-    def get_clans_ratings(self, callback, clan_ids, fields = None):
+    def get_clans_ratings(self, callback, clan_ids, fields=None):
         """
         return data from ratings backend using `bulks API method`_
         
@@ -196,7 +188,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/ratings/clans/'
         return self._request_data(callback, url, get_data=get_params)
 
-    def get_clans_info(self, callback, clan_ids, fields = None):
+    def get_clans_info(self, callback, clan_ids, fields=None):
         """
         return data from WGCCBE backend using `clans API method`_
         
@@ -207,32 +199,35 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/clans/info/'
         return self._request_data(callback, url, get_data=get_params, converters={'created_at': from_iso})
 
-    def get_accounts_names(self, callback, account_ids, fields = None):
+    def get_accounts_names(self, callback, account_ids, fields=None):
         """
         return data from SPA backend using `account id/name mappings API method`_
         
-                .. _account id/name mappings API method: https://confluence.wargaming.net/display/WEBDEV/%5BWGNSPA%5D+-+SPA+HTTP+API+Examples#id-[WGNSPA]-SPAHTTPAPIExamples-Byids
+                .. _account id/name mappings API method: https://confluence.wargaming.net/display/WEBDEV/%5BWGNSPA%5D+-
+                +SPA+HTTP+API+Examples#id-[WGNSPA]-SPAHTTPAPIExamples-Byids
         """
         get_params = {'id': account_ids,
          'fields': fields}
         url = '/accounts/names/'
         return self._request_data(callback, url, get_data=get_params, converters={'id': int})
 
-    def get_clan_members(self, callback, clan_id, fields = None):
+    def get_clan_members(self, callback, clan_id, fields=None):
         """
         return data from WGCCBE backend using `clan members API method`_
         
-                .. _clan members API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/api-common/clans_id_members.html
+                .. _clan members API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/api-common/
+                clans_id_members.html
         """
         get_params = {'fields': fields}
         url = '/clans/%s/members/' % clan_id
         return self._request_data(callback, url, get_data=get_params, converters={'joined_at': from_iso})
 
-    def get_clan_favorite_attributes(self, callback, clan_id, fields = None):
+    def get_clan_favorite_attributes(self, callback, clan_id, fields=None):
         """
         return data from WGCCBE backend using `favorite_attributes API method`_
         
-                .. _favorite_attributes API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/statistics/favorite_attributes.html
+                .. _favorite_attributes API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/
+                statistics/favorite_attributes.html
         """
         url = '/clans/%s/favorite_attributes/' % clan_id
         return self._request_data(callback, url, converters={'favorite_primetime': lambda x: x and datetime.strptime(x, '%H:%M').time(),
@@ -240,7 +235,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
          'favorite_arena_8': int,
          'favorite_arena_10': int})
 
-    def get_accounts_clans(self, callback, account_ids, fields = None):
+    def get_accounts_clans(self, callback, account_ids, fields=None):
         """
         return data from WGCCBE backend using `accounts API method`_
         
@@ -252,7 +247,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data=get_params, converters={'in_clan_cooldown_till': from_iso,
          'joined_at': from_iso})
 
-    def get_account_applications_count_since(self, callback, account_id, since = None):
+    def get_account_applications_count_since(self, callback, account_id, since=None):
         """
         return data from WGCCBE backend using `applications API method`_
         
@@ -263,7 +258,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/accounts/%s/applications/count/' % account_id
         return self._request_data(callback, url, get_data=get_params)
 
-    def get_clan_invites_count_since(self, callback, clan_id, since = None):
+    def get_clan_invites_count_since(self, callback, clan_id, since=None):
         """
         return data from WGCCBE backend using `invites API method`_
         
@@ -278,7 +273,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/ping/'
         return self._request_data(callback, url)
 
-    def get_account_applications(self, callback, fields = None, statuses = None, get_total_count = False, limit = None, offset = None):
+    def get_account_applications(self, callback, fields=None, statuses=None, get_total_count=False, limit=None, offset=None):
         """
         return data from WGCCBE backend using `applications API method`_
         
@@ -296,7 +291,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data=get_params, converters={'items.created_at': from_iso,
          'items.updated_at': from_iso})
 
-    def get_clan_applications(self, callback, clan_id, fields = None, statuses = None, get_total_count = False, limit = None, offset = None):
+    def get_clan_applications(self, callback, clan_id, fields=None, statuses=None, get_total_count=False, limit=None, offset=None):
         """
         return data from WGCCBE backend using `applications API method`_
         
@@ -314,35 +309,38 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data=get_params, converters={'items.created_at': from_iso,
          'items.updated_at': from_iso})
 
-    def create_applications(self, callback, clan_ids, comment, fields = None):
+    def create_applications(self, callback, clan_ids, comment, fields=None):
         """
         create applications for accounts into clan using `create applications API method`_
-                .. _create applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/applications.html
+                .. _create applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/
+                applications.html
         """
         url = '/clans/applications/'
         data = {'clan_ids': clan_ids,
          'comment': comment}
         return self._request_data(callback, url, method='POST', post_data=data)
 
-    def accept_application(self, callback, application_id, fields = None):
+    def accept_application(self, callback, application_id, fields=None):
         """
         accept application for accounts into clan using `accept applications API method`_
-                .. _accept applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/applications_id.html
+                .. _accept applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/
+                applications_id.html
         """
         url = '/clans/applications/%s/' % application_id
         data = {'status': 'accepted'}
         return self._request_data(callback, url, method='PATCH', post_data=data)
 
-    def decline_application(self, callback, application_id, fields = None):
+    def decline_application(self, callback, application_id, fields=None):
         """
         decline application for accounts into clan using `decline applications API method`_
-                .. _decline applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/applications_id.html
+                .. _decline applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/
+                applications_id.html
         """
         url = '/clans/applications/%s/' % application_id
         data = {'status': 'declined'}
         return self._request_data(callback, url, method='PATCH', post_data=data)
 
-    def create_invites(self, callback, clan_id, account_ids, comment, fields = None):
+    def create_invites(self, callback, clan_id, account_ids, comment, fields=None):
         """
         create applications for accounts into clan using `create invites API method`_
                 .. _create invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites.html
@@ -352,7 +350,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
          'comment': comment}
         return self._request_data(callback, url, method='POST', post_data=data)
 
-    def accept_invite(self, callback, invite_id, fields = None):
+    def accept_invite(self, callback, invite_id, fields=None):
         """
         accept application for accounts into clan using `accept invite API method`_
                 .. _accept invite API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites_id.html
@@ -361,7 +359,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         data = {'status': 'accepted'}
         return self._request_data(callback, url, method='PATCH', post_data=data)
 
-    def decline_invite(self, callback, invite_id, fields = None):
+    def decline_invite(self, callback, invite_id, fields=None):
         """
         decline application for accounts into clan using `decline invites API method`_
                 .. _decline invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites_id.html
@@ -370,7 +368,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         data = {'status': 'declined'}
         return self._request_data(callback, url, method='PATCH', post_data=data)
 
-    def bulk_decline_invites(self, callback, invite_ids, fields = None):
+    def bulk_decline_invites(self, callback, invite_ids, fields=None):
         """
         decline application for accounts into clan using `decline invites API method`_
                 .. _decline invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wgcc/invites.html#patch
@@ -379,7 +377,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         data = {'invite_ids': invite_ids}
         return self._request_data(callback, url, method='PATCH', post_data=data)
 
-    def search_clans(self, callback, search, get_total_count = False, fields = None, offset = None, limit = None):
+    def search_clans(self, callback, search, get_total_count=False, fields=None, offset=None, limit=None):
         """
         return data from WGCCBE backend using `clans API method`_
         
@@ -396,7 +394,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/clans/search/'
         return self._request_data(callback, url, get_data=get_params, converters={'items.created_at': from_iso})
 
-    def get_recommended_clans(self, callback, get_total_count = False, fields = None, offset = None, limit = None):
+    def get_recommended_clans(self, callback, get_total_count=False, fields=None, offset=None, limit=None):
         """
         return data from WGCCBE backend using `clans API method`_
         
@@ -412,7 +410,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/clans/recommended/'
         return self._request_data(callback, url, get_data=get_params, converters={'items.created_at': from_iso})
 
-    def get_clan_invites(self, callback, clan_id, fields = None, statuses = None, get_total_count = False, limit = None, offset = None):
+    def get_clan_invites(self, callback, clan_id, fields=None, statuses=None, get_total_count=False, limit=None, offset=None):
         """
         return data from WGCCBE backend using `invites API method`_
         
@@ -430,7 +428,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data=get_params, converters={'items.created_at': from_iso,
          'items.updated_at': from_iso})
 
-    def get_account_invites(self, callback, fields = None, statuses = None, get_total_count = False, limit = None, offset = None):
+    def get_account_invites(self, callback, fields=None, statuses=None, get_total_count=False, limit=None, offset=None):
         """
         return data from WGCCBE backend using `invites API method`_
         
@@ -454,34 +452,38 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data=get_params, converters={'items.created_at': from_iso,
          'items.updated_at': from_iso})
 
-    def get_accounts_info(self, callback, account_ids, fields = None):
+    def get_accounts_info(self, callback, account_ids, fields=None):
         """
         return data from exporter backend using `accounts detailed information`_
         
-                .. _accounts detailed information: http://rtd.wargaming.net/docs/exporter/en/latest/api_wot.html#accounts-detailed-information
+                .. _accounts detailed information: http://rtd.wargaming.net/docs/exporter/en/latest/
+                api_wot.html#accounts-detailed-information
         """
         get_params = {'account_ids': account_ids,
          'fields': fields}
         url = '/accounts/info/'
         return self._request_data(callback, url, get_data=get_params, converters={'account_id': int})
 
-    def get_clan_provinces(self, callback, clan_id, fields = None):
+    def get_clan_provinces(self, callback, clan_id, fields=None):
         """
         return data from WGCW backend using `clans provinces API method`_
         
-                .. _clans provinces API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/wgapi.html?highlight=stats#clans-provinces
+                .. _clans provinces API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/
+                wgapi.html?highlight=stats#clans-provinces
         """
         get_params = {'clan_id': [clan_id],
          'fields': fields}
         url = '/clans/provinces/'
         return self._request_data(callback, url, get_data=get_params, converters={'prime_time': lambda x: x and datetime.strptime(x, '%H:%M').time(),
+         'pillage_end_datetime': from_iso,
          'clan_id': int})
 
-    def get_clan_globalmap_stats(self, callback, clan_id, fields = None):
+    def get_clan_globalmap_stats(self, callback, clan_id, fields=None):
         """
         return data from WGCW backend using `clans stats API method`_
         
-                .. _clans stats API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/wgapi.html?highlight=stats#clans-stats
+                .. _clans stats API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/
+                wgapi.html?highlight=stats#clans-stats
         """
         url = '/clans/global_map/stats/'
         get_params = {'clan_id': clan_id}
@@ -489,35 +491,38 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             get_params['fields'] = fields
         return self._request_data(callback, url, get_data=get_params, converters={'clan_id': int})
 
-    def get_fronts_info(self, callback, front_names = None, fields = None):
+    def get_fronts_info(self, callback, front_names=None, fields=None):
         """
         return data from WGCW backend using `fronts info API method`_
         
-                .. _fronts info API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/wgapi.html?highlight=stats#id1
+                .. _fronts info API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/
+                wgapi.html?highlight=stats#id1
         """
         url = '/global_map/fronts/'
         get_params = {'fields': fields,
          'front_names': front_names}
         return self._request_data(callback, url, get_data=get_params)
 
-    def get_stronghold_info(self, callback, clan_id, fields = None):
+    def get_stronghold_info(self, callback, clan_id, fields=None):
         """
         return data from WGCCFE backend using `stronghold info API method`_
         
-                .. _stronghold info API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/strongholds.html#strongholds-clan-id
+                .. _stronghold info API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/
+                strongholds.html#strongholds-clan-id
         """
         url = '/strongholds/info/'
         get_params = {'clan_id': clan_id}
         if fields:
             get_params['fields'] = fields
         return self._request_data(callback, url, get_data=get_params, converters={'clan_id': int,
-         'defence_hour': lambda x: (dt_time(x, 0) if x >= 0 else None)})
+         'defence_hour': lambda x: dt_time(x, 0) if x >= 0 else None})
 
-    def get_strongholds_statistics(self, callback, clan_id, fields = None):
+    def get_strongholds_statistics(self, callback, clan_id, fields=None):
         """
         return data from WGCCFE backend using `stronghold statistics API method`_
         
-                .. _stronghold statistics API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/strongholds.html#strongholds-statistics-clan-id
+                .. _stronghold statistics API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/
+                rst/strongholds.html#strongholds-statistics-clan-id
         """
         url = '/strongholds/statistics/'
         get_params = {'clan_id': clan_id}
@@ -526,13 +531,14 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data=get_params, converters={'vacation_start': timestamp_to_datetime,
          'vacation_finish': timestamp_to_datetime})
 
-    def get_strongholds_state(self, callback, clan_id, fields = None):
+    def get_strongholds_state(self, callback, clan_id, fields=None):
         """
         return data from WGCCFE backend using `stronghold state API method`_
         
-                .. _stronghold state API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/strongholds.html#strongholds-state
+                .. _stronghold state API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/
+                strongholds.html#strongholds-state
         """
         url = '/strongholds/state/'
         get_params = {'clan_id': clan_id}
         return self._request_data(callback, url, get_data=get_params, converters={'clan_id': int,
-         'defence_hour': lambda x: (dt_time(x, 0) if x >= 0 else None)})
+         'defence_hour': lambda x: dt_time(x, 0) if x >= 0 else None})

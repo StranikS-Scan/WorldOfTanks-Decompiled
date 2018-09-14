@@ -103,6 +103,7 @@
         <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G21_PanzerJager_I/PanzerJager_I_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	2.2 2.2 0.000000 0.000000	</tiling>
     </camouflage>
@@ -729,7 +730,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
@@ -748,17 +749,7 @@
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <FuG2>	shared	  <unlocks>
-        <radio>	FuG5	  <cost>	105	</cost>
-        </radio>
-      </unlocks>
-    </FuG2>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG_Spr.A	  <cost>	4500	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
-    <FuG_Spr.A>	shared	</FuG_Spr.A>
+    <FuG2>	shared	</FuG2>
   </radios>
   <effects>
     <collision></collision>

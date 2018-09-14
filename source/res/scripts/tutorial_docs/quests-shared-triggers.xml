@@ -1,5 +1,23 @@
 <quests-shared-triggers.xml>
   <triggers>
+    <trigger>	PveChainShownTrigger	  <type>	tutorialAccountSetting	</type>
+      <validate-var>	PveChainShownVar	</validate-var>
+      <on-effects>
+        <activate>	PveChainShown	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	PveChainShown	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	InventoryVehicleTrigger	  <type>	inventoryVehicle	</type>
+      <validate-var>	SelectedVehicleCriteria	</validate-var>
+      <on-effects>
+        <activate>	NoPveVehicleInInventory	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	NoPveVehicleInInventory	</inactivate>
+      </off-effects>
+    </trigger>
     <trigger>	ResearchHelpButtonTrigger	  <type>	tutorialIntSetting	</type>
       <validate-var>	ResearchVar	</validate-var>
       <off-effects>
@@ -59,6 +77,14 @@
       </on-effects>
       <off-effects>
         <inactivate>	InSandboxOrRandom	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	InSandBoxPreQueueTrigger	  <type>	isInSandbox	</type>
+      <on-effects>
+        <activate>	InSandbox	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	InSandbox	</inactivate>
       </off-effects>
     </trigger>
     <trigger>	FightBtnDisableTrigger	  <type>	fightBtn	</type>

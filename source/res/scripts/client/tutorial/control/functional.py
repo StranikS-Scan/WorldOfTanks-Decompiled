@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/functional.py
 import re
 import BigWorld
@@ -132,6 +132,9 @@ class FunctionalBonusReceivedCondition(FunctionalCondition):
     def isConditionOk(self, condition):
         chapter = self._descriptor.getChapter(condition.getID())
         if chapter is None:
+            chapterID = self._tutorial.getVars().get(condition.getID())
+            chapter = self._descriptor.getChapter(chapterID)
+        if chapter is None:
             LOG_ERROR('Chapter is not found', condition.getID())
             return False
         else:
@@ -227,7 +230,7 @@ class FunctionalEffect(TutorialProxyHolder):
         self._effect = effect
 
     def triggerEffect(self):
-        raise NotImplementedError, 'method triggerEffect is not implemented'
+        raise NotImplementedError('method triggerEffect is not implemented')
 
     def getEffect(self):
         return self._effect
@@ -251,10 +254,7 @@ class FunctionalEffect(TutorialProxyHolder):
 
     def isAllConditionsOK(self):
         result = True
-        if self._effect is not None:
-            return FunctionalConditions(self._effect.getConditions()).allConditionsOk()
-        else:
-            return result
+        return FunctionalConditions(self._effect.getConditions()).allConditionsOk() if self._effect is not None else result
 
 
 class FunctionalActivateEffect(FunctionalEffect):
@@ -324,10 +324,7 @@ class FunctionalRunTriggerEffect(FunctionalEffect):
 
     def isStillRunning(self):
         trigger = self.getTarget()
-        if trigger is not None:
-            return trigger.isRunning
-        else:
-            return False
+        return trigger.isRunning if trigger is not None else False
 
     def triggerEffect(self):
         trigger = self.getTarget()

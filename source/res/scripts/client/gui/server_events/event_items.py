@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/event_items.py
 import operator
 import time
@@ -47,9 +47,7 @@ class ServerEventAbstract(object):
         return self._data.get('weekDays', set())
 
     def getActiveTimeIntervals(self):
-        if 'activeTimeIntervals' in self._data:
-            return map(lambda (l, h): (l[0] * 3600 + l[1] * 60, h[0] * 3600 + h[1] * 60), self._data['activeTimeIntervals'])
-        return []
+        return map(lambda (l, h): (l[0] * 3600 + l[1] * 60, h[0] * 3600 + h[1] * 60), self._data['activeTimeIntervals']) if 'activeTimeIntervals' in self._data else []
 
     def getID(self):
         return self._id
@@ -73,24 +71,16 @@ class ServerEventAbstract(object):
         return self._data.get('type', 0)
 
     def getStartTime(self):
-        if 'startTime' in self._data:
-            return time_utils.makeLocalServerTime(self._data['startTime'])
-        return time.time()
+        return time_utils.makeLocalServerTime(self._data['startTime']) if 'startTime' in self._data else time.time()
 
     def getFinishTime(self):
-        if 'finishTime' in self._data:
-            return time_utils.makeLocalServerTime(self._data['finishTime'])
-        return time.time()
+        return time_utils.makeLocalServerTime(self._data['finishTime']) if 'finishTime' in self._data else time.time()
 
     def getCreationTime(self):
-        if 'gStartTime' in self._data:
-            return time_utils.makeLocalServerTime(self._data['gStartTime'])
-        return time.time()
+        return time_utils.makeLocalServerTime(self._data['gStartTime']) if 'gStartTime' in self._data else time.time()
 
     def getDestroyingTime(self):
-        if 'gFinishTime' in self._data:
-            return time_utils.makeLocalServerTime(self._data['gFinishTime'])
-        return time.time()
+        return time_utils.makeLocalServerTime(self._data['gFinishTime']) if 'gFinishTime' in self._data else time.time()
 
     def getCreationTimeLeft(self):
         return time_utils.getTimeDeltaFromNowInLocal(self.getCreationTime())
@@ -119,7 +109,7 @@ class ServerEventAbstract(object):
     def isIGR(self):
         return self._data.get('isIGR', False)
 
-    def isCompleted(self, progress = None):
+    def isCompleted(self, progress=None):
         return False
 
     def getNearestActivityTimeLeft(self):
@@ -151,11 +141,9 @@ class ServerEventAbstract(object):
             else:
                 return (False, 'invalid_time_interval')
 
-        if not self._checkConditions():
-            return (False, 'requirements')
-        return (True, '')
+        return (False, 'requirements') if not self._checkConditions() else (True, '')
 
-    def getBonuses(self, bonusName = None):
+    def getBonuses(self, bonusName=None):
         return []
 
     def _checkConditions(self):
@@ -173,7 +161,7 @@ class Group(ServerEventAbstract):
 
 class Quest(ServerEventAbstract):
 
-    def __init__(self, qID, data, progress = None):
+    def __init__(self, qID, data, progress=None):
         import copy
         tmpData = copy.deepcopy(data)
         super(Quest, self).__init__(qID, data)
@@ -189,9 +177,7 @@ class Quest(ServerEventAbstract):
         self._groupID = DEFAULTS_GROUPS.UNGROUPED_QUESTS
 
     def getUserType(self):
-        if self.getType() == constants.EVENT_TYPE.FORT_QUEST:
-            return i18n.makeString(QUESTS.ITEM_TYPE_SPECIALMISSION)
-        return i18n.makeString(QUESTS.ITEM_TYPE_QUEST)
+        return i18n.makeString(QUESTS.ITEM_TYPE_SPECIALMISSION) if self.getType() == constants.EVENT_TYPE.FORT_QUEST else i18n.makeString(QUESTS.ITEM_TYPE_QUEST)
 
     def getProgressExpiryTime(self):
         return self._data.get('progressExpiryTime', time.time())
@@ -205,7 +191,7 @@ class Quest(ServerEventAbstract):
                 return bonusLimit <= self.getBonusCount(groupByKey)
         return False
 
-    def isCompleted(self, progress = None):
+    def isCompleted(self, progress=None):
         progress = progress or self._progress
         bonusLimit = self.bonusCond.getBonusLimit()
         if bonusLimit is not None:
@@ -235,7 +221,7 @@ class Quest(ServerEventAbstract):
     def getParents(self):
         return self._parents
 
-    def getBonusCount(self, groupByKey = None, progress = None):
+    def getBonusCount(self, groupByKey=None, progress=None):
         progress = progress or self._progress
         if progress is not None:
             groupBy = self.bonusCond.getGroupByValue()
@@ -250,7 +236,7 @@ class Quest(ServerEventAbstract):
     def getProgressData(self):
         return self._progress or {}
 
-    def getBonuses(self, bonusName = None):
+    def getBonuses(self, bonusName=None):
         result = []
         for n, v in self._data.get('bonus', {}).iteritems():
             if bonusName is not None and n != bonusName:
@@ -272,7 +258,7 @@ class Quest(ServerEventAbstract):
 
         return False
 
-    def __checkGroupedCompletion(self, values, progress, bonusLimit = None, keyMaker = lambda v: v):
+    def __checkGroupedCompletion(self, values, progress, bonusLimit=None, keyMaker=lambda v: v):
         bonusLimit = bonusLimit or self.bonusCond.getBonusLimit()
         for value in values:
             if bonusLimit > self.getBonusCount(groupByKey=keyMaker(value), progress=progress):
@@ -288,15 +274,12 @@ class Quest(ServerEventAbstract):
 
 class PersonalQuest(Quest):
 
-    def __init__(self, qID, data, progress = None, expiryTime = None):
+    def __init__(self, qID, data, progress=None, expiryTime=None):
         super(PersonalQuest, self).__init__(qID, data, progress)
         self.expiryTime = expiryTime
 
     def getFinishTime(self):
-        if self.expiryTime is not None:
-            return min(super(PersonalQuest, self).getFinishTime(), self.expiryTime)
-        else:
-            return super(PersonalQuest, self).getFinishTime()
+        return min(super(PersonalQuest, self).getFinishTime(), self.expiryTime) if self.expiryTime is not None else super(PersonalQuest, self).getFinishTime()
 
 
 class Action(ServerEventAbstract):
@@ -317,8 +300,7 @@ class Action(ServerEventAbstract):
                 continue
             if mName in result:
                 result[mName].update(m)
-            else:
-                result[mName] = m
+            result[mName] = m
 
         return sorted(result.itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
 
@@ -391,22 +373,16 @@ class PQTile(object):
 
     def getChainVehicleClass(self, chainID):
         firstQuest = findFirst(None, self.__quests.get(chainID, {}).itervalues())
-        if firstQuest is not None:
-            return findFirst(None, firstQuest.getVehicleClasses())
-        else:
-            return
+        return findFirst(None, firstQuest.getVehicleClasses()) if firstQuest is not None else None
 
     def getChainMajorTag(self, chainID):
         firstQuest = findFirst(None, self.__quests.get(chainID, {}).itervalues())
-        if firstQuest is not None:
-            return firstQuest.getMajorTag()
-        else:
-            return
+        return firstQuest.getMajorTag() if firstQuest is not None else None
 
     def getChainSortKey(self, chainID):
         return self.getChainMajorTag(chainID)
 
-    def getChainTotalTokensCount(self, chainID, isMainBonuses = None):
+    def getChainTotalTokensCount(self, chainID, isMainBonuses=None):
         result = 0
         for q in self.__quests[chainID].itervalues():
             for tokenBonus in q.getBonuses('tokens', isMainBonuses):
@@ -433,7 +409,7 @@ class PQTile(object):
     def getQuests(self):
         return self.__quests
 
-    def getQuestsInChainByFilter(self, chainID, filterFunc = lambda v: True):
+    def getQuestsInChainByFilter(self, chainID, filterFunc=lambda v: True):
         result = {}
         for qID, q in self.__quests[chainID].iteritems():
             if filterFunc(q):
@@ -441,7 +417,7 @@ class PQTile(object):
 
         return result
 
-    def getQuestsByFilter(self, filterFunc = lambda v: True):
+    def getQuestsByFilter(self, filterFunc=lambda v: True):
         result = {}
         for _, quests in self.__quests.iteritems():
             for qID, q in quests.iteritems():
@@ -453,25 +429,25 @@ class PQTile(object):
     def getInProgressQuests(self):
         return self.getQuestsByFilter(lambda quest: quest.isInProgress())
 
-    def getCompletedQuests(self, isRewardReceived = None):
+    def getCompletedQuests(self, isRewardReceived=None):
         return self.getQuestsByFilter(lambda quest: quest.isCompleted(isRewardReceived=isRewardReceived))
 
-    def getFullCompletedQuests(self, isRewardReceived = None):
+    def getFullCompletedQuests(self, isRewardReceived=None):
         return self.getQuestsByFilter(lambda quest: quest.isFullCompleted(isRewardReceived=isRewardReceived))
 
-    def isCompleted(self, isRewardReceived = None):
+    def isCompleted(self, isRewardReceived=None):
         return len(self.getCompletedQuests(isRewardReceived)) == self.getQuestsCount()
 
     def isInProgress(self):
         return len(self.getInProgressQuests()) > 0
 
-    def isFullCompleted(self, isRewardReceived = None):
+    def isFullCompleted(self, isRewardReceived=None):
         return len(self.getFullCompletedQuests(isRewardReceived)) == self.getQuestsCount()
 
     def isAwardAchieved(self):
         return self.__isAwardAchieved
 
-    def getCompletedFinalQuests(self, isRewardReceived = None):
+    def getCompletedFinalQuests(self, isRewardReceived=None):
         return self.getQuestsByFilter(lambda quest: quest.isCompleted(isRewardReceived=isRewardReceived) and quest.isFinal())
 
     def getInitialQuests(self):
@@ -558,7 +534,7 @@ class PQTile(object):
 
 class PotapovQuest(Quest):
 
-    def __init__(self, qID, pqType, pqProgress = None, seasonID = None):
+    def __init__(self, qID, pqType, pqProgress=None, seasonID=None):
         super(PotapovQuest, self).__init__(qID, pqType.mainQuestInfo)
         self.__pqType = pqType
         self.__pqProgress = pqProgress
@@ -636,7 +612,7 @@ class PotapovQuest(Quest):
     def getMajorTag(self):
         return self.__pqType.getMajorTag()
 
-    def isMainCompleted(self, isRewardReceived = None):
+    def isMainCompleted(self, isRewardReceived=None):
         if isRewardReceived is True:
             states = (_PQS.MAIN_REWARD_GOTTEN, _PQS.ALL_REWARDS_GOTTEN)
         elif isRewardReceived is False:
@@ -648,7 +624,7 @@ class PotapovQuest(Quest):
              _PQS.NEED_GET_ALL_REWARDS)
         return self.__checkForStates(*states)
 
-    def isFullCompleted(self, isRewardReceived = None):
+    def isFullCompleted(self, isRewardReceived=None):
         if isRewardReceived is True:
             states = (_PQS.ALL_REWARDS_GOTTEN,)
         elif isRewardReceived is False:
@@ -657,7 +633,7 @@ class PotapovQuest(Quest):
             states = _PQS.COMPLETED
         return self.__checkForStates(*states)
 
-    def isCompleted(self, progress = None, isRewardReceived = None):
+    def isCompleted(self, progress=None, isRewardReceived=None):
         return self.isMainCompleted(isRewardReceived) or self.isFullCompleted(isRewardReceived)
 
     def canBeSelected(self):
@@ -681,7 +657,7 @@ class PotapovQuest(Quest):
     def updateProgress(self, questsProgress):
         self.__pqProgress = questsProgress.getPotapovQuestProgress(self.__pqType, self._id)
 
-    def getBonuses(self, bonusName = None, isMain = None):
+    def getBonuses(self, bonusName=None, isMain=None):
         if isMain is None:
             data = (self.__pqType.mainQuestInfo, self.__pqType.addQuestInfo)
         elif isMain:
@@ -716,7 +692,7 @@ class PotapovQuest(Quest):
 
 class ClubsQuest(Quest):
 
-    def __init__(self, seasonID, questDescr, progress = None):
+    def __init__(self, seasonID, questDescr, progress=None):
         Quest.__init__(self, questDescr.questID, questDescr.questData, progress)
         self.__seasonID = seasonID
 
@@ -728,6 +704,30 @@ class ClubsQuest(Quest):
 
     def getDescription(self):
         return i18n.makeString(Quest.getDescription(self))
+
+    def getType(self):
+        return constants.EVENT_TYPE.CLUBS_QUEST
+
+
+class MotiveQuest(Quest):
+
+    def getUserName(self):
+        return i18n.makeString(Quest.getUserName(self))
+
+    def getDescription(self):
+        return i18n.makeString(Quest.getDescription(self))
+
+    def getParents(self):
+        return {}
+
+    def getTips(self):
+        return getLocalizedData(self._data, 'advice')
+
+    def getAwardMsg(self):
+        return getLocalizedData(self._data, 'congratulation')
+
+    def getRequirementsStr(self):
+        return getLocalizedData(self._data, 'requirements')
 
 
 class CompanyBattles(namedtuple('CompanyBattles', ['startTime', 'finishTime', 'peripheryIDs'])):
@@ -834,15 +834,13 @@ def getTileAnimationPath(tileIconID):
     return '../flash/animations/questTiles/%s.swf' % tileIconID
 
 
-def createQuest(questType, qID, data, progress = None, expiryTime = None):
+def createQuest(questType, qID, data, progress=None, expiryTime=None):
     if questType == constants.EVENT_TYPE.PERSONAL_QUEST:
         return PersonalQuest(qID, data, progress, expiryTime)
     if questType == constants.EVENT_TYPE.GROUP:
         return Group(qID, data)
-    return Quest(qID, data, progress)
+    return MotiveQuest(qID, data, progress) if questType == constants.EVENT_TYPE.MOTIVE_QUEST else Quest(qID, data, progress)
 
 
 def createAction(eventType, aID, data):
-    if eventType == constants.EVENT_TYPE.GROUP:
-        return Group(aID, data)
-    return Action(aID, data)
+    return Group(aID, data) if eventType == constants.EVENT_TYPE.GROUP else Action(aID, data)

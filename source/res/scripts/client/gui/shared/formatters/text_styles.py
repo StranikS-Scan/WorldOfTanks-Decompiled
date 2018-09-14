@@ -1,17 +1,17 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/text_styles.py
 import types
 from helpers import i18n
 from gui import makeHtmlString
 __all__ = ('standard', 'main', 'neutral', 'stats', 'statInfo', 'middleTitle', 'highTitle', 'disabled', 'promoTitle', 'promoSubTitle', 'alert', 'success', 'error', 'warning', 'critical', 'expText', 'gold', 'credits', 'defRes', 'counter', 'titleFont', 'tutorial', 'playerOnline', 'getRawStyles', 'getStyles', 'concatStylesToSingleLine', 'concatStylesToMultiLine')
 
-def _getStyle(style, ctx = None):
+def _getStyle(style, ctx=None):
     if ctx is None:
         ctx = {}
     return makeHtmlString('html_templates:lobby/textStyle', style, ctx)
 
 
-def _formatText(style, text = ''):
+def _formatText(style, text=''):
     if type(text) in types.StringTypes and i18n.isValidKey(text):
         text = i18n.makeString(text)
     return _getStyle(style, {'message': text})
@@ -164,12 +164,12 @@ def concatStylesWithSpace(*styles):
 
 class _StylesBuilder(object):
 
-    def __init__(self, delimiter = ''):
+    def __init__(self, delimiter=''):
         super(_StylesBuilder, self).__init__()
         self.__chunks = []
         self.__delimiter = delimiter
 
-    def addStyledText(self, style, text = ''):
+    def addStyledText(self, style, text=''):
         self.__chunks.append((style, text))
         return self
 
@@ -178,11 +178,10 @@ class _StylesBuilder(object):
         for style, text in self.__chunks:
             if isinstance(style, types.FunctionType):
                 result.append(style(text))
-            else:
-                result.append(_formatText(style, text))
+            result.append(_formatText(style, text))
 
         return self.__delimiter.join(result)
 
 
-def builder(delimiter = ''):
+def builder(delimiter=''):
     return _StylesBuilder(delimiter)

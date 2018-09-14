@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/ClubStaffView.py
 import BigWorld
 from adisp import process
@@ -13,7 +13,7 @@ from gui import DialogsInterface, SystemMessages
 from gui.clubs import events_dispatcher as club_events, formatters as club_fmts
 from gui.clubs.contexts import OpenCloseClubCtx, AssignOfficerCtx, AssignPrivateCtx, KickMemberCtx, DestroyClubCtx, LeaveClubCtx
 from gui.clubs.settings import CLUB_REQUEST_TYPE
-from gui.shared import events, formatters as shared_fmts
+from gui.shared import events
 from gui.shared.formatters import text_styles
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.StaticFormationStaffViewMeta import StaticFormationStaffViewMeta
@@ -22,7 +22,7 @@ from gui.Scaleform.genConsts.FORMATION_MEMBER_TYPE import FORMATION_MEMBER_TYPE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
-from account_helpers.AccountSettings import AccountSettings, JOIN_COMMAND_PRESSED
+from account_helpers.AccountSettings import AccountSettings, LAST_CLUB_OPENED_FOR_APPS
 from account_helpers.AccountSettings import SHOW_INVITE_COMMAND_BTN_ANIMATION
 
 def _getFlashMemberType(member):
@@ -48,7 +48,7 @@ def _packAppointment(profile, club, member, memberType, limits):
      'promoteBtnTooltip': TOOLTIPS.STATICFORMATION_PROMOTEBTN}
 
 
-def _packTableHeaderItem(tooltip, id, buttonWidth, label = '', icon = None, sortOrder = 0, sortType = 'numeric', inverted = False, enabled = True):
+def _packTableHeaderItem(tooltip, id_, buttonWidth, label='', icon=None, sortOrder=0, sortType='numeric', inverted=False, enabled=True):
     return {'label': text_styles.standard(label) if label else '',
      'buttonWidth': buttonWidth,
      'enabled': enabled,
@@ -56,7 +56,7 @@ def _packTableHeaderItem(tooltip, id, buttonWidth, label = '', icon = None, sort
      'sortType': sortType,
      'toolTip': tooltip,
      'sortOrder': sortOrder,
-     'id': id,
+     'id': id_,
      'iconSource': icon}
 
 
@@ -137,6 +137,11 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
         if club:
             self.as_setStaticHeaderDataS(self.__packStaticHeaderData(club))
 
+    def onIGRTypeChanged(self):
+        club = self.clubsCtrl.getClub(self._clubDbID)
+        if club:
+            self.as_updateStaffDataS(self.__packStaffData(club))
+
     @process
     def assignOfficer(self, memberDbID, userName):
         isOk = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('staticFormation/staffView/promoteConfirmation', messageCtx={'userName': userName}))
@@ -175,7 +180,7 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
 
     @process
     def setRecruitmentOpened(self, opened):
-        AccountSettings.setFilter(JOIN_COMMAND_PRESSED, True)
+        AccountSettings.setFilter(LAST_CLUB_OPENED_FOR_APPS, self._clubDbID)
         club = self.clubsCtrl.getClub(self._clubDbID)
         if club.getState().isOpened() != opened:
             sendRequest = True
@@ -252,7 +257,7 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
          'btnInviteTooltip': btnInviteTooltip,
          'isRecruitmentOpened': club.getState().isOpened(),
          'btnRecruitmentVisible': canSeeApplicants,
-         'isCheckBoxPressed': not AccountSettings.getFilter(JOIN_COMMAND_PRESSED),
+         'isCheckBoxPressed': AccountSettings.getFilter(LAST_CLUB_OPENED_FOR_APPS) != self._clubDbID,
          'cbOpenedVisible': limits.canOpenClub(profile, club).success}
 
     def __packStaticHeaderData(self, club):
@@ -296,7 +301,7 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
         self.as_setRecruitmentAvailabilityS(True)
         return
 
-    def __packStaffData(self, club, syncUserInfo = False):
+    def __packStaffData(self, club, syncUserInfo=False):
         members = []
         membersDict = club.getMembers()
         membersCount = len(membersDict)
@@ -318,12 +323,12 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
                 removeBtnTooltip = TOOLTIPS.STATICFORMATIONSTAFFVIEW_REMOVEHIMSELFBTN
             else:
                 removeBtnTooltip = TOOLTIPS.STATICFORMATIONSTAFFVIEW_REMOVEMEMBERBTN
-            userData = self.getGuiUserData(dbID)
+            isValid, userData = self.getGuiUserDataWithStatus(dbID)
             userData.update({'igrType': getIGRCtrl().getRoomType()})
             members.append({'memberId': dbID,
              'canRemoved': self.__canBeRemoved(profile, club, member, membersCount, limits),
              'canPassOwnership': limits.canTransferOwnership(profile, club).success,
-             'canShowContextMenu': not isSelf,
+             'canShowContextMenu': not isSelf and isValid,
              'removeMemberBtnIcon': RES_ICONS.MAPS_ICONS_LIBRARY_CROSS,
              'removeMemberBtnTooltip': removeBtnTooltip,
              'appointmentSortValue': memberType,

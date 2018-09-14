@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/SettingsCore.py
 import Event
 from InterfaceScaleManager import InterfaceScaleManager
@@ -63,6 +63,7 @@ class _SettingsCore(object):
          (GAME.ENABLE_POSTMORTEM_DELAY, options.PostMortemDelaySetting(GAME.ENABLE_POSTMORTEM_DELAY, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_VEHICLES_COUNTER, options.StorageAccountSetting(GAME.SHOW_VEHICLES_COUNTER, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS, options.ExcludeInReplayAccountSetting(GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.BATTLE_LOADING_INFO, options.BattleLoadingTipSetting(GAME.BATTLE_LOADING_INFO, GAME.BATTLE_LOADING_INFO)),
          (GAME.SHOW_MARKS_ON_GUN, options.ShowMarksOnGunSetting(GAME.SHOW_MARKS_ON_GUN, storage=MARK_ON_GUN_SETTINGS_STORAGE)),
          (GAME.DYNAMIC_CAMERA, options.DynamicCamera(GAME.DYNAMIC_CAMERA, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SNIPER_MODE_STABILIZATION, options.SniperModeStabilization(GAME.SNIPER_MODE_STABILIZATION, storage=GAME_SETTINGS_STORAGE)),
@@ -89,6 +90,9 @@ class _SettingsCore(object):
          (GAME.SHOW_VECTOR_ON_MAP, options.MinimapSetting(GAME.SHOW_VECTOR_ON_MAP, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_SECTOR_ON_MAP, options.MinimapSetting(GAME.SHOW_SECTOR_ON_MAP, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_VEH_MODELS_ON_MAP, options.MinimapVehModelsSetting(GAME.SHOW_VEH_MODELS_ON_MAP, storage=GAME_SETTINGS_STORAGE)),
+         (GAME.MINIMAP_VIEW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_VIEW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.MINIMAP_MAX_VIEW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_MAX_VIEW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.MINIMAP_DRAW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_DRAW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GRAPHICS.MONITOR, options.MonitorSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.RESOLUTION, options.ResolutionSetting(storage=VIDEO_SETTINGS_STORAGE)),
@@ -132,9 +136,11 @@ class _SettingsCore(object):
          (GRAPHICS.SEMITRANSPARENT_LEAVES_ENABLED, options.GraphicSetting(GRAPHICS.SEMITRANSPARENT_LEAVES_ENABLED)),
          (GRAPHICS.GRAPHICS_SETTINGS_LIST, options.ReadOnlySetting(lambda : graphics.GRAPHICS_SETTINGS.ALL())),
          (GRAPHICS.INTERFACE_SCALE, options.InterfaceScaleSetting(GRAPHICS.INTERFACE_SCALE)),
+         (SOUND.MASTER_TOGGLE, options.SoundEnableSetting()),
+         (SOUND.SOUND_QUALITY, options.SoundQualitySetting()),
+         (SOUND.SOUND_QUALITY_VISIBLE, options.ReadOnlySetting(options.SoundQualitySetting.isAvailable)),
          (SOUND.MASTER, options.SoundSetting('master')),
          (SOUND.MUSIC, options.SoundSetting('music')),
-         (SOUND.VOICE, options.SoundSetting('voice')),
          (SOUND.VEHICLES, options.SoundSetting('vehicles')),
          (SOUND.EFFECTS, options.SoundSetting('effects')),
          (SOUND.GUI, options.SoundSetting('gui')),
@@ -146,6 +152,7 @@ class _SettingsCore(object):
          (SOUND.VOIP_MIC, options.VOIPMicSoundSetting(True)),
          (SOUND.CAPTURE_DEVICES, options.VOIPCaptureDevicesSetting()),
          (SOUND.VOIP_SUPPORTED, options.VOIPSupportSetting()),
+         (SOUND.DYNAMIC_RANGE, options.DynamicSoundPresetSetting(SOUND.DYNAMIC_RANGE, SOUND.DYNAMIC_RANGE)),
          (SOUND.ALT_VOICES, options.AltVoicesSetting(SOUND.ALT_VOICES, storage=SOUND_SETTINGS_STORAGE)),
          (CONTROLS.MOUSE_ARCADE_SENS, options.MouseSensitivitySetting('arcade')),
          (CONTROLS.MOUSE_SNIPER_SENS, options.MouseSensitivitySetting('sniper')),
@@ -154,6 +161,7 @@ class _SettingsCore(object):
          (CONTROLS.MOUSE_VERT_INVERSION, options.MouseInversionSetting(CONTROLS.MOUSE_VERT_INVERSION, 'vertInvert', storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.BACK_DRAFT_INVERSION, options.BackDraftInversionSetting(storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.KEYBOARD, options.KeyboardSettings(storage=KEYBOARD_SETTINGS_STORAGE)),
+         (CONTROLS.KEYBOARD_IMPORTANT_BINDS, options.ReadOnlySetting(lambda : options.KeyboardSettings.getKeyboardImportantBinds())),
          (AIM.ARCADE, options.AimSetting('arcade', storage=AIM_SETTINGS_STORAGE)),
          (AIM.SNIPER, options.AimSetting('sniper', storage=AIM_SETTINGS_STORAGE)),
          (MARKERS.ENEMY, options.VehicleMarkerSetting(MARKERS.ENEMY, storage=MARKERS_SETTINGS_STORAGE)),
@@ -180,12 +188,13 @@ class _SettingsCore(object):
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         self.interfaceScale.init()
-        LOG_DEBUG('SettingsCore is initialized')
 
     def fini(self):
         self.options.dump()
         self.__storages = None
-        self.__options = None
+        if self.__options is not None:
+            self.__options.fini()
+            self.__options = None
         self.__serverSettings = None
         self.interfaceScale.fini()
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging

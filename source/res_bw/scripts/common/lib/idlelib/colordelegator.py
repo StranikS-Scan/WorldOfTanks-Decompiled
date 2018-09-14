@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ColorDelegator.py
 import time
 import re
@@ -83,12 +83,12 @@ class ColorDelegator(Delegator):
             print 'tagdefs', self.tagdefs
         return
 
-    def insert(self, index, chars, tags = None):
+    def insert(self, index, chars, tags=None):
         index = self.index(index)
         self.delegate.insert(index, chars, tags)
         self.notify_range(index, index + '+%dc' % len(chars))
 
-    def delete(self, index1, index2 = None):
+    def delete(self, index1, index2=None):
         index1 = self.index(index1)
         self.delegate.delete(index1, index2)
         self.notify_range(index1)
@@ -97,7 +97,7 @@ class ColorDelegator(Delegator):
     allow_colorizing = True
     colorizing = False
 
-    def notify_range(self, index1, index2 = None):
+    def notify_range(self, index1, index2=None):
         self.tag_add('TODO', index1, index2)
         if self.after_id:
             if DEBUG:
@@ -114,7 +114,7 @@ class ColorDelegator(Delegator):
 
     close_when_done = None
 
-    def close(self, close_when_done = None):
+    def close(self, close_when_done=None):
         if self.after_id:
             after_id = self.after_id
             self.after_id = None

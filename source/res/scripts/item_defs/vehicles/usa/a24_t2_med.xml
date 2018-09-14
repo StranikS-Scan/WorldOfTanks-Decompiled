@@ -79,6 +79,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A24_T2_med/T2_med_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <T2E1>
@@ -245,90 +246,90 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
-        <maxOffset>	0.01	</maxOffset>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
         <gravity>	-9	</gravity>
-        <elasticity>	757	</elasticity>
+        <elasticity>	1083	</elasticity>
         <damping>	2	</damping>
         <forwardElastK>	1	</forwardElastK>
         <backwardElastK>	1	</backwardElastK>
         <offset>	0.000000	</offset>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.099	</offset>
-        </node>
-        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.48	</backwardElastK>
           <offset>	-0.099	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.83	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.064	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.8	</forwardElastK>
-          <backwardElastK>	2.5	</backwardElastK>
-          <offset>	-0.064	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.8	</forwardElastK>
-          <backwardElastK>	3	</backwardElastK>
-          <offset>	-0.064	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L4	</name>
-          <forwardElastK>	0.8	</forwardElastK>
-          <backwardElastK>	3.5	</backwardElastK>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.48	</backwardElastK>
           <offset>	-0.099	</offset>
-          <elasticity>	1105	</elasticity>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.83	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.63	</backwardElastK>
           <offset>	-0.064	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <forwardElastK>	0.8	</forwardElastK>
-          <backwardElastK>	2.5	</backwardElastK>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
           <offset>	-0.064	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
-          <forwardElastK>	0.8	</forwardElastK>
-          <backwardElastK>	3	</backwardElastK>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.86	</backwardElastK>
           <offset>	-0.064	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
           <elasticity>	1105	</elasticity>
-          <forwardElastK>	0.8	</forwardElastK>
-          <backwardElastK>	3.5	</backwardElastK>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.63	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.86	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <elasticity>	1105	</elasticity>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
           <offset>	-0.099	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <forwardElastK>	1.13	</forwardElastK>
+          <forwardElastK>	0.88	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
           <offset>	-0.03	</offset>
         </node>
@@ -343,7 +344,7 @@
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
           <forwardElastK>	2.05	</forwardElastK>
-          <backwardElastK>	1.39	</backwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.03	</offset>
         </node>
         <node>
@@ -562,10 +563,10 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L4	</name>
+          <elasticity>	1105	</elasticity>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3.5	</backwardElastK>
           <offset>	-0.099	</offset>
-          <elasticity>	1105	</elasticity>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -661,46 +662,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_semiautomatic_gun_M1924>	shared	  <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_37mm_Browning_semiautomatic_gun	  <cost>	40	</cost>
-            </gun>
-            <gun>	_20mm_Hispano_Suiza_Birgikt_gun	  <cost>	140	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	22	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	10	</gun>
-          </armor>
-          <maxAmmo>	110	</maxAmmo>
-          <reloadTime>	5.7	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.7	</aimingTime>
-          <shotDispersionRadius>	0.51	</shotDispersionRadius>
-          <models>
-            <undamaged>	vehicles/american/A24_T2_med/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A24_T2_med/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A24_T2_med/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/american/A24_T2_med/collision/Gun_01.model	</collisionModel>
-          </hitTester>
-          <camouflage>
-            <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_37mm_semiautomatic_gun_M1924>
         <_37mm_Browning_semiautomatic_gun>	shared	  <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -708,6 +669,8 @@
           <unlocks>
             <turret>	T2T2	  <cost>	115	</cost>
             </turret>
+            <gun>	_20mm_Hispano_Suiza_Birgikt_gun	  <cost>	140	</cost>
+            </gun>
           </unlocks>
           <armor>
             <armor_1>	22	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -835,40 +798,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_semiautomatic_gun_M1924>	shared	  <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	22	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	10	</gun>
-          </armor>
-          <maxAmmo>	110	</maxAmmo>
-          <reloadTime>	5.7	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.7	</aimingTime>
-          <shotDispersionRadius>	0.51	</shotDispersionRadius>
-          <models>
-            <undamaged>	vehicles/american/A24_T2_med/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/american/A24_T2_med/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/american/A24_T2_med/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/american/A24_T2_med/collision/Gun_04.model	</collisionModel>
-          </hitTester>
-          <camouflage>
-            <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_37mm_semiautomatic_gun_M1924>
         <_37mm_Browning_semiautomatic_gun>	shared	  <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -900,7 +829,7 @@
             <collisionModel>	vehicles/american/A24_T2_med/collision/Gun_05.model	</collisionModel>
           </hitTester>
           <camouflage>
-            <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
+            <tiling>	0.325 0.325 0.000000 0.000000	</tiling>
           </camouflage>
         </_37mm_Browning_semiautomatic_gun>
         <_37mm_M-5>	shared	  <pitchLimits>
@@ -1015,17 +944,7 @@
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <SCR_200>	shared	  <unlocks>
-        <radio>	SCR_210	  <cost>	330	</cost>
-        </radio>
-      </unlocks>
-    </SCR_200>
-    <SCR_210>	shared	  <unlocks>
-        <radio>	SCR_506	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </SCR_210>
-    <SCR_506>	shared	</SCR_506>
+    <SCR_200>	shared	</SCR_200>
   </radios>
   <effects>
     <collision></collision>

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/CompanyListView.py
 from adisp import process
 from constants import PREBATTLE_TYPE
@@ -75,7 +75,7 @@ class CompanyListView(CompanyListMeta, PrbListener):
         return
 
     @process
-    def __requestCompaniesList(self, isNotInBattle = False, division = 0, owner = ''):
+    def __requestCompaniesList(self, isNotInBattle=False, division=0, owner=''):
         yield self.prbDispatcher.sendPrbRequest(prb_ctx.RequestCompaniesCtx(isNotInBattle, division, owner))
 
     @process

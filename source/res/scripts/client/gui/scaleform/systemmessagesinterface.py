@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/SystemMessagesInterface.py
 import time
 import account_helpers
@@ -45,7 +45,7 @@ class SystemMessagesInterface(BaseSystemMessages):
     def proto(self):
         return None
 
-    def pushMessage(self, text, type = SM_TYPE.Information, priority = None):
+    def pushMessage(self, text, type=SM_TYPE.Information, priority=None):
         if GUI_SETTINGS.isGuiEnabled():
             self.proto.serviceChannel.pushClientSysMessage(text, type, priority=priority)
         else:
@@ -82,7 +82,7 @@ class SystemMessagesInterface(BaseSystemMessages):
     def __onConnected(self):
         self.pushI18nMessage('#system_messages:connected', connectionManager.serverUserName, type=SM_TYPE.GameGreeting)
 
-    def __checkPremiumAccountExpiry(self, ctx = None):
+    def __checkPremiumAccountExpiry(self, ctx=None):
         expiryUTCTime = g_itemsCache.items.stats.premiumExpiryTime
         delta = account_helpers.getPremiumExpiryDelta(expiryUTCTime)
         if delta.days == 0 and expiryUTCTime and not self.__expirationShown:

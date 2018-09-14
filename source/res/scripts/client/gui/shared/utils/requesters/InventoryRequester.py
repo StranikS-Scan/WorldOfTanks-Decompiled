@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/InventoryRequester.py
 import time
 from collections import namedtuple, defaultdict
@@ -54,7 +54,7 @@ class InventoryRequester(AbstractSyncDataRequester):
         return False
 
     @async
-    def _requestCache(self, callback = None):
+    def _requestCache(self, callback=None):
         BigWorld.player().inventory.getCache(lambda resID, value: self._response(resID, value, callback))
 
     def __makeItem(self, itemTypeID, invDataIdx):
@@ -80,9 +80,7 @@ class InventoryRequester(AbstractSyncDataRequester):
 
     def getItemData(self, typeCompDescr):
         itemTypeID = getTypeOfCompactDescr(typeCompDescr)
-        if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-            return self.getVehicleData(self.__vehsIDsByCD.get(typeCompDescr, -1))
-        return self.__makeSimpleItem(typeCompDescr)
+        return self.getVehicleData(self.__vehsIDsByCD.get(typeCompDescr, -1)) if itemTypeID == GUI_ITEM_TYPE.VEHICLE else self.__makeSimpleItem(typeCompDescr)
 
     def getTankmanData(self, tmanInvID):
         return self.__makeTankman(tmanInvID)
@@ -106,7 +104,7 @@ class InventoryRequester(AbstractSyncDataRequester):
                 return cache[typeCompDescr]
             itemsInvData = self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {})
 
-            def value(key, default = None):
+            def value(key, default=None):
                 return itemsInvData.get(key, {}).get(vehInvID, default)
 
             compactDescr = value('compDescr')
@@ -127,7 +125,7 @@ class InventoryRequester(AbstractSyncDataRequester):
         else:
             itemsInvData = self.getCacheValue(GUI_ITEM_TYPE.TANKMAN, {})
 
-            def value(key, default = None):
+            def value(key, default=None):
                 return itemsInvData.get(key, {}).get(tmanInvID, default)
 
             compactDescr = value('compDescr')
@@ -159,7 +157,7 @@ class InventoryRequester(AbstractSyncDataRequester):
         super(InventoryRequester, self)._response(resID, invData, callback)
         return
 
-    def getItems(self, itemTypeIdx, dataIdx = None):
+    def getItems(self, itemTypeIdx, dataIdx=None):
         """
         Returns inventory items data by given item type. If data index is
         not specified - returns dictionary of items data, otherwise -
@@ -174,14 +172,10 @@ class InventoryRequester(AbstractSyncDataRequester):
         """
         if itemTypeIdx == GUI_ITEM_TYPE.VEHICLE:
             return self.__getVehiclesData(dataIdx)
-        if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN:
-            return self.__getTankmenData(dataIdx)
-        return self.__getItemsData(itemTypeIdx, dataIdx)
+        return self.__getTankmenData(dataIdx) if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN else self.__getItemsData(itemTypeIdx, dataIdx)
 
     def isItemInInventory(self, itemTypeID, invDataIdx):
-        if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-            return invDataIdx in self.__vehsIDsByCD
-        return invDataIdx in self.__itemsCache[itemTypeID]
+        return invDataIdx in self.__vehsIDsByCD if itemTypeID == GUI_ITEM_TYPE.VEHICLE else invDataIdx in self.__itemsCache[itemTypeID]
 
     def isInInventory(self, intCompactDescr):
         """
@@ -194,9 +188,7 @@ class InventoryRequester(AbstractSyncDataRequester):
         itemsData = self.__getItemsData(itemTypeIdx)
         if itemTypeIdx == GUI_ITEM_TYPE.VEHICLE:
             return intCompactDescr in self.__itemsCache[GUI_ITEM_TYPE.VEHICLE]
-        if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN:
-            return False
-        return intCompactDescr in itemsData
+        return False if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN else intCompactDescr in itemsData
 
     def getIgrCustomizationsLayout(self):
         """
@@ -206,7 +198,7 @@ class InventoryRequester(AbstractSyncDataRequester):
         """
         return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('igrCustomizationLayout', {})
 
-    def __getItemsData(self, itemTypeIdx, compactDescr = None):
+    def __getItemsData(self, itemTypeIdx, compactDescr=None):
         """
         Common items request handler. Returns all given type items
         data or only one specific data by @compactDescr.
@@ -221,7 +213,7 @@ class InventoryRequester(AbstractSyncDataRequester):
                 return result.get(compactDescr)
         return result
 
-    def __getTankmenData(self, inventoryID = None):
+    def __getTankmenData(self, inventoryID=None):
         """
         Tankmen inventory data request handler. Returns all tankmen
         data or specific tankman data by given inventory id.
@@ -261,7 +253,7 @@ class InventoryRequester(AbstractSyncDataRequester):
 
             return result
 
-    def __getVehiclesData(self, inventoryID = None):
+    def __getVehiclesData(self, inventoryID=None):
         """
         Vehicles inventory data request handler. Returns all vehicles
         data or specific vehicle data by given inventory id.

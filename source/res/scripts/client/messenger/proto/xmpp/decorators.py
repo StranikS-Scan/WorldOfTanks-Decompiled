@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/decorators.py
 from debug_utils import LOG_WARNING
 from messenger.ext import validateAccountName
@@ -16,10 +16,7 @@ class QUERY_SIGN(object):
 
 
 def _validateDatabaseID(dbID):
-    if not dbID:
-        return ClientError(CLIENT_ERROR_ID.DBID_INVALID)
-    else:
-        return None
+    return ClientError(CLIENT_ERROR_ID.DBID_INVALID) if not dbID else None
 
 
 def _validateAccountName(name):
@@ -54,7 +51,7 @@ _QUERY_SIGN_VALIDATORS = {QUERY_SIGN.DATABASE_ID: _validateDatabaseID,
  QUERY_SIGN.NOTE_TEXT: _validateNoteText}
 _QUERY_OPT_SIGNS = (QUERY_SIGN.OPT_GROUP_NAME,)
 
-class local_query(object):
+class local_query(ClientHolder):
     __slots__ = ('_sign',)
 
     def __init__(self, *args):
@@ -98,10 +95,9 @@ class local_query(object):
             return None
 
 
-class xmpp_query(local_query, ClientHolder):
+class xmpp_query(local_query):
+    __slots__ = ()
 
     def _validate(self, *args):
         client = self.client()
-        if not client or not client.isConnected():
-            return ClientError(CLIENT_ERROR_ID.NOT_CONNECTED)
-        return super(xmpp_query, self)._validate(*args)
+        return ClientError(CLIENT_ERROR_ID.NOT_CONNECTED) if not client or not client.isConnected() else super(xmpp_query, self)._validate(*args)

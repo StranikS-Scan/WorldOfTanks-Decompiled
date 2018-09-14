@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ObjectBrowser.py
 from idlelib.TreeWidget import TreeItem, TreeNode, ScrolledCanvas
 from repr import Repr
@@ -8,7 +8,7 @@ myrepr.maxother = 100
 
 class ObjectTreeItem(TreeItem):
 
-    def __init__(self, labeltext, object, setfunction = None):
+    def __init__(self, labeltext, object, setfunction=None):
         self.labeltext = labeltext
         self.object = object
         self.setfunction = setfunction
@@ -20,8 +20,7 @@ class ObjectTreeItem(TreeItem):
         return myrepr.repr(self.object)
 
     def GetIconName(self):
-        if not self.IsExpandable():
-            return 'python'
+        return 'python' if not self.IsExpandable() else None
 
     def IsEditable(self):
         return self.setfunction is not None
@@ -47,7 +46,7 @@ class ObjectTreeItem(TreeItem):
             except AttributeError:
                 continue
 
-            item = make_objecttreeitem(str(key) + ' =', value, lambda value, key = key, object = self.object: setattr(object, key, value))
+            item = make_objecttreeitem(str(key) + ' =', value, lambda value, key=key, object=self.object: setattr(object, key, value))
             sublist.append(item)
 
         return sublist
@@ -101,7 +100,7 @@ class SequenceTreeItem(ObjectTreeItem):
             except KeyError:
                 continue
 
-            def setfunction(value, key = key, object = self.object):
+            def setfunction(value, key=key, object=self.object):
                 object[key] = value
 
             item = make_objecttreeitem('%r:' % (key,), value, setfunction)
@@ -133,7 +132,7 @@ dispatch = {IntType: AtomicObjectTreeItem,
  InstanceType: InstanceTreeItem,
  ClassType: ClassTreeItem}
 
-def make_objecttreeitem(labeltext, object, setfunction = None):
+def make_objecttreeitem(labeltext, object, setfunction=None):
     t = type(object)
     if t in dispatch:
         c = dispatch[t]

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Hangar.py
 import BigWorld
 from CurrentVehicle import g_currentVehicle
@@ -41,7 +41,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         RESEARCH_PANEL = 'researchPanel'
         TMEN_XP_PANEL = 'tmenXpPanel'
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         LobbySubView.__init__(self, 0)
         self.__isCursorOver3dScene = False
         self.__selected3DEntity = None
@@ -139,7 +139,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         if self.paramsPanel:
             self.paramsPanel.update()
 
-    def __updateCarouselVehicles(self, vehicles = None):
+    def __updateCarouselVehicles(self, vehicles=None):
         if self.tankCarousel is not None:
             self.tankCarousel.updateVehicles(vehicles)
         return

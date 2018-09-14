@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleSelectorPopupMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -11,17 +11,13 @@ class VehicleSelectorPopupMeta(AbstractWindowView):
         self._printOverrideError('onSelectVehicles')
 
     def as_setFiltersDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setFiltersData(data)
+        return self.flashObject.as_setFiltersData(data) if self._isDAAPIInited() else None
 
     def as_setListDataS(self, listData, selectedItems):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setListData(listData, selectedItems)
+        return self.flashObject.as_setListData(listData, selectedItems) if self._isDAAPIInited() else None
 
     def as_setListModeS(self, isMultipleSelect):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setListMode(isMultipleSelect)
+        return self.flashObject.as_setListMode(isMultipleSelect) if self._isDAAPIInited() else None
 
     def as_setInfoTextS(self, text, componentsOffset):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInfoText(text, componentsOffset)
+        return self.flashObject.as_setInfoText(text, componentsOffset) if self._isDAAPIInited() else None

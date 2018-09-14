@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/__init__.py
 import types
 import BigWorld
@@ -23,14 +23,12 @@ def passCensor(text):
     if text is None:
         return u''
     else:
-        if type(text) is not types.UnicodeType:
+        if not isinstance(text, types.UnicodeType):
             text = unicode(text, 'utf-8')
-        if g_settings.userPrefs.enableOlFilter:
-            return g_olDictionary.searchAndReplace(text)
-        return text
+        return g_olDictionary.searchAndReplace(text) if g_settings.userPrefs.enableOlFilter else text
 
 
-def isBattleChatEnabled(common = False):
+def isBattleChatEnabled(common=False):
     result = True
     arena = getattr(BigWorld.player(), 'arena', None)
     if arena is None:
@@ -60,10 +58,8 @@ def getMinimapCellName(cellIdx):
 def validateAccountName(name):
     if not name:
         return (False, CLIENT_ERROR_ID.NAME_EMPTY)
-    elif not isAccountNameValid(name):
-        return (False, CLIENT_ERROR_ID.NAME_INVALID)
     else:
-        return (True, None)
+        return (False, CLIENT_ERROR_ID.NAME_INVALID) if not isAccountNameValid(name) else (True, None)
 
 
 def checkAccountName(token):

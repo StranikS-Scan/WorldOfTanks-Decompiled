@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/VehicleCustonizationModel.py
 import time
 
@@ -21,7 +21,7 @@ class VehicleCustomizationModel:
         VehicleCustomizationModel._playerInscriptions = list(vehicleDescriptor.playerInscriptions)
 
     @classmethod
-    def updateVehicleSticker(cls, itemType, itemID = None, itemPosition = 0, duration = 0):
+    def updateVehicleSticker(cls, itemType, itemID=None, itemPosition=0, duration=0):
         if itemType == 'player':
             list = VehicleCustomizationModel._playerEmblems
             sticker = (itemID, round(time.time()), duration)

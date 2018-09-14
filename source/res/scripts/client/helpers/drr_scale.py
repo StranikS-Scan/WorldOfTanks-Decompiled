@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/drr_scale.py
 import BigWorld
 DRR_MIN_SCALE_VALUE = 0.6
@@ -22,7 +22,7 @@ def changeScaleByStep(offset):
     result = None
     scale = BigWorld.getDRRScale()
     newScale = normalizeScale(scale + offset)
-    if scale != newScale:
+    if normalizeScale(scale) != newScale:
         BigWorld.setDRRScale(newScale)
         if normalizeScale(BigWorld.getDRRScale()) == newScale:
             result = newScale

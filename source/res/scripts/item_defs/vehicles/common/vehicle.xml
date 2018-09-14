@@ -25,7 +25,7 @@
       </name>
       <name>	germany:VK2801	  <weight>	21.6	</weight>
       </name>
-      <name>	usa:T28_Prototype	  <weight>	48.0	</weight>
+      <name>	usa:A68_T28_Prototype	  <weight>	48.0	</weight>
       </name>
       <name>	usa:A14_T30	  <weight>	72.0	</weight>
       </name>
@@ -51,7 +51,7 @@
       </name>
       <name>	ussr:R87_T62A	  <weight>	120.0	</weight>
       </name>
-      <name>	france:AMX_50Fosh_155	  <weight>	120.0	</weight>
+      <name>	france:F64_AMX_50Fosh_155	  <weight>	120.0	</weight>
       </name>
       <name>	france:Bat_Chatillon25t	  <weight>	120.0	</weight>
       </name>
@@ -133,7 +133,7 @@
       </name>
       <name>	usa:M60	  <weight>	120.0	</weight>
       </name>
-      <name>	germany:E-25	  <weight>	32.4	</weight>
+      <name>	germany:G48_E-25	  <weight>	32.4	</weight>
       </name>
       <name>	china:Ch14_T34_3	  <weight>	48.0	</weight>
       </name>
@@ -165,7 +165,7 @@
       </name>
       <name>	germany:Pz_Sfl_IVc	  <weight>	14.4	</weight>
       </name>
-      <name>	germany:Nashorn	  <weight>	21.6	</weight>
+      <name>	germany:G40_Nashorn	  <weight>	21.6	</weight>
       </name>
       <name>	germany:Sturer_Emil	  <weight>	32.4	</weight>
       </name>
@@ -190,8 +190,6 @@
       <name>	japan:ST_B1	  <weight>	120.0	</weight>
       </name>
       <name>	ussr:R104_Object_430_II	  <weight>	72.0	</weight>
-      </name>
-      <name>	ussr:Object_430	  <weight>	120.0	</weight>
       </name>
       <name>	usa:A86_T23E3	  <weight>	32.4	</weight>
       </name>
@@ -275,9 +273,33 @@
       </name>
       <name>	germany:G119_Panzer58	  <weight>	48.0	</weight>
       </name>
+      <name>	germany:G119_Pz58_Mutz	  <weight>	48.0	</weight>
+      </name>
       <name>	ussr:R121_KV4_KTT	  <weight>	48.0	</weight>
       </name>
       <name>	uk:GB87_Chieftain_T95_turret	  <weight>	48.0	</weight>
+      </name>
+      <name>	czech:Cz08_T_25	  <weight>	21.6	</weight>
+      </name>
+      <name>	czech:Cz05_T34_100	  <weight>	32.4	</weight>
+      </name>
+      <name>	czech:Cz07_TVP_46	  <weight>	48.0	</weight>
+      </name>
+      <name>	czech:Cz02_TVP_T50	  <weight>	72.0	</weight>
+      </name>
+      <name>	czech:Cz04_T50_51	  <weight>	120.0	</weight>
+      </name>
+      <name>	germany:G121_Grille_15_L63	  <weight>	120.0	</weight>
+      </name>
+      <name>	usa:A63_M46_Patton_KR	  <weight>	48.0	</weight>
+      </name>
+      <name>	france:F75_Char_de_25t	  <weight>	72.0	</weight>
+      </name>
+      <name>	germany:G120_M41_90	  <weight>	48.0	</weight>
+      </name>
+      <name>	uk:GB35_Sentinel_AC_IV	  <weight>	21.6	</weight>
+      </name>
+      <name>	usa:A111_T25_Pilot	  <weight>	48.0	</weight>
       </name>
       <name>	ussr:ISU-152_IGR	  <weight>	48.0	</weight>
       </name>
@@ -301,7 +323,7 @@
       </name>
       <name>	germany:G65_JagdTiger_SdKfz_185_IGR	  <weight>	48.0	</weight>
       </name>
-      <name>	germany:E-25_IGR	  <weight>	32.4	</weight>
+      <name>	germany:G48_E-25_IGR	  <weight>	32.4	</weight>
       </name>
       <name>	germany:Ferdinand_IGR	  <weight>	48.0	</weight>
       </name>
@@ -416,9 +438,13 @@
     </pull>
   </defaultTurretDetachmentEffects>
   <extras>
+    <attributeModifier>	NoneExtra : AttributeModifier	</attributeModifier>
     <shoot>	ShowShooting : Shoot	</shoot>
     <noAmmo>	NoneExtra : NoAmmo	</noAmmo>
     <gunReload>	NoneExtra : GunReload	</gunReload>
+    <deathZones>	NoneExtra: DeathZones	</deathZones>
+    <trackInstantRepairDelay>	NoneExtra : TrackInstantRepairDelay	  <delay>	0.3	</delay>
+    </trackInstantRepairDelay>
     <fire>	Fire : Fire	  <sounds>
         <fireStarted>	fire_started	</fireStarted>
         <fireStopped>	fire_stopped	</fireStopped>
@@ -446,6 +472,15 @@
     <hotCoffee>	NoneExtra : Stimulator	</hotCoffee>
     <removedRpmLimiter>	NoneExtra : RemovedRpmLimiter	</removedRpmLimiter>
     <qualityOil>	NoneExtra : Fuel	</qualityOil>
+    <overturnStun>	NoneExtra : OverturnStun	  <gameplayFactors>
+        <reloadTime>	2.0	</reloadTime>
+        <turretRotationSpeed>	0.5	</turretRotationSpeed>
+        <gunRotationSpeed>	0.5	</gunRotationSpeed>
+        <aimingTime>	2.0	</aimingTime>
+        <shotDispersion>	2.0	</shotDispersion>
+        <visionRadius>	0.5	</visionRadius>
+      </gameplayFactors>
+    </overturnStun>
     <artillery_tier1>	NoneExtra : Artillery	</artillery_tier1>
     <artillery_tier2>	NoneExtra : Artillery	</artillery_tier2>
     <artillery_tier3>	NoneExtra : Artillery	</artillery_tier3>
@@ -632,6 +667,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_1>
     <armor_2>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -640,6 +677,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_2>
     <armor_3>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -648,6 +687,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_3>
     <armor_4>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -656,6 +697,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_4>
     <armor_5>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -664,6 +707,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_5>
     <armor_6>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -672,6 +717,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_6>
     <armor_7>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -680,6 +727,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_7>
     <armor_8>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -688,6 +737,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_8>
     <armor_9>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -696,6 +747,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_9>
     <armor_10>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -704,6 +757,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_10>
     <armor_11>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -712,6 +767,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_11>
     <armor_12>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -720,6 +777,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_12>
     <armor_13>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -728,6 +787,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_13>
     <armor_14>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -736,6 +797,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_14>
     <armor_15>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -744,6 +807,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_15>
     <armor_16>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -752,6 +817,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_16>
     <armor_17>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -760,6 +827,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_17>
     <armor_18>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -768,6 +837,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_18>
     <armor_19>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -776,6 +847,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_19>
     <armor_20>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -784,6 +857,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_20>
     <armor_21>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -792,6 +867,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_21>
     <armor_22>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -800,6 +877,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_22>
     <armor_23>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -808,6 +887,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_23>
     <armor_24>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -816,6 +897,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_24>
     <armor_25>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -824,6 +907,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_25>
     <armor_26>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -832,6 +917,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_26>
     <armor_27>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -840,6 +927,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_27>
     <armor_28>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -848,6 +937,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_28>
     <armor_29>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -856,6 +947,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_29>
     <armor_30>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -864,6 +957,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_30>
     <armor_31>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -872,6 +967,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_31>
     <armor_32>
       <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
@@ -880,6 +977,8 @@
       <useAntifragmentationLining>	true	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	true	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	true	</checkCaliberForHitAngleNorm>
     </armor_32>
     <engine>
       <extra>	engineHealth	</extra>
@@ -889,6 +988,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
@@ -902,6 +1003,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
@@ -915,6 +1018,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.27	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.27	</chanceToHitByExplosion>
@@ -928,6 +1033,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
@@ -941,6 +1048,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
@@ -954,6 +1063,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	auto	</damageKind>
       <chanceToHitByProjectile>	1.0	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	1.0	</chanceToHitByExplosion>
@@ -967,6 +1078,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	auto	</damageKind>
       <chanceToHitByProjectile>	1.0	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	1.0	</chanceToHitByExplosion>
@@ -980,6 +1093,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.33	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.33	</chanceToHitByExplosion>
@@ -993,6 +1108,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	true	</mayRicochet>
       <collideOnceOnly>	false	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	1.0	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	1.0	</chanceToHitByExplosion>
@@ -1006,6 +1123,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
@@ -1019,6 +1138,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.45	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.45	</chanceToHitByExplosion>
@@ -1032,6 +1153,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.33	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.15	</chanceToHitByExplosion>
@@ -1045,6 +1168,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.33	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.15	</chanceToHitByExplosion>
@@ -1058,6 +1183,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.33	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.15	</chanceToHitByExplosion>
@@ -1071,6 +1198,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.33	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.15	</chanceToHitByExplosion>
@@ -1084,6 +1213,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.33	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.15	</chanceToHitByExplosion>
@@ -1097,6 +1228,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.33	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.15	</chanceToHitByExplosion>
@@ -1110,6 +1243,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.33	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.15	</chanceToHitByExplosion>
@@ -1123,6 +1258,8 @@
       <useAntifragmentationLining>	false	</useAntifragmentationLining>
       <mayRicochet>	false	</mayRicochet>
       <collideOnceOnly>	true	</collideOnceOnly>
+      <checkCaliberForRichet>	false	</checkCaliberForRichet>
+      <checkCaliberForHitAngleNorm>	false	</checkCaliberForHitAngleNorm>
       <damageKind>	device	</damageKind>
       <chanceToHitByProjectile>	0.33	</chanceToHitByProjectile>
       <chanceToHitByExplosion>	0.15	</chanceToHitByExplosion>

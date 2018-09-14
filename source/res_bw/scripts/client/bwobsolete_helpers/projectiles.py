@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/projectiles.py
 """This module handles different projectiles."""
 import BigWorld
@@ -31,7 +31,7 @@ def calculateTripTime(sourcePosition, targetPosition, speed):
     return t
 
 
-def create(name, owner, target, projectile, colour = (1.0, 1.0, 1.0), location = None):
+def create(name, owner, target, projectile, colour=(1.0, 1.0, 1.0), location=None):
     if fxMap.has_key(name):
         trail, explosion, project, tracer = fxMap[name]
         if project:
@@ -61,7 +61,7 @@ def destroyFireball(owner, fireball, fx, explosionFXName, targetHitCallback, pre
     return
 
 
-def fireballTripTime(source, target, srcoff = Vector3(0, 1.5, 0), dstoff = Vector3(0, 1.2, 0)):
+def fireballTripTime(source, target, srcoff=Vector3(0, 1.5, 0), dstoff=Vector3(0, 1.2, 0)):
     global projectileSpeed
     if hasattr(target, 'matrix'):
         targetMatrix = target.matrix
@@ -89,7 +89,7 @@ def fireballTripTime(source, target, srcoff = Vector3(0, 1.5, 0), dstoff = Vecto
     return tripTime
 
 
-def createFireball(projectileFXName, explosionFXName, source, target, srcOffset = None, targetHitCallback = None, prereqs = None):
+def createFireball(projectileFXName, explosionFXName, source, target, srcOffset=None, targetHitCallback=None, prereqs=None):
     global projectileSpeed
     fireball = BigWorld.Model('')
     fx = FX.Persistent(projectileFXName, prereqs)
@@ -115,7 +115,7 @@ def createFireball(projectileFXName, explosionFXName, source, target, srcOffset 
     return tripTime
 
 
-def shootProjectile(owner, target, projectile, trail = None, boom = None, srcoff = Vector3(0, 1.5, 0), dstoff = Vector3(0, 1.2, 0), motor = None):
+def shootProjectile(owner, target, projectile, trail=None, boom=None, srcoff=Vector3(0, 1.5, 0), dstoff=Vector3(0, 1.2, 0), motor=None):
     if hasattr(target, 'matrix'):
         targetMatrix = target.matrix
     else:

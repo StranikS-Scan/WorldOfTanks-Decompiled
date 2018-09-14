@@ -1,16 +1,19 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_xml_source.py
+from copy import deepcopy
 from pprint import pformat
 import time
 import ResMgr
 import nations
 import ArenaType
 import battle_results_shared
+from debug_utils import LOG_DEBUG
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
 from items import vehicles, tankmen
 from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, FORT_QUEST_SUFFIX
-from bonus_readers import getBonusReaders, readUTC
+from bonus_readers import readBonusSection, readUTC
+from optional_bonuses import walkBonuses, FilterVisitor, StripVisitor
 _WEEKDAYS = {'Mon': 1,
  'Tue': 2,
  'Wed': 3,
@@ -23,7 +26,7 @@ MAX_BONUS_LIMIT = 1000000
 class XMLNode(object):
     __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus', 'groupContent')
 
-    def __init__(self, name = ''):
+    def __init__(self, name=''):
         self.name = name
         self.value = []
         self.questClientConditions = []
@@ -41,7 +44,7 @@ class XMLNode(object):
             dump.update(group=self.relatedGroup)
         return pformat(dump, indent=4)
 
-    def getChildNode(self, name, relatedGroup = None):
+    def getChildNode(self, name, relatedGroup=None):
         childNode = None
         for subnode in self.value:
             if not isinstance(subnode, XMLNode):
@@ -53,10 +56,7 @@ class XMLNode(object):
         return childNode
 
     def getFirstChildValue(self):
-        if len(self.value) == 0:
-            return None
-        else:
-            return self.value[0]
+        return None if len(self.value) == 0 else self.value[0]
 
     def isExistChildNode(self, nodeName):
         for child in self.value:
@@ -66,7 +66,7 @@ class XMLNode(object):
 
         return False
 
-    def addChild(self, childNode, needClientInfo = True):
+    def addChild(self, childNode, needClientInfo=True):
         self.value.append(childNode)
         if not needClientInfo:
             return
@@ -85,14 +85,14 @@ class Source(object):
         ResMgr.purge(path)
         section = ResMgr.openSection(path)
         if section is None:
-            raise Exception, "Can not open '%s'" % path
-        return self.__readXML(section, gStartTime, gFinishTime, curTime)
+            raise Exception("Can not open '%s'" % path)
+        return {} if not section.has_key('quests') else self.__readXML(section['quests'], gStartTime, gFinishTime, curTime)
 
     def readFromInternalFile(self, path, curTime):
         ResMgr.purge(path)
         section = ResMgr.openSection(path)
         if section is None:
-            raise Exception, "Can not open '%s'" % path
+            raise Exception("Can not open '%s'" % path)
         if not section.has_key('quests'):
             return {}
         else:
@@ -112,7 +112,7 @@ class Source(object):
             if eventType == EVENT_TYPE.GROUP:
                 mainNode.groupContent = tuple(self.__readGroupContent(questSection))
             conditionReaders = self.__getConditionReaders(eventType)
-            bonusReaders = self.__getBonusReaders(eventType)
+            availableBonuses = self.__getAvailableBonuses(eventType)
             bonusNode = XMLNode('bonus')
             prebattleNode = XMLNode('preBattle')
             prebattleNode.addChild(bonusNode, False)
@@ -161,32 +161,37 @@ class Source(object):
                 bonusNode.addChild(bonusLimitNode)
             if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
                 if (cumulative or unit or vehicleKills) and inrow:
-                    raise Exception, 'battleQuest: Unexpected tags (vehicleKills, cumulative, unit/cumulative) with inrow'
+                    raise Exception('battleQuest: Unexpected tags (vehicleKills, cumulative, unit/cumulative) with inrow')
                 if not (cumulative or unit or vehicleKills or bonusLimit or battles) and (daily or groupBy):
-                    raise Exception, 'battleQuest: daily and groupBy should be used with cumulative, unit, vehicleKills, bonusLimit or battles tags'
+                    raise Exception('battleQuest: daily and groupBy should be used with cumulative, unit, vehicleKills, bonusLimit or battles tags')
                 if battles and not battleCount:
-                    raise Exception, 'Invalid battles section'
+                    raise Exception('Invalid battles section')
             elif eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
                 if cumulative or unit or vehicleKills or groupBy or battles:
-                    raise Exception, 'tokenQuest: Unexpected tags (cumulative, unit, vehicleKills, groupBy, battles)'
+                    raise Exception('tokenQuest: Unexpected tags (cumulative, unit, vehicleKills, groupBy, battles)')
                 if not bonusLimit and daily:
-                    raise Exception, 'tokenQuest: daily should be used with bonusLimit tag'
-            mainNode.bonus = self.__readBonusSection(bonusReaders, eventType, questSection['bonus'], gFinishTime)
+                    raise Exception('tokenQuest: daily should be used with bonusLimit tag')
+            mainNode.bonus = walkBonuses(readBonusSection(availableBonuses, questSection['bonus'], eventType), FilterVisitor(eventType))
             questClientData = dict(info)
-            questClientData.pop('serverOnly', None)
-            questClientData['bonus'] = mainNode.bonus
+            questClientData['bonus'] = deepcopy(mainNode.bonus)
             questClientData['conditions'] = mainNode.questClientConditions
             if mainNode.groupContent:
                 questClientData['groupContent'] = mainNode.groupContent
+            self.__stripServerQuestData(questClientData)
             mainNode.info['questClientData'] = questClientData
             nodes.setdefault(eventType, []).append(mainNode)
 
         return nodes
 
+    def __stripServerQuestData(self, questClientData):
+        questClientData.pop('serverOnly', None)
+        questClientData['bonus'] = walkBonuses(questClientData['bonus'], StripVisitor())
+        return
+
     def __readHeader(self, eventType, questSection, gStartTime, gFinishTime, curTime):
         id = questSection.readString('id', '')
         if not id:
-            raise Exception, 'Quest id must be specified.'
+            raise Exception('Quest id must be specified.')
         if questSection.has_key('name'):
             questName = self.__readMetaSection(questSection['name'])
         else:
@@ -205,20 +210,20 @@ class Source(object):
         makeIntervals = lambda intervals: tuple((makeHM(v) for v in intervals.split('_')))
         activeTimeIntervals = [ makeIntervals(i) for i in intervalsInString ]
         if startTime < gStartTime:
-            raise Exception, 'Invalid start time. startTime:%s < gStartTime:%s' % (startTime, gStartTime)
+            raise Exception('Invalid start time. startTime:%s < gStartTime:%s' % (startTime, gStartTime))
         if finishTime > gFinishTime:
-            raise Exception, 'Invalid finish time. finishTime:%s > gFinishTime:%s' % (finishTime, gFinishTime)
+            raise Exception('Invalid finish time. finishTime:%s > gFinishTime:%s' % (finishTime, gFinishTime))
         if progressExpiryTime < gFinishTime:
-            raise Exception, 'Invalid progress expiry time. progressExpiryTime:%s < gFinishTime:%s' % (progressExpiryTime, gFinishTime)
+            raise Exception('Invalid progress expiry time. progressExpiryTime:%s < gFinishTime:%s' % (progressExpiryTime, gFinishTime))
         requiredToken = questSection.readString('requiredToken', '')
         if eventType == EVENT_TYPE.PERSONAL_QUEST:
             if not requiredToken:
-                raise Exception, 'Personal quest must contain tag <requiredToken> with not empty token'
+                raise Exception('Personal quest must contain tag <requiredToken> with not empty token')
         if eventType == EVENT_TYPE.FORT_QUEST:
             if FORT_QUEST_SUFFIX not in id:
-                raise Exception, 'Fort quest must contain "stronghold" in its id.'
+                raise Exception('Fort quest must contain "stronghold" in its id.')
         elif FORT_QUEST_SUFFIX in id:
-            raise Exception, 'Quest must not contain "stronghold" in its id.'
+            raise Exception('Quest must not contain "stronghold" in its id.')
         tOption = curTime > time.gmtime()
         info = {'id': id,
          'hidden': questSection.readBool('hidden', False),
@@ -238,6 +243,12 @@ class Source(object):
          'Toption': None if not tOption else startTime,
          'priority': questSection.readInt('priority', 0),
          'uiDecoration': questSection.readInt('uiDecoration', 0)}
+        if eventType == EVENT_TYPE.MOTIVE_QUEST:
+            extraSubsectionsNames = ('advice', 'requirements', 'congratulation')
+            for subsectionName in extraSubsectionsNames:
+                if questSection.has_key(subsectionName):
+                    info[subsectionName] = self.__readMetaSection(questSection[subsectionName])
+
         return info
 
     def __readGroupContent(self, questSection):
@@ -355,7 +366,7 @@ class Source(object):
              'black': self.__readClanIds})
         return condition_readers
 
-    def __getBonusReaders(self, eventType):
+    def __getAvailableBonuses(self, eventType):
         bonusTypes = {'gold',
          'credits',
          'freeXP',
@@ -372,12 +383,12 @@ class Source(object):
          'customizations'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.FORT_QUEST, EVENT_TYPE.PERSONAL_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
-        return getBonusReaders(bonusTypes)
+        return bonusTypes
 
     def __readCondition_groupBy(self, _, section, node):
         s = section.asString
         if s not in ('vehicle', 'nation', 'class', 'level'):
-            raise Exception, 'Unknown groupBy name %s' % s
+            raise Exception('Unknown groupBy name %s' % s)
         node.addChild(s)
 
     def __readCondition_installedModules(self, _, section, node):
@@ -388,7 +399,7 @@ class Source(object):
                 nationID = nations.INDICES[nationName]
             else:
                 if node.name != 'optionalDevice':
-                    raise Exception, 'module must be like nation:inNationName'
+                    raise Exception('module must be like nation:inNationName')
                 name = module
             if node.name == 'guns':
                 nationModules = vehicles.g_cache.guns(nationID)
@@ -405,26 +416,26 @@ class Source(object):
                 modules.add(vehicles.g_cache.optionalDevices()[idx]['compactDescr'])
                 break
             else:
-                raise Exception, 'Unknown tag %s' % node.name
+                raise Exception('Unknown tag %s' % node.name)
             for descr in nationModules.itervalues():
                 if descr['name'] == name:
                     modules.add(descr['compactDescr'])
                     break
             else:
-                raise Exception, 'Unknown module(%s) %s' % (node.name, module)
+                raise Exception('Unknown module(%s) %s' % (node.name, module))
 
         node.addChild(modules)
 
     def __readCritName(self, _, section, node):
         critName = section.asString
         if critName not in vehicles.VEHICLE_DEVICE_TYPE_NAMES + vehicles.VEHICLE_TANKMAN_TYPE_NAMES:
-            raise Exception, 'Invalid crit name (%s)' % critName
+            raise Exception('Invalid crit name (%s)' % critName)
         node.addChild(critName)
 
     def __readCondition_cumulative(self, _, section, node):
         for name, sub in section.items():
-            if name not in battle_results_shared.VEH_FULL_RESULTS.names():
-                raise Exception, "Unsupported misc variable '%s'" % name
+            if name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.VEH_BASE_RESULTS.names():
+                raise Exception("Unsupported misc variable '%s'" % name)
             node.addChild((name, int(sub.asFloat)))
 
     def __readBattleResultsConditionList(self, conditionReaders, section, node):
@@ -444,8 +455,7 @@ class Source(object):
             values = achievement.split(':')
             if len(values) == 2:
                 dossierRecordDBIDs.add(RECORD_DB_IDS[values[0], values[1]])
-            else:
-                raise Exception, 'Invalid achievement format (%s). Must be blockName:record.' % achievement
+            raise Exception('Invalid achievement format (%s). Must be blockName:record.' % achievement)
 
         node.addChild(dossierRecordDBIDs)
 
@@ -456,7 +466,7 @@ class Source(object):
         rammingConditions = set([ rammingCondition for rammingCondition in section.asString.split() ])
         for rammingCondition in rammingConditions:
             if rammingCondition not in ('stayedAlive', 'dealtMoreDamage'):
-                raise Exception, 'Unsupported kill by ramming condition %s, must be one of (%s %s)' % (rammingCondition, 'stayedAlive', 'dealtMoreDamage')
+                raise Exception('Unsupported kill by ramming condition %s, must be one of (%s %s)' % (rammingCondition, 'stayedAlive', 'dealtMoreDamage'))
 
         node.addChild(rammingConditions)
 
@@ -472,16 +482,16 @@ class Source(object):
                     if rec in blockBuilder.recordsLayout or rec.startswith('tankExpert') or rec.startswith('mechanicEngineer'):
                         break
             else:
-                raise Exception, 'Invalid dossier record %s' % (record,)
+                raise Exception('Invalid dossier record %s' % (record,))
 
         else:
-            raise Exception, 'Old or invalid dossier record format (%s)' % (record,)
+            raise Exception('Old or invalid dossier record format (%s)' % (record,))
         node.addChild(record)
 
     def __readCondition_keyResults(self, _, section, node):
         name = section.asString
         if name not in battle_results_shared.VEH_BASE_RESULTS.names() and name not in battle_results_shared.COMMON_RESULTS.names() and name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.AVATAR_BASE_RESULTS.names() and name not in battle_results_shared.AVATAR_FULL_RESULTS.names():
-            raise Exception, "Unsupported battle result variable '%s'" % name
+            raise Exception("Unsupported battle result variable '%s'" % name)
         node.addChild(name)
 
     def __readCondition_true(self, _, section, node):
@@ -500,7 +510,7 @@ class Source(object):
     def __readCondition_attackReason(self, _, section, node):
         attackReason = section.asInt
         if not 0 <= attackReason < len(ATTACK_REASONS):
-            raise Exception, 'Invalid attack reason index'
+            raise Exception('Invalid attack reason index')
         node.addChild(section.asInt)
 
     def __readCondition_set(self, _, section, node):
@@ -509,7 +519,7 @@ class Source(object):
     def __readCondition_IGRType(self, _, section, node):
         igrType = section.asInt
         if igrType not in IGR_TYPE.RANGE:
-            raise Exception, 'Invalid IGR type %s' % (igrType,)
+            raise Exception('Invalid IGR type %s' % (igrType,))
         node.addChild(igrType)
 
     def __readBattleFilter_GeometryNames(self, _, section, node):
@@ -521,7 +531,7 @@ class Source(object):
                     arenaIDs.append(id)
 
             if initialLen == len(arenaIDs):
-                raise Exception, 'Unknown geometry name %s' % geometryName
+                raise Exception('Unknown geometry name %s' % geometryName)
 
         node.addChild(set(arenaIDs))
 
@@ -529,7 +539,7 @@ class Source(object):
         res = set()
         for bonusType in section.asString.split():
             if int(bonusType) not in ARENA_BONUS_TYPE.RANGE:
-                raise Exception, 'Unknown bonus type %s' % bonusType
+                raise Exception('Unknown bonus type %s' % bonusType)
             res.add(int(bonusType))
 
         node.addChild(res)
@@ -547,8 +557,7 @@ class Source(object):
         for level in section.asString.split():
             if 1 <= int(level) <= 10:
                 res.add(int(level))
-            else:
-                raise Exception, 'Unsupported vehicle level %s' % level
+            raise Exception('Unsupported vehicle level %s' % level)
 
         node.addChild(res)
 
@@ -565,52 +574,6 @@ class Source(object):
     def __readVehicleTypeList(self, section):
         typeNames = section.asString.split()
         return [ vehicles.makeVehicleTypeCompDescrByName(typeName) for typeName in typeNames ]
-
-    def __readBonusSection(self, bonusReaders, eventType, section, gFinishTime):
-        if section is None:
-            return {}
-        else:
-            bonus = {}
-            if eventType == EVENT_TYPE.FORT_QUEST:
-                for name, sub in section.items():
-                    if name.startswith('pack_'):
-                        words = name.split('_')
-                        if len(words) != 2:
-                            raise Exception, 'Invalid pack format (pack_id, where id between 1 and 10)'
-                        packID = int(words[1])
-                        if not 1 <= packID <= 10:
-                            raise Exception, 'Invalid pack format (pack_id, where id between 1 and 10)'
-                        if packID in bonus:
-                            raise Exception, 'Invalid pack. Already defined.'
-                        bonus[packID] = self.__readBonusSubSection(bonusReaders, eventType, sub, gFinishTime)
-
-            else:
-                bonus = self.__readBonusSubSection(bonusReaders, eventType, section, gFinishTime)
-            self.__postprocessBonus(bonus, eventType)
-            return bonus
-
-    def __readBonusSubSection(self, bonusReaders, eventType, section, gFinishTime):
-        if section is None:
-            return {}
-        else:
-            bonus = {}
-            for name, sub in section.items():
-                if name in ('meta',):
-                    bonus['meta'] = self.__readMetaSection(sub)
-                    continue
-                if name not in bonusReaders:
-                    continue
-                bonusReaders[name](bonus, name, sub)
-
-            return bonus
-
-    def __postprocessBonus(self, bonus, eventType):
-        if eventType != EVENT_TYPE.POTAPOV_QUEST and 'tankmen' in bonus:
-            tankmenList = [ tankmen.makeTmanDescrByTmanData(tmanData) for tmanData in bonus['tankmen'] ]
-            bonus['tankmen'] = tankmenList
-        if eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS and 'customization' in bonus:
-            if 'boundToCurrentVehicle' in bonus['customization']:
-                raise Exception, "Unsupported tag 'boundToCurrentVehicle' in 'like token' quests"
 
     def __readMetaSection(self, section):
         if section is None:

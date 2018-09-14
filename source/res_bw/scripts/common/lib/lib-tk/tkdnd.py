@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/Tkdnd.py
 """Drag-and-drop support for Tkinter.
 
@@ -181,10 +181,10 @@ class DndHandler:
     def on_release(self, event):
         self.finish(event, 1)
 
-    def cancel(self, event = None):
+    def cancel(self, event=None):
         self.finish(event, 0)
 
-    def finish(self, event, commit = 0):
+    def finish(self, event, commit=0):
         target = self.target
         source = self.source
         widget = self.initial_widget
@@ -213,7 +213,7 @@ class Icon:
         self.canvas = self.label = self.id = None
         return
 
-    def attach(self, canvas, x = 10, y = 10):
+    def attach(self, canvas, x=10, y=10):
         if canvas is self.canvas:
             self.canvas.coords(self.id, x, y)
             return

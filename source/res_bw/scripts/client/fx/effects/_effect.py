@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Effects/_Effect.py
 import ResMgr
 from FX import s_sectionProcessors
@@ -34,7 +34,7 @@ class Effect:
             self.prereqs.add(self.fileName)
             return None
 
-    def _create(self, prereqs = None):
+    def _create(self, prereqs=None):
         try:
             pSection = prereqs[self.fileName]
         except KeyError:
@@ -51,7 +51,7 @@ class Effect:
             self.events.append(('', timedEvents.DebugEventTiming()))
         return
 
-    def _parse(self, tag, store, pSection, prereqs = None, gatherPrerequisites = False):
+    def _parse(self, tag, store, pSection, prereqs=None, gatherPrerequisites=False):
         for sname, ds in pSection.items():
             if sname == tag:
                 section = ds.items()[0][1]
@@ -87,7 +87,7 @@ class Effect:
         self._parse('Actor', self.actors, pSection, gatherPrerequisites=True)
         self._parse('Event', self.events, pSection, gatherPrerequisites=True)
 
-    def _createFromSection(self, pSection, prereqs = None):
+    def _createFromSection(self, pSection, prereqs=None):
         self._parse('Actor', self.actors, pSection, prereqs)
         self._parse('Joint', self.joints, pSection, prereqs)
         self._parse('Event', self.events, pSection, prereqs)

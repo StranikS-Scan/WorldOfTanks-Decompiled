@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/UtilsManager.py
 import calendar
 from gui.Scaleform.framework.managers.TextManager import TextManager
@@ -106,7 +106,7 @@ class UtilsManager(UtilsManagerMeta):
 
 class ImageUrlProperties(object):
 
-    def __init__(self, imageAlias, width = 16, height = 16, vSpace = -4, hSpace = 0):
+    def __init__(self, imageAlias, width=16, height=16, vSpace=-4, hSpace=0):
         super(ImageUrlProperties, self).__init__()
         self.imageAlias = imageAlias
         self.width = width

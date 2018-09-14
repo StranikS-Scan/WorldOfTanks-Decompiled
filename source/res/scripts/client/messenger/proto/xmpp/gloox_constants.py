@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/gloox_constants.py
 import BigWorld
 _XmppClient = BigWorld.XmppClient
@@ -11,6 +11,7 @@ class PRESENCE(object):
     DND = _XmppClient.PRESENCE_DND
     XA = _XmppClient.PRESENCE_XA
     UNAVAILABLE = _XmppClient.PRESENCE_UNAVAILABLE
+    OFFLINE = (UNKNOWN, UNAVAILABLE)
     RANGE = (UNKNOWN,
      AVAILABLE,
      CHAT,
@@ -94,6 +95,12 @@ class MESSAGE_TYPE(object):
     HEADLINE = 8
     NORMAL = 16
     INVALID = 32
+    RANGE = (CHAT,
+     ERROR,
+     GROUPCHAT,
+     HEADLINE,
+     NORMAL,
+     INVALID)
 
 
 class MESSAGE_TYPE_ATTR(object):
@@ -125,7 +132,7 @@ class ROSTER_CONTEXT(object):
 
 
 class GLOOX_EVENT(object):
-    CONNECTED, LOGIN, DISCONNECTED, ROSTER_RESULT, ROSTER_ITEM_SET, ROSTER_ITEM_REMOVED, PRESENCE, SUBSCRIPTION_REQUEST, LOG, IQ, ROSTER_QUERY, MESSAGE = ALL = range(0, 12)
+    CONNECTED, LOGIN, DISCONNECTED, ROSTER_RESULT, ROSTER_ITEM_SET, ROSTER_ITEM_REMOVED, PRESENCE, SUBSCRIPTION_REQUEST, LOG, IQ, ROSTER_QUERY, MESSAGE, PRESENCE_ERROR = ALL = range(0, 13)
 
 
 GLOOX_EVENTS_NAMES = dict([ (v, k) for k, v in GLOOX_EVENT.__dict__.iteritems() if v in GLOOX_EVENT.ALL ])

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/wotdecorators.py
 from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, CRITICAL_ERROR
 from time_tracking import LOG_TIME_WARNING
@@ -36,7 +36,7 @@ def exposedtoclient(func):
             result = func(*args, **kwArgs)
             timeSinceLastTick = time.time() - lastTick
             if timeSinceLastTick > time_tracking.DEFAULT_TIME_LIMIT:
-                LOG_TIME_WARNING(timeSinceLastTick, context=(args[0].id,
+                LOG_TIME_WARNING(timeSinceLastTick, context=(getattr(args[0], 'id', 0),
                  func.__name__,
                  args,
                  kwArgs))

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/__init__.py
 import weakref
 import itertools
@@ -25,6 +25,7 @@ class BoundMethodWeakref(object):
 
     def __init__(self, func):
         self.methodName = func.__name__
+        assert not self.methodName.startswith('__'), 'BoundMethodWeakref: private methods are not supported'
         self.wrefCls = weakref.ref(func.__self__)
 
     def __call__(self, *args, **kwargs):
@@ -52,19 +53,19 @@ def safeCancelCallback(callbackID):
         LOG_ERROR('Cannot cancel BigWorld callback: incorrect callback ID.')
 
 
-def prettyPrint(dict, sort_keys = True, indent = 4):
+def prettyPrint(dict, sort_keys=True, indent=4):
     import json
     return json.dumps(dict, sort_keys=sort_keys, indent=indent)
 
 
-def findFirst(function_or_None, sequence, default = None):
+def findFirst(function_or_None, sequence, default=None):
     try:
         return next(itertools.ifilter(function_or_None, sequence))
     except StopIteration:
         return default
 
 
-def first(sequence, default = None):
+def first(sequence, default=None):
     return findFirst(None, sequence, default)
 
 
@@ -131,13 +132,11 @@ class BitmaskHelper(object):
 
 class AlwaysValidObject(object):
 
-    def __init__(self, name = ''):
+    def __init__(self, name=''):
         self.__name = name
 
     def __getattr__(self, item):
-        if item in self.__dict__:
-            return self.__dict__[item]
-        return AlwaysValidObject(self._makeName(self.__name, item))
+        return self.__dict__[item] if item in self.__dict__ else AlwaysValidObject(self._makeName(self.__name, item))
 
     def __call__(self, *args, **kwargs):
         return AlwaysValidObject()

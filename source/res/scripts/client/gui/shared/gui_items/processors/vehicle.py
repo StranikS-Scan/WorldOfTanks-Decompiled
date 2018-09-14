@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
 import BigWorld
 import AccountCommands
@@ -30,7 +30,7 @@ def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
 
 class VehicleRenter(ItemProcessor):
 
-    def __init__(self, vehicle, rentPackage, buyShell = False, crewType = -1):
+    def __init__(self, vehicle, rentPackage, buyShell=False, crewType=-1):
         self.buyShell = buyShell
         self.buyCrew = crewType != -1
         self.crewType = crewType
@@ -46,14 +46,14 @@ class VehicleRenter(ItemProcessor):
     def _getPrice(self):
         return getCrewAndShellsSumPrice(self.rentPrice, self.vehicle, self.crewType, self.buyShell)
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         if not len(errStr):
             msg = 'vehicle_rent/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_rent/server_error_centerDown'
         else:
             msg = 'vehicle_rent/%s' % errStr
         return makeI18nError(msg, vehName=self.item.userName)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('vehicle_rent/success', vehName=self.item.userName, days=ctx.get('days', 0), price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _request(self, callback):
@@ -64,9 +64,7 @@ class VehicleRenter(ItemProcessor):
         return self.rentPackage
 
     def _getSysMsgType(self):
-        if self.item.buyPrice[1] > 0:
-            return SM_TYPE.PurchaseForGold
-        return SM_TYPE.PurchaseForCredits
+        return SM_TYPE.PurchaseForGold if self.item.buyPrice[1] > 0 else SM_TYPE.PurchaseForCredits
 
     def __getRentPrice(self, rentPackage, vehicle):
         for package in vehicle.rentPackages:
@@ -78,7 +76,7 @@ class VehicleRenter(ItemProcessor):
 
 class VehicleBuyer(VehicleRenter):
 
-    def __init__(self, vehicle, buySlot, buyShell = False, crewType = -1):
+    def __init__(self, vehicle, buySlot, buyShell=False, crewType=-1):
         self.buySlot = buySlot
         super(VehicleBuyer, self).__init__(vehicle, None, buyShell=buyShell, crewType=crewType)
         return
@@ -89,14 +87,14 @@ class VehicleBuyer(VehicleRenter):
     def _getPrice(self):
         return getCrewAndShellsSumPrice(list(self.vehicle.buyPrice), self.vehicle, self.crewType, self.buyShell)
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         if not len(errStr):
             msg = 'vehicle_buy/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_buy/server_error_centerDown'
         else:
             msg = 'vehicle_buy/%s' % errStr
         return makeI18nError(msg, vehName=self.item.userName)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _getRentInfo(self):
@@ -105,7 +103,7 @@ class VehicleBuyer(VehicleRenter):
 
 class VehicleSlotBuyer(Processor):
 
-    def __init__(self, showConfirm = True, showWarning = True):
+    def __init__(self, showConfirm=True, showWarning=True):
         self.__hasDiscounts = bool(g_itemsCache.items.shop.personalSlotDiscounts)
         self.__frozenSlotPrice = None
         slotCost = self.__getSlotPrice()
@@ -118,12 +116,10 @@ class VehicleSlotBuyer(Processor):
         super(VehicleSlotBuyer, self).__init__((plugins.MessageInformator('buySlotNotEnoughCredits', activeHandler=lambda : not plugins.MoneyValidator(slotCost).validate().success, isEnabled=showWarning), plugins.MessageConfirmator(confirmationType, isEnabled=showConfirm, ctx=ctx), plugins.MoneyValidator(slotCost)))
         return
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('vehicle_slot_buy/%s' % errStr)
-        return makeI18nError('vehicle_slot_buy/server_error')
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('vehicle_slot_buy/%s' % errStr) if len(errStr) else makeI18nError('vehicle_slot_buy/server_error')
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('vehicle_slot_buy/success', money=formatPrice(self.__getSlotPrice()), type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
@@ -142,7 +138,7 @@ class VehicleSlotBuyer(Processor):
 
 class VehicleSeller(ItemProcessor):
 
-    def __init__(self, vehicle, dismantlingGoldCost, shells = [], eqs = [], optDevs = [], inventory = [], isCrewDismiss = False):
+    def __init__(self, vehicle, dismantlingGoldCost, shells=[], eqs=[], optDevs=[], inventory=[], isCrewDismiss=False):
         self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory, dismantlingGoldCost)
         barracksBerthsNeeded = len(filter(lambda (idx, item): item is not None, vehicle.crew))
         super(VehicleSeller, self).__init__(vehicle, (plugins.VehicleValidator(vehicle, False, prop={'isBroken': True,
@@ -161,7 +157,7 @@ class VehicleSeller(ItemProcessor):
         self.isDismantlingForGold = self.__dismantlingForGoldDevicesCount(vehicle, optDevs) > 0
         self.isRemovedAfterRent = vehicle.isRented
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         if len(errStr):
             localKey = 'vehicle_sell/%s'
             if self.isRemovedAfterRent:
@@ -172,7 +168,7 @@ class VehicleSeller(ItemProcessor):
             localKey = 'vehicle_remove/server_error'
         return makeI18nError(localKey, vehName=self.vehicle.userName)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         if self.isDismantlingForGold:
             localKey = 'vehicle_sell/success_dismantling'
             smType = SM_TYPE.Selling
@@ -238,7 +234,7 @@ class VehicleSeller(ItemProcessor):
         moneySpend = (0, self.__dismantlingForGoldDevicesCount(vehicle, vehOptDevs) * dismantlingGoldCost)
         return (moneyGain, moneySpend)
 
-    def __accumulatePrice(self, result, price, count = 1):
+    def __accumulatePrice(self, result, price, count=1):
         for i in xrange(2):
             result[i] += price[i] * count
 
@@ -247,7 +243,7 @@ class VehicleSeller(ItemProcessor):
 
 class VehicleSettingsProcessor(ItemProcessor):
 
-    def __init__(self, vehicle, setting, value, plugins = list()):
+    def __init__(self, vehicle, setting, value, plugins=list()):
         self._setting = setting
         self._value = value
         super(VehicleSettingsProcessor, self).__init__(vehicle, plugins)
@@ -262,12 +258,10 @@ class VehicleTmenXPAccelerator(VehicleSettingsProcessor):
     def __init__(self, vehicle, value):
         super(VehicleTmenXPAccelerator, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.XP_TO_TMAN, value, (plugins.MessageConfirmator('xpToTmenCheckbox', isEnabled=value),))
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('vehicle_tmenxp_accelerator/%s' % errStr, vehName=self.item.userName)
-        return makeI18nError('vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('vehicle_tmenxp_accelerator/%s' % errStr, vehName=self.item.userName) if len(errStr) else makeI18nError('vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('vehicle_tmenxp_accelerator/success' + str(self._value), vehName=self.item.userName, type=SM_TYPE.Information)
 
 
@@ -300,7 +294,7 @@ class VehicleLayoutProcessor(Processor):
     Apply equipments and shells layout
     """
 
-    def __init__(self, vehicle, shellsLayout = None, eqsLayout = None):
+    def __init__(self, vehicle, shellsLayout=None, eqsLayout=None):
         """
         Ctor.
         
@@ -321,11 +315,9 @@ class VehicleLayoutProcessor(Processor):
         BigWorld.player().inventory.setAndFillLayouts(self.vehicle.invID, self.shellsLayout, self.eqsLayout, lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
 
     def __getSysMsgType(self, price):
-        if price[1] > 0:
-            return SM_TYPE.PurchaseForGold
-        return SM_TYPE.PurchaseForCredits
+        return SM_TYPE.PurchaseForGold if price[1] > 0 else SM_TYPE.PurchaseForCredits
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         additionalMessages = []
         if len(ctx.get('shells', [])):
             totalPrice = [0, 0]
@@ -343,7 +335,7 @@ class VehicleLayoutProcessor(Processor):
 
         return makeSuccess(auxData=additionalMessages)
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         if not len(errStr):
             msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
         else:
@@ -412,19 +404,19 @@ class VehicleRepairer(ItemProcessor):
     def _request(self, callback):
         BigWorld.player().inventory.repair(self.item.invID, lambda code: self._response(code, callback))
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         if len(errStr):
             needed = (self._repairCost[0] - g_itemsCache.items.stats.credits, 0)
             return makeI18nError('vehicle_repair/%s' % errStr, vehName=self.item.userName, needed=formatPrice(needed))
         return makeI18nError('vehicle_repair/server_error', vehName=self.item.userName)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('vehicle_repair/success', vehName=self.item.userName, money=formatPrice(self._repairCost), type=SM_TYPE.Repair)
 
 
 @async
 @process
-def tryToLoadDefaultShellsLayout(vehicle, callback = None):
+def tryToLoadDefaultShellsLayout(vehicle, callback=None):
     defaultLayout = []
     for shell in vehicle.shells:
         if shell.defaultCount > shell.inventoryCount:

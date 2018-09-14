@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/chains/aspects.py
 import weakref
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID

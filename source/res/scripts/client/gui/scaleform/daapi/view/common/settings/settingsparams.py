@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsParams.py
 import BigWorld
 from account_helpers.settings_core import settings_constants, options
@@ -83,7 +83,4 @@ class SettingsParams(object):
         newMonitorIndex = diff.get(settings_constants.GRAPHICS.MONITOR)
         isFullscreen = g_monitorSettings.isFullscreen or diff.get(settings_constants.GRAPHICS.FULLSCREEN)
         isMonitorChanged = g_monitorSettings.isMonitorChanged or newMonitorIndex is not None and g_monitorSettings.currentMonitor != int(newMonitorIndex)
-        if isFullscreen and isMonitorChanged:
-            return options.APPLY_METHOD.RESTART
-        else:
-            return g_settingsCore.getApplyMethod(diff)
+        return options.APPLY_METHOD.RESTART if isFullscreen and isMonitorChanged else g_settingsCore.getApplyMethod(diff)

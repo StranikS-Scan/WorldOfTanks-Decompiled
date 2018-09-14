@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortificationsView.py
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
@@ -10,11 +10,13 @@ from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.sounds.ambients import FortEnv
 from gui.ClientUpdateManager import g_clientUpdateManager
 
 class FortificationsView(LobbySubView, FortificationsViewMeta, FortViewHelper):
+    __sound_env__ = FortEnv
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortificationsView, self).__init__()
         self.__reqID = None
         self.__initialize = False
@@ -66,7 +68,7 @@ class FortificationsView(LobbySubView, FortificationsViewMeta, FortViewHelper):
         g_clientUpdateManager.removeCallback('stats.clanInfo', self.__onClanInfoChanged)
         super(FortificationsView, self)._dispose()
 
-    def __makeWaitingData(self, showWaiting = False):
+    def __makeWaitingData(self, showWaiting=False):
         self.as_waitingDataS({'isShowWaiting': showWaiting,
          'waitingLbl': WAITING.FORT_SERVERCONNECTION})
 

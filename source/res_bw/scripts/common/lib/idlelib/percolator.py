@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/Percolator.py
 from idlelib.WidgetRedirector import WidgetRedirector
 from idlelib.Delegator import Delegator
@@ -25,10 +25,10 @@ class Percolator:
         self.text = None
         return
 
-    def insert(self, index, chars, tags = None):
+    def insert(self, index, chars, tags=None):
         self.top.insert(index, chars, tags)
 
-    def delete(self, index1, index2 = None):
+    def delete(self, index1, index2=None):
         self.top.delete(index1, index2)
 
     def insertfilter(self, filter):

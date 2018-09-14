@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/contexts.py
 import constants
 import gui
@@ -19,7 +19,7 @@ from items import vehicles
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'rentals')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'rentals', 'slotIdx')
 
     def __init__(self):
         self.vehicle = None
@@ -33,6 +33,7 @@ class StatsConfiguration(object):
         self.node = None
         self.xp = True
         self.dailyXP = True
+        self.slotIdx = 0
         return
 
 
@@ -70,7 +71,7 @@ class ParamsConfiguration(object):
 
 class ToolTipContext(object):
 
-    def __init__(self, component, fieldsToExclude = None):
+    def __init__(self, component, fieldsToExclude=None):
         self._component = component
         self._fieldsToExclude = fieldsToExclude or tuple()
 
@@ -96,7 +97,7 @@ class ToolTipContext(object):
 
 class ShopContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(ShopContext, self).__init__(TOOLTIP_COMPONENT.SHOP, fieldsToExclude)
 
     def buildItem(self, intCD):
@@ -124,7 +125,7 @@ class ShopContext(ToolTipContext):
 
 class InventoryContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(InventoryContext, self).__init__(TOOLTIP_COMPONENT.INVENTORY, fieldsToExclude)
 
     def buildItem(self, intCD):
@@ -148,7 +149,7 @@ class InventoryContext(ToolTipContext):
 
 class CarouselContext(InventoryContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(InventoryContext, self).__init__(fieldsToExclude)
         self._component = TOOLTIP_COMPONENT.CAROUSEL
 
@@ -168,7 +169,7 @@ class CarouselContext(InventoryContext):
 
 class PotapovQuestsChainContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(PotapovQuestsChainContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
     def buildItem(self, tileID, chainID):
@@ -177,7 +178,7 @@ class PotapovQuestsChainContext(ToolTipContext):
 
 class PotapovQuestsTileContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(PotapovQuestsTileContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
     def buildItem(self, tileID):
@@ -186,7 +187,7 @@ class PotapovQuestsTileContext(ToolTipContext):
 
 class QuestContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(QuestContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
     def buildItem(self, eventID):
@@ -195,14 +196,14 @@ class QuestContext(ToolTipContext):
 
 class HangarContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(HangarContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
         self._slotIdx = 0
         self._vehicle = None
         self._historicalBattleID = -1
         return
 
-    def buildItem(self, intCD, slotIdx = 0, historicalBattleID = -1):
+    def buildItem(self, intCD, slotIdx=0, historicalBattleID=-1):
         self._slotIdx = int(slotIdx)
         self._vehicle = g_currentVehicle.item
         self._historicalBattleID = historicalBattleID
@@ -227,6 +228,7 @@ class HangarContext(ToolTipContext):
         value.xp = True
         value.dailyXP = True
         value.vehicle = self._vehicle
+        value.slotIdx = self._slotIdx
         return value
 
     def getParamsConfiguration(self, item):
@@ -245,7 +247,7 @@ class TankmanHangarContext(HangarContext):
 
 class TechTreeContext(ShopContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(TechTreeContext, self).__init__(fieldsToExclude)
         self._vehicle = None
         self._node = None
@@ -281,11 +283,11 @@ class TechTreeContext(ShopContext):
 
 class TechMainContext(HangarContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(TechMainContext, self).__init__(fieldsToExclude)
         self._eqs = tuple()
 
-    def buildItem(self, compact, slotIdx = 0, eqs = None):
+    def buildItem(self, compact, slotIdx=0, eqs=None):
         if eqs is not None:
             self._eqs = eqs
         return super(TechMainContext, self).buildItem(compact, slotIdx=slotIdx)
@@ -305,7 +307,7 @@ class TechMainContext(HangarContext):
 class PersonalCaseContext(ToolTipContext):
     SKILL_MOCK = namedtuple('SkillMock', ('userName', 'shortDescription', 'description', 'count', 'level'))
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(PersonalCaseContext, self).__init__(TOOLTIP_COMPONENT.PERSONAL_CASE, fieldsToExclude)
 
     def buildItem(self, skillID, tankmanID):
@@ -328,7 +330,7 @@ class NewSkillContext(PersonalCaseContext):
 
 class ProfileContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(ProfileContext, self).__init__(TOOLTIP_COMPONENT.PROFILE, fieldsToExclude)
         self._dossier = None
         self._dossierType = None
@@ -356,16 +358,13 @@ class ProfileContext(ToolTipContext):
 
 class BattleResultContext(ProfileContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(BattleResultContext, self).__init__(fieldsToExclude)
         self._component = TOOLTIP_COMPONENT.PROFILE
 
-    def buildItem(self, block, name, value = 0, customData = None):
+    def buildItem(self, block, name, value=0, customData=None):
         factory = factories.getAchievementFactory((block, name))
-        if factory is not None:
-            return factory.create(value=value)
-        else:
-            return
+        return factory.create(value=value) if factory is not None else None
 
     def getParamsConfiguration(self, item):
         value = super(ProfileContext, self).getParamsConfiguration(item)
@@ -375,7 +374,7 @@ class BattleResultContext(ProfileContext):
 
 class BattleResultMarksOnGunContext(BattleResultContext):
 
-    def buildItem(self, block, name, value = 0, customData = None):
+    def buildItem(self, block, name, value=0, customData=None):
         item = super(BattleResultMarksOnGunContext, self).buildItem(block, name, value, customData)
         if item is not None and customData is not None:
             damageRating, vehNationID = customData
@@ -388,7 +387,7 @@ class BattleResultMarksOnGunContext(BattleResultContext):
 
 class BattleResultMarkOfMasteryContext(BattleResultContext):
 
-    def buildItem(self, block, name, value = 0, customData = None):
+    def buildItem(self, block, name, value=0, customData=None):
         item = super(BattleResultMarkOfMasteryContext, self).buildItem(block, name, value, customData)
         if item is not None and customData is not None:
             prevMarkOfMastery, compDescr = customData
@@ -399,31 +398,31 @@ class BattleResultMarkOfMasteryContext(BattleResultContext):
 
 class FinalStatisticContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(FinalStatisticContext, self).__init__(TOOLTIP_COMPONENT.FINAL_STATISTIC, fieldsToExclude)
 
 
 class CyberSportUnitContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(CyberSportUnitContext, self).__init__(TOOLTIP_COMPONENT.CYBER_SPORT_UNIT, fieldsToExclude)
 
 
 class FortificationContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(FortificationContext, self).__init__(TOOLTIP_COMPONENT.FORTIFICATIONS, fieldsToExclude)
 
 
 class ClanProfileFortBuildingContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(ClanProfileFortBuildingContext, self).__init__(TOOLTIP_COMPONENT.CLAN_PROFILE, fieldsToExclude)
 
 
 class CustomizationContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(CustomizationContext, self).__init__(TOOLTIP_COMPONENT.CUSTOMIZATION, fieldsToExclude)
 
     def buildItem(self, nationId, itemId, customizationType):
@@ -449,7 +448,7 @@ class CustomizationContext(ToolTipContext):
 
 class ContactContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(ContactContext, self).__init__(TOOLTIP_COMPONENT.CONTACT, fieldsToExclude)
 
 
@@ -461,7 +460,7 @@ class FortOrderContext(FortificationContext):
 
 class HangarTutorialContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(HangarTutorialContext, self).__init__(TOOLTIP_COMPONENT.HANGAR_TUTORIAL, fieldsToExclude)
 
 
@@ -473,7 +472,17 @@ class FortPopoverDefResProgressContext(FortificationContext):
     pass
 
 
+class SettingsMinimapContext(ToolTipContext):
+    pass
+
+
 class TechCustomizationContext(ToolTipContext):
 
-    def __init__(self, fieldsToExclude = None):
+    def __init__(self, fieldsToExclude=None):
         super(TechCustomizationContext, self).__init__(TOOLTIP_COMPONENT.TECH_CUSTOMIZATION, fieldsToExclude)
+
+
+class BoosterContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude=None):
+        super(BoosterContext, self).__init__(TOOLTIP_COMPONENT.BOOSTER, fieldsToExclude)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_availability.py
 import Event
 from debug_utils import LOG_DEBUG
@@ -8,7 +8,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 
-def isHourInForbiddenList(hours, currUtcTimeHour = None):
+def isHourInForbiddenList(hours, currUtcTimeHour=None):
     if currUtcTimeHour is not None:
         cTime = currUtcTimeHour
     else:
@@ -18,11 +18,10 @@ def isHourInForbiddenList(hours, currUtcTimeHour = None):
 
 def _getNextHour(hour):
     hour = hour + 1
-    if hour < time_utils.HOURS_IN_DAY:
-        return hour
+    return hour if hour < time_utils.HOURS_IN_DAY else 0
 
 
-def getForbiddenPeriods(hours, formatter = None):
+def getForbiddenPeriods(hours, formatter=None):
     guiData = []
 
     def _formatPeriod(fromHour, endHour):
@@ -36,17 +35,16 @@ def getForbiddenPeriods(hours, formatter = None):
         for h in hours:
             if currRange is None:
                 currRange = [h, h]
-            elif h - currRange[1] > 1:
+            if h - currRange[1] > 1:
                 guiData.append(_formatPeriod(currRange[0], _getNextHour(currRange[1])))
                 currRange = [h, h]
-            else:
-                currRange[1] = h
+            currRange[1] = h
 
         guiData.append(_formatPeriod(currRange[0], _getNextHour(currRange[1])))
     return guiData
 
 
-def getUpdatePeriods(forbiddenUTCHours, localTimestamp = None):
+def getUpdatePeriods(forbiddenUTCHours, localTimestamp=None):
 
     def __getHour(index):
         index += 1
@@ -73,10 +71,9 @@ def getUpdatePeriods(forbiddenUTCHours, localTimestamp = None):
                 else:
                     outcomePeriods.append((hoursTillUpdate + 1) * time_utils.ONE_HOUR)
                 hoursTillUpdate = 0
-            elif i != time_utils.HOURS_IN_DAY:
+            if i != time_utils.HOURS_IN_DAY:
                 hoursTillUpdate += 1
-            else:
-                outcomePeriods.append((hoursTillUpdate + 1 + hoursTillFirstUpdate) * time_utils.ONE_HOUR)
+            outcomePeriods.append((hoursTillUpdate + 1 + hoursTillFirstUpdate) * time_utils.ONE_HOUR)
 
         secondsLeft = time_utils.ONE_HOUR - (utc.tm_min * time_utils.ONE_MINUTE + utc.tm_sec)
         firstPeriod = hoursTillFirstUpdate * time_utils.ONE_HOUR + secondsLeft
@@ -85,7 +82,7 @@ def getUpdatePeriods(forbiddenUTCHours, localTimestamp = None):
 
 class BattleAvailabilityController(Notifiable):
 
-    def __init__(self, notifierClass = None):
+    def __init__(self, notifierClass=None):
         super(BattleAvailabilityController, self).__init__(self)
         self._battlesAvailable = None
         self._currServerAvailable = None
@@ -118,7 +115,7 @@ class BattleAvailabilityController(Notifiable):
     def isServerAvailable(self):
         raise NotImplementedError()
 
-    def _onChanged(self, diff = None):
+    def _onChanged(self, diff=None):
         raise NotImplementedError()
 
     def _getPeriodsInfo(self):
@@ -127,7 +124,7 @@ class BattleAvailabilityController(Notifiable):
     def _getTimeStamp(self):
         return None
 
-    def _update(self, forbHours = None):
+    def _update(self, forbHours=None):
         hours = forbHours
         if hours is None:
             hours = self.getForbiddenHours()
@@ -141,7 +138,7 @@ class BattleAvailabilityController(Notifiable):
         self.onStatusChanged()
         return
 
-    def _calcStatus(self, hours = None):
+    def _calcStatus(self, hours=None):
         hours = hours or self.getForbiddenHours()
         utcHour = time_utils.getTimeStructInUTC(self._getTimeStamp()).tm_hour
         self._battlesAvailable = not isHourInForbiddenList(hours, utcHour)
@@ -171,14 +168,14 @@ class ClubAvailabilityController(BattleAvailabilityController):
         super(ClubAvailabilityController, self).stop()
         LOG_DEBUG('Club controller has been successfully stopped')
 
-    def getForbiddenHours(self, serverID = None):
+    def getForbiddenHours(self, serverID=None):
         servSettings = g_lobbyContext.getServerSettings()
         forbiddenHours = []
         if servSettings:
             forbiddenHours = self.getForbiddenHoursFromRatedBattles(servSettings.getForbiddenRatedBattles(), serverID)
         return forbiddenHours
 
-    def getForbiddenHoursFromRatedBattles(self, forbiddenRatedBattles, serverID = None):
+    def getForbiddenHoursFromRatedBattles(self, forbiddenRatedBattles, serverID=None):
         if serverID is None:
             serverID = connectionManager.peripheryID
         forbiddenHours = []
@@ -192,7 +189,7 @@ class ClubAvailabilityController(BattleAvailabilityController):
 
         return forbiddenHours
 
-    def getForbiddenPeriods(self, serverID = None):
+    def getForbiddenPeriods(self, serverID=None):
         if serverID is None:
             serverID = connectionManager.peripheryID
         servSettings = g_lobbyContext.getServerSettings()
@@ -209,21 +206,18 @@ class ClubAvailabilityController(BattleAvailabilityController):
 
         return forbiddenHours
 
-    def isServerAvailable(self, serverID = None):
+    def isServerAvailable(self, serverID=None):
         if serverID is None:
             serverID = connectionManager.peripheryID
         servSettings = g_lobbyContext.getServerSettings()
-        if servSettings is not None and len(self.getForbiddenHours(serverID)) == time_utils.HOURS_IN_DAY + 1:
-            return False
-        else:
-            return True
+        return False if servSettings is not None and len(self.getForbiddenHours(serverID)) == time_utils.HOURS_IN_DAY else True
 
-    def _onChanged(self, diff = None):
+    def _onChanged(self, diff=None):
         if diff and 'forbiddenRatedBattles' in diff:
             self._update(self.getForbiddenHoursFromRatedBattles(diff['forbiddenRatedBattles'], connectionManager.peripheryID))
             LOG_DEBUG('Club settings changed:', diff)
 
-    def _calcStatus(self, hours = None):
+    def _calcStatus(self, hours=None):
         super(ClubAvailabilityController, self)._calcStatus(hours)
         LOG_DEBUG('Club availability:', 'At current hour:', self._battlesAvailable, 'At current periphery:', self._currServerAvailable)
 
@@ -244,22 +238,21 @@ class SortiesCurfewController(BattleAvailabilityController):
 
     def getForbiddenHours(self):
         servSettings = g_lobbyContext.getServerSettings()
-        if servSettings:
-            return servSettings.getForbiddenSortieHours()
-        return []
+        return servSettings.getForbiddenSortieHours() if servSettings else []
 
     def isServerAvailable(self):
         servSettings = g_lobbyContext.getServerSettings()
-        if servSettings and connectionManager.peripheryID in servSettings.getForbiddenSortiePeripheryIDs():
-            return False
-        return True
+        return False if servSettings and connectionManager.peripheryID in servSettings.getForbiddenSortiePeripheryIDs() else True
 
-    def _onChanged(self, diff = None):
+    def _onChanged(self, diff=None):
         if diff and ('forbiddenSortieHours' in diff or 'forbiddenSortiePeripheryIDs' in diff):
             self._update(diff.get('forbiddenSortieHours'))
             LOG_DEBUG('Sorties settings changed:', diff)
 
-    def _calcStatus(self, hours = None):
+    def _getTimeStamp(self):
+        return time_utils.getServerRegionalTime()
+
+    def _calcStatus(self, hours=None):
         super(SortiesCurfewController, self)._calcStatus(hours)
         LOG_DEBUG('Sortie availability:', 'At current hour:', self._battlesAvailable, 'At current periphery:', self._currServerAvailable)
 

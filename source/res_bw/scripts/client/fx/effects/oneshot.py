@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Effects/OneShot.py
 import BigWorld
 from functools import partial
@@ -25,7 +25,7 @@ class OneShot(Effect):
     This type of Effect does not keep a permanent assocation with any source.
     """
 
-    def __init__(self, fileName = None, maxDuration = 10.0, prereqs = None):
+    def __init__(self, fileName=None, maxDuration=10.0, prereqs=None):
         Effect.__init__(self, fileName)
         Effect._create(self, prereqs)
         self.timer = EventTimer()
@@ -38,7 +38,7 @@ class OneShot(Effect):
             WARNING_MSG('maxDuration was negative!  setting to 10', self.maxDuration)
             self.maxDuration = 10.0
 
-    def _playEvents(self, eventTiming, source, target = None, callbackFn = None, **kargs):
+    def _playEvents(self, eventTiming, source, target=None, callbackFn=None, **kargs):
         """
         This method plays all the events that match the
         TRANSFORM_DEPENDENT_EVENT timing flag.
@@ -75,7 +75,7 @@ class OneShot(Effect):
 
         return self.totalDuration
 
-    def go(self, source, target = None, callbackFn = None, **kargs):
+    def go(self, source, target=None, callbackFn=None, **kargs):
         """
         This method should be the only method called on this Effect. Once fully
         finished, the self.going flag will be reset, and you can call go()

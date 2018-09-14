@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/battle/triggers.py
 from gui.battle_control import g_sessionProvider
 from tutorial.control.triggers import TriggerWithValidateVar
@@ -15,7 +15,7 @@ class UseItemsTrigger(TriggerWithValidateVar):
         self.toggle(isOn=self.isOn())
         return
 
-    def isOn(self, result = False):
+    def isOn(self, result=False):
         return result
 
     def __onEquipmentUpdated(self, intCD, item):

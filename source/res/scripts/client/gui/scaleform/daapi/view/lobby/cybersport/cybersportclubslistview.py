@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportClubsListView.py
 import operator
 import BigWorld
@@ -22,7 +22,7 @@ from gui.shared.view_helpers import ClubEmblemsHelper
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
-def _createHeader(label, buttonWidth, iconSource = None):
+def _createHeader(label, buttonWidth, iconSource=None):
     return {'label': label,
      'buttonWidth': buttonWidth,
      'iconSource': iconSource,
@@ -86,7 +86,7 @@ class CyberSportClubsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
             self.__paginator.refresh()
         self._setCreateButtonData()
 
-    def _getPaginator(self, pattern = None):
+    def _getPaginator(self, pattern=None):
         if not pattern:
             return self.unitFunctional.getClubsPaginator()
         else:
@@ -206,7 +206,15 @@ class CyberSportClubsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
          'searchByNameEnable': True})
         return
 
-    def __setNavigationData(self, isCooldown = False):
+    def _setDummyData(self, text, btnVisible=False, btnLabel='', btnTooltip='', icon=None):
+        self.as_setDummyS({'iconSource': icon,
+         'htmlText': text,
+         'alignCenter': False,
+         'btnVisible': btnVisible,
+         'btnLabel': btnLabel,
+         'btnTooltip': btnTooltip})
+
+    def __setNavigationData(self, isCooldown=False):
         self.as_updateNavigationBlockS({'previousVisible': True,
          'previousEnabled': not isCooldown and self.__paginator.canMoveLeft(),
          'nextVisible': True,
@@ -239,7 +247,8 @@ class CyberSportClubsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
         if not result:
             text = '\n'.join([text_styles.middleTitle(CYBERSPORT.WINDOW_UNITLISTVIEW_NOSEARCHRESULTS_HEADER), text_styles.standard(CYBERSPORT.WINDOW_UNITLISTVIEW_NOSEARCHRESULTS_DESCRIPTION)])
             self.__onClubsListUpdated(None, True, False, [])
-            self.as_noSearchResultsS(text, True)
+            self._setDummyData(text, True, CYBERSPORT.WINDOW_UNITLISTVIEW_NOSEARCHRESULTS_BTN)
+            self.as_setDummyVisibleS(True)
         else:
             self.__onClubsListUpdated(selectedID, isFullUpdate, isReqInCoolDown, result)
         return

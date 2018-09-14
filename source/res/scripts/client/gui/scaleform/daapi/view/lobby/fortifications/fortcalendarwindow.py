@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortCalendarWindow.py
 import BigWorld
 from collections import defaultdict
@@ -191,7 +191,7 @@ class FortCalendarWindow(FortViewHelper, FortCalendarWindowMeta):
         return
 
     @classmethod
-    def _isValidTime(cls, timestampToCheck, rootTimestamp = None):
+    def _isValidTime(cls, timestampToCheck, rootTimestamp=None):
         rootTimestamp = rootTimestamp or time_utils.getCurrentTimestamp()
         minLimit = rootTimestamp - cls.TIME_LIMITS.LOW
         dayStart, _ = time_utils.getDayTimeBoundsForLocal(minLimit)

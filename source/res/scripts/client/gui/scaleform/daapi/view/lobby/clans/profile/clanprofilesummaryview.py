@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileSummaryView.py
 import BigWorld
 from adisp import process, async
@@ -16,7 +16,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.meta.ClanProfileSummaryViewMeta import ClanProfileSummaryViewMeta
 
-def _stateVO(showRequestBtn, mainStatus = None, tooltip = '', enabledRequestBtn = False, addStatus = None, showPersonalBtn = False):
+def _stateVO(showRequestBtn, mainStatus=None, tooltip='', enabledRequestBtn=False, addStatus=None, showPersonalBtn=False):
     return {'isShowRequestBtn': showRequestBtn,
      'isEnabledRequestBtn': enabledRequestBtn,
      'isShowPersonnelBtn': showPersonalBtn,
@@ -25,7 +25,7 @@ def _stateVO(showRequestBtn, mainStatus = None, tooltip = '', enabledRequestBtn 
      'tooltip': tooltip}
 
 
-def _status(i18nKey, style, icon = None):
+def _status(i18nKey, style, icon=None):
     message = CLANS.clanprofile_summaryview_statusmsg(i18nKey)
     if icon is not None:
         message = i18n.makeString(message, icon=icons.makeImageTag(icon, 16, 16, -4, 0))
@@ -262,7 +262,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
          'emptyLbl': text_styles.standard(fortInfo[1]),
          'isActivated': fortInfo[0]})
 
-    def __makeGeneralBlock(self, clanInfo, syncUserInfo = False):
+    def __makeGeneralBlock(self, clanInfo, syncUserInfo=False):
         stats = [{'local': 'commander',
           'value': formatField(getter=clanInfo.getLeaderDbID, formatter=self.getGuiUserName),
           'textStyle': _STYLE.STATS_TEXT}, {'local': 'totalPlayers',

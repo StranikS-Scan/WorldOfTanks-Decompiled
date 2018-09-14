@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/DetachedTurret.py
 from AvatarInputHandler import mathUtils
 import BigWorld
@@ -13,7 +13,6 @@ from helpers.EffectsList import EffectsListPlayer, SoundStartParam, SpecialKeyPo
 from helpers.bound_effects import ModelBoundEffects
 from items import vehicles
 from constants import SERVER_TICK_LENGTH
-import FMOD
 _MIN_COLLISION_SPEED = 3.5
 
 class DetachedTurret(BigWorld.Entity):
@@ -100,12 +99,11 @@ class DetachedTurret(BigWorld.Entity):
             hitEffects = self.__hitEffects.get(shotPoint.componentName)
             if hitEffects is not None:
                 hitEffects.showHit(shotPoint, effectsIndex)
-            else:
-                LOG_ERROR("Detached turret got hit into %s component, but it's impossible" % shotPoint.componentName)
+            LOG_ERROR("Detached turret got hit into %s component, but it's impossible" % shotPoint.componentName)
 
         return
 
-    def collideSegment(self, startPoint, endPoint, skipGun = False):
+    def collideSegment(self, startPoint, endPoint, skipGun=False):
         res = None
         filterMethod = getattr(self.filter, 'segmentMayHitEntity', lambda : True)
         if not filterMethod(startPoint, endPoint, 0):
@@ -162,8 +160,7 @@ class _TurretDetachmentEffects(object):
     _MAX_COLLISION_ENERGY = 98.10000000000001
     _MIN_COLLISION_ENERGY = _MIN_COLLISION_SPEED ** 2 * 0.5
     _MIN_NORMALIZED_ENERGY = 0.1
-    if FMOD.enabled:
-        _DROP_ENERGY_PARAM = 'dropEnergy'
+    _DROP_ENERGY_PARAM = 'RTPC_ext_drop_energy'
 
     def __init__(self, turretModel, detachmentEffectsDesc, onGround):
         self.__turretModel = turretModel
@@ -225,7 +222,7 @@ class _TurretDetachmentEffects(object):
         self.__pullEffectListPlayer.play(self.__turretModel, SpecialKeyPointNames.START)
         self.__pullEffectListPlayer.effectMaterialIdx = effectMaterialIdx
 
-    def __playStateEffect(self, startKeyPoint = SpecialKeyPointNames.START):
+    def __playStateEffect(self, startKeyPoint=SpecialKeyPointNames.START):
         self.__stopStateEffects()
         effectName = _TurretDetachmentEffects.__EFFECT_NAMES[self.__state]
         stages, effectsList, _ = self.__detachmentEffectsDesc[effectName]
@@ -267,10 +264,8 @@ class VehicleEnterTimer(object):
             return
         elif not vehicle.inWorld or not vehicle.isStarted:
             return
-        elif not self._canAcceptVehicle(vehicle):
-            return
         else:
-            return vehicle
+            return None if not self._canAcceptVehicle(vehicle) else vehicle
 
     def __startCallback(self):
         assert self.__callbackId is None

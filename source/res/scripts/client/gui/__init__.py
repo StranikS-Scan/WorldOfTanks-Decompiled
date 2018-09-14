@@ -1,9 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/__init__.py
 import nations
 from collections import defaultdict
 from constants import IS_DEVELOPMENT
-from gui.GuiSettings import GuiSettings
+from gui.GuiSettings import GuiSettings as _GuiSettings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.html.templates import XMLCollection
 g_guiResetters = set()
@@ -11,7 +11,7 @@ g_repeatKeyHandlers = set()
 g_keyEventHandlers = set()
 g_mouseEventHandlers = set()
 g_tankActiveCamouflage = {'historical': {}}
-GUI_SETTINGS = GuiSettings()
+GUI_SETTINGS = _GuiSettings()
 DEPTH_OF_Disconnect = 0.0
 DEPTH_OF_Postmortem = 0.01
 DEPTH_OF_BotsMenu = 0.05
@@ -62,27 +62,20 @@ GUI_NATIONS_ORDER_INDEX[NONE_NATION_NAME] = nations.NONE_INDEX
 def nationCompareByName(first, second):
     if second is None:
         return -1
-    elif first is None:
-        return 1
     else:
-        return GUI_NATIONS_ORDER_INDEX[first] - GUI_NATIONS_ORDER_INDEX[second]
+        return 1 if first is None else GUI_NATIONS_ORDER_INDEX[first] - GUI_NATIONS_ORDER_INDEX[second]
 
 
 def nationCompareByIndex(first, second):
 
     def getNationName(idx):
-        if idx != nations.NONE_INDEX:
-            return nations.NAMES[idx]
-        return NONE_NATION_NAME
+        return nations.NAMES[idx] if idx != nations.NONE_INDEX else NONE_NATION_NAME
 
     return nationCompareByName(getNationName(first), getNationName(second))
 
 
 def getNationIndex(nationOrderIndex):
-    if nationOrderIndex < len(GUI_NATIONS):
-        return nations.INDICES.get(GUI_NATIONS[nationOrderIndex])
-    else:
-        return None
+    return nations.INDICES.get(GUI_NATIONS[nationOrderIndex]) if nationOrderIndex < len(GUI_NATIONS) else None
 
 
 HTML_TEMPLATES_DIR_PATH = 'gui/{0:>s}.xml'
@@ -108,5 +101,5 @@ if IS_DEVELOPMENT:
             collection.load(clear=True)
 
 
-def makeHtmlString(path, key, ctx = None, **kwargs):
+def makeHtmlString(path, key, ctx=None, **kwargs):
     return g_htmlTemplates[path].format(key, ctx=ctx, **kwargs)

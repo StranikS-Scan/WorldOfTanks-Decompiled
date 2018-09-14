@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/login/social_networks/RequestHandler.py
 import httplib
 import base64
@@ -23,26 +23,28 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def onLogin(self, **kwargs):
-        if 'token_encrypted' in kwargs:
-            token = kwargs['token_encrypted']
-        else:
-            token = kwargs['token']
+        token, accountId, socialNetwork = self.__fetchParams(kwargs)
         self.send_response(httplib.OK)
         self.send_header('Content-Type', 'image/gif')
         self.end_headers()
         self.wfile.write(base64.decodestring(_TEMPLATE_EMPTY_GIF_BASE64))
         self.wfile.close()
-        self.server.keepData(token, kwargs['account_id'])
+        self.server.keepData(token, accountId, socialNetwork)
 
     def onLoginWithRedirect(self, **kwargs):
-        if 'token_encrypted' in kwargs:
-            token = kwargs['token_encrypted']
-        else:
-            token = kwargs['token']
+        token, accountId, socialNetwork = self.__fetchParams(kwargs)
         self.send_response(httplib.FOUND)
         self.send_header('Location', kwargs['next'])
         self.end_headers()
-        self.server.keepData(token, kwargs['account_id'])
+        self.server.keepData(token, accountId, socialNetwork)
 
-    def log_request(self, code = '-', size = '-'):
+    def __fetchParams(self, params):
+        if 'token_encrypted' in params:
+            token = params['token_encrypted']
+        else:
+            token = params['token']
+        socialNetwork = params.get('authentication_method', '').partition(':')[2]
+        return (token, params['account_id'], socialNetwork)
+
+    def log_request(self, code='-', size='-'):
         pass

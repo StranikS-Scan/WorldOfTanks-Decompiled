@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/TweenManagerMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
@@ -14,5 +14,4 @@ class TweenManagerMeta(BaseDAAPIModule):
         self._printOverrideError('disposeAll')
 
     def as_setDataFromXmlS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setDataFromXml(data)
+        return self.flashObject.as_setDataFromXml(data) if self._isDAAPIInited() else None

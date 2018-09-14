@@ -1,7 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/dictionaries.py
 from debug_utils import *
-import re, sre_compile
+import re
+import sre_compile
 import ResMgr
 _defaultReplacementFunction = lambda word: '*' * len(word)
 
@@ -81,7 +82,7 @@ class BasicOLDictionary(ObsceneLanguageDictionary):
         Search bad words and if find, than replace by replacement function.
         Search stages:
                 1. splits string using space.
-                2. for each word: removed non-alphanumeric character, 
+                2. for each word: removed non-alphanumeric character,
                 find and replace equivalents to required characters
                 3. try finds bad words. If find, than replace, else do nothing.
         

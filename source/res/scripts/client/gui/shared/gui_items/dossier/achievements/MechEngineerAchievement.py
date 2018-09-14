@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/MechEngineerAchievement.py
 from dossiers2.custom.helpers import getMechanicEngineerRequirements
 from abstract import NationSpecificAchievement
@@ -6,7 +6,7 @@ from abstract.mixins import HasVehiclesList
 
 class MechEngineerAchievement(HasVehiclesList, NationSpecificAchievement):
 
-    def __init__(self, nationID, block, dossier, value = None):
+    def __init__(self, nationID, block, dossier, value=None):
         self.__vehTypeCompDescrs = self._parseVehiclesDescrsList(NationSpecificAchievement.makeFullName('mechanicEngineer', nationID), nationID, dossier)
         NationSpecificAchievement.__init__(self, 'mechanicEngineer', nationID, block, dossier, value)
         HasVehiclesList.__init__(self)

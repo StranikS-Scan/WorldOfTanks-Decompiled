@@ -36,7 +36,7 @@
       <armor_13>	16	</armor_13>
       <armor_14>	8	</armor_14>
     </armor>
-    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <primaryArmor>	armor_5 armor_3 armor_4	</primaryArmor>
     <weight>	3354	</weight>
     <maxHealth>	56	</maxHealth>
     <ammoBayHealth>
@@ -103,6 +103,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R16_SU-18/SU-18_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	0.625 0.625 0.000000 0.000000	</tiling>
     </camouflage>
@@ -640,7 +641,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
@@ -649,26 +650,16 @@
   </turrets0>
   <engines>
     <MS-1>	shared	  <unlocks>
-        <engine>	GAZ-M1	  <cost>	35	</cost>
-        </engine>
-      </unlocks>
-    </MS-1>
-    <GAZ-M1>	shared	  <unlocks>
         <engine>	AMO-3	  <cost>	40	</cost>
         </engine>
       </unlocks>
-    </GAZ-M1>
+    </MS-1>
     <AMO-3>	shared	</AMO-3>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <_71-TK-1>	shared	  <unlocks>
-        <radio>	_71-TK-3	  <cost>	95	</cost>
-        </radio>
-      </unlocks>
-    </_71-TK-1>
     <_71-TK-3>	shared	  <unlocks>
         <radio>	_9RK	  <cost>	540	</cost>
         </radio>

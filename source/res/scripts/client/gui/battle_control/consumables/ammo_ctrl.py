@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/consumables/ammo_ctrl.py
 import weakref
 from collections import namedtuple
@@ -131,7 +131,7 @@ class AmmoController(MethodsRules):
     def __repr__(self):
         return '{0:>s}(ammo = {1!r:s}, current = {2!r:s}, next = {3!r:s}, gun = {4!r:s})'.format(self.__class__.__name__, self.__ammo, self.__currShellCD, self.__nextShellCD, self.__gunSettings)
 
-    def clear(self, leave = True):
+    def clear(self, leave=True):
         super(AmmoController, self).clear()
         if leave:
             self.__eManager.clear()
@@ -139,6 +139,9 @@ class AmmoController(MethodsRules):
         self._order = []
         self.__currShellCD = None
         self.__nextShellCD = None
+        reloadEffect = self.__gunSettings.reloadEffect
+        if reloadEffect is not None:
+            reloadEffect.stop()
         self.__gunSettings = _GunSettings.default()
         self.__reloadTime = 0.0
         self.__baseTime = 0.0
@@ -186,8 +189,7 @@ class AmmoController(MethodsRules):
     @MethodsRules.delayable('setCurrentShellCD')
     def setGunReloadTime(self, timeLeft, baseTime):
         interval = self.__gunSettings.clip.interval
-        if timeLeft == baseTime and self.__gunSettings.reloadEffect is not None:
-            self.__gunSettings.reloadEffect.start(baseTime)
+        self.triggerReloadEffect(timeLeft, baseTime)
         if interval > 0:
             if self.__ammo[self.__currShellCD][1] != 1:
                 baseTime = interval
@@ -200,6 +202,10 @@ class AmmoController(MethodsRules):
         self.__baseTime = baseTime
         if not isIgnored:
             self.onGunReloadTimeSet(self.__currShellCD, timeLeft, baseTime)
+
+    def triggerReloadEffect(self, timeLeft, baseTime):
+        if timeLeft == baseTime and self.__gunSettings.reloadEffect is not None:
+            self.__gunSettings.reloadEffect.start(baseTime)
         return
 
     def getGunReloadTime(self):
@@ -269,13 +275,13 @@ class AmmoController(MethodsRules):
                 code = VEHICLE_SETTING.NEXT_SHELLS
             return code
 
-    def applySettings(self, avatar = None):
+    def applySettings(self, avatar=None):
         if self.__nextShellCD > 0 and self.__nextShellCD in self.__ammo:
             avatar_getter.changeVehicleSetting(VEHICLE_SETTING.NEXT_SHELLS, self.__nextShellCD, avatar)
         if self.__currShellCD > 0 and self.__currShellCD in self.__ammo:
             avatar_getter.changeVehicleSetting(VEHICLE_SETTING.CURRENT_SHELLS, self.__currShellCD, avatar)
 
-    def changeSetting(self, intCD, avatar = None):
+    def changeSetting(self, intCD, avatar=None):
         if not avatar_getter.isVehicleAlive(avatar):
             return False
         else:
@@ -287,7 +293,7 @@ class AmmoController(MethodsRules):
                 avatar_getter.changeVehicleSetting(code, intCD, avatar)
             return True
 
-    def reloadPartialClip(self, avatar = None):
+    def reloadPartialClip(self, avatar=None):
         clipSize = self.__gunSettings.clip.size
         if clipSize > 1 and self.__currShellCD in self.__ammo:
             quantity, quantityInClip = self.__ammo[self.__currShellCD]
@@ -325,7 +331,7 @@ class AmmoReplayRecorder(AmmoController):
         self.__changeRecord = replayCtrl.setAmmoSetting
         self.__timeRecord = replayCtrl.setGunReloadTime
 
-    def clear(self, leave = True):
+    def clear(self, leave=True):
         super(AmmoReplayRecorder, self).clear(leave)
         if leave:
             self.__changeRecord = None
@@ -337,7 +343,7 @@ class AmmoReplayRecorder(AmmoController):
         self.__timeRecord(0, timeLeft)
         super(AmmoReplayRecorder, self).setGunReloadTime(timeLeft, baseTime)
 
-    def changeSetting(self, intCD, avatar = None):
+    def changeSetting(self, intCD, avatar=None):
         if super(AmmoReplayRecorder, self).changeSetting(intCD, avatar) and intCD in self._order:
             self.__changeRecord(self._order.index(intCD))
 
@@ -355,8 +361,8 @@ class AmmoReplayPlayer(AmmoController):
         self.__replayCtrl.onAmmoSettingChanged += self.__onAmmoSettingChanged
         return
 
-    def clear(self, leave = True):
-        if leave:
+    def clear(self, leave=True):
+        if leave and self.__replayCtrl is not None:
             if self.__callbackID is not None:
                 BigWorld.cancelCallback(self.__callbackID)
                 self.__callbackID = None
@@ -368,13 +374,14 @@ class AmmoReplayPlayer(AmmoController):
 
     def setGunReloadTime(self, timeLeft, baseTime):
         self.__percent = None
+        self.triggerReloadEffect(timeLeft, baseTime)
         if not self.__isActivated:
             self.__isActivated = True
             self.__timeGetter = self.__replayCtrl.getGunReloadAmountLeft
             self.__timeLoop()
         return
 
-    def changeSetting(self, intCD, avatar = None):
+    def changeSetting(self, intCD, avatar=None):
         return False
 
     def getGunReloadTime(self):

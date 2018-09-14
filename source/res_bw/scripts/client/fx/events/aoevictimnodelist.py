@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/AOEVictimNodeList.py
 import BigWorld
 import random
@@ -21,7 +21,7 @@ class AOEVictimNodeList(ParticleSubSystem):
         self.maxNodes = 5
         self.findTeam = 0
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         self.nodeList = pSection.readStrings('Node')
         self.maxNodes = pSection.readFloat('maxNodes', 5.0)
         self.maxRange = pSection.readFloat('maxRange', 25.0)
@@ -49,9 +49,7 @@ class AOEVictimNodeList(ParticleSubSystem):
             dpos = dpos.scale(-self.maxRange)
         dpos = dpos + origin
         res = BigWorld.collide(source.spaceID, origin, dpos)
-        if not res:
-            return dpos
-        return res[0]
+        return dpos if not res else res[0]
 
     def findTargets(self, actor, source, target):
         self.calculatedTargets = []

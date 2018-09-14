@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ParenMatch.py
 """ParenMatch -- An IDLE extension for parenthesis matching.
 
@@ -106,7 +106,7 @@ class ParenMatch:
             self.set_timeout()
             return
 
-    def restore_event(self, event = None):
+    def restore_event(self, event=None):
         self.text.tag_delete('paren')
         self.deactivate_restore()
         self.counter += 1
@@ -138,7 +138,7 @@ class ParenMatch:
         or the insert has moved"""
         self.counter += 1
 
-        def callme(callme, self = self, c = self.counter, index = self.text.index('insert')):
+        def callme(callme, self=self, c=self.counter, index=self.text.index('insert')):
             if index != self.text.index('insert'):
                 self.handle_restore_timer(c)
             else:
@@ -149,4 +149,4 @@ class ParenMatch:
     def set_timeout_last(self):
         """The last highlight created will be removed after .5 sec"""
         self.counter += 1
-        self.editwin.text_frame.after(self.FLASH_DELAY, lambda self = self, c = self.counter: self.handle_restore_timer(c))
+        self.editwin.text_frame.after(self.FLASH_DELAY, lambda self=self, c=self.counter: self.handle_restore_timer(c))

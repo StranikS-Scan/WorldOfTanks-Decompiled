@@ -33,7 +33,6 @@
     <Radio_01_KV>	200	</Radio_01_KV>
     <Radio_T-50-2>	201	</Radio_T-50-2>
     <Observer>	202	</Observer>
-    <R113M_fallout>	204	</R113M_fallout>
     <_10RK-26_fallout>	205	</_10RK-26_fallout>
     <Alarm_flags_bot>	207	</Alarm_flags_bot>
     <_71-TK-1_bot>	209	</_71-TK-1_bot>
@@ -51,23 +50,13 @@
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
+      <notInShop>	true	</notInShop>
       <weight>	1	</weight>
       <distance>	90	</distance>
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Alarm_flags>
-    <_71-TK-1>
-      <userString>	#ussr_vehicles:_71-TK-1	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	180	</price>
-      <weight>	50	</weight>
-      <distance>	265	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </_71-TK-1>
     <Alarm_flags_bot>
       <userString>	#ussr_vehicles:Alarm_flags_bot	</userString>
       <tags></tags>
@@ -80,6 +69,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Alarm_flags_bot>
+    <_71-TK-1>
+      <userString>	#ussr_vehicles:_71-TK-1	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	265	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </_71-TK-1>
     <_71-TK-3>
       <userString>	#ussr_vehicles:_71-TK-3	</userString>
       <tags></tags>
@@ -323,18 +324,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113M>
-    <R113M_fallout>
-      <userString>	#ussr_vehicles:R113M_fallout	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	0.1	</repairCost>
-    </R113M_fallout>
     <_12LL>
       <userString>	#ussr_vehicles:_12LL	</userString>
       <tags></tags>

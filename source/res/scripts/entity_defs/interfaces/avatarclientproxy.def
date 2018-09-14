@@ -1,0 +1,97 @@
+<avatarclientproxy.def>
+  <BaseMethods>
+    <avatarClientProxy_updateOwnVehiclePosition>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </avatarClientProxy_updateOwnVehiclePosition>
+    <avatarClientProxy_updateGunMarker>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </avatarClientProxy_updateGunMarker>
+    <avatarClientProxy_updateVehicleHealth>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+    </avatarClientProxy_updateVehicleHealth>
+    <avatarClientProxy_updateVehicleGunReloadTime>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </avatarClientProxy_updateVehicleGunReloadTime>
+    <avatarClientProxy_updateVehicleAmmo>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	INT16	</Arg>
+    </avatarClientProxy_updateVehicleAmmo>
+    <avatarClientProxy_updateVehicleOptionalDeviceStatus>
+      <Arg>	UINT8	</Arg>
+      <Arg>	BOOL	</Arg>
+    </avatarClientProxy_updateVehicleOptionalDeviceStatus>
+    <avatarClientProxy_updateVehicleMiscStatus>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </avatarClientProxy_updateVehicleMiscStatus>
+    <avatarClientProxy_updateVehicleSetting>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+    </avatarClientProxy_updateVehicleSetting>
+    <avatarClientProxy_updateTargetingInfo>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </avatarClientProxy_updateTargetingInfo>
+    <avatarClientProxy_showOwnVehicleHitDirection>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	BOOL	</Arg>
+    </avatarClientProxy_showOwnVehicleHitDirection>
+    <avatarClientProxy_showShotResults>
+      <Arg>	ARRAY	  <of>	UINT64	</of>
+      </Arg>
+    </avatarClientProxy_showShotResults>
+    <avatarClientProxy_updateBomberTrajectory>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT64	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR2	</Arg>
+      <Arg>	FLOAT64	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR2	</Arg>
+      <Arg>	BOOL	</Arg>
+    </avatarClientProxy_updateBomberTrajectory>
+    <avatarClientProxy_showHittingArea>
+      <Arg>	UINT16	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT64	</Arg>
+    </avatarClientProxy_showHittingArea>
+    <avatarClientProxy_showCarpetBombing>
+      <Arg>	UINT16	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT64	</Arg>
+    </avatarClientProxy_showCarpetBombing>
+    <avatarClientProxy_syncVehicleAttrs>
+      <Arg>	VEHICLE_SYNC_ATTRS	</Arg>
+    </avatarClientProxy_syncVehicleAttrs>
+    <avatarClientProxy_showDevelopmentInfo>
+      <Arg>	UINT8	</Arg>
+      <Arg>	STRING	</Arg>
+    </avatarClientProxy_showDevelopmentInfo>
+  </BaseMethods>
+</avatarclientproxy.def>

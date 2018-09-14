@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/shared_parsers.py
 from debug_utils import LOG_WARNING
 from gui.wgnc.errors import ParseError
@@ -34,8 +34,7 @@ class ParsersCollection(SectionParser):
             if name in self._parsers:
                 parser = self._parsers[name]
                 yield parser.parse(sub)
-            else:
-                LOG_WARNING('Tag {0} is not supported. It is ignored.'.format(name))
+            LOG_WARNING('Tag {0} is not supported. It is ignored.'.format(name))
 
     def _createResult(self):
         raise NotImplementedError

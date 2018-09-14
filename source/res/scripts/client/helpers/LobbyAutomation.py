@@ -1,13 +1,19 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/LobbyAutomation.py
 import BigWorld
 from ConnectionManager import connectionManager
-from gui.WindowsManager import g_windowsManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.app_loader.loader import g_appLoader
+from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
 from AccountCommands import CMD_PRB_TEAM_READY
+
+def _getLobby():
+    return g_appLoader.getApp(_SPACE.SF_LOBBY)
+
+
 _isConnecting = False
 _server = ''
 _login = ''
@@ -70,11 +76,12 @@ def _detectCurrentScreen():
     if Waiting.isVisible():
         BigWorld.callback(0.2, lambda : _detectCurrentScreen())
         return
-    elif g_windowsManager.window is None or g_windowsManager.window.containerManager is None:
-        BigWorld.callback(0.2, lambda : _detectCurrentScreen())
-        return
     else:
-        dialogsContainer = g_windowsManager.window.containerManager.getContainer(ViewTypes.TOP_WINDOW)
+        lobby = _getLobby()
+        if lobby is None or lobby.containerManager is None:
+            BigWorld.callback(0.2, lambda : _detectCurrentScreen())
+            return
+        dialogsContainer = lobby.containerManager.getContainer(ViewTypes.TOP_WINDOW)
         if dialogsContainer is not None:
             dialog = dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.EULA})
             if dialog is not None:
@@ -82,17 +89,17 @@ def _detectCurrentScreen():
             dialog = dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: 'tGreetingDialog'})
             if dialog is not None:
                 dialog.cancel()
-        view = g_windowsManager.window.containerManager.getView(ViewTypes.DEFAULT)
+        view = lobby.containerManager.getView(ViewTypes.DEFAULT)
         if view and view.settings.alias == VIEW_ALIAS.LOGIN and view._isCreated() and connectionManager.isDisconnected() and not _isConnecting:
             _isConnecting = True
             _connect()
             BigWorld.callback(0.2, lambda : _detectCurrentScreen())
             return
-        view = g_windowsManager.window.containerManager.getView(ViewTypes.DEFAULT)
+        view = lobby.containerManager.getView(ViewTypes.DEFAULT)
         if view is not None and view.settings.alias == 'lobby':
             if _justLogin:
                 return
-            subView = g_windowsManager.window.containerManager.getView(ViewTypes.LOBBY_SUB)
+            subView = lobby.containerManager.getView(ViewTypes.LOBBY_SUB)
             if subView.settings.alias == 'hangar':
                 _leaveDevRoom()
                 BigWorld.callback(0.2, lambda : _detectCurrentScreen())

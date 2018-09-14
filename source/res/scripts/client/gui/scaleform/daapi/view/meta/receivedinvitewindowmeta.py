@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ReceivedInviteWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -14,9 +14,7 @@ class ReceivedInviteWindowMeta(AbstractWindowView):
         self._printOverrideError('cancelInvite')
 
     def as_setTitleS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTitle(value)
+        return self.flashObject.as_setTitle(value) if self._isDAAPIInited() else None
 
     def as_setReceivedInviteInfoS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setReceivedInviteInfo(value)
+        return self.flashObject.as_setReceivedInviteInfo(value) if self._isDAAPIInited() else None

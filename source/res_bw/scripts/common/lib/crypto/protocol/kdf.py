@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Protocol/KDF.py
 """This file contains a collection of standard key derivation functions.
 
@@ -22,7 +22,7 @@ from Crypto.Hash import SHA1, HMAC, CMAC
 from Crypto.Util.strxor import strxor
 from Crypto.Util.number import long_to_bytes, bytes_to_long
 
-def PBKDF1(password, salt, dkLen, count = 1000, hashAlgo = None):
+def PBKDF1(password, salt, dkLen, count=1000, hashAlgo=None):
     """Derive one key from a password (or passphrase).
     
     This function performs key derivation according an old version of
@@ -65,7 +65,7 @@ def PBKDF1(password, salt, dkLen, count = 1000, hashAlgo = None):
     return pHash.digest()[:dkLen]
 
 
-def PBKDF2(password, salt, dkLen = 16, count = 1000, prf = None):
+def PBKDF2(password, salt, dkLen=16, count=1000, prf=None):
     """Derive one or more keys from a password (or passphrase).
     
         This performs key derivation according to the PKCS#5 standard (v2.0),

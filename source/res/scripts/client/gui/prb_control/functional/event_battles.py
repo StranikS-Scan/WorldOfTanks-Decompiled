@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/event_battles.py
 import BigWorld
 from constants import QUEUE_TYPE
@@ -29,7 +29,7 @@ class _EventBattlesEventsSubscriber(prequeue.PlayersEventsSubscriber):
 
 class EventBattlesQueueFunctional(prequeue.AccountQueueFunctional):
 
-    def __init__(self, flags = FUNCTIONAL_FLAG.EVENT_BATTLES):
+    def __init__(self, flags=FUNCTIONAL_FLAG.EVENT_BATTLES):
         super(EventBattlesQueueFunctional, self).__init__(QUEUE_TYPE.EVENT_BATTLES, _EventBattlesEventsSubscriber(), flags)
 
     @prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)

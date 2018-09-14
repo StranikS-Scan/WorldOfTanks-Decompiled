@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/GraphicsPresets.py
 import BigWorld
 import ResMgr
@@ -56,7 +56,7 @@ class GraphicsPresets:
         self.checkCurrentPreset()
         return
 
-    def checkCurrentPreset(self, needRefresh = False):
+    def checkCurrentPreset(self, needRefresh=False):
         if needRefresh:
             self.__currentSetings = None
         self.selectedPresetKey = GraphicsPresets.CUSTOM_PRESET_KEY
@@ -235,5 +235,4 @@ class GraphicsPresets:
                 if key in self.__settingsDelayed:
                     delayedSettings = True
 
-        if delayedSettings:
-            return 'hasPendingSettings'
+        return 'hasPendingSettings' if delayedSettings else 'apply'

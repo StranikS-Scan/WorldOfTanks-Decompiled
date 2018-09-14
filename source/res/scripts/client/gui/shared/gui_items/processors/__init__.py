@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/__init__.py
 from collections import namedtuple
 from debug_utils import *
@@ -9,19 +9,19 @@ from gui.shared.utils import code2str
 from gui.shared.gui_items.processors import plugins
 ResultMsg = namedtuple('ResultMsg', 'success userMsg sysMsgType auxData')
 
-def makeSuccess(userMsg = '', msgType = SM_TYPE.Information, auxData = None):
+def makeSuccess(userMsg='', msgType=SM_TYPE.Information, auxData=None):
     return ResultMsg(True, userMsg, msgType, auxData)
 
 
-def makeError(userMsg = '', msgType = SM_TYPE.Error, auxData = None):
+def makeError(userMsg='', msgType=SM_TYPE.Error, auxData=None):
     return ResultMsg(False, userMsg, msgType, auxData)
 
 
-def makeI18nSuccess(sysMsgKey = '', auxData = None, *args, **kwargs):
+def makeI18nSuccess(sysMsgKey='', auxData=None, *args, **kwargs):
     return makeSuccess(i18n.makeString(('#system_messages:%s' % sysMsgKey), *args, **kwargs), kwargs.get('type', SM_TYPE.Information), auxData)
 
 
-def makeI18nError(sysMsgKey = '', auxData = None, *args, **kwargs):
+def makeI18nError(sysMsgKey='', auxData=None, *args, **kwargs):
     return makeError(i18n.makeString(('#system_messages:%s' % sysMsgKey), *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
 
 
@@ -32,7 +32,7 @@ class Processor(object):
     """
     PLUGIN_RES_CODE = -33
 
-    def __init__(self, plugins = list()):
+    def __init__(self, plugins=list()):
         """
         Ctor.
         
@@ -69,7 +69,7 @@ class Processor(object):
         for plugin in plugins:
             self.addPlugin(plugin)
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         """
         Error case handler. Will be called when server responses
         error code. Must return user-friendly error string.
@@ -79,7 +79,7 @@ class Processor(object):
         """
         return makeError(errStr, auxData=ctx)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         """
         Success case handler. Will be called when server responses
         success code. Must return user-friendly message string.
@@ -89,7 +89,7 @@ class Processor(object):
         """
         return makeSuccess(auxData=ctx)
 
-    def _response(self, code, callback, errStr = '', ctx = None):
+    def _response(self, code, callback, errStr='', ctx=None):
         """
         Common server response handler. Call corresponded
         method for error or success cases.
@@ -98,9 +98,7 @@ class Processor(object):
         @param callback: callback to be called
         """
         LOG_DEBUG('Server response', code, errStr, ctx)
-        if code < 0:
-            return callback(self._errorHandler(code, errStr=errStr, ctx=ctx))
-        return callback(self._successHandler(code, ctx=ctx))
+        return callback(self._errorHandler(code, errStr=errStr, ctx=ctx)) if code < 0 else callback(self._successHandler(code, ctx=ctx))
 
     @async
     @process
@@ -162,7 +160,7 @@ class Processor(object):
 
     @async
     @process
-    def request(self, callback = None):
+    def request(self, callback=None):
         res = yield self.__confirm()
         if not res.success:
             callback(res)
@@ -180,7 +178,7 @@ class ItemProcessor(Processor):
     tankman and etc.
     """
 
-    def __init__(self, item, plugins = list()):
+    def __init__(self, item, plugins=list()):
         """
         Ctor.
         
@@ -190,7 +188,7 @@ class ItemProcessor(Processor):
         super(ItemProcessor, self).__init__(plugins)
         self.item = item
 
-    def _response(self, code, callback, ctx = None, errStr = ''):
+    def _response(self, code, callback, ctx=None, errStr=''):
         """
         Common server response handler. Call corresponded
         method for error or success cases.

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/decorators.py
 import time
 import adisp
@@ -43,7 +43,7 @@ class process(object):
         return wrapper
 
 
-def async(func, cbname = 'callback', cbwrapper = lambda x: x):
+def async(func, cbname='callback', cbwrapper=lambda x: x):
 
     def wrapper(*kargs, **kwargs):
         if cbname in func.func_code.co_varnames:
@@ -143,7 +143,7 @@ class InternalRepresenter(object):
 
     def __call__(self, clazz):
         if '__repr__' in dir(clazz):
-            if hasattr(clazz, '__repr_params__') and self.reprParentFlag != False:
+            if hasattr(clazz, '__repr_params__') and self.reprParentFlag is not False:
                 clazz.__repr_params__ = tuple((arg for arg in self.argNames if arg not in clazz.__repr_params__)) + tuple((arg for arg in clazz.__repr_params__ if arg[0:2] != '__'))
             else:
                 clazz.__repr_params__ = self.argNames
@@ -177,3 +177,14 @@ class InternalRepresenter(object):
 
         clazz.__repr__ = __repr__
         return clazz
+
+
+def next_tick(func):
+    """
+    Moves function calling to the next frame
+    """
+
+    def wrapper(*args, **kwargs):
+        BigWorld.callback(0.01, lambda : func(*args, **kwargs))
+
+    return wrapper

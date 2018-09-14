@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/TutorialManager.py
 from collections import defaultdict
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -16,7 +16,7 @@ except ImportError:
     class gui_config(object):
 
         @classmethod
-        def readConfig(cls, path, forced = False):
+        def readConfig(cls, path, forced=False):
             return None
 
 
@@ -26,7 +26,7 @@ _CUSTOM_COMPONENTS = ('TankCarousel', 'PremiumButton', 'FreeXpButton', 'Research
 
 class TutorialManager(TutorialManagerMeta):
 
-    def __init__(self, app, isEnabled = False, path = ''):
+    def __init__(self, app, isEnabled=False, path=''):
         super(TutorialManager, self).__init__()
         self._isEnabled = isEnabled
         self._aliases = {}
@@ -39,10 +39,7 @@ class TutorialManager(TutorialManagerMeta):
         return
 
     def getViewTutorialID(self, name):
-        if not self._isEnabled:
-            return None
-        else:
-            return name
+        return None if not self._isEnabled else name
 
     def getFoundComponentsIDs(self):
         return self._components
@@ -61,7 +58,7 @@ class TutorialManager(TutorialManagerMeta):
     def clearTriggers(self, componentID):
         self.setTriggers(componentID, ())
 
-    def showInteractiveHint(self, componentID, content, triggers = None):
+    def showInteractiveHint(self, componentID, content, triggers=None):
         if not self._validate(componentID):
             return
         else:

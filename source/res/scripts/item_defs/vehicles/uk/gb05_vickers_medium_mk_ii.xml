@@ -76,6 +76,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/british/GB05_Vickers_Medium_Mk_II/Vickers_Medium_Mk_II_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_GB05_Vickers_Medium_Mk_II>
@@ -224,7 +225,9 @@
         <mud>	smallTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Chassis.model	</collisionModel>
@@ -385,7 +388,9 @@
         <mud>	smallTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Chassis.model	</collisionModel>
@@ -438,40 +443,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_3pdr_gun_Hotchkiss>	shared	  <maxAmmo>	111	</maxAmmo>
-          <unlocks>
-            <gun>	QF_6_pounder_8cwt_Mk_II	  <cost>	180	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <reloadTime>	4.2	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.7	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -16 1 -16	</minPitch>
-            <maxPitch>	0 6 0.083333 6 0.146995 7 0.853005 7 0.916667 6 1 6	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_01.model	</collisionModel>
-          </hitTester>
-          <camouflage>
-            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_3pdr_gun_Hotchkiss>
         <QF_6_pounder_8cwt_Mk_II>	shared	  <maxAmmo>	80	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_GB05_Vickers_Medium_Mk_II	  <cost>	50	</cost>
@@ -540,6 +511,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.950 0.000 0.950 0.000 0.474 0.096 0.550 0.500 0.550 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_GB05_Vickers_Medium_Mk_II>
     <Turret_2_GB05_Vickers_Medium_Mk_II>
@@ -579,36 +551,6 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.02	</invisibilityFactor>
       <guns>
-        <_3pdr_gun_Hotchkiss>	shared	  <maxAmmo>	111	</maxAmmo>
-          <armor>
-            <armor_1>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <reloadTime>	3.6	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -16 1 -16	</minPitch>
-            <maxPitch>	0 6 0.083333 6 0.146995 7 0.853005 7 0.916667 6 1 6	</maxPitch>
-          </pitchLimits>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_03.model	</collisionModel>
-          </hitTester>
-          <camouflage>
-            <tiling>	0.835 0.835 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_3pdr_gun_Hotchkiss>
         <QF_6_pounder_8cwt_Mk_II>	shared	  <maxAmmo>	80	</maxAmmo>
           <armor>
             <armor_1>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -736,37 +678,23 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.952 -0.011 1.000 0.000 0.444 0.138 0.585 0.651 0.500 0.500 0.019 0.500 0.000 1.000 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_2_GB05_Vickers_Medium_Mk_II>
   </turrets0>
   <engines>
     <Vickers-Armstrong>	shared	  <unlocks>
-        <engine>	Vickers-Armstrong_MkII	  <cost>	35	</cost>
-        </engine>
-      </unlocks>
-    </Vickers-Armstrong>
-    <Vickers-Armstrong_MkII>	shared	  <unlocks>
         <engine>	Sunbeam_Amazon	  <cost>	250	</cost>
         </engine>
       </unlocks>
-    </Vickers-Armstrong_MkII>
+    </Vickers-Armstrong>
     <Sunbeam_Amazon>	shared	</Sunbeam_Amazon>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <N14>	shared	  <unlocks>
-        <radio>	N11	  <cost>	100	</cost>
-        </radio>
-      </unlocks>
-    </N14>
-    <N11>	shared	  <unlocks>
-        <radio>	N9	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </N11>
-    <N9>	shared	</N9>
+    <N14>	shared	</N14>
   </radios>
   <effects>
     <collision></collision>

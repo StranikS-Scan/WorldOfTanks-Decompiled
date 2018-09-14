@@ -126,29 +126,30 @@
   <trace>
     <quality>
       <option>	MAX	  <lodBias>	1.0	</lodBias>
-        <maxTraceLength>	250	</maxTraceLength>
-        <lifetimeMultiplier>	4.0	</lifetimeMultiplier>
+        <maxTraceLength>	300	</maxTraceLength>
+        <lifetimeMultiplier>	2.4	</lifetimeMultiplier>
       </option>
       <option>	HIGH	  <lodBias>	0.8	</lodBias>
-        <maxTraceLength>	125	</maxTraceLength>
-        <lifetimeMultiplier>	2.0	</lifetimeMultiplier>
+        <maxTraceLength>	150	</maxTraceLength>
+        <lifetimeMultiplier>	1.2	</lifetimeMultiplier>
       </option>
       <option>	MEDIUM	  <lodBias>	0.6	</lodBias>
-        <maxTraceLength>	50	</maxTraceLength>
-        <lifetimeMultiplier>	1.0	</lifetimeMultiplier>
+        <maxTraceLength>	75	</maxTraceLength>
+        <lifetimeMultiplier>	0.6	</lifetimeMultiplier>
       </option>
       <option>	LOW	  <lodBias>	0.4	</lodBias>
         <maxTraceLength>	50	</maxTraceLength>
-        <lifetimeMultiplier>	0.8	</lifetimeMultiplier>
+        <lifetimeMultiplier>	0.3	</lifetimeMultiplier>
       </option>
       <option>	OFF	  <lodBias>	0.0	</lodBias>
       </option>
     </quality>
-    <enableOptimisation>	false	</enableOptimisation>
+    <enableOptimisation>	true	</enableOptimisation>
     <fade>	50 100	</fade>
     <maxTraceAdditionTimeout>	0.5	</maxTraceAdditionTimeout>
     <maxTraceAdditionAngle>	4.0	</maxTraceAdditionAngle>
     <maxTraceOffset>	0.05	</maxTraceOffset>
+    <maxTraceSegmentLength>	33.3	</maxTraceSegmentLength>
     <anisotropy>	4	</anisotropy>
   </trace>
   <road>

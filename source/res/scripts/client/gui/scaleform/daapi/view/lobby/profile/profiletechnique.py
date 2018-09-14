@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechnique.py
 import BigWorld
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
@@ -27,7 +27,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         super(ProfileTechnique, self)._populate()
         self.as_setInitDataS(self._getInitData())
 
-    def _getInitData(self, isFallout = False):
+    def _getInitData(self, isFallout=False):
         dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL),
@@ -41,7 +41,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         return {'dropDownProvider': dropDownProvider,
          'tableHeader': self._getTableHeader(isFallout)}
 
-    def _getTableHeader(self, isFallout = False):
+    def _getTableHeader(self, isFallout=False):
         return (self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
          self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL, inverted=True),
          self._createTableBtnInfo('level', 32, 2, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_LVL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL),
@@ -51,7 +51,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
          self._createTableBtnInfo('avgExperience', 90, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_AVGEXPERIENCE),
          self._createTableBtnInfo('markOfMastery', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_CLASSINESS, showSeparator=False))
 
-    def _createTableBtnInfo(self, iconId, buttonWidth, sortOrder, toolTip, defaultSortDirection, label = '', iconSource = '', inverted = False, sortType = 'numeric', showSeparator = True):
+    def _createTableBtnInfo(self, iconId, buttonWidth, sortOrder, toolTip, defaultSortDirection, label='', iconSource='', inverted=False, sortType='numeric', showSeparator=True):
         return {'id': iconId,
          'buttonWidth': buttonWidth,
          'sortOrder': sortOrder,
@@ -81,7 +81,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         self.as_setInitDataS(self._getInitData(self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT))
         self.as_responseDossierS(self._battlesType, self._getTechniqueListVehicles(targetData), '', self.getEmptyScreenLabel())
 
-    def _getTechniqueListVehicles(self, targetData, addVehiclesThatInHangarOnly = False):
+    def _getTechniqueListVehicles(self, targetData, addVehiclesThatInHangarOnly=False):
         result = []
         for intCD, (battlesCount, wins, markOfMastery, xp) in targetData.getVehicles().iteritems():
             avgXP = xp / battlesCount if battlesCount else 0
@@ -120,9 +120,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         pass
 
     def __getMarkOfMasteryVal(self, markOfMastery):
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
-            return markOfMastery
-        return ProfileUtils.UNAVAILABLE_VALUE
+        return markOfMastery if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL else ProfileUtils.UNAVAILABLE_VALUE
 
     def _receiveVehicleDossier(self, vehicleIntCD, databaseId):
         vehDossier = g_itemsCache.items.getVehicleDossier(vehicleIntCD, databaseId)

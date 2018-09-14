@@ -2039,7 +2039,7 @@
     <userString>	#vehicle_customization:emblem/special	</userString>
     <priceFactor>	0.0	</priceFactor>
     <notInShop>	true	</notInShop>
-    <allow>	germany:VK7201	</allow>
+    <allow>	germany:G92_VK7201	</allow>
     <emblems>
       <emblem>
         <id>	1501	</id>
@@ -2069,7 +2069,7 @@
     <userString>	#vehicle_customization:emblem/battle	</userString>
     <priceFactor>	0.0	</priceFactor>
     <notInShop>	true	</notInShop>
-    <allow>	uk:GB33_Sentinel_AC_I	</allow>
+    <allow>	uk:GB33_Sentinel_AC_I uk:GB35_Sentinel_AC_IV	</allow>
     <emblems>
       <emblem>
         <id>	1701	</id>
@@ -2108,4 +2108,39 @@
       </emblem>
     </emblems>
   </group17>
+  <group18>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <priceFactor>	0.0	</priceFactor>
+    <notInShop>	true	</notInShop>
+    <emblems>
+      <emblem>
+        <id>	1801	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_51.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group18/special_51	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	1802	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_52.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group18/special_52	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	1803	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_53.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group18/special_53	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	1804	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_54.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group18/special_54	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+    </emblems>
+  </group18>
 </player_emblems.xml>

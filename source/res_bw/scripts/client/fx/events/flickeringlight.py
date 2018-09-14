@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/FlickeringLight.py
 import BigWorld
 from FX import s_sectionProcessors
@@ -40,7 +40,7 @@ class FlickeringLight(Event):
         self.colour = Vector4(255, 240, 100, 255)
         return
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """This method loads the FlickeringLight event from an XML data
         section.  It reads the following variables:
         - colour

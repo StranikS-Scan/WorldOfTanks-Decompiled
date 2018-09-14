@@ -1,6 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/goodie_helpers.py
 from collections import namedtuple
+from debug_utils import LOG_ERROR
+from Goodies import GoodieException
 from GoodieConditions import MaxVehicleLevel
 from GoodieDefinition import GoodieDefinition
 from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExperience
@@ -95,6 +97,9 @@ def getPremiumCost(premiumCosts, goodie):
         return
 
 
-def loadPdata(pdataGoodies, goodies):
+def loadPdata(pdataGoodies, goodies, logID):
     for uid, goodie in pdataGoodies.iteritems():
-        goodies.load(uid, goodie[0], goodie[1], goodie[2])
+        try:
+            goodies.load(uid, goodie[0], goodie[1], goodie[2])
+        except GoodieException as detail:
+            LOG_ERROR('Cannot load a goodie', detail, logID)

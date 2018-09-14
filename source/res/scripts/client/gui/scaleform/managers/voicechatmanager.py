@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/VoiceChatManager.py
 import BigWorld
 import Event
@@ -127,7 +127,7 @@ class VoiceChatManager(VoiceChatManagerMeta):
         vOIPSetting.initFromPref()
 
     @async
-    def requestCaptureDevices(self, firstTime = False, callback = None):
+    def requestCaptureDevices(self, firstTime=False, callback=None):
         if getVOIPManager().getVOIPDomain() == '':
             LOG_WARNING('RequestCaptureDevices. Vivox is not supported')
             callback([])
@@ -137,7 +137,7 @@ class VoiceChatManager(VoiceChatManagerMeta):
             callback([])
             return
 
-        def resetCapturedDevice(devices, firstTime = firstTime):
+        def resetCapturedDevice(devices, firstTime=firstTime):
             if firstTime:
                 option = g_settingsCore.options.getSetting(SOUND.CAPTURE_DEVICES)
                 option.apply(option.get(), firstTime)
@@ -150,10 +150,8 @@ class VoiceChatManager(VoiceChatManagerMeta):
         p = BigWorld.player()
         if isPlayerAccount():
             return p.databaseID
-        elif isPlayerAvatar() and hasattr(p, 'playerVehicleID'):
-            return p.arena.vehicles[p.playerVehicleID].get('accountDBID', None)
         else:
-            return None
+            return p.arena.vehicles[p.playerVehicleID].get('accountDBID', None) if isPlayerAvatar() and hasattr(p, 'playerVehicleID') else None
 
     def __onPlayerSpeaking(self, accountDBID, isSpeak):
         if not GUI_SETTINGS.voiceChat:
@@ -167,9 +165,7 @@ class VoiceChatManager(VoiceChatManagerMeta):
         self.onStateToggled(isEnabled)
 
     def isPlayerSpeaking(self, accountDBID):
-        if GUI_SETTINGS.voiceChat:
-            return bool(getVOIPManager().isParticipantTalking(accountDBID))
-        return False
+        return bool(getVOIPManager().isParticipantTalking(accountDBID)) if GUI_SETTINGS.voiceChat else False
 
     def isVivox(self):
         return getVOIPManager().getAPI() == VOIP_SUPPORTED_API.VIVOX
@@ -181,9 +177,7 @@ class VoiceChatManager(VoiceChatManagerMeta):
     def provider(self):
         if self.isVivox():
             return self.PROVIDERS.VIVOX
-        if self.isYY():
-            return self.PROVIDERS.YY
-        return self.PROVIDERS.UNKNOWN
+        return self.PROVIDERS.YY if self.isYY() else self.PROVIDERS.UNKNOWN
 
     def isVOIPEnabled(self):
         return GUI_SETTINGS.voiceChat

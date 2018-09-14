@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/EditorWindow.py
 import sys
 import os
@@ -34,7 +34,7 @@ def _sphinx_version():
     return release
 
 
-def _find_module(fullname, path = None):
+def _find_module(fullname, path=None):
     """Version of imp.find_module() that handles hierarchical module names"""
     file = None
     for tgt in fullname.split('.'):
@@ -73,7 +73,7 @@ class HelpDialog(object):
         self.dlg = None
         return
 
-    def display(self, parent, near = None):
+    def display(self, parent, near=None):
         """ Display the help dialog.
         
             parent - parent widget for the help window
@@ -101,7 +101,7 @@ class HelpDialog(object):
         dlg.deiconify()
         dlg.lift()
 
-    def destroy(self, ev = None):
+    def destroy(self, ev=None):
         self.dlg = None
         self.parent = None
         return
@@ -123,7 +123,7 @@ class EditorWindow(object):
     from idlelib.MultiStatusBar import MultiStatusBar
     help_url = None
 
-    def __init__(self, flist = None, filename = None, key = None, root = None):
+    def __init__(self, flist=None, filename=None, key=None, root=None):
         if EditorWindow.help_url is None:
             dochome = os.path.join(sys.prefix, 'Doc', 'index.html')
             if sys.platform.count('linux'):
@@ -365,7 +365,7 @@ class EditorWindow(object):
         self.text.event_add('<<set-line-and-column>>', '<KeyRelease>', '<ButtonRelease>')
         self.text.after_idle(self.set_line_and_column)
 
-    def set_line_and_column(self, event = None):
+    def set_line_and_column(self, event=None):
         line, column = self.text.index(INSERT).split('.')
         self.status_bar.set_label('column', 'Col: %s' % column)
         self.status_bar.set_label('line', 'Ln: %s' % line)
@@ -440,12 +440,11 @@ class EditorWindow(object):
             label, eventname = item[0], item[1]
             if label is not None:
 
-                def command(text = self.text, eventname = eventname):
+                def command(text=self.text, eventname=eventname):
                     text.event_generate(eventname)
 
                 rmenu.add_command(label=label, command=command)
-            else:
-                rmenu.add_separator()
+            rmenu.add_separator()
 
         self.rmenu = rmenu
         return
@@ -472,20 +471,20 @@ class EditorWindow(object):
 
         return 'normal'
 
-    def about_dialog(self, event = None):
+    def about_dialog(self, event=None):
         aboutDialog.AboutDialog(self.top, 'About IDLE')
 
-    def config_dialog(self, event = None):
+    def config_dialog(self, event=None):
         configDialog.ConfigDialog(self.top, 'Settings')
 
-    def help_dialog(self, event = None):
+    def help_dialog(self, event=None):
         if self.root:
             parent = self.root
         else:
             parent = self.top
         helpDialog.display(parent, near=self.top)
 
-    def python_docs(self, event = None):
+    def python_docs(self, event=None):
         if sys.platform[:3] == 'win':
             try:
                 os.startfile(self.help_url)
@@ -507,12 +506,12 @@ class EditorWindow(object):
         self.text.event_generate('<<Paste>>')
         self.text.see('insert')
 
-    def select_all(self, event = None):
+    def select_all(self, event=None):
         self.text.tag_add('sel', '1.0', 'end-1c')
         self.text.mark_set('insert', '1.0')
         self.text.see('insert')
 
-    def remove_selection(self, event = None):
+    def remove_selection(self, event=None):
         self.text.tag_remove('sel', '1.0', 'end')
         self.text.see('insert')
 
@@ -572,7 +571,7 @@ class EditorWindow(object):
             text.see('insert')
             return
 
-    def open_module(self, event = None):
+    def open_module(self, event=None):
         try:
             name = self.text.get('sel.first', 'sel.last')
         except TclError:
@@ -601,7 +600,7 @@ class EditorWindow(object):
         else:
             self.io.loadfile(file)
 
-    def open_class_browser(self, event = None):
+    def open_class_browser(self, event=None):
         filename = self.io.filename
         if not filename:
             tkMessageBox.showerror('No filename', 'This buffer has no associated filename', master=self.text)
@@ -614,7 +613,7 @@ class EditorWindow(object):
             ClassBrowser.ClassBrowser(self.flist, base, [head])
             return None
 
-    def open_path_browser(self, event = None):
+    def open_path_browser(self, event=None):
         from idlelib import PathBrowser
         PathBrowser.PathBrowser(self.flist)
 
@@ -765,7 +764,7 @@ class EditorWindow(object):
     def __extra_help_callback(self, helpfile):
         """Create a callback with the helpfile value frozen at definition time"""
 
-        def display_extra_help(helpfile = helpfile):
+        def display_extra_help(helpfile=helpfile):
             if not helpfile.startswith(('www', 'http')):
                 helpfile = os.path.normpath(helpfile)
             if sys.platform[:3] == 'win':
@@ -779,7 +778,7 @@ class EditorWindow(object):
 
         return display_extra_help
 
-    def update_recent_files_list(self, new_file = None):
+    def update_recent_files_list(self, new_file=None):
         """Load and update the recent files list and menus"""
         rf_list = []
         if os.path.exists(self.recent_files_path):
@@ -817,7 +816,7 @@ class EditorWindow(object):
 
     def __recent_file_callback(self, file_name):
 
-        def open_recent_file(fn_closure = file_name):
+        def open_recent_file(fn_closure=file_name):
             self.io.open(editFile=fn_closure)
 
         return open_recent_file
@@ -864,7 +863,7 @@ class EditorWindow(object):
     def center_insert_event(self, event):
         self.center()
 
-    def center(self, mark = 'insert'):
+    def center(self, mark='insert'):
         text = self.text
         top, bot = self.getwindowlines()
         lineno = self.getlineno(mark)
@@ -881,7 +880,7 @@ class EditorWindow(object):
             bot = top + height - 1
         return (top, bot)
 
-    def getlineno(self, mark = 'insert'):
+    def getlineno(self, mark='insert'):
         text = self.text
         return int(float(text.index(mark)))
 
@@ -980,7 +979,7 @@ class EditorWindow(object):
                 if hasattr(ins, methodname):
                     self.text.bind(vevent, getattr(ins, methodname))
 
-    def apply_bindings(self, keydefs = None):
+    def apply_bindings(self, keydefs=None):
         if keydefs is None:
             keydefs = self.Bindings.default_keydefs
         text = self.text
@@ -991,7 +990,7 @@ class EditorWindow(object):
 
         return
 
-    def fill_menus(self, menudefs = None, keydefs = None):
+    def fill_menus(self, menudefs=None, keydefs=None):
         """Add appropriate entries to the menus and submenus
         
         Menus that are absent or None in self.menudict are ignored.
@@ -1009,22 +1008,20 @@ class EditorWindow(object):
             for entry in entrylist:
                 if not entry:
                     menu.add_separator()
-                else:
-                    label, eventname = entry
-                    checkbutton = label[:1] == '!'
-                    if checkbutton:
-                        label = label[1:]
-                    underline, label = prepstr(label)
-                    accelerator = get_accelerator(keydefs, eventname)
+                label, eventname = entry
+                checkbutton = label[:1] == '!'
+                if checkbutton:
+                    label = label[1:]
+                underline, label = prepstr(label)
+                accelerator = get_accelerator(keydefs, eventname)
 
-                    def command(text = text, eventname = eventname):
-                        text.event_generate(eventname)
+                def command(text=text, eventname=eventname):
+                    text.event_generate(eventname)
 
-                    if checkbutton:
-                        var = self.get_var_obj(eventname, BooleanVar)
-                        menu.add_checkbutton(label=label, underline=underline, command=command, accelerator=accelerator, variable=var)
-                    else:
-                        menu.add_command(label=label, underline=underline, command=command, accelerator=accelerator)
+                if checkbutton:
+                    var = self.get_var_obj(eventname, BooleanVar)
+                    menu.add_checkbutton(label=label, underline=underline, command=command, accelerator=accelerator, variable=var)
+                menu.add_command(label=label, underline=underline, command=command, accelerator=accelerator)
 
         return
 
@@ -1035,14 +1032,14 @@ class EditorWindow(object):
             return value
         raise NameError, name
 
-    def setvar(self, name, value, vartype = None):
+    def setvar(self, name, value, vartype=None):
         var = self.get_var_obj(name, vartype)
         if var:
             var.set(value)
         else:
             raise NameError, name
 
-    def get_var_obj(self, name, vartype = None):
+    def get_var_obj(self, name, vartype=None):
         var = self.tkinter_vars.get(name)
         if not var and vartype:
             self.tkinter_vars[name] = var = vartype(self.text)
@@ -1074,7 +1071,7 @@ class EditorWindow(object):
             pixels = text.tk.call('font', 'measure', text['font'], '-displayof', text.master, 'n' * newtabwidth)
             text.configure(tabs=pixels)
 
-    def set_indentation_params(self, ispythonsource, guess = True):
+    def set_indentation_params(self, ispythonsource, guess=True):
         if guess and ispythonsource:
             i = self.guess_indent()
             if 2 <= i <= 8:
@@ -1233,7 +1230,7 @@ class EditorWindow(object):
 
     def _build_char_in_string_func(self, startindex):
 
-        def inner(offset, _startindex = startindex, _icis = self.is_char_in_string):
+        def inner(offset, _startindex=startindex, _icis=self.is_char_in_string):
             return _icis(_startindex + '+%dc' % offset)
 
         return inner
@@ -1389,11 +1386,10 @@ def classifyws(s, tabwidth):
         if ch == ' ':
             raw = raw + 1
             effective = effective + 1
-        elif ch == '\t':
+        if ch == '\t':
             raw = raw + 1
             effective = (effective // tabwidth + 1) * tabwidth
-        else:
-            break
+        break
 
     return (raw, effective)
 
@@ -1416,11 +1412,9 @@ class IndentSearcher(object):
             return ''
         i = self.i = self.i + 1
         mark = repr(i) + '.0'
-        if self.text.compare(mark, '>=', 'end'):
-            return ''
-        return self.text.get(mark, mark + ' lineend+1c')
+        return '' if self.text.compare(mark, '>=', 'end') else self.text.get(mark, mark + ' lineend+1c')
 
-    def tokeneater(self, type, token, start, end, line, INDENT = _tokenize.INDENT, NAME = _tokenize.NAME, OPENERS = ('class', 'def', 'for', 'if', 'try', 'while')):
+    def tokeneater(self, type, token, start, end, line, INDENT=_tokenize.INDENT, NAME=_tokenize.NAME, OPENERS=('class', 'def', 'for', 'if', 'try', 'while')):
         if self.finished:
             pass
         elif type == NAME and token in OPENERS:
@@ -1433,9 +1427,11 @@ class IndentSearcher(object):
         save_tabsize = _tokenize.tabsize
         _tokenize.tabsize = self.tabwidth
         try:
-            _tokenize.tokenize(self.readline, self.tokeneater)
-        except (_tokenize.TokenError, SyntaxError):
-            pass
+            try:
+                _tokenize.tokenize(self.readline, self.tokeneater)
+            except (_tokenize.TokenError, SyntaxError):
+                pass
+
         finally:
             _tokenize.tabsize = save_tabsize
 

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/ClanCache.py
 from collections import namedtuple
 import BigWorld
@@ -38,7 +38,7 @@ class _ClanCache(object):
 
     def __init__(self):
         self.__waitForSync = False
-        self.__fortProvider = ClientFortProvider()
+        self.__fortProvider = None
         self.__clanMembersLen = None
         self.__clanMotto = ''
         self.__clanDescription = ''
@@ -47,11 +47,12 @@ class _ClanCache(object):
         return
 
     def init(self):
-        pass
+        self.__fortProvider = ClientFortProvider()
 
     def fini(self):
         self.onSyncStarted.clear()
         self.onSyncCompleted.clear()
+        self.clear()
 
     def onAccountShowGUI(self):
         self.__startFortProvider()
@@ -67,11 +68,12 @@ class _ClanCache(object):
         return self.__waitForSync
 
     @async
-    def update(self, diff = None, callback = None):
+    def update(self, diff=None, callback=None):
         self.__invalidateData(diff, callback)
 
     def clear(self):
-        pass
+        self.__fortProvider = None
+        return
 
     @storage_getter('users')
     def usersStorage(self):
@@ -104,10 +106,7 @@ class _ClanCache(object):
     def clanInfo(self):
         from gui.shared import g_itemsCache
         info = g_itemsCache.items.stats.clanInfo
-        if info and len(info) > 1:
-            return info
-        else:
-            return (None, None, -1, 0, 0)
+        return info if info and len(info) > 1 else (None, None, -1, 0, 0)
 
     @property
     def clanName(self):
@@ -128,9 +127,7 @@ class _ClanCache(object):
     @property
     def clanTag(self):
         result = self.clanAbbrev
-        if result:
-            return '[%s]' % result
-        return result
+        return '[%s]' % result if result else result
 
     @property
     def clanCommanderName(self):
@@ -205,7 +202,7 @@ class _ClanCache(object):
         if not self.__waitForSync:
             self.__invalidateData()
 
-    def __invalidateData(self, diff = None, callback = lambda *args: None):
+    def __invalidateData(self, diff=None, callback=lambda *args: None):
         if diff is not None:
             if 'stats' in diff and 'clanInfo' in diff['stats']:
                 self.__fortProvider.resetState()

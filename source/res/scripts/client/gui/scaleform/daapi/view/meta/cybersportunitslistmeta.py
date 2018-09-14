@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CyberSportUnitsListMeta.py
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyListView import BaseRallyListView
 
@@ -28,26 +28,20 @@ class CyberSportUnitsListMeta(BaseRallyListView):
     def searchTeams(self, name):
         self._printOverrideError('searchTeams')
 
-    def as_noSearchResultsS(self, mesage, cleanBtnVisible):
-        if self._isDAAPIInited():
-            return self.flashObject.as_noSearchResults(mesage, cleanBtnVisible)
+    def as_setDummyS(self, data):
+        return self.flashObject.as_setDummy(data) if self._isDAAPIInited() else None
+
+    def as_setDummyVisibleS(self, visible):
+        return self.flashObject.as_setDummyVisible(visible) if self._isDAAPIInited() else None
 
     def as_setSearchResultTextS(self, text, descrText, filterData):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSearchResultText(text, descrText, filterData)
+        return self.flashObject.as_setSearchResultText(text, descrText, filterData) if self._isDAAPIInited() else None
 
     def as_setHeaderS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setHeader(data)
+        return self.flashObject.as_setHeader(data) if self._isDAAPIInited() else None
 
-    def as_setSelectedVehiclesInfoS(self, infoText, selectedVehiclesCount):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSelectedVehiclesInfo(infoText, selectedVehiclesCount)
-
-    def as_updateNavigationBlockS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateNavigationBlock(value)
+    def as_updateNavigationBlockS(self, data):
+        return self.flashObject.as_updateNavigationBlock(data) if self._isDAAPIInited() else None
 
     def as_updateRallyIconS(self, iconPath):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateRallyIcon(iconPath)
+        return self.flashObject.as_updateRallyIcon(iconPath) if self._isDAAPIInited() else None

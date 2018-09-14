@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/wgnc/WGNCPollWindow.py
 from adisp import process
 from gui import DialogsInterface
@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.meta.WGNCPollWindowMeta import WGNCPollWindowMeta
 
 class WGNCPollWindow(WGNCPollWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(WGNCPollWindow, self).__init__()
         assert ctx, 'Context can be defined'
         self.__notID = ctx['notID']

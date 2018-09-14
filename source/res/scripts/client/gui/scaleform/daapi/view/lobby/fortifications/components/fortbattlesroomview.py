@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesRoomView.py
 import BigWorld
 from debug_utils import LOG_DEBUG
@@ -63,12 +63,13 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
             data = vo_converters.makeSortieVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
             self.as_updateRallyS(data)
 
-    def onUnitVehicleChanged(self, dbID, vInfo):
+    def onUnitVehiclesChanged(self, dbID, vInfos):
         functional = self.unitFunctional
         pInfo = functional.getPlayerInfo(dbID=dbID)
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
-            if not vInfo.isEmpty():
+            if vInfos and not vInfos[0].isEmpty():
+                vInfo = vInfos[0]
                 vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange())
                 slotCost = vInfo.vehLevel
             else:
@@ -111,7 +112,7 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
         self.as_highlightSlotsS(availableSlots)
         return availableSlots
 
-    def isPlayerLeginary(self, databaseID = None):
+    def isPlayerLeginary(self, databaseID=None):
         pInfo = self.unitFunctional.getPlayerInfo(dbID=databaseID)
         return pInfo.isLegionary
 

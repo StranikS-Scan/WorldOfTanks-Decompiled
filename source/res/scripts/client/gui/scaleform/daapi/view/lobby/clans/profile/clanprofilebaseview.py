@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileBaseView.py
 import BigWorld
 from adisp import process
@@ -46,6 +46,13 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
     def onClanStateChanged(self, oldStateID, newStateID):
         self._updateDummy()
 
+    def onAccountWebVitalInfoChanged(self, fieldName, value):
+        self._updateHeaderState()
+
+    def onClanWebVitalInfoChanged(self, clanDbID, fieldName, value):
+        if clanDbID == self._clanDossier.getDbID():
+            self._updateHeaderState()
+
     def _dispose(self):
         self._clanDossier = None
         self.stopClanListening()
@@ -79,7 +86,7 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
         canSendApplication = self.clansCtrl.getLimits().canSendApplication(self._clanDossier)
         self.as_setHeaderStateS(self.__headerBtnStates.get(canSendApplication.reason) or self._getHeaderButtonStateVO())
 
-    def _getHeaderButtonStateVO(self, actionBtnVisible = False, actionBtnLabel = None, iconBtnVisible = False, topTFVisible = False, middleTFVisible = False, actionId = None, actionBtnTooltip = None, middleTF = None, topTF = None):
+    def _getHeaderButtonStateVO(self, actionBtnVisible=False, actionBtnLabel=None, iconBtnVisible=False, topTFVisible=False, middleTFVisible=False, actionId=None, actionBtnTooltip=None, middleTF=None, topTF=None):
         return {'actionBtnVisible': actionBtnVisible,
          'iconBtnVisible': iconBtnVisible,
          'topTFVisible': topTFVisible,

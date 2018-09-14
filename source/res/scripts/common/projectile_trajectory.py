@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/projectile_trajectory.py
 import BigWorld
 import Math
@@ -25,8 +25,7 @@ def computeProjectileTrajectory(beginPoint, velocity, gravity, time, epsilon):
             extremeVelocity = v1 + gravity.scale(extremeTime)
             stack.append((extremeVelocity, p1 + extremePoint, p2))
             stack.append((v1, p1, p1 + extremePoint))
-        else:
-            checkPoints.append(p2)
+        checkPoints.append(p2)
 
     return checkPoints
 
@@ -36,7 +35,7 @@ try:
 except AttributeError:
     pass
 
-def getShotAngles(vehTypeDescr, vehMatrix, curShotAngles, point, adjust = True):
+def getShotAngles(vehTypeDescr, vehMatrix, curShotAngles, point, adjust=True):
     turretOffs = vehTypeDescr.hull['turretPositions'][0] + vehTypeDescr.chassis['hullPosition']
     gunOffs = vehTypeDescr.turret['gunPosition']
     speed = vehTypeDescr.shot['speed']

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/HangarSpace.py
 import BigWorld
 import Event
@@ -66,21 +66,17 @@ class HangarVideoCameraController:
                 else:
                     self.__videoCamera.disable()
                     BigWorld.camera(self.__overriddenCamera)
-            if self.__enabled:
-                return self.__videoCamera.handleKeyEvent(event.key, event.isKeyDown())
-            return False
+            return self.__videoCamera.handleKeyEvent(event.key, event.isKeyDown()) if self.__enabled else False
 
     def handleMouseEvent(self, event):
         if self.__videoCamera is None:
             return
-        elif self.__enabled:
-            return self.__videoCamera.handleMouseEvent(event.dx, event.dy, event.dz)
         else:
-            return False
+            return self.__videoCamera.handleMouseEvent(event.dx, event.dy, event.dz) if self.__enabled else False
 
 
 class _HangarSpace(object):
-    isPremium = property(lambda self: (self.__isSpacePremium if self.__spaceInited else self.__delayedIsPremium))
+    isPremium = property(lambda self: self.__isSpacePremium if self.__spaceInited else self.__delayedIsPremium)
 
     def __init__(self):
         self.__space = ClientHangarSpace()
@@ -104,10 +100,7 @@ class _HangarSpace(object):
 
     @property
     def space(self):
-        if self.spaceInited:
-            return self.__space
-        else:
-            return None
+        return self.__space if self.spaceInited else None
 
     @property
     def inited(self):
@@ -133,10 +126,9 @@ class _HangarSpace(object):
             if self.__lastUpdatedVehicle is not None:
                 self.updateVehicle(self.__lastUpdatedVehicle)
             game_control.g_instance.gameSession.onPremiumNotify += self.onPremiumChanged
-        self.playHangarMusic()
         return
 
-    def refreshSpace(self, isPremium, forceRefresh = False):
+    def refreshSpace(self, isPremium, forceRefresh=False):
         igrType = game_control.g_instance.igr.getRoomType()
         if self.__isSpacePremium == isPremium and self.__igrSpaceType == igrType and not forceRefresh:
             return
@@ -196,11 +188,6 @@ class _HangarSpace(object):
                 self.__space.removeVehicle()
             self.__changeDone()
             self.__lastUpdatedVehicle = None
-        return
-
-    def playHangarMusic(self, restart = False):
-        if self.__space is not None:
-            self.__space.playHangarMusic(restart)
         return
 
     def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):

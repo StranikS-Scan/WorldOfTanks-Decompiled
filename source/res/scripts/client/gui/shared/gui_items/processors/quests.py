@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/quests.py
 import operator
 import BigWorld
@@ -13,22 +13,22 @@ class _PotapovQuestsSelect(Processor):
         self.__quests = potapovQuestItems
         self.__questBranch = questBranch
         deselectedQuests = set(events_cache.getSelectedQuests().values()).difference(set(potapovQuestItems))
-        super(_PotapovQuestsSelect, self).__init__((plugins.PotapovQuestValidator(potapovQuestItems), self._getLockedByVehicleValidator()(deselectedQuests)))
+        super(_PotapovQuestsSelect, self).__init__((plugins.PotapovQuestValidator(potapovQuestItems), self._getLockedByVehicleValidator(deselectedQuests)))
 
     @staticmethod
-    def _getLockedByVehicleValidator():
+    def _getLockedByVehicleValidator(quests):
         raise NotImplemented
 
     def _getMessagePrefix(self):
         raise NotImplemented
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         errorI18nKey = '%s/server_error' % self._getMessagePrefix()
         if len(errStr):
             errorI18nKey = '%s/%s' % (errorI18nKey, errStr)
         return makeI18nError(errorI18nKey, questNames=', '.join(self.__getQuestsNames()))
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('%s/success' % self._getMessagePrefix(), questNames=', '.join(self.__getQuestsNames()))
 
     def _request(self, callback):
@@ -60,8 +60,7 @@ class PotapovQuestSelect(_PotapovQuestsSelect):
         for quest in quests:
             if quest.getChainID() != newQuest.getChainID():
                 result.append(quest)
-            else:
-                removedQuest = quest
+            removedQuest = quest
 
         return (result, removedQuest)
 
@@ -72,8 +71,8 @@ class RandomQuestSelect(PotapovQuestSelect):
         super(RandomQuestSelect, self).__init__(quest, events_cache, PQ_BRANCH.REGULAR)
 
     @staticmethod
-    def _getLockedByVehicleValidator():
-        return plugins.RandomQuestsLockedByVehicle
+    def _getLockedByVehicleValidator(quests):
+        return plugins.PotapovQuestsLockedByVehicle(quests)
 
 
 class FalloutQuestSelect(PotapovQuestSelect):
@@ -82,8 +81,8 @@ class FalloutQuestSelect(PotapovQuestSelect):
         super(FalloutQuestSelect, self).__init__(quest, events_cache, PQ_BRANCH.FALLOUT)
 
     @staticmethod
-    def _getLockedByVehicleValidator():
-        return plugins.FalloutQuestsLockedByVehicle
+    def _getLockedByVehicleValidator(quests):
+        return plugins.PotapovQuestsLockedByVehicle(quests, messageKeyPrefix='fallout/')
 
 
 class _PotapovQuestRefuse(_PotapovQuestsSelect):
@@ -104,8 +103,8 @@ class RandomQuestRefuse(_PotapovQuestRefuse):
         super(RandomQuestRefuse, self).__init__(quest, events_cache, PQ_BRANCH.REGULAR)
 
     @staticmethod
-    def _getLockedByVehicleValidator():
-        return plugins.RandomQuestsLockedByVehicle
+    def _getLockedByVehicleValidator(quests):
+        return plugins.PotapovQuestsLockedByVehicle(quests)
 
 
 class FalloutQuestRefuse(_PotapovQuestRefuse):
@@ -114,8 +113,8 @@ class FalloutQuestRefuse(_PotapovQuestRefuse):
         super(FalloutQuestRefuse, self).__init__(quest, events_cache, PQ_BRANCH.FALLOUT)
 
     @staticmethod
-    def _getLockedByVehicleValidator():
-        return plugins.FalloutQuestsLockedByVehicle
+    def _getLockedByVehicleValidator(quests):
+        return plugins.PotapovQuestsLockedByVehicle(quests, messageKeyPrefix='fallout/')
 
 
 class _PotapovQuestsGetReward(Processor):
@@ -131,12 +130,10 @@ class _PotapovQuestsGetReward(Processor):
     def _getMessagePrefix(self):
         pass
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('%s/server_error/%s' % (self._getMessagePrefix(), errStr))
-        return makeI18nError('%s/server_error' % self._getMessagePrefix())
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('%s/server_error/%s' % (self._getMessagePrefix(), errStr)) if len(errStr) else makeI18nError('%s/server_error' % self._getMessagePrefix())
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('%s/success' % self._getMessagePrefix())
 
     def _request(self, callback):

@@ -1,17 +1,13 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/settings.py
 import re
-from adisp import async
 from collections import namedtuple
 from constants import CLAN_MEMBER_FLAGS
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
-from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.formatters import icons, text_styles
 from shared_utils import CONST_CONTAINER
-from helpers import i18n
 DEFAULT_COOLDOWN = 1.0
 SEND_INVITES_COOLDOWN = 5.0
+ACCEPT_INVITES_COOLDOWN = 2.0
+DECLINE_INVITES_COOLDOWN = 2.0
 MAX_ACCOUNT_APPLICATIONS_COUNT = 100
 MAX_CLAN_INVITES_COUNT = 100
 MAX_CLAN_MEMBERS_COUNT = 100
@@ -86,14 +82,14 @@ class CLAN_APPLICATION_STATES(CONST_CONTAINER):
     ALL = (ACTIVE, DECLINED, ACCEPTED)
 
 
-CLAN_INVITE_STATES_SORT_RULES = {CLAN_INVITE_STATES.ACTIVE: 0,
- CLAN_INVITE_STATES.ACCEPTED: 1,
- CLAN_INVITE_STATES.DECLINED: 2,
- CLAN_INVITE_STATES.DECLINED_RESENT: 2,
- CLAN_INVITE_STATES.EXPIRED: 4,
- CLAN_INVITE_STATES.EXPIRED_RESENT: 4,
- CLAN_INVITE_STATES.ERROR: 5,
- CLAN_INVITE_STATES.DELETED: 6}
+CLAN_INVITE_STATES_SORT_RULES = {CLAN_INVITE_STATES.ACTIVE: 5,
+ CLAN_INVITE_STATES.ACCEPTED: 4,
+ CLAN_INVITE_STATES.DECLINED: 3,
+ CLAN_INVITE_STATES.DECLINED_RESENT: 3,
+ CLAN_INVITE_STATES.EXPIRED: 2,
+ CLAN_INVITE_STATES.EXPIRED_RESENT: 2,
+ CLAN_INVITE_STATES.ERROR: 1,
+ CLAN_INVITE_STATES.DELETED: 0}
 
 class CLAN_REQUESTED_DATA_TYPE(CONST_CONTAINER):
     LOGIN = 1
@@ -149,14 +145,6 @@ class CLIENT_CLAN_RESTRICTIONS(CONST_CONTAINER):
 
 
 _RestrResult = namedtuple('_RestrResult', 'success reason')
-
-@async
-def showAcceptClanInviteDialog(clanName, clanAbbrev, callback):
-    from gui import DialogsInterface
-    DialogsInterface.showDialog(I18nConfirmDialogMeta('clanConfirmJoining', messageCtx={'icon': icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICON, 16, 16, -4, 0),
-     'clanName': text_styles.stats(i18n.makeString(DIALOGS.CLANCONFIRMJOINING_MESSAGE_CLANNAME, clanAbbr=clanAbbrev, clanName=clanName)),
-     'clanExit': text_styles.standard(i18n.makeString(DIALOGS.CLANCONFIRMJOINING_MESSAGE_CLANEXIT))}), callback)
-
 
 def error(reason):
     return _RestrResult(False, reason)

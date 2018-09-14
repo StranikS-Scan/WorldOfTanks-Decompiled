@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/account_helpers/BattleResultsCache.py
 import os
 import BigWorld
@@ -60,13 +60,11 @@ class BattleResultsCache(object):
             return (AccountCommands.RES_NON_PLAYER, None)
         elif self.__waiting:
             return (AccountCommands.RES_COOLDOWN, None)
-        battleResults = load(uniqueFolderName, arenaUniqueID)
-        if battleResults is not None:
-            return (AccountCommands.RES_CACHE, convertToFullForm(battleResults))
         else:
-            return (None, None)
+            battleResults = load(uniqueFolderName, arenaUniqueID)
+            return (AccountCommands.RES_CACHE, convertToFullForm(battleResults)) if battleResults is not None else (None, None)
 
-    def __onGetResponse(self, callback, resultsSubUrl, requestID, resultID, errorStr, ext = None):
+    def __onGetResponse(self, callback, resultsSubUrl, requestID, resultID, errorStr, ext=None):
         if resultID != AccountCommands.RES_STREAM:
             self.__waiting = False
             if callback is not None:
@@ -126,10 +124,7 @@ def load(uniqueFolderName, arenaUniqueID):
 
     if fileHandler is not None:
         fileHandler.close()
-    if version == BATTLE_RESULTS_VERSION:
-        return battleResults
-    else:
-        return
+    return battleResults if version == BATTLE_RESULTS_VERSION else None
 
 
 def getFolderName(uniqueFolderName, arenaUniqueID):

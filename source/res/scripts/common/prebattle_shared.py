@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/prebattle_shared.py
 import nations
 from items import vehicles, ITEM_TYPES
@@ -24,7 +24,7 @@ def isVehicleValid(vehDescr, vehAmmo, limits):
             classMinLevel, classMaxLevel = classLevelLimits[classTag]
             if not classMinLevel <= vehDescr.level <= classMaxLevel:
                 return (False, 'limits/classLevel')
-        elif not minLevel <= vehDescr.level <= maxLevel:
+        if not minLevel <= vehDescr.level <= maxLevel:
             return (False, 'limits/level')
 
     classesLimits = limits['classes']
@@ -143,9 +143,7 @@ class PrebattleSettings(object):
         self.__settings = settings
 
     def __getitem__(self, key):
-        if key in self.__settings:
-            return self.__settings[key]
-        return SETTING_DEFAULTS[key]
+        return self.__settings[key] if key in self.__settings else SETTING_DEFAULTS[key]
 
     def __setitem__(self, key, value):
         self.__settings[key] = value
@@ -163,9 +161,7 @@ class TeamLimits(object):
     def __getitem__(self, key):
         if key in self.__limits[self.__team]:
             return self.__limits[self.__team][key]
-        if key in self.__limits.get(0, {}):
-            return self.__limits[0][key]
-        return LIMIT_DEFAULTS[key]
+        return self.__limits[0][key] if key in self.__limits.get(0, {}) else LIMIT_DEFAULTS[key]
 
 
 SETTING_DEFAULTS = {'ver': 1,
@@ -187,6 +183,7 @@ SETTING_DEFAULTS = {'ver': 1,
  'creatorClanAbbrev': '',
  'creatorIGRType': IGR_TYPE.NONE,
  'creatorDBID': 0,
+ 'creatorAttrs': 0,
  'isOpened': False,
  'battlesLimit': 0,
  'winsLimit': 0,

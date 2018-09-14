@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR
@@ -55,7 +55,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
     def update(self):
         self._update()
 
-    def _update(self, modulesData = None, shellsData = None):
+    def _update(self, modulesData=None, shellsData=None):
         if g_currentVehicle.isPresent():
             self.as_setModulesEnabledS(True)
             self.__updateAmmo(shellsData)
@@ -118,22 +118,20 @@ class AmmunitionPanel(AmmunitionPanelMeta):
                             md['slotIndex'] = i
                             dataProvider[i].append(md)
 
-                    else:
-                        if isFit:
-                            reason = self._getInstallReason(module, vehicle, reason)
-                        moduleData['icon'] = module.level
-                        moduleData['removable'] = True
-                        moduleData['isSelected'] = moduleData.get('target') == 1
-                        moduleData['status'] = self.__getStatus(reason)
-                        moduleData['disabled'] = not isFit or reason == 'unlock_error'
-                        dataProvider.append(moduleData)
+                    if isFit:
+                        reason = self._getInstallReason(module, vehicle, reason)
+                    moduleData['icon'] = module.level
+                    moduleData['removable'] = True
+                    moduleData['isSelected'] = moduleData.get('target') == 1
+                    moduleData['status'] = self.__getStatus(reason)
+                    moduleData['disabled'] = not isFit or reason == 'unlock_error'
+                    dataProvider.append(moduleData)
 
                 if slotType in AmmunitionPanel.__ARTEFACTS_SLOTS:
                     for i in xrange(3):
                         self.__addDevice(devices, dataProvider[i], slotType, i)
 
-                else:
-                    self.__addDevice(devices, dataProvider, slotType)
+                self.__addDevice(devices, dataProvider, slotType)
 
             self.as_setDataS(devices)
             statusId, msg, msgLvl = g_currentVehicle.getHangarMessage()
@@ -154,7 +152,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
              'isBackground': isBackground})
         return
 
-    def __addDevice(self, seq, dp, slotType, slotIndex = 0):
+    def __addDevice(self, seq, dp, slotType, slotIndex=0):
         device = {'slotType': slotType,
          'slotIndex': slotIndex,
          'selectedIndex': self.__getSelectedItemIndex(dp),
@@ -183,14 +181,14 @@ class AmmunitionPanel(AmmunitionPanelMeta):
             if item['isSelected']:
                 return idx
 
-    def _getInstallReason(self, module, vehicle, reason, slotIdx = None):
+    def _getInstallReason(self, module, vehicle, reason, slotIdx=None):
         _, installReason = module.mayInstall(vehicle, slotIdx)
         if reason == 'credit_error':
             return installReason or reason
         else:
             return installReason
 
-    def __updateAmmo(self, shellsData = None):
+    def __updateAmmo(self, shellsData=None):
         shells = []
         stateWarning = False
         if g_currentVehicle.isPresent():
@@ -204,7 +202,6 @@ class AmmunitionPanel(AmmunitionPanelMeta):
                  'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
                  'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
                  'count': count,
-                 'historicalBattleID': -1,
                  'tooltip': '',
                  'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_SHELL})
 
@@ -239,10 +236,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
         ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_MODULE, invID, newId, slotIdx, oldId, isRemove)
 
     def __getStatus(self, reason):
-        if reason is not None:
-            return '#menu:moduleFits/' + reason.replace(' ', '_')
-        else:
-            return ''
+        return '#menu:moduleFits/' + reason.replace(' ', '_') if reason is not None else ''
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()

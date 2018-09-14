@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/__init__.py
 from AimerAchievement import AimerAchievement
 from ArmorPiercerAchievement import ArmorPiercerAchievement
@@ -63,3 +63,4 @@ from ReadyForBattleALLAchievement import ReadyForBattleALLAchievement
 from Achieved import Achieved
 from StormLordAchievement import StormLordAchievement
 from WinnerLaurelsAchievement import WinnerLaurelsAchievement
+from SauronsEyeAchievement import SauronsEyeAchievement

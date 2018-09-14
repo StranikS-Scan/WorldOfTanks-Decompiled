@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/formatters.py
 import BigWorld
 from helpers.i18n import makeString, doesTextExist
@@ -120,11 +120,10 @@ def getRequestErrorMsg(result, ctx):
     else:
         errorMsg = result.errStr
     key = ERROR_SYS_MSG_TPL % errorMsg
-    if doesTextExist(key):
-        return makeString(key)
+    return makeString(key) if doesTextExist(key) else ''
 
 
-def getAppSentSysMsg(club = None):
+def getAppSentSysMsg(club=None):
     if club is not None:
         clubName = club.getUserName()
     else:
@@ -132,7 +131,7 @@ def getAppSentSysMsg(club = None):
     return _sysMsg('clubs/request/success/application/sent', clubName=clubName)
 
 
-def getAppRevokeSysMsg(club = None):
+def getAppRevokeSysMsg(club=None):
     if club is not None:
         clubName = club.getUserName()
     else:
@@ -168,7 +167,7 @@ def getCreateClubSysMsg():
     return _sysMsg('clubs/request/success/createClub')
 
 
-def getLeaveClubSysMsg(club = None):
+def getLeaveClubSysMsg(club=None):
     if club is not None:
         clubName = club.getUserName()
     else:
@@ -176,7 +175,7 @@ def getLeaveClubSysMsg(club = None):
     return _sysMsg('clubs/request/success/leaveClub', clubName=clubName)
 
 
-def getDestroyClubSysMsg(club = None):
+def getDestroyClubSysMsg(club=None):
     if club is not None:
         clubName = club.getUserName()
     else:
@@ -197,7 +196,7 @@ def getInviteRevokeSysMsg():
 
 class InvitesSysMsgFormatter(object):
 
-    def __init__(self, accountsIDs, response, usersCache = None):
+    def __init__(self, accountsIDs, response, usersCache=None):
         self._successNames = []
         self._errorNames = []
         self._accountsIDs = accountsIDs
@@ -215,8 +214,7 @@ class InvitesSysMsgFormatter(object):
                 continue
             if dbID not in errors:
                 self._successNames.append(user.getFullName(dbID))
-            else:
-                self._errorNames.append(user.getFullName(dbID))
+            self._errorNames.append(user.getFullName(dbID))
 
         return
 
@@ -230,8 +228,7 @@ class InvitesSysMsgFormatter(object):
             return _sysMsg('clubs/request/success/invite/sent')
 
     def getErrorSysMsg(self):
-        if self._errorNames:
-            return _sysMsg('clubs/request/success/invites/sent/names/error', names=', '.join(self._errorNames))
+        return _sysMsg('clubs/request/success/invites/sent/names/error', names=', '.join(self._errorNames)) if self._errorNames else None
 
 
 def _sysMsg(i18nKey, *args, **kwargs):

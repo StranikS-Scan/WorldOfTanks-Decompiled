@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/DecalMap.py
 import BigWorld
 import ResMgr
@@ -22,8 +22,7 @@ class DecalMap:
                 index = BigWorld.wg_decalTextureIndex(tex[1])
                 if index == -1:
                     LOG_ERROR("texture '%s' is not exist or to more textures added to the texture atlas.Max textures count is 16." % tex[1])
-                else:
-                    self.__texMap[tex[0]] = index
+                self.__texMap[tex[0]] = index
 
         except Exception:
             LOG_CURRENT_EXCEPTION()

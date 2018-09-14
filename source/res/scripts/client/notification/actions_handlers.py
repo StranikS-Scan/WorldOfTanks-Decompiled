@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/actions_handlers.py
 from collections import defaultdict
 import BigWorld
@@ -7,9 +7,10 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages, game_control
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
+from gui.awards.event_dispatcher import showClanJoinAward
 from gui.clans import contexts as clan_ctxs
 from gui.clans.clan_controller import g_clanCtrl
-from gui.clans.settings import showAcceptClanInviteDialog
+from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.clubs import contexts as club_ctx, events_dispatcher as club_events
 from gui.clubs.club_helpers import ClubListener
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -225,9 +226,13 @@ class _AcceptClanInviteHandler(_ClanInviteHandler):
     def handleAction(self, model, entityID, action):
         super(_AcceptClanInviteHandler, self).handleAction(model, entityID, action)
         entity = model.getNotification(self.getNotType(), entityID).getEntity()
-        result = yield showAcceptClanInviteDialog(entity.getClanName(), entity.getClanTag())
+        clanName = entity.getClanName()
+        clanTag = entity.getClanTag()
+        result = yield showAcceptClanInviteDialog(clanName, clanTag)
         if result:
-            yield g_clanCtrl.sendRequest(clan_ctxs.AcceptInviteCtx(self._getInviteID(model, entityID)), allowDelay=True)
+            reqResult = yield g_clanCtrl.sendRequest(clan_ctxs.AcceptInviteCtx(self._getInviteID(model, entityID)), allowDelay=True)
+            if reqResult.isSuccess():
+                showClanJoinAward(clanName, clanTag, entity.getClanId())
 
 
 class _DeclineClanInviteHandler(_ClanInviteHandler):
@@ -569,8 +574,7 @@ class ShowClubInviteHandler(_ActionHandler, ClubListener):
     def handleAction(self, model, entityID, action):
         super(ShowClubInviteHandler, self).handleAction(model, entityID, action)
         invite = self.clubsCtrl.getProfile().getInvite(entityID)
-        if invite:
-            return club_events.showClubProfile(invite.getClubDbID())
+        return club_events.showClubProfile(invite.getClubDbID()) if invite else None
 
 
 class ShowClubAppsHandler(_ActionHandler, ClubListener):
@@ -617,7 +621,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')
 
-    def __init__(self, handlers = None):
+    def __init__(self, handlers=None):
         super(NotificationsActionsHandlers, self).__init__()
         self.__single = {}
         self.__multi = defaultdict(set)
@@ -630,8 +634,7 @@ class NotificationsActionsHandlers(object):
                     self.__single[clazz.getNotType(), actions[0]] = clazz
                 else:
                     LOG_ERROR('Handler is not added to collection', clazz)
-            else:
-                self.__multi[clazz.getNotType()].add(clazz)
+            self.__multi[clazz.getNotType()].add(clazz)
 
     def handleAction(self, model, typeID, entityID, actionName):
         key = (typeID, actionName)

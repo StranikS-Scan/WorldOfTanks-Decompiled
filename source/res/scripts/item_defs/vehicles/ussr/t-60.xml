@@ -79,6 +79,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R42_T-60/T-60_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_T-60>
@@ -188,6 +189,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.769415 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R42_T-60/collision/Chassis.model	</collisionModel>
@@ -309,6 +312,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.769415 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R42_T-60/collision/Chassis.model	</collisionModel>
@@ -367,7 +372,7 @@
       <guns>
         <_12.7mm_DSHK>	shared	  <maxAmmo>	1000	</maxAmmo>
           <unlocks>
-            <gun>	_23mm_PT-23TB	  <cost>	30	</cost>
+            <gun>	_20mm_TNSH	  <cost>	35	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -408,50 +413,6 @@
             <collisionModel>	vehicles/russian/R42_T-60/collision/Gun_11.model	</collisionModel>
           </hitTester>
         </_12.7mm_DSHK>
-        <_23mm_PT-23TB>	shared	  <maxAmmo>	630	</maxAmmo>
-          <unlocks>
-            <gun>	_20mm_TNSH	  <cost>	35	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <gun>	10	</gun>
-          </armor>
-          <reloadTime>	3.6	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	1.4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 7 1 7	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/russian/R42_T-60/normal/lod0/Gun_13.model	</undamaged>
-            <destroyed>	vehicles/russian/R42_T-60/crash/lod0/Gun_13.model	</destroyed>
-            <exploded>	vehicles/russian/R42_T-60/crash/lod0/Gun_13.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/russian/R42_T-60/collision/Gun_13.model	</collisionModel>
-          </hitTester>
-        </_23mm_PT-23TB>
         <_20mm_TNSH>	shared	  <maxAmmo>	740	</maxAmmo>
           <armor>
             <armor_1>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -523,6 +484,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.374 0.391 0.589 0.433 0.356 0.500 0.404 0.500 0.289 0.640 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_T-60>
     <Turret_2_T-60>
@@ -605,48 +567,6 @@
             <tiling>	1.54 1.54 0.000000 0.000000	</tiling>
           </camouflage>
         </_12.7mm_DSHK>
-        <_23mm_PT-23TB>	shared	  <maxAmmo>	630	</maxAmmo>
-          <armor>
-            <armor_1>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <gun>	10	</gun>
-          </armor>
-          <reloadTime>	3.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	1.4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 7 1 7	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/russian/R42_T-60/normal/lod0/Gun_14.model	</undamaged>
-            <destroyed>	vehicles/russian/R42_T-60/crash/lod0/Gun_14.model	</destroyed>
-            <exploded>	vehicles/russian/R42_T-60/crash/lod0/Gun_14.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/russian/R42_T-60/collision/Gun_14.model	</collisionModel>
-          </hitTester>
-          <camouflage>
-            <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_23mm_PT-23TB>
         <_20mm_TNSH>	shared	  <maxAmmo>	740	</maxAmmo>
           <armor>
             <armor_1>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -765,6 +685,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.982 0.000 1.018 0.000 0.378 0.404 0.612 0.427 0.427 0.500 0.351 0.500 0.241 0.729 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_2_T-60>
   </turrets0>
@@ -780,11 +701,6 @@
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <_71-TK-1>	shared	  <unlocks>
-        <radio>	_71-TK-3	  <cost>	95	</cost>
-        </radio>
-      </unlocks>
-    </_71-TK-1>
     <_71-TK-3>	shared	</_71-TK-3>
   </radios>
   <effects>

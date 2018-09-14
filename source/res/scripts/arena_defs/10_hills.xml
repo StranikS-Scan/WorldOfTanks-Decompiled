@@ -136,12 +136,16 @@
           <position1>	-236.649109 329.674500	</position1>
         </team2>
       </teamBasePositions>
-      <battleScenario>
-        <level>	1	  <scenario>	spaces/10_hills/bot_scenarios_1_lv1.xml	</scenario>
+      <battleScenarios>
+        <level>
+          <id>	1	</id>
+          <scenario>	spaces/10_hills/bot_scenarios_1_lv1.xml	</scenario>
         </level>
-        <level>	2	  <scenario>	spaces/10_hills/bot_scenarios_1_lv2.xml	</scenario>
+        <level>
+          <id>	2	</id>
+          <scenario>	spaces/10_hills/bot_scenarios_1_lv2.xml	</scenario>
         </level>
-      </battleScenario>
+      </battleScenarios>
     </sandbox>
   </gameplayTypes>
   <waypoints>	spaces/10_hills/paths.xml	</waypoints>

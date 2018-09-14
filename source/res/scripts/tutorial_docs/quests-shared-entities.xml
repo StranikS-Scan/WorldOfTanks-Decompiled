@@ -194,6 +194,30 @@
         </esc>
       </actions>
     </hint>
+    <hint>	BattleSelectorHint	  <item-id>	BattleSelectorBar	</item-id>
+      <text>	_(#tutorial:pveChain/hint/selector)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	False	</loop>
+      </arrow>
+      <actions>
+        <click>	BattleSelectorBar	  <effects>
+            <close-hint>	BattleSelectorHint	</close-hint>
+            <save-account-setting>	PveTriggerShown	</save-account-setting>
+          </effects>
+        </click>
+        <click-outside>	BattleSelectorBar	  <effects>
+            <close-hint>	BattleSelectorHint	</close-hint>
+            <save-account-setting>	PveTriggerShown	</save-account-setting>
+          </effects>
+        </click-outside>
+        <esc>	BattleSelectorBar	  <effects>
+            <close-hint>	BattleSelectorHint	</close-hint>
+            <save-account-setting>	PveTriggerShown	</save-account-setting>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
     <tutorial-setting>	ResearchHintSetting	  <setting-name>	research	</setting-name>
       <setting-value>	True	</setting-value>
     </tutorial-setting>
@@ -230,6 +254,9 @@
     <tutorial-setting>	TutorialStartSetting	  <setting-name>	wasQuestsTutorialStarted	</setting-name>
       <setting-value>	True	</setting-value>
     </tutorial-setting>
+    <tutorial-setting>	PveTriggerShown	  <setting-name>	PveTriggerShown	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
     <simple-window>	TutorialAwardWindow2	  <type>	awardWindow	</type>
       <var-ref>	Chapter2Var	</var-ref>
       <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest2)	</description>
@@ -248,7 +275,7 @@
     </simple-window>
     <simple-window>	TutorialAwardWindow6	  <type>	awardWindow	</type>
       <var-ref>	Chapter6Var	</var-ref>
-      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest6)	</description>
+      <description>	_(tutorialQuest/awardWindow/description/quest6)	</description>
     </simple-window>
     <simple-window>	TutorialAwardWindow7	  <type>	awardWindow	</type>
       <var-ref>	Chapter7Var	</var-ref>

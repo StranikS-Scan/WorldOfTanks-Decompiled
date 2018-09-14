@@ -1,13 +1,35 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/listeners.py
 import weakref
 import operator
+from collections import namedtuple
 import BigWorld
-from constants import ARENA_PERIOD
+from constants import ARENA_PERIOD, FINISH_REASON
 from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_ERROR
+from gui.battle_control.battle_constants import WinStatus
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto.events import g_messengerEvents
+
+class _PeriodAdditionalInfo(namedtuple('_PeriodAdditionalInfo', ['winStatus', 'winnerTeam', 'finishReason'])):
+
+    def getWinnerTeam(self):
+        return self.winnerTeam
+
+    def getWinStatus(self):
+        return self.winStatus
+
+    def isExtermination(self):
+        return self.finishReason == FINISH_REASON.EXTERMINATION
+
+
+def _getPeriodAdditionalInfo(arenaDP, period, additionalInfo):
+    if period == ARENA_PERIOD.AFTERBATTLE:
+        winnerTeam, finishReason = additionalInfo
+        return _PeriodAdditionalInfo(WinStatus.fromWinnerTeam(winnerTeam, arenaDP.isAllyTeam(winnerTeam)), winnerTeam, finishReason)
+    else:
+        return None
+
 
 class _Listener(object):
     __slots__ = ('_controllers', '_arena')
@@ -65,7 +87,7 @@ class ArenaVehiclesListener(_Listener):
         self.__callbackID = None
         return
 
-    def start(self, arena, arenaDP = None):
+    def start(self, arena, arenaDP=None):
         super(ArenaVehiclesListener, self).start(arena)
         if arenaDP is None:
             LOG_ERROR('Arena data provider is None')
@@ -312,22 +334,30 @@ class ArenaTeamBasesListener(_Listener):
 
 class ArenaPeriodListener(_Listener):
 
-    def start(self, arena, **kwargs):
-        super(ArenaPeriodListener, self).start(arena, **kwargs)
+    def __init__(self):
+        super(ArenaPeriodListener, self).__init__()
+        self._dataProvider = None
+        return
+
+    def start(self, arena, arenaDP=None):
+        super(ArenaPeriodListener, self).start(arena)
+        self._dataProvider = arenaDP
         arena = self._arena()
-        self._invokeListenersMethod('setPeriodInfo', arena.period, arena.periodEndTime, arena.periodLength, arena.arenaType.battleCountdownTimerSound)
+        periodAddInfo = _getPeriodAdditionalInfo(self._dataProvider, arena.period, arena.periodAdditionalInfo)
+        self._invokeListenersMethod('setPeriodInfo', arena.period, arena.periodEndTime, arena.periodLength, periodAddInfo, arena.arenaType.battleCountdownTimerSound)
         arena.onPeriodChange += self.__arena_onPeriodChange
 
     def stop(self):
         arena = super(ArenaPeriodListener, self).stop()
+        self._dataProvider = None
         if arena is None:
             return
         else:
             arena.onPeriodChange -= self.__arena_onPeriodChange
             return
 
-    def __arena_onPeriodChange(self, period, endTime, length, *args):
-        self._invokeListenersMethod('invalidatePeriodInfo', period, endTime, length)
+    def __arena_onPeriodChange(self, period, endTime, length, additionalInfo):
+        self._invokeListenersMethod('invalidatePeriodInfo', period, endTime, length, _getPeriodAdditionalInfo(self._dataProvider, period, additionalInfo))
 
 
 class ArenaRespawnListener(_Listener):

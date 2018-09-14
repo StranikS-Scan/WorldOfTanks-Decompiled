@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/tkFileDialog.py
 from tkCommonDialog import Dialog
 
@@ -37,9 +37,7 @@ class Open(_Dialog):
                 path, file = os.path.split(result[0])
                 self.options['initialdir'] = path
             return result
-        if not widget.tk.wantobjects() and 'multiple' in self.options:
-            return self._fixresult(widget, widget.tk.splitlist(result))
-        return _Dialog._fixresult(self, widget, result)
+        return self._fixresult(widget, widget.tk.splitlist(result)) if not widget.tk.wantobjects() and 'multiple' in self.options else _Dialog._fixresult(self, widget, result)
 
 
 class SaveAs(_Dialog):
@@ -83,16 +81,13 @@ def askopenfilenames(**options):
     return Open(**options).show()
 
 
-def askopenfile(mode = 'r', **options):
+def askopenfile(mode='r', **options):
     """Ask for a filename to open, and returned the opened file"""
     filename = Open(**options).show()
-    if filename:
-        return open(filename, mode)
-    else:
-        return None
+    return open(filename, mode) if filename else None
 
 
-def askopenfiles(mode = 'r', **options):
+def askopenfiles(mode='r', **options):
     """Ask for multiple filenames and return the open file
     objects
     
@@ -109,13 +104,10 @@ def askopenfiles(mode = 'r', **options):
     return files
 
 
-def asksaveasfile(mode = 'w', **options):
+def asksaveasfile(mode='w', **options):
     """Ask for a filename to save as, and returned the opened file"""
     filename = SaveAs(**options).show()
-    if filename:
-        return open(filename, mode)
-    else:
-        return None
+    return open(filename, mode) if filename else None
 
 
 def askdirectory(**options):

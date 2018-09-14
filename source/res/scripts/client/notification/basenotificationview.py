@@ -1,10 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/BaseNotificationView.py
 
 
 class BaseNotificationView(object):
 
-    def __init__(self, model = None):
+    def __init__(self, model=None):
         super(BaseNotificationView, self).__init__()
         self._model = None
         self.setModel(model)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CombatSelectedArea.py
 import BigWorld
 import Math
@@ -39,7 +39,7 @@ class CombatSelectedArea(object):
         self.__speed = Math.Vector3(0.0, 0.0, 0.0)
         self.__time = 0.0
 
-    def setSelectingDirection(self, value = False):
+    def setSelectingDirection(self, value=False):
         if value and self.__terrainRotatedArea is None:
             objectSize = Math.Vector2(10.0, 10.0)
             self.__rotateModelNode = self.__fakeModel.node('', mathUtils.createRTMatrix(Math.Vector3(-self.__matrix.yaw, 0.0, 0.0), Math.Vector3((-self.__size.x - objectSize.x) * 0.5, 0.0, (self.__size.y + objectSize.y) * 0.5)))

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/CustomizationInterface.py
 import Event
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
@@ -12,7 +12,7 @@ class CustomizationInterface(BaseDAAPIModule):
     onCustomizationDropFailed = Event.Event(_eventManager)
     onCurrentItemChange = Event.Event(_eventManager)
 
-    def __init__(self, name, nationId, type, position = -1):
+    def __init__(self, name, nationId, type, position=-1):
         super(CustomizationInterface, self).__init__()
         self._name = name
         self._position = position
@@ -24,7 +24,7 @@ class CustomizationInterface(BaseDAAPIModule):
     def fetchCurrentItem(self, vehDescr):
         pass
 
-    def invalidateData(self, vehType, refresh = False):
+    def invalidateData(self, vehType, refresh=False):
         pass
 
     def isNewItemSelected(self):

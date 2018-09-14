@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationsCollection.py
 from debug_utils import LOG_ERROR, LOG_WARNING
 from notification.decorators import SearchCriteria, _NotificationDecorator
@@ -94,7 +94,7 @@ class NotificationsCollection(object):
             LOG_ERROR('Type of notification not found', typeID)
         return result
 
-    def getListIterator(self, typesRange = None):
+    def getListIterator(self, typesRange=None):
         notifications = []
         typesRange = typesRange or NOTIFICATION_TYPE.RANGE
         for typeID in typesRange:

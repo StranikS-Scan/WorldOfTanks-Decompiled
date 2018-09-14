@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Actors/PPChain.py
 import BigWorld
 import PostProcessing
@@ -11,7 +11,7 @@ class PPChain(Actor):
     This class implements an Actor that is a Post Processing Chain.
     """
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """
         This method loads a .ppchain file. You may also specify additional
         properties to set on the chain.

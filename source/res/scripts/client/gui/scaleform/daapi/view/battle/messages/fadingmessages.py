@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/messages/FadingMessages.py
 from account_helpers.settings_core import g_settingsCore
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
@@ -29,7 +29,7 @@ class FadingMessages(object):
     def clear(self):
         self.__callFlash('Clear')
 
-    def showMessage(self, key, args = None, extra = None, postfix = ''):
+    def showMessage(self, key, args=None, extra=None, postfix=''):
         if postfix:
             extKey = '{0}_{1}'.format(key, postfix)
             if extKey in self.__messages:
@@ -50,7 +50,7 @@ class FadingMessages(object):
         LOG_DEBUG('%s: show message with key = %s' % (self.__name, key))
         self.__callFlash('ShowMessage', [key, msgText, color])
 
-    def __formatEntitiesEx(self, args, extra = None):
+    def __formatEntitiesEx(self, args, extra=None):
         if extra is None:
             extra = ()
         manager = self.__ui.colorManager
@@ -69,7 +69,7 @@ class FadingMessages(object):
 
         return
 
-    def __doShowMessage(self, key, args = None, extra = None):
+    def __doShowMessage(self, key, args=None, extra=None):
         msgText, colors = self.__messages[key]
         if args is not None:
             self.__formatEntitiesEx(args, extra=extra)
@@ -97,5 +97,5 @@ class FadingMessages(object):
         self.__ui.respond(args)
         self._addGameListeners()
 
-    def __callFlash(self, funcName, args = None):
+    def __callFlash(self, funcName, args=None):
         self.__ui.call(self.__pathPrefix % funcName, args)

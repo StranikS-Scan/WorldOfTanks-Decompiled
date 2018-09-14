@@ -1,0 +1,22 @@
+<generalspacedata.def>
+  <Implements>
+    <Interface>	SpaceRecording	</Interface>
+  </Implements>
+  <Properties>
+    <isRecording>
+      <Type>	STRING	</Type>
+    </isRecording>
+    <geometryLoaded>
+      <Type>	BOOL	</Type>
+      <Default>	0	</Default>
+    </geometryLoaded>
+    <weather>
+      <Type>	STRING	</Type>
+      <Exposed></Exposed>
+    </weather>
+    <itemsVisibilityMask>
+      <Type>	UINT32	</Type>
+      <Exposed></Exposed>
+    </itemsVisibilityMask>
+  </Properties>
+</generalspacedata.def>

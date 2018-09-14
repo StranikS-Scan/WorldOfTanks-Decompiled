@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/BWLogging.py
 import encodings
 import json
@@ -13,7 +13,7 @@ class BWLogger(logging.Logger):
     NOTICE = logging.INFO + 1
     HACK = logging.CRITICAL + 1
 
-    def __init__(self, name, level = logging.NOTSET):
+    def __init__(self, name, level=logging.NOTSET):
         logging.Logger.__init__(self, name, level)
 
     def trace(self, msg, *args, **kw):

@@ -1,7 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/XmppServerSettings.py
 import types
 from debug_utils import LOG_ERROR
+from gui import GUI_SETTINGS
 from gui.shared.utils import getPlayerDatabaseID
 from messenger.proto.interfaces import IProtoSettings
 from messenger.proto.xmpp.gloox_constants import CONNECTION_IMPL_TYPE
@@ -24,7 +25,7 @@ def _validateConnection(record):
         host, port = record
         if not host:
             result = False
-        if type(port) is not types.IntType:
+        if not isinstance(port, types.IntType):
             result = False
     else:
         result = False
@@ -33,7 +34,7 @@ def _validateConnection(record):
 
 class ConnectionsIterator(object):
 
-    def __init__(self, base = None, alt = None, bosh = None):
+    def __init__(self, base=None, alt=None, bosh=None):
         super(ConnectionsIterator, self).__init__()
         self.__tcp = _makeSample(base or [], alt or [])
         self.__bosh = _makeSample(bosh or [])
@@ -64,14 +65,14 @@ class ConnectionsIterator(object):
 
 
 class XmppServerSettings(IProtoSettings):
-    __slots__ = ('enabled', 'connections', 'domain', 'port', 'resource', 'altConnections', 'boshConnections')
+    __slots__ = ('enabled', 'connections', 'domain', 'port', 'resource', 'altConnections', 'boshConnections', 'userRoomsService')
 
     def __init__(self):
         super(XmppServerSettings, self).__init__()
         self.clear()
 
     def __repr__(self):
-        return 'XmppServerSettings(enabled = {0!r:s}, connections = {1!r:s}, altConnections = {2!r:s}, boshConnections = {3!r:s}, domain = {4:>s}, port = {5:n}, resource = {6:>s})'.format(self.enabled, self.connections, self.altConnections, self.boshConnections, self.domain, self.port, self.resource)
+        return 'XmppServerSettings(enabled = {0!r:s}, connections = {1!r:s}, altConnections = {2!r:s}, boshConnections = {3!r:s}, domain = {4:>s}, port = {5:n}, resource = {6:>s}, userRoomsService = {7:>s})'.format(self.enabled, self.connections, self.altConnections, self.boshConnections, self.domain, self.port, self.resource, self.userRoomsService)
 
     def update(self, data):
         if 'xmpp_connections' in data:
@@ -105,6 +106,7 @@ class XmppServerSettings(IProtoSettings):
                 self.enabled = False
         else:
             self.enabled = False
+        self.userRoomsService = GUI_SETTINGS.userRoomsService
 
     def clear(self):
         self.enabled = False
@@ -112,6 +114,7 @@ class XmppServerSettings(IProtoSettings):
         self.altConnections = []
         self.boshConnections = []
         self.domain = None
+        self.userRoomsService = ''
         self.port = -1
         self.resource = ''
         return
@@ -119,7 +122,7 @@ class XmppServerSettings(IProtoSettings):
     def isEnabled(self):
         return self.enabled
 
-    def getFullJID(self, databaseID = None):
+    def getFullJID(self, databaseID=None):
         if databaseID is None:
             databaseID = getPlayerDatabaseID()
         assert databaseID, "Player's databaseID can not be empty"
@@ -134,3 +137,11 @@ class XmppServerSettings(IProtoSettings):
         if not iterator.hasNext():
             iterator = ConnectionsIterator([(self.domain, self.port)])
         return iterator
+
+    def isMucServiceAllowed(self, service=''):
+        if not self.enabled:
+            return False
+        elif service:
+            return service in (self.userRoomsService,)
+        else:
+            return len(self.userRoomsService) > 0

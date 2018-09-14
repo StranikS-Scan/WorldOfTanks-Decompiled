@@ -1,7 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SoundGroups.py
 import BigWorld
-import FMOD
+import WWISE
 import Event
 import Settings
 import ResMgr
@@ -11,11 +11,19 @@ from helpers import i18n
 import PlayerEvents
 import traceback
 from ReplayEvents import g_replayEvents
-from functools import partial
+ENABLE_LS = True
+ENABLE_ENGINE_N_TRACKS = True
+DEBUG_TRACE_SOUND = False
+DEBUG_TRACE_STACK = False
+DEBUG_TRACE_EFFECTLIST = False
 g_instance = None
 DSP_LOWPASS_LOW = 7000
 DSP_LOWPASS_HI = 20000
 DSP_SEEKSPEED = 200000
+SOUND_ENABLE_STATUS_DEFAULT = 0
+SOUND_ENABLE_STATUS_VALUES = range(3)
+LQ_RENDER_STATE_DEFAULT = 0
+LQ_RENDER_STATE_VALUES = range(3)
 
 class SoundModes():
     __MODES_FOLDER = 'gui/soundModes/'
@@ -28,12 +36,12 @@ class SoundModes():
 
         def __init__(self, dataSection):
             self.name = dataSection.readString('name', 'default')
-            if FMOD.enabled:
-                self.voiceLanguage = dataSection.readString('fmod_language', 'default')
+            self.voiceLanguage = dataSection.readString('wwise_language', '')
             descriptionLink = dataSection.readString('description', '')
             self.description = i18n.makeString(descriptionLink)
             self.invisible = dataSection.readBool('invisible', False)
             self.banksToBeLoaded = []
+            self.wwbanksToBeLoaded = []
             self.__isValid = None
             banksSec = dataSection['banks']
             if banksSec is not None:
@@ -41,6 +49,13 @@ class SoundModes():
                     bankName = bank.asString
                     manualPath = bank.readString('filePath', '')
                     self.banksToBeLoaded.append((bankName, manualPath))
+
+            wwbanksSec = dataSection['wwbanks']
+            if wwbanksSec is not None:
+                for bank in wwbanksSec.values():
+                    bankName = bank.asString
+                    manualPath = bank.readString('filePath', '')
+                    self.wwbanksToBeLoaded.append((bankName, manualPath))
 
             return
 
@@ -50,26 +65,15 @@ class SoundModes():
             return self.__isValid
 
         def loadBanksManually(self):
-            if not FMOD.enabled:
-                return True
-            for bankName, bankPath in self.banksToBeLoaded:
-                if bankPath != '':
-                    loadSuccessfully = FMOD.loadSoundBankIntoMemoryFromPath(bankPath)
-                    if not loadSuccessfully:
-                        return False
-
             return True
 
         def unloadBanksManually(self):
-            if FMOD.enabled:
-                for bankName, bankPath in self.banksToBeLoaded:
-                    if bankPath != '':
-                        FMOD.unloadSoundBankFromMemory(bankName)
+            pass
 
         def __validate(self, soundModes):
             prevMode = soundModes.currentMode
-            for soundBankName, soundPath in self.banksToBeLoaded:
-                pathToCheck = soundPath if soundPath else '%s/%s.fsb' % (SoundModes.MEDIA_PATH, soundBankName)
+            for soundBankName, soundPath in self.wwbanksToBeLoaded:
+                pathToCheck = soundPath if soundPath != '' else '%s/%s' % (SoundModes.MEDIA_PATH, soundBankName)
                 if not ResMgr.isFile(pathToCheck):
                     return False
 
@@ -85,8 +89,7 @@ class SoundModes():
                 return -1
             if self.name == 'default':
                 return -1
-            if other.name == 'default':
-                return 1
+            return 1 if other.name == 'default' else 1
 
     class NationalPresetDesc(object):
 
@@ -113,7 +116,7 @@ class SoundModes():
         if SoundModes.MEDIA_PATH is None:
             engineConfig = ResMgr.openSection('engine_config.xml')
             if engineConfig is not None:
-                SoundModes.MEDIA_PATH = engineConfig.readString('soundMgr/mediaPath', 'audio')
+                SoundModes.MEDIA_PATH = engineConfig.readString('soundMgr/wwmediaPath', 'wwaudio')
             else:
                 SoundModes.MEDIA_PATH = 'audio'
         self.__modes = {}
@@ -146,14 +149,12 @@ class SoundModes():
                         for mode in soundModes:
                             if self.__modes.has_key(mode.name):
                                 LOG_WARNING("%s config tries to redefine soundMode '%s', ignored" % (modesConfigSection.name, mode.name))
-                            else:
-                                self.__modes[mode.name] = mode
+                            self.__modes[mode.name] = mode
 
                         for preset in nationalPresets:
                             if self.__nationalPresets.has_key(preset.name):
                                 LOG_WARNING("%s config tries to redefine nationalPreset '%s', ignored" % (preset.name, preset.name))
-                            else:
-                                self.__nationalPresets[preset.name] = preset
+                            self.__nationalPresets[preset.name] = preset
 
             self.setMode(initialModeName)
             return
@@ -176,8 +177,7 @@ class SoundModes():
                 for nationName, soundMode in overridePreset.mapping.iteritems():
                     nationalPresetToOverride.mapping[nationName] = soundMode
 
-            else:
-                LOG_WARNING("Failed to override nationalPreset '%s'" % overridePreset.name)
+            LOG_WARNING("Failed to override nationalPreset '%s'" % overridePreset.name)
 
         return (soundModes, nationalPresets)
 
@@ -198,8 +198,7 @@ class SoundModes():
             if SoundModes.DEFAULT_MODE_NAME in self.__modes:
                 defaultVoiceLanguage = self.__modes[SoundModes.DEFAULT_MODE_NAME].voiceLanguage
             try:
-                if FMOD.enabled:
-                    FMOD.setLanguage(defaultVoiceLanguage, self.modifiedSoundGroups)
+                WWISE.setLanguage(defaultVoiceLanguage)
                 self.__modes[SoundModes.DEFAULT_MODE_NAME].loadBanksManually()
             except:
                 LOG_CURRENT_EXCEPTION()
@@ -211,33 +210,21 @@ class SoundModes():
         if modeName not in self.__modes:
             LOG_DEBUG('Sound mode %s does not exist' % modeName)
             return False
-        if self.__currentMode == modeName:
+        elif self.__currentMode == modeName:
             return True
-        self.__modes[self.__currentMode].unloadBanksManually()
+        if self.__currentMode is not None:
+            self.__modes[self.__currentMode].unloadBanksManually()
         self.__currentMode = modeName
         modeDesc = self.__modes[modeName]
-        if FMOD.enabled:
-            languageSet = FMOD.setLanguage(modeDesc.voiceLanguage, self.modifiedSoundGroups)
+        languageSet = WWISE.setLanguage(modeDesc.voiceLanguage)
         if not languageSet:
-            LOG_WARNING('Sound: Internal FMOD error in FMOD::setLanguage')
+            LOG_WARNING('Sound: Internal error in WWISE::setLanguage')
             return False
-        if not self.__modes[self.__currentMode].loadBanksManually():
+        elif not self.__modes[self.__currentMode].loadBanksManually():
             LOG_WARNING('Sound: Error while manual banks loading')
             return False
-        if FMOD.enabled:
-            loadedSoundBanks = FMOD.getSoundBanks()
-            for bankName, bankPath in modeDesc.banksToBeLoaded:
-                found = False
-                for loadedBank in loadedSoundBanks:
-                    if bankName == loadedBank:
-                        found = True
-                        break
-
-                if not found:
-                    LOG_WARNING('Sound: Bank %s was not loaded while loading %s sound mode' % (bankName, modeName))
-                    return False
-
-        return True
+        else:
+            return True
 
     def setCurrentNation(self, nation):
         arena = getattr(BigWorld.player(), 'arena', None)
@@ -296,23 +283,23 @@ class SoundGroups(object):
     onMusicVolumeChanged = Event.Event()
 
     def __init__(self):
+        self.__enableStatus = SOUND_ENABLE_STATUS_DEFAULT
         self.__volumeByCategory = {}
         self.__masterVolume = 1.0
+        self.__lqRenderState = LQ_RENDER_STATE_DEFAULT
         self.__replace = {}
         self.__isWindowVisible = BigWorld.isWindowVisible()
         self.__handleInside = None
         self.__handleOutside = None
-        self.__ceilLess = None
         self.__activeStinger = None
         self.__activeTrack = None
         self.__activeStingerPriority = None
         self.__muffled = False
         self.__muffledByReplay = False
         PlayerEvents.g_playerEvents.onAvatarReady += self.onAvatarReady
-        self.__categories = {'voice': ('ingame_voice',),
-         'vehicles': ('outside/vehicles', 'vehicles', 'inside/vehicles'),
-         'effects': ('hits', 'outside/hits', 'inside/hits', 'weapons', 'inside/weapons', 'outside/weapons', 'environment', 'inside/environment', 'outside/environment', 'battle_gui'),
-         'gui': ('gui',),
+        self.__categories = {'vehicles': ('outside/vehicles', 'vehicles'),
+         'effects': ('hits', 'outside/hits', 'inside/weapons', 'outside/weapons', 'outside/environment', 'battle_gui'),
+         'gui': ('gui', 'ingame_voice'),
          'music': ('music',),
          'ambient': ('outside/ambient', 'hangar_v2', 'ambientUR'),
          'masterVivox': (),
@@ -335,6 +322,8 @@ class SoundGroups(object):
             self.savePreferences()
         else:
             ds = userPrefs[Settings.KEY_SOUND_PREFERENCES]
+            self.__enableStatus = ds.readInt('enable', SOUND_ENABLE_STATUS_DEFAULT)
+            self.__lqRenderState = ds.readInt('LQ_render', LQ_RENDER_STATE_DEFAULT)
             self.__masterVolume = ds.readFloat('masterVolume', defMasterVolume)
             for categoryName in self.__categories.keys():
                 volume = ds.readFloat('volume_' + categoryName, defCategoryVolumes.get(categoryName, 1.0))
@@ -363,23 +352,26 @@ class SoundGroups(object):
             self.__soundModes.setNationalMappingByMode(soundModeName)
         self.applyPreferences()
         self.__muteCallbackID = BigWorld.callback(0.25, self.__muteByWindowVisibility)
-        self.defaultGroupList = []
-        settings = ResMgr.openSection('scripts/arena_defs/_default_.xml/preloadSoundGroups')
+        self.defaultGroupList = ''
+        settings = ResMgr.openSection('scripts/arena_defs/_default_.xml/preloadSoundBanks')
         if settings is not None:
-            self.defaultGroupList = settings.readStrings('groupName')
-        if FMOD.enabled:
-            for sg in self.defaultGroupList:
-                result = FMOD.WG_loadSoundGroup(sg)
-                if not result:
-                    LOG_NOTE('Loading failed for default sound group ', sg)
-
-            FMOD.WG_unloadAll()
+            self.defaultGroupList = settings.asString
         g_replayEvents.onMuteSound += self.__onReplayMute
         from gui.app_loader import g_appLoader
         g_appLoader.onGUISpaceChanged += self.__onGUISpaceChanged
         return
 
     def __del__(self):
+        LOG_DEBUG('Deleted: %s' % self)
+
+    def destroy(self):
+        PlayerEvents.g_playerEvents.onAvatarReady -= self.onAvatarReady
+        g_replayEvents.onMuteSound -= self.__onReplayMute
+        from gui.app_loader import g_appLoader
+        g_appLoader.onGUISpaceChanged -= self.__onGUISpaceChanged
+        player = BigWorld.player()
+        if player:
+            player.inputHandler.onCameraChanged -= self.__onCameraChanged
         self.onVolumeChanged.clear()
         if self.__muteCallbackID is not None:
             BigWorld.cancelCallback(self.__muteCallbackID)
@@ -397,8 +389,8 @@ class SoundGroups(object):
             volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
-        volume = 0.0 if not enable else self.__volumeByCategory['voice']
-        self.setVolume('voice', volume, False)
+        volume = 0.0 if not enable else self.__volumeByCategory['gui']
+        self.setVolume('gui', volume, False)
 
     def enableAmbientAndMusic(self, enable):
         for categoryName in ('ambient', 'music'):
@@ -407,24 +399,25 @@ class SoundGroups(object):
             self.setVolume(categoryName, volume, False)
 
     def enableVoiceSounds(self, enable):
-        for categoryName in ('voice',):
+        for categoryName in ('gui',):
             volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
     def __onReplayMute(self, mute):
         self.__muffledByReplay = mute
-        for categoryName in ('vehicles', 'effects', 'ambient'):
+        for categoryName in ('vehicles', 'effects', 'ambient', 'gui'):
             volume = 0.0 if mute else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
     def __onGUISpaceChanged(self, spaceID):
-        pass
+        from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
+        if spaceID == GUI_GLOBAL_SPACE_ID.LOGIN:
+            WWISE.WG_loadLogin()
 
     def setMasterVolume(self, volume):
         self.__masterVolume = volume
         self.__muffledVolume = self.__masterVolume * self.getVolume('masterFadeVivox')
-        if FMOD.enabled:
-            FMOD.setMasterVolume(self.__muffledVolume if self.__muffled else self.__masterVolume)
+        WWISE.WW_setRTCPGlobal('RTPC_ext_menu_volume_master', (self.__muffledVolume if self.__muffled else self.__masterVolume) * 100.0)
         self.savePreferences()
         self.onMusicVolumeChanged('music', self.__masterVolume, self.getVolume('music'))
         self.onMusicVolumeChanged('ambient', self.__masterVolume, self.getVolume('ambient'))
@@ -432,14 +425,24 @@ class SoundGroups(object):
     def getMasterVolume(self):
         return self.__masterVolume
 
-    def setVolume(self, categoryName, volume, updatePrefs = True):
-        if FMOD.enabled:
-            for category in self.__categories[categoryName]:
-                try:
-                    BigWorld.wg_setCategoryVolume(category, volume)
-                except Exception:
-                    LOG_CURRENT_EXCEPTION()
+    def getEnableStatus(self):
+        return self.__enableStatus
 
+    def setEnableStatus(self, status):
+        assert status in SOUND_ENABLE_STATUS_VALUES
+        self.__enableStatus = status
+        self.savePreferences()
+
+    def getLQRenderState(self):
+        return self.__lqRenderState
+
+    def setLQRenderState(self, state):
+        assert state in LQ_RENDER_STATE_VALUES
+        self.__lqRenderState = state
+        self.savePreferences()
+
+    def setVolume(self, categoryName, volume, updatePrefs=True):
+        WWISE.WW_setRTCPGlobal('RTPC_ext_menu_volume_' + self.__getWWISECategoryName(categoryName), volume * 100.0)
         if updatePrefs:
             self.__volumeByCategory[categoryName] = volume
             self.savePreferences()
@@ -456,6 +459,8 @@ class SoundGroups(object):
         for categoryName in self.__volumeByCategory.keys():
             ds.writeFloat('volume_' + categoryName, self.__volumeByCategory[categoryName])
 
+        ds.writeInt('enable', self.__enableStatus)
+        ds.writeInt('LQ_render', self.__lqRenderState)
         soundModeName = SoundModes.DEFAULT_MODE_NAME if self.__soundModes is None else self.__soundModes.currentMode
         ds.deleteSection('soundMode')
         if self.__soundModes is None:
@@ -477,8 +482,7 @@ class SoundGroups(object):
 
     def applyPreferences(self):
         if not self.__isWindowVisible:
-            if FMOD.enabled:
-                FMOD.setMasterVolume(0)
+            WWISE.WW_setRTCPGlobal('RTPC_ext_menu_volume_master', 0.0)
             return
         self.setMasterVolume(self.__masterVolume)
         for categoryName in self.__volumeByCategory.keys():
@@ -487,12 +491,12 @@ class SoundGroups(object):
                 newVolume = 0.0
             self.setVolume(categoryName, newVolume, updatePrefs=False)
 
-    def muffleFMODVolume(self):
+    def muffleVolume(self):
         if not self.__muffled:
             self.__muffled = True
             self.applyPreferences()
 
-    def restoreFMODVolume(self):
+    def restoreVolume(self):
         self.__muffled = False
         self.applyPreferences()
 
@@ -504,33 +508,42 @@ class SoundGroups(object):
         self.__muteCallbackID = BigWorld.callback(0.25, self.__muteByWindowVisibility)
 
     def onAvatarReady(self):
-        self.__ceilLess = BigWorld.player().vehicleTypeDescriptor.turret['ceilless']
+        BigWorld.player().inputHandler.onCameraChanged += self.__onCameraChanged
+        PlayerEvents.g_playerEvents.onAvatarReady -= self.onAvatarReady
+        self.changePlayMode(0)
 
-    def unloadAll(self, path = None):
-        if FMOD.enabled:
-            FMOD.WG_unloadAll()
-        import MusicController
-        MusicController.g_musicController.destroy()
-        MusicController.g_musicController.init(path)
-
-    def preloadSoundGroups(self, arenaName):
-        if not FMOD.enabled:
+    def __onCameraChanged(self, cameraName, currentVehicleId=None):
+        if cameraName != 'postmortem':
+            return
+        elif BigWorld.entity(BigWorld.player().playerVehicleID).isAlive():
+            return
+        elif currentVehicleId is None:
             return
         else:
-            self.groupList = []
-            settings = ResMgr.openSection('scripts/arena_defs/' + arenaName + '.xml/preloadSoundGroups')
-            if settings is not None:
-                self.groupList = settings.readStrings('groupName')
-            for sg in self.groupList:
-                result = FMOD.WG_loadSoundGroup(sg)
-                if not result:
-                    LOG_NOTE('Loading failed for arena sound group ', sg)
-
+            self.changePlayMode(0)
             return
+
+    def unloadAll(self):
+        import MusicController
+        MusicController.g_musicController.destroy()
+
+    def preloadSoundGroups(self, arenaName):
+        settings = ResMgr.openSection('scripts/arena_defs/' + arenaName + '.xml/preloadSoundBanks')
+        banks = ''
+        if settings is not None:
+            banks = settings.asString
+        from Account import PlayerAccount
+        isHangar = isinstance(BigWorld.player(), PlayerAccount)
+        if isHangar:
+            WWISE.WG_loadBanks(self.defaultGroupList + ';' + banks, True)
+        else:
+            WWISE.WG_loadBanks(banks, False)
+        import MusicController
+        MusicController.g_musicController.init(arenaName)
+        return
 
     def checkAndReplace(self, event):
         if event == '':
-            print 'SoundGroups.py: asked to play event with empty name'
             traceback.print_stack()
             return ''
         elif event in self.__replace:
@@ -539,36 +552,79 @@ class SoundGroups(object):
             return event
 
     def getSound3D(self, node, event):
-        if FMOD.enabled:
-            return FMOD.getSound3D(self.checkAndReplace(event), node)
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: getSound3D', event, node)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        return self.WWgetSound(self.checkAndReplace(event), event + ' : ' + str(node), node)
 
     def playSound3D(self, node, event):
-        if FMOD.enabled:
-            s = FMOD.getSound3D(self.checkAndReplace(event), node)
-            if s is not None:
-                s.play()
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: playSound3D', event, node)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        s = self.WWgetSound(self.checkAndReplace(event), event + ' : ' + str(node), node)
+        if s is not None:
+            s.play()
         return
 
     def getSound2D(self, event):
-        if FMOD.enabled:
-            return FMOD.getSound(self.checkAndReplace(event))
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: getSound2D', event)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        return self.WWgetSound(self.checkAndReplace(event), None, None)
 
     def playSound2D(self, event):
-        if FMOD.enabled:
-            return FMOD.playSound(self.checkAndReplace(event))
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: playSound2D', event)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        return WWISE.WW_eventGlobal(self.checkAndReplace(event))
 
     def playSoundPos(self, event, pos):
-        if FMOD.enabled:
-            raise Exception('Tried to use WWISE function from FMOD release')
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: playSoundPos', event, pos)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        return WWISE.WW_eventGlobalPos(self.checkAndReplace(event), pos)
 
-    def WWgetSound(self, eventName, objectName, matrix, local = (0.0, 0.0, 0.0)):
-        pass
+    def WWgetSoundObject(self, objectName, matrix, local=(0.0, 0.0, 0.0)):
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: WWgetSoundObject', objectName, matrix, local)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        return WWISE.WW_getSoundObject(self.checkAndReplace(objectName), matrix, local)
+
+    def WWgetSound(self, eventName, objectName, matrix, local=(0.0, 0.0, 0.0)):
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: WWgetSound', eventName, objectName, matrix, local)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        return WWISE.WW_getSound(self.checkAndReplace(eventName), self.checkAndReplace(objectName), matrix, local)
 
     def WWgetSoundCallback(self, eventName, objectName, matrix, callback):
-        pass
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: WWgetSoundCallback', eventName, objectName, matrix, callback)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        return WWISE.WW_getSoundCallback(self.checkAndReplace(eventName), self.checkAndReplace(objectName), matrix, callback)
 
     def WWgetSoundPos(self, eventName, objectName, position):
-        pass
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: WWgetSoundPos', eventName, objectName, position)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        return WWISE.WW_getSoundPos(self.checkAndReplace(eventName), self.checkAndReplace(objectName), position)
 
     def loadRemapping(self, arenaDescr):
         self.__replace = {}
@@ -580,22 +636,30 @@ class SoundGroups(object):
             self.__replace[s1] = s2
 
     def changePlayMode(self, mode):
-        if FMOD.enabled:
-            FMOD.setEventsParam('viewPlayMode', mode)
-        if FMOD.enabled:
-            if self.__handleInside == None:
-                self.__handleInside = FMOD.DSPgetHandleByNameAndCategory('FMOD Lowpass Simple', 'inside')
-            if self.__handleOutside == None:
-                self.__handleOutside = FMOD.DSPgetHandleByNameAndCategory('FMOD Lowpass Simple', 'outside')
-            if self.__ceilLess == True:
-                FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
-                FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
-            elif mode == 1:
-                FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
-                FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_LOW, -DSP_SEEKSPEED)
+        if BigWorld.player().getVehicleAttached() is not None:
+            __ceilLess = BigWorld.player().getVehicleAttached().typeDescriptor.turret['ceilless']
+        else:
+            __ceilLess = BigWorld.player().vehicleTypeDescriptor.turret['ceilless']
+        if mode == 0:
+            WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 1)
+            if __ceilLess is True:
+                WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewplaymode_arcade_ceilless')
             else:
-                FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_LOW, -DSP_SEEKSPEED)
-                FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
+                WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewPlayMode_arcade')
+            WWISE.WWsetCameraShift(None)
+        elif mode == 1:
+            WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 0)
+            if __ceilLess is True:
+                WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewplaymode_sniper_ceilless')
+            else:
+                WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewPlayMode_sniper')
+            if BigWorld.player().getVehicleAttached() is not None:
+                WWISE.WWsetCameraShift(BigWorld.player().getVehicleAttached().appearance.modelsDesc['turret']['model'].matrix)
+        elif mode == 2:
+            WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 2)
+            WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewPlayMode_strategic')
+            WWISE.WWsetCameraShift(None)
+        __ceilLess = None
         return
 
     def playStinger(self, event, priority):
@@ -614,40 +678,12 @@ class SoundGroups(object):
         return
 
     def __getWWISECategoryName(self, categoryName):
-        if categoryName == 'gui':
-            return 'voice_gui'
-        return categoryName
+        return 'voice_gui' if categoryName == 'gui' else categoryName
 
 
 def reloadSoundBanks():
     import MusicController
-    if FMOD.enabled:
-        FMOD.reloadSoundbanks()
     MusicController.g_musicController.restart()
-
-
-def loadPluginDB():
-    ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/audioplugins.xml'
-    section = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE)
-    pluginDB = []
-    for propertyName, propertySection in section.items():
-        DBplugin = []
-        DBplugin.append(propertySection.readString('name'))
-        DBplugin.append(propertySection.readString('category'))
-        for propertyName2, propertySection2 in propertySection['parameters'].items():
-            DBparam = []
-            DBparam.append(propertySection2.readInt('index'))
-            DBparam.append(propertySection2.readFloat('value'))
-            DBplugin.append(DBparam)
-
-        DBparam = None
-        pluginDB.append(DBplugin)
-
-    DBitem = None
-    if FMOD.enabled:
-        FMOD.DSPloadPluginDB(pluginDB)
-    pluginDB = None
-    return
 
 
 def loadLightSoundsDB():
@@ -663,12 +699,15 @@ def loadLightSoundsDB():
             DBitem = []
             DBitem.append(propertySection.readString('modelName'))
             DBitem.append(propertySection.readVector3('offset'))
-            if FMOD.enabled:
-                DBitem.append(propertySection.readStrings('event'))
+            DBitem.append(propertySection.readStrings('wwsound'))
             DBitem.append(propertySection.readString('hardPoint'))
             lightSoundDB.append(DBitem)
 
-        if FMOD.enabled:
-            FMOD.LSloadEventsDB(lightSoundDB)
+        WWISE.LSloadEventsDB(lightSoundDB)
         lightSoundDB = None
         return
+
+
+def LSstartAll():
+    if ENABLE_LS:
+        WWISE.LSstartAll()

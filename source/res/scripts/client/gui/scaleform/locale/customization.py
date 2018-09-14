@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/CUSTOMIZATION.py
 
 
@@ -80,3 +80,10 @@ class CUSTOMIZATION(object):
     FILTER_TOOLTIP_IGR_DISABLED_BODY = '#customization:filter/tooltip/igr/disabled/body'
     TOOLTIP_FILTER_GROUPS_DISABLED_HEADER = '#customization:tooltip/filter/groups/disabled/header'
     TOOLTIP_FILTER_GROUPS_DISABLED_BODY = '#customization:tooltip/filter/groups/disabled/body'
+    BUYWINDOW_TITLE_CAMOUFLAGE = '#customization:buyWindow/title/camouflage'
+    BUYWINDOW_TITLE_INSCRIPTION = '#customization:buyWindow/title/inscription'
+    BUYWINDOW_TITLE_EMBLEM = '#customization:buyWindow/title/emblem'
+    BUYWINDOW_BUYTIME_EVER = '#customization:buyWindow/buyTime/ever'
+    BUYWINDOW_BUYTIME_THIRTYDAYS = '#customization:buyWindow/buyTime/thirtyDays'
+    BUYWINDOW_BUYTIME_SEVENDAYS = '#customization:buyWindow/buyTime/sevenDays'
+    BUYWINDOW_BUYTIME_COPY = '#customization:buyWindow/buyTime/copy'

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/GuiItemsManager.py
 import weakref
 import cPickle as pickle
@@ -56,10 +56,7 @@ class TankmanWrapper(ItemWrapper):
 
     @property
     def currentVehicle(self):
-        if self.item.isIntTank:
-            return self.item.vehicleDescr.type.compactDescr
-        else:
-            return None
+        return self.item.vehicleDescr.type.compactDescr if self.item.isIntTank else None
 
     @property
     def skills(self):
@@ -141,17 +138,13 @@ class _Dossier(ItemWrapper):
 
     def getattr(self, attrName):
         stats = self.item.getTotalStats()
-        if hasattr(stats, attrName):
-            return getattr(self, attrName)
-        return super(_Dossier, self).getattr(attrName)
+        return getattr(self, attrName) if hasattr(stats, attrName) else super(_Dossier, self).getattr(attrName)
 
     def call(self, methodName, *args):
         stats = self.item.getTotalStats()
-        if hasattr(stats, methodName):
-            return getattr(stats, methodName)(*args)
-        return super(_Dossier, self).call(methodName, *args)
+        return getattr(stats, methodName)(*args) if hasattr(stats, methodName) else super(_Dossier, self).call(methodName, *args)
 
-    def getAchievements(self, isInDossier = True):
+    def getAchievements(self, isInDossier=True):
         dcd = pickle.dumps(self.item.getDossierDescr().makeCompDescr())
         result = []
         for section in self.item.getTotalStats().getAchievements(isInDossier):
@@ -288,10 +281,7 @@ class AchievementWrapper(ItemWrapper):
     def getDossierCompDescr(self):
         achieveName, dossierID = self.itemID
         d = self.__getDossier(g_itemsCache.items, *dossierID)
-        if d is not None:
-            return pickle.dumps(d.getDossierDescr().makeCompDescr())
-        else:
-            return
+        return pickle.dumps(d.getDossierDescr().makeCompDescr()) if d is not None else None
 
     def _getItem(self, items, itemID):
         achieveName, dossierID = itemID
@@ -309,10 +299,8 @@ class AchievementWrapper(ItemWrapper):
             return items.getAccountDossier(dossierID)
         elif dossierType == GUI_ITEM_TYPE.VEHICLE_DOSSIER:
             return items.getVehicleDossier(*dossierID)
-        elif dossierType == GUI_ITEM_TYPE.TANKMAN_DOSSIER:
-            return items.getTankmanDossier(dossierID)
         else:
-            return None
+            return items.getTankmanDossier(dossierID) if dossierType == GUI_ITEM_TYPE.TANKMAN_DOSSIER else None
 
 
 class GuiItemsManager(GuiItemsManagerMeta):
@@ -327,9 +315,7 @@ class GuiItemsManager(GuiItemsManagerMeta):
          GUI_ITEM_TYPE.ACHIEVEMENT: lambda itemTypeIdx, itemID: AchievementWrapper(g_itemsCache.items, itemID)}
 
     def __getWrapper(self, itemTypeIdx, itemID):
-        if itemTypeIdx in self.__wrappers:
-            return self.__wrappers[itemTypeIdx](itemTypeIdx, itemID)
-        return ItemWrapper(g_itemsCache.items, itemTypeIdx, itemID)
+        return self.__wrappers[itemTypeIdx](itemTypeIdx, itemID) if itemTypeIdx in self.__wrappers else ItemWrapper(g_itemsCache.items, itemTypeIdx, itemID)
 
     def _getItemAttribute(self, itemTypeIdx, itemID, attrName):
         return self.__getWrapper(itemTypeIdx, itemID).getattr(attrName)

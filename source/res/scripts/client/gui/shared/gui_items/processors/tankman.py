@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/tankman.py
 import BigWorld
 from constants import EQUIP_TMAN_CODE
@@ -22,12 +22,10 @@ class TankmanDismiss(ItemProcessor):
         super(TankmanDismiss, self).__init__(tankman, [confirmatorType, plugins.VehicleValidator(vehicle, isEnabled=tankman.vehicleInvID > 0)])
         return
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('dismiss_tankman/%s' % errStr)
-        return makeI18nError('dismiss_tankman/server_error')
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('dismiss_tankman/%s' % errStr) if len(errStr) else makeI18nError('dismiss_tankman/server_error')
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('dismiss_tankman/success', type=SM_TYPE.Information)
 
     def _request(self, callback):
@@ -44,16 +42,12 @@ class TankmanRecruit(Processor):
         self.role = role
         self.tmanCostTypeIdx = tmanCostTypeIdx
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('recruit_window/%s' % errStr)
-        return makeI18nError('recruit_window/server_error', auxData=ctx)
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('recruit_window/%s' % errStr) if len(errStr) else makeI18nError('recruit_window/server_error', auxData=ctx)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
-        if tmanCost[0] > 0 or tmanCost[1] > 0:
-            return makeI18nSuccess('recruit_window/financial_success', price=formatPrice(tmanCost), type=self.__getSysMsgType(), auxData=ctx)
-        return makeI18nSuccess('recruit_window/success', type=self.__getSysMsgType(), auxData=ctx)
+        return makeI18nSuccess('recruit_window/financial_success', price=formatPrice(tmanCost), type=self.__getSysMsgType(), auxData=ctx) if tmanCost[0] > 0 or tmanCost[1] > 0 else makeI18nSuccess('recruit_window/success', type=self.__getSysMsgType(), auxData=ctx)
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to recruit tankman:', self.nationID, self.vehTypeID, self.role, self.tmanCostTypeIdx)
@@ -63,16 +57,13 @@ class TankmanRecruit(Processor):
         upgradeCost = g_itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]
         if tmanCostTypeIdx == 1:
             return (upgradeCost['credits'], 0)
-        if tmanCostTypeIdx == 2:
-            return (0, upgradeCost['gold'])
+        return (0, upgradeCost['gold']) if tmanCostTypeIdx == 2 else (0, 0)
 
     def __getSysMsgType(self):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
         if tmanCost[0] > 0:
             return SM_TYPE.PurchaseForCredits
-        if tmanCost[1] > 0:
-            return SM_TYPE.PurchaseForGold
-        return SM_TYPE.Information
+        return SM_TYPE.PurchaseForGold if tmanCost[1] > 0 else SM_TYPE.Information
 
 
 class TankmanEquip(Processor):
@@ -89,13 +80,11 @@ class TankmanEquip(Processor):
         self.addPlugins([plugins.VehicleValidator(vehicle, False, prop={'isLocked': True}), plugins.ModuleValidator(tankman), plugins.ModuleTypeValidator(tankman, (GUI_ITEM_TYPE.TANKMAN,))])
         return
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         prefix = self.__getSysMsgPrefix()
-        if len(errStr):
-            return makeI18nError('%s/%s' % (prefix, errStr))
-        return makeI18nError('%s/server_error' % prefix)
+        return makeI18nError('%s/%s' % (prefix, errStr)) if len(errStr) else makeI18nError('%s/server_error' % prefix)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('%s/success' % self.__getSysMsgPrefix(), type=SM_TYPE.Information)
 
     def _request(self, callback):
@@ -107,8 +96,7 @@ class TankmanEquip(Processor):
         return
 
     def __getSysMsgPrefix(self):
-        if not self.isReequip:
-            return 'equip_tankman'
+        return 'equip_tankman' if not self.isReequip else 'reequip_tankman'
 
 
 class TankmanRecruitAndEquip(Processor):
@@ -129,42 +117,34 @@ class TankmanRecruitAndEquip(Processor):
         LOG_DEBUG('Make server request to buy and equip tankman:', self.vehicle, self.slot, self.tmanCostTypeIdx)
         BigWorld.player().shop.buyAndEquipTankman(self.vehicle.invID, self.slot, self.tmanCostTypeIdx, lambda code, tmanInvID, tmanCompDescr: self._response(code, callback, ctx=tmanInvID))
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         prefix = self.__getSysMsgPrefix()
-        if len(errStr):
-            return makeI18nError('%s/%s' % (prefix, errStr))
-        return makeI18nError('%s/server_error' % prefix, auxData=ctx)
+        return makeI18nError('%s/%s' % (prefix, errStr)) if len(errStr) else makeI18nError('%s/server_error' % prefix, auxData=ctx)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
         prefix = self.__getSysMsgPrefix()
-        if tmanCost[0] > 0 or tmanCost[1] > 0:
-            return makeI18nSuccess('%s/financial_success' % prefix, price=formatPrice(tmanCost), type=self.__getSysMsgType(), auxData=ctx)
-        return makeI18nSuccess('%s/success' % prefix, type=self.__getSysMsgType(), auxData=ctx)
+        return makeI18nSuccess('%s/financial_success' % prefix, price=formatPrice(tmanCost), type=self.__getSysMsgType(), auxData=ctx) if tmanCost[0] > 0 or tmanCost[1] > 0 else makeI18nSuccess('%s/success' % prefix, type=self.__getSysMsgType(), auxData=ctx)
 
     def __getRecruitPrice(self, tmanCostTypeIdx):
         upgradeCost = g_itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]
         if tmanCostTypeIdx == 1:
             return (upgradeCost['credits'], 0)
-        if tmanCostTypeIdx == 2:
-            return (0, upgradeCost['gold'])
+        return (0, upgradeCost['gold']) if tmanCostTypeIdx == 2 else (0, 0)
 
     def __getSysMsgType(self):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
         if tmanCost[0] > 0:
             return SM_TYPE.PurchaseForCredits
-        if tmanCost[1] > 0:
-            return SM_TYPE.PurchaseForGold
-        return SM_TYPE.Information
+        return SM_TYPE.PurchaseForGold if tmanCost[1] > 0 else SM_TYPE.Information
 
     def __getSysMsgPrefix(self):
-        if not self.isReplace:
-            return 'buy_and_equip_tankman'
+        return 'buy_and_equip_tankman' if not self.isReplace else 'buy_and_reequip_tankman'
 
 
 class TankmanUnload(Processor):
 
-    def __init__(self, vehicle, slot = -1):
+    def __init__(self, vehicle, slot=-1):
         """
         Ctor.
         
@@ -181,12 +161,10 @@ class TankmanUnload(Processor):
         self.__sysMsgPrefix = 'unload_tankman' if berthsNeeded == 1 else 'unload_crew'
         self.addPlugins([plugins.VehicleValidator(vehicle, False, prop={'isLocked': True}), plugins.BarracksSlotsValidator(berthsNeeded)])
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('%s/%s' % (self.__sysMsgPrefix, errStr))
-        return makeI18nError('%s/server_error' % self.__sysMsgPrefix)
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('%s/%s' % (self.__sysMsgPrefix, errStr)) if len(errStr) else makeI18nError('%s/server_error' % self.__sysMsgPrefix)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('%s/success' % self.__sysMsgPrefix, type=SM_TYPE.Information)
 
     def _request(self, callback):
@@ -202,13 +180,11 @@ class TankmanReturn(Processor):
         self.__vehicle = vehicle
         super(TankmanReturn, self).__init__([plugins.VehicleValidator(self.__vehicle, False, prop={'isLocked': True})])
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('%s/success' % self.__prefix, type=SM_TYPE.Information)
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('%s/%s' % (self.__prefix, errStr))
-        return makeI18nError('%s/server_error' % self.__prefix)
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('%s/%s' % (self.__prefix, errStr)) if len(errStr) else makeI18nError('%s/server_error' % self.__prefix)
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to return crew. VehicleItem :', self.__vehicle)
@@ -222,31 +198,26 @@ class TankmanRetraining(ItemProcessor):
         self.vehicle = vehicle
         self.tmanCostTypeIdx = tmanCostTypeIdx
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         if len(errStr):
             makeI18nError('retraining_tankman/%s' % errStr)
         return makeI18nError('retraining_tankman/server_error')
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         tmanCost = self._getRecruitPrice(self.tmanCostTypeIdx)
-        if tmanCost[0] > 0 or tmanCost[1] > 0:
-            return makeI18nSuccess('retraining_tankman/financial_success', price=formatPrice(tmanCost), type=self._getSysMsgType(), auxData=ctx)
-        return makeI18nSuccess('retraining_tankman/success', type=self._getSysMsgType(), auxData=ctx)
+        return makeI18nSuccess('retraining_tankman/financial_success', price=formatPrice(tmanCost), type=self._getSysMsgType(), auxData=ctx) if tmanCost[0] > 0 or tmanCost[1] > 0 else makeI18nSuccess('retraining_tankman/success', type=self._getSysMsgType(), auxData=ctx)
 
     def _getRecruitPrice(self, tmanCostTypeIdx):
         upgradeCost = g_itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]
         if tmanCostTypeIdx == 1:
             return (upgradeCost['credits'], 0)
-        if tmanCostTypeIdx == 2:
-            return (0, upgradeCost['gold'])
+        return (0, upgradeCost['gold']) if tmanCostTypeIdx == 2 else (0, 0)
 
     def _getSysMsgType(self):
         tmanCost = self._getRecruitPrice(self.tmanCostTypeIdx)
         if tmanCost[0] > 0:
             return SM_TYPE.PurchaseForCredits
-        if tmanCost[1] > 0:
-            return SM_TYPE.PurchaseForGold
-        return SM_TYPE.Information
+        return SM_TYPE.PurchaseForGold if tmanCost[1] > 0 else SM_TYPE.Information
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to retrain Crew:', self.item, self.vehicle, self.tmanCostTypeIdx)
@@ -261,24 +232,20 @@ class TankmanCrewRetraining(Processor):
         self.vehicle = vehicle
         self.tmanCostTypeIdx = tmanCostTypeIdx
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         crewMembersCount = len(self.tankmen)
         messagePrefix = 'retraining_crew'
         if crewMembersCount == 1:
             messagePrefix = 'retraining_tankman'
-        if len(errStr):
-            return makeI18nError('%s/%s' % (messagePrefix, errStr))
-        return makeI18nError('%s/server_error' % messagePrefix)
+        return makeI18nError('%s/%s' % (messagePrefix, errStr)) if len(errStr) else makeI18nError('%s/server_error' % messagePrefix)
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         crewMembersCount = len(self.tankmen)
         messagePrefix = 'retraining_crew'
         if crewMembersCount == 1:
             messagePrefix = 'retraining_tankman'
         crewRetrainingCost = self._getRecruitPrice(self.tmanCostTypeIdx)
-        if crewRetrainingCost[0] > 0 or crewRetrainingCost[1] > 0:
-            return makeI18nSuccess('%s/financial_success' % messagePrefix, type=self._getSysMsgType(), auxData=ctx, price=formatPrice(crewRetrainingCost))
-        return makeI18nSuccess('%s/success' % messagePrefix, type=self._getSysMsgType(), auxData=ctx)
+        return makeI18nSuccess('%s/financial_success' % messagePrefix, type=self._getSysMsgType(), auxData=ctx, price=formatPrice(crewRetrainingCost)) if crewRetrainingCost[0] > 0 or crewRetrainingCost[1] > 0 else makeI18nSuccess('%s/success' % messagePrefix, type=self._getSysMsgType(), auxData=ctx)
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to retrain Crew:', self.tankmen, self.vehicle, self.tmanCostTypeIdx)
@@ -297,9 +264,7 @@ class TankmanCrewRetraining(Processor):
         tmanCost = self._getRecruitPrice(self.tmanCostTypeIdx)
         if tmanCost[0] > 0:
             return SM_TYPE.PurchaseForCredits
-        if tmanCost[1] > 0:
-            return SM_TYPE.PurchaseForGold
-        return SM_TYPE.Information
+        return SM_TYPE.PurchaseForGold if tmanCost[1] > 0 else SM_TYPE.Information
 
 
 class TankmanFreeToOwnXpConvertor(Processor):
@@ -309,12 +274,10 @@ class TankmanFreeToOwnXpConvertor(Processor):
         self.__tankman = tankman
         self.__selectedXpForConvert = selectedXpForConvert
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('free_xp_to_tman_skill/error/%s' % errStr)
-        return makeI18nError('free_xp_to_tman_skill/server_error')
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('free_xp_to_tman_skill/error/%s' % errStr) if len(errStr) else makeI18nError('free_xp_to_tman_skill/server_error')
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('free_xp_to_tman_skill/success', freeXP=BigWorld.wg_getIntegralFormat(self.__selectedXpForConvert), type=SM_TYPE.Information)
 
     def _request(self, callback):
@@ -325,15 +288,13 @@ class TankmanFreeToOwnXpConvertor(Processor):
 class TankmanAddSkill(ItemProcessor):
 
     def __init__(self, tankman, skillName):
-        super(TankmanAddSkill, self).__init__(tankman)
+        super(TankmanAddSkill, self).__init__(tankman, (plugins.TankmanAddSkillValidator(tankman.descriptor, skillName),))
         self.skillName = skillName
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('add_tankman_skill/%s' % errStr)
-        return makeI18nError('add_tankman_skill/server_error')
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('add_tankman_skill/%s' % errStr) if len(errStr) else makeI18nError('add_tankman_skill/server_error')
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('add_tankman_skill/success', type=SM_TYPE.Information)
 
     def _request(self, callback):
@@ -353,12 +314,10 @@ class TankmanChangeRole(ItemProcessor):
          plugins.VehicleRoleValidator(vehicle, role),
          plugins.MoneyValidator((0, self.__changeRoleCost))])
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('change_tankman_role/%s' % errStr)
-        return makeI18nError('change_tankman_role/server_error')
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('change_tankman_role/%s' % errStr) if len(errStr) else makeI18nError('change_tankman_role/server_error')
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         msgType = SM_TYPE.FinancialTransactionWithGold
         vehicle = g_itemsCache.items.getItemByCD(self.__vehTypeCompDescr)
         if ctx == EQUIP_TMAN_CODE.OK:
@@ -381,12 +340,10 @@ class TankmanDropSkills(ItemProcessor):
         super(TankmanDropSkills, self).__init__(tankman, (plugins.MessageConfirmator('dropSkill'),))
         self.dropSkillCostIdx = dropSkillCostIdx
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
-            return makeI18nError('drop_tankman_skill/%s' % errStr)
-        return makeI18nError('drop_tankman_skill/server_error')
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('drop_tankman_skill/%s' % errStr) if len(errStr) else makeI18nError('drop_tankman_skill/server_error')
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         msgType = self.__getTankmanSysMsgType(self.dropSkillCostIdx)
         price = g_itemsCache.items.shop.dropSkillsCost.get(self.dropSkillCostIdx)
         return makeI18nSuccess('drop_tankman_skill/success', money=formatPrice((price['credits'], price['gold'])), type=msgType)
@@ -398,9 +355,7 @@ class TankmanDropSkills(ItemProcessor):
     def __getTankmanSysMsgType(self, dropSkillCostIdx):
         if dropSkillCostIdx == 1:
             return SM_TYPE.FinancialTransactionWithCredits
-        if dropSkillCostIdx == 2:
-            return SM_TYPE.FinancialTransactionWithGold
-        return SM_TYPE.Information
+        return SM_TYPE.FinancialTransactionWithGold if dropSkillCostIdx == 2 else SM_TYPE.Information
 
 
 class TankmanChangePassport(ItemProcessor):
@@ -417,10 +372,10 @@ class TankmanChangePassport(ItemProcessor):
         self.isFemale = tankman.descriptor.isFemale
         self.isPremium = tankman.descriptor.isPremium
 
-    def _errorHandler(self, code, errStr = '', ctx = None):
+    def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError('replace_tankman/server_error')
 
-    def _successHandler(self, code, ctx = None):
+    def _successHandler(self, code, ctx=None):
         if self.isFemale:
             goldPrice = g_itemsCache.items.shop.passportFemaleChangeCost
         else:

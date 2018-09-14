@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ClanInvitesViewWithTableMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -11,25 +11,19 @@ class ClanInvitesViewWithTableMeta(BaseDAAPIComponent):
         self._printOverrideError('refreshTable')
 
     def as_setDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(data)
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_getTableDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getTableDP()
+        return self.flashObject.as_getTableDP() if self._isDAAPIInited() else None
 
     def as_updateDefaultSortFieldS(self, defaultSortField, defaultSortDirection):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateDefaultSortField(defaultSortField, defaultSortDirection)
+        return self.flashObject.as_updateDefaultSortField(defaultSortField, defaultSortDirection) if self._isDAAPIInited() else None
 
-    def as_showDummyS(self, dummyAlias):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showDummy(dummyAlias)
+    def as_showDummyS(self, data):
+        return self.flashObject.as_showDummy(data) if self._isDAAPIInited() else None
 
     def as_hideDummyS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_hideDummy()
+        return self.flashObject.as_hideDummy() if self._isDAAPIInited() else None
 
     def as_updateButtonRefreshStateS(self, enabled, tooltip):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateButtonRefreshState(enabled, tooltip)
+        return self.flashObject.as_updateButtonRefreshState(enabled, tooltip) if self._isDAAPIInited() else None

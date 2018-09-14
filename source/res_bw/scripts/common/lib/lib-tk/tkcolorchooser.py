@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/tkColorChooser.py
 from tkCommonDialog import Dialog
 
@@ -22,7 +22,7 @@ class Chooser(Dialog):
             return ((r / 256, g / 256, b / 256), str(result))
 
 
-def askcolor(color = None, **options):
+def askcolor(color=None, **options):
     """Ask for a color"""
     if color:
         options = options.copy()

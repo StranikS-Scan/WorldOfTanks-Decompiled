@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/SearchDialog.py
 from Tkinter import *
 from idlelib import SearchEngine
@@ -31,7 +31,7 @@ class SearchDialog(SearchDialogBase):
         f = SearchDialogBase.create_widgets(self)
         self.make_button('Find Next', self.default_command, 1)
 
-    def default_command(self, event = None):
+    def default_command(self, event=None):
         if not self.engine.getprog():
             return
         self.find_again(self.text)

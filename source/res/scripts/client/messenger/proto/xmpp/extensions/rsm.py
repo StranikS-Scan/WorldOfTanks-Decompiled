@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/rsm.py
 from shared_utils import findFirst
 from messenger.proto.xmpp.extensions import PyExtension, SimpleExtension
@@ -8,7 +8,7 @@ from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
 class ResultSet(PyExtension):
     __slots__ = '_converter'
 
-    def __init__(self, converter = int):
+    def __init__(self, converter=int):
         super(ResultSet, self).__init__(_TAG.SET)
         self.setXmlNs(_NS.RESULT_SET_MANAGEMENT)
         self._converter = converter
@@ -43,7 +43,7 @@ class ResultSet(PyExtension):
 
 class RqResultSet(ResultSet):
 
-    def __init__(self, max = 0, after = None, before = None):
+    def __init__(self, max=0, after=None, before=None):
         super(RqResultSet, self).__init__()
         if max:
             self.setChild(SimpleExtension('max', max))

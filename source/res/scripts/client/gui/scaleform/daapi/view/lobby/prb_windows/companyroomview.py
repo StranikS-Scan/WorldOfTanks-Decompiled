@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/CompanyRoomView.py
 from adisp import process
 from gui import makeHtmlString
@@ -69,9 +69,7 @@ class CompanyRoomView(CompanyRoomMeta):
         return formatters.getCompanyName()
 
     def canKickPlayer(self):
-        if self.prbFunctional.getTeamState(team=1).isInQueue():
-            return False
-        return self.prbFunctional.getPermissions().canKick(team=1)
+        return False if self.prbFunctional.getTeamState(team=1).isInQueue() else self.prbFunctional.getPermissions().canKick(team=1)
 
     def canMoveToAssigned(self):
         result = self.prbFunctional.getPermissions().canAssignToTeam(team=1)

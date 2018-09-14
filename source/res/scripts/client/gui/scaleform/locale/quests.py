@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/QUESTS.py
 
 
@@ -334,6 +334,23 @@ class QUESTS(object):
     DETAILS_CONDITIONS_VEHICLESKILLS_TYPE_LEVEL_NOT = '#quests:details/conditions/vehiclesKills/type_level/not'
     DETAILS_CONDITIONS_VEHICLESKILLS_NATION_TYPE_LEVEL = '#quests:details/conditions/vehiclesKills/nation_type_level'
     DETAILS_CONDITIONS_VEHICLESKILLS_NATION_TYPE_LEVEL_NOT = '#quests:details/conditions/vehiclesKills/nation_type_level/not'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE = '#quests:details/conditions/vehicleDamage'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_NOT = '#quests:details/conditions/vehicleDamage/not'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_ALL = '#quests:details/conditions/vehicleDamage/all'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_NATION = '#quests:details/conditions/vehicleDamage/nation'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_NATION_NOT = '#quests:details/conditions/vehicleDamage/nation/not'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_TYPE = '#quests:details/conditions/vehicleDamage/type'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_TYPE_NOT = '#quests:details/conditions/vehicleDamage/type/not'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_LEVEL = '#quests:details/conditions/vehicleDamage/level'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_LEVEL_NOT = '#quests:details/conditions/vehicleDamage/level/not'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_NATION_TYPE = '#quests:details/conditions/vehicleDamage/nation_type'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_NATION_TYPE_NOT = '#quests:details/conditions/vehicleDamage/nation_type/not'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_NATION_LEVEL = '#quests:details/conditions/vehicleDamage/nation_level'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_NATION_LEVEL_NOT = '#quests:details/conditions/vehicleDamage/nation_level/not'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_TYPE_LEVEL = '#quests:details/conditions/vehicleDamage/type_level'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_TYPE_LEVEL_NOT = '#quests:details/conditions/vehicleDamage/type_level/not'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_NATION_TYPE_LEVEL = '#quests:details/conditions/vehicleDamage/nation_type_level'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_NATION_TYPE_LEVEL_NOT = '#quests:details/conditions/vehicleDamage/nation_type_level/not'
     DETAILS_CONDITIONS_GROUPBY_NATION = '#quests:details/conditions/groupBy/nation'
     DETAILS_CONDITIONS_GROUPBY_CLASS = '#quests:details/conditions/groupBy/class'
     DETAILS_CONDITIONS_GROUPBY_LEVEL = '#quests:details/conditions/groupBy/level'
@@ -380,6 +397,8 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_MARKOFMASTERY2 = '#quests:details/conditions/cumulative/markOfMastery2'
     DETAILS_CONDITIONS_CUMULATIVE_MARKOFMASTERY3 = '#quests:details/conditions/cumulative/markOfMastery3'
     DETAILS_CONDITIONS_CUMULATIVE_MARKOFMASTERY4 = '#quests:details/conditions/cumulative/markOfMastery4'
+    DETAILS_CONDITIONS_CUMULATIVE_INNERMODULECRITCOUNT = '#quests:details/conditions/cumulative/innerModuleCritCount'
+    DETAILS_CONDITIONS_CUMULATIVE_CRITSCOUNT = '#quests:details/conditions/cumulative/critsCount'
     DETAILS_CONDITIONS_CLUBS_GETDIVISION = '#quests:details/conditions/clubs/getDivision'
     DETAILS_CONDITIONS_CLUBS_BATTLES = '#quests:details/conditions/clubs/battles'
     DETAILS_CONDITIONS_CLUBS_HASCLUB = '#quests:details/conditions/clubs/hasClub'

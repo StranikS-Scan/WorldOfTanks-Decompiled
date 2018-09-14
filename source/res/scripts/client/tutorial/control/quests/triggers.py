@@ -1,6 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/triggers.py
 import BigWorld
+from account_helpers.AccountSettings import AccountSettings
 from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from tutorial import doc_loader
@@ -17,7 +18,7 @@ from tutorial.settings import createSettingsCollection
 
 class AllTutorialBonusesTrigger(TriggerWithValidateVar):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, validateUpdateOnly = False):
+    def __init__(self, triggerID, validateVarID, setVarID=None, validateUpdateOnly=False):
         super(AllTutorialBonusesTrigger, self).__init__(triggerID, validateVarID, setVarID, validateUpdateOnly)
         self._tutorDescriptor = None
         return
@@ -225,6 +226,15 @@ class BuyVehicleTrigger(TriggerWithValidateVar):
         self.toggle(isOn=self.isOn())
 
 
+class InventoryVehicleTrigger(BuyVehicleTrigger):
+
+    def isOn(self):
+        vehicleCriteria = self.getVar()
+        minLvl, maxLvl = vehicleCriteria.get('levelsRange', (1, 10))
+        criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(minLvl, maxLvl)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+        return bool(len(g_itemsCache.items.getVehicles(criteria)))
+
+
 class VehicleBattleCountTrigger(TriggerWithValidateVar):
 
     def run(self):
@@ -269,25 +279,59 @@ class TutorialIntSettingsTrigger(TriggerWithValidateVar):
             self.toggle(isOn=bool(diff[self.getVar()]))
 
 
+class TutorialAccountSettingsTrigger(TriggerWithValidateVar):
+
+    def run(self):
+        self.isRunning = True
+        if not self.isSubscribed:
+            self.isSubscribed = True
+            AccountSettings.onSettingsChanging += self.__onSettingsChanged
+        self.toggle(isOn=self.isOn())
+
+    def isOn(self):
+        return AccountSettings.getSettings(self.getVar())
+
+    def clear(self):
+        AccountSettings.onSettingsChanging -= self.__onSettingsChanged
+        self.isSubscribed = False
+        self.isRunning = False
+
+    def __onSettingsChanged(self, key, value):
+        if self.getVar() == key:
+            self.toggle(isOn=self.isOn())
+
+
 class XpExchangeTrigger(Trigger):
+    REQUEST_SENT_FLAG = 'xpExchangeRequestSent'
 
     def __init__(self, triggerID):
         super(XpExchangeTrigger, self).__init__(triggerID)
         self.__pIdx = -1
+        self.__startProcessTriggerId = -1
 
     def run(self):
         if not self.isSubscribed:
+            self.__startProcessTriggerId = g_tutorialWeaver.weave(pointcut=aspects.StartXpExchangePointcut, aspects=[aspects.StartXpExchangeAspect(self)])
             self.__pIdx = g_tutorialWeaver.weave(pointcut=aspects.XpExchangePointcut, aspects=[aspects.XpExchangeAspect(self)])
             self.isSubscribed = True
         self.isRunning = True
         self.toggle(isOn=self.isOn())
 
-    def isOn(self, success = False):
-        return success
+    def isOn(self):
+        return self._tutorial.getFlags().isActiveFlag(self.REQUEST_SENT_FLAG)
+
+    def registerRequest(self):
+        flags = self._tutorial.getFlags()
+        flags.addFlag(self.REQUEST_SENT_FLAG)
+        flags.activateFlag(self.REQUEST_SENT_FLAG)
+        self._cache.update(None, self._tutorial.getFlags().getDict())
+        return
 
     def clear(self):
         g_tutorialWeaver.clear(self.__pIdx)
+        g_tutorialWeaver.clear(self.__startProcessTriggerId)
         self.__pIdx = -1
+        self.__startProcessTriggerId = -1
         self.isSubscribed = False
         self.isRunning = False
 
@@ -327,7 +371,7 @@ class InstallItemsTrigger(TriggerWithValidateVar):
 
 class TimerTrigger(TriggerWithValidateVar):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, validateUpdateOnly = False):
+    def __init__(self, triggerID, validateVarID, setVarID=None, validateUpdateOnly=False):
         super(TimerTrigger, self).__init__(triggerID, validateVarID, setVarID, validateUpdateOnly)
         self.__timerCallback = None
         return
@@ -357,7 +401,7 @@ class TimerTrigger(TriggerWithValidateVar):
 
 class SimpleWindowCloseTrigger(TriggerWithSubscription):
 
-    def isOn(self, targetID = None):
+    def isOn(self, targetID=None):
         return targetID == self.getVar()
 
     def _subscribe(self):
@@ -372,7 +416,7 @@ class SimpleWindowCloseTrigger(TriggerWithSubscription):
 
 class SimpleWindowProcessTrigger(TriggerWithSubscription):
 
-    def isOn(self, targetID = None):
+    def isOn(self, targetID=None):
         return targetID == self.getVar()
 
     def _subscribe(self):

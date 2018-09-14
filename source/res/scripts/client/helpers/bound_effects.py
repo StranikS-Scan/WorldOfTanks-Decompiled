@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/bound_effects.py
 import helpers
 from debug_utils import *
@@ -54,7 +54,7 @@ class StaticSceneBoundEffects(object):
 
 class ModelBoundEffects(object):
 
-    def __init__(self, model, nodeName = ''):
+    def __init__(self, model, nodeName=''):
         self.__model = model
         self.__nodeName = nodeName
         self._effects = list()

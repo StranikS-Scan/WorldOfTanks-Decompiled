@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/CheckBox.py
 import BigWorld, GUI
 from Button import Button
@@ -16,7 +16,7 @@ class CheckBox(Button):
         self._updateVisualState()
 
     @staticmethod
-    def createInternal(texture, text = '', **kwargs):
+    def createInternal(texture, text='', **kwargs):
         c = GUI.Window('')
         c.materialFX = 'BLEND'
         c.widthMode = 'CLIP'
@@ -45,6 +45,6 @@ class CheckBox(Button):
         return c
 
     @staticmethod
-    def create(texture, text = '', **kwargs):
+    def create(texture, text='', **kwargs):
         b = CheckBox(CheckBox.createInternal(texture, text, **kwargs), **kwargs)
         return b.component

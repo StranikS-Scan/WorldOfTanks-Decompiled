@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/configHelpSourceEdit.py
 """Dialog to specify or edit the parameters for a user configured help source."""
 import os
@@ -9,7 +9,7 @@ import tkFileDialog
 
 class GetHelpSourceDialog(Toplevel):
 
-    def __init__(self, parent, title, menuItem = '', filePath = ''):
+    def __init__(self, parent, title, menuItem='', filePath=''):
         """Get menu entry and url/ local file location for Additional Help
         
         User selects a name for the Help resource and provides a web url
@@ -120,7 +120,7 @@ class GetHelpSourceDialog(Toplevel):
                 pathOk = False
         return pathOk
 
-    def Ok(self, event = None):
+    def Ok(self, event=None):
         if self.MenuOk() and self.PathOk():
             self.result = (self.menu.get().strip(), self.path.get().strip())
             if sys.platform == 'darwin':
@@ -132,7 +132,7 @@ class GetHelpSourceDialog(Toplevel):
                     self.result[1] = 'file://' + path
             self.destroy()
 
-    def Cancel(self, event = None):
+    def Cancel(self, event=None):
         self.result = None
         self.destroy()
         return

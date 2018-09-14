@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ModelHitTester.py
 from collections import namedtuple
 import math
@@ -16,13 +16,13 @@ class ModelHitTester(object):
 
     bspModelName = property(lambda self: self.__bspModelName, __setBspModelName)
 
-    def __init__(self, dataSection = None):
+    def __init__(self, dataSection=None):
         self.__bspModel = None
         self.__bspModelName = None
         if dataSection is not None:
             self.__bspModelName = dataSection.readString('collisionModel')
             if not self.__bspModelName:
-                raise Exception, '<collisionModel> is missing or wrong'
+                raise Exception('<collisionModel> is missing or wrong')
         return
 
     def getBspModel(self):
@@ -37,7 +37,7 @@ class ModelHitTester(object):
         else:
             bspModel = BigWorld.WGBspCollisionModel()
             if not bspModel.setModelName(self.bspModelName):
-                raise Exception, "wrong collision model '%s'" % self.bspModelName
+                raise Exception("wrong collision model '%s'" % self.bspModelName)
             self.__bspModel = bspModel
             self.bbox = bspModel.getBoundingBox()
             return
@@ -75,7 +75,7 @@ class ModelHitTester(object):
 
             return res
 
-    def localSphericHitTest(self, center, radius, bOutsidePolygonsOnly = True):
+    def localSphericHitTest(self, center, radius, bOutsidePolygonsOnly=True):
         return self.__bspModel.collideSphere(center, radius, bOutsidePolygonsOnly)
 
     def localCollidesWithTriangle(self, triangle, hitDir):
@@ -93,9 +93,7 @@ def segmentMayHitVolume(boundingRadius, center, segmentStart, segmentEnd):
     e = ao.dot(ab)
     if e <= 0.0:
         return ao.lengthSquared <= radiusSquared
-    if e >= ab.lengthSquared:
-        return bo.lengthSquared <= radiusSquared
-    return ao.lengthSquared - e * e / ab.lengthSquared <= radiusSquared
+    return bo.lengthSquared <= radiusSquared if e >= ab.lengthSquared else ao.lengthSquared - e * e / ab.lengthSquared <= radiusSquared
 
 
 def segmentMayHitVehicle(vehicleDescr, segmentStart, segmentEnd, vehicleCenter):

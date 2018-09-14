@@ -1,8 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/statistics.py
 import math
 import BigWorld
 import ResMgr
+import Settings
 from constants import ARENA_PERIOD, INVALID_CLIENT_STATS
 from account_helpers.settings_core import SettingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
@@ -21,8 +22,8 @@ class _HARDWARE_SCORE_PARAMS:
 
 
 class StatisticsCollector:
-    avrPing = property(lambda self: (0 if self.__framesTotal is 0 else self.__avrPing / self.__framesTotal))
-    lagPercentage = property(lambda self: (0 if self.__framesTotal is 0 else self.__framesWithLags * 100 / self.__framesTotal))
+    avrPing = property(lambda self: 0 if self.__framesTotal is 0 else self.__avrPing / self.__framesTotal)
+    lagPercentage = property(lambda self: 0 if self.__framesTotal is 0 else self.__framesWithLags * 100 / self.__framesTotal)
     update = property(lambda self: self.__updateFunc)
 
     def __init__(self):
@@ -77,7 +78,7 @@ class StatisticsCollector:
     def subscribeToHangarSpaceCreate(self, event):
         event += self.__onHangarSpaceLoaded
 
-    def getStatistics(self, andStop = True):
+    def getStatistics(self, andStop=True):
         proceed = self.__state == _STATISTICS_STATE.IN_PROGRESS
         ret = {}
         if proceed:
@@ -101,6 +102,7 @@ class StatisticsCollector:
                 ret['dynamicDRR'] = BigWorld.isDRRAutoscalingEnabled()
                 ret['invalidStats'] |= self.__invalidStats
                 ret['contentType'] = ResMgr.activeContentType()
+                ret['soundQuality'] = Settings.g_instance.userPrefs[Settings.KEY_SOUND_PREFERENCES].readInt('LQ_render', 0)
         if andStop is True or not proceed:
             self.stop()
         return ret

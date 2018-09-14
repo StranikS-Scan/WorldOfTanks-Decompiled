@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/UtilsManagerMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
@@ -38,5 +38,4 @@ class UtilsManagerMeta(BaseDAAPIModule):
         self._printOverrideError('isTwelveHoursFormat')
 
     def as_setImageCacheSettingsS(self, maxSize, minSize):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setImageCacheSettings(maxSize, minSize)
+        return self.flashObject.as_setImageCacheSettings(maxSize, minSize) if self._isDAAPIInited() else None

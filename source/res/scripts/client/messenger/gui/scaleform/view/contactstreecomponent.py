@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/ContactsTreeComponent.py
 from helpers.i18n import makeString
 from gui.Scaleform.daapi.view.meta.ContactsTreeComponentMeta import ContactsTreeComponentMeta
@@ -31,7 +31,7 @@ class ContactsTreeComponent(ContactsTreeComponentMeta):
         else:
             self._updateListState()
 
-    def showContacts(self, onlineMode = True, showVisibleOthers = None, showFriends = True, showEmptyGroups = True, showGroupMenu = True):
+    def showContacts(self, onlineMode=True, showVisibleOthers=None, showFriends=True, showEmptyGroups=True, showGroupMenu=True):
         self._mainDP.setOnlineMode(onlineMode)
         self._mainDP.setOthersVisible(showVisibleOthers)
         self._mainDP.setFriendsVisible(showFriends)

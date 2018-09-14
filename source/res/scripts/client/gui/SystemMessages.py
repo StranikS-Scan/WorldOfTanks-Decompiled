@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/SystemMessages.py
 from abc import ABCMeta, abstractmethod
 from enumerations import Enumeration
@@ -31,7 +31,7 @@ class BaseSystemMessages(object):
         pass
 
     @abstractmethod
-    def pushMessage(self, text, type = SM_TYPE.Information):
+    def pushMessage(self, text, type=SM_TYPE.Information):
         pass
 
     @abstractmethod
@@ -41,7 +41,7 @@ class BaseSystemMessages(object):
 
 g_instance = None
 
-def pushMessage(text, type = SM_TYPE.Information, priority = None):
+def pushMessage(text, type=SM_TYPE.Information, priority=None):
     if g_instance:
         g_instance.pushMessage(text, type, priority)
 

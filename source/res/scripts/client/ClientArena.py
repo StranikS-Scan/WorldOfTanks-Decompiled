@@ -1,11 +1,13 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientArena.py
 import Math
-import BigWorld, ResMgr
+import BigWorld
+import ResMgr
 import ArenaType
 from items import vehicles
 import constants
-import cPickle, zlib
+import cPickle
+import zlib
 import Event
 from constants import ARENA_PERIOD, ARENA_UPDATE, FLAG_STATE
 from PlayerEvents import g_playerEvents
@@ -213,7 +215,7 @@ class ClientArena(object):
     def __onRespawnAvailableVehicles(self, argStr):
         vehsList = cPickle.loads(zlib.decompress(argStr))
         self.onRespawnAvailableVehicles(vehsList)
-        LOG_TU('[RESPAWN] onRespawnAvailableVehicles', vehsList)
+        LOG_DEBUG_DEV('[RESPAWN] onRespawnAvailableVehicles', vehsList)
 
     def __onRespawnCooldowns(self, argStr):
         cooldowns = cPickle.loads(zlib.decompress(argStr))
@@ -260,14 +262,14 @@ class ClientArena(object):
     def __onInteractiveStats(self, argStr):
         stats = cPickle.loads(zlib.decompress(argStr))
         self.onInteractiveStats(stats)
-        LOG_TU('[RESPAWN] onInteractiveStats', stats)
+        LOG_DEBUG_DEV('[RESPAWN] onInteractiveStats', stats)
 
     def __rebuildIndexToId(self):
         vehicles = self.__vehicles
         self.__vehicleIndexToId = dict(zip(range(len(vehicles)), sorted(vehicles.keys())))
 
     def __vehicleInfoAsDict(self, info):
-        getVehicleType = lambda cd: (None if cd is None else vehicles.VehicleDescr(compactDescr=cd))
+        getVehicleType = lambda cd: None if cd is None else vehicles.VehicleDescr(compactDescr=cd)
         infoAsDict = {'vehicleType': getVehicleType(info[1]),
          'name': info[2],
          'team': info[3],
@@ -294,8 +296,8 @@ def _convertToList(vec4):
 
 
 def _pointInBB(bottomLeft2D, upperRight2D, point3D, minMaxHeight):
-    if bottomLeft2D[0] < point3D[0] < upperRight2D[0] and bottomLeft2D[1] < point3D[2] < upperRight2D[1] and minMaxHeight[0] < point3D[1] < minMaxHeight[1]:
-        return True
+    if (bottomLeft2D[0] < point3D[0] < upperRight2D[0] and bottomLeft2D[1]) < point3D[2] < upperRight2D[1]:
+        return minMaxHeight[0] < point3D[1] < minMaxHeight[1] and True
     else:
         return False
 
@@ -345,11 +347,7 @@ class Plane():
             return None
         else:
             t = (self.d - self.n.dot(a)) / normalDotDir
-            if t >= 0.0 and t <= 1.0:
-                return a + ab.scale(t)
-            return None
+            return a + ab.scale(t) if t >= 0.0 and t <= 1.0 else None
 
     def testPoint(self, point):
-        if self.n.dot(point) - self.d >= 0.0:
-            return True
-        return False
+        return True if self.n.dot(point) - self.d >= 0.0 else False

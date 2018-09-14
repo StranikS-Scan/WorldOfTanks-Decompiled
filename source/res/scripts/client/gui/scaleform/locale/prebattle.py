@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/PREBATTLE.py
 
 
@@ -48,3 +48,4 @@ class PREBATTLE(object):
     SWITCHPERIPHERYWINDOW_FORT_DESCRIPTION = '#prebattle:switchPeripheryWindow/fort/description'
     SWITCHPERIPHERYWINDOW_FORT_SELECTSERVERLABEL = '#prebattle:switchPeripheryWindow/fort/selectServerLabel'
     SWITCHPERIPHERYWINDOW_FORT_APPLYSWITCHLABEL = '#prebattle:switchPeripheryWindow/fort/applySwitchLabel'
+    COMPANYLISTVIEW_FILTERBUTTON_LABEL = '#prebattle:companyListView/filterButton/label'

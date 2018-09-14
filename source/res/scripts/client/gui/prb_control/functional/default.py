@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/default.py
 import BigWorld
 from PlayerEvents import g_playerEvents
@@ -17,7 +17,7 @@ from gui.prb_control.restrictions.limits import DefaultLimits
 from gui.prb_control.restrictions.permissions import DefaultPrbPermissions
 from gui.prb_control.restrictions.permissions import IntroPrbPermissions
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE, PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_INIT_STEP
-from gui.shared.utils.ListenersCollection import ListenersCollection
+from gui.shared.utils.listeners_collection import ListenersCollection
 from prebattle_shared import decodeRoster
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 
@@ -30,10 +30,10 @@ class PrbIntro(interfaces.IPrbEntry):
     def makeDefCtx(self):
         return prb_ctx.JoinModeCtx(self._prbType)
 
-    def create(self, ctx, callback = None):
+    def create(self, ctx, callback=None):
         raise Exception('PrbIntro is not create entity')
 
-    def join(self, ctx, callback = None):
+    def join(self, ctx, callback=None):
         if not prb_getters.hasModalEntity() or ctx.isForced():
             g_prbCtrlEvents.onPrebattleIntroModeJoined(ctx.getEntityType(), prb_getters.hasModalEntity())
             if callback:
@@ -43,16 +43,16 @@ class PrbIntro(interfaces.IPrbEntry):
             if callback:
                 callback(False)
 
-    def select(self, ctx, callback = None):
+    def select(self, ctx, callback=None):
         self.join(ctx, callback=callback)
 
 
 class PrbEntry(interfaces.IPrbEntry):
 
-    def create(self, ctx, callback = None):
+    def create(self, ctx, callback=None):
         LOG_ERROR('Routine "create" must be implemented in subclass')
 
-    def join(self, ctx, callback = None):
+    def join(self, ctx, callback=None):
         if prb_getters.getClientPrebattle() is None or ctx.isForced():
             ctx.startProcessing(callback=callback)
             BigWorld.player().prb_join(ctx.getID())
@@ -62,13 +62,13 @@ class PrbEntry(interfaces.IPrbEntry):
                 callback(False)
         return
 
-    def select(self, ctx, callback = None):
+    def select(self, ctx, callback=None):
         LOG_ERROR('Routine "select" must be implemented in subclass')
 
 
 class _PrbFunctional(ListenersCollection, interfaces.IPrbFunctional):
 
-    def __init__(self, listenerClass, requestHandlers = None, flags = FUNCTIONAL_FLAG.UNDEFINED):
+    def __init__(self, listenerClass, requestHandlers=None, flags=FUNCTIONAL_FLAG.UNDEFINED):
         super(_PrbFunctional, self).__init__()
         self._setListenerClass(listenerClass)
         self._requestHandlers = requestHandlers or {}
@@ -81,13 +81,12 @@ class _PrbFunctional(ListenersCollection, interfaces.IPrbFunctional):
     def setFunctionalFlags(self, flags):
         self._flags = flags
 
-    def fini(self, clientPrb = None, woEvents = False):
-        self._setListenerClass(None)
+    def fini(self, clientPrb=None, woEvents=False):
         self._requestHandlers.clear()
         self._deferredReset = False
         return FUNCTIONAL_FLAG.UNDEFINED
 
-    def request(self, ctx, callback = None):
+    def request(self, ctx, callback=None):
         requestType = ctx.getRequestType()
         handler = None
         if requestType in self._requestHandlers:
@@ -107,12 +106,12 @@ class NoPrbFunctional(interfaces.IPrbFunctional):
     def getFunctionalFlags(self):
         return FUNCTIONAL_FLAG.NO_PREBATTLE
 
-    def leave(self, ctx, callback = None):
+    def leave(self, ctx, callback=None):
         LOG_ERROR('NoPrbFunctional.leave was invoke', ctx)
         if callback:
             callback(False)
 
-    def request(self, ctx, callback = None):
+    def request(self, ctx, callback=None):
         LOG_ERROR('NoPrbFunctional.request was invoke', ctx)
         if callback:
             callback(False)
@@ -120,34 +119,31 @@ class NoPrbFunctional(interfaces.IPrbFunctional):
 
 class IntroPrbFunctional(_PrbFunctional):
 
-    def __init__(self, prbType, listReq, requestHandlers = None):
+    def __init__(self, prbType, listReq, requestHandlers=None):
         super(IntroPrbFunctional, self).__init__(interfaces.IIntoPrbListener, requestHandlers, FUNCTIONAL_FLAG.PREBATTLE_INTRO)
         self._prbType = prbType
         self._listReq = listReq
         self._hasEntity = False
 
-    def init(self, clientPrb = None, ctx = None):
+    def init(self, clientPrb=None, ctx=None):
         self._hasEntity = True
-        for listener in self._listeners:
-            listener.onIntroPrbFunctionalInited()
-
+        self._invokeListeners('onIntroPrbFunctionalInited')
         if self._listReq:
             self._listReq.start(self._onPrbListReceived)
         return FUNCTIONAL_FLAG.UNDEFINED
 
-    def fini(self, clientPrb = None, woEvents = False):
+    def fini(self, clientPrb=None, woEvents=False):
         self._hasEntity = False
         if self._listReq:
             self._listReq.stop()
             self._listReq = None
         super(IntroPrbFunctional, self).fini(clientPrb, woEvents)
         try:
-            for listener in self._listeners:
-                listener.onIntroPrbFunctionalFinished()
-
+            self._invokeListeners('onIntroPrbFunctionalFinished')
         except:
             LOG_CURRENT_EXCEPTION()
 
+        self.clear()
         return FUNCTIONAL_FLAG.UNDEFINED
 
     def getEntityType(self):
@@ -159,13 +155,13 @@ class IntroPrbFunctional(_PrbFunctional):
     def hasEntity(self):
         return self._hasEntity
 
-    def getPermissions(self, pID = None):
+    def getPermissions(self, pID=None):
         return IntroPrbPermissions()
 
     def getConfirmDialogMeta(self, ctx):
         return rally_dialog_meta.createPrbIntroLeaveMeta(ctx, self.getEntityType())
 
-    def leave(self, ctx, callback = None):
+    def leave(self, ctx, callback=None):
         g_prbCtrlEvents.onPrebattleIntroModeLeft()
         if callback is not None:
             callback(True)
@@ -181,7 +177,7 @@ class PrbInitFunctional(interfaces.IPrbFunctional):
         super(PrbInitFunctional, self).__init__()
         self.__prbInitSteps = 0
 
-    def init(self, clientPrb = None, ctx = None):
+    def init(self, clientPrb=None, ctx=None):
         if clientPrb is None:
             clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
@@ -193,8 +189,7 @@ class PrbInitFunctional(interfaces.IPrbFunctional):
                 self.prb_onRosterReceived()
         return FUNCTIONAL_FLAG.UNDEFINED
 
-    def fini(self, clientPrb = None, woEvents = False):
-        self.__dispatcher = None
+    def fini(self, clientPrb=None, woEvents=False):
         if clientPrb is None:
             clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
@@ -249,7 +244,7 @@ class PrbRosterRequester(interfaces.IPrbListRequester):
             self.__ctx = None
         return
 
-    def request(self, ctx = None):
+    def request(self, ctx=None):
         self.__ctx = ctx
         BigWorld.player().requestPrebattleRoster(self.__ctx.getPrbID())
 
@@ -263,7 +258,7 @@ class PrbRosterRequester(interfaces.IPrbListRequester):
 
 class PrbDispatcher(_PrbFunctional):
 
-    def __init__(self, settings, permClass = None, limits = None, requestHandlers = None):
+    def __init__(self, settings, permClass=None, limits=None, requestHandlers=None):
         super(PrbDispatcher, self).__init__(interfaces.IPrbListener, requestHandlers, FUNCTIONAL_FLAG.PREBATTLE)
         self._settings = settings
         self._permClass = permClass or DefaultPrbPermissions
@@ -271,7 +266,7 @@ class PrbDispatcher(_PrbFunctional):
         self._hasEntity = False
         self._cooldown = prb_cooldown.PrbCooldownManager()
 
-    def init(self, clientPrb = None, ctx = None):
+    def init(self, clientPrb=None, ctx=None):
         self._hasEntity = True
         if clientPrb is None:
             clientPrb = prb_getters.getClientPrebattle()
@@ -284,14 +279,12 @@ class PrbDispatcher(_PrbFunctional):
             clientPrb.onPlayerAdded += self.prb_onPlayerAdded
             clientPrb.onPlayerRemoved += self.prb_onPlayerRemoved
             clientPrb.onKickedFromQueue += self.prb_onKickedFromQueue
-            for listener in self._listeners:
-                listener.onPrbFunctionalInited()
-
+            self._invokeListeners('onPrbFunctionalInited')
         else:
             LOG_ERROR('ClientPrebattle is not defined')
         return FUNCTIONAL_FLAG.UNDEFINED
 
-    def fini(self, clientPrb = None, woEvents = False):
+    def fini(self, clientPrb=None, woEvents=False):
         self._hasEntity = False
         self._settings = None
         super(PrbDispatcher, self).fini(clientPrb, woEvents)
@@ -300,12 +293,11 @@ class PrbDispatcher(_PrbFunctional):
             self._limits = None
         if not woEvents:
             try:
-                for listener in self._listeners:
-                    listener.onPrbFunctionalFinished()
-
+                self._invokeListeners('onPrbFunctionalFinished')
             except:
                 LOG_CURRENT_EXCEPTION()
 
+        self.clear()
         if clientPrb is None:
             clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
@@ -325,8 +317,7 @@ class PrbDispatcher(_PrbFunctional):
         return prb_getters.getPrebattleID()
 
     def getEntityType(self):
-        if self._settings:
-            return self._settings['type']
+        return self._settings['type'] if self._settings else 0
 
     def getEntityTypeName(self):
         return prb_getters.getPrebattleTypeName(self.getEntityType())
@@ -337,10 +328,10 @@ class PrbDispatcher(_PrbFunctional):
     def getLimits(self):
         return self._limits
 
-    def getPermissions(self, pID = None):
+    def getPermissions(self, pID=None):
         return restrictions.createPermissions(self, pID=pID)
 
-    def isCreator(self, pDatabaseID = None):
+    def isCreator(self, pDatabaseID=None):
         return self._permClass.isCreator(self.getRoles(pDatabaseID=pDatabaseID))
 
     def hasEntity(self):
@@ -364,8 +355,7 @@ class PrbDispatcher(_PrbFunctional):
     def prb_onSettingUpdated(self, settingName):
         settingValue = self._settings[settingName]
         LOG_DEBUG('prb_onSettingUpdated', settingName, settingValue)
-        for listener in self._listeners:
-            listener.onSettingUpdated(self, settingName, settingValue)
+        self._invokeListeners('onSettingUpdated', self, settingName, settingValue)
 
     def prb_onTeamStatesReceived(self):
         team1State = self.getTeamState(team=1)
@@ -374,31 +364,26 @@ class PrbDispatcher(_PrbFunctional):
         if self._deferredReset and not self.getTeamState().isInQueue():
             self._deferredReset = False
             self.reset()
-        for listener in self._listeners:
-            listener.onTeamStatesReceived(self, team1State, team2State)
+        self._invokeListeners('onTeamStatesReceived', self, team1State, team2State)
 
     def prb_onPlayerStateChanged(self, pID, roster):
         accountInfo = self.getPlayerInfo(pID=pID)
         LOG_DEBUG('prb_onPlayerStateChanged', accountInfo)
-        for listener in self._listeners:
-            listener.onPlayerStateChanged(self, roster, accountInfo)
+        self._invokeListeners('onPlayerStateChanged', self, roster, accountInfo)
 
     def prb_onRosterReceived(self):
         LOG_DEBUG('prb_onRosterReceived')
         rosters = self.getRosters()
-        for listener in self._listeners:
-            listener.onRostersChanged(self, rosters, True)
-
+        self._invokeListeners('onRostersChanged', self, rosters, True)
         team = self.getPlayerTeam()
-        for listener in self._listeners:
-            listener.onPlayerTeamNumberChanged(self, team)
+        self._invokeListeners('onPlayerTeamNumberChanged', self, team)
 
     def prb_onPlayerRosterChanged(self, pID, prevRoster, roster, actorID):
         LOG_DEBUG('prb_onPlayerRosterChanged', pID, prevRoster, roster, actorID)
         rosters = self.getRosters(keys=[prevRoster, roster])
         actorInfo = self.getPlayerInfo(pID=actorID)
         playerInfo = self.getPlayerInfo(pID=pID)
-        for listener in self._listeners:
+        for listener in self.getListenersIterator():
             if actorInfo and playerInfo:
                 listener.onPlayerRosterChanged(self, actorInfo, playerInfo)
             listener.onRostersChanged(self, rosters, False)
@@ -407,14 +392,13 @@ class PrbDispatcher(_PrbFunctional):
             prevTeam, _ = decodeRoster(prevRoster)
             currentTeam, _ = decodeRoster(roster)
             if currentTeam is not prevTeam:
-                for listener in self._listeners:
-                    listener.onPlayerTeamNumberChanged(self, currentTeam)
+                self._invokeListeners('onPlayerTeamNumberChanged', self, currentTeam)
 
     def prb_onPlayerAdded(self, pID, roster):
         LOG_DEBUG('prb_onPlayerAdded', pID, roster)
         rosters = self.getRosters(keys=[roster])
         playerInfo = self.getPlayerInfo(pID=pID, rosterKey=roster)
-        for listener in self._listeners:
+        for listener in self.getListenersIterator():
             listener.onPlayerAdded(self, playerInfo)
             listener.onRostersChanged(self, rosters, False)
 
@@ -422,7 +406,7 @@ class PrbDispatcher(_PrbFunctional):
         LOG_DEBUG('prb_onPlayerRemoved', pID, roster, name)
         rosters = self.getRosters(keys=[roster])
         playerInfo = prb_items.PlayerPrbInfo(pID, name=name)
-        for listener in self._listeners:
+        for listener in self.getListenersIterator():
             listener.onPlayerRemoved(self, playerInfo)
             listener.onRostersChanged(self, rosters, False)
 
@@ -435,7 +419,7 @@ class PrbDispatcher(_PrbFunctional):
 
 class PrbFunctional(PrbDispatcher):
 
-    def getRosterKey(self, pID = None):
+    def getRosterKey(self, pID=None):
         rosters = prb_getters.getPrebattleRosters()
         rosterRange = PREBATTLE_ROSTER.getRange(self.getEntityType())
         if pID is None:
@@ -446,7 +430,7 @@ class PrbFunctional(PrbDispatcher):
 
         return PREBATTLE_ROSTER.UNKNOWN
 
-    def getPlayerInfo(self, pID = None, rosterKey = None):
+    def getPlayerInfo(self, pID=None, rosterKey=None):
         rosters = prb_getters.getPrebattleRosters()
         if pID is None:
             pID = account_helpers.getPlayerID()
@@ -472,14 +456,14 @@ class PrbFunctional(PrbDispatcher):
 
         return prb_items.PlayerPrbInfo(-1L)
 
-    def getPlayerTeam(self, pID = None):
+    def getPlayerTeam(self, pID=None):
         team = 0
         roster = self.getRosterKey(pID=pID)
         if roster is not PREBATTLE_ROSTER.UNKNOWN:
             team, _ = decodeRoster(roster)
         return team
 
-    def getTeamState(self, team = None):
+    def getTeamState(self, team=None):
         result = prb_items.TeamStateInfo(0)
         if team is None:
             roster = self.getRosterKey()
@@ -490,7 +474,7 @@ class PrbFunctional(PrbDispatcher):
             result = prb_items.TeamStateInfo(teamStates[team])
         return result
 
-    def getRoles(self, pDatabaseID = None, clanDBID = None, team = None):
+    def getRoles(self, pDatabaseID=None, clanDBID=None, team=None):
         result = 0
         if self._settings is None:
             return result
@@ -513,7 +497,7 @@ class PrbFunctional(PrbDispatcher):
     def getProps(self):
         return prb_items.PrbPropsInfo(**prb_getters.getPrebattleProps())
 
-    def leave(self, ctx, callback = None):
+    def leave(self, ctx, callback=None):
         ctx.startProcessing(callback)
         BigWorld.player().prb_leave(ctx.onResponseReceived)
 
@@ -531,7 +515,7 @@ class PrbFunctional(PrbDispatcher):
             else:
                 setNotReady(0)
 
-    def assign(self, ctx, callback = None):
+    def assign(self, ctx, callback=None):
         prevTeam, _ = decodeRoster(self.getRosterKey(pID=ctx.getPlayerID()))
         nextTeam, assigned = decodeRoster(ctx.getRoster())
         pPermissions = self.getPermissions()
@@ -555,7 +539,7 @@ class PrbFunctional(PrbDispatcher):
         ctx.startProcessing(callback)
         BigWorld.player().prb_assign(ctx.getPlayerID(), ctx.getRoster(), ctx.onResponseReceived)
 
-    def setTeamState(self, ctx, callback = None):
+    def setTeamState(self, ctx, callback=None):
         team = ctx.getTeam()
         if not self.getPermissions().canSetTeamState(team=team):
             LOG_ERROR('Player can not change state of team', team)
@@ -576,7 +560,7 @@ class PrbFunctional(PrbDispatcher):
         elif callback:
             callback(True)
 
-    def setPlayerState(self, ctx, callback = None):
+    def setPlayerState(self, ctx, callback=None):
         playerInfo = self.getPlayerInfo()
         if playerInfo is not None:
             playerIsReady = playerInfo.isReady()
@@ -593,7 +577,7 @@ class PrbFunctional(PrbDispatcher):
                 callback(False)
         return
 
-    def kickPlayer(self, ctx, callback = None):
+    def kickPlayer(self, ctx, callback=None):
         pID = ctx.getPlayerID()
         rosterKey = self.getRosterKey(pID=pID)
         team, assigned = decodeRoster(rosterKey)
@@ -612,7 +596,7 @@ class PrbFunctional(PrbDispatcher):
         ctx.startProcessing(callback)
         BigWorld.player().prb_kick(ctx.getPlayerID(), ctx.onResponseReceived)
 
-    def swapTeams(self, ctx, callback = None):
+    def swapTeams(self, ctx, callback=None):
         if self._cooldown.validate(REQUEST_TYPE.SWAP_TEAMS):
             if callback:
                 callback(False)
@@ -627,7 +611,7 @@ class PrbFunctional(PrbDispatcher):
             if callback:
                 callback(False)
 
-    def sendInvites(self, ctx, callback = None):
+    def sendInvites(self, ctx, callback=None):
         if self._cooldown.validate(REQUEST_TYPE.SEND_INVITE):
             if callback:
                 callback(False)
@@ -643,7 +627,7 @@ class PrbFunctional(PrbDispatcher):
             if callback:
                 callback(False)
 
-    def _setTeamNotReady(self, ctx, callback = None):
+    def _setTeamNotReady(self, ctx, callback=None):
         if self._cooldown.validate(REQUEST_TYPE.SET_TEAM_STATE):
             if callback:
                 callback(False)
@@ -652,7 +636,7 @@ class PrbFunctional(PrbDispatcher):
         BigWorld.player().prb_teamNotReady(ctx.getTeam(), ctx.onResponseReceived)
         self._cooldown.process(REQUEST_TYPE.SET_TEAM_STATE, coolDown=REQUEST_COOLDOWN.PREBATTLE_TEAM_NOT_READY)
 
-    def _setTeamReady(self, ctx, callback = None):
+    def _setTeamReady(self, ctx, callback=None):
         if prb_getters.isParentControlActivated():
             g_eventDispatcher.showParentControlNotification()
             if callback:
@@ -676,7 +660,7 @@ class PrbFunctional(PrbDispatcher):
                 callback(False)
             SystemMessages.pushMessage(messages.getInvalidTeamMessage(notValidReason, functional=self), type=SystemMessages.SM_TYPE.Error)
 
-    def _setPlayerNotReady(self, ctx, callback = None):
+    def _setPlayerNotReady(self, ctx, callback=None):
         if self._cooldown.validate(REQUEST_TYPE.SET_PLAYER_STATE, REQUEST_COOLDOWN.PREBATTLE_NOT_READY):
             if callback:
                 callback(False)
@@ -692,7 +676,7 @@ class PrbFunctional(PrbDispatcher):
         BigWorld.player().prb_notReady(PREBATTLE_ACCOUNT_STATE.NOT_READY, ctx.onResponseReceived)
         self._cooldown.process(REQUEST_TYPE.SET_PLAYER_STATE, REQUEST_COOLDOWN.PREBATTLE_NOT_READY)
 
-    def _setPlayerReady(self, ctx, callback = None):
+    def _setPlayerReady(self, ctx, callback=None):
         if prb_getters.isParentControlActivated():
             g_eventDispatcher.showParentControlNotification()
             if callback:

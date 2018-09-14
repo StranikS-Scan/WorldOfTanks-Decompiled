@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/DossierRequester.py
 import time
 from functools import partial
@@ -55,8 +55,7 @@ class UserDossier(object):
 
     def __nextRequestTime(self):
         t = constants.REQUEST_COOLDOWN.PLAYER_DOSSIER - (time.time() - self.__lastResponseTime)
-        if t > 0:
-            return t
+        return t if t > 0 else 0
 
     def __processQueue(self):
         if self.__request is not None:

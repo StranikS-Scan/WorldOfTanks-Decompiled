@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/D3DEnums.py
 BW_BLEND_ZERO = 1
 BW_BLEND_ONE = 2

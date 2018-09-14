@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/View.py
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
@@ -8,7 +8,7 @@ __author__ = 'd_trofimov'
 
 class View(AbstractViewMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(View, self).__init__()
         self.__settings = None
         self.__uniqueName = None
@@ -69,6 +69,9 @@ class View(AbstractViewMeta):
     @property
     def uniqueName(self):
         return self.__uniqueName
+
+    def getUniqueName(self):
+        return self.uniqueName or self.alias
 
     def setUniqueName(self, name):
         if name is not None:

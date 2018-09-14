@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/ItemsParameters.py
 import BigWorld
 from gui.shared.utils import ParametersCache, RELOAD_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, CLIP_VEHICLES_PROP_NAME, GUN_RELOADING_TYPE, GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, CLIP_VEHICLES_CD_PROP_NAME, UNICHARGED_VEHICLES_PROP_NAME, VEHICLES_PROP_NAME
@@ -43,6 +43,7 @@ class _ItemsParameters(object):
                                                      ('piercingPower', lambda v: self.__formatRange(*v)),
                                                      ('caliber', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
                                                      ('shotsNumberRange', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
+                                                     ('explosionRadius', lambda v: BigWorld.wg_getNiceNumberFormat(v) if v > 0 else None),
                                                      ('areaRadius', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
                                                      ('artDelayRange', lambda v: BigWorld.wg_getNiceNumberFormat(v))),
                                artefacts.Bomber: (('bombDamage', lambda v: self.__formatRange(*v)),
@@ -53,8 +54,8 @@ class _ItemsParameters(object):
          vehicles._SHELL: (('caliber', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
                            (PIERCING_POWER_PROP_NAME, lambda v: self.__formatRange(*v)),
                            (DAMAGE_PROP_NAME, lambda v: self.__formatRange(*v)),
-                           ('explosionRadius', lambda v: (BigWorld.wg_getNiceNumberFormat(v) if v > 0 else None))),
-         vehicles._OPTIONALDEVICE: (('weight', lambda v: (self.__formatRange(*v) if v[1] > 0 else None)),),
+                           ('explosionRadius', lambda v: BigWorld.wg_getNiceNumberFormat(v) if v > 0 else None)),
+         vehicles._OPTIONALDEVICE: (('weight', lambda v: self.__formatRange(*v) if v[1] > 0 else None),),
          vehicles._GUN: (('caliber', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
                          (SHELLS_COUNT_PROP_NAME, lambda v: self.__formatRange(*v)),
                          (SHELL_RELOADING_TIME_PROP_NAME, lambda v: self.__formatRange(*v)),
@@ -66,78 +67,16 @@ class _ItemsParameters(object):
                          (AIMING_TIME_PROP_NAME, lambda v: self.__formatRange(*v)),
                          ('weight', lambda v: BigWorld.wg_getIntegralFormat(v)))}
 
-    def __getCommonParameters(self, itemTypeCompDescr, paramsDict, excluded = tuple()):
-        result = list()
-        if GUI_SETTINGS.technicalInfo:
-            compDescrType = getTypeOfCompactDescr(itemTypeCompDescr)
-            params = self.__itemCommonParamsList.get(compDescrType, {})
-            if compDescrType == vehicles._EQUIPMENT:
-                eqDescr = vehicles.getDictDescr(itemTypeCompDescr)
-                params = params.get(type(eqDescr), [])
-            else:
-                params = self.__itemCommonParamsList.get(compDescrType, [])
-            for param in params:
-                if type(param) == str:
-                    if param not in excluded:
-                        result.append([param, paramsDict.get(param)])
-                else:
-                    paramName = param[0]
-                    paramValue = paramsDict.get(param[0])
-                    formatFunc = param[1]
-                    formattedValue = formatFunc(paramValue)
-                    if formattedValue is not None and paramName not in excluded:
-                        result.append([paramName, formattedValue])
-
-        return result
-
-    def __formatAsCurrent(self, item):
-        return '<font color="#658c4c"><b>%s</b></font>' % item
-
-    def __formatRange(self, minVal, maxVal):
-        if minVal == maxVal:
-            return BigWorld.wg_getNiceNumberFormat(minVal)
-
-        def smartRound(value):
-            if value > 99:
-                return round(value)
-            elif value > 9:
-                return round(value, 1)
-            else:
-                return round(value, 2)
-
-        return '%s-%s' % (BigWorld.wg_getNiceNumberFormat(smartRound(minVal)), BigWorld.wg_getNiceNumberFormat(smartRound(maxVal)))
-
-    def __formatList(self, values, isIntegral = True):
-        wrapper = BigWorld.wg_getNiceNumberFormat
-        if isIntegral:
-            wrapper = lambda v: BigWorld.wg_getIntegralFormat(int(v))
-        return '/'.join(map(lambda v: wrapper(v), values))
-
-    def __getCompatibles(self, name, collection):
-        return ', '.join([ (self.__formatAsCurrent(c) if c == name else c) for c in collection ])
-
-    def __getItemFullName(self, itemTypeIdx, itemDescr):
-        return getTypeInfoByIndex(itemTypeIdx)['userString'] + ' ' + itemDescr['userString']
-
-    def getParameters(self, itemDescr, vehicleDescr = None):
+    def getParameters(self, itemDescr, vehicleDescr=None):
         return self.__get(itemDescr, vehicleDescr, isCompatibles=False).get('parameters')
 
-    def getCompatibles(self, itemDescr, vehicleDescr = None):
+    def getCompatibles(self, itemDescr, vehicleDescr=None):
         return self.__get(itemDescr, vehicleDescr, isParameters=False).get('compatible')
 
-    def get(self, itemDescr, vehicleDescr = None):
+    def get(self, itemDescr, vehicleDescr=None):
         return self.__get(itemDescr, vehicleDescr)
 
-    def __get(self, itemDescr, vehicleDescr = None, isParameters = True, isCompatibles = True):
-        try:
-            compactDescr = itemDescr.type.compactDescr if isinstance(itemDescr, vehicles.VehicleDescr) else itemDescr['compactDescr']
-            handler = self.__itemTypeHandlers.get(getTypeOfCompactDescr(compactDescr), lambda *args: None)
-            return handler(itemDescr, vehicleDescr, isParameters, isCompatibles)
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-            return dict()
-
-    def getRadio(self, itemDescr, vehicleDescr = None, isParameters = True, isCompatibles = True):
+    def getRadio(self, itemDescr, vehicleDescr=None, isParameters=True, isCompatibles=True):
         result = {'parameters': tuple(),
          'compatible': tuple()}
         if isParameters:
@@ -150,7 +89,7 @@ class _ItemsParameters(object):
             result['compatible'] = (('vehicles', self.__getCompatibles(curVehicle, compatibles['vehicles'])),)
         return result
 
-    def getChassis(self, itemDescr, vehicleDescr = None, isParameters = True, isCompatibles = True):
+    def getChassis(self, itemDescr, vehicleDescr=None, isParameters=True, isCompatibles=True):
         result = {'parameters': tuple(),
          'compatible': tuple()}
         if isParameters:
@@ -163,7 +102,7 @@ class _ItemsParameters(object):
             result['compatible'] = (('vehicles', self.__getCompatibles(curVehicle, compatibles['vehicles'])),)
         return result
 
-    def getEngine(self, itemDescr, vehicleDescr = None, isParameters = True, isCompatibles = True):
+    def getEngine(self, itemDescr, vehicleDescr=None, isParameters=True, isCompatibles=True):
         result = {'parameters': tuple(),
          'compatible': tuple()}
         if isParameters:
@@ -176,7 +115,7 @@ class _ItemsParameters(object):
             result['compatible'] = (('vehicles', self.__getCompatibles(curVehicle, compatibles['vehicles'])),)
         return result
 
-    def getTurret(self, itemDescr, vehicleDescr = None, isParameters = True, isCompatibles = True):
+    def getTurret(self, itemDescr, vehicleDescr=None, isParameters=True, isCompatibles=True):
         result = {'parameters': tuple(),
          'compatible': tuple()}
         if isParameters:
@@ -190,7 +129,7 @@ class _ItemsParameters(object):
             result['compatible'] = (('vehicles', self.__getCompatibles(curVehicle, compatibles['vehicles'])), ('guns', self.__getCompatibles(curGun, compatibles['guns'])))
         return result
 
-    def getVehicle(self, vehicleDescr, stubParameter = None, isParameters = True, isCompatibles = True):
+    def getVehicle(self, vehicleDescr, stubParameter=None, isParameters=True, isCompatibles=True):
         result = {'parameters': tuple(),
          'compatible': tuple(),
          'stats': list(),
@@ -214,7 +153,7 @@ class _ItemsParameters(object):
                 result['base'].insert(1, self.__getItemFullName(vehicles._TURRET, vehicleDescr.turret))
         return result
 
-    def getEquipment(self, itemDescr, vehicleDescr = None, isParameters = True, isCompatibles = True):
+    def getEquipment(self, itemDescr, vehicleDescr=None, isParameters=True, isCompatibles=True):
         result = {'parameters': tuple(),
          'compatible': tuple()}
         if isParameters:
@@ -223,7 +162,7 @@ class _ItemsParameters(object):
             pass
         return result
 
-    def getOptionalDevice(self, itemDescr, vehicleDescr = None, isParameters = True, isCompatibles = True):
+    def getOptionalDevice(self, itemDescr, vehicleDescr=None, isParameters=True, isCompatibles=True):
         result = {'parameters': tuple(),
          'compatible': tuple()}
         if isParameters:
@@ -232,7 +171,7 @@ class _ItemsParameters(object):
             pass
         return result
 
-    def getGun(self, itemDescr, vehicleDescr = None, isParameters = True, isCompatibles = True):
+    def getGun(self, itemDescr, vehicleDescr=None, isParameters=True, isCompatibles=True):
         result = {'parameters': tuple(),
          'compatible': tuple()}
         if isCompatibles:
@@ -261,6 +200,25 @@ class _ItemsParameters(object):
             result['parameters'].append((GUN_RELOADING_TYPE, gunReloadingType))
         return result
 
+    def getShell(self, itemDescr, vehicleDescr=None, isParameters=True, isCompatibles=True):
+        result = {'parameters': tuple(),
+         'compatible': tuple()}
+        if isParameters:
+            result['parameters'] = self.__getCommonParameters(itemDescr['compactDescr'], ParametersCache.g_instance.getShellParameters(itemDescr, vehicleDescr))
+        if isCompatibles:
+            compatibles = ParametersCache.g_instance.getShellCompatibles(itemDescr, vehicleDescr)
+            result['compatible'] = (('shellGuns', ', '.join(compatibles['shellGuns'])),)
+        return result
+
+    def __get(self, itemDescr, vehicleDescr=None, isParameters=True, isCompatibles=True):
+        try:
+            compactDescr = itemDescr.type.compactDescr if isinstance(itemDescr, vehicles.VehicleDescr) else itemDescr['compactDescr']
+            handler = self.__itemTypeHandlers.get(getTypeOfCompactDescr(compactDescr), lambda *args: None)
+            return handler(itemDescr, vehicleDescr, isParameters, isCompatibles)
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+            return dict()
+
     def __getGunReloadingSystemOpportunities(self, vehicleDescr, vehiclesNamesList, clipVehicleCdList):
         reloadingSystemType = GUN_NORMAL
         if vehicleDescr is not None:
@@ -281,15 +239,57 @@ class _ItemsParameters(object):
                 reloadingSystemType = GUN_CLIP
         return reloadingSystemType
 
-    def getShell(self, itemDescr, vehicleDescr = None, isParameters = True, isCompatibles = True):
-        result = {'parameters': tuple(),
-         'compatible': tuple()}
-        if isParameters:
-            result['parameters'] = self.__getCommonParameters(itemDescr['compactDescr'], ParametersCache.g_instance.getShellParameters(itemDescr, vehicleDescr))
-        if isCompatibles:
-            compatibles = ParametersCache.g_instance.getShellCompatibles(itemDescr, vehicleDescr)
-            result['compatible'] = (('shellGuns', ', '.join(compatibles['shellGuns'])),)
+    def __getCommonParameters(self, itemTypeCompDescr, paramsDict, excluded=tuple()):
+        result = list()
+        if GUI_SETTINGS.technicalInfo:
+            compDescrType = getTypeOfCompactDescr(itemTypeCompDescr)
+            params = self.__itemCommonParamsList.get(compDescrType, {})
+            if compDescrType == vehicles._EQUIPMENT:
+                eqDescr = vehicles.getDictDescr(itemTypeCompDescr)
+                params = params.get(type(eqDescr), [])
+            else:
+                params = self.__itemCommonParamsList.get(compDescrType, [])
+            for param in params:
+                if type(param) == str:
+                    if param not in excluded:
+                        result.append([param, paramsDict.get(param)])
+                paramName = param[0]
+                paramValue = paramsDict.get(param[0])
+                formatFunc = param[1]
+                formattedValue = formatFunc(paramValue)
+                if formattedValue is not None and paramName not in excluded:
+                    result.append([paramName, formattedValue])
+
         return result
+
+    def __formatAsCurrent(self, item):
+        return '<font color="#658c4c"><b>%s</b></font>' % item
+
+    def __formatRange(self, minVal, maxVal):
+        if minVal == maxVal:
+            return BigWorld.wg_getNiceNumberFormat(minVal)
+
+        def smartRound(value):
+            if value > 99:
+                return round(value)
+            elif value > 9:
+                return round(value, 1)
+            else:
+                return round(value, 2)
+
+        return '%s-%s' % (BigWorld.wg_getNiceNumberFormat(smartRound(minVal)), BigWorld.wg_getNiceNumberFormat(smartRound(maxVal)))
+
+    def __formatList(self, values, isIntegral=True):
+        wrapper = BigWorld.wg_getNiceNumberFormat
+        if isIntegral:
+            wrapper = lambda v: BigWorld.wg_getIntegralFormat(int(v))
+        return '/'.join(map(lambda v: wrapper(v), values))
+
+    def __getCompatibles(self, name, collection):
+        return ', '.join([ (self.__formatAsCurrent(c) if c == name else c) for c in collection ])
+
+    def __getItemFullName(self, itemTypeIdx, itemDescr):
+        return getTypeInfoByIndex(itemTypeIdx)['userString'] + ' ' + itemDescr['userString']
 
 
 g_instance = _ItemsParameters()

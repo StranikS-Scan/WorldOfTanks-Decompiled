@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/FortOrder.py
 from FortifiedRegionBase import FORT_EVENT_TYPE
 from constants import FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES
@@ -23,7 +23,7 @@ class FortOrder(object):
      FORT_ORDER_TYPE.ARTILLERY: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_ARTILLERY, RES_ICONS.MAPS_ICONS_ORDERS_BIG_ARTILLERY),
      FORT_ORDER_TYPE.BOMBER: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_BOMBER, RES_ICONS.MAPS_ICONS_ORDERS_BIG_BOMBER)}
 
-    def __init__(self, orderID, proxy = None, level = 0):
+    def __init__(self, orderID, proxy=None, level=0):
         self.orderID = orderID
         self.buildingID = None
         self.count = 0
@@ -75,18 +75,12 @@ class FortOrder(object):
     @property
     def icon(self):
         icons = self.ORDERS_ICONS.get(self.orderID, None)
-        if icons:
-            return icons[0]
-        else:
-            return
+        return icons[0] if icons else None
 
     @property
     def bigIcon(self):
         icons = self.ORDERS_ICONS.get(self.orderID, None)
-        if icons:
-            return icons[1]
-        else:
-            return
+        return icons[1] if icons else None
 
     @property
     def inProgress(self):
@@ -136,26 +130,19 @@ class FortOrder(object):
         return percent
 
     def getUsageLeftTime(self):
-        if self.finishTime is not None:
-            return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.finishTime))
-        else:
-            return 0
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.finishTime)) if self.finishTime is not None else 0
 
     def getUsageLeftTimeStr(self):
         return time_formatters.getTimeDurationStr(self.getProductionLeftTime())
 
     def getProductionLeftTime(self):
-        if self.productionTime is not None:
-            return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.productionTime))
-        else:
-            return 0
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.productionTime)) if self.productionTime is not None else 0
 
     def getProductionLeftTimeStr(self):
         return time_formatters.getTimeDurationStr(self.getProductionLeftTime())
 
     def getOperationDescription(self):
-        if self.isConsumable:
-            return i18n.makeString('#fortifications:fortConsumableOrder/descr/%d' % self.orderID)
+        return i18n.makeString('#fortifications:fortConsumableOrder/descr/%d' % self.orderID) if self.isConsumable else ''
 
     def getUserType(self):
         i18nKey = 'battleConsumable' if self.isConsumable else 'consumable'

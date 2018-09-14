@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Netscape/PowerPlant.py
 """Suite PowerPlant:
 Level 0, version 0
@@ -12,7 +13,7 @@ _code = 'ppnt'
 class PowerPlant_Events:
     _argmap_SwitchTellTarget = {'to': 'data'}
 
-    def SwitchTellTarget(self, _no_object = None, _attributes = {}, **_arguments):
+    def SwitchTellTarget(self, _no_object=None, _attributes={}, **_arguments):
         """SwitchTellTarget: Makes an object the \xd2focus\xd3 of AppleEvents
         Keyword argument to: reference to new focus of AppleEvents
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -25,14 +26,11 @@ class PowerPlant_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_select = {'data': 'data'}
 
-    def select(self, _object, _attributes = {}, **_arguments):
+    def select(self, _object, _attributes={}, **_arguments):
         """select: Sets the present selection
         Required argument: object to select or container of sub-objects to select
         Keyword argument data: sub-object(s) to select
@@ -45,8 +43,7 @@ class PowerPlant_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 _Enum_dbac = {'DoNothing': '\x00\x00\x00\x00',

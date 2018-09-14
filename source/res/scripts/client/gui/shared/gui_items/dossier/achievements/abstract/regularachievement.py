@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/RegularAchievement.py
 import BigWorld
 from helpers import i18n
@@ -19,7 +19,7 @@ class RegularAchievement(GUIItem):
     ICON_PATH_95X85 = '../maps/icons/achievement/95x85'
     ICON_DEFAULT = '../maps/icons/achievement/noImage.png'
 
-    def __init__(self, name, block, dossier, value = None):
+    def __init__(self, name, block, dossier, value=None):
         super(RegularAchievement, self).__init__()
         self._name = str(name)
         self._block = str(block)
@@ -54,10 +54,7 @@ class RegularAchievement(GUIItem):
 
     def getI18nValue(self):
         maxValue = RECORD_MAX_VALUES.get(self.getRecordName())
-        if maxValue is not None and self._value >= maxValue:
-            return i18n.makeString('#achievements:achievement/maxMedalValue') % BigWorld.wg_getIntegralFormat(maxValue - 1)
-        else:
-            return BigWorld.wg_getIntegralFormat(self._value)
+        return i18n.makeString('#achievements:achievement/maxMedalValue') % BigWorld.wg_getIntegralFormat(maxValue - 1) if maxValue is not None and self._value >= maxValue else BigWorld.wg_getIntegralFormat(self._value)
 
     def getLevelUpValue(self):
         return self._lvlUpValue
@@ -121,18 +118,15 @@ class RegularAchievement(GUIItem):
 
     def getUserHeroInfo(self):
         heroInfoKey = '#achievements:%s_heroInfo' % self._getActualName()
-        if i18n.doesTextExist(heroInfoKey):
-            return i18n.makeString(heroInfoKey)
+        return i18n.makeString(heroInfoKey) if i18n.doesTextExist(heroInfoKey) else ''
 
     def getNotificationInfo(self):
         notificationKey = '#achievements:%s_notification' % self._getActualName()
-        if i18n.doesTextExist(notificationKey):
-            return i18n.makeString(notificationKey)
+        return i18n.makeString(notificationKey) if i18n.doesTextExist(notificationKey) else ''
 
     def getUserCondition(self):
         condKey = '#achievements:%s_condition' % self._getActualName()
-        if i18n.doesTextExist(condKey):
-            return i18n.makeString(condKey)
+        return i18n.makeString(condKey) if i18n.doesTextExist(condKey) else ''
 
     @classmethod
     def checkIsInDossier(cls, block, name, dossier):

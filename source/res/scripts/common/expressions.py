@@ -1,7 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/expressions.py
 import cStringIO
-import tokenize, token
+import tokenize
+import token
 
 class ParserException(Exception):
 
@@ -37,7 +38,7 @@ class _Tokenizer:
             self.__next()
         return self.__currentToken
 
-    def match(self, toknum, tokval = None):
+    def match(self, toknum, tokval=None):
         if self.__currentToken is None:
             self.__next()
         currentToken = self.__currentToken

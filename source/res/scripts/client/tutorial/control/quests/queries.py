@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/queries.py
 from helpers import i18n
 from tutorial.control import ContentQuery
@@ -16,6 +16,9 @@ class AwardWindowContentQuery(ContentQuery):
         content['bgImage'] = self.__getAwardIcon(content, chapter)
         content['bonuses'] = chapter.getBonus().getValues()
         content['chapterID'] = chapterID
+        progrCondition = chapter.getProgressCondition()
+        if progrCondition.getID() == 'vehicleBattlesCount':
+            content['vehicle'] = progrCondition.getValues().get('vehicle')
         content['showQuestsBtn'] = not descriptor.areAllBonusesReceived(self._bonuses.getCompleted())
 
     def __getAwardHeader(self, content, chapter):

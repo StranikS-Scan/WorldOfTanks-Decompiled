@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ConfigParser.py
 """Configuration file parser.
 
@@ -125,7 +125,7 @@ class Error(Exception):
 
     message = property(_get_message, _set_message)
 
-    def __init__(self, msg = ''):
+    def __init__(self, msg=''):
         self.message = msg
         Exception.__init__(self, msg)
 
@@ -231,7 +231,7 @@ class MissingSectionHeaderError(ParsingError):
 
 class RawConfigParser():
 
-    def __init__(self, defaults = None, dict_type = _default_dict, allow_no_value = False):
+    def __init__(self, defaults=None, dict_type=_default_dict, allow_no_value=False):
         self._dict = dict_type
         self._sections = self._dict()
         self._defaults = self._dict()
@@ -309,7 +309,7 @@ class RawConfigParser():
 
         return read_ok
 
-    def readfp(self, fp, filename = None):
+    def readfp(self, fp, filename=None):
         """Like read() but the argument must be a file-like object.
         
         The `fp' argument must have a `readline' method.  Optional
@@ -394,7 +394,7 @@ class RawConfigParser():
             option = self.optionxform(option)
             return option in self._sections[section] or option in self._defaults
 
-    def set(self, section, option, value = None):
+    def set(self, section, option, value=None):
         """Set an option."""
         if not section or section == DEFAULTSECT:
             sectdict = self._defaults
@@ -481,41 +481,38 @@ class RawConfigParser():
                 value = line.strip()
                 if value:
                     cursect[optname].append(value)
-            else:
-                mo = self.SECTCRE.match(line)
-                if mo:
-                    sectname = mo.group('header')
-                    if sectname in self._sections:
-                        cursect = self._sections[sectname]
-                    elif sectname == DEFAULTSECT:
-                        cursect = self._defaults
-                    else:
-                        cursect = self._dict()
-                        cursect['__name__'] = sectname
-                        self._sections[sectname] = cursect
-                    optname = None
-                elif cursect is None:
-                    raise MissingSectionHeaderError(fpname, lineno, line)
+            mo = self.SECTCRE.match(line)
+            if mo:
+                sectname = mo.group('header')
+                if sectname in self._sections:
+                    cursect = self._sections[sectname]
+                elif sectname == DEFAULTSECT:
+                    cursect = self._defaults
                 else:
-                    mo = self._optcre.match(line)
-                    if mo:
-                        optname, vi, optval = mo.group('option', 'vi', 'value')
-                        optname = self.optionxform(optname.rstrip())
-                        if optval is not None:
-                            if vi in ('=', ':') and ';' in optval:
-                                pos = optval.find(';')
-                                if pos != -1 and optval[pos - 1].isspace():
-                                    optval = optval[:pos]
-                            optval = optval.strip()
-                            if optval == '""':
-                                optval = ''
-                            cursect[optname] = [optval]
-                        else:
-                            cursect[optname] = optval
-                    else:
-                        if not e:
-                            e = ParsingError(fpname)
-                        e.append(lineno, repr(line))
+                    cursect = self._dict()
+                    cursect['__name__'] = sectname
+                    self._sections[sectname] = cursect
+                optname = None
+            if cursect is None:
+                raise MissingSectionHeaderError(fpname, lineno, line)
+            mo = self._optcre.match(line)
+            if mo:
+                optname, vi, optval = mo.group('option', 'vi', 'value')
+                optname = self.optionxform(optname.rstrip())
+                if optval is not None:
+                    if vi in ('=', ':') and ';' in optval:
+                        pos = optval.find(';')
+                        if pos != -1 and optval[pos - 1].isspace():
+                            optval = optval[:pos]
+                    optval = optval.strip()
+                    if optval == '""':
+                        optval = ''
+                    cursect[optname] = [optval]
+                else:
+                    cursect[optname] = optval
+            if not e:
+                e = ParsingError(fpname)
+            e.append(lineno, repr(line))
 
         if e:
             raise e
@@ -566,7 +563,7 @@ class _Chainmap(_UserDict.DictMixin):
 
 class ConfigParser(RawConfigParser):
 
-    def get(self, section, option, raw = False, vars = None):
+    def get(self, section, option, raw=False, vars=None):
         """Get an option value for a given section.
         
         If `vars' is provided, it must be a dictionary. The option is looked up
@@ -603,7 +600,7 @@ class ConfigParser(RawConfigParser):
             return self._interpolate(section, option, value, d)
             return
 
-    def items(self, section, raw = False, vars = None):
+    def items(self, section, raw=False, vars=None):
         """Return a list of tuples with (name, value) for each option
         in the section.
         
@@ -646,8 +643,7 @@ class ConfigParser(RawConfigParser):
                 except KeyError as e:
                     raise InterpolationMissingOptionError(option, section, rawval, e.args[0])
 
-            else:
-                break
+            break
 
         if value and '%(' in value:
             raise InterpolationDepthError(option, section, rawval)
@@ -688,7 +684,7 @@ class SafeConfigParser(ConfigParser):
             if c == '%':
                 accum.append('%')
                 rest = rest[2:]
-            elif c == '(':
+            if c == '(':
                 m = self._interpvar_re.match(rest)
                 if m is None:
                     raise InterpolationSyntaxError(option, section, 'bad interpolation variable reference %r' % rest)
@@ -703,12 +699,11 @@ class SafeConfigParser(ConfigParser):
                     self._interpolate_some(option, accum, v, section, map, depth + 1)
                 else:
                     accum.append(v)
-            else:
-                raise InterpolationSyntaxError(option, section, "'%%' must be followed by '%%' or '(', found: %r" % (rest,))
+            raise InterpolationSyntaxError(option, section, "'%%' must be followed by '%%' or '(', found: %r" % (rest,))
 
         return
 
-    def set(self, section, option, value = None):
+    def set(self, section, option, value=None):
         """Set an option.  Extend ConfigParser.set: check for string values."""
         if self._optcre is self.OPTCRE or value:
             if not isinstance(value, basestring):

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/PrebattleUserCMHandler.py
 from adisp import process
 from constants import PREBATTLE_TYPE
@@ -10,15 +10,13 @@ KICK_FROM_PREBATTLE = 'kickPlayerFromPrebattle'
 
 class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
 
-    def __init__(self, cmProxy, ctx = None):
+    def __init__(self, cmProxy, ctx=None):
         super(PrebattleUserCMHandler, self).__init__(cmProxy, ctx)
         self._isCreator = self.prbFunctional.isCreator()
-        self._isSquad = self.prbFunctional.getEntityType() == PREBATTLE_TYPE.SQUAD
         self.startPrbListening()
 
     def fini(self):
         self._isCreator = None
-        self._isSquad = None
         self.stopPrbListening()
         super(PrebattleUserCMHandler, self).fini()
         return
@@ -45,9 +43,6 @@ class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
         handlers = super(PrebattleUserCMHandler, self)._getHandlers()
         handlers.update({KICK_FROM_PREBATTLE: 'kickPlayerFromPrebattle'})
         return handlers
-
-    def _isAppealsEnabled(self):
-        return self._getDenunciationsLeft() > 0 and not self.prbFunctional.getEntityType() == PREBATTLE_TYPE.SQUAD
 
     def _canKickPlayer(self):
         playerInfo = self.prbFunctional.getPlayerInfoByDbID(self.databaseID)

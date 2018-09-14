@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-netbsd1/IN.py
 IPPROTO_IP = 0
 IPPROTO_ICMP = 1

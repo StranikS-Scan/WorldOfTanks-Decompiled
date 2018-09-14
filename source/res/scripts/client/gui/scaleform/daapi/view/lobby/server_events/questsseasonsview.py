@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsSeasonsView.py
 import weakref
 import operator
@@ -181,7 +181,7 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta):
          'hasActiveQuests': len(selectedQuests) > 0,
          'noActiveQuestsText': text_styles.builder('\n').addStyledText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, QUESTS.PERSONAL_SEASONS_SLOTS_NOACTIVESLOTS_HEADER).addStyledText(TEXT_MANAGER_STYLES.STANDARD_TEXT, QUESTS.PERSONAL_SEASONS_SLOTS_NOACTIVESLOTS_BODY).render()})
 
-    def __packQuestSlot(self, quest = None):
+    def __packQuestSlot(self, quest=None):
         ttHeader, ttBody, ttAttention, ttNote = (None, None, None, None)
         if quest is not None:
             tile = _getQuestsCache().getTiles()[quest.getTileID()]

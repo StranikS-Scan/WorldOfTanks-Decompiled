@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/search_processor.py
 from debug_utils import LOG_WARNING
 from messenger.m_constants import PROTO_TYPE
@@ -27,7 +27,7 @@ class SearchUsersProcessor(SearchProcessor):
     def getSearchResultLimit(self):
         return MESSENGER_LIMITS.FIND_USERS_BY_NAME_MAX_RESULT_SIZE
 
-    def find(self, token, onlineMode = None):
+    def find(self, token, onlineMode=None):
         token = token.strip()
         isCorrect, reason = checkAccountName(token)
         if not isCorrect:

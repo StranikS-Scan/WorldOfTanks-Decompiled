@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/storage/sandbox_storage.py
 from account_helpers.AccountSettings import AccountSettings, DEFAULT_QUEUE
 from constants import QUEUE_TYPE
@@ -6,6 +6,8 @@ from gui.LobbyContext import g_lobbyContext
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.prb_control.storage.local_storage import LocalStorage
 from gui.shared import g_itemsCache
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from shared_utils import findFirst
 
 class SandboxStorage(LocalStorage):
     __slots__ = ('_isSelected',)
@@ -21,8 +23,13 @@ class SandboxStorage(LocalStorage):
         if AccountSettings.getSettings(DEFAULT_QUEUE) == QUEUE_TYPE.SANDBOX:
             isSelected = True
             dossier = g_itemsCache.items.getAccountDossier()
-            if dossier is not None:
-                isSelected = True
+            criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(3, 10)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+            vehicles = sorted(g_itemsCache.items.getVehicles(criteria=criteria).values(), key=lambda item: item.level)
+            vehicle = findFirst(None, vehicles)
+            if vehicle is not None:
+                AccountSettings.setSettings(DEFAULT_QUEUE, QUEUE_TYPE.RANDOMS)
+                isSelected = False
+            if dossier is not None and isSelected:
                 count = dossier.getRandomStats().getBattlesCount()
                 if count >= BATTLES_TO_SELECT_RANDOM_MIN_LIMIT:
                     AccountSettings.setSettings(DEFAULT_QUEUE, QUEUE_TYPE.RANDOMS)

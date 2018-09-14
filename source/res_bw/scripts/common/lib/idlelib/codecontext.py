@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/CodeContext.py
 """CodeContext - Extension to display the block context above the edit window
 
@@ -29,7 +29,7 @@ BLOCKOPENERS = set(['class',
  'with'])
 UPDATEINTERVAL = 100
 FONTUPDATEINTERVAL = 1000
-getspacesfirstword = lambda s, c = re.compile('^(\\s*)(\\w*)'): c.match(s).groups()
+getspacesfirstword = lambda s, c=re.compile('^(\\s*)(\\w*)'): c.match(s).groups()
 
 class CodeContext:
     menudefs = [('options', [('!Code Conte_xt', '<<toggle-code-context>>')])]
@@ -55,7 +55,7 @@ class CodeContext:
         self.text.after(FONTUPDATEINTERVAL, self.font_timer_event)
         return
 
-    def toggle_code_context_event(self, event = None):
+    def toggle_code_context_event(self, event=None):
         if not self.label:
             widgets = (self.editwin.text, self.editwin.text_frame)
             padx = 0
@@ -92,7 +92,7 @@ class CodeContext:
             indent = len(spaces)
         return (indent, text, opener)
 
-    def get_context(self, new_topvisible, stopline = 1, stopindent = 0):
+    def get_context(self, new_topvisible, stopline=1, stopindent=0):
         """Get context lines, starting at new_topvisible and working backwards.
         
         Stop when stopline or stopindent is reached. Return a tuple of context

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/QuestsProgressRequester.py
 from collections import namedtuple
 import BigWorld
@@ -11,7 +11,7 @@ _Token = namedtuple('_Token', ('expireTime', 'count'))
 class _QuestsProgressRequester(AbstractSyncDataRequester):
 
     @async
-    def _requestCache(self, callback = None):
+    def _requestCache(self, callback=None):
         BigWorld.player().questProgress.getCache(lambda resID, value: self._response(resID, value, callback))
 
 
@@ -55,7 +55,7 @@ class _PotapovQuestsProgressRequester(_QuestsProgressRequester):
     def getPotapovQuestsStorage(self):
         return self.__pqStorage
 
-    def getPotapovQuestsFreeSlots(self, removedCount = 0):
+    def getPotapovQuestsFreeSlots(self, removedCount=0):
         pqProgress = self.__getQuestsData()
         return pqProgress['slots'] - len(pqProgress['selected']) + removedCount
 

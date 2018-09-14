@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/ConsumablesPanel.py
 from collections import namedtuple
 from functools import partial
@@ -10,7 +10,7 @@ from constants import EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.view.battle import COMMAND_AMMO_CHOICE_MASK, AMMO_ICON_PATH, NO_AMMO_ICON_PATH
 from gui.battle_control import g_sessionProvider
-from gui.battle_control.arena_info import isEventBattle, hasRage
+from gui.battle_control.arena_info import isFalloutBattle, hasRage
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
@@ -52,7 +52,7 @@ class _FalloutSlotViewProps(namedtuple('_FalloutSlotViewProps', ('useStandardLay
  'slotType_h_margin',
  'slot_h_margin'))):
 
-    def __new__(cls, useStandardLayout = True, drawHitArea = True, hitAreaAlpha = 0.5, hitAreaWidth = 47, hitAreaHeight = 47, hitAreaXOffset = 5, hitAreaYOffset = 5, slot_Y_Offset = -11, actualSlotWidth = 47, slotType_h_margin = 8, slot_h_margin = 1):
+    def __new__(cls, useStandardLayout=True, drawHitArea=True, hitAreaAlpha=0.5, hitAreaWidth=47, hitAreaHeight=47, hitAreaXOffset=5, hitAreaYOffset=5, slot_Y_Offset=-11, actualSlotWidth=47, slotType_h_margin=8, slot_h_margin=1):
         return super(_FalloutSlotViewProps, cls).__new__(cls, useStandardLayout, drawHitArea, hitAreaAlpha, hitAreaWidth, hitAreaHeight, hitAreaXOffset, hitAreaYOffset, slot_Y_Offset, actualSlotWidth, slotType_h_margin, slot_h_margin)
 
 
@@ -61,7 +61,7 @@ class _RageBarViewProps(namedtuple('_RageBarViewProps', ('maxValue',
  'rageBar_y_offset',
  'rageBar_x_offset'))):
 
-    def __new__(cls, maxValue = 0, curValue = 0, rageBar_y_offset = 54, rageBar_x_offset = 7):
+    def __new__(cls, maxValue=0, curValue=0, rageBar_y_offset=54, rageBar_x_offset=7):
         return super(_RageBarViewProps, cls).__new__(cls, maxValue, curValue, rageBar_y_offset, rageBar_x_offset)
 
 
@@ -89,7 +89,7 @@ class ConsumablesPanel(object):
             self.__plugins.init()
             self.__plugins.start()
             props = _FalloutSlotViewProps(useStandardLayout=not hasRage())
-            self.__flashObject.setProperties(isEventBattle(), props._asdict())
+            self.__flashObject.setProperties(isFalloutBattle(), props._asdict())
             self.__addListeners()
         else:
             LOG_ERROR('Display object is not found in the swf file.')
@@ -135,7 +135,7 @@ class ConsumablesPanel(object):
     def flashObject(self):
         return self.__flashObject
 
-    def __callFlash(self, funcName, args = None):
+    def __callFlash(self, funcName, args=None):
         self.__ui.call('battle.consumablesPanel.%s' % funcName, args)
 
     def __addListeners(self):
@@ -212,22 +212,21 @@ class ConsumablesPanel(object):
                  None,
                  None,
                  None)
-            else:
-                bwKey, sfKey = self.__genKey(idx)
-                handler = None
-                if idx in AMMO_RANGE:
-                    handler = partial(self.__handleAmmoPressed, intCD)
-                elif idx in EQUIPMENT_RANGE or idx in ORDERS_RANGE:
-                    item = getEquipment(intCD)
-                    if item and item.getTag() and item.getQuantity() > 0:
-                        if item.isEntityRequired():
-                            handler = partial(self.__handleEquipmentExpanded, intCD)
-                        else:
-                            handler = partial(self.__handleEquipmentPressed, intCD)
-                yield (idx,
-                 bwKey,
-                 sfKey,
-                 handler)
+            bwKey, sfKey = self.__genKey(idx)
+            handler = None
+            if idx in AMMO_RANGE:
+                handler = partial(self.__handleAmmoPressed, intCD)
+            elif idx in EQUIPMENT_RANGE or idx in ORDERS_RANGE:
+                item = getEquipment(intCD)
+                if item and item.getTag() and item.getQuantity() > 0:
+                    if item.isEntityRequired():
+                        handler = partial(self.__handleEquipmentExpanded, intCD)
+                    else:
+                        handler = partial(self.__handleEquipmentPressed, intCD)
+            yield (idx,
+             bwKey,
+             sfKey,
+             handler)
 
         return
 
@@ -243,7 +242,7 @@ class ConsumablesPanel(object):
     def __handleAmmoPressed(self, intCD):
         g_sessionProvider.getAmmoCtrl().changeSetting(intCD)
 
-    def __handleEquipmentPressed(self, intCD, entityName = None):
+    def __handleEquipmentPressed(self, intCD, entityName=None):
         result, error = g_sessionProvider.getEquipmentsCtrl().changeSetting(intCD, entityName=entityName, avatar=BigWorld.player())
         if not result and error:
             self.__ui.vErrorsPanel.showMessage(error.key, error.ctx)
@@ -345,6 +344,8 @@ class ConsumablesPanel(object):
                 self.__flashObject.setItemTimeQuantityInSlot(self.__cds.index(intCD), quantity, currentTime, maxTime)
                 self.__updateOrderSlot(idx, item)
             else:
+                if quantity == 0:
+                    SoundGroups.g_instance.playSound2D('battle_equipment_%d' % intCD)
                 self.__flashObject.setItemTimeQuantityInSlot(idx, quantity, currentTime, maxTime)
                 self.onPopUpClosed()
         else:
@@ -461,7 +462,7 @@ class _RageBarPlugin(IPlugin):
         avatarStatsCtrl = g_sessionProvider.getAvatarStatsCtrl()
         self.__currentValue = avatarStatsCtrl.getStats().get('ragePoints', 0)
         rageProps = _RageBarViewProps(maxValue=rage.g_cache.pointsLimit, curValue=self.__currentValue)
-        self._parentObj.flashObject.initializeRageProgress(isEventBattle(), rageProps._asdict())
+        self._parentObj.flashObject.initializeRageProgress(isFalloutBattle(), rageProps._asdict())
 
     def reset(self):
         super(_RageBarPlugin, self).reset()

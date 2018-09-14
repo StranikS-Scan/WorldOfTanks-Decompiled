@@ -1,7 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/awards/event_dispatcher.py
 import gui.awards.special_achievement_awards as specialAwards
-from gui.shared.event_dispatcher import showAwardWindow, showPremiumCongratulationWindow
+from gui.shared.event_dispatcher import showAwardWindow
 
 def showResearchAward(vehiclesCount, messageNumber):
     showAwardWindow(specialAwards.ResearchAward(vehiclesCount, messageNumber))
@@ -19,16 +19,16 @@ def showPveBattleAward(battlesCount, messageNumber):
     showAwardWindow(specialAwards.PvEBattleAward(battlesCount, messageNumber))
 
 
-def showPremiumDiscountAward(researchLvl, premiumPacket, discount):
-    showPremiumCongratulationWindow(specialAwards.PremiumDiscountAward(researchLvl, premiumPacket, discount))
-
-
 def showBoosterAward(booster):
     showAwardWindow(specialAwards.BoosterAward(booster))
 
 
-def showFalloutAward(lvls, isRequiredVehicle = False):
+def showFalloutAward(lvls, isRequiredVehicle=False):
     showAwardWindow(specialAwards.FalloutAwardWindow(lvls, isRequiredVehicle))
+
+
+def showClanJoinAward(clanAbbrev, clanName, clanDbID):
+    showAwardWindow(specialAwards.ClanJoinAward(clanAbbrev, clanName, clanDbID))
 
 
 def showTelecomAward(vehicleDesrs, hasCrew, hasBrotherhood):

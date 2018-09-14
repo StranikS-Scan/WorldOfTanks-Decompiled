@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBuildingProcessWindow.py
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from FortifiedRegionBase import BuildingDescr
@@ -25,7 +25,7 @@ class FortBuildingProcessWindow(FortBuildingProcessWindowMeta, FortViewHelper):
         NOT_AVAILABLE = 2
         AVAILABLE = 3
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortBuildingProcessWindow, self).__init__()
         self.__buildingDirection = ctx.get('buildingDirection')
         self.__buildingPosition = ctx.get('buildingPosition')
@@ -49,7 +49,7 @@ class FortBuildingProcessWindow(FortBuildingProcessWindowMeta, FortViewHelper):
         if self.__buildingDirection == dir:
             self.destroy()
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         if reason == BUILDING_UPDATE_REASON.ADDED and ctx.get('dir') == self.__buildingDirection and ctx.get('pos') == self.__buildingPosition:
             self.destroy()
 
@@ -96,7 +96,7 @@ class FortBuildingProcessWindow(FortBuildingProcessWindowMeta, FortViewHelper):
         self.as_responseBuildingInfoS(infoData)
         return
 
-    def __makeButtonTooltip(self, status, buildingName = None):
+    def __makeButtonTooltip(self, status, buildingName=None):
         result = {}
         header = i18n.makeString(TOOLTIPS.FORTIFICATION_BUILDINGPROCESS_BTNENABLED_HEADER, buildingName=buildingName)
         body = i18n.makeString(TOOLTIPS.FORTIFICATION_BUILDINGPROCESS_BTNENABLED_BODY)

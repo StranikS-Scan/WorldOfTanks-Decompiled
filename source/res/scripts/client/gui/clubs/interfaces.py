@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/interfaces.py
 from gui.clubs.settings import CLIENT_CLUB_RESTRICTIONS, error
 
@@ -8,6 +8,9 @@ class IClubListener(object):
         pass
 
     def onCompletedSeasonsInfoChanged(self):
+        pass
+
+    def onIGRTypeChanged(self):
         pass
 
     def onAccountClubRelationChanged(self, isRelatedToClubs):
@@ -100,68 +103,68 @@ class IAccountClubLimits(object):
     def canDeclineInvite(self, profile, inviteID):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canSendApplication(self, profile, club = None):
+    def canSendApplication(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canRevokeApplication(self, profile, club = None):
+    def canRevokeApplication(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canSeeContenders(self, profile, club = None):
+    def canSeeContenders(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canSeeOtherPlayerInfo(self, profile, club = None, userDbID = None):
+    def canSeeOtherPlayerInfo(self, profile, club=None, userDbID=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canGetClubSeasons(self, profile, club = None):
+    def canGetClubSeasons(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canDestroyClub(self, profile, club = None):
+    def canDestroyClub(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canLeaveClub(self, profile, club = None):
+    def canLeaveClub(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canOpenClub(self, profile, club = None):
+    def canOpenClub(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canCloseClub(self, profile, club = None):
+    def canCloseClub(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canSendInvite(self, profile, club = None):
+    def canSendInvite(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canRevokeInvite(self, profile, club = None):
+    def canRevokeInvite(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canAcceptApplication(self, profile, club = None):
+    def canAcceptApplication(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canDeclineApplication(self, profile, club = None):
+    def canDeclineApplication(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canJoinUnit(self, profile, club = None):
+    def canJoinUnit(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canCreateUnit(self, profile, club = None):
+    def canCreateUnit(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canSeeApplicants(self, profile, club = None):
+    def canSeeApplicants(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canTransferOwnership(self, profile, club = None):
+    def canTransferOwnership(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canAssignOfficer(self, profile, club = None):
+    def canAssignOfficer(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canAssignPrivate(self, profile, club = None):
+    def canAssignPrivate(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canKickMember(self, profile, club = None, memberDbID = None):
+    def canKickMember(self, profile, club=None, memberDbID=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canChangeClubRequirements(self, profile, club = None):
+    def canChangeClubRequirements(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canChangeWebSettings(self, profile, club = None):
+    def canChangeWebSettings(self, profile, club=None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)

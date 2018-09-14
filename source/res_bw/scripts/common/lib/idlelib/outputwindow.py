@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/OutputWindow.py
 from Tkinter import *
 from idlelib.EditorWindow import EditorWindow
@@ -29,7 +29,7 @@ class OutputWindow(EditorWindow):
         else:
             return 'no'
 
-    def write(self, s, tags = (), mark = 'insert'):
+    def write(self, s, tags=(), mark='insert'):
         if isinstance(s, str):
             try:
                 s = unicode(s, IOBinding.encoding)
@@ -59,7 +59,7 @@ class OutputWindow(EditorWindow):
      '^\\s*(\\S.*?):\\s*(\\d+):']
     file_line_progs = None
 
-    def goto_file_line(self, event = None):
+    def goto_file_line(self, event=None):
         if self.file_line_progs is None:
             l = []
             for pat in self.file_line_pats:

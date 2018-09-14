@@ -1,8 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/ranges.py
 from helpers import int2roman
 
-def toRangeString(sequence, step, itemDelimiter = ', ', rangeDelimiter = '-'):
+def toRangeString(sequence, step, itemDelimiter=', ', rangeDelimiter='-'):
     items = list()
     for item in list(stringRanges(sequence, step)):
         items.append(rangeDelimiter.join(item))
@@ -10,7 +10,7 @@ def toRangeString(sequence, step, itemDelimiter = ', ', rangeDelimiter = '-'):
     return itemDelimiter.join(items)
 
 
-def toRomanRangeString(sequence, step, itemDelimiter = ', ', rangeDelimiter = '-'):
+def toRomanRangeString(sequence, step, itemDelimiter=', ', rangeDelimiter='-'):
     items = list()
     for item in list(romanStringRanges(sequence, step)):
         items.append(rangeDelimiter.join(item))

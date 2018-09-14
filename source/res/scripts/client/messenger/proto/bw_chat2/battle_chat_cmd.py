@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/battle_chat_cmd.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
@@ -42,7 +42,7 @@ for cmd in BATTLE_CHAT_COMMANDS:
 class _OutCmdDecorator(OutChatCommand):
     __slots__ = ('_name',)
 
-    def __init__(self, name, args = None):
+    def __init__(self, name, args=None):
         super(_OutCmdDecorator, self).__init__(args or messageArgs(), getClientID4BattleChannel(BATTLE_CHANNEL.TEAM.name))
         self._name = name
 
@@ -103,8 +103,7 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
         return self._protoData['floatArg1']
 
     def getCellIndex(self):
-        if self.isOnMinimap():
-            return self.getFirstTargetID()
+        return self.getFirstTargetID() if self.isOnMinimap() else 0
 
     def isOnMinimap(self):
         return self._commandID == _MINIMAP_CMD_ID

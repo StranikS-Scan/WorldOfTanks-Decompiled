@@ -1,12 +1,13 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/factory.py
 import BigWorld
 from constants import TOKEN_TYPE
 from client_request_lib.requester import Requester as WebRequester
 from gui.clans.requests import ClanRequester, ClanRequestsController
 from gui.shared.utils.requesters import TokenRequester
+from helpers.ServerSettings import _ClanProfile
 
-def _webUrlFetcher(url, callback, headers = None, timeout = 30.0, method = 'GET', postData = ''):
+def _webUrlFetcher(url, callback, headers=None, timeout=30.0, method='GET', postData=''):
     return BigWorld.fetchURL(url, callback, headers, timeout, method, postData)
 
 
@@ -52,7 +53,7 @@ class FakeClanFactory(_ClanFactory):
         super(FakeClanFactory, self).__init__()
 
     def createWebRequester(self, settings, *args, **kwargs):
-        return WebRequester.create_requester(_webUrlFetcher, settings, *args, **kwargs)
+        return WebRequester.create_requester(_webUrlFetcher, _ClanProfile(True, None, 'fake'), *args, **kwargs)
 
     def createTokenRequester(self):
         return TokenRequester(TOKEN_TYPE.WGNI, cache=False)

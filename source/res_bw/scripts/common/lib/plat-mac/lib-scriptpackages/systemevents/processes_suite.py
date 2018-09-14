@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/SystemEvents/Processes_Suite.py
 """Suite Processes Suite: Terms and Events for controlling Processes
 Level 1, version 1

@@ -1,5 +1,7 @@
 <quests-shared-vars.xml>
   <vars>
+    <var-set>	PveChainShownVar	  <asString>	PveTriggerShown	</asString>
+    </var-set>
     <var-set>	ResearchVar	  <asString>	research	</asString>
     </var-set>
     <var-set>	ResearchTreeVar	  <asString>	researchTree	</asString>
@@ -100,6 +102,15 @@
     <var-set>	OptionalDeviceConditionVar	  <asDict>
         <itemType>	&gt;	  <asString>	optionalDevice	</asString>
         </itemType>
+      </asDict>
+    </var-set>
+    <var-set>	SelectedVehicleCriteria	  <asDict>
+        <levelsRange>
+          <asList>
+            <asInt>	3	</asInt>
+            <asInt>	10	</asInt>
+          </asList>
+        </levelsRange>
       </asDict>
     </var-set>
   </vars>

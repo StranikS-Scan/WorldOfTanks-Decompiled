@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/CGIHTTPServer.py
 """CGI-savvy HTTP Server.
 
@@ -104,8 +104,7 @@ class CGIHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             if os.path.isdir(scriptdir):
                 dir, rest = nextdir, nextrest
                 i = rest.find('/')
-            else:
-                break
+            break
 
         i = rest.rfind('?')
         if i >= 0:
@@ -180,8 +179,7 @@ class CGIHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             for line in self.headers.getallmatchingheaders('accept'):
                 if line[:1] in '\t\n\r ':
                     accept.append(line.strip())
-                else:
-                    accept = accept + line[7:].split(',')
+                accept = accept + line[7:].split(',')
 
             env['HTTP_ACCEPT'] = ','.join(accept)
             ua = self.headers.getheader('user-agent')
@@ -284,7 +282,7 @@ def _url_collapse_path(path):
     for part in path_parts[:-1]:
         if part == '..':
             head_parts.pop()
-        elif part and part != '.':
+        if part and part != '.':
             head_parts.append(part)
 
     if path_parts:
@@ -332,7 +330,7 @@ def executable(path):
     return st.st_mode & 73 != 0
 
 
-def test(HandlerClass = CGIHTTPRequestHandler, ServerClass = BaseHTTPServer.HTTPServer):
+def test(HandlerClass=CGIHTTPRequestHandler, ServerClass=BaseHTTPServer.HTTPServer):
     SimpleHTTPServer.test(HandlerClass, ServerClass)
 
 

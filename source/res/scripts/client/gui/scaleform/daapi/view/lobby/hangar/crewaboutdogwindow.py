@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/CrewAboutDogWindow.py
 from gui.Scaleform.daapi.view.meta.SimpleWindowMeta import SimpleWindowMeta
 from gui.Scaleform.locale.MENU import MENU
@@ -6,7 +6,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
 class CrewAboutDogWindow(SimpleWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(CrewAboutDogWindow, self).__init__()
 
     def onBtnClick(self, action):

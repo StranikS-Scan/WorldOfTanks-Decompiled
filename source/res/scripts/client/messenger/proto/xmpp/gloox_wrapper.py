@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/gloox_wrapper.py
 from collections import defaultdict
 import weakref
@@ -10,7 +10,7 @@ from messenger.proto.xmpp.gloox_constants import PRESENCE, CONNECTION_STATE, DIS
 from messenger.proto.xmpp.jid import ContactBareJID, JID
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 from messenger.proto.xmpp.resources import Resource
-from messenger.proto.xmpp.wrappers import makeClanInfo
+from messenger.proto.xmpp.wrappers import makeClanInfo, makeMucInfo
 _GLOOX_EVENTS_LISTENERS = (('onConnect', 'onConnected'),
  ('onReady', 'onLogin'),
  ('onDisconnect', 'onDisconnected'),
@@ -70,11 +70,11 @@ class ClientDecorator(object):
         ClientHolder._clearClient()
         return
 
-    def connect(self, jid, host = '', port = -1):
+    def connect(self, jid, host='', port=-1):
         self.__address = (jid, host, port)
         self.__client.connect(jid, host, port)
 
-    def connectBosh(self, jid, host = '', port = -1, url = ''):
+    def connectBosh(self, jid, host='', port=-1, url=''):
         self.__address = (jid, host, port)
         self.__client.connectBosh(jid, host, port, url)
 
@@ -110,15 +110,18 @@ class ClientDecorator(object):
         self.__client.presence = presence
 
     def sendPresence(self, query):
-        self.__client.sendCustomPresence(query.getType(), query.getTo(), query.getTag())
+        self.__client.sendCustomPresence(query.getType(), str(query.getTo()), query.getTag(), query.getStatus())
+
+    def sendMUCPresence(self, query, password=''):
+        self.__client.sendMUCPresence(query.getType(), str(query.getTo()), password)
 
     def sendIQ(self, query):
-        return self.__client.sendCustomQuery(query.getType(), query.getTag(), query.getTo())
+        return self.__client.sendCustomQuery(query.getType(), query.getTag(), str(query.getTo()))
 
     def sendMessage(self, message):
         self.__client.sendCustomMessage(message.getType(), str(message.getTo()), message.getBody(), message.getTag())
 
-    def setContactToRoster(self, jid, name = '', groups = None):
+    def setContactToRoster(self, jid, name='', groups=None):
         if groups is None:
             groups = set()
         self.__client.add(str(jid), name, groups)
@@ -127,16 +130,16 @@ class ClientDecorator(object):
     def removeContactFromRoster(self, jid):
         self.__client.remove(str(jid))
 
-    def askSubscription(self, jid, message = ''):
+    def askSubscription(self, jid, message=''):
         self.__client.subscribe(str(jid), message)
 
     def removeSubscribeTo(self, jid):
         self.__client.unsubscribe(str(jid))
 
-    def approveSubscription(self, jid, message = ''):
+    def approveSubscription(self, jid, message=''):
         self.__client.setSubscribed(str(jid), message)
 
-    def cancelSubscription(self, jid, message = ''):
+    def cancelSubscription(self, jid, message=''):
         self.__client.setUnsubscribed(str(jid), message)
 
     def registerHandler(self, event, handler):
@@ -169,7 +172,7 @@ class ClientDecorator(object):
     def onLogin(self):
         self.__handleEvent(GLOOX_EVENT.LOGIN)
 
-    def onDisconnected(self, reason = DISCONNECT_REASON.BY_REQUEST, description = None):
+    def onDisconnected(self, reason=DISCONNECT_REASON.BY_REQUEST, description=None):
         if reason != DISCONNECT_REASON.BY_REQUEST:
             self.__address = None
         self.__cancelInboundSubsCallback()
@@ -195,10 +198,10 @@ class ClientDecorator(object):
         self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_REMOVED, ContactBareJID(jid))
 
     def onHandlePresence(self, jid, priority, status, presence, wgexts, mucInfo):
-        self.__handleEvent(GLOOX_EVENT.PRESENCE, JID(jid), Resource(priority, status, presence, makeWGInfoFromPresence(wgexts)))
+        self.__handleEvent(GLOOX_EVENT.PRESENCE, JID(jid), Resource(priority, status, presence, makeWGInfoFromPresence(wgexts), makeMucInfo(mucInfo)))
 
-    def onHandlePresenceError(self, *args, **kwargs):
-        pass
+    def onHandlePresenceError(self, jid, pyGlooxTag):
+        self.__handleEvent(GLOOX_EVENT.PRESENCE_ERROR, JID(jid), pyGlooxTag)
 
     def onSubscriptionRequest(self, jid, message, nickname, wgexts):
         self.__cancelInboundSubsCallback()
@@ -254,6 +257,7 @@ class ClientDecorator(object):
 
 
 class ClientHolder(object):
+    __slots__ = ('_client',)
     _client = None
 
     @classmethod

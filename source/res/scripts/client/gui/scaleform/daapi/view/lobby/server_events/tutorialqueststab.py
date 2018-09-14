@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/TutorialQuestsTab.py
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.server_events.QuestsCurrentTab import QuestsCurrentTab
@@ -11,6 +11,7 @@ from gui.server_events import g_eventsCache, formatters
 from gui.server_events.formatters import PROGRESS_BAR_TYPE
 from gui.shared.ItemsCache import g_itemsCache
 from gui import SystemMessages
+from shared_utils import findFirst
 NO_PROGRESS_COUNT = -1
 _EVENT_STATUS = events_helpers.EVENT_STATUS
 
@@ -40,9 +41,15 @@ class TutorialQuestsTab(QuestsCurrentTab):
             self.components.get(alias).setQuestsDescriptor(self.__questsDescriptor)
 
     def _selectQuest(self, questID):
-        if self.__questsDescriptor is not None and self.__questsDescriptor.getChapter(questID) is not None:
+        motiveQuests = g_eventsCache.getMotiveQuests(filterFunc=self._filterFunc)
+        if questID in motiveQuests or self.__questsDescriptor is not None and self.__questsDescriptor.getChapter(questID) is not None:
             return self.as_setSelectedQuestS(questID)
         else:
+            if questID in g_eventsCache.getMotiveQuests(filterFunc=lambda q: q.isCompleted()):
+                sortedQuests = sorted(motiveQuests.values(), key=lambda q: q.getPriority())
+                nextQuest = findFirst(None, sortedQuests)
+                if nextQuest:
+                    return self.as_setSelectedQuestS(nextQuest.getID())
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.QUESTS_NOQUESTSWITHGIVENID)
             return
 
@@ -68,9 +75,21 @@ class TutorialQuestsTab(QuestsCurrentTab):
                      'detailsLinkage': QUESTS_ALIASES.TUTORIAL_HANGAR_QUEST_DETAILS_LINKAGE,
                      'detailsPyAlias': QUESTS_ALIASES.TUTORIAL_HANGAR_QUEST_DETAILS_PY_ALIAS})
 
+        svrEvents = self._applyFilters(g_eventsCache.getMotiveQuests().values())
+        if len(svrEvents):
+            result.append(formatters.packGroupBlock(QUESTS.QUESTS_TITLE_MANEUVERSQUESTS))
+            for e in svrEvents:
+                infoData = events_helpers.getEventInfo(e, svrEvents)
+                infoData.update({'detailsLinkage': QUESTS_ALIASES.TUTORIAL_HANGAR_MOTIVE_QUEST_DETAILS_LINKAGE,
+                 'detailsPyAlias': QUESTS_ALIASES.TUTORIAL_HANGAR_MOTIVE_QUEST_DETAILS_PY_ALIAS})
+                result.append(infoData)
+
         self.as_setQuestsDataS({'quests': result,
-         'totalTasks': len(result)})
+         'totalTasks': len(svrEvents)})
         return
+
+    def _filterFunc(self, event):
+        return not event.isCompleted() and event.isAvailable()[0]
 
     def __onEventsUpdated(self, *args):
         self._invalidateEventsData()

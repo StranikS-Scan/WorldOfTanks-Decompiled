@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/game_vars.py
 import types
 from CurrentVehicle import g_currentVehicle
@@ -37,10 +37,7 @@ def getFreeXP():
 
 
 def getItemByIntCD(intCD):
-    if intCD is None or type(intCD) not in (types.IntType, types.LongType, types.FloatType):
-        return
-    else:
-        return g_itemsCache.items.getItemByCD(intCD)
+    return None if intCD is None or type(intCD) not in (types.IntType, types.LongType, types.FloatType) else g_itemsCache.items.getItemByCD(intCD)
 
 
 def getVehicleByIntCD(intCD):
@@ -51,7 +48,7 @@ def getVehicleByIntCD(intCD):
     return vehicle
 
 
-def getVehiclesByLevel(level, researchOnly = True):
+def getVehiclesByLevel(level, researchOnly=True):
     criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVEL(level)
     if researchOnly:
         criteria |= RESEARCH_CRITERIA.VEHICLE_TO_UNLOCK
@@ -253,10 +250,7 @@ def _isItemPremium(intCD):
 
 
 def _isItemUnlocked(intCD):
-    if intCD is None:
-        return False
-    else:
-        return intCD in getUnlockedItems()
+    return False if intCD is None else intCD in getUnlockedItems()
 
 
 def _isItemXPEnough(itemCD, vehicleCD):

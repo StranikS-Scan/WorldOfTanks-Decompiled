@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BarracksMeta.py
 from gui.Scaleform.framework.entities.View import View
 
@@ -32,13 +32,10 @@ class BarracksMeta(View):
         self._printOverrideError('openPersonalCase')
 
     def as_setTankmenS(self, tankmenCount, tankmenInSlots, placesCount, tankmenInBarracks, tankmanArr):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTankmen(tankmenCount, tankmenInSlots, placesCount, tankmenInBarracks, tankmanArr)
+        return self.flashObject.as_setTankmen(tankmenCount, tankmenInSlots, placesCount, tankmenInBarracks, tankmanArr) if self._isDAAPIInited() else None
 
     def as_updateTanksListS(self, provider):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateTanksList(provider)
+        return self.flashObject.as_updateTanksList(provider) if self._isDAAPIInited() else None
 
     def as_setTankmenFilterS(self, nation, role, tankType, location, nationID):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTankmenFilter(nation, role, tankType, location, nationID)
+        return self.flashObject.as_setTankmenFilter(nation, role, tankType, location, nationID) if self._isDAAPIInited() else None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/__init__.py
 import weakref
 import BigWorld
@@ -88,7 +88,7 @@ class Tutorial(object):
             self.onStarted()
             return True
 
-    def stop(self, finished = False, reason = TUTORIAL_STOP_REASON.DEFAULT):
+    def stop(self, finished=False, reason=TUTORIAL_STOP_REASON.DEFAULT):
         if self._stopped:
             return
         else:
@@ -130,7 +130,7 @@ class Tutorial(object):
             ctx.cache.setRefused(False)
         self.run(dispatcher, ctx)
 
-    def reload(self, afterBattle = False):
+    def reload(self, afterBattle=False):
         if not self._stopped:
             self._funcScene.reload()
             self._sound.stop()
@@ -142,7 +142,7 @@ class Tutorial(object):
         else:
             LOG_ERROR('Tutorial is not running.')
 
-    def loadCurrentChapter(self, initial = False):
+    def loadCurrentChapter(self, initial=False):
         afterBattle = self._cache.isAfterBattle()
         LOG_DEBUG('Chapter is loading', self._currentChapter, afterBattle)
         self._gui.showWaiting('chapter-loading', isSingle=True)
@@ -196,7 +196,7 @@ class Tutorial(object):
                 result = top.pop(0)
         return result
 
-    def storeEffectsInQueue(self, effects, benefit = False):
+    def storeEffectsInQueue(self, effects, benefit=False):
         if effects is None or len(effects) == 0:
             LOG_ERROR('Effect list is not defined')
         else:

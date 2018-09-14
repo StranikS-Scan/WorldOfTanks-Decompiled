@@ -196,6 +196,21 @@
       <devices>	64	</devices>
     </damage>
   </_47mm_3pdrAPCR>
+  <_47mm_3pdrHE>
+    <id>	23	</id>
+    <userString>	#gb_vehicles:_47mm_3pdrHE	</userString>
+    <icon>	he	</icon>
+    <price>	0	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	47	</caliber>
+    <explosionRadius>	0.47	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	65	</armor>
+      <devices>	64	</devices>
+    </damage>
+  </_47mm_3pdrHE>
   <_47mm_3pdrAP_bot>
     <id>	112	</id>
     <userString>	#gb_vehicles:_47mm_3pdrAP_bot	</userString>
@@ -226,21 +241,6 @@
       <devices>	3	</devices>
     </damage>
   </_47mm_3pdrAP_1_bot>
-  <_47mm_3pdrHE>
-    <id>	23	</id>
-    <userString>	#gb_vehicles:_47mm_3pdrHE	</userString>
-    <icon>	he	</icon>
-    <price>	0	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	47	</caliber>
-    <explosionRadius>	0.47	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	smallHighExplosive	</effects>
-    <damage>
-      <armor>	65	</armor>
-      <devices>	64	</devices>
-    </damage>
-  </_47mm_3pdrHE>
   <_2pdr_AP_Mk.1T>
     <id>	4	</id>
     <userString>	#gb_vehicles:_2pdr_AP_Mk.1T	</userString>
@@ -1226,37 +1226,6 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_APCR_L7>
-  <_105mm_HE_L7>
-    <id>	64	</id>
-    <userString>	#gb_vehicles:_105mm_HE_L7	</userString>
-    <icon>	he	</icon>
-    <price>	950	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	105	</caliber>
-    <explosionRadius>	1.91	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	480	</armor>
-      <devices>	150	</devices>
-    </damage>
-  </_105mm_HE_L7>
-  <_105mm_HESH_L7>
-    <id>	69	</id>
-    <userString>	#gb_vehicles:_105mm_HESH_L7	</userString>
-    <icon>	he	</icon>
-    <price>	13	  <gold></gold>
-    </price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	105	</caliber>
-    <explosionRadius>	1.91	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	480	</armor>
-      <devices>	150	</devices>
-    </damage>
-  </_105mm_HESH_L7>
   <_4.5inch_HE_Mk_13>
     <id>	94	</id>
     <userString>	#gb_vehicles:_4.5inch_HE_Mk_13	</userString>
@@ -1288,6 +1257,37 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_HEAT_L7>
+  <_105mm_HE_L7>
+    <id>	64	</id>
+    <userString>	#gb_vehicles:_105mm_HE_L7	</userString>
+    <icon>	he	</icon>
+    <price>	950	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_HE_L7>
+  <_105mm_HESH_L7>
+    <id>	69	</id>
+    <userString>	#gb_vehicles:_105mm_HESH_L7	</userString>
+    <icon>	he	</icon>
+    <price>	13	  <gold></gold>
+    </price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_HESH_L7>
   <_120mm_AP-T_L1A1>
     <id>	60	</id>
     <userString>	#gb_vehicles:_120mm_AP-T_L1A1	</userString>

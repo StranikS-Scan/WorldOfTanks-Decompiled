@@ -1,12 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanInvitesWindowAbstractTabView.py
 import weakref
-from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.ClanInvitesWindowAbstractTabViewMeta import ClanInvitesWindowAbstractTabViewMeta
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
-from gui.clans import formatters as clans_fmts
-from gui.clans.clan_helpers import ClanListener
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
 from gui.clans.settings import CLAN_INVITE_STATES, CLAN_REQUESTED_DATA_TYPE
 from gui.shared.events import CoolDownEvent
 from gui.shared.view_helpers import CooldownHelper
@@ -28,6 +26,7 @@ class _RefreshBtnStateController(object):
         self.__cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.CLAN)
         self.__isEnabled = False
         self.__tooltip = None
+        self.__isInCooldown = False
         return
 
     def start(self):
@@ -38,12 +37,14 @@ class _RefreshBtnStateController(object):
         self.__cooldown = None
         return
 
-    def setEnabled(self, enable, toolTip = None):
+    def setEnabled(self, enable, toolTip=None):
         self.__isEnabled = enable
         self.__tooltip = toolTip
-        self._updateState()
+        if not self.__isInCooldown:
+            self._updateState()
 
     def _onCooldownHandle(self, isInCooldown):
+        self.__isInCooldown = isInCooldown
         self._updateState()
 
     def _updateState(self):
@@ -72,7 +73,7 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
     def clanInfo(self):
         return self._parentWnd.clanInfo
 
-    def onClanMembersListChanged(self, members):
+    def onMembersListChanged(self, members):
         self.resyncClanInfo()
 
     def onClanInfoReceived(self, clanDbID, clanInfo):
@@ -81,7 +82,7 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
             self._onListUpdated(None, True, True, (paginator.getLastStatus(), paginator.getLastResult()))
         return
 
-    def resyncClanInfo(self, force = False):
+    def resyncClanInfo(self, force=False):
         return self._parentWnd.resyncClanInfo(force=force)
 
     def showMore(self):
@@ -89,7 +90,7 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
 
     def refreshTable(self):
         self._enableRefreshBtn(False)
-        self.paginatorsController.markPanginatorsAsUnSynced()
+        self.paginatorsController.markPanginatorsAsUnSynced(self._getViewAlias())
         self._sendRefreshRequest(self._getCurrentPaginator())
         self.resyncClanInfo()
 
@@ -107,14 +108,6 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
         secondSort = tuple(((item, order) for item in self._getSecondSortFields()))
         self._sendSortRequest(self._getCurrentPaginator(), sort + secondSort)
 
-    def onClanAppsCountReceived(self, clanDbID, appsCount):
-        super(ClanInvitesWindowAbstractTabView, self).onClanAppsCountReceived(clanDbID, appsCount)
-        self._enableRefreshBtn(True)
-
-    def onClanInvitesCountReceived(self, clanDbID, appsCount):
-        super(ClanInvitesWindowAbstractTabView, self).onClanAppsCountReceived(clanDbID, appsCount)
-        self._enableRefreshBtn(True)
-
     def formatInvitesCount(self, paginator):
         return self._parentWnd.formatInvitesCount(paginator)
 
@@ -124,7 +117,7 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
     def _getViewAlias(self):
         raise NotImplementedError
 
-    def _getDummyByFilterName(self, filterName):
+    def _showDummyByFilterName(self, filterName):
         raise NotImplementedError
 
     def _getDefaultFilterName(self):
@@ -141,10 +134,9 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
         paginator = self._getCurrentPaginator()
         status, data = result
         if status is True:
-            self._enableRefreshBtn(False)
             if len(data) == 0:
                 self._updateSortField(None)
-                self.as_showDummyS(self._getDummyByFilterName(self.currentFilterName))
+                self._showDummyByFilterName(self.currentFilterName)
                 self.dataProvider.rebuildList(None, False)
             else:
                 self._updateSortField(paginator.getLastSort() or self._getDefaultSortFields())
@@ -153,7 +145,7 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
         else:
             self._updateSortField(None)
             self._enableRefreshBtn(True, toolTip=CLANS.CLANINVITESWINDOW_TOOLTIPS_REFRESHBUTTON_ENABLEDTRYTOREFRESH)
-            self.as_showDummyS(CLANS_ALIASES.INVITE_WINDOW_DUMMY_SERVER_ERROR)
+            self._showDummy(CLANS.CLANINVITESWINDOW_DUMMY_SERVERERROR_TITLE, CLANS.CLANINVITESWINDOW_DUMMY_SERVERERROR_TEXT, RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON, alignCenter=False)
         self.showWaiting(False)
         return
 
@@ -163,8 +155,15 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
             self.dataProvider.refreshItems(items)
         for item in items:
             status = item.getStatus()
+            msgArgs = None
             if status == CLAN_INVITE_STATES.EXPIRED_RESENT or status == CLAN_INVITE_STATES.DECLINED_RESENT:
-                SystemMessages.pushMessage(clans_fmts.getInvitesSentSysMsg([item.getAccountName()]))
+                msgArgs = (True, None)
+            elif status == CLAN_INVITE_STATES.ERROR:
+                msgArgs = (False, item.getStatusCode())
+            if msgArgs:
+                showClanInviteSystemMsg(item.getAccountName(), *msgArgs)
+
+        return
 
     def _getPaginatorByFilterName(self, filterName):
         return self.paginatorsController.getPanginator(self._getViewAlias(), filterName)
@@ -205,6 +204,7 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
 
     def _onAttachedToWindow(self):
         super(ClanInvitesWindowAbstractTabView, self)._onAttachedToWindow()
+        self.__refreshBtnController.setEnabled(False)
         self.__refreshBtnController.start()
 
     def _makeData(self):
@@ -217,5 +217,5 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
         for item in self._makeFilters():
             self.as_updateFilterStateS(item)
 
-    def _enableRefreshBtn(self, enable, toolTip = None):
+    def _enableRefreshBtn(self, enable, toolTip=None):
         self.__refreshBtnController.setEnabled(enable, toolTip)

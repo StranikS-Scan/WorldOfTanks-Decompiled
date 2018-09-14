@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsTileChainsView.py
 import weakref
 import operator
@@ -54,15 +54,15 @@ DetailsBtnInfo = namedtuple('DetailsBtnInfo', ['isApplyBtnVisible',
  'btnToolTip',
  'taskDescriptionText'])
 
-def _makeSelectBtn(label = '', tooltip = '', descr = '', enabled = True):
+def _makeSelectBtn(label='', tooltip='', descr='', enabled=True):
     return DetailsBtnInfo(True, enabled, False, label, tooltip, descr)
 
 
-def _makeRefuseBtn(label = '', tooltip = '', descr = ''):
+def _makeRefuseBtn(label='', tooltip='', descr=''):
     return DetailsBtnInfo(False, False, True, label, tooltip, descr)
 
 
-def _makeNoBtn(descr = ''):
+def _makeNoBtn(descr=''):
     return DetailsBtnInfo(False, False, False, '', '', descr)
 
 
@@ -174,7 +174,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
     def _sortChains(self, questsByChains):
         return events_helpers.sortWithQuestType(questsByChains, key=operator.itemgetter(0))
 
-    def __updateTileData(self, vehType, questState, selectItemID = -1):
+    def __updateTileData(self, vehType, questState, selectItemID=-1):
         self._navInfo.changePQFilters(vehType, questState)
         questsByChains = self.__getQuestsByChains(vehType, questState)
         chains = []
@@ -232,7 +232,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
                 break
 
         else:
-            result = yield events_helpers.getPotapovQuestsRewardProcessor(quest).request()
+            result = yield events_helpers.getPotapovQuestsRewardProcessor()(quest).request()
         callback(result)
         return
 
@@ -313,10 +313,8 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
             return (text_styles.neutral(_ms(QUESTS.TILECHAINSVIEW_TASKTYPE_INPROGRESS_TEXT)), RES_ICONS.MAPS_ICONS_LIBRARY_INPROGRESSICON)
         elif quest.isFullCompleted():
             return (text_styles.statInfo(_ms(QUESTS.TILECHAINSVIEW_TASKTYPE_FULLCOMPLETED_TEXT)), RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_CHECKMARK)
-        elif quest.isMainCompleted():
-            return (text_styles.statInfo(_ms(QUESTS.TILECHAINSVIEW_TASKTYPE_COMPLETED_TEXT)), RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_CHECKMARK)
         else:
-            return (text_styles.main(''), None)
+            return (text_styles.statInfo(_ms(QUESTS.TILECHAINSVIEW_TASKTYPE_COMPLETED_TEXT)), RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_CHECKMARK) if quest.isMainCompleted() else (text_styles.main(''), None)
 
     def __packQuestStatesFilter(self):
         return [{'label': _ms(QUESTS.TILECHAINSVIEW_TASKTYPEFILTER_ITEMSINPROGRESS_TEXT),
@@ -330,10 +328,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
 
     def __getChainUserName(self, chainID):
         chainType = self.__tile.getChainMajorTag(chainID)
-        if chainType is not None:
-            return _ms('#quests:tileChainsView/chainName/%s' % chainType)
-        else:
-            return ''
+        return _ms('#quests:tileChainsView/chainName/%s' % chainType) if chainType is not None else ''
 
 
 class RandomQuestsTileChainsView(_QuestsTileChainsView):

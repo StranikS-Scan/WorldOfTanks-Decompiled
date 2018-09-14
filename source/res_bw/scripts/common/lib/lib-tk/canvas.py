@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/Canvas.py
 from warnings import warnpy3k
 warnpy3k('the Canvas module has been removed in Python 3.0', stacklevel=2)
@@ -35,7 +35,7 @@ class CanvasItem:
 
     def keys(self):
         if not hasattr(self, '_keys'):
-            self._keys = map(lambda x, tk = self.canvas.tk: tk.splitlist(x)[0][1:], self.canvas.tk.splitlist(self.canvas._do('itemconfigure', (self.id,))))
+            self._keys = map(lambda x, tk=self.canvas.tk: tk.splitlist(x)[0][1:], self.canvas.tk.splitlist(self.canvas._do('itemconfigure', (self.id,))))
         return self._keys
 
     def has_key(self, key):
@@ -44,30 +44,30 @@ class CanvasItem:
     def __contains__(self, key):
         return key in self.keys()
 
-    def addtag(self, tag, option = 'withtag'):
+    def addtag(self, tag, option='withtag'):
         self.canvas.addtag(tag, option, self.id)
 
     def bbox(self):
         x1, y1, x2, y2 = self.canvas.bbox(self.id)
         return ((x1, y1), (x2, y2))
 
-    def bind(self, sequence = None, command = None, add = None):
+    def bind(self, sequence=None, command=None, add=None):
         return self.canvas.tag_bind(self.id, sequence, command, add)
 
-    def unbind(self, sequence, funcid = None):
+    def unbind(self, sequence, funcid=None):
         self.canvas.tag_unbind(self.id, sequence, funcid)
 
-    def config(self, cnf = {}, **kw):
+    def config(self, cnf={}, **kw):
         return self.canvas.itemconfig(self.id, _cnfmerge((cnf, kw)))
 
-    def coords(self, pts = ()):
+    def coords(self, pts=()):
         flat = ()
         for x, y in pts:
             flat = flat + (x, y)
 
         return self.canvas.coords(self.id, *flat)
 
-    def dchars(self, first, last = None):
+    def dchars(self, first, last=None):
         self.canvas.dchars(self.id, first, last)
 
     def dtag(self, ttd):
@@ -88,13 +88,13 @@ class CanvasItem:
     def insert(self, beforethis, string):
         self.canvas.insert(self.id, beforethis, string)
 
-    def lower(self, belowthis = None):
+    def lower(self, belowthis=None):
         self.canvas.tag_lower(self.id, belowthis)
 
     def move(self, xamount, yamount):
         self.canvas.move(self.id, xamount, yamount)
 
-    def tkraise(self, abovethis = None):
+    def tkraise(self, abovethis=None):
         self.canvas.tag_raise(self.id, abovethis)
 
     raise_ = tkraise
@@ -162,7 +162,7 @@ class Window(CanvasItem):
 
 class Group:
 
-    def __init__(self, canvas, tag = None):
+    def __init__(self, canvas, tag=None):
         if not tag:
             tag = 'Group%d' % id(self)
         self.tag = self.id = tag
@@ -186,7 +186,7 @@ class Group:
     def addtag_below(self, tagOrId):
         self._do('addtag', 'below', tagOrId)
 
-    def addtag_closest(self, x, y, halo = None, start = None):
+    def addtag_closest(self, x, y, halo=None, start=None):
         self._do('addtag', 'closest', x, y, halo, start)
 
     def addtag_enclosed(self, x1, y1, x2, y2):
@@ -201,22 +201,22 @@ class Group:
     def bbox(self):
         return self.canvas._getints(self._do('bbox'))
 
-    def bind(self, sequence = None, command = None, add = None):
+    def bind(self, sequence=None, command=None, add=None):
         return self.canvas.tag_bind(self.id, sequence, command, add)
 
-    def unbind(self, sequence, funcid = None):
+    def unbind(self, sequence, funcid=None):
         self.canvas.tag_unbind(self.id, sequence, funcid)
 
     def coords(self, *pts):
         return self._do('coords', pts)
 
-    def dchars(self, first, last = None):
+    def dchars(self, first, last=None):
         self._do('dchars', first, last)
 
     def delete(self):
         self._do('delete')
 
-    def dtag(self, tagToDelete = None):
+    def dtag(self, tagToDelete=None):
         self._do('dtag', tagToDelete)
 
     def focus(self):
@@ -234,16 +234,16 @@ class Group:
     def insert(self, beforeThis, string):
         self._do('insert', beforeThis, string)
 
-    def config(self, cnf = {}, **kw):
+    def config(self, cnf={}, **kw):
         return self.canvas.itemconfigure(self.tag, _cnfmerge((cnf, kw)))
 
-    def lower(self, belowThis = None):
+    def lower(self, belowThis=None):
         self._do('lower', belowThis)
 
     def move(self, xAmount, yAmount):
         self._do('move', xAmount, yAmount)
 
-    def tkraise(self, aboveThis = None):
+    def tkraise(self, aboveThis=None):
         self._do('raise', aboveThis)
 
     lift = tkraise

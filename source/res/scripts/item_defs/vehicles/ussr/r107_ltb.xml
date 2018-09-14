@@ -69,6 +69,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R107_LTB/LTB_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_R107_LTB>
@@ -289,6 +290,8 @@
           <leftSibling>	Track_VT_R2	</leftSibling>
         </node>
       </trackNodes>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <trackThickness>	0.0142	</trackThickness>
       <splineDesc>
         <segmentModelLeft>	vehicles/russian/R107_LTB/track/segment.model	</segmentModelLeft>
@@ -543,6 +546,8 @@
           <backwardElastK>	0.9	</backwardElastK>
         </node>
       </trackNodes>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <trackThickness>	0.0142	</trackThickness>
       <splineDesc>
         <segmentModelLeft>	vehicles/russian/R107_LTB/track/segment.model	</segmentModelLeft>
@@ -820,7 +825,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_04	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_4000-5999	</turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 1.018 0.000 0.627 0.026 0.739 0.580 0.265 0.500 0.235 0.500 0.097 0.100 0.035	</physicsShape>
       <camouflage>

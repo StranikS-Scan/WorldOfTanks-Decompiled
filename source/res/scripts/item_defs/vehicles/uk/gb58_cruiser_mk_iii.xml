@@ -66,6 +66,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/british/GB58_Cruiser_Mk_III/Cruiser_Mk_III_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
     </camouflage>
@@ -1135,22 +1136,7 @@
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <N11>	shared	  <unlocks>
-        <radio>	N9	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </N11>
-    <N9>	shared	  <unlocks>
-        <radio>	N19Mk1	  <cost>	1480	</cost>
-        </radio>
-      </unlocks>
-    </N9>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
-    <N19Mk2>	shared	</N19Mk2>
+    <N11>	shared	</N11>
   </radios>
   <effects>
     <collision></collision>

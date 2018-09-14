@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/events.py
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
@@ -19,7 +19,7 @@ __all__ = ['ArgsEvent',
 
 class HasCtxEvent(SharedEvent):
 
-    def __init__(self, eventType = None, ctx = None):
+    def __init__(self, eventType=None, ctx=None):
         super(HasCtxEvent, self).__init__(eventType)
         self.ctx = ctx if ctx is not None else {}
         return
@@ -57,26 +57,27 @@ class GameEvent(HasCtxEvent):
     SHOW_CURSOR = 'game/showCursor'
     HIDE_CURSOR = 'game/hideCursor'
     PLAYING_TIME_ON_ARENA = 'game/playingTimeOnArena'
+    CHANGE_APP_RESOLUTION = 'game/changeAppResolution'
 
 
 class GUICommonEvent(SharedEvent):
     LOBBY_VIEW_LOADED = 'lobbyViewLoaded'
 
-    def __init__(self, eventType = None):
+    def __init__(self, eventType=None):
         super(GUICommonEvent, self).__init__(eventType)
 
 
 class GUIEditorEvent(HasCtxEvent):
     HIDE_GUIEditor = 'hideGUIEditor'
 
-    def __init__(self, eventType = None, ctx = None):
+    def __init__(self, eventType=None, ctx=None):
         super(GUIEditorEvent, self).__init__(eventType, ctx)
 
 
 class ArgsEvent(HasCtxEvent):
     UPDATE_ARGS = 'updateArguments'
 
-    def __init__(self, eventType = None, alias = '', ctx = None):
+    def __init__(self, eventType=None, alias='', ctx=None):
         super(ArgsEvent, self).__init__(eventType, ctx)
         self.alias = alias
 
@@ -102,7 +103,7 @@ class ComponentEvent(SharedEvent):
 
 class LoadViewEvent(HasCtxEvent):
 
-    def __init__(self, alias = None, name = None, ctx = None):
+    def __init__(self, alias=None, name=None, ctx=None):
         super(LoadViewEvent, self).__init__(alias, ctx)
         self.name = name if name is not None else alias
         return
@@ -133,7 +134,7 @@ class ShowDialogEvent(SharedEvent):
 class LoginEvent(SharedEvent):
     CANCEL_LGN_QUEUE = 'cancelLoginQueue'
 
-    def __init__(self, eventType, alias = '', isSuccess = False, errorMsg = ''):
+    def __init__(self, eventType, alias='', isSuccess=False, errorMsg=''):
         super(LoginEvent, self).__init__(eventType=eventType)
         self.alias = alias
         self.isSuccess = isSuccess
@@ -172,7 +173,6 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_ROSTER_SLOT_SETTINGS_WINDOW = 'showRosterSlotSettingsWindow'
     HIDE_LEGAL_INFO_WINDOW = 'showLegalInfoWindow'
     HIDE_SANDBOX_QUEUE_DIALOG = 'hideSandboxQueueDialog'
-    HIDE_FALLOUT_WINDOW = 'hideFalloutWindow'
 
 
 class HidePopoverEvent(HasCtxEvent):
@@ -228,7 +228,7 @@ class CloseWindowEvent(SharedEvent):
     EULA_CLOSED = 'EULAClosed'
     GOLD_FISH_CLOSED = 'GoldFishClosed'
 
-    def __init__(self, eventType = None, isAgree = False):
+    def __init__(self, eventType=None, isAgree=False):
         super(CloseWindowEvent, self).__init__(eventType)
         self.isAgree = isAgree
 
@@ -242,7 +242,7 @@ class CoolDownEvent(SharedEvent):
     CLUB = 'club'
     CLAN = 'clan'
 
-    def __init__(self, eventType = None, requestID = 0, coolDown = 5.0):
+    def __init__(self, eventType=None, requestID=0, coolDown=5.0):
         super(CoolDownEvent, self).__init__(eventType)
         self.coolDown = coolDown
         self.requestID = requestID
@@ -258,7 +258,7 @@ class TutorialEvent(SharedEvent):
     SIMPLE_WINDOW_CLOSED = 'simpleWindowClosed'
     SIMPLE_WINDOW_PROCESSED = 'simpleWindowProcessed'
 
-    def __init__(self, eventType, settingsID = '', targetID = '', reloadIfRun = False, initialChapter = None, restoreIfRun = False, isStopForced = False, isAfterBattle = False):
+    def __init__(self, eventType, settingsID='', targetID='', reloadIfRun=False, initialChapter=None, restoreIfRun=False, isStopForced=False, isAfterBattle=False):
         super(TutorialEvent, self).__init__(eventType)
         self.settingsID = settingsID
         self.targetID = targetID
@@ -297,7 +297,7 @@ class ChannelManagementEvent(HasCtxEvent):
     REQUEST_TO_DEACTIVATE = 'rqDeactivateChannel'
     REQUEST_TO_EXIT = 'rqExitChannel'
 
-    def __init__(self, clientID, eventType = None, ctx = None):
+    def __init__(self, clientID, eventType=None, ctx=None):
         super(ChannelManagementEvent, self).__init__(eventType, ctx)
         self.clientID = clientID
 
@@ -306,7 +306,7 @@ class PreBattleChannelEvent(ChannelManagementEvent):
     REQUEST_TO_ADD_PRE_BATTLE_CHANNEL = 'loadSquad'
     REQUEST_TO_REMOVE_PRE_BATTLE_CHANNEL = 'removeSquad'
 
-    def __init__(self, clientID, eventType = None, ctx = None):
+    def __init__(self, clientID, eventType=None, ctx=None):
         super(PreBattleChannelEvent, self).__init__(clientID, eventType, ctx)
 
 
@@ -317,17 +317,21 @@ class ChannelCarouselEvent(SharedEvent):
     MINIMIZE_ALL_CHANNELS = 'minimizeAllChannels'
     CLOSE_ALL_EXCEPT_CURRENT = 'closeAllExceptCurrent'
     CLOSE_BUTTON_CLICK = 'closeButtonClick'
+    ON_WINDOW_CHANGE_FOCUS = 'onWindowChangeFocus'
+    ON_WINDOW_CHANGE_OPEN_STATE = 'onWindowChangeOpenState'
 
-    def __init__(self, target, eventType = None, clientID = None):
+    def __init__(self, target, eventType=None, clientID=None, wndType=None, flag=False):
         super(ChannelCarouselEvent, self).__init__(eventType)
         self.target = target
         self.clientID = clientID
+        self.wndType = wndType
+        self.flag = flag
 
 
 class AutoInviteEvent(SharedEvent):
     INVITE_RECEIVED = 'inviteReceived'
 
-    def __init__(self, invite, eventType = None):
+    def __init__(self, invite, eventType=None):
         super(AutoInviteEvent, self).__init__(eventType)
         self.invite = invite
 
@@ -335,14 +339,14 @@ class AutoInviteEvent(SharedEvent):
 class CSVehicleSelectEvent(HasCtxEvent):
     VEHICLE_SELECTED = 'vehicleSelected'
 
-    def __init__(self, eventType = None, ctx = None):
+    def __init__(self, eventType=None, ctx=None):
         super(CSVehicleSelectEvent, self).__init__(eventType, ctx)
 
 
 class CSRosterSlotSettingsWindow(HasCtxEvent):
     APPLY_SLOT_SETTINGS = 'applySlotSettings'
 
-    def __init__(self, eventType = None, ctx = None):
+    def __init__(self, eventType=None, ctx=None):
         super(CSRosterSlotSettingsWindow, self).__init__(eventType, ctx)
 
 
@@ -356,6 +360,7 @@ class FortEvent(HasCtxEvent):
     TRANSPORTATION_STEP = 'transportationStep'
     CHOICE_DIVISION = 'testChoiceDivision'
     REQUEST_TRANSPORTATION = 'requestTransportation'
+    IS_IN_TRANSPORTING_MODE = 'isInTransportingMode'
 
     class TRANSPORTATION_STEPS(CONST_CONTAINER):
         NONE = 0
@@ -363,7 +368,7 @@ class FortEvent(HasCtxEvent):
         NEXT_STEP = 2
         CONFIRMED = 3
 
-    def __init__(self, eventType = None, ctx = None):
+    def __init__(self, eventType=None, ctx=None):
         super(FortEvent, self).__init__(eventType, ctx)
 
 
@@ -371,7 +376,7 @@ class FortOrderEvent(HasCtxEvent):
     USE_ORDER = 'useOrder'
     CREATE_ORDER = 'createOrder'
 
-    def __init__(self, eventType = None, ctx = None):
+    def __init__(self, eventType=None, ctx=None):
         super(FortOrderEvent, self).__init__(eventType, ctx)
 
 
@@ -397,7 +402,7 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_CAP = 'globalMapCap'
     GLOBAL_MAP_PROMO = 'globalMapPromo'
 
-    def __init__(self, eventType, url = '', title = ''):
+    def __init__(self, eventType, url='', title=''):
         super(OpenLinkEvent, self).__init__(eventType)
         self.url = url
         self.title = title
@@ -407,7 +412,7 @@ class CalendarEvent(SharedEvent):
     MONTH_CHANGED = 'monthChanged'
     DATE_SELECTED = 'dateSelected'
 
-    def __init__(self, eventType = None, timestamp = None):
+    def __init__(self, eventType=None, timestamp=None):
         super(CalendarEvent, self).__init__(eventType)
         self.__timestamp = timestamp
 
@@ -418,7 +423,7 @@ class CalendarEvent(SharedEvent):
 class BubbleTooltipEvent(LobbySimpleEvent):
     SHOW = 'showBubble'
 
-    def __init__(self, eventType, message = None, duration = 5000):
+    def __init__(self, eventType, message=None, duration=5000):
         super(BubbleTooltipEvent, self).__init__(eventType)
         self.__message = message
         self.__duration = duration
@@ -435,7 +440,7 @@ class WGNCShowItemEvent(SharedEvent):
     SHOW_POLL_WINDOW = 'wgnc/pollWindow/show'
     CLOSE_POLL_WINDOW = 'wgnc/pollWindow/close'
 
-    def __init__(self, notID, target, eventType = None):
+    def __init__(self, notID, target, eventType=None):
         super(WGNCShowItemEvent, self).__init__(eventType)
         self.__notID = notID
         self.__target = target

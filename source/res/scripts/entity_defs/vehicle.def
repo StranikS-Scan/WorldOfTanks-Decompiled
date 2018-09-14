@@ -1,4 +1,8 @@
 <vehicle.def>
+  <Implements>
+    <Interface>	VehicleAI	</Interface>
+    <Interface>	TeamBase_Vehicle	</Interface>
+  </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
       <label>	NEAR	</label>
@@ -26,14 +30,6 @@
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </physicsMode>
-    <trackScrolling>
-      <Type>	UINT16	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </trackScrolling>
-    <gear>
-      <Type>	INT8	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </gear>
     <gunAnglesPacked>
       <Type>	UINT16	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -173,8 +169,9 @@
   <TempProperties>
     <p></p>
     <_Vehicle__p></_Vehicle__p>
-    <_EntityUtils__timers></_EntityUtils__timers>
-    <_EntityUtils__eventListeners></_EntityUtils__eventListeners>
+    <_directVisibility></_directVisibility>
+    <_vehicleAI></_vehicleAI>
+    <_entityExtraUserData></_entityExtraUserData>
     <_extras></_extras>
     <attrs></attrs>
     <typeDescriptor></typeDescriptor>
@@ -364,6 +361,7 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT16	</Arg>
+      <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	INT32	</Arg>
@@ -371,6 +369,7 @@
       <Arg>	UINT8	</Arg>
       <Arg>	BOOL	</Arg>
       <Arg>	UINT16	</Arg>
+      <Arg>	UINT8	</Arg>
     </receiveHitAssistBonus>
     <onEnemyVehicleShot>
       <Arg>	OBJECT_ID	</Arg>
@@ -380,22 +379,18 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
     </onEnemyVehicleShot>
-    <onEnemyVehicleBecameMovingOrStill>
+    <scheduleExtraCheck>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	FLOAT32	</Arg>
-    </onEnemyVehicleBecameMovingOrStill>
-    <onTeamBaseCaptured>
-      <Arg>	UINT8	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	BOOL	</Arg>
-    </onTeamBaseCaptured>
+    </scheduleExtraCheck>
     <onObservedByEnemy>
-      <Arg>	OBJECT_ID	</Arg>
       <Arg>	BOOL	</Arg>
     </onObservedByEnemy>
-    <onStopObservationByEnemy>
+    <onDetectedByEnemy>
       <Arg>	OBJECT_ID	</Arg>
-    </onStopObservationByEnemy>
+      <Arg>	BOOL	</Arg>
+    </onDetectedByEnemy>
+    <onStopObservationByEnemy></onStopObservationByEnemy>
     <onCombatEquipmentShootingStarted>
       <Arg>	UINT16	</Arg>
       <Arg>	VECTOR3	</Arg>
@@ -418,13 +413,7 @@
     <receiveFirstDetectionsFromArena>
       <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
       </Arg>
-      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
-      </Arg>
     </receiveFirstDetectionsFromArena>
-    <receiveTeamBasePoints>
-      <Arg>	UINT8	</Arg>
-      <Arg>	FLOAT32	</Arg>
-    </receiveTeamBasePoints>
     <sendPositionsToClient>
       <Arg>	BOOL	</Arg>
     </sendPositionsToClient>
@@ -446,14 +435,6 @@
       <Arg>	ATTACKER_INFO	</Arg>
       <Arg>	SHOT_ID	</Arg>
     </setOnFireByExplosion>
-    <receiveVisibilityInfo>
-      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	FLOAT32	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	FLOAT32	</of>
-      </Arg>
-    </receiveVisibilityInfo>
     <onReceiveSpatialData>
       <Arg>	ARRAY	  <of>	VEHICLE_SPATIAL_INFO	</of>
       </Arg>
@@ -464,35 +445,19 @@
     <setInsideResourcePoint>
       <Arg>	BOOL	</Arg>
     </setInsideResourcePoint>
-    <autoBotScriptStep>
-      <Arg>	UINT8	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	ARRAY	  <of>	INT32	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	INT32	</of>
-      </Arg>
-    </autoBotScriptStep>
-    <autoBotReroute>
-      <Arg>	STRING	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </autoBotReroute>
     <grantWinPoints>
       <Arg>	UINT16	</Arg>
     </grantWinPoints>
-    <onEnterDeathZone>
-      <Arg>	UINT16	</Arg>
-      <Arg>	UINT16	</Arg>
-      <Arg>	BOOL	</Arg>
-    </onEnterDeathZone>
-    <onLeaveDeathZone>
-      <Arg>	UINT16	</Arg>
-    </onLeaveDeathZone>
     <activateGasAttack>
       <Arg>	FLOAT32	</Arg>
     </activateGasAttack>
     <pauseMechanics>
       <Arg>	UINT64	</Arg>
     </pauseMechanics>
+    <startOrUpdateExtraFromOutside>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </startOrUpdateExtraFromOutside>
     <damageByEquipment>
       <Arg>	INT32	</Arg>
       <Arg>	BOOL	</Arg>
@@ -516,16 +481,5 @@
       <Arg>	PYTHON	</Arg>
     </sendFinalStats>
     <smartDestroy></smartDestroy>
-    <createAutoBotController>
-      <Arg>	STRING	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </createAutoBotController>
-    <autoBotScriptStep>
-      <Arg>	PYTHON	</Arg>
-    </autoBotScriptStep>
-    <autoBotScriptCallback>
-      <Arg>	INT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </autoBotScriptCallback>
   </BaseMethods>
 </vehicle.def>

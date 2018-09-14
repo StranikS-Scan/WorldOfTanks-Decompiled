@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/SoundEventChecker.py
 from gui.app_loader.decorators import sf_lobby
 from gui.game_control.controllers import Controller
@@ -34,8 +34,9 @@ class SoundEventChecker(Controller):
         g_currentVehicle.onChangeStarted -= self.__onVehicleChanging
 
     def __playSound(self, soundName):
-        if self.app.soundManager is not None:
-            self.app.soundManager.playEffectSound(soundName)
+        app = self.app
+        if app is not None and app.soundManager is not None:
+            app.soundManager.playEffectSound(soundName)
         return
 
     def __onVehicleChanging(self):

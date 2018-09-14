@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/MedalKayAchievement.py
 from abstract import ClassProgressAchievement
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 
 class MedalKayAchievement(ClassProgressAchievement):
 
-    def __init__(self, dossier, value = None):
+    def __init__(self, dossier, value=None):
         super(MedalKayAchievement, self).__init__('medalKay', _AB.TOTAL, dossier, value)
 
     def getNextLevelInfo(self):

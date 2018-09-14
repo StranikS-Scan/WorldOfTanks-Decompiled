@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/CustomizationHelper.py
 import math
 import Math
@@ -111,8 +111,7 @@ def updateVisitedItems(customizationName, visitedIds):
     for item in visitedIds:
         if isinstance(item, int):
             updatedVisitedIds.append((g_currentVehicle.item.intCD, item))
-        else:
-            updatedVisitedIds.append((g_currentVehicle.item.intCD,) + item)
+        updatedVisitedIds.append((g_currentVehicle.item.intCD,) + item)
 
     curItems = {customizationName: updatedVisitedIds}
     curTypeItems = __integrateDicts(curItems, storedItems)
@@ -139,13 +138,12 @@ def __integrateDicts(fromDict, toDict):
                     toDict[key] = list(data)
             else:
                 LOG_WARNING('incorrect type of data in data with key: ' + key)
-        else:
-            toDict[key] = value
+        toDict[key] = value
 
     return toDict
 
 
-def getInventoryItemsFor(type = None, isPermanent = None):
+def getInventoryItemsFor(type=None, isPermanent=None):
     inventoryRequester = g_itemsCache.items.inventory
     unassignedCI = inventoryRequester.getItemsData('customizations')
     res = []
@@ -157,7 +155,7 @@ def getInventoryItemsFor(type = None, isPermanent = None):
     return res
 
 
-def __getCiFromDict(sourceDict, isPermanent, type = None):
+def __getCiFromDict(sourceDict, isPermanent, type=None):
     res = []
     for vehTypeCompDesr, ciItems in sourceDict.get(isPermanent, {}).iteritems():
         types = ciItems.keys() if type is None else [type]
@@ -177,14 +175,14 @@ def __createCiItem(rawKey, rawValue, type, isPermanent, vehTypeCompDesr):
      'quantity': rawValue}
 
 
-def checkIsNewItem(type, itemID, nationId = None):
+def checkIsNewItem(type, itemID, nationId=None):
     if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE:
         return itemID in getNewIdsByType(type, nationId)
     else:
         return (nationId, itemID) in getNewIdsByType(type, nationId)
 
 
-def getNewIdsByType(type, nationId = None):
+def getNewIdsByType(type, nationId=None):
     visitedItems = getVisitedIDs(type)
     filteredVisitedItems = []
     filteredItems = []
@@ -205,7 +203,7 @@ def getNewIdsByType(type, nationId = None):
     return result.difference(set(filteredVisitedItems))
 
 
-def isIdInDefaultSetup(type, itemID, position = None):
+def isIdInDefaultSetup(type, itemID, position=None):
     res = False
     defaultElements, _, _ = getCustomizationElements(type, 0)
     for item in defaultElements:
@@ -216,7 +214,7 @@ def isIdInDefaultSetup(type, itemID, position = None):
     return res
 
 
-def getItemFromHangar(type, itemID, nationId, position = None):
+def getItemFromHangar(type, itemID, nationId, position=None):
     if itemID is None:
         return
     else:
@@ -279,7 +277,7 @@ def areItemsInHangar(type, itemIDs, nationId):
         return False
 
 
-def isItemInHangar(type, itemID, nationId, position = None):
+def isItemInHangar(type, itemID, nationId, position=None):
     if itemID is None:
         return False
     else:

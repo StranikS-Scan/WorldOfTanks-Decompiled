@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/BaseDAAPIModule.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.framework.entities.abstract.BaseDAAPIModuleMeta import BaseDAAPIModuleMeta
@@ -21,13 +21,13 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
     def _printOverrideError(self, methodName):
         LOG_ERROR('Method must be override!', methodName, self.__class__)
 
-    def setFlashObject(self, movieClip, autoPopulate = True, setScript = True):
+    def setFlashObject(self, movieClip, autoPopulate=True, setScript=True):
         if movieClip is not None:
             self.__isScriptSet = setScript
             try:
                 self.turnDAAPIon(setScript, movieClip)
             except:
-                raise Exception, 'Can not initialize daapi in ' + str(self)
+                raise Exception('Can not initialize daapi in ' + str(self))
 
             if autoPopulate:
                 if self._isCreated():

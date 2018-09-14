@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/AutoCompleteWindow.py
 """
 An auto-completion window for IDLE, used by the AutoComplete extension
@@ -55,8 +55,7 @@ class AutoCompleteWindow:
             m = (i + j) // 2
             if self.completions[m] >= s:
                 j = m
-            else:
-                i = m + 1
+            i = m + 1
 
         return min(i, len(self.completions) - 1)
 
@@ -73,8 +72,7 @@ class AutoCompleteWindow:
             m = (i + j) // 2
             if self.completions[m][:len(s)] != s:
                 j = m
-            else:
-                i = m + 1
+            i = m + 1
 
         last = i - 1
         if first == last:

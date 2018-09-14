@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/fort_utils/FortViewHelper.py
 import calendar
 import BigWorld
@@ -104,19 +104,19 @@ class FortViewHelper(FortListener):
          'level': level}
 
     @staticmethod
-    def getMapIconSource(uid, level, hpVal = 0, maxHpValue = 0, isFortFrozen = False, isDefenceOn = False):
+    def getMapIconSource(uid, level, hpVal=0, maxHpValue=0, isFortFrozen=False, isDefenceOn=False):
         return FortViewHelper._getIconSource(uid, level, FORTIFICATION_ALIASES.FORT_ICONS_MAP, hpVal, maxHpValue, isFortFrozen, isDefenceOn)
 
     @staticmethod
-    def getPopoverIconSource(uid, level, isDefenceOn = False):
+    def getPopoverIconSource(uid, level, isDefenceOn=False):
         return FortViewHelper._getIconSource(uid, level, FORTIFICATION_ALIASES.FORT_ICONS_POPOVERS, isDefenceOn=isDefenceOn)
 
     @staticmethod
-    def getSmallIconSource(uid, level, isDefenceOn = False):
+    def getSmallIconSource(uid, level, isDefenceOn=False):
         return FortViewHelper._getIconSource(uid, level, FORTIFICATION_ALIASES.FORT_ICONS_SMALL, isDefenceOn=isDefenceOn)
 
     @staticmethod
-    def _getIconSource(uid, level, path, hpVal = 0, maxHpValue = 0, isFortFrozen = False, isDefenceOn = False):
+    def _getIconSource(uid, level, path, hpVal=0, maxHpValue=0, isFortFrozen=False, isDefenceOn=False):
         buildingLevel = FortViewHelper._getUpgradeLevelByBuildingLevel(uid, level, isDefenceOn)
         if hpVal < maxHpValue and buildingLevel > 1:
             if uid == FORTIFICATION_ALIASES.FORT_BASE_BUILDING:
@@ -213,7 +213,7 @@ class FortViewHelper(FortListener):
         else:
             return FORTIFICATION_ALIASES.STATE_BUILDING
 
-    def _makeBuildingData(self, buildingDescr, direction, position, onlyBaseData = True, animation = FORTIFICATION_ALIASES.WITHOUT_ANIMATION):
+    def _makeBuildingData(self, buildingDescr, direction, position, onlyBaseData=True, animation=FORTIFICATION_ALIASES.WITHOUT_ANIMATION):
         uid = self.FORT_UNKNOWN
         hpVal = 0
         maxHpValue = 0
@@ -303,10 +303,7 @@ class FortViewHelper(FortListener):
 
     def __orderIsInProgress(self, buildingID):
         order = self.__getOrderByBuildingID(buildingID)
-        if order is None:
-            return False
-        else:
-            return order.inProgress
+        return False if order is None else order.inProgress
 
     def __getOrderByBuildingID(self, buildingID):
         return self.fortCtrl.getFort().getOrder(self.fortCtrl.getFort().getBuildingOrder(buildingID))
@@ -353,10 +350,10 @@ class FortViewHelper(FortListener):
         nutIcon = ' ' + icons.nut()
         labelOne = text_styles.main(i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STRENGTH))
         labelTwo = text_styles.main(i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STORE))
-        defResCompensationValue = 0
         fstLine = labelOne + text_styles.neutral(self.__toFormattedStr(hpVal)) + ' / ' + text_styles.standard(self.__toFormattedStr(maxHpValue)) + nutIcon
         secLine = labelTwo + text_styles.neutral(self.__toFormattedStr(defResVal)) + ' / ' + text_styles.standard(self.__toFormattedStr(maxDefResValue)) + nutIcon
         toolTipData = fstLine + secLine
+        defResCompensationValue = defResVal - maxDefResValue
         if defResCompensationValue > 0:
             toolTipData += text_styles.standard(i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_COMPENSATION)) + text_styles.neutral(self.__toFormattedStr(defResCompensationValue)) + nutIcon
         return toolTipData

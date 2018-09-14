@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/BattleReplay.py
 import base64
 import os
@@ -56,6 +56,7 @@ class BattleReplay():
     playerVehicleID = property(lambda self: self.__replayCtrl.playerVehicleID)
     fps = property(lambda self: self.__replayCtrl.fps)
     ping = property(lambda self: self.__replayCtrl.ping)
+    compressed = property(lambda self: self.__replayCtrl.isFileCompressed())
     isLaggingNow = property(lambda self: self.__replayCtrl.isLaggingNow)
     playbackSpeed = property(lambda self: self.__replayCtrl.playbackSpeed)
     scriptModalWindowsEnabled = property(lambda self: self.__replayCtrl.scriptModalWindowsEnabled)
@@ -155,7 +156,7 @@ class BattleReplay():
             self.__timeWarpCleanupCb = None
         return
 
-    def record(self, fileName = None):
+    def record(self, fileName=None):
         if self.isPlaying:
             return False
         else:
@@ -198,7 +199,7 @@ class BattleReplay():
             return False
             return
 
-    def play(self, fileName = None):
+    def play(self, fileName=None):
         if self.isRecording:
             self.stop()
         import SafeUnpickler
@@ -233,7 +234,7 @@ class BattleReplay():
             return False
             return
 
-    def stop(self, rewindToTime = None, delete = False):
+    def stop(self, rewindToTime=None, delete=False):
         if not self.isPlaying and not self.isRecording:
             return False
         else:
@@ -384,7 +385,7 @@ class BattleReplay():
     def getGunRotatorTargetPoint(self):
         return self.__replayCtrl.gunRotatorTargetPoint
 
-    def setConsumablesPosition(self, pos, dir = Math.Vector3(1, 1, 1)):
+    def setConsumablesPosition(self, pos, dir=Math.Vector3(1, 1, 1)):
         self.__replayCtrl.gunMarkerPosition = pos
         self.__replayCtrl.gunMarkerDirection = dir
 
@@ -452,7 +453,8 @@ class BattleReplay():
         self.__replayCtrl.resetArenaPeriod()
 
     def setArenaPeriod(self, period, length):
-        assert self.isRecording
+        if not self.isRecording:
+            LOG_ERROR('Replay is not recorded on setArenaPeriod')
         if period == constants.ARENA_PERIOD.AFTERBATTLE:
             period = constants.ARENA_PERIOD.BATTLE
         self.__replayCtrl.arenaPeriod = period
@@ -507,9 +509,7 @@ class BattleReplay():
 
     def getPlaybackSpeedIdx(self):
         ret = self.__playbackSpeedModifiers.index(self.__replayCtrl.playbackSpeed)
-        if ret == -1:
-            return self.__playbackSpeedModifiers.index(1.0)
-        return ret
+        return self.__playbackSpeedModifiers.index(1.0) if ret == -1 else ret
 
     def setControlMode(self, value):
         self.__replayCtrl.controlMode = value
@@ -596,8 +596,9 @@ class BattleReplay():
             try:
                 self.__serverSettings = json.loads(self.__replayCtrl.getArenaInfoStr()).get('serverSettings')
             except:
-                LOG_ERROR('There is exception while getting serverSettings from replay')
-                LOG_CURRENT_EXCEPTION()
+                LOG_WARNING('There is problem while unpacking server settings from replay')
+                if IS_DEVELOPMENT:
+                    LOG_CURRENT_EXCEPTION()
 
         from gui.LobbyContext import g_lobbyContext
         g_lobbyContext.setServerSettings(self.__serverSettings)
@@ -624,7 +625,7 @@ class BattleReplay():
         self.__isFinished = True
         self.setPlaybackSpeedIdx(0)
 
-    def onControlModeChanged(self, forceControlMode = None):
+    def onControlModeChanged(self, forceControlMode=None):
         player = BigWorld.player()
         if not self.isPlaying or not isPlayerAvatar():
             return
@@ -715,7 +716,7 @@ class BattleReplay():
 
     def __onClientVersionConfirmDlgClosed(self, result):
         if result:
-            self.__replayCtrl.isWaitingForVersionConfirm = False
+            self.__replayCtrl.confirmDlgAccepted()
         else:
             self.stop()
 
@@ -740,7 +741,7 @@ class BattleReplay():
                     self.stop()
             return
 
-    def setResultingFileName(self, fileName, overwriteExisting = False):
+    def setResultingFileName(self, fileName, overwriteExisting=False):
         self.__replayCtrl.setResultingFileName(fileName or '', overwriteExisting)
 
     def cancelSaveCurrMessage(self):
@@ -749,7 +750,7 @@ class BattleReplay():
     def saveCurrMessage(self):
         self.__replayCtrl.saveCurrMessage(True)
 
-    def __showInfoMessage(self, msg, args = None):
+    def __showInfoMessage(self, msg, args=None):
         from gui.battle_control import g_sessionProvider
         if not self.isTimeWarpInProgress:
             ctrl = g_sessionProvider.getBattleMessagesCtrl()
@@ -797,16 +798,8 @@ class BattleReplay():
                     for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'fortResourceReplay', 'goldReplay', 'freeXPReplay', 'avatarDamageEventList'):
                         personal[field] = None
 
-                    details = personal.pop('details', None)
-                    if details is not None:
-                        modifiedDetails = dict()
-                        for key, value in details.iteritems():
-                            modifiedDetails[str(key)] = value
-
-                        personal['details'] = modifiedDetails
-
             modifiedResults = (modifiedResults, self.__getArenaVehiclesInfo(), BigWorld.player().arena.statistics)
-            self.__replayCtrl.setArenaStatisticsStr(json.dumps(modifiedResults))
+            self.__replayCtrl.setArenaStatisticsStr(json.dumps(_JSON_Encode(modifiedResults)))
         return
 
     def __onAccountBecomePlayer(self):
@@ -878,10 +871,8 @@ class BattleReplay():
     def __enableInGameEffects(self, enable):
         AreaDestructibles.g_destructiblesManager.forceNoAnimation = not enable
 
-    def getSetting(self, key, default = None):
-        if self.__settings.has_key(key):
-            return pickle.loads(base64.b64decode(self.__settings.readString(key)))
-        return default
+    def getSetting(self, key, default=None):
+        return pickle.loads(base64.b64decode(self.__settings.readString(key))) if self.__settings.has_key(key) else default
 
     def setSetting(self, key, value):
         self.__settings.write(key, base64.b64encode(pickle.dumps(value)))
@@ -940,6 +931,41 @@ class BattleReplay():
             if self.__arenaPeriod == period and period == ARENA_PERIOD.BATTLE:
                 self.resetArenaPeriod()
         self.__arenaPeriod = period
+
+    def setDataCallback(self, name, callback):
+        eventHandler = self.__replayCtrl.getCallbackHandler(name)
+        if eventHandler is None:
+            eventHandler = Event.Event()
+            self.__replayCtrl.setDataCallback(name, eventHandler)
+        eventHandler += callback
+        return
+
+    def serializeCallbackData(self, cbkName, data):
+        self.__replayCtrl.serializeCallbackData(cbkName, data)
+
+    def delDataCallback(self, name, callback):
+        eventHandler = self.__replayCtrl.getCallbackHandler(name)
+        if eventHandler is not None:
+            eventHandler -= callback
+        return
+
+
+def _JSON_Encode(obj):
+    if isinstance(obj, dict):
+        newDict = {}
+        for key, value in obj.iteritems():
+            if isinstance(key, tuple):
+                newDict[str(key)] = _JSON_Encode(value)
+            newDict[key] = _JSON_Encode(value)
+
+        return newDict
+    if isinstance(obj, list) or isinstance(obj, tuple):
+        newList = []
+        for value in obj:
+            newList.append(_JSON_Encode(value))
+
+        return newList
+    return obj
 
 
 def isPlaying():

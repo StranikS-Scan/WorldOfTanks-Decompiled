@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/Shop.py
 import AccountCommands
 import cPickle
@@ -61,8 +61,8 @@ class Shop(object):
             self.__syncController = SyncController(account, self.__sendSyncRequest, self.__onSyncResponse, self.__onSyncComplete)
         return
 
-    def synchronize(self, serverCacheRev = None):
-        LOG_MX('Shop.synchronize: cli_rev=%s, serv_rev=%s' % (self.__getCacheRevision(), serverCacheRev))
+    def synchronize(self, serverCacheRev=None):
+        LOG_DEBUG('Shop.synchronize: cli_rev=%s, serv_rev=%s' % (self.__getCacheRevision(), serverCacheRev))
         if self.__ignore:
             return
         elif self.__getCacheRevision() == serverCacheRev:
@@ -77,7 +77,7 @@ class Shop(object):
             return
 
     def resynchronize(self):
-        LOG_MX('resynchronize')
+        LOG_DEBUG('resynchronize')
         if self.__ignore:
             return
         else:
@@ -170,9 +170,7 @@ class Shop(object):
         addSlotNumber = slots - slotsPrices[0]
         if addSlotNumber < 0:
             return 0
-        if addSlotNumber < len(slotsPrices[1]):
-            return slotsPrices[1][addSlotNumber]
-        return slotsPrices[1][-1]
+        return slotsPrices[1][addSlotNumber] if addSlotNumber < len(slotsPrices[1]) else slotsPrices[1][-1]
 
     def getBerthsPrices(self, callback):
         self.__getValue('berthsPrices', callback)
@@ -181,9 +179,7 @@ class Shop(object):
         addPackNumber = (berths - berthsPrices[0]) / berthsPrices[1]
         if addPackNumber < 0:
             return 0
-        if addPackNumber < len(berthsPrices[2]):
-            return berthsPrices[2][addPackNumber]
-        return berthsPrices[2][-1]
+        return berthsPrices[2][addPackNumber] if addPackNumber < len(berthsPrices[2]) else berthsPrices[2][-1]
 
     def getExchangeRate(self, callback):
         self.__getValue('exchangeRate', callback)
@@ -205,9 +201,6 @@ class Shop(object):
 
     def getPremiumCost(self, callback):
         self.__getValue('premiumCost', callback)
-
-    def getTradeFees(self, callback):
-        self.__getValue('tradeFees', callback)
 
     def getTankmanCost(self, callback):
         self.__getValue('tankmanCost', callback)
@@ -239,9 +232,6 @@ class Shop(object):
     def getHornCost(self, callback):
         self.__getValue('hornCost', callback)
 
-    def getGoldPackets(self, callback):
-        return self.__getValue('goldPackets', callback)
-
     def buy(self, itemTypeIdx, nationIdx, itemShopID, count, goldForCredits, callback):
         if self.__ignore:
             if callback is not None:
@@ -253,7 +243,7 @@ class Shop(object):
         else:
             count = int(round(count))
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID)
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
             self.__account._doCmdInt4(AccountCommands.CMD_BUY_ITEM, self.__getCacheRevision(), itemShopID, count, goldForCredits, proxy)
@@ -266,7 +256,7 @@ class Shop(object):
             return
         else:
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, errorStr, ext)
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
             else:
                 proxy = None
             arr = [self.__getCacheRevision(),
@@ -285,7 +275,7 @@ class Shop(object):
             return
         else:
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, errorStr, ext)
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
             else:
                 proxy = None
             self.__account._doCmdInt4(AccountCommands.CMD_BUY_AND_EQUIP_TMAN, self.__getCacheRevision(), vehInvID, slot, tmanCostTypeIdx, proxy)
@@ -304,7 +294,7 @@ class Shop(object):
             if recruitCrew:
                 flags |= BUY_VEHICLE_FLAG.CREW
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID)
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
             arr = [self.__getCacheRevision(),
@@ -319,13 +309,13 @@ class Shop(object):
         vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationIdx, innationIdx)
         roleIdx = tankmen.SKILL_INDICES[role]
         if callback is not None:
-            proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, ext.get('tmanInvID', None), ext.get('tmanCompDescr', None))
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext.get('tmanInvID', None), ext.get('tmanCompDescr', None))
         else:
             proxy = None
         self.__account._doCmdInt4(AccountCommands.CMD_BUY_TMAN, self.__getCacheRevision(), vehTypeCompDescr, roleIdx, tmanCostTypeIdx, proxy)
         return
 
-    def __onSyncResponse(self, syncID, resultID, ext = {}):
+    def __onSyncResponse(self, syncID, resultID, ext={}):
         if resultID == AccountCommands.RES_NON_PLAYER:
             return
         if syncID != self.__syncID:
@@ -515,7 +505,7 @@ class Shop(object):
     def __getCacheRevision(self):
         return self.__cache.get('rev', 0)
 
-    def __getPriceFromCache(self, typeCompDescr, default = (0, 0)):
+    def __getPriceFromCache(self, typeCompDescr, default=(0, 0)):
         vehPrices = self.__cache.get('items', {}).get('itemPrices', {})
         return vehPrices.get(typeCompDescr, default)
 
@@ -523,7 +513,7 @@ class Shop(object):
         packets = self.__cache.get('items', {}).get('vehiclesRentPrices', {})
         return packets.get(vehTypeCompDescr, {})
 
-    def __getVehiclePriceFromCache(self, vehCompDescr, default = (0, 0)):
+    def __getVehiclePriceFromCache(self, vehCompDescr, default=(0, 0)):
         typeCompDescr = vehicles.getVehicleTypeCompactDescr(vehCompDescr)
         price = self.__getPriceFromCache(typeCompDescr, None)
         if price is None:

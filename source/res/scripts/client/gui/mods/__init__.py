@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/mods/__init__.py
 import importlib
 import ResMgr
@@ -37,7 +37,7 @@ def _isValidMOD(scriptName):
     return scriptName.startswith('mod_') and scriptName.endswith(_MOD_NAME_POSTFIX)
 
 
-def _findValidMODs(path = None, package = None):
+def _findValidMODs(path=None, package=None):
     result = {}
     path = path or __path__[0]
     package = package or __package__

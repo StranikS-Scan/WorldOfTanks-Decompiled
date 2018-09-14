@@ -1,4 +1,18 @@
 <gb06_vickers_medium_mk_iii.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	48	</forward>
+    <backward>	16	</backward>
+  </speedLimits>
+  <repairCost>	3.15	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -67,6 +81,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/british/GB06_Vickers_Medium_Mk_III/Vickers_Medium_Mk_III_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.96 1.96 0.000000 0.000000	</tiling>
     </camouflage>
@@ -697,6 +712,39 @@
   </chassis>
   <turrets0>
     <Turret_1_GB06_Vickers_Medium_Mk_III>
+      <userString>	#gb_vehicles:Turret_1_GB06_Vickers_Medium_Mk_III	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	730	</price>
+      <unlocks>
+        <turret>	Turret_2_GB06_Vickers_Medium_Mk_III	  <cost>	340	</cost>
+        </turret>
+      </unlocks>
+      <armor>
+        <armor_1>	14	</armor_1>
+        <armor_2>	14	</armor_2>
+        <armor_3>	14	</armor_3>
+        <armor_4>	14	</armor_4>
+        <armor_5>	4	</armor_5>
+        <armor_6>	4	</armor_6>
+        <armor_7>	4	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1250	</weight>
+      <maxHealth>	50	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
       <guns>
         <OQF_3pdr_Gun>	shared	  <maxAmmo>	111	</maxAmmo>
           <pitchLimits>
@@ -771,39 +819,6 @@
           </camouflage>
         </QF_6_pounder_8cwt_Mk_I>
       </guns>
-      <userString>	#gb_vehicles:Turret_1_GB06_Vickers_Medium_Mk_III	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	730	</price>
-      <unlocks>
-        <turret>	Turret_2_GB06_Vickers_Medium_Mk_III	  <cost>	340	</cost>
-        </turret>
-      </unlocks>
-      <armor>
-        <armor_1>	14	</armor_1>
-        <armor_2>	14	</armor_2>
-        <armor_3>	14	</armor_3>
-        <armor_4>	14	</armor_4>
-        <armor_5>	4	</armor_5>
-        <armor_6>	4	</armor_6>
-        <armor_7>	4	</armor_7>
-        <armor_8>	0	</armor_8>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	1250	</weight>
-      <maxHealth>	50	</maxHealth>
-      <rotationSpeed>	40	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	70	</maxHealth>
-        <maxRegenHealth>	35	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	310	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
-        <repairCost>	2.0	</repairCost>
-      </surveyingDeviceHealth>
       <models>
         <undamaged>	vehicles/british/GB06_Vickers_Medium_Mk_III/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Turret_01.model	</destroyed>
@@ -840,6 +855,40 @@
       </camouflage>
     </Turret_1_GB06_Vickers_Medium_Mk_III>
     <Turret_2_GB06_Vickers_Medium_Mk_III>
+      <userString>	#gb_vehicles:Turret_2_GB06_Vickers_Medium_Mk_III	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1800	</price>
+      <unlocks>
+        <gun>	_2pdr_Gun_Mk_IX	  <cost>	300	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	14	</armor_1>
+        <armor_2>	14	</armor_2>
+        <armor_3>	14	</armor_3>
+        <armor_4>	14	</armor_4>
+        <armor_5>	4	</armor_5>
+        <armor_6>	4	</armor_6>
+        <armor_7>	9	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	9	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1750	</weight>
+      <maxHealth>	80	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
       <guns>
         <OQF_3pdr_Gun>	shared	  <maxAmmo>	111	</maxAmmo>
           <pitchLimits>
@@ -948,40 +997,6 @@
           </camouflage>
         </_2pdr_Gun_Mk_IX>
       </guns>
-      <userString>	#gb_vehicles:Turret_2_GB06_Vickers_Medium_Mk_III	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	1800	</price>
-      <unlocks>
-        <gun>	_2pdr_Gun_Mk_IX	  <cost>	300	</cost>
-        </gun>
-      </unlocks>
-      <armor>
-        <armor_1>	14	</armor_1>
-        <armor_2>	14	</armor_2>
-        <armor_3>	14	</armor_3>
-        <armor_4>	14	</armor_4>
-        <armor_5>	4	</armor_5>
-        <armor_6>	4	</armor_6>
-        <armor_7>	9	</armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	9	</armor_9>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	1750	</weight>
-      <maxHealth>	80	</maxHealth>
-      <rotationSpeed>	40	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	70	</maxHealth>
-        <maxRegenHealth>	35	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
-        <repairCost>	2.0	</repairCost>
-      </surveyingDeviceHealth>
       <models>
         <undamaged>	vehicles/british/GB06_Vickers_Medium_Mk_III/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Turret_02.model	</destroyed>
@@ -1025,20 +1040,6 @@
       </camouflage>
     </Turret_2_GB06_Vickers_Medium_Mk_III>
   </turrets0>
-  <crew>
-    <commander></commander>
-    <gunner></gunner>
-    <driver></driver>
-    <radioman></radioman>
-    <radioman></radioman>
-    <loader></loader>
-  </crew>
-  <speedLimits>
-    <forward>	48	</forward>
-    <backward>	16	</backward>
-  </speedLimits>
-  <repairCost>	3.15	</repairCost>
-  <crewXpFactor>	1.0	</crewXpFactor>
   <engines>
     <Armstrong-Siddeley>	shared	  <unlocks>
         <engine>	Rolls_Royse_Phantom_II	  <cost>	850	</cost>

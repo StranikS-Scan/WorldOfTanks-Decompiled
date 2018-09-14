@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/__init__.py
 import ResMgr
 from gui.wgnc.errors import ParseError
@@ -19,7 +19,7 @@ class _NotificationParser(shared_parsers.SectionParser):
     def parse(self, section):
         if section.name != self.getTagName():
             raise ParseError('Root tag "{0}" is invalid'.format(section.name))
-        notifyID = section.readInt64('notification_id', 0L)
+        notifyID = section.readInt64('notification_id', 0)
         if not notifyID:
             raise ParseError('Attribute "notification_id" is not valid.')
         ttl = section.readFloat('valid_till', 0.0)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/Goodie.py
 import time
 from goodie_constants import GOODIE_STATE
@@ -9,7 +9,7 @@ class Goodie(object):
      'expiration',
      'counter']
 
-    def __init__(self, uid, state = GOODIE_STATE.INACTIVE, expiration = 0, counter = 0):
+    def __init__(self, uid, state=GOODIE_STATE.INACTIVE, expiration=0, counter=0):
         self.uid = uid
         self.state = state
         self.expiration = expiration

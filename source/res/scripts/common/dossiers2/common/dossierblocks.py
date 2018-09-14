@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/common/DossierBlocks.py
 import struct
 import weakref
@@ -70,6 +70,7 @@ class StaticDossierBlockDescr(object):
         data = dict([ (key, value) for value, (key, _) in izip(values, self.__recordsLayout) ])
         data.update(self.__data)
         self.__data = data
+        self.__isExpanded = True
         return self
 
     def updateDossierCompDescr(self, dossierCompDescrArray, offset, size):
@@ -157,7 +158,7 @@ class DictDossierBlockDescr(object):
     def __str__(self):
         return str(self.__data)
 
-    def get(self, key, default = None):
+    def get(self, key, default=None):
         return self.__data.get(key, default)
 
     def setdefault(self, key, default):
@@ -168,7 +169,7 @@ class DictDossierBlockDescr(object):
             self[key] = default
             return default
 
-    def pop(self, key, default = None):
+    def pop(self, key, default=None):
         value = self.__data.get(key, None)
         if value is None:
             return default
@@ -429,9 +430,7 @@ class BinarySetDossierBlockDescr(object):
         if self.__cache:
             return value in self.__cache
         sizeDiff, byteNum, bitMask = self.__findSizeDiff(value)
-        if sizeDiff:
-            return False
-        return bool(self.__unpackedData[byteNum] & bitMask)
+        return False if sizeDiff else bool(self.__unpackedData[byteNum] & bitMask)
 
     def __findSizeDiff(self, value):
         assert value in self.__valueToPosition, 'The value should be present in the set value list'

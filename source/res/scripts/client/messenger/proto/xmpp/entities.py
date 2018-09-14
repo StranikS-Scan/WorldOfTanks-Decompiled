@@ -1,15 +1,15 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/entities.py
 from messenger.m_constants import PROTO_TYPE, USER_TAG, GAME_ONLINE_STATUS
 from messenger.proto.entities import UserEntity, ChannelEntity, MemberEntity
-from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE
-from messenger.proto.xmpp.wrappers import XMPPChannelData
+from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE, PRESENCE
+from messenger.proto.xmpp.xmpp_constants import XMPP_BAN_COMPONENT
 from messenger.proto.xmpp.xmpp_items import createItem
 
 class XMPPUserEntity(UserEntity):
     __slots__ = ('_item', '_gos')
 
-    def __init__(self, databaseID, name = None, tags = None, clanInfo = None, item = None):
+    def __init__(self, databaseID, name=None, tags=None, clanInfo=None, item=None):
         super(XMPPUserEntity, self).__init__(databaseID, name, tags, clanInfo)
         self._item = item or createItem(databaseID)
         self._gos = GAME_ONLINE_STATUS.UNDEFINED
@@ -99,11 +99,14 @@ class XMPPUserEntity(UserEntity):
 
 
 class _XMPPChannelEntity(ChannelEntity):
-    __slots__ = ('_jid',)
+    __slots__ = ('_jid', '_name', '_isStored')
 
-    def __init__(self, jid, data):
-        super(_XMPPChannelEntity, self).__init__(data)
+    def __init__(self, jid, name=''):
+        super(_XMPPChannelEntity, self).__init__(None)
         self._jid = jid
+        self._name = name
+        self._isStored = False
+        return
 
     def getID(self):
         return self._jid
@@ -111,36 +114,36 @@ class _XMPPChannelEntity(ChannelEntity):
     def getProtoType(self):
         return PROTO_TYPE.XMPP
 
+    def getName(self):
+        return self._name
 
-class XMPPChatChannelEntity(_XMPPChannelEntity):
-    __slots__ = ('_isStored',)
+    def setName(self, name):
+        self._name = name
 
-    def __init__(self, jid, name = ''):
-        super(XMPPChatChannelEntity, self).__init__(str(jid), XMPPChannelData(name, MESSAGE_TYPE.CHAT))
-        self._isStored = False
+    def getFullName(self):
+        return self.getName()
+
+    def getMessageType(self):
+        raise NotImplementedError
+
+    def getBanComponent(self):
+        raise NotImplementedError
 
     def getPersistentState(self):
         state = None
         if self._isStored:
-            state = tuple(self._data)
+            state = (self.getMessageType(), self._name)
         return state
 
     def setPersistentState(self, state):
         if len(state) == 2:
-            self._data = XMPPChannelData(*state)
-            self._isStored = True
+            msgType, name = state
+            if self.getMessageType() == msgType:
+                self._name = name
+                self._isStored = True
         else:
             self._isStored = False
         return self._isStored
-
-    def isPrivate(self):
-        return True
-
-    def getName(self):
-        return self._data.name
-
-    def getFullName(self):
-        return self.getName()
 
     def setStored(self, flag):
         self._isStored = flag
@@ -149,27 +152,151 @@ class XMPPChatChannelEntity(_XMPPChannelEntity):
         self._isJoined = isJoined
         self.onConnectStateChanged(self)
 
+    def addMember(self, member):
+        self.addMembers((member,))
+
+    def removeMember(self, jid):
+        self.removeMembers((jid,))
+
     def clear(self):
         self._isStored = False
-        super(XMPPChatChannelEntity, self).clear()
+        super(_XMPPChannelEntity, self).clear()
+
+
+class XMPPChatChannelEntity(_XMPPChannelEntity):
+    __slots__ = ('_contactDBID',)
+
+    def __init__(self, jid, name=''):
+        super(XMPPChatChannelEntity, self).__init__(jid, name)
+        self._contactDBID = 0L
+
+    def isPrivate(self):
+        return True
+
+    def getMessageType(self):
+        return MESSAGE_TYPE.CHAT
+
+    def getBanComponent(self):
+        return XMPP_BAN_COMPONENT.PRIVATE
+
+    def getPersistentState(self):
+        state = None
+        if self._isStored:
+            state = (self.getMessageType(), self._name, self._contactDBID)
+        return state
+
+    def setPersistentState(self, state):
+        if len(state) == 3:
+            msgType, name, contactDBID = state
+            if self.getMessageType() == msgType:
+                self._name = name
+                self._contactDBID = contactDBID
+                self._isStored = True
+        else:
+            self._isStored = False
+        return self._isStored
+
+    def addMembers(self, members):
+        raise AssertionError('Routine addMembers is not allowed in the chat session')
+
+    def removeMembers(self, ids):
+        raise AssertionError('Routine removeMembers is not allowed in the chat session')
+
+    def setUser(self, jid, nickname, presence=PRESENCE.AVAILABLE):
+        super(XMPPChatChannelEntity, self).addMembers((XMPPChatSessionGameMember(jid, nickname, presence),))
+
+    def setContact(self, jid, presence, dbID=0L):
+        if dbID:
+            self._contactDBID = dbID
+        if self._contactDBID and jid.getDatabaseID() == self._contactDBID:
+            member = XMPPChatSessionGameMember(jid, self.getName(), presence)
+        else:
+            member = XMPPChatSessionNonGameMember(jid, self.getName(), self._contactDBID, presence)
+        super(XMPPChatChannelEntity, self).addMembers((member,))
 
 
 class XMPPMucChannelEntity(_XMPPChannelEntity):
+    __slots__ = ('_password',)
 
-    def __init__(self, jid, name = ''):
-        super(XMPPMucChannelEntity, self).__init__(str(jid), XMPPChannelData(name, MESSAGE_TYPE.GROUPCHAT))
+    def __init__(self, jid, name='', password=''):
+        super(XMPPMucChannelEntity, self).__init__(jid, name)
+        self._password = password or ''
 
-    def getFullName(self):
-        return self._data.name
+    def getMessageType(self):
+        return MESSAGE_TYPE.GROUPCHAT
+
+    def getBanComponent(self):
+        return XMPP_BAN_COMPONENT.USER
+
+    def getPassword(self):
+        return self._password
+
+    def setPassword(self, password):
+        self._password = password
+
+    def getPersistentState(self):
+        state = None
+        if self._isStored:
+            state = (self.getMessageType(), self._name, self._password)
+        return state
+
+    def setPersistentState(self, state):
+        if len(state) == 3:
+            msgType, name, password = state
+            if self.getMessageType() == msgType:
+                self._name = name
+                self._password = password
+                self._isStored = True
+        else:
+            self._isStored = False
+        return self._isStored
 
 
-class XMPPMemberEntity(MemberEntity):
+class _XMPPMemberEntity(MemberEntity):
+    __slots__ = ('_dbID',)
+
+    def __init__(self, jid, nickName, dbID=0L, presence=PRESENCE.AVAILABLE):
+        super(_XMPPMemberEntity, self).__init__(jid, nickName, presence)
+        self._dbID = dbID
 
     def getProtoType(self):
         return PROTO_TYPE.XMPP
 
-    def setOnline(self, value):
-        self.setStatus(value)
+    def getDatabaseID(self):
+        return self._dbID
 
     def isOnline(self):
-        return self.getStatus()
+        return self.getStatus() not in PRESENCE.OFFLINE
+
+    def clear(self):
+        self._memberID = None
+        self._dbID = 0L
+        super(_XMPPMemberEntity, self).clear()
+        return
+
+
+class XMPPChatSessionGameMember(_XMPPMemberEntity):
+
+    def __init__(self, jid, nickName, presence=PRESENCE.AVAILABLE):
+        super(XMPPChatSessionGameMember, self).__init__(jid, nickName, presence=presence)
+
+    def getDatabaseID(self):
+        return self._memberID.getDatabaseID()
+
+
+class XMPPChatSessionNonGameMember(_XMPPMemberEntity):
+    pass
+
+
+class XMPPMUCOccupant(_XMPPMemberEntity):
+    __slots__ = ('_affiliation', '_role')
+
+    def __init__(self, jid, nickName, dbID=0L, presence=PRESENCE.AVAILABLE, info=None):
+        super(XMPPMUCOccupant, self).__init__(jid, nickName, dbID, presence)
+        if info is not None:
+            self._affiliation = info.affiliation
+            self._role = info.role
+        else:
+            self._affiliation = 'none'
+            self._role = 'none'
+        return

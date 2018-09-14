@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/__init__.py
 from collections import namedtuple
 from items import _xml, vehicles
@@ -131,22 +131,18 @@ def readConditions(xmlCtx, section, flags):
         if name == 'either':
             eitherCondition = readConditions(xmlCtx, subSec, flags)
             result.appendEitherBlock(eitherCondition)
-        else:
-            function = CONDITION_TAGS.get(name)
-            if function is None:
-                LOG_ERROR('Condition is not supported: ', name)
-                continue
-            result.append(function(xmlCtx, subSec, flags))
+        function = CONDITION_TAGS.get(name)
+        if function is None:
+            LOG_ERROR('Condition is not supported: ', name)
+            continue
+        result.append(function(xmlCtx, subSec, flags))
 
     return result
 
 
 def _parseConditions(xmlCtx, section, flags):
     condSec = section['condition']
-    if condSec is not None:
-        return readConditions(xmlCtx, condSec, flags)
-    else:
-        return
+    return readConditions(xmlCtx, condSec, flags) if condSec is not None else None
 
 
 ACTION_TAGS = {'click': GUI_EVENT_TYPE.CLICK,
@@ -335,7 +331,7 @@ def setEffectsParsers(parsers):
     _EFFECT_TAGS.update(parsers)
 
 
-def _parseEffect(xmlCtx, section, flags, afterBattle = False):
+def _parseEffect(xmlCtx, section, flags, afterBattle=False):
     function = _EFFECT_TAGS.get(section.name)
     result = None
     if 'after-battle-filter' in section.keys() and not afterBattle:
@@ -441,7 +437,7 @@ def _readAsDictSection(_, section):
 
 
 def _readAsIntSequence(_, section):
-    return map(lambda item: (int(item) if len(item) else None), section.asString.split(' '))
+    return map(lambda item: int(item) if len(item) else None, section.asString.split(' '))
 
 
 def _readAsVehTypeNameSection(_, section):

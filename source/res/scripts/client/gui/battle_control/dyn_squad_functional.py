@@ -1,25 +1,48 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/dyn_squad_functional.py
+import BigWorld
+import CommandMapping
+import Keys
 from account_helpers.settings_core import g_settingsCore
 from account_helpers.settings_core.settings_constants import SOUND
-from constants import ARENA_GUI_TYPE, IS_CHINA
+from constants import IS_CHINA
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.battle_control import avatar_getter, arena_info
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.prb_control.prb_helpers import prbInvitesProperty
 from gui.shared.SoundEffectsId import SoundEffectsId
 from helpers.i18n import makeString
+from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_messages import ClientActionMessage, ACTION_MESSAGE_TYPE
 SQUAD_MEMBERS_COUNT = 2
 FULL_SQUAD_MEMBERS_COUNT = 3
 
+def _getKey(command):
+    """Get bigworld's keyboard key assigned to the provided command
+    """
+    commandName = CommandMapping.g_instance.getName(command)
+    return CommandMapping.g_instance.get(commandName)
+
+
+def _getVIOPState(key):
+    """Get the current state of VOIP in the client considering bind key, region and VOIP settings.
+    """
+    if IS_CHINA:
+        return 'withoutVOIP'
+    elif key == Keys.KEY_NONE:
+        return 'specifyVOIP'
+    elif g_settingsCore.getSetting(SOUND.VOIP_ENABLE):
+        return 'disableVOIP'
+    else:
+        return 'enableVOIP'
+
+
 class IDynSquadEntityClient(object):
 
     def updateSquadmanVeh(self, vehID):
-        raise NotImplementedError, 'This method invokes by DynSquadEntityController it must be implemented %s' % self
+        raise NotImplementedError('This method invokes by DynSquadEntityController it must be implemented %s' % self)
 
 
 class _DynSquadEntityController(IArenaVehiclesController):
@@ -33,7 +56,7 @@ class _DynSquadEntityController(IArenaVehiclesController):
         pass
 
     def invalidateVehicleInfo(self, flags, playerVehVO, arenaDP):
-        if arena_info.getArenaGuiType == ARENA_GUI_TYPE.RANDOM:
+        if arena_info.isRandomBattle():
             if flags & INVALIDATE_OP.PREBATTLE_CHANGED and playerVehVO.squadIndex > 0:
                 vID = playerVehVO.vehicleID
                 squadMansToUpdate = ()
@@ -176,49 +199,40 @@ class DynSquadMessagesController(DynSquadArenaController):
         super(DynSquadMessagesController, self).__init__()
 
     def _inviteReceived(self, invite):
-        self.__sendMessage(makeString(MESSENGER.CLIENT_DYNSQUAD_INVITERECEIVED, creator=invite.creator))
+        self.__sendMessage('#messenger:client/dynSquad/inviteReceived', creator=invite.creator)
 
     def _inviteSent(self, invite):
-        self.__sendMessage(makeString(MESSENGER.CLIENT_DYNSQUAD_INVITESENT, receiver=invite.receiver))
+        self.__sendMessage('#messenger:client/dynSquad/inviteSent', receiver=invite.receiver)
 
     def _squadCreatedImOwner(self, squadNum):
-        param = {'squadNum': squadNum}
-        if IS_CHINA:
-            key = MESSENGER.CLIENT_DYNSQUAD_CREATED_OWNER_WITHOUTVOIP
-        else:
-            key = '#messenger:client/dynSquad/created/owner/disableVOIP' if g_settingsCore.getSetting(SOUND.VOIP_ENABLE) else '#messenger:client/dynSquad/created/owner/enableVOIP'
-            param['hotkey'] = 'G'
-        self.__sendMessage(key, **param)
+        key = _getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
+        state = _getVIOPState(key)
+        message = '#messenger:client/dynSquad/created/owner/%s' % state
+        self.__sendMessage(message, squadNum=squadNum, keyName=BigWorld.keyToString(key))
 
     def _squadCreatedImRecruit(self, squadNum):
-        param = {'squadNum': squadNum}
-        if IS_CHINA:
-            key = MESSENGER.CLIENT_DYNSQUAD_CREATED_RECRUIT_WITHOUTVOIP
-        else:
-            key = '#messenger:client/dynSquad/created/recruit/disableVOIP' if g_settingsCore.getSetting(SOUND.VOIP_ENABLE) else '#messenger:client/dynSquad/created/owner/enableVOIP'
-            param['hotkey'] = 'G'
-        self.__sendMessage(key, **param)
+        key = _getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
+        state = _getVIOPState(key)
+        message = '#messenger:client/dynSquad/created/recruit/%s' % state
+        self.__sendMessage(message, squadNum=squadNum, keyName=BigWorld.keyToString(key))
 
     def _squadCreatedByAllies(self, squadNum):
-        self.__sendMessage(MESSENGER.CLIENT_DYNSQUAD_CREATED_ALLIES, squadNum=squadNum, squadType=DYN_SQUAD_TYPE.ALLY)
+        self.__sendMessage('#messenger:client/dynSquad/created/allies', squadNum=squadNum, squadType=DYN_SQUAD_TYPE.ALLY)
 
     def _squadCreatedByEnemies(self, squadNum):
-        self.__sendMessage(MESSENGER.CLIENT_DYNSQUAD_CREATED_ENEMIES, squadNum=squadNum, squadType=DYN_SQUAD_TYPE.ENEMY)
+        self.__sendMessage('#messenger:client/dynSquad/created/enemies', squadNum=squadNum, squadType=DYN_SQUAD_TYPE.ENEMY)
 
     def _iAmJoinedSquad(self, squadNum):
-        param = {'squadNum': squadNum}
-        if IS_CHINA:
-            key = MESSENGER.CLIENT_DYNSQUAD_INVITEACCEPTED_MYSELF_WITHOUTVOIP
-        else:
-            key = '#messenger:client/dynSquad/inviteAccepted/myself/disableVOIP' if g_settingsCore.getSetting(SOUND.VOIP_ENABLE) else '#messenger:client/dynSquad/inviteAccepted/myself/enableVOIP'
-            param['hotkey'] = 'G'
-        self.__sendMessage(key, **param)
+        key = _getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
+        state = _getVIOPState(key)
+        message = '#messenger:client/dynSquad/inviteAccepted/myself/%s' % state
+        self.__sendMessage(message, squadNum=squadNum, keyName=BigWorld.keyToString(key))
 
     def _someoneJoinedAlliedSquad(self, squadNum, receiver):
-        self.__sendMessage(MESSENGER.CLIENT_DYNSQUAD_INVITEACCEPTED_USER, squadNum=squadNum, receiver=receiver, squadType=DYN_SQUAD_TYPE.ALLY)
+        self.__sendMessage('#messenger:client/dynSquad/inviteAccepted/user', squadNum=squadNum, receiver=receiver, squadType=DYN_SQUAD_TYPE.ALLY)
 
     def _someoneJoinedMySquad(self, squadNum, receiver):
-        self.__sendMessage(MESSENGER.CLIENT_DYNSQUAD_INVITEACCEPTED_USER, squadNum=squadNum, receiver=receiver)
+        self.__sendMessage('#messenger:client/dynSquad/inviteAccepted/user', squadNum=squadNum, receiver=receiver)
 
     def destroy(self):
         super(DynSquadMessagesController, self).destroy()
@@ -272,18 +286,20 @@ class _DynSquadSoundsController(DynSquadArenaController):
 
 class DynSquadFunctional(object):
 
-    def __init__(self):
+    def __init__(self, isReplayPlaying=False):
         super(DynSquadFunctional, self).__init__()
         self.__soundCtrl = None
         self.__entitiesCtrl = None
         self.__msgsCtrl = None
         self.__inited = False
+        if isReplayPlaying:
+            g_messengerEvents.users.onUsersListReceived({USER_TAG.FRIEND, USER_TAG.IGNORED})
         return
 
     def setUI(self, battleUI, sessionProviderRef):
         self.__soundCtrl = _DynSquadSoundsController(battleUI.soundManager)
         sessionProviderRef.addArenaCtrl(self.__soundCtrl)
-        self.__entitiesCtrl = _DynSquadEntityController((battleUI.minimap, battleUI.markersManager))
+        self.__entitiesCtrl = _DynSquadEntityController((battleUI.getMinimap(), battleUI.markersManager))
         sessionProviderRef.addArenaCtrl(self.__entitiesCtrl)
         self.__msgsCtrl = DynSquadMessagesController()
         sessionProviderRef.addArenaCtrl(self.__msgsCtrl)

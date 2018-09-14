@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/HyperParser.py
 """
 HyperParser
@@ -63,8 +63,8 @@ class HyperParser:
             raise ValueError('The index given is before the analyzed statement')
         self.indexinrawtext = indexinrawtext
         self.indexbracket = 0
-        while self.indexbracket < len(self.bracketing) - 1 and self.bracketing[self.indexbracket + 1][0] < self.indexinrawtext:
-            self.indexbracket += 1
+        while 1:
+            self.indexbracket < len(self.bracketing) - 1 and self.bracketing[self.indexbracket + 1][0] < self.indexinrawtext and self.indexbracket += 1
 
         if self.indexbracket < len(self.bracketing) - 1 and self.bracketing[self.indexbracket + 1][0] == self.indexinrawtext and not self.isopener[self.indexbracket + 1]:
             self.indexbracket += 1
@@ -77,7 +77,7 @@ class HyperParser:
         """Is the index given to the HyperParser is in a normal code?"""
         return not self.isopener[self.indexbracket] or self.rawtext[self.bracketing[self.indexbracket][0]] not in ('#', '"', "'")
 
-    def get_surrounding_brackets(self, openers = '([{', mustclose = False):
+    def get_surrounding_brackets(self, openers='([{', mustclose=False):
         """If the index given to the HyperParser is surrounded by a bracket
         defined in openers (or at least has one before it), return the
         indices of the opening bracket and the closing bracket (or the
@@ -87,15 +87,15 @@ class HyperParser:
         """
         bracketinglevel = self.bracketing[self.indexbracket][1]
         before = self.indexbracket
-        while not self.isopener[before] or self.rawtext[self.bracketing[before][0]] not in openers or self.bracketing[before][1] > bracketinglevel:
-            before -= 1
-            if before < 0:
-                return None
+        while 1:
+            if not self.isopener[before] or self.rawtext[self.bracketing[before][0]] not in openers or self.bracketing[before][1] > bracketinglevel:
+                before -= 1
+                return before < 0 and None
             bracketinglevel = min(bracketinglevel, self.bracketing[before][1])
 
         after = self.indexbracket + 1
-        while after < len(self.bracketing) and self.bracketing[after][1] >= bracketinglevel:
-            after += 1
+        while 1:
+            after < len(self.bracketing) and self.bracketing[after][1] >= bracketinglevel and after += 1
 
         beforeindex = self.text.index('%s-%dc' % (self.stopatindex, len(self.rawtext) - self.bracketing[before][0]))
         if after >= len(self.bracketing) or self.bracketing[after][0] > len(self.rawtext):
@@ -136,15 +136,14 @@ class HyperParser:
             while 1:
                 if pos > brck_limit and rawtext[pos - 1] in self._whitespace_chars:
                     pos -= 1
-                elif not postdot_phase and pos > brck_limit and rawtext[pos - 1] == '.':
+                if not postdot_phase and pos > brck_limit and rawtext[pos - 1] == '.':
                     pos -= 1
                     postdot_phase = True
-                elif pos == brck_limit and brck_index > 0 and rawtext[bracketing[brck_index - 1][0]] == '#':
+                if pos == brck_limit and brck_index > 0 and rawtext[bracketing[brck_index - 1][0]] == '#':
                     brck_index -= 2
                     brck_limit = bracketing[brck_index][0]
                     pos = bracketing[brck_index + 1][0]
-                else:
-                    break
+                break
 
             if not postdot_phase:
                 break
@@ -153,7 +152,7 @@ class HyperParser:
                 pos = pos - ret
                 last_identifier_pos = pos
                 postdot_phase = False
-            elif pos == brck_limit:
+            if pos == brck_limit:
                 level = bracketing[brck_index][1]
                 while brck_index > 0 and bracketing[brck_index - 1][1] > level:
                     brck_index -= 1
@@ -173,7 +172,6 @@ class HyperParser:
 
                         last_identifier_pos = pos
                     break
-            else:
-                break
+            break
 
         return rawtext[last_identifier_pos:self.indexinrawtext]

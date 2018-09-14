@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/connection.py
 import random
 import BigWorld
@@ -35,7 +35,7 @@ def _makeSample(*args):
 
 class ConnectionsIterator(object):
 
-    def __init__(self, base = None, alt = None, bosh = None):
+    def __init__(self, base=None, alt=None, bosh=None):
         super(ConnectionsIterator, self).__init__()
         self.__tcp = _makeSample(base or [], alt or [])
         self.__bosh = _makeSample(bosh or [])

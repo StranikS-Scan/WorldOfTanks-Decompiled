@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/Controllers/TrackBreakingController.py
 import BigWorld
 import Math
@@ -55,9 +55,9 @@ class TrackBreakingController:
         OnceController(vibrationToPlay)
 
     def update(self, vehicle, isLeftTrackBroken, isRightTrackBroken):
-        if self.__wasLeftTrackBroken == False and isLeftTrackBroken:
+        if self.__wasLeftTrackBroken is False and isLeftTrackBroken:
             self.__breakWithDirection(vehicle, True)
-        elif self.__wasRightTrackBroken == False and isRightTrackBroken:
+        elif self.__wasRightTrackBroken is False and isRightTrackBroken:
             self.__breakWithDirection(vehicle, False)
         self.__wasLeftTrackBroken = isLeftTrackBroken
         self.__wasRightTrackBroken = isRightTrackBroken

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBuildingComponent.py
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from debug_utils import LOG_DEBUG
@@ -10,6 +10,8 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.FortBuildingComponentMeta import FortBuildingComponentMeta
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.shared.events import FortEvent
+from helpers.i18n import makeString as _ms
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 
 class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHelper):
 
@@ -32,7 +34,7 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
         super(FortBuildingComponent, self)._dispose()
         return
 
-    def updateData(self, animations = None):
+    def updateData(self, animations=None):
         self.__makeData(animations)
 
     def onWindowClose(self):
@@ -56,8 +58,11 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
             self.fortCtrl.addUpgradeVisitedBuildings(buildingID)
 
     def requestBuildingToolTipData(self, uid, type):
-        buildingDescr = self.fortCtrl.getFort().getBuilding(self.getBuildingIDbyUID(uid))
-        self.as_setBuildingToolTipDataS(uid, type, self.getCommonBuildTooltipData(buildingDescr))
+        fort = self.fortCtrl.getFort()
+        if fort:
+            buildingDescr = fort.getBuilding(self.getBuildingIDbyUID(uid))
+            header = _ms(FORTIFICATIONS.buildings_buildingname(uid))
+            self.as_setBuildingToolTipDataS(uid, type, header, self.getCommonBuildTooltipData(buildingDescr))
 
     def onUpdated(self, isFullUpdate):
         if self._animation is not None or isFullUpdate:
@@ -68,7 +73,7 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
     def onStateChanged(self, state):
         self.updateData(self._animation)
 
-    def onBuildingChanged(self, buildingID, reason, ctx = None):
+    def onBuildingChanged(self, buildingID, reason, ctx=None):
         animations = {}
         if reason == BUILDING_UPDATE_REASON.COMPLETED:
             uid = self.getBuildingUIDbyID(buildingID)
@@ -82,7 +87,7 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
         else:
             self.updateData(animations)
 
-    def onBuildingsUpdated(self, buildingsTypeIDs, cooldownPassed = False):
+    def onBuildingsUpdated(self, buildingsTypeIDs, cooldownPassed=False):
         if cooldownPassed:
             self.updateData()
         else:
@@ -123,7 +128,7 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
         self.__isOnNextTransportingStep = step == events.FortEvent.TRANSPORTATION_STEPS.NEXT_STEP
         self.updateData()
 
-    def __makeData(self, animations = None):
+    def __makeData(self, animations=None):
         b_list = []
         baseBuildingDescr = self.fortCtrl.getFort().getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE)
         animation = FORTIFICATION_ALIASES.WITHOUT_ANIMATION

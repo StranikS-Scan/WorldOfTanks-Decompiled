@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/SyncController.py
 import BigWorld
 import AccountCommands
@@ -35,7 +35,7 @@ class SyncController:
             self.__sendSyncRequest(syncID, partial(self.__onSyncResponse, syncID))
         return
 
-    def __onSyncResponse(self, syncID, requestID, resultID, errorStr, ext = {}):
+    def __onSyncResponse(self, syncID, requestID, resultID, errorStr, ext={}):
         if resultID != AccountCommands.RES_STREAM:
             self.__onOwnerSyncResponse(syncID, resultID, ext)
             for callback in self.__syncRequests.pop(syncID, []):

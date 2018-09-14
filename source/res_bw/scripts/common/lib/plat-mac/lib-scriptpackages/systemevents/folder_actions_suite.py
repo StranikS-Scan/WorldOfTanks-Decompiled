@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/SystemEvents/Folder_Actions_Suite.py
 """Suite Folder Actions Suite: Terms and Events for controlling Folder Actions
 Level 1, version 1
@@ -12,7 +13,7 @@ _code = 'faco'
 class Folder_Actions_Suite_Events:
     _argmap_attach_action_to = {'using': 'faal'}
 
-    def attach_action_to(self, _object, _attributes = {}, **_arguments):
+    def attach_action_to(self, _object, _attributes={}, **_arguments):
         """attach action to: Attach an action to a folder
         Required argument: the object for the command
         Keyword argument using: a file containing the script to attach
@@ -26,10 +27,9 @@ class Folder_Actions_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def attached_scripts(self, _object, _attributes = {}, **_arguments):
+    def attached_scripts(self, _object, _attributes={}, **_arguments):
         """attached scripts: List the actions attached to a folder
         Required argument: the object for the command
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -43,14 +43,13 @@ class Folder_Actions_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_do_folder_action = {'with_window_size': 'fnsz',
      'with_item_list': 'flst',
      'folder_action_code': 'actn'}
 
-    def do_folder_action(self, _object, _attributes = {}, **_arguments):
+    def do_folder_action(self, _object, _attributes={}, **_arguments):
         """do folder action: Event the Finder sends to the Folder Actions FBA
         Required argument: the object for the command
         Keyword argument with_window_size: the new window size for the folder action message to process
@@ -67,13 +66,12 @@ class Folder_Actions_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_edit_action_of = {'using_action_name': 'snam',
      'using_action_number': 'indx'}
 
-    def edit_action_of(self, _object, _attributes = {}, **_arguments):
+    def edit_action_of(self, _object, _attributes={}, **_arguments):
         """edit action of: Edit as action of a folder
         Required argument: the object for the command
         Keyword argument using_action_name: ...or the name of the action to edit
@@ -88,13 +86,12 @@ class Folder_Actions_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_remove_action_from = {'using_action_name': 'snam',
      'using_action_number': 'indx'}
 
-    def remove_action_from(self, _object, _attributes = {}, **_arguments):
+    def remove_action_from(self, _object, _attributes={}, **_arguments):
         """remove action from: Remove a folder action from a folder
         Required argument: the object for the command
         Keyword argument using_action_name: ...or the name of the action to remove
@@ -109,8 +106,7 @@ class Folder_Actions_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class application(aetools.ComponentItem):

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/LobbyEntry.py
 import weakref
 from debug_utils import LOG_ERROR
@@ -105,7 +105,7 @@ class LobbyEntry(IGUIEntry):
         g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
         g_messengerEvents.onErrorReceived -= self.__me_onErrorReceived
 
-    def addClientMessage(self, message, isCurrentPlayer = False):
+    def addClientMessage(self, message, isCurrentPlayer=False):
         pass
 
     def __setView4Ctrl(self, controller):

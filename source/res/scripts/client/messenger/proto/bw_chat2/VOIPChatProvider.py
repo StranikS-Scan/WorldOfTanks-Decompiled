@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/VOIPChatProvider.py
 from debug_utils import LOG_WARNING, LOG_NOTE
 from messenger.proto.bw_chat2 import errors, provider
@@ -24,7 +24,7 @@ class VOIPChatProvider(provider.ResponseDictHandler, IVOIPChatProvider):
     def getChannelParams(self):
         return self.__channelParams
 
-    def requestCredentials(self, reset = 0):
+    def requestCredentials(self, reset=0):
         provider = self.provider()
         actionID = _ACTIONS.GET_VOIP_CREDENTIALS
         if reset:

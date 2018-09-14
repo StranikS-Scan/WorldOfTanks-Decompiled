@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBattleResultsWindow.py
 import uuid
 import BigWorld
@@ -34,9 +34,7 @@ class FortBattleResultsWindow(FortBattleResultsWindowMeta):
         def getResultByWinStatus(cls, winStatus):
             if cls.isWin(winStatus):
                 return cls.WIN
-            if cls.isDefeat(winStatus):
-                return cls.DEFEAT
-            return cls.DRAW
+            return cls.DEFEAT if cls.isDefeat(winStatus) else cls.DRAW
 
         @classmethod
         def isWin(cls, winStatus):
@@ -67,7 +65,7 @@ class FortBattleResultsWindow(FortBattleResultsWindowMeta):
             SystemMessages.g_instance.pushI18nMessage(msg, type=SystemMessages.SM_TYPE.Warning)
 
     @classmethod
-    def _packAchievement(cls, achieve, isUnique = False):
+    def _packAchievement(cls, achieve, isUnique=False):
         icons = achieve.getIcons()
         rank, i18nValue = (None, None)
         if achieve.getType() != ACHIEVEMENT_TYPE.SERIES:

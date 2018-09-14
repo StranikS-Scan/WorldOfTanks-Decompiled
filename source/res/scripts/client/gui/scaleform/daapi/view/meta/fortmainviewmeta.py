@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortMainViewMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -53,29 +53,22 @@ class FortMainViewMeta(BaseDAAPIComponent):
         self._printOverrideError('onSelectOrderSelector')
 
     def as_switchModeS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_switchMode(data)
+        return self.flashObject.as_switchMode(data) if self._isDAAPIInited() else None
 
     def as_toggleCommanderHelpS(self, show):
-        if self._isDAAPIInited():
-            return self.flashObject.as_toggleCommanderHelp(show)
+        return self.flashObject.as_toggleCommanderHelp(show) if self._isDAAPIInited() else None
 
     def as_setMainDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMainData(data)
+        return self.flashObject.as_setMainData(data) if self._isDAAPIInited() else None
 
     def as_setClanIconIdS(self, clanIconId):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setClanIconId(clanIconId)
+        return self.flashObject.as_setClanIconId(clanIconId) if self._isDAAPIInited() else None
 
     def as_setHeaderMessageS(self, message, isWrongLocalTime):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setHeaderMessage(message, isWrongLocalTime)
+        return self.flashObject.as_setHeaderMessage(message, isWrongLocalTime) if self._isDAAPIInited() else None
 
     def as_setBattlesDirectionDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setBattlesDirectionData(data)
+        return self.flashObject.as_setBattlesDirectionData(data) if self._isDAAPIInited() else None
 
     def as_setTutorialArrowVisibilityS(self, arrowAlias, isVisible):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTutorialArrowVisibility(arrowAlias, isVisible)
+        return self.flashObject.as_setTutorialArrowVisibility(arrowAlias, isVisible) if self._isDAAPIInited() else None

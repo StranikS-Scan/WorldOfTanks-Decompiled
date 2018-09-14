@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/VehicleProgressHelper.py
 import BigWorld
 import math
@@ -69,10 +69,10 @@ class VehicleProgressHelper(object):
         getter = self._items.getItemByCD
         for itemTypeCD, unlockProps in possible2UnlockItems.iteritems():
             item = getter(itemTypeCD)
-            if self.__vehicleXp - unlockProps.xpCost <= vehicleBattleXp:
-                if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-                    avgBattles2Unlock = self.__getAvgBattles2Unlock(unlockProps)
-                    if self.__vehicleXp > unlockProps.xpCost or 0 < avgBattles2Unlock <= MIN_BATTLES_TO_SHOW_PROGRESS:
+            if self.__vehicleXp - unlockProps.xpCost <= vehicleBattleXp and item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+                avgBattles2Unlock = self.__getAvgBattles2Unlock(unlockProps)
+                if not self.__vehicleXp > unlockProps.xpCost:
+                    if 0 < avgBattles2Unlock <= MIN_BATTLES_TO_SHOW_PROGRESS:
                         ready2UnlockVehicles.append(self.__makeUnlockVehicleVO(item, unlockProps, avgBattles2Unlock))
                 elif self.__vehicleXp > unlockProps.xpCost:
                     ready2UnlockModules.append(self.__makeUnlockModuleVO(item, unlockProps))
@@ -118,12 +118,10 @@ class VehicleProgressHelper(object):
         return skilledTankmans
 
     def __getAvgBattles2Unlock(self, unlockProps):
-        if self.__avgVehicleXp > 0:
-            return int(math.ceil((unlockProps.xpCost - self.__vehicleXp) / float(self.__avgVehicleXp)))
+        return int(math.ceil((unlockProps.xpCost - self.__vehicleXp) / float(self.__avgVehicleXp))) if self.__avgVehicleXp > 0 else 0
 
     def __getAvgBattles2NewSkill(self, avgTmanXp, tman):
-        if avgTmanXp > 0:
-            return max(1, math.ceil(tman.getNextSkillXpCost() / avgTmanXp))
+        return max(1, math.ceil(tman.getNextSkillXpCost() / avgTmanXp)) if avgTmanXp > 0 else 0
 
     def __makeTankmanDescription(self, tankman):
         role = text_styles.main(tankman.roleUserName)

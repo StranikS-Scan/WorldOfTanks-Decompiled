@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsCurrentTab.py
 from collections import defaultdict
 import constants
@@ -129,16 +129,12 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
         if res:
             return -res
         res = cmp(a.getPriority(), b.getPriority())
-        if res:
-            return res
-        return cmp(a.getUserName(), b.getUserName())
+        return res if res else cmp(a.getUserName(), b.getUserName())
 
-    def _filterFunc(self, a):
-        if self.__filterType == self.FILTER_TYPE.ACTIONS and not self._isAction(a):
+    def _filterFunc(self, event):
+        if self.__filterType == self.FILTER_TYPE.ACTIONS and not self._isAction(event):
             return False
-        if self.__filterType == self.FILTER_TYPE.QUESTS and not self._isQuest(a):
-            return False
-        return (not self._hideCompleted or not a.isCompleted()) and self._isAvailableQuestForTab(a)
+        return False if self.__filterType == self.FILTER_TYPE.QUESTS and not self._isQuest(event) else not (self._hideCompleted and event.isCompleted()) and self._isAvailableQuestForTab(event)
 
     def _applyFilters(self, quests):
         return filter(self._filterFunc, self.__applySort(quests))

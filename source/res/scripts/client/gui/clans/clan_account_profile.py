@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/clan_account_profile.py
 import weakref
 from collections import namedtuple, defaultdict
@@ -36,7 +36,7 @@ class _CACHE_KEYS(CONST_CONTAINER):
 
 class ClanAccountProfile(object):
 
-    def __init__(self, clansCtrl, accountDbID, clanDbID = 0, clanBwInfo = None):
+    def __init__(self, clansCtrl, accountDbID, clanDbID=0, clanBwInfo=None):
         self._clansCtrl = weakref.proxy(clansCtrl)
         self._accountDbID = accountDbID
         self._clanDbID = clanDbID
@@ -54,19 +54,15 @@ class ClanAccountProfile(object):
         self._cache.clear()
 
     def getPermissions(self, clanDossier):
-        if clanDossier and clanDossier.getDbID() == self._clanDbID:
-            return ClanMemberPermissions(self.getRole())
-        return DefaultClanMemberPermissions()
+        return ClanMemberPermissions(self.getRole()) if clanDossier and clanDossier.getDbID() == self._clanDbID else DefaultClanMemberPermissions()
 
     def getMyClanPermissions(self):
-        if self.isInClan():
-            return self.getPermissions(self.getClanDossier())
-        return DefaultClanMemberPermissions()
+        return self.getPermissions(self.getClanDossier()) if self.isInClan() else DefaultClanMemberPermissions()
 
     def getClanDossier(self):
         return self._clansCtrl.getClanDossier(self._clanDbID)
 
-    def isSynced(self, key = None):
+    def isSynced(self, key=None):
         if key is None:
             for key in self._vitalWebInfo.keys():
                 if not self._syncState & key:
@@ -105,19 +101,13 @@ class ClanAccountProfile(object):
 
     def isInClanEnterCooldown(self):
         self.resyncWebClanInfo()
-        if self._vitalWebInfo[SYNC_KEYS.CLAN_INFO]:
-            return time_utils.getCurrentTimestamp() - self._vitalWebInfo[SYNC_KEYS.CLAN_INFO].getClanCooldownTill() <= 0
-        return False
+        return time_utils.getCurrentTimestamp() - self._vitalWebInfo[SYNC_KEYS.CLAN_INFO].getClanCooldownTill() <= 0 if self._vitalWebInfo[SYNC_KEYS.CLAN_INFO] else False
 
     def hasClanInvite(self, clanDbID):
-        if self._cache[_CACHE_KEYS.INVITES]:
-            return clanDbID in self._cache[_CACHE_KEYS.INVITES]
-        return False
+        return clanDbID in self._cache[_CACHE_KEYS.INVITES] if self._cache[_CACHE_KEYS.INVITES] else False
 
     def isClanApplicationSent(self, clanDbID):
-        if self._cache[_CACHE_KEYS.APPS]:
-            return clanDbID in self._cache[_CACHE_KEYS.APPS]
-        return False
+        return clanDbID in self._cache[_CACHE_KEYS.APPS] if self._cache[_CACHE_KEYS.APPS] else False
 
     def getInvitesCount(self):
         self.resyncInvites()
@@ -130,7 +120,7 @@ class ClanAccountProfile(object):
     def isInvitesLimitReached(self):
         return self._isInvitesLimitReached.get(defValue=False)
 
-    def resync(self, force = False):
+    def resync(self, force=False):
         LOG_DEBUG('Full account clan profile resync initiated')
         self.resyncInvites(force=force)
         self.resyncApps(force=force)
@@ -139,7 +129,7 @@ class ClanAccountProfile(object):
             self.getClanDossier().resync(force=force)
 
     @process
-    def resyncWebClanInfo(self, force = False):
+    def resyncWebClanInfo(self, force=False):
         if self._waitForSync & SYNC_KEYS.CLAN_INFO:
             return
         if self.isSynced(SYNC_KEYS.CLAN_INFO) and not force:
@@ -160,7 +150,7 @@ class ClanAccountProfile(object):
                 self._vitalWebInfo[SYNC_KEYS.CLAN_INFO] = ctx.getDefDataObj()
         self._waitForSync ^= SYNC_KEYS.CLAN_INFO
 
-    def resyncInvites(self, force = False):
+    def resyncInvites(self, force=False):
         if self._waitForSync & SYNC_KEYS.INVITES:
             return
         if self.isSynced(SYNC_KEYS.INVITES) and not force:
@@ -173,7 +163,7 @@ class ClanAccountProfile(object):
             self._syncState |= SYNC_KEYS.INVITES
         self._waitForSync ^= SYNC_KEYS.INVITES
 
-    def resyncApps(self, force = False):
+    def resyncApps(self, force=False):
         if self._waitForSync & SYNC_KEYS.APPS:
             return
         if self.isSynced(SYNC_KEYS.APPS) and not force:
@@ -325,7 +315,7 @@ class ClanAccountProfile(object):
             return default
             return
 
-    def _resyncBwInfo(self, clanDbID = 0, clanBwInfo = None):
+    def _resyncBwInfo(self, clanDbID=0, clanBwInfo=None):
         needToRaiseEvent = self._clanDbID != clanDbID or self._clanBwInfo != clanBwInfo
         if self._clanDbID != clanDbID:
             self._syncState = 0

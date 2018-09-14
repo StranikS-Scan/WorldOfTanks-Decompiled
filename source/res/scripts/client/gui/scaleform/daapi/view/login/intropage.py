@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/IntroPage.py
 import BigWorld
 import SoundGroups
@@ -10,10 +10,10 @@ from gui.shared import events
 
 class IntroPage(IntroPageMeta):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(IntroPage, self).__init__()
         self.__movieFiles = GuiDirReader.getAvailableIntroVideoFiles()
-        self.__soundValue = SoundGroups.g_instance.getMasterVolume() / 2
+        self.__soundValue = SoundGroups.g_instance.getMasterVolume() / 4
 
     def stopVideo(self):
         if self.__movieFiles is not None and len(self.__movieFiles):
@@ -46,7 +46,7 @@ class IntroPage(IntroPageMeta):
         self.as_playVideoS({'source': movie,
          'volume': self.__soundValue})
 
-    def __sendResult(self, isSuccess, msg = ''):
+    def __sendResult(self, isSuccess, msg=''):
         """
         Call callback and send result of work
         @param isSuccess: is result of current component working has no errors

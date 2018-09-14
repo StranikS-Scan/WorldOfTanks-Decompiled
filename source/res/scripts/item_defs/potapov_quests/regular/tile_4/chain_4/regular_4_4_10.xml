@@ -8,8 +8,8 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <greaterOrEqual>	4000	</greaterOrEqual>
               <whileInvisible></whileInvisible>
+              <greaterOrEqual>	4000	</greaterOrEqual>
             </vehicleDamage>
           </and>
         </postBattle>
@@ -31,8 +31,8 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <greaterOrEqual>	4000	</greaterOrEqual>
               <whileInvisible></whileInvisible>
+              <greaterOrEqual>	4000	</greaterOrEqual>
             </vehicleDamage>
             <isAlive></isAlive>
             <win></win>

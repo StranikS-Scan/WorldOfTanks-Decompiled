@@ -1,11 +1,12 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/Cursor.py
+import GUI
+import BigWorld
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi.view.meta.CursorMeta import CursorMeta
 from gui.Scaleform.framework.entities.View import View
-import GUI
-import BigWorld
-__author__ = 'd_trofimov'
+from gui.shared import EVENT_BUS_SCOPE
+from gui.shared.events import GameEvent
 
 class Cursor(CursorMeta, View):
     ARROW = 'arrow'
@@ -19,27 +20,12 @@ class Cursor(CursorMeta, View):
     DRAG_OPEN = 'dragopen'
     DRAG_CLOSE = 'dragclose'
     __DAAPI_ERROR = 'flashObject is Python Cursor class can`t be None!'
-    __isAutoShow = False
 
     def __init__(self):
         super(Cursor, self).__init__()
         self.__isActivated = False
-
-    @classmethod
-    def setAutoShow(cls, flag):
-        cls.__isAutoShow = flag
-
-    @classmethod
-    def getAutoShow(cls):
-        return cls.__isAutoShow
-
-    def _populate(self):
-        super(Cursor, self)._populate()
-        self.attachCursor(self.__isAutoShow)
-        self.setAutoShow(False)
-
-    def _dispose(self):
-        super(Cursor, self)._dispose()
+        self.__savedMCursorPos = None
+        return
 
     def attachCursor(self, automaticallyShow):
         if automaticallyShow:
@@ -62,17 +48,38 @@ class Cursor(CursorMeta, View):
 
     def show(self):
         if self.flashObject is not None:
+            self.__setSFMousePosition()
             self.flashObject.visible = True
+            self.fireEvent(GameEvent(GameEvent.SHOW_CURSOR), scope=EVENT_BUS_SCOPE.GLOBAL)
         else:
             LOG_ERROR(self.__DAAPI_ERROR)
         return
 
     def hide(self):
+        self.__restoreDeviceMousePosition()
         if self.flashObject is not None:
             self.flashObject.visible = False
+            self.fireEvent(GameEvent(GameEvent.HIDE_CURSOR), scope=EVENT_BUS_SCOPE.GLOBAL)
         else:
             LOG_ERROR(self.__DAAPI_ERROR)
         return
 
     def setCursorForced(self, cursor):
         self.as_setCursorS(cursor)
+
+    def _populate(self):
+        super(Cursor, self)._populate()
+        self.app.syncCursor()
+
+    def __setSFMousePosition(self):
+        screenWidth, screenHeight = GUI.screenResolution()
+        mouseLeft, mouseTop = GUI.mcursor().position
+        self.__savedMCursorPos = (mouseLeft, mouseTop)
+        self.flashObject.x = round((1.0 + mouseLeft) / 2.0 * screenWidth)
+        self.flashObject.y = round(-(-1.0 + mouseTop) / 2.0 * screenHeight)
+
+    def __restoreDeviceMousePosition(self):
+        if self.__savedMCursorPos is not None:
+            GUI.mcursor().position = self.__savedMCursorPos
+            self.__savedMCursorPos = None
+        return

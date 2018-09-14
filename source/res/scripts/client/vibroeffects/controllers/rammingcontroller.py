@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/Controllers/RammingController.py
 import BigWorld
 from OnceController import OnceController
@@ -19,10 +19,10 @@ class RammingController:
         return
 
     def execute(self, vehicleSpeed, matKind):
-        if not self.__executionForbidden:
-            if vehicleSpeed >= self.MIN_IMPACT_SPEED:
-                effectName = 'ramming_vehicle_veff'
-                effectName = matKind is not None and DESTRUCTIBLE_MATKIND.MIN <= matKind <= DESTRUCTIBLE_MATKIND.MAX and 'ramming_destructible_veff'
+        effectName = not self.__executionForbidden and vehicleSpeed >= self.MIN_IMPACT_SPEED and 'ramming_vehicle_veff'
+        if matKind is not None:
+            if DESTRUCTIBLE_MATKIND.MIN <= matKind <= DESTRUCTIBLE_MATKIND.MAX:
+                effectName = 'ramming_destructible_veff'
             else:
                 effectName = 'ramming_indestructible_veff'
             OnceController(effectName)

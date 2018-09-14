@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/ChainView.py
 from _PostProcessing import debug as _debug
 from _PostProcessing import chain
@@ -190,7 +190,7 @@ class ChainView:
         self.minScroll = [xs[0], ys[0]]
         self.maxScroll = [xs[1], ys[1]]
 
-    def scrollTo(self, x, y, animate = False):
+    def scrollTo(self, x, y, animate=False):
         self.scroll[0] = max(x, self.minScroll[0])
         self.scroll[0] = min(self.scroll[0], self.maxScroll[0])
         self.scroll[1] = max(y, self.minScroll[1])

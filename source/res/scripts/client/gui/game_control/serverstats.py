@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/ServerStats.py
 import BigWorld
 import constants
@@ -66,7 +66,7 @@ class ServerStats(Controller):
         if hasattr(BigWorld.player(), 'requestServerStats'):
             BigWorld.player().requestServerStats()
 
-    def __loadStatsCallback(self, timeout = None):
+    def __loadStatsCallback(self, timeout=None):
         if constants.IS_SHOW_SERVER_STATS:
             self.__statsCallbackID = BigWorld.callback(timeout if timeout is not None else self.STATS_REQUEST_TIMEOUT, self.__requestServerStats)
         return

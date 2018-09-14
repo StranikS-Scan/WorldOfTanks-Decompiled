@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/__init__.py
 import datetime
 import BigWorld
@@ -6,7 +6,6 @@ from constants import ACCOUNT_ATTR
 from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
 from shared_utils.account_helpers import BattleResultsCache, ClientClubs
 from shared_utils.account_helpers import ClientInvitations
-from gui import GUI_SETTINGS
 from helpers.time_utils import getCurrentTimestamp
 
 def __checkAccountAttr(attrs, attrID):
@@ -48,8 +47,8 @@ def convertGold(gold):
 
 
 def getPlayerID():
-    return getattr(BigWorld.player(), 'id', 0L)
+    return getattr(BigWorld.player(), 'id', 0)
 
 
 def getAccountDatabaseID():
-    return getattr(BigWorld.player(), 'databaseID', 0L)
+    return getattr(BigWorld.player(), 'databaseID', 0)

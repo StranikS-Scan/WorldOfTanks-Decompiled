@@ -90,15 +90,15 @@
     <tags>	heavyTank mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	6	</level>
   </G15_VK3601H>
-  <VK3001H>
+  <G13_VK3001H>
     <id>	10	</id>
     <userString>	#germany_vehicles:VK3001H	</userString>
     <shortUserString>	#germany_vehicles:VK3001H_short	</shortUserString>
     <description>	#germany_vehicles:VK3001H_descr	</description>
     <price>	410000	</price>
-    <tags>	heavyTank enhancedTorsions3t_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	heavyTank enhancedTorsions3t_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	5	</level>
-  </VK3001H>
+  </G13_VK3001H>
   <G11_Bison_I>
     <id>	11	</id>
     <userString>	#germany_vehicles:Bison_I	</userString>
@@ -304,15 +304,15 @@
     <tags>	mediumTank beast enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user	</tags>
     <level>	8	</level>
   </Panther_II>
-  <G_Tiger>
+  <G45_G_Tiger>
     <id>	34	</id>
     <userString>	#germany_vehicles:G_Tiger	</userString>
     <shortUserString>	#germany_vehicles:G_Tiger_short	</shortUserString>
     <description>	#germany_vehicles:G_Tiger_descr	</description>
     <price>	3600000	</price>
-    <tags>	SPG heavySPG beast largeCaliberHowitzerRammer_user wetCombatPack_class2_user enhancedTorsions5t_user	</tags>
+    <tags>	SPG heavySPG beast largeCaliberHowitzerRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	9	</level>
-  </G_Tiger>
+  </G45_G_Tiger>
   <G_Panther>
     <id>	35	</id>
     <userString>	#germany_vehicles:G_Panther	</userString>
@@ -412,15 +412,15 @@
     <tags>	AT-SPG mediumAT-SPG beast enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	8	</level>
   </G71_JagdPantherII>
-  <Nashorn>
+  <G40_Nashorn>
     <id>	46	</id>
     <userString>	#germany_vehicles:Nashorn	</userString>
     <shortUserString>	#germany_vehicles:Nashorn_short	</shortUserString>
     <description>	#germany_vehicles:Nashorn_descr	</description>
     <price>	905000	</price>
-    <tags>	AT-SPG mediumAT-SPG noImprovedVentilation enhancedLevers_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user	</tags>
+    <tags>	AT-SPG mediumAT-SPG noImprovedVentilation enhancedLevers_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user HD	</tags>
     <level>	6	</level>
-  </Nashorn>
+  </G40_Nashorn>
   <JagdPz_E100>
     <id>	47	</id>
     <userString>	#germany_vehicles:JagdPz_E100	</userString>
@@ -656,6 +656,17 @@
     <tags>	lightTank scout enhancedTorsions1t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	7	</level>
   </G113_SP_I_C>
+  <G121_Grille_15_L63>
+    <id>	75	</id>
+    <userString>	#germany_vehicles:G121_Grille_15_L63	</userString>
+    <description>	#germany_vehicles:G121_Grille_15_L63_descr	</description>
+    <shortUserString>	#germany_vehicles:G121_Grille_15_L63_short	</shortUserString>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG mediumAT-SPG noImprovedVentilation enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class1_user HD secret testTank	</tags>
+    <level>	10	</level>
+  </G121_Grille_15_L63>
   <PzV_PzIV>
     <id>	201	</id>
     <userString>	#germany_vehicles:PzV_PzIV	</userString>
@@ -730,16 +741,16 @@
     <tags>	heavyTank beast antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
     <level>	8	</level>
   </Lowe>
-  <T-25>
+  <G46_T-25>
     <id>	213	</id>
     <userString>	#germany_vehicles:T-25	</userString>
     <shortUserString>	#germany_vehicles:T-25_short	</shortUserString>
     <description>	#germany_vehicles:T-25_descr	</description>
     <price>	1500	  <gold></gold>
     </price>
-    <tags>	mediumTank enhancedSprings_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank enhancedSprings_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	5	</level>
-  </T-25>
+  </G46_T-25>
   <T-15>
     <id>	214	</id>
     <userString>	#germany_vehicles:T-15	</userString>
@@ -772,16 +783,16 @@
     <tags>	AT-SPG heavyAT-SPG beast antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	8	</level>
   </G65_JagdTiger_SdKfz_185>
-  <E-25>
+  <G48_E-25>
     <id>	217	</id>
     <userString>	#germany_vehicles:E-25	</userString>
     <description>	#germany_vehicles:E-25_descr	</description>
     <price>	6700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG mediumAT-SPG enhancedBelwillWashers_user  mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	AT-SPG mediumAT-SPG enhancedBelwillWashers_user  mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	7	</level>
-  </E-25>
+  </G48_E-25>
   <DickerMax>
     <id>	223	</id>
     <userString>	#germany_vehicles:DickerMax	</userString>
@@ -844,7 +855,7 @@
     <tags>	mediumTank secret enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
     <level>	1	</level>
   </PzV_training>
-  <VK7201>
+  <G92_VK7201>
     <id>	229	</id>
     <userString>	#germany_vehicles:VK7201	</userString>
     <shortUserString>	#germany_vehicles:VK7201_short	</shortUserString>
@@ -852,9 +863,9 @@
     <price>	22500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank special antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user	</tags>
+    <tags>	heavyTank special antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
     <level>	10	</level>
-  </VK7201>
+  </G92_VK7201>
   <G100_Gtraktor_Krupp>
     <id>	233	</id>
     <userString>	#germany_vehicles:G100_Gtraktor_Krupp	</userString>
@@ -1017,12 +1028,23 @@
     <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </G119_Panzer58>
+  <G120_M41_90>
+    <id>	250	</id>
+    <userString>	#germany_vehicles:G120_M41_90	</userString>
+    <shortUserString>	#germany_vehicles:G120_M41_90_short	</shortUserString>
+    <description>	#germany_vehicles:G120_M41_90_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank scout mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD secret testTank	</tags>
+    <level>	8	</level>
+  </G120_M41_90>
   <G119_Pz58_Mutz>
     <id>	251	</id>
     <userString>	#germany_vehicles:G119_Pz58_Mutz	</userString>
     <shortUserString>	#germany_vehicles:G119_Pz58_Mutz_short	</shortUserString>
     <description>	#germany_vehicles:G119_Pz58_Mutz_descr	</description>
-    <price>	7700	  <gold></gold>
+    <price>	8700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
@@ -1094,15 +1116,15 @@
     <tags>	AT-SPG mediumAT-SPG enhancedTorsions3t_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user HD premiumIGR secret	</tags>
     <level>	5	</level>
   </StuG_40_AusfG_IGR>
-  <E-25_IGR>
+  <G48_E-25_IGR>
     <id>	156	</id>
     <userString>	#igr_vehicles:E-25_IGR	</userString>
     <description>	#igr_vehicles:E-25_IGR_descr	</description>
     <price>	1	  <gold></gold>
     </price>
-    <tags>	AT-SPG mediumAT-SPG enhancedBelwillWashers_user  mediumCaliberTankRammer_user wetCombatPack_class1_user premiumIGR secret	</tags>
+    <tags>	AT-SPG mediumAT-SPG enhancedBelwillWashers_user  mediumCaliberTankRammer_user wetCombatPack_class1_user premiumIGR secret HD	</tags>
     <level>	7	</level>
-  </E-25_IGR>
+  </G48_E-25_IGR>
   <PzV_IGR>
     <id>	157	</id>
     <userString>	#igr_vehicles:PzV_IGR	</userString>

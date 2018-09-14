@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ReplaceDialog.py
 from Tkinter import *
 from idlelib import SearchEngine
@@ -51,14 +51,14 @@ class ReplaceDialog(SearchDialogBase):
         self.make_button('Replace+Find', self.default_command, 1)
         self.make_button('Replace All', self.replace_all)
 
-    def find_it(self, event = None):
+    def find_it(self, event=None):
         self.do_find(0)
 
-    def replace_it(self, event = None):
+    def replace_it(self, event=None):
         if self.do_find(self.ok):
             self.do_replace()
 
-    def default_command(self, event = None):
+    def default_command(self, event=None):
         if self.do_find(self.ok):
             if self.do_replace():
                 self.do_find(0)
@@ -77,7 +77,7 @@ class ReplaceDialog(SearchDialogBase):
             new = repl
         return new
 
-    def replace_all(self, event = None):
+    def replace_all(self, event=None):
         prog = self.engine.getprog()
         if not prog:
             return
@@ -128,7 +128,7 @@ class ReplaceDialog(SearchDialogBase):
             self.close()
             return
 
-    def do_find(self, ok = 0):
+    def do_find(self, ok=0):
         if not self.engine.getprog():
             return False
         else:
@@ -191,6 +191,6 @@ class ReplaceDialog(SearchDialogBase):
         text.see('insert')
         text.update_idletasks()
 
-    def close(self, event = None):
+    def close(self, event=None):
         SearchDialogBase.close(self, event)
         self.text.tag_remove('hit', '1.0', 'end')

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/LayoutController.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
@@ -31,7 +31,7 @@ class LayoutController(BaseMessagesController, EventSystemEntity):
             self.__onSomeViewSelected({})
         self.addListener(VIEW_ALIAS.LOBBY_HANGAR, self.__onHangarViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(VIEW_ALIAS.LOBBY_INVENTORY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(VIEW_ALIAS.LOBBY_SHOP, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(VIEW_ALIAS.LOBBY_STORE, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(VIEW_ALIAS.LOBBY_PROFILE, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(VIEW_ALIAS.LOBBY_TECHTREE, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(VIEW_ALIAS.LOBBY_RESEARCH, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
@@ -51,16 +51,16 @@ class LayoutController(BaseMessagesController, EventSystemEntity):
     def __onSomeViewSelected(self, _):
         self._model.setLayoutSettings(*LAYOUT_PADDING.OTHER)
 
-    def __onHangarViewSelected(self, _ = None):
+    def __onHangarViewSelected(self, _=None):
         self._model.setLayoutSettings(*LAYOUT_PADDING.HANGAR)
 
-    def __onCustomizationViewSelected(self, _ = None):
+    def __onCustomizationViewSelected(self, _=None):
         self._model.setLayoutSettings(*LAYOUT_PADDING.CUSTOMIZATION)
 
     def cleanUp(self):
         self.removeListener(VIEW_ALIAS.LOBBY_HANGAR, self.__onHangarViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(VIEW_ALIAS.LOBBY_INVENTORY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(VIEW_ALIAS.LOBBY_SHOP, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(VIEW_ALIAS.LOBBY_STORE, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(VIEW_ALIAS.LOBBY_PROFILE, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(VIEW_ALIAS.LOBBY_TECHTREE, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(VIEW_ALIAS.LOBBY_RESEARCH, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)

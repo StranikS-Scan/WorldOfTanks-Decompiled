@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/logger.py
 import time
 import BigWorld
@@ -38,6 +38,7 @@ class _GlooxLogger(_IEventLogger):
 
 
 class LogHandler(ClientEventsHandler):
+    __slots__ = ('__loggers',)
 
     def __init__(self):
         super(LogHandler, self).__init__()
@@ -76,7 +77,7 @@ class XMPP_EVENT_LOG(object):
     DISCONNECT = 1
 
 
-def sendEventToServer(eventType, host, port, errorCode = 0, errorDescr = '', tries = 1):
+def sendEventToServer(eventType, host, port, errorCode=0, errorDescr='', tries=1):
     player = BigWorld.player()
     sender = getattr(player, 'logXMPPEvents', None)
     if not sender or not callable(sender) or not player.isPlayer:

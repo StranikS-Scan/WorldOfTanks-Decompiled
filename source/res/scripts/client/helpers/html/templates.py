@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/html/templates.py
 import ResMgr
 from collections import defaultdict
@@ -8,7 +8,7 @@ from helpers import html
 
 class Template(object):
 
-    def __init__(self, source, ctx = None):
+    def __init__(self, source, ctx=None):
         super(Template, self).__init__()
         self.source = source
         self.ctx = ctx
@@ -16,7 +16,7 @@ class Template(object):
     def __repr__(self):
         return 'Template(source = {0:>s})'.format(self.source)
 
-    def format(self, ctx = None, **kwargs):
+    def format(self, ctx=None, **kwargs):
         sourceKey = kwargs.get('sourceKey', 'text')
         if sourceKey in self.source:
             text = self.source[sourceKey]
@@ -25,7 +25,7 @@ class Template(object):
             return ''
         if ctx is None:
             ctx = {}
-        if type(self.ctx) is DictType and type(ctx) is DictType:
+        if isinstance(self.ctx, DictType) and isinstance(ctx, DictType):
             ctx.update(self.ctx)
         if ctx:
             try:
@@ -42,7 +42,7 @@ class DummyTemplate(Template):
     def __repr__(self):
         return 'DummyTemplate(source = {0:>s})'.format(self.source)
 
-    def format(self, ctx = None, **kwargs):
+    def format(self, ctx=None, **kwargs):
         return self.source
 
 
@@ -61,7 +61,7 @@ class Collection(defaultdict):
         return value
 
     def load(self, *args):
-        raise NotImplementedError, 'Loader.load not implemented'
+        raise NotImplementedError('Loader.load not implemented')
 
     def unload(self):
         self.clear()
@@ -69,13 +69,13 @@ class Collection(defaultdict):
     def _make(self, source):
         return Template(source)
 
-    def format(self, key, ctx = None, **kwargs):
+    def format(self, key, ctx=None, **kwargs):
         return self[key].format(ctx=ctx, **kwargs)
 
 
 class XMLCollection(Collection):
 
-    def load(self, section = None, clear = False):
+    def load(self, section=None, clear=False):
         if section is None:
             if clear:
                 ResMgr.purge(self._domain)
@@ -102,8 +102,7 @@ class XMLCollection(Collection):
             for key in keys:
                 if 'context' == key:
                     ctx = dict(map(lambda item: (item[0], item[1].asString), source['context'].items()))
-                else:
-                    srcDict[key] = html.translation(source.readString(key))
+                srcDict[key] = html.translation(source.readString(key))
 
         else:
             srcDict['text'] = html.translation(source.asString)

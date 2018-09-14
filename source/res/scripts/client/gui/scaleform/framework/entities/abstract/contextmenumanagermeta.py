@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/ContextMenuManagerMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
@@ -14,9 +14,7 @@ class ContextMenuManagerMeta(BaseDAAPIModule):
         self._printOverrideError('onHide')
 
     def as_setOptionsS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setOptions(data)
+        return self.flashObject.as_setOptions(data) if self._isDAAPIInited() else None
 
     def as_hideS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_hide()
+        return self.flashObject.as_hide() if self._isDAAPIInited() else None

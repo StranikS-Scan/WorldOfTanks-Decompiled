@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/messages/PlayerMessages.py
 from constants import EQUIPMENT_STAGES
 from gui.battle_control import g_sessionProvider, avatar_getter
@@ -51,7 +51,7 @@ class PlayerMessages(FadingMessages):
          'attacker': getFullName(attackerID, showClan=False)}, extra=(('target', targetID), ('attacker', attackerID)), postfix=postfix)
         return
 
-    def __onShowPlayerMessageByKey(self, key, args = None, extra = None):
+    def __onShowPlayerMessageByKey(self, key, args=None, extra=None):
         self.showMessage(key, args, extra)
 
     def __onCombatEquipmentUpdated(self, intCD, item):

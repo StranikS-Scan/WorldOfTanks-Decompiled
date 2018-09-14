@@ -1,5 +1,6 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/AchievementsUtils.py
+from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_SECTION, ACHIEVEMENT_TYPE
 from dossiers2.custom.config import RECORD_CONFIGS
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
@@ -11,11 +12,11 @@ class AchievementsUtils(object):
         super(AchievementsUtils, self).__init__()
 
     @staticmethod
-    def packAchievementList(target, dossierType, dossierCompactDescriptor, isDossierForCurrentUser, defaultShowProgress = True, defaultSeriesCounter = None):
+    def packAchievementList(target, dossierType, dossierCompactDescriptor, isDossierForCurrentUser, defaultShowProgress=True, defaultSeriesCounter=None):
         return [ AchievementsUtils.packAchievement(a, dossierType, dossierCompactDescriptor, isDossierForCurrentUser, defaultShowProgress, defaultSeriesCounter) for a in target ]
 
     @staticmethod
-    def packAchievement(achievement, dossierType, dossierCompDescr, isDossierForCurrentUser, defaultShowProgress = True, defaultSeriesCounter = None):
+    def packAchievement(achievement, dossierType, dossierCompDescr, isDossierForCurrentUser, defaultShowProgress=True, defaultSeriesCounter=None):
         atype = achievement.getType()
         total = achievement.getLevelUpTotalValue() or 0
         lvlUpValue = achievement.getLevelUpValue() or 0
@@ -65,7 +66,7 @@ class AchievementsUtils(object):
         return commonData
 
     @staticmethod
-    def getCommonAchievementData(achievement, dossierType, dossierCompDescr, iconAlpha = 1):
+    def getCommonAchievementData(achievement, dossierType, dossierCompDescr, iconAlpha=1):
         icons = achievement.getIcons()
         return {'name': achievement.getName(),
          'block': achievement.getBlock(),
@@ -81,7 +82,7 @@ class AchievementsUtils(object):
          'iconAlpha': iconAlpha}
 
     @staticmethod
-    def getCounterType(achievement, defaultSeriesCounter = None):
+    def getCounterType(achievement, defaultSeriesCounter=None):
         counterType = None
         section = achievement.getSection()
         atype = achievement.getType()
@@ -97,7 +98,7 @@ class AchievementsUtils(object):
                 counterType = ACHIEVEMENTS_ALIASES.RED_COUNTER
         elif atype == ACHIEVEMENT_TYPE.SERIES:
             if in_dossier:
-                counterType = defaultSeriesCounter if defaultSeriesCounter is not None else ACHIEVEMENTS_ALIASES.YELLOW_COUNTER
+                counterType = defaultSeriesCounter or ACHIEVEMENTS_ALIASES.YELLOW_COUNTER
         elif atype == ACHIEVEMENT_TYPE.CUSTOM:
             if section == ACHIEVEMENT_SECTION.SPECIAL:
                 counterType = None

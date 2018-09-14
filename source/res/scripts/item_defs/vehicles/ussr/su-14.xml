@@ -110,6 +110,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R27_SU-14/SU-14_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <SU-14>
@@ -219,6 +220,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	-0.020835 1.34644 -0.394151	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R27_SU-14/collision/Chassis.model	</collisionModel>
@@ -340,6 +343,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	-0.020835 1.34644 -0.394151	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R27_SU-14/collision/Chassis.model	</collisionModel>
@@ -497,6 +502,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </SU-14_1>
   </turrets0>

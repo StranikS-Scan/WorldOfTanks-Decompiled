@@ -57,6 +57,7 @@
       <collisionModel>	vehicles/chinese/Ch04_T34_1_training/collision/Hull.model	</collisionModel>
     </hitTester>
     <emblemSlots></emblemSlots>
+    <hangarShadowTexture>	vehicles/chinese/Ch04_T34_1/T34_1_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_Ch04_T34_1_training>
@@ -148,7 +149,9 @@
         <mud>	mediumTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.815087 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/chinese/Ch04_T34_1/collision/Chassis.model	</collisionModel>
@@ -265,6 +268,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.995 0.000 1.036 0.000 0.855 -0.041 0.972 0.459 0.430 0.500 0.285 0.500 0.065 0.425 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_0-799	</turretRotatorSoundGear>
     </Turret_1_Ch04_T34_1_training>
   </turrets0>

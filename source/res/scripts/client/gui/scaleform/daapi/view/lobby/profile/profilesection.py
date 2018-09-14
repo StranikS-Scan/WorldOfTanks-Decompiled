@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSection.py
 from helpers import i18n
 from gui.clubs.ClubsController import g_clubsCtrl
@@ -30,7 +30,7 @@ class ProfileSection(ProfileSectionMeta):
         self._battlesType = bType
         self.invokeUpdate()
 
-    def setSeasonID(self, battleType, seasonID = None):
+    def setSeasonID(self, battleType, seasonID=None):
         self._battlesType = battleType
         self._seasonID = seasonID
         self.invokeUpdate()
@@ -52,7 +52,7 @@ class ProfileSection(ProfileSectionMeta):
             accountDossier = g_itemsCache.items.getAccountDossier(self._userID)
             self._sendAccountData(self._getNecessaryStats(accountDossier), accountDossier)
 
-    def _getNecessaryStats(self, accountDossier = None):
+    def _getNecessaryStats(self, accountDossier=None):
         if accountDossier is None:
             accountDossier = g_itemsCache.items.getAccountDossier(self._userID)
         if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:

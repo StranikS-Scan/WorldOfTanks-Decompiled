@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/chat_message.py
 from gui.LobbyContext import g_lobbyContext
 from gui.battle_control import g_sessionProvider
@@ -26,7 +26,7 @@ class _BattleMessageBuilder(object):
         self._ctx['messageColor'] = getter('battle/message').getHexStr('unknown')
         return self
 
-    def setName(self, dbID, pName = None):
+    def setName(self, dbID, pName=None):
         if pName:
             pName = i18n.encodeUtf8(pName)
         self._ctx['playerName'] = g_sessionProvider.getCtx().getFullPlayerName(accID=dbID, pName=pName)
@@ -79,7 +79,7 @@ class CommonMessageBuilder(_BattleMessageBuilder):
         self._ctx['messageColor'] = g_settings.getColorScheme('battle/message').getHexStr('common')
         return self
 
-    def setName(self, dbID, pName = None):
+    def setName(self, dbID, pName=None):
         ctx = g_sessionProvider.getCtx()
         fullName = ctx.getFullPlayerName(accID=dbID, pName=pName)
         if not len(fullName):
@@ -130,7 +130,7 @@ class LobbyMessageBuilder(object):
         self.__templateKey = self.usersStorage.getUserGuiType(dbID)
         return self
 
-    def setName(self, dbID, nickName, clanAbbrev = None):
+    def setName(self, dbID, nickName, clanAbbrev=None):
         self.__name = g_lobbyContext.getPlayerFullName(nickName, pDBID=dbID, clanAbbrev=clanAbbrev)
         return self
 

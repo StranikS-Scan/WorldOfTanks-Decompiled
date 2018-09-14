@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/fortifications.py
 from gui.shared.formatters import icons, text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE
@@ -46,7 +46,7 @@ class FortListViewTooltipData(BlocksTooltipData):
         self._descr = None
         return
 
-    def _packBlocks(self, isCurfewEnabled, timeLimits, serverName = None):
+    def _packBlocks(self, isCurfewEnabled, timeLimits, serverName=None):
         title = TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_HEADER_CURFEW if isCurfewEnabled else TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_HEADER_INFO
         items = super(FortListViewTooltipData, self)._packBlocks()
         items.append(formatters.packTitleDescBlock(text_styles.highTitle(title), desc=text_styles.main(self._descr) if self._descr else None))

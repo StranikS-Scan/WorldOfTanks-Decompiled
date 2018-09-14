@@ -100,6 +100,7 @@
         <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G23_Grille/Grille_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Grilleketten_ausf_A>
@@ -781,7 +782,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.819 0.532 1.000 0.000 0.596 0.191 0.500 0.100 0.000 0.500 0.000 0.500 0.000 0.100 0.830	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Grille_mod_1>
   </turrets0>

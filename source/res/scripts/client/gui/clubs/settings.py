@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/settings.py
 from collections import namedtuple
 from club_shared import CLUB_SUBSCRIPTION_TYPE as _CST, CLIENT_CLUB_COMMANDS, CLUB_INVITE_STATE_NAMES
@@ -172,7 +172,7 @@ def getStubEmblem64x64():
     return _getStubEmblemPath(64)
 
 
-def getLadderBackground(division = None):
+def getLadderBackground(division=None):
     if division is not None:
         imgFileName = '%d' % (getLeagueByDivision(division) + 1)
     else:
@@ -184,23 +184,23 @@ def getInviteStatusString(state):
     return CLUB_INVITE_STATE_NAMES.get(state, 'N/A')
 
 
-def getLadderChevron16x16(division = None):
+def getLadderChevron16x16(division=None):
     return _getLadderChevronIcon(16, division)
 
 
-def getLadderChevron64x64(division = None):
+def getLadderChevron64x64(division=None):
     return _getLadderChevronIcon(64, division)
 
 
-def getLadderChevron128x128(division = None):
+def getLadderChevron128x128(division=None):
     return _getLadderChevronIcon(128, division)
 
 
-def getLadderChevron256x256(division = None):
+def getLadderChevron256x256(division=None):
     return _getLadderChevronIcon(256, division)
 
 
-def getLadderChevronIconName(division = None):
+def getLadderChevronIconName(division=None):
     from gui.clubs.formatters import getDivisionString
     if division is not None:
         return '%d%s' % (getLeagueByDivision(division) + 1, getDivisionString(division))
@@ -227,7 +227,7 @@ def _getStubEmblemPath(size):
      size)
 
 
-def _getLadderChevronIcon(iconSize, division = None):
+def _getLadderChevronIcon(iconSize, division=None):
     return '%s/%d/%s.png' % (LADDER_CHEVRON_ICON_PATH, iconSize, getLadderChevronIconName(division))
 
 

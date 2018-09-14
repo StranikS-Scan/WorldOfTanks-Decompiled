@@ -1,12 +1,14 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/cart.py
 import functools
+import itertools
 import BigWorld
 from Event import Event
 from gui import SystemMessages, g_tankActiveCamouflage
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from data_aggregator import CUSTOMIZATION_TYPE
+from data_aggregator import CUSTOMIZATION_TYPE, DURATION
 from items import vehicles
 from helpers.i18n import makeString as _ms
 from shared import forEachSlotIn
@@ -48,10 +50,14 @@ class Cart(object):
         self.filled = Event()
         self.emptied = Event()
         self.totalPriceUpdated = Event()
+        self.availableMoneyUpdated = Event()
         self.purchaseProcessed = Event()
+        g_clientUpdateManager.addCallbacks({'stats.credits': self.__onAvailableMoneyUpdate,
+         'stats.gold': self.__onAvailableMoneyUpdate})
         return
 
     def fini(self):
+        g_clientUpdateManager.removeObjectCallbacks(self)
         self.__aData = None
         self.__initialSlotsData = None
         self.__purchaseData = None
@@ -74,9 +80,11 @@ class Cart(object):
 
     def update(self, updatedSlotsData):
         self.__purchaseData = []
-        self.__totalPriceCredits = 0
-        self.__totalPriceGold = 0
-        forEachSlotIn(updatedSlotsData, self.__initialSlotsData, self.__recalculatePurchaseData)
+        sortedContainer = [[], [], []]
+        forEachSlotIn(updatedSlotsData, self.__initialSlotsData, functools.partial(self.__recalculatePurchaseData, sortedContainer))
+        self.__purchaseData = list(itertools.chain(*sortedContainer))
+        self.markDuplicates()
+        self.recalculateTotalPrice()
         self.itemsUpdated(self.__purchaseData)
         self.totalPriceUpdated()
         if not bool(self.__totalPriceCredits + self.__totalPriceGold):
@@ -88,7 +96,7 @@ class Cart(object):
             self.__isShown = True
 
     def buyItems(self, purchaseWindowItems):
-        sortedItems = sorted(purchaseWindowItems, cmp=lambda i, j: cmp(j['price'], i['price']))
+        sortedItems = sorted(purchaseWindowItems, key=lambda item: item['price'])
         self.__elementsToProcess = 0
         for item in sortedItems:
             if item['selected']:
@@ -97,14 +105,16 @@ class Cart(object):
         self.purchaseProcessStarted()
         for item in sortedItems:
             itemIndex = purchaseWindowItems.index(item)
+            cartItem = self.__purchaseData[itemIndex]
+            isGold = cartItem['duration'] == DURATION.PERMANENT
             if item['selected']:
-                self.buyItem(item['cType'], self.__purchaseData[itemIndex]['spot'], self.__calculateVehicleIndex(item['slotIdx'], item['cType']), item['id'], self.__purchaseData[itemIndex]['duration'], item['price'], item['imgCurrency'])
+                self.buyItem(item['cType'], cartItem['spot'], self.__calculateVehicleIndex(item['slotIdx'], item['cType']), item['id'], cartItem['duration'], item['price'], isGold)
 
-    def buyItem(self, cType, cSpot, slotIdx, cItemID, duration, price = -1, currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2):
+    def buyItem(self, cType, cSpot, slotIdx, cItemID, duration, price=-1, isGold=True):
         purchaseFunction = {CUSTOMIZATION_TYPE.CAMOUFLAGE: BigWorld.player().inventory.changeVehicleCamouflage,
          CUSTOMIZATION_TYPE.EMBLEM: BigWorld.player().inventory.changeVehicleEmblem,
          CUSTOMIZATION_TYPE.INSCRIPTION: BigWorld.player().inventory.changeVehicleInscription}[cType]
-        if not (price > 0 or currencyIcon == RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2):
+        if not (price > 0 or isGold):
             duration = 0
         arguments = [g_currentVehicle.item.invID,
          cSpot + slotIdx,
@@ -112,35 +122,59 @@ class Cart(object):
          duration]
         if cType == CUSTOMIZATION_TYPE.INSCRIPTION:
             arguments.append(1)
+        if cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
+            g_tankActiveCamouflage[g_currentVehicle.item.intCD] = slotIdx
         if price == -1:
             arguments.append(lambda resultID: self.__onCustomizationDrop(resultID, cItemID, cType))
         else:
-            arguments.append(functools.partial(self.__onCustomizationChange, (price, currencyIcon == RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2), cType))
+            arguments.append(functools.partial(self.__onCustomizationChange, (price, isGold), cType))
         purchaseFunction(*arguments)
 
-    def __recalculatePurchaseData(self, newSlotItem, oldSlotItem, cType, slotIdx):
+    def markDuplicates(self):
+        duplicateSuspected = []
+        toBeDuplicated = []
+        for item in self.__purchaseData:
+            item['isDuplicate'] = False
+            if not item['isSelected']:
+                continue
+            if item['duration'] == DURATION.PERMANENT and (item['itemID'], item['type']) not in toBeDuplicated:
+                toBeDuplicated.append((item['itemID'], item['type']))
+            duplicateSuspected.append(item)
+
+        for item in duplicateSuspected:
+            if (item['itemID'], item['type']) in toBeDuplicated:
+                item['isDuplicate'] = True
+
+    def recalculateTotalPrice(self):
+        self.__totalPriceCredits = 0
+        self.__totalPriceGold = 0
+        for item in self.__purchaseData:
+            if item['isSelected'] and not item['isDuplicate']:
+                price = item['object'].getPrice(item['duration'])
+                if item['duration'] == DURATION.PERMANENT:
+                    self.__totalPriceGold += price
+                else:
+                    self.__totalPriceCredits += price
+
+    def __recalculatePurchaseData(self, container, newSlotItem, oldSlotItem, cType, slotIdx):
         if newSlotItem['itemID'] != oldSlotItem['itemID'] and newSlotItem['itemID'] > 0:
             cItem = self.__aData.available[cType][newSlotItem['itemID']]
-            purchaseTypeIcon = newSlotItem['purchaseTypeIcon']
-            if purchaseTypeIcon == RES_ICONS.MAPS_ICONS_LIBRARY_QUEST_ICON:
+            if newSlotItem['purchaseTypeIcon'] == RES_ICONS.MAPS_ICONS_LIBRARY_QUEST_ICON:
                 return
-            if purchaseTypeIcon == RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2:
-                self.__totalPriceGold += newSlotItem['price']
-            else:
-                self.__totalPriceCredits += newSlotItem['price']
-            self.__purchaseData.append({'type': cType,
+            container[cType].append({'type': cType,
              'idx': slotIdx,
              'object': cItem,
              'itemID': newSlotItem['itemID'],
-             'price': newSlotItem['price'],
              'bonus': newSlotItem['bonus'],
-             'currencyIcon': purchaseTypeIcon,
              'name': cItem.getName(),
              'bonusValue': cItem.qualifier.getValue(),
              'bonusIcon': cItem.qualifier.getIcon16x16(),
              'duration': newSlotItem['duration'],
+             'initialDuration': newSlotItem['duration'],
              'spot': newSlotItem['spot'],
-             'isConditional': '' if cItem.qualifier.getDescription() is None else '*'})
+             'isConditional': '' if cItem.qualifier.getDescription() is None else '*',
+             'isDuplicate': False,
+             'isSelected': True})
         return
 
     def __synchronizeDossierIfRequired(self):
@@ -149,6 +183,9 @@ class Cart(object):
             BigWorld.player().resyncDossiers()
             self.__elementsToProcess = 1
             self.purchaseProcessed()
+
+    def __onAvailableMoneyUpdate(self, *args):
+        self.availableMoneyUpdated()
 
     def __onCustomizationChange(self, price, cType, resultID):
         if resultID < 0:

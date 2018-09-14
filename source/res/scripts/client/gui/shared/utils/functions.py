@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/functions.py
 import random
 import re
@@ -30,9 +30,7 @@ def rnd_choice_loop(*args):
 def clamp(value, minRange, maxRange):
     if value < minRange:
         return minRange
-    if value > maxRange:
-        return maxRange
-    return value
+    return maxRange if value > maxRange else value
 
 
 def roundToMinOrZero(value, minValue):
@@ -70,7 +68,7 @@ def stripShortDescr(descr):
     return re.sub('<shortDesc>(.*?)</shortDesc>', '', descr)
 
 
-def makeTooltip(header = None, body = None, note = None, attention = None):
+def makeTooltip(header=None, body=None, note=None, attention=None):
     """
     Make complex tooltip from carrying params.
     This special formatted string will be parsed from Flash
@@ -114,8 +112,7 @@ def checkAmmoLevel(vehicles, callback):
                 for eq in vehicle.eqsLayout:
                     if eq is not None:
                         eqsLayout.extend(eq.defaultLayoutValue)
-                    else:
-                        eqsLayout.extend((0, 0))
+                    eqsLayout.extend((0, 0))
 
                 LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
                 result = yield VehicleLayoutProcessor(vehicle, shellsLayout, eqsLayout).request()
@@ -153,9 +150,7 @@ def getModuleGoldStatus(price, money):
         couldBeBought |= availableForCredits
     if price[1] and price[1] < money[1]:
         couldBeBought |= availableForGold
-    if not couldBeBought:
-        return (False, '#menu:moduleFits/%s_error' % currency, '#tooltips:moduleFits/%s_error' % currency)
-    return (True, '', '')
+    return (False, '#menu:moduleFits/%s_error' % currency, '#tooltips:moduleFits/%s_error' % currency) if not couldBeBought else (True, '', '')
 
 
 def findConflictedEquipments(itemCompactDescr, itemTypeID, vehicle):
@@ -205,9 +200,7 @@ def getArenaFullName(arenaTypeID):
 def getBattleSubTypeWinText(arenaTypeID, teamID):
     key = 'type/%s/description' % ArenaType.g_cache[arenaTypeID].gameplayName
     winText = i18n.makeString('#arenas:%s' % key)
-    if winText == key:
-        return i18n.makeString('#arenas:%s%d' % (key, teamID))
-    return winText
+    return i18n.makeString('#arenas:%s%d' % (key, teamID)) if winText == key else winText
 
 
 def getBattleSubTypeBaseNumder(arenaTypeID, team, baseID):
@@ -233,16 +226,14 @@ def isBaseExists(arenaTypeID, team):
 
 def isControlPointExists(arenaTypeID):
     controlPoint = ArenaType.g_cache[arenaTypeID].controlPoints
-    if controlPoint:
-        return True
-    return False
+    return True if controlPoint else False
 
 
 def getAbsoluteUrl(url):
     return url.replace('../', 'img://gui/')
 
 
-def showInformationDialog(infDialog, callback, customMessage = '', ns = 'common'):
+def showInformationDialog(infDialog, callback, customMessage='', ns='common'):
     """
     Show information dialog (1 button - Close) and wait when player closes
             this dialog.
@@ -268,7 +259,7 @@ def showInformationDialog(infDialog, callback, customMessage = '', ns = 'common'
         battle.call('{0:>s}.showInformationDialog'.format(ns), [infDialog, customMessage, 'informationDialog.onClose'])
 
 
-def showConfirmDialog(confirmDialog, callback, customMessage = '', ns = 'common'):
+def showConfirmDialog(confirmDialog, callback, customMessage='', ns='common'):
     """
     Show confirmation dialog (2 buttons - Submit, Close) and wait when player
             closes this dialog.

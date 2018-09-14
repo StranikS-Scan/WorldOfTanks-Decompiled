@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/elements/__init__.py
 from available import Camouflage as AvailableCamouflage
 from available import Emblem as AvailableEmblem

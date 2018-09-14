@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/notifications.py
 from constants import NC_MESSAGE_PRIORITY
 
@@ -27,7 +27,7 @@ class NotificationPriorityLevel(object):
 class NotificationGuiSettings(object):
     __slots__ = ('isNotify', 'priorityLevel', 'isAlert', 'auxData', 'showAt', '__customEvent')
 
-    def __init__(self, isNotify = False, priorityLevel = NotificationPriorityLevel.MEDIUM, isAlert = False, auxData = None, showAt = 0):
+    def __init__(self, isNotify=False, priorityLevel=NotificationPriorityLevel.MEDIUM, isAlert=False, auxData=None, showAt=0):
         super(NotificationGuiSettings, self).__init__()
         self.isNotify = isNotify
         self.priorityLevel = priorityLevel
@@ -37,7 +37,7 @@ class NotificationGuiSettings(object):
         self.__customEvent = None
         return
 
-    def setCustomEvent(self, eType, ctx = None):
+    def setCustomEvent(self, eType, ctx=None):
         self.__customEvent = (eType, ctx)
 
     def getCustomEvent(self):

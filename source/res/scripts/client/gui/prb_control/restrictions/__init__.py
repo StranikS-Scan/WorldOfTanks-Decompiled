@@ -1,9 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/restrictions/__init__.py
-from constants import PREBATTLE_TYPE, FALLOUT_BATTLE_TYPE
+from UnitBase import ROSTER_TYPE
+from constants import PREBATTLE_TYPE
 from prebattle_shared import decodeRoster
 
-def createPermissions(functional, pID = None):
+def createPermissions(functional, pID=None):
     clazz = functional._permClass
     rosterKey = functional.getRosterKey(pID=pID)
     if rosterKey is not None:
@@ -23,11 +24,9 @@ def createUnitActionValidator(prbType, rosterSettings, proxy):
     elif prbType == PREBATTLE_TYPE.CLUBS:
         validator = limits.ClubsActionValidator(rosterSettings, proxy)
     elif prbType == PREBATTLE_TYPE.SQUAD:
-        battleType = proxy.getExtra().eventType
-        if battleType != FALLOUT_BATTLE_TYPE.UNDEFINED:
-            validator = limits.FalloutSquadActionValidator(rosterSettings)
-        else:
-            validator = limits.SquadActionValidator(rosterSettings)
+        validator = limits.SquadActionValidator(rosterSettings)
+    elif prbType == PREBATTLE_TYPE.FALLOUT:
+        validator = limits.FalloutSquadActionValidator(rosterSettings)
     else:
         validator = limits.UnitActionValidator(rosterSettings)
     return validator

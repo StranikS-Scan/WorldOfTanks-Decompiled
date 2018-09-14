@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/formatters.py
 import types
 import BigWorld
@@ -60,7 +60,7 @@ class RELATIONS_SCHEME(CONST_CONTAINER):
 
 class UiElement(object):
 
-    def __init__(self, initDict, labelFieldName = None):
+    def __init__(self, initDict, labelFieldName=None):
         self._dict = initDict
         self._labelFieldName = labelFieldName
         self._originalLabel = self._dict.get(self._labelFieldName)
@@ -69,10 +69,7 @@ class UiElement(object):
         return self._dict
 
     def getLabel(self):
-        if self._labelFieldName is not None:
-            return self._dict[self._labelFieldName]
-        else:
-            return
+        return self._dict[self._labelFieldName] if self._labelFieldName is not None else None
 
     def setIndex(self, index):
         if self._labelFieldName is not None and self._labelFieldName in self._dict:
@@ -93,7 +90,7 @@ def todict(uiElement_or_list):
     return uiElement_or_list._dict
 
 
-def indexing(uiElements, startIndex = 1, step = 1):
+def indexing(uiElements, startIndex=1, step=1):
     index = startIndex
     for fmt in uiElements:
         if fmt.setIndex(index):
@@ -102,7 +99,7 @@ def indexing(uiElements, startIndex = 1, step = 1):
     return uiElements
 
 
-def _packTableHeaderBtn(btnID, width, label = '', tooltip = '', icon = None, showSeparator = True):
+def _packTableHeaderBtn(btnID, width, label='', tooltip='', icon=None, showSeparator=True):
     return {'id': btnID,
      'label': label,
      'toolTip': tooltip,
@@ -127,7 +124,7 @@ def _packVehLevelBtn(width):
     return _packTableHeaderBtn('level', width, label='', icon='../maps/icons/buttons/tab_sort_button/level.png', tooltip='#quests:tooltip/vehTable/level')
 
 
-def _packVehNameBtn(width, showSeparator = True):
+def _packVehNameBtn(width, showSeparator=True):
     return _packTableHeaderBtn('vName', width, label='#quests:details/requirements/vehiclesTable/name', tooltip='#quests:tooltip/vehTable/name', showSeparator=showSeparator)
 
 
@@ -135,11 +132,11 @@ def _packCountBtn(width):
     return _packTableHeaderBtn('count', width, label='#quests:details/requirements/vehiclesTable/count')
 
 
-def _packUnavailableBtn(width, showSeparator = True):
+def _packUnavailableBtn(width, showSeparator=True):
     return _packTableHeaderBtn('notAvailable', width, label='', icon='../maps/icons/buttons/tab_sort_button/notAvailable.png', tooltip='#quests:tooltip/vehTable/availability', showSeparator=showSeparator)
 
 
-def _packDiscountBtn(width, showSeparator = True):
+def _packDiscountBtn(width, showSeparator=True):
     return _packTableHeaderBtn('discount', width, label='#quests:details/requirements/vehiclesTable/discount', tooltip='#quests:tooltip/vehTable/discount', showSeparator=showSeparator)
 
 
@@ -158,7 +155,7 @@ VEH_ACTION_HEADER = [_packNationBtn(40),
  _packVehNameBtn(154),
  _packDiscountBtn(100, showSeparator=False)]
 
-def _packVehicleTypesFilter(defaultVehType = -1):
+def _packVehicleTypesFilter(defaultVehType=-1):
     result = [{'label': '#menu:carousel_tank_filter/all',
       'data': defaultVehType,
       'icon': '../maps/icons/filters/tanks/none.png'}]
@@ -194,7 +191,7 @@ def _packVehicleLevelsFilter():
     return result
 
 
-def _packVehicle(vehicle, isAvailable = True, discountValue = None, discoutType = None, disableChecker = None, showDone = False):
+def _packVehicle(vehicle, isAvailable=True, discountValue=None, discoutType=None, disableChecker=None, showDone=False):
     if vehicle is None:
         return
     else:
@@ -214,7 +211,7 @@ def _packVehicle(vehicle, isAvailable = True, discountValue = None, discoutType 
          'showDone': showDone}
 
 
-def _packIconTextElement(label = '', icon = '', dataType = None, dataValue = None, counter = '', iconAutoSize = True):
+def _packIconTextElement(label='', icon='', dataType=None, dataValue=None, counter='', iconAutoSize=True):
     return UiElement({'linkage': 'QuestIconElement_UI',
      'label': label,
      'icon': icon,
@@ -224,18 +221,15 @@ def _packIconTextElement(label = '', icon = '', dataType = None, dataValue = Non
      'iconAutoSize': iconAutoSize}, 'label')
 
 
-def _packProgress(current, total, label = ''):
-    if current is None or total is None:
-        return
-    else:
-        return {'progrTooltip': None,
-         'progrBarType': PROGRESS_BAR_TYPE.SIMPLE,
-         'maxProgrVal': total,
-         'currentProgrVal': current,
-         'description': label}
+def _packProgress(current, total, label=''):
+    return None if current is None or total is None else {'progrTooltip': None,
+     'progrBarType': PROGRESS_BAR_TYPE.SIMPLE,
+     'maxProgrVal': total,
+     'currentProgrVal': current,
+     'description': label}
 
 
-def _formatRelation(value, relation, relationI18nType = RELATIONS_SCHEME.DEFAULT):
+def _formatRelation(value, relation, relationI18nType=RELATIONS_SCHEME.DEFAULT):
     relation = relation or 'equal'
     if type(value) not in types.StringTypes:
         value = BigWorld.wg_getNiceNumberFormat(value)
@@ -243,7 +237,7 @@ def _formatRelation(value, relation, relationI18nType = RELATIONS_SCHEME.DEFAULT
      'value': value})
 
 
-def _packConditionsBlock(label, counterValue = None, conditions = None, showDone = False, counterDescr = None):
+def _packConditionsBlock(label, counterValue=None, conditions=None, showDone=False, counterDescr=None):
     if counterDescr is None:
         counterDescr = i18n.makeString('#quests:quests/table/battlesLeft')
     return UiElement({'linkage': 'CommonConditionsBlock_UI',
@@ -254,7 +248,7 @@ def _packConditionsBlock(label, counterValue = None, conditions = None, showDone
      'counterDescr': counterDescr}, 'description')
 
 
-def _packGroupByConditionsBlock(label = '', vehicle = None, counterValue = None, conditions = None, icon = None, isCompleted = False, counterDescr = None):
+def _packGroupByConditionsBlock(label='', vehicle=None, counterValue=None, conditions=None, icon=None, isCompleted=False, counterDescr=None):
     if counterDescr is None:
         counterDescr = i18n.makeString('#quests:quests/table/battlesLeft')
     return UiElement({'linkage': 'EventProgressBlock_UI',
@@ -288,9 +282,7 @@ def makeUniqueTableID(event, uniqueName):
 
 def formatDiscount(discountVal, discountType):
     multiplier = '+' if discountVal < 0 else ''
-    if discountType == DISCOUNT_TYPE.GOLD:
-        return makeHtmlString('html_templates:lobby/quests/actions', 'gold', {'value': multiplier + BigWorld.wg_getGoldFormat(abs(long(discountVal)))})
-    return makeHtmlString('html_templates:lobby/quests/actions', discountType, {'value': multiplier + BigWorld.wg_getIntegralFormat(abs(int(discountVal)))})
+    return makeHtmlString('html_templates:lobby/quests/actions', 'gold', {'value': multiplier + BigWorld.wg_getGoldFormat(abs(long(discountVal)))}) if discountType == DISCOUNT_TYPE.GOLD else makeHtmlString('html_templates:lobby/quests/actions', discountType, {'value': multiplier + BigWorld.wg_getIntegralFormat(abs(int(discountVal)))})
 
 
 def formatGray(msg):
@@ -310,7 +302,7 @@ def formatIndex(index, msg):
      'label': msg})
 
 
-def packVehicleData(v, discountVal = None, discountType = None):
+def packVehicleData(v, discountVal=None, discountType=None):
     discountFmt = None
     if discountVal is not None and discountType is not None:
         discountFmt = formatDiscount(discountVal, discountType)
@@ -322,7 +314,7 @@ def packVehicleData(v, discountVal = None, discountType = None):
      'discount': discountFmt}
 
 
-def packDiscount(label, value = None, discountType = None):
+def packDiscount(label, value=None, discountType=None):
     discountFmt = None
     if value is not None:
         discountFmt = formatDiscount(value, discountType)
@@ -334,7 +326,7 @@ def getNationName(nation):
     return i18n.makeString(MENU.nations(nation))
 
 
-def packTopLevelContainer(title = '', note = '', subBlocks = None, isOpened = True, isResizable = False, current = None, total = None, showDone = False):
+def packTopLevelContainer(title='', note='', subBlocks=None, isOpened=True, isResizable=False, current=None, total=None, showDone=False):
     return UiElement({'linkage': 'ResizableContent_UI',
      'headerTitle': title,
      'headerHtmlPart': note,
@@ -345,7 +337,7 @@ def packTopLevelContainer(title = '', note = '', subBlocks = None, isOpened = Tr
      'showDone': showDone})
 
 
-def packMotiveContainer(title = '', note = '', subBlocks = None, isOpened = True, isResizable = False, current = None, total = None, showDone = False):
+def packMotiveContainer(title='', note='', subBlocks=None, isOpened=True, isResizable=False, current=None, total=None, showDone=False):
     return UiElement({'linkage': 'ResizableContent_UI',
      'headerTitle': title,
      'headerHtmlPart': note,
@@ -356,7 +348,7 @@ def packMotiveContainer(title = '', note = '', subBlocks = None, isOpened = True
      'showDone': showDone})
 
 
-def packContainer(title = '', subBlocks = None, isOpened = True, isResizable = False, current = None, total = None, value = None, relation = None, showDone = False):
+def packContainer(title='', subBlocks=None, isOpened=True, isResizable=False, current=None, total=None, value=None, relation=None, showDone=False):
     if value is not None:
         title = '%s: %s' % (title, _formatRelation(value, relation))
     return UiElement({'linkage': 'InnerResizableContent_UI',
@@ -368,7 +360,7 @@ def packContainer(title = '', subBlocks = None, isOpened = True, isResizable = F
      'showDone': showDone}, 'headerHtmlPart')
 
 
-def packVehiclesBlock(uniqueListID, header, vehs = None, showFilters = True, showInHangarCB = False, showNotInHangarCB = False, isShowInHangarCBChecked = False, disableChecker = None):
+def packVehiclesBlock(uniqueListID, header, vehs=None, showFilters=True, showInHangarCB=False, showNotInHangarCB=False, isShowInHangarCBChecked=False, disableChecker=None):
     props = caches.addVehiclesData(uniqueListID, vehs, disableChecker=disableChecker, checkbox=isShowInHangarCBChecked)
     if props.checkbox is not None:
         isShowInHangarCBChecked = props.checkbox
@@ -390,7 +382,7 @@ def packVehiclesBlock(uniqueListID, header, vehs = None, showFilters = True, sho
      'tableID': uniqueListID})
 
 
-def packTextBlock(label, value = None, relation = None, questID = None, isAvailable = True, fullLabel = None, counterValue = 0, showDone = False, relationI18nType = RELATIONS_SCHEME.DEFAULT, counterDescr = None):
+def packTextBlock(label, value=None, relation=None, questID=None, isAvailable=True, fullLabel=None, counterValue=0, showDone=False, relationI18nType=RELATIONS_SCHEME.DEFAULT, counterDescr=None):
     if value is not None:
         value = _formatRelation(value, relation, relationI18nType)
     if counterDescr is None:
@@ -429,7 +421,7 @@ def packIconAwardBonusBlock(awards):
     return UiElement(blockData)
 
 
-def packTextCondition(label, value = None, relation = None, current = None, total = None, isCompleted = False):
+def packTextCondition(label, value=None, relation=None, current=None, total=None, isCompleted=False):
     if current is None or total is None:
         progrBarType = PROGRESS_BAR_TYPE.NONE
     else:
@@ -447,10 +439,20 @@ def packTextCondition(label, value = None, relation = None, current = None, tota
      'showDone': isCompleted}, 'description')
 
 
-def packBonusTypeElement(bonusType):
-    if bonusType in (ARENA_BONUS_TYPE.SANDBOX, ARENA_BONUS_TYPE.RATED_SANDBOX):
-        bonusType = ARENA_BONUS_TYPE.RATED_SANDBOX
-    return _packIconTextElement(label=i18n.makeString('#menu:bonusType/%d' % bonusType), icon='../maps/icons/battleTypes/%d.png' % bonusType)
+def packBonusTypeElements(bonusTypes):
+    uniqueTypes = set()
+    for bonusType in bonusTypes:
+        if bonusType in (ARENA_BONUS_TYPE.SANDBOX, ARENA_BONUS_TYPE.RATED_SANDBOX):
+            bonusType = ARENA_BONUS_TYPE.RATED_SANDBOX
+        if bonusType in (ARENA_BONUS_TYPE.TOURNAMENT_REGULAR, ARENA_BONUS_TYPE.TOURNAMENT_CLAN):
+            bonusType = ARENA_BONUS_TYPE.TOURNAMENT
+        uniqueTypes.add(bonusType)
+
+    elements = []
+    for bonusType in uniqueTypes:
+        elements.append(_packIconTextElement(label=i18n.makeString('#menu:bonusType/%d' % bonusType), icon='../maps/icons/battleTypes/%d.png' % bonusType))
+
+    return elements
 
 
 def packFormationElement(formationName):
@@ -478,28 +480,28 @@ def packMapElement(arenaTypeID):
         return _packIconTextElement(label=label)
 
 
-def packIconTextBlock(label, align = 'right', iconTexts = None):
+def packIconTextBlock(label, align='right', iconTexts=None):
     return UiElement({'linkage': 'ConditionElement_UI',
      'conditionType': label,
      'contentAlign': align,
      'iconElements': todict(iconTexts or [])}, 'conditionType')
 
 
-def packSeparator(label, needAlign = False):
+def packSeparator(label, needAlign=False):
     return UiElement({'linkage': 'ConditionSeparator_UI',
      'text': label,
      'needAlign': needAlign})
 
 
-def packQuestDetailsSeparator(leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0):
+def packQuestDetailsSeparator(leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0):
     return UiElement({'linkage': 'QuestDetailsSeparatorBlockUI',
-     'leftPadding': leftPadding,
-     'rightPadding': rightPadding,
-     'topPadding': topPadding,
-     'bottomPadding': bottomPadding})
+     'paddings': {'left': leftPadding,
+                  'right': rightPadding,
+                  'top': topPadding,
+                  'bottom': bottomPadding}})
 
 
-def packQuestDetailsSpacing(spacing = 0):
+def packQuestDetailsSpacing(spacing=0):
     return UiElement({'linkage': 'QuestDetailsSpacingBlockUI',
      'spacing': spacing})
 
@@ -509,7 +511,7 @@ def packCustomizations(list):
      'list': list})
 
 
-def packConditionsBlock(battlesCount = None, counterValue = None, inrow = False, conditions = None, counterDescr = None):
+def packConditionsBlock(battlesCount=None, counterValue=None, inrow=False, conditions=None, counterDescr=None):
     label = ''
     if battlesCount is not None:
         if inrow:
@@ -520,19 +522,19 @@ def packConditionsBlock(battlesCount = None, counterValue = None, inrow = False,
     return _packConditionsBlock(label, counterValue, conditions, counterDescr=counterDescr)
 
 
-def packGroupByVehicleConditions(vehicle, counterValue = None, inrow = False, conditions = None, isCompleted = False, counterDescr = None):
+def packGroupByVehicleConditions(vehicle, counterValue=None, inrow=False, conditions=None, isCompleted=False, counterDescr=None):
     return _packGroupByConditionsBlock('', vehicle, counterValue, conditions, isCompleted=isCompleted, counterDescr=counterDescr)
 
 
-def packGroupByLevelConditions(level, counterValue = None, inrow = False, conditions = None, isCompleted = False, counterDescr = None):
+def packGroupByLevelConditions(level, counterValue=None, inrow=False, conditions=None, isCompleted=False, counterDescr=None):
     return _packGroupByConditionsBlock(i18n.makeString('#quests:details/conditions/groupBy/levelLabel', int2roman(level)), counterValue=counterValue, conditions=conditions, isCompleted=isCompleted, counterDescr=counterDescr)
 
 
-def packGroupByNationConditions(nationName, counterValue = None, inrow = False, conditions = None, isCompleted = False, counterDescr = None):
+def packGroupByNationConditions(nationName, counterValue=None, inrow=False, conditions=None, isCompleted=False, counterDescr=None):
     return _packGroupByConditionsBlock(i18n.makeString('#menu:nations/%s' % nationName), counterValue=counterValue, conditions=conditions, icon='../maps/icons/filters/nations/%s.png' % nationName, isCompleted=isCompleted, counterDescr=counterDescr)
 
 
-def packGroupByClassConditions(className, counterValue = None, inrow = False, conditions = None, isCompleted = False, counterDescr = None):
+def packGroupByClassConditions(className, counterValue=None, inrow=False, conditions=None, isCompleted=False, counterDescr=None):
     return _packGroupByConditionsBlock(i18n.makeString('#quests:classes/%s' % className), counterValue=counterValue, conditions=conditions, icon='../maps/icons/filters/tanks/%s.png' % className, isCompleted=isCompleted, counterDescr=counterDescr)
 
 

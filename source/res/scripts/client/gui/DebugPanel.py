@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DebugPanel.py
 import BigWorld
 from gui.DebugView import DebugView
@@ -7,7 +7,7 @@ from debug_utils import *
 
 class DebugPanel(DebugView):
 
-    def __init__(self, textureName = '', parentGUI = None, updateInterval = 0.1):
+    def __init__(self, textureName='', parentGUI=None, updateInterval=0.1):
         DebugView.__init__(self, textureName, parentGUI)
         self.__cbIDUpdate = None
         self.__cbUpdateInterval = -1.0
@@ -18,7 +18,7 @@ class DebugPanel(DebugView):
         self.setUpdateInterval(-1.0)
         DebugView.destroy(self)
 
-    def setUpdateInterval(self, interval = 0.1):
+    def setUpdateInterval(self, interval=0.1):
         self.__cbUpdateInterval = interval
         if self.__cbIDUpdate is not None:
             BigWorld.cancelCallback(self.__cbIDUpdate)
@@ -50,7 +50,7 @@ class DebugPanel(DebugView):
 
 class DebugPanelItem(DebugViewItem):
 
-    def __init__(self, name = '', updater = None, mapper = None):
+    def __init__(self, name='', updater=None, mapper=None):
         DebugViewItem.__init__(self, name)
         self.__updater = updater
         self.__mapper = mapper
@@ -87,7 +87,7 @@ class DebugPanelItem(DebugViewItem):
 
 class DebugPanelItemUpdater:
 
-    def __init__(self, functor, interval = 0.0):
+    def __init__(self, functor, interval=0.0):
         self.__value = None
         self.__cbIDValid = None
         self.__cbFunctor = None

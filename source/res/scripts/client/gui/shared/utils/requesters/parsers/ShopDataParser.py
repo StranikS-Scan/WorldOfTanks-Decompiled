@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/parsers/ShopDataParser.py
 import weakref
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -8,7 +8,7 @@ import nations
 
 class ShopDataParser(object):
 
-    def __init__(self, data = None):
+    def __init__(self, data=None):
 
         def wrapper(method):
             obj = weakref.proxy(self)
@@ -42,7 +42,7 @@ class ShopDataParser(object):
         allOptDevices = vehicles.g_cache.optionalDevices()
         return self.__filterByNation(allOptDevices, ParametersCache.g_instance.getOptionalDeviceParameters, nationID)
 
-    def getItemsIterator(self, nationID = None, itemTypeID = None):
+    def getItemsIterator(self, nationID=None, itemTypeID=None):
         hiddenInShop = self.data.get('notInShopItems', [])
         sellForGold = self.data.get('vehiclesToSellForGold', [])
         prices = self.getPrices()
@@ -56,7 +56,7 @@ class ShopDataParser(object):
     def getPrices(self):
         return self.data.get('itemPrices', {})
 
-    def getHiddenItems(self, nationID = None):
+    def getHiddenItems(self, nationID=None):
         hiddenItems = self.data.get('notInShopItems', set([]))
         result = set([])
         for intCD in self.__getListOfCompDescrs(nationID):
@@ -77,7 +77,7 @@ class ShopDataParser(object):
     def isSellForGold(self, intCD):
         return intCD in self.getSellForGoldItems()
 
-    def __getListOfCompDescrs(self, nationID = None, itemTypeID = None):
+    def __getListOfCompDescrs(self, nationID=None, itemTypeID=None):
         itemTypes = [itemTypeID]
         if itemTypeID is None:
             itemTypes = self.__modulesGetters.keys()

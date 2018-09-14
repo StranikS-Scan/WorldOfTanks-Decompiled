@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/elements/available.py
 import Math
 from constants import IGR_TYPE
@@ -8,9 +8,9 @@ from helpers.i18n import makeString as _ms
 from CurrentVehicle import g_currentVehicle
 
 class Item(object):
-    __slots__ = ('_qualifier', '_rawData', '_price', '__isInDossier', '__isInQuests', '__isInShop', '__itemID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays')
+    __slots__ = ('_qualifier', '_rawData', '__isInDossier', '__isInQuests', '__isInShop', '__itemID', '__nationID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__notAllowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays', '__groupName')
 
-    def __init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays):
+    def __init__(self, itemID, nationID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, notAllowedNations, igrReplaced, numberOfItems, numberOfDays, groupName):
         self.__isInDossier = isInDossier
         self.__isInQuests = isInQuests
         self.__isInShop = isInShop
@@ -19,6 +19,9 @@ class Item(object):
         self.__notAllowedVehicles = notAllowedVehicles
         self.__allowedNations = allowedNations
         self.__igrReplaced = igrReplaced
+        self.__notAllowedNations = notAllowedNations
+        self.__nationID = nationID
+        self.__groupName = groupName
         self.__numberOfItems = numberOfItems
         self.__numberOfDays = numberOfDays
         self._qualifier = qualifier
@@ -26,6 +29,12 @@ class Item(object):
 
     def getID(self):
         return self.__itemID
+
+    def getNationID(self):
+        return self.__nationID
+
+    def getGroupName(self):
+        return self.__groupName
 
     def getTexturePath(self):
         raise NotImplementedError
@@ -41,6 +50,12 @@ class Item(object):
 
     def getIgrType(self):
         raise NotImplementedError
+
+    def getPrice(self, duration):
+        return int(round(self._getPrice(duration) * self._getVehiclePriceFactor() * self._getPriceFactor()))
+
+    def getDefaultPrice(self, duration):
+        return int(round(self._getDefaultPrice(duration) * self._getDefaultVehiclePriceFactor() * self._getDefaultPriceFactor()))
 
     @property
     def numberOfDays(self):
@@ -62,10 +77,16 @@ class Item(object):
             return False
         if not self.__allowedVehicles and not self.__notAllowedVehicles:
             return True
-        if self.__allowedVehicles and intCD in self.__allowedVehicles:
-            return True
-        if self.__notAllowedVehicles and intCD not in self.__notAllowedVehicles:
-            return True
+        if self.__allowedVehicles:
+            if intCD in self.__allowedVehicles:
+                return True
+            else:
+                return False
+        if self.__notAllowedVehicles:
+            if intCD not in self.__notAllowedVehicles:
+                return True
+            else:
+                return False
         return False
 
     @property
@@ -84,9 +105,28 @@ class Item(object):
     def isFeatured(self):
         return False
 
+    def isSale(self, duration):
+        return self.getDefaultPrice(duration) - self.getPrice(duration) > 0
+
     @property
     def qualifier(self):
         return self._qualifier
+
+    @property
+    def allowedVehicles(self):
+        return self.__allowedVehicles
+
+    @property
+    def notAllowedVehicles(self):
+        return self.__notAllowedVehicles
+
+    @property
+    def allowedNations(self):
+        return self.__allowedNations
+
+    @property
+    def notAllowedNations(self):
+        return self.__notAllowedNations
 
     def priceIsGold(self, duration):
         return not duration
@@ -100,12 +140,26 @@ class Item(object):
     def setAllowedVehicles(self, allowedVehicles):
         self.__allowedVehicles = allowedVehicles
 
+    def _getPrice(self, duration):
+        pass
+
+    def _getDefaultPrice(self, duration):
+        pass
+
+    def _getPriceFactor(self):
+        pass
+
+    def _getDefaultPriceFactor(self):
+        pass
+
+    def _getVehiclePriceFactor(self):
+        return g_currentVehicle.item.level
+
+    def _getDefaultVehiclePriceFactor(self):
+        return self._getVehiclePriceFactor()
+
 
 class Emblem(Item):
-
-    def __init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays):
-        Item.__init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays)
-        self._price = g_itemsCache.items.shop.playerEmblemCost
 
     def getTexturePath(self):
         return self._rawData[2].replace('gui/maps', '../maps')
@@ -122,16 +176,22 @@ class Emblem(Item):
     def getIgrType(self):
         return self._rawData[1]
 
-    def getPrice(self, duration):
-        return int(round(self._price[duration][0] * g_currentVehicle.item.level * g_itemsCache.items.shop.getEmblemsGroupPriceFactors()[self.getGroup()]))
+    def _getPrice(self, duration):
+        return g_itemsCache.items.shop.playerEmblemCost[duration][0]
+
+    def _getDefaultPrice(self, duration):
+        return g_itemsCache.items.shop.defaults.playerEmblemCost[duration][0]
+
+    def _getPriceFactor(self):
+        return g_itemsCache.items.shop.getEmblemsGroupPriceFactors()[self.getGroup()]
+
+    def _getDefaultPriceFactor(self):
+        priceFactor = g_itemsCache.items.shop.defaults.getEmblemsGroupPriceFactors()
+        return priceFactor.get(self.getGroup(), 1)
 
 
 class Inscription(Item):
 
-    def __init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays):
-        Item.__init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays)
-        self._price = g_itemsCache.items.shop.playerInscriptionCost
-
     def getTexturePath(self):
         return self._rawData[2].replace('gui/maps', '../maps')
 
@@ -147,18 +207,25 @@ class Inscription(Item):
     def getIgrType(self):
         return self._rawData[1]
 
+    @property
     def isFeatured(self):
         return self._rawData[5]
 
-    def getPrice(self, duration):
-        return int(round(self._price[duration][0] * g_currentVehicle.item.level * g_itemsCache.items.shop.getInscriptionsGroupPriceFactors(g_currentVehicle.item.descriptor.type.customizationNationID)[self.getGroup()]))
+    def _getPrice(self, duration):
+        return g_itemsCache.items.shop.playerInscriptionCost[duration][0]
+
+    def _getDefaultPrice(self, duration):
+        return g_itemsCache.items.shop.defaults.playerInscriptionCost[duration][0]
+
+    def _getPriceFactor(self):
+        return g_itemsCache.items.shop.getInscriptionsGroupPriceFactors(self.getNationID())[self.getGroup()]
+
+    def _getDefaultPriceFactor(self):
+        priceFactor = g_itemsCache.items.shop.defaults.getInscriptionsGroupPriceFactors(self.getNationID())
+        return priceFactor.get(self.getGroup(), 1)
 
 
 class Camouflage(Item):
-
-    def __init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays):
-        Item.__init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays)
-        self._price = g_itemsCache.items.shop.camouflageCost
 
     def getTexturePath(self):
         colors = self._rawData.get('colors', (0, 0, 0, 0))
@@ -180,5 +247,20 @@ class Camouflage(Item):
     def getIgrType(self):
         return self._rawData['igrType']
 
-    def getPrice(self, duration):
-        return int(round(self._price[duration][0] * g_itemsCache.items.shop.getVehCamouflagePriceFactor(g_currentVehicle.item.descriptor.type.compactDescr) * g_itemsCache.items.shop.getCamouflagesPriceFactors(g_currentVehicle.item.descriptor.type.customizationNationID)[self.getID()]))
+    def _getPrice(self, duration):
+        return g_itemsCache.items.shop.camouflageCost[duration][0]
+
+    def _getDefaultPrice(self, duration):
+        return g_itemsCache.items.shop.defaults.camouflageCost[duration][0]
+
+    def _getPriceFactor(self):
+        return g_itemsCache.items.shop.getCamouflagesPriceFactors(g_currentVehicle.item.descriptor.type.customizationNationID)[self.getID()]
+
+    def _getDefaultPriceFactor(self):
+        return g_itemsCache.items.shop.defaults.getCamouflagesPriceFactors(g_currentVehicle.item.descriptor.type.customizationNationID)[self.getID()]
+
+    def _getVehiclePriceFactor(self):
+        return g_itemsCache.items.shop.getVehCamouflagePriceFactor(g_currentVehicle.item.descriptor.type.compactDescr)
+
+    def _getDefaultVehiclePriceFactor(self):
+        return g_itemsCache.items.shop.defaults.getVehCamouflagePriceFactor(g_currentVehicle.item.descriptor.type.compactDescr)

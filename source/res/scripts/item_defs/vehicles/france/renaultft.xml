@@ -33,7 +33,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2750	</weight>
-    <maxHealth>	84	</maxHealth>
+    <maxHealth>	92	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -76,218 +76,25 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/french/F01_RenaultFT/RenaultFT_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
-    <Chassis_RenaultFT>
-      <userString>	#france_vehicles:Chassis_RenaultFT	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <unlocks>
-        <chassis>	Chassis_RenaultFT2	  <cost>	80	</cost>
-        </chassis>
-      </unlocks>
-      <armor>
-        <leftTrack>	5	</leftTrack>
-        <rightTrack>	5	</rightTrack>
-      </armor>
-      <weight>	1200	</weight>
-      <maxLoad>	4890	</maxLoad>
-      <terrainResistance>	1.1 1.5 2.5	</terrainResistance>
-      <brakeForce>	35500	</brakeForce>
-      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
-      <shotDispersionFactors>
-        <vehicleMovement>	0.42	</vehicleMovement>
-        <vehicleRotation>	0.42	</vehicleRotation>
-      </shotDispersionFactors>
-      <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	40	</maxHealth>
-      <maxRegenHealth>	30	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-      <models>
-        <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Chassis.model	</undamaged>
-        <destroyed>	vehicles/french/F01_RenaultFT/crash/lod0/Chassis.model	</destroyed>
-        <exploded>	vehicles/french/F01_RenaultFT/crash/lod0/Chassis.model	</exploded>
-      </models>
-      <traces>
-        <lodDist>	FAR	</lodDist>
-        <bufferPrefs>	smallTank	</bufferPrefs>
-        <textureSet>	usa_02	</textureSet>
-        <size>	0.3 0.38	</size>
-      </traces>
-      <tracks>
-        <lodDist>	MEDIUM_TRACK	</lodDist>
-        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
-        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.62	</textureScale>
-      </tracks>
-      <wheels>
-        <lodDist>	MEDIUM	</lodDist>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.085	</radius>
-          <startIndex>	4	</startIndex>
-          <count>	3	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R7	</name>
-          <radius>	0.324808	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.11	</radius>
-          <startIndex>	5	</startIndex>
-          <count>	4	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.43	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.0849999	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	3	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	W_R0	</name>
-          <radius>	0.174193	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	W_R1	</name>
-          <radius>	0.11	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	W_R2	</name>
-          <radius>	0.324881	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.11	</radius>
-          <startIndex>	3	</startIndex>
-          <count>	2	</count>
-        </group>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.085	</radius>
-          <startIndex>	4	</startIndex>
-          <count>	3	</count>
-        </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L7	</name>
-          <radius>	0.324808	</radius>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.11	</radius>
-          <startIndex>	5	</startIndex>
-          <count>	4	</count>
-        </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L0	</name>
-          <radius>	0.43	</radius>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.0849999	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	3	</count>
-        </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	W_L0	</name>
-          <radius>	0.174193	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	W_L1	</name>
-          <radius>	0.11	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	W_L2	</name>
-          <radius>	0.324881	</radius>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.11	</radius>
-          <startIndex>	3	</startIndex>
-          <count>	2	</count>
-        </group>
-      </wheels>
-      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
-        <mud>	smallTankMud	</mud>
-      </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <hullPosition>	0.000000 0.73628 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModel>	vehicles/french/F01_RenaultFT/collision/Chassis.model	</collisionModel>
-      </hitTester>
-      <topRightCarryingPoint>	0.678016 0.961784	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	2.379860 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.104420 0.000000	</row1>
-            <row2>	0.000000 0.000000 3.654780	</row2>
-            <row3>	0.000000 0.000000 0.000002	</row3>
-          </transform>
-        </decal>
-      </AODecals>
-    </Chassis_RenaultFT>
     <Chassis_RenaultFT2>
       <userString>	#france_vehicles:Chassis_RenaultFT2	</userString>
       <tags></tags>
-      <level>	2	</level>
-      <price>	560	</price>
-      <unlocks>
-        <vehicle>	Hotchkiss_H35	  <cost>	115	</cost>
-        </vehicle>
-        <vehicle>	RenaultFT_AC	  <cost>	100	</cost>
-        </vehicle>
-      </unlocks>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	5	</leftTrack>
         <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	1200	</weight>
       <maxLoad>	6800	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
+      <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	60	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.38	</vehicleMovement>
         <vehicleRotation>	0.38	</vehicleRotation>
@@ -440,6 +247,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.73628 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/french/F01_RenaultFT/collision/Chassis.model	</collisionModel>
@@ -460,146 +269,12 @@
     </Chassis_RenaultFT2>
   </chassis>
   <turrets0>
-    <Turret_1_RenaultFT>
-      <userString>	#france_vehicles:Turret_1_RenaultFT	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <armor>
-        <armor_1>	16	</armor_1>
-        <armor_2>	16	</armor_2>
-        <armor_3>	16	</armor_3>
-        <armor_4>	14	</armor_4>
-        <armor_5>	16	</armor_5>
-        <armor_6>	8	</armor_6>
-        <armor_7>	8	</armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	16	</armor_9>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	170	</weight>
-      <maxHealth>	21	</maxHealth>
-      <rotationSpeed>	38	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	250	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	30	</maxHealth>
-        <maxRegenHealth>	15	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </surveyingDeviceHealth>
-      <guns>
-        <_37mm_APX_SA18>	shared	  <unlocks>
-            <gun>	_13.2mm_Hotchkiss_mle._1930	  <cost>	30	</cost>
-            </gun>
-          </unlocks>
-          <pitchLimits>
-            <minPitch>	0 -35 1 -35	</minPitch>
-            <maxPitch>	0 6 0.40856 6 0.472222 0 0.527778 0 0.59144 6 1 6	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.54	</shotDispersionRadius>
-          <reloadTime>	2.5	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
-          <models>
-            <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/french/F01_RenaultFT/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/french/F01_RenaultFT/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/french/F01_RenaultFT/collision/Gun_01.model	</collisionModel>
-          </hitTester>
-        </_37mm_APX_SA18>
-        <_13.2mm_Hotchkiss_mle._1930>	shared	  <maxAmmo>	720	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -35 1 -35	</minPitch>
-            <maxPitch>	0 10 0.40856 10 0.472222 0 0.527778 0 0.59144 10 1 10	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <turret>	Turret_2_RenaultFT	  <cost>	40	</cost>
-            </turret>
-          </unlocks>
-          <armor>
-            <armor_1>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	1.2	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <shotDispersionRadius>	0.58	</shotDispersionRadius>
-          <reloadTime>	5.8	</reloadTime>
-          <aimingTime>	2	</aimingTime>
-          <models>
-            <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/french/F01_RenaultFT/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/french/F01_RenaultFT/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/french/F01_RenaultFT/collision/Gun_02.model	</collisionModel>
-          </hitTester>
-        </_13.2mm_Hotchkiss_mle._1930>
-      </guns>
-      <models>
-        <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/french/F01_RenaultFT/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/french/F01_RenaultFT/crash/lod0/Turret_01.model	</exploded>
-      </models>
-      <hitTester>
-        <collisionModel>	vehicles/french/F01_RenaultFT/collision/Turret_01.model	</collisionModel>
-      </hitTester>
-      <gunPosition>	0.000000 0.2375 0.4353	</gunPosition>
-      <emblemSlots>
-        <player>
-          <rayStart>	-0.693904 0.272214 0.0046335	</rayStart>
-          <rayEnd>	-0.303131 0.186797 0.0046335	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
-          <rayStart>	0.693904 0.272214 0.0046335	</rayStart>
-          <rayEnd>	0.303131 0.186797 0.0046335	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.661 0.068 0.602 0.525 0.537 0.500 0.229 0.500 0.218 0.390 0.444	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
-      <camouflage>
-        <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
-      </camouflage>
-    </Turret_1_RenaultFT>
     <Turret_2_RenaultFT>
       <userString>	#france_vehicles:Turret_2_RenaultFT	</userString>
       <tags></tags>
-      <level>	2	</level>
-      <price>	240	</price>
-      <unlocks>
-        <gun>	_25mm_Canon_Raccourci_Mle.1934	  <cost>	150	</cost>
-        </gun>
-        <vehicle>	D1	  <cost>	70	</cost>
-        </vehicle>
-        <vehicle>	F49_RenaultR35	  <cost>	70	</cost>
-        </vehicle>
-      </unlocks>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	22	</armor_1>
         <armor_2>	16	</armor_2>
@@ -613,7 +288,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	200	</weight>
-      <maxHealth>	31	</maxHealth>
+      <maxHealth>	23	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
@@ -627,7 +302,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_APX_SA18>	shared	  <pitchLimits>
+        <_37mm_APX_SA18>	shared	  <unlocks>
+            <gun>	_13.2mm_Hotchkiss_mle._1930	  <cost>	30	</cost>
+            </gun>
+          </unlocks>
+          <pitchLimits>
             <minPitch>	0 -35 1 -35	</minPitch>
             <maxPitch>	0 2 0.40856 2 0.472222 0 0.527778 0 0.59144 2 1 2	</maxPitch>
           </pitchLimits>
@@ -655,17 +334,24 @@
             <collisionModel>	vehicles/french/F01_RenaultFT/collision/Gun_03.model	</collisionModel>
           </hitTester>
         </_37mm_APX_SA18>
-        <_13.2mm_Hotchkiss_mle._1930>	shared	  <pitchLimits>
+        <_13.2mm_Hotchkiss_mle._1930>	shared	  <unlocks>
+            <vehicle>	RenaultFT_AC	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	D1	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	Hotchkiss_H35	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	F50_FCM36_20t	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	F49_RenaultR35	  <cost>	280	</cost>
+            </vehicle>
+            <vehicle>	RenaultBS	  <cost>	280	</cost>
+            </vehicle>
+          </unlocks>
+          <pitchLimits>
             <minPitch>	0 -35 1 -35	</minPitch>
             <maxPitch>	0 10 0.40856 10 0.472222 0 0.527778 0 0.59144 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	1.2	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
-          <reloadTime>	5.8	</reloadTime>
           <armor>
             <armor_1>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -673,6 +359,13 @@
             </armor_2>
             <gun>	10	</gun>
           </armor>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	1.2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <reloadTime>	5.8	</reloadTime>
           <shotDispersionRadius>	0.58	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Gun_04.model	</undamaged>
@@ -683,38 +376,6 @@
             <collisionModel>	vehicles/french/F01_RenaultFT/collision/Gun_04.model	</collisionModel>
           </hitTester>
         </_13.2mm_Hotchkiss_mle._1930>
-        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <unlocks>
-            <vehicle>	F50_FCM36_20t	  <cost>	50	</cost>
-            </vehicle>
-          </unlocks>
-          <pitchLimits>
-            <minPitch>	0 -35 1 -35	</minPitch>
-            <maxPitch>	0 4 0.40856 4 0.472222 0 0.527778 0 0.59144 4 1 4	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	10	</gun>
-          </armor>
-          <reloadTime>	2.1	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.5	</aimingTime>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <models>
-            <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/french/F01_RenaultFT/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/french/F01_RenaultFT/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/french/F01_RenaultFT/collision/Gun_05.model	</collisionModel>
-          </hitTester>
-        </_25mm_Canon_Raccourci_Mle.1934>
       </guns>
       <models>
         <undamaged>	vehicles/french/F01_RenaultFT/normal/lod0/Turret_02.model	</undamaged>
@@ -727,15 +388,15 @@
       <gunPosition>	0.000000 0.2375 0.4572	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.680474 0.254191 0.213156	</rayStart>
-          <rayEnd>	-0.295792 0.175673 0.136638	</rayEnd>
+          <rayStart>	-0.688164 0.236419 0.193277	</rayStart>
+          <rayEnd>	-0.303483 0.157901 0.116759	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.683284 0.235978 0.218262	</rayStart>
-          <rayEnd>	0.298603 0.15746 0.141743	</rayEnd>
+          <rayStart>	0.688164 0.236419 0.193277	</rayStart>
+          <rayEnd>	0.303483 0.157901 0.116759	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -745,6 +406,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.661 0.068 0.698 0.489 0.588 0.500 0.234 0.500 0.246 0.486 0.379	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
@@ -752,32 +414,13 @@
     </Turret_2_RenaultFT>
   </turrets0>
   <engines>
-    <Renault>	shared	  <unlocks>
-        <engine>	Renault_M26_27	  <cost>	30	</cost>
-        </engine>
-      </unlocks>
-    </Renault>
-    <Renault_M26_27>	shared	  <unlocks>
-        <engine>	Franklin	  <cost>	40	</cost>
-        </engine>
-      </unlocks>
-    </Renault_M26_27>
-    <Franklin>	shared	</Franklin>
+    <Renault>	shared	</Renault>
   </engines>
   <fuelTanks>
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <Fanions_de_signaux>	shared	  <unlocks>
-        <radio>	ER_52	  <cost>	100.0	</cost>
-        </radio>
-      </unlocks>
-    </Fanions_de_signaux>
-    <ER_52>	shared	  <unlocks>
-        <vehicle>	RenaultBS	  <cost>	145	</cost>
-        </vehicle>
-      </unlocks>
-    </ER_52>
+    <ER_52>	shared	</ER_52>
   </radios>
   <effects>
     <collision></collision>

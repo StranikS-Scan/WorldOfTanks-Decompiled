@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PromoPremiumIgrWindow.py
 from account_helpers.AccountSettings import AccountSettings, IGR_PROMO
 from gui.Scaleform.daapi.view.meta.PromoPremiumIgrWindowMeta import PromoPremiumIgrWindowMeta
@@ -9,7 +9,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
 class PromoPremiumIgrWindow(PromoPremiumIgrWindowMeta):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(PromoPremiumIgrWindow, self).__init__()
 
     def _populate(self):

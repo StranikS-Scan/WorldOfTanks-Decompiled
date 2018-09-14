@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/NationSpecificAchievement.py
 from SimpleProgressAchievement import SimpleProgressAchievement
 from dossiers2.custom.cache import getCache as getDossiersCache
@@ -6,7 +6,7 @@ from gui import nationCompareByIndex
 
 class NationSpecificAchievement(SimpleProgressAchievement):
 
-    def __init__(self, namePrefix, nationID, block, dossier, value = None):
+    def __init__(self, namePrefix, nationID, block, dossier, value=None):
         self._nationID = nationID
         super(NationSpecificAchievement, self).__init__(self.makeFullName(namePrefix, nationID), block, dossier, value)
 

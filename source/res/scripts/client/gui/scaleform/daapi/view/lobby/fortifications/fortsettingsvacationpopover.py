@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortSettingsVacationPopover.py
 from adisp import process
 import fortified_regions
@@ -14,7 +14,7 @@ SHOW_MAX_MONTH = 4
 
 class FortSettingsVacationPopover(FortSettingsVacationPopoverMeta, FortViewHelper):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(FortSettingsVacationPopover, self).__init__()
 
     def onApply(self, data):

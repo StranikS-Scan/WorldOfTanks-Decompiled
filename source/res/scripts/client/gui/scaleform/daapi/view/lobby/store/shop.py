@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/Shop.py
 import BigWorld
 from PlayerEvents import g_playerEvents
@@ -18,10 +18,11 @@ from gui.Scaleform.daapi.view.meta.ShopMeta import ShopMeta
 from items import ITEM_TYPE_INDICES
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.Vehicle import Vehicle
+import WWISE
 
 class Shop(ShopMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(Shop, self).__init__(ctx)
         self.__tableType = None
         return

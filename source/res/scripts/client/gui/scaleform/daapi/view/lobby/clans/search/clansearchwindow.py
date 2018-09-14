@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/search/ClanSearchWindow.py
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -21,7 +21,7 @@ from helpers.i18n import makeString as _ms
 _SEARCH_LIMIT = 18
 _SEARCH_MAX_CHARS = 70
 
-def _packHeaderColumnData(columnID, label, buttonWidth, tooltip, showSeparator = True, textAlign = 'center'):
+def _packHeaderColumnData(columnID, label, buttonWidth, tooltip, showSeparator=True, textAlign='center'):
     return {'id': columnID,
      'label': _ms(label),
      'buttonWidth': buttonWidth,
@@ -35,6 +35,7 @@ def _packHeaderColumnData(columnID, label, buttonWidth, tooltip, showSeparator =
 
 class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
     __coolDownRequests = [CLAN_REQUESTED_DATA_TYPE.CLAN_RATINGS, CLAN_REQUESTED_DATA_TYPE.SEARCH_CLANS, CLAN_REQUESTED_DATA_TYPE.GET_RECOMMENDED_CLANS]
+    MIN_CHARS_FOR_SEARCH = 2
 
     def __init__(self, ctx):
         super(ClanSearchWindow, self).__init__()
@@ -55,8 +56,13 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
             pass
 
     def search(self, text):
-        self.__clanFinder.setRecommended(False)
-        self.__doSearch(text)
+        if len(text) < self.MIN_CHARS_FOR_SEARCH:
+            self._showDummy(True)
+            self._setDummyData(CLANS.SEARCH_REQUESTTOOSHORT_HEADER, CLANS.SEARCH_REQUESTTOOSHORT_BODY, None, self.__clanFinder.hasSuccessRequest(), _ms(CLANS.SEARCH_REQUESTTOOSHORT_BUTTON), CLANS.SEARCH_REQUESTTOOSHORT_BUTTON_TOOLTIP_HEADER)
+        else:
+            self.__clanFinder.setRecommended(False)
+            self.__doSearch(text)
+        return
 
     def previousPage(self):
         self.as_showWaitingS(WAITING.PREBATTLE_AUTO_SEARCH, {})
@@ -120,7 +126,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
         self.__isFirstPageRequested = False
         self.as_hideWaitingS()
 
-    def _processSearchResponse(self, status, data, isInitial = False):
+    def _processSearchResponse(self, status, data, isInitial=False):
         if status:
             if len(data) > 0:
                 self.__applyFoundData(data)
@@ -151,7 +157,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
     def _showDummy(self, isVisible):
         self.as_setDummyVisibleS(isVisible)
 
-    def _setDummyData(self, header, body, icon = None, btnVisible = False, btnLabel = '', btnTooltip = ''):
+    def _setDummyData(self, header, body, icon=None, btnVisible=False, btnLabel='', btnTooltip=''):
         self.as_setDummyS({'iconSource': icon,
          'htmlText': str().join((text_styles.middleTitle(header), clans_fmts.getHtmlLineDivider(3), text_styles.main(body))),
          'alignCenter': False,
@@ -239,8 +245,7 @@ class _ClanSearchDataProvider(SortableDAAPIDataProvider, ClanEmblemsHelper):
         self._dispose()
 
     def getSelectedIdx(self):
-        if self.__selectedID in self.__mapping:
-            return self.__mapping[self.__selectedID]
+        return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1
 
     def setSelectedID(self, id):
         self.__selectedID = id
@@ -272,9 +277,7 @@ class _ClanSearchDataProvider(SortableDAAPIDataProvider, ClanEmblemsHelper):
     def refreshItem(self, cache, clanDBID):
         isSelected = self.__selectedID == clanDBID
         self.buildList(cache)
-        if isSelected and clanDBID not in self.__mapping:
-            return True
-        return False
+        return True if isSelected and clanDBID not in self.__mapping else False
 
     def pyGetSelectedIdx(self):
         return self.getSelectedIdx()

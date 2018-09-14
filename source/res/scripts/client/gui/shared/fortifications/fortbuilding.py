@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/FortBuilding.py
 from FortifiedRegionBase import BuildingDescr
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
@@ -8,7 +8,7 @@ from helpers import time_utils, i18n
 
 class FortBuilding(BuildingDescr, HasStrCD):
 
-    def __init__(self, buildingCompactDescr = None, typeID = None):
+    def __init__(self, buildingCompactDescr=None, typeID=None):
         BuildingDescr.__init__(self, buildingCompactDescr, typeID=typeID)
         HasStrCD.__init__(self, buildingCompactDescr or self.makeCompactDescr())
 
@@ -17,7 +17,7 @@ class FortBuilding(BuildingDescr, HasStrCD):
         from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
         return i18n.makeString(FORTIFICATIONS.buildings_buildingname(FortViewHelper.getBuildingUIDbyID(self.typeID)))
 
-    def getUserLevel(self, nextLevel = False):
+    def getUserLevel(self, nextLevel=False):
         from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
         level = self.level
         if nextLevel:
@@ -60,13 +60,13 @@ class FortBuilding(BuildingDescr, HasStrCD):
     def getEstimatedCooldownStr(self):
         return time_formatters.getTimeDurationStr(self.getEstimatedCooldown())
 
-    def isExportAvailable(self, resCount = None):
+    def isExportAvailable(self, resCount=None):
         enoughRes = True
         if resCount is not None:
             enoughRes = self.storage >= resCount
         return self.isReady() and not self.isInCooldown() and self.hasStorageToExport() and enoughRes
 
-    def isImportAvailable(self, resCount = None):
+    def isImportAvailable(self, resCount=None):
         space = self.levelRef.storage - self.storage
         enoughRes = True
         if resCount is not None:

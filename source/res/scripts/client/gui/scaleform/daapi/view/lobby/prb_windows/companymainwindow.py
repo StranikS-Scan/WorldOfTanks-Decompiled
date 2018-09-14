@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/CompanyMainWindow.py
 from adisp import process
 from constants import PREBATTLE_COMPANY_DIVISION
@@ -84,6 +84,9 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
     def showFAQWindow(self):
         self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def getClientID(self):
+        return self.__clientID
+
     def canSendInvite(self):
         return self.prbFunctional.getPermissions().canSendInvite()
 
@@ -94,7 +97,7 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
     def onCreateRally(self):
         self.__requestToCreate()
 
-    def onJoinRally(self, rallyId, slotIndex = None, peripheryID = None):
+    def onJoinRally(self, rallyId, slotIndex=None, peripheryID=None):
         self.__requestToJoin(rallyId)
 
     def _populate(self):

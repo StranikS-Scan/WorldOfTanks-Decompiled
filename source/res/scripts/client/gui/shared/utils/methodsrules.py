@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/MethodsRules.py
 from collections import defaultdict
 from types import MethodType
@@ -20,12 +20,12 @@ class MethodsRules(object):
                 return
             self.__listerner(*args, **kwargs)
 
-        def __get__(self, obj, objtype = None):
+        def __get__(self, obj, objtype=None):
             return MethodType(self, obj, objtype)
 
     class delayable(object):
 
-        def __init__(self, delayerName = None):
+        def __init__(self, delayerName=None):
             self.__delayerName = delayerName
 
         def __call__(self, listener):
@@ -42,7 +42,7 @@ class MethodsRules(object):
 
             return wrapper
 
-        def __get__(self, obj, objtype = None):
+        def __get__(self, obj, objtype=None):
             return MethodType(self, obj, objtype)
 
     def __init__(self):

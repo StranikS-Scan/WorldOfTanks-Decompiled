@@ -1,13 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/economics.py
 
 
 def getActionPrc(price, defaultPrice):
 
     def calculate(price, defaultPrice):
-        if defaultPrice == 0 or price == defaultPrice:
-            return 0
-        return int(round((1 - float(price) / defaultPrice) * 100))
+        return 0 if defaultPrice == 0 or price == defaultPrice else int(round((1 - float(price) / defaultPrice) * 100))
 
     if isinstance(price, tuple):
         goldPrc = calculate(price[1], defaultPrice[1])

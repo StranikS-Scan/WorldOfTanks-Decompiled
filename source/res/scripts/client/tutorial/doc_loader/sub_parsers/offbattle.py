@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/offbattle.py
 from helpers.html import translation
 from items import _xml
@@ -83,9 +83,8 @@ def _readFinalWindowSection(xmlCtx, section, _, windowID, windowType, content):
                 data[key] = translation(subSec.asString)
 
             hints.append(data)
-        else:
-            hints.append({'type': typeName,
-             'label': translation(hintSec.asString)})
+        hints.append({'type': typeName,
+         'label': translation(hintSec.asString)})
 
     content['battleHints'] = hints
     content['restartHint'] = translation(_xml.readString(xmlCtx, section, 'restart-hint'))

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ToolTip.py
 from Tkinter import *
 
@@ -14,10 +14,10 @@ class ToolTipBase:
         self._id3 = self.button.bind('<ButtonPress>', self.leave)
         return
 
-    def enter(self, event = None):
+    def enter(self, event=None):
         self.schedule()
 
-    def leave(self, event = None):
+    def leave(self, event=None):
         self.unschedule()
         self.hidetip()
 
@@ -42,7 +42,7 @@ class ToolTipBase:
         tw.wm_geometry('+%d+%d' % (x, y))
         self.showcontents()
 
-    def showcontents(self, text = 'Your text here'):
+    def showcontents(self, text='Your text here'):
         label = Label(self.tipwindow, text=text, justify=LEFT, background='#ffffe0', relief=SOLID, borderwidth=1)
         label.pack()
 

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortChoiceDivisionWindow.py
 from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import makeDivisionData
 from helpers import i18n
@@ -21,7 +21,7 @@ def _getTextLevels(lvl):
 
 class FortChoiceDivisionWindow(FortChoiceDivisionWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortChoiceDivisionWindow, self).__init__()
         self.__isInChangeDivisionMode = ctx.get('isInChangeDivisionMode', False)
         self.__divisionID = ctx.get('division', None)

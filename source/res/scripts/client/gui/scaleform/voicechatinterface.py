@@ -1,6 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/VoiceChatInterface.py
-import BigWorld, Event
+import BigWorld
+import Event
 import BattleReplay
 from VOIP import getVOIPManager
 from VOIP.voip_constants import VOIP_SUPPORTED_API
@@ -56,13 +57,12 @@ class _VoiceChatInterface(UIInterface):
             self.onVoiceChatInitFailed()
 
     def getPlayerDBID(self):
-        import Avatar, Account
-        if type(BigWorld.player()) is Account.PlayerAccount:
+        import Avatar
+        import Account
+        if isinstance(BigWorld.player(), Account.PlayerAccount):
             return BigWorld.player().databaseID
-        elif type(BigWorld.player()) is Avatar.PlayerAvatar and hasattr(BigWorld.player(), 'playerVehicleID'):
-            return BigWorld.player().arena.vehicles[BigWorld.player().playerVehicleID].get('accountDBID', None)
         else:
-            return
+            return BigWorld.player().arena.vehicles[BigWorld.player().playerVehicleID].get('accountDBID', None) if isinstance(BigWorld.player(), Avatar.PlayerAvatar) and hasattr(BigWorld.player(), 'playerVehicleID') else None
 
     def setPlayerSpeaking(self, accountDBID, isSpeak):
         if not GUI_SETTINGS.voiceChat:
@@ -70,9 +70,7 @@ class _VoiceChatInterface(UIInterface):
         self.onPlayerSpeaking(accountDBID, isSpeak)
 
     def isPlayerSpeaking(self, accountDBID):
-        if GUI_SETTINGS.voiceChat:
-            return getVOIPManager().isParticipantTalking(accountDBID)
-        return False
+        return getVOIPManager().isParticipantTalking(accountDBID) if GUI_SETTINGS.voiceChat else False
 
     @property
     def state(self):
@@ -136,8 +134,7 @@ class _VoiceChatInterface(UIInterface):
     def voiceChatProvider(self):
         if self.isVivox():
             return 'vivox'
-        if self.isYY():
-            return 'YY'
+        return 'YY' if self.isYY() else 'unknown'
 
     @process
     def __doInitialize(self):

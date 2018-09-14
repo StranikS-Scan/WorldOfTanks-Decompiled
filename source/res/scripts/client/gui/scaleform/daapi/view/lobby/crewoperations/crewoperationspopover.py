@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/crewOperations/CrewOperationsPopOver.py
 from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -21,7 +21,7 @@ OPERATION_DROP_IN_BARRACK = 'dropInBarrack'
 
 class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(CrewOperationsPopOver, self).__init__()
 
     def _populate(self):
@@ -42,9 +42,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         crew = vehicle.crew
         if self.__isNoCrew(crew):
             return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'noCrew')
-        if self.__isHasNotNative(crew) is not True:
-            return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'alreadyRetrained')
-        return self.__getInitCrewOperationObject(OPERATION_RETRAIN)
+        return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'alreadyRetrained') if self.__isHasNotNative(crew) is not True else self.__getInitCrewOperationObject(OPERATION_RETRAIN)
 
     def __getReturnOperationData(self, vehicle):
         crew = vehicle.crew
@@ -80,8 +78,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
                                 tankmenToBarracksCount -= 1
                     else:
                         isCrewAlreadyInCurrentVehicle = False
-                else:
-                    demobilizedMembersCounter += 1
+                demobilizedMembersCounter += 1
 
             if tankmenToBarracksCount > freeBerths:
                 return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP)
@@ -91,19 +88,15 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'allDemobilized')
         elif isCrewAlreadyInCurrentVehicle:
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'alreadyOnPlaces')
-        elif demobilizedMembersCounter > 0 and demobilizedMembersCounter < len(lastCrewIDs):
-            return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP, True)
         else:
-            return self.__getInitCrewOperationObject(OPERATION_RETURN)
+            return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP, True) if demobilizedMembersCounter > 0 and demobilizedMembersCounter < len(lastCrewIDs) else self.__getInitCrewOperationObject(OPERATION_RETURN)
 
     def __getDropInBarrackOperationData(self, vehicle):
         crew = vehicle.crew
         if self.__isNoCrew(crew):
             return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, 'noCrew')
-        elif self.__isNotEnoughSpaceInBarrack(crew):
-            return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP)
         else:
-            return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK)
+            return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP) if self.__isNotEnoughSpaceInBarrack(crew) else self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK)
 
     def __isHasNotNative(self, crew):
         for slotIdx, tman in crew:
@@ -144,7 +137,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
-    def __getInitCrewOperationObject(self, operationId, errorId = None, warningId = '', operationAvailable = False):
+    def __getInitCrewOperationObject(self, operationId, errorId=None, warningId='', operationAvailable=False):
         context = '#crew_operations:%s'
         cOpId = context % operationId
         iconPathContext = '../maps/icons/tankmen/crew/%s%s'

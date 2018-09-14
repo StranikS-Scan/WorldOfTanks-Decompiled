@@ -1,10 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/data_aggregator.py
 import copy
 from collections import namedtuple
 from Event import Event
+import nations
 from gui import GUI_SETTINGS, g_tankActiveCamouflage
-from gui.game_control import getIGRCtrl
+from gui.game_control import getIGRCtrl, g_instance as _g_gameControlInstance
 from gui.server_events import g_eventsCache as _g_eventsCache
 from gui.shared import g_itemsCache as _g_itemsCache
 from gui.shared.ItemsCache import CACHE_SYNC_REASON, g_itemsCache
@@ -12,27 +13,41 @@ from items.vehicles import g_cache as _g_vehiclesCache
 from items.qualifiers import g_cache as _g_qualifiersCache
 from CurrentVehicle import g_currentVehicle as _g_currentVehicle, g_currentVehicle
 from elements import AvailableCamouflage, AvailableInscription, AvailableEmblem, InstalledCamouflage, InstalledInscription, InstalledEmblem, Qualifier, CamouflageQualifier
-_QuestData = namedtuple('QuestData', ('id', 'isCompleted'))
+_QuestData = namedtuple('QuestData', ('id', 'isCompleted', 'name', 'count'))
 
-class CUSTOMIZATION_TYPE:
+class CUSTOMIZATION_TYPE(object):
     CAMOUFLAGE = 0
     EMBLEM = 1
     INSCRIPTION = 2
     ALL = (CAMOUFLAGE, EMBLEM, INSCRIPTION)
 
 
+class DURATION(object):
+    PERMANENT = 0
+    MONTH = 30
+    WEEK = 7
+    ALL = (PERMANENT, MONTH, WEEK)
+
+
 SLOT_TYPE = {CUSTOMIZATION_TYPE.EMBLEM: 'player',
  CUSTOMIZATION_TYPE.INSCRIPTION: 'inscription'}
-_TYPE_NAME = {'emblems': CUSTOMIZATION_TYPE.EMBLEM,
+TYPE_NAME = {'emblems': CUSTOMIZATION_TYPE.EMBLEM,
  'inscriptions': CUSTOMIZATION_TYPE.INSCRIPTION,
  'camouflages': CUSTOMIZATION_TYPE.CAMOUFLAGE}
 _ITEM_CLASS = {CUSTOMIZATION_TYPE.EMBLEM: AvailableEmblem,
  CUSTOMIZATION_TYPE.INSCRIPTION: AvailableInscription,
  CUSTOMIZATION_TYPE.CAMOUFLAGE: AvailableCamouflage}
+_ITEM_CONTAINER = {CUSTOMIZATION_TYPE.CAMOUFLAGE: lambda nationId, itemId: _g_vehiclesCache.customization(nationId)['camouflages'][itemId],
+ CUSTOMIZATION_TYPE.EMBLEM: lambda _, itemId: _g_vehiclesCache.playerEmblems()[1][itemId],
+ CUSTOMIZATION_TYPE.INSCRIPTION: lambda nationId, itemId: _g_vehiclesCache.customization(nationId)['inscriptions'][itemId]}
+_ITEM_GROUP = {CUSTOMIZATION_TYPE.CAMOUFLAGE: lambda nationId: _g_vehiclesCache.customization(nationId)['camouflageGroups'],
+ CUSTOMIZATION_TYPE.EMBLEM: lambda _: _g_vehiclesCache.playerEmblems()[0],
+ CUSTOMIZATION_TYPE.INSCRIPTION: lambda nationId: _g_vehiclesCache.customization(nationId)['inscriptionGroups']}
 _MAX_HULL_SLOTS = 2
 _MAX_TURRET_SLOTS = 2
 VEHICLE_CHANGED_EVENT = 'VEHICLE_CHANGED_EVENT'
 EVENTS_UPDATED_EVENT = 'EVENTS_UPDATED_EVENT'
+_IGR_TYPE_CHANGED = 'IGR_TYPE_CHANGED'
 
 class DataAggregator(object):
 
@@ -50,15 +65,20 @@ class DataAggregator(object):
         self.__cNationID = None
         self.__rawItems = None
         self.__vehicleInventoryID = None
-        self.__displayIgrItems = getIGRCtrl().getRoomType() == 2 and GUI_SETTINGS.igrEnabled
+        self.__displayIgrItems = False
         self.__availableGroupNames = None
+        return
+
+    def init(self):
         self.__gatherDataForVehicle(CACHE_SYNC_REASON.DOSSIER_RESYNC, None)
         _g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         _g_itemsCache.onSyncCompleted += self.__gatherDataForVehicle
         _g_eventsCache.onSyncCompleted += self.__onEventsUpdated
+        _g_gameControlInstance.igr.onIgrTypeChanged += self.__onIGRTypeChanged
         return
 
     def fini(self):
+        _g_gameControlInstance.igr.onIgrTypeChanged -= self.__onIGRTypeChanged
         _g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         _g_itemsCache.onSyncCompleted -= self.__gatherDataForVehicle
         _g_eventsCache.onSyncCompleted -= self.__onEventsUpdated
@@ -107,11 +127,17 @@ class DataAggregator(object):
         self.__gatherDataForVehicle(EVENTS_UPDATED_EVENT, None)
         return
 
+    def __onIGRTypeChanged(self, roomType, xpFactor):
+        self.__gatherDataForVehicle(_IGR_TYPE_CHANGED, None)
+        return
+
     def __gatherDataForVehicle(self, updateReason, invalidItems):
         if updateReason in (CACHE_SYNC_REASON.DOSSIER_RESYNC,
          CACHE_SYNC_REASON.SHOP_RESYNC,
+         _IGR_TYPE_CHANGED,
          VEHICLE_CHANGED_EVENT,
          EVENTS_UPDATED_EVENT):
+            self.__displayIgrItems = getIGRCtrl().getRoomType() == 2 and GUI_SETTINGS.igrEnabled
             self.__vehicleInventoryID = g_currentVehicle.item.invID
             curVehItem = _g_currentVehicle.item
             curVehDescr = curVehItem.descriptor
@@ -126,7 +152,7 @@ class DataAggregator(object):
             self.__igrReplacedItems = [{}, {}, {}]
             self.__notMigratedItems = [set([]), set([]), set([])]
             self.__associatedQuests = [{}, {}, {}]
-            inventoryItems = self.__setInventoryItems()
+            inventoryItems = self.getInventoryItems(self.__cNationID, self.__rawItems)
             installedRawItems = self.__setInstalledRawItems(curVehDescr)
             self.__installed = self.__setInstalledCustomization(curVehDescr.hull['emblemSlots'], curVehDescr.turret['emblemSlots'], installedRawItems)
             for cType in CUSTOMIZATION_TYPE.ALL:
@@ -177,12 +203,12 @@ class DataAggregator(object):
         for key in installedRawItems.keys():
             for installedRawItem in installedRawItems[key]:
                 installedItemID = installedRawItem[0]
-                if installedRawItem[2] == 0 and installedItemID is not None and (_TYPE_NAME[key] != CUSTOMIZATION_TYPE.EMBLEM or _TYPE_NAME[key] == CUSTOMIZATION_TYPE.EMBLEM) and installedItemID not in self.__itemGroups[CUSTOMIZATION_TYPE.EMBLEM]['auto'][0]:
-                    self.__notMigratedItems[_TYPE_NAME[key]].add(installedItemID)
+                if installedRawItem[2] == 0 and installedItemID is not None and (TYPE_NAME[key] != CUSTOMIZATION_TYPE.EMBLEM or TYPE_NAME[key] == CUSTOMIZATION_TYPE.EMBLEM) and installedItemID not in self.__itemGroups[CUSTOMIZATION_TYPE.EMBLEM]['auto'][0]:
+                    self.__notMigratedItems[TYPE_NAME[key]].add(installedItemID)
 
         if self.__displayIgrItems:
-            igrLayout = g_itemsCache.items.inventory.getIgrCustomizationsLayout()
             vehicleId = g_currentVehicle.item.invID
+            igrLayout = g_itemsCache.items.inventory.getIgrCustomizationsLayout()
             igrRoomType = getIGRCtrl().getRoomType()
             igrVehDescr = []
             if vehicleId in igrLayout:
@@ -193,7 +219,7 @@ class DataAggregator(object):
                     replacedItemID = installedRawItems[key][index][0]
                     replacedItemDaysLeft = installedRawItems[key][index][2]
                     if replacedItemID is not None:
-                        self.__igrReplacedItems[_TYPE_NAME[key]][replacedItemID] = replacedItemDaysLeft
+                        self.__igrReplacedItems[TYPE_NAME[key]][replacedItemID] = replacedItemDaysLeft
                     installedRawItems[key][index] = igrVehDescr[key][index]
 
         activeCamouflage = g_tankActiveCamouflage['historical'].get(curVehDescr.type.compactDescr)
@@ -204,8 +230,74 @@ class DataAggregator(object):
         self.viewModel = [camouflageID, copy.deepcopy(installedRawItems['emblems']), copy.deepcopy(installedRawItems['inscriptions'])]
         return installedRawItems
 
-    def __setInventoryItems(self):
-        inventoryItems = [{}, {}, {}]
+    def __fillAvailableItems(self, cType, inDossier, inQuests, inventoryItems):
+        containerToFill = self.__availableItems[cType]
+        availableRawItems = self.__rawItems[cType]
+        for itemID, availableRawItem in availableRawItems.iteritems():
+            replacedByIGRItem = itemID in self.__igrReplacedItems[cType]
+            isMigrated = itemID not in self.__notMigratedItems[cType]
+            isInDossier = itemID in inDossier[cType] or replacedByIGRItem or not isMigrated
+            containerToFill[itemID] = self.createElement(itemID, cType, self.__cNationID, isInDossier, itemID in inQuests[cType], replacedByIGRItem, inventoryItems=inventoryItems)
+
+    def createElement(self, itemId, itemType, nationId, isInDossier=False, isInQuests=False, isReplacedByIGR=False, inventoryItems=None):
+        rawItemGetter = _ITEM_CONTAINER[itemType]
+        groupsGetter = _ITEM_GROUP[itemType]
+        rawItem = rawItemGetter(nationId, itemId)
+        groups = groupsGetter(nationId)
+        cls = _ITEM_CLASS[itemType]
+        if itemType != CUSTOMIZATION_TYPE.CAMOUFLAGE:
+            if rawItem[7] in _g_qualifiersCache.qualifiers:
+                qualifier = Qualifier(_g_qualifiersCache.qualifiers[rawItem[7]])
+            else:
+                qualifier = CamouflageQualifier('winter')
+            group = groups[rawItem[0]]
+            readableGroupName = group[1]
+            if len(group) == 5:
+                allowedNations = None
+                allowedVehicles = list(group[3])
+                notAllowedVehicles = group[4]
+            else:
+                allowedNations = group[3]
+                allowedVehicles = list(group[4])
+                notAllowedVehicles = group[5]
+        else:
+            groupName = rawItem['groupName']
+            qualifier = CamouflageQualifier(groupName[3:] if groupName.startswith('IGR') else groupName)
+            allowedNations = None
+            allowedVehicles = list(rawItem['allow'])
+            notAllowedVehicles = rawItem['deny']
+            readableGroupName = '#vehicle_customization:camouflage/{0}'.format(groupName[3:] if groupName.startswith('IGR') else groupName)
+        numberOfDays = None
+        numberOfItems = None
+        if itemType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
+            groupName = itemId
+        else:
+            groupName = rawItem[0]
+        isInShop = self.__groupIsInShop(groupName, itemType, nationId)
+        if inventoryItems is not None:
+            if itemId in inventoryItems[itemType] and not isInDossier:
+                isInDossier = True
+                allowedVehicles += inventoryItems[itemType][itemId][4]
+                if inventoryItems[itemType][itemId][6][0]:
+                    numberOfItems = inventoryItems[itemType][itemId][6][1]
+                else:
+                    numberOfDays = inventoryItems[itemType][itemId][6][1]
+            elif itemId in self.__igrReplacedItems[itemType]:
+                numberOfDays = self.__igrReplacedItems[itemType][itemId]
+        notAllowedNations = None if allowedNations is None else []
+        if allowedNations is not None:
+            for nationID in nations.INDICES.values():
+                if nationID not in allowedNations:
+                    notAllowedNations.append(nationID)
+
+        if itemType == CUSTOMIZATION_TYPE.EMBLEM:
+            actualNationId = nations.NONE_INDEX
+        else:
+            actualNationId = nationId
+        return cls(itemId, actualNationId, rawItem, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, notAllowedNations, isReplacedByIGR, numberOfItems, numberOfDays, readableGroupName)
+
+    def getInventoryItems(self, cNationID, rawItems=None):
+        inventoryItems = ({}, {}, {})
         inventoryCustomization = g_itemsCache.items.inventory.getItemsData('customizations')
         for isGold, itemsData in inventoryCustomization.iteritems():
             if itemsData:
@@ -214,7 +306,7 @@ class DataAggregator(object):
                         continue
                     typedItemsData = itemsData[key]
                     for cTypeName, items in typedItemsData.iteritems():
-                        cType = _TYPE_NAME[cTypeName]
+                        cType = TYPE_NAME[cTypeName]
                         for item, itemNum in items.iteritems():
                             if cType != CUSTOMIZATION_TYPE.EMBLEM:
                                 nationID, itemID = item
@@ -223,9 +315,9 @@ class DataAggregator(object):
                             allowedVehicles = []
                             if key is not None:
                                 allowedVehicles.append(key)
-                            if self.__cNationID == nationID or cType == CUSTOMIZATION_TYPE.EMBLEM:
+                            if cNationID == nationID or cType == CUSTOMIZATION_TYPE.EMBLEM:
                                 inventoryItems[cType][itemID] = [itemID,
-                                 self.__rawItems[cType][itemID],
+                                 None if rawItems is None else rawItems[cType][itemID],
                                  None,
                                  isGold,
                                  allowedVehicles,
@@ -233,55 +325,6 @@ class DataAggregator(object):
                                  (isGold, itemNum)]
 
         return inventoryItems
-
-    def __fillAvailableItems(self, cType, inDossier, inQuests, inventoryItems):
-        containerToFill = self.__availableItems[cType]
-        groups = self.__itemGroups[cType]
-        class_ = _ITEM_CLASS[cType]
-        availableRawItems = self.__rawItems[cType]
-        for itemID, availableRawItem in availableRawItems.iteritems():
-            if cType != CUSTOMIZATION_TYPE.CAMOUFLAGE:
-                if availableRawItem[7] in _g_qualifiersCache.qualifiers:
-                    qualifier = Qualifier(_g_qualifiersCache.qualifiers[availableRawItem[7]])
-                else:
-                    qualifier = CamouflageQualifier('winter')
-                group = groups[availableRawItem[0]]
-                if len(group) == 5:
-                    allowedNations = None
-                    allowedVehicles = list(group[3])
-                    notAllowedVehicles = group[4]
-                else:
-                    allowedNations = group[3]
-                    allowedVehicles = list(group[4])
-                    notAllowedVehicles = group[5]
-            else:
-                groupName = availableRawItem['groupName']
-                qualifier = CamouflageQualifier(groupName[3:] if groupName.startswith('IGR') else groupName)
-                allowedNations = None
-                allowedVehicles = list(availableRawItem['allow'])
-                notAllowedVehicles = availableRawItem['deny']
-            replacedByIGRItem = itemID in self.__igrReplacedItems[cType]
-            isNotMigrated = itemID in self.__notMigratedItems[cType]
-            numberOfDays = None
-            numberOfItems = None
-            isInDossier = itemID in inDossier[cType] or replacedByIGRItem or isNotMigrated
-            if cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
-                groupName = itemID
-            else:
-                groupName = availableRawItem[0]
-            isInShop = self.__groupIsInShop(groupName, cType)
-            if itemID in inventoryItems[cType]:
-                isInDossier = True
-                allowedVehicles += inventoryItems[cType][itemID][4]
-                if inventoryItems[cType][itemID][6][0]:
-                    numberOfItems = inventoryItems[cType][itemID][6][1]
-                else:
-                    numberOfDays = inventoryItems[cType][itemID][6][1]
-            elif itemID in self.__igrReplacedItems[cType]:
-                numberOfDays = self.__igrReplacedItems[cType][itemID]
-            containerToFill[itemID] = class_(itemID, availableRawItem, qualifier, isInDossier, itemID in inQuests[cType], isInShop, allowedVehicles, notAllowedVehicles, allowedNations, replacedByIGRItem, numberOfItems, numberOfDays)
-
-        return
 
     def __fillDisplayedItems(self, cType):
         containerToFill = self.__displayedItems[cType]
@@ -294,8 +337,8 @@ class DataAggregator(object):
                 elif availableItem.isInShop:
                     containerToFill[itemID] = availableItem
 
-    def __groupIsInShop(self, groupName, cType):
-        return [lambda group: group not in g_itemsCache.items.shop.getCamouflagesHiddens(self.__cNationID), lambda group: group not in g_itemsCache.items.shop.getEmblemsGroupHiddens() and (group != 'group5' or self.__displayIgrItems), lambda group: group not in g_itemsCache.items.shop.getInscriptionsGroupHiddens(self.__cNationID) and (group != 'IGR' or self.__displayIgrItems)][cType](groupName)
+    def __groupIsInShop(self, groupName, cType, nationID):
+        return [lambda group: group not in g_itemsCache.items.shop.getCamouflagesHiddens(nationID), lambda group: group not in g_itemsCache.items.shop.getEmblemsGroupHiddens() and (group != 'group5' or self.__displayIgrItems), lambda group: group not in g_itemsCache.items.shop.getInscriptionsGroupHiddens(nationID) and (group != 'IGR' or self.__displayIgrItems)][cType](groupName)
 
     def __fillDisplayedGroups(self, cType):
         groups = self.__availableGroupNames[cType]
@@ -313,7 +356,7 @@ class DataAggregator(object):
             for bonus in event.getBonuses('customizations'):
                 for item in bonus.getList():
                     if item['nationId'] == self.__cNationID or item['type'] == CUSTOMIZATION_TYPE.EMBLEM:
-                        questData = _QuestData(id=event.getID(), isCompleted=event.isCompleted())
+                        questData = _QuestData(id=event.getID(), isCompleted=event.isCompleted(), name=event.getUserName(), count=item['value'])
                         questItems[item['type']][item['id']] = questData
 
         return questItems

@@ -29,6 +29,7 @@
       </post-effects>
       <runtime-effects>
         <show-hint>	TankCarouselHint	  <condition>
+            <active>	TankCarouselOnScene	</active>
             <effect-not-triggered>	TankCarouselHint	</effect-not-triggered>
           </condition>
         </show-hint>
@@ -112,7 +113,7 @@
         <activate>	FreeSlotBought	</activate>
       </on-effects>
       <off-effects>
-        <refuse-training></refuse-training>
+        <inactivate>	FreeSlotBought	</inactivate>
       </off-effects>
     </trigger>
     <trigger>	SimpleDialogTrigger	  <type>	simpleDialog	</type>

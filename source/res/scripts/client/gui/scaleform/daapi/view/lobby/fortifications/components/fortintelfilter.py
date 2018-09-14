@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortIntelFilter.py
 import constants
 from gui.shared.formatters import text_styles
@@ -90,7 +90,7 @@ class FortIntelFilter(FortIntelFilterMeta, FortViewHelper):
                         status = FORTIFICATIONS.FORTINTELLIGENCE_FORTINTELFILTER_STATUS_APPLIEDFILTERANDCLAN
                     elif cache.isFilterApplied():
                         status = FORTIFICATIONS.FORTINTELLIGENCE_FORTINTELFILTER_STATUS_APPLIEDFILTER
-                    elif cache.ifDefaultQueryResult():
+                    else:
                         status = FORTIFICATIONS.FORTINTELLIGENCE_FORTINTELFILTER_STATUS_ALL
                 elif self.__getSelectedFilterType() == FORTIFICATION_ALIASES.CLAN_TYPE_FILTER_STATE_BOOKMARKS:
                     status = FORTIFICATIONS.FORTINTELLIGENCE_FORTINTELFILTER_STATUS_APPLIEDBOOKMARKEDFILTER
@@ -107,7 +107,7 @@ class FortIntelFilter(FortIntelFilterMeta, FortViewHelper):
     def __onIntelFilterReset(self, event):
         self.__updateFilterStatuses()
 
-    def __resetFilter(self, isDefaultRequest = False):
+    def __resetFilter(self, isDefaultRequest=False):
         cache = self.fortCtrl.getPublicInfoCache()
         if cache:
             if isDefaultRequest:

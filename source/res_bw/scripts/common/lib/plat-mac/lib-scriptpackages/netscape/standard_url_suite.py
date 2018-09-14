@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Netscape/Standard_URL_suite.py
 """Suite Standard URL suite: Mac URL standard, supported by many apps
 
@@ -16,7 +17,7 @@ class Standard_URL_suite_Events:
      'inside': 'HWIN',
      'from_': 'refe'}
 
-    def GetURL(self, _object, _attributes = {}, **_arguments):
+    def GetURL(self, _object, _attributes={}, **_arguments):
         """GetURL: Loads the URL (optionally to disk)
         Required argument: The url
         Keyword argument to: file the URL should be loaded into
@@ -31,8 +32,7 @@ class Standard_URL_suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 _classdeclarations = {}

@@ -1,8 +1,9 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/etree/ElementPath.py
 import re
 xpath_tokenizer_re = re.compile('(\'[^\']*\'|"[^"]*"|::|//?|\\.\\.|\\(\\)|[/.*:\\[\\]\\(\\)@=])|((?:\\{[^}]+\\})?[^/\\[\\]\\(\\)@=\\s]+)|\\s+')
 
-def xpath_tokenizer(pattern, namespaces = None):
+def xpath_tokenizer(pattern, namespaces=None):
     for token in xpath_tokenizer_re.findall(pattern):
         tag = token[1]
         if tag and tag[0] != '{' and ':' in tag:
@@ -14,8 +15,7 @@ def xpath_tokenizer(pattern, namespaces = None):
             except KeyError:
                 raise SyntaxError('prefix %r not found in prefix map' % prefix)
 
-        else:
-            yield token
+        yield token
 
 
 def get_parent_map(context):
@@ -197,7 +197,7 @@ class _SelectorContext:
         self.root = root
 
 
-def iterfind(elem, path, namespaces = None):
+def iterfind(elem, path, namespaces=None):
     if path[-1:] == '/':
         path = path + '*'
     try:
@@ -233,7 +233,7 @@ def iterfind(elem, path, namespaces = None):
     return result
 
 
-def find(elem, path, namespaces = None):
+def find(elem, path, namespaces=None):
     try:
         return iterfind(elem, path, namespaces).next()
     except StopIteration:
@@ -242,11 +242,11 @@ def find(elem, path, namespaces = None):
     return None
 
 
-def findall(elem, path, namespaces = None):
+def findall(elem, path, namespaces=None):
     return list(iterfind(elem, path, namespaces))
 
 
-def findtext(elem, path, default = None, namespaces = None):
+def findtext(elem, path, default=None, namespaces=None):
     try:
         elem = iterfind(elem, path, namespaces).next()
         return elem.text or ''

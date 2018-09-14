@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/has_id.py
 
 
@@ -25,7 +25,7 @@ class IHasTargetID(object):
 
 class HasID(IHasID):
 
-    def __init__(self, entityID = None, entityType = 0, **kwargs):
+    def __init__(self, entityID=None, entityType=0, **kwargs):
         super(HasID, self).__init__(**kwargs)
         self._id = entityID
         self._type = entityType
@@ -55,6 +55,6 @@ class HasTargetID(IHasTargetID):
 
 class HasIDAndTarget(HasID, HasTargetID):
 
-    def __init__(self, entityID = None, targetID = None, entityType = 0):
+    def __init__(self, entityID=None, targetID=None, entityType=0):
         super(HasIDAndTarget, self).__init__(entityID=entityID, targetID=targetID, entityType=entityType)
         self._targetID = targetID

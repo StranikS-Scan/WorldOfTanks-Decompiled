@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/SimpleProgressAchievement.py
 from RegularAchievement import RegularAchievement
 from dossiers2.custom.config import RECORD_CONFIGS
 
 class SimpleProgressAchievement(RegularAchievement):
 
-    def __init__(self, name, block, dossier, value = None):
+    def __init__(self, name, block, dossier, value=None):
         if dossier is not None:
             self._progressValue = self._readProgressValue(dossier)
         else:
@@ -14,9 +14,7 @@ class SimpleProgressAchievement(RegularAchievement):
         return
 
     def getProgressValue(self):
-        if not self._lvlUpTotalValue:
-            return 1.0
-        return 1 - float(self._lvlUpValue) / float(self._lvlUpTotalValue)
+        return 1.0 if not self._lvlUpTotalValue else 1 - float(self._lvlUpValue) / float(self._lvlUpTotalValue)
 
     def isInNear(self):
         return self.getProgressValue() > 0

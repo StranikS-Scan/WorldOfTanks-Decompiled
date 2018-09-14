@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/IntUserSettings.py
 import AccountCommands
 from functools import partial
@@ -37,36 +37,34 @@ class IntUserSettings(object):
             for key, value in settingsDiff.iteritems():
                 if value is not None:
                     cache[key] = value
-                else:
-                    cache.pop(key, None)
+                cache.pop(key, None)
 
         LOG_DEBUG('IntUserSettings synchronize: cache now=%s' % self.__cache)
         return
 
-    def getCache(self, callback = None):
+    def getCache(self, callback=None):
         if self.__syncData:
             self.__syncData.waitForSync(partial(self.__onGetCacheResponse, callback))
         elif callback:
             callback(AccountCommands.RES_NON_PLAYER)
 
-    def get(self, key, callback = None):
+    def get(self, key, callback=None):
         if self.__syncData:
             self.__syncData.waitForSync(partial(self.__onGetResponse, key, callback))
         elif callback:
             callback(AccountCommands.RES_NON_PLAYER)
 
-    def addIntSettings(self, dictIntSettings, callback = None):
+    def addIntSettings(self, dictIntSettings, callback=None):
         if dictIntSettings:
             arr = []
             for k, v in dictIntSettings.iteritems():
                 if isinstance(k, int) and isinstance(v, int):
                     arr.append(k)
                     arr.append(v)
-                else:
-                    import traceback
-                    traceback.print_stack()
-                    LOG_ERROR('Bad key:value pair in addIntUserSettings: %r:%r (should be int:int)' % (k, v))
-                    return
+                import traceback
+                traceback.print_stack()
+                LOG_ERROR('Bad key:value pair in addIntUserSettings: %r:%r (should be int:int)' % (k, v))
+                return
 
         else:
             import traceback
@@ -74,7 +72,7 @@ class IntUserSettings(object):
             LOG_ERROR('Bad dictIntSettings: %r (should be {int:int} dictionary)' % dictIntSettings)
             return
         if callback is not None:
-            proxyCallback = lambda requestID, resultID, errorStr, ext = {}: callback(resultID)
+            proxyCallback = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
         else:
             proxyCallback = None
         if self.__proxy:
@@ -83,18 +81,17 @@ class IntUserSettings(object):
             callback(AccountCommands.RES_NON_PLAYER)
         return
 
-    def delIntSettings(self, listIntKeys, callback = None):
+    def delIntSettings(self, listIntKeys, callback=None):
         arr = []
         for k in listIntKeys:
             if isinstance(k, int):
                 arr.append(k)
-            else:
-                LOG_ERROR('Bad key in delIntSettings: %r (should be int)' % k)
-                return
+            LOG_ERROR('Bad key in delIntSettings: %r (should be int)' % k)
+            return
 
         if arr:
             if callback is not None:
-                proxyCallback = lambda requestID, resultID, errorStr, ext = {}: callback(resultID)
+                proxyCallback = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxyCallback = None
             if self.__proxy:

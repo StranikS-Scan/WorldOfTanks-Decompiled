@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/lobby/functional.py
 from tutorial.control.functional import FunctionalEffect, FunctionalConditions, FunctionalChapterInfo
 from tutorial.logger import LOG_ERROR

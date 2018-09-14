@@ -108,6 +108,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R53_Object_704/Object_704_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_Object_704>
@@ -146,13 +147,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	ussr_01	</textureSet>
-        <size>	0.52 0.76	</size>
+        <size>	0.56 0.68	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.7	</textureScale>
+        <textureScale>	-2.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -221,6 +222,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.953338 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R53_Object_704/collision/Chassis.model	</collisionModel>
@@ -407,13 +410,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	ussr_01	</textureSet>
-        <size>	0.52 0.76	</size>
+        <size>	0.56 0.68	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.7	</textureScale>
+        <textureScale>	-2.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -482,6 +485,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.953338 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R53_Object_704/collision/Chassis.model	</collisionModel>
@@ -696,9 +701,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.00571244 -0.027355 1.36	</rayStart>
+              <rayStart>	0.00124962 -0.016539 1.36	</rayStart>
               <rayEnd>	0.0604213 -0.0249215 1.16214	</rayEnd>
-              <rayUp>	0.162 0.145 3	</rayUp>
+              <rayUp>	0.159 0.145 5	</rayUp>
               <size>	0.733	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -742,9 +747,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0058384 -0.0273576 1.37	</rayStart>
+              <rayStart>	0.00112403 -0.0165432 1.37	</rayStart>
               <rayEnd>	0.0911523 -0.135134 1.25103	</rayEnd>
-              <rayUp>	0.134 0.128 3	</rayUp>
+              <rayUp>	0.136 0.13 4	</rayUp>
               <size>	0.733	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -769,7 +774,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_Object_704>
   </turrets0>

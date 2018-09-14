@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DebugView.py
 import BigWorld
 import GUI
@@ -6,7 +6,7 @@ from gui import g_guiResetters
 
 class DebugView():
 
-    def __init__(self, textureName = '', parentGUI = None):
+    def __init__(self, textureName='', parentGUI=None):
         self.__listKeynames = []
         self.__dictItems = {}
         self.__bAutoUpdate = False
@@ -63,10 +63,7 @@ class DebugView():
 
     def getParentSize(self):
         parent = self.__window.parent
-        if parent is not None:
-            return parent.size
-        else:
-            return
+        return parent.size if parent is not None else None
 
     def setAutoUpdate(self, bValue):
         self.__bAutoUpdate = bool(bValue)
@@ -74,7 +71,7 @@ class DebugView():
     def getAutoUpdate(self):
         return self.__bAutoUpdate
 
-    def setAlign(self, value, index = None):
+    def setAlign(self, value, index=None):
         if index is None:
             self.__align = [bool(value[0]),
              bool(value[1]),
@@ -84,13 +81,10 @@ class DebugView():
             self.__align[index] = bool(value)
         return
 
-    def getAlign(self, index = None):
-        if index is None:
-            return list(self.__align)
-        else:
-            return self.__align[index]
+    def getAlign(self, index=None):
+        return list(self.__align) if index is None else self.__align[index]
 
-    def setMargin(self, value, index = None):
+    def setMargin(self, value, index=None):
         if index is None:
             self.__margin = [float(value[0]),
              float(value[1]),
@@ -100,11 +94,8 @@ class DebugView():
             self.__margin[index] = float(value)
         return
 
-    def getMargin(self, index = None):
-        if index is None:
-            return list(self.__margin)
-        else:
-            return self.__margin[index]
+    def getMargin(self, index=None):
+        return list(self.__margin) if index is None else self.__margin[index]
 
     def getListKeynames(self):
         return list(self.__listKeynames)
@@ -215,8 +206,6 @@ class DebugView():
             self.update()
 
     def swapLines(self, keyname1, keyname2):
-        if deltaLine == 0:
-            return
         try:
             ind1 = self.__listKeynames.index(keyname1)
             ind2 = self.__listKeynames.index(keyname2)
@@ -300,7 +289,7 @@ class DebugView():
 
 class DebugViewItem():
 
-    def __init__(self, name = '', value = '', divider = ' = '):
+    def __init__(self, name='', value='', divider=' = '):
         self.__name = str(name)
         self.__value = str(value)
         self.__divider = str(divider)
@@ -437,7 +426,7 @@ class DebugViewItem():
         return
 
 
-def LU2BW(point3d, parent = None):
+def LU2BW(point3d, parent=None):
     if parent is None:
         sizeX = -2.0
         sizeY = 2.0

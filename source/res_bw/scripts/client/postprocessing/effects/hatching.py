@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Effects/Hatching.py
 from PostProcessing.RenderTargets import *
 from PostProcessing.Phases import *
@@ -12,7 +12,7 @@ power = MaterialFloatProperty('Hatching', -1, 'power')
 tile = MaterialFloatProperty('Hatching', -1, 'tile')
 
 @implementEffectFactory('Hatching', 'Simulated pencil cross-hatching.')
-def hatching(texName = 'system/maps/post_processing/hatching.dds'):
+def hatching(texName='system/maps/post_processing/hatching.dds'):
     """This method creates and returns a post-process effect that performs
     hatching, or a pencil sketch effect.  It requires the back buffer,
     and a texture containing 3 individual channels of response to the

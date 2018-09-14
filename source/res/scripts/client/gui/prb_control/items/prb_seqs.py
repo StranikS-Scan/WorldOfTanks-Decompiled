@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/prb_seqs.py
 import time
 from constants import PREBATTLE_CACHE_KEY, PREBATTLE_COMPANY_DIVISION_NAMES
@@ -75,8 +75,7 @@ class PrbListItem(object):
         return fullName
 
     def getCensoredComment(self):
-        if self.comment:
-            return passCensor(self.comment)
+        return passCensor(self.comment) if self.comment else ''
 
     def getDivisionName(self):
         name = None
@@ -88,7 +87,7 @@ class PrbListItem(object):
 class AutoInviteItem(object):
     __slots__ = ('prbID', 'peripheryID', 'description', 'startTime', 'isValid', 'prbType')
 
-    def __init__(self, prbID, type = PREBATTLE_TYPE.CLAN, peripheryID = 0, description = None, startTime = 0, isValid = True):
+    def __init__(self, prbID, type=PREBATTLE_TYPE.CLAN, peripheryID=0, description=None, startTime=0, isValid=True):
         super(AutoInviteItem, self).__init__()
         self.prbID = prbID
         self.peripheryID = peripheryID

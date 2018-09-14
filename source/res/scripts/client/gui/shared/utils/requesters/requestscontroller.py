@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/RequestsController.py
 from functools import partial
 import BigWorld
@@ -20,7 +20,7 @@ class _NoCooldownsManager(RequestCooldownManager):
 
 class RequestsController(object):
 
-    def __init__(self, requester, cooldowns = _NoCooldownsManager()):
+    def __init__(self, requester, cooldowns=_NoCooldownsManager()):
         self._requester = requester
         self._cooldowns = cooldowns
         self._waiters = {}
@@ -45,7 +45,7 @@ class RequestsController(object):
             self._requester.stopProcessing()
         return
 
-    def request(self, ctx, callback = lambda *args: None, allowDelay = None):
+    def request(self, ctx, callback=lambda *args: None, allowDelay=None):
         LOG_DEBUG('Send server request', self.__class__.__name__, ctx, callback, allowDelay)
         if allowDelay is None:
             allowDelay = bool(self._cooldowns._commonCooldown)
@@ -85,7 +85,7 @@ class RequestsController(object):
     def hasHandler(self, requestTypeID):
         return self._getHandlerByRequestType(requestTypeID) is not None
 
-    def _doNextRequest(self, adjustCooldown = None):
+    def _doNextRequest(self, adjustCooldown=None):
         if len(self._rqQueue) and self._rqCallbackID is None:
             requestType, ctx, request = self._rqQueue.pop(0)
             cooldownLeft = self._cooldowns.getTime(requestType)
@@ -125,7 +125,7 @@ class RequestsController(object):
         LOG_ERROR('Request timed out', self, requestType, ctx)
         self._doRequestError(ctx, 'time out', cb)
 
-    def _doRequestError(self, ctx, msg, callback = None):
+    def _doRequestError(self, ctx, msg, callback=None):
         if self._requester:
             self._requester._stopProcessing(ctx, msg, callback)
         LOG_ERROR(msg, ctx)

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-unixware7/IN.py
 
 
@@ -64,9 +65,9 @@ def quad_low(x):
 ADT_EMASKSIZE = 8
 SHRT_MIN = -32768
 SHRT_MAX = 32767
-INT_MIN = -0x80000000
+INT_MIN = -2147483648
 INT_MAX = 2147483647
-LONG_MIN = -0x80000000
+LONG_MIN = -2147483648
 LONG_MAX = 2147483647
 OFF32_MAX = LONG_MAX
 ISTAT_ASSERTED = 0
@@ -233,11 +234,11 @@ def __STRING(x):
 
 
 def __P(protos):
-    return ()
+    pass
 
 
 def __STRING(x):
-    return 'x'
+    pass
 
 
 NETCONFIG = '/etc/netconfig'
@@ -698,7 +699,7 @@ def toid_unpackid(idval):
 
 
 def toid_unpackcg(idval):
-    return 0
+    pass
 
 
 def toid_unpackid(idval):

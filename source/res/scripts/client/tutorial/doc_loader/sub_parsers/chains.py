@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/chains.py
 from items import _xml
 from tutorial.control.chains import triggers
@@ -15,10 +15,6 @@ def readHintSection(xmlCtx, section, flags):
 
 def readFightBtnDisableTriggerSection(xmlCtx, section, _, triggerID):
     return triggers.FightButtonDisabledTrigger(triggerID)
-
-
-def _readSwitchToRandomSection(xmlCtx, section, flags, conditions):
-    return effects.SimpleEffect(effects.EFFECT_TYPE.ENTER_QUEUE, conditions=conditions)
 
 
 def readShowUnlockedChapterSection(xmlCtx, section, flags, conditions):
@@ -76,7 +72,7 @@ def readQueueTrigger(xmlCtx, section, _, triggerID):
 
 def init():
     sub_parsers.setEntitiesParsers({'hint': readHintSection})
-    sub_parsers.setEffectsParsers({'switch-to-random': _readSwitchToRandomSection,
+    sub_parsers.setEffectsParsers({'switch-to-random': lobby.readSwitchToRandomSection,
      'show-unlocked-chapter': readShowUnlockedChapterSection})
     sub_parsers.setTriggersParsers({'simpleDialog': _readSimpleDialogTriggerSection,
      'unlocked': lobby.readItemUnlockedTriggerSection,

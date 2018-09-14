@@ -1,15 +1,20 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/debug_utils.py
 import sys
 import BigWorld
 import excepthook
+import time
+import traceback
+from GarbageCollectionDebug import gcDump, getGarbageGraph
 from functools import wraps
 from collections import defaultdict
 from warnings import warn_explicit
 from traceback import format_exception
 from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM, IS_DEVELOPMENT
+from constants import LEAKS_DETECTOR_MAX_EXECUTION_TIME
 _src_file_trim_to = ('res/wot/scripts/', len('res/wot/scripts/'))
 _g_logMapping = {}
+GCDUMP_CROWBAR_SWITCH = False
 
 class LOG_LEVEL:
     DEV = 1
@@ -100,7 +105,7 @@ def CRITICAL_ERROR(msg, *kargs):
     elif IS_CELLAPP or IS_BASEAPP:
         import BigWorld
         BigWorld.shutDownApp()
-        raise CriticalError, msg
+        raise CriticalError(msg)
     else:
         sys.exit()
     return
@@ -117,6 +122,8 @@ def LOG_CURRENT_EXCEPTION():
         BigWorld.logError('EXCEPTION', extMsg, None)
     return
 
+
+LOG_EXPECTED_EXCEPTION = LOG_CURRENT_EXCEPTION
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
@@ -150,133 +157,33 @@ def LOG_CODEPOINT_WARNING(*kargs):
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
-def LOG_ERROR(msg, *kargs):
-    _doLog('ERROR', msg, kargs)
+def LOG_ERROR(msg, *kargs, **kwargs):
+    _doLog('ERROR', msg, kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.DEV)
-def LOG_ERROR_DEV(msg, *kargs):
-    _doLog('ERROR', msg, kargs)
+def LOG_ERROR_DEV(msg, *kargs, **kwargs):
+    _doLog('ERROR', msg, kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
-def LOG_WARNING(msg, *kargs):
-    _doLog('WARNING', msg, kargs)
+def LOG_WARNING(msg, *kargs, **kwargs):
+    _doLog('WARNING', msg, kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
-def LOG_NOTE(msg, *kargs):
-    _doLog('NOTE', msg, kargs)
+def LOG_NOTE(msg, *kargs, **kwargs):
+    _doLog('NOTE', msg, kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.SVR_RELEASE)
-def LOG_DEBUG(msg, *kargs):
-    _doLog('DEBUG', msg, kargs)
+def LOG_DEBUG(msg, *kargs, **kwargs):
+    _doLog('DEBUG', msg, kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.DEV)
-def LOG_DEBUG_DEV(msg, *kargs):
-    _doLog('DEBUG', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
-def LOG_NESTE(msg, *kargs):
-    _doLog('NESTE', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
-def LOG_MX(msg, *kargs):
-    _doLog('MX', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_MX_DEV(msg, *kargs):
-    _doLog('MX', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_DZ(msg, *kargs):
-    _doLog('DZ', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_TU(msg, *kargs):
-    _doLog('TU', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
-def LOG_RF(msg, *kargs):
-    _doLog('RF', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
-def LOG_DAN(msg, *kargs):
-    _doLog('DAN', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_DAN_DEV(msg, *kargs):
-    _doLog('DAN', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_VLK_DEV(msg, *kargs):
-    _doLog('VLK', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
-def LOG_VLK(msg, *kargs):
-    _doLog('VLK', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_SK_DEV(msg, *kargs):
-    _doLog('SK', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
-def LOG_SK(msg, *kargs):
-    _doLog('SK', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_OGNICK_DEV(msg, *kargs):
-    _doLog('OGNICK', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
-def LOG_OGNICK(msg, *kargs):
-    _doLog('OGNICK', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_MK(msg, *kargs):
-    _doLog('MK', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_EZ(msg, *kargs):
-    _doLog('JKqq', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
-def LOG_IG(msg, *kargs):
-    _doLog('IG', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_SVAN_DEV(fmt, *args):
-    _doLogFmt('SVAN', fmt, *args)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_AQ(msg, *kargs):
-    _doLog('MRAQ', msg, kargs)
-
-
-@_LogWrapper(LOG_LEVEL.DEV)
-def LOG_SDS_DEV(msg, *kargs):
-    _doLog('SDS', msg, kargs)
+def LOG_DEBUG_DEV(msg, *kargs, **kwargs):
+    _doLog('DEBUG', msg, kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.CT)
@@ -307,7 +214,7 @@ def LOG_WRONG_CLIENT(entity, *kargs):
     return
 
 
-def _doLog(category, msg, args = None):
+def _doLog(category, msg, args=None, kwargs={}):
     header = _makeMsgHeader(sys._getframe(2))
     logFunc = _g_logMapping.get(category, None)
     if not logFunc:
@@ -317,6 +224,8 @@ def _doLog(category, msg, args = None):
     else:
         output = ' '.join(map(str, [header, msg]))
     logFunc(category, output, None)
+    if kwargs.get('stack', False):
+        traceback.print_stack()
     return
 
 
@@ -369,11 +278,11 @@ def disabled(func):
     return empty_func
 
 
-def disabled_if(flag, msg = ''):
+def disabled_if(flag, msg=''):
     if flag:
 
         def disable_func(func):
-            LOG_SVAN_DEV('Method ({}) disabled. {} ', func.__name__, msg)
+            LOG_DEBUG_DEV('Method ({}) disabled. {} ', func.__name__, msg)
             return disabled(func)
 
     else:
@@ -384,11 +293,12 @@ def disabled_if(flag, msg = ''):
     return disable_func
 
 
-def dump_garbage(source = False):
+def dump_garbage(source=False):
     """
     show us what's the garbage about
     """
-    import inspect, gc
+    import inspect
+    import gc
     print '\nCollecting GARBAGE:'
     gc.collect()
     print '\nCollecting GARBAGE:'
@@ -414,7 +324,7 @@ def dump_garbage(source = False):
             pass
 
 
-def dump_garbage_2(verbose = True, generation = 2):
+def dump_garbage_2(verbose=True, generation=2):
     import gc
     from weakref import ProxyType, ReferenceType
     gc.set_debug(gc.DEBUG_LEAK | gc.DEBUG_STATS)
@@ -449,6 +359,39 @@ def dump_garbage_2(verbose = True, generation = 2):
         print '##DUMPEND'
         print '========================================='
     return
+
+
+def memoryLeaksSafeDump(id, _):
+    curTime = time.time()
+    if not GCDUMP_CROWBAR_SWITCH:
+        gcDump()
+    if time.time() - curTime > LEAKS_DETECTOR_MAX_EXECUTION_TIME or GCDUMP_CROWBAR_SWITCH:
+        BigWorld.delTimer(id)
+
+
+def initMemoryLeaksLogging(repeatOffset=300):
+
+    def detectMemoryLeaksTimerCallback(id, userArg):
+        if userArg == 0:
+            BigWorld.addTimer(memoryLeaksSafeDump, 1, repeatOffset, 1)
+
+    BigWorld.addTimer(detectMemoryLeaksTimerCallback, 1, 0, 0)
+
+
+def createMemoryLeakFunctionWatcher():
+    """
+    register function watcher as command
+    command can be executed remotely and return structure created by objgraph
+    based on result of garbage collection
+    """
+    for app_type, flag_name in (('cellapp', 'EXPOSE_CELL_APPS'), ('baseapp', 'EXPOSE_BASE_APPS'), ('serviceapp', 'EXPOSE_SERVICE_APPS')):
+        try:
+            if not hasattr(BigWorld, flag_name):
+                continue
+            flag = getattr(BigWorld, flag_name)
+            BigWorld.addFunctionWatcher('command/garbageCollect%s' % app_type, getGarbageGraph, [], flag, 'Colect %s garbage data and return objgraph result as dot data' % app_type)
+        except:
+            LOG_CURRENT_EXCEPTION()
 
 
 def verify(expression):

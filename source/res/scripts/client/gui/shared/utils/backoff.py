@@ -1,10 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/backoff.py
 import random
 
 class AbstractBackoff(object):
 
-    def __init__(self, minTime = 1, maxTime = 65536, modifier = 1, randFactor = 0.5):
+    def __init__(self, minTime=1, maxTime=65536, modifier=1, randFactor=0.5):
         self._minTime = minTime
         self._maxTime = maxTime
         self._modifier = modifier

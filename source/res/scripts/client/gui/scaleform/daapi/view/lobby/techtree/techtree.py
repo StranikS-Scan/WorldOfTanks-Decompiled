@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/TechTree.py
 import GUI
 import Keys
@@ -14,14 +14,16 @@ from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.sounds.ambients import LobbySubViewEnv
 import nations
 from account_helpers.settings_core.settings_constants import TUTORIAL
 _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 768
 _HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_768'
 
 class TechTree(TechTreeMeta):
+    __sound_env__ = LobbySubViewEnv
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         if USE_XML_DUMPING and IS_DEVELOPMENT:
             dumper = dumpers.NationXMLDumper()
         else:
@@ -84,7 +86,7 @@ class TechTree(TechTreeMeta):
     def invalidateRent(self, vehicles):
         pass
 
-    def _resolveLoadCtx(self, ctx = None):
+    def _resolveLoadCtx(self, ctx=None):
         nation = ctx['nation'] if ctx is not None and 'nation' in ctx else None
         if nation is not None and nation in nations.INDICES:
             nationIdx = nations.INDICES[nation]
@@ -96,7 +98,7 @@ class TechTree(TechTreeMeta):
     def _getOverride(self):
         _, height = GUI.screenResolution()
         override = ''
-        if height < _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE:
+        if height < _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE or self.app.varsManager.isShowTicker() and height == _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE:
             override = _HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG
         return override
 

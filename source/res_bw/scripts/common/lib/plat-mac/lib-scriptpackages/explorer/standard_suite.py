@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Explorer/Standard_Suite.py
 """Suite Standard Suite: Common terms for most applications
 Level 1, version 1
@@ -12,7 +13,7 @@ _code = '****'
 class Standard_Suite_Events:
     _argmap_get = {'as': 'rtyp'}
 
-    def get(self, _object, _attributes = {}, **_arguments):
+    def get(self, _object, _attributes={}, **_arguments):
         """get:
         Required argument: an AE object reference
         Keyword argument as: undocumented, typecode 'type'
@@ -26,8 +27,7 @@ class Standard_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class application(aetools.ComponentItem):

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyView.py
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.BaseRallyViewMeta import BaseRallyViewMeta

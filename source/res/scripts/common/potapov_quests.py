@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/potapov_quests.py
 import time
 import ResMgr
@@ -24,6 +24,10 @@ class PQ_BRANCH:
     NAME_TO_TYPE = {'regular': REGULAR,
      'fallout': FALLOUT}
     TYPE_TO_NAME = dict(zip(NAME_TO_TYPE.values(), NAME_TO_TYPE.keys()))
+
+
+def isPotapovQuestEnabled(gameParams, branch):
+    return not (branch == PQ_BRANCH.REGULAR and not gameParams['misc_settings']['isRegularQuestEnabled'] or branch == PQ_BRANCH.FALLOUT and not gameParams['misc_settings']['isFalloutQuestEnabled'])
 
 
 class PQ_STATE:
@@ -65,7 +69,7 @@ class SeasonCache:
 
     def getSeasonInfo(self, seasonID):
         if seasonID not in self.__seasonsInfo:
-            raise Exception, 'Invalid season id (%s)' % (seasonID,)
+            raise Exception('Invalid season id (%s)' % (seasonID,))
         return self.__seasonsInfo[seasonID]
 
     def __readSeasons(self):
@@ -100,7 +104,7 @@ class TileCache(object):
 
     def getTileInfo(self, tileID):
         if tileID not in self.__tilesInfo:
-            raise Exception, 'Invalid tile id (%s)' % (tileID,)
+            raise Exception('Invalid tile id (%s)' % (tileID,))
         return self.__tilesInfo[tileID]
 
     def __iter__(self):
@@ -166,7 +170,7 @@ class PQCache(object):
 
     def questByPotapovQuestID(self, potapovQuestID):
         if potapovQuestID not in self.__potapovQuestIDToQuestType:
-            raise Exception, 'Invalid potapov quest id (%s)' % (potapovQuestID,)
+            raise Exception('Invalid potapov quest id (%s)' % (potapovQuestID,))
         return self.__potapovQuestIDToQuestType[potapovQuestID]
 
     def hasPotapovQuest(self, potapovQuestID):
@@ -238,7 +242,7 @@ class PQCache(object):
              'requiredUnlocks': frozenset(map(int, _xml.readString(ctx, qsection, 'requiredUnlocks').split()))}
             rewardByDemand = qsection.readInt('rewardByDemand', 0)
             if rewardByDemand != 0 and rewardByDemand not in PQ_REWARD_BY_DEMAND.keys():
-                raise Exception, 'Unexpected value for rewardByDemand'
+                raise Exception('Unexpected value for rewardByDemand')
             basicInfo['rewardByDemand'] = rewardByDemand
             tags = _readTags(ctx, qsection, 'tags')
             basicInfo['tags'] = tags
@@ -340,7 +344,7 @@ class PQType(object):
             return self.vehClasses[0]
         if self.branch == PQ_BRANCH.FALLOUT:
             return self.falloutTypes[0]
-        raise Exception, 'wrong potapov quest branch: %i' % self.branch
+        raise Exception('wrong potapov quest branch: %i' % self.branch)
 
     def maySelectQuest(self, unlockedQuests):
         return len(self.requiredUnlocks - frozenset(unlockedQuests)) == 0
@@ -362,7 +366,7 @@ class PQType(object):
             flags, state = potapovQuestsProgress.get(finalQuestID)
             if state >= PQ_STATE.NEED_GET_ADD_REWARD:
                 completedQuestsCount += 1
-            elif state == PQ_STATE.NONE:
+            if state == PQ_STATE.NONE:
                 toUnlock.add(finalQuestID)
 
         return (completedQuestsCount >= chainsCountToUnlockNext, toUnlock)
@@ -370,7 +374,7 @@ class PQType(object):
 
 class PQStorage(object):
 
-    def __init__(self, compDescr = None, storage = None):
+    def __init__(self, compDescr=None, storage=None):
         if compDescr is not None:
             self.__compDescr = compDescr
             self.__quests = quests = {}
@@ -407,7 +411,7 @@ class PQStorage(object):
     def __contains__(self, id):
         return id in self.__quests
 
-    def get(self, key, default = (0, PQ_STATE.NONE)):
+    def get(self, key, default=(0, PQ_STATE.NONE)):
         return self.__quests.get(key, default)
 
     def pop(self, id):

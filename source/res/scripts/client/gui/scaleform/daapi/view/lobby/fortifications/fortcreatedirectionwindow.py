@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortCreateDirectionWindow.py
 from fortified_regions import g_cache as g_fortCache
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
@@ -13,6 +13,7 @@ from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
 from gui.shared.fortifications.context import DirectionCtx
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
 from shared_utils import findFirst
 from gui import makeHtmlString, DialogsInterface, SystemMessages
@@ -20,7 +21,7 @@ from adisp import process
 
 class FortCreateDirectionWindow(FortCreateDirectionWindowMeta, FortViewHelper):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(FortCreateDirectionWindow, self).__init__()
 
     def _populate(self):
@@ -95,7 +96,8 @@ class FortCreateDirectionWindow(FortCreateDirectionWindowMeta, FortViewHelper):
             playersLabel = makeHtmlString('html_templates:lobby/fortifications/playersCount', template, {'count': requiredPlayersCount})
             description = i18n.makeString(FORTIFICATIONS.FORTDIRECTIONSWINDOW_DESCR_REQUIREMENTS, count=playersLabel)
         self.as_setDescriptionS(description)
-        self.as_setupButtonS(canOpenDirections, not isAllDirctnsOpened, ttHeader, ttDescr)
+        tooltip = makeTooltip(ttHeader, ttDescr)
+        self.as_setupButtonS(canOpenDirections, not isAllDirctnsOpened, tooltip)
 
     def onWindowClose(self):
         self.destroy()

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/ArcadeAimingSystem.py
 import BigWorld
 import Math
@@ -53,8 +53,9 @@ class ArcadeAimingSystem(IAimingSystem):
     aimMatrix = property(lambda self: self.__aimMatrix, __setAimMatrix)
     yaw = property(lambda self: self.__cursor.yaw, __setYaw)
     pitch = property(lambda self: self.__cursor.pitch, __setPitch)
+    idealMatrix = property(lambda self: self.__idealMatrix)
 
-    def __init__(self, vehicleMProv, heightAboveTarget, focusRadius, aimMatrix, anglesRange, enableSmartShotPointCalc = True):
+    def __init__(self, vehicleMProv, heightAboveTarget, focusRadius, aimMatrix, anglesRange, enableSmartShotPointCalc=True):
         IAimingSystem.__init__(self)
         self.__aimMatrix = aimMatrix
         self.__vehicleMProv = vehicleMProv
@@ -63,6 +64,7 @@ class ArcadeAimingSystem(IAimingSystem):
         self.__cursor.base = vehicleMProv
         self.__cursor.heightAboveBase = heightAboveTarget
         self.__cursor.focusRadius = focusRadius
+        self.__idealMatrix = self._matrix
         self.__shotPointCalculator = ShotPointCalculatorPlanar() if enableSmartShotPointCalc else None
         return
 
@@ -76,14 +78,14 @@ class ArcadeAimingSystem(IAimingSystem):
     def destroy(self):
         IAimingSystem.destroy(self)
 
-    def enable(self, targetPos, turretYaw = None, gunPitch = None):
+    def enable(self, targetPos, turretYaw=None, gunPitch=None):
         if targetPos is not None:
             self.focusOnPos(targetPos)
             if turretYaw is not None and gunPitch is not None:
                 self.__adjustFocus((turretYaw, gunPitch))
         return
 
-    def __adjustFocus(self, yawPitch = None):
+    def __adjustFocus(self, yawPitch=None):
         if self.__shotPointCalculator is None:
             return
         else:
@@ -108,6 +110,9 @@ class ArcadeAimingSystem(IAimingSystem):
         aimMatrix = self.__getLookToAimMatrix()
         aimMatrix.postMultiply(self.__cursor.matrix)
         self._matrix.set(aimMatrix)
+        aimMatrix = self.__getLookToAimMatrix()
+        aimMatrix.postMultiply(self.__cursor.idealMatrix)
+        self.__idealMatrix.set(aimMatrix)
 
     def __calcPitchAngle(self, distanceFromFocus, dir):
         fov = BigWorld.projection().fov
@@ -157,6 +162,9 @@ class ArcadeAimingSystem(IAimingSystem):
         aimMatrix = self.__getLookToAimMatrix()
         aimMatrix.postMultiply(self.__cursor.matrix)
         self._matrix.set(aimMatrix)
+        aimMatrix = self.__getLookToAimMatrix()
+        aimMatrix.postMultiply(self.__cursor.idealMatrix)
+        self.__idealMatrix.set(aimMatrix)
         if self.__shotPointCalculator is not None:
             self.__shotPointCalculator.update(*self.__getScanRay())
         return 0.0
@@ -184,16 +192,14 @@ class _AimPlane(object):
         self.__plane.init(targetPos, targetPos + Vector3(0.0, 0.0, 1.0), targetPos + Vector3(1.0, 0.0, 0.0))
         self.__initialProjection = Vector3(0.0, 1.0, 0.0).dot(lookDir)
 
-    def intersectRay(self, startPos, dir, checkCloseness = True, checkSign = True):
+    def intersectRay(self, startPos, dir, checkCloseness=True, checkSign=True):
         collisionPoint = self.__plane.intersectRay(startPos, dir)
         projection = Vector3(0.0, 1.0, 0.0).dot(dir)
         tooClose = collisionPoint.distTo(startPos) - self.__lookLength < -0.0001 and checkCloseness
         parallelToPlane = abs(projection) <= _AimPlane.__EPS_COLLIDE_ARENA
         projectionSignDiffers = projection * self.__initialProjection < 0.0 and checkSign
         backwardCollision = (collisionPoint - startPos).dot(dir) <= 0.0
-        if tooClose or parallelToPlane or projectionSignDiffers or backwardCollision:
-            return startPos + dir * self.__lookLength
-        return collisionPoint
+        return startPos + dir * self.__lookLength if tooClose or parallelToPlane or projectionSignDiffers or backwardCollision else collisionPoint
 
 
 class ShotPointCalculatorPlanar(object):
@@ -202,7 +208,7 @@ class ShotPointCalculatorPlanar(object):
     aimPlane = property(lambda self: self.__aimPlane)
 
     def __init__(self):
-        self.__vehicleMat = BigWorld.player().getOwnVehicleMatrix()
+        self.__vehicleMat = BigWorld.player().getOwnVehicleStabilisedMatrix()
         self.__vehicleDesc = BigWorld.player().vehicleTypeDescriptor
         self.__aimPlane = _AimPlane()
         self.__getTurretMat = functools.partial(AimingSystems.getTurretJointMat, self.__vehicleDesc, self.__vehicleMat)
@@ -212,7 +218,7 @@ class ShotPointCalculatorPlanar(object):
         if isPointConvenient:
             self.__aimPlane.init(scanStart, point)
 
-    def focusAtPos(self, scanStart, scanDir, yawPitch = None):
+    def focusAtPos(self, scanStart, scanDir, yawPitch=None):
         scanPos, isPointConvenient = self.__testMouseTargetPoint(scanStart, scanDir)
         if not isPointConvenient:
             if yawPitch is not None:

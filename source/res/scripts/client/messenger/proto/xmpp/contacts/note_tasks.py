@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/note_tasks.py
 from messenger.m_constants import USER_ACTION_ID, CLIENT_ACTION_ID, USER_TAG
 from messenger.proto.entities import SharedUserEntity
@@ -31,8 +31,7 @@ class NotesListTask(SeqTask):
             contact = getter(dbID)
             if contact:
                 contact.update(note=note)
-            else:
-                setter(SharedUserEntity(dbID, note=note))
+            setter(SharedUserEntity(dbID, note=note))
 
         self._offset += len(notes)
         if self._offset < count:
@@ -47,7 +46,7 @@ class NotesListTask(SeqTask):
 
 class _NoteTask(ContactTask):
 
-    def sync(self, name, groups, sub = None, clanInfo = None):
+    def sync(self, name, groups, sub=None, clanInfo=None):
         return self._result
 
     def _update(self, note):
@@ -77,7 +76,7 @@ class SetNoteTask(_NoteTask):
         self._iqID = client.sendIQ(contact_note.SetNoteQuery(self._jid.getDatabaseID(), self._text))
 
     def _getError(self, pyGlooxTag):
-        return errors.createServerActionError(CLIENT_ACTION_ID.SET_NOTE, pyGlooxTag)
+        return errors.createServerActionIQError(CLIENT_ACTION_ID.SET_NOTE, pyGlooxTag)
 
 
 class RemoveNoteTask(_NoteTask):
@@ -90,7 +89,7 @@ class RemoveNoteTask(_NoteTask):
         self._iqID = client.sendIQ(contact_note.RemoveNoteQuery(self._jid.getDatabaseID()))
 
     def _getError(self, pyGlooxTag):
-        return errors.createServerActionError(CLIENT_ACTION_ID.REMOVE_NOTE, pyGlooxTag)
+        return errors.createServerActionIQError(CLIENT_ACTION_ID.REMOVE_NOTE, pyGlooxTag)
 
 
 class RemoveNotesTask(SeqTask):

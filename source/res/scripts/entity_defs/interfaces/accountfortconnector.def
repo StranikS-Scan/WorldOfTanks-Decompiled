@@ -1,0 +1,68 @@
+<accountfortconnector.def>
+  <BaseMethods>
+    <accountFortConnector_requestFortPublicInfo>
+      <Exposed></Exposed>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	ARRAY	  <of>	INT64	</of>
+      </Arg>
+    </accountFortConnector_requestFortPublicInfo>
+    <accountFortConnector_callFortMethod>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Exposed></Exposed>
+    </accountFortConnector_callFortMethod>
+    <accountFortConnector_onPickupEquipments>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+    </accountFortConnector_onPickupEquipments>
+    <accountFortConnector_onFortReply>
+      <Arg>	UINT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </accountFortConnector_onFortReply>
+    <accountFortConnector_onFortNotification>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </accountFortConnector_onFortNotification>
+    <accountFortConnector_onFortUpdate>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+    </accountFortConnector_onFortUpdate>
+    <accountFortConnector_onFortBattleRoundEnd>
+      <Arg>	STRING	</Arg>
+    </accountFortConnector_onFortBattleRoundEnd>
+    <accountFortConnector_onFortBattleEnd>
+      <Arg>	STRING	</Arg>
+    </accountFortConnector_onFortBattleEnd>
+  </BaseMethods>
+</accountfortconnector.def>

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/SmoothMover.py
 import BigWorld, GUI, Math, Keys
 from PyGUIBase import PyGUIBase
@@ -15,7 +15,7 @@ class SmoothMover(PyGUIBase):
         self.scrollTransform = Math.Matrix()
         self.scrollTransform.setIdentity()
 
-    def scrollTo(self, x, y, animate = True):
+    def scrollTo(self, x, y, animate=True):
         self.scroll[0] = max(x, self.minScroll[0])
         self.scroll[0] = min(self.scroll[0], self.maxScroll[0])
         self.scroll[1] = max(y, self.minScroll[1])

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/Grid.py
 import BigWorld, GUI, Keys
 from PyGUIBase import PyGUIBase
@@ -84,16 +84,15 @@ class Grid(PyGUIBase):
                 else:
                     count += 1
                     horizPos += horizOffset
-            elif count == self.gridHeight:
+            if count == self.gridHeight:
                 count = 1
                 vertPos = vertStart
                 horizPos += horizOffset
-            else:
-                count += 1
-                vertPos += vertOffset
+            count += 1
+            vertPos += vertOffset
 
     @staticmethod
-    def create(texture, gridSize = (1, 1), horizontalFirst = True, **kwargs):
+    def create(texture, gridSize=(1, 1), horizontalFirst=True, **kwargs):
         c = GUI.Window(texture)
         c.materialFX = 'BLEND'
         c.widthMode = 'CLIP'

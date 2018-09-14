@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RecruitWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -23,33 +23,25 @@ class RecruitWindowMeta(AbstractWindowView):
         self._printOverrideError('updateAllDropdowns')
 
     def as_setVehicleClassDropdownS(self, vehicleClassData):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setVehicleClassDropdown(vehicleClassData)
+        return self.flashObject.as_setVehicleClassDropdown(vehicleClassData) if self._isDAAPIInited() else None
 
     def as_setVehicleTypeDropdownS(self, vehicleTypeData):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setVehicleTypeDropdown(vehicleTypeData)
+        return self.flashObject.as_setVehicleTypeDropdown(vehicleTypeData) if self._isDAAPIInited() else None
 
     def as_setRoleDropdownS(self, roleData):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setRoleDropdown(roleData)
+        return self.flashObject.as_setRoleDropdown(roleData) if self._isDAAPIInited() else None
 
     def as_setCreditsChangedS(self, credits):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCreditsChanged(credits)
+        return self.flashObject.as_setCreditsChanged(credits) if self._isDAAPIInited() else None
 
     def as_setGoldChangedS(self, gold):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setGoldChanged(gold)
+        return self.flashObject.as_setGoldChanged(gold) if self._isDAAPIInited() else None
 
     def as_initDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_initData(data)
+        return self.flashObject.as_initData(data) if self._isDAAPIInited() else None
 
     def as_setNationsS(self, nationsData):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setNations(nationsData)
+        return self.flashObject.as_setNations(nationsData) if self._isDAAPIInited() else None
 
     def as_setAllDropdownsS(self, nationsData, vehicleClassData, vehicleTypeData, roleData):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setAllDropdowns(nationsData, vehicleClassData, vehicleTypeData, roleData)
+        return self.flashObject.as_setAllDropdowns(nationsData, vehicleClassData, vehicleTypeData, roleData) if self._isDAAPIInited() else None

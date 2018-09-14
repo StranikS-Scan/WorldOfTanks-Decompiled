@@ -9,8 +9,8 @@
           <and>
             <vehicleDamage>
               <lvlDiff>	0	</lvlDiff>
-              <greaterOrEqual>	10	</greaterOrEqual>
               <eventCount></eventCount>
+              <greaterOrEqual>	10	</greaterOrEqual>
             </vehicleDamage>
           </and>
         </postBattle>
@@ -26,15 +26,15 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <lvlDiff>	0	</lvlDiff>
-              <greaterOrEqual>	10	</greaterOrEqual>
-              <eventCount></eventCount>
-            </vehicleDamage>
             <results>
               <key>	damageDealt	</key>
               <greaterOrEqual>	2000	</greaterOrEqual>
             </results>
+            <vehicleDamage>
+              <lvlDiff>	0	</lvlDiff>
+              <eventCount></eventCount>
+              <greaterOrEqual>	10	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>

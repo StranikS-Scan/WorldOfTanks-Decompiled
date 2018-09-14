@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/BWCoroutine.py
 """This module provides a number of utilities to simplify the writing of code
 that needs to execute in order over a number of  frames using python generators
@@ -63,7 +63,7 @@ class BWCoroutineTimeoutException(Exception):
 
 class _BWCoroutineThread:
 
-    def __init__(self, generator, completionCallback = None):
+    def __init__(self, generator, completionCallback=None):
         assert isinstance(generator, types.GeneratorType)
         assert callable(completionCallback) or completionCallback is None
         self._generator = generator
@@ -164,7 +164,7 @@ class BWWaitForCondition(_BWWaitObject):
     period expires.
     """
 
-    def __init__(self, condition, timeout = None, checkFrequency = 0.01):
+    def __init__(self, condition, timeout=None, checkFrequency=0.01):
         _BWWaitObject.__init__(self)
         assert callable(condition)
         self._condition = condition
@@ -232,7 +232,7 @@ class BWWaitForCoroutine(_BWWaitObject):
     functionB timed out waiting for function A
     """
 
-    def __init__(self, waitThread, timeout = None):
+    def __init__(self, waitThread, timeout=None):
         _BWWaitObject.__init__(self)
         assert isinstance(waitThread, _BWCoroutineThread)
         self._waitThread = waitThread

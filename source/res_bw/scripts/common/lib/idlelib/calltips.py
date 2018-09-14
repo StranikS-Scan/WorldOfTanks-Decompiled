@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/CallTips.py
 """CallTips.py - An IDLE Extension to Jog Your Memory
 
@@ -18,7 +18,7 @@ from idlelib.HyperParser import HyperParser
 class CallTips:
     menudefs = [('edit', [('Show call tip', '<<force-open-calltip>>')])]
 
-    def __init__(self, editwin = None):
+    def __init__(self, editwin=None):
         if editwin is None:
             self.editwin = None
             return
@@ -36,7 +36,7 @@ class CallTips:
     def _make_tk_calltip_window(self):
         return CallTipWindow.CallTip(self.text)
 
-    def _remove_calltip_window(self, event = None):
+    def _remove_calltip_window(self, event=None):
         if self.calltip:
             self.calltip.hidetip()
             self.calltip = None

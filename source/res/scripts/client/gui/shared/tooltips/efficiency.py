@@ -1,8 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/efficiency.py
+from constants import ARENA_GUI_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.battle_control.arena_info import hasGasAttack
 from gui.shared.tooltips import formatters
 from helpers.i18n import makeString as ms
 from gui.shared.formatters import text_styles
@@ -27,7 +29,7 @@ class TermsItemPacker(HeaderItemPacker):
 
     def __init__(self, headerTitle, icon, termsAlias):
         super(TermsItemPacker, self).__init__(headerTitle, icon)
-        self.__termsAlias = termsAlias
+        self._termsAlias = termsAlias
 
     def pack(self, data):
         items = super(TermsItemPacker, self).pack(data)
@@ -35,7 +37,7 @@ class TermsItemPacker(HeaderItemPacker):
         return items
 
     def _packTerms(self, data):
-        text = makeHtmlText('tooltip_terms_label', ms(self.__termsAlias))
+        text = makeHtmlText('tooltip_terms_label', ms(self._termsAlias))
         return [formatters.packTextBlockData(text)]
 
 
@@ -52,6 +54,13 @@ class KillItemPacker(TermsItemPacker):
             text = makeHtmlText('tooltip_add_info_label', ms(alias))
             items.append(formatters.packTextBlockData(text))
         return items
+
+    def _packTerms(self, data):
+        text = makeHtmlText('tooltip_terms_label', ms(self._termsAlias))
+        arenaType = data.get('arenaType', 0)
+        if arenaType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
+            text += '\n' + makeHtmlText('tooltip_terms_label', ms(self._termsAlias + '/gasAttack'))
+        return [formatters.packTextBlockData(text)]
 
 
 class DetectionItemPacker(TermsItemPacker):

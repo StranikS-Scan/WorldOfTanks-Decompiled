@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Terminal/Standard_Suite.py
 """Suite Standard Suite: Common classes and commands for most applications.
 Level 1, version 1
@@ -13,7 +14,7 @@ class Standard_Suite_Events():
     _argmap_close = {'saving_in': 'kfil',
      'saving': 'savo'}
 
-    def close(self, _object, _attributes = {}, **_arguments):
+    def close(self, _object, _attributes={}, **_arguments):
         """close: Close an object.
         Required argument: the object for the command
         Keyword argument saving_in: The file in which to save the object.
@@ -28,12 +29,11 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_count = {'each': 'kocl'}
 
-    def count(self, _object, _attributes = {}, **_arguments):
+    def count(self, _object, _attributes={}, **_arguments):
         """count: Return the number of elements of a particular class within an object.
         Required argument: the object for the command
         Keyword argument each: The class of objects to be counted.
@@ -47,10 +47,9 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def delete(self, _object, _attributes = {}, **_arguments):
+    def delete(self, _object, _attributes={}, **_arguments):
         """delete: Delete an object.
         Required argument: the object for the command
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -63,13 +62,12 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_duplicate = {'to': 'insh',
      'with_properties': 'prdt'}
 
-    def duplicate(self, _object, _attributes = {}, **_arguments):
+    def duplicate(self, _object, _attributes={}, **_arguments):
         """duplicate: Copy object(s) and put the copies at a new location.
         Required argument: the object for the command
         Keyword argument to: The location for the new object(s).
@@ -83,10 +81,9 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def exists(self, _object, _attributes = {}, **_arguments):
+    def exists(self, _object, _attributes={}, **_arguments):
         """exists: Verify if an object exists.
         Required argument: the object for the command
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -100,10 +97,9 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def get(self, _object, _attributes = {}, **_arguments):
+    def get(self, _object, _attributes={}, **_arguments):
         """get: Get the data for an object.
         Required argument: the object for the command
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -117,15 +113,14 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_make = {'at': 'insh',
      'new': 'kocl',
      'with_data': 'data',
      'with_properties': 'prdt'}
 
-    def make(self, _no_object = None, _attributes = {}, **_arguments):
+    def make(self, _no_object=None, _attributes={}, **_arguments):
         """make: Make a new object.
         Keyword argument at: The location at which to insert the object.
         Keyword argument new: The class of the new object.
@@ -142,14 +137,11 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_move = {'to': 'insh'}
 
-    def move(self, _object, _attributes = {}, **_arguments):
+    def move(self, _object, _attributes={}, **_arguments):
         """move: Move object(s) to a new location.
         Required argument: the object for the command
         Keyword argument to: The new location for the object(s).
@@ -162,10 +154,9 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def open(self, _object = None, _attributes = {}, **_arguments):
+    def open(self, _object=None, _attributes={}, **_arguments):
         """open: Open an object.
         Required argument: list of objects
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -178,10 +169,9 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def print_(self, _object = None, _attributes = {}, **_arguments):
+    def print_(self, _object=None, _attributes={}, **_arguments):
         """print: Print an object.
         Required argument: list of objects
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -194,12 +184,11 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_quit = {'saving': 'savo'}
 
-    def quit(self, _object, _attributes = {}, **_arguments):
+    def quit(self, _object, _attributes={}, **_arguments):
         """quit: Quit an application.
         Required argument: the object for the command
         Keyword argument saving: Specifies whether changes should be saved before quitting.
@@ -213,13 +202,12 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_save = {'in_': 'kfil',
      'as': 'fltp'}
 
-    def save(self, _object, _attributes = {}, **_arguments):
+    def save(self, _object, _attributes={}, **_arguments):
         """save: Save an object.
         Required argument: the object for the command
         Keyword argument in_: The file in which to save the object.
@@ -233,12 +221,11 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_set = {'to': 'data'}
 
-    def set(self, _object, _attributes = {}, **_arguments):
+    def set(self, _object, _attributes={}, **_arguments):
         """set: Set an object's data.
         Required argument: the object for the command
         Keyword argument to: The new value.
@@ -251,8 +238,7 @@ class Standard_Suite_Events():
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class application(aetools.ComponentItem):

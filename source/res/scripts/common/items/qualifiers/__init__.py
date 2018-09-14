@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/qualifiers/__init__.py
 import os
 import ResMgr
@@ -18,7 +18,7 @@ class QualifiersCache(object):
     def fromXmlFile(cls, xmlPath):
         root = ResMgr.openSection(xmlPath)
         if root is None:
-            raise Exception, 'Wrong xml with item qualifiers={0}'.format(xmlPath)
+            raise Exception('Wrong xml with item qualifiers={0}'.format(xmlPath))
         res = []
         for name, section in root.items():
             if name != 'qualifier':

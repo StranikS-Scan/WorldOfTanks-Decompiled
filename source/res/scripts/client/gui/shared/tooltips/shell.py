@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/shell.py
 from debug_utils import LOG_ERROR
 from gui.shared import g_itemsCache
@@ -95,10 +95,8 @@ class ShellIsGoldField(ToolTipDataField):
             return None
         elif buyPrice:
             return shell.buyPrice[1] > 0
-        elif sellPrice:
-            return shell.sellPrice[1] > 0
         else:
-            return super(ShellIsGoldField, self)._getValue()
+            return shell.sellPrice[1] > 0 if sellPrice else super(ShellIsGoldField, self)._getValue()
 
 
 class ShellToolTipData(ToolTipData):

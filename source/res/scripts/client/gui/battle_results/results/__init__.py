@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/results/__init__.py
 from constants import ARENA_BONUS_TYPE
 from gui.battle_results.results.club import ClubResults

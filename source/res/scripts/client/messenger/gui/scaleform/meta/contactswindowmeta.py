@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/ContactsWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -17,29 +17,22 @@ class ContactsWindowMeta(AbstractWindowView):
         self._printOverrideError('isEnabledInRoaming')
 
     def as_getFriendsDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getFriendsDP()
+        return self.flashObject.as_getFriendsDP() if self._isDAAPIInited() else None
 
     def as_getClanDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getClanDP()
+        return self.flashObject.as_getClanDP() if self._isDAAPIInited() else None
 
     def as_getIgnoredDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getIgnoredDP()
+        return self.flashObject.as_getIgnoredDP() if self._isDAAPIInited() else None
 
     def as_getMutedDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getMutedDP()
+        return self.flashObject.as_getMutedDP() if self._isDAAPIInited() else None
 
     def as_getSearchDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getSearchDP()
+        return self.flashObject.as_getSearchDP() if self._isDAAPIInited() else None
 
     def as_setSearchResultTextS(self, message):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSearchResultText(message)
+        return self.flashObject.as_setSearchResultText(message) if self._isDAAPIInited() else None
 
     def as_frozenSearchActionS(self, flag):
-        if self._isDAAPIInited():
-            return self.flashObject.as_frozenSearchAction(flag)
+        return self.flashObject.as_frozenSearchAction(flag) if self._isDAAPIInited() else None

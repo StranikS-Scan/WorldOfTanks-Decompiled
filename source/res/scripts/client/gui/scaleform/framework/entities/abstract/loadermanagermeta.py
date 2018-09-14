@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/LoaderManagerMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
@@ -14,5 +14,4 @@ class LoaderManagerMeta(BaseDAAPIModule):
         self._printOverrideError('viewInitializationError')
 
     def as_loadViewS(self, config, alias, name, viewTutorialId):
-        if self._isDAAPIInited():
-            return self.flashObject.as_loadView(config, alias, name, viewTutorialId)
+        return self.flashObject.as_loadView(config, alias, name, viewTutorialId) if self._isDAAPIInited() else None

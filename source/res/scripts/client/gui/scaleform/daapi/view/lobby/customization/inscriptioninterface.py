@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/InscriptionInterface.py
 import BigWorld
 from abc import abstractmethod, ABCMeta
@@ -36,10 +36,7 @@ class InscriptionInterface(BaseTimedCustomizationInterface):
 
     def isEnabled(self):
         serverSettigns = g_lobbyContext.getServerSettings()
-        if serverSettigns is not None and serverSettigns.roaming.isInRoaming():
-            return False
-        else:
-            return self._isEnabled
+        return False if serverSettigns is not None and serverSettigns.roaming.isInRoaming() else self._isEnabled
 
     def locateCameraOnSlot(self):
         res = g_hangarSpace.space.locateCameraOnEmblem(not self.isTurret, 'inscription', self._position - self._positionShift, self.ZOOM_FACTOR)
@@ -65,7 +62,7 @@ class InscriptionInterface(BaseTimedCustomizationInterface):
     def getItemDefaultPriceFactor(self, vehType):
         return self._vehicleLevel
 
-    def updateVehicleCustomization(self, itemID = None):
+    def updateVehicleCustomization(self, itemID=None):
         space = g_hangarSpace.space
         if space is not None and g_currentVehicle.isInHangar():
             VehicleCustomizationModel.updateVehicleSticker('inscription', itemID, self.getRealPosition(), self._rentalPackageDP.selectedPackage.get('periodDays'))

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/QuestsControlMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -8,9 +8,7 @@ class QuestsControlMeta(BaseDAAPIComponent):
         self._printOverrideError('showQuestsWindow')
 
     def as_isShowAlertIconS(self, value, highlight):
-        if self._isDAAPIInited():
-            return self.flashObject.as_isShowAlertIcon(value, highlight)
+        return self.flashObject.as_isShowAlertIcon(value, highlight) if self._isDAAPIInited() else None
 
     def as_setDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(data)
+        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/SoundManager.py
 from debug_utils import *
 import ResMgr
@@ -33,26 +33,26 @@ class SoundSettings(dict):
                     for eventName, event in events.items():
                         res.__overrides[overrideName][eventName] = event.asString
 
-            elif typeName == 'schemas':
+            if typeName == 'schemas':
                 for schemaName, parts in settings.items():
                     res.__schemas[schemaName] = {}
                     for partName, subParts in parts.items():
                         for subPartName, data in subParts.items():
                             if partName == 'sounds':
                                 res.__schemas[schemaName][subPartName] = data.asString
-                            elif partName == 'groups':
+                            if partName == 'groups':
                                 res.__groups[subPartName] = schemaName
 
-            elif typeName == 'default':
+            if typeName == 'default':
                 for eventName, event in settings.items():
                     res[eventName] = event.asString
 
-            else:
-                res[typeName] = settings.asString
+            res[typeName] = settings.asString
 
         return res
 
     def getSoundName(self, soundType, soundId, state):
+        state = 'ww' + state
         if len(soundId) and self.__overrides.has_key(soundId) > 0:
             sound = self.__overrides.get(soundId, {}).get(state, '')
         elif len(soundType) > 0 and self.__groups.has_key(soundType):
@@ -110,7 +110,7 @@ class SoundManager(UIInterface):
                     return
                 scope = scope[key]
 
-            if type(scope) != str:
+            if not isinstance(scope, str):
                 LOG_ERROR('Invalid soundpath under key: %s', dictPath)
                 return
             SoundGroups.g_instance.playSound2D(scope)

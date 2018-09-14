@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Flock.py
 from AvatarInputHandler import mathUtils
 import BigWorld
@@ -12,12 +12,12 @@ import Settings
 import SoundGroups
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from Math import Vector3
-import FMOD
+import WWISE
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/environment_effects.xml'
 
 class DebugGizmo:
 
-    def __init__(self, spaceID, modelName = 'helpers/models/position_gizmo.model'):
+    def __init__(self, spaceID, modelName='helpers/models/position_gizmo.model'):
         self.model = BigWorld.Model(modelName)
         BigWorld.addModel(self.model, spaceID)
         self.motor = BigWorld.Servo(Math.Matrix())
@@ -88,8 +88,7 @@ class FlockLike:
             flockDataSect = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/birds')
             for value in flockDataSect.values():
                 modelName = value.readString('modelName', '')
-                if FMOD.enabled:
-                    soundName = value.readString('sound', '')
+                soundName = value.readString('wwsound', '')
                 if modelName != '' and soundName != '':
                     FlockLike.__SoundNames[modelName] = soundName
 
@@ -228,8 +227,7 @@ class Flock(BigWorld.Entity, FlockLike):
             boid.position = Vector3(0.0, 0.0, self.deadZoneRadius)
             if self.flyAroundCenter == Flock.STRATEGY_FLY_AROUND_CW:
                 boid.yaw = math.pi / 2.0
-            else:
-                boid.yaw = -math.pi / 2.0
+            boid.yaw = -math.pi / 2.0
 
     def __doUsualFly(self):
         flightZoneHeight = self.maxHeight - self.minHeight

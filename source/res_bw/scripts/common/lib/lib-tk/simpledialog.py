@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/SimpleDialog.py
 """A simple but flexible modal dialog box."""
 from Tkinter import *
 
 class SimpleDialog:
 
-    def __init__(self, master, text = '', buttons = [], default = None, cancel = None, title = None, class_ = None):
+    def __init__(self, master, text='', buttons=[], default=None, cancel=None, title=None, class_=None):
         if class_:
             self.root = Toplevel(master, class_=class_)
         else:
@@ -23,7 +23,7 @@ class SimpleDialog:
         self.root.bind('<Return>', self.return_event)
         for num in range(len(buttons)):
             s = buttons[num]
-            b = Button(self.frame, text=s, command=lambda self = self, num = num: self.done(num))
+            b = Button(self.frame, text=s, command=lambda self=self, num=num: self.done(num))
             if num == default:
                 b.config(relief=RIDGE, borderwidth=8)
             b.pack(side=LEFT, fill=BOTH, expand=1)
@@ -31,7 +31,7 @@ class SimpleDialog:
         self.root.protocol('WM_DELETE_WINDOW', self.wm_delete_window)
         self._set_transient(master)
 
-    def _set_transient(self, master, relx = 0.5, rely = 0.3):
+    def _set_transient(self, master, relx=0.5, rely=0.3):
         widget = self.root
         widget.withdraw()
         widget.transient(master)
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     def test():
         root = Tk()
 
-        def doit(root = root):
+        def doit(root=root):
             d = SimpleDialog(root, text='This is a test dialog.  Would this have been an actual dialog, the buttons below would have been glowing in soft pink light.\nDo you believe this?', buttons=['Yes', 'No', 'Cancel'], default=0, cancel=2, title='Test Dialog')
             print d.go()
 

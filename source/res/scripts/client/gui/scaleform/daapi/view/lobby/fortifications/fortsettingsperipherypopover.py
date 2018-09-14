@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortSettingsPeripheryPopover.py
 from ConnectionManager import connectionManager
 from predefined_hosts import g_preDefinedHosts
@@ -11,7 +11,7 @@ from helpers import i18n
 
 class FortSettingsPeripheryPopover(FortSettingsPeripheryPopoverMeta, FortViewHelper):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(FortSettingsPeripheryPopover, self).__init__()
 
     def setTexts(self):

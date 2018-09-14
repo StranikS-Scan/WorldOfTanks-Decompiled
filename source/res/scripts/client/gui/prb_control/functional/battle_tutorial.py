@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/battle_tutorial.py
 import BigWorld
 from PlayerEvents import g_playerEvents
@@ -10,12 +10,6 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.functional import prequeue
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
-
-class TutorialPreQueueEntry(prequeue.PreQueueEntry):
-
-    def __init__(self):
-        super(TutorialPreQueueEntry, self).__init__(QUEUE_TYPE.TUTORIAL, FUNCTIONAL_FLAG.UNDEFINED)
-
 
 class _TutorialQueueEventsSubscriber(prequeue.PlayersEventsSubscriber):
 
@@ -39,7 +33,7 @@ class TutorialQueueFunctional(prequeue.AccountQueueFunctional):
     def __init__(self):
         super(TutorialQueueFunctional, self).__init__(QUEUE_TYPE.TUTORIAL, _TutorialQueueEventsSubscriber(), FUNCTIONAL_FLAG.BATTLE_TUTORIAL)
 
-    def init(self, ctx = None):
+    def init(self, ctx=None):
         g_eventDispatcher.startOffbattleTutorial()
         return super(TutorialQueueFunctional, self).init(ctx)
 
@@ -72,7 +66,7 @@ class TutorialQueueFunctional(prequeue.AccountQueueFunctional):
     def _doDequeue(self, ctx):
         BigWorld.player().dequeueTutorial()
 
-    def _makeQueueCtxByAction(self, action = None):
+    def _makeQueueCtxByAction(self, action=None):
         return pre_queue_ctx.QueueCtx()
 
     def _validateParentControl(self):

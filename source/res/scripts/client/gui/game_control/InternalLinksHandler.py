@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/InternalLinksHandler.py
 import BigWorld
 from adisp import async, process
@@ -62,7 +62,7 @@ class InternalLinksHandler(Controller):
         callback(url)
 
     @process
-    def __openInternalBrowse(self, urlName, title = '', browserSize = None, showActionBtn = True, showCloseBtn = False):
+    def __openInternalBrowse(self, urlName, title='', browserSize=None, showActionBtn=True, showCloseBtn=False):
         parsedUrl = yield self.getURL(urlName)
         if parsedUrl:
             self._browserID = yield self._proxy.getController(gc_constants.CONTROLLER.BROWSER).load(parsedUrl, browserID=self._browserID, title=title, browserSize=browserSize, showActionBtn=showActionBtn, showCloseBtn=showCloseBtn)

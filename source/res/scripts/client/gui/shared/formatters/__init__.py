@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/__init__.py
 import BigWorld
 from gui.shared.formatters import icons
@@ -8,11 +8,10 @@ from helpers.i18n import makeString
 __all__ = ('icons', 'text_styles', 'time_formatters')
 
 def getGlobalRatingFmt(globalRating):
-    if globalRating >= 0:
-        return BigWorld.wg_getIntegralFormat(globalRating)
+    return BigWorld.wg_getIntegralFormat(globalRating) if globalRating >= 0 else '--'
 
 
-def formatPrice(price, reverse = False):
+def formatPrice(price, reverse=False):
     outPrice = []
     credits, gold = price[:2]
     if credits != 0 or gold == 0:
@@ -28,7 +27,7 @@ def formatPrice(price, reverse = False):
     return ''.join(outPrice)
 
 
-def formatGoldPrice(gold, reverse = False):
+def formatGoldPrice(gold, reverse=False):
     outPrice = []
     gname = makeString('#menu:price/gold') + ': '
     gformatted = BigWorld.wg_getGoldFormat(gold)

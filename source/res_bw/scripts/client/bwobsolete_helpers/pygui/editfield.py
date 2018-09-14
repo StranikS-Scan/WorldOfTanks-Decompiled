@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/EditField.py
 import BigWorld, GUI, Keys
 from PyGUIBase import PyGUIBase
@@ -58,7 +58,7 @@ def skipWord(s, cursorPos, direction):
 class EditField(PyGUIBase):
     factoryString = 'PyGUI.EditField'
 
-    def __init__(self, component = None):
+    def __init__(self, component=None):
         PyGUIBase.__init__(self, component)
         self.cursorIndex = 0
         self.scrollInPixels = 0

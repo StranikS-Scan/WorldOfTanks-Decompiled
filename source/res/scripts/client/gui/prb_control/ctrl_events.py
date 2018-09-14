@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/ctrl_events.py
 import Event
 
@@ -10,7 +10,6 @@ class _PrbCtrlEvents(object):
         self.__eManager = Event.EventManager()
         self.onPrebattleIntroModeJoined = Event.Event(self.__eManager)
         self.onPrebattleIntroModeLeft = Event.Event(self.__eManager)
-        self.onUnitIntroModeLeft = Event.Event(self.__eManager)
         self.onPrebattleInited = Event.Event(self.__eManager)
         self.onUnitIntroModeJoined = Event.Event(self.__eManager)
         self.onUnitIntroModeLeft = Event.Event(self.__eManager)

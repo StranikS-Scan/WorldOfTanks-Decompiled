@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/BattleSessionWindow.py
 import BigWorld
 import constants
@@ -17,7 +17,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
     START_TIME_SYNC_PERIOD = 10
     NATION_ICON_PATH = '../maps/icons/filters/nations/%(nation)s.png'
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(BattleSessionWindow, self).__init__(prbName='battleSession')
         self.__setStaticData()
         self.__startTimeSyncCallbackID = None

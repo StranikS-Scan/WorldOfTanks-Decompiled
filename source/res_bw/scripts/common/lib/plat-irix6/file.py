@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-irix6/FILE.py
 from warnings import warnpy3k
 warnpy3k('the FILE module has been removed in Python 3.0', stacklevel=2)
@@ -505,7 +506,7 @@ def mutex_spintrylock(l):
 
 
 def spinlock_initialized(l):
-    return 1
+    pass
 
 
 SV_FIFO = 0
@@ -556,7 +557,7 @@ def initlock(l):
 
 
 def ownlock(x):
-    return 1
+    pass
 
 
 def mutex_enter(m):

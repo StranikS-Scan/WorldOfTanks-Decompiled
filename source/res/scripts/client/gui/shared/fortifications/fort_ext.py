@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/fort_ext.py
 import BigWorld
 import Event
@@ -15,7 +15,7 @@ from helpers import i18n
 
 class SimpleFortRequester(RequestsByIDProcessor):
 
-    def __init__(self, success = None):
+    def __init__(self, success=None):
         super(SimpleFortRequester, self).__init__()
         if success is None:
             self._success = (FORT_ERROR.OK,)
@@ -51,7 +51,7 @@ class SimpleFortRequester(RequestsByIDProcessor):
 
 class PlayerFortRequester(SimpleFortRequester):
 
-    def __init__(self, success = None):
+    def __init__(self, success=None):
         super(PlayerFortRequester, self).__init__(success)
         self._databaseID = getAccountDatabaseID()
         self._individualRqIDs = set()

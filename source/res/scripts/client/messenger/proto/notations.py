@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/notations.py
 from debug_utils import LOG_NOTE
 from messenger import g_settings
@@ -6,7 +6,7 @@ from messenger.m_constants import PROTO_TYPE_NAMES
 
 class _profile(object):
 
-    def __init__(self, protoType, log = True):
+    def __init__(self, protoType, log=True):
         super(_profile, self).__init__()
         self._protoType = protoType
         self._doLog = log

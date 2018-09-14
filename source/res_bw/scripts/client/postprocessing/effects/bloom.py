@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Effects/Bloom.py
 from PostProcessing.RenderTargets import *
 from PostProcessing.Phases import *
@@ -8,7 +8,7 @@ from PostProcessing.Effects import implementEffectFactory
 amount = MaterialFloatProperty('Bloom', -1, 'alpha', primary=True)
 
 @implementEffectFactory('Bloom', 'Detect the highlights in the scene, blur them and add them back over the scene. Requires the downSample Effect.')
-def bloom(filterMode = 0, attenuation = (1, 1, 1, 1), numPasses = 3, width = 1.0, power = 8):
+def bloom(filterMode=0, attenuation=(1, 1, 1, 1), numPasses=3, width=1.0, power=8):
     """This method creates and returns a bloom post-process effect.  It assumes
     the scene has been captured and downsampled into the downSample3 render target."""
     downSample3 = rt('PostProcessing/downSample3')
@@ -34,7 +34,7 @@ def bloom(filterMode = 0, attenuation = (1, 1, 1, 1), numPasses = 3, width = 1.0
 
 
 @implementEffectFactory('Blur', 'Blur the scene. Requires the downSample Effect.')
-def blur(filterMode = 0, attenuation = (1, 1, 1, 1), numPasses = 1, width = 1.0):
+def blur(filterMode=0, attenuation=(1, 1, 1, 1), numPasses=1, width=1.0):
     """This method creates and returns a blur post-process effect.  It assumes
     the scene has been captured and downsampled into the downSample3 render target."""
     downSample3 = rt('PostProcessing/downSample3')

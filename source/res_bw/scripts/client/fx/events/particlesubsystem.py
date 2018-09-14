@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/ParticleSubSystem.py
 from FX.Event import Event
 from bwdebug import *
@@ -32,7 +32,7 @@ class ParticleSubSystem(Event):
     def __init__(self):
         self.subSystems = []
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         self.subSystems = pSection.readStrings('systemName')
         return self
 

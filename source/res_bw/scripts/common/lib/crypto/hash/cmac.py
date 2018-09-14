@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Hash/CMAC.py
 """CMAC (Cipher-based Message Authentication Code) algorithm
 
@@ -49,7 +49,7 @@ from Crypto.Util.strxor import strxor
 from Crypto.Util.number import long_to_bytes, bytes_to_long
 digest_size = None
 
-def _shift_bytes(bs, xor_lsb = 0):
+def _shift_bytes(bs, xor_lsb=0):
     num = bytes_to_long(bs) << 1 ^ xor_lsb
     return long_to_bytes(num, len(bs))[-len(bs):]
 
@@ -58,7 +58,7 @@ class _SmoothMAC(object):
     """Turn a MAC that only operates on aligned blocks of data
     into a MAC with granularity of 1 byte."""
 
-    def __init__(self, block_size, msg = b(''), min_digest = 0):
+    def __init__(self, block_size, msg=b(''), min_digest=0):
         self._bs = block_size
         self._buffer = []
         self._buffer_len = 0
@@ -134,7 +134,7 @@ class CMAC(_SmoothMAC):
     """Class that implements CMAC"""
     digest_size = None
 
-    def __init__(self, key, msg = None, ciphermod = None):
+    def __init__(self, key, msg=None, ciphermod=None):
         """Create a new CMAC object.
         
         :Parameters:
@@ -280,7 +280,7 @@ class CMAC(_SmoothMAC):
         self.verify(unhexlify(tobytes(hex_mac_tag)))
 
 
-def new(key, msg = None, ciphermod = None):
+def new(key, msg=None, ciphermod=None):
     """Create a new CMAC object.
     
     :Parameters:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/CYBERSPORT.py
 from debug_utils import LOG_WARNING
 
@@ -41,7 +41,6 @@ class CYBERSPORT(object):
     BUTTON_MEDALLION_CHOOSEVEHICLE = '#cyberSport:button/medallion/chooseVehicle'
     BUTTON_MEDALLION_ADDSLOTSETTINGS = '#cyberSport:button/medallion/addSlotSettings'
     BUTTON_CHOOSEVEHICLES_SELECTED = '#cyberSport:button/chooseVehicles/selected'
-    BUTTON_CHOOSEVEHICLES_SELECT = '#cyberSport:button/chooseVehicles/select'
     BUTTON_CHOOSEVEHICLES_INFO_TOOLTIP_TITLE = '#cyberSport:button/chooseVehicles/info/tooltip/title'
     BUTTON_CHOOSEVEHICLES_INFO_TOOLTIP_DESCRIPTION_VALID = '#cyberSport:button/chooseVehicles/info/tooltip/description/valid'
     BUTTON_CHOOSEVEHICLES_INFO_TOOLTIP_DESCRIPTION_NOTVALID = '#cyberSport:button/chooseVehicles/info/tooltip/description/notValid'
@@ -62,7 +61,6 @@ class CYBERSPORT(object):
     WINDOW_ROSTERSLOTSETTINGS_TABBTNLBL_RANGE = '#cyberSport:window/rosterSlotSettings/tabBtnLbl/range'
     WINDOW_ROSTERSLOTSETTINGS_BOTTOMRESULT = '#cyberSport:window/rosterSlotSettings/bottomResult'
     WINDOW_ROSTERSLOTSETTINGS_VEHICLETAB_HEADERTEXT = '#cyberSport:window/rosterSlotSettings/vehicleTab/headerText'
-    WINDOW_ROSTERSLOTSETTINGS_VEHICLETAB_ADDNLHEADERTEXT = '#cyberSport:window/rosterSlotSettings/vehicleTab/addnlHeaderText'
     WINDOW_ROSTERSLOTSETTINGS_VEHICLETAB_NATIONFIELDSET = '#cyberSport:window/rosterSlotSettings/vehicleTab/nationFieldSet'
     WINDOW_ROSTERSLOTSETTINGS_VEHICLETAB_VEHICLETYPE = '#cyberSport:window/rosterSlotSettings/vehicleTab/vehicleType'
     WINDOW_ROSTERSLOTSETTINGS_VEHICLETAB_VEHICLELEVEL = '#cyberSport:window/rosterSlotSettings/vehicleTab/vehicleLevel'
@@ -151,6 +149,7 @@ class CYBERSPORT(object):
     WINDOW_UNITLISTVIEW_ENTERBTN_MEMBER = '#cyberSport:window/unitListView/enterBtn/member'
     WINDOW_UNITLISTVIEW_ENTERBTN_LEGIONARY = '#cyberSport:window/unitListView/enterBtn/legionary'
     WINDOW_UNITLISTVIEW_NOITEMS = '#cyberSport:window/unitListView/noItems'
+    WINDOW_UNITLISTVIEW_SEARCHBTN_LABEL = '#cyberSport:window/unitListView/searchBtn/label'
     WINDOW_STATICRALLYINFO_STATSBATTLESCOUNT = '#cyberSport:window/staticRallyInfo/statsBattlesCount'
     WINDOW_STATICRALLYINFO_STATICRALLY_STATSWINSPERCENT = '#cyberSport:window/staticRallyInfo/staticRally/statsWinsPercent'
     WINDOW_STATICRALLYINFO_LADDERINFO = '#cyberSport:window/staticRallyInfo/ladderInfo'

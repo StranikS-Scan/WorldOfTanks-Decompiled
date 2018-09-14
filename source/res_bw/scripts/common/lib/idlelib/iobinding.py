@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/IOBinding.py
 import os
 import types
@@ -161,7 +161,7 @@ class IOBinding():
                 self.filename_change_hook()
         return
 
-    def open(self, event = None, editFile = None):
+    def open(self, event=None, editFile=None):
         flist = self.editwin.flist
         if flist:
             if not editFile:
@@ -444,7 +444,7 @@ class IOBinding():
             filename = filename.encode(filesystemencoding)
         return filename
 
-    def defaultfilename(self, mode = 'open'):
+    def defaultfilename(self, mode='open'):
         if self.filename:
             return os.path.split(self.filename)
         elif self.dirname:

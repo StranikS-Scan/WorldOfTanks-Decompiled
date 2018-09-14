@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/limits.py
 from constants import CHAT_MESSAGE_MAX_LENGTH, CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE
 from messenger.m_constants import MESSAGES_HISTORY_MAX_LEN
@@ -20,3 +20,10 @@ class LobbyLimits(IProtoLimits):
 
     def getHistoryMaxLength(self):
         return MESSAGES_HISTORY_MAX_LEN
+
+
+class CHANNEL_LIMIT(object):
+    NAME_MIN_LENGTH = 3
+    NAME_MAX_LENGTH = 32
+    PWD_MIN_LENGTH = 3
+    PWD_MAX_LENGTH = 12

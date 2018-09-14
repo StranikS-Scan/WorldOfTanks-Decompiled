@@ -73,6 +73,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R97_Object_140/Object_140_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_Object_140>
@@ -197,6 +198,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R97_Object_140/collision/Chassis.model	</collisionModel>
@@ -345,6 +348,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.078 -0.072 1.023 0.000 0.453 0.195 0.562 0.469 0.500 0.500 0.259 0.500 0.300 0.533 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
     </Turret_1_Object_140>
   </turrets0>

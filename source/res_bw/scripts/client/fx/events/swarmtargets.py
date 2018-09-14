@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/SwarmTargets.py
 from FX import s_sectionProcessors
 from ParticleSubSystem import ParticleSubSystem
@@ -17,7 +17,7 @@ class SwarmTargets(ParticleSubSystem):
         ParticleSubSystem.__init__(self)
         self.nodeList = []
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """
         This method loads a list of node names, specified by "Node" tags from
         an XML data section.

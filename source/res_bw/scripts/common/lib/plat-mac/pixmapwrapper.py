@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/PixMapWrapper.py
 """PixMapWrapper - defines the PixMapWrapper class, which wraps an opaque
 QuickDraw PixMap data structure in a handy Python class.  Also provides
@@ -115,7 +116,7 @@ class PixMapWrapper:
             self.__dict__['_pm'] = Qd.RawBitMap(self._header)
         return self.__dict__['_pm']
 
-    def blit(self, x1 = 0, y1 = 0, x2 = None, y2 = None, port = None):
+    def blit(self, x1=0, y1=0, x2=None, y2=None, port=None):
         """Draw this pixmap into the given (default current) grafport."""
         src = self.bounds
         dest = [x1,
@@ -131,7 +132,7 @@ class PixMapWrapper:
         Qd.CopyBits(self.PixMap(), port.GetPortBitMapForCopyBits(), src, tuple(dest), QuickDraw.srcCopy, None)
         return
 
-    def fromstring(self, s, width, height, format = imgformat.macrgb):
+    def fromstring(self, s, width, height, format=imgformat.macrgb):
         """Stuff this pixmap with raw pixel data from a string.
         Supply width, height, and one of the imgformat specifiers."""
         if format != imgformat.macrgb and format != imgformat.macrgb16:
@@ -151,7 +152,7 @@ class PixMapWrapper:
             self.cmpSize = 5
         self.rowBytes = width * self.pixelSize / 8
 
-    def tostring(self, format = imgformat.macrgb):
+    def tostring(self, format=imgformat.macrgb):
         """Return raw data as a string in the specified format."""
         if format == imgformat.macrgb and self.pixelSize == 32 or format == imgformat.macrgb16 and self.pixelsize == 16:
             return self.data

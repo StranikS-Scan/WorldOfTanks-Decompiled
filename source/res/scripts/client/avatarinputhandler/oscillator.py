@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/Oscillator.py
 import math
 import random
@@ -111,7 +111,7 @@ class CompoundOscillator(IOscillator):
 
 class RandomNoiseOscillator(IOscillator):
 
-    def __init__(self, mass, stiffness, drag, randomGoalPointFunc, restEpsilon = 0.001):
+    def __init__(self, mass, stiffness, drag, randomGoalPointFunc, restEpsilon=0.001):
         IOscillator.__init__(self)
         self.__oscillationsSolver = OscillationsSolver(mass, stiffness, drag)
         self.restEpsilon = restEpsilon
@@ -153,9 +153,7 @@ class RandomNoiseOscillator(IOscillator):
         self.__initialSeed = random.random() * sys.maxint
 
     def __getDeviation(self, t):
-        if t < 0:
-            return 0.0
-        return self.__oscillationsSolver.calcDeviation(self.__startVelocity, t)
+        return 0.0 if t < 0 else self.__oscillationsSolver.calcDeviation(self.__startVelocity, t)
 
     def __getGoalPoint(self, t, deviation):
         seed = hash(self.__initialSeed + t)
@@ -163,18 +161,18 @@ class RandomNoiseOscillator(IOscillator):
         return self.__randomGoalPointFunc(deviation, self.__generator)
 
 
-def RandomNoiseOscillatorFlat(mass, stiffness, drag, restEpsilon = 0.01):
+def RandomNoiseOscillatorFlat(mass, stiffness, drag, restEpsilon=0.01):
     return RandomNoiseOscillator(mass, stiffness, drag, mathUtils.RandomVectors.random3Flat, restEpsilon)
 
 
-def RandomNoiseOscillatorSpherical(mass, stiffness, drag, scaleCoeff = Vector3(1.0, 1.0, 1.0), restEpsilon = 0.01):
+def RandomNoiseOscillatorSpherical(mass, stiffness, drag, scaleCoeff=Vector3(1.0, 1.0, 1.0), restEpsilon=0.01):
     randomFunc = lambda deviation, generator: matrixScale(mathUtils.RandomVectors.random3(deviation, generator), scaleCoeff)
     return RandomNoiseOscillator(mass, stiffness, drag, randomFunc, restEpsilon)
 
 
 class NoiseOscillator(IOscillator):
 
-    def __init__(self, mass, stiffness, drag, restEpsilon = 0.001):
+    def __init__(self, mass, stiffness, drag, restEpsilon=0.001):
         IOscillator.__init__(self)
         self.mass = mass
         self.stiffness = Vector3(stiffness)

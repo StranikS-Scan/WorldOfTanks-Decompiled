@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/roster_tasks.py
 from messenger.m_constants import USER_ACTION_ID, USER_TAG, PROTO_TYPE, CLIENT_ACTION_ID
 from messenger.proto.events import g_messengerEvents
@@ -11,7 +11,7 @@ from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.proto.xmpp.xmpp_items import RosterItem
 
-def _syncRosterItem(storage, jid, name, groups, sub = None, clanInfo = None):
+def _syncRosterItem(storage, jid, name, groups, sub=None, clanInfo=None):
     dbID = jid.getDatabaseID()
     user = storage.getUser(dbID, PROTO_TYPE.XMPP)
     if user:
@@ -27,7 +27,7 @@ def _syncRosterItem(storage, jid, name, groups, sub = None, clanInfo = None):
     return user
 
 
-def _syncEmptyGroups(storage, groups, woEvent = False):
+def _syncEmptyGroups(storage, groups, woEvent=False):
     isGroupExists = storage.isGroupExists
     addEmptyGroup = storage.addEmptyGroup
     included = set()
@@ -56,7 +56,7 @@ class RosterResultTask(SeqTask):
 class RosterItemTask(ContactTask):
     __slots__ = ('_groups',)
 
-    def __init__(self, jid, name = '', groups = None):
+    def __init__(self, jid, name='', groups=None):
         super(RosterItemTask, self).__init__(jid, name)
         self._groups = groups or set()
 
@@ -67,13 +67,13 @@ class RosterItemTask(ContactTask):
     def getContext(self):
         return ROSTER_CONTEXT.PUSH_ROSTER_ITEM
 
-    def _doSync(self, name, groups = None, sub = None, clanInfo = None):
+    def _doSync(self, name, groups=None, sub=None, clanInfo=None):
         return _syncRosterItem(self.usersStorage, self._jid, name, groups, sub, clanInfo)
 
 
 class SyncSubscriptionTask(RosterItemTask):
 
-    def _doSync(self, name, groups = None, sub = None, clanInfo = None):
+    def _doSync(self, name, groups=None, sub=None, clanInfo=None):
         user = self._getUser()
         if user:
             prevSub = user.getSubscription()
@@ -97,7 +97,7 @@ class SyncSubscriptionTask(RosterItemTask):
 
 class AddRosterItemTask(RosterItemTask):
 
-    def _doSync(self, name, groups = None, sub = None, clanInfo = None):
+    def _doSync(self, name, groups=None, sub=None, clanInfo=None):
         user = super(AddRosterItemTask, self)._doSync(name, groups, sub, clanInfo)
         if user:
             g_logOutput.debug(CLIENT_LOG_AREA.ROSTER, 'Item is added to roster', user)
@@ -107,12 +107,12 @@ class AddRosterItemTask(RosterItemTask):
         client.setContactToRoster(self._jid, self._name, self._groups)
 
     def _getError(self, pyGlooxTag):
-        return errors.createServerActionError(CLIENT_ACTION_ID.ADD_FRIEND, pyGlooxTag)
+        return errors.createServerActionIQError(CLIENT_ACTION_ID.ADD_FRIEND, pyGlooxTag)
 
 
 class RemoveRosterItemTask(RosterItemTask):
 
-    def _doSync(self, name, groups = None, sub = None, clanInfo = None):
+    def _doSync(self, name, groups=None, sub=None, clanInfo=None):
         user = self._getUser()
         if not user or user.isCurrentPlayer():
             return user
@@ -122,6 +122,11 @@ class RemoveRosterItemTask(RosterItemTask):
                 _syncEmptyGroups(self.usersStorage, self._groups)
                 g_logOutput.debug(CLIENT_LOG_AREA.ROSTER, 'Roster item is removed', user)
                 self._doNotify(USER_ACTION_ID.FRIEND_REMOVED, user)
+            elif user.getItemType() == XMPP_ITEM_TYPE.SUB_PENDING:
+                user.update(item=None)
+                _syncEmptyGroups(self.usersStorage, self._groups)
+                g_logOutput.debug(CLIENT_LOG_AREA.ROSTER, 'Friendship request is revoked by sender', user)
+                g_messengerEvents.users.onFriendshipRequestsUpdated([user])
             return user
 
     def _doRun(self, client):
@@ -131,7 +136,7 @@ class RemoveRosterItemTask(RosterItemTask):
         return ROSTER_CONTEXT.REMOVE_ROSTER_ITEM
 
     def _getError(self, pyGlooxTag):
-        return errors.createServerActionError(CLIENT_ACTION_ID.REMOVE_FRIEND, pyGlooxTag)
+        return errors.createServerActionIQError(CLIENT_ACTION_ID.REMOVE_FRIEND, pyGlooxTag)
 
 
 class EmptyGroupsTask(RosterItemTask):
@@ -146,7 +151,7 @@ class EmptyGroupsTask(RosterItemTask):
 class ChangeRosterItemGroupsTask(RosterItemTask):
     __slots__ = ('_exclude',)
 
-    def __init__(self, jid, name = '', groups = None, exclude = None):
+    def __init__(self, jid, name='', groups=None, exclude=None):
         super(ChangeRosterItemGroupsTask, self).__init__(jid, name, groups)
         self._exclude = exclude or set()
 
@@ -156,7 +161,7 @@ class ChangeRosterItemGroupsTask(RosterItemTask):
         super(ChangeRosterItemGroupsTask, self).clear()
         return
 
-    def sync(self, name, groups, sub = None, clanInfo = None):
+    def sync(self, name, groups, sub=None, clanInfo=None):
         if self._groups != groups:
             return self._result
         self._result = TASK_RESULT.REMOVE
@@ -170,7 +175,7 @@ class ChangeRosterItemGroupsTask(RosterItemTask):
         client.setContactToRoster(self._jid, self._name, self._groups)
 
     def _getError(self, pyGlooxTag):
-        return errors.createServerActionError(CLIENT_ACTION_ID.CHANGE_GROUP, pyGlooxTag)
+        return errors.createServerActionIQError(CLIENT_ACTION_ID.CHANGE_GROUP, pyGlooxTag)
 
 
 class _RosterItemsGroupsChain(object):
@@ -185,12 +190,12 @@ class _RosterItemsGroupsChain(object):
 
 class RemoveRosterItemsGroupsChain(RemoveRosterItemTask, _RosterItemsGroupsChain):
 
-    def __init__(self, queue, removeNotes = None):
+    def __init__(self, queue, removeNotes=None):
         jid, name, groups = self.next(queue)
         self._removeNotes = removeNotes or set()
         super(RemoveRosterItemsGroupsChain, self).__init__(jid, name, groups)
 
-    def sync(self, name, groups, sub = None, clanInfo = None):
+    def sync(self, name, groups, sub=None, clanInfo=None):
         user = self._doSync(name, groups, sub, clanInfo)
         if user and user.getItemType() != XMPP_ITEM_TYPE.ROSTER_ITEM and canNoteAutoDelete(user):
             self._removeNotes.add(user.getID())
@@ -232,7 +237,7 @@ class RemoveRosterItemsGroupsChain(RemoveRosterItemTask, _RosterItemsGroupsChain
         else:
             client.removeContactFromRoster(self._jid)
 
-    def _doSync(self, name, groups = None, sub = None, clanInfo = None):
+    def _doSync(self, name, groups=None, sub=None, clanInfo=None):
         if self._groups:
             user = _syncRosterItem(self.usersStorage, self._jid, name, groups, sub, clanInfo)
             self._doNotify(USER_ACTION_ID.GROUPS_CHANGED, user)
@@ -247,7 +252,7 @@ class ChangeRosterItemsGroupsChain(ChangeRosterItemGroupsTask, _RosterItemsGroup
         jid, name, groups = self.next(queue)
         super(ChangeRosterItemsGroupsChain, self).__init__(jid, name, groups)
 
-    def sync(self, name, groups, sub = None, clanInfo = None):
+    def sync(self, name, groups, sub=None, clanInfo=None):
         user = self._doSync(name, groups, sub, clanInfo)
         if user:
             self._doNotify(USER_ACTION_ID.GROUPS_CHANGED, user)

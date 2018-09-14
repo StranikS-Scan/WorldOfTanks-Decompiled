@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/BattleSharedHistory.py
 from collections import deque
 from debug_utils import LOG_WARNING
@@ -34,7 +34,7 @@ class BattleSharedHistory(object):
     def deactivate(self):
         self.__cursor = -1
 
-    def addMessage(self, message, fillColor = FILL_COLORS.BLACK):
+    def addMessage(self, message, fillColor=FILL_COLORS.BLACK):
         if self.isEnabled():
             self.__history.append((message, fillColor))
             if self.__syncCursor:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/CustomizationBonus.py
 from gui.Scaleform.locale.CUSTOMIZATION import CUSTOMIZATION
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS

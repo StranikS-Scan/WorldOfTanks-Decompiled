@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/tkFont.py
 __version__ = '0.9'
 import Tkinter
@@ -57,7 +57,7 @@ class Font:
 
         return options
 
-    def __init__(self, root = None, font = None, name = None, exists = False, **options):
+    def __init__(self, root=None, font=None, name=None, exists=False, **options):
         if not root:
             root = Tkinter._default_root
         if font:
@@ -105,7 +105,7 @@ class Font:
         """Return a distinct copy of the current font"""
         return Font(self._root, **self.actual())
 
-    def actual(self, option = None):
+    def actual(self, option=None):
         """Return actual font attributes"""
         if option:
             return self._call('font', 'actual', self.name, '-' + option)
@@ -145,14 +145,14 @@ class Font:
             return options
 
 
-def families(root = None):
+def families(root=None):
     """Get font families (as a tuple)"""
     if not root:
         root = Tkinter._default_root
     return root.tk.splitlist(root.tk.call('font', 'families'))
 
 
-def names(root = None):
+def names(root=None):
     """Get names of defined fonts (as a tuple)"""
     if not root:
         root = Tkinter._default_root

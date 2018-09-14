@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/etree/ElementInclude.py
 import copy
 from . import ElementTree
@@ -9,7 +10,7 @@ class FatalIncludeError(SyntaxError):
     pass
 
 
-def default_loader(href, parse, encoding = None):
+def default_loader(href, parse, encoding=None):
     with open(href) as file:
         if parse == 'xml':
             data = ElementTree.parse(file).getroot()
@@ -20,7 +21,7 @@ def default_loader(href, parse, encoding = None):
     return data
 
 
-def include(elem, loader = None):
+def include(elem, loader=None):
     if loader is None:
         loader = default_loader
     i = 0

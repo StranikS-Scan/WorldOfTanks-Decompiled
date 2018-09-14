@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_constants.py
 from shared_utils import CONST_CONTAINER
 
@@ -58,6 +58,7 @@ class GAME(CONST_CONTAINER):
     INVITES_FROM_FRIENDS = 'invitesFromFriendsOnly'
     RECEIVE_CLAN_INVITES_NOTIFICATIONS = 'receiveClanInvitesNotifications'
     RECEIVE_INVITES_IN_BATTLE = 'receiveInvitesInBattle'
+    BATTLE_LOADING_INFO = 'battleLoadingInfo'
     RECEIVE_FRIENDSHIP_REQUEST = 'receiveFriendshipRequest'
     STORE_RECEIVER_IN_BATTLE = 'storeReceiverInBattle'
     DISABLE_BATTLE_CHAT = 'disableBattleChat'
@@ -84,6 +85,9 @@ class GAME(CONST_CONTAINER):
     SHOW_VECTOR_ON_MAP = 'showVectorOnMap'
     SHOW_SECTOR_ON_MAP = 'showSectorOnMap'
     SHOW_VEH_MODELS_ON_MAP = 'showVehModelsOnMap'
+    MINIMAP_VIEW_RANGE = 'minimapViewRange'
+    MINIMAP_MAX_VIEW_RANGE = 'minimapMaxViewRange'
+    MINIMAP_DRAW_RANGE = 'minimapDrawRange'
     SNIPER_MODE_SWINGING_ENABLED = 'SNIPER_MODE_SWINGING_ENABLED'
 
 
@@ -103,15 +107,18 @@ class TUTORIAL(CONST_CONTAINER):
 
 
 class SOUND(CONST_CONTAINER):
+    MASTER_TOGGLE = 'masterVolumeToggle'
+    SOUND_QUALITY = 'soundQuality'
+    SOUND_QUALITY_VISIBLE = 'soundQualityVisible'
     MASTER = 'masterVolume'
     MUSIC = 'musicVolume'
-    VOICE = 'voiceVolume'
     VEHICLES = 'vehiclesVolume'
     EFFECTS = 'effectsVolume'
     GUI = 'guiVolume'
     AMBIENT = 'ambientVolume'
     NATIONS_VOICES = 'nationalVoices'
     ALT_VOICES = 'alternativeVoices'
+    DYNAMIC_RANGE = 'dynamicRange'
     CAPTURE_DEVICES = 'captureDevice'
     VOIP_ENABLE = 'enableVoIP'
     VOIP_MASTER = 'masterVivoxVolume'
@@ -128,6 +135,7 @@ class CONTROLS(CONST_CONTAINER):
     MOUSE_VERT_INVERSION = 'mouseVertInvert'
     BACK_DRAFT_INVERSION = 'backDraftInvert'
     KEYBOARD = 'keyboard'
+    KEYBOARD_IMPORTANT_BINDS = 'keyboardImportantBinds'
 
 
 class AIM(CONST_CONTAINER):

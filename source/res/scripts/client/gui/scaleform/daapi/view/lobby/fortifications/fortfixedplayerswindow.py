@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortFixedPlayersWindow.py
 import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
@@ -23,7 +23,7 @@ from shared_utils import findFirst
 
 class FortFixedPlayersWindow(FortFixedPlayersWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortFixedPlayersWindow, self).__init__()
         self.__buildingUId = ctx.get('data', None)
         self.__buildingId = self.getBuildingIDbyUID(self.__buildingUId)
@@ -111,7 +111,7 @@ class FortFixedPlayersWindow(FortFixedPlayersWindowMeta, FortViewHelper):
          self._createTableBtnInfo(i18n.makeString(FORTIFICATIONS.FIXEDPLAYERS_LISTHEADER_FIELDWEEK, icon=icons.nut()), 'intWeekMining', 103, 2, TOOLTIPS.FORTIFICATION_FIXEDPLAYERS_WEEK, TEXT_ALIGN.RIGHT),
          self._createTableBtnInfo(i18n.makeString(FORTIFICATIONS.FIXEDPLAYERS_LISTHEADER_FIELDALLTIME, icon=icons.nut()), 'intTotalMining', 103, 2, TOOLTIPS.FORTIFICATION_FIXEDPLAYERS_ALLTIME, TEXT_ALIGN.RIGHT)]
 
-    def _createTableBtnInfo(self, label, id, buttonWidth, sortOrder, toolTip, textAlign, sortType = 'numeric'):
+    def _createTableBtnInfo(self, label, id, buttonWidth, sortOrder, toolTip, textAlign, sortType='numeric'):
         return {'label': label,
          'id': id,
          'buttonWidth': buttonWidth,
@@ -119,7 +119,7 @@ class FortFixedPlayersWindow(FortFixedPlayersWindowMeta, FortViewHelper):
          'toolTip': toolTip,
          'textAlign': textAlign,
          'sortType': sortType,
-         'defaultSortDirection': 'ascending'}
+         'defaultSortDirection': 'descending'}
 
     def __playersLabel(self):
         concat = ' / {0}'.format(self.__limitFixedPlayers)
@@ -148,6 +148,6 @@ class FortFixedPlayersWindow(FortFixedPlayersWindowMeta, FortViewHelper):
     def onClanMembersListChanged(self):
         self.__makeData()
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         if self.__buildingId == buildingTypeID and reason == BUILDING_UPDATE_REASON.DELETED:
             self.destroy()

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/validate_shells.py
 import ResMgr
 
@@ -13,10 +14,9 @@ def gatherChunks(spaceDir):
             if ResMgr.isDir(spaceDir + entry):
                 children = gatherChunks(spaceDir + entry)
                 result.extend(children)
-            else:
-                entry = entry.lower()
-                if len(entry) == 15 and entry[-6:] == '.chunk':
-                    result.append(spaceDir + entry)
+            entry = entry.lower()
+            if len(entry) == 15 and entry[-6:] == '.chunk':
+                result.append(spaceDir + entry)
 
     return result
 

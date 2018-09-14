@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/HangarVehicle.py
 import BigWorld
 import Math
@@ -19,7 +19,7 @@ class HangarVehicle(BigWorld.Entity):
     def onLeaveWorld(self):
         pass
 
-    def collideSegment(self, startPoint, endPoint, skipGun = False):
+    def collideSegment(self, startPoint, endPoint, skipGun=False):
         worldToVehMatrix = Math.Matrix(self.model.matrix)
         worldToVehMatrix.invert()
         startPoint = worldToVehMatrix.applyPoint(startPoint)

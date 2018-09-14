@@ -1,6 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/EdgeDetectColorController.py
-import BigWorld, ResMgr, Math
+import BigWorld
+import ResMgr
+import Math
 from PlayerEvents import g_playerEvents
 from Account import PlayerAccount
 from account_helpers.settings_core.SettingsCore import g_settingsCore

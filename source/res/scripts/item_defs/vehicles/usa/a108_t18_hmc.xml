@@ -106,6 +106,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A108_T18_HMC/T18_HMC_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	2.14 2.14 0.000000 0.000000	</tiling>
     </camouflage>
@@ -643,7 +644,7 @@
       <circularVisionRadius>	280	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	45	</maxHealth>
-        <maxRegenHealth>	22.5	</maxRegenHealth>
+        <maxRegenHealth>	22.0	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -697,7 +698,7 @@
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	0.890 0.135 1.014 0.000 0.907 -0.039 0.693 0.000 0.648 0.515 0.000 0.500 0.000 0.100 0.152	</physicsShape>
       <camouflage>

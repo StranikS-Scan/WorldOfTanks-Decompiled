@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/formatters.py
 from helpers import i18n
 from gui.clubs.formatters import getDivisionString, getLeagueString, getDivisionWithinLeague
 _UNKNOWN_TEAMMATE_NAME = i18n.makeString('#battle_results:players/teammate/unknown')
 _UNKNOWN_ENEMY_NAME = i18n.makeString('#battle_results:players/enemy/unknown')
 
-def getUnknownPlayerName(isEnemy = False):
+def getUnknownPlayerName(isEnemy=False):
     if isEnemy:
         return _UNKNOWN_ENEMY_NAME
     else:
@@ -25,7 +25,4 @@ def getAnimationDivisionIcon(league, division):
 
 
 def getAnimationLogoIcon(league, division):
-    if getDivisionWithinLeague(division) == 0:
-        return '../maps/icons/library/cybersport/animation/logo/%s.png' % getLeagueString(league)
-    else:
-        return None
+    return '../maps/icons/library/cybersport/animation/logo/%s.png' % getLeagueString(league) if getDivisionWithinLeague(division) == 0 else None

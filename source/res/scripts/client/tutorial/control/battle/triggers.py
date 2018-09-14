@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/battle/triggers.py
 import BigWorld
 import TriggersManager
@@ -24,7 +24,7 @@ __all__ = ['VehicleOnArenaTrigger',
 
 class VehicleOnArenaTrigger(TriggerWithValidateVar):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, key = 'name'):
+    def __init__(self, triggerID, validateVarID, setVarID=None, key='name'):
         super(VehicleOnArenaTrigger, self).__init__(triggerID, validateVarID, setVarID=setVarID)
         self.__key = key
 
@@ -51,7 +51,7 @@ class VehicleOnArenaTrigger(TriggerWithValidateVar):
 
 class PlayerVehicleNoAmmoTrigger(Trigger):
 
-    def __init__(self, triggerID, stateFlagID = None):
+    def __init__(self, triggerID, stateFlagID=None):
         super(PlayerVehicleNoAmmoTrigger, self).__init__(triggerID)
         self.__pIdx = -1
         self.__ammoLayout = {}
@@ -72,10 +72,10 @@ class PlayerVehicleNoAmmoTrigger(Trigger):
         super(PlayerVehicleNoAmmoTrigger, self).run()
         return
 
-    def isOn(self, shoot = False):
+    def isOn(self, shoot=False):
         return sum(self.__ammoLayout.values()) is 0 and shoot
 
-    def toggle(self, isOn = True, **kwargs):
+    def toggle(self, isOn=True, **kwargs):
         if self._stateFlag is isOn:
             self.isRunning = False
             return
@@ -113,7 +113,7 @@ class PlayerVehicleNoAmmoTrigger(Trigger):
 
 class _DispatchableTrigger(TriggerWithValidateVar):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, stateFlagID = None):
+    def __init__(self, triggerID, validateVarID, setVarID=None, stateFlagID=None):
         super(_DispatchableTrigger, self).__init__(triggerID, validateVarID, setVarID=setVarID)
         self._stateFlag = None
         self._stateFlagID = stateFlagID
@@ -125,7 +125,7 @@ class _DispatchableTrigger(TriggerWithValidateVar):
     def getAllowed(self):
         return []
 
-    def resolveState(self, isOn = False):
+    def resolveState(self, isOn=False):
         if self._stateFlag is None:
             self._stateFlag = self._tutorial.getFlags().isActiveFlag(self._stateFlagID)
             self.toggle(isOn=isOn, benefit=True)
@@ -134,7 +134,7 @@ class _DispatchableTrigger(TriggerWithValidateVar):
     def isOn(self, stateFlag):
         return stateFlag
 
-    def toggle(self, isOn = True, **kwargs):
+    def toggle(self, isOn=True, **kwargs):
         if self._stateFlag is isOn:
             return
         self._stateFlag = isOn
@@ -149,7 +149,7 @@ class ObjectAIMTrigger(_DispatchableTrigger):
     def getAllowed(self):
         return [TriggersManager.TRIGGER_TYPE.AIM]
 
-    def resolveState(self, isOn = False):
+    def resolveState(self, isOn=False):
         manager = TriggersManager.g_manager
         if manager is not None and manager.isEnabled():
             isOn = manager.isAutoTriggerActive(TriggersManager.TRIGGER_TYPE.AIM, self.getVar())
@@ -165,7 +165,7 @@ class AreaTrigger(_DispatchableTrigger):
     def getAllowed(self):
         return [TriggersManager.TRIGGER_TYPE.AREA]
 
-    def resolveState(self, isOn = False):
+    def resolveState(self, isOn=False):
         manager = TriggersManager.g_manager
         if manager is not None and manager.isEnabled():
             isOn = manager.isAutoTriggerActive(TriggersManager.TRIGGER_TYPE.AREA, self.getVar())
@@ -199,7 +199,7 @@ class VehicleDestroyedTrigger(_DispatchableTrigger):
     def getAllowed(self):
         return [TriggersManager.TRIGGER_TYPE.VEHICLE_DESTROYED]
 
-    def resolveState(self, isOn = False):
+    def resolveState(self, isOn=False):
         arena = getattr(BigWorld.player(), 'arena', None)
         if arena is not None:
             vehicle = arena.vehicles.get(self.getVar())
@@ -211,7 +211,7 @@ class VehicleDestroyedTrigger(_DispatchableTrigger):
 
 class VehicleOnSoftTerrainTrigger(_DispatchableTrigger):
 
-    def __init__(self, triggerID, stateFlagID = None):
+    def __init__(self, triggerID, stateFlagID=None):
         super(VehicleOnSoftTerrainTrigger, self).__init__(triggerID, None, setVarID=None, stateFlagID=stateFlagID)
         return
 
@@ -224,7 +224,7 @@ class VehicleOnSoftTerrainTrigger(_DispatchableTrigger):
 
 class ShotMissedTrigger(_DispatchableTrigger):
 
-    def __init__(self, triggerID, stateFlagID = None):
+    def __init__(self, triggerID, stateFlagID=None):
         super(ShotMissedTrigger, self).__init__(triggerID, None, setVarID=None, stateFlagID=stateFlagID)
         return
 
@@ -237,7 +237,7 @@ class ShotMissedTrigger(_DispatchableTrigger):
 
 class ShotNoDamageTrigger(_DispatchableTrigger):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, stateFlagID = None, maxCount = 1):
+    def __init__(self, triggerID, validateVarID, setVarID=None, stateFlagID=None, maxCount=1):
         super(ShotNoDamageTrigger, self).__init__(triggerID, validateVarID, setVarID)
         self._count = 0
         self._maxCount = maxCount
@@ -260,7 +260,7 @@ class ShotNoDamageTrigger(_DispatchableTrigger):
 
 class ShotDamageTrigger(_DispatchableTrigger):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None, stateFlagID = None, maxCount = 1):
+    def __init__(self, triggerID, validateVarID, setVarID=None, stateFlagID=None, maxCount=1):
         super(ShotDamageTrigger, self).__init__(triggerID, validateVarID, setVarID)
         self._count = 0
         self._maxCount = maxCount
@@ -283,7 +283,7 @@ class ShotDamageTrigger(_DispatchableTrigger):
 
 class SniperModeTrigger(_DispatchableTrigger):
 
-    def __init__(self, triggerID, stateFlagID = None):
+    def __init__(self, triggerID, stateFlagID=None):
         super(SniperModeTrigger, self).__init__(triggerID, None, setVarID=None, stateFlagID=stateFlagID)
         return
 
@@ -314,8 +314,7 @@ class TriggersDispatcher(Trigger, TriggersManager.ITriggerListener):
             if trigger is not None:
                 self._types.update(trigger.getAllowed())
                 trigger.resolveState()
-            else:
-                LOG_ERROR('Trigger not found', triggerID)
+            LOG_ERROR('Trigger not found', triggerID)
 
         manager = TriggersManager.g_manager
         if manager is not None:
@@ -337,7 +336,7 @@ class TriggersDispatcher(Trigger, TriggersManager.ITriggerListener):
         self._types = set()
         return
 
-    def toggle(self, isOn = True, event = None, **kwargs):
+    def toggle(self, isOn=True, event=None, **kwargs):
         if event is None:
             event = {}
         eventType = event.get('type')

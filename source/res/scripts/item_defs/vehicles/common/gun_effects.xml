@@ -22,6 +22,7 @@
         <wwsoundNPC>	wpn_automatic_NPC	</wwsoundNPC>
         <modelPart>	gun	</modelPart>
         <position>	HP_gunFire	</position>
+        <stopSyncVisual>	true	</stopSyncVisual>
       </sound>
       <sound>
         <startKey>	start	</startKey>
@@ -84,13 +85,14 @@
         <wwsoundNPC>	wpn_automatic_NPC	</wwsoundNPC>
         <modelPart>	gun	</modelPart>
         <position>	HP_gunFire	</position>
+        <stopSyncVisual>	true	</stopSyncVisual>
       </sound>
       <sound>
         <startKey>	start	</startKey>
         <soundPC>	/guns/pc/guns/wpn_12-25mm_set/shotExt_impulse	</soundPC>
         <soundNPC>	/guns/npc/guns/wpn_12-25mm_set/shotExt_impulse	</soundNPC>
-        <wwsoundPC>	wpn_automatic_PC	</wwsoundPC>
-        <wwsoundNPC>	wpn_automatic_NPC	</wwsoundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
         <modelPart>	gun	</modelPart>
         <position>	HP_gunFire	</position>
       </sound>
@@ -174,6 +176,7 @@
         <wwsoundNPC>	wpn_automatic_NPC	</wwsoundNPC>
         <modelPart>	gun	</modelPart>
         <position>	HP_gunFire	</position>
+        <stopSyncVisual>	true	</stopSyncVisual>
       </sound>
       <sound>
         <startKey>	start	</startKey>
@@ -236,6 +239,7 @@
         <wwsoundNPC>	wpn_automatic_NPC	</wwsoundNPC>
         <modelPart>	gun	</modelPart>
         <position>	HP_gunFire	</position>
+        <stopSyncVisual>	true	</stopSyncVisual>
       </sound>
       <sound>
         <startKey>	start	</startKey>
@@ -298,6 +302,7 @@
         <wwsoundNPC>	wpn_automatic_NPC	</wwsoundNPC>
         <modelPart>	gun	</modelPart>
         <position>	HP_gunFire	</position>
+        <stopSyncVisual>	true	</stopSyncVisual>
       </sound>
       <sound>
         <startKey>	start	</startKey>
@@ -1143,6 +1148,274 @@
       </groundWave>
     </relatedEffects>
   </shot_main_mb>
+  <shot_mainext>
+    <timeline>
+      <lighting2>	0.085	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	1	</endpixie>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_main_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1	</innerRadius>
+        <outerRadius>	6	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_85-107mm_set/shotExt_distant	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_85-107mm_set/shotExt_distant	</soundNPC>
+        <wwsoundPC>	wpn_main_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_main_NPC	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_85-107mm_set/shotExt_impulse	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_85-107mm_set/shotExt_impulse	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_85-107mm_set/shotExt_reflectTail	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_85-107mm_set/shotExt_reflectTail	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_85-107mm_set/shotExt_underride	</soundPC>
+        <soundNPC>	/guns/npc/guns/guns_empty_event	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	hull	</modelPart>
+        <position>	HP_turretJoint	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_85-107mm_set/shotInt_shotShell_v1	</soundPC>
+        <soundNPC>	/guns/npc/guns/guns_empty_event	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	hull	</modelPart>
+        <position>	HP_turretJoint	</position>
+      </sound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_stone.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_sand.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_snow.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_mainext>
+  <shot_mainext_mb>
+    <timeline>
+      <lighting2>	0.085	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	1	</endpixie>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_main_02.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1	</innerRadius>
+        <outerRadius>	6	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_85-107mm_set/shotExt_distant	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_85-107mm_set/shotExt_distant	</soundNPC>
+        <wwsoundPC>	wpn_main_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_main_NPC	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_85-107mm_set/shotExt_impulse	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_85-107mm_set/shotExt_impulse	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_85-107mm_set/shotExt_reflectTail	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_85-107mm_set/shotExt_reflectTail	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_85-107mm_set/shotExt_underride	</soundPC>
+        <soundNPC>	/guns/npc/guns/guns_empty_event	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	hull	</modelPart>
+        <position>	HP_turretJoint	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_85-107mm_set/shotInt_shotShell_v2	</soundPC>
+        <soundNPC>	/guns/npc/guns/guns_empty_event	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	hull	</modelPart>
+        <position>	HP_turretJoint	</position>
+      </sound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_stone_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_sand_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_snow_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_mainext_mb>
   <shot_large>
     <timeline>
       <lighting2>	0.09	</lighting2>
@@ -1813,6 +2086,274 @@
       </groundWave>
     </relatedEffects>
   </shot_huge2>
+  <shot_superhuge>
+    <timeline>
+      <lighting2>	0.1	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	2	</endpixie>
+      <soundplaystop>	6	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_huge_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	3	</innerRadius>
+        <outerRadius>	15	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	35	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	55	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	30	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+      </light>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_175-380mm_set/shotExt_distant	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_175-380mm_set/shotExt_distant	</soundNPC>
+        <wwsoundPC>	wpn_huge_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_huge_NPC	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_175-380mm_set/shotExt_impulse	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_175-380mm_set/shotExt_impulse	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_175-380mm_set/shotExt_reflectTail	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_175-380mm_set/shotExt_reflectTail	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_175-380mm_set/shotExt_underride	</soundPC>
+        <soundNPC>	/guns/npc/guns/guns_empty_event	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	hull	</modelPart>
+        <position>	HP_turretJoint	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_175-380mm_set/shotInt_shotShell_v1	</soundPC>
+        <soundNPC>	/guns/npc/guns/guns_empty_event	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	hull	</modelPart>
+        <position>	HP_turretJoint	</position>
+      </sound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_stone.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_sand.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_snow.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_superhuge>
+  <shot_superhuge_mb>
+    <timeline>
+      <lighting2>	0.1	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	2	</endpixie>
+      <soundplaystop>	6	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_huge_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	3	</innerRadius>
+        <outerRadius>	15	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	35	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	55	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	30	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+      </light>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_175-380mm_set/shotExt_distant	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_175-380mm_set/shotExt_distant	</soundNPC>
+        <wwsoundPC>	wpn_huge_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_huge_NPC	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_175-380mm_set/shotExt_impulse	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_175-380mm_set/shotExt_impulse	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_175-380mm_set/shotExt_reflectTail	</soundPC>
+        <soundNPC>	/guns/npc/guns/wpn_175-380mm_set/shotExt_reflectTail	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	gun	</modelPart>
+        <position>	HP_gunFire	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_175-380mm_set/shotExt_underride	</soundPC>
+        <soundNPC>	/guns/npc/guns/guns_empty_event	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	hull	</modelPart>
+        <position>	HP_turretJoint	</position>
+      </sound>
+      <sound>
+        <startKey>	start	</startKey>
+        <soundPC>	/guns/pc/guns/wpn_175-380mm_set/shotInt_shotShell_v1	</soundPC>
+        <soundNPC>	/guns/npc/guns/guns_empty_event	</soundNPC>
+        <wwsoundPC>	TEST_EVENT	</wwsoundPC>
+        <wwsoundNPC>	TEST_EVENT	</wwsoundNPC>
+        <modelPart>	hull	</modelPart>
+        <position>	HP_turretJoint	</position>
+      </sound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_stone.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_sand.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_snow.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_superhuge_mb>
   <shot_env_artillery>
     <timeline>
       <lighting2>	0.1	</lighting2>

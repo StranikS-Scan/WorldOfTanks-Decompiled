@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/ArcadeCamera.py
 from collections import namedtuple
 import BigWorld
@@ -25,12 +25,21 @@ def getCameraAsSettingsHolder(settingsDataSec):
 
 
 MinMax = namedtuple('MinMax', ('min', 'max'))
+
+class AdvancedColliderConstants(namedtuple('AdvancedColliderConstants', ('enable', 'ePower', 'fovRatio', 'specialCollisionRadius', 'forwardEstimatedTime', 'backwardEstimatedTime'))):
+
+    @staticmethod
+    def fromSection(dataSection):
+        it = iter(AdvancedColliderConstants._fields)
+        return AdvancedColliderConstants(dataSection.readBool(next(it), True), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)))
+
+
 _INERTIA_EASING = mathUtils.Easing.exponentialEasing
 ENABLE_INPUT_ROTATION_INERTIA = False
 
 class _InputInertia(object):
     __ZOOM_DURATION = 0.5
-    positionDelta = property(lambda self: self.__deltaInterpolator.value)
+    positionDelta = property(lambda self: self.__deltaEasing.value)
     fovZoomMultiplier = property(lambda self: self.__zoomMultiplierEasing.value)
     endZoomMultiplier = property(lambda self: self.__zoomMultiplierEasing.b)
 
@@ -48,7 +57,7 @@ class _InputInertia(object):
         endMult = mathUtils.lerp(minMult, maxMult, newRelativeFocusDist)
         self.__zoomMultiplierEasing.reset(self.__zoomMultiplierEasing.value, endMult, _InputInertia.__ZOOM_DURATION)
 
-    def teleport(self, relativeFocusDist, minMaxZoomMultiplier = None):
+    def teleport(self, relativeFocusDist, minMaxZoomMultiplier=None):
         if minMaxZoomMultiplier is not None:
             self.__minMaxZoomMultiplier = minMaxZoomMultiplier
         self.__deltaEasing.reset(Vector3(0.0), Vector3(0.0), _InputInertia.__ZOOM_DURATION)
@@ -142,7 +151,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             self.__defaultAimOffset = (aimOffset[0], aimOffset[1])
             return
 
-    def create(self, pivotPos, onChangeControlMode = None, postmortemMode = False):
+    def create(self, pivotPos, onChangeControlMode=None, postmortemMode=False):
         self.__onChangeControlMode = onChangeControlMode
         self.__postmortemMode = postmortemMode
         targetMat = self.getTargetMProv()
@@ -175,13 +184,9 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__onChangeControlMode = None
         self.__cam = None
         self.__aim = None
-        self.__aimingSystem.destroy()
-        self.__aimingSystem = None
-        return
-
-    def __del__(self):
-        if self.__cam is not None:
-            self.destroy()
+        if self.__aimingSystem is not None:
+            self.__aimingSystem.destroy()
+            self.__aimingSystem = None
         return
 
     def getPivotSettings(self):
@@ -211,12 +216,14 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
 
     def __setModelsToCollideWith(self, models):
         self.__cam.setModelsToCollideWith(models)
-        self.__aimingSystem.setModelsToCollideWith(models)
+        if self.__aimingSystem is not None:
+            self.__aimingSystem.setModelsToCollideWith(models)
+        return
 
     def focusOnPos(self, preferredPos):
         self.__aimingSystem.focusOnPos(preferredPos)
 
-    def shiftCamPos(self, shift = None):
+    def shiftCamPos(self, shift=None):
         matrixProduct = self.__aimingSystem.vehicleMProv
         shiftMat = matrixProduct.a
         if shift is not None:
@@ -229,7 +236,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             shiftMat.setIdentity()
         return
 
-    def enable(self, preferredPos = None, closesDist = False, postmortemParams = None, turretYaw = None, gunPitch = None):
+    def enable(self, preferredPos=None, closesDist=False, postmortemParams=None, turretYaw=None, gunPitch=None):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.setAimClipPosition(Vector2(self.__aim.offset()))
@@ -315,7 +322,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         FovExtended.instance().resetFov()
         return
 
-    def update(self, dx, dy, dz, rotateMode = True, zoomMode = True, updatedByKeyboard = False):
+    def update(self, dx, dy, dz, rotateMode=True, zoomMode=True, updatedByKeyboard=False):
         self.__curSense = self.__cfg['keySensitivity'] if updatedByKeyboard else self.__cfg['sensitivity']
         self.__curScrollSense = self.__cfg['keySensitivity'] if updatedByKeyboard else self.__cfg['scrollSensitivity']
         if updatedByKeyboard:
@@ -366,7 +373,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__aimingSystem.handleMovement(yawDelta, -pitchDelta)
         return (self.__aimingSystem.yaw, self.__aimingSystem.pitch, 0)
 
-    def __update(self, dx, dy, dz, rotateMode = True, zoomMode = True, isCallback = False):
+    def __update(self, dx, dy, dz, rotateMode=True, zoomMode=True, isCallback=False):
         prevPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.matrix)
         distChanged = False
         if zoomMode and dz != 0:
@@ -409,9 +416,14 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
                 inertDt = deltaTime = deltaTime / repSpeed
         self.__aimingSystem.update(deltaTime)
         virginShotPoint = self.__aimingSystem.getThirdPersonShotPoint()
+        delta = self.__inputInertia.positionDelta
+        sign = delta.dot(Vector3(0, 0, 1))
         self.__inputInertia.update(inertDt)
+        delta = (delta - self.__inputInertia.positionDelta).length
+        if delta != 0.0:
+            self.__cam.setScrollDelta(math.copysign(delta, sign))
         FovExtended.instance().setFovByMultiplier(self.__inputInertia.fovZoomMultiplier)
-        unshakenPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.matrix)
+        unshakenPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.idealMatrix if self.__cam.advancedColliderEnabled else self.__aimingSystem.matrix)
         vehMatrix = Math.Matrix(self.__aimingSystem.vehicleMProv)
         vehiclePos = vehMatrix.translation
         fromVehicleToUnshakedPos = unshakenPos - vehiclePos
@@ -519,14 +531,14 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         movementDeviation.set(movementDeviation.x * zoomMultiplier, movementDeviation.y * zoomMultiplier, movementDeviation.z * zoomMultiplier)
         return (impulseDeviation, movementDeviation, zoomMultiplier)
 
-    def applyImpulse(self, position, impulse, reason = ImpulseReason.ME_HIT):
+    def applyImpulse(self, position, impulse, reason=ImpulseReason.ME_HIT):
         adjustedImpulse, noiseMagnitude = self.__dynamicCfg.adjustImpulse(impulse, reason)
         yawMat = mathUtils.createRotationMatrix((-self.__aimingSystem.yaw, 0, 0))
         impulseLocal = yawMat.applyVector(adjustedImpulse)
         self.__impulseOscillator.applyImpulse(impulseLocal)
         self.__applyNoiseImpulse(noiseMagnitude)
 
-    def applyDistantImpulse(self, position, impulseValue, reason = ImpulseReason.ME_HIT):
+    def applyDistantImpulse(self, position, impulseValue, reason=ImpulseReason.ME_HIT):
         applicationPosition = self.__cam.position
         if reason == ImpulseReason.SPLASH:
             applicationPosition = Matrix(self.vehicleMProv).translation
@@ -549,7 +561,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         noiseImpulse = mathUtils.RandomVectors.random3(noiseMagnitude)
         self.__noiseOscillator.applyImpulse(noiseImpulse)
 
-    def handleKeyEvent(self, isDown, key, mods, event = None):
+    def handleKeyEvent(self, isDown, key, mods, event=None):
         if self.__shiftKeySensor is None:
             return False
         elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and mods & 4:
@@ -655,6 +667,11 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         maxAccelerationDuration = readFloat(dynamicsSection, 'maxAccelerationDuration', 0.0, 10000.0, ArcadeCamera._DEFAULT_MAX_ACCELERATION_DURATION)
         self.__accelerationSmoother = AccelerationSmoother(accelerationFilter, maxAccelerationDuration)
         self.__inputInertia = _InputInertia(self.__cfg['fovMultMinMaxDist'], 0.0)
+        advancedCollision = dataSec['advancedCollision']
+        if advancedCollision is None:
+            LOG_ERROR('<advancedCollision> dataSection is not found!')
+        else:
+            BigWorld.setAdvancedColliderConstants(AdvancedColliderConstants.fromSection(advancedCollision), cfg['distRange'][0])
         return
 
     def writeUserPreferences(self):

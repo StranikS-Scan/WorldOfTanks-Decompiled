@@ -55,6 +55,7 @@
     <userString>	#ussr_vehicles:_23mm_BC-23	</userString>
     <icon>	ap	</icon>
     <price>	3	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	23	</caliber>
     <isTracer>	true	</isTracer>
@@ -70,6 +71,7 @@
     <icon>	ap_cr	</icon>
     <price>	1	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	23	</caliber>
     <isTracer>	true	</isTracer>
@@ -137,6 +139,21 @@
       <devices>	50	</devices>
     </damage>
   </_37mm_UBR-160>
+  <_37mm_UBR-160_bot>
+    <id>	154	</id>
+    <userString>	#ussr_vehicles:_37mm_UBR-160_bot	</userString>
+    <icon>	ap	</icon>
+    <price>	8	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	18	</armor>
+      <devices>	15	</devices>
+    </damage>
+  </_37mm_UBR-160_bot>
   <_37mm_UBR-160P>
     <id>	5	</id>
     <userString>	#ussr_vehicles:_37mm_UBR-160P	</userString>
@@ -181,36 +198,6 @@
       <devices>	50	</devices>
     </damage>
   </_37mm_UBR160bis>
-  <_37mm_UBR-160_bot>
-    <id>	154	</id>
-    <userString>	#ussr_vehicles:_37mm_UBR-160_bot	</userString>
-    <icon>	ap	</icon>
-    <price>	8	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	37	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
-    <damage>
-      <armor>	18	</armor>
-      <devices>	15	</devices>
-    </damage>
-  </_37mm_UBR-160_bot>
-  <_37mm_UBRT1_bot>
-    <id>	151	</id>
-    <userString>	#ussr_vehicles:_37mm_UBRT1_bot	</userString>
-    <icon>	ap	</icon>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	37	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing	</effects>
-    <damage>
-      <armor>	5	</armor>
-      <devices>	3	</devices>
-    </damage>
-  </_37mm_UBRT1_bot>
   <_37mm_UBR160PA>
     <id>	8	</id>
     <userString>	#ussr_vehicles:_37mm_UBR160PA	</userString>
@@ -286,6 +273,21 @@
       <devices>	50	</devices>
     </damage>
   </_37mm_UOT1>
+  <_37mm_UBRT1_bot>
+    <id>	151	</id>
+    <userString>	#ussr_vehicles:_37mm_UBRT1_bot	</userString>
+    <icon>	ap	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	5	</armor>
+      <devices>	3	</devices>
+    </damage>
+  </_37mm_UBRT1_bot>
   <_2pdr_AP_Mk.1T>
     <id>	82	</id>
     <userString>	#ussr_vehicles:_2pdr_AP_Mk.1T	</userString>

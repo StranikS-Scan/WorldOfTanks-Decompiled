@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/Tankman.py
 from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES
@@ -8,18 +8,16 @@ from gui.shared.gui_items import HasStrCD, GUIItem, ItemsCollection
 
 class TankmenCollection(ItemsCollection):
 
-    def _filterItem(self, item, nation = None, role = None, isInTank = None):
+    def _filterItem(self, item, nation=None, role=None, isInTank=None):
         if role is not None and item.descriptor.role != role:
             return False
-        elif isInTank is not None and item.isInTank != isInTank:
-            return False
         else:
-            return ItemsCollection._filterItem(self, item, nation)
+            return False if isInTank is not None and item.isInTank != isInTank else ItemsCollection._filterItem(self, item, nation)
 
 
 class TankmenComparator(object):
 
-    def __init__(self, vehicleGetter = None):
+    def __init__(self, vehicleGetter=None):
         self._vehicleGetter = vehicleGetter
 
     def __call__(self, first, second):
@@ -64,7 +62,7 @@ class Tankman(GUIItem, HasStrCD):
      ROLES.RADIOMAN: 3,
      ROLES.LOADER: 4}
 
-    def __init__(self, strCompactDescr, inventoryID = -1, vehicle = None, proxy = None):
+    def __init__(self, strCompactDescr, inventoryID=-1, vehicle=None, proxy=None):
         GUIItem.__init__(self, proxy)
         HasStrCD.__init__(self, strCompactDescr)
         self.__descriptor = None
@@ -131,6 +129,10 @@ class Tankman(GUIItem, HasStrCD):
         return self.descriptor.roleLevel
 
     @property
+    def isFemale(self):
+        return self.descriptor.isFemale
+
+    @property
     def icon(self):
         return getIconName(self.nationID, self.descriptor.iconID)
 
@@ -172,10 +174,10 @@ class Tankman(GUIItem, HasStrCD):
             tmanDescr = tankmen.TankmanDescr(self.strCD)
             i = 0
             skills_list = list(tankmen.ACTIVE_SKILLS)
-            while tmanDescr.roleLevel == 100 and (tmanDescr.lastSkillLevel == 100 or len(tmanDescr.skills) == 0) and len(skills_list) > 0:
-                skillname = skills_list.pop()
-                if skillname not in tmanDescr.skills:
-                    tmanDescr.addSkill(skillname)
+            while 1:
+                if tmanDescr.roleLevel == 100 and (tmanDescr.lastSkillLevel == 100 or len(tmanDescr.skills) == 0) and len(skills_list) > 0:
+                    skillname = skills_list.pop()
+                    skillname not in tmanDescr.skills and tmanDescr.addSkill(skillname)
                     i += 1
 
             return (i, tmanDescr.lastSkillLevel)
@@ -240,16 +242,11 @@ class Tankman(GUIItem, HasStrCD):
                 return res
         if self.lastUserName < other.lastUserName:
             return -1
-        elif self.lastUserName > other.lastUserName:
-            return 1
         else:
-            return 0
+            return 1 if self.lastUserName > other.lastUserName else 0
 
     def __eq__(self, other):
-        if other is None or not isinstance(other, Tankman):
-            return False
-        else:
-            return self.invID == other.invID
+        return False if other is None or not isinstance(other, Tankman) else self.invID == other.invID
 
     def __repr__(self):
         return 'Tankman<id:%d, nation:%d, vehicleID:%d>' % (self.invID, self.nationID, self.vehicleInvID)
@@ -257,7 +254,7 @@ class Tankman(GUIItem, HasStrCD):
 
 class TankmanSkill(GUIItem):
 
-    def __init__(self, skillName, tankman = None, proxy = None):
+    def __init__(self, skillName, tankman=None, proxy=None):
         super(TankmanSkill, self).__init__(proxy)
         self.name = skillName
         self.isPerk = self.name in tankmen.PERKS
@@ -271,7 +268,7 @@ class TankmanSkill(GUIItem):
         if tankman is not None:
             tdescr = tankman.descriptor
             skills = tdescr.skills
-            self.isFemale = tdescr.isFemale
+            self.isFemale = tankman.isFemale
             self.level = tdescr.lastSkillLevel if skills.index(self.name) == len(skills) - 1 else tankmen.MAX_SKILL_LEVEL
             self.roleType = self.__getSkillRoleType(skillName)
             self.isActive = self.__getSkillActivity(tankman)
@@ -426,11 +423,11 @@ def getSkillUserDescription(skillName):
     return tankmen.getSkillsConfig()[skillName]['description']
 
 
-def calculateRoleLevel(startRoleLevel, freeXpValue = 0, typeID = (0, 0)):
+def calculateRoleLevel(startRoleLevel, freeXpValue=0, typeID=(0, 0)):
     return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID).roleLevel
 
 
-def calculateRankID(startRoleLevel, freeXpValue = 0, typeID = (0, 0)):
+def calculateRankID(startRoleLevel, freeXpValue=0, typeID=(0, 0)):
     return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID).rankID
 
 

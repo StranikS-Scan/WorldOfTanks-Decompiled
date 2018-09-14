@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/settings.py
 from collections import namedtuple
 TUTORIAL_VERSION = '0.3.7'
@@ -47,10 +47,7 @@ class _SettingsCollection(dict):
 
     def getSettings(self, settingsID):
         settings = None
-        if settingsID in self:
-            return self[settingsID]
-        else:
-            return settings
+        return self[settingsID] if settingsID in self else settings
 
 
 def createSettingsCollection():
@@ -59,7 +56,7 @@ def createSettingsCollection():
     return collection
 
 
-def createTutorialElement(classPath, init = None):
+def createTutorialElement(classPath, init=None):
     imported = __import__(classPath.module, globals(), locals(), [classPath.clazz])
     if not imported:
         raise ValueError('Can not find class {0.module} in {0.clazz}'.format(classPath))

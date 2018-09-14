@@ -1,10 +1,14 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/functional.py
 import copy
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.SettingsCore import g_settingsCore
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from shared_utils import findFirst
 from tutorial.control.functional import FunctionalEffect, FunctionalShowWindowEffect, FunctionalRunTriggerEffect
 from tutorial.logger import LOG_ERROR
+from gui.shared import event_dispatcher
 
 class SaveTutorialSettingEffect(FunctionalEffect):
 
@@ -27,6 +31,23 @@ class SaveAccountSettingEffect(FunctionalEffect):
             return
         else:
             AccountSettings.setSettings(setting.getSettingName(), setting.getSettingValue())
+            return
+
+
+class SelectVehicleInHangar(FunctionalEffect):
+
+    def triggerEffect(self):
+        vehicleCriteria = self._tutorial.getVars().get(self.getTargetID())
+        if vehicleCriteria is None:
+            LOG_ERROR('Tutorial setting is not found', self._effect.getTargetID())
+            return
+        else:
+            minLvl, maxLvl = vehicleCriteria.get('levelsRange', (1, 10))
+            criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(minLvl, maxLvl)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+            vehicles = sorted(g_itemsCache.items.getVehicles(criteria=criteria).values(), key=lambda item: item.level)
+            vehicle = findFirst(None, vehicles)
+            if vehicle is not None:
+                event_dispatcher.selectVehicleInHangar(vehicle.intCD)
             return
 
 

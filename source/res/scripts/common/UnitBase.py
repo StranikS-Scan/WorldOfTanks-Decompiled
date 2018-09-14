@@ -1,18 +1,19 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/UnitBase.py
 import struct
 import copy
-import cPickle
 import weakref
+from collections import namedtuple
 from items import vehicles
-from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE
+from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE
 from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, reprBitMaskFromDict
-from unit_roster_config import SortieRoster6, SortieRoster8, SortieRoster10, FortRoster8, FortRoster10, ClubRoster, SquadRoster, UnitRoster
+from unit_roster_config import SortieRoster6, SortieRoster8, SortieRoster10, FortRoster8, FortRoster10, ClubRoster, SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
-from unit_helpers.ExtrasHandler import EmptyExtrasHandler, FortBattleExtrasHandler
+from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import ClubExtrasHandler, SortieExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler
-from debug_utils import LOG_DAN, LOG_SVAN_DEV
+from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
+UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
 
 class UNIT_MGR_STATE:
     IDLE = 0
@@ -20,7 +21,6 @@ class UNIT_MGR_STATE:
     IN_PRE_ARENA = 2
     IN_AUTO_SEARCH = 3
     IN_WAITING_JOINING_ACCOUNTS = 4
-    IN_ROSTER_WAIT = 5
 
 
 class UNIT_FLAGS:
@@ -33,11 +33,11 @@ class UNIT_FLAGS:
     SORTIES_FORBIDDEN = 64
     RATED_BATTLE_FORBIDDEN = 128
     IN_PRE_ARENA = 256
-    IN_ROSTER_WAIT = 512
     IS_DYNAMIC = 1024
     DEFAULT = 0
     PRE_QUEUE = 0
     PRE_SEARCH = 0
+    IN_ROSTER_WAIT = 0
     MODAL_STATES = IN_QUEUE | IN_SEARCH | IN_ARENA
     CHANGED_STATE_ASQ = IN_ARENA | IN_PRE_ARENA | IN_SEARCH | IN_QUEUE
 
@@ -130,6 +130,14 @@ class UNIT_ERROR:
     SORTIES_FORBIDDEN = 74
     RATED_BATTLE_FORBIDDEN = 75
     KICKED_PLAYER_AFTER_BATTLE = 76
+    SPEC_BATTLE_END = 77
+    BAD_VEHICLE_TYPE = 78
+    TOO_FEW_VEHICLE_TYPE = 79
+    TOO_MANY_VEHICLE_TYPE = 80
+    TOO_FEW_VEHICLES = 81
+    TOO_MANY_VEHICLES = 82
+    BAD_FALLOUT_TYPE = 83
+    BAD_VEHICLES_SET = 84
 
 
 OK = UNIT_ERROR.OK
@@ -164,6 +172,8 @@ class UNIT_OP:
     EXTRAS_UPDATE = 18
     EXTRAS_RESET = 19
     GAMEPLAYS_MASK = 20
+    SET_VEHICLE_LIST = 21
+    CHANGE_FALLOUT_TYPE = 22
 
 
 class UNIT_ROLE:
@@ -219,16 +229,17 @@ class UNIT_PUBLISHER_ERROR:
 
 
 class UNIT_NOTIFY_CMD:
-    SET_VEHICLE = 1
+    SET_VEHICLE_LIST = 1
     PLAYER_ONLINE = 2
     TRANSFER_LEADERSHIP = 3
     PUBLISH_STATE_CHANGE = 4
     SET_MEMBER_READY = 5
     KICK_ALL = 6
     EXTRAS_UPDATED = 7
-    ROSTER_CONFIRM = 8
     SORTIE_DIVISION_CHANGE = 9
-    SET_FALLOUT_BATTLE_TYPE = 10
+    FALLOUT_TYPE_CHANGE = 10
+    AUTO_ASSEMBLED_MEMBER_ADDED = 11
+    APPROVED_VEHICLE_LIST = 12
 
 
 class CLIENT_UNIT_CMD:
@@ -255,9 +266,8 @@ class CLIENT_UNIT_CMD:
     CHANGE_SORTIE_DIVISION = 20
     SET_RATED_BATTLE = 21
     SET_GAMEPLAYS_MASK = 22
-    SET_EVENT_SQUAD_VEHICLE_LIST = 23
-    CHANGE_EVENT_SQUAD_TYPE = 24
-    SET_EVENT_SQUAD_MEMBER_READY = 25
+    SET_VEHICLE_LIST = 23
+    CHANGE_FALLOUT_TYPE = 24
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
@@ -277,6 +287,9 @@ class UNIT_MGR_FLAGS:
     FORT_BATTLE_DIVISION_FLAG_MASK = FORT_BATTLE | FORT_BATTLE_DIVISION_8
     CLUBS = 32
     SQUAD = 64
+    SPEC_BATTLE = 128
+    FALLOUT_CLASSIC = 256
+    FALLOUT_MULTITEAM = 512
 
 
 class ROSTER_TYPE:
@@ -287,8 +300,11 @@ class ROSTER_TYPE:
     FORT_ROSTER_8 = UNIT_MGR_FLAGS.FORT_BATTLE | UNIT_MGR_FLAGS.FORT_BATTLE_DIVISION_8
     FORT_ROSTER_10 = UNIT_MGR_FLAGS.FORT_BATTLE
     CLUB_ROSTER_10 = UNIT_MGR_FLAGS.CLUBS
+    FALLOUT_CLASSIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.FALLOUT_CLASSIC
+    FALLOUT_MULTITEAM_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM
     SQUAD_ROSTER = UNIT_MGR_FLAGS.SQUAD
-    _MASK = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8 | UNIT_MGR_FLAGS.SORTIE_DIVISION_6 | UNIT_MGR_FLAGS.FORT_BATTLE | UNIT_MGR_FLAGS.FORT_BATTLE_DIVISION_8 | CLUB_ROSTER_10 | SQUAD_ROSTER
+    SPEC_ROSTER = UNIT_MGR_FLAGS.SPEC_BATTLE
+    _MASK = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8 | UNIT_MGR_FLAGS.SORTIE_DIVISION_6 | UNIT_MGR_FLAGS.FORT_BATTLE | UNIT_MGR_FLAGS.FORT_BATTLE_DIVISION_8 | CLUB_ROSTER_10 | SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM
 
 
 class EXTRAS_HANDLER_TYPE:
@@ -297,6 +313,7 @@ class EXTRAS_HANDLER_TYPE:
     CLUBS = 2
     SORTIE = 3
     SQUAD = 4
+    SPEC_BATTLE = 5
 
 
 class SORTIE_DIVISION(object):
@@ -307,6 +324,7 @@ class SORTIE_DIVISION(object):
 
 
 SORTIE_DIVISION_NAMES = dict([ (v, k) for k, v in SORTIE_DIVISION.__dict__.iteritems() if not k.startswith('_') ])
+SORTIE_DIVISION_NAME_TO_LEVEL = dict([ (v, k) for k, v in SORTIE_DIVISION_NAMES.iteritems() ])
 SORTIE_DIVISION_LEVEL_TO_FLAGS = {SORTIE_DIVISION.MIDDLE: ROSTER_TYPE.SORTIE_ROSTER_6,
  SORTIE_DIVISION.CHAMPION: ROSTER_TYPE.SORTIE_ROSTER_8,
  SORTIE_DIVISION.ABSOLUTE: ROSTER_TYPE.SORTIE_ROSTER_10}
@@ -324,6 +342,8 @@ FORT_BATTLE_DIVISION_LEVEL_TO_FLAGS = {FORT_BATTLE_DIVISION.CHAMPION: ROSTER_TYP
  FORT_BATTLE_DIVISION.ABSOLUTE: ROSTER_TYPE.FORT_ROSTER_10}
 FORT_BATTLE_DIVISION_NAME_TO_FLAGS = dict([ (v, FORT_BATTLE_DIVISION_LEVEL_TO_FLAGS[k]) for k, v in FORT_BATTLE_DIVISION_NAMES.iteritems() ])
 FORT_BATTLE_DIVISION_FLAGS_TO_NAME = dict([ (flags, name) for name, flags in FORT_BATTLE_DIVISION_NAME_TO_FLAGS.iteritems() ])
+FALLOUT_QUEUE_TYPE_TO_ROSTER = {QUEUE_TYPE.FALLOUT_CLASSIC: ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER,
+ QUEUE_TYPE.FALLOUT_MULTITEAM: ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER}
 ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.SORTIE_ROSTER_6: SortieRoster6,
  ROSTER_TYPE.SORTIE_ROSTER_8: SortieRoster8,
@@ -331,12 +351,16 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.FORT_ROSTER_8: FortRoster8,
  ROSTER_TYPE.FORT_ROSTER_10: FortRoster10,
  ROSTER_TYPE.CLUB_ROSTER_10: ClubRoster,
- ROSTER_TYPE.SQUAD_ROSTER: SquadRoster}
+ ROSTER_TYPE.SQUAD_ROSTER: SquadRoster,
+ ROSTER_TYPE.SPEC_ROSTER: SpecRoster,
+ ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER: FalloutClassicRoster,
+ ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER: FalloutMultiteamRoster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
- EXTRAS_HANDLER_TYPE.FORT_BATTLE: FortBattleExtrasHandler,
+ EXTRAS_HANDLER_TYPE.FORT_BATTLE: ClanBattleExtrasHandler,
  EXTRAS_HANDLER_TYPE.CLUBS: ClubExtrasHandler,
  EXTRAS_HANDLER_TYPE.SORTIE: SortieExtrasHandler,
- EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler}
+ EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
+ EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler}
 
 class UnitBase(OpsUnpacker):
     _opsFormatDefs = initOpsFormatDef({UNIT_OP.SET_VEHICLE: ('qHi', '_setVehicle'),
@@ -364,10 +388,15 @@ class UnitBase(OpsUnpacker):
                              'S',
                              ['']),
      UNIT_OP.EXTRAS_RESET: (None, 'resetExtras'),
-     UNIT_OP.GAMEPLAYS_MASK: ('i', '_setGameplaysMask')})
+     UNIT_OP.GAMEPLAYS_MASK: ('i', '_setGameplaysMask'),
+     UNIT_OP.SET_VEHICLE_LIST: ('q',
+                                '_setVehicleList',
+                                'N',
+                                [('H', 'iH')]),
+     UNIT_OP.CHANGE_FALLOUT_TYPE: ('i', '_changeFalloutQueueType')})
     MAX_PLAYERS = 250
 
-    def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', extrasInit = None, packedUnit = '', rosterTypeID = ROSTER_TYPE.UNIT_ROSTER, extrasHandlerID = EXTRAS_HANDLER_TYPE.EMPTY, prebattleTypeID = PREBATTLE_TYPE.UNIT):
+    def __init__(self, limitsDefs={}, slotDefs={}, slotCount=0, packedRoster='', extrasInit=None, packedUnit='', rosterTypeID=ROSTER_TYPE.UNIT_ROSTER, extrasHandlerID=EXTRAS_HANDLER_TYPE.EMPTY, prebattleTypeID=PREBATTLE_TYPE.UNIT):
         if packedUnit:
             self.unpack(packedUnit)
         else:
@@ -375,7 +404,7 @@ class UnitBase(OpsUnpacker):
             RosterType = ROSTER_TYPE_TO_CLASS.get(rosterTypeID)
             if slotDefs and not slotCount:
                 slotCount = len(slotDefs)
-            self._roster = RosterType(slotDefs, slotCount, packedRoster)
+            self._roster = RosterType(limitsDefs, slotDefs, slotCount, packedRoster)
             self._prebattleTypeID = prebattleTypeID
             self._freeSlots = set(xrange(0, slotCount))
             self._dirty = 1
@@ -411,17 +440,22 @@ class UnitBase(OpsUnpacker):
         return self.__extrasHandler
 
     def _setVehicle(self, accountDBID, vehTypeCompDescr, vehInvID):
-        classTag = vehicles.getVehicleClass(vehTypeCompDescr)
-        vehType = vehicles.getVehicleType(vehTypeCompDescr)
-        vehClassIdx = VEHICLE_CLASS_INDICES.get(classTag, _BAD_CLASS_INDEX)
-        self._vehicles[accountDBID] = {'vehTypeCompDescr': vehTypeCompDescr,
-         'vehInvID': vehInvID,
-         'nationIdx': vehType.id[0],
-         'inNationIdx': vehType.id[1],
-         'vehLevel': vehType.level,
-         'vehClassIdx': vehClassIdx}
-        self.storeOp(UNIT_OP.SET_VEHICLE, accountDBID, vehTypeCompDescr, vehInvID)
-        self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_VEHICLE, [vehInvID])
+        return self._setVehicleList(accountDBID, [(vehInvID, vehTypeCompDescr)])
+
+    def _setVehicleList(self, accountDBID, vehShortList):
+        vehs = []
+        vehInvIDs = []
+        for vehInvID, vehTypeCompDescr in vehShortList:
+            classTag = vehicles.getVehicleClass(vehTypeCompDescr)
+            vehType = vehicles.getVehicleType(vehTypeCompDescr)
+            vehClassIdx = VEHICLE_CLASS_INDICES.get(classTag, _BAD_CLASS_INDEX)
+            vehTuple = UnitVehicle(vehInvID, vehTypeCompDescr, vehType.level, vehClassIdx)
+            vehs.append(vehTuple)
+            vehInvIDs.append(vehInvID)
+
+        self._vehicles[accountDBID] = vehs
+        self.storeOp(UNIT_OP.SET_VEHICLE_LIST, accountDBID, vehShortList)
+        self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_VEHICLE_LIST, [vehInvIDs])
         self._dirty = 1
         return True
 
@@ -432,7 +466,7 @@ class UnitBase(OpsUnpacker):
             self.setMemberReady(accountDBID, False)
         self._dirty = 1
         self.storeOp(UNIT_OP.CLEAR_VEHICLE, accountDBID)
-        self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_VEHICLE, [0])
+        self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_VEHICLE_LIST, [[]])
         return
 
     def _setMember(self, accountDBID, slotChosenIdx):
@@ -493,12 +527,12 @@ class UnitBase(OpsUnpacker):
             neighbourSlotIdx = rosterSlotIdx ^ 1
             neighbourSlot = roster.slots.get(neighbourSlotIdx)
             if neighbourSlot and packedSlot == roster.DEFAULT_SLOT_PACK:
-                LOG_DAN('_setRosterSlot: removing default slotIdx=%s' % rosterSlotIdx)
+                LOG_DEBUG('_setRosterSlot: removing default slotIdx=%s' % rosterSlotIdx)
                 roster.slots.pop(rosterSlotIdx, None)
             else:
                 roster.slots[rosterSlotIdx] = slot
                 if neighbourSlot and neighbourSlot.pack() == roster.DEFAULT_SLOT_PACK:
-                    LOG_DAN('_setRosterSlot: removing default neighbour slotIdx=%s' % rosterSlotIdx)
+                    LOG_DEBUG('_setRosterSlot: removing default neighbour slotIdx=%s' % rosterSlotIdx)
                     roster.slots.pop(neighbourSlotIdx, None)
         roster.pack()
         self._dirty = 1
@@ -515,15 +549,17 @@ class UnitBase(OpsUnpacker):
 
     _HEADER = '<HHHHHHBii'
     _PLAYER_DATA = '<qiIHBHH'
-    _PLAYER_VEHICLES = '<qiH'
+    _PLAYER_VEHICLES_LIST = '<qH'
+    _PLAYER_VEHICLE_TUPLE = '<iH'
     _SLOT_PLAYERS = '<Bq'
-    _IDS = '<BBB'
+    _IDS = '<HBB'
     _VEHICLE_DICT_HEADER = '<Hq'
     _VEHICLE_DICT_ITEM = '<Hi'
     _HEADER_SIZE = struct.calcsize(_HEADER)
     _SLOT_PLAYERS_SIZE = struct.calcsize(_SLOT_PLAYERS)
     _PLAYER_DATA_SIZE = struct.calcsize(_PLAYER_DATA)
-    _PLAYER_VEHICLES_SIZE = struct.calcsize(_PLAYER_VEHICLES)
+    _PLAYER_VEHICLES_LIST_SIZE = struct.calcsize(_PLAYER_VEHICLES_LIST)
+    _PLAYER_VEHICLE_TUPLE_SIZE = struct.calcsize(_PLAYER_VEHICLE_TUPLE)
     _IDS_SIZE = struct.calcsize(_IDS)
     _VEHICLE_DICT_HEADER_SIZE = struct.calcsize(_VEHICLE_DICT_HEADER)
     _VEHICLE_DICT_ITEM_SIZE = struct.calcsize(_VEHICLE_DICT_ITEM)
@@ -546,8 +582,10 @@ class UnitBase(OpsUnpacker):
          self._modalTimestamp,
          self._gameplaysMask)
         packed += struct.pack(self._HEADER, *args)
-        for accountDBID, veh in vehs.iteritems():
-            packed += struct.pack(self._PLAYER_VEHICLES, accountDBID, veh['vehInvID'], veh['vehTypeCompDescr'])
+        for accountDBID, vehList in vehs.iteritems():
+            packed += struct.pack(self._PLAYER_VEHICLES_LIST, accountDBID, len(vehList))
+            for vehTuple in vehList:
+                packed += struct.pack(self._PLAYER_VEHICLE_TUPLE, vehTuple.vehInvID, vehTuple.vehTypeCompDescr)
 
         for slotIdx, member in members.iteritems():
             packed += struct.pack(self._SLOT_PLAYERS, slotIdx, member['accountDBID'])
@@ -576,9 +614,15 @@ class UnitBase(OpsUnpacker):
         memberCount, vehCount, playerCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._gameplaysMask = struct.unpack_from(self._HEADER, unpacking)
         unpacking = unpacking[self._HEADER_SIZE:]
         for i in xrange(0, vehCount):
-            accountDBID, vehInvID, vehTypeCompDescr = struct.unpack_from(self._PLAYER_VEHICLES, unpacking)
-            self._setVehicle(accountDBID, vehTypeCompDescr, vehInvID)
-            unpacking = unpacking[self._PLAYER_VEHICLES_SIZE:]
+            accountDBID, vehListCount = struct.unpack_from(self._PLAYER_VEHICLES_LIST, unpacking)
+            unpacking = unpacking[self._PLAYER_VEHICLES_LIST_SIZE:]
+            vehDataList = []
+            for i in xrange(0, vehListCount):
+                vehInvID, vehTypeCompDescr = struct.unpack_from(self._PLAYER_VEHICLE_TUPLE, unpacking)
+                unpacking = unpacking[self._PLAYER_VEHICLE_TUPLE_SIZE:]
+                vehDataList.append((vehInvID, vehTypeCompDescr))
+
+            self._setVehicleList(accountDBID, vehDataList)
 
         for i in xrange(0, memberCount):
             slotIdx, accountDBID = struct.unpack_from(self._SLOT_PLAYERS, unpacking)
@@ -613,6 +657,17 @@ class UnitBase(OpsUnpacker):
 
     def getCommanderDBID(self):
         return self._members.get(LEADER_SLOT, {}).get('accountDBID', 0)
+
+    def getAccountsStates(self):
+        statesDict = {}
+        assignedPlayers = self._playerSlots.keys()
+        accountsVehicles = self._vehicles
+        isMemberReadyFunc = self.isMemberReady
+        for accountDBID, playerData in self._players.iteritems():
+            vehs = accountsVehicles.get(accountDBID)
+            statesDict[accountDBID] = (vehs[0].vehTypeCompDescr if vehs else None, accountDBID in assignedPlayers, isMemberReadyFunc(accountDBID))
+
+        return statesDict
 
     def updateUnitExtras(self, updateStr):
         oldExtras = copy.deepcopy(self._extras)
@@ -669,6 +724,9 @@ class UnitBase(OpsUnpacker):
     def isDynamic(self):
         return bool(self._flags & UNIT_FLAGS.IS_DYNAMIC)
 
+    def isSquad(self):
+        return bool(self._rosterTypeID & UNIT_MGR_FLAGS.SQUAD)
+
     def shouldPublish(self):
         return not (self.isInviteOnly() or self.isSortiesForbidden() or self.isRatedBattleForbidden())
 
@@ -686,7 +744,7 @@ class UnitBase(OpsUnpacker):
         repr += '\n  modalTimestamp:%s' % self._modalTimestamp
         repr += '\n  _vehicles len=%s {' % len(self._vehicles)
         for accountDBID, veh in self._vehicles.iteritems():
-            repr += '\n    [%d] %s' % (accountDBID, veh)
+            repr += '\n    [%d] %s' % (accountDBID, str(veh))
 
         repr += '\n  },'
         repr += '\n  _players len=%s {' % len(self._players)
@@ -714,7 +772,7 @@ class UnitBase(OpsUnpacker):
         repr += ', stamp:%s, free=%r' % (self._modalTimestamp, list(self._freeSlots))
         repr += '\n vehs(%s)={' % len(self._vehicles)
         for accountDBID, veh in self._vehicles.iteritems():
-            repr += '%d:%s, ' % (accountDBID, veh.get('vehTypeCompDescr', 0))
+            repr += '%d:%s, ' % (accountDBID, str(veh))
 
         repr += '},'
         repr += '\n plrs(%s)={' % len(self._players)
@@ -727,22 +785,19 @@ class UnitBase(OpsUnpacker):
         repr += '\n)'
         return repr
 
-    def setMemberReady(self, accountDBID, isReady = True):
+    def setMemberReady(self, accountDBID, isReady=True):
         slotIdx = self._playerSlots.get(accountDBID)
         if slotIdx is None:
             return UNIT_ERROR.BAD_SLOT_IDX
         else:
             prevReadyMask = self._readyMask
-            isEventSquad = self._prebattleTypeID == PREBATTLE_TYPE.SQUAD and 'eventType' in self._extras
             if isReady:
-                if isEventSquad:
-                    vehicles = self._extras['accountVehicles'].get(accountDBID)
-                    if not vehicles:
-                        return UNIT_ERROR.VEHICLE_NOT_CHOSEN
-                else:
-                    veh = self._vehicles.get(accountDBID)
-                    if veh is None:
-                        return UNIT_ERROR.VEHICLE_NOT_CHOSEN
+                vehs = self._vehicles.get(accountDBID)
+                if vehs is None:
+                    return UNIT_ERROR.VEHICLE_NOT_CHOSEN
+                vehList = [ (vehicle.vehInvID, vehicle.vehTypeCompDescr) for vehicle in vehs ]
+                if not self._canUseVehicles(vehList):
+                    return UNIT_ERROR.BAD_VEHICLES_SET
                 newReadyMask = prevReadyMask | 1 << slotIdx
             else:
                 newReadyMask = prevReadyMask & ~(1 << slotIdx)
@@ -750,8 +805,11 @@ class UnitBase(OpsUnpacker):
                 self._readyMask = newReadyMask
                 self.storeOp(UNIT_OP.READY_MASK, newReadyMask)
                 self._dirty = 1
-                self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_MEMBER_READY, [isReady, isEventSquad])
+                self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_MEMBER_READY, [isReady])
             return OK
+
+    def _canUseVehicles(self, vehiclesList, isSet=False):
+        return True
 
     def _setGameplaysMask(self, newGameplaysMask):
         prevGameplaysMask = self._gameplaysMask
@@ -762,10 +820,7 @@ class UnitBase(OpsUnpacker):
 
     def isMemberReady(self, accountDBID):
         slotIdx = self._playerSlots.get(accountDBID)
-        if slotIdx is not None:
-            return bool(self._readyMask & 1 << slotIdx)
-        else:
-            return False
+        return bool(self._readyMask & 1 << slotIdx) if slotIdx is not None else False
 
     def _setModalTimestamp(self, timestamp):
         self._modalTimestamp = timestamp
@@ -803,32 +858,53 @@ class UnitBase(OpsUnpacker):
         sum = 0
         for slotIdx, member in self._members.iteritems():
             accountDBID = member.get('accountDBID', 0)
-            veh = self._vehicles.get(accountDBID)
-            if veh:
-                sum += veh.get('vehLevel', 0)
+            vehs = self._vehicles.get(accountDBID)
+            if vehs:
+                sum += vehs[0].vehLevel
 
         return sum
 
-    def checkVehicleLevelsRange(self, minLvl, maxLvl):
+    def checkVehicleLevelsRange(self, lvlsByClass, commonLvls):
         for slotIdx, member in self._members.iteritems():
-            accountDBID = member.get('accountDBID', 0)
-            veh = self._vehicles.get(accountDBID)
-            if veh:
-                lvl = veh.get('vehLevel', 0)
-                if lvl < minLvl or maxLvl < lvl:
+            accountDBID = member.get('accountDBID', None)
+            if accountDBID is None:
+                continue
+            vehs = self._vehicles.get(accountDBID, None)
+            if not vehs:
+                continue
+            for vehTuple in vehs:
+                vehLevel = vehTuple.vehLevel
+                levelLimits = commonLvls
+                if lvlsByClass is not None:
+                    levelLimits = lvlsByClass.get(vehTuple.vehClassIdx, commonLvls)
+                if vehLevel < levelLimits[0] or levelLimits[1] < vehLevel:
                     return False
 
         return True
 
-    def getArtyCount(self):
-        count = 0
+    def checkVehicleTypesRange(self, vehicleTypes):
+        vehicleCount = {}
         for slotIdx, member in self._members.iteritems():
-            accountDBID = member.get('accountDBID', 0)
-            veh = self._vehicles.get(accountDBID)
-            if veh and veh['vehClassIdx'] == VEHICLE_CLASS_SPG:
-                count += 1
+            accountDBID = member.get('accountDBID', None)
+            if accountDBID is None:
+                continue
+            vehs = self._vehicles.get(accountDBID)
+            if not vehs:
+                continue
+            for vehTuple in vehs:
+                vehTypeCompDescr = vehTuple.vehTypeCompDescr
+                if vehTypeCompDescr is None:
+                    continue
+                if vehTypeCompDescr not in vehicleTypes:
+                    return UNIT_ERROR.BAD_VEHICLE_TYPE
+                if vehTypeCompDescr not in vehicleCount:
+                    vehicleCount[vehTypeCompDescr] = 0
+                vehicleCount[vehTypeCompDescr] += 1
 
-        return count
+        if any((value < vehicleTypes[key][0] for key, value in vehicleCount.iteritems())):
+            return UNIT_ERROR.TOO_FEW_VEHICLE_TYPE
+        else:
+            return UNIT_ERROR.TOO_MANY_VEHICLE_TYPE if any((value > vehicleTypes[key][1] for key, value in vehicleCount.iteritems())) else OK
 
     def hasInArenaMembers(self):
         for slotIdx, member in self._members.iteritems():
@@ -879,7 +955,7 @@ class UnitBase(OpsUnpacker):
     def _appendCmdrOp(self, op, packedArgs):
         pass
 
-    def _storeNotification(self, accountDBID, notifyCmd, argList = []):
+    def _storeNotification(self, accountDBID, notifyCmd, argList=[]):
         pass
 
     def _unpackRosterSlot(self, packedOps):
@@ -889,7 +965,7 @@ class UnitBase(OpsUnpacker):
         self._setRosterSlot(rosterSlotIdx, packedSlot)
         return packedOps[opLen:]
 
-    def _packVehicleDict(self, accountDBID, vehDict = {}):
+    def _packVehicleDict(self, accountDBID, vehDict={}):
         packedArgs = struct.pack(self._VEHICLE_DICT_HEADER, len(vehDict), accountDBID)
         for vehTypeCompDescr, vehInvID in vehDict.iteritems():
             packedArgs += struct.pack(self._VEHICLE_DICT_ITEM, vehTypeCompDescr, vehInvID)
@@ -956,14 +1032,14 @@ class UnitBase(OpsUnpacker):
         prevRosterTypeID = self._rosterTypeID
         newRosterTypeID = SORTIE_DIVISION_LEVEL_TO_FLAGS.get(division, None)
         if newRosterTypeID is None:
-            LOG_SVAN_DEV('Wrong division={}.', division)
+            LOG_DEBUG_DEV('Wrong division={}.', division)
             return
         elif newRosterTypeID == prevRosterTypeID:
-            LOG_SVAN_DEV('Division has not changed.')
+            LOG_DEBUG_DEV('Division has not changed.')
             return
         RosterType = ROSTER_TYPE_TO_CLASS.get(newRosterTypeID, None)
         if RosterType is None:
-            LOG_SVAN_DEV('Wrong RosterTypeID={}', newRosterTypeID)
+            LOG_DEBUG_DEV('Wrong RosterTypeID={}', newRosterTypeID)
             return
         else:
             return (newRosterTypeID, RosterType)
@@ -971,16 +1047,47 @@ class UnitBase(OpsUnpacker):
     def _changeSortieDivision(self, division):
         prevRosterTypeID = self._rosterTypeID
         prevRoster = self._roster
-        LOG_SVAN_DEV('Previous roster type: {0} : {1}', prevRosterTypeID, prevRoster.__class__)
+        LOG_DEBUG_DEV('Previous roster type: {0} : {1}', prevRosterTypeID, prevRoster.__class__)
         res = self._getSortieRosterType(division)
         if res is None:
             return False
         else:
             self._rosterTypeID, RosterType = res
             self._roster = RosterType()
-            LOG_SVAN_DEV('New roster type: {0} : {1}', self._rosterTypeID, self._roster.__class__)
+            LOG_DEBUG_DEV('New roster type: {0} : {1}', self._rosterTypeID, self._roster.__class__)
             self._refreshFreeSlots(prevRoster.MAX_SLOTS, self._roster.MAX_SLOTS)
             self.storeOp(UNIT_OP.CHANGE_DIVISION, division)
+            return True
+
+    def _getFalloutRosterType(self, queueType):
+        prevRosterTypeID = self._rosterTypeID
+        newRosterTypeID = FALLOUT_QUEUE_TYPE_TO_ROSTER.get(queueType, None)
+        if newRosterTypeID is None:
+            LOG_DEBUG_DEV('Wrong fallout queue type={}.', queueType)
+            return
+        elif newRosterTypeID == prevRosterTypeID:
+            LOG_DEBUG_DEV('Queue type has not changed.')
+            return
+        RosterType = ROSTER_TYPE_TO_CLASS.get(newRosterTypeID, None)
+        if RosterType is None:
+            LOG_DEBUG_DEV('Wrong RosterTypeID={}', newRosterTypeID)
+            return
+        else:
+            return (newRosterTypeID, RosterType)
+
+    def _changeFalloutQueueType(self, queueType):
+        prevRosterTypeID = self._rosterTypeID
+        prevRoster = self._roster
+        LOG_DEBUG_DEV('Previous roster type: {0} : {1}', prevRosterTypeID, prevRoster.__class__)
+        res = self._getFalloutRosterType(queueType)
+        if res is None:
+            return False
+        else:
+            self._rosterTypeID, RosterType = res
+            self._roster = RosterType()
+            LOG_DEBUG_DEV('New roster type: {0} : {1}', self._rosterTypeID, self._roster.__class__)
+            self._refreshFreeSlots(prevRoster.MAX_SLOTS, self._roster.MAX_SLOTS)
+            self.storeOp(UNIT_OP.CHANGE_FALLOUT_TYPE, queueType)
             return True
 
     def _getLeaderDBID(self):
@@ -988,3 +1095,18 @@ class UnitBase(OpsUnpacker):
 
     def isRatedBattle(self):
         return bool(self._extras.get('isRatedBattle'))
+
+    def isMultiVehicle(self):
+        return self._roster.MAX_VEHICLES > 1
+
+    def getRosterType(self):
+        return self._rosterTypeID
+
+    def _checkAllVehiclesMatchSlot(self, accountDBID, unitSlotIdx):
+        vehList = self._vehicles.get(accountDBID, [])
+        for veh in vehList:
+            res, slotChosenIdx = self._roster.checkVehicle(veh.vehTypeCompDescr, unitSlotIdx)
+            if not res:
+                return False
+
+        return True

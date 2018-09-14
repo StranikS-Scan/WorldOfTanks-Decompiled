@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/EventsCache.py
 import math
 import sys
@@ -8,9 +8,10 @@ from collections import defaultdict
 import BigWorld
 from PlayerEvents import g_playerEvents
 import clubs_quests
+import motivation_quests
 from Event import Event, EventManager
 from adisp import async, process
-from constants import EVENT_TYPE, EVENT_CLIENT_DATA
+from constants import EVENT_TYPE, EVENT_CLIENT_DATA, QUEUE_TYPE, ARENA_BONUS_TYPE
 from potapov_quests import _POTAPOV_QUEST_XML_PATH
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from helpers import isPlayerAccount
@@ -23,12 +24,14 @@ from gui.server_events import caches as quests_caches
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
 from gui.server_events.PQController import RandomPQController, FalloutPQController
 from gui.server_events.CompanyBattleController import CompanyBattleController
-from gui.server_events.event_items import EventBattles, createQuest, createAction, FalloutConfig
+from gui.server_events.event_items import EventBattles, createQuest, createAction, FalloutConfig, MotiveQuest
 from gui.server_events.event_items import CompanyBattles, ClubsQuest
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import makeTupleByDict
+QUEUE_TYPE_TO_ARENA_BONUS_TYPE = {QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_BONUS_TYPE.FALLOUT_CLASSIC,
+ QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_BONUS_TYPE.FALLOUT_MULTITEAM}
 
 def _defaultQuestMaker(qID, qData, progress):
     return createQuest(qData.get('type', 0), qID, qData, progress.getQuestProgress(qID), progress.getTokenExpiryTime(qData.get('requiredToken')))
@@ -36,6 +39,10 @@ def _defaultQuestMaker(qID, qData, progress):
 
 def _clubsQuestMaker(qID, qData, progress, seasonID, questDescr):
     return ClubsQuest(seasonID, questDescr, progress.getQuestProgress(qID))
+
+
+def _motiveQuestMaker(qID, qData, progress):
+    return MotiveQuest(qID, qData, progress.getQuestProgress(qID))
 
 
 class _PotapovComposer(object):
@@ -170,7 +177,7 @@ class _EventsCache(object):
 
     @async
     @process
-    def update(self, diff = None, callback = None):
+    def update(self, diff=None, callback=None):
         if diff is not None:
             if diff.get('eventsData', {}).get(EVENT_CLIENT_DATA.INGAME_EVENTS):
                 self.__companies.setNotificators()
@@ -205,7 +212,7 @@ class _EventsCache(object):
             _cbWrapper(True)
             return
 
-    def getQuests(self, filterFunc = None):
+    def getQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
 
         def userFilterFunc(q):
@@ -213,12 +220,20 @@ class _EventsCache(object):
 
         return self._getQuests(userFilterFunc)
 
-    def getGroups(self, filterFunc = None):
+    def getMotiveQuests(self, filterFunc=None):
+        filterFunc = filterFunc or (lambda a: True)
+
+        def userFilterFunc(q):
+            return q.getType() == EVENT_TYPE.MOTIVE_QUEST and filterFunc(q)
+
+        return self.getQuests(userFilterFunc)
+
+    def getGroups(self, filterFunc=None):
         svrGroups = self._getQuestsGroups(filterFunc)
         svrGroups.update(self._getActionsGroups(filterFunc))
         return svrGroups
 
-    def getHiddenQuests(self, filterFunc = None):
+    def getHiddenQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
 
         def hiddenFilterFunc(q):
@@ -226,10 +241,10 @@ class _EventsCache(object):
 
         return self._getQuests(hiddenFilterFunc)
 
-    def getAllQuests(self, filterFunc = None, includePotapovQuests = False):
+    def getAllQuests(self, filterFunc=None, includePotapovQuests=False):
         return self._getQuests(filterFunc, includePotapovQuests)
 
-    def getActions(self, filterFunc = None):
+    def getActions(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
 
         def userFilterFunc(q):
@@ -248,6 +263,9 @@ class _EventsCache(object):
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0
 
+    def isGasAttackEnabled(self):
+        return len(self.__getGasAttack()) > 0
+
     def getEventVehicles(self):
         from gui.shared import g_itemsCache
         result = []
@@ -258,7 +276,7 @@ class _EventsCache(object):
 
         return sorted(result)
 
-    def getEvents(self, filterFunc = None):
+    def getEvents(self, filterFunc=None):
         svrEvents = self.getQuests(filterFunc)
         svrEvents.update(self.getActions(filterFunc))
         return svrEvents
@@ -275,10 +293,14 @@ class _EventsCache(object):
         finishTime = battle.get('finishTime', 0.0)
         return CompanyBattles(startTime=None if startTime is None else float(startTime), finishTime=None if finishTime is None else float(finishTime), peripheryIDs=battle.get('peripheryIDs', set()))
 
-    def getFalloutConfig(self, battleType):
-        return makeTupleByDict(FalloutConfig, self.__getFallout().get(battleType, {}))
+    def isFalloutEnabled(self):
+        return bool(self.__getFallout().get('enabled', False))
 
-    def getItemAction(self, item, isBuying = True, forCredits = False):
+    def getFalloutConfig(self, queueType):
+        arenaBonusType = QUEUE_TYPE_TO_ARENA_BONUS_TYPE.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
+        return makeTupleByDict(FalloutConfig, self.__getFallout().get(arenaBonusType, {}))
+
+    def getItemAction(self, item, isBuying=True, forCredits=False):
         result = []
         type = ACTION_MODIFIER_TYPE.DISCOUNT if isBuying else ACTION_MODIFIER_TYPE.SELLING
         itemTypeID = item.itemTypeID
@@ -340,7 +362,7 @@ class _EventsCache(object):
 
         return result
 
-    def _getQuests(self, filterFunc = None, includePotapovQuests = False):
+    def _getQuests(self, filterFunc=None, includePotapovQuests=False):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
@@ -373,7 +395,7 @@ class _EventsCache(object):
 
         return result
 
-    def _getQuestsGroups(self, filterFunc = None):
+    def _getQuestsGroups(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
         result = {}
         for qID, q in self.__getCommonQuestsIterator():
@@ -385,7 +407,7 @@ class _EventsCache(object):
 
         return result
 
-    def _getActions(self, filterFunc = None):
+    def _getActions(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
         actions = self.__getActionsData()
         result = {}
@@ -408,7 +430,7 @@ class _EventsCache(object):
 
         return result
 
-    def _getActionsGroups(self, filterFunc = None):
+    def _getActionsGroups(self, filterFunc=None):
         actions = self.__getActionsData()
         filterFunc = filterFunc or (lambda a: True)
         result = {}
@@ -426,7 +448,7 @@ class _EventsCache(object):
     def _onResync(self, *args):
         self.__invalidateData()
 
-    def _makeQuest(self, qID, qData, maker = _defaultQuestMaker, **kwargs):
+    def _makeQuest(self, qID, qData, maker=_defaultQuestMaker, **kwargs):
         storage = self.__cache['quests']
         if qID in storage:
             return storage[qID]
@@ -467,7 +489,7 @@ class _EventsCache(object):
 
         return (children, parents)
 
-    def __invalidateData(self, callback = lambda *args: None):
+    def __invalidateData(self, callback=lambda *args: None):
         self.__clearCache()
         self.__clearInvalidateCallback()
         self.__waitForSync = True
@@ -490,8 +512,7 @@ class _EventsCache(object):
                 for k in values:
                     if k in currentSection:
                         currentSection[k] = mergeValues(currentSection[k], values[k])
-                    else:
-                        currentSection[k] = values[k]
+                    currentSection[k] = values[k]
 
         rareAchieves = set()
         invalidateTimeLeft = sys.maxint
@@ -513,8 +534,7 @@ class _EventsCache(object):
                 else:
                     intervalBeginTimeLeft, (intervalStart, intervalEnd) = timeLeftInfo
                     invalidateTimeLeft = min(invalidateTimeLeft, intervalBeginTimeLeft + intervalEnd - intervalStart)
-            else:
-                invalidateTimeLeft = min(invalidateTimeLeft, q.getFinishTimeLeft())
+            invalidateTimeLeft = min(invalidateTimeLeft, q.getFinishTimeLeft())
 
         g_rareAchievesCache.request(rareAchieves)
         for q in self.getFutureEvents().itervalues():
@@ -546,7 +566,7 @@ class _EventsCache(object):
                 if eventsTypeName in BigWorld.player().eventsData:
                     return pickle.loads(zlib.decompress(BigWorld.player().eventsData[eventsTypeName]))
                 return {}
-            LOG_ERROR('Trying to get quests data from not account player', eventsTypeName, BigWorld.player())
+            LOG_DEBUG('Trying to get quests data from not account player', eventsTypeName, BigWorld.player())
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
@@ -573,6 +593,9 @@ class _EventsCache(object):
     def __getFallout(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.FALLOUT)
 
+    def __getGasAttack(self):
+        return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS).get('gasAttack', {})
+
     def __getCommonQuestsIterator(self):
         questsData = self.__getQuestsData()
         questsData.update(self.__getFortQuestsData())
@@ -585,6 +608,10 @@ class _EventsCache(object):
         eSportQuests = clubs_quests.g_cache.getLadderQuestsBySeasonID(currentESportSeasonID) or []
         for questDescr in eSportQuests:
             yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questData, maker=_clubsQuestMaker, seasonID=currentESportSeasonID, questDescr=questDescr))
+
+        motiveQuests = motivation_quests.g_cache.getAllQuests() or []
+        for questDescr in motiveQuests:
+            yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questData, maker=_motiveQuestMaker))
 
     def __loadInvalidateCallback(self, duration):
         LOG_DEBUG('load quest window invalidation callback (secs)', duration)

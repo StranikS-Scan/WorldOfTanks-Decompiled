@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortIntelligenceClanDescription.py
 import BigWorld
 import time
@@ -85,6 +85,13 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
                 yield self.fortProvider.sendRequest(RequestClanCardCtx(currentEnemyClanDBID, waitingID='fort/attack'))
         return
 
+    @process
+    def onFortBattleRemoved(self, cache, battleID):
+        if self.__item is not None:
+            currentEnemyClanDBID = self.__item.getClanDBID()
+            yield self.fortProvider.sendRequest(RequestClanCardCtx(currentEnemyClanDBID, waitingID='fort/attack'))
+        return
+
     def onEnemyClanCardRemoved(self):
         cache = self.fortCtrl.getPublicInfoCache()
         if cache is not None:
@@ -127,7 +134,7 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
          'item': self.__item,
          'defHourStart': self.__selectedDefencePeriodStart}), EVENT_BUS_SCOPE.LOBBY)
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         if reason == BUILDING_UPDATE_REASON.UPDATED and buildingTypeID == FORT_BUILDING_TYPE.MILITARY_BASE:
             self.__makeData()
 
@@ -226,9 +233,7 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
         start, finish = time_utils.getDayTimeBoundsForUTC(self.__selectedDefencePeriodStart)
 
         def filterToday(item):
-            if start <= item.getStartTime() <= finish:
-                return True
-            return False
+            return True if start <= item.getStartTime() <= finish else False
 
         attacksThisDayByUTC = fort.getAttacks(filterFunc=filterToday)
         hasFreeDirsLeft = len(attacksThisDayByUTC) < len(fort.getOpenedDirections())

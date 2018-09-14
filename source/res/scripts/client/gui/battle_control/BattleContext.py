@@ -1,5 +1,6 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/BattleContext.py
+from collections import namedtuple
 import BigWorld
 import Settings
 from gui.battle_control import avatar_getter
@@ -44,6 +45,7 @@ class BattleContext(object):
         super(BattleContext, self).__init__()
         self.__arenaDP = None
         self.__isShowVehShortName = True
+        self.__lastArenaWinStatus = None
         self.lastArenaUniqueID = None
         self.isInBattle = False
         self.wasInBattle = False
@@ -68,7 +70,7 @@ class BattleContext(object):
     def getVehIDByAccDBID(self, accDBID):
         return self.__arenaDP.getVehIDByAccDBID(accDBID)
 
-    def getFullPlayerNameWithParts(self, vID = None, accID = None, pName = None, showVehShortName = True, showClan = True, showRegion = True):
+    def getFullPlayerNameWithParts(self, vID=None, accID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
         FM = self.FORMAT_MASK
         key = FM.NONE
         vehShortName = ''
@@ -108,7 +110,7 @@ class BattleContext(object):
          regionCode,
          vehName)
 
-    def getFullPlayerName(self, vID = None, accID = None, pName = None, showVehShortName = True, showClan = True, showRegion = True):
+    def getFullPlayerName(self, vID=None, accID=None, pName=None, showVehShortName=True, showClan=True, showRegion=True):
         return self.getFullPlayerNameWithParts(vID, accID, pName, showVehShortName, showClan, showRegion)[0]
 
     def getRegionCode(self, dbID):
@@ -120,12 +122,12 @@ class BattleContext(object):
                 _, regionCode = roaming.getPlayerHome(dbID)
         return regionCode
 
-    def isSquadMan(self, vID = None, accID = None, prebattleID = None):
+    def isSquadMan(self, vID=None, accID=None, prebattleID=None):
         if vID is None:
             vID = self.__arenaDP.getVehIDByAccDBID(accID)
         return vID and self.__arenaDP.isSquadMan(vID, prebattleID)
 
-    def isTeamKiller(self, vID = None, accID = None):
+    def isTeamKiller(self, vID=None, accID=None):
         if vID is None:
             vID = self.__arenaDP.getVehIDByAccDBID(accID)
         return vID and self.__arenaDP.isTeamKiller(vID)
@@ -136,13 +138,13 @@ class BattleContext(object):
     def isPlayerObserver(self):
         return self.isObserver(getattr(BigWorld.player(), 'playerVehicleID', -1))
 
-    def isInTeam(self, teamIdx, vID = None, accID = None):
+    def isInTeam(self, teamIdx, vID=None, accID=None):
         return self._isInTeams([teamIdx], vID, accID)
 
-    def isAlly(self, vID = None, accID = None):
+    def isAlly(self, vID=None, accID=None):
         return self._isInTeams(self.__arenaDP.getAllyTeams(), vID, accID)
 
-    def isEnemy(self, vID = None, accID = None):
+    def isEnemy(self, vID=None, accID=None):
         return self._isInTeams(self.__arenaDP.getEnemyTeams(), vID, accID)
 
     def isCurrentPlayer(self, vID):
@@ -159,7 +161,15 @@ class BattleContext(object):
             teamName = opponents.get('%s' % teamIdx, {}).get('name', teamName)
         return teamName
 
-    def _isInTeams(self, teams, vID = None, accID = None):
+    def setLastArenaWinStatus(self, winStatus):
+        self.__lastArenaWinStatus = winStatus
+
+    def extractLastArenaWinStatus(self):
+        value = self.__lastArenaWinStatus
+        self.__lastArenaWinStatus = None
+        return value
+
+    def _isInTeams(self, teams, vID=None, accID=None):
         if vID is None:
             vID = self.__arenaDP.getVehIDByAccDBID(accID)
         return self.__arenaDP.getVehicleInfo(vID).team in teams

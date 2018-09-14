@@ -1,10 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/event_dispatcher.py
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 _SCOPE = EVENT_BUS_SCOPE.BATTLE
 
-def _makeKeyCtx(key = 0, isDown = False):
+def _makeKeyCtx(key=0, isDown=False):
     return {'key': key,
      'isDown': isDown}
 
@@ -33,14 +33,6 @@ def setRadialMenuCmd(key, isDown, offset):
 
 def setGUIVisibility(flag):
     g_eventBus.handleEvent(GameEvent(GameEvent.GUI_VISIBILITY, {'visible': flag}), scope=_SCOPE)
-
-
-def showGUICursor():
-    g_eventBus.handleEvent(GameEvent(GameEvent.SHOW_CURSOR), scope=_SCOPE)
-
-
-def hideGUICursor():
-    g_eventBus.handleEvent(GameEvent(GameEvent.HIDE_CURSOR), scope=_SCOPE)
 
 
 def setPlayingTimeOnArena(playingTime):

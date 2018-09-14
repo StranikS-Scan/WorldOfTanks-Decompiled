@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/player_helpers.py
 import BigWorld
 from debug_utils import LOG_ERROR
@@ -14,7 +14,7 @@ def _getInfo4AccountPlayer():
 
 
 def _getInfo4AvatarPlayer():
-    dbID, name, clanAbbrev = (0L, '', None)
+    dbID, name, clanAbbrev = (0, '', None)
     player = BigWorld.player()
     arena = getattr(player, 'arena', None)
     if arena is not None:

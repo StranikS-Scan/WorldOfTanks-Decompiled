@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/AccountSyncData.py
 import cPickle
 import BigWorld
@@ -100,7 +100,7 @@ class AccountSyncData(object):
             return
 
     def _resynchronize(self):
-        LOG_MX('resynchronize')
+        LOG_DEBUG('resynchronize')
         if self.__ignore:
             return
         else:
@@ -110,7 +110,7 @@ class AccountSyncData(object):
             self.__syncController.request(self.__getNextSyncID(), None)
             return
 
-    def __onSyncResponse(self, syncID, resultID, ext = {}):
+    def __onSyncResponse(self, syncID, resultID, ext={}):
         if resultID == AccountCommands.RES_NON_PLAYER:
             return
         if syncID != self.__syncID:

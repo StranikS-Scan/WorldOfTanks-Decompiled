@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/MiniAEFrame.py
 """MiniAEFrame - A minimal AppleEvent Application framework.
 
@@ -47,14 +48,14 @@ class MiniApplication:
     def close(self):
         pass
 
-    def mainloop(self, mask = everyEvent, timeout = 3600):
+    def mainloop(self, mask=everyEvent, timeout=3600):
         while not self.quitting:
             self.dooneevent(mask, timeout)
 
     def _quit(self):
         self.quitting = 1
 
-    def dooneevent(self, mask = everyEvent, timeout = 3600):
+    def dooneevent(self, mask=everyEvent, timeout=3600):
         got, event = Evt.WaitNextEvent(mask, timeout)
         if got:
             self.lowlevelhandler(event)
@@ -180,7 +181,7 @@ class _Test(AEServer, MiniApplication):
     def open_app(self, **args):
         pass
 
-    def other(self, _object = None, _class = None, _type = None, **args):
+    def other(self, _object=None, _class=None, _type=None, **args):
         print 'AppleEvent', (_class, _type), 'for', _object, 'Other args:', args
 
 

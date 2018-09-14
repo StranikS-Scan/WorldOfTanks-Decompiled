@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/errors.py
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
@@ -110,7 +110,7 @@ class _AdminCommandError(IChatError):
 
 class _SimpleAdminCommandError(_AdminCommandError):
 
-    def __init__(self, errorID, kwargs = None):
+    def __init__(self, errorID, kwargs=None):
         super(_SimpleAdminCommandError, self).__init__(getChatErrorMessage(errorID, kwargs or {'actionName': i18n.makeString(I18N_MESSENGER.CUSTOM_CLIENT_ACTION_ADMIN_CHAT_COMMAND)}))
 
 

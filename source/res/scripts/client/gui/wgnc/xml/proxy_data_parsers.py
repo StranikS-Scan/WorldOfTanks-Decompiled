@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/proxy_data_parsers.py
 from gui.wgnc import proxy_data
 from gui.wgnc.xml.shared_parsers import ParsersCollection, SectionParser
@@ -9,7 +9,7 @@ class _ClanApplicationParser(SectionParser):
         pass
 
     def parse(self, section):
-        return proxy_data.ClanApplicationItem(section.readInt('account_id'), section.readInt('application_id'), section.readInt('active_applications_count'))
+        return proxy_data.ClanApplicationItem(section.readInt64('account_id'), section.readInt64('application_id'), section.readInt('active_applications_count'))
 
 
 class _ClanInviteParser(SectionParser):
@@ -18,13 +18,13 @@ class _ClanInviteParser(SectionParser):
         pass
 
     def parse(self, section):
-        return proxy_data.ClanInviteItem(section.readInt('invite_id'), section.readInt('clan_id'), self._readString('clan_name', section), self._readString('clan_tag', section), section.readInt('active_invites_count'))
+        return proxy_data.ClanInviteItem(section.readInt('invite_id'), section.readInt64('clan_id'), self._readString('clan_name', section), self._readString('clan_tag', section), section.readInt('active_invites_count'))
 
 
 class _ClanPersonalAppParser(SectionParser):
 
     def parse(self, section):
-        return self._createItem(section.readInt('clan_id'), self._readString('clan_name', section), self._readString('clan_tag', section), section.readInt('application_id'))
+        return self._createItem(section.readInt64('clan_id'), self._readString('clan_name', section), self._readString('clan_tag', section), section.readInt64('application_id'))
 
     def _createItem(self, cId, cName, cTag, appId):
         raise NotImplementedError
@@ -51,7 +51,7 @@ class _ClanAppDeclinedParser(_ClanPersonalAppParser):
 class _ClanInviteActionParser(SectionParser):
 
     def parse(self, section):
-        return self._createItem(section.readInt('account_id'), section.readInt('invite_id'))
+        return self._createItem(section.readInt64('account_id'), section.readInt('invite_id'))
 
     def _createItem(self, account_id, invite_id):
         raise NotImplementedError

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/Finder/Enumerations.py
 """Suite Enumerations: Enumerations for the Finder
 Level 1, version 1

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/contact_note.py
 import types
 from helpers import html
@@ -12,7 +12,7 @@ from messenger.proto.xmpp.gloox_constants import IQ_TYPE
 class NoteID(PyExtension):
     __slots__ = ('_dbID',)
 
-    def __init__(self, dbID = 0):
+    def __init__(self, dbID=0):
         super(NoteID, self).__init__('key')
         self._dbID = dbID
 
@@ -29,14 +29,13 @@ class NoteID(PyExtension):
         return dbID
 
     def _makeChildrenString(self):
-        if self._dbID:
-            return str(self._dbID)
+        return str(self._dbID) if self._dbID else ''
 
 
 class NoteText(PyExtension):
     __slots__ = ('_text',)
 
-    def __init__(self, text = ''):
+    def __init__(self, text=''):
         super(NoteText, self).__init__('value')
         self._text = text
 
@@ -59,7 +58,7 @@ class NoteText(PyExtension):
 
 class NoteItem(PyExtension):
 
-    def __init__(self, dbID = 0, text = ''):
+    def __init__(self, dbID=0, text=''):
         super(NoteItem, self).__init__(_TAG.ITEM)
         self.setChild(NoteID(dbID))
         self.setChild(NoteText(text))
@@ -75,7 +74,7 @@ class NoteItem(PyExtension):
 
 class NoteList(PyExtension):
 
-    def __init__(self, items = None, rsm = None):
+    def __init__(self, items=None, rsm=None):
         super(NoteList, self).__init__(_TAG.LIST)
         self.setAttribute('name', 'contact-notes')
         if items:
@@ -105,7 +104,7 @@ class NoteList(PyExtension):
 
 class NoteQuery(PyExtension):
 
-    def __init__(self, items = None, rsm = None):
+    def __init__(self, items=None, rsm=None):
         super(NoteQuery, self).__init__(_TAG.QUERY)
         self.setXmlNs(_NS.WG_STORAGE)
         self.setChild(NoteList(items, rsm))
@@ -120,7 +119,7 @@ class NoteQuery(PyExtension):
 
 class NotesListQuery(PyQuery):
 
-    def __init__(self, max = 0, after = None):
+    def __init__(self, max=0, after=None):
         super(NotesListQuery, self).__init__(IQ_TYPE.GET, NoteQuery(rsm=RqResultSet(max, after)))
 
 
@@ -143,7 +142,7 @@ class SetNotesQuery(PyQuery):
         for item in items:
             assert len(item) == 2
             dbID = item[0]
-            assert type(dbID) is types.LongType
+            assert isinstance(dbID, types.LongType)
             text = item[1]
             assert type(text) in types.StringTypes
             converted.append(NoteItem(dbID, text))
@@ -162,7 +161,7 @@ class RemoveNotesQuery(PyQuery):
     def __init__(self, dbIDs):
         converted = []
         for dbID in dbIDs:
-            assert type(dbID) is types.LongType
+            assert isinstance(dbID, types.LongType)
             converted.append(NoteItem(dbID))
 
         super(RemoveNotesQuery, self).__init__(IQ_TYPE.SET, NoteQuery(items=converted))

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/ScrollableText.py
 import BigWorld
 import GUI
@@ -63,8 +63,7 @@ def _wrapLine(s, desiredWidth, textComponent):
             ret.append(subStr)
             s = s[len(subStr):]
             i = 0
-        else:
-            i += 1
+        i += 1
 
     ret.append(s)
     return ret
@@ -73,7 +72,7 @@ def _wrapLine(s, desiredWidth, textComponent):
 class ScrollableText(PyGUIBase):
     factoryString = 'PyGUI.ScrollableText'
 
-    def __init__(self, component = None):
+    def __init__(self, component=None):
         PyGUIBase.__init__(self, component)
         if component == None:
             self.component = GUI.Window('system/maps/col_white.bmp')
@@ -116,12 +115,12 @@ class ScrollableText(PyGUIBase):
         self.scrollIndex = min(self.scrollIndex, self._displayedLineCount - self.minVisibleLines)
         self._updateScroll()
 
-    def scrollUp(self, amt = 4):
+    def scrollUp(self, amt=4):
         self.scrollIndex = min(self.scrollIndex + amt, self.maxLines)
         self.scrollIndex = min(self.scrollIndex, self._displayedLineCount - self.minVisibleLines)
         self._updateScroll()
 
-    def scrollDown(self, amt = 4):
+    def scrollDown(self, amt=4):
         self.scrollIndex = max(self.scrollIndex - amt, 0)
         self._updateScroll()
 
@@ -151,7 +150,7 @@ class ScrollableText(PyGUIBase):
         if len(fonts) > 0:
             self.autoSelectionFonts = fonts
 
-    def appendLine(self, str, colour = (255, 255, 255, 255)):
+    def appendLine(self, str, colour=(255, 255, 255, 255)):
         io = StringIO.StringIO(_packColourTag(colour) + unicode(str))
         newLines = [ unicode(x).rstrip() for x in io.readlines() ]
         if len(newLines) + len(self.lines) >= self.maxLines:

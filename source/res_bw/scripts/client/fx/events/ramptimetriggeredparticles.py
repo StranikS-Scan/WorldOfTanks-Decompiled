@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/RampTimeTriggeredParticles.py
 from FX.Event import Event
 from FX.Event import IMMEDIATE_EVENT
@@ -15,7 +15,7 @@ class RampTimeTriggeredParticles(Event):
     correctly in a OneShot effect scenario. 
     """
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         """
         This method loads a RampTimeTriggeredParticles event from an XML
         data section.  It reads in "duration" and "fadeTime" as floats.

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/invites.py
 from collections import namedtuple, defaultdict
 import BigWorld
@@ -26,9 +26,7 @@ from messenger.ext import isNotFriendSenderIgnored
 from predefined_hosts import g_preDefinedHosts
 
 def isInviteSenderIgnoredInBattle(user, areFriendsOnly, isFromBattle):
-    if isFromBattle:
-        return isNotFriendSenderIgnored(user, False)
-    return isNotFriendSenderIgnored(user, areFriendsOnly)
+    return isNotFriendSenderIgnored(user, False) if isFromBattle else isNotFriendSenderIgnored(user, areFriendsOnly)
 
 
 class _INVITE_VERSION(object):
@@ -59,8 +57,8 @@ _PrbInviteData = namedtuple('_PrbInviteData', ' '.join(['clientID',
 class PrbInviteWrapper(_PrbInviteData):
 
     @staticmethod
-    def __new__(cls, clientID = -1L, createTime = None, type = 0, comment = str(), creator = str(), creatorDBID = -1L, creatorClanAbbrev = None, receiver = str(), receiverDBID = -1L, receiverClanAbbrev = None, state = None, count = 0, peripheryID = 0, prebattleID = 0, extraData = None, alwaysAvailable = None, ownerDBID = -1L, expiryTime = None, id = -1L, **kwargs):
-        if ownerDBID < 0L:
+    def __new__(cls, clientID=-1, createTime=None, type=0, comment=str(), creator=str(), creatorDBID=-1, creatorClanAbbrev=None, receiver=str(), receiverDBID=-1, receiverClanAbbrev=None, state=None, count=0, peripheryID=0, prebattleID=0, extraData=None, alwaysAvailable=None, ownerDBID=-1, expiryTime=None, id=-1, **kwargs):
+        if ownerDBID < 0:
             ownerDBID = creatorDBID
         result = _PrbInviteData.__new__(cls, clientID, createTime, type, comment, creator, creatorDBID, creatorClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, state, count, peripheryID, prebattleID, extraData or {}, alwaysAvailable, ownerDBID, expiryTime, id)
         result.showAt = 0
@@ -92,22 +90,13 @@ class PrbInviteWrapper(_PrbInviteData):
         return False
 
     def getCreateTime(self):
-        if self.createTime is not None:
-            return int(time_utils.makeLocalServerTime(self.createTime))
-        else:
-            return
+        return int(time_utils.makeLocalServerTime(self.createTime)) if self.createTime is not None else None
 
     def getExpiryTime(self):
-        if self.expiryTime is not None:
-            return int(time_utils.makeLocalServerTime(self.expiryTime))
-        else:
-            return
+        return int(time_utils.makeLocalServerTime(self.expiryTime)) if self.expiryTime is not None else None
 
-    def getExtraData(self, key = None):
-        if key is not None:
-            return self.extraData.get(key)
-        else:
-            return self.extraData
+    def getExtraData(self, key=None):
+        return self.extraData.get(key) if key is not None else self.extraData
 
     def isCreatedInBattle(self):
         return not self.isFromHangar()
@@ -124,16 +113,16 @@ class PrbInviteWrapper(_PrbInviteData):
     def getState(self):
         return PRB_INVITE_STATE.getFromOldState(self)
 
-    def accept(self, callback = None):
+    def accept(self, callback=None):
         if connectionManager.peripheryID == self.peripheryID:
             BigWorld.player().prb_acceptInvite(self.prebattleID, self.peripheryID)
         else:
             LOG_ERROR('Invalid periphery', (self.prebattleID, self.peripheryID), connectionManager.peripheryID)
 
-    def decline(self, callback = None):
+    def decline(self, callback=None):
         BigWorld.player().prb_declineInvite(self.prebattleID, self.peripheryID)
 
-    def revoke(self, callback = None):
+    def revoke(self, callback=None):
         LOG_WARNING('Old-style invite can not be revoked')
 
     @classmethod
@@ -153,7 +142,7 @@ class PrbInviteWrapper(_PrbInviteData):
         data = {}
         if other.creator:
             data['creator'] = other.creator
-        if other.creatorDBID > 0L:
+        if other.creatorDBID > 0:
             data['creatorDBID'] = other.creatorDBID
         if other.creatorClanAbbrev:
             data['creatorClanAbbrev'] = other.creatorClanAbbrev
@@ -183,7 +172,7 @@ class PrbInviteWrapper(_PrbInviteData):
 class PrbInvitationWrapper(PrbInviteWrapper):
 
     @staticmethod
-    def __new__(cls, clientID = -1L, id = -1L, type = 0, status = None, sentAt = None, expiresAt = None, ownerID = -1L, senderDBID = -1L, receiverDBID = -1L, info = None, sender = str(), senderClanAbbrev = None, receiver = str(), receiverClanAbbrev = None, **kwargs):
+    def __new__(cls, clientID=-1, id=-1, type=0, status=None, sentAt=None, expiresAt=None, ownerID=-1, senderDBID=-1, receiverDBID=-1, info=None, sender=str(), senderClanAbbrev=None, receiver=str(), receiverClanAbbrev=None, **kwargs):
         info = info or {}
         peripheryID, prbID = cls.getPrbInfo(info)
         result = PrbInviteWrapper.__new__(cls, clientID, sentAt, type, info.get('comment', ''), sender, senderDBID, senderClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, status, 1, peripheryID, prbID, info, False, ownerID, expiresAt, id, **kwargs)
@@ -214,16 +203,16 @@ class PrbInvitationWrapper(PrbInviteWrapper):
     def getState(self):
         return PRB_INVITE_STATE.getFromNewState(self)
 
-    def accept(self, callback = None):
+    def accept(self, callback=None):
         if connectionManager.peripheryID == self.peripheryID:
             BigWorld.player().prebattleInvitations.acceptInvitation(self.id, self.creatorDBID, callback)
         else:
             LOG_ERROR('Invalid periphery', (self.prebattleID, self.peripheryID), connectionManager.peripheryID)
 
-    def decline(self, callback = None):
+    def decline(self, callback=None):
         BigWorld.player().prebattleInvitations.declineInvitation(self.id, self.creatorDBID, callback)
 
-    def revoke(self, callback = None):
+    def revoke(self, callback=None):
         LOG_WARNING('Need to call valid Account method')
 
 
@@ -249,9 +238,7 @@ def _getOldInvites():
 
 
 def _getNewInvites():
-    if hasattr(BigWorld.player(), 'prebattleInvitations'):
-        return BigWorld.player().prebattleInvitations.getInvites()
-    return {}
+    return BigWorld.player().prebattleInvitations.getInvites() if hasattr(BigWorld.player(), 'prebattleInvitations') else {}
 
 
 class InvitesManager(UsersInfoHelper):
@@ -318,7 +305,7 @@ class InvitesManager(UsersInfoHelper):
     def isInited(self):
         return self.__inited == PRB_INVITES_INIT_STEP.INITED
 
-    def acceptInvite(self, inviteID, postActions = None):
+    def acceptInvite(self, inviteID, postActions=None):
         try:
             invite = self.__invites[inviteID]
         except KeyError:
@@ -400,7 +387,7 @@ class InvitesManager(UsersInfoHelper):
             result = invite.clientID > 0 and invite.isActive() and invite.creatorDBID == getPlayerDatabaseID()
         return result
 
-    def getInvites(self, incoming = None, version = None, onlyActive = None):
+    def getInvites(self, incoming=None, version=None, onlyActive=None):
         result = self.__invites.values()
         if incoming is not None:
             result = filter(lambda item: item.isIncoming() is incoming, result)
@@ -419,13 +406,13 @@ class InvitesManager(UsersInfoHelper):
     def getReceivedInviteCount(self):
         return len(self.getReceivedInvites())
 
-    def getReceivedInvites(self, IDs = None):
+    def getReceivedInvites(self, IDs=None):
         result = self.getInvites(incoming=True)
         if IDs is not None:
             result = filter(lambda item: item.clientID in IDs, result)
         return result
 
-    def getSentInvites(self, IDs = None):
+    def getSentInvites(self, IDs=None):
         result = self.getInvites(incoming=False)
         if IDs is not None:
             result = filter(lambda item: item.clientID in IDs, result)
@@ -624,7 +611,7 @@ class InvitesManager(UsersInfoHelper):
                 if self._addInvite(invite, rosterGetter):
                     modified = True
                     added.append(inviteID)
-            elif self._updateInvite(invite, rosterGetter):
+            if self._updateInvite(invite, rosterGetter):
                 modified = True
                 changed.append(inviteID)
 
@@ -660,7 +647,7 @@ class InvitesManager(UsersInfoHelper):
                 if self._addInvite(invite, rosterGetter):
                     modified[isIncoming] = True
                     added[isIncoming].append(inviteID)
-            elif self._updateInvite(invite, rosterGetter):
+            if self._updateInvite(invite, rosterGetter):
                 modified[isIncoming] = True
                 changed[isIncoming].append(inviteID)
 

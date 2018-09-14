@@ -88,6 +88,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A27_T82/T82_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
     </camouflage>
@@ -135,7 +136,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.75	</textureScale>
+        <textureScale>	-1.634	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -238,18 +239,18 @@
       <splineDesc>
         <segmentModelLeft>	vehicles/american/A27_T82/track/T_16_track1.model	</segmentModelLeft>
         <segmentModelRight>	vehicles/american/A27_T82/track/T_16_track1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A27_T82/track/T_16_track2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A27_T82/track/T_16_track2.model	</segment2ModelRight>
         <left>	vehicles/american/A27_T82/track/left.track	</left>
         <right>	vehicles/american/A27_T82/track/right.track	</right>
         <segmentLength>	0.115	</segmentLength>
         <segmentOffset>	-0.023	</segmentOffset>
+        <segment2Offset>	0.063	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
-        <segment2ModelLeft>	vehicles/american/A27_T82/track/T_16_track2.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/american/A27_T82/track/T_16_track2.model	</segment2ModelRight>
-        <segment2Offset>	0.063	</segment2Offset>
       </splineDesc>
       <trackThickness>	0.0083	</trackThickness>
       <trackNodes>
@@ -391,7 +392,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.75	</textureScale>
+        <textureScale>	-1.634	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -494,18 +495,18 @@
       <splineDesc>
         <segmentModelLeft>	vehicles/american/A27_T82/track/T_16_track1.model	</segmentModelLeft>
         <segmentModelRight>	vehicles/american/A27_T82/track/T_16_track1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A27_T82/track/T_16_track2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A27_T82/track/T_16_track2.model	</segment2ModelRight>
         <left>	vehicles/american/A27_T82/track/left.track	</left>
         <right>	vehicles/american/A27_T82/track/right.track	</right>
         <segmentLength>	0.115	</segmentLength>
         <segmentOffset>	-0.023	</segmentOffset>
+        <segment2Offset>	0.063	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
         </atlas>
-        <segment2ModelLeft>	vehicles/american/A27_T82/track/T_16_track2.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/american/A27_T82/track/T_16_track2.model	</segment2ModelRight>
-        <segment2Offset>	0.063	</segment2Offset>
       </splineDesc>
       <trackThickness>	0.0083	</trackThickness>
       <trackNodes>
@@ -689,7 +690,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.023 0.975 0.000 0.997 -0.007 0.336 0.100 0.500 0.500 0.023 0.500 0.489 0.580 0.000	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.355 0.355 0.000000 0.000000	</tiling>
@@ -769,7 +770,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.023 0.975 -0.000 1.010 0.007 0.336 0.100 0.500 0.500 0.023 0.500 0.489 0.553 0.000	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.355 0.355 0.000000 0.000000	</tiling>

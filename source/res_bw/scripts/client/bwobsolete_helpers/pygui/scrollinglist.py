@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/ScrollingList.py
 import BigWorld, GUI, Keys
 import Utils
@@ -87,9 +87,7 @@ class ScrollingList(PyGUIBase):
     def canSelect(self, idx):
         if idx < 0:
             return 0
-        if idx >= len(self.items.children):
-            return 0
-        return self.items.children[idx][1].script.canSelect()
+        return 0 if idx >= len(self.items.children) else self.items.children[idx][1].script.canSelect()
 
     def moveSelection(self, dist):
         self.selectItem(self.getSelectionOffset(dist))
@@ -112,7 +110,7 @@ class ScrollingList(PyGUIBase):
 
         return newIdx
 
-    def selectItem(self, idx = 0, bringIntoView = True, animate = True, forceReselect = False):
+    def selectItem(self, idx=0, bringIntoView=True, animate=True, forceReselect=False):
         num = len(self.items.children)
         if num == 0 or idx == self.selection and not forceReselect:
             return
@@ -133,7 +131,7 @@ class ScrollingList(PyGUIBase):
         except Exception as e:
             print 'ERROR: ScrollingList.selectItem callback', e
 
-    def executeSelected(self, playSound = True):
+    def executeSelected(self, playSound=True):
         BigWorld.playSound('ui/boop')
         entry = self.items.children[self.selection][1]
         i = entry.script.onSelect(self)
@@ -142,7 +140,7 @@ class ScrollingList(PyGUIBase):
     def updateControlBar(self):
         pass
 
-    def checkSelectionVisible(self, animate = True):
+    def checkSelectionVisible(self, animate=True):
         if self.items.script.maxScroll[1] == 0.0:
             self.items.script.scrollTo(0, 0, animate)
             self.scrollUp.visible = 0
@@ -150,7 +148,7 @@ class ScrollingList(PyGUIBase):
             return
         self.scrollToItem(self.selection, animate)
 
-    def scrollToItem(self, idx, animate = True):
+    def scrollToItem(self, idx, animate=True):
         itemHeight = self.totalHeightScreenClip / len(self.component.items.children)
         itemScrollY = itemHeight * idx
         currentScroll = self.items.script.scroll[1]

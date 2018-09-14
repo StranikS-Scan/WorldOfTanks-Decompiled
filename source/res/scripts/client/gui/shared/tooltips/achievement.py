@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/achievement.py
 import constants
 from debug_utils import LOG_ERROR
@@ -52,9 +52,7 @@ class AchievementIsInDossierField(ToolTipDataField):
     def _getValue(self):
         achievement = self._tooltip.item
         configuration = self._tooltip.context.getParamsConfiguration(achievement)
-        if not configuration.checkAchievementExistence:
-            return True
-        return achievement.isInDossier()
+        return True if not configuration.checkAchievementExistence else achievement.isInDossier()
 
 
 class AchievementRecordsField(ToolTipDataField):

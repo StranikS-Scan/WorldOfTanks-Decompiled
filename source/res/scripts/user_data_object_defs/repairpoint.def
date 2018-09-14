@@ -1,6 +1,11 @@
 <repairpoint.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	0	</Default>
+    </team>
     <radius>
       <Type>	FLOAT32	</Type>
       <Editable>	true	</Editable>
@@ -61,5 +66,10 @@
       <Default>	repair_point_flag	</Default>
       <Editable>	true	</Editable>
     </flagModel>
+    <heightOver>
+      <Type>	UINT8	</Type>
+      <Default>	0	</Default>
+      <Editable>	true	</Editable>
+    </heightOver>
   </Properties>
 </repairpoint.def>

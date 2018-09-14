@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/SystemEvents/Disk_Folder_File_Suite.py
 """Suite Disk-Folder-File Suite: Terms and Events for controlling Disks, Folders, and Files
 Level 1, version 1
@@ -12,7 +13,7 @@ _code = 'cdis'
 class Disk_Folder_File_Suite_Events:
     _argmap_move = {'to': 'insh'}
 
-    def move(self, _object, _attributes = {}, **_arguments):
+    def move(self, _object, _attributes={}, **_arguments):
         """move: Move disk item(s) to a new location.
         Required argument: the object for the command
         Keyword argument to: The new location for the disk item(s).
@@ -26,8 +27,7 @@ class Disk_Folder_File_Suite_Events:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class application(aetools.ComponentItem):

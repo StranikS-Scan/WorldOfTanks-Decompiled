@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/ui/layouts.py
 from collections import defaultdict
 from dossiers2.custom.vehicle_layout import FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT
@@ -57,9 +57,7 @@ _CUSTOM_ACHIEVES = defaultdict(tuple, {DOSSIER_TYPE.ACCOUNT: (achievements.WHITE
 def _getComLayoutRecordID(record):
     if record in TANK_EXPERT_GROUP:
         return (record[0], 'tankExpertStrg')
-    if record in MECH_ENGINEER_GROUP:
-        return (record[0], 'mechanicEngineerStrg')
-    return record
+    return (record[0], 'mechanicEngineerStrg') if record in MECH_ENGINEER_GROUP else record
 
 
 def _buildComLayoutSet(dossierType, comLayout):
@@ -68,8 +66,7 @@ def _buildComLayoutSet(dossierType, comLayout):
     for layout in comLayout:
         if hasattr(layout, 'recordsLayout'):
             result.update(set(((layout.name, r) for r in layout.recordsLayout)))
-        else:
-            result.add(achievements.makeAchievesStorageName(layout.name))
+        result.add(achievements.makeAchievesStorageName(layout.name))
 
     for dt in (_COMMON_DOSSIERS_TYPE, dossierType):
         result -= set(_EXCLUDED_ACHIEVES[dt])
@@ -88,9 +85,7 @@ _layoutsMap = {}
 
 def getAchievementsLayout(dossierType):
     global _layoutsMap
-    if dossierType in _layoutsMap:
-        return _layoutsMap[dossierType][0]
-    return tuple()
+    return _layoutsMap[dossierType][0] if dossierType in _layoutsMap else tuple()
 
 
 def isAchievementRegistered(record):

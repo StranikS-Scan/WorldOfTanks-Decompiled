@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/AbstractTweenMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
@@ -53,13 +53,10 @@ class AbstractTweenMeta(BaseDAAPIModule):
         self._printOverrideError('postponedCheckState')
 
     def getTargetDisplayObjectS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.getTargetDisplayObject()
+        return self.flashObject.getTargetDisplayObject() if self._isDAAPIInited() else None
 
     def onAnimCompleteS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.onAnimComplete()
+        return self.flashObject.onAnimComplete() if self._isDAAPIInited() else None
 
     def onAnimStartS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.onAnimStart()
+        return self.flashObject.onAnimStart() if self._isDAAPIInited() else None

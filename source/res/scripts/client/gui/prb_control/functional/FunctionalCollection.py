@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/FunctionalCollection.py
 from debug_utils import LOG_ERROR
 from gui.prb_control.items import FunctionalState, PlayerDecorator, SelectResult
@@ -11,7 +11,7 @@ class FunctionalCollection(object):
         super(FunctionalCollection, self).__init__()
         self.__items = {}
 
-    def clear(self, woEvents = False):
+    def clear(self, woEvents=False):
         for item in self.__items.itervalues():
             if item is not None:
                 item.fini(woEvents=woEvents)
@@ -30,7 +30,7 @@ class FunctionalCollection(object):
             result = self.__items[ctrlType]
         return result
 
-    def setItem(self, ctrlType, item, initCtx = None):
+    def setItem(self, ctrlType, item, initCtx=None):
         if ctrlType in self.__items:
             self.__items[ctrlType].fini()
         self.__items[ctrlType] = item
@@ -106,7 +106,7 @@ class FunctionalCollection(object):
 
         return permissions
 
-    def canPlayerDoAction(self, afterGeneralChecking = False):
+    def canPlayerDoAction(self, afterGeneralChecking=False):
         if afterGeneralChecking:
             order = FUNCTIONAL_ORDER.AFTER_GENERAL_CHECKING
         else:
@@ -127,7 +127,7 @@ class FunctionalCollection(object):
             if item and item.exitFromQueue():
                 return
 
-    def doAction(self, factories, action = None):
+    def doAction(self, factories, action=None):
         result = False
         state = self.getState(factories)
         if state.hasModalEntity:

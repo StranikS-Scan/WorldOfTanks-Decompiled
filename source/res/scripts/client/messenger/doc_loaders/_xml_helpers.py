@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/_xml_helpers.py
 import types
 from helpers.html import translation as html_translation
@@ -25,15 +25,15 @@ class XMLError(Exception):
 
 class XMLCtx(object):
 
-    def __init__(self, filePath, xpath = None):
+    def __init__(self, filePath, xpath=None):
         super(XMLCtx, self).__init__()
         self.__filePath = filePath
         if xpath is None:
             self.__xpath = []
-        elif type(xpath) is types.ListType:
+        elif isinstance(xpath, types.ListType):
             self.__xpath = xpath
         else:
-            raise ValueError, 'xpath must be list.'
+            raise ValueError('xpath must be list.')
         return
 
     def next(self, section):
@@ -65,7 +65,7 @@ def readRGB(xmlCtx, section, name, msg):
     return _convertVector3ToRGB(xmlCtx, section.readVector3(name), msg)
 
 
-def readItem(xmlCtx, section, getter, converter = None, settings = None):
+def readItem(xmlCtx, section, getter, converter=None, settings=None):
     name = readNoEmptyStr(xmlCtx, section, 'name', 'Item name is not defined')
     if 'value' not in section.keys():
         raise XMLError(xmlCtx, 'Item value is not defined')
@@ -80,27 +80,27 @@ def readItem(xmlCtx, section, getter, converter = None, settings = None):
     return (name, value)
 
 
-def readIntItem(xmlCtx, section, settings = None):
+def readIntItem(xmlCtx, section, settings=None):
     return readItem(xmlCtx, section, 'readInt', settings=settings)
 
 
-def readFloatItem(xmlCtx, section, settings = None):
+def readFloatItem(xmlCtx, section, settings=None):
     return readItem(xmlCtx, section, 'readFloat', settings=settings)
 
 
-def readRGBItem(xmlCtx, section, settings = None):
+def readRGBItem(xmlCtx, section, settings=None):
     name, value = readItem(xmlCtx, section, 'readVector3', settings=settings)
     return (name, _convertVector3ToRGB(xmlCtx, value, 'Value is not valid'))
 
 
-def readStringItem(xmlCtx, section, settings = None):
+def readStringItem(xmlCtx, section, settings=None):
     return readItem(xmlCtx, section, 'readString', settings=settings)
 
 
-def readUnicodeItem(xmlCtx, section, settings = None):
+def readUnicodeItem(xmlCtx, section, settings=None):
     return readItem(xmlCtx, section, 'readString', converter=lambda value: unicode(value, 'utf-8', 'ignore'), settings=settings)
 
 
-def readI18nStringItem(xmlCtx, section, settings = None):
+def readI18nStringItem(xmlCtx, section, settings=None):
     name, value = readItem(xmlCtx, section, 'readString', converter=html_translation, settings=settings)
     return (name, value)

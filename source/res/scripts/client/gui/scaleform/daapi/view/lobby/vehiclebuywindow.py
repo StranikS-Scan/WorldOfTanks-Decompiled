@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleBuyWindow.py
 import BigWorld
 from gui.Scaleform.locale.DIALOGS import DIALOGS
@@ -19,7 +19,7 @@ from gui.game_control import g_instance as g_gameCtrl
 
 class VehicleBuyWindow(VehicleBuyWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(VehicleBuyWindow, self).__init__()
         self.nationID = ctx.get('nationID')
         self.inNationID = ctx.get('itemID')

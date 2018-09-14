@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/meta/DamagePanelMeta.py
 from gui.Scaleform.daapi.view.battle.meta.BattleComponentMeta import BattleComponentMeta
 
@@ -46,9 +46,6 @@ class DamagePanelMeta(BattleComponentMeta):
     def as_setCrewDeactivatedS(self):
         self._flashObject.as_setCrewDeactivated()
 
-    def as_showGasCrewDestroyedS(self, params):
-        self._flashObject.as_showGasCrewDestroyed(params)
-
     def as_showS(self, isShow):
         self._flashObject.as_show(isShow)
 
@@ -58,5 +55,17 @@ class DamagePanelMeta(BattleComponentMeta):
     def as_resetS(self):
         self._flashObject.as_reset()
 
-    def as_hideGasAtackInfoS(self):
-        self._flashObject.as_hideGasAtackInfo()
+    def as_setNormalizedEngineRpmS(self, rpm):
+        self._flashObject.as_setNormalizedEngineRpm(rpm)
+
+    def as_updateMaxSpeedS(self, speed):
+        self._flashObject.as_setMaxSpeed(speed)
+
+    def as_startVehicleStartAnimS(self):
+        self._flashObject.as_startVehicleStartAnim()
+
+    def as_finishVehicleStartAnimS(self):
+        self._flashObject.as_finishVehicleStartAnim()
+
+    def as_playEngineStartAnimS(self):
+        self._flashObject.as_playEngineStartAnim()

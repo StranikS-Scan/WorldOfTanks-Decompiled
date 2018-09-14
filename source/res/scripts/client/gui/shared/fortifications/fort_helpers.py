@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/fort_helpers.py
 import calendar
 import datetime
@@ -17,13 +17,13 @@ from gui.shared.fortifications.settings import ROSTER_INTRO_WINDOW
 
 class fortProviderProperty(property):
 
-    def __get__(self, obj, objType = None):
+    def __get__(self, obj, objType=None):
         return g_clanCache.fortProvider
 
 
 class fortCtrlProperty(property):
 
-    def __get__(self, obj, objType = None):
+    def __get__(self, obj, objType=None):
         provider = g_clanCache.fortProvider
         ctrl = None
         if provider:
@@ -33,7 +33,7 @@ class fortCtrlProperty(property):
 
 class fortStateProperty(property):
 
-    def __get__(self, obj, objType = None):
+    def __get__(self, obj, objType=None):
         provider = g_clanCache.fortProvider
         state = None
         if provider:
@@ -73,7 +73,7 @@ def adjustDefenceHourToUTC(defenceHour):
     return time.gmtime(localTime).tm_hour
 
 
-def adjustDefenceHourToLocal(defenceHour, timestamp = None):
+def adjustDefenceHourToLocal(defenceHour, timestamp=None):
     timestamp = timestamp or time_utils.getCurrentTimestamp()
     localtime = time.localtime(time_utils.getTimeForUTC(timestamp, defenceHour))
     return (localtime.tm_hour, localtime.tm_min)
@@ -100,7 +100,7 @@ def adjustOffDayToLocal(offDay, defenceHour):
     return __adjustOffDay(offDay, defenceHour, False)
 
 
-def __adjustOffDay(offDay, defenceHour, toUTC = True):
+def __adjustOffDay(offDay, defenceHour, toUTC=True):
     if offDay != NOT_ACTIVATED and time.timezone:
         weekDays = tuple(calendar.Calendar().iterweekdays())
         timezoneHourOffset = abs(getTimeZoneOffset())
@@ -151,7 +151,7 @@ def getRosterIntroWindowSetting(type):
     return settings[ROSTER_INTRO_WINDOW].get(type)
 
 
-def setRosterIntroWindowSetting(type, value = True):
+def setRosterIntroWindowSetting(type, value=True):
     settings = dict(AccountSettings.getSettings('fortSettings'))
     if ROSTER_INTRO_WINDOW not in settings:
         settings[ROSTER_INTRO_WINDOW] = {}

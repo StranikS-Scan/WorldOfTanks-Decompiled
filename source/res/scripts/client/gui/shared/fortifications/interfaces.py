@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/interfaces.py
 from debug_utils import LOG_DEBUG
 from gui.shared.fortifications.settings import FORT_RESTRICTION
@@ -8,10 +8,10 @@ class IFortController(object):
     def __del__(self):
         LOG_DEBUG('Fort controller deleted:', self)
 
-    def init(self, clan, listeners, prevController = None):
+    def init(self, clan, listeners, prevController=None):
         pass
 
-    def fini(self, clearCache = True):
+    def fini(self, clearCache=True):
         pass
 
     @classmethod
@@ -45,13 +45,13 @@ class IFortController(object):
     def getFort(self):
         return None
 
-    def request(self, ctx, callback = None):
+    def request(self, ctx, callback=None):
         pass
 
-    def subscribe(self, callback = None):
+    def subscribe(self, callback=None):
         pass
 
-    def unsubscribe(self, callback = None):
+    def unsubscribe(self, callback=None):
         pass
 
 
@@ -87,10 +87,10 @@ class IFortListener(object):
     def onUpdated(self, isFullUpdate):
         pass
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         pass
 
-    def onBuildingsUpdated(self, buildingsTypeIDs, cooldownPassed = False):
+    def onBuildingsUpdated(self, buildingsTypeIDs, cooldownPassed=False):
         pass
 
     def onTransport(self):
@@ -258,10 +258,10 @@ class IFortLimits(object):
     def isCreationValid(self):
         return (False, FORT_RESTRICTION.UNKNOWN)
 
-    def isDirectionValid(self, direction, open = True):
+    def isDirectionValid(self, direction, open=True):
         return (False, FORT_RESTRICTION.UNKNOWN)
 
-    def isOrderValid(self, orderTypeID, count = 1, add = True):
+    def isOrderValid(self, orderTypeID, count=1, add=True):
         return (False, FORT_RESTRICTION.UNKNOWN)
 
     def canBuild(self, buildingID):
@@ -270,7 +270,7 @@ class IFortLimits(object):
     def canUpgrade(self, buildingTypeID):
         return (False, FORT_RESTRICTION.UNKNOWN)
 
-    def isSortieCreationValid(self, level = None):
+    def isSortieCreationValid(self, level=None):
         return (False, FORT_RESTRICTION.UNKNOWN)
 
 
@@ -283,6 +283,4 @@ class IFortValidators(object):
         self._validators.clear()
 
     def validate(self, requestType, *args):
-        if requestType in self._validators:
-            return self._validators[requestType](*args)
-        return (True, '')
+        return self._validators[requestType](*args) if requestType in self._validators else (True, '')

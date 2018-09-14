@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/PathBrowser.py
 import os
 import sys
@@ -35,7 +35,7 @@ class PathBrowserTreeItem(TreeItem):
 
 class DirBrowserTreeItem(TreeItem):
 
-    def __init__(self, dir, packages = []):
+    def __init__(self, dir, packages=[]):
         self.dir = dir
         self.packages = packages
 

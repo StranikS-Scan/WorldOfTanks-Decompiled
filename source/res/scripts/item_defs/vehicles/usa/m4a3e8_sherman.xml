@@ -83,6 +83,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A06_M4A3E8_Sherman/M4A3_Sherman_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <NVSS_T66>
@@ -238,6 +239,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.818455 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Chassis.model	</collisionModel>
@@ -409,6 +412,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.818455 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/american/A06_M4A3E8_Sherman/collision/Chassis.model	</collisionModel>
@@ -615,6 +620,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.976 -0.053 1.000 0.000 0.705 0.000 0.713 0.590 0.456 0.500 0.082 0.500 0.000 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	1.06 1.06 0.09 0.000000	</tiling>
@@ -628,7 +634,7 @@
       <unlocks>
         <gun>	_76mm_Gun_M1A2	  <cost>	5800	</cost>
         </gun>
-        <vehicle>	T20	  <cost>	55500	</cost>
+        <vehicle>	A07_T20	  <cost>	55500	</cost>
         </vehicle>
       </unlocks>
       <armor>
@@ -855,6 +861,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.951 -0.012 1.000 0.000 0.678 0.000 0.686 0.555 0.467 0.500 0.098 0.500 0.000 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.97 0.97 0.32 0.000000	</tiling>

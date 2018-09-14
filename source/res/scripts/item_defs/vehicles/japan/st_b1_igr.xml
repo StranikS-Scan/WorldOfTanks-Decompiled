@@ -86,6 +86,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/japan/J16_ST_B1/ST_B1_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
     </camouflage>
@@ -180,7 +181,9 @@
         <mud>	largeTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.05446 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/japan/J16_ST_B1/collision/Chassis.model	</collisionModel>
@@ -318,6 +321,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.066 -0.155 1.073 0.000 0.525 0.038 0.823 0.555 0.418 0.500 0.437 0.500 0.112 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
     </Turret_1_ST_B1_IGR>
   </turrets0>

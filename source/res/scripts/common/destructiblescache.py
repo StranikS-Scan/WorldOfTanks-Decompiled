@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/DestructiblesCache.py
 import ResMgr
 import BigWorld
@@ -37,12 +37,12 @@ class DestructiblesCache():
         if IS_CLIENT:
             sec = ResMgr.openSection(DESTRUCTIBLES_EFFECTS_FILE)
             if not sec:
-                raise Exception, "Fail to read '%s'" % DESTRUCTIBLES_EFFECTS_FILE
+                raise Exception("Fail to read '%s'" % DESTRUCTIBLES_EFFECTS_FILE)
             self.__effects = _readDestructiblesEffects(sec)
             ResMgr.purge(DESTRUCTIBLES_EFFECTS_FILE, True)
         sec = ResMgr.openSection(DESTRUCTIBLES_CONFIG_FILE)
         if not sec:
-            raise Exception, "Fail to read '%s'" % DESTRUCTIBLES_CONFIG_FILE
+            raise Exception("Fail to read '%s'" % DESTRUCTIBLES_CONFIG_FILE)
         self.__defaultLifetimeEffectChance = sec.readFloat('defaultLifetimeEffectChance')
         self.__unitVehicleMass = sec.readFloat('unitVehicleMass')
         if not IS_CLIENT or IS_DEVELOPMENT:
@@ -82,20 +82,14 @@ class DestructiblesCache():
         return self.__projectilePiercingPowerReduction
 
     def getDescByID(self, descID):
-        if descID < len(self.__descs):
-            return self.__descs[descID]
-        else:
-            return None
+        return self.__descs[descID] if descID < len(self.__descs) else None
 
     def getDescIDByFilename(self, filename):
         return self.__descIDs.get(filename)
 
     def getDescByFilename(self, filename):
         id = self.getDescIDByFilename(filename)
-        if id is not None:
-            return self.__descs[id]
-        else:
-            return
+        return self.__descs[id] if id is not None else None
 
     def __readStructure(self, structSec):
         filename = structSec.readString('filename')
@@ -281,9 +275,9 @@ class DestructiblesCache():
             if tag in CUSTOM_DESTRUCTIBLE_TAGS:
                 desc['achievementTag'] = tag
             else:
-                raise Exception, "Wrong achievement tag '%s' in destructible '%s'" % (tag, section.readString('filename'))
+                raise Exception("Wrong achievement tag '%s' in destructible '%s'" % (tag, section.readString('filename')))
 
-    def _getEffect(self, effectName, effectCategory, needLogErrors = True):
+    def _getEffect(self, effectName, effectCategory, needLogErrors=True):
         if not effectName:
             if needLogErrors:
                 LOG_WARNING('Failed to read %s name in %s' % (effectName, effectCategory))
@@ -329,7 +323,7 @@ def _parseMaterialName(matName, filename):
     return res
 
 
-def _readAndMapEffect(cfg, sec, effectKey, effects, destrFilename, needLogErrors = True):
+def _readAndMapEffect(cfg, sec, effectKey, effects, destrFilename, needLogErrors=True):
     effectName = sec.readString(effectKey)
     if not effectName:
         if needLogErrors:
@@ -404,18 +398,18 @@ def _readProjectilePiercingPowerReduction(section):
             minReduction = float(val[1])
             assert reductionFactor >= 0.0 and minReduction >= 0.0
         except:
-            raise Exception, 'Wrong of missing value of %s/%s' % (section.name, matName)
+            raise Exception('Wrong of missing value of %s/%s' % (section.name, matName))
 
         res.append((reductionFactor, minReduction))
 
     return tuple(res)
 
 
-def _readFloatArray(sec, count = None):
+def _readFloatArray(sec, count=None):
     arrayStr = sec.readString('')
     strArr = arrayStr.split()
     if count is not None and len(strArr) != count:
-        raise Exception, 'Error reading float array from section %s' % sec.name
+        raise Exception('Error reading float array from section %s' % sec.name)
     return tuple(map(float, strArr))
 
 
@@ -423,7 +417,7 @@ def _readIntArray(sec, count):
     arrayStr = sec.readString('')
     strArr = arrayStr.split()
     if len(strArr) != count:
-        raise Exception, 'Error reading int array from section %s' % sec.name
+        raise Exception('Error reading int array from section %s' % sec.name)
     return tuple(map(int, strArr))
 
 
@@ -431,7 +425,7 @@ def _readStringArray(sec, count):
     arrayStr = sec.readString('')
     strArr = arrayStr.split()
     if len(strArr) != count:
-        raise Exception, 'Error reading int array from section %s' % sec.name
+        raise Exception('Error reading int array from section %s' % sec.name)
     return strArr
 
 

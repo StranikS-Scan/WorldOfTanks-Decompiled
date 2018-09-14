@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/Shockwave.py
 from FX.Event import Event
 from FX import s_sectionProcessors
@@ -10,7 +10,7 @@ from Math import Vector4Animation
 from bwdebug import *
 from FX.Event import TRANSFORM_DEPENDENT_EVENT
 
-def shake(targetModel, maxDist = 100, energy = 0.1):
+def shake(targetModel, maxDist=100, energy=0.1):
     dist = Vector3(targetModel.position - BigWorld.player().position).length
     if dist < maxDist:
         normDist = dist / maxDist
@@ -39,7 +39,7 @@ class ShockWaveModel:
             name = ShockWaveModel.stdModel
         return name
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         name = self.modelName(pSection)
         try:
             actor = prereqs.pop(name)
@@ -65,7 +65,7 @@ class ShockWaveEvent(Event):
         self.victimList = {}
         self.fader = Vector4Animation()
 
-    def load(self, pSection, prereqs = None):
+    def load(self, pSection, prereqs=None):
         self.colour = pSection.readVector4('colour', (0.0364, 0.0632, 0.094, 1.0))
         self.actionName = pSection.readString('actionName')
         self.shimmerStyle = pSection.readInt('shimmerStyle', 1)

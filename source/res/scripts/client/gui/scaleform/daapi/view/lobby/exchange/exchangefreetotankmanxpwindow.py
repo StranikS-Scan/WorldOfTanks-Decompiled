@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ExchangeFreeToTankmanXpWindow.py
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
@@ -13,7 +13,7 @@ from items.tankmen import MAX_SKILL_LEVEL
 
 class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(ExchangeFreeToTankmanXpWindow, self).__init__()
         self.__tankManId = ctx.get('tankManId')
         self.__selectedXpForConvert = 0

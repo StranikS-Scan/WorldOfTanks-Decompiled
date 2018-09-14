@@ -1,0 +1,69 @@
+<indirectvisibility.def>
+  <CellMethods>
+    <indirectVisibility_onVehicleCreated>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+    </indirectVisibility_onVehicleCreated>
+    <indirectVisibility_onVehicleUpdated>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT8	</Arg>
+    </indirectVisibility_onVehicleUpdated>
+    <indirectVisibility_onVehiclePrebattleUpdated>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </indirectVisibility_onVehiclePrebattleUpdated>
+    <indirectVisibility_makeVehicleAnObserver>
+      <Arg>	OBJECT_ID	</Arg>
+    </indirectVisibility_makeVehicleAnObserver>
+    <indirectVisibility_assignAvatarToVehicle>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </indirectVisibility_assignAvatarToVehicle>
+    <indirectVisibility_receivePositionPushUpdate>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </indirectVisibility_receivePositionPushUpdate>
+    <indirectVisibility_receiveStatusUpdate>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+    </indirectVisibility_receiveStatusUpdate>
+    <indirectVisibility_receiveFirstDetectionEvents>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
+      </Arg>
+    </indirectVisibility_receiveFirstDetectionEvents>
+    <indirectVisibility_receiveTeamVisibilityEvents>
+      <Arg>	UINT8	</Arg>
+      <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
+      </Arg>
+    </indirectVisibility_receiveTeamVisibilityEvents>
+    <indirectVisibility_receiveVehicleVisibilityEvents>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
+      </Arg>
+    </indirectVisibility_receiveVehicleVisibilityEvents>
+    <indirectVisibility_setRetransmissionFactorForVehicle>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </indirectVisibility_setRetransmissionFactorForVehicle>
+    <indirectVisibility_registerVisibilityListener>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+    </indirectVisibility_registerVisibilityListener>
+    <indirectVisibility_updateCarriedFlag>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	BOOL	</Arg>
+    </indirectVisibility_updateCarriedFlag>
+  </CellMethods>
+</indirectvisibility.def>

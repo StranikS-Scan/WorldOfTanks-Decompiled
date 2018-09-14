@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/TOOLTIPS_CONSTANTS.py
 
 
@@ -34,8 +34,6 @@ class TOOLTIPS_CONSTANTS(object):
     EFFICIENCY_PARAM = 'efficiencyParam'
     RSS_NEWS = 'rssNews'
     MAP = 'map'
-    HISTORICAL_AMMO = 'historicalAmmo'
-    HISTORICAL_MODULES = 'historicalModules'
     SETTINGS_CONTROL = 'control'
     SETTINGS_BUTTON = 'settingsButton'
     CUSTOMIZATION_ITEM = 'customizationItem'
@@ -88,6 +86,7 @@ class TOOLTIPS_CONSTANTS(object):
     LADDER_REGULATIONS = 'ladderRegulations'
     PRIVATE_QUESTS_FEMALE_TANKMAN_AWARD = 'femaleTankmanPersonalQuestAward'
     PRIVATE_QUESTS_TOKENS_AWARD = 'tokensPersonalQuestAward'
+    BOOSTERS_BOOSTER_INFO = 'boostersBoosterInfo'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
     TANKMEN_SKILL_UI = 'ToolTipSkillUI'
@@ -95,7 +94,7 @@ class TOOLTIPS_CONSTANTS(object):
     ACHIEVEMENT_UI = 'ToolTipAchievementUI'
     MARKS_ON_GUN_UI = 'ToolTipMarksOnGunUI'
     MARK_OF_MASTERY_UI = 'ToolTipMarkOfMasteryUI'
-    VEHICLE_UI = 'TooltipVehicleUI'
+    VEHICLE_INFO_UI = 'ToolTipInblocksDefaultUI'
     EQUIPMENT_UI = 'ToolTipEquipmentUI'
     RSS_NEWS_UI = 'ToolTipRSSNewsUI'
     INBLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
@@ -108,8 +107,6 @@ class TOOLTIPS_CONSTANTS(object):
     UNIT_LEVEL_UI = 'ToolTipUnitLevelUI'
     SORTIE_DIVISION_UI = 'ToolTipSortieDivisionUI'
     MAP_UI = 'ToolTipMapUI'
-    HISTORICAL_AMMO_UI = 'ToolTipHistoricalAmmoUI'
-    HISTORICAL_MODULES_UI = 'ToolTipHistoricalModulesUI'
     COMPLEX_UI = 'ToolTipComplexUI'
     CLAN_INFO_UI = 'ToolTipClanInfoUI'
     FORT_BUILDING_INFO_UI = 'ToolTipFortBuildingInfoUI'
@@ -144,3 +141,6 @@ class TOOLTIPS_CONSTANTS(object):
     ENVIRONMENT_UI = 'TooltipEnvironmentUI'
     LADDER_REGULATIONS_UI = 'ToolTipLadderRegulationsUI'
     CLAN_COMMON_INFO_UI = 'ToolTipClanCommonInfoUI'
+    SETTINGS_MINIMAP_CIRCLES = 'SettingsMinimapCircles'
+    SETTINGS_MINIMAP_CIRCLES_UI = 'ToolTipInblocksDefaultUI'
+    BOOSTERS_BOOSTER_INFO_UI = 'ToolTipInblocksDefaultUI'

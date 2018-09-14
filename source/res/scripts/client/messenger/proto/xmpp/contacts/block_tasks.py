@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/block_tasks.py
 from shared_utils import findFirst
 from messenger.m_constants import USER_ACTION_ID, USER_TAG, PROTO_TYPE, CLIENT_ACTION_ID
@@ -11,7 +11,7 @@ from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.proto.xmpp.xmpp_items import BlockItem
 
-def _syncBlockItem(storage, jid, name = '', dbID = 0, clanInfo = None):
+def _syncBlockItem(storage, jid, name='', dbID=0, clanInfo=None):
     dbID = jid.getDatabaseID()
     user = storage.getUser(dbID, PROTO_TYPE.XMPP)
     if user:
@@ -30,7 +30,7 @@ def _syncBlockItem(storage, jid, name = '', dbID = 0, clanInfo = None):
 
 class _BlockItemTask(ContactTask):
 
-    def sync(self, name, groups, sub = None, clanInfo = None):
+    def sync(self, name, groups, sub=None, clanInfo=None):
         return self._result
 
 
@@ -69,7 +69,7 @@ class AddBlockItemTask(_BlockItemTask):
         self._iqID = client.sendIQ(blocking_cmd.BlockItemQuery(self._jid))
 
     def _getError(self, pyGlooxTag):
-        return errors.createServerActionError(CLIENT_ACTION_ID.ADD_IGNORED, pyGlooxTag)
+        return errors.createServerActionIQError(CLIENT_ACTION_ID.ADD_IGNORED, pyGlooxTag)
 
 
 class RemoveBlockItemTask(_BlockItemTask):
@@ -96,7 +96,7 @@ class RemoveBlockItemTask(_BlockItemTask):
         self._iqID = client.sendIQ(blocking_cmd.UnblockItemQuery(self._jid))
 
     def _getError(self, pyGlooxTag):
-        return errors.createServerActionError(CLIENT_ACTION_ID.REMOVE_IGNORED, pyGlooxTag)
+        return errors.createServerActionIQError(CLIENT_ACTION_ID.REMOVE_IGNORED, pyGlooxTag)
 
 
 class SyncBlockItemTask(IQTask):

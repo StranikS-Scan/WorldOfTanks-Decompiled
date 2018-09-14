@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Queue.py
 """A multi-producer, multi-consumer queue."""
 from time import time as _time
@@ -30,7 +31,7 @@ class Queue:
     If maxsize is <= 0, the queue size is infinite.
     """
 
-    def __init__(self, maxsize = 0):
+    def __init__(self, maxsize=0):
         self.maxsize = maxsize
         self._init(maxsize)
         self.mutex = _threading.Lock()
@@ -102,7 +103,7 @@ class Queue:
         self.mutex.release()
         return n
 
-    def put(self, item, block = True, timeout = None):
+    def put(self, item, block=True, timeout=None):
         """Put an item into the queue.
         
         If optional args 'block' is true and 'timeout' is None (the default),
@@ -149,7 +150,7 @@ class Queue:
         """
         return self.put(item, False)
 
-    def get(self, block = True, timeout = None):
+    def get(self, block=True, timeout=None):
         """Remove and return an item from the queue.
         
         If optional args 'block' is true and 'timeout' is None (the default),
@@ -198,7 +199,7 @@ class Queue:
     def _init(self, maxsize):
         self.queue = deque()
 
-    def _qsize(self, len = len):
+    def _qsize(self, len=len):
         return len(self.queue)
 
     def _put(self, item):
@@ -217,13 +218,13 @@ class PriorityQueue(Queue):
     def _init(self, maxsize):
         self.queue = []
 
-    def _qsize(self, len = len):
+    def _qsize(self, len=len):
         return len(self.queue)
 
-    def _put(self, item, heappush = heapq.heappush):
+    def _put(self, item, heappush=heapq.heappush):
         heappush(self.queue, item)
 
-    def _get(self, heappop = heapq.heappop):
+    def _get(self, heappop=heapq.heappop):
         return heappop(self.queue)
 
 
@@ -233,7 +234,7 @@ class LifoQueue(Queue):
     def _init(self, maxsize):
         self.queue = []
 
-    def _qsize(self, len = len):
+    def _qsize(self, len=len):
         return len(self.queue)
 
     def _put(self, item):

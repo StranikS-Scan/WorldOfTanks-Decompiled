@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/VideoCamera.py
 import math
 import time
@@ -18,7 +18,7 @@ from DetachedTurret import DetachedTurret
 
 class KeySensor:
 
-    def __init__(self, keyMappings, sensitivity, sensitivityIncDecKeys = None, sensitivityAcceleration = None):
+    def __init__(self, keyMappings, sensitivity, sensitivityIncDecKeys=None, sensitivityAcceleration=None):
         self.keyMappings = keyMappings
         self.sensitivity = self.defaultSensitivity = sensitivity
         self.__sensitivityKeys = {}
@@ -104,7 +104,7 @@ class _AlignerToLand:
         self.__ignoreTerrain = False
         return
 
-    def enable(self, position, aboveSeaLevel = False):
+    def enable(self, position, aboveSeaLevel=False):
         self.__ignoreTerrain = aboveSeaLevel
         landPosition = self.__getLandAt(position)
         if landPosition is not None:
@@ -123,18 +123,16 @@ class _AlignerToLand:
     def __getLandAt(self, position):
         if self.__ignoreTerrain:
             return Vector3(position.x, 0, position.z)
-        spaceID = BigWorld.player().spaceID
-        if spaceID is None:
-            return
-        upPoint = Math.Vector3(position)
-        upPoint.y += 1000
-        downPoint = Math.Vector3(position)
-        downPoint.y = -1000
-        collideRes = BigWorld.wg_collideSegment(spaceID, upPoint, downPoint, 16, self.__isTerrain)
-        if collideRes is None:
-            return
         else:
-            return collideRes[0]
+            spaceID = BigWorld.player().spaceID
+            if spaceID is None:
+                return
+            upPoint = Math.Vector3(position)
+            upPoint.y += 1000
+            downPoint = Math.Vector3(position)
+            downPoint.y = -1000
+            collideRes = BigWorld.wg_collideSegment(spaceID, upPoint, downPoint, 16, self.__isTerrain)
+            return None if collideRes is None else collideRes[0]
 
     def __isTerrain(self, matKind, collFlags, itemId, chunkId):
         return collFlags & 8
@@ -144,9 +142,7 @@ class _AlignerToLand:
             return position
         else:
             landPos = self.__getLandAt(position)
-            if landPos is None:
-                return position
-            return landPos + self.__desiredHeightShift
+            return position if landPos is None else landPos + self.__desiredHeightShift
 
 
 class _VehicleBounder(object):
@@ -158,10 +154,7 @@ class _VehicleBounder(object):
     SELECT_DETACHED_TURRET = 4
 
     def __getLookAtPosition(self):
-        if self.__lookAtProvider is None:
-            return
-        else:
-            return Matrix(self.__lookAtProvider).translation
+        return None if self.__lookAtProvider is None else Matrix(self.__lookAtProvider).translation
 
     isBound = property(lambda self: self.__vehicle is not None)
     lookAtPosition = property(__getLookAtPosition)
@@ -174,7 +167,7 @@ class _VehicleBounder(object):
         self.__placement = _VehicleBounder.SELECT_CHASSIS
         return
 
-    def bind(self, vehicle, bindWorldPos = None):
+    def bind(self, vehicle, bindWorldPos=None):
         self.__vehicle = vehicle
         if vehicle is None:
             self.matrix = mathUtils.createIdentityMatrix()
@@ -244,9 +237,7 @@ class _VehiclePicker(object):
             return (None, None)
         else:
             pos, collData = posColldata
-            if collData is None or not collData.isVehicle():
-                return (None, None)
-            return (collData[0], pos)
+            return (None, None) if collData is None or not collData.isVehicle() else (collData[0], pos)
 
 
 class VideoCamera(CallbackDelayer, TimeDeltaMeter):
@@ -288,7 +279,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
     def getReasonsAffectCameraDirectly(self):
         pass
 
-    def applyImpulse(self, position, impulse, reason = 1):
+    def applyImpulse(self, position, impulse, reason=1):
         pass
 
     def create(self):
@@ -587,13 +578,11 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
     def __checkSpaceBounds(self, startPos, endPos):
         if not isPlayerAvatar():
             return endPos
-        moveDir = endPos - startPos
-        moveDir.normalise()
-        collisionPointWithBorders = BigWorld.player().arena.collideWithSpaceBB(startPos - moveDir, endPos + moveDir)
-        if collisionPointWithBorders is not None:
-            return collisionPointWithBorders
         else:
-            return endPos
+            moveDir = endPos - startPos
+            moveDir.normalise()
+            collisionPointWithBorders = BigWorld.player().arena.collideWithSpaceBB(startPos - moveDir, endPos + moveDir)
+            return collisionPointWithBorders if collisionPointWithBorders is not None else endPos
 
     def __processBindToVehicleKey(self):
         if BigWorld.isKeyDown(Keys.KEY_LSHIFT) or BigWorld.isKeyDown(Keys.KEY_RSHIFT):

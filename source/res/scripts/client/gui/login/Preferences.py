@@ -1,10 +1,30 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/login/Preferences.py
 import json
-from predefined_hosts import AUTO_LOGIN_QUERY_URL
 import BigWorld
 import Settings
+from predefined_hosts import AUTO_LOGIN_QUERY_URL
 from debug_utils import LOG_DEBUG, LOG_WARNING
+from gui import GUI_SETTINGS
+if GUI_SETTINGS.cryptLoginInfo:
+
+    def _crypt(data):
+        return BigWorld.wg_cpdata(data)
+
+
+    def _decrypt(data):
+        return BigWorld.wg_ucpdata(data)
+
+
+else:
+
+    def _crypt(data):
+        return data
+
+
+    def _decrypt(data):
+        return data
+
 
 class Preferences(dict):
 
@@ -20,7 +40,7 @@ class Preferences(dict):
             LOG_DEBUG('Read old format preferences: {0}'.format(self))
         else:
             try:
-                loginInfo = json.loads(BigWorld.wg_ucpdata(preferences[Settings.KEY_LOGIN_INFO].readString('data', '')), encoding='utf-8')
+                loginInfo = json.loads(_decrypt(preferences[Settings.KEY_LOGIN_INFO].readString('data', '')), encoding='utf-8')
                 self.update(loginInfo)
                 LOG_DEBUG('Read login info from preferences.xml: {0}'.format(self))
             except ValueError:
@@ -32,7 +52,7 @@ class Preferences(dict):
             Settings.g_instance.userPrefs.deleteSection(Settings.KEY_LOGIN_INFO)
             Settings.g_instance.userPrefs.write(Settings.KEY_LOGIN_INFO, '')
             self.__oldFormat = False
-        Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].writeString('data', BigWorld.wg_cpdata(json.dumps(dict(self), encoding='utf-8')))
+        Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].writeString('data', _crypt(json.dumps(dict(self), encoding='utf-8')))
 
     def __readOldPreferencesFormat(self, loginInfo):
         self['login'] = BigWorld.wg_ucpdata(loginInfo.readString('login', ''))

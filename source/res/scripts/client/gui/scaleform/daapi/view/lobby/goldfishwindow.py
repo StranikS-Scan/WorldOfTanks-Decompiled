@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/GoldFishWindow.py
 from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -14,7 +14,7 @@ BTN_WIDTH = 120
 
 class GoldFishWindow(GoldFishWindowMeta):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(GoldFishWindow, self).__init__()
 
     def onBtnClick(self, action):

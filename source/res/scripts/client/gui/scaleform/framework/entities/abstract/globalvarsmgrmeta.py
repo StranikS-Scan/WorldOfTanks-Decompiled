@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/GlobalVarsMgrMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
@@ -57,3 +57,6 @@ class GlobalVarsMgrMeta(BaseDAAPIModule):
 
     def isPotapovQuestEnabled(self):
         self._printOverrideError('isPotapovQuestEnabled')
+
+    def isLoginLoadedAtFirstTime(self):
+        self._printOverrideError('isLoginLoadedAtFirstTime')

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/CodeWarrior/Standard_Suite.py
 """Suite Standard Suite: Common terms for most applications
 Level 1, version 1
@@ -14,7 +15,7 @@ class Standard_Suite_Events(Standard_Suite_Events):
     _argmap_close = {'saving': 'savo',
      'saving_in': 'kfil'}
 
-    def close(self, _object, _attributes = {}, **_arguments):
+    def close(self, _object, _attributes={}, **_arguments):
         """close: close an object
         Required argument: the object to close
         Keyword argument saving: specifies whether or not changes should be saved before closing
@@ -29,12 +30,11 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_count = {'each': 'kocl'}
 
-    def count(self, _object, _attributes = {}, **_arguments):
+    def count(self, _object, _attributes={}, **_arguments):
         """count: return the number of elements of a particular class within an object
         Required argument: the object whose elements are to be counted
         Keyword argument each: the class of the elements to be counted. Keyword 'each' is optional in AppleScript
@@ -48,12 +48,11 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_get = {'as': 'rtyp'}
 
-    def get(self, _object, _attributes = {}, **_arguments):
+    def get(self, _object, _attributes={}, **_arguments):
         """get: get the data for an object
         Required argument: the object whose data is to be returned
         Keyword argument as: the desired types for the data, in order of preference
@@ -67,8 +66,7 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_make = {'new': 'kocl',
      'as': 'rtyp',
@@ -76,7 +74,7 @@ class Standard_Suite_Events(Standard_Suite_Events):
      'with_data': 'data',
      'with_properties': 'prdt'}
 
-    def make(self, _no_object = None, _attributes = {}, **_arguments):
+    def make(self, _no_object=None, _attributes={}, **_arguments):
         """make: make a new element
         Keyword argument new: the class of the new element\xd1keyword 'new' is optional in AppleScript
         Keyword argument as: the desired types for the data, in order of preference
@@ -94,12 +92,9 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
-        else:
-            return
+        return _arguments['----'] if _arguments.has_key('----') else None
 
-    def select(self, _object = None, _attributes = {}, **_arguments):
+    def select(self, _object=None, _attributes={}, **_arguments):
         """select: select the specified object
         Required argument: the object to select
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -112,12 +107,11 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
     _argmap_set = {'to': 'data'}
 
-    def set(self, _object, _attributes = {}, **_arguments):
+    def set(self, _object, _attributes={}, **_arguments):
         """set: set an object's data
         Required argument: the object to change
         Keyword argument to: the new value
@@ -130,8 +124,7 @@ class Standard_Suite_Events(Standard_Suite_Events):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise aetools.Error, aetools.decodeerror(_arguments)
-        if _arguments.has_key('----'):
-            return _arguments['----']
+        return _arguments['----'] if _arguments.has_key('----') else None
 
 
 class application(aetools.ComponentItem):

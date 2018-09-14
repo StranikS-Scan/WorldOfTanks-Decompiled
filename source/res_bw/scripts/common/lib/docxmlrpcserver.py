@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/DocXMLRPCServer.py
 """Self documenting XML-RPC Server.
 
@@ -20,7 +20,7 @@ from SimpleXMLRPCServer import SimpleXMLRPCServer, SimpleXMLRPCRequestHandler, C
 class ServerHTMLDoc(pydoc.HTMLDoc):
     """Class used to generate pydoc HTML document for a server"""
 
-    def markup(self, text, escape = None, funcs = {}, classes = {}, methods = {}):
+    def markup(self, text, escape=None, funcs={}, classes={}, methods={}):
         """Mark up some plain text, given a context of symbols to look for.
         Each context dictionary maps object names to anchor names."""
         escape = escape or self.escape
@@ -54,7 +54,7 @@ class ServerHTMLDoc(pydoc.HTMLDoc):
         results.append(escape(text[here:]))
         return ''.join(results)
 
-    def docroutine(self, object, name, mod = None, funcs = {}, classes = {}, methods = {}, cl = None):
+    def docroutine(self, object, name, mod=None, funcs={}, classes={}, methods={}, cl=None):
         """Produce HTML documentation for a function or method object."""
         anchor = (cl and cl.__name__ or '') + '-' + name
         note = ''
@@ -197,7 +197,7 @@ class DocXMLRPCServer(SimpleXMLRPCServer, XMLRPCDocGenerator):
     of SimpleXMLRPCServer.
     """
 
-    def __init__(self, addr, requestHandler = DocXMLRPCRequestHandler, logRequests = 1, allow_none = False, encoding = None, bind_and_activate = True):
+    def __init__(self, addr, requestHandler=DocXMLRPCRequestHandler, logRequests=1, allow_none=False, encoding=None, bind_and_activate=True):
         SimpleXMLRPCServer.__init__(self, addr, requestHandler, logRequests, allow_none, encoding, bind_and_activate)
         XMLRPCDocGenerator.__init__(self)
 

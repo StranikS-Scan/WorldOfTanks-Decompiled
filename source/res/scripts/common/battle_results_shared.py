@@ -1,10 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/battle_results_shared.py
 import struct
 from itertools import izip
 from items.vehicles import VEHICLE_DEVICE_TYPE_NAMES, VEHICLE_TANKMAN_TYPE_NAMES
 from constants import FLAG_ACTION
-from DictPackers import *
+from DictPackers import Meta, DictPacker, SimpleDictPacker, DeltaPacker, ValueReplayPacker, roundToInt
 VEH_INTERACTION_DETAILS = (('spotted', 'B', 1, 0),
  ('deathReason', 'b', 10, -1),
  ('directHits', 'H', 65535, 0),
@@ -251,10 +251,6 @@ _VEH_CELL_RESULTS_SERVER = Meta(('potentialDamageDealt',
  list,
  [],
  DeltaPacker(),
- 'extend'), ('guerrillaShots',
- list,
- [],
- DeltaPacker(),
  'extend'), ('critsCount',
  int,
  0,
@@ -354,6 +350,10 @@ _VEH_BASE_RESULTS_PUBLIC = Meta(('accountDBID',
  0,
  None,
  'any'), ('typeCompDescr',
+ int,
+ 0,
+ None,
+ 'skip'), ('index',
  int,
  0,
  None,
@@ -730,7 +730,7 @@ VEH_FULL_RESULTS_UPDATE = Meta(('originalCredits',
  int,
  0,
  None,
- 'skip'), ('premiumVehicleXP',
+ 'sum'), ('premiumVehicleXP',
  int,
  0,
  None,
@@ -758,15 +758,15 @@ VEH_FULL_RESULTS_UPDATE = Meta(('originalCredits',
  int,
  0,
  None,
- 'any'), ('igrXPFactor10',
+ 'max'), ('igrXPFactor10',
  int,
  0,
  None,
- 'any'), ('aogasFactor10',
+ 'max'), ('aogasFactor10',
  int,
  0,
  None,
- 'any'), ('refSystemXPFactor10',
+ 'max'), ('refSystemXPFactor10',
  int,
  0,
  None,
@@ -1080,4 +1080,4 @@ class VehicleInteractionDetails(object):
         return packed
 
     def toDict(self):
-        return dict([ ((vehID, vehTypeCompDescr), dict(_VehicleInteractionDetailsItem(self.__values, offset))) for (vehID, vehTypeCompDescr), offset in self.__offsets.iteritems() ])
+        return dict([ ((vehID, vehIdx), dict(_VehicleInteractionDetailsItem(self.__values, offset))) for (vehID, vehIdx), offset in self.__offsets.iteritems() ])

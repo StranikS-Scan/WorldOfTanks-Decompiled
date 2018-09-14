@@ -1,6 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/interfaces.py
 from debug_utils import LOG_DEBUG
+from gui.shared.utils.listeners_collection import IListenersCollection
 from gui.prb_control.items import prb_items, unit_items, SelectResult
 from gui.prb_control.restrictions.interfaces import IPrbPermissions
 from gui.prb_control.restrictions.interfaces import IUnitPermissions
@@ -12,13 +13,13 @@ class IPrbEntry(object):
     def makeDefCtx(self):
         return None
 
-    def create(self, ctx, callback = None):
+    def create(self, ctx, callback=None):
         pass
 
-    def join(self, ctx, callback = None):
+    def join(self, ctx, callback=None):
         pass
 
-    def select(self, ctx, callback = None):
+    def select(self, ctx, callback=None):
         pass
 
     def setAccountsToInvite(self, accountsToInvite):
@@ -36,7 +37,7 @@ class IPrbListUpdater(object):
 
 class IPrbListRequester(IPrbListUpdater):
 
-    def request(self, ctx = None):
+    def request(self, ctx=None):
         pass
 
 
@@ -60,13 +61,13 @@ class IClientFunctional(object):
     def canPlayerDoAction(self):
         return (True, '')
 
-    def doAction(self, action = None):
+    def doAction(self, action=None):
         return False
 
     def doSelectAction(self, action):
         return SelectResult()
 
-    def showGUI(self, ctx = None):
+    def showGUI(self, ctx=None):
         return False
 
     def getConfirmDialogMeta(self, ctx):
@@ -90,31 +91,22 @@ class IClientFunctional(object):
     def hasLockedState(self):
         return False
 
-    def getUnitFullData(self, unitIdx = None):
+    def getUnitFullData(self, unitIdx=None):
         return None
 
-    def getPermissions(self, pID = None, **kwargs):
+    def getPermissions(self, pID=None, **kwargs):
         return IPrbPermissions()
 
-    def isCreator(self, dbID = None):
+    def isCreator(self, dbID=None):
         return False
 
-    def leave(self, ctx, callback = None):
+    def leave(self, ctx, callback=None):
         pass
 
-    def request(self, ctx, callback = None):
+    def request(self, ctx, callback=None):
         pass
 
     def reset(self):
-        pass
-
-
-class IListenersCollection(object):
-
-    def addListener(self, listener):
-        pass
-
-    def removeListener(self, listener):
         pass
 
 
@@ -126,10 +118,10 @@ class IPrbFunctional(IClientFunctional, IListenersCollection):
     def __del__(self):
         LOG_DEBUG('Prebattle functional deleted:', self)
 
-    def init(self, clientPrb = None, ctx = None):
+    def init(self, clientPrb=None, ctx=None):
         return FUNCTIONAL_FLAG.UNDEFINED
 
-    def fini(self, clientPrb = None, woEvents = False):
+    def fini(self, clientPrb=None, woEvents=False):
         return FUNCTIONAL_FLAG.UNDEFINED
 
     def getCtrlType(self):
@@ -138,31 +130,31 @@ class IPrbFunctional(IClientFunctional, IListenersCollection):
     def getSettings(self):
         return makePrebattleSettings()
 
-    def getRosterKey(self, pID = None):
+    def getRosterKey(self, pID=None):
         return PREBATTLE_ROSTER.UNKNOWN
 
-    def getRosters(self, keys = None):
+    def getRosters(self, keys=None):
         return dict.fromkeys(PREBATTLE_ROSTER.ALL, [])
 
-    def getPlayerInfo(self, pID = None, rosterKey = None):
+    def getPlayerInfo(self, pID=None, rosterKey=None):
         return prb_items.PlayerPrbInfo(-1L)
 
     def getPlayerInfoByDbID(self, dbID):
         return prb_items.PlayerPrbInfo(-1L)
 
-    def getPlayerTeam(self, pID = None):
+    def getPlayerTeam(self, pID=None):
         pass
 
-    def getTeamState(self, team = None):
+    def getTeamState(self, team=None):
         return prb_items.TeamStateInfo(0)
 
     def getPlayersStateStats(self):
         return prb_items.PlayersStateStats(0, False, 0, 0)
 
-    def getRoles(self, pDatabaseID = None, clanDBID = None, team = None):
+    def getRoles(self, pDatabaseID=None, clanDBID=None, team=None):
         pass
 
-    def getPermissions(self, pID = None):
+    def getPermissions(self, pID=None):
         return IPrbPermissions()
 
     def getLimits(self):
@@ -283,10 +275,10 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
     def __del__(self):
         LOG_DEBUG('Unit functional deleted:', self)
 
-    def init(self, ctx = None):
+    def init(self, ctx=None):
         return FUNCTIONAL_FLAG.UNDEFINED
 
-    def fini(self, woEvents = False):
+    def fini(self, woEvents=False):
         return FUNCTIONAL_FLAG.UNDEFINED
 
     def getCtrlType(self):
@@ -310,46 +302,52 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
     def canSwitchToIntro(self):
         return False
 
-    def getPermissions(self, dbID = None, unitIdx = None):
+    def getPermissions(self, dbID=None, unitIdx=None):
         return IUnitPermissions()
 
-    def getUnit(self, unitIdx = None, safe = False):
+    def getUnit(self, unitIdx=None, safe=False):
         return (0, None)
 
     def getRosterSettings(self):
         return unit_items.UnitRosterSettings()
 
-    def getPlayerInfo(self, dbID = None, unitIdx = None):
+    def getPlayerInfo(self, dbID=None, unitIdx=None):
         return unit_items.PlayerUnitInfo(-1L, 0, None)
 
-    def getReadyStates(self, unitIdx = None):
+    def getReadyStates(self, unitIdx=None):
         return []
 
-    def getSlotState(self, slotIdx, unitIdx = None):
+    def getSlotState(self, slotIdx, unitIdx=None):
         return unit_items.SlotState(-1)
 
-    def getPlayers(self, unitIdx = None):
+    def getPlayers(self, unitIdx=None):
         return {}
 
-    def getCandidates(self, unitIdx = None):
+    def getCandidates(self, unitIdx=None):
         return {}
 
-    def getRoster(self, unitIdx = None):
+    def getRosterType(self, unitIdx=None):
         return None
 
-    def getVehicleInfo(self, dbID = None, unitIdx = None):
-        return unit_items.VehicleInfo()
+    def getRoster(self, unitIdx=None):
+        return None
 
-    def getFlags(self, unitIdx = None):
+    def getVehiclesInfo(self, dbID=None, unitIdx=None):
+        return (unit_items.VehicleInfo(),)
+
+    def invalidateSelectedVehicles(self, vehCDs):
+        return None
+
+    def getFlags(self, unitIdx=None):
         return unit_items.UnitFlags(0)
 
-    def getStats(self, unitIdx = None):
+    def getStats(self, unitIdx=None):
         return unit_items.UnitStats(0, 0, 0, 0, [], 0, 0)
 
-    def getComment(self, unitIdx = None):
+    def getComment(self, unitIdx=None):
         pass
 
-    def getCensoredComment(self, unitIdx = None):
+    def getCensoredComment(self, unitIdx=None):
         pass
 
     def getShowLeadershipNotification(self):
@@ -358,10 +356,10 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
     def doLeadershipNotificationShown(self):
         pass
 
-    def validateLevels(self, stats = None, flags = None, vInfo = None):
+    def validateLevels(self, stats=None, flags=None, vInfo=None):
         return (True, '')
 
-    def getUnitInvalidLevels(self, stats = None):
+    def getUnitInvalidLevels(self, stats=None):
         return []
 
 
@@ -430,7 +428,7 @@ class IUnitListener(IIntroUnitListener):
     def onUnitPlayersListChanged(self):
         pass
 
-    def onUnitVehicleChanged(self, dbID, vInfo):
+    def onUnitVehiclesChanged(self, dbID, vInfos):
         pass
 
     def onUnitPlayerVehDictChanged(self, pInfo):

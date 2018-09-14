@@ -1,8 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/ClubLadderView.py
 import BigWorld
 from adisp import process
-from debug_utils import LOG_DEBUG
 from helpers.i18n import makeString as _ms
 from gui.clubs.club_helpers import isSeasonInProgress
 from gui.clubs.contexts import GetClubsContendersCtx
@@ -101,24 +100,22 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
                 self._hasLadderInfo = False
             self.hideWaiting()
         else:
-            yield lambda callback = None: callback
+            yield lambda callback=None: callback
         self.as_setLadderStateS(self.__packLadderState(club))
         return
 
     def __packLadderState(self, club):
+        hasBattlesInSeason = club.wasInRatedBattleThisSeason() and self._hasLadderInfo
         if not isSeasonInProgress():
-            showStateMessage = True
             title = CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERSTATUS_NOSEASON
             message = CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERMSG_NOSEASON
-        elif not club.wasInRatedBattleThisSeason() or not self._hasLadderInfo:
-            showStateMessage = True
+        elif not hasBattlesInSeason:
             title = CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERSTATUS_NOBATTLES
             message = CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERMSG_NOBATTLES
         else:
-            showStateMessage = False
             title = CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERSTATUS_INLADDER
             message = CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERMSG_INLADDER
-        return {'showStateMessage': showStateMessage,
+        return {'showStateMessage': not hasBattlesInSeason,
          'stateMessage': {'title': text_styles.middleTitle(title),
                           'message': text_styles.main(message),
                           'iconPath': getLadderChevron256x256()}}
@@ -151,7 +148,7 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
          self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERWINSPERCENT_TEXT, 80, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERWINPERCENT, fieldName='winPercentSortValue'),
          self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERSHOWFORMATIONPROFILE_TEXT, 180, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERSHOWFORMATIONPROFILE)]
 
-    def __packTableHeaderItem(self, label, buttonWidth, tooltip = '', fieldName = '', sortOrder = 0, sortType = 'numeric'):
+    def __packTableHeaderItem(self, label, buttonWidth, tooltip='', fieldName='', sortOrder=0, sortType='numeric'):
         return {'label': text_styles.standard(label),
          'toolTip': tooltip,
          'sortOrder': sortOrder,

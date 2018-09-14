@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleBuyWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -11,17 +11,13 @@ class VehicleBuyWindowMeta(AbstractWindowView):
         self._printOverrideError('storeSettings')
 
     def as_setGoldS(self, gold):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setGold(gold)
+        return self.flashObject.as_setGold(gold) if self._isDAAPIInited() else None
 
     def as_setCreditsS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCredits(value)
+        return self.flashObject.as_setCredits(value) if self._isDAAPIInited() else None
 
     def as_setInitDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInitData(data)
+        return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_setEnabledSubmitBtnS(self, enabled):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setEnabledSubmitBtn(enabled)
+        return self.flashObject.as_setEnabledSubmitBtn(enabled) if self._isDAAPIInited() else None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/controls.py
 import BigWorld
 from functools import partial
@@ -42,7 +42,7 @@ class _FortController(IFortController):
         self._waiters = None
         return
 
-    def init(self, clan, listeners, prevController = None):
+    def init(self, clan, listeners, prevController=None):
         self._requester = PlayerFortRequester()
         self._requester.init()
         self._setLimits()
@@ -52,7 +52,7 @@ class _FortController(IFortController):
         self._addFortListeners()
         self._waiters = {}
 
-    def fini(self, clearCache = True):
+    def fini(self, clearCache=True):
         self._removeFortListeners()
         self.stopProcessing()
         if self._requester:
@@ -107,7 +107,7 @@ class _FortController(IFortController):
     def removeFortBattlesCache(self):
         FortBattlesCache._removeStoredData()
 
-    def request(self, ctx, callback = None):
+    def request(self, ctx, callback=None):
         if self._clan is None:
             return self._failChecking('Clan is not defined', ctx, callback)
         else:
@@ -126,7 +126,7 @@ class _FortController(IFortController):
                 self._failChecking('Handler not found', ctx, callback)
             return
 
-    def subscribe(self, callback = None):
+    def subscribe(self, callback=None):
 
         def _doRequest():
             LOG_DEBUG('Fort request to subscribe')
@@ -140,12 +140,12 @@ class _FortController(IFortController):
         else:
             _doRequest()
 
-    def unsubscribe(self, callback = None):
+    def unsubscribe(self, callback=None):
         LOG_DEBUG('Fort request to unsubscribe')
         self._requester.doRequestEx(FortRequestCtx(), callback, 'unsubscribe')
         return False
 
-    def _failChecking(self, ctx, msg, callback = None):
+    def _failChecking(self, ctx, msg, callback=None):
         if callback:
             callback(False)
         LOG_ERROR(msg, ctx)
@@ -194,18 +194,17 @@ class NoFortController(_FortController):
     def isNext(cls, stateID, isLeader):
         if stateID in [CLIENT_FORT_STATE.NO_CLAN, CLIENT_FORT_STATE.UNSUBSCRIBED]:
             return True
-        if not isLeader and stateID == CLIENT_FORT_STATE.NO_FORT:
-            return True
+        return True if not isLeader and stateID == CLIENT_FORT_STATE.NO_FORT else None
 
-    def request(self, ctx, callback = None):
+    def request(self, ctx, callback=None):
         self._failChecking('Has been invoked NoFortController.request', ctx, callback)
 
-    def init(self, clan, listeners, prevController = None):
+    def init(self, clan, listeners, prevController=None):
         super(NoFortController, self).init(clan, listeners, prevController)
         self._sortiesCurfewCtrl = SortiesCurfewController()
         self._sortiesCurfewCtrl.start()
 
-    def fini(self, clearCache = True):
+    def fini(self, clearCache=True):
         if self._sortiesCurfewCtrl:
             self._sortiesCurfewCtrl.stop()
             self._sortiesCurfewCtrl = None
@@ -222,10 +221,9 @@ class CenterUnavailableController(_FortController):
     def isNext(cls, stateID, isLeader):
         if stateID in [CLIENT_FORT_STATE.CENTER_UNAVAILABLE]:
             return True
-        if not isLeader and stateID == CLIENT_FORT_STATE.NO_FORT:
-            return True
+        return True if not isLeader and stateID == CLIENT_FORT_STATE.NO_FORT else None
 
-    def init(self, clan, listeners, prevController = None):
+    def init(self, clan, listeners, prevController=None):
         super(CenterUnavailableController, self).init(clan, listeners, prevController)
         if prevController is not None:
             self._sortiesCache = prevController.getSortiesCache()
@@ -233,14 +231,14 @@ class CenterUnavailableController(_FortController):
                 self._sortiesCache.setController(self)
         return
 
-    def fini(self, clearCache = True):
+    def fini(self, clearCache=True):
         if self._sortiesCache and clearCache:
             self._sortiesCache.stop()
             self._sortiesCache = None
         super(CenterUnavailableController, self).fini()
         return
 
-    def request(self, ctx, callback = None):
+    def request(self, ctx, callback=None):
         self._failChecking('Has been invoked CenterUnavailableController.request', ctx, callback)
 
 
@@ -253,7 +251,7 @@ class IntroController(_FortController):
     def isNext(cls, stateID, isLeader):
         return isLeader and stateID == CLIENT_FORT_STATE.NO_FORT
 
-    def create(self, ctx, callback = None):
+    def create(self, ctx, callback=None):
         perm = self.getPermissions()
         if not perm.canCreate():
             return self._failChecking('Player can not create fort', ctx, callback)
@@ -262,9 +260,7 @@ class IntroController(_FortController):
             return self._failChecking('Fort is already created', ctx, callback)
         limits = self.getLimits()
         valid, reason = limits.isCreationValid()
-        if not valid:
-            return self._failChecking('Creation is not valid: {0}'.format(reason), ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'create')
+        return self._failChecking('Creation is not valid: {0}'.format(reason), ctx, callback) if not valid else self._requester.doRequestEx(ctx, callback, 'create')
 
     def _setLimits(self):
         self._limits = IntroFortLimits()
@@ -311,7 +307,7 @@ class FortController(_FortController):
     def isNext(cls, stateID, _):
         return stateID in [CLIENT_FORT_STATE.WIZARD, CLIENT_FORT_STATE.HAS_FORT]
 
-    def init(self, clan, listeners, prevController = None):
+    def init(self, clan, listeners, prevController=None):
         super(FortController, self).init(clan, listeners, prevController)
         self._sortiesCache = SortiesCache(self)
         self._sortiesCache.start()
@@ -324,7 +320,7 @@ class FortController(_FortController):
         self._publicInfoCache = PublicInfoCache(self)
         self._publicInfoCache.start()
 
-    def fini(self, clearCache = True):
+    def fini(self, clearCache=True):
         if self._sortiesCache and clearCache:
             self._sortiesCache.stop()
             self._sortiesCache = None
@@ -346,7 +342,7 @@ class FortController(_FortController):
         super(FortController, self).stopProcessing()
         return
 
-    def openDirection(self, ctx, callback = None):
+    def openDirection(self, ctx, callback=None):
         perm = self.getPermissions()
         fort = self.getFort()
         direction = ctx.getDirection()
@@ -356,11 +352,9 @@ class FortController(_FortController):
             return self._failChecking('Player can not open direction', ctx, callback)
         limits = self.getLimits()
         valid, reason = limits.isDirectionValid(direction)
-        if not valid:
-            return self._failChecking('Direction is invalid: {0}'.format(reason), ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'openDir', direction)
+        return self._failChecking('Direction is invalid: {0}'.format(reason), ctx, callback) if not valid else self._requester.doRequestEx(ctx, callback, 'openDir', direction)
 
-    def closeDirection(self, ctx, callback = None):
+    def closeDirection(self, ctx, callback=None):
         perm = self.getPermissions()
         fort = self.getFort()
         direction = ctx.getDirection()
@@ -370,11 +364,9 @@ class FortController(_FortController):
             return self._failChecking('Player can not open direction', ctx, callback)
         limits = self.getLimits()
         valid, reason = limits.isDirectionValid(direction, open=False)
-        if not valid:
-            return self._failChecking('Direction is invalid: {0}'.format(reason), ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'closeDir', direction)
+        return self._failChecking('Direction is invalid: {0}'.format(reason), ctx, callback) if not valid else self._requester.doRequestEx(ctx, callback, 'closeDir', direction)
 
-    def addBuilding(self, ctx, callback = None):
+    def addBuilding(self, ctx, callback=None):
         perm = self.getPermissions()
         fort = self.getFort()
         buildingTypeID = ctx.getBuildingTypeID()
@@ -388,21 +380,17 @@ class FortController(_FortController):
             return self._failChecking('Player can not build buildings', ctx, callback)
         limits = self.getLimits()
         valid, reason = limits.canBuild(buildingTypeID)
-        if not valid:
-            return self._failChecking('Building is invalid: {0}'.format(reason), ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'addBuilding', buildingTypeID, direction, position)
+        return self._failChecking('Building is invalid: {0}'.format(reason), ctx, callback) if not valid else self._requester.doRequestEx(ctx, callback, 'addBuilding', buildingTypeID, direction, position)
 
-    def deleteBuilding(self, ctx, callback = None):
+    def deleteBuilding(self, ctx, callback=None):
         perm = self.getPermissions()
         fort = self.getFort()
         buildingTypeID = ctx.getBuildingTypeID()
         if not fort.isBuildingBuilt(buildingTypeID):
             return self._failChecking('Building is not built', ctx, callback)
-        if not perm.canDeleteBuilding():
-            return self._failChecking('Player can not build buildings', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'delBuilding', buildingTypeID)
+        return self._failChecking('Player can not build buildings', ctx, callback) if not perm.canDeleteBuilding() else self._requester.doRequestEx(ctx, callback, 'delBuilding', buildingTypeID)
 
-    def transport(self, ctx, callback = None):
+    def transport(self, ctx, callback=None):
         perm = self.getPermissions()
         fort = self.getFort()
         fromBuildingID = ctx.getFromBuildingTypeID()
@@ -418,21 +406,17 @@ class FortController(_FortController):
         toBuilding = fort.getBuilding(toBuildingID)
         if not toBuilding.isImportAvailable(resCount):
             return self._failChecking('Importing into building is not available', ctx, callback)
-        if not perm.canTransport():
-            return self._failChecking('Player can not transport', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'transport', fromBuildingID, toBuildingID, resCount)
+        return self._failChecking('Player can not transport', ctx, callback) if not perm.canTransport() else self._requester.doRequestEx(ctx, callback, 'transport', fromBuildingID, toBuildingID, resCount)
 
-    def attach(self, ctx, callback = None):
+    def attach(self, ctx, callback=None):
         perm = self.getPermissions()
         fort = self.getFort()
         buildingTypeID = ctx.getBuildingTypeID()
         if not fort.isBuildingBuilt(buildingTypeID):
             return self._failChecking('Building is not built', ctx, callback)
-        if not perm.canAttach():
-            return self._failChecking('Player can not attach', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'attach', buildingTypeID)
+        return self._failChecking('Player can not attach', ctx, callback) if not perm.canAttach() else self._requester.doRequestEx(ctx, callback, 'attach', buildingTypeID)
 
-    def upgrade(self, ctx, callback = None):
+    def upgrade(self, ctx, callback=None):
         perm = self.getPermissions()
         fort = self.getFort()
         buildingTypeID = ctx.getBuildingTypeID()
@@ -450,7 +434,7 @@ class FortController(_FortController):
         self.removeUpgradeVisitedBuilding(buildingTypeID)
         return self._requester.doRequestEx(ctx, callback, 'upgrade', buildingTypeID)
 
-    def addOrder(self, ctx, callback = None):
+    def addOrder(self, ctx, callback=None):
         perm = self.getPermissions()
         fort = self.getFort()
         orderTypeID = ctx.getOrderTypeID()
@@ -465,11 +449,9 @@ class FortController(_FortController):
             return self._failChecking('Player can not add order', ctx, callback)
         limits = self.getLimits()
         valid, reason = limits.isOrderValid(orderTypeID, add=False)
-        if not valid:
-            return self._failChecking('Orded is invalid: {0}'.format(reason), ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'addOrder', order.buildingID, count)
+        return self._failChecking('Orded is invalid: {0}'.format(reason), ctx, callback) if not valid else self._requester.doRequestEx(ctx, callback, 'addOrder', order.buildingID, count)
 
-    def activateOrder(self, ctx, callback = None):
+    def activateOrder(self, ctx, callback=None):
         perm = self.getPermissions()
         fort = self.getFort()
         orderTypeID = ctx.getOrderTypeID()
@@ -479,30 +461,24 @@ class FortController(_FortController):
         orderBuilding = fort.getBuilding(order.buildingID)
         if not orderBuilding.isReady():
             return self._failChecking('Building is not ready to add order', ctx, callback)
-        if not perm.canActivateOrder():
-            return self._failChecking('Player can not add order', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'activateOrder', orderTypeID)
+        return self._failChecking('Player can not add order', ctx, callback) if not perm.canActivateOrder() else self._requester.doRequestEx(ctx, callback, 'activateOrder', orderTypeID)
 
-    def createSortie(self, ctx, callback = None):
+    def createSortie(self, ctx, callback=None):
         level = ctx.getDivisionLevel()
         perm = self.getPermissions()
         if not perm.canCreateSortie():
             return self._failChecking('Player can not create sortie, no permission', ctx, callback)
         limits = self.getLimits()
         valid, reason = limits.isSortieCreationValid(level)
-        if not valid:
-            return self._failChecking('Player can not create sortie: {0}'.format(reason), ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'createSortie', level)
+        return self._failChecking('Player can not create sortie: {0}'.format(reason), ctx, callback) if not valid else self._requester.doRequestEx(ctx, callback, 'createSortie', level)
 
-    def requestSortieUnit(self, ctx, callback = None):
+    def requestSortieUnit(self, ctx, callback=None):
         unitMgrID = ctx.getUnitMgrID()
         peripheryID = ctx.getPeripheryID()
         fort = self.getFort()
         if not fort:
             return self._failChecking('Client fort is not found', ctx, callback)
-        if (unitMgrID, peripheryID) not in fort.sorties:
-            return self._failChecking('Sortie does not exists on client', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'getSortieData', unitMgrID, peripheryID)
+        return self._failChecking('Sortie does not exists on client', ctx, callback) if (unitMgrID, peripheryID) not in fort.sorties else self._requester.doRequestEx(ctx, callback, 'getSortieData', unitMgrID, peripheryID)
 
     def getUpgradeVisitedBuildings(self):
         return self._upgradeVisitedBuildings
@@ -517,36 +493,28 @@ class FortController(_FortController):
             self._upgradeVisitedBuildings.remove(buildingID)
             self._listeners.notify('onUpgradeVisitedBuildingChanged', buildingID)
 
-    def changeDefHour(self, ctx, callback = None):
+    def changeDefHour(self, ctx, callback=None):
         perm = self.getPermissions()
         defHour = ctx.getDefenceHour()
-        if not perm.canChangeDefHour():
-            return self._failChecking('Player can not change defence hour', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'changeDefHour', defHour)
+        return self._failChecking('Player can not change defence hour', ctx, callback) if not perm.canChangeDefHour() else self._requester.doRequestEx(ctx, callback, 'changeDefHour', defHour)
 
-    def changeOffDay(self, ctx, callback = None):
+    def changeOffDay(self, ctx, callback=None):
         perm = self.getPermissions()
         offDay = ctx.getOffDay()
-        if not perm.canChangeOffDay():
-            return self._failChecking('Player can not change off day', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'changeOffDay', offDay)
+        return self._failChecking('Player can not change off day', ctx, callback) if not perm.canChangeOffDay() else self._requester.doRequestEx(ctx, callback, 'changeOffDay', offDay)
 
-    def changePeriphery(self, ctx, callback = None):
+    def changePeriphery(self, ctx, callback=None):
         perm = self.getPermissions()
         peripheryID = ctx.getPeripheryID()
-        if not perm.canChangePeriphery():
-            return self._failChecking('Player can not change periphery', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'changePeriphery', peripheryID)
+        return self._failChecking('Player can not change periphery', ctx, callback) if not perm.canChangePeriphery() else self._requester.doRequestEx(ctx, callback, 'changePeriphery', peripheryID)
 
-    def changeVacation(self, ctx, callback = None):
+    def changeVacation(self, ctx, callback=None):
         perm = self.getPermissions()
         timeVacationStart = ctx.getTimeVacationStart()
         timeVacationDuration = ctx.getTimeVacationDuration()
-        if not perm.canChangeVacation():
-            return self._failChecking('Player can not change vacation', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'changeVacation', timeVacationStart, timeVacationDuration)
+        return self._failChecking('Player can not change vacation', ctx, callback) if not perm.canChangeVacation() else self._requester.doRequestEx(ctx, callback, 'changeVacation', timeVacationStart, timeVacationDuration)
 
-    def changeSettings(self, ctx, callback = None):
+    def changeSettings(self, ctx, callback=None):
         perm = self.getPermissions()
         fort = self.getFort()
         chain = []
@@ -565,23 +533,17 @@ class FortController(_FortController):
             if not perm.canChangePeriphery():
                 return self._failChecking('Player can not change periphery', ctx, callback)
             chain.append(('changePeriphery', (peripheryID,), {}))
-        if not chain:
-            return self._failChecking('No requests to process', ctx, callback)
-        return self._requester.doRequestChainEx(ctx, callback, chain)
+        return self._failChecking('No requests to process', ctx, callback) if not chain else self._requester.doRequestChainEx(ctx, callback, chain)
 
-    def shutDownDefHour(self, ctx, callback = None):
+    def shutDownDefHour(self, ctx, callback=None):
         perm = self.getPermissions()
-        if not perm.canShutDownDefHour():
-            return self._failChecking('Player can not shut down def hour', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'shutdownDefHour')
+        return self._failChecking('Player can not shut down def hour', ctx, callback) if not perm.canShutDownDefHour() else self._requester.doRequestEx(ctx, callback, 'shutdownDefHour')
 
-    def cancelShutDownDefHour(self, ctx, callback = None):
+    def cancelShutDownDefHour(self, ctx, callback=None):
         perm = self.getPermissions()
-        if not perm.canCancelShutDownDefHour():
-            return self._failChecking('Player can not cancel shut down def hour', ctx, callback)
-        return self._requester.doRequestEx(ctx, callback, 'cancelDefHourShutdown')
+        return self._failChecking('Player can not cancel shut down def hour', ctx, callback) if not perm.canCancelShutDownDefHour() else self._requester.doRequestEx(ctx, callback, 'cancelDefHourShutdown')
 
-    def requestFortPublicInfo(self, ctx, callback = None):
+    def requestFortPublicInfo(self, ctx, callback=None):
         fort = self.getFort()
         perm = self.getPermissions()
         if not perm.canRequestPublicInfo():
@@ -616,28 +578,28 @@ class FortController(_FortController):
             return self._failChecking('Player input is invalid', ctx, callback)
         return self._finder.request(filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourFrom + 1, nextOwnStartDefHourFrom, nextOwnStartDefHourFrom + 1, defHourChangeDay, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, firstDefaultQuery, electedClanDBIDs, callback)
 
-    def requestClanCard(self, ctx, callback = None):
+    def requestClanCard(self, ctx, callback=None):
         perm = self.getPermissions()
         if not perm.canRequestClanCard():
             return self._failChecking('Player can not request clan card', ctx, callback)
         clanDBID = ctx.getClanDBID()
         return self._requester.doRequestEx(ctx, callback, 'getEnemyClanCard', clanDBID)
 
-    def addFavorite(self, ctx, callback = None):
+    def addFavorite(self, ctx, callback=None):
         perm = self.getPermissions()
         if not perm.canAddToFavorite():
             return self._failChecking('Player can not add favorite', ctx, callback)
         clanDBID = ctx.getClanDBID()
         return self._requester.doRequestEx(ctx, callback, 'addFavorite', clanDBID)
 
-    def removeFavorite(self, ctx, callback = None):
+    def removeFavorite(self, ctx, callback=None):
         perm = self.getPermissions()
         if not perm.canRemoveFavorite():
             return self._failChecking('Player can not remove favorite', ctx, callback)
         clanDBID = ctx.getClanDBID()
         return self._requester.doRequestEx(ctx, callback, 'removeFavorite', clanDBID)
 
-    def planAttack(self, ctx, callback = None):
+    def planAttack(self, ctx, callback=None):
         perm = self.getPermissions()
         if not perm.canPlanAttack():
             return self._failChecking('Player can not plan attack', ctx, callback)
@@ -647,7 +609,7 @@ class FortController(_FortController):
         dirTo = ctx.getDirTo()
         return self._requester.doRequestEx(ctx, callback, 'planAttack', clanDBID, timeAttack, dirFrom, dirTo)
 
-    def createOrJoinFortBattle(self, ctx, callback = None):
+    def createOrJoinFortBattle(self, ctx, callback=None):
         perm = self.getPermissions()
         if not perm.canCreateFortBattle():
             return self._failChecking('Player can not plan attack', ctx, callback)
@@ -655,7 +617,7 @@ class FortController(_FortController):
         slotIdx = ctx.getSlotIdx()
         return self._requester.doRequestEx(ctx, callback, 'createOrJoinFortBattle', battleID, slotIdx)
 
-    def activateConsumable(self, ctx, callback = None):
+    def activateConsumable(self, ctx, callback=None):
         perm = self.getPermissions()
         if not perm.canActivateConsumable():
             return self._failChecking('Player can not activate consumable', ctx, callback)
@@ -663,7 +625,7 @@ class FortController(_FortController):
         slotIdx = ctx.getSlotIdx()
         return self._requester.doRequestEx(ctx, callback, 'activateConsumable', orderTypeID, slotIdx)
 
-    def returnConsumable(self, ctx, callback = None):
+    def returnConsumable(self, ctx, callback=None):
         perm = self.getPermissions()
         if not perm.canReturnConsumable():
             return self._failChecking('Player can not return consumable', ctx, callback)
@@ -744,10 +706,10 @@ class FortController(_FortController):
             fortMgr.onFortPublicInfoReceived -= self.__fortMgr_onFortPublicInfoReceived
         super(FortController, self)._removeFortListeners()
 
-    def __refreshCooldowns(self, doNotify = True):
+    def __refreshCooldowns(self, doNotify=True):
+        self.__cancelCooldownCallback()
         if self.__cooldownBuildings and doNotify:
             self._listeners.notify('onBuildingsUpdated', self.__cooldownBuildings, self.__cooldownPassed)
-        self.__cancelCooldownCallback()
         fort = self.getFort()
         self.__cooldownBuildings = fort.getBuildingsOnCooldown()
         if self.__cooldownBuildings:
@@ -767,6 +729,7 @@ class FortController(_FortController):
 
     def __cancelCooldownCallback(self):
         if self.__cooldownCallback is not None:
+            LOG_DEBUG('Cooldown callback cancelling: ', self.__cooldownCallback)
             BigWorld.cancelCallback(self.__cooldownCallback)
             self.__cooldownCallback = None
             self.__cooldownBuildings = []
@@ -791,7 +754,7 @@ class FortController(_FortController):
             self.__defencePeriodCallback = None
         return
 
-    def __fort_onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def __fort_onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         self._listeners.notify('onBuildingChanged', buildingTypeID, reason, ctx)
 
     def __fort_onBuildingRemoved(self, buildingTypeID):
@@ -858,7 +821,7 @@ class FortController(_FortController):
     def __fort_onDefenceHourShutdown(self):
         self._listeners.notify('onDefenceHourShutdown')
 
-    def __fortMgr_onFortUpdateReceived(self, isFullUpdate = False):
+    def __fortMgr_onFortUpdateReceived(self, isFullUpdate=False):
         self.__refreshCooldowns(isFullUpdate)
 
     def __fortMgr_onFortPublicInfoReceived(self, requestID, errorID, resultSet):
@@ -876,7 +839,7 @@ def createInitial():
     return NoFortController()
 
 
-def createByState(state, isLeader = False, exclude = None):
+def createByState(state, isLeader=False, exclude=None):
     all = [NoFortController,
      IntroController,
      FortController,

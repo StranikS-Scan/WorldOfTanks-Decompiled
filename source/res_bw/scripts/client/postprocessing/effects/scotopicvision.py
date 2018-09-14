@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Effects/ScotopicVision.py
 from PostProcessing.RenderTargets import *
 from PostProcessing.Phases import *
@@ -12,7 +12,7 @@ noiseThreshold = MaterialFloatProperty('Scotopic Vision', -1, 'noiseThreshold')
 textureScale = MaterialFloatProperty('Scotopic Vision', -1, 'noiseScale', 1)
 
 @implementEffectFactory('Scotopic vision', 'Simulate human night vision, via tone-map desaturation and added noise.')
-def scotopicVision(colName = 'system/maps/post_processing/scotopic_vision.dds', noiseName = 'system/maps/post_processing/noise.texanim'):
+def scotopicVision(colName='system/maps/post_processing/scotopic_vision.dds', noiseName='system/maps/post_processing/noise.texanim'):
     """This method creates and returns a post-process effect that simulates
     scotopic vision, or human night vision.
     """

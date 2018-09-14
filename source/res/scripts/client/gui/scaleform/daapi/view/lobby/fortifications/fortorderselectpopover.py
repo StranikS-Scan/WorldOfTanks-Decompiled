@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderSelectPopover.py
 import constants
 from adisp import process
@@ -6,8 +6,6 @@ from helpers.i18n import makeString as _ms
 from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.fortifications.context import ActivateConsumableCtx, ReturnConsumableCtx
 from gui.Scaleform.daapi.view.meta.FortOrderSelectPopoverMeta import FortOrderSelectPopoverMeta
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.formatters import icons, text_styles
@@ -16,7 +14,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_format
 
 class FortOrderSelectPopover(FortOrderSelectPopoverMeta, FortViewHelper, UnitListener):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortOrderSelectPopover, self).__init__()
         self.__slotIdx = ctx.get('data').slotID
 
@@ -36,6 +34,10 @@ class FortOrderSelectPopover(FortOrderSelectPopoverMeta, FortViewHelper, UnitLis
 
     def onUnitExtraChanged(self, extra):
         self.destroy()
+
+    def onOrderChanged(self, orderTypeID, reason):
+        if self.fortCtrl.getFort().getOrder(orderTypeID).isConsumable:
+            self.__updateData()
 
     def _populate(self):
         super(FortOrderSelectPopover, self)._populate()

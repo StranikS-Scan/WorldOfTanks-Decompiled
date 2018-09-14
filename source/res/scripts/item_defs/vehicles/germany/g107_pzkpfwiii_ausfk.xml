@@ -74,6 +74,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G107_PzKpfwIII_AusfK/PzKpfwIII_AusfK_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1 1 0.000000 0.24	</tiling>
     </camouflage>
@@ -186,9 +187,9 @@
         <mud>	mediumTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	vehicles_treads_pc_2	</wwsoundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundNPC>	vehicles_treads_npc_2	</wwsoundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.03757 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/german/G107_PzKpfwIII_AusfK/collision/Chassis.model	</collisionModel>
@@ -449,7 +450,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_03	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <physicsShape>	0.895 0.000 0.978 -0.020 0.444 0.145 0.468 1.000 0.273 0.482 0.309 0.547 0.094 0.569 0.180	</physicsShape>
       <camouflage>

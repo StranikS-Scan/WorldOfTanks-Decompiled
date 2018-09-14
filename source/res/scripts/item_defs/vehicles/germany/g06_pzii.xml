@@ -77,6 +77,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G06_PzII/PzII_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	2.14 2.14 0.000000 0.000000	</tiling>
     </camouflage>
@@ -930,15 +931,10 @@
   </turrets0>
   <engines>
     <Maybach_HL57TR>	shared	  <unlocks>
-        <engine>	Maybach_HL62TR	  <cost>	145	</cost>
-        </engine>
-      </unlocks>
-    </Maybach_HL57TR>
-    <Maybach_HL62TR>	shared	  <unlocks>
         <engine>	Maybach_HL62TRM	  <cost>	180	</cost>
         </engine>
       </unlocks>
-    </Maybach_HL62TR>
+    </Maybach_HL57TR>
     <Maybach_HL62TRM>	shared	  <unlocks>
         <vehicle>	PzIII_A	  <cost>	1500	</cost>
         </vehicle>
@@ -949,17 +945,7 @@
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <FuG2>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360.0	</cost>
-        </radio>
-      </unlocks>
-    </FuG2>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG_Spr.1	  <cost>	3600.0	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
-    <FuG_Spr.1>	shared	</FuG_Spr.1>
+    <FuG5>	shared	</FuG5>
   </radios>
   <effects>
     <collision></collision>

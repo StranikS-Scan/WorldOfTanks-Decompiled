@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/spa_resolver.py
 from messenger.proto.xmpp.extensions import PyExtension, PyQuery
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
@@ -24,7 +24,7 @@ class SpaResolverError(PyExtension):
 
 class SpaResolverItem(PyExtension):
 
-    def __init__(self, dbID = 0L, nickname = ''):
+    def __init__(self, dbID=0, nickname=''):
         super(SpaResolverItem, self).__init__(_TAG.ITEM)
         if dbID:
             self.setAttribute('id', dbID)
@@ -34,14 +34,14 @@ class SpaResolverItem(PyExtension):
 
     @classmethod
     def getDefaultData(cls):
-        return (0L, '', SpaResolverError.getDefaultData())
+        return (0, '', SpaResolverError.getDefaultData())
 
     def parseTag(self, pyGlooxTag):
         dbID = pyGlooxTag.findAttribute('id')
         if dbID:
             dbID = long(dbID)
         else:
-            dbID = 0L
+            dbID = 0
         nickname = pyGlooxTag.findAttribute('nickname')
         error = self._getChildData(pyGlooxTag, 0, SpaResolverError.getDefaultData())
         return (dbID, nickname, error)
@@ -49,7 +49,7 @@ class SpaResolverItem(PyExtension):
 
 class SpaResolverQuery(PyExtension):
 
-    def __init__(self, items = None):
+    def __init__(self, items=None):
         super(SpaResolverQuery, self).__init__(_TAG.QUERY)
         self.setXmlNs(_NS.WG_SPA_RESOLVER)
         items = items or tuple()

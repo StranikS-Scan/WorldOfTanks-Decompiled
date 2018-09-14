@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/time_utils.py
 import time
 import datetime
@@ -54,31 +54,19 @@ def setTimeCorrection(serverUTCTime):
 
 
 def makeLocalServerTime(serverTime):
-    if serverTime:
-        return max(0, serverTime - _g_instance.timeCorrection)
-    else:
-        return None
+    return max(0, serverTime - _g_instance.timeCorrection) if serverTime else None
 
 
 def makeLocalServerDatetime(serverDatetime):
-    if isinstance(serverDatetime, datetime.datetime):
-        return serverDatetime - datetime.timedelta(seconds=_g_instance.timeCorrection)
-    else:
-        return None
+    return serverDatetime - datetime.timedelta(seconds=_g_instance.timeCorrection) if isinstance(serverDatetime, datetime.datetime) else None
 
 
 def makeServerTimeFromLocal(localTime):
-    if localTime:
-        return max(0, localTime + _g_instance.timeCorrection)
-    else:
-        return None
+    return max(0, localTime + _g_instance.timeCorrection) if localTime else None
 
 
 def makeServerDatetimeFromLocal(localDatetime):
-    if isinstance(localDatetime, datetime.datetime):
-        return localDatetime + datetime.timedelta(seconds=_g_instance.timeCorrection)
-    else:
-        return None
+    return localDatetime + datetime.timedelta(seconds=_g_instance.timeCorrection) if isinstance(localDatetime, datetime.datetime) else None
 
 
 def getServerRegionalTime():
@@ -114,8 +102,7 @@ def getTimeDeltaFromNowInLocal(t):
 
 
 def getTimestampFromNow(t):
-    if t > 0 and t > getCurrentTimestamp():
-        return t - getCurrentTimestamp()
+    return t - getCurrentTimestamp() if t > 0 and t > getCurrentTimestamp() else 0
 
 
 def getTimeDeltaTilNow(t):
@@ -124,7 +111,7 @@ def getTimeDeltaTilNow(t):
         return delta.days * ONE_DAY + delta.seconds
 
 
-def getTillTimeString(timeValue, keyNamespace, isRoundUp = False):
+def getTillTimeString(timeValue, keyNamespace, isRoundUp=False):
     gmtime = time.gmtime(timeValue)
     if isRoundUp and gmtime.tm_sec > 0:
         timeValue += ONE_MINUTE
@@ -198,7 +185,7 @@ def isToday(timestamp):
     return todayStart <= timestamp <= todayEnd
 
 
-def getDayTimeBoundsForLocal(timestamp = None):
+def getDayTimeBoundsForLocal(timestamp=None):
     if timestamp is not None:
         dateTime = getDateTimeInLocal(timestamp)
     else:
@@ -206,7 +193,7 @@ def getDayTimeBoundsForLocal(timestamp = None):
     return (_getTimestampForLocal(dateTime.year, dateTime.month, dateTime.day), _getTimestampForLocal(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59))
 
 
-def getDayTimeBoundsForUTC(timestamp = None):
+def getDayTimeBoundsForUTC(timestamp=None):
     if timestamp is not None:
         dateTime = getDateTimeInUTC(timestamp)
     else:
@@ -223,20 +210,20 @@ def isTimeNextDay(timestamp):
     return isTimeThisDay(timestamp - ONE_DAY)
 
 
-def getTimeTodayForUTC(hour = 0, minute = 0, second = 0, microsecond = 0):
+def getTimeTodayForUTC(hour=0, minute=0, second=0, microsecond=0):
     return getTimeForUTC(getCurrentTimestamp(), hour, minute, second, microsecond)
 
 
-def getTimeTodayForLocal(hour = 0, minute = 0, second = 0, microsecond = 0):
+def getTimeTodayForLocal(hour=0, minute=0, second=0, microsecond=0):
     return getTimeForLocal(getCurrentTimestamp(), hour, minute, second, microsecond)
 
 
-def getTimeForUTC(timestamp, hour = 0, minute = 0, second = 0, microsecond = 0):
+def getTimeForUTC(timestamp, hour=0, minute=0, second=0, microsecond=0):
     date = getDateTimeInUTC(timestamp)
     return _getTimestampForUTC(date.year, date.month, date.day, hour, minute, second, microsecond)
 
 
-def getTimeForLocal(timestamp, hour = 0, minute = 0, second = 0, microsecond = 0):
+def getTimeForLocal(timestamp, hour=0, minute=0, second=0, microsecond=0):
     date = getDateTimeInLocal(timestamp)
     return _getTimestampForLocal(date.year, date.month, date.day, hour, minute, second, microsecond)
 
@@ -249,7 +236,7 @@ def getLocalDelta():
     return abs(getCurrentLocalServerTimestamp() - getCurrentTimestamp())
 
 
-def getTimeLeftFormat(timeLeft, useMinutes = True, useHours = False):
+def getTimeLeftFormat(timeLeft, useMinutes=True, useHours=False):
     templateParts = ['%S']
     if useMinutes:
         templateParts.insert(0, '%M')
@@ -261,7 +248,7 @@ def getTimeLeftFormat(timeLeft, useMinutes = True, useHours = False):
 
 class ActivityIntervalsIterator(object):
 
-    def __init__(self, currentTime, currentDay, weekDays = None, timeIntervals = None):
+    def __init__(self, currentTime, currentDay, weekDays=None, timeIntervals=None):
         self._currentTime = currentTime
         self._currentDay = currentDay
         self._timeIntervals = timeIntervals or [WHOLE_DAY_INTERVAL]
@@ -310,7 +297,7 @@ class ActivityIntervalsIterator(object):
 
 class DaysAvailabilityIterator(object):
 
-    def __init__(self, availableTimestamp, weekDaysToExclude = None, intervalsToExclude = None, minDelta = 0):
+    def __init__(self, availableTimestamp, weekDaysToExclude=None, intervalsToExclude=None, minDelta=0):
         self._weekDaysToExclude = weekDaysToExclude or ()
         self._intervalsToExclude = intervalsToExclude or ()
         self._availableTimestamp = availableTimestamp
@@ -339,7 +326,7 @@ class DaysAvailabilityIterator(object):
         return True
 
 
-def _getTimestampForUTC(year, month, day, hour = 0, minute = 0, second = 0, microsecond = 0):
+def _getTimestampForUTC(year, month, day, hour=0, minute=0, second=0, microsecond=0):
     return getTimestampFromUTC((year,
      month,
      day,
@@ -349,5 +336,5 @@ def _getTimestampForUTC(year, month, day, hour = 0, minute = 0, second = 0, micr
      microsecond))
 
 
-def _getTimestampForLocal(year, month, day, hour = 0, minute = 0, second = 0, microsecond = 0):
+def _getTimestampForLocal(year, month, day, hour=0, minute=0, second=0, microsecond=0):
     return getTimestampFromLocal(datetime.datetime(year, month, day, hour, minute, second, microsecond).timetuple())

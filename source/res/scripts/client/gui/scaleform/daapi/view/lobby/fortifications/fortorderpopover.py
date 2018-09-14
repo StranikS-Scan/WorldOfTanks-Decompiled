@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderPopover.py
 import constants
 from adisp import process
@@ -21,7 +21,7 @@ from helpers import i18n
 
 class FortOrderPopover(FortOrderPopoverMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortOrderPopover, self).__init__()
         self._orderID = str(ctx.get('data'))
 
@@ -48,9 +48,7 @@ class FortOrderPopover(FortOrderPopoverMeta, FortViewHelper):
         buildingID = self.getBuildingUIDbyID(order.buildingID)
         building = i18n.makeString(FORTIFICATIONS.buildings_buildingname(buildingID))
         hasBuilding = order.hasBuilding
-        if not hasBuilding:
-            return text_styles.error(building)
-        return building
+        return text_styles.error(building) if not hasBuilding else building
 
     def _getCountStr(self, order):
         count = order.count
@@ -231,10 +229,7 @@ class FortOrderPopover(FortOrderPopoverMeta, FortViewHelper):
     @classmethod
     def __getFortQuest(cls):
         fortQuests = g_eventsCache.getQuests(lambda q: q.getType() == constants.EVENT_TYPE.FORT_QUEST)
-        if len(fortQuests):
-            return fortQuests.values()[0]
-        else:
-            return None
+        return fortQuests.values()[0] if len(fortQuests) else None
 
     @classmethod
     def __getFortQuestBonusesStr(cls):

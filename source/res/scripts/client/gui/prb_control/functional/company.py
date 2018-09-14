@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/company.py
 import BigWorld
 from PlayerEvents import g_playerEvents
@@ -30,7 +30,7 @@ from prebattle_shared import decodeRoster
 
 class CompanyEntry(PrbEntry):
 
-    def create(self, ctx, callback = None):
+    def create(self, ctx, callback=None):
         if prb_cooldown.validatePrbCreationCooldown():
             if callback is not None:
                 callback(False)
@@ -79,7 +79,7 @@ class _CompanyListRequester(IPrbListRequester):
             self.__ctx = None
         return
 
-    def request(self, ctx = None):
+    def request(self, ctx=None):
         if self.__cooldown.validate(REQUEST_TYPE.PREBATTLES_LIST):
             if ctx:
                 ctx.stopProcessing(False)
@@ -113,7 +113,7 @@ class CompanyIntroFunctional(IntroPrbFunctional):
         super(CompanyIntroFunctional, self).__init__(PREBATTLE_TYPE.COMPANY, _CompanyListRequester(), handlers)
         self._rosterReq = PrbRosterRequester()
 
-    def init(self, clientPrb = None, ctx = None):
+    def init(self, clientPrb=None, ctx=None):
         result = super(CompanyIntroFunctional, self).init()
         self._rosterReq.start(self._onPrbRosterReceived)
         g_eventDispatcher.loadCompany()
@@ -122,7 +122,7 @@ class CompanyIntroFunctional(IntroPrbFunctional):
         g_eventsCache.companies.onCompanyStateChanged += self.onCompanyStateChanged
         return result
 
-    def fini(self, clientPrb = None, woEvents = False):
+    def fini(self, clientPrb=None, woEvents=False):
         super(CompanyIntroFunctional, self).fini()
         if self._flags & FUNCTIONAL_FLAG.SWITCH == 0:
             if not woEvents:
@@ -150,7 +150,7 @@ class CompanyIntroFunctional(IntroPrbFunctional):
             result = True
         return SelectResult(result, None)
 
-    def requestList(self, ctx, callback = None):
+    def requestList(self, ctx, callback=None):
         if self._listReq.isInCooldown():
             self._listReq.fireCooldownEvent()
             if callback:
@@ -159,7 +159,7 @@ class CompanyIntroFunctional(IntroPrbFunctional):
             ctx.startProcessing(callback)
             self._listReq.request(ctx)
 
-    def requestRoster(self, ctx, callback = None):
+    def requestRoster(self, ctx, callback=None):
         ctx.startProcessing(callback)
         self._rosterReq.request(ctx)
 
@@ -186,7 +186,7 @@ class CompanyFunctional(PrbFunctional):
         super(CompanyFunctional, self).__init__(settings, permClass=CompanyPrbPermissions, limits=CompanyLimits(self), requestHandlers=requests)
         self.__doTeamReady = False
 
-    def init(self, clientPrb = None, ctx = None):
+    def init(self, clientPrb=None, ctx=None):
         result = super(CompanyFunctional, self).init(clientPrb=clientPrb)
         playerInfo = self.getPlayerInfo()
         if self.getTeamState(team=1).isInQueue() and playerInfo.isReady() and playerInfo.roster == PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1:
@@ -212,7 +212,7 @@ class CompanyFunctional(PrbFunctional):
     def isGUIProcessed(self):
         return True
 
-    def fini(self, clientPrb = None, woEvents = False):
+    def fini(self, clientPrb=None, woEvents=False):
         super(CompanyFunctional, self).fini(clientPrb=clientPrb, woEvents=woEvents)
         if self._flags & FUNCTIONAL_FLAG.SWITCH == 0:
             if not woEvents:
@@ -227,13 +227,13 @@ class CompanyFunctional(PrbFunctional):
         return FUNCTIONAL_FLAG.UNDEFINED
 
     @vehicleAmmoCheck
-    def setPlayerState(self, ctx, callback = None):
+    def setPlayerState(self, ctx, callback=None):
         super(CompanyFunctional, self).setPlayerState(ctx, callback)
 
     def getPlayersStateStats(self):
         return self._getPlayersStateStats(PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1)
 
-    def getRosters(self, keys = None):
+    def getRosters(self, keys=None):
         rosters = prb_getters.getPrebattleRosters()
         if keys is None:
             result = {PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1: [],
@@ -259,7 +259,7 @@ class CompanyFunctional(PrbFunctional):
             isValid, notValidReason = self._limits.isTeamValid()
         return (isValid, notValidReason)
 
-    def doAction(self, action = None):
+    def doAction(self, action=None):
         if self.isCreator():
             if self.getRosterKey() != PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1:
                 DialogsInterface.showI18nInfoDialog('teamDoesNotHaveCommander', lambda result: None)
@@ -292,10 +292,10 @@ class CompanyFunctional(PrbFunctional):
             self.setPlayerState(prb_ctx.SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))
         return True
 
-    def showGUI(self, ctx = None):
+    def showGUI(self, ctx=None):
         g_eventDispatcher.loadCompany()
 
-    def changeOpened(self, ctx, callback = None):
+    def changeOpened(self, ctx, callback=None):
         if ctx.getRequestType() != REQUEST_TYPE.CHANGE_OPENED:
             LOG_ERROR('Invalid context for request changeOpened', ctx)
             if callback is not None:
@@ -321,7 +321,7 @@ class CompanyFunctional(PrbFunctional):
             self._cooldown.process(REQUEST_TYPE.CHANGE_SETTINGS)
             return
 
-    def changeComment(self, ctx, callback = None):
+    def changeComment(self, ctx, callback=None):
         if ctx.getRequestType() != REQUEST_TYPE.CHANGE_COMMENT:
             LOG_ERROR('Invalid context for request changeComment', ctx)
             if callback is not None:
@@ -347,7 +347,7 @@ class CompanyFunctional(PrbFunctional):
             self._cooldown.process(REQUEST_TYPE.CHANGE_SETTINGS)
             return
 
-    def changeDivision(self, ctx, callback = None):
+    def changeDivision(self, ctx, callback=None):
         if ctx.getRequestType() != REQUEST_TYPE.CHANGE_DIVISION:
             LOG_ERROR('Invalid context for request changeDivision', ctx)
             if callback is not None:

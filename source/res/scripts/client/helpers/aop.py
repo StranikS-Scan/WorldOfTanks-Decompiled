@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/aop.py
 import re
 import sys
@@ -112,7 +112,7 @@ def _search(ns, regexp, match):
         if regexp.match(attrName):
             if match:
                 attrNames.append(attrName)
-        elif not match:
+        if not match:
             attrNames.append(attrName)
 
     return attrNames
@@ -236,7 +236,7 @@ class Pointcut(list):
     def __del__(self):
         LOG_DEBUG('Pointcut deleted: {0:>s}'.format(self))
 
-    def __init__(self, path, name, filterString, match = True, aspects = ()):
+    def __init__(self, path, name, filterString, match=True, aspects=()):
         super(Pointcut, self).__init__()
         self.__nsPath = path
         self.__nsName = name
@@ -259,7 +259,7 @@ class Pointcut(list):
         return getattr(imported, name, None)
 
     def addAspect(self, aspect, *args, **kwargs):
-        if type(aspect) is AspectType:
+        if isinstance(aspect, AspectType):
             for item in self:
                 aspect(*args, **kwargs)(item)
 
@@ -290,7 +290,7 @@ class Weaver(object):
         pointcut = kwargs.pop('pointcut', Pointcut)
         aspects = kwargs.pop('aspects', [])
         avoid = kwargs.pop('avoid', False)
-        if type(pointcut) is PointcutType:
+        if isinstance(pointcut, PointcutType):
             try:
                 pointcut = pointcut(*args, **kwargs)
             except ImportError:
@@ -318,7 +318,7 @@ class Weaver(object):
                 LOG_CURRENT_EXCEPTION()
 
     def findPointcut(self, pointcut):
-        if type(pointcut) is PointcutType:
+        if isinstance(pointcut, PointcutType):
             clazz = pointcut
         else:
             clazz = pointcut.__class__
@@ -329,7 +329,7 @@ class Weaver(object):
     def avoid(self, idx):
         self.addAspect(idx, DummyAspect)
 
-    def clear(self, idx = None):
+    def clear(self, idx=None):
         if idx is not None:
             if -1 < idx < len(self.__pointcuts):
                 pointcut = self.__pointcuts.pop(idx)

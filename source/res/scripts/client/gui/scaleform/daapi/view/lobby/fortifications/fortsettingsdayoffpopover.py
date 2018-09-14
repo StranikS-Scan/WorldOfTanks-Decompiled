@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortSettingsDayoffPopover.py
 from FortifiedRegionBase import NOT_ACTIVATED
 from adisp import process
@@ -16,7 +16,7 @@ from helpers import i18n
 
 class FortSettingsDayoffPopover(FortViewHelper, FortSettingsDayoffPopoverMeta):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(FortSettingsDayoffPopover, self).__init__()
 
     def onApply(self, offDay):

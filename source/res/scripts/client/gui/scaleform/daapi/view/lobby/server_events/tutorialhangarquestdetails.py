@@ -1,5 +1,6 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/TutorialHangarQuestDetails.py
+from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.TutorialHangarQuestDetailsMeta import TutorialHangarQuestDetailsMeta
 from gui.prb_control.dispatcher import g_prbLoader
@@ -60,7 +61,7 @@ class TutorialHangarQuestDetails(TutorialHangarQuestDetailsMeta):
              'description': self.__getDescription(description, chapter)})
             return
 
-    def __getBonuses(self, chapter, useIconFormat = False):
+    def __getBonuses(self, chapter, useIconFormat=False):
         if not chapter.isBonusReceived(g_itemsCache.items.stats.tutorialsCompleted):
             result = []
             iconResult = []
@@ -94,11 +95,21 @@ class TutorialHangarQuestDetails(TutorialHangarQuestDetailsMeta):
 
     def __getTopConditions(self, chapter):
         blocks = []
+        progrCondition = chapter.getProgressCondition()
+        vehicle = None
+        if progrCondition.getID() == 'vehicleBattlesCount':
+            vehicleCD = progrCondition.getValues().get('vehicle')
+            vehicle = g_itemsCache.items.getItemByCD(vehicleCD)
         for questCondition in chapter.getQuestConditions():
             chainType = questCondition['type']
             blocks.append({'type': chainType,
              'id': questCondition['id'],
              'btnText': questCondition['btnLabel'],
-             'text': text_styles.main(questCondition['text'])})
+             'text': self.__getConditionText(questCondition['text'], vehicle)})
 
         return blocks
+
+    def __getConditionText(self, questConditionText, vehicle):
+        if vehicle is not None:
+            questConditionText = i18n.makeString('#tutorial:%s' % questConditionText, vehName=vehicle.userName)
+        return text_styles.main(questConditionText)

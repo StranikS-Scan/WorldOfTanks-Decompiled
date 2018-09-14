@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/StringIO.py
 r"""File-like objects that read from or write to a string buffer.
 
@@ -54,7 +55,7 @@ class StringIO:
     a UnicodeError to be raised when getvalue() is called.
     """
 
-    def __init__(self, buf = ''):
+    def __init__(self, buf=''):
         if not isinstance(buf, basestring):
             buf = str(buf)
         self.buf = buf
@@ -95,7 +96,7 @@ class StringIO:
         _complain_ifclosed(self.closed)
         return False
 
-    def seek(self, pos, mode = 0):
+    def seek(self, pos, mode=0):
         """Set the file's current position.
         
         The mode argument is optional and defaults to 0 (absolute file
@@ -119,7 +120,7 @@ class StringIO:
         _complain_ifclosed(self.closed)
         return self.pos
 
-    def read(self, n = -1):
+    def read(self, n=-1):
         """Read at most size bytes from the file
         (less if the read hits EOF before obtaining size bytes).
         
@@ -139,7 +140,7 @@ class StringIO:
         self.pos = newpos
         return r
 
-    def readline(self, length = None):
+    def readline(self, length=None):
         r"""Read one entire line from the file.
         
         A trailing newline character is kept in the string (but may be absent
@@ -168,7 +169,7 @@ class StringIO:
         self.pos = newpos
         return r
 
-    def readlines(self, sizehint = 0):
+    def readlines(self, sizehint=0):
         """Read until EOF using readline() and return a list containing the
         lines thus read.
         
@@ -188,7 +189,7 @@ class StringIO:
 
         return lines
 
-    def truncate(self, size = None):
+    def truncate(self, size=None):
         """Truncate the file's size.
         
         If the optional size argument is present, the file is truncated to

@@ -69,6 +69,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/british/GB03_Cruiser_Mk_I/Cruiser_Mk_I_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_GB03_Cruiser_Mk_I>
@@ -966,17 +967,7 @@
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <N14>	shared	  <unlocks>
-        <radio>	N11	  <cost>	100	</cost>
-        </radio>
-      </unlocks>
-    </N14>
-    <N11>	shared	  <unlocks>
-        <radio>	N9	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </N11>
-    <N9>	shared	</N9>
+    <N11>	shared	</N11>
   </radios>
   <effects>
     <collision></collision>

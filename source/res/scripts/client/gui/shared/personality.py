@@ -1,8 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/personality.py
 import SoundGroups
 import BigWorld
-import MusicController
 from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 from PlayerEvents import g_playerEvents
@@ -11,14 +10,14 @@ from CurrentVehicle import g_currentVehicle
 from ConnectionManager import connectionManager
 from gui.app_loader import g_appLoader
 from helpers import isPlayerAccount, time_utils
-from gui import SystemMessages, g_guiResetters, game_control, miniclient
-from gui import GUI_SETTINGS
+from gui import SystemMessages, g_guiResetters, game_control, miniclient, macroses
 from gui.wgnc import g_wgncProvider
 from gui.server_events import g_eventsCache
 from gui.LobbyContext import g_lobbyContext
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.sounds import g_soundsCtrl
 from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
-from gui.goodies.GoodiesCache import g_goodiesCache
+from gui.goodies import g_goodiesCache
 from gui.clubs.ClubsController import g_clubsCtrl
 from gui.clans.clan_controller import g_clanCtrl
 from gui.prb_control.dispatcher import g_prbLoader
@@ -81,6 +80,7 @@ def onAccountShowGUI(ctx):
     g_clanCache.onAccountShowGUI()
     g_clubsCtrl.start()
     g_clanCtrl.start()
+    g_soundsCtrl.start()
     SoundGroups.g_instance.enableLobbySounds(True)
     onCenterIsLongDisconnected(True)
     guiModsSendEvent('onAccountShowGUI', ctx)
@@ -100,6 +100,7 @@ def onAccountBecomeNonPlayer():
 def onAvatarBecomePlayer():
     yield g_settingsCache.update()
     g_settingsCore.serverSettings.applySettings()
+    g_soundsCtrl.stop()
     g_clubsCtrl.stop()
     g_clanCtrl.stop()
     g_eventsCache.stop()
@@ -156,7 +157,7 @@ def onIGRTypeChanged(roomType, xpFactor):
                  'igrXPFactor': xpFactor}})
 
 
-def init(loadingScreenGUI = None):
+def init(loadingScreenGUI=None):
     global onShopResyncStarted
     global onAccountShowGUI
     global onScreenShotMade
@@ -178,11 +179,8 @@ def init(loadingScreenGUI = None):
     g_playerEvents.onShopResync += onShopResync
     g_playerEvents.onCenterIsLongDisconnected += onCenterIsLongDisconnected
     g_playerEvents.onIGRTypeChanged += onIGRTypeChanged
-    if GUI_SETTINGS.isGuiEnabled():
-        from gui.Scaleform.app_factory import AS3_AS2_AppFactory as AppFactory
-    else:
-        from gui.Scaleform.app_factory import NoAppFactory as AppFactory
-    g_appLoader.init(AppFactory())
+    from gui.Scaleform.app_factory import createAppFactory
+    g_appLoader.init(createAppFactory())
     game_control.g_instance.init()
     from gui.Scaleform import SystemMessagesInterface
     SystemMessages.g_instance = SystemMessagesInterface.SystemMessagesInterface()
@@ -192,6 +190,7 @@ def init(loadingScreenGUI = None):
         loadingScreenGUI.script.active(False)
     g_prbLoader.init()
     LogitechMonitor.init()
+    g_soundsCtrl.init()
     g_itemsCache.init()
     g_settingsCache.init()
     g_settingsCore.init()
@@ -220,6 +219,7 @@ def start():
 
 def fini():
     guiModsFini()
+    g_soundsCtrl.fini()
     Waiting.close()
     LogitechMonitor.destroy()
     g_appLoader.fini()
@@ -230,6 +230,7 @@ def fini():
     g_clanCtrl.fini()
     g_clanCache.fini()
     game_control.g_instance.fini()
+    macroses.fini()
     g_settingsCore.fini()
     g_settingsCache.fini()
     g_eventsCache.fini()
@@ -262,12 +263,15 @@ def fini():
 
 
 def onConnected():
+    guiModsSendEvent('onConnected')
     game_control.g_instance.onConnected()
 
 
 def onDisconnected():
+    guiModsSendEvent('onDisconnected')
     g_prbLoader.onDisconnected()
     g_clanCache.onDisconnected()
+    g_soundsCtrl.stop(isDisconnected=True)
     game_control.g_instance.onDisconnected()
     g_clubsCtrl.stop(isDisconnected=True)
     g_clanCtrl.stop()

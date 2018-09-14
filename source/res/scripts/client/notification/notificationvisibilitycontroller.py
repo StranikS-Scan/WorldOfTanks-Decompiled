@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationVisibilityController.py
 from gui.clubs.task_scheduler import TaskScheduler, Task
 from notification.BaseMessagesController import BaseMessagesController

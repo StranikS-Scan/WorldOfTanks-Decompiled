@@ -150,7 +150,11 @@
       </ABSOLUTE>
     </fort_battle>
   </divisions>
-  <fort_battle_maps>	02_malinovka
+  <fort_battle_maps>	18_cliff
+		86_himmelsdorf_winter
+		01_karelia
+		10_hills
+		02_malinovka
 		04_himmelsdorf
 		05_prohorovka
 		06_ensk
@@ -175,12 +179,7 @@
 		47_canada_a
 		63_tundra
 		83_kharkiv
-		84_winter
-		86_himmelsdorf_winter
-		01_karelia
-		10_hills
-		18_cliff
-		01_karelia	</fort_battle_maps>
+		84_winter	</fort_battle_maps>
   <transport_levels>
     <level>	1	  <max_resource>	250	</max_resource>
       <cooldown_time>	82800	</cooldown_time>
@@ -1459,4 +1458,15 @@
       <items>	10	</items>
     </level>
   </fort_bonus_factors>
+  <fortSortiesProfitRate>
+    <MIDDLE>
+      <fortInfluencePointsFactor>	0.0625	</fortInfluencePointsFactor>
+    </MIDDLE>
+    <CHAMPION>
+      <fortInfluencePointsFactor>	0.05	</fortInfluencePointsFactor>
+    </CHAMPION>
+    <ABSOLUTE>
+      <fortInfluencePointsFactor>	0.033	</fortInfluencePointsFactor>
+    </ABSOLUTE>
+  </fortSortiesProfitRate>
 </fortified_regions.xml>

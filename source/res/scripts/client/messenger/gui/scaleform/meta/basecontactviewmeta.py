@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/BaseContactViewMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -11,17 +11,13 @@ class BaseContactViewMeta(BaseDAAPIComponent):
         self._printOverrideError('onCancel')
 
     def as_updateS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_update(data)
+        return self.flashObject.as_update(data) if self._isDAAPIInited() else None
 
     def as_setOkBtnEnabledS(self, isEnabled):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setOkBtnEnabled(isEnabled)
+        return self.flashObject.as_setOkBtnEnabled(isEnabled) if self._isDAAPIInited() else None
 
     def as_setInitDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInitData(data)
+        return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_closeViewS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_closeView()
+        return self.flashObject.as_closeView() if self._isDAAPIInited() else None

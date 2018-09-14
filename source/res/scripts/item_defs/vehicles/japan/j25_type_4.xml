@@ -74,6 +74,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/japan/J25_Type_4/Type_4_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_J25_Type_4>
@@ -380,7 +381,7 @@
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	270	</maxHealth>
-      <maxRegenHealth>	202.5	</maxRegenHealth>
+      <maxRegenHealth>	202.0	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/japan/J25_Type_4/normal/lod0/Chassis.model	</undamaged>
@@ -677,7 +678,7 @@
       <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	115	</maxHealth>
-        <maxRegenHealth>	57.5	</maxRegenHealth>
+        <maxRegenHealth>	57.0	</maxRegenHealth>
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -810,7 +811,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_12000-more	</turretRotatorSoundGear>
       <physicsShape>	1.012 0.000 1.007 0.000 0.818 -0.169 0.881 0.535 0.390 0.500 0.126 0.500 0.075 0.000 0.000	</physicsShape>
       <camouflage>

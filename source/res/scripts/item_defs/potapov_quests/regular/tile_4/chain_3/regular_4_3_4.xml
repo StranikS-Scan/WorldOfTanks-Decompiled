@@ -16,8 +16,8 @@
               </destroyed>
             </crits>
             <vehicleDamage>
-              <eventCount></eventCount>
               <enemyImmobilized></enemyImmobilized>
+              <eventCount></eventCount>
               <greaterOrEqual>	4	</greaterOrEqual>
             </vehicleDamage>
           </and>
@@ -43,15 +43,15 @@
               </destroyed>
             </crits>
             <vehicleDamage>
-              <eventCount></eventCount>
               <enemyImmobilized></enemyImmobilized>
+              <eventCount></eventCount>
               <greaterOrEqual>	4	</greaterOrEqual>
             </vehicleDamage>
-            <win></win>
             <vehicleKills>
               <enemyImmobilized></enemyImmobilized>
               <greaterOrEqual>	3	</greaterOrEqual>
             </vehicleKills>
+            <win></win>
           </and>
         </postBattle>
       </conditions>

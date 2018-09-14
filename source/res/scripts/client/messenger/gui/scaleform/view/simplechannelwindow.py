@@ -1,19 +1,19 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/SimpleChannelWindow.py
 from gui.shared.events import FocusEvent
-from messenger.gui.Scaleform.meta.BaseChannelWindowMeta import BaseChannelWindowMeta
+from messenger.gui.Scaleform.meta.ChannelWindowMeta import ChannelWindowMeta
 from gui.shared import events, EVENT_BUS_SCOPE
 from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 from messenger.inject import channelsCtrlProperty
 
-class SimpleChannelWindow(BaseChannelWindowMeta):
+class SimpleChannelWindow(ChannelWindowMeta):
 
     def __init__(self, ctx):
         super(SimpleChannelWindow, self).__init__()
         self._clientID = ctx.get('clientID')
         self._controller = self.channelsCtrl.getController(self._clientID)
         if self._controller is None:
-            raise ValueError, 'Controller for lobby channel by clientID={0:1} is not found'.format(self._clientID)
+            raise ValueError('Controller for lobby channel by clientID={0:1} is not found'.format(self._clientID))
         return
 
     def onFocusIn(self, alias):

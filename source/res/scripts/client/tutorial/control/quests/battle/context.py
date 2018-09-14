@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/battle/context.py
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.settings_constants import TUTORIAL
@@ -10,10 +10,10 @@ class BattleQuestsStartReqs(context.StartReqs):
 
     def isEnabled(self):
         areSettingsInited = self.__areSettingsInited()
-        arenaGuiType = ARENA_GUI_TYPE.RANDOM
+        arenaGuiTypes = [ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.SANDBOX, ARENA_GUI_TYPE.RATED_SANDBOX]
         if IS_DEVELOPMENT:
-            arenaGuiType = ARENA_GUI_TYPE.TRAINING
-        return arena_info.getArenaGuiType() == arenaGuiType and areSettingsInited
+            arenaGuiTypes.append(ARENA_GUI_TYPE.TRAINING)
+        return arena_info.getArenaGuiType() in arenaGuiTypes and areSettingsInited
 
     def __areSettingsInited(self):
         validateSettings = (TUTORIAL.FIRE_EXTINGUISHER_INSTALLED, TUTORIAL.MEDKIT_INSTALLED, TUTORIAL.REPAIRKIT_INSTALLED)
@@ -33,5 +33,5 @@ class BattleQuestsStartReqs(context.StartReqs):
 
 class FakeBonusesRequester(context.BonusesRequester):
 
-    def request(self, chapterID = None):
+    def request(self, chapterID=None):
         pass

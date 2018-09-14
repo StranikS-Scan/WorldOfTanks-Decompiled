@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Cookie.py
 r"""
 Here's a sample session to show how to use this module.
@@ -354,7 +354,7 @@ _Translator = {'\x00': '\\000',
  '\xff': '\\377'}
 _idmap = ''.join((chr(x) for x in xrange(256)))
 
-def _quote(str, LegalChars = _LegalChars, idmap = _idmap, translate = string.translate):
+def _quote(str, LegalChars=_LegalChars, idmap=_idmap, translate=string.translate):
     if '' == translate(str, idmap, LegalChars):
         return str
     else:
@@ -388,10 +388,9 @@ def _unquote(str):
             res.append(str[i:k])
             res.append(str[k + 1])
             i = k + 2
-        else:
-            res.append(str[i:j])
-            res.append(chr(int(str[j + 1:j + 4], 8)))
-            i = j + 4
+        res.append(str[i:j])
+        res.append(chr(int(str[j + 1:j + 4], 8)))
+        i = j + 4
 
     return _nulljoin(res)
 
@@ -417,7 +416,7 @@ _monthname = [None,
  'Nov',
  'Dec']
 
-def _getdate(future = 0, weekdayname = _weekdayname, monthname = _monthname):
+def _getdate(future=0, weekdayname=_weekdayname, monthname=_monthname):
     from time import gmtime, time
     now = time()
     year, month, day, hh, mm, ss, wd, y, z = gmtime(now + future)
@@ -456,7 +455,7 @@ class Morsel(dict):
     def isReservedKey(self, K):
         return K.lower() in self._reserved
 
-    def set(self, key, val, coded_val, LegalChars = _LegalChars, idmap = _idmap, translate = string.translate):
+    def set(self, key, val, coded_val, LegalChars=_LegalChars, idmap=_idmap, translate=string.translate):
         if key.lower() in self._reserved:
             raise CookieError('Attempt to set a reserved key: %s' % key)
         if '' != translate(key, idmap, LegalChars):
@@ -465,7 +464,7 @@ class Morsel(dict):
         self.value = val
         self.coded_value = coded_val
 
-    def output(self, attrs = None, header = 'Set-Cookie:'):
+    def output(self, attrs=None, header='Set-Cookie:'):
         return '%s %s' % (header, self.OutputString(attrs))
 
     __str__ = output
@@ -473,10 +472,10 @@ class Morsel(dict):
     def __repr__(self):
         return '<%s: %s=%s>' % (self.__class__.__name__, self.key, repr(self.value))
 
-    def js_output(self, attrs = None):
+    def js_output(self, attrs=None):
         return '\n        <script type="text/javascript">\n        <!-- begin hiding\n        document.cookie = "%s";\n        // end hiding -->\n        </script>\n        ' % (self.OutputString(attrs).replace('"', '\\"'),)
 
-    def OutputString(self, attrs = None):
+    def OutputString(self, attrs=None):
         result = []
         RA = result.append
         RA('%s=%s' % (self.key, self.coded_value))
@@ -491,14 +490,13 @@ class Morsel(dict):
                 continue
             if K == 'expires' and type(V) == type(1):
                 RA('%s=%s' % (self._reserved[K], _getdate(V)))
-            elif K == 'max-age' and type(V) == type(1):
+            if K == 'max-age' and type(V) == type(1):
                 RA('%s=%d' % (self._reserved[K], V))
-            elif K == 'secure':
+            if K == 'secure':
                 RA(str(self._reserved[K]))
-            elif K == 'httponly':
+            if K == 'httponly':
                 RA(str(self._reserved[K]))
-            else:
-                RA('%s=%s' % (self._reserved[K], V))
+            RA('%s=%s' % (self._reserved[K], V))
 
         return _semispacejoin(result)
 
@@ -526,7 +524,7 @@ class BaseCookie(dict):
         strval = str(val)
         return (strval, strval)
 
-    def __init__(self, input = None):
+    def __init__(self, input=None):
         if input:
             self.load(input)
 
@@ -541,7 +539,7 @@ class BaseCookie(dict):
         rval, cval = self.value_encode(value)
         self.__set(key, rval, cval)
 
-    def output(self, attrs = None, header = 'Set-Cookie:', sep = '\r\n'):
+    def output(self, attrs=None, header='Set-Cookie:', sep='\r\n'):
         """Return a string suitable for HTTP."""
         result = []
         items = self.items()
@@ -562,7 +560,7 @@ class BaseCookie(dict):
 
         return '<%s: %s>' % (self.__class__.__name__, _spacejoin(L))
 
-    def js_output(self, attrs = None):
+    def js_output(self, attrs=None):
         """Return a string suitable for JavaScript."""
         result = []
         items = self.items()
@@ -584,7 +582,7 @@ class BaseCookie(dict):
             for k, v in rawdata.items():
                 self[k] = v
 
-    def __ParseString(self, str, patt = _CookiePattern):
+    def __ParseString(self, str, patt=_CookiePattern):
         i = 0
         n = len(str)
         M = None
@@ -597,13 +595,12 @@ class BaseCookie(dict):
             if K[0] == '$':
                 if M:
                     M[K[1:]] = V
-            elif K.lower() in Morsel._reserved:
+            if K.lower() in Morsel._reserved:
                 if M:
                     M[K] = _unquote(V)
-            else:
-                rval, cval = self.value_decode(V)
-                self.__set(K, rval, cval)
-                M = self[K]
+            rval, cval = self.value_decode(V)
+            self.__set(K, rval, cval)
+            M = self[K]
 
         return
 
@@ -639,7 +636,7 @@ class SerialCookie(BaseCookie):
     does not check for this limit, so be careful!!!
     """
 
-    def __init__(self, input = None):
+    def __init__(self, input=None):
         warnings.warn('SerialCookie class is insecure; do not use it', DeprecationWarning)
         BaseCookie.__init__(self, input)
 
@@ -664,7 +661,7 @@ class SmartCookie(BaseCookie):
     does not check for this limit, so be careful!!!
     """
 
-    def __init__(self, input = None):
+    def __init__(self, input=None):
         warnings.warn('Cookie/SmartCookie class is insecure; do not use it', DeprecationWarning)
         BaseCookie.__init__(self, input)
 

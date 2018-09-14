@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/VehicleSelectorPopup.py
 from account_helpers.AccountSettings import AccountSettings
 from constants import VEHICLE_CLASSES
@@ -12,7 +12,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
 class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(VehicleSelectorPopup, self).__init__()
         assert 'section' in ctx, 'Section is required to show selector popup'
         self.__isMultiSelect = ctx.get('isMultiSelect', False)

@@ -1,16 +1,19 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/Flash.py
 from collections import defaultdict
 import json
-import GUI, _Scaleform, weakref
+import GUI
+import _Scaleform
+import weakref
 from gui.Scaleform import SCALEFORM_SWF_PATH
 from debug_utils import LOG_DEBUG, LOG_CODEPOINT_WARNING, LOG_ERROR, LOG_GUI
 
 class Flash(object):
 
-    def __init__(self, swf, className = 'Flash', args = None, path = SCALEFORM_SWF_PATH):
+    def __init__(self, swf, className='Flash', args=None, path=SCALEFORM_SWF_PATH):
         if args is None:
             args = []
+        super(Flash, self).__init__()
         self.__fsCbs = defaultdict(set)
         self.__exCbs = defaultdict(set)
         movieDefinition = _Scaleform.MovieDef(''.join((path, '/', swf)))
@@ -77,21 +80,21 @@ class Flash(object):
     def getMember(self, path):
         return getattr(self.movie, path, None)
 
-    def call(self, methodName, args = None):
+    def call(self, methodName, args=None):
         if args is None:
             args = []
         args.insert(0, methodName)
         self.movie.invoke(('call', args))
         return
 
-    def callNice(self, methodName, args = None):
+    def callNice(self, methodName, args=None):
         if args is None:
             args = []
         jsonArgs = [methodName, json.dumps(args)]
         self.movie.invoke(('callJson', jsonArgs))
         return
 
-    def respond(self, args = None):
+    def respond(self, args=None):
         if args is None:
             args = []
         self.movie.invoke(('respond', args))
@@ -119,7 +122,7 @@ class Flash(object):
     def addExternalCallback(self, command, function):
         self.__exCbs[command].add(function)
 
-    def removeExternalCallback(self, command, function = None):
+    def removeExternalCallback(self, command, function=None):
         try:
             if function is None:
                 self.__exCbs.pop(command)

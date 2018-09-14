@@ -1,18 +1,19 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/errors.py
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from helpers import i18n
+from messenger.m_constants import CLIENT_ACTION_ID
 from messenger.proto.interfaces import IChatError
-from messenger.proto.shared_errors import ClientError, I18nActionID, I18nErrorID, ChatBanError
-from messenger.proto.xmpp.extensions.error import StanzaErrorExtension
-from messenger.proto.xmpp.extensions.shared_handlers import IQHandler
-from messenger.proto.xmpp.xmpp_constants import CONTACT_ERROR_NAMES, LIMIT_ERROR_NAMES
+from messenger.proto import shared_errors
+from messenger.proto.xmpp.extensions.error import StanzaErrorExtension, WgErrorExtension
+from messenger.proto.xmpp.extensions.shared_handlers import IQHandler, ProxyHandler
+from messenger.proto.xmpp import xmpp_constants
 
-class _ContactErrorID(I18nErrorID):
+class _ContactErrorID(shared_errors.I18nErrorID):
 
     def getName(self):
-        if self.errorID in CONTACT_ERROR_NAMES:
-            errorName = CONTACT_ERROR_NAMES[self.errorID]
+        if self.errorID in xmpp_constants.CONTACT_ERROR_NAMES:
+            errorName = xmpp_constants.CONTACT_ERROR_NAMES[self.errorID]
         else:
             errorName = 'CONTACT_ERROR_{0}'.format(self.errorID)
         return errorName
@@ -21,11 +22,11 @@ class _ContactErrorID(I18nErrorID):
         return I18N_MESSENGER.client_error_contact(self.getName())
 
 
-class _LimitErrorID(I18nErrorID):
+class _LimitErrorID(shared_errors.I18nErrorID):
 
     def getName(self):
-        if self.errorID in LIMIT_ERROR_NAMES:
-            errorName = LIMIT_ERROR_NAMES[self.errorID]
+        if self.errorID in xmpp_constants.LIMIT_ERROR_NAMES:
+            errorName = xmpp_constants.LIMIT_ERROR_NAMES[self.errorID]
         else:
             errorName = 'LIMIT_ERROR_{0}'.format(self.errorID)
         return errorName
@@ -34,9 +35,35 @@ class _LimitErrorID(I18nErrorID):
         return I18N_MESSENGER.client_error_limit(self.getName())
 
 
-class ClientContactError(ClientError):
+class _ChannelErrorID(shared_errors.I18nErrorID):
 
-    def __init__(self, errorID, name = None):
+    def getName(self):
+        if self.errorID in xmpp_constants.CHANNEL_ERROR_NAMES:
+            errorName = xmpp_constants.CHANNEL_ERROR_NAMES[self.errorID]
+        else:
+            errorName = 'CONTACT_ERROR_{0}'.format(self.errorID)
+        return errorName
+
+    def getI18nKey(self):
+        return I18N_MESSENGER.client_error_channel(self.getName())
+
+
+class _UserRoomCreationErrorID(shared_errors.I18nErrorID):
+
+    def getName(self):
+        if self.errorID in xmpp_constants.MUC_CREATION_ERROR_NAMES:
+            errorName = xmpp_constants.MUC_CREATION_ERROR_NAMES[self.errorID]
+        else:
+            errorName = 'MUC_CREATION_ERROR_{0}'.format(self.errorID)
+        return errorName
+
+    def getI18nKey(self):
+        return I18N_MESSENGER.server_error_user_room_creation(self.getName())
+
+
+class ClientContactError(shared_errors.ClientError):
+
+    def __init__(self, errorID, name=None):
         kwargs = {}
         if name:
             kwargs['strArg1'] = name
@@ -46,51 +73,101 @@ class ClientContactError(ClientError):
         return _ContactErrorID(errorID)
 
 
-class ClientIntLimitError(ClientError):
+class ClientIntLimitError(shared_errors.ClientError):
 
-    def __init__(self, errorID, maxLimit, minLimit = 0):
+    def __init__(self, errorID, maxLimit, minLimit=0):
         super(ClientIntLimitError, self).__init__(errorID, int32Arg1=minLimit, int32Arg2=maxLimit)
 
     def createError(self, errorID):
         return _LimitErrorID(errorID)
 
 
+class ClientChannelError(shared_errors.ClientError):
+
+    def __init__(self, errorID, name=None):
+        kwargs = {}
+        if name:
+            kwargs['strArg1'] = name
+        super(ClientChannelError, self).__init__(errorID, **kwargs)
+
+    def createError(self, errorID):
+        return _ChannelErrorID(errorID)
+
+
 class StanzaConditionError(IChatError):
     __slots__ = ('_condition',)
 
-    def __init__(self, condition):
+    def __init__(self, errorType, condition):
         super(StanzaConditionError, self).__init__()
+        self._errorType = errorType
         self._condition = condition
+
+    def getErrorType(self):
+        return self._errorType
 
     def getCondition(self):
         return self._condition
 
     def getMessage(self):
-        return i18n.makeString('#messenger:xmpp_error/simple', strArg1=self.getCondition())
+        return i18n.makeString(I18N_MESSENGER.XMPP_ERROR_SIMPLE, strArg1=self.getCondition())
 
 
 class ServerActionError(StanzaConditionError):
     __slots__ = ('_action',)
 
-    def __init__(self, actionID, condition):
-        super(ServerActionError, self).__init__(condition)
-        self._action = I18nActionID(actionID)
+    def __init__(self, actionID, errorType, condition):
+        super(ServerActionError, self).__init__(errorType, condition)
+        self._action = shared_errors.I18nActionID(actionID)
 
     def getMessage(self):
-        return i18n.makeString('#messenger:xmpp_error/action', actionName=self._action.getI18nName(), strArg1=self.getCondition())
+        return i18n.makeString(I18N_MESSENGER.XMPP_ERROR_ACTION, actionName=self._action.getI18nName(), strArg1=self.getCondition())
 
 
-def createServerError(pyGlooxTag):
-    return StanzaConditionError(IQHandler(StanzaErrorExtension()).handleTag(pyGlooxTag)[1])
+class ServerUserRoomCreationError(IChatError):
+    __slots__ = ('_error',)
+
+    def __init__(self, errorID, roomName):
+        super(ServerUserRoomCreationError, self).__init__()
+        self._error = _UserRoomCreationErrorID(errorID)
+        self._kwargs = {'strArg1': roomName}
+
+    def getMessage(self):
+        key = self._error.getI18nKey()
+        if key:
+            reason = i18n.makeString(key, **self._kwargs)
+        else:
+            reason = self._error.getName()
+        return i18n.makeString(I18N_MESSENGER.XMPP_ERROR_USER_ROOM_CREATION, strArg1=reason)
 
 
-def createServerActionError(actionID, pyGlooxTag):
-    return ServerActionError(actionID, IQHandler(StanzaErrorExtension()).handleTag(pyGlooxTag)[1])
+def createServerIQError(pyGlooxTag):
+    return StanzaConditionError(*IQHandler(StanzaErrorExtension()).handleTag(pyGlooxTag))
+
+
+def createServerActionIQError(actionID, pyGlooxTag):
+    return ServerActionError(actionID, *IQHandler(StanzaErrorExtension()).handleTag(pyGlooxTag))
+
+
+def createServerUserRoomCreationIQError(pyGlooxTag, roomName):
+    errorID = IQHandler(WgErrorExtension()).handleTag(pyGlooxTag)
+    if errorID != xmpp_constants.MUC_CREATION_ERROR.UNDEFINED:
+        error = ServerUserRoomCreationError(errorID, roomName)
+    else:
+        error = ServerActionError(CLIENT_ACTION_ID.CREATE_USER_ROOM, *IQHandler(StanzaErrorExtension()).handleTag(pyGlooxTag))
+    return error
+
+
+def createServerPresenceError(pyGlooxTag):
+    return StanzaConditionError(*ProxyHandler(StanzaErrorExtension()).handleTag(pyGlooxTag))
+
+
+def createServerActionPresenceError(actionID, pyGlooxTag):
+    return ServerActionError(actionID, *ProxyHandler(StanzaErrorExtension()).handleTag(pyGlooxTag))
 
 
 def createChatBanError(banInfo):
     error = None
     item = banInfo.getFirstActiveItem()
     if item:
-        error = ChatBanError(item.expiresAt, item.reason)
+        error = shared_errors.ChatBanError(item.expiresAt, item.reason)
     return error

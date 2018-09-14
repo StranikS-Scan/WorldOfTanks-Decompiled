@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/filter.py
 from Event import Event
 from constants import IGR_TYPE
@@ -36,10 +36,10 @@ class Filter(object):
         self.__currentGroup = 'all_groups'
         self.__showInDossier = True
         self.__purchaseType = PURCHASE_TYPE.PURCHASE
-        self.__rules = [self.__isInDossier,
-         self.__hasSelectedBonus,
-         self.__isInSelectedGroup,
-         self.__hasPurchaseType]
+        self.__rules = {FILTER_TYPE.SHOW_IN_DOSSIER: self.__isInDossier,
+         FILTER_TYPE.QUALIFIER: self.__hasSelectedBonus,
+         FILTER_TYPE.GROUP: self.__isInSelectedGroup,
+         FILTER_TYPE.PURCHASE_TYPE: self.__hasPurchaseType}
         self.__selectedBonuses = {QUALIFIER_TYPE.ALL: False,
          QUALIFIER_TYPE.COMMANDER: False,
          QUALIFIER_TYPE.GUNNER: False,
@@ -91,8 +91,18 @@ class Filter(object):
     def currentGroup(self):
         return self.__currentGroup
 
-    def check(self, item):
-        for rule in self.__rules:
+    def check(self, item, filterExceptions=None):
+        """ Check if item should be shown.
+        
+        :param item: customization item to be checked
+        :param filterExceptions: dict with exceptions for each rule (format: FILTER_TYPE: items)
+        :return: True if item should be shown, False otherwise.
+        """
+        for filterType, rule in self.__rules.items():
+            if filterExceptions is not None and filterType in filterExceptions:
+                excludedIDs = map(lambda item: item.getID(), filterExceptions[filterType])
+                if item.getID() in excludedIDs:
+                    return True
             if not rule(item):
                 return False
 
@@ -118,16 +128,12 @@ class Filter(object):
         self.changed()
 
     def __isInDossier(self, item):
-        if not self.__showInDossier:
-            return not item.isInDossier
-        return True
+        return not item.isInDossier if not self.__showInDossier else True
 
     def __hasSelectedBonus(self, item):
         if not self.__bonusSelected():
             return True
-        if item.qualifier.getType() == QUALIFIER_TYPE.CAMOUFLAGE:
-            return True
-        return self.__selectedBonuses[item.qualifier.getType()]
+        return True if item.qualifier.getType() == QUALIFIER_TYPE.CAMOUFLAGE else self.__selectedBonuses[item.qualifier.getType()]
 
     def __isInSelectedGroup(self, item):
         if self.__currentGroup == 'all_groups':
@@ -147,5 +153,4 @@ class Filter(object):
             return item.getIgrType() == IGR_TYPE.NONE and (item.isInDossier or item.isInShop)
         if self.__purchaseType == PURCHASE_TYPE.QUEST:
             return item.isInQuests and not item.isInDossier
-        if self.__purchaseType == PURCHASE_TYPE.IGR:
-            return item.getIgrType() == IGR_TYPE.PREMIUM and (item.isInDossier or item.isInShop)
+        return item.getIgrType() == IGR_TYPE.PREMIUM and (item.isInDossier or item.isInShop) if self.__purchaseType == PURCHASE_TYPE.IGR else None

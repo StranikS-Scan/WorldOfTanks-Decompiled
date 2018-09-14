@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/BattleChannelView.py
 import weakref
 from gui import makeHtmlString
@@ -79,7 +79,7 @@ class BattleChannelView(UIInterface, IBattleChannelView):
         if len(result):
             self.__flashCall(BTMS_COMMANDS.UpdateReceivers(), result)
 
-    def addMessage(self, message, isCurrentPlayer = False):
+    def addMessage(self, message, isCurrentPlayer=False):
         if isCurrentPlayer:
             fillColor = FILL_COLORS.BROWN
         else:
@@ -127,11 +127,11 @@ class BattleChannelView(UIInterface, IBattleChannelView):
                 controller = ctrlRef()
         return controller
 
-    def __flashCall(self, funcName, args = None):
+    def __flashCall(self, funcName, args=None):
         if self.uiHolder:
             self.uiHolder.call(funcName, args)
 
-    def __flashRespond(self, args = None):
+    def __flashRespond(self, args=None):
         self.uiHolder.respond(args)
 
     def __onReceiverChanged(self, *args):

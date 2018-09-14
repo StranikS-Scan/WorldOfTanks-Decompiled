@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/FORTIFICATIONS.py
 from debug_utils import LOG_WARNING
 
@@ -44,9 +44,12 @@ class FORTIFICATIONS(object):
     FORTWELCOMEVIEW_HYPERLINK_MORE = '#fortifications:FortWelcomeView/hyperlink/more'
     FORTWELCOMEVIEW_WARNING = '#fortifications:FortWelcomeView/warning'
     FORTWELCOMEVIEW_REQUIREMENTCOMMANDER = '#fortifications:FortWelcomeView/requirementCommander'
+    FORTWELCOMEVIEW_ALREADYCREATED = '#fortifications:FortWelcomeView/alreadyCreated'
     FORTWELCOMEVIEW_REQUIREMENTCLAN = '#fortifications:FortWelcomeView/requirementClan'
     FORTWELCOMEVIEW_CLANSEARCH = '#fortifications:FortWelcomeView/clanSearch'
     FORTWELCOMEVIEW_CLANCREATE = '#fortifications:FortWelcomeView/clanCreate'
+    FORTWELCOMEVIEW_CLANCREATELABEL = '#fortifications:FortWelcomeView/clanCreateLabel'
+    FORTWELCOMEVIEW_CLANCREATE_OR = '#fortifications:FortWelcomeView/clanCreate/or'
     FORTWELCOMECOMMANDERVIEW_TITLE = '#fortifications:FortWelcomeCommanderView/title'
     FORTWELCOMECOMMANDERVIEW_BUTTON_LABEL = '#fortifications:FortWelcomeCommanderView/button/label'
     FORTWELCOMECOMMANDERVIEW_OPTION1_TITLE = '#fortifications:FortWelcomeCommanderView/option1/title'

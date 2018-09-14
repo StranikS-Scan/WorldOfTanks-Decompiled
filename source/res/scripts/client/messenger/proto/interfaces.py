@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/interfaces.py
 
 
@@ -116,7 +116,7 @@ class IVOIPChatProvider(object):
     def getChannelParams(self):
         pass
 
-    def requestCredentials(self, reset = 0):
+    def requestCredentials(self, reset=0):
         pass
 
     def logVivoxLogin(self):

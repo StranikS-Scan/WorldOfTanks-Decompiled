@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/EasyDialogs.py
 """Easy to use dialogs.
 
@@ -75,7 +76,7 @@ def lf2cr(text):
     return text
 
 
-def Message(msg, id = 260, ok = None):
+def Message(msg, id=260, ok=None):
     """Display a MESSAGE string.
     
     Return when the user clicks the OK button or presses Return.
@@ -105,7 +106,7 @@ def Message(msg, id = 260, ok = None):
         return
 
 
-def AskString(prompt, default = '', id = 261, ok = None, cancel = None):
+def AskString(prompt, default='', id=261, ok=None, cancel=None):
     """Display a PROMPT string and a text entry field with a DEFAULT string.
     
     Return the contents of the text entry field when the user clicks the
@@ -150,7 +151,7 @@ def AskString(prompt, default = '', id = 261, ok = None, cancel = None):
         return
 
 
-def AskPassword(prompt, default = '', id = 264, ok = None, cancel = None):
+def AskPassword(prompt, default='', id=264, ok=None, cancel=None):
     """Display a PROMPT string and a text entry field with a DEFAULT string.
     The string is displayed as bullets only.
     
@@ -198,7 +199,7 @@ def AskPassword(prompt, default = '', id = 264, ok = None, cancel = None):
         return
 
 
-def AskYesNoCancel(question, default = 0, yes = None, no = None, cancel = None, id = 262):
+def AskYesNoCancel(question, default=0, yes=None, no=None, cancel=None, id=262):
     """Display a QUESTION string which can be answered with Yes or No.
     
     Return 1 when the user clicks the Yes button.
@@ -273,7 +274,7 @@ kControlProgressBarIndeterminateTag = 'inde'
 
 class ProgressBar:
 
-    def __init__(self, title = 'Working...', maxval = 0, label = '', id = 263):
+    def __init__(self, title='Working...', maxval=0, label='', id=263):
         self.w = None
         self.d = None
         _initialize()
@@ -294,7 +295,7 @@ class ProgressBar:
         del self.w
         del self.d
 
-    def title(self, newstr = ''):
+    def title(self, newstr=''):
         """title(text) - Set title of progress window"""
         self.w.BringToFront()
         self.w.SetWTitle(newstr)
@@ -337,7 +338,7 @@ class ProgressBar:
                 MacOS.HandleEvent(ev)
         return
 
-    def set(self, value, max = None):
+    def set(self, value, max=None):
         """set(value) - Set progress bar position"""
         if max is not None:
             self.maxval = max
@@ -354,7 +355,7 @@ class ProgressBar:
         self._update(value)
         return
 
-    def inc(self, n = 1):
+    def inc(self, n=1):
         """inc(amt) - Increment progress bar position"""
         self.set(self.curval + n)
 
@@ -425,7 +426,7 @@ def _selectoption(d, optionlist, idx):
         d.HideDialogItem(ARGV_OPTION_VALUE)
 
 
-def GetArgv(optionlist = None, commandlist = None, addoldfile = 1, addnewfile = 1, addfolder = 1, id = ARGV_ID):
+def GetArgv(optionlist=None, commandlist=None, addoldfile=1, addnewfile=1, addfolder=1, id=ARGV_ID):
     _initialize()
     _interact()
     d = GetNewDialog(id, -1)
@@ -619,7 +620,7 @@ def SetDefaultEventProc(proc):
     return rv
 
 
-def AskFileForOpen(message = None, typeList = None, version = None, defaultLocation = None, dialogOptionFlags = None, location = None, clientName = None, windowTitle = None, actionButtonLabel = None, cancelButtonLabel = None, preferenceKey = None, popupExtension = None, eventProc = _dummy_Nav_eventproc, previewProc = None, filterProc = None, wanted = None, multiple = None):
+def AskFileForOpen(message=None, typeList=None, version=None, defaultLocation=None, dialogOptionFlags=None, location=None, clientName=None, windowTitle=None, actionButtonLabel=None, cancelButtonLabel=None, preferenceKey=None, popupExtension=None, eventProc=_dummy_Nav_eventproc, previewProc=None, filterProc=None, wanted=None, multiple=None):
     """Display a dialog asking the user for a file to open.
     
     wanted is the return type wanted: FSSpec, FSRef, unicode or string (default)
@@ -650,7 +651,7 @@ def AskFileForOpen(message = None, typeList = None, version = None, defaultLocat
         return None
 
 
-def AskFileForSave(message = None, savedFileName = None, version = None, defaultLocation = None, dialogOptionFlags = None, location = None, clientName = None, windowTitle = None, actionButtonLabel = None, cancelButtonLabel = None, preferenceKey = None, popupExtension = None, eventProc = _dummy_Nav_eventproc, fileType = None, fileCreator = None, wanted = None, multiple = None):
+def AskFileForSave(message=None, savedFileName=None, version=None, defaultLocation=None, dialogOptionFlags=None, location=None, clientName=None, windowTitle=None, actionButtonLabel=None, cancelButtonLabel=None, preferenceKey=None, popupExtension=None, eventProc=_dummy_Nav_eventproc, fileType=None, fileCreator=None, wanted=None, multiple=None):
     """Display a dialog asking the user for a filename to save to.
     
     wanted is the return type wanted: FSSpec, FSRef, unicode or string (default)
@@ -687,7 +688,7 @@ def AskFileForSave(message = None, savedFileName = None, version = None, default
         return None
 
 
-def AskFolder(message = None, version = None, defaultLocation = None, dialogOptionFlags = None, location = None, clientName = None, windowTitle = None, actionButtonLabel = None, cancelButtonLabel = None, preferenceKey = None, popupExtension = None, eventProc = _dummy_Nav_eventproc, filterProc = None, wanted = None, multiple = None):
+def AskFolder(message=None, version=None, defaultLocation=None, dialogOptionFlags=None, location=None, clientName=None, windowTitle=None, actionButtonLabel=None, cancelButtonLabel=None, preferenceKey=None, popupExtension=None, eventProc=_dummy_Nav_eventproc, filterProc=None, wanted=None, multiple=None):
     """Display a dialog asking the user for select a folder.
     
     wanted is the return type wanted: FSSpec, FSRef, unicode or string (default)

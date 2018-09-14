@@ -61,7 +61,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.00487 0.54681 0.554577	</turret>
+      <turret>	-0.00487 0.532146 0.575507	</turret>
     </turretPositions>
     <hitTester>
       <collisionModel>	vehicles/british/GB07_Matilda/collision/Hull.model	</collisionModel>
@@ -82,6 +82,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/british/GB07_Matilda/Matilda_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.96 1.96 0.000000 0.000000	</tiling>
     </camouflage>
@@ -123,13 +124,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.28 0.36	</size>
+        <size>	0.38 0.36	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.9	</textureScale>
+        <textureScale>	-1.7	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -198,11 +199,11 @@
       <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.899932 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.939138 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB07_Matilda/collision/Chassis.model	</collisionModel>
       </hitTester>
-      <topRightCarryingPoint>	1.03529 1.91079	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.03954 1.80844	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -249,14 +250,14 @@
           <maxOffset>	0.03	</maxOffset>
         </group>
       </groundNodes>
-      <trackThickness>	0.0033	</trackThickness>
+      <trackThickness>	-0.0294	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.009	</maxAmplitude>
-        <maxOffset>	0.000000	</maxOffset>
-        <gravity>	-7.5	</gravity>
-        <elasticity>	977	</elasticity>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-3.2	</gravity>
+        <elasticity>	1300	</elasticity>
         <damping>	2	</damping>
         <forwardElastK>	1	</forwardElastK>
         <backwardElastK>	3	</backwardElastK>
@@ -265,56 +266,32 @@
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
           <elasticity>	569	</elasticity>
-          <backwardElastK>	2.04	</backwardElastK>
           <offset>	-0.04	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
           <elasticity>	569	</elasticity>
-          <backwardElastK>	2.04	</backwardElastK>
           <offset>	-0.04	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <forwardElastK>	3	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
           <offset>	-0.04	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <forwardElastK>	3	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
           <offset>	-0.04	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <offset>	-0.08	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <offset>	-0.08	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
         </node>
       </trackNodes>
       <splineDesc>
-        <segmentModelLeft>	vehicles/british/GB07_Matilda/track/segment1.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/british/GB07_Matilda/track/segment1.model	</segmentModelRight>
+        <segmentModelLeft>	vehicles/british/GB07_Matilda/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB07_Matilda/track/segment.model	</segmentModelRight>
         <left>	vehicles/british/GB07_Matilda/track/left.track	</left>
         <right>	vehicles/british/GB07_Matilda/track/right.track	</right>
-        <segmentLength>	0.173	</segmentLength>
-        <segmentOffset>	0.104	</segmentOffset>
+        <segmentLength>	0.185	</segmentLength>
+        <segmentOffset>	0.111	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -354,13 +331,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.28 0.36	</size>
+        <size>	0.38 0.36	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.9	</textureScale>
+        <textureScale>	-1.7	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -429,11 +406,11 @@
       <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.899932 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.939138 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB07_Matilda/collision/Chassis.model	</collisionModel>
       </hitTester>
-      <topRightCarryingPoint>	1.03529 1.91079	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.03954 1.80844	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -480,14 +457,14 @@
           <maxOffset>	0.03	</maxOffset>
         </group>
       </groundNodes>
-      <trackThickness>	0.0033	</trackThickness>
+      <trackThickness>	-0.0294	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.009	</maxAmplitude>
-        <maxOffset>	0.000000	</maxOffset>
-        <gravity>	-7.5	</gravity>
-        <elasticity>	977	</elasticity>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-3.2	</gravity>
+        <elasticity>	1300	</elasticity>
         <damping>	2	</damping>
         <forwardElastK>	1	</forwardElastK>
         <backwardElastK>	3	</backwardElastK>
@@ -496,53 +473,32 @@
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
           <elasticity>	569	</elasticity>
-          <backwardElastK>	2.04	</backwardElastK>
           <offset>	-0.04	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
           <elasticity>	569	</elasticity>
-          <backwardElastK>	2.04	</backwardElastK>
+          <offset>	-0.04	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <forwardElastK>	3	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.04	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <forwardElastK>	3	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <offset>	-0.08	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <offset>	-0.08	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
+          <offset>	-0.04	</offset>
         </node>
       </trackNodes>
       <splineDesc>
-        <segmentModelLeft>	vehicles/british/GB07_Matilda/track/segment1.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/british/GB07_Matilda/track/segment1.model	</segmentModelRight>
+        <segmentModelLeft>	vehicles/british/GB07_Matilda/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB07_Matilda/track/segment.model	</segmentModelRight>
         <left>	vehicles/british/GB07_Matilda/track/left.track	</left>
         <right>	vehicles/british/GB07_Matilda/track/right.track	</right>
         <segmentLength>	0.173	</segmentLength>
-        <segmentOffset>	0.104	</segmentOffset>
+        <segmentOffset>	0.111	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>

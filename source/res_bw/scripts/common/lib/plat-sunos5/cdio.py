@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-sunos5/CDIO.py
 CDROM_LBA = 1
 CDROM_MSF = 2

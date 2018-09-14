@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/user_prefs.py
 from messenger.doc_loaders import _xml_helpers
 import types
@@ -8,35 +8,35 @@ _userProps = {'datetimeIdx': ('readInt',
                  False),
  'enableOlFilter': ('readBool',
                     'writeBool',
-                    lambda value: type(value) is types.BooleanType,
+                    lambda value: isinstance(value, types.BooleanType),
                     False),
  'enableSpamFilter': ('readBool',
                       'writeBool',
-                      lambda value: type(value) is types.BooleanType,
+                      lambda value: isinstance(value, types.BooleanType),
                       False),
  'invitesFromFriendsOnly': ('readBool',
                             'writeBool',
-                            lambda value: type(value) is types.BooleanType,
+                            lambda value: isinstance(value, types.BooleanType),
                             False),
  'storeReceiverInBattle': ('readBool',
                            'writeBool',
-                           lambda value: type(value) is types.BooleanType,
+                           lambda value: isinstance(value, types.BooleanType),
                            False),
  'disableBattleChat': ('readBool',
                        'writeBool',
-                       lambda value: type(value) is types.BooleanType,
+                       lambda value: isinstance(value, types.BooleanType),
                        False),
  'chatContactsListOnly': ('readBool',
                           'writeBool',
-                          lambda value: type(value) is types.BooleanType,
+                          lambda value: isinstance(value, types.BooleanType),
                           True),
  'receiveFriendshipRequest': ('readBool',
                               'writeBool',
-                              lambda value: type(value) is types.BooleanType,
+                              lambda value: isinstance(value, types.BooleanType),
                               False),
  'receiveInvitesInBattle': ('readBool',
                             'writeBool',
-                            lambda value: type(value) is types.BooleanType,
+                            lambda value: isinstance(value, types.BooleanType),
                             True)}
 
 def loadDefault(xmlCtx, section, messengerSettings):
@@ -52,8 +52,7 @@ def loadDefault(xmlCtx, section, messengerSettings):
         value = getattr(subSec, reader)('value')
         if validator(value):
             data[name] = value
-        else:
-            raise _xml_helpers.XMLError(ctx, 'Invalid value of preference {0:>s}'.format(name))
+        raise _xml_helpers.XMLError(ctx, 'Invalid value of preference {0:>s}'.format(name))
 
     if len(data):
         messengerSettings.userPrefs = messengerSettings.userPrefs._replace(**data)

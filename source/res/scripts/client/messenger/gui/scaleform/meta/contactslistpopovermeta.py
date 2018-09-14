@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/ContactsListPopoverMeta.py
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
@@ -20,21 +20,16 @@ class ContactsListPopoverMeta(SmartPopOverView):
         self._printOverrideError('copyIntoGroup')
 
     def as_setInitInfoS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInitInfo(data)
+        return self.flashObject.as_setInitInfo(data) if self._isDAAPIInited() else None
 
     def as_editGroupS(self, targetGroupName):
-        if self._isDAAPIInited():
-            return self.flashObject.as_editGroup(targetGroupName)
+        return self.flashObject.as_editGroup(targetGroupName) if self._isDAAPIInited() else None
 
     def as_removeGroupS(self, targetGroupName):
-        if self._isDAAPIInited():
-            return self.flashObject.as_removeGroup(targetGroupName)
+        return self.flashObject.as_removeGroup(targetGroupName) if self._isDAAPIInited() else None
 
     def as_createContactNoteS(self, userName, databaseID):
-        if self._isDAAPIInited():
-            return self.flashObject.as_createContactNote(userName, databaseID)
+        return self.flashObject.as_createContactNote(userName, databaseID) if self._isDAAPIInited() else None
 
     def as_editContactNoteS(self, userName, databaseID):
-        if self._isDAAPIInited():
-            return self.flashObject.as_editContactNote(userName, databaseID)
+        return self.flashObject.as_editContactNote(userName, databaseID) if self._isDAAPIInited() else None

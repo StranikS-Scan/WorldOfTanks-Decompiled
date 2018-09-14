@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ConfirmExchangeDialogMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -8,5 +8,4 @@ class ConfirmExchangeDialogMeta(AbstractWindowView):
         self._printOverrideError('exchange')
 
     def as_updateS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_update(data)
+        return self.flashObject.as_update(data) if self._isDAAPIInited() else None

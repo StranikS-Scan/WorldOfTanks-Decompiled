@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/configSectionNameDialog.py
 """
 Dialog that allows user to specify a new config file section name.
@@ -11,7 +11,7 @@ import tkMessageBox
 
 class GetCfgSectionNameDialog(Toplevel):
 
-    def __init__(self, parent, title, message, used_names, _htest = False):
+    def __init__(self, parent, title, message, used_names, _htest=False):
         """
         message - string, informational message to display
         used_names - string collection, names already in use for validity check
@@ -67,13 +67,13 @@ class GetCfgSectionNameDialog(Toplevel):
             name = ''
         return name
 
-    def Ok(self, event = None):
+    def Ok(self, event=None):
         name = self.name_ok()
         if name:
             self.result = name
             self.destroy()
 
-    def Cancel(self, event = None):
+    def Cancel(self, event=None):
         self.result = ''
         self.destroy()
 

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/RadialMenu.py
 from weakref import proxy
 import BigWorld
@@ -12,15 +12,13 @@ from gui.shared.utils.key_mapping import getScaleformKey, BW_TO_SCALEFORM
 from debug_utils import LOG_ERROR
 from gui.Scaleform.windows import UIInterface
 import CommandMapping
-import FMOD
 
 class RadialMenu(UIInterface):
     DEFAULT_CUT = 'default'
     ALLY_CUT = 'ally'
     ENEMY_CUT = 'enemy'
     ENEMY_SPG_CUT = 'enemy_spg'
-    if FMOD.enabled:
-        SELECT_EFFECT_SND = 'effects.select_radial_button'
+    SELECT_EFFECT_SND = 'effects.wwselect_radial_button'
     INDEX_REFERENCES = (2, 1, 5, 4, 0, 3)
     ALL_SHORTCUTS = {DEFAULT_CUT: {'labels': ['attack',
                               'backToBase',
@@ -189,8 +187,7 @@ class RadialMenu(UIInterface):
                     shortcut = self.KEYB_CMDS_MAPPINGS[self.KEYB_MAPPINGS[index]]
                     keyCode = getScaleformKey(CommandMapping.g_instance.get(shortcut))
                     keys.append(keyCode)
-                else:
-                    keys.append(0)
+                keys.append(0)
 
             return keys
         LOG_ERROR('Unknown vehicle type under crosshair target')

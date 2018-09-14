@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/CallTipWindow.py
 """A CallTip window class for Tkinter/IDLE.
 
@@ -71,7 +71,7 @@ class CallTip:
         for seq in HIDE_SEQUENCES:
             self.widget.event_add(HIDE_VIRTUAL_EVENT_NAME, seq)
 
-    def checkhide_event(self, event = None):
+    def checkhide_event(self, event=None):
         if not self.tipwindow:
             return
         else:

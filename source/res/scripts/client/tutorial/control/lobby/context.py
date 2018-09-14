@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/lobby/context.py
 import BigWorld
 from AccountCommands import RES_TUTORIAL_DISABLED
@@ -15,7 +15,7 @@ class LobbyBonusesRequester(context.BonusesRequester):
     def isStillRunning(self):
         return not self._isReceived
 
-    def request(self, chapterID = None):
+    def request(self, chapterID=None):
         chapter = self.getChapter(chapterID=chapterID)
         if chapter is None:
             LOG_ERROR('Chapter not found', chapterID)

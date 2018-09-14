@@ -157,22 +157,10 @@
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
     <model>
-      <modelName>	particles/Environment/interior/112_eifel_tower_fire_small.xml	</modelName>
-      <offset>	0 1 0	</offset>
-      <event>	/burn/burn/burn_small	</event>
-      <wwsound>	ambient_burn_static_small	</wwsound>
-    </model>
-    <model>
       <modelName>	particles/Environment/interior/112_eifel_tower_firesmoke.xml	</modelName>
       <offset>	0 1 0	</offset>
       <event>	/burn/burn/burn_mid	</event>
       <wwsound>	ambient_burn_static_mid	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/Environment/interior/112_eifel_tower_firesmoke_hard.xml	</modelName>
-      <offset>	0 1 0	</offset>
-      <event>	/burn/burn/burn_big	</event>
-      <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
     <model>
       <modelName>	particles/Environment/interior/114_czech_firesmoke.xml	</modelName>
@@ -3098,437 +3086,6 @@
     </crow>
   </birds>
   <mapActivities>
-    <eiffel_tower_FAU_1>
-      <channel0>
-        <modelName>	content/Environment/env_112_22_F2_rocket/normal/lod0/env_112_22_F2_rocket_light.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/112_paris_fau_flight.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-512.935852 504.179138 748.797241	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-211.215210 315.876526 556.319214	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	52.829842 -7.030560 303.676422	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-    </eiffel_tower_FAU_1>
-    <eiffel_tower_FAU_2>
-      <channel0>
-        <modelName>	content/Environment/env_112_22_F2_rocket/normal/lod0/env_112_22_F2_rocket_light.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/112_paris_fau_flight.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-564.490845 473.540802 779.399597	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-327.004974 307.147339 685.456726	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-115.255295 -7.375442 593.132996	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-    </eiffel_tower_FAU_2>
-    <eiffel_tower_FAU_3>
-      <channel0>
-        <modelName>	content/Environment/env_112_22_F2_rocket/normal/lod0/env_112_22_F2_rocket_light.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/112_paris_fau_flight.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-512.935852 491.580841 666.160339	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-182.881302 275.384308 396.886414	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	14.004394 -1.416358 213.593628	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-    </eiffel_tower_FAU_3>
-    <eiffel_tower_FAU_4>
-      <channel0>
-        <modelName>	content/Environment/env_112_22_F2_rocket/normal/lod0/env_112_22_F2_rocket_light.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/112_paris_fau_flight.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-512.935852 499.685120 530.418945	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-182.881302 291.058502 -22.283989	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	40.642262 0.825848 -353.222168	</position>
-        <speed0>	700.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-    </eiffel_tower_FAU_4>
-    <eiffel_tower_FAU_explosion_1>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/112_paris_fau_explosion.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName></soundName>
-        <wwsoundName></wwsoundName>
-      </channel0>
-      <point>
-        <position>	47.038902 11.279978 307.607086	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	46.771561 10.577575 311.204742	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </eiffel_tower_FAU_explosion_1>
-    <eiffel_tower_FAU_explosion_2>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/112_paris_fau_explosion.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName></soundName>
-        <wwsoundName></wwsoundName>
-      </channel0>
-      <point>
-        <position>	-124.361656 10.508998 596.711304	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-121.841812 10.620578 594.307800	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </eiffel_tower_FAU_explosion_2>
-    <eiffel_tower_FAU_explosion_3>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/112_paris_fau_explosion.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName></soundName>
-        <wwsoundName></wwsoundName>
-      </channel0>
-      <point>
-        <position>	9.979972 12.957669 218.622375	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	7.780962 12.897610 214.726700	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </eiffel_tower_FAU_explosion_3>
-    <eiffel_tower_FAU_explosion_4>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/112_paris_fau_explosion.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName></soundName>
-        <wwsoundName></wwsoundName>
-      </channel0>
-      <point>
-        <position>	34.951160 17.099430 -345.613586	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	38.363976 18.325159 -345.848572	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </eiffel_tower_FAU_explosion_4>
-    <eiffel_tower_FAU_explosion_sound_1>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <effectName></effectName>
-        <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
-        <waveImpulse>
-          <start>	1.3	</start>
-          <end>	0.8	</end>
-          <count>	4	</count>
-          <time>	0.4	</time>
-        </waveImpulse>
-      </channel0>
-    </eiffel_tower_FAU_explosion_sound_1>
-    <eiffel_tower_FAU_explosion_sound_2>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
-        <waveImpulse>
-          <start>	1.3	</start>
-          <end>	0.8	</end>
-          <count>	4	</count>
-          <time>	0.4	</time>
-        </waveImpulse>
-      </channel0>
-      <point>
-        <position>	-124.361656 0.509002 596.711304	</position>
-        <speed0>	0.280000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-121.841812 0.620582 594.307800	</position>
-        <speed0>	0.280000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </eiffel_tower_FAU_explosion_sound_2>
-    <eiffel_tower_FAU_explosion_sound_3>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName></effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
-        <waveImpulse>
-          <start>	1.3	</start>
-          <end>	0.8	</end>
-          <count>	4	</count>
-          <time>	0.4	</time>
-        </waveImpulse>
-      </channel0>
-      <point>
-        <position>	9.979972 2.957673 218.622375	</position>
-        <speed0>	0.350000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	7.780962 2.897614 214.726700	</position>
-        <speed0>	0.350000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </eiffel_tower_FAU_explosion_sound_3>
-    <eiffel_tower_FAU_explosion_sound_4>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName></effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
-        <waveImpulse>
-          <start>	1.3	</start>
-          <end>	0.8	</end>
-          <count>	4	</count>
-          <time>	0.4	</time>
-        </waveImpulse>
-      </channel0>
-      <point>
-        <position>	34.951160 7.099438 -345.613586	</position>
-        <speed0>	0.290000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	38.363976 8.325162 -345.848572	</position>
-        <speed0>	0.290000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </eiffel_tower_FAU_explosion_sound_4>
-    <h07_newyear_2015_Hummel_flying>
-      <channel0>
-        <modelName>	content/Hangars/han07_Newyear_2015/background/lod0/hummel.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	15.000000 40.000000	</alphaFadeDistances>
-        <soundName>	/hangar/ambient/hangar_ny_v2/hangar_ny_santa	</soundName>
-        <effectName>	particles/Environment/scenarios/h07_newyear_2015_hummel_sparks.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-      </channel0>
-      <point>
-        <position>	-209.146927 65.139359 -17.787991	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	-95.263573 33.445934 57.402935	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	-52.939938 15.453074 67.391472	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	-32.970238 3.707250 162.397339	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	30.999119 1.044350 169.771347	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	53.723434 0.915263 127.773674	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	25.664890 3.757700 89.706161	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	-21.336691 9.378860 95.000465	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	-35.451881 14.563195 134.160919	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	9.184085 31.712690 193.676926	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	56.372379 42.605579 198.419922	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	172.096344 62.198235 223.527344	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	256.754852 59.550781 201.294922	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-      <point>
-        <position>	261.307678 26.923618 149.556351	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction>	animation	</animAction>
-      </point>
-    </h07_newyear_2015_Hummel_flying>
     <airfield_curve>
       <channel0>
         <modelName>	content/Environment/env712_BF109G/normal/lod0/BF109G.model	</modelName>
@@ -3541,7 +3098,7 @@
         <effectName>	particles/Environment/plane_engine.xml	</effectName>
         <effectHardpoint>	HP_0	</effectHardpoint>
         <soundName>	/objects/aircraft/aircraft_loop_01	</soundName>
-        <soundName>	aircraft_loop_01	</soundName>
+        <wwsoundName>	aircraft_loop_01	</wwsoundName>
       </channel0>
       <point>
         <position>	-590.702820 29.999969 0.000000	</position>
@@ -3591,7 +3148,7 @@
         <effectHardpoint>	HP_0	</effectHardpoint>
         <effectName>	particles/Environment/plane_engine.xml	</effectName>
         <soundName>	/objects/aircraft/aircraft_loop_01	</soundName>
-        <soundName>	aircraft_loop_01	</soundName>
+        <wwsoundName>	aircraft_loop_01	</wwsoundName>
       </channel0>
       <point>
         <position>	-582.845520 88.654510 -0.000016	</position>
@@ -3629,22 +3186,22 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	781.295593 54.436378 -521.651794	</position>
+        <position>	781.295532 54.436375 -521.651733	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	1.108788 74.522484 -83.691467	</position>
+        <position>	1.108788 74.522476 -83.691460	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-343.818542 91.998047 347.209564	</position>
+        <position>	-343.818512 91.998039 347.209534	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-757.830505 38.702564 784.807678	</position>
+        <position>	-757.830444 38.702560 784.807617	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -3664,22 +3221,22 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	781.775696 52.538315 -537.334534	</position>
+        <position>	781.775635 52.538311 -537.334473	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-12.505466 74.579765 -89.728760	</position>
+        <position>	-12.505466 74.579758 -89.728752	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-359.800690 90.226654 341.358398	</position>
+        <position>	-359.800659 90.226646 341.358368	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-781.102844 40.180008 772.445679	</position>
+        <position>	-781.102783 40.180004 772.445618	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -3699,22 +3256,22 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	785.123291 50.313568 -586.096802	</position>
+        <position>	785.123230 50.313564 -586.096741	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	243.348038 58.887749 -279.217804	</position>
+        <position>	243.348022 58.887745 -279.217773	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	57.318878 61.843395 -237.590958	</position>
+        <position>	57.318874 61.843391 -237.590942	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-523.170349 32.625580 -746.599060	</position>
+        <position>	-523.170288 32.625576 -746.598999	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -3734,22 +3291,22 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	783.095703 44.362343 -603.472717	</position>
+        <position>	783.095642 44.362339 -603.472656	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	248.846817 66.690598 -297.371216	</position>
+        <position>	248.846802 66.690590 -297.371185	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	51.836761 73.549225 -249.214569	</position>
+        <position>	51.836758 73.549217 -249.214554	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-499.164185 28.557728 -750.997192	</position>
+        <position>	-499.164154 28.557726 -750.997131	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -3769,27 +3326,27 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	781.271973 52.523842 -475.332642	</position>
+        <position>	781.271912 52.523838 -475.332611	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	42.673363 73.599838 -51.829483	</position>
+        <position>	42.673359 73.599831 -51.829479	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-44.277241 74.742020 108.562721	</position>
+        <position>	-44.277237 74.742012 108.562714	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	160.070831 64.060173 493.218506	</position>
+        <position>	160.070816 64.060165 493.218475	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	533.276855 12.756310 762.662781	</position>
+        <position>	533.276794 12.756310 762.662720	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -3809,27 +3366,27 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	779.790527 50.699478 -487.325806	</position>
+        <position>	779.790466 50.699474 -487.325775	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	32.841599 69.088722 -64.268982	</position>
+        <position>	32.841595 69.088715 -64.268974	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-54.742371 66.194473 114.953880	</position>
+        <position>	-54.742367 66.194466 114.953873	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	151.504410 72.485260 510.726013	</position>
+        <position>	151.504395 72.485252 510.725983	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	510.783752 13.376473 772.836548	</position>
+        <position>	510.783722 13.376472 772.836487	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -3849,27 +3406,27 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	-767.358276 49.082253 494.949585	</position>
+        <position>	-767.358215 49.082249 494.949554	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-245.487076 91.710175 -29.404690	</position>
+        <position>	-245.487061 91.710167 -29.404688	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	403.324341 121.206146 -366.544647	</position>
+        <position>	403.324310 121.206139 -366.544617	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	592.646179 91.215736 -271.904419	</position>
+        <position>	592.646118 91.215729 -271.904388	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	770.197021 14.086514 690.040710	</position>
+        <position>	770.196960 14.086514 690.040649	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -3889,27 +3446,27 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	-788.439209 34.703373 468.359558	</position>
+        <position>	-788.439148 34.703369 468.359528	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-256.337952 107.552315 -51.752548	</position>
+        <position>	-256.337921 107.552307 -51.752544	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	407.833252 106.044540 -394.602264	</position>
+        <position>	407.833221 106.044533 -394.602234	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	595.774170 82.402763 -303.366028	</position>
+        <position>	595.774109 82.402756 -303.365997	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	781.727112 14.623204 666.152100	</position>
+        <position>	781.727051 14.623203 666.152039	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -3929,27 +3486,27 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	-742.362671 32.717381 510.233521	</position>
+        <position>	-742.362610 32.717377 510.233490	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-206.442673 115.740181 0.162127	</position>
+        <position>	-206.442657 115.740173 0.162127	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	423.075653 106.457962 -326.268921	</position>
+        <position>	423.075623 106.457954 -326.268890	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	590.464905 90.106026 -239.212601	</position>
+        <position>	590.464844 90.106018 -239.212585	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	750.813049 15.959682 722.244812	</position>
+        <position>	750.812988 15.959682 722.244751	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -3969,27 +3526,27 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	-789.246460 17.820557 432.546722	</position>
+        <position>	-789.246399 17.820555 432.546692	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-274.284851 93.553665 -69.147125	</position>
+        <position>	-274.284821 93.553658 -69.147118	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	432.829041 93.151093 -435.367706	</position>
+        <position>	432.829010 93.151085 -435.367676	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	610.250366 74.068977 -351.950470	</position>
+        <position>	610.250305 74.068970 -351.950439	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	797.100342 10.992517 650.831055	</position>
+        <position>	797.100281 10.992517 650.830994	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -4009,32 +3566,32 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	227.918640 41.527821 -751.988281	</position>
+        <position>	227.918625 41.527817 -751.988220	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-76.645088 96.616356 -275.083588	</position>
+        <position>	-76.645081 96.616348 -275.083557	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-62.795498 128.128983 127.160995	</position>
+        <position>	-62.795494 128.128967 127.160988	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	35.461998 186.637985 207.331985	</position>
+        <position>	35.461994 186.637970 207.331970	</position>
         <speed0>	80.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	504.859619 162.413818 -11.099998	</position>
+        <position>	504.859589 162.413803 -11.099998	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	790.802246 21.546377 -786.381287	</position>
+        <position>	790.802185 21.546375 -786.381226	</position>
         <speed0>	140.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -4054,32 +3611,32 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
       </channel0>
       <point>
-        <position>	198.293625 43.777859 -778.647034	</position>
+        <position>	198.293610 43.777855 -778.646973	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-94.098991 101.692993 -288.499969	</position>
+        <position>	-94.098984 101.692986 -288.499939	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-102.356995 124.591995 123.718994	</position>
+        <position>	-102.356987 124.591988 123.718987	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	4.005099 192.204987 223.228989	</position>
+        <position>	4.005098 192.204971 223.228973	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	522.575256 166.124817 58.610653	</position>
+        <position>	522.575195 166.124802 58.610649	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	801.964294 15.615788 -726.115295	</position>
+        <position>	801.964233 15.615788 -726.115234	</position>
         <speed0>	140.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -4099,32 +3656,32 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc3_a3_a4.xml	</effectName>
       </channel0>
       <point>
-        <position>	-795.304199 33.282310 -729.985168	</position>
+        <position>	-795.304138 33.282307 -729.985107	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-126.471985 88.720383 -300.459930	</position>
+        <position>	-126.471977 88.720375 -300.459900	</position>
         <speed0>	105.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-65.497696 125.496994 186.618988	</position>
+        <position>	-65.497688 125.496986 186.618973	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	57.503353 183.342163 277.129242	</position>
+        <position>	57.503349 183.342148 277.129211	</position>
         <speed0>	70.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	407.352844 186.949295 24.936543	</position>
+        <position>	407.352814 186.949280 24.936541	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	752.500122 23.748737 -751.279724	</position>
+        <position>	752.500061 23.748735 -751.279663	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -4144,32 +3701,32 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc3_a3_a4.xml	</effectName>
       </channel0>
       <point>
-        <position>	-785.469360 26.953369 -756.298157	</position>
+        <position>	-785.469299 26.953367 -756.298096	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-158.366974 101.140984 -287.582947	</position>
+        <position>	-158.366959 101.140976 -287.582916	</position>
         <speed0>	110.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-102.247993 155.916992 225.364990	</position>
+        <position>	-102.247986 155.916977 225.364975	</position>
         <speed0>	80.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	61.461697 212.164978 272.423981	</position>
+        <position>	61.461693 212.164963 272.423950	</position>
         <speed0>	90.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	410.895111 155.899078 120.168182	</position>
+        <position>	410.895081 155.899063 120.168175	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	770.790894 20.861740 -748.212219	</position>
+        <position>	770.790833 20.861738 -748.212158	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -4189,22 +3746,22 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc4_a1.xml	</effectName>
       </channel0>
       <point>
-        <position>	630.612244 33.703278 771.456116	</position>
+        <position>	630.612183 33.703274 771.456055	</position>
         <speed0>	85.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	152.553513 85.421150 508.764618	</position>
+        <position>	152.553497 85.421143 508.764587	</position>
         <speed0>	85.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-138.796310 92.877403 -137.348648	</position>
+        <position>	-138.796295 92.877396 -137.348633	</position>
         <speed0>	85.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-644.740417 42.373421 -787.428528	</position>
+        <position>	-644.740356 42.373417 -787.428467	</position>
         <speed0>	85.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -4224,37 +3781,37 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc4_a2_a3.xml	</effectName>
       </channel0>
       <point>
-        <position>	392.950958 386.145752 764.522339	</position>
+        <position>	392.950928 386.145721 764.522278	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-8.719559 99.217827 224.366135	</position>
+        <position>	-8.719558 99.217819 224.366119	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-71.809555 91.001457 29.812899	</position>
+        <position>	-71.809547 91.001450 29.812897	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-220.637177 95.242485 -216.674225	</position>
+        <position>	-220.637161 95.242477 -216.674210	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-355.625427 84.879089 -254.383163	</position>
+        <position>	-355.625397 84.879082 -254.383148	</position>
         <speed0>	80.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-541.885925 82.491585 -198.727005	</position>
+        <position>	-541.885864 82.491577 -198.726990	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-708.422791 28.841673 753.109924	</position>
+        <position>	-708.422729 28.841671 753.109863	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -4274,37 +3831,37 @@
         <effectName>	particles/Environment/scenarios/plane_engine_sc4_a2_a3.xml	</effectName>
       </channel0>
       <point>
-        <position>	412.582825 397.284851 750.864380	</position>
+        <position>	412.582794 397.284821 750.864319	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	17.110203 111.087692 239.395767	</position>
+        <position>	17.110201 111.087685 239.395752	</position>
         <speed0>	150.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-52.490845 99.507256 27.834974	</position>
+        <position>	-52.490841 99.507248 27.834972	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-219.201324 95.680313 -265.287079	</position>
+        <position>	-219.201309 95.680305 -265.287048	</position>
         <speed0>	120.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-370.097443 83.946541 -303.046661	</position>
+        <position>	-370.097412 83.946533 -303.046631	</position>
         <speed0>	80.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-554.432129 79.975784 -246.086578	</position>
+        <position>	-554.432068 79.975777 -246.086563	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-740.509277 24.587744 725.649109	</position>
+        <position>	-740.509216 24.587742 725.649048	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
@@ -4610,220 +4167,6 @@
         <animAction></animAction>
       </point>
     </stalingrad_4_explosion_3>
-    <feb_23_tank_moving>
-      <channel0>
-        <modelName>	content/Environment/hangar_premium_23feb_v3/environment/cars/normal/lod0/car6.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
-        <soundName>	/hangar/ambient/hangar_premium_23feb_v3/scenario/car	</soundName>
-        <wwsoundName>	hangar_23feb_v3_car	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-183.321060 -5.044662 -89.267105	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-139.644394 -5.276889 -103.912735	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-51.115398 -4.885279 -106.201042	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	29.121885 -4.693333 -107.758751	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	80.839119 -4.495118 -108.201851	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	132.556351 -4.296902 -103.498001	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	162.750778 -4.354760 -98.487938	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	190.491714 -4.387670 -97.663033	</position>
-        <speed0>	6.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	218.125717 -4.004241 -106.283264	</position>
-        <speed0>	6.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	257.323975 -3.141510 -159.234985	</position>
-        <speed0>	6.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </feb_23_tank_moving>
-    <feb_23_truck_leaving>
-      <channel0>
-        <modelName>	content/Environment/hangar_premium_23feb_v3/environment/cars/normal/lod0/car4.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	15.000000 100.000000	</alphaFadeDistances>
-        <soundName>	/hangar/ambient/hangar_premium_23feb_v3/scenario/truck	</soundName>
-        <wwsoundName>	hangar_23feb_v3_truck	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-      </channel0>
-      <point>
-        <position>	26.623091 -5.187960 -61.113880	</position>
-        <speed0>	3.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	26.294794 -5.346498 -82.598976	</position>
-        <speed0>	4.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	7.821970 -4.949419 -101.073975	</position>
-        <speed0>	6.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-22.889595 -4.866570 -105.505974	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-70.101936 -5.216772 -100.609779	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-117.314941 -5.456170 -100.626938	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-178.946884 -5.469646 -93.879036	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-229.053848 -6.231964 -77.156921	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </feb_23_truck_leaving>
-    <feb_23_car_moving>
-      <channel0>
-        <modelName>	content/Environment/hangar_premium_23feb_v3/environment/cars/normal/lod0/car6.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
-        <soundName>	/hangar/ambient/hangar_premium_23feb_v3/scenario/car	</soundName>
-        <wwsoundName>	hangar_23feb_v3_car	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	245.426270 -3.383572 -143.543411	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	227.885803 -3.886244 -112.950722	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	197.493942 -4.344100 -95.431572	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	158.421936 -4.313044 -93.674072	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	119.349968 -4.457591 -100.426338	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	55.668385 -4.786662 -103.201973	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-8.013726 -4.882697 -102.204971	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-59.550983 -5.202689 -101.738968	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-106.731972 -5.177619 -101.289841	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-143.893936 -5.266676 -99.490723	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-175.448395 -4.974494 -94.190636	</position>
-        <speed0>	12.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </feb_23_car_moving>
     <Dday_paratrooper_airplane>
       <channel0>
         <modelName>	content/MilitaryEnvironment/mle206_C47/normal/lod0/mle206_C47.model	</modelName>
@@ -5307,7 +4650,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	391.932526 403.166534 748.797180	</position>
@@ -5334,7 +4677,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -5364,7 +4707,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -5397,7 +4740,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	-418.905640 380.436951 -826.337158	</position>
@@ -5424,7 +4767,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -5454,7 +4797,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -5487,7 +4830,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	-84.297371 403.166534 748.797180	</position>
@@ -5514,7 +4857,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -5544,7 +4887,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -5577,7 +4920,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	28.853268 380.436951 -743.001343	</position>
@@ -5604,7 +4947,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -5634,7 +4977,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -5655,6 +4998,114 @@
         <animAction></animAction>
       </point>
     </lostcity_gas_attack_rocket_explosion_sound_4>
+    <lostcity_fire_storm_1>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_x_back.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	0.0 0.0 -550.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	0.0 0.0 -500.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </lostcity_fire_storm_1>
+    <lostcity_fire_storm_2>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_x_forw.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	0.0 0.0 550	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	0.0 0.0 500	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </lostcity_fire_storm_2>
+    <lostcity_fire_storm_3>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_z_back.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	550.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	500.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </lostcity_fire_storm_3>
+    <lostcity_fire_storm_4>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_z_forw.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	-550.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-500.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </lostcity_fire_storm_4>
     <eifeltower_gas_attack_rocket_flight_1>
       <channel0>
         <modelName>	content/Environment/env_112_22_F2_rocket/normal/lod0/env_112_22_F2_rocket_light.model	</modelName>
@@ -5667,7 +5118,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	68.363297 504.179077 915.123352	</position>
@@ -5694,7 +5145,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -5724,7 +5175,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -5757,7 +5208,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	-564.490601 380.116913 -25.182468	</position>
@@ -5784,7 +5235,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -5814,7 +5265,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -5847,7 +5298,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	-74.529343 504.179077 974.967590	</position>
@@ -5874,7 +5325,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -5904,7 +5355,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -5937,7 +5388,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	3.171677 380.116913 -607.135071	</position>
@@ -5964,7 +5415,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -5994,7 +5445,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -6015,6 +5466,114 @@
         <animAction></animAction>
       </point>
     </eifeltower_gas_attack_rocket_explosion_sound_4>
+    <eifeltower_fire_storm_1>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_x_back.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	0.0 0.0 -550.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	0.0 0.0 -500.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </eifeltower_fire_storm_1>
+    <eifeltower_fire_storm_2>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_x_forw.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	0.0 0.0 550	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	0.0 0.0 500	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </eifeltower_fire_storm_2>
+    <eifeltower_fire_storm_3>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_z_back.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	450.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	400.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </eifeltower_fire_storm_3>
+    <eifeltower_fire_storm_4>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_z_forw.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	-450.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-400.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </eifeltower_fire_storm_4>
     <paris_gas_attack_rocket_flight_1>
       <channel0>
         <modelName>	content/Environment/env_112_22_F2_rocket/normal/lod0/env_112_22_F2_rocket_light.model	</modelName>
@@ -6027,7 +5586,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	-777.073547 466.178650 -116.155701	</position>
@@ -6054,7 +5613,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -6084,7 +5643,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -6117,7 +5676,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	155.133774 367.147278 962.071045	</position>
@@ -6144,7 +5703,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -6174,7 +5733,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -6207,7 +5766,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	74.541183 466.178650 -898.633789	</position>
@@ -6234,7 +5793,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -6264,7 +5823,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -6297,7 +5856,7 @@
         <effectName>	particles/Environment/scenarios/gas_attack_rocket_flight.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/combat_atmosphere/fau2/tracer	</soundName>
-        <wwsoundName>	fau2_tracer	</wwsoundName>
+        <wwsoundName>	sauron_tracer	</wwsoundName>
       </channel0>
       <point>
         <position>	-155.365891 367.147278 962.071045	</position>
@@ -6324,7 +5883,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
         <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/scenarios/gas_attack_rocket_explosion.xml	</effectName>
+        <effectName>	particles/Environment/scenarios/fire_attack_rocket_explosion.xml	</effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName></soundName>
         <wwsoundName></wwsoundName>
@@ -6354,7 +5913,7 @@
         <effectName></effectName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
-        <wwsoundName>	fau2_expl	</wwsoundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
         <waveImpulse>
           <start>	1.3	</start>
           <end>	0.8	</end>
@@ -6375,5 +5934,1451 @@
         <animAction></animAction>
       </point>
     </paris_gas_attack_rocket_explosion_sound_4>
+    <paris_fire_storm_1>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_x_back.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	0.0 0.0 -650.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	0.0 0.0 -600.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </paris_fire_storm_1>
+    <paris_fire_storm_2>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_x_forw.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	0.0 0.0 550	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	0.0 0.0 500	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </paris_fire_storm_2>
+    <paris_fire_storm_3>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_z_back.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	650.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	600.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </paris_fire_storm_3>
+    <paris_fire_storm_4>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/fire_storm_ext_smoke_z_forw.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	-650.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-600.0 0.0 0.0	</position>
+        <speed0>	0.0100000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </paris_fire_storm_4>
+    <h12_bday_EU_text_5>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/h12_bday_EU_sparkling_text.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+      </channel0>
+      <point>
+        <position>	79.712936 16.912735 7.837350	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	77.561447 15.888340 7.994995	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	75.670464 15.841898 8.152625	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	74.236427 16.771328 8.152469	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	74.200920 18.866386 8.161679	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	75.075829 20.055656 8.246770	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	76.649933 19.918633 8.366397	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	77.869843 19.374504 7.743258	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	77.788406 20.044765 8.412580	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	77.796570 22.329231 8.574340	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	77.831406 22.406950 8.574338	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	75.896095 22.473345 8.575863	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	73.931198 23.005701 8.577396	</position>
+        <speed0>	17.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </h12_bday_EU_text_5>
+    <h12_bday_EU_text_y1>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/h12_bday_EU_sparkling_text.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+      </channel0>
+      <point>
+        <position>	68.637123 17.920734 7.961316	</position>
+        <speed0>	5.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	70.528130 20.674946 7.737324	</position>
+        <speed0>	5.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </h12_bday_EU_text_y1>
+    <h12_bday_EU_text_y2>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/h12_bday_EU_sparkling_text.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+      </channel0>
+      <point>
+        <position>	68.840935 15.219901 7.927600	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	68.676010 18.036589 7.912035	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	66.939354 20.910507 7.896474	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </h12_bday_EU_text_y2>
+    <h12_bday_EU_text_e>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/h12_bday_EU_sparkling_text.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+      </channel0>
+      <point>
+        <position>	66.654976 18.646622 7.933887	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	63.337086 18.536730 7.930884	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	61.772602 19.577774 7.929390	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	62.670734 20.971807 8.203485	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	64.267319 20.846439 7.928262	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	65.233582 20.011864 7.928076	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	64.727097 17.441135 7.927976	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	63.757904 16.730495 7.927926	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	61.821568 17.001930 7.927905	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	60.731804 18.105450 7.927891	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </h12_bday_EU_text_e>
+    <h12_bday_EU_text_a1>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/h12_bday_EU_sparkling_text.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+      </channel0>
+      <point>
+        <position>	54.433098 18.565395 8.287895	</position>
+        <speed0>	5.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	55.306831 19.711451 7.942924	</position>
+        <speed0>	5.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	55.837749 21.031195 8.112416	</position>
+        <speed0>	5.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	56.290054 23.478367 8.226069	</position>
+        <speed0>	5.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </h12_bday_EU_text_a1>
+    <h12_bday_EU_text_a2>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/h12_bday_EU_sparkling_text.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+      </channel0>
+      <point>
+        <position>	54.181034 20.222715 8.055545	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	57.043747 18.268208 8.062941	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.995235 19.034586 8.092177	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	59.244904 21.224434 8.115596	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	57.974319 22.546867 8.176972	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	56.291256 22.894087 8.238354	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </h12_bday_EU_text_a2>
+    <h12_bday_EU_text_r1>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/h12_bday_EU_sparkling_text.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+      </channel0>
+      <point>
+        <position>	52.727039 18.942511 8.319496	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.058819 21.346680 8.507600	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.860931 23.781860 8.282659	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </h12_bday_EU_text_r1>
+    <h12_bday_EU_text_r2>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/h12_bday_EU_sparkling_text.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+      </channel0>
+      <point>
+        <position>	50.929234 23.429304 8.348308	</position>
+        <speed0>	2.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	52.303562 23.668922 8.340647	</position>
+        <speed0>	2.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.485374 22.750473 8.332993	</position>
+        <speed0>	2.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </h12_bday_EU_text_r2>
+    <h12_bday_EU_text_s>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/h12_bday_EU_sparkling_text.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+      </channel0>
+      <point>
+        <position>	50.104469 20.764362 8.309126	</position>
+        <speed0>	14.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	46.649792 20.566893 8.312484	</position>
+        <speed0>	14.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	45.762859 22.263117 8.314170	</position>
+        <speed0>	14.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	46.814922 23.189756 8.314793	</position>
+        <speed0>	14.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	48.654167 22.815500 8.315420	</position>
+        <speed0>	14.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	49.562862 23.950859 8.315523	</position>
+        <speed0>	14.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	48.634792 25.346930 8.232581	</position>
+        <speed0>	14.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	46.384747 24.878557 8.315850	</position>
+        <speed0>	14.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </h12_bday_EU_text_s>
+    <victory_day_comet_1_center>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_GB22_Comet/normal/envIN_20_GB22_Comet_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/truck_01	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_truck_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	167.010834 0.020000 258.070313	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	56.257507 0.019992 147.429626	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-9.272429 0.019992 81.610428	</position>
+        <speed0>	3.2	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-21.629036 0.019992 71.153435	</position>
+        <speed0>	3.7	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-42.109238 0.020004 62.068935	</position>
+        <speed0>	3.4	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-64.894043 0.020002 59.744686	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-97.102364 0.019996 68.215576	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-123.378922 0.020002 93.790802	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-139.859421 0.020000 115.203308	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-188.810196 0.020000 183.957672	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_comet_1_center>
+    <victory_day_sexton_2_left>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_GB27_Sexton/normal/envIN_20_GB27_Sexton_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/tank_01	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_tank_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	169.091751 0.020000 255.934753	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.288025 0.020000 144.932861	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-7.082530 0.020000 79.398537	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-20.706469 0.020000 67.965881	</position>
+        <speed0>	3.3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-43.256939 0.020000 58.463638	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-67.693779 0.020000 57.065548	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-100.082932 0.019996 66.535057	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-126.030441 0.019998 91.722122	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-142.968613 0.020000 114.019333	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-190.398636 0.020004 180.149597	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_sexton_2_left>
+    <victory_day_sexton_2_right>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_GB27_Sexton/normal/envIN_20_GB27_Sexton_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/metal_squeak	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_metal_squeak	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	164.824051 0.253041 260.082794	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.950687 0.089286 149.435226	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-11.016118 0.020015 84.751648	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-23.721987 0.020000 73.683548	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-44.788975 0.020000 64.630249	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-63.866974 0.019996 62.906574	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-95.244949 0.163160 71.374046	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-121.152390 0.073752 96.217819	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-136.171494 0.020000 116.252106	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-185.950745 0.020000 186.246780	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_sexton_2_right>
+    <victory_day_chaffee_3_left>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_A34_M24_Chaffee/normal/envIN_20_M24_Chaffee_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/tank_02	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_tank_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	169.091751 0.020000 255.934753	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.288025 0.020000 144.932861	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-7.082530 0.020000 79.398537	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-20.706469 0.020000 67.965881	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-43.256939 0.020000 58.463638	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-67.693779 0.020000 57.065548	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-100.082932 0.019996 66.535057	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-126.030441 0.019998 91.722122	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-142.968613 0.020000 114.019333	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-190.420944 0.019996 180.180664	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_chaffee_3_left>
+    <victory_day_chaffee_3_right>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_A34_M24_Chaffee/normal/envIN_20_M24_Chaffee_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/car_01	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_car_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	164.824051 0.253041 260.082794	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.950687 0.089286 149.435226	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-11.016118 0.020015 84.751648	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-23.721987 0.020000 73.683548	</position>
+        <speed0>	3.2	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-44.788975 0.020000 64.630249	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-63.866974 0.019996 62.906574	</position>
+        <speed0>	3.4	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-95.244949 0.163160 71.374046	</position>
+        <speed0>	3.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-121.152390 0.073752 96.217819	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-136.171494 0.020000 116.252106	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-186.058899 0.019996 186.313797	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_chaffee_3_right>
+    <victory_day_challenger_4_center>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_GB41_Challenger/normal/envIN_20_GB41_Challenger.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/tank_03	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_tank_03	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	167.010834 0.020000 258.070313	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	56.257507 0.019992 147.429626	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-9.272429 0.019992 81.610428	</position>
+        <speed0>	3.7	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-21.629036 0.019992 71.153435	</position>
+        <speed0>	3.2	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-42.109238 0.020004 62.068935	</position>
+        <speed0>	3.4	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-64.894043 0.020002 59.744686	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-97.102364 0.019996 68.215576	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-123.378922 0.020002 93.790802	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-139.859421 0.020000 115.203308	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-188.842178 0.020000 183.932114	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_challenger_4_center>
+    <victory_day_cromvel_5_left>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_GB21_Cromwell/normal/envIN_20_GB21_Cromwell_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/tank_04	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_tank_04	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	169.091751 0.020000 255.934753	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.288025 0.020000 144.932861	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-7.082530 0.020000 79.398537	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-20.706469 0.020000 67.965881	</position>
+        <speed0>	3.2	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-43.256939 0.020000 58.463638	</position>
+        <speed0>	3.3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-67.693779 0.020000 57.065548	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-100.082932 0.019996 66.535057	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-126.030441 0.019998 91.722122	</position>
+        <speed0>	3.4	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-142.968613 0.020000 114.019333	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-190.395416 0.020000 180.146561	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_cromvel_5_left>
+    <victory_day_cromvel_5_right>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_GB21_Cromwell/normal/envIN_20_GB21_Cromwell_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/truck_02	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_truck_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	164.824051 0.253041 260.082794	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.950687 0.089286 149.435226	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-11.016118 0.020015 84.751648	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-23.721987 0.020000 73.683548	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-44.788975 0.020000 64.630249	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-63.866974 0.019996 62.906574	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-95.244949 0.163160 71.374046	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-121.152390 0.073752 96.217819	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-136.171494 0.020000 116.252106	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-186.088303 0.020000 186.342575	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_cromvel_5_right>
+    <victory_day_sherman_6_left>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_GB50_ShermanIII/normal/envIN_20_GB50_ShermanIII_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/tank_01	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_tank_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	169.091751 0.020000 255.934753	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.288025 0.020000 144.932861	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-7.082530 0.020000 79.398537	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-20.706469 0.020000 67.965881	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-43.256939 0.020000 58.463638	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-67.693779 0.020000 57.065548	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-100.082932 0.019996 66.535057	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-126.030441 0.019998 91.722122	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-142.968613 0.020000 114.019333	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-190.487183 0.020000 180.128250	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_sherman_6_left>
+    <victory_day_sherman_6_right>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_GB50_ShermanIII/normal/envIN_20_GB50_ShermanIII_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/metal_squeak	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_metal_squeak	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	164.824051 0.253041 260.082794	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.950687 0.089286 149.435226	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-11.016118 0.020015 84.751648	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-23.721987 0.020000 73.683548	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-44.788975 0.020000 64.630249	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-63.866974 0.019996 62.906574	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-95.244949 0.163160 71.374046	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-121.152390 0.073752 96.217819	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-136.171494 0.020000 116.252106	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-186.059219 0.020000 186.312714	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_sherman_6_right>
+    <victory_day_is3_7_left>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_IS-3/normal/envIN_20_IS-3_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/car_02	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_car_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	169.091751 0.020000 255.934753	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	58.288025 0.020000 144.932861	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-7.082530 0.020000 79.398537	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-20.706469 0.020000 67.965881	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-43.256939 0.020000 58.463638	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-67.693779 0.020000 57.065548	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-100.082932 0.019996 66.535057	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-126.030441 0.019998 91.722122	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-142.968613 0.020000 114.019333	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-190.476456 0.020000 180.182846	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_is3_7_left>
+    <victory_day_is3_7_right>
+      <channel0>
+        <modelName>	content/Environment/hangar_victory_day/tanks/envIN_20_IS-3/normal/envIN_20_IS-3_02.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_victory_day/scenario/tank_02	</soundName>
+        <wwsoundName>	hangar_victory_day_scenario_tank_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/victory_day_tank_dust.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	164.824051 0.253041 260.082794	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	53.950687 0.089286 149.435226	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-11.016118 0.020015 84.751648	</position>
+        <speed0>	3.4	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-23.721987 0.020000 73.683548	</position>
+        <speed0>	3.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-44.788975 0.020000 64.630249	</position>
+        <speed0>	3.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-63.866974 0.019996 62.906574	</position>
+        <speed0>	3.3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-95.244949 0.163160 71.374046	</position>
+        <speed0>	3	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-121.152390 0.073752 96.217819	</position>
+        <speed0>	3.6	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-136.171494 0.020000 116.252106	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-186.084885 0.019996 186.342255	</position>
+        <speed0>	3.5	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </victory_day_is3_7_right>
   </mapActivities>
 </environment_effects.xml>

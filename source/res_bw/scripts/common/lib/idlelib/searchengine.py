@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/SearchEngine.py
 """Define SearchEngine for search dialogs."""
 import re
@@ -89,7 +89,7 @@ class SearchEngine:
 
             return prog
 
-    def report_error(self, pat, msg, col = -1):
+    def report_error(self, pat, msg, col=-1):
         msg = 'Error: ' + str(msg)
         if pat:
             msg = msg + '\nPattern: ' + str(pat)
@@ -97,7 +97,7 @@ class SearchEngine:
             msg = msg + '\nOffset: ' + str(col)
         tkMessageBox.showerror('Regular expression error', msg, master=self.root)
 
-    def search_text(self, text, prog = None, ok = 0):
+    def search_text(self, text, prog=None, ok=0):
         """Return (lineno, matchobj) or None for forward/backward search.
         
         This function calls the right function with the right arguments.
@@ -136,15 +136,14 @@ class SearchEngine:
             res = self.search_forward(text, prog, line, col, wrap, ok)
         return res
 
-    def search_forward(self, text, prog, line, col, wrap, ok = 0):
+    def search_forward(self, text, prog, line, col, wrap, ok=0):
         wrapped = 0
         startline = line
         chars = text.get('%d.0' % line, '%d.0' % (line + 1))
         while chars:
             m = prog.search(chars[:-1], col)
-            if m:
-                if ok or m.end() > col:
-                    return (line, m)
+            if m and (ok or m.end() > col):
+                return (line, m)
             line = line + 1
             if wrapped and line > startline:
                 break
@@ -159,15 +158,14 @@ class SearchEngine:
 
         return None
 
-    def search_backward(self, text, prog, line, col, wrap, ok = 0):
+    def search_backward(self, text, prog, line, col, wrap, ok=0):
         wrapped = 0
         startline = line
         chars = text.get('%d.0' % line, '%d.0' % (line + 1))
         while 1:
             m = search_reverse(prog, chars[:-1], col)
-            if m:
-                if ok or m.start() < col:
-                    return (line, m)
+            if m and (ok or m.start() < col):
+                return (line, m)
             line = line - 1
             if wrapped and line < startline:
                 break

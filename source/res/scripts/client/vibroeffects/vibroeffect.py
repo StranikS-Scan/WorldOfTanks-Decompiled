@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/VibroEffect.py
 import BigWorld
 from Vibroeffects.EffectsSettings import EffectsSettings
@@ -50,7 +50,7 @@ class VibroEffect:
             self.__vibrationObject.deleteEffect(self.handle)
         return
 
-    def onStart(self, count = None):
+    def onStart(self, count=None):
         if self.handle is None:
             return
         else:

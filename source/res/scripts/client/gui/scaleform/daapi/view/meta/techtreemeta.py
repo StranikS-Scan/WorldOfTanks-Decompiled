@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TechTreeMeta.py
 from gui.Scaleform.daapi.view.lobby.techtree.ResearchView import ResearchView
 
@@ -17,21 +17,16 @@ class TechTreeMeta(ResearchView):
         self._printOverrideError('onCloseTechTree')
 
     def as_setAvailableNationsS(self, nations):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setAvailableNations(nations)
+        return self.flashObject.as_setAvailableNations(nations) if self._isDAAPIInited() else None
 
     def as_setSelectedNationS(self, nationName):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSelectedNation(nationName)
+        return self.flashObject.as_setSelectedNation(nationName) if self._isDAAPIInited() else None
 
     def as_refreshNationTreeDataS(self, nationName):
-        if self._isDAAPIInited():
-            return self.flashObject.as_refreshNationTreeData(nationName)
+        return self.flashObject.as_refreshNationTreeData(nationName) if self._isDAAPIInited() else None
 
     def as_setUnlockPropsS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setUnlockProps(data)
+        return self.flashObject.as_setUnlockProps(data) if self._isDAAPIInited() else None
 
     def as_showMiniClientInfoS(self, description, hyperlink):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showMiniClientInfo(description, hyperlink)
+        return self.flashObject.as_showMiniClientInfo(description, hyperlink) if self._isDAAPIInited() else None

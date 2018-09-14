@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/StatsRequester.py
 import BigWorld
 from account_helpers import isPremiumAccount
@@ -50,8 +50,7 @@ class StatsRequester(AbstractSyncDataRequester):
         @return: account gold actual balance
         """
         from gui import game_control
-        if self.mayConsumeWalletResources or not game_control.g_instance.wallet.useGold:
-            return self.getCacheValue('gold', 0)
+        return self.getCacheValue('gold', 0) if self.mayConsumeWalletResources or not game_control.g_instance.wallet.useGold else 0
 
     @property
     def actualMoney(self):
@@ -70,14 +69,13 @@ class StatsRequester(AbstractSyncDataRequester):
         @return: account free experience value
         """
         from gui import game_control
-        if self.mayConsumeWalletResources or not game_control.g_instance.wallet.useFreeXP:
-            return self.getCacheValue('freeXP', 0)
+        return self.getCacheValue('freeXP', 0) if self.mayConsumeWalletResources or not game_control.g_instance.wallet.useFreeXP else 0
 
     @property
     def vehiclesXPs(self):
         """
         @return: vehicles experience. Dict format:
-                                { vehicle type int compact descriptor: xp value, }
+                    { vehicle type int compact descriptor: xp value, }
         """
         return self.getCacheValue('vehTypeXP', dict())
 
@@ -85,7 +83,7 @@ class StatsRequester(AbstractSyncDataRequester):
     def multipliedVehicles(self):
         """
         @return: current day already multiplied vehicles list. Format:
-                                [vehicle type int compact descriptor, ...]
+                    [vehicle type int compact descriptor, ...]
         """
         return self.getCacheValue('multipliedXPVehs', list())
 
@@ -93,7 +91,7 @@ class StatsRequester(AbstractSyncDataRequester):
     def eliteVehicles(self):
         """
         @return: elite vehicles list. Format:
-                                [vehicle type int compact descriptor, ...]
+                    [vehicle type int compact descriptor, ...]
         """
         return self.getCacheValue('eliteVehicles', list())
 
@@ -101,7 +99,7 @@ class StatsRequester(AbstractSyncDataRequester):
     def vehicleTypeLocks(self):
         """
         @return: vehicles locks. Now available only clan locks [1]. Format:
-                { vehicle type int compact descriptor: { 1: time to unlock in seconds }, }
+            { vehicle type int compact descriptor: { 1: time to unlock in seconds }, }
         """
         return self.getCacheValue('vehTypeLocks', dict())
 
@@ -109,7 +107,7 @@ class StatsRequester(AbstractSyncDataRequester):
     def globalVehicleLocks(self):
         """
         @return: vehicles locks. Now available only clan locks [1]. Format:
-                { 1: time to unlock in seconds, }
+            { 1: time to unlock in seconds, }
         """
         return self.getCacheValue('globalVehicleLocks', dict())
 
@@ -117,7 +115,7 @@ class StatsRequester(AbstractSyncDataRequester):
     def attributes(self):
         """
         @return: account attributes. Bit combination of
-                                constants.ACCOUNT_ATTR.*
+                    constants.ACCOUNT_ATTR.*
         """
         return self.getCacheValue('attrs', 0)
 
@@ -134,7 +132,7 @@ class StatsRequester(AbstractSyncDataRequester):
 
     @property
     def isTeamKiller(self):
-        return self.getCacheValue('tkillIsSuspected', 0)
+        return self.getCacheValue('tkillIsSuspected', False)
 
     @property
     def restrictions(self):
@@ -240,4 +238,11 @@ class StatsRequester(AbstractSyncDataRequester):
 
     @property
     def tutorialsCompleted(self):
-        return self.getCacheValue('tutorialsCompleted', {})
+        return self.getCacheValue('tutorialsCompleted', 0)
+
+    @property
+    def oldVehInvIDs(self):
+        """
+        @return: Unit previously selected vehicles
+        """
+        return self.getCacheValue('oldVehInvIDs', ())

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/TankExpertAchievement.py
 from dossiers2.custom.helpers import getTankExpertRequirements
 from abstract import NationSpecificAchievement
@@ -6,7 +6,7 @@ from abstract.mixins import HasVehiclesList
 
 class TankExpertAchievement(HasVehiclesList, NationSpecificAchievement):
 
-    def __init__(self, nationID, block, dossier, value = None):
+    def __init__(self, nationID, block, dossier, value=None):
         self.__vehTypeCompDescrs = self._parseVehiclesDescrsList(NationSpecificAchievement.makeFullName('tankExpert', nationID), dossier)
         NationSpecificAchievement.__init__(self, 'tankExpert', nationID, block, dossier, value)
         HasVehiclesList.__init__(self)
@@ -27,7 +27,4 @@ class TankExpertAchievement(HasVehiclesList, NationSpecificAchievement):
 
     @classmethod
     def _parseVehiclesDescrsList(cls, name, dossier):
-        if dossier is not None:
-            return getTankExpertRequirements(dossier.getBlock('vehTypeFrags')).get(name, [])
-        else:
-            return []
+        return getTankExpertRequirements(dossier.getBlock('vehTypeFrags')).get(name, []) if dossier is not None else []

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/Research.py
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 import nations
@@ -12,6 +12,7 @@ from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.sounds.ambients import LobbySubViewEnv
 from gui.Scaleform.daapi.view.lobby.techtree.settings import USE_XML_DUMPING
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
@@ -26,8 +27,9 @@ class RESEARCH_HINT_ID(object):
 
 
 class Research(ResearchMeta):
+    __sound_env__ = LobbySubViewEnv
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         if USE_XML_DUMPING and IS_DEVELOPMENT:
             dumper = dumpers.ResearchItemsXMLDumper()
         else:
@@ -117,7 +119,7 @@ class Research(ResearchMeta):
     def _dispose(self):
         super(Research, self)._dispose()
 
-    def _resolveLoadCtx(self, ctx = None):
+    def _resolveLoadCtx(self, ctx=None):
         rootCD = ctx['rootCD'] if ctx is not None and 'rootCD' in ctx else None
         if rootCD is None:
             if g_currentVehicle.isPresent():

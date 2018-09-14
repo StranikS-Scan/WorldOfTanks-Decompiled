@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/TokenResponse.py
 import BigWorld
 TOKEN_EXPIRED_TIME = 3000
@@ -6,7 +6,7 @@ TOKEN_EXPIRED_TIME = 3000
 class TokenResponse(object):
     __slots__ = ('_receivedAt', '_token', '_databaseID', '_error')
 
-    def __init__(self, token = None, databaseID = 0L, error = None, **kwargs):
+    def __init__(self, token=None, databaseID=0, error=None, **kwargs):
         super(TokenResponse, self).__init__()
         self._receivedAt = BigWorld.time()
         self._token = token
@@ -19,7 +19,7 @@ class TokenResponse(object):
     def clear(self):
         self._receivedAt = 0
         self._token = None
-        self._databaseID = 0L
+        self._databaseID = 0
         self._error = None
         return
 

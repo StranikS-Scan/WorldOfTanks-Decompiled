@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/TechnicalMaintenance.py
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -20,7 +20,7 @@ from account_helpers.settings_core.settings_constants import TUTORIAL
 
 class TechnicalMaintenance(TechnicalMaintenanceMeta):
 
-    def __init__(self, _ = None):
+    def __init__(self, _=None):
         super(TechnicalMaintenance, self).__init__()
         self.__currentVehicleId = None
         self.__isConfirmDialogShown = False
@@ -67,7 +67,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         if not g_currentVehicle.isPresent():
             self.destroy()
             return
-        if reason == CACHE_SYNC_REASON.SHOP_RESYNC or self.__currentVehicleId in diff.get(GUI_ITEM_TYPE.VEHICLE, {}):
+        if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
             self.populateTechnicalMaintenance()
             self.populateTechnicalMaintenanceEquipment(**self.__layout)
 
@@ -76,8 +76,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         for item in (eId1, eId2, eId3):
             if item is None:
                 eIdsCD.append(None)
-            else:
-                eIdsCD.append(int(item))
+            eIdsCD.append(int(item))
 
         self.populateTechnicalMaintenanceEquipment(eIdsCD[0], currency1, eIdsCD[1], currency2, eIdsCD[2], currency3, slotIndex)
         return
@@ -163,7 +162,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         self.populateTechnicalMaintenanceEquipment(**params)
         return
 
-    def populateTechnicalMaintenanceEquipment(self, eId1 = None, currency1 = None, eId2 = None, currency2 = None, eId3 = None, currency3 = None, slotIndex = None):
+    def populateTechnicalMaintenanceEquipment(self, eId1=None, currency1=None, eId2=None, currency2=None, eId3=None, currency3=None, slotIndex=None):
         items = g_itemsCache.items
         goldEqsForCredits = items.shop.isEnabledBuyingGoldEqsForCredits
         vehicle = g_currentVehicle.item
@@ -172,7 +171,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         currencies = [None, None, None]
         selectedItems = [None, None, None]
         if eId1 is not None or eId2 is not None or eId3 is not None or slotIndex is not None:
-            selectedItems = map(lambda id: (items.getItemByCD(id) if id is not None else None), (eId1, eId2, eId3))
+            selectedItems = map(lambda id: items.getItemByCD(id) if id is not None else None, (eId1, eId2, eId3))
             currencies = [currency1, currency2, currency3]
         inventoryVehicles = items.getVehicles(_RC.INVENTORY).values()
         itemsCriteria = ~_RC.HIDDEN | _RC.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.EQUIPMENT])
@@ -215,8 +214,8 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
              'moduleLabel': module.getGUIEmblemID()})
 
         vehicle.eqs = list(installedItems)
-        installed = map(lambda e: (e.intCD if e is not None else None), installedItems)
-        setup = map(lambda e: (e.intCD if e is not None else None), selectedItems)
+        installed = map(lambda e: e.intCD if e is not None else None, installedItems)
+        setup = map(lambda e: e.intCD if e is not None else None, selectedItems)
         self.__seveCurrentLayout(eId1=eId1, currency1=currency1, eId2=eId2, currency2=currency2, eId3=eId3, currency3=currency3)
         self.as_setEquipmentS(installed, setup, modules)
         return
@@ -243,9 +242,8 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 buyGoldEqForCredits = ei.goldEqsForCredits and ei.prices[1] > 0 and ei.currency == 'credits'
                 eqsLayout.append(intCD if not buyGoldEqForCredits else -intCD)
                 eqsLayout.append(1)
-            else:
-                eqsLayout.append(0)
-                eqsLayout.append(0)
+            eqsLayout.append(0)
+            eqsLayout.append(0)
 
         if not needRepair and not needAmmo and not needEquipment:
             self.__setVehicleLayouts(g_currentVehicle.item, shellsLayout, eqsLayout)
@@ -285,7 +283,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 self.__currentVehicleId = g_currentVehicle.item.intCD
 
     @decorators.process('techMaintenance')
-    def __setVehicleLayouts(self, vehicle, shellsLayout = list(), eqsLayout = list()):
+    def __setVehicleLayouts(self, vehicle, shellsLayout=list(), eqsLayout=list()):
         LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
         result = yield VehicleLayoutProcessor(vehicle, shellsLayout, eqsLayout).request()
         if result and result.auxData:
@@ -306,7 +304,4 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         return
 
     def __getStatus(self, reason):
-        if reason is not None:
-            return '#menu:moduleFits/' + reason.replace(' ', '_')
-        else:
-            return ''
+        return '#menu:moduleFits/' + reason.replace(' ', '_') if reason is not None else ''

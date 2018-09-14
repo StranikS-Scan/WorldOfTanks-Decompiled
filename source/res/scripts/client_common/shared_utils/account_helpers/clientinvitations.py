@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/account_helpers/ClientInvitations.py
 import operator
 from functools import partial
@@ -38,18 +38,18 @@ class ClientInvitations(object):
         self._loadExpiryCallback()
         self.__playerEvents.onPrebattleInvitationsChanged(self.__invitations)
 
-    def sendInvitation(self, accountsToInvite, comment = '', callback = None):
+    def sendInvitation(self, accountsToInvite, comment='', callback=None):
         if self.__playerEvents.isPlayerEntityChanging:
             return
         self.__proxy._doCmdIntArrStrArr(AccountCommands.CMD_INVITATION_SEND, accountsToInvite, [comment], callback)
 
-    def acceptInvitation(self, invitationID, senderDBID, callback = None):
+    def acceptInvitation(self, invitationID, senderDBID, callback=None):
         if self.__playerEvents.isPlayerEntityChanging:
             return
         proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.ACCEPTED, invitationID, callback)
         self.__proxy._doCmdInt3(AccountCommands.CMD_INVITATION_ACCEPT, invitationID, senderDBID, 0, proxy)
 
-    def declineInvitation(self, invitationID, senderDBID, callback = None):
+    def declineInvitation(self, invitationID, senderDBID, callback=None):
         if self.__playerEvents.isPlayerEntityChanging:
             return
         proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.DECLINED, invitationID, callback)
@@ -96,3 +96,12 @@ class ClientInvitations(object):
             LOG_CURRENT_EXCEPTION()
 
         self._loadExpiryCallback()
+
+
+class ReplayClientInvitations(ClientInvitations):
+
+    def processInvitations(self, invitations):
+        for inv in invitations:
+            inv['expiresAt'] = getCurrentTimestamp() + 86400
+
+        super(ReplayClientInvitations, self).processInvitations(invitations)

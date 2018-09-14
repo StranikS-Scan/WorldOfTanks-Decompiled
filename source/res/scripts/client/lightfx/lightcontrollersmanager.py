@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/LightFx/LightControllersManager.py
 from Controllers.HealthController import HealthController
 import LightManager

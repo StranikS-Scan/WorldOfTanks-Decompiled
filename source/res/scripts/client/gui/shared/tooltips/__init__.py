@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/__init__.py
 import weakref
 import sys
@@ -26,8 +26,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     IGR = 'igr'
     CYBER_SPORT = 'cyberSport'
     MAP = 'map'
-    HISTORICAL_AMMO = 'historicalAmmo'
-    HISTORICAL_MODULES = 'historicalModules'
     CONTROL = 'control'
     REF_SYSTEM = 'refSystem'
     PRIVATE_QUESTS = 'privateQuests'
@@ -37,6 +35,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     CLAN_PROFILE = 'clanProfile'
     TECH_CUSTOMIZATION = 'techCustomization'
     TECH_CUSTOMIZATION_BONUS = 'techCustomizationBonus'
+    BOOSTER = 'booster'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -58,6 +57,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     CONTACT = 'contact'
     HANGAR_TUTORIAL = 'hangarTutorial'
     TECH_CUSTOMIZATION = 'techCustomization'
+    BOOSTER = 'booster'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):
@@ -139,7 +139,7 @@ class ToolTipDataField(object):
 
 class ToolTipAttrField(ToolTipDataField):
 
-    def __init__(self, context, name, attr = None):
+    def __init__(self, context, name, attr=None):
         super(ToolTipAttrField, self).__init__(context, name)
         self._attr = attr
 
@@ -149,14 +149,12 @@ class ToolTipAttrField(ToolTipDataField):
     def _getValue(self):
         attr = self._attr or self._name
         item = self._getItem()
-        if hasattr(item, attr):
-            return getattr(item, attr)
-        return super(ToolTipAttrField, self)._getValue()
+        return getattr(item, attr) if hasattr(item, attr) else super(ToolTipAttrField, self)._getValue()
 
 
 class ToolTipMethodField(ToolTipDataField):
 
-    def __init__(self, context, name, method = None, args = None):
+    def __init__(self, context, name, method=None, args=None):
         super(ToolTipMethodField, self).__init__(context, name)
         self._method = method
         self._args = args or tuple()
@@ -167,14 +165,12 @@ class ToolTipMethodField(ToolTipDataField):
     def _getValue(self):
         attr = self._method or self._name
         item = self._getItem()
-        if hasattr(item, attr):
-            return getattr(item, attr)(*self._args)
-        return super(ToolTipMethodField, self)._getValue()
+        return getattr(item, attr)(*self._args) if hasattr(item, attr) else super(ToolTipMethodField, self)._getValue()
 
 
 class ToolTipAttrCheckField(ToolTipAttrField):
 
-    def __init__(self, context, name, value, attr = None):
+    def __init__(self, context, name, value, attr=None):
         super(ToolTipAttrCheckField, self).__init__(context, name, attr)
         self._value = value
 
@@ -184,7 +180,7 @@ class ToolTipAttrCheckField(ToolTipAttrField):
 
 class ToolTipMethodCheckField(ToolTipMethodField):
 
-    def __init__(self, context, name, value, method = None, args = None):
+    def __init__(self, context, name, value, method=None, args=None):
         super(ToolTipMethodCheckField, self).__init__(context, name, method, args)
         self._value = value
 
@@ -221,7 +217,7 @@ def getComplexStatus(statusKey):
     return
 
 
-def getUnlockPrice(compactDescr, parentCD = None):
+def getUnlockPrice(compactDescr, parentCD=None):
     item_type_id, _, _ = vehicles.parseIntCompactDescr(compactDescr)
     freeXP = g_itemsCache.items.stats.actualFreeXP
     unlocks = g_itemsCache.items.stats.unlocks
@@ -263,7 +259,7 @@ def getUnlockPrice(compactDescr, parentCD = None):
         return
 
 
-def getItemActionTooltipData(item, isBuying = True):
+def getItemActionTooltipData(item, isBuying=True):
     creditsState = None
     goldState = None
     if isBuying:

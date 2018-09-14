@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/fetcher.py
 
 
@@ -19,7 +19,7 @@ class FakeResponse(object):
         return '[HTTP status: {}] {}'.format(self.responseCode, self.body)
 
 
-def fetchURL(url, callback, headers = {}, timeout = 30, method = 'GET', postData = ''):
+def fetchURL(url, callback, headers={}, timeout=30, method='GET', postData=''):
     """
             Simple synchronous implementation via requests library
             see http://docs.python-requests.org/en/latest/

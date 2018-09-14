@@ -1,10 +1,10 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/filters/_collection.py
 import re
 import sre_compile
 import pickle
 import BigWorld
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION
 from external_strings_utils import normalized_unicode_trim
 from gui import GUI_SETTINGS
 from gui.shared.utils import functions
@@ -26,9 +26,7 @@ class ObsceneLanguageFilter(IIncomingMessageFilter):
         g_olDictionary.resetReplacementFunction()
 
     def filter(self, senderID, text):
-        if isCurrentPlayer(senderID):
-            return text
-        return g_olDictionary.searchAndReplace(text)
+        return text if isCurrentPlayer(senderID) else g_olDictionary.searchAndReplace(text)
 
 
 class ColoringObsceneLanguageFilter(IIncomingMessageFilter):
@@ -55,9 +53,7 @@ class ColoringObsceneLanguageFilter(IIncomingMessageFilter):
     def filter(self, senderID, text):
         self.__currentID = senderID
         self.usersStorage._markAsBreaker(self.__currentID, False)
-        if isCurrentPlayer(senderID):
-            return text
-        return g_olDictionary.searchAndReplace(text)
+        return text if isCurrentPlayer(senderID) else g_olDictionary.searchAndReplace(text)
 
 
 class SpamFilter(IIncomingMessageFilter):
@@ -78,9 +74,7 @@ class SpamFilter(IIncomingMessageFilter):
             self._filter = Dummy()
 
     def filter(self, senderID, text):
-        if isCurrentPlayer(senderID):
-            return text
-        return self._filter.removeSpam(text)
+        return text if isCurrentPlayer(senderID) else self._filter.removeSpam(text)
 
 
 class FloodFilter(IIncomingMessageFilter):
@@ -101,7 +95,7 @@ class FloodFilter(IIncomingMessageFilter):
             for msgTime, msgText in userHistory:
                 if currTime - msgTime > MESSAGE_FLOOD_COOLDOWN:
                     recentCount -= 1
-                elif text == msgText:
+                if text == msgText:
                     text = ''
                     break
 
@@ -109,6 +103,10 @@ class FloodFilter(IIncomingMessageFilter):
             if recentCount < len(userHistory):
                 self.__history[senderID] = userHistory[-recentCount:]
             return text
+
+    def resetHistory(self, contactId):
+        if contactId in self.__history:
+            self.__history[contactId] = []
 
 
 class DomainNameFilter(IIncomingMessageFilter):
@@ -118,9 +116,7 @@ class DomainNameFilter(IIncomingMessageFilter):
         g_dnDictionary.resetReplacementFunction()
 
     def filter(self, senderID, text):
-        if isCurrentPlayer(senderID):
-            return text
-        return g_dnDictionary.searchAndReplace(text)
+        return text if isCurrentPlayer(senderID) else g_dnDictionary.searchAndReplace(text)
 
 
 class HtmlEscapeFilter(IIncomingMessageFilter):

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/GameLoading.py
 import GUI
 import BigWorld
@@ -13,7 +13,7 @@ from helpers import getFullClientVersion, getClientOverride
 
 class GameLoading(Flash):
 
-    def __init__(self, component = None):
+    def __init__(self, component=None):
         Flash.__init__(self, 'gameLoading.swf', path=SCALEFORM_SWF_PATH_V3)
         self._displayRoot = self.getMember('root.main')
         if self._displayRoot is not None:

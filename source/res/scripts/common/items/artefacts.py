@@ -1,20 +1,20 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/artefacts.py
 import Math
-import items, nations
+import items
+import nations
 from items import _xml, vehicles
 from debug_utils import *
 from constants import IS_CLIENT, IS_BASEAPP, IS_CELLAPP, IS_WEB, IS_DEVELOPMENT
 from functools import partial
 if IS_CLIENT:
     from helpers import i18n
-    import FMOD
 elif IS_WEB:
     from web_stubs import *
 
 class OptionalDevice(object):
 
-    def get(self, key, defVal = None):
+    def get(self, key, defVal=None):
         return self.__dict__.get(key, defVal)
 
     def __getitem__(self, key):
@@ -32,10 +32,7 @@ class OptionalDevice(object):
         return (self._vehWeightFraction, self._weight, 0.0)
 
     def checkCompatibilityWithVehicle(self, vehicleDescr):
-        if self.__filter is None:
-            return (True, None)
-        else:
-            return self.__filter.checkCompatibility(vehicleDescr)
+        return (True, None) if self.__filter is None else self.__filter.checkCompatibility(vehicleDescr)
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
         pass
@@ -77,7 +74,7 @@ class StaticFactorDevice(OptionalDevice):
             attrDict = getattr(vehicleDescr, self.__attr[0])
             attrName = self.__attr[1]
         val = attrDict[attrName]
-        if type(val) is int:
+        if isinstance(val, int):
             attrDict[attrName] = int(val * self.__factor)
         else:
             attrDict[attrName] = val * self.__factor
@@ -97,7 +94,7 @@ class StaticAdditiveDevice(OptionalDevice):
             attrDict = getattr(vehicleDescr, self.__attr[0])
             attrName = self.__attr[1]
         val = attrDict[attrName]
-        if type(val) is int:
+        if isinstance(val, int):
             attrDict[attrName] = int(val + self.__value)
         else:
             attrDict[attrName] = val + self.__value
@@ -176,7 +173,7 @@ class AntifragmentationLining(OptionalDevice):
 
 class Equipment(object):
 
-    def get(self, key, defVal = None):
+    def get(self, key, defVal=None):
         return self.__dict__.get(key, defVal)
 
     def __getitem__(self, key):
@@ -187,28 +184,21 @@ class Equipment(object):
         self._readConfig((xmlCtx, 'script'), section['script'])
 
     def checkCompatibilityWithVehicle(self, vehicleDescr):
-        if self.__vehicleFilter is None:
-            return (True, None)
-        else:
-            return self.__vehicleFilter.checkCompatibility(vehicleDescr)
+        return (True, None) if self.__vehicleFilter is None else self.__vehicleFilter.checkCompatibility(vehicleDescr)
 
     def checkCompatibilityWithEquipment(self, other):
         if self is other:
             return False
         else:
             filter = self.__equipmentFilter
-            if filter is None:
-                return True
-            return not filter.inInstalled(other.tags)
+            return True if filter is None else not filter.inInstalled(other.tags)
 
     def checkCompatibilityWithActiveEquipment(self, other):
         if self is other:
             return False
         else:
             filter = self.__equipmentFilter
-            if filter is None:
-                return True
-            return not filter.inActive(other.tags)
+            return True if filter is None else not filter.inActive(other.tags)
 
     def updatePrice(self, newPrice, showInShop):
         self.price = newPrice
@@ -339,7 +329,10 @@ class Bomber(Equipment):
     def _readConfig(self, xmlCtx, section):
         self.delay = _xml.readPositiveFloat(xmlCtx, section, 'delay')
         self.modelName = _xml.readString(xmlCtx, section, 'modelName')
-        self.soundEvent = _xml.readString(xmlCtx, section, 'soundEvent')
+        if IS_CLIENT:
+            self.soundEvent = _xml.readString(xmlCtx, section, 'wwsoundEvent')
+        else:
+            self.soundEvent = _xml.readString(xmlCtx, section, 'soundEvent')
         self.speed = _xml.readInt(xmlCtx, section, 'speed')
         self.heights = _xml.readTupleOfPositiveInts(xmlCtx, section, 'heights', 2)
         self.areaLength = _xml.readPositiveFloat(xmlCtx, section, 'areaLength')
@@ -371,10 +364,9 @@ class _VehicleFilter(object):
         for subsection in section.values():
             if subsection.name == 'include':
                 self.__include.append(_readVehicleFilterPattern((xmlCtx, 'include'), subsection))
-            elif subsection.name == 'exclude':
+            if subsection.name == 'exclude':
                 self.__exclude.append(_readVehicleFilterPattern((xmlCtx, 'exclude'), subsection))
-            else:
-                _xml.raiseWrongXml(xmlCtx, subsection.name, 'should be <include> or <exclude>')
+            _xml.raiseWrongXml(xmlCtx, subsection.name, 'should be <include> or <exclude>')
 
     def checkCompatibility(self, vehicleDescr):
         if self.__exclude:
@@ -398,10 +390,9 @@ class _EquipmentFilter(object):
         for subsection in section.values():
             if subsection.name == 'installed':
                 self.__installed.update(_readTags((xmlCtx, subsection.name), subsection, '', 'equipment'))
-            elif subsection.name == 'active':
+            if subsection.name == 'active':
                 self.__active.update(_readTags((xmlCtx, subsection.name), subsection, '', 'equipment'))
-            else:
-                _xml.raiseWrongXml(xmlCtx, subsection.name, 'should be <installed> or <active>')
+            _xml.raiseWrongXml(xmlCtx, subsection.name, 'should be <installed> or <active>')
 
     def inInstalled(self, tags):
         return len(self.__installed.intersection(tags))
@@ -423,7 +414,7 @@ def _readVehicleFilterPattern(xmlCtx, section):
                     _xml.raiseWrongXml(xmlCtx, 'nations', "unknown nation '%s'" % name)
                 res['nations'].append(id)
 
-        elif sname in _vehicleFilterItemTypes:
+        if sname in _vehicleFilterItemTypes:
             sname = intern(sname)
             res[sname] = {}
             if section.has_key('tags'):
@@ -439,8 +430,7 @@ def _readVehicleFilterPattern(xmlCtx, section):
                 _xml.raiseWrongSection(ctx, 'maxLevel')
             if maxLevel != 10:
                 res[sname]['maxLevel'] = maxLevel
-        else:
-            _xml.raiseWrongXml(ctx, '', 'unknown section name')
+        _xml.raiseWrongXml(ctx, '', 'unknown section name')
 
     return res
 

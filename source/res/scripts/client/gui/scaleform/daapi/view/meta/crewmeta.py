@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CrewMeta.py
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
@@ -26,9 +26,7 @@ class CrewMeta(BaseDAAPIComponent):
         self._printOverrideError('onCrewDogItemClick')
 
     def as_tankmenResponseS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_tankmenResponse(data)
+        return self.flashObject.as_tankmenResponse(data) if self._isDAAPIInited() else None
 
     def as_dogResponseS(self, dogName):
-        if self._isDAAPIInited():
-            return self.flashObject.as_dogResponse(dogName)
+        return self.flashObject.as_dogResponse(dogName) if self._isDAAPIInited() else None

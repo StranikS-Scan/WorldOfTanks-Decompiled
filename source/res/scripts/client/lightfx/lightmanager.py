@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/LightFx/LightManager.py
 import time
 from debug_utils import *
@@ -132,9 +132,8 @@ class LightManager:
                     del blackLights[:]
                 if oneLightAction.action == LightEffect.ACTION_COLOR:
                     self.setLightAction(oneLightAction.lightDescription, oneLightAction.color, oneLightAction.action)
-                else:
-                    del blackLights[:]
-                    break
+                del blackLights[:]
+                break
 
         for lightDescription in blackLights:
             self.setLightAction(lightDescription, Vector4(), LightEffect.ACTION_COLOR)

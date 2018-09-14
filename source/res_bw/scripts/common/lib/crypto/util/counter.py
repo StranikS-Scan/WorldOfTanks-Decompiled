@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Util/Counter.py
 """Fast counter functions for CTR cipher modes.
 
@@ -43,7 +43,7 @@ import struct
 import warnings
 _deprecated = 'deprecated'
 
-def new(nbits, prefix = b(''), suffix = b(''), initial_value = 1, overflow = 0, little_endian = False, allow_wraparound = False, disable_shortcut = _deprecated):
+def new(nbits, prefix=b(''), suffix=b(''), initial_value=1, overflow=0, little_endian=False, allow_wraparound=False, disable_shortcut=_deprecated):
     """Create a stateful counter block function suitable for CTR encryption modes.
     
     Each call to the function returns the next counter block.
@@ -95,7 +95,7 @@ def new(nbits, prefix = b(''), suffix = b(''), initial_value = 1, overflow = 0, 
         return _counter._newBE(bstr(prefix), bstr(suffix), initval, allow_wraparound=allow_wraparound)
 
 
-def _encode(n, nbytes, little_endian = False):
+def _encode(n, nbytes, little_endian=False):
     retval = []
     n = long(n)
     for i in range(nbytes):

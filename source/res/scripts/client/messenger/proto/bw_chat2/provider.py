@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/provider.py
 from collections import defaultdict, deque
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
@@ -47,7 +47,7 @@ class BWChatProvider(object):
         else:
             self.__queue = []
 
-    def doAction(self, actionID, args = None, response = False, skipCoolDown = False):
+    def doAction(self, actionID, args=None, response=False, skipCoolDown=False):
         success, reqID = False, 0
         if self.__coolDown.isInProcess(actionID):
             if not skipCoolDown:
@@ -115,7 +115,7 @@ class BWChatProvider(object):
         if handler in handlers:
             handlers.remove(handler)
 
-    def __sendAction(self, actionID, reqID, args = None):
+    def __sendAction(self, actionID, reqID, args=None):
         player = BigWorld.player()
         if player:
             player.base.messenger_onActionByClient_chat2(actionID, reqID, args or messageArgs())
@@ -124,7 +124,7 @@ class BWChatProvider(object):
             LOG_ERROR('Player is not defined')
             return False
 
-    def __addActionToQueue(self, actionID, reqID, args = None):
+    def __addActionToQueue(self, actionID, reqID, args=None):
         self.__queue.append((actionID, reqID, args))
         return True
 
@@ -160,7 +160,7 @@ class ActionsHandler(object):
 
 class ResponseHandler(ActionsHandler):
 
-    def pushRq(self, reqID, value = None):
+    def pushRq(self, reqID, value=None):
         raise NotImplementedError
 
     def popRq(self, reqID):
@@ -193,7 +193,7 @@ class ResponseSeqHandler(ResponseHandler):
         self._reqIDs.clear()
         super(ResponseHandler, self).clear()
 
-    def pushRq(self, reqID, value = None):
+    def pushRq(self, reqID, value=None):
         self._reqIDs.append(reqID)
 
     def popRq(self, reqID):
@@ -214,7 +214,7 @@ class ResponseDictHandler(ResponseHandler):
         self._reqIDs.clear()
         super(ResponseHandler, self).clear()
 
-    def pushRq(self, reqID, value = None):
+    def pushRq(self, reqID, value=None):
         self._reqIDs[reqID] = value
 
     def popRq(self, reqID):

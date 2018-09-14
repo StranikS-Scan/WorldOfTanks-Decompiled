@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/MimeWriter.py
 """Generic MIME writer.
 
@@ -87,7 +88,7 @@ class MimeWriter:
         self._fp = fp
         self._headers = []
 
-    def addheader(self, key, value, prefix = 0):
+    def addheader(self, key, value, prefix=0):
         """Add a header line to the MIME message.
         
         The key is the name of the header, where the value obviously provides
@@ -124,7 +125,7 @@ class MimeWriter:
         self._fp.writelines(self._headers)
         self._headers = []
 
-    def startbody(self, ctype, plist = [], prefix = 1):
+    def startbody(self, ctype, plist=[], prefix=1):
         """Returns a file-like object for writing the body of the message.
         
         The content-type is set to the provided ctype, and the optional
@@ -142,7 +143,7 @@ class MimeWriter:
         self._fp.write('\n')
         return self._fp
 
-    def startmultipartbody(self, subtype, boundary = None, plist = [], prefix = 1):
+    def startmultipartbody(self, subtype, boundary=None, plist=[], prefix=1):
         """Returns a file-like object for writing the body of the message.
         
         Additionally, this method initializes the multi-part code, where the

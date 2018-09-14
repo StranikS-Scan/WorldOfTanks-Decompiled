@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/persistent_caches.py
 import BigWorld
 import cPickle
@@ -8,7 +8,7 @@ import constants
 
 class SimpleCache(object):
 
-    def __init__(self, cacheType, cacheName, accountName = None):
+    def __init__(self, cacheType, cacheName, accountName=None):
         self.__cacheType = cacheType
         self.__cacheName = cacheName
         self.__accountName = accountName
@@ -19,11 +19,11 @@ class SimpleCache(object):
         except:
             pass
 
-    def setAccount(self, account = None):
+    def setAccount(self, account=None):
         self.__accountName = account.name if account is not None else None
         return
 
-    def setAccountName(self, accountName = None):
+    def setAccountName(self, accountName=None):
         self.__accountName = accountName
 
     def getAccountName(self):

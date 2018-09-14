@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Effects/DepthOfField.py
 from PostProcessing.RenderTargets import *
 from PostProcessing import Effect
@@ -35,7 +35,7 @@ bkzFocus = MaterialFloatProperty('Depth of Field (bokeh control)', 1, 'zFocus', 
 
 class FocalLengthProperty(MaterialFloatProperty):
 
-    def __init__(self, effectName, phaseIdx, materialAttribute, primary = False):
+    def __init__(self, effectName, phaseIdx, materialAttribute, primary=False):
         MaterialFloatProperty.__init__(self, effectName, phaseIdx, materialAttribute, 2, primary)
 
     def format(self, val):
@@ -73,21 +73,21 @@ dof3Alpha = MaterialFloatProperty('Depth of Field (multi-blur)', -1, 'alpha', pr
 dof3Overdrive = MaterialFloatProperty('Depth of Field (multi-blur)', -1, 'overdrive')
 
 @implementPhaseFactory('Thin lens simulation', 'Mathematical thin lens simulation. Provides the intermediate data for depth of field phases.', None, None)
-def buildThinLensSimulationPhase(input, output, srcBlend = BW_BLEND_ONE, destBlend = BW_BLEND_ZERO):
+def buildThinLensSimulationPhase(input, output, srcBlend=BW_BLEND_ONE, destBlend=BW_BLEND_ZERO):
     p = buildPhase(input, output, 'shaders/post_processing/depth_blur_write.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.name = 'thin lens'
     return p
 
 
 @implementPhaseFactory('Explicit lens simulation', 'Explicit control over lens parameters.  Provides the intermediate data for depth of field phases.', None, None)
-def buildExplicitLensSimulationPhase(input, output, srcBlend = BW_BLEND_ONE, destBlend = BW_BLEND_ZERO):
+def buildExplicitLensSimulationPhase(input, output, srcBlend=BW_BLEND_ONE, destBlend=BW_BLEND_ZERO):
     p = buildPhase(input, output, 'shaders/post_processing/depth_blur_write2.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.name = 'explicit lens'
     return p
 
 
 @implementPhaseFactory('Depth of Field (variable filter)', 'Depth of field using a variable sized filter. Fast, but low quality. Requires intermediate data from a lens simulation.', None, None, None, stochasticSample)
-def buildDOFVariableCoCPhase(input, depthBlurTexture, output, filter, srcBlend = BW_BLEND_ONE, destBlend = BW_BLEND_ZERO):
+def buildDOFVariableCoCPhase(input, depthBlurTexture, output, filter, srcBlend=BW_BLEND_ONE, destBlend=BW_BLEND_ZERO):
     """This depth-of-field output phase uses a variable-sized kernel to simulate
     the circle of confusion for depth-of-field."""
     p = buildPhase(input, output, 'shaders/post_processing/depth_of_field.fx', straightTransfer4Tap, srcBlend, destBlend)
@@ -107,7 +107,7 @@ def buildDOFVariableCoCPhase(input, depthBlurTexture, output, filter, srcBlend =
 
 
 @implementPhaseFactory('Depth of Field (bokeh control)', 'Depth of field using bokeh texture splatting. Slow, but high quality. Requires intermediate data from a lens simulation.', None, None, None)
-def buildDOFBokehControlPhase(input, depthBlurTexture, output, srcBlend = BW_BLEND_SRCALPHA, destBlend = BW_BLEND_ONE):
+def buildDOFBokehControlPhase(input, depthBlurTexture, output, srcBlend=BW_BLEND_SRCALPHA, destBlend=BW_BLEND_ONE):
     """This depth-of-field output phase uses variable-sized point sprites
     to simulate the circle of confusion for depth-of-field.  It accepts
     an arbitrary bokeh texture map, but uses large amounts of fill-rate."""
@@ -122,7 +122,7 @@ def buildDOFBokehControlPhase(input, depthBlurTexture, output, srcBlend = BW_BLE
 
 
 @implementPhaseFactory('Depth of Field transfer (bokeh control)', 'Depth of field transfer phase specifically for use by depth-of-field (bokeh control).', None, None)
-def buildDOFBokehControlTransferPhase(inputTexture, depthBlurTexture, srcBlend = BW_BLEND_SRCALPHA, destBlend = BW_BLEND_INVSRCALPHA):
+def buildDOFBokehControlTransferPhase(inputTexture, depthBlurTexture, srcBlend=BW_BLEND_SRCALPHA, destBlend=BW_BLEND_INVSRCALPHA):
     p = buildPhase(inputTexture, None, 'shaders/post_processing/depth_of_field2_transfer.fx', straightTransfer4Tap, srcBlend, destBlend)
     p.material.depthBlurTexture = depthBlurTexture
     p.name = 'depth of field transfer (bokeh control)'

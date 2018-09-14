@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortIntelligenceWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -8,29 +8,22 @@ class FortIntelligenceWindowMeta(AbstractWindowView):
         self._printOverrideError('requestClanFortInfo')
 
     def as_setClanFortInfoS(self, clanFortVO):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setClanFortInfo(clanFortVO)
+        return self.flashObject.as_setClanFortInfo(clanFortVO) if self._isDAAPIInited() else None
 
     def as_setDataS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setData(value)
+        return self.flashObject.as_setData(value) if self._isDAAPIInited() else None
 
     def as_setStatusTextS(self, statusText):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setStatusText(statusText)
+        return self.flashObject.as_setStatusText(statusText) if self._isDAAPIInited() else None
 
     def as_getSearchDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getSearchDP()
+        return self.flashObject.as_getSearchDP() if self._isDAAPIInited() else None
 
     def as_getCurrentListIndexS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getCurrentListIndex()
+        return self.flashObject.as_getCurrentListIndex() if self._isDAAPIInited() else None
 
     def as_selectByIndexS(self, index):
-        if self._isDAAPIInited():
-            return self.flashObject.as_selectByIndex(index)
+        return self.flashObject.as_selectByIndex(index) if self._isDAAPIInited() else None
 
     def as_setTableHeaderS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTableHeader(data)
+        return self.flashObject.as_setTableHeader(data) if self._isDAAPIInited() else None

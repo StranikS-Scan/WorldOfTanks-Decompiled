@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/ValueTracker.py
 import functools
 import BigWorld
@@ -12,7 +12,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 class ValueTracker(CallbackDelayer):
     _ENABLED = True and constants.IS_DEVELOPMENT
     __instance = None
-    textGui = property(lambda self: (self.__textGui if constants.IS_DEVELOPMENT else None))
+    textGui = property(lambda self: self.__textGui if constants.IS_DEVELOPMENT else None)
 
     @staticmethod
     def enable(isEnable):
@@ -61,7 +61,7 @@ class ValueTracker(CallbackDelayer):
         self.__items[name] = math.floor(value * 1000) / 1000
         self.__updateText()
 
-    def addValueAverage(self, name, value, maxAmount = 100):
+    def addValueAverage(self, name, value, maxAmount=100):
         curSum, curAm = self.__avgInfo.get(name, (None, 0))
         if curAm < maxAmount:
             curSum = curSum + value if curSum is not None else value

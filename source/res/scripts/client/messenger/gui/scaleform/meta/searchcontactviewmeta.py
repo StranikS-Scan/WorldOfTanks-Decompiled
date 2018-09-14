@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/SearchContactViewMeta.py
 from messenger.gui.Scaleform.view.BaseContactView import BaseContactView
 
@@ -8,13 +8,10 @@ class SearchContactViewMeta(BaseContactView):
         self._printOverrideError('search')
 
     def as_getSearchDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getSearchDP()
+        return self.flashObject.as_getSearchDP() if self._isDAAPIInited() else None
 
     def as_setSearchResultTextS(self, message):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSearchResultText(message)
+        return self.flashObject.as_setSearchResultText(message) if self._isDAAPIInited() else None
 
     def as_setSearchDisabledS(self, coolDown):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSearchDisabled(coolDown)
+        return self.flashObject.as_setSearchDisabled(coolDown) if self._isDAAPIInited() else None

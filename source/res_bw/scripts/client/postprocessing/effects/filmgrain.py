@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Effects/FilmGrain.py
 from PostProcessing.RenderTargets import *
 from PostProcessing import Effect
@@ -15,7 +15,7 @@ alpha2 = MaterialFloatProperty(_effectName, -1, 'alpha')
 speed2 = MaterialFloatProperty(_effectName, -1, 'speed')
 scale2 = MaterialFloatProperty(_effectName, -1, 'scale')
 
-def buildFilmGrainPhase(inputTextures, punchcard, output, fxFile, sampleProvider = straightTransfer4Tap, srcBlend = BW_BLEND_ONE, destBlend = BW_BLEND_ZERO):
+def buildFilmGrainPhase(inputTextures, punchcard, output, fxFile, sampleProvider=straightTransfer4Tap, srcBlend=BW_BLEND_ONE, destBlend=BW_BLEND_ZERO):
     p = Phase()
     m = Material(fxFile)
     m.punchcard = punchcard

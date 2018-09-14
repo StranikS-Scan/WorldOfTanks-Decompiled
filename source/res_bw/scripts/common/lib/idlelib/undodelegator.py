@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/UndoDelegator.py
 import string
 from Tkinter import *
@@ -64,10 +64,10 @@ class UndoDelegator(Delegator):
             if self.saved_change_hook:
                 self.saved_change_hook()
 
-    def insert(self, index, chars, tags = None):
+    def insert(self, index, chars, tags=None):
         self.addcmd(InsertCommand(index, chars, tags))
 
-    def delete(self, index1, index2 = None):
+    def delete(self, index1, index2=None):
         self.addcmd(DeleteCommand(index1, index2))
 
     def undo_block_start(self):
@@ -84,7 +84,7 @@ class UndoDelegator(Delegator):
                     cmd = cmd.getcmd(0)
                 self.addcmd(cmd, 0)
 
-    def addcmd(self, cmd, execute = True):
+    def addcmd(self, cmd, execute=True):
         if execute:
             cmd.do(self.delegate)
         if self.undoblock != 0:
@@ -130,7 +130,7 @@ class UndoDelegator(Delegator):
 class Command:
     tags = None
 
-    def __init__(self, index1, index2, chars, tags = None):
+    def __init__(self, index1, index2, chars, tags=None):
         self.marks_before = {}
         self.marks_after = {}
         self.index1 = index1
@@ -176,7 +176,7 @@ class Command:
 
 class InsertCommand(Command):
 
-    def __init__(self, index1, chars, tags = None):
+    def __init__(self, index1, chars, tags=None):
         Command.__init__(self, index1, None, chars, tags)
         return
 
@@ -221,13 +221,12 @@ class InsertCommand(Command):
     def classify(self, c):
         if c in self.alphanumeric:
             return 'alphanumeric'
-        if c == '\n':
-            return 'newline'
+        return 'newline' if c == '\n' else 'punctuation'
 
 
 class DeleteCommand(Command):
 
-    def __init__(self, index1, index2 = None):
+    def __init__(self, index1, index2=None):
         Command.__init__(self, index1, index2, None, None)
         return
 
@@ -290,7 +289,7 @@ class CommandSequence(Command):
         for cmd in cmds:
             cmd.undo(text)
 
-    def bump_depth(self, incr = 1):
+    def bump_depth(self, incr=1):
         self.depth = self.depth + incr
         return self.depth
 

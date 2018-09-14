@@ -1,10 +1,11 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/UserList.py
 """A more or less complete user-defined wrapper around list objects."""
 import collections
 
 class UserList(collections.MutableSequence):
 
-    def __init__(self, initlist = None):
+    def __init__(self, initlist=None):
         self.data = []
         if initlist is not None:
             if type(initlist) == type(self.data):
@@ -122,7 +123,7 @@ class UserList(collections.MutableSequence):
     def insert(self, i, item):
         self.data.insert(i, item)
 
-    def pop(self, i = -1):
+    def pop(self, i=-1):
         return self.data.pop(i)
 
     def remove(self, item):

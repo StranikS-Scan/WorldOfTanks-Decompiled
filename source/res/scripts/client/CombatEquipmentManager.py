@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CombatEquipmentManager.py
 from AvatarInputHandler import mathUtils
 import BigWorld
@@ -44,7 +44,7 @@ class _DebugFrontLine(CallbackDelayer):
 
 class CombatEquipmentManager(object):
 
-    def testArtyStrike(self, id = 33, offset = Vector3(0, 0, 0)):
+    def testArtyStrike(self, id=33, offset=Vector3(0, 0, 0)):
         if not IS_DEVELOPMENT:
             return
         else:

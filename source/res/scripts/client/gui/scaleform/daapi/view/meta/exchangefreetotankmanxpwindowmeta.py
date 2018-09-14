@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ExchangeFreeToTankmanXpWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -14,13 +14,10 @@ class ExchangeFreeToTankmanXpWindowMeta(AbstractWindowView):
         self._printOverrideError('calcValueRequest')
 
     def as_setInitDataS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setInitData(value)
+        return self.flashObject.as_setInitData(value) if self._isDAAPIInited() else None
 
     def as_setCalcValueResponseS(self, price, actionPriceData):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setCalcValueResponse(price, actionPriceData)
+        return self.flashObject.as_setCalcValueResponse(price, actionPriceData) if self._isDAAPIInited() else None
 
     def as_setWalletStatusS(self, walletStatus):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setWalletStatus(walletStatus)
+        return self.flashObject.as_setWalletStatus(walletStatus) if self._isDAAPIInited() else None

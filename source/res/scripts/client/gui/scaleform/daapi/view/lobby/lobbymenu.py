@@ -1,7 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyMenu.py
 from adisp import process
-from helpers import i18n
+from helpers import i18n, getClientVersion
 from gui import DialogsInterface, game_control
 from gui.app_loader import g_appLoader
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
@@ -53,7 +53,4 @@ class LobbyMenu(LobbyMenuMeta):
         return
 
     def __getPatchPromoMessage(self):
-        if game_control.g_instance.promo.isPatchPromoAvailable():
-            return (i18n.makeString(MENU.PROMO_PATCH_MESSAGE),)
-        else:
-            return None
+        return i18n.makeString(MENU.PROMO_PATCH_MESSAGE, version=getClientVersion()) if game_control.g_instance.promo.isPatchPromoAvailable() else None

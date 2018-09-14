@@ -1,14 +1,14 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/avatar_getter.py
 import BigWorld
 import constants
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 
-def isForcedGuiControlMode(avatar = None):
+def isForcedGuiControlMode(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
-        result = avatar.isForcedGuiControlMode
+        result = avatar.isForcedGuiControlMode()
     except AttributeError:
         LOG_WARNING('Attribute "isForcedGuiControlMode" is not found')
         result = False
@@ -16,7 +16,14 @@ def isForcedGuiControlMode(avatar = None):
     return result
 
 
-def getPlayerName(avatar = None):
+def setForcedGuiControlMode(value, stopVehicle=True, enableAiming=True):
+    try:
+        BigWorld.player().setForcedGuiControlMode(value, stopVehicle=stopVehicle, enableAiming=enableAiming)
+    except AttributeError:
+        pass
+
+
+def getPlayerName(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -28,19 +35,19 @@ def getPlayerName(avatar = None):
     return result
 
 
-def getPlayerTeam(avatar = None):
+def getPlayerTeam(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     return getattr(avatar, 'team', 0)
 
 
-def getPlayerVehicleID(avatar = None):
+def getPlayerVehicleID(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     return getattr(avatar, 'playerVehicleID', 0)
 
 
-def isVehicleAlive(avatar = None):
+def isVehicleAlive(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -52,7 +59,7 @@ def isVehicleAlive(avatar = None):
     return result
 
 
-def isVehicleInFire(avatar = None):
+def isVehicleInFire(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -64,7 +71,7 @@ def isVehicleInFire(avatar = None):
     return result
 
 
-def getVehicleDeviceStates(avatar = None):
+def getVehicleDeviceStates(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -76,7 +83,7 @@ def getVehicleDeviceStates(avatar = None):
     return result
 
 
-def getVehicleTypeDescriptor(avatar = None):
+def getVehicleTypeDescriptor(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -88,7 +95,7 @@ def getVehicleTypeDescriptor(avatar = None):
     return result
 
 
-def getVehicleExtrasDict(avatar = None):
+def getVehicleExtrasDict(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -100,7 +107,7 @@ def getVehicleExtrasDict(avatar = None):
     return result
 
 
-def getSoundNotifications(avatar = None):
+def getSoundNotifications(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -112,7 +119,7 @@ def getSoundNotifications(avatar = None):
     return result
 
 
-def isPlayerOnArena(avatar = None):
+def isPlayerOnArena(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -124,7 +131,7 @@ def isPlayerOnArena(avatar = None):
     return result
 
 
-def getInputHandler(avatar = None):
+def getInputHandler(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -136,7 +143,7 @@ def getInputHandler(avatar = None):
     return result
 
 
-def getArena(avatar = None):
+def getArena(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -148,7 +155,7 @@ def getArena(avatar = None):
     return result
 
 
-def getArenaUniqueID(avatar = None):
+def getArenaUniqueID(avatar=None):
     try:
         return getArena(avatar).arenaUniqueID
     except AttributeError:
@@ -157,7 +164,7 @@ def getArenaUniqueID(avatar = None):
     return None
 
 
-def getMaxTeamsOnArena(avatar = None):
+def getMaxTeamsOnArena(avatar=None):
     try:
         return getArena(avatar).arenaType.maxTeamsInArena
     except AttributeError:
@@ -166,7 +173,7 @@ def getMaxTeamsOnArena(avatar = None):
     return constants.TEAMS_IN_ARENA.MIN_TEAMS
 
 
-def updateVehicleSetting(code, value, avatar = None):
+def updateVehicleSetting(code, value, avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -178,7 +185,7 @@ def updateVehicleSetting(code, value, avatar = None):
     return
 
 
-def changeVehicleSetting(code, value, avatar = None):
+def changeVehicleSetting(code, value, avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -189,7 +196,7 @@ def changeVehicleSetting(code, value, avatar = None):
     return
 
 
-def activateAvatarEquipment(equipmentID, avatar = None):
+def activateAvatarEquipment(equipmentID, avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -200,7 +207,7 @@ def activateAvatarEquipment(equipmentID, avatar = None):
     return
 
 
-def leaveArena(avatar = None):
+def leaveArena(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -211,7 +218,7 @@ def leaveArena(avatar = None):
     return
 
 
-def refreshShotDispersionAngle(avatar = None):
+def refreshShotDispersionAngle(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
     try:

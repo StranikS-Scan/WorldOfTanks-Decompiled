@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBattleDirectionPopover.py
 import operator
 import sys
@@ -22,7 +22,7 @@ from gui.shared.formatters import text_styles, icons
 class FortBattleDirectionPopover(FortBattleDirectionPopoverMeta, FortViewHelper):
     INVALIDATE_INTERVAL = 60
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortBattleDirectionPopover, self).__init__()
         self._direction = ctx.get('data')
         self.__updateCallbackID = None

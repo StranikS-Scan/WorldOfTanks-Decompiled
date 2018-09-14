@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/club_layout.py
 from dossiers2.common.DossierBlockBuilders import *
 from battle_statistics_layouts import *

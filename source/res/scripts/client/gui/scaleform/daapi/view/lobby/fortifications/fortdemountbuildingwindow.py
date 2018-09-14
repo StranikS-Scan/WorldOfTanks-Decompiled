@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortDemountBuildingWindow.py
 import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
@@ -16,7 +16,7 @@ from helpers import i18n
 
 class FortDemountBuildingWindow(FortDemountBuildingWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FortDemountBuildingWindow, self).__init__()
         self.__buildingID = ctx.get('data', None)
         self.__formattedBuildingName = i18n.makeString(ALIAS.buildings_buildingname(self.__buildingID))
@@ -50,7 +50,7 @@ class FortDemountBuildingWindow(FortDemountBuildingWindowMeta, FortViewHelper):
         super(FortDemountBuildingWindow, self)._dispose()
         return
 
-    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
         if self.__buildingIntID == buildingTypeID and reason == BUILDING_UPDATE_REASON.DELETED:
             self.destroy()
 

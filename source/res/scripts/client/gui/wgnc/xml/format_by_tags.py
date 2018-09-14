@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/format_by_tags.py
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
@@ -162,8 +162,7 @@ class _LinkFormatter(_TagFormatter):
             if not actions:
                 LOG_WARNING('Actions are empty. It is removed', tag)
                 yield (tag, '')
-            else:
-                yield (tag, _LINK_HTML.format(actions, label))
+            yield (tag, _LINK_HTML.format(actions, label))
 
     def _makePattern(self, name):
         return re.compile('(<{0} actions=(["|\\\']+?)(.+?)\\2>(.+?)</{0}>)'.format(name), _RE_FLAGS)

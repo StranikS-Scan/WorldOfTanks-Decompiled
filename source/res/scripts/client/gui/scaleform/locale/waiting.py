@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/WAITING.py
 
 
@@ -188,12 +188,12 @@ class WAITING(object):
     def message(key):
         outcome = '#waiting:message/%s' % key
         if outcome not in WAITING.MESSAGE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def titles(key):
         outcome = '#waiting:titles/%s' % key
         if outcome not in WAITING.TITLES_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

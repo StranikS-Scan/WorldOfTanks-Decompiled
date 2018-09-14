@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/GameInputMgr.py
 import Keys
 import CommandMapping
@@ -19,7 +19,7 @@ class GameInputMgr(GameInputManagerMeta):
         if keyCode == self.__voiceChatKey and VOIP.getVOIPManager().getCurrentChannel():
             VOIP.getVOIPManager().setMicMute(True if eventType == 'keyUp' else False)
 
-    def updateChatKeyHandlers(self, value = None):
+    def updateChatKeyHandlers(self, value=None):
         if value and self.__voiceChatKey != value:
             self._clearChatKeyHandlers()
             if value is None:

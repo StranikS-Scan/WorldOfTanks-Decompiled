@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CompaniesWindowMeta.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
@@ -26,21 +26,16 @@ class CompaniesWindowMeta(AbstractWindowView):
         self._printOverrideError('getClientID')
 
     def as_getCompaniesListDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getCompaniesListDP()
+        return self.flashObject.as_getCompaniesListDP() if self._isDAAPIInited() else None
 
     def as_showPlayersListS(self, index):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showPlayersList(index)
+        return self.flashObject.as_showPlayersList(index) if self._isDAAPIInited() else None
 
     def as_setDefaultFilterS(self, creatorMask, isNotInBattle, division):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setDefaultFilter(creatorMask, isNotInBattle, division)
+        return self.flashObject.as_setDefaultFilter(creatorMask, isNotInBattle, division) if self._isDAAPIInited() else None
 
     def as_setRefreshCoolDownS(self, time):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setRefreshCoolDown(time)
+        return self.flashObject.as_setRefreshCoolDown(time) if self._isDAAPIInited() else None
 
     def as_disableCreateButtonS(self, isDisable):
-        if self._isDAAPIInited():
-            return self.flashObject.as_disableCreateButton(isDisable)
+        return self.flashObject.as_disableCreateButton(isDisable) if self._isDAAPIInited() else None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/DraggableComponent.py
 import BigWorld, GUI, Math, Keys
 import Utils
@@ -46,8 +46,7 @@ def _horzAnchorOffset(component):
         return 0
     if component.horizontalAnchor == 'CENTER':
         return -component.width / 2.0
-    if component.horizontalAnchor == 'RIGHT':
-        return -component.width
+    return -component.width if component.horizontalAnchor == 'RIGHT' else None
 
 
 def _vertAnchorOffset(component):
@@ -55,8 +54,7 @@ def _vertAnchorOffset(component):
         return 0
     if component.verticalAnchor == 'CENTER':
         return component.height / 2.0
-    if component.verticalAnchor == 'BOTTOM':
-        return component.height
+    return component.height if component.verticalAnchor == 'BOTTOM' else None
 
 
 class ComponentDragManager:

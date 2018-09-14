@@ -11,7 +11,6 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from helpers import i18n
-_UPDATE_LOCKS_PERIOD = 60
 
 class _SUPPLY_ITEMS(object):
     BUY_TANK = 0
@@ -83,6 +82,11 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         """
         return bool(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.RENT))
 
+    def hasEventVehicles(self):
+        """ Returns True if there is at least one event vehicle, False otherwise
+        """
+        return bool(self._getFilteredVehicles(REQ_CRITERIA.VEHICLE.EVENT))
+
     def getTotalVehiclesCount(self):
         """ Get number of vehicles without applied filter.
         """
@@ -118,6 +122,16 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self.clear()
         self._dispose()
 
+    def selectVehicle(self, filteredIdx):
+        """ Select one of vehicles.
+        
+        :param filteredIdx: index in the carousel with applied filter (i.e. what user sees)
+        """
+        realIdx = self._filteredIndices[filteredIdx]
+        vehicle = self._vehicles[realIdx]
+        self._selectedIdx = filteredIdx
+        self._currentVehicle.selectVehicle(vehicle.invID)
+
     def updateSupplies(self):
         """ Update the supply slots: 'buy tank' and 'buy slot'.
         """
@@ -126,29 +140,19 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self.flashObject.invalidateItems(self.__getSupplyIndices(), self._supplyItems)
         self.applyFilter()
 
-    def updateVehicles(self, vehicles=None, filterCriteria=None):
-        isFullResync = vehicles is None and filterCriteria is None
+    def updateVehicles(self, vehiclesCDs=None, filterCriteria=None):
+        isFullResync = vehiclesCDs is None and filterCriteria is None
         filterCriteria = filterCriteria or REQ_CRITERIA.EMPTY
-        if vehicles:
-            filterCriteria |= REQ_CRITERIA.IN_CD_LIST(vehicles)
-        vehiclesCollection = self._itemsCache.items.getVehicles(self._baseCriteria | filterCriteria)
-        isVehicleRemoved = not set(vehicles or ()).issubset(vehiclesCollection.viewkeys())
-        isVehicleAdded = not set(vehicles or ()).issubset(self._vehicles)
+        if vehiclesCDs:
+            filterCriteria |= REQ_CRITERIA.IN_CD_LIST(vehiclesCDs)
+        newVehiclesCollection = self._itemsCache.items.getVehicles(self._baseCriteria | filterCriteria)
+        oldVehiclesCDs = [ vehicle.intCD for vehicle in self._vehicles ]
+        isVehicleRemoved = not set(vehiclesCDs or ()).issubset(newVehiclesCollection.viewkeys())
+        isVehicleAdded = not set(vehiclesCDs or ()).issubset(oldVehiclesCDs)
         if isFullResync or isVehicleAdded or isVehicleRemoved:
             self.buildList()
         else:
-            updateIndices = []
-            updateVehicles = []
-            for intCD, newVehicle in vehiclesCollection.iteritems():
-                for idx, oldVehicle in enumerate(self._vehicles):
-                    if oldVehicle.invID == newVehicle.invID:
-                        self._vehicleItems[idx] = self._getVehicleDataVO(newVehicle)
-                        self._vehicles[idx] = newVehicle
-                        updateIndices.append(idx)
-                        updateVehicles.append(self._vehicleItems[idx])
-
-            self.flashObject.invalidateItems(updateIndices, updateVehicles)
-            self.applyFilter()
+            self._updateVehicleItems(newVehiclesCollection)
         return
 
     def buildList(self):
@@ -162,12 +166,10 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         """ Apply filters and sort items in the carousel.
         """
         prevFilteredIndices = self._filteredIndices[:]
+        prevSelectedIdx = self._selectedIdx
         self._filteredIndices = []
-        if self._currentVehicle.isPresent():
-            currentVehicleInvID = self._currentVehicle.item.invID
-        else:
-            currentVehicleInvID = None
-        selectedItemID = -1
+        self._selectedIdx = -1
+        currentVehicleInvID = self._currentVehicle.invID
         visibleVehiclesInvIDs = [ vehicle.invID for vehicle in self._getCurrentVehicles() ]
         sortedVehicleIndices = _sortedIndices(self._vehicles, _vehicleComparisonKey)
         for idx in sortedVehicleIndices:
@@ -175,19 +177,15 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
             if vehicle.invID in visibleVehiclesInvIDs:
                 self._filteredIndices.append(idx)
                 if currentVehicleInvID == vehicle.invID:
-                    selectedItemID = len(self._filteredIndices) - 1
+                    self._selectedIdx = len(self._filteredIndices) - 1
 
         supplyIndices = self.__getSupplyIndices()
         if not self._emptySlotsCount:
             supplyIndices.pop(_SUPPLY_ITEMS.BUY_TANK)
         self._filteredIndices += supplyIndices
-        self._selectedIdx = selectedItemID
-        if prevFilteredIndices != self._filteredIndices:
+        needUpdate = prevFilteredIndices != self._filteredIndices or prevSelectedIdx != self._selectedIdx
+        if needUpdate:
             self.flashObject.as_setFilter(self._filteredIndices)
-        return
-
-    def _populate(self):
-        super(CarouselDataProvider, self)._populate()
 
     def _dispose(self):
         self._filter = None
@@ -227,6 +225,24 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
             self._vehicleItems.append(self._getVehicleDataVO(vehicle))
 
         self.app.imageManager.loadImages(vehicleIcons)
+
+    def _updateVehicleItems(self, vehiclesCollection):
+        """ Selectively update provided vehicles.
+        
+        :param vehiclesCollection: instance of ItemsCollection with vehicles to update.
+        """
+        updateIndices = []
+        updateVehicles = []
+        for intCD, newVehicle in vehiclesCollection.iteritems():
+            for idx, oldVehicle in enumerate(self._vehicles):
+                if oldVehicle.invID == newVehicle.invID:
+                    self._vehicleItems[idx] = self._getVehicleDataVO(newVehicle)
+                    self._vehicles[idx] = newVehicle
+                    updateIndices.append(idx)
+                    updateVehicles.append(self._vehicleItems[idx])
+
+        self.flashObject.invalidateItems(updateIndices, updateVehicles)
+        self.applyFilter()
 
     def _buildSupplyItems(self):
         self._supplyItems = []

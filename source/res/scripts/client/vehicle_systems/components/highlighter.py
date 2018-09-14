@@ -14,10 +14,15 @@ class Highlighter(assembly_utility.Component):
     def enabled(self):
         return self.__highlightStatus != self.HIGHLIGHT_OFF
 
+    @property
+    def locked(self):
+        return self.__lock
+
     def __init__(self, vehicle):
         super(Highlighter, self).__init__()
         self.__vehicle = vehicle
         self.__highlightStatus = self.HIGHLIGHT_OFF
+        self.__lock = False
 
     def destroy(self):
         if self.__highlightStatus != self.HIGHLIGHT_OFF:
@@ -26,7 +31,12 @@ class Highlighter(assembly_utility.Component):
         self.__vehicle = None
         return
 
-    def highlight(self, enable, forceSimpleEdge=False):
+    def lock(self, lock):
+        self.__lock = lock
+
+    def highlight(self, enable, forceSimpleEdge=False, ignoreLock=False):
+        if self.__lock and not ignoreLock:
+            return
         vehicle = self.__vehicle
         if self.__highlightStatus != self.HIGHLIGHT_OFF:
             BigWorld.wgDelEdgeDetectEntity(vehicle)

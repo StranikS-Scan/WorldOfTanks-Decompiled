@@ -5,8 +5,8 @@ import calendar
 import datetime
 import XmlConfigReader
 from debug_utils import LOG_DEBUG, LOG_WARNING
-from goodies import goodie_constants
-from goodies import goodie_helpers
+import goodie_constants
+import goodie_helpers
 _CONFIG_FILE = 'scripts/server_xml/goodies.xml'
 g_cache = None
 

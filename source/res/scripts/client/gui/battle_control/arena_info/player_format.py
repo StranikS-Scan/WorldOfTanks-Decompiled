@@ -72,7 +72,10 @@ class PlayerFullNameFormatter(object):
             else:
                 vehName = vehType.name
         if playerName is None:
-            playerName = self._normalizePlayerName(vInfoVO.player.getPlayerLabel())
+            if vehType.isMark1:
+                playerName = ''
+            else:
+                playerName = self._normalizePlayerName(vInfoVO.player.getPlayerLabel())
         clanAbbrev = ''
         if self.__isClanShown:
             clanAbbrev = vInfoVO.player.clanAbbrev

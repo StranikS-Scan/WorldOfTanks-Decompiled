@@ -1264,6 +1264,24 @@
     </inf_env414_Pole_Touchdown>
   </fallingAtoms>
   <fragiles>
+    <inf_gaf_122_01_PersonnelObstacles>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf_122_01_PersonnelObstacles.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wire_barricade	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_gaf_122_01_PersonnelObstacles>
     <inf_env_18_01_FallingApplesSign>
       <variant1>
         <stages>
@@ -8814,7 +8832,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
+            <wwsound>	obj_wood_crash_light	</wwsound>
           </sound>
         </effects>
       </variant1>

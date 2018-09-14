@@ -112,7 +112,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'allowedNotSupportedGraphicSettings': {},
  'userRoomsService': '',
  'cryptLoginInfo': True,
- 'compulsoryIntroVideos': []}
+ 'compulsoryIntroVideos': [],
+ 'forumUrl': []}
 
 class GuiSettings(object):
 

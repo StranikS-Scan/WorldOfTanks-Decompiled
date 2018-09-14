@@ -4,7 +4,6 @@ import math
 from functools import partial
 import BigWorld
 import CommandMapping
-import SoundGroups
 from constants import EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
@@ -335,8 +334,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                 self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
                 self.__updateOrderSlot(idx, item)
             else:
-                if not quantity:
-                    SoundGroups.g_instance.playSound2D('battle_equipment_%d' % intCD)
                 self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
                 self.onPopUpClosed()
         else:

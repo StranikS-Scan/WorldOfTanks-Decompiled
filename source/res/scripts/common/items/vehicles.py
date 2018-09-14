@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicles.py
+import pprint
 import BigWorld
 import ResMgr
 from Math import Vector2, Vector3
@@ -43,6 +44,14 @@ VEHICLE_DEVICE_TYPE_NAMES = ('engine',
  'fuelTank',
  'radio',
  'track',
+ 'gun',
+ 'turretRotator',
+ 'surveyingDevice')
+WHEEL_VEHICLE_DEVICE_TYPE_NAMES = ('engine',
+ 'ammoBay',
+ 'fuelTank',
+ 'radio',
+ 'wheel',
  'gun',
  'turretRotator',
  'surveyingDevice')
@@ -110,6 +119,8 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'gun/reloadTime': 1.0,
  'gun/aimingTime': 1.0,
  'gun/canShoot': True,
+ 'gun/canShoot/0': True,
+ 'gun/canShoot/1': True,
  'engine/fireStartingChance': 1.0,
  'healthBurnPerSecLossFraction': 1.0,
  'repairSpeed': 1.0,
@@ -173,6 +184,11 @@ class VehicleDescr(object):
         self.turret, self.gun = self.turrets[turretPosition]
         self.__activeTurretPos = turretPosition
         self.activeGunShotIndex = 0
+        if 'markI' in self.type.tags and not IS_CLIENT:
+            self.secondTurret = copy.deepcopy(self.turret)
+            self.secondGun = copy.deepcopy(self.gun)
+            self.secondTurret['gunPosition'].x *= -1
+            self.secondGun['turretYawLimits'] = (-self.secondGun['turretYawLimits'][1], -self.secondGun['turretYawLimits'][0])
 
     activeTurretPosition = property(lambda self: self.__activeTurretPos, __set_activeTurretPos)
 
@@ -849,6 +865,11 @@ class VehicleDescr(object):
                 self.hull = type.hulls[0]
             else:
                 self.hull = self.__selectBestHull(self.turrets, self.chassis)
+            if 'markI' in type.tags and not IS_CLIENT:
+                turretPosition = self.hull['turretPositions'][0]
+                secondTurretPosition = copy.deepcopy(turretPosition)
+                secondTurretPosition.x *= -1
+                self.hull['turretPositions'] = (turretPosition, secondTurretPosition)
             self.optionalDevices = [None] * NUM_OPTIONAL_DEVICE_SLOTS
             idx = NUM_OPTIONAL_DEVICE_SLOTS - 1
             while optionalDeviceSlots:
@@ -1066,9 +1087,18 @@ class VehicleType(object):
          'firePenalty': _xml.readFraction(xmlCtx, section, 'invisibility/firePenalty')}
         self.crewRoles = _readCrew(xmlCtx, section, 'crew')
         commonConfig = g_cache.commonConfig
-        if IS_CLIENT or IS_CELLAPP:
+        if IS_CELLAPP:
             self.extras = commonConfig['extras']
             self.extrasDict = commonConfig['extrasDict']
+            self.devices = commonConfig['_devices']
+            self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
+        if IS_CLIENT:
+            if 'wheeledVehicle' in self.tags:
+                self.extras = commonConfig['extrasOverrides']
+                self.extrasDict = commonConfig['extrasDictWithOverrides']
+            else:
+                self.extras = commonConfig['extras']
+                self.extrasDict = commonConfig['extrasDict']
             self.devices = commonConfig['_devices']
             self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
         if IS_BASEAPP or IS_WEB:
@@ -2234,11 +2264,25 @@ def _readChassis(xmlCtx, section, compactDescr, unlocksDescrs=None, parentItem=N
         _readUserText(res, section)
     if IS_CLIENT:
         res['models'] = _readModels(xmlCtx, section, 'models')
-        res['traces'] = {'lodDist': _readLodDist(xmlCtx, section, 'traces/lodDist'),
-         'bufferPrefs': _xml.readNonEmptyString(xmlCtx, section, 'traces/bufferPrefs'),
-         'textureSet': _xml.readNonEmptyString(xmlCtx, section, 'traces/textureSet'),
-         'centerOffset': res['topRightCarryingPoint'][0],
-         'size': _xml.readPositiveVector2(xmlCtx, section, 'traces/size')}
+        if 'wheeledVehicle' in res['tags']:
+            res['traces'] = []
+            for sname, subsection in _xml.getChildren(xmlCtx, section, 'traces'):
+                if sname == 'trace':
+                    ctx = (xmlCtx, 'traces/trace')
+                    t = {'lodDist': _readLodDist(ctx, subsection, 'lodDist'),
+                     'isLeading': _xml.readBool(ctx, subsection, 'isLeading'),
+                     'bufferPrefs': _xml.readNonEmptyString(ctx, subsection, 'bufferPrefs'),
+                     'textureSet': _xml.readNonEmptyString(ctx, subsection, 'textureSet'),
+                     'centerOffset': res['topRightCarryingPoint'][0],
+                     'size': _xml.readPositiveVector2(ctx, subsection, 'size')}
+                    res['traces'].append(t)
+
+        else:
+            res['traces'] = {'lodDist': _readLodDist(xmlCtx, section, 'traces/lodDist'),
+             'bufferPrefs': _xml.readNonEmptyString(xmlCtx, section, 'traces/bufferPrefs'),
+             'textureSet': _xml.readNonEmptyString(xmlCtx, section, 'traces/textureSet'),
+             'centerOffset': res['topRightCarryingPoint'][0],
+             'size': _xml.readPositiveVector2(xmlCtx, section, 'traces/size')}
         res['tracks'] = {'lodDist': _readLodDist(xmlCtx, section, 'tracks/lodDist'),
          'leftMaterial': _xml.readNonEmptyString(xmlCtx, section, 'tracks/leftMaterial'),
          'rightMaterial': _xml.readNonEmptyString(xmlCtx, section, 'tracks/rightMaterial'),
@@ -2426,9 +2470,20 @@ def _xphysicsParse_chassis(ctx, sec):
     res['wPushedSoftFactor'] = sec.readFloat('wPushedSoftFactor', 1.0)
     res['sideFrictionConstantRatio'] = sec.readFloat('sideFrictionConstantRatio', 0.0)
     res['angVelocityFactor0'] = sec.readFloat('angVelocityFactor0', 1.0)
+    axleCount = sec.readInt('axleCount', -1)
+    if axleCount != -1:
+        subsec = sec['wheels']
+        if subsec is not None:
+            res['wheels'] = {'steeringLockAngle': 0.7,
+             'steeringSpeed': 0.2}
+            res['wheels']['steeringLockAngle'] = subsec.readFloat('steeringLockAngle', 0.7)
+            res['wheels']['steeringSpeed'] = subsec.readFloat('steeringSpeed', 0.2)
+    else:
+        axleCount = 5
+    res['axleCount'] = axleCount
     floatArrParamsCommon = (('hullCOM', 3),
-     ('roadWheelPositions', 5),
-     ('stiffnessFactors', 5),
+     ('roadWheelPositions', axleCount),
+     ('stiffnessFactors', axleCount),
      ('hullInertiaFactors', 3))
     res.update(_parseFloatArrList(ctx, sec, floatArrParamsCommon))
     floatParamsDetailed = ('centerRotationFwdSpeed', 'rotationByLockChoker', 'fwLagRatio', 'bkLagRatio')
@@ -3607,6 +3662,8 @@ def _readCommonConfig(xmlCtx, section):
         res['miscParams']['explosionCandleVolumes'] = [ float(f) for f in _xml.readString(xmlCtx, section, 'miscParams/explosionCandleVolumes').split() ]
     if IS_CLIENT or IS_CELLAPP:
         res['extras'], res['extrasDict'] = _readExtras(xmlCtx, section, 'extras')
+        if IS_CLIENT:
+            res['extrasOverrides'], res['extrasDictWithOverrides'] = _readExtrasOverrides(xmlCtx, section, 'extrasOverrides', res['extras'], res['extrasDict'])
         res['materials'], res['_autoDamageKindMaterials'] = _readMaterials(xmlCtx, section, 'materials', res['extrasDict'])
         res['deviceExtraIndexToTypeIndex'], res['tankmanExtraIndexToTypeIndex'] = _readDeviceTypes(xmlCtx, section, 'deviceExtras', res['extrasDict'])
         res['_devices'] = frozenset((res['extras'][idx] for idx in res['deviceExtraIndexToTypeIndex'].iterkeys()))
@@ -3667,6 +3724,31 @@ def _readExtras(xmlCtx, section, subsectionName):
     if len(extras) > 200:
         _xml.raiseWrongXml(xmlCtx, subsectionName, 'too many extras')
     return (tuple(extras), extrasDict)
+
+
+def _readExtrasOverrides(xmlCtx, section, subsectionName, extras, overridenExtrasDict):
+    import vehicle_extras as mod
+    noneExtra = mod.NoneExtra('_NoneExtra', 0, '', None)
+    extras = list(extras)
+    extrasDictWithOverrides = overridenExtrasDict.copy()
+    for extraName, extraSection in _xml.getChildren(xmlCtx, section, subsectionName):
+        extraName = intern(extraName)
+        ctx = (xmlCtx, subsectionName + '/' + extraName)
+        overridenExtraName, sep, className = extraSection.asString.partition(':')
+        overridenExtraName = overridenExtraName.strip()
+        className = className.strip()
+        classObj = getattr(mod, className, None)
+        if classObj is None:
+            _xml.raiseWrongXml(ctx, '', "class '%s' is not found in '%s'" % (className, mod.__name__))
+        if overridenExtraName not in overridenExtrasDict:
+            _xml.raiseWrongXml(ctx, '', "'%s' is not found in extras" % overridenExtraName)
+        overridenExtra = overridenExtrasDict[overridenExtraName]
+        extra = classObj(extraName, overridenExtra.index, xmlCtx[1], extraSection)
+        extras[overridenExtra.index] = extra
+        extrasDictWithOverrides[extraName] = extra
+        extrasDictWithOverrides[overridenExtraName] = extra
+
+    return (tuple(extras), extrasDictWithOverrides)
 
 
 def _readDeviceTypes(xmlCtx, section, subsectionName, extrasDict):

@@ -46,6 +46,7 @@ class USER(object):
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
     VEHICLE_PREVIEW = 'vehiclePreview'
+    MARK_PREVIEW = 'markPreview'
 
 
 class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
@@ -334,6 +335,10 @@ class AppealCMHandler(BaseUserCMHandler):
         shared_events.showVehiclePreview(self._vehicleCD)
         shared_events.hideBattleResults()
 
+    def showMarkPreview(self):
+        shared_events.showMarkPreview()
+        shared_events.hideBattleResults()
+
     def _initFlashValues(self, ctx):
         self._vehicleCD = None
         vehicleCD = getattr(ctx, 'vehicleCD', None)
@@ -357,7 +362,8 @@ class AppealCMHandler(BaseUserCMHandler):
          DENUNCIATIONS.FORBIDDEN_NICK: 'appealForbiddenNick',
          DENUNCIATIONS.BOT: 'appealBot',
          USER.VEHICLE_INFO: 'showVehicleInfo',
-         USER.VEHICLE_PREVIEW: 'showVehiclePreview'})
+         USER.VEHICLE_PREVIEW: 'showVehiclePreview',
+         USER.MARK_PREVIEW: 'showMarkPreview'})
         return handlers
 
     def _addAppealInfo(self, options):

@@ -124,11 +124,6 @@ class CarouselFilter(_CarouselFilter):
         self._sections = (CAROUSEL_FILTER_1, CAROUSEL_FILTER_2)
         self._criteriesGroups = (EventCriteriesGroup(), BasicCriteriesGroup())
 
-    def update(self, params, save=True):
-        if 'igr' in params and params['igr']:
-            params['hideRented'] = False
-        super(CarouselFilter, self).update(params, save)
-
     def save(self):
         g_settingsCore.serverSettings.setSections(self._sections, self._filters)
 
@@ -227,8 +222,10 @@ class EventCriteriesGroup(CriteriesGroup):
     """ This group is especially for event vehicles.
     """
 
-    def apply(self, vehicle):
-        return True
+    def update(self, filters):
+        super(EventCriteriesGroup, self).update(filters)
+        if filters['hideEvent']:
+            self._criteria |= ~REQ_CRITERIA.VEHICLE.EVENT
 
     @staticmethod
     def isApplicableFor(vehicle):

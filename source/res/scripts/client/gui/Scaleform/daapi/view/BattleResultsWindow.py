@@ -10,6 +10,7 @@ from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.battle_control import arena_visitor
 from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
 from gui.battle_results.VehicleProgressHelper import VehicleProgressHelper, PROGRESS_ACTION
@@ -19,14 +20,14 @@ from gui.shared.event_dispatcher import showResearchView, showPersonalCase, show
 from gui.shared.utils.functions import getArenaSubTypeName
 import nations
 import potapov_quests
-from account_helpers.AccountSettings import AccountSettings
+from account_helpers.AccountSettings import AccountSettings, STATS_SORTING_EVENT
 from account_helpers import getAccountDatabaseID
 from account_shared import getFairPlayViolationName
 from debug_utils import LOG_DEBUG
 from helpers import i18n, time_utils
 from adisp import async, process
 from CurrentVehicle import g_currentVehicle
-from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, IGR_TYPE, EVENT_TYPE, FINISH_REASON as FR, FLAG_ACTION, TEAMS_IN_ARENA
+from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, IGR_TYPE, EVENT_TYPE, FINISH_REASON as FR, FLAG_ACTION, TEAMS_IN_ARENA, MARK1_TEAM_NUMBER
 from dossiers2.custom.records import RECORD_DB_IDS, DB_ID_TO_RECORD
 from dossiers2.ui import achievements
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD
@@ -65,6 +66,7 @@ def _wrapEmblemUrl(emblemUrl):
 RESULT_ = '#menu:finalStatistic/commonStats/resultlabel/{0}'
 BATTLE_RESULTS_STR = '#battle_results:{0}'
 FINISH_REASON = BATTLE_RESULTS_STR.format('finish/reason/{0}')
+FINISH_REASON_MARK1 = BATTLE_RESULTS_STR.format('finish/reason_mark1/{0}_{1}')
 CLAN_BATTLE_FINISH_REASON_DEF = BATTLE_RESULTS_STR.format('finish/clanBattle_reason_def/{0}')
 CLAN_BATTLE_FINISH_REASON_ATTACK = BATTLE_RESULTS_STR.format('finish/clanBattle_reason_attack/{0}')
 RESULT_LINE_STR = BATTLE_RESULTS_STR.format('details/calculations/{0}')
@@ -357,13 +359,28 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         return SystemMessages.pushI18nMessage('#system_messages:queue/isInQueue', type=SystemMessages.SM_TYPE.Error) if prbDispatcher and prbDispatcher.getFunctionalState().isNavigationDisabled() else quests_events.showEventsWindow(eID, eventType)
 
     def saveSorting(self, iconType, sortDirection, bonusType):
-        AccountSettings.setSettings('statsSorting' if bonusType != ARENA_BONUS_TYPE.SORTIE else 'statsSortingSortie', {'iconType': iconType,
+        AccountSettings.setSettings(self.__getStatsSortingKeyByBonus(bonusType), {'iconType': iconType,
          'sortDirection': sortDirection})
 
-    def __getPlayerName(self, playerDBID, bots, vID=None):
+    @staticmethod
+    def __getStatsSortingKeyByBonus(bonusType):
+        if bonusType == ARENA_BONUS_TYPE.SORTIE:
+            return 'statsSortingSortie'
+        elif bonusType == ARENA_BONUS_TYPE.EVENT_BATTLES:
+            return STATS_SORTING_EVENT
+        else:
+            return 'statsSorting'
+
+    def __getPlayerName(self, playerDBID, bots, vID=None, isMark1=False, isMark1Team=False):
         playerNameRes = self.__playersNameCache.get(playerDBID)
         if playerNameRes is None:
-            botName = bots.get(vID, (None, None))[1]
+            if isMark1:
+                if isMark1Team:
+                    botName = i18n.makeString(MESSENGER.BATTLE_UNKNOWN_ALLY)
+                else:
+                    botName = i18n.makeString(MESSENGER.BATTLE_UNKNOWN_ENEMY)
+            else:
+                botName = bots.get(vID, (None, None))[1]
             player = self.dataProvider.getPlayerData(playerDBID, botName)
             playerNameRes = (player.getFullName(), (player.name,
               player.clanAbbrev,
@@ -373,14 +390,15 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 self.__playersNameCache[playerDBID] = playerNameRes
         return playerNameRes
 
-    def __getVehicleData(self, vehicleCompDesc):
+    def __getVehicleData(self, vehicleCompDesc=None, vehicle=None):
         vehicleName = i18n.makeString(UNKNOWN_VEHICLE_NAME_VALUE)
         vehicleShortName = i18n.makeString(UNKNOWN_VEHICLE_NAME_VALUE)
         vehicleIcon = VEHICLE_ICON_FILE.format(VEHICLE_NO_IMAGE_FILE_NAME)
         vehicleIconSmall = VEHICLE_ICON_SMALL_FILE.format(VEHICLE_NO_IMAGE_FILE_NAME)
         nation = -1
-        if vehicleCompDesc:
+        if vehicle is None and vehicleCompDesc:
             vehicle = g_itemsCache.items.getItemByCD(vehicleCompDesc)
+        if vehicle:
             vehicleName = vehicle.userName
             vehicleShortName = vehicle.shortUserName
             vehicleIcon = vehicle.icon
@@ -1028,6 +1046,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         valsStr = makeHtmlString('html_templates:lobby/battle_results', 'tooltip_params_style', {'text': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_PARAMS_VAL)})
         bots = commonData.get('bots', {})
         details = []
+        isMark1Team = pCommonData.get('team') == MARK1_TEAM_NUMBER
         for techniquesGroup, enemiesGroup, basesGroup in self.__buildEfficiencyDataSource(pData, pCommonData, playersData, commonData):
             enemies = []
             for (vId, vIdx), iInfo in enemiesGroup:
@@ -1045,12 +1064,13 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 if vehsData:
                     vInfo = vehsData[0]
                     deathReason = vInfo.get('deathReason', -1)
-                _, result['vehicleName'], _, result['tankIcon'], _ = self.__getVehicleData(vIntCD)
+                vehicle = g_itemsCache.items.getItemByCD(vIntCD)
+                _, result['vehicleName'], _, result['tankIcon'], _ = self.__getVehicleData(vehicle=vehicle)
                 result['deathReason'] = deathReason
                 result['spotted'] = iInfo.get('spotted', 0)
                 result['piercings'] = iInfo.get('piercings', 0)
                 result['damageDealt'] = iInfo.get('damageDealt', 0)
-                playerNameData = self.__getPlayerName(accountDBID, bots, vId)
+                playerNameData = self.__getPlayerName(accountDBID, bots, vId, vehicle.isMark1, isMark1Team)
                 result['playerFullName'] = playerNameData[0]
                 result['playerName'], result['playerClan'], result['playerRegion'], _ = playerNameData[1]
                 result['vehicleId'] = vId
@@ -1060,8 +1080,8 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 result['isFake'] = False
                 result.update(self.__getDamageInfo(iInfo, valsStr))
                 result.update(self.__getArmorUsingInfo(iInfo, valsStr))
-                result.update(self.__getAssistInfo(iInfo, valsStr))
-                result.update(self.__getCritsInfo(iInfo))
+                result.update(self.__getAssistInfo(vehicle, iInfo, valsStr))
+                result.update(self.__getCritsInfo(vehicle, iInfo))
                 enemies.append(result)
 
             enemies = sorted(enemies, cmp=self.__vehiclesComparator)
@@ -1093,19 +1113,23 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
              'line3': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART3, vals=valsStr)})
         return armorUsingInfo
 
-    def __getAssistInfo(self, iInfo, valsStr):
+    def __getAssistInfo(self, vehicle, iInfo, valsStr):
         damageAssisted = iInfo.get('damageAssistedTrack', 0) + iInfo.get('damageAssistedRadio', 0)
         assistInfo = {'damageAssisted': damageAssisted}
         if damageAssisted > 0:
             assistInfo['damageAssistedVals'] = makeHtmlString('html_templates:lobby/battle_results', 'tooltip_three_liner', {'line1': BigWorld.wg_getIntegralFormat(iInfo['damageAssistedRadio']),
              'line2': BigWorld.wg_getIntegralFormat(iInfo['damageAssistedTrack']),
              'line3': BigWorld.wg_getIntegralFormat(damageAssisted)})
+            if vehicle.hasWheelBase:
+                line2TextID = BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART2_WHEEL
+            else:
+                line2TextID = BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART2
             assistInfo['damageAssistedNames'] = makeHtmlString('html_templates:lobby/battle_results', 'tooltip_three_liner', {'line1': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART1, vals=valsStr),
-             'line2': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART2, vals=valsStr),
+             'line2': i18n.makeString(line2TextID, vals=valsStr),
              'line3': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_TOTAL, vals=valsStr)})
         return assistInfo
 
-    def __getCritsInfo(self, iInfo):
+    def __getCritsInfo(self, vehicle, iInfo):
         destroyedTankmen = iInfo['crits'] >> 24 & 255
         destroyedDevices = iInfo['crits'] >> 12 & 4095
         criticalDevices = iInfo['crits'] & 4095
@@ -1113,13 +1137,14 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         criticalDevicesList = []
         destroyedDevicesList = []
         destroyedTankmenList = []
-        for shift in range(len(vehicles.VEHICLE_DEVICE_TYPE_NAMES)):
+        deviceTypeNames = vehicle.getDeviceTypeNames()
+        for shift in range(len(deviceTypeNames)):
             if 1 << shift & criticalDevices:
                 critsCount += 1
-                criticalDevicesList.append(self.__makeTooltipModuleLabel(vehicles.VEHICLE_DEVICE_TYPE_NAMES[shift], 'Critical'))
+                criticalDevicesList.append(self.__makeTooltipModuleLabel(deviceTypeNames[shift], 'Critical'))
             if 1 << shift & destroyedDevices:
                 critsCount += 1
-                destroyedDevicesList.append(self.__makeTooltipModuleLabel(vehicles.VEHICLE_DEVICE_TYPE_NAMES[shift], 'Destroyed'))
+                destroyedDevicesList.append(self.__makeTooltipModuleLabel(deviceTypeNames[shift], 'Destroyed'))
 
         for shift in range(len(vehicles.VEHICLE_TANKMAN_TYPE_NAMES)):
             if 1 << shift & destroyedTankmen:
@@ -1214,7 +1239,11 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 _frFormatter = lambda : i18n.makeString(CLAN_BATTLE_FINISH_REASON_ATTACK.format(''.join([str(1), str(status)])), buildingName=buildingName)
         else:
             commonDataOutput['resultShortStr'] = status
-            _frFormatter = lambda : _finishReasonFormatter(FINISH_REASON)
+            if bonusType == ARENA_BONUS_TYPE.EVENT_BATTLES:
+                commonDataOutput['isMark1Team'] = playerTeam == MARK1_TEAM_NUMBER
+                _frFormatter = lambda : i18n.makeString(FINISH_REASON_MARK1.format(playerTeam, finishReason))
+            else:
+                _frFormatter = lambda : _finishReasonFormatter(FINISH_REASON)
         if not self.__isFallout:
             commonDataOutput['finishReasonStr'] = _frFormatter()
         else:
@@ -1558,6 +1587,9 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 else:
                     teamIdx = 0 if team == playerTeam else 1
                     commonDataOutput['victoryScore'][teamIdx]['score'] += playerScore
+            if bonusType == ARENA_BONUS_TYPE.EVENT_BATTLES:
+                bonuses = vInfo.get('explosiveDelivered', 0) + vInfo.get('repairKitDelivered', 0)
+                row['mark1BonusDelivered'] = bonuses
             row['isSelf'] = isSelf
             prebattleID = pInfo.get('prebattleID', 0)
             row['prebattleID'] = prebattleID
@@ -1803,7 +1835,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             isFFA = isMultiTeamMode and findFirst(lambda prbID: prbID > 0, teams.itervalues()) is None
             isResource = self.__arenaVisitor.hasResourcePoints()
             isFlags = self.__arenaVisitor.hasFlags()
-            statsSorting = AccountSettings.getSettings('statsSorting' if bonusType != ARENA_BONUS_TYPE.SORTIE else 'statsSortingSortie')
+            statsSorting = AccountSettings.getSettings(self.__getStatsSortingKeyByBonus(bonusType))
             if self.__isFallout:
                 commonDataOutput['iconType'] = 'victoryScore'
                 commonDataOutput['sortDirection'] = 'descending'

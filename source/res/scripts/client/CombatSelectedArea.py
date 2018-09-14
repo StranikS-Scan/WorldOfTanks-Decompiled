@@ -78,6 +78,10 @@ class CombatSelectedArea(object):
         else:
             self.__matrix.translation = self.__nextPosition
 
+    def updatePosition(self, position):
+        self.__matrix.translation = position
+        self.__terrainSelectedArea.updateHeights()
+
     def setupDefault(self, position, direction, size, marker):
         self.setup(position, direction, size, DEFAULT_RADIUS_MODEL, COLOR_WHITE, marker)
 

@@ -26,6 +26,8 @@ class DAMAGE_INFO_PANEL_CONSTS(object):
     FIRST_RADIOMAN = 14
     SECOND_RADIOMAN = 15
     COMMANDER = 16
+    LEFT_WHEEL = 17
+    RIGHT_WHEEL = 18
     ITEM_ID = 0
     STATE_ID = 1
     IS_HIT = 'isHit'

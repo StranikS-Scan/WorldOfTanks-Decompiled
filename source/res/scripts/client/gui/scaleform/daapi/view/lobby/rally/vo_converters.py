@@ -351,8 +351,13 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
             isVisibleAdtMsg = player and player.isCurrentPlayer() and not vehicle
             additionMsg = ''
             if isVisibleAdtMsg:
-                vehiclesNames = [ veh.userName for veh in g_eventsCache.getEventVehicles() ]
-                additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName=', '.join(vehiclesNames)))
+                vehicles = g_eventsCache.getEventVehicles()
+                if vehicles:
+                    vehiclesName = vehicles[0].shortUserName
+                else:
+                    vehiclesName = ''
+                countourLink = '../maps/icons/vehicle/contour/uk-GB90_Lanchester_Armored_Car.png'
+                additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName=vehiclesName) + ' ' + icons.makeImageTag(countourLink, 50, 24, -7))
             slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
              'additionalMsg': additionMsg})
         if isFallout:

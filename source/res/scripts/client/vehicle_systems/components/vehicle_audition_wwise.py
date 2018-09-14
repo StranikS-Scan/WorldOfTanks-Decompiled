@@ -15,6 +15,8 @@ from vehicle_systems import assembly_utility
 from vehicle_systems.assembly_utility import TypedProperty, LinkDescriptor
 from vehicle_systems.components.engine_state import DetailedEngineStateWWISE
 from items.vehicles import HP_TO_WATTS
+import CommandMapping
+import collections
 from vehicle_systems.tankStructure import TankPartNames
 
 class EngineAudition(assembly_utility.Component):
@@ -40,13 +42,16 @@ class EngineAudition(assembly_utility.Component):
     def deviceRepairedToCritical(self, deviceName):
         pass
 
+    def onKeyTriggered(self, isDown, key, vehicle):
+        pass
+
 
 class TrackCrashAudition(assembly_utility.Component):
 
     def destroy(self):
         pass
 
-    def playCrashSound(self, isLeft=True, restore=False):
+    def playCrashSound(self, isLeft=True, restore=False, wheeledVehicle=False):
         pass
 
 
@@ -91,6 +96,7 @@ class EngineAuditionWWISE(EngineAudition):
         self.__event = None
         self.__eventC = None
         self.__cameraUnit = False
+        self.__stopMotionSounds = None
         self.__initSounds(compoundModel)
         BigWorld.player().inputHandler.onCameraChanged += self.__onCameraChanged
         return
@@ -156,6 +162,13 @@ class EngineAuditionWWISE(EngineAudition):
             self.__engineSound.setRTPC('RTPC_ext_engine_state', 0.0)
             self.__engineSound.setRTPC('RTPC_ext_physic_rpm_rel', 0.0)
             self.__engineSound.setRTPC('RTPC_ext_physic_rpm_abs', 0.0)
+            isWheeled = 'wheeledVehicle' in vehicle.typeDescriptor.type.tags
+            if isWheeled:
+                self.setBigGunSwitch(False)
+                soundsPair = collections.namedtuple('soundsPair', 'stop move')
+                keySound = collections.namedtuple('keySound', 'key down up')
+                soundSoft = 'armored_car_stop_motion_soft'
+                self.__stopMotionSounds = (keySound(key=CommandMapping.CMD_MOVE_FORWARD, down=soundsPair(stop=None, move=None), up=soundsPair(stop=None, move=soundSoft)), keySound(key=CommandMapping.CMD_MOVE_BACKWARD, down=soundsPair(stop=None, move=None), up=soundsPair(stop=None, move=soundSoft)), keySound(key=CommandMapping.CMD_BLOCK_TRACKS, down=soundsPair(stop=None, move=soundSoft), up=soundsPair(stop=None, move=None)))
             return
 
     def reattachTo(self, compoundModel):
@@ -391,6 +404,30 @@ class EngineAuditionWWISE(EngineAudition):
         if deviceName == 'engine':
             self.__engineSound.play('eng_restoring')
 
+    def onKeyTriggered(self, isDown, key, vehicle):
+        if self.__stopMotionSounds is None or vehicle is None:
+            return
+        else:
+            vehicleSpeed = vehicle.getSpeed()
+            isMoving = abs(vehicleSpeed) > 0.01
+            cmdMap = CommandMapping.g_instance
+            sound = None
+            for value in self.__stopMotionSounds:
+                if cmdMap.isFired(value.key, key):
+                    sounds = value.down if isDown else value.up
+                    sound = sounds.move if isMoving else sounds.stop
+                    break
+
+            if sound is not None and self.__movementSound is not None:
+                self.__movementSound.play(sound)
+            return
+
+    def setBigGunSwitch(self, isOn):
+        if isOn:
+            self.__gunSound.setSwitch('wpn_external_armored_car', 'ev_mark_big_gun_ext')
+        else:
+            self.__gunSound.setSwitch('wpn_external_armored_car', 'ev_mark_machine_gun_ext')
+
 
 class TrackCrashAuditionWWISE(TrackCrashAudition):
 
@@ -402,8 +439,14 @@ class TrackCrashAuditionWWISE(TrackCrashAudition):
         self.__trackCenterMProvs = None
         return
 
-    def playCrashSound(self, isLeft=True, restore=False):
+    def playCrashSound(self, isLeft=True, restore=False, wheeledVehicle=False):
         positionMatrix = Math.Matrix(self.__trackCenterMProvs[0 if isLeft else 1])
+        if wheeledVehicle:
+            if restore:
+                SoundGroups.g_instance.playSoundPos('gui_repair_wheel', positionMatrix.translation)
+            else:
+                SoundGroups.g_instance.playSoundPos('gui_brakedown_wheel', positionMatrix.translation)
+            return
         if restore:
             SoundGroups.g_instance.playSoundPos('repair_treads', positionMatrix.translation)
         else:

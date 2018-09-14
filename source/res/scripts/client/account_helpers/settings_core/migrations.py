@@ -223,6 +223,10 @@ def _migrateTo24(core, data, initialized):
     data['carousel_filter']['event'] = True
 
 
+def _migrateTo25(core, data, initialized):
+    data['carousel_filter']['hideEvent'] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -313,6 +317,10 @@ _versions = ((1,
   False),
  (24,
   _migrateTo24,
+  False,
+  False),
+ (25,
+  _migrateTo25,
   False,
   False))
 

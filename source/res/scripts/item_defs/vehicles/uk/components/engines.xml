@@ -58,6 +58,8 @@
     <Vickers-Armstrong_bot>	77	</Vickers-Armstrong_bot>
     <Leyland_L60_No_4>	78	</Leyland_L60_No_4>
     <Continental_AOI-1195-5>	79	</Continental_AOI-1195-5>
+    <Fosters_Daimler_6_cylinder>	80	</Fosters_Daimler_6_cylinder>
+    <Lanchester>	81	</Lanchester>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -998,6 +1000,40 @@
       <rpm_min>	274	</rpm_min>
       <rpm_max>	2921	</rpm_max>
     </Continental_AOI-1195-5>
+    <Fosters_Daimler_6_cylinder>
+      <userString>	#gb_vehicles:Fosters_Daimler_6_cylinder	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	ev_mark1_engine	</wwsoundNPC>
+      <power>	105	</power>
+      <weight>	300	</weight>
+      <maxHealth>	32	</maxHealth>
+      <maxRegenHealth>	15	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2361	</rpm_max>
+    </Fosters_Daimler_6_cylinder>
+    <Lanchester>
+      <userString>	#gb_vehicles:Lanchester	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	200	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_armored_car_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_armored_car_npc	</wwsoundNPC>
+      <power>	60	</power>
+      <weight>	250	</weight>
+      <maxHealth>	38	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1400	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
+    </Lanchester>
     <Rolls_Royse_Meteor_MkIVC_IGR>
       <userString>	#igr_vehicles:Rolls_Royse_Meteor_MkIVC_IGR	</userString>
       <tags>	gasoline	</tags>

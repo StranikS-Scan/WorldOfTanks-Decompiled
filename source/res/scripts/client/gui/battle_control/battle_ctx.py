@@ -16,14 +16,16 @@ class BattleContext(object):
         self.lastArenaUniqueID = None
         self.isInBattle = False
         self.wasInBattle = False
+        self.__isEventBattle = False
         return
 
-    def start(self, arenaDP):
+    def start(self, arenaDP, sessionProvider):
         prefs = Settings.g_instance.userPrefs
         if prefs is not None:
             self.__isShowVehShortName = prefs.readBool('showVehShortName', True)
         self.__arenaDP = arenaDP
         self.isInBattle = self.wasInBattle = True
+        self.__isEventBattle = sessionProvider.arenaVisitor.gui.isEventBattle()
         return
 
     def stop(self):
@@ -177,3 +179,6 @@ class BattleContext(object):
         if vID is None:
             vID = self.__arenaDP.getVehIDByAccDBID(accID)
         return self.__arenaDP.getVehicleInfo(vID).team in teams
+
+    def isEventBattle(self):
+        return self.__isEventBattle

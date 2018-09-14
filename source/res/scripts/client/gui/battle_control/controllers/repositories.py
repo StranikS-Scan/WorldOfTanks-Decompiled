@@ -23,6 +23,7 @@ from gui.battle_control.controllers import respawn_ctrl
 from gui.battle_control.controllers import team_bases_ctrl
 from gui.battle_control.controllers import vehicle_state_ctrl
 from gui.battle_control.controllers import interfaces
+from gui.battle_control.controllers import event_mark1
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -185,6 +186,10 @@ class DynamicControllersLocator(_ControllersLocator):
     def gasAttack(self):
         return self._repository.getController(BATTLE_CTRL_ID.GAS_ATTACK)
 
+    @property
+    def mark1Bonus(self):
+        return self._repository.getController(BATTLE_CTRL_ID.MARK1_BONUS)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -317,4 +322,17 @@ class FalloutControllersRepository(_ControllersRepositoryByBonuses):
     def create(cls, setup):
         repository = super(FalloutControllersRepository, cls).create(setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
+        return repository
+
+
+class EventMark1ControllerRepository(_ControllersRepositoryByBonuses):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        repository = super(EventMark1ControllerRepository, cls).create(setup)
+        repository.addViewController(debug_ctrl.DebugController(), setup)
+        bonusCtrl = event_mark1.createBonusCtrl(setup)
+        repository.addViewController(bonusCtrl, setup)
+        repository.addViewController(event_mark1.createEventsCtrl(setup, bonusCtrl), setup)
         return repository

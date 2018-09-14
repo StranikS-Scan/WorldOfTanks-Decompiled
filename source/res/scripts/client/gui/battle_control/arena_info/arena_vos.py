@@ -37,6 +37,10 @@ def isPremiumIGR(tags):
     return VEHICLE_TAGS.PREMIUM_IGR in tags
 
 
+def isMark1(tags):
+    return VEHICLE_TAGS.MARK1 in tags
+
+
 class PlayerInfoVO(object):
     __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'potapovQuestIDs', 'isPrebattleCreator', 'forbidInBattleInvitations')
 
@@ -87,7 +91,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'isMark1')
 
     def __init__(self, vehicleType=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -117,6 +121,7 @@ class VehicleTypeInfoVO(object):
             self.classTag = getClassTag(tags)
             self.isObserver = isObserver(tags)
             self.isPremiumIGR = isPremiumIGR(tags)
+            self.isMark1 = isMark1(tags)
             self.turretYawLimits = vehicle_getter.getYawLimits(vehicleDescr)
             self.shortName = vehicleType.shortUserString
             self.name = Vehicle.getUserName(vehicleType=vehicleType, textPrefix=True)
@@ -136,6 +141,7 @@ class VehicleTypeInfoVO(object):
             self.classTag = None
             self.isObserver = False
             self.isPremiumIGR = False
+            self.isMark1 = False
             self.turretYawLimits = None
             self.shortName = settings.UNKNOWN_VEHICLE_NAME
             self.name = settings.UNKNOWN_VEHICLE_NAME

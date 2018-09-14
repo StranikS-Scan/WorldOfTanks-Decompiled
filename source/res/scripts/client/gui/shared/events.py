@@ -16,7 +16,8 @@ __all__ = ['ArgsEvent',
  'FightButtonDisablingEvent',
  'FightButtonEvent',
  'CloseWindowEvent',
- 'BrowserEvent']
+ 'BrowserEvent',
+ 'Mark1PreviewEvent']
 
 class HasCtxEvent(SharedEvent):
 
@@ -414,6 +415,7 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_PROMO_SUMMARY = 'globalMapPromoSummary'
     GLOBAL_MAP_CAP = 'globalMapCap'
     GLOBAL_MAP_PROMO = 'globalMapPromo'
+    FORUM = 'forum'
 
     def __init__(self, eventType, url='', title=''):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -467,3 +469,8 @@ class WGNCShowItemEvent(SharedEvent):
 
 class ScoreEvent(HasCtxEvent):
     FRAGS_UPDATED = 'score/frags'
+
+
+class Mark1PreviewEvent(SharedEvent):
+    MARK1_WINDOW_OPENED = 'Mark1WindowOpened'
+    MARK1_WINDOW_CLOSED = 'Mark1WindowClosed'

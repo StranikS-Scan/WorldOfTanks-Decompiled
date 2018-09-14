@@ -194,6 +194,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['mapActivitiesTimeframes'] = __readMapActivitiesTimeframes(section)
     maxTeamsInArena = cfg.get('maxTeamsInArena', geometryCfg.get('maxTeamsInArena', None))
     assert maxTeamsInArena is not None
+    cfg.update(__readRespawns(section))
     cfg.update(__readWinPoints(section))
     cfg.update(__readGameplayPoints(section, geometryCfg))
     cfg['teamBasePositions'] = __readTeamBasePositions(section, maxTeamsInArena)
@@ -551,3 +552,7 @@ def __readGasAttackSettings(section):
 
 def __readWinPoints(section):
     return {'winPointsSettings': section.readString('winPoints', 'DEFAULT')}
+
+
+def __readRespawns(section):
+    return {'respawnType': section.readString('respawnType', 'none')}

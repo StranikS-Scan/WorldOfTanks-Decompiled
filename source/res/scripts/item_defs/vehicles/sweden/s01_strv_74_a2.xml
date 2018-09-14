@@ -377,19 +377,23 @@
             <armor_9>	40	</armor_9>
             <gun>	20	</gun>
           </armor>
-          <reloadTime>	5.5	</reloadTime>
+          <reloadTime>	16	</reloadTime>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.8	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -10.5 0.133333 -10.5 0.177778 -12 0.822222 -12 0.866667 -10.5 1 -10.5	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
+          <clip>
+            <count>	4	</count>
+            <rate>	30	</rate>
+          </clip>
           <models>
             <undamaged>	vehicles/sweden/S01_Strv_74_A2/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/sweden/S01_Strv_74_A2/crash/lod0/Gun_01.model	</destroyed>

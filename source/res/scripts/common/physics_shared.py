@@ -734,14 +734,17 @@ def initVehiclePhysics(physics, typeDesc, forcedCfg, saveTransform, IS_EDITOR=Fa
     return
 
 
-def computeBarrelLocalPoint(vehDescr, turretYaw, gunPitch):
-    maxGunZ = vehDescr.gun['hitTester'].bbox[1][2]
+def computeBarrelLocalPoint(vehDescr, turretYaw, gunPitch, gunIndex=0):
+    gun = vehDescr.gun if gunIndex == 0 else vehDescr.secondGun
+    turret = vehDescr.turret if gunIndex == 0 else vehDescr.secondTurret
+    maxGunZ = gun['hitTester'].bbox[1][2]
     m = Math.Matrix()
     m.setRotateX(gunPitch)
-    pt = m.applyVector((0.0, 0.0, maxGunZ)) + vehDescr.turret['gunPosition']
+    pt = m.applyVector((0.0, 0.0, maxGunZ)) + turret['gunPosition']
     m.setRotateY(turretYaw)
     pt = m.applyVector(pt)
-    pt += vehDescr.hull['turretPositions'][vehDescr.activeTurretPosition]
+    turretPos = vehDescr.hull['turretPositions'][gunIndex]
+    pt += turretPos
     pt += vehDescr.chassis['hullPosition']
     return pt
 

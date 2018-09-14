@@ -29,6 +29,7 @@ from ModelHitTester import segmentMayHitVehicle, SegmentCollisionResult
 from gun_rotation_shared import decodeGunAngles
 from constants import SPT_MATKIND
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
+from CombatEquipmentManager import CombatEquipmentManager
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
 _g_waitingVehicle = dict()
@@ -93,6 +94,7 @@ class Vehicle(BigWorld.Entity):
         self.assembler = None
         _g_waitingVehicle[self.id] = weakref.ref(self)
         self.respawnCompactDescr = None
+        self.__bombArea = None
         return
 
     def __del__(self):
@@ -156,22 +158,62 @@ class Vehicle(BigWorld.Entity):
 
         player.initSpace()
         player.vehicle_onEnterWorld(self)
+        if self.typeDescriptor.name.find('uk:GB89_Mark') > -1:
+            bonusCtrl = g_sessionProvider.dynamic.mark1Bonus
+            if bonusCtrl is not None:
+                bonusCtrl.onBombPlanted += self.onBombPlanted
+                bonusCtrl.onBombExploded += self.onBombExploded
         self.__isEnteringWorld = False
+        return
 
     def onLeaveWorld(self):
+        if self.__bombArea is not None:
+            self.__bombArea.destroy()
+            self.__bombArea = None
+        if self.typeDescriptor.name.find('uk:GB89_Mark') > -1:
+            bonusCtrl = g_sessionProvider.dynamic.mark1Bonus
+            if bonusCtrl is not None:
+                bonusCtrl.onBombPlanted -= self.onBombPlanted
+                bonusCtrl.onBombExploded -= self.onBombExploded
         self.__stopExtras()
         BigWorld.player().vehicle_onLeaveWorld(self)
         assert not self.isStarted
+        return
 
-    def showShooting(self, burstCount, isPredictedShot=False):
+    def onBombPlanted(self, timeLeft):
+        if self.__bombArea is not None:
+            self.__bombArea.destroy()
+            self.__bombArea = None
+        eq = vehicles.g_cache.commonConfig['extrasDict']['explosive']
+        self.__bombArea = CombatEquipmentManager.createEquipmentSelectedArea(self.position, Math.Vector3(1.0, 0.0, 0.0), eq)
+        BigWorld.callback(0.02, self.updateZone)
+        return
+
+    def onBombExploded(self):
+        if self.__bombArea is not None:
+            self.__bombArea.destroy()
+            self.__bombArea = None
+        return
+
+    def updateZone(self):
+        if self.__bombArea is not None:
+            self.__bombArea.updatePosition(Math.Matrix(self.matrix).translation)
+            BigWorld.callback(0.02, self.updateZone)
+        return
+
+    def showShooting(self, burstCount, gunIndex, isPredictedShot=False):
         if not self.isStarted:
             return
         if not isPredictedShot and self.isPlayerVehicle and not BigWorld.player().isWaitingForShot:
             if not BattleReplay.g_replayCtrl.isPlaying:
                 return
         extra = self.typeDescriptor.extrasDict['shoot']
+        gunFireNodeName = 'HP_gunFire'
+        if gunIndex > 0:
+            extra = self.typeDescriptor.extrasDict['secondGunShoot']
+            gunFireNodeName = 'HP_gunFire_02'
         extra.stopFor(self)
-        extra.startFor(self, burstCount)
+        extra.startFor(self, (burstCount, gunFireNodeName))
         if not isPredictedShot and self.isPlayerVehicle:
             BigWorld.player().cancelWaitingForShot()
 
@@ -189,6 +231,8 @@ class Vehicle(BigWorld.Entity):
                 compMatrix = Math.Matrix(compoundModel.node(firstHitPoint.componentName))
                 firstHitDirLocal = firstHitPoint.matrix.applyToAxis(2)
                 firstHitDir = compMatrix.applyVector(firstHitDirLocal)
+                if firstHitPoint.componentName == 'chassis' and 'wheeledVehicle' in self.typeDescriptor.type.tags:
+                    self.appearance.storeHitPoint(firstHitPoint.matrix.translation)
                 self.appearance.receiveShotImpulse(firstHitDir, effectsDescr['targetImpulse'])
                 self.appearance.executeHitVibrations(maxHitEffectCode)
                 player = BigWorld.player()
@@ -315,6 +359,10 @@ class Vehicle(BigWorld.Entity):
             syncGunAngles(yaw, pitch)
         return
 
+    def set_secondGunAnglesPacked(self, prev):
+        yaw, pitch = decodeGunAngles(self.secondGunAnglesPacked, self.typeDescriptor.gun['pitchLimits']['absolute'])
+        self.appearance.markTurret.updateGunAngles(yaw, pitch)
+
     def set_health(self, prev):
         pass
 
@@ -328,6 +376,9 @@ class Vehicle(BigWorld.Entity):
             if not self.isCrewActive and self.health > 0:
                 self.__onVehicleDeath()
         return
+
+    def set_steeringAngle(self, prev):
+        self.appearance.setSteeringAngle(self.steeringAngle)
 
     def onHealthChanged(self, newHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:
@@ -669,16 +720,16 @@ class Vehicle(BigWorld.Entity):
         super(Vehicle, self).addModel(model)
         highlighter = self.appearance.highlighter
         if highlighter.enabled:
-            highlighter.highlight(True)
+            highlighter.highlight(True, ignoreLock=True)
 
     def delModel(self, model):
         highlighter = self.appearance.highlighter
         hlEnabled = highlighter.enabled
         if hlEnabled:
-            highlighter.highlight(False)
+            highlighter.highlight(False, ignoreLock=True)
         super(Vehicle, self).delModel(model)
         if hlEnabled:
-            highlighter.highlight(True)
+            highlighter.highlight(True, ignoreLock=True)
 
 
 def _stripVehCompDescrIfRoaming(vehCompDescr):

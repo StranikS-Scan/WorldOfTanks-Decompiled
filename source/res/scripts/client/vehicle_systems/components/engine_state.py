@@ -99,6 +99,7 @@ class DetailedEngineState(assembly_utility.Component):
             self._relativeSpeed = vehicleSpeed / vehicleTypeDescriptor.physics['speedLimits'][0]
         else:
             self._relativeSpeed = vehicleSpeed / vehicleTypeDescriptor.physics['speedLimits'][1]
+        self._relativeSpeed = clamp(-1.0, 1.0, self._relativeSpeed)
 
     def setGearUpCallback(self, gearUpCbk):
         self._gearUpCbk = gearUpCbk

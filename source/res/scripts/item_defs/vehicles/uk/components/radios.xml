@@ -3,6 +3,7 @@
     <N19Mk2_Aust>	1	</N19Mk2_Aust>
     <British_Wireless_set_N19>	2	</British_Wireless_set_N19>
     <N14>	4	</N14>
+    <Alarm_flags>	3	</Alarm_flags>
     <N19Mk2>	8	</N19Mk2>
     <N19Mk1>	9	</N19Mk1>
     <N22>	12	</N22>
@@ -17,6 +18,7 @@
     <N14_bot>	28	</N14_bot>
     <N9A>	21	</N9A>
     <C42_B47>	29	</C42_B47>
+    <Carrier_pigeons>	30	</Carrier_pigeons>
     <C42_IGR>	60001	</C42_IGR>
     <N19Mk3_IGR>	60002	</N19Mk3_IGR>
     <N22_IGR>	60003	</N22_IGR>
@@ -35,6 +37,18 @@
       <maxRegenHealth>	24	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Alarm_flags_bot>
+    <Alarm_flags>
+      <userString>	#gb_vehicles:Alarm_flags	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	24	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Alarm_flags>
     <N14>
       <userString>	#gb_vehicles:N14	</userString>
       <tags></tags>
@@ -207,6 +221,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C45A>
+    <Carrier_pigeons>
+      <userString>	#gb_vehicles:Carrier_pigeons	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	24	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Carrier_pigeons>
     <C42_IGR>
       <userString>	#igr_vehicles:C42_IGR	</userString>
       <tags></tags>

@@ -24,7 +24,8 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.GLOBAL_MAP_SUMMARY: '_handleGmSummaryURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO_SUMMARY: '_handleGmPromoSummaryURL',
  OpenLinkEvent.GLOBAL_MAP_CAP: '_handleGmCapURL',
- OpenLinkEvent.GLOBAL_MAP_PROMO: '_handleGmPromoURL'}
+ OpenLinkEvent.GLOBAL_MAP_PROMO: '_handleGmPromoURL',
+ OpenLinkEvent.FORUM: '_handleForumURL'}
 
 class ExternalLinksHandler(Controller):
 
@@ -133,3 +134,6 @@ class ExternalLinksHandler(Controller):
 
     def _handleGmPromoURL(self, _):
         self.__openParsedUrl('globalMapPromo')
+
+    def _handleForumURL(self, event):
+        self.open(event.url)

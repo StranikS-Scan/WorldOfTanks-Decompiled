@@ -36,6 +36,8 @@ GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
+NEW_CUSTOMIZATION_ITEMS = 'new_customization_items'
+STATS_SORTING_EVENT = 'statsSortingEvent'
 LAST_CLUB_OPENED_FOR_APPS = 'lastClubOpenedForApps'
 SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
 DEFAULT_QUEUE = 'defaultQueue'
@@ -82,6 +84,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'elite': False,
                                    'igr': False,
                                    'hideRented': False,
+                                   'hideEvent': False,
                                    'favorite': False,
                                    'bonus': False},
                FALLOUT_CAROUSEL_FILTER_1: {'ussr': False,
@@ -112,6 +115,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                            'elite': False,
                                            'igr': False,
                                            'hideRented': False,
+                                           'hideEvent': False,
                                            'gameMode': False,
                                            'favorite': False,
                                            'bonus': False},
@@ -282,6 +286,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                  'sortDirection': 'descending'},
                 'statsSortingSortie': {'iconType': 'tank',
                                        'sortDirection': 'descending'},
+                STATS_SORTING_EVENT: {'iconType': 'mark1BonusDelivered',
+                                      'sortDirection': 'descending'},
                 'backDraftInvert': False,
                 'quests': {'lastVisitTime': -1,
                            'visited': [],
@@ -309,7 +315,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'dynamicRange': 0,
                 'soundDevice': 0,
                 'bassBoost': False,
-                PREVIEW_INFO_PANEL_IDX: 0}}
+                PREVIEW_INFO_PANEL_IDX: 0,
+                NEW_CUSTOMIZATION_ITEMS: {'inscriptions': True,
+                                          'emblems': True}}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:

@@ -4,7 +4,7 @@ from avatar_helpers.aim_global_binding import CTRL_MODE_NAME
 from enumerations import Enumeration, AttributeEnumItem
 
 class BATTLE_CTRL_ID(object):
-    AMMO, EQUIPMENTS, OPTIONAL_DEVICES, OBSERVED_VEHICLE_STATE, ARENA_LOAD_PROGRESS, ARENA_PERIOD, TEAM_BASES, DEBUG, HIT_DIRECTION, FEEDBACK, CHAT_COMMANDS, MESSAGES, DRR_SCALE, RESPAWN, REPAIR, DYN_SQUADS, AVATAR_PRIVATE_STATS, GAS_ATTACK, FLAG_NOTS, CROSSHAIR, MOD, GUI = range(1, 23)
+    AMMO, EQUIPMENTS, OPTIONAL_DEVICES, OBSERVED_VEHICLE_STATE, ARENA_LOAD_PROGRESS, ARENA_PERIOD, TEAM_BASES, DEBUG, HIT_DIRECTION, FEEDBACK, CHAT_COMMANDS, MESSAGES, DRR_SCALE, RESPAWN, REPAIR, DYN_SQUADS, AVATAR_PRIVATE_STATS, GAS_ATTACK, FLAG_NOTS, CROSSHAIR, MOD, GUI, MARK1_EVENT_NOTS, MARK1_BONUS = range(1, 25)
 
 
 REUSABLE_BATTLE_CTRL_IDS = (BATTLE_CTRL_ID.MOD, BATTLE_CTRL_ID.GUI)
@@ -65,10 +65,13 @@ class VEHICLE_VIEW_STATE(object):
 
 
 VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftTrack', 'rightTrack', 'surveyingDevice', 'radio', 'fuelTank')
+WHEEL_VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftWheel', 'rightWheel', 'surveyingDevice', 'radio', 'fuelTank')
 VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'chassis', 'surveyingDevice', 'radio', 'fuelTank')
+WHEEL_VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'wheelChassis', 'surveyingDevice', 'radio', 'fuelTank')
 VEHICLE_DEVICE_IN_COMPLEX_ITEM = {'leftTrack': 'chassis',
  'rightTrack': 'chassis'}
-VEHICLE_COMPLEX_ITEMS = {'chassis': ('leftTrack', 'rightTrack')}
+VEHICLE_COMPLEX_ITEMS = {'chassis': ('leftTrack', 'rightTrack'),
+ 'wheelChassis': ('leftWheel', 'rightWheel')}
 DEVICE_STATES_RANGE = ('normal', 'critical', 'destroyed', 'repaired')
 DEVICE_STATE_AS_DAMAGE = ('critical', 'destroyed')
 
@@ -76,6 +79,7 @@ class VEHICLE_INDICATOR_TYPE(object):
     DEFAULT = 'Tank'
     SPG = 'SPG'
     AT_SPG = 'AT-SPG'
+    CAR = 'Car'
 
 
 EXTRA_SUFFIX = 'Health'
@@ -211,3 +215,8 @@ def getCrosshairViewIDByCtrlMode(ctrlMode):
 class GUN_RELOADING_VALUE_TYPE(object):
     TIME = 1
     PERCENT = 2
+
+
+class BATTLE_SYNC_LOCKS(object):
+    MARK1_EVENT_NOTIFICATIONS = 1
+    BATTLE_MARK1_AT_BASE_SOUND_LOCK = 2

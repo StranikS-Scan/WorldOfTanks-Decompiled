@@ -1,0 +1,755 @@
+<122_somme.xml>
+  <name>	#arenas:122_somme/name	</name>
+  <description>	#arenas:122_somme/description	</description>
+  <geometry>	spaces/122_somme	</geometry>
+  <boundingBox>
+    <bottomLeft>	-400.000000 -400.000000	</bottomLeft>
+    <upperRight>	400.000000 400.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	480	</roundLength>
+  <minimap>	spaces/122_somme/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	7	</maxPlayersInTeam>
+  <wwloadingMusic>	ev_mark_1_music_loading_screen	</wwloadingMusic>
+  <wwambientSound>	ev_mark_1_wind	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ev_mark_1.bnk	</bank>
+      <bank>	wheel_vehicles.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	wpn.bnk	</bank>
+      <bank>	impacts_full.bnk	</bank>
+      <bank>	eng_continental_R975.bnk	</bank>
+      <bank>	eng_continentalR.bnk	</bank>
+      <bank>	eng_ford.bnk	</bank>
+      <bank>	eng_gaz_aa.bnk	</bank>
+      <bank>	eng_hetzer.bnk	</bank>
+      <bank>	eng_v55.bnk	</bank>
+      <bank>	treads_npc.bnk	</bank>
+      <bank>	treads_pc.bnk	</bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	wpn_small_PC	</name>
+        <mod>	wpn_small_armored_car_pc	</mod>
+      </event>
+      <event>
+        <name>	wpn_small_NPC	</name>
+        <mod>	wpn_small_armored_car_npc	</mod>
+      </event>
+      <event>
+        <name>	music_combat	</name>
+        <mod>	silence_music_combat_Mark1	</mod>
+      </event>
+      <event>
+        <name>	expl_ally_NPC	</name>
+        <mod>	silence_music_combat_Mark1	</mod>
+      </event>
+      <event>
+        <name>	vo_track_damaged	</name>
+        <mod>	armored_car_vo_silence_Mark1	</mod>
+      </event>
+      <event>
+        <name>	vo_track_destroyed	</name>
+        <mod>	armored_car_vo_silence_Mark1	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional	</name>
+        <mod>	armored_car_vo_silence_Mark1	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional	</name>
+        <mod>	armored_car_vo_silence_Mark1	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional_can_move	</name>
+        <mod>	armored_car_vo_silence_Mark1	</mod>
+      </event>
+      <event>
+        <name>	vo_vehicle_destroyed	</name>
+        <mod>	armored_car_vo_silence_Mark1	</mod>
+      </event>
+      <event>
+        <name>	vo_fire_started	</name>
+        <mod>	armored_car_vo_silence_Mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_small_critical_AP_NPC_NPC	</name>
+        <mod>	imp_small_critical_armored_car_AP_NPC_NPC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_not_pierce_AP_NPC_NPC	</name>
+        <mod>	imp_small_not_pierce_armored_car_AP_NPC_NPC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_pierce_AP_NPC_NPC	</name>
+        <mod>	imp_small_pierce_armored_car_AP_NPC_NPC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_ricochet_AP_NPC_NPC	</name>
+        <mod>	imp_small_ricochet_armored_car_AP_NPC_NPC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_critical_AP_NPC_PC	</name>
+        <mod>	imp_small_critical_armored_car_AP_NPC_PC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_not_pierce_AP_NPC_PC	</name>
+        <mod>	imp_small_not_pierce_armored_car_AP_NPC_PC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_pierce_AP_NPC_PC	</name>
+        <mod>	imp_small_pierce_armored_car_AP_NPC_PC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_ricochet_AP_NPC_PC	</name>
+        <mod>	imp_small_ricochet_armored_car_AP_NPC_PC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_critical_AP_PC_NPC	</name>
+        <mod>	imp_small_critical_armored_car_AP_PC_NPC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_not_pierce_AP_PC_NPC	</name>
+        <mod>	imp_small_not_pierce_armored_car_AP_PC_NPC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_pierce_AP_PC_NPC	</name>
+        <mod>	imp_small_pierce_armored_car_AP_PC_NPC	</mod>
+      </event>
+      <event>
+        <name>	imp_small_ricochet_AP_PC_NPC	</name>
+        <mod>	imp_small_ricochet_armored_car_AP_PC_NPC	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_critical_AP_NPC_NPC	</name>
+        <mod>	imp_medium_critical_AP_NPC_NPC_mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_not_pierce_AP_NPC_NPC	</name>
+        <mod>	imp_medium_not_pierce_AP_NPC_NPC_mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_pierce_AP_NPC_NPC	</name>
+        <mod>	imp_medium_pierce_AP_NPC_NPC_mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_ricochet_AP_NPC_NPC	</name>
+        <mod>	imp_medium_ricochet_AP_NPC_NPC_mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_critical_AP_NPC_PC	</name>
+        <mod>	imp_medium_critical_AP_NPC_PC_mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_not_pierce_AP_NPC_PC	</name>
+        <mod>	imp_medium_not_pierce_AP_NPC_PC_mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_pierce_AP_NPC_PC	</name>
+        <mod>	imp_medium_pierce_AP_NPC_PC_mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_ricochet_AP_NPC_PC	</name>
+        <mod>	imp_medium_ricochet_AP_NPC_PC_mark1	</mod>
+      </event>
+      <event>
+        <name>	time_countdown	</name>
+        <mod>	armored_car_vo_silence_Mark1	</mod>
+      </event>
+      <event>
+        <name>	vo_flt_ready_for_action	</name>
+        <mod>	armored_car_vo_silence_Mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_surface_small_PC	</name>
+        <mod>	imp_surface_small_PC_Mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_surface_medium_PC	</name>
+        <mod>	imp_surface_medium_PC_Mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_surface_small_NPC	</name>
+        <mod>	imp_surface_small_NPC_Mark1	</mod>
+      </event>
+      <event>
+        <name>	imp_surface_medium_NPC	</name>
+        <mod>	imp_surface_medium_NPC_Mark1	</mod>
+      </event>
+      <event>
+        <name>	trds_chf_npc	</name>
+        <mod>	armored_car_vo_silence_Mark1	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <respawnType>	infinite	</respawnType>
+      <winPoints>	MANY_FLAGS_15x15	</winPoints>
+      <maxPlayersInTeam>	7	</maxPlayersInTeam>
+      <winnerIfTimeout>	2	</winnerIfTimeout>
+      <battleEndWarningAppearTime>	60	</battleEndWarningAppearTime>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+      <battleScenarios>
+        <level>
+          <id>	1	</id>
+          <scenario>	spaces/122_somme/bot_scenarios_1.xml	</scenario>
+        </level>
+      </battleScenarios>
+      <artilleryPreparationChance>	1.0	</artilleryPreparationChance>
+      <teamBasePositions>
+        <team2>
+          <position1>	-239.044174 329.581665	</position1>
+        </team2>
+      </teamBasePositions>
+      <flagSpawnPoint>
+        <position>	85.881538 39.608887 39.162025	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	88.313240 39.459343 39.754826	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	45.910378 50.400002 36.130455	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	37.559650 46.180206 63.064938	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	38.595398 46.195206 63.982388	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	70.190094 43.516441 89.181656	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	43.790478 46.220665 144.885956	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	43.425198 46.273712 143.473602	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	94.977692 40.184433 104.601944	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	93.707619 40.260574 103.347549	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	70.708374 42.264580 179.899353	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	1.476372 54.570030 212.948547	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	4.447553 49.970592 329.105103	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	55.362591 42.185108 -270.863647	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	0.206912 45.063450 -116.639282	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	33.425259 45.024593 -101.364960	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	57.203369 44.772335 -93.471115	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	67.716629 43.944008 -50.973682	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	5.968268 48.801380 -68.681496	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	3.764444 46.357506 -32.088699	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	75.002991 43.455322 -33.834564	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	75.867943 43.421722 -33.578186	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	144.346069 33.414841 35.565544	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	147.363647 32.980442 36.174629	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	133.876678 35.166298 61.036491	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	135.487152 39.088875 141.605682	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	137.271820 39.088001 143.487396	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	144.151428 39.087753 133.289886	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	119.764366 37.942329 312.999756	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	121.863747 39.442326 -185.158356	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	161.496979 32.370983 -70.515457	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	101.503548 43.528885 -47.698082	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	288.946167 34.659126 73.964943	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	280.644104 27.170708 20.545774	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	218.719208 32.678257 -122.052742	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	200.184525 42.955803 -189.921661	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-260.299103 54.838745 15.132975	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-170.582550 54.193890 90.813225	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-118.859306 47.392509 22.278688	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-120.786583 47.162853 20.925106	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-158.010864 55.555073 131.702881	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-194.395767 60.421051 242.062805	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-134.485794 59.456367 235.122757	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-141.167435 56.119072 -22.771545	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-56.258064 51.014194 39.851849	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-69.082199 52.164059 95.634216	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-83.905563 45.630764 10.135786	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-89.602196 49.907700 69.838852	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-88.155548 49.866390 69.366173	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-21.448959 57.058189 155.491699	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-8.480118 51.118668 123.131332	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-97.528297 57.862427 158.703522	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-45.958557 51.982170 104.588951	</position>
+        <team>	1	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-25.150902 52.595337 120.325699	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-58.194664 59.424110 166.018433	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-57.195145 59.424339 166.904480	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-58.132046 58.931435 280.270325	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-37.780083 59.464634 208.866196	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-0.672287 54.559761 210.961578	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-0.685211 45.010170 -117.660820	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-19.131927 59.598045 -171.968567	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-4.194893 48.673450 -63.451836	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-5.087006 48.707634 -64.473381	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-79.715668 48.385777 -72.736969	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-81.168259 48.406334 -75.027786	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-62.179634 44.788437 -25.006088	</position>
+        <team>	2	</team>
+        <flagType>	1	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-59.924404 44.771774 -24.229439	</position>
+        <team>	1	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-39.340336 44.252876 -10.137123	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-46.542015 47.998169 -83.014885	</position>
+        <team>	0	</team>
+        <flagType>	3	</flagType>
+      </flagSpawnPoint>
+    </ctf>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <waypoints>	spaces/122_somme/paths.xml	</waypoints>
+  <mapActivities>
+    <scenario>
+      <startTime>	40.000000 40.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <period>	90.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	somme_sc1_a1	</preset>
+          <position>	0.000000 40.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc1_a2	</preset>
+          <position>	0.000000 40.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc1_a3	</preset>
+          <position>	0.000000 40.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc1_a4	</preset>
+          <position>	0.000000 40.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc1_a5	</preset>
+          <position>	0.000000 40.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc1_a6	</preset>
+          <position>	0.000000 40.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	150.000000 150.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <period>	80.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	somme_sc2_a1	</preset>
+          <position>	0.000000 40.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc2_a2	</preset>
+          <position>	0.000000 40.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc2_a3	</preset>
+          <position>	0.000000 40.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc2_a4	</preset>
+          <position>	0.000000 40.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	90.000000 90.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <period>	80.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	somme_sc3_a1	</preset>
+          <position>	0.000000 20.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc3_a2	</preset>
+          <position>	0.000000 20.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc3_a3	</preset>
+          <position>	0.000000 20.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc3_a4	</preset>
+          <position>	0.000000 20.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	240.000000 240.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <period>	120.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	somme_sc4_a1	</preset>
+          <position>	0.000000 60.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc4_a2	</preset>
+          <position>	0.000000 60.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	6.000000 6.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_sc4_a3	</preset>
+          <position>	0.000000 60.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	6.000000 6.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	30.000000 30.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <period>	5	</period>
+      <trajectories>
+        <warplane>
+          <preset>	somme_cannon_shoot_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_cannon_shoot_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.300000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_cannon_shoot_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.600000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_cannon_shoot_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.800000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	somme_cannon_shoot_5	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	1.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+</122_somme.xml>

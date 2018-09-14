@@ -7,8 +7,23 @@
       <udoRef>	FlagSpawnPoint	</udoRef>
     </model>
     <model>
-      <name>	ctf_flag_circle	</name>
-      <file>	content/Environment/env_111_02_FalloutFlag/normal/lod0/env_111_02_FalloutFlag_border.model	</file>
+      <name>	box_explosive	</name>
+      <file>	content/MilitaryEnvironment/mle_122_06_BonusBox/normal/lod0/mle_122_06_BonusBox_Explosive_Group.model	</file>
+      <udoRef>	FlagSpawnPoint	</udoRef>
+    </model>
+    <model>
+      <name>	box_repair	</name>
+      <file>	content/MilitaryEnvironment/mle_122_06_BonusBox/normal/lod0/mle_122_06_BonusBox_Repair_Group.model	</file>
+      <udoRef>	FlagSpawnPoint	</udoRef>
+    </model>
+    <model>
+      <name>	box_shells	</name>
+      <file>	content/MilitaryEnvironment/mle_122_06_BonusBox/normal/lod0/mle_122_06_BonusBox_Shells_Group.model	</file>
+      <udoRef>	FlagSpawnPoint	</udoRef>
+    </model>
+    <model>
+      <name>	box_lanchester	</name>
+      <file>	content/MilitaryEnvironment/mle_122_06_BonusBox/normal/lod0/mle_122_06_BonusBox_Lanchester.model	</file>
       <udoRef>	FlagSpawnPoint	</udoRef>
     </model>
     <model>
@@ -45,6 +60,218 @@
       </pixie>
     </effects>
   </resourcePointEffect>
+  <explosionEffect>
+    <stages>
+      <base>	4.0	</base>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	base	</startKey>
+        <file>	particles/Event/bomb_Mark_1.xml	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <startKey>	base	</startKey>
+        <wwsound>	ev_mark_exploded	</wwsound>
+      </sound>
+    </effects>
+  </explosionEffect>
+  <pickupsEffects>
+    <pickupsEffect>
+      <model>	box_explosive	</model>
+      <state>	absorbed	</state>
+      <effectList>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Event/bonus/take_bonus.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wire_barricade	</wwsound>
+          </sound>
+        </effects>
+      </effectList>
+    </pickupsEffect>
+    <pickupsEffect>
+      <model>	box_explosive	</model>
+      <state>	spawn	</state>
+      <condition>
+        <team>	1	</team>
+      </condition>
+      <effectList>
+        <timeline>
+          <effectEnd>	36000	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles\Event\map\vfx_escort_resourcepoint_1.xml	</file>
+            <force>	1	</force>
+            <position>	HP_module_0	</position>
+          </pixie>
+        </effects>
+      </effectList>
+    </pickupsEffect>
+    <pickupsEffect>
+      <model>	box_explosive	</model>
+      <state>	spawn	</state>
+      <condition>
+        <team>	2	</team>
+      </condition>
+      <effectList>
+        <timeline>
+          <effectEnd>	36000	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles\Event\map\vfx_escort_resourcepoint_2.xml	</file>
+            <force>	1	</force>
+            <position>	HP_module_0	</position>
+          </pixie>
+        </effects>
+      </effectList>
+    </pickupsEffect>
+    <pickupsEffect>
+      <model>	box_repair	</model>
+      <state>	absorbed	</state>
+      <effectList>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Event/bonus/take_bonus.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wire_barricade	</wwsound>
+          </sound>
+        </effects>
+      </effectList>
+    </pickupsEffect>
+    <pickupsEffect>
+      <model>	box_repair	</model>
+      <state>	spawn	</state>
+      <condition>
+        <team>	2	</team>
+      </condition>
+      <effectList>
+        <timeline>
+          <effectEnd>	36000	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles\Event\map\vfx_escort_resourcepoint_1.xml	</file>
+            <force>	1	</force>
+            <position>	HP_module_0	</position>
+          </pixie>
+        </effects>
+      </effectList>
+    </pickupsEffect>
+    <pickupsEffect>
+      <model>	box_repair	</model>
+      <state>	spawn	</state>
+      <condition>
+        <team>	1	</team>
+      </condition>
+      <effectList>
+        <timeline>
+          <effectEnd>	36000	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles\Event\map\vfx_escort_resourcepoint_2.xml	</file>
+            <force>	1	</force>
+            <position>	HP_module_0	</position>
+          </pixie>
+        </effects>
+      </effectList>
+    </pickupsEffect>
+    <pickupsEffect>
+      <model>	box_shells	</model>
+      <state>	absorbed	</state>
+      <effectList>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Event/bonus/take_bonus.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wire_barricade	</wwsound>
+          </sound>
+        </effects>
+      </effectList>
+    </pickupsEffect>
+    <pickupsEffect>
+      <model>	box_shells	</model>
+      <state>	spawn	</state>
+      <effectList>
+        <timeline>
+          <effectEnd>	36000	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles\Event\map\vfx_escort_resourcepoint_3.xml	</file>
+            <force>	1	</force>
+            <position>	HP_module_0	</position>
+          </pixie>
+        </effects>
+      </effectList>
+    </pickupsEffect>
+    <pickupsEffect>
+      <model>	box_lanchester	</model>
+      <state>	absorbed	</state>
+      <effectList>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Event/bonus/take_bonus.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wire_barricade	</wwsound>
+          </sound>
+        </effects>
+      </effectList>
+    </pickupsEffect>
+    <pickupsEffect>
+      <model>	box_lanchester	</model>
+      <state>	spawn	</state>
+      <effectList>
+        <timeline>
+          <effectEnd>	36000	</effectEnd>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <file>	particles\Event\map\vfx_escort_resourcepoint_3.xml	</file>
+            <force>	1	</force>
+            <position>	HP_module_0	</position>
+          </pixie>
+        </effects>
+      </effectList>
+    </pickupsEffect>
+  </pickupsEffects>
   <referencesForTools>
     <item>
       <type>	FlagAbsorptionPoint	</type>

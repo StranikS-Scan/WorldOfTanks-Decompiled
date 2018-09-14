@@ -20,7 +20,6 @@ from gui import g_tankActiveCamouflage
 from gui import game_control, g_keyEventHandlers, g_mouseEventHandlers
 import items.vehicles
 import VehicleStickers
-from HangarVehicle import HangarVehicle
 import constants
 from PlayerEvents import g_playerEvents
 from ConnectionManager import connectionManager
@@ -33,6 +32,7 @@ import TankHangarShadowProxy
 import SoundGroups
 from vehicle_systems import camouflages, model_assembler
 from vehicle_systems.tankStructure import TankPartNames
+from vehicle_systems.CompoundAppearance import CompoundAppearance
 _DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
@@ -260,6 +260,17 @@ class ClientHangarSpace():
         self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
         self.__yawCameraFilter = HangarCameraYawFilter(math.radians(_CFG['cam_yaw_constr'][0]), math.radians(_CFG['cam_yaw_constr'][1]), _CFG['cam_sens'])
         self.__setupCamera()
+        self.setDefaultCameraDistance()
+        self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
+        self.__destroyFunc = None
+        MapActivities.g_mapActivities.generateOfflineActivities(spacePath)
+        g_keyEventHandlers.add(self.handleKeyEvent)
+        g_mouseEventHandlers.add(self.handleMouseEventGlobal)
+        g_postProcessing.enable('hangar')
+        BigWorld.pauseDRRAutoscaling(True)
+        return
+
+    def setDefaultCameraDistance(self):
         distConstrs = _CFG['cam_dist_constr']
         previewConstr = _CFG.get('preview_cam_dist_constr', distConstrs)
         if distConstrs is not None:
@@ -269,14 +280,10 @@ class ClientHangarSpace():
                 self.__camDistConstr = (distConstrs, distConstrs)
         else:
             self.__camDistConstr = ((0.0, 0.0), (0.0, 0.0))
-        self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
-        self.__destroyFunc = None
-        MapActivities.g_mapActivities.generateOfflineActivities(spacePath)
-        g_keyEventHandlers.add(self.handleKeyEvent)
-        g_mouseEventHandlers.add(self.handleMouseEventGlobal)
-        g_postProcessing.enable('hangar')
-        BigWorld.pauseDRRAutoscaling(True)
         return
+
+    def setCameraDistance(self, distance):
+        self.__camDistConstr = ((distance, distance), (distance, distance))
 
     def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback=None):
         if self.__vAppearance is None:
@@ -335,10 +342,12 @@ class ClientHangarSpace():
 
     def handleKeyEvent(self, event):
         if event.key == Keys.KEY_LEFTMOUSE:
+            from gui.shared.utils.HangarSpace import g_hangarSpace
             self.__isMouseDown = event.isKeyDown()
             if self.__isMouseDown:
-                from gui.shared.utils.HangarSpace import g_hangarSpace
                 g_hangarSpace.leftButtonClicked()
+            elif event.isKeyUp():
+                g_hangarSpace.leftButtonReleased()
         return False
 
     def handleMouseEventGlobal(self, event):
@@ -414,44 +423,47 @@ class ClientHangarSpace():
         return
 
     def updateCameraByMouseMove(self, dx, dy, dz):
-        if self.__selectedEmblemInfo is not None:
-            self.__cam.target.setTranslate(_CFG['preview_cam_start_target_pos'])
-            self.__cam.pivotPosition = _CFG['preview_cam_pivot_pos']
-            if self.__locatedOnEmbelem:
-                self.__cam.maxDistHalfLife = 0.0
-            else:
-                self.__cam.maxDistHalfLife = _CFG['cam_fluency']
-        sourceMat = Math.Matrix(self.__cam.source)
-        yaw = sourceMat.yaw
-        pitch = sourceMat.pitch
-        dist = self.__cam.pivotMaxDist
-        currentMatrix = Math.Matrix(self.__cam.invViewMatrix)
-        currentYaw = currentMatrix.yaw
-        yaw = self.__yawCameraFilter.getNextYaw(currentYaw, yaw, dx)
-        pitch -= dy * _CFG['cam_sens']
-        dist -= dz * _CFG['cam_sens']
-        pitch = mathUtils.clamp(math.radians(_CFG['cam_pitch_constr'][0]), math.radians(_CFG['cam_pitch_constr'][1]), pitch)
-        prevDist = dist
-        distConstr = self.__camDistConstr[1] if self.__selectedEmblemInfo is not None else self.__camDistConstr[0]
-        dist = mathUtils.clamp(distConstr[0], distConstr[1], dist)
-        if self.__boundingRadius is not None:
-            boundingRadius = self.__boundingRadius if self.__boundingRadius < distConstr[1] else distConstr[1]
-            dist = dist if dist > boundingRadius else boundingRadius
-        if dist > prevDist and dz > 0:
+        if self.__cam != BigWorld.camera():
+            return
+        else:
             if self.__selectedEmblemInfo is not None:
-                self.locateCameraOnEmblem(*self.__selectedEmblemInfo)
-                return
-        self.__locatedOnEmbelem = False
-        mat = Math.Matrix()
-        mat.setRotateYPR((yaw, pitch, 0.0))
-        self.__cam.source = mat
-        self.__cam.pivotMaxDist = dist
-        if g_settingsCore.getSetting('dynamicFov') and abs(distConstr[1] - distConstr[0]) > 0.001:
-            relativeDist = (dist - distConstr[0]) / (distConstr[1] - distConstr[0])
-            _, minFov, maxFov = g_settingsCore.getSetting('fov')
-            fov = mathUtils.lerp(minFov, maxFov, relativeDist)
-            BigWorld.callback(0, functools.partial(FovExtended.instance().setFovByAbsoluteValue, math.radians(fov), 0.1))
-        return
+                self.__cam.target.setTranslate(_CFG['preview_cam_start_target_pos'])
+                self.__cam.pivotPosition = _CFG['preview_cam_pivot_pos']
+                if self.__locatedOnEmbelem:
+                    self.__cam.maxDistHalfLife = 0.0
+                else:
+                    self.__cam.maxDistHalfLife = _CFG['cam_fluency']
+            sourceMat = Math.Matrix(self.__cam.source)
+            yaw = sourceMat.yaw
+            pitch = sourceMat.pitch
+            dist = self.__cam.pivotMaxDist
+            currentMatrix = Math.Matrix(self.__cam.invViewMatrix)
+            currentYaw = currentMatrix.yaw
+            yaw = self.__yawCameraFilter.getNextYaw(currentYaw, yaw, dx)
+            pitch -= dy * _CFG['cam_sens']
+            dist -= dz * _CFG['cam_sens']
+            pitch = mathUtils.clamp(math.radians(_CFG['cam_pitch_constr'][0]), math.radians(_CFG['cam_pitch_constr'][1]), pitch)
+            prevDist = dist
+            distConstr = self.__camDistConstr[1] if self.__selectedEmblemInfo is not None else self.__camDistConstr[0]
+            dist = mathUtils.clamp(distConstr[0], distConstr[1], dist)
+            if self.__boundingRadius is not None:
+                boundingRadius = self.__boundingRadius if self.__boundingRadius < distConstr[1] else distConstr[1]
+                dist = dist if dist > boundingRadius else boundingRadius
+            if dist > prevDist and dz > 0:
+                if self.__selectedEmblemInfo is not None:
+                    self.locateCameraOnEmblem(*self.__selectedEmblemInfo)
+                    return
+            self.__locatedOnEmbelem = False
+            mat = Math.Matrix()
+            mat.setRotateYPR((yaw, pitch, 0.0))
+            self.__cam.source = mat
+            self.__cam.pivotMaxDist = dist
+            if g_settingsCore.getSetting('dynamicFov') and abs(distConstr[1] - distConstr[0]) > 0.001:
+                relativeDist = (dist - distConstr[0]) / (distConstr[1] - distConstr[0])
+                _, minFov, maxFov = g_settingsCore.getSetting('fov')
+                fov = mathUtils.lerp(minFov, maxFov, relativeDist)
+                BigWorld.callback(0, functools.partial(FovExtended.instance().setFovByAbsoluteValue, math.radians(fov), 0.1))
+            return
 
     def spaceLoaded(self):
         return not self.__loadingStatus < 1
@@ -625,7 +637,7 @@ class _VehicleAppearance():
             self.__isLoaded = False
             self.__startBuild(self.__vDesc, self.__vState)
         entity = BigWorld.entity(self.__vEntityId)
-        if isinstance(entity, HangarVehicle):
+        if entity is not None:
             entity.releaseBspModels()
         return
 
@@ -716,13 +728,13 @@ class _VehicleAppearance():
         self.__model = resources[self.__vDesc.name]
         self.__setupEmblems(self.__vDesc)
         if not self.__isVehicleDestroyed:
-            self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(False, _CFG['v_scale']), None, None, None)
-            import VehicleAppearance
-            VehicleAppearance.setupTracksFashion(self.__fashions.chassis, self.__vDesc, self.__isVehicleDestroyed)
-            self.__model.setupFashions(self.__fashions)
+            self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(False, _CFG['v_scale'], True, 'wheeledVehicle' in self.__vDesc.type.tags), None, None, None)
+            import VehicleUtils
+            VehicleUtils.setupTracksFashion(self.__fashions.chassis, self.__vDesc, self.__isVehicleDestroyed)
+            self.__model.setupFashions(self.__fashions.stripEmpty())
             chassisFashion = self.__fashions.chassis
             chassisFashion.initialUpdateTracks(1.0, 10.0)
-            VehicleAppearance.setupSplineTracks(chassisFashion, self.__vDesc, self.__model, self.__resources)
+            VehicleUtils.setupSplineTracks(chassisFashion, self.__vDesc, self.__model, self.__resources)
         else:
             self.__fashions = VehiclePartsTuple(None, None, None, None)
         self.updateCamouflage()
@@ -808,8 +820,9 @@ class _VehicleAppearance():
         model.matrix = matrix
         self.__doFinalSetup(buildIdx, model)
         entity = BigWorld.entity(self.__vEntityId)
-        if isinstance(entity, HangarVehicle):
+        if entity is not None:
             entity.typeDescriptor = self.__vDesc
+        return
 
     def __doFinalSetup(self, buildIdx, model):
         if buildIdx != self.__curBuildInd:
@@ -819,7 +832,7 @@ class _VehicleAppearance():
             if entity:
                 entity.model = model
                 self.__isLoaded = True
-                if isinstance(entity, HangarVehicle):
+                if entity is not None:
                     entity.canDoHitTest(True)
                 if self.__onLoadedCallback is not None:
                     self.__onLoadedCallback()
@@ -915,18 +928,25 @@ class _VehicleAppearance():
         return dir
 
     def __getCurrentCamouflage(self):
-        if self.__vDesc.camouflages is not None:
-            activeCamo = g_tankActiveCamouflage['historical'].get(self.__vDesc.type.compactDescr)
-            if activeCamo is None:
-                activeCamo = g_tankActiveCamouflage.get(self.__vDesc.type.compactDescr, 0)
-            camouflageID = self.__vDesc.camouflages[activeCamo][0]
-        if camouflageID is None:
-            for camouflageData in self.__vDesc.camouflages:
-                if camouflageData[0] is not None:
-                    camouflageID = camouflageData[0]
-                    break
+        camouflageIdPerTeam = CompoundAppearance.EVENT_CAMOUFLAGES.get(self.__vDesc.name)
+        if camouflageIdPerTeam is not None:
+            savedTeam = g_tankActiveCamouflage.get(self.__vDesc.type.compactDescr)
+            currentTeam = savedTeam if savedTeam is not None else 1
+            camouflageId = camouflageIdPerTeam[0] if currentTeam == 1 else camouflageIdPerTeam[1]
+            return camouflageId
+        else:
+            if self.__vDesc.camouflages is not None:
+                activeCamo = g_tankActiveCamouflage['historical'].get(self.__vDesc.type.compactDescr)
+                if activeCamo is None:
+                    activeCamo = g_tankActiveCamouflage.get(self.__vDesc.type.compactDescr, 0)
+                camouflageID = self.__vDesc.camouflages[activeCamo][0]
+            if camouflageID is None:
+                for camouflageData in self.__vDesc.camouflages:
+                    if camouflageData[0] is not None:
+                        camouflageID = camouflageData[0]
+                        break
 
-        return camouflageID
+            return camouflageID
 
     def initFashions(self):
         fashions = list(self.__fashions)
@@ -935,8 +955,8 @@ class _VehicleAppearance():
             if fashion is None:
                 fashions[fashionIdx] = BigWorld.WGBaseFashion()
 
-        self.__fashions = fashions
-        self.__model.setupFashions(self.__fashions)
+        self.__fashions = VehiclePartsTuple(*fashions)
+        self.__model.setupFashions(self.__fashions.stripEmpty())
         return
 
     def updateCamouflage(self, camouflageID=None):

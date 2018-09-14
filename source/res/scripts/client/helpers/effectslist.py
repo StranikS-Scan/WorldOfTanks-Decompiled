@@ -570,6 +570,13 @@ class _ShotSoundEffectDesc(_BaseSoundEvent, object):
                 distance = (BigWorld.camera().position - vehicle.position).length
                 soundObject.setRTPC('RTPC_ext_control_reflections_priority', distance)
                 soundObject.play(soundName)
+                from gui.battle_control import g_sessionProvider
+                from gui.battle_control.controllers.event_mark1.bonus_ctrl import EXTRA_BIG_GUN
+                bonusCtrl = g_sessionProvider.dynamic.mark1Bonus
+                if bonusCtrl is not None:
+                    currentBonus = bonusCtrl.getVehicleBonus(vehicle.id)
+                    if currentBonus != EXTRA_BIG_GUN:
+                        vehicle.appearance.engineAudition.setBigGunSwitch(False)
         return
 
 

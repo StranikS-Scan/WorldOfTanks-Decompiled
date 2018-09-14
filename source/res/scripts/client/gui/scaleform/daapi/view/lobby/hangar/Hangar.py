@@ -30,6 +30,7 @@ from ConnectionManager import connectionManager
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+from gui.server_events import g_eventsCache
 
 class Hangar(LobbySubView, HangarMeta, GlobalListener):
     __background_alpha__ = 0.0
@@ -37,8 +38,11 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
     def __init__(self, _=None):
         LobbySubView.__init__(self, 0)
         self.__isCursorOver3dScene = False
+        self.__isObjectClicked = False
+        self.__selected3dEntityWhileClicked = None
         self.__selected3DEntity = None
         self.__currentCarouselAlias = None
+        self.__mark1PreviewWasShown = False
         return
 
     def _populate(self):
@@ -53,6 +57,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         g_hangarSpace.onObjectSelected += self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected += self.__on3DObjectUnSelected
         g_hangarSpace.onObjectClicked += self.__on3DObjectClicked
+        g_hangarSpace.onObjectReleased += self.__on3DObjectReleased
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_clientUpdateManager.addCallbacks({'stats.credits': self.onMoneyUpdate,
          'stats.gold': self.onMoneyUpdate,
@@ -119,8 +124,9 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         g_hangarSpace.onObjectSelected -= self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected -= self.__on3DObjectUnSelected
         g_hangarSpace.onObjectClicked -= self.__on3DObjectClicked
+        g_hangarSpace.onObjectReleased -= self.__on3DObjectReleased
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
-        if self.__selected3DEntity is not None:
+        if self.__selected3DEntity is not None and not self.__mark1PreviewWasShown:
             BigWorld.wgDelEdgeDetectEntity(self.__selected3DEntity)
             self.__selected3DEntity = None
         self.closeHelpLayout()
@@ -193,6 +199,9 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         return
 
     def __on3DObjectSelected(self, entity):
+        if self.__isObjectClicked:
+            self.__selected3dEntityWhileClicked = entity
+            return
         self.__selected3DEntity = entity
         if self.__isCursorOver3dScene:
             self.__highlight3DEntityAndShowTT(entity)
@@ -201,14 +210,27 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
     def __on3DObjectUnSelected(self, entity):
         self.__selected3DEntity = None
+        self.__selected3dEntityWhileClicked = None
         if self.__isCursorOver3dScene:
             self.__fade3DEntityAndHideTT(entity)
         return
 
     def __on3DObjectClicked(self):
+        self.__isObjectClicked = True
         if self.__isCursorOver3dScene:
             if self.__selected3DEntity is not None:
                 self.__selected3DEntity.onClicked()
+        return
+
+    def __on3DObjectReleased(self):
+        self.__isObjectClicked = False
+        if self.__isCursorOver3dScene:
+            if self.__selected3DEntity is not None:
+                if not self.__showMark1Preview(self.__selected3DEntity):
+                    self.__selected3DEntity.onReleased()
+        if self.__selected3dEntityWhileClicked is not None:
+            self.__on3DObjectSelected(self.__selected3dEntityWhileClicked)
+            self.__selected3dEntityWhileClicked = None
         return
 
     @property
@@ -347,3 +369,10 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
     def __onVehicleClientStateChanged(self, vehicles):
         self.__updateCarouselVehicles(vehicles)
         self.__updateAmmoPanel()
+
+    def __showMark1Preview(self, selectedEntity):
+        if g_eventsCache.isEventEnabled():
+            if self.__selected3DEntity.selectionId == 'mark1':
+                self.__mark1PreviewWasShown = True
+                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.MARK_PREVIEW, ctx={'entity3d': selectedEntity}), EVENT_BUS_SCOPE.LOBBY)
+        return self.__mark1PreviewWasShown

@@ -555,8 +555,8 @@ class _EventsCache(object):
                 storage = self.__questsDossierBonuses[q.getID()]
                 for bonus in dossierBonuses:
                     records = bonus.getRecords()
-                    storage.update(records)
-                    rareAchieves |= set((r for r in records if r[0] == ACHIEVEMENT_BLOCK.RARE))
+                    storage.update(set(bonus.getRecords().keys()))
+                    rareAchieves |= set((rId for r, rId in records.iteritems() if r[0] == ACHIEVEMENT_BLOCK.RARE))
 
             timeLeftInfo = q.getNearestActivityTimeLeft()
             if timeLeftInfo is not None:

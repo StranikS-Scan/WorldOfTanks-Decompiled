@@ -3,6 +3,7 @@
     <Interface>	VehicleAI	</Interface>
     <Interface>	TeamBase_Vehicle	</Interface>
     <Interface>	RepairBase_Vehicle	</Interface>
+    <Interface>	FlagMechanics_Vehicle	</Interface>
   </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
@@ -27,6 +28,10 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isStrafing>
+    <steeringAngle>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </steeringAngle>
     <physicsMode>
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -37,6 +42,12 @@
       <IsReliable>	false	</IsReliable>
       <SendLatestOnly>	true	</SendLatestOnly>
     </gunAnglesPacked>
+    <secondGunAnglesPacked>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <IsReliable>	false	</IsReliable>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </secondGunAnglesPacked>
     <publicInfo>
       <Type>	PUBLIC_VEHICLE_INFO	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -187,6 +198,7 @@
     </onHealthChanged>
     <showShooting>
       <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
     </showShooting>
     <showDamageFromShot>
       <Arg>	OBJECT_ID	</Arg>
@@ -239,18 +251,22 @@
     <trackWorldPointWithGun>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
+      <Arg>	UINT8	</Arg>
     </trackWorldPointWithGun>
     <trackRelativePointWithGun>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
+      <Arg>	UINT8	</Arg>
     </trackRelativePointWithGun>
     <stopTrackingWithGun>
       <Exposed></Exposed>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </stopTrackingWithGun>
     <trackVehicleWithGun>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
     </trackVehicleWithGun>
     <changeSetting>
       <Exposed></Exposed>
@@ -264,6 +280,7 @@
     </sendVisibilityDevelopmentInfo>
     <shoot>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </shoot>
     <useHorn>
       <Arg>	BOOL	</Arg>
@@ -281,6 +298,16 @@
       <Arg>	INT32	</Arg>
       <Arg>	STRING	</Arg>
     </setDevelopmentFeature>
+    <setEventFeature>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </setEventFeature>
+    <damageByMark1ExplosionAt>
+      <Arg>	INT32	</Arg>
+      <Arg>	FLOAT	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </damageByMark1ExplosionAt>
     <receiveFakeShot>
       <Arg>	INT32	</Arg>
       <Arg>	FLOAT32	</Arg>
@@ -404,11 +431,6 @@
         <size>	2	</size>
       </Arg>
     </onCombatEquipmentShootingStarted>
-    <onFlagAction>
-      <Arg>	UINT8	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	UINT8	</Arg>
-    </onFlagAction>
     <receiveAssistsFromArena>
       <Arg>	ARRAY	  <of>	UINT8	</of>
       </Arg>

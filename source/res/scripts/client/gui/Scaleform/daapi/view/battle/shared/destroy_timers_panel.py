@@ -182,10 +182,14 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         ctrl = g_sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
-            checkStatesIDs = (VEHICLE_VIEW_STATE.FIRE, VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER, VEHICLE_VIEW_STATE.SHOW_DEATHZONE_TIMER)
+            checkStatesIDs = (VEHICLE_VIEW_STATE.FIRE,
+             VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER,
+             VEHICLE_VIEW_STATE.SHOW_DEATHZONE_TIMER,
+             VEHICLE_VIEW_STATE.HIDE_DESTROY_TIMER,
+             VEHICLE_VIEW_STATE.HIDE_DEATHZONE_TIMER)
             for stateID in checkStatesIDs:
-                stateValue = ctrl.getStateValue(stateID)
-                if stateValue:
+                if ctrl.hasStateValue(stateID):
+                    stateValue = ctrl.getStateValue(stateID)
                     self.__onVehicleStateUpdated(stateID, stateValue)
 
         handler = avatar_getter.getInputHandler()

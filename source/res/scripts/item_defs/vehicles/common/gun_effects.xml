@@ -132,11 +132,55 @@
       </pixie>
       <shotSound>
         <startKey>	start	</startKey>
-        <wwsoundPC>	wpn_automatic_PC	</wwsoundPC>
-        <wwsoundNPC>	wpn_automatic_NPC	</wwsoundNPC>
+        <wwsoundPC>	wpn_small_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_small_NPC	</wwsoundNPC>
       </shotSound>
     </effects>
   </shot_Gochkins_auto>
+  <shot_MarkI_Vickers_Maxim>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.3	</end>
+      <endpixie>	0.1	</endpixie>
+      <soundplaystop>	8	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_auto_01.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_small_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_small_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </shot_MarkI_Vickers_Maxim>
+  <shot_MarkI_Gochkins_auto>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.3	</end>
+      <endpixie>	0.1	</endpixie>
+      <soundplaystop>	8	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_lanchester_auto.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_small_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_small_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </shot_MarkI_Gochkins_auto>
   <shot_small>
     <timeline>
       <lighting2>	0.075	</lighting2>
@@ -475,6 +519,56 @@
       </groundWave>
     </relatedEffects>
   </shot_medium_mb>
+  <shot_MarkI_6pdr>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	0.5	</endpixie>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Event/shot_markI.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1	</innerRadius>
+        <outerRadius>	5	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	13	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	ev_mark_wpn	</wwsoundPC>
+        <wwsoundNPC>	ev_mark_wpn	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </shot_MarkI_6pdr>
   <shot_main>
     <timeline>
       <lighting2>	0.085	</lighting2>

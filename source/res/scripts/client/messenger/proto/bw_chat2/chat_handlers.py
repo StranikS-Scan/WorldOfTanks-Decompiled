@@ -265,7 +265,7 @@ class UnitChatHandler(_EntityChatHandler):
             return
         else:
             settings = None
-            if prbType in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.FALLOUT):
+            if prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES:
                 settings = BATTLE_CHANNEL.SQUAD
             self.__channel = self._addChannel(entities.BWUnitChannelEntity(settings, prbType))
             return

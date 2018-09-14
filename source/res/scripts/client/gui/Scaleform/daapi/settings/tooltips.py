@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/tooltips.py
+from gui.Scaleform.daapi.view.lobby import markPreview
 from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, potapovquests, tutorial, fortifications, clans, boosters
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import BonusTooltip as CustomizationBonusTooltip
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip, QuestElementTooltip as CustomizationQuestElementTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.tooltips.filter import VehicleFilterTooltip
+from gui.Scaleform.daapi.view.lobby.markPreview.MarkPreview import MarkPreviewTooltipData
 TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_UI,
                               'method': lambda invID, isCurrentVehicle=None: tankman.TankmanTooltipData(contexts.TankmanHangarContext()).buildToolTip(invID),
                               'complex': None},
@@ -269,6 +271,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.VEHICLE_FILTER: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                      'method': VehicleFilterTooltip(contexts.TechCustomizationContext()).buildToolTip,
                                      'complex': None},
+ TOOLTIPS_CONSTANTS.MARK_PREVIEW: {'tooltip': TOOLTIPS_CONSTANTS.MARK_MODULE_TOOLTIP_UI,
+                                   'method': MarkPreviewTooltipData(contexts.HangarContext()).buildToolTip,
+                                   'complex': None},
  'default': {'tooltip': TOOLTIPS_CONSTANTS.COMPLEX_UI,
              'method': None,
              'complex': None}}

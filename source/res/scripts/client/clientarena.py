@@ -14,6 +14,7 @@ from PlayerEvents import g_playerEvents
 from debug_utils import *
 from CTFManager import g_ctfManager
 from helpers.EffectsList import FalloutDestroyEffect
+from gui.battle_control import g_sessionProvider
 
 class ClientArena(object):
     __onUpdate = {ARENA_UPDATE.VEHICLE_LIST: '_ClientArena__onVehicleListUpdate',
@@ -38,7 +39,8 @@ class ClientArena(object):
      ARENA_UPDATE.DISAPPEAR_BEFORE_RESPAWN: '_ClientArena__onDisappearVehicleBeforeRespawn',
      ARENA_UPDATE.RESOURCE_POINT_STATE_CHANGED: '_ClientArena__onResourcePointStateChanged',
      ARENA_UPDATE.OWN_VEHICLE_INSIDE_RP: '_ClientArena__onOwnVehicleInsideRP',
-     ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP'}
+     ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
+     ARENA_UPDATE.FLAG_BONUSES: '_ClientArena__onFlagBonuses'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, weatherPresetID):
         self.__vehicles = {}
@@ -289,6 +291,16 @@ class ClientArena(object):
 
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})
+
+    def __onFlagBonuses(self, msg):
+        data = cPickle.loads(msg)
+        LOG_DEBUG('[EVENT BONUSES]', data)
+        if data:
+            bonusCtrl = g_sessionProvider.dynamic.mark1Bonus
+            if bonusCtrl is not None:
+                opcode, info = data
+                bonusCtrl.bonusChangedFromArena(opcode, info)
+        return
 
 
 def _convertToList(vec4):

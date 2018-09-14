@@ -112,26 +112,39 @@ class AccountSyncData(object):
 
     def __onSyncResponse(self, syncID, resultID, ext={}):
         if resultID == AccountCommands.RES_NON_PLAYER:
+            LOG_NOTE('Sync response is ignored', syncID)
             return
-        if syncID != self.__syncID:
+        elif syncID != self.__syncID:
+            LOG_NOTE('Sync ID mismatch', self.__syncID, syncID)
             return
-        if resultID < 0:
+        elif resultID < 0:
             LOG_ERROR('Data synchronization failed.')
             self._resynchronize()
             return
-        if self.revision != ext.get('prevRev', self.revision):
-            LOG_ERROR('Incorrect diff received', self.revision, ext['prevRev'])
-            self._resynchronize()
+        else:
+            if 'prevRev' in ext:
+                prevRev = ext['prevRev']
+            elif self.revision == 0:
+                prevRev = self.revision
+            else:
+                LOG_ERROR('Unexpected case: Incorrect diff received', self.revision, None)
+                self._resynchronize()
+                return
+            if self.revision != prevRev:
+                LOG_ERROR('Incorrect diff received', self.revision, prevRev)
+                self._resynchronize()
+                return
+            self.revision = ext.get('rev', self.revision)
+            self.__isSynchronized = True
+            if not self.__account._update(not self.__isFirstSync, ext):
+                return
+            self.__isFirstSync = False
+            subscribers = self.__subscribers
+            self.__subscribers = []
+            for callback in subscribers:
+                callback(resultID)
+
             return
-        self.revision = ext.get('rev', self.revision)
-        self.__isSynchronized = True
-        if not self.__account._update(not self.__isFirstSync, ext):
-            return
-        self.__isFirstSync = False
-        subscribers = self.__subscribers
-        self.__subscribers = []
-        for callback in subscribers:
-            callback(resultID)
 
     def __onSyncComplete(self, syncID, data):
         if syncID != self.__syncID:
@@ -155,6 +168,7 @@ class AccountSyncData(object):
         if self.__ignore:
             return
         crc = self.__persistentCache.getDescr()
+        LOG_NOTE('sendSyncRequest revision={}, syncID={}'.format(self.revision, self.__syncID))
         self.__account._doCmdInt3(AccountCommands.CMD_SYNC_DATA, self.revision, 0 if not crc else crc, 0, proxy)
 
     def __clearPersistentCache(self):

@@ -90,12 +90,16 @@ class BattleLoading(LobbySubView, BaseBattleLoadingMeta, IArenaVehiclesControlle
         for isEnemy, collection in ((False, vos_collections.AllyItemsCollection(sortKey=sortKey)), (True, vos_collections.EnemyItemsCollection(sortKey=sortKey))):
             result = []
             for vInfoVO, vStatsVO in collection.iterator(arenaDP):
+                if self.__isMark1Vehicle(vInfoVO):
+                    continue
                 result.append(self._makeItem(vInfoVO, vStatsVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy, self._getSquadIdx(arenaDP, vInfoVO), isFallout))
 
             self.as_setVehiclesDataS({'vehiclesInfo': result,
              'isEnemy': isEnemy})
 
     def addVehicleInfo(self, vo, arenaDP):
+        if self.__isMark1Vehicle(vo):
+            return
         playerTeam = arenaDP.getNumberOfTeam()
         isEnemy = arenaDP.isEnemyTeam(vo.team)
         vStatsVO = arenaDP.getVehicleStats(vo.vehicleID)
@@ -254,6 +258,13 @@ class BattleLoading(LobbySubView, BaseBattleLoadingMeta, IArenaVehiclesControlle
          'arenaTypeID': self._arenaVisitor.type.getID(),
          'minimapTeam': arenaDP.getNumberOfTeam(),
          'showMinimap': settingID == BattleLoadingTipSetting.OPTIONS.MINIMAP}
+
+    def __isMark1Vehicle(self, vo):
+        isEventBattles = self._arenaVisitor.gui.isEventBattle()
+        if isEventBattles and vo.vehicleType.isMark1:
+            return True
+        else:
+            return False
 
 
 class FalloutMultiTeamBattleLoading(BattleLoading):

@@ -460,8 +460,30 @@ def packFormationElement(formationName):
 
 
 def packAchieveElement(achieveRecordID):
+    """
+    :param achieveRecordID: records unique id from dossiers2/custom/records.py
+    :param classMedalRank: optional records value, used to show class achievement to
+                           determine correct medal rank and image
+    """
     block, achieveName = DB_ID_TO_RECORD[achieveRecordID]
-    return _packIconTextElement(label=i18n.makeString('#achievements:%s' % achieveName), icon='../maps/icons/achievement/32x32/%s.png' % achieveName, dataType='battleStatsAchievementData', dataValue=[block, achieveName])
+    return _packAchieveElement(i18n.makeString('#achievements:%s' % achieveName), '../maps/icons/achievement/32x32/%s.png' % achieveName, block, achieveName)
+
+
+def packAchieveElementByItem(item):
+    """ @item is achievement gui items instance
+    """
+    return _packAchieveElement(item.getUserName(), item.getIcon32x32(), item.getBlock(), item.getName(), item.getValue())
+
+
+def _packAchieveElement(userName, iconPath, block, record, value=0):
+    """ Prepares data to send to the flash
+    :param userName: i18n achievement's name
+    :param iconPath: path to the smallest achievement's icon
+    :param block: dossier block where achievement is placed
+    :param record: achievement unique name within dossier's block
+    :param value: optional for tooltip, just for showing correct user text and image
+    """
+    return _packIconTextElement(label=userName, icon=iconPath, dataType='battleStatsAchievementData', dataValue=[block, record, value])
 
 
 def packCamoElement(camoTypeName):

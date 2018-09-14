@@ -292,9 +292,8 @@ class _QuestInfo(_EventInfo):
         for b in bonuses:
             if b.isShowInGUI():
                 if b.getName() == 'dossier':
-                    for record in b.getRecords():
-                        if record[0] != ACHIEVEMENT_BLOCK.RARE:
-                            result.append(formatters.packAchieveElement(RECORD_DB_IDS[record]))
+                    for achieve in b.getAchievements():
+                        result.append(formatters.packAchieveElementByItem(achieve))
 
                 elif b.getName() == 'customizations':
                     customizationsList.extend(b.getList())

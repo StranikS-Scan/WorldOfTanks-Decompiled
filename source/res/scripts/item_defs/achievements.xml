@@ -596,6 +596,21 @@
       </value>
     </achievement>
     <achievement>
+      <name>	achievements:markI100Years	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1407.96	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
       <name>	fortAchievements:counterblow	</name>
       <type>	dict	</type>
       <value>
@@ -2569,6 +2584,66 @@
         <item>	action	  <name>	section	</name>
         </item>
         <item>	1418.11	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:markIProtector	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1418.12	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:markIBaseProtector	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1418.13	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:markIBomberman	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1418.14	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:markIRepairer	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1418.15	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>

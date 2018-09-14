@@ -42,9 +42,9 @@ class IntroPage(IntroPageMeta):
     def __showNextMovie(self):
         moviePath = self.__movieFiles.pop(0)
         if moviePath in GUI_SETTINGS.compulsoryIntroVideos:
-            self.__showMovie(moviePath)
+            self.__showMovie(moviePath, False)
         elif isIntroVideoSettingChanged():
-            self.__showMovie(moviePath)
+            self.__showMovie(moviePath, True)
             self.__writeSetting = True
         else:
             LOG_DEBUG('Startup Video skipped: {}'.format(moviePath))
@@ -54,10 +54,11 @@ class IntroPage(IntroPageMeta):
                 self.__sendResult(True)
         return
 
-    def __showMovie(self, movie):
+    def __showMovie(self, movie, canSkip):
         LOG_DEBUG('Startup Video: START - movie = %s, sound volume = %d per cent' % (movie, self.__soundValue * 100))
         self.as_playVideoS({'source': movie,
-         'volume': self.__soundValue})
+         'volume': self.__soundValue,
+         'canSkip': canSkip})
 
     def __sendResult(self, isSuccess, msg=''):
         """

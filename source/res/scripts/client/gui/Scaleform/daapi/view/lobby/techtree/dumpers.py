@@ -134,7 +134,7 @@ class ResearchItemsObjDumper(_BaseDumper):
         else:
             if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun(rootItem.descriptor):
                 extraInfo = CLIP_ICON_PATH
-            vClass.update({'name': item.itemTypeName})
+            vClass.update({'name': item.getGUIEmblemID()})
         credits, gold = item.minRentPrice or item.buyPrice
         action = None
         if item.buyPrice != item.defaultPrice and not minRentPricePackage:

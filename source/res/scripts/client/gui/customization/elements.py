@@ -228,6 +228,10 @@ class Element(object):
     def notAllowedNations(self):
         return self.__notAllowedNations
 
+    @property
+    def isDisplayedFirst(self):
+        return False
+
     def _getPrice(self, duration):
         return self._price['actual']['base'][duration][0]
 
@@ -268,6 +272,10 @@ class Emblem(Element):
     def getIgrType(self):
         return self._rawData[1]
 
+    @property
+    def isDisplayedFirst(self):
+        return 'displayedFirst' in self._rawData[6]
+
 
 class Inscription(Element):
     __slots__ = ('_rawData', '_qualifier', '_price', '__isInDossier', '__isInShop', '__isInQuests', '__itemID', '__nationID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__notAllowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays', '__groupName')
@@ -293,6 +301,10 @@ class Inscription(Element):
     @property
     def isFeatured(self):
         return self._rawData[5]
+
+    @property
+    def isDisplayedFirst(self):
+        return 'displayedFirst' in self._rawData[6]
 
 
 class Camouflage(Element):

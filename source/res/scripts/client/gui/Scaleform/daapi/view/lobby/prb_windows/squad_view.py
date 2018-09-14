@@ -210,8 +210,7 @@ class SquadView(SquadViewMeta):
         return False
 
     def __getActionButtonStateVO(self):
-        unitFunctional = self.unitFunctional
-        return SquadActionButtonStateVO(unitFunctional)
+        return SquadActionButtonStateVO(self.unitFunctional)
 
     def __canSendInvite(self):
         return self.unitFunctional.getPermissions().canSendInvite()

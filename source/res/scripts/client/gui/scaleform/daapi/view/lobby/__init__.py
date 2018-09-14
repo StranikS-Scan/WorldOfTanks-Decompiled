@@ -61,6 +61,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.VehicleInfoWindow import VehicleInfoWindow
     from gui.Scaleform.daapi.view.lobby.VehicleSellDialog import VehicleSellDialog
     from gui.Scaleform.daapi.view.lobby.vehiclePreview.VehiclePreview import VehiclePreview
+    from gui.Scaleform.daapi.view.lobby.markPreview.MarkPreview import MarkPreview
     from gui.Scaleform.daapi.view.meta.MiniClientComponentMeta import MiniClientComponentMeta
     return (ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_LOADING, BattleLoading, 'battleLoading.swf', ViewTypes.DEFAULT, VIEW_ALIAS.BATTLE_LOADING, ScopeTemplates.DEFAULT_SCOPE),
@@ -69,6 +70,7 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_CUSTOMIZATION, CustomizationMainView, 'customizationMainView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_CUSTOMIZATION, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW, VehiclePreview, 'vehiclePreview.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.MARK_PREVIEW, MarkPreview, 'markPreview.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.MARK_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CHECK_BOX_DIALOG, CheckBoxDialog, 'confirmDialog.swf', ViewTypes.TOP_WINDOW, 'confirmDialog', None, ScopeTemplates.DYNAMIC_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, ConfirmModuleDialog, 'confirmModuleWindow.swf', ViewTypes.TOP_WINDOW, 'confirmModuleDialog', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_BOOSTER_DIALOG, ConfirmBoosterDialog, 'confirmBoostersWindow.swf', ViewTypes.TOP_WINDOW, 'confirmBoosterDialog', None, ScopeTemplates.DEFAULT_SCOPE),
@@ -132,6 +134,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.LOBBY, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_CUSTOMIZATION, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_PREVIEW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.MARK_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_MENU, self.loadViewByCtxEvent),
          (VIEW_ALIAS.MODULE_INFO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.PERSONAL_CASE, self.loadViewByCtxEvent),

@@ -16,7 +16,7 @@ def __makeAchievementFileRequest(urlName, params, achievementId, callback):
         callback(achievementId, None)
         return
     except TypeError:
-        LOG_ERROR('Incorrect url format: %s' % url)
+        LOG_ERROR('Incorrect url format: %s' % url, params)
         callback(achievementId, None)
         return
     except:

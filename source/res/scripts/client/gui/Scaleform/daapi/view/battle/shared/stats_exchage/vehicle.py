@@ -51,12 +51,27 @@ class TeamsSortedIDsComposer(BiSortedIDsComposer):
         super(TeamsSortedIDsComposer, self).__init__(left=AllySortedIDsComposer(voField='leftItemsIDs', sortKey=sortKey), right=EnemySortedIDsComposer(voField='rightItemsIDs', sortKey=sortKey))
 
 
+class Mark1EventTeamsSortedIDsComposer(BiSortedIDsComposer):
+    __slots__ = ()
+
+    def __init__(self, sortKey=vos_collections.Mark1EventSort):
+        super(Mark1EventTeamsSortedIDsComposer, self).__init__(left=AllySortedIDsComposer(voField='leftItemsIDs', sortKey=sortKey), right=EnemySortedIDsComposer(voField='rightItemsIDs', sortKey=sortKey))
+
+
 class TeamsCorrelationIDsComposer(BiSortedIDsComposer):
     __slots__ = ()
 
     def __init__(self):
         sortKey = vos_collections.FragCorrelationSortKey
         super(TeamsCorrelationIDsComposer, self).__init__(left=AllySortedIDsComposer(voField='leftCorrelationIDs', sortKey=sortKey), right=EnemySortedIDsComposer(voField='rightCorrelationIDs', sortKey=sortKey))
+
+
+class Mark1EventTeamsCorrelationIDsComposer(BiSortedIDsComposer):
+    __slots__ = ()
+
+    def __init__(self):
+        sortKey = vos_collections.Mark1EventSort
+        super(Mark1EventTeamsCorrelationIDsComposer, self).__init__(left=AllySortedIDsComposer(voField='leftCorrelationIDs', sortKey=sortKey), right=EnemySortedIDsComposer(voField='rightCorrelationIDs', sortKey=sortKey))
 
 
 class TotalStatsComposer(broker.IExchangeComposer):

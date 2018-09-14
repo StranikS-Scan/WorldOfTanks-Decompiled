@@ -440,6 +440,13 @@ class EventListener():
         :param url: The URL that the frame wants to navigate to.
         :return: True to block a navigation. Return False to let it continue.
         """
+        from gui import GUI_SETTINGS
+        for tpl in GUI_SETTINGS.forumURL:
+            if tpl in url:
+                from gui.shared import g_eventBus, events
+                g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.FORUM, url))
+                return True
+
         return False
 
     def onWhitelistMiss(self, isMainFrame, failedURL):

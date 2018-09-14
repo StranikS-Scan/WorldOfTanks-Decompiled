@@ -606,6 +606,14 @@ class VehicleStateController(IBattleController):
             return None
             return None
 
+    def hasStateValue(self, statID):
+        """
+        Return if the provided stateID is in the cache
+        :param statID: state to check
+        :return: boolean result
+        """
+        return statID in self.__cachedStateValues
+
     def invalidate(self, state, value, vehicleID=0):
         """
         Invalidates vehicle sates. The method should be invoked by vehicle state change trigger.

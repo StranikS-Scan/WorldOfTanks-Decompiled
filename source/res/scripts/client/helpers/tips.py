@@ -3,7 +3,7 @@
 import re
 import sys
 from collections import defaultdict, namedtuple
-from constants import ARENA_GUI_TYPE
+from constants import ARENA_GUI_TYPE, MARK1_TEAM_NUMBER
 import constants
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_control import g_sessionProvider
@@ -107,7 +107,16 @@ class SandboxTipsCriteria(_TipsCriteria):
 class EventTipsCriteria(_TipsCriteria):
 
     def find(self):
-        return _FoundTip(i18n.makeString('#tips:eventTitle'), i18n.makeString('#tips:eventMessage'), TIPS_IMAGE_SOURCE % 'event')
+        arenaDP = g_sessionProvider.getCtx().getArenaDP()
+        if arenaDP is not None:
+            playerTeam = arenaDP.getNumberOfTeam()
+        else:
+            playerTeam = MARK1_TEAM_NUMBER
+        if playerTeam == MARK1_TEAM_NUMBER:
+            postfix = 'Attack'
+        else:
+            postfix = 'Defence'
+        return _FoundTip(i18n.makeString('#tips:eventTitle%s' % postfix), i18n.makeString('#tips:eventMessage%s' % postfix), TIPS_IMAGE_SOURCE % 'event')
 
 
 def getTipsCriteria(arenaVisitor):

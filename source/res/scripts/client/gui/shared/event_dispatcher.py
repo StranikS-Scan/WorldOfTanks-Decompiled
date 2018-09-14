@@ -80,6 +80,11 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
          'previewAlias': previewAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showMarkPreview():
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MARK_PREVIEW, ctx={'entity3d': None}), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
 def hideBattleResults():
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 

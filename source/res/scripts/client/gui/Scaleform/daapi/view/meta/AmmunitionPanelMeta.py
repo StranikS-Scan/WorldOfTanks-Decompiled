@@ -43,3 +43,10 @@ class AmmunitionPanelMeta(ModulesPanelMeta):
         :return :
         """
         return self.flashObject.as_updateVehicleStatus(data) if self._isDAAPIInited() else None
+
+    def as_showCounterS(self, count):
+        """
+        :param count:
+        :return :
+        """
+        return self.flashObject.as_showCounter(count) if self._isDAAPIInited() else None

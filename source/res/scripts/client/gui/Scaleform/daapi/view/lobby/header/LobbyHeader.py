@@ -79,6 +79,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
     def __init__(self):
         super(LobbyHeader, self).__init__()
         self.__falloutCtrl = None
+        self.__mark1PreviewOpened = False
         return
 
     def _populate(self):
@@ -103,6 +104,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.Mark1PreviewEvent.MARK1_WINDOW_OPENED, self.__onMark1PreviewOpened, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.Mark1PreviewEvent.MARK1_WINDOW_CLOSED, self.__onMark1PreviewClosed, scope=EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'stats.credits': self.__setCredits,
          'stats.gold': self.__setGold,
          'stats.freeXP': self.__setFreeXP,
@@ -172,6 +175,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.Mark1PreviewEvent.MARK1_WINDOW_OPENED, self.__onMark1PreviewOpened, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.Mark1PreviewEvent.MARK1_WINDOW_CLOSED, self.__onMark1PreviewClosed, scope=EVENT_BUS_SCOPE.LOBBY)
         game_control.g_instance.gameSession.onPremiumNotify -= self.__onPremiumTimeChanged
         game_control.g_instance.wallet.onWalletStatusChanged -= self.__onWalletChanged
         game_control.g_instance.igr.onIgrTypeChanged -= self.__onIGRChanged
@@ -468,7 +473,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
             else:
                 iconSquad = RES_ICONS.MAPS_ICONS_BATTLETYPES_40X40_SQUAD
             self.as_updateSquadS(isInSquad, tooltip, TOOLTIP_TYPES.COMPLEX, isEvent, iconSquad)
-            isFightBtnDisabled = not canDo or selected.isFightButtonForcedDisabled()
+            isFightBtnDisabled = not canDo or selected.isFightButtonForcedDisabled() or isEvent and self.__mark1PreviewOpened
             if isFightBtnDisabled and not state.hasLockedState:
                 if state.isInPreQueue(queueType=constants.QUEUE_TYPE.SANDBOX) and canDoMsg == QUEUE_RESTRICTION.LIMIT_LEVEL:
                     self.as_setFightBtnTooltipS(self.__getSandboxTooltipData())
@@ -476,6 +481,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
                     self.as_setFightBtnTooltipS(self.__getFightBtnTooltipData(canDoMsg))
                 elif isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
                     self.as_setFightBtnTooltipS(self.__getEventTooltipData())
+                elif isEvent and self.__mark1PreviewOpened:
+                    self.as_setFightBtnTooltipS(self.__getMark1PreviewTooltipData())
                 else:
                     self.as_setFightBtnTooltipS(None)
             else:
@@ -605,3 +612,16 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
     def __updatePing(self, pingValues):
         currentPing = pingValues.get(connectionManager.url, UNDEFINED_PING_VAL)
         self.as_updatePingStatusS(getPingStatus(currentPing), g_settingsCore.getSetting('isColorBlind'))
+
+    def __onMark1PreviewOpened(self, _):
+        self.__mark1PreviewOpened = True
+        self.__updatePrebattleControls()
+
+    def __onMark1PreviewClosed(self, _):
+        self.__mark1PreviewOpened = False
+        self.__updatePrebattleControls()
+
+    def __getMark1PreviewTooltipData(self):
+        header = i18n.makeString(TOOLTIPS.HANGAR_MARKPREVIEW_REDBUTTONDISABLED_HEADER)
+        body = i18n.makeString(TOOLTIPS.HANGAR_MARKPREVIEW_REDBUTTONDISABLED_DESCRIPTION)
+        return makeTooltip(header, body)

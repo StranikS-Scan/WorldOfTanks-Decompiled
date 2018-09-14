@@ -76,6 +76,8 @@
     <_120mm_Gun_L11A1>	82	</_120mm_Gun_L11A1>
     <_90mm_Gun_T208_rifled>	83	</_90mm_Gun_T208_rifled>
     <_3pdr_gun_Hotchkiss_1_bot>	84	</_3pdr_gun_Hotchkiss_1_bot>
+    <QF_6_pounder_8cwt_Mk_I_A>	85	</QF_6_pounder_8cwt_Mk_I_A>
+    <_37mm_Hothckiss_Naval>	87	</_37mm_Hothckiss_Naval>
     <_20pdr_Gun_Type_A_IGR>	60001	</_20pdr_Gun_Type_A_IGR>
     <_20pdr_Gun_Type_B_IGR>	60002	</_20pdr_Gun_Type_B_IGR>
     <_75mm_Gun_Vickers_HV_IGR>	60003	</_75mm_Gun_Vickers_HV_IGR>
@@ -238,6 +240,64 @@
         </_15mm_AP_W_Mk1>
       </shots>
     </_15mm_Machine_gun_BESA_>
+    <_37mm_Hothckiss_Naval>
+      <userString>	#gb_vehicles:_7.7mm_Vickers_Maxim	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	1000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.24	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.013	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_MarkI_Gochkins_auto	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -37.0 1.0 -37.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	50	</rotationSpeed>
+      <reloadTime>	3	</reloadTime>
+      <maxAmmo>	92	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	104	</weight>
+      <maxHealth>	54	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.3	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_37mm_Common_Shell>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	15 10	</piercingPower>
+        </_37mm_Common_Shell>
+        <_37mm_Incendiary_Shell>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	40 30	</piercingPower>
+        </_37mm_Incendiary_Shell>
+        <_37mm_Common_Shell_Auto>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1200	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	15 10	</piercingPower>
+        </_37mm_Common_Shell_Auto>
+      </shots>
+    </_37mm_Hothckiss_Naval>
     <_3pdr_gun_Hotchkiss_bot>
       <userString>	#gb_vehicles:_3pdr_gun_Hotchkiss_bot	</userString>
       <tags></tags>
@@ -1347,6 +1407,64 @@
         </_6pdr_HE_Common>
       </shots>
     </QF_6_pounder_8cwt_Mk_I>
+    <QF_6_pounder_8cwt_Mk_I_A>
+      <userString>	#gb_vehicles:QF_6_pounder_8cwt_Mk_I_A	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.26	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.15	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_MarkI_6pdr	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	2.28571428571429	</reloadTime>
+      <maxAmmo>	92	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	450	</weight>
+      <maxHealth>	94	</maxHealth>
+      <maxRegenHealth>	47	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.43428571428571	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_6pdr_AP_Steel_HSCT_A>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	538	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	57 45	</piercingPower>
+        </_6pdr_AP_Steel_HSCT_A>
+        <_6pdr_AP_Steel_NF_A>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	673	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	72 57	</piercingPower>
+        </_6pdr_AP_Steel_NF_A>
+        <_6pdr_HE_Common_A>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	538	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	29 29	</piercingPower>
+        </_6pdr_HE_Common_A>
+      </shots>
+    </QF_6_pounder_8cwt_Mk_I_A>
     <QF_6_pounder_8cwt_Mk_I_AT>
       <userString>	#gb_vehicles:QF_6_pounder_8cwt_Mk_I_AT	</userString>
       <tags></tags>

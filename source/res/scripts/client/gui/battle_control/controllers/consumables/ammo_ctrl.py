@@ -436,7 +436,11 @@ class AmmoController(MethodsRules, IBattleController):
         """Gets quantity of current shells.
         :return: tuple(quantity, quantityInClip).
         """
-        return self.getShells(self.__currShellCD)
+        if self.__currShellCD is not None:
+            return self.getShells(self.__currShellCD)
+        else:
+            return (-1, -1)
+            return
 
     def getShellsQuantityLeft(self):
         """Gets quantity of shells that are left before to next clip reloading.

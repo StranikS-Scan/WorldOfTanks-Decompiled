@@ -243,3 +243,13 @@ class IVehiclesAndPositionsController(IArenaVehiclesController):
 
     def updatePositions(self, iterator):
         pass
+
+
+class IVehiclesPositionsTeamBasesController(IVehiclesAndPositionsController, ITeamsBasesController):
+    """
+    Interface for Mark1 Event (progress bar panel)
+    """
+    __slots__ = ()
+
+    def getCtrlScope(self):
+        return _SCOPE.VEHICLES | _SCOPE.POSITIONS | _SCOPE.TEAMS_BASES

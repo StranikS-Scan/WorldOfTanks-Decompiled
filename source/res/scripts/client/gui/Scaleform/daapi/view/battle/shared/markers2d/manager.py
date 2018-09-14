@@ -102,15 +102,11 @@ class MarkersManager(Flash, VehicleMarkersManagerMeta, plugins.IMarkersManager):
         self.__canvas.scaleProperties = GUI_SETTINGS.markerScaleSettings
         self.__canvas.alphaProperties = GUI_SETTINGS.markerBgSettings
         self.__canvasProxy = weakref.ref(self.__canvas)
-        self.__parentUI.component.addChild(self.__canvas, 'vehicleMarkersCanvas')
+        self.component.addChild(self.__canvas, 'vehicleMarkersCanvas')
 
     def __removeCanvas(self):
-        if self.__parentUI is not None:
-            try:
-                setattr(self.__parentUI.component, 'vehicleMarkersCanvas', None)
-            except:
-                LOG_CURRENT_EXCEPTION()
-
+        if self.__canvas is not None:
+            self.component.delChild(self.__canvas)
         self.__canvas = None
         self.__canvasProxy = None
         return

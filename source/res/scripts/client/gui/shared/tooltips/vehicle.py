@@ -311,7 +311,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                     if isAvailable and not isUnlocked and need > 0 and techTreeNode is not None:
                         neededValue = need
                     block.append(makePriceBlock(cost, CURRENCY_SETTINGS.UNLOCK_PRICE, neededValue, valueWidth=self._valueWidth))
-            if buyPrice and not (self.vehicle.isDisabledForBuy or self.vehicle.isPremiumIGR or self.vehicle.isTelecom):
+            if buyPrice and not (self.vehicle.isDisabledForBuy or self.vehicle.isPremiumIGR or self.vehicle.isTelecom or self.vehicle.isOnlyForEventBattles):
                 price = self.vehicle.buyPrice
                 money = g_itemsCache.items.stats.money
                 actionPrc = self.vehicle.actionPrc
@@ -324,7 +324,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                 if isInInventory or not isInInventory and not isUnlocked and not isNextToUnlock:
                     neededValue = None
                 block.append(makePriceBlock(buyPriceText, CURRENCY_SETTINGS.getBuySetting(currency), neededValue, oldPrice, actionPrc, valueWidth=self._valueWidth))
-            if sellPrice and not self.vehicle.isTelecom:
+            if sellPrice and not (self.vehicle.isTelecom or self.vehicle.isOnlyForEventBattles):
                 sellPrice = self.vehicle.sellPrice
                 if sellPrice.isSet(Currency.GOLD):
                     sellPriceText = text_styles.gold(_int(sellPrice.gold))

@@ -41,6 +41,7 @@ class ITEM_TYPES(object):
     TURRETROTATOR_NAME = '#item_types:turretRotator/name'
     SURVEYINGDEVICE_NAME = '#item_types:surveyingDevice/name'
     TRACK_NAME = '#item_types:track/name'
+    WHEEL_NAME = '#item_types:wheel/name'
     RADIO_NAME = '#item_types:radio/name'
     RADIO_DESC = '#item_types:radio/desc'
     RADIO_TAGS = '#item_types:radio/tags'

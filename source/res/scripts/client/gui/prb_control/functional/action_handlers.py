@@ -223,9 +223,6 @@ class EventSquadActionsHandler(SquadActionsHandler):
 
     def _loadWindow(self, ctx):
         g_eventDispatcher.loadEventSquad(ctx, self._getTeamReady())
-        if not self._functional.getPlayerInfo().isReady:
-            eventVehicle = g_eventsCache.getEventVehicles()[0]
-            g_currentVehicle.selectVehicle(eventVehicle.invID)
 
 
 class BalancedSquadActionsHandler(SquadActionsHandler):

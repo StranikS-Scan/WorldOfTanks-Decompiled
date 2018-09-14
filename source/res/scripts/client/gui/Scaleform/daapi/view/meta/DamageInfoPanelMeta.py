@@ -151,6 +151,34 @@ class DamageInfoPanelMeta(BaseDAAPIComponent):
         """
         return self.flashObject.as_hideSurveyingDevice() if self._isDAAPIInited() else None
 
+    def as_updateLeftWheelS(self, stateId, isHit):
+        """
+        :param stateId:
+        :param isHit:
+        :return :
+        """
+        return self.flashObject.as_updateLeftWheel(stateId, isHit) if self._isDAAPIInited() else None
+
+    def as_hideLeftWheelS(self):
+        """
+        :return :
+        """
+        return self.flashObject.as_hideLeftWheel() if self._isDAAPIInited() else None
+
+    def as_updateRightWheelS(self, stateId, isHit):
+        """
+        :param stateId:
+        :param isHit:
+        :return :
+        """
+        return self.flashObject.as_updateRightWheel(stateId, isHit) if self._isDAAPIInited() else None
+
+    def as_hideRightWheelS(self):
+        """
+        :return :
+        """
+        return self.flashObject.as_hideRightWheel() if self._isDAAPIInited() else None
+
     def as_updateCommanderS(self, stateId, isHit):
         """
         :param stateId:

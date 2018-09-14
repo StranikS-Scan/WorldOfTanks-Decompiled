@@ -23,6 +23,16 @@ from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+_CUSTOMIZATIONS_SCALE = 44.0 / 128
+
+def _getAchievement(block, record, value):
+    factory = getAchievementFactory((block, record))
+    return factory.create(value=value)
+
+
+def _isAchievement(block):
+    return block in ACHIEVEMENT_BLOCK.ALL
+
 
 class SimpleBonus(object):
 
@@ -337,28 +347,43 @@ class VehiclesBonus(SimpleBonus):
 class DossierBonus(SimpleBonus):
 
     def getRecords(self):
-        records = set()
+        """ Returns dictionary of dossier records {(dossier_block, record_name): record_value), ....}
+        """
+        records = {}
         if self._value is not None:
             for dossierType in self._value:
                 if dossierType != DOSSIER_TYPE.CLAN:
-                    for name in self._value[dossierType]:
-                        records.add(name)
+                    for name, data in self._value[dossierType].iteritems():
+                        records[name] = data.get('value', 0)
 
         return records
+
+    def getAchievements(self):
+        result = []
+        for (block, record), value in self.getRecords().iteritems():
+            if _isAchievement(block):
+                if block == ACHIEVEMENT_BLOCK.RARE:
+                    continue
+                try:
+                    result.append(_getAchievement(block, record, value))
+                except Exception:
+                    LOG_ERROR('There is error while getting bonus dossier record name')
+                    LOG_CURRENT_EXCEPTION()
+
+        return result
 
     def format(self):
         return ', '.join(self.formattedList())
 
     def formattedList(self):
         result = []
-        for block, record in self.getRecords():
+        for (block, record), value in self.getRecords().iteritems():
             try:
-                if block in ACHIEVEMENT_BLOCK.ALL:
-                    factory = getAchievementFactory((block, record))
-                    if factory is not None:
-                        achieve = factory.create()
-                        if achieve is not None:
-                            result.append(achieve.userName)
+                if _isAchievement(block):
+                    if block == ACHIEVEMENT_BLOCK.RARE:
+                        continue
+                    achieve = _getAchievement(block, record, value)
+                    result.append(achieve.userName)
                 else:
                     result.append(i18n.makeString('#quests:details/dossier/%s' % record))
             except Exception:

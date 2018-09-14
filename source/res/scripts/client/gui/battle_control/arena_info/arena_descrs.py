@@ -3,7 +3,7 @@
 from collections import namedtuple
 import weakref
 import BattleReplay
-from constants import IS_DEVELOPMENT
+from constants import IS_DEVELOPMENT, MARK1_TEAM_NUMBER
 from gui.Scaleform import getNecessaryArenaFrameName
 from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
@@ -286,6 +286,17 @@ class FalloutBattlesDescription(ArenaWithLabelDescription):
             return _QuestInfo(i18n.makeString(INGAME_GUI.POTAPOVQUESTS_TIP_NOQUESTS_BATTLETYPE), '', '')
 
 
+class EventBattleDescription(ArenaWithLabelDescription):
+    __slots__ = ()
+
+    def getWinString(self, isInBattle=True):
+        if self._team == MARK1_TEAM_NUMBER:
+            postfix = 'Attack'
+        else:
+            postfix = 'Defence'
+        return i18n.makeString('#arenas:event/mark1/description/%s' % postfix)
+
+
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui
     if guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle():
@@ -294,6 +305,8 @@ def createDescription(arenaVisitor):
         description = TutorialBattleDescription(arenaVisitor)
     elif guiVisitor.isFalloutBattle():
         description = FalloutBattlesDescription(arenaVisitor)
+    elif guiVisitor.isEventBattle():
+        description = EventBattleDescription(arenaVisitor)
     elif guiVisitor.hasLabel():
         description = ArenaWithLabelDescription(arenaVisitor)
     else:

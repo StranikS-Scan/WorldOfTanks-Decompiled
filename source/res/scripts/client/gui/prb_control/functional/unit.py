@@ -1745,6 +1745,10 @@ class SquadUnitFunctional(UnitFunctional):
     def rejoin(self):
         super(SquadUnitFunctional, self).rejoin()
         self.unit_onUnitRosterChanged()
+        if self.getPlayerInfo().isReady and self._flags.isInQueue():
+            g_eventDispatcher.loadBattleQueue()
+        else:
+            g_eventDispatcher.loadHangar()
 
     def onEventsSyncCompleted(self, *args):
         enabled = self.isBalancedSquadEnabled()

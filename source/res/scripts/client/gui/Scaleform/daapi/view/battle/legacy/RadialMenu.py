@@ -245,12 +245,14 @@ class RadialMenu(UIInterface):
         chatCommands = g_sessionProvider.shared.chatCommands
         if chatCommands is None:
             return
-        if action in self.TARGET_ACTIONS:
-            chatCommands.sendTargetedCommand(action, self.__currentTarget.id)
-        elif action == self.RELOADING_GUN_ACTION:
-            chatCommands.sendReloadingCommand()
         else:
-            chatCommands.sendCommand(action)
+            if action in self.TARGET_ACTIONS:
+                chatCommands.sendTargetedCommand(action, self.__currentTarget.id)
+            elif action == self.RELOADING_GUN_ACTION:
+                chatCommands.sendReloadingCommand()
+            else:
+                chatCommands.sendCommand(action)
+            return
 
     def __onMenuShow(self, mouseUsedForShow):
         if not self.__ingameMenuIsVisible():

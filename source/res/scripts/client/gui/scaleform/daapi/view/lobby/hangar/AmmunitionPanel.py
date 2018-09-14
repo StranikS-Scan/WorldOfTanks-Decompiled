@@ -17,6 +17,7 @@ from gui.shared.events import LoadViewEvent
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from helpers import i18n
 from gui.shared import event_dispatcher as shared_events
+from gui.Scaleform.daapi.view.lobby.shared.new_items_notification import CustomizationItemNotification
 
 class AmmunitionPanel(AmmunitionPanelMeta):
     __FITTING_SLOTS = (GUI_ITEM_TYPE_NAMES[2],
@@ -81,6 +82,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
              'isBackground': isBackground})
+            self.as_showCounterS(CustomizationItemNotification.getFormattedOverallCount())
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()
@@ -92,6 +94,8 @@ class AmmunitionPanel(AmmunitionPanelMeta):
             vehicle = g_currentVehicle.item
             stateWarning = vehicle.isBroken or not vehicle.isAmmoFull or not g_currentVehicle.isAutoLoadFull() or not g_currentVehicle.isAutoEquipFull()
             for shell in vehicle.shells:
+                if shell.isHidden:
+                    continue
                 shells.append({'id': str(shell.intCD),
                  'type': shell.type,
                  'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),

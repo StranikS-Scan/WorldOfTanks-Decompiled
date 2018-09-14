@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/__init__.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.hangar.filter_popover import FilterPopover
 from gui.Scaleform.daapi.view.lobby.shared.fitting_select_popover import FittingSelectPopover
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler

@@ -24,3 +24,25 @@ class FlagNotificationMeta(BaseDAAPIComponent):
         :return :
         """
         return self.flashObject.as_setActive(value) if self._isDAAPIInited() else None
+
+    def as_setupS(self, states):
+        """
+        :param states:
+        :return :
+        """
+        return self.flashObject.as_setup(states) if self._isDAAPIInited() else None
+
+    def as_hideS(self):
+        """
+        :return :
+        """
+        return self.flashObject.as_hide() if self._isDAAPIInited() else None
+
+    def as_updateFieldsS(self, state, titleStr, body):
+        """
+        :param state:
+        :param titleStr:
+        :param body:
+        :return :
+        """
+        return self.flashObject.as_updateFields(state, titleStr, body) if self._isDAAPIInited() else None

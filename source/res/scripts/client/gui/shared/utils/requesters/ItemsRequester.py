@@ -134,6 +134,7 @@ class REQ_CRITERIA(object):
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
+        MARK1 = RequestCriteria(PredicateCondition(lambda item: item.isMark1))
         LOCKED_BY_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isLocked and item.typeOfLockingArena in ARENA_BONUS_TYPE.FALLOUT_RANGE))
         ONLY_FOR_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isFalloutOnly()))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))

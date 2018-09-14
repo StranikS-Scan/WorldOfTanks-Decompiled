@@ -316,9 +316,11 @@ class AvatarInputHandler(CallbackDelayer):
         arcadeMode.camera.reinitMatrix()
 
     def deactivatePostmortem(self):
-        self.onControlModeChanged('arcade')
         arcadeMode = self.__ctrls['arcade']
         arcadeMode.camera.setToVehicleDirection()
+        pos = self.getDesiredShotPoint()
+        self.onControlModeChanged('arcade', prevModeName='postmortem', preferredPos=pos, camMatrix=arcadeMode.camera.camera.matrix)
+        arcadeMode.camera.camera.resetCollider()
         self.__identifySPG()
         self.setReloading(-1)
 

@@ -75,10 +75,10 @@ class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
         return
 
     def _sendAccountData(self, targetData, accountDossier):
+        self._setInitData(accountDossier)
         vo = getStatisticsVO(battlesType=self._battlesType, targetData=targetData, accountDossier=accountDossier, isCurrentUser=self._userID is None)
         if self._battlesType in (PROFILE_DROPDOWN_KEYS.TEAM, PROFILE_DROPDOWN_KEYS.STATICTEAM, PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON):
             if self._battlesType in (PROFILE_DROPDOWN_KEYS.STATICTEAM, PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON):
-                self._setInitData(accountDossier)
                 self._battlesType = PROFILE_DROPDOWN_KEYS.STATICTEAM
                 vo['headerText'] = i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_STATICTEAM)
                 vo['dropdownSeasonLabel'] = text_styles.main(CYBERSPORT.STATICFORMATIONSTATSVIEW_SEASONFILTER)

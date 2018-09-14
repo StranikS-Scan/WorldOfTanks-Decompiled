@@ -146,6 +146,21 @@
       <wwsound>	ambient_burn_static_small	</wwsound>
     </model>
     <model>
+      <modelName>	particles/Event/map/vfx_escort_fire_storm.xml	</modelName>
+      <offset>	0 1 0	</offset>
+      <wwsound>	ambient_burn_static_big	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/Event/map/vfx_escort_fireland.xml	</modelName>
+      <offset>	0 1 0	</offset>
+      <wwsound>	ambient_burn_static_mid	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/Event/map/vfx_escort_firesmoke.xml	</modelName>
+      <offset>	0 1 0	</offset>
+      <wwsound>	ambient_burn_static_mid	</wwsound>
+    </model>
+    <model>
       <modelName>	content/Environment/envAM_004_WaterTower/normal/lod0/envAM_004_WaterTower_big.model	</modelName>
       <offset>	0 25 0	</offset>
       <wwsound>	ambient_static_objects_water_tower	</wwsound>
@@ -2300,6 +2315,36 @@
       <offset>	0 7 0	</offset>
       <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
     </model>
+    <model>
+      <modelName>	speedtree/122_somme/Bush.spt	</modelName>
+      <offset>	0 2 0	</offset>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/122_somme/Chestnut.spt	</modelName>
+      <offset>	0 6 0	</offset>
+      <wwsound>	ambient_trees_yellow_soft_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/122_somme/Linden_2.spt	</modelName>
+      <offset>	0 6 0	</offset>
+      <wwsound>	ambient_trees_yellow_dry_comb_big_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/122_somme/Linden_3.spt	</modelName>
+      <offset>	0 8 0	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/122_somme/LiveOakDry.spt	</modelName>
+      <offset>	0 12 0	</offset>
+      <wwsound>	ambient_trees_yellow_tree_few_foliage_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/122_somme/Platan1.spt	</modelName>
+      <offset>	0 8 0	</offset>
+      <wwsound>	ambient_trees_green_comb_big_01	</wwsound>
+    </model>
   </lightSounds>
   <birds>
     <seagull>
@@ -2320,6 +2365,35 @@
     </dowe>
   </birds>
   <mapActivities>
+    <h18_bdtanks100_2016_plane>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName></wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/hangar/h18_WGL_bdtanks100_2016_plane_fly.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-112.635933 95.114517 -290.641998	</position>
+        <speed0>	5.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-146.554031 85.807449 77.353294	</position>
+        <speed0>	5.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-197.851990 98.676125 292.417084	</position>
+        <speed0>	5.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </h18_bdtanks100_2016_plane>
     <eiffel_tower_FAU_explosion_sound_1>
       <channel0>
         <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
@@ -3349,6 +3423,890 @@
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
     </wg_bday_lorry_moving>
+    <NatDay_CN_plane_flying>
+      <channel0>
+        <modelName>	content/Environment/hangar_NatDay_CN/environment/airplanes/normal/lod0/fly_airplane.model	</modelName>
+        <rollMagnitude>	2.000000	</rollMagnitude>
+        <rollRelaxation>	2.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.500000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.500000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 200.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_NatDay_CN_plane	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/cn_plane_flying.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	54.290058 19.518660 229.253632	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	220.749252 30.566456 269.378937	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	271.347748 30.355074 225.877792	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	282.947906 26.960182 74.606781	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	237.917419 30.581692 -42.622292	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	143.734177 35.225113 -116.984375	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	74.389709 35.551582 -135.760162	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	-8.777863 34.136650 -117.591011	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	-69.592880 29.356125 -52.912437	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	-94.770744 25.792444 32.098576	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	-55.102146 14.750563 132.728043	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+      <point>
+        <position>	16.784475 6.192860 173.914368	</position>
+        <speed0>	50.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
+      </point>
+    </NatDay_CN_plane_flying>
+    <somme_cannon_shoot_1>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	ev_mark_cannon	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Event/map/vfx_escort_cannon.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-321.757263 88.591385 456.638489	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-320.836212 89.449005 455.000549	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_cannon_shoot_1>
+    <somme_cannon_shoot_2>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	ev_mark_cannon	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Event/map/vfx_escort_cannon.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-344.739563 88.414780 443.080688	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-344.110901 88.896240 441.168671	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_cannon_shoot_2>
+    <somme_cannon_shoot_3>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	ev_mark_cannon	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Event/map/vfx_escort_cannon.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-368.891235 88.339569 426.214325	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-367.912964 88.922974 424.739319	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_cannon_shoot_3>
+    <somme_cannon_shoot_4>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	ev_mark_cannon	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Event/map/vfx_escort_cannon.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-388.921936 88.825150 417.621918	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-387.991364 89.649033 416.185516	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_cannon_shoot_4>
+    <somme_cannon_shoot_5>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	ev_mark_cannon	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Event/map/vfx_escort_cannon.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-408.447418 88.216026 406.529968	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-407.096954 89.001877 405.195313	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_cannon_shoot_5>
+    <somme_sc1_a1>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod0/mle_122_02_Plane_eff.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	675.060974 54.436424 -466.962097	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	1.108788 43.177731 -83.691452	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-343.818481 77.774292 347.209503	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-663.346313 56.610836 659.455139	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc1_a1>
+    <somme_sc1_a2>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod0/mle_122_02_Plane_eff.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_mustang_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	668.680664 52.538292 -476.482971	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-12.505466 50.975170 -89.728745	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-359.800659 90.226646 341.358368	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-673.092896 44.360081 641.761536	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc1_a2>
+    <somme_sc1_a3>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod0/mle_122_02_Plane_eff.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	662.915100 50.313560 -514.840027	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	48.694172 41.259083 -234.104675	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-230.343140 54.508160 -331.105988	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-595.654114 17.094887 -661.149658	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc1_a3>
+    <somme_sc1_a4>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod0/mle_122_02_Plane_eff.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_bomber_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	659.469543 44.362335 -531.429626	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	49.744114 37.557056 -253.515274	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-218.408981 52.170635 -354.300690	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-591.096069 16.809525 -679.464783	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc1_a4>
+    <somme_sc1_a5>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod0/mle_122_02_Plane_eff.model	</modelName>
+        <rollMagnitude>	3.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_mustang_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	695.395874 52.523918 -421.557983	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	35.582115 21.307060 -50.538734	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-39.780678 32.868031 108.562675	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	160.070801 54.878353 493.218445	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	510.223114 3.127098 682.616577	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc1_a5>
+    <somme_sc1_a6>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod0/mle_122_02_Plane_eff.model	</modelName>
+        <rollMagnitude>	3.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_yak_3_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	690.068237 50.699455 -434.781921	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	32.841595 69.088715 -64.268974	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-54.742367 66.194466 114.953873	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	151.504379 55.770489 510.725952	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	484.361786 2.650742 693.340027	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc1_a6>
+    <somme_sc2_a1>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod3/mle_122_03_Plane.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_yak_3_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-759.441345 1.247269 489.111267	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-245.487045 80.105865 -29.404686	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	338.522186 121.206108 -354.665253	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	525.741394 97.632248 -28.753681	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	486.698517 25.946682 695.026184	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc2_a1>
+    <somme_sc2_a2>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod3/mle_122_03_Plane.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_bomber_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-788.439087 -1.656052 468.359497	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-256.337891 94.080368 -51.752541	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	333.817596 106.044518 -395.384888	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	545.765198 90.721985 -73.707718	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	534.339600 27.514599 668.877319	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc2_a2>
+    <somme_sc2_a3>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod3/mle_122_03_Plane.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_mustang_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-742.362366 0.193581 510.233368	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-206.442642 100.554535 0.162127	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	339.477600 106.457970 -317.443512	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	505.020081 94.580978 30.092266	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	438.694580 23.791832 704.519287	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc2_a3>
+    <somme_sc2_a4>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod3/mle_122_03_Plane.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_yak_3_01	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-789.246338 -3.542343 432.546661	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-274.284790 81.237045 -69.147110	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	317.726563 93.151024 -424.725830	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	562.349304 82.070404 -106.830338	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	578.714905 29.220898 645.308838	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc2_a4>
+    <somme_sc3_a1>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod0/mle_122_02_Plane_eff.model	</modelName>
+        <rollMagnitude>	3.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_bomber_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	227.918610 14.793968 -751.988159	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-76.645081 96.616348 -275.083557	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-62.795494 128.128967 127.160988	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	35.461994 186.637970 207.331970	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	479.168884 162.413849 -26.784460	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	790.802063 3.386192 -786.381104	</position>
+        <speed0>	140.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc3_a1>
+    <somme_sc3_a2>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod0/mle_122_02_Plane_eff.model	</modelName>
+        <rollMagnitude>	3.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_not_gun_mustang_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc_all.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	198.293594 18.938583 -778.646912	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-94.098984 101.692986 -288.499939	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-102.356987 124.591988 123.718987	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	4.005098 192.204971 223.228973	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	487.961456 166.124847 27.583685	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	801.964111 -5.848518 -726.115112	</position>
+        <speed0>	140.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc3_a2>
+    <somme_sc3_a3>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod3/mle_122_03_Plane.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_with_gun_yak_3_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc3_a3_a4.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-733.921509 33.282238 -679.811157	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-126.471977 88.720375 -300.459900	</position>
+        <speed0>	105.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-65.497688 125.496986 186.618973	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	57.503349 183.342148 277.129211	</position>
+        <speed0>	70.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	407.352814 186.949280 24.936541	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	752.499878 -3.687569 -751.279480	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc3_a3>
+    <somme_sc3_a4>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod3/mle_122_03_Plane.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_with_gun_mustang_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc3_a3_a4.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	-718.591919 26.953365 -712.205383	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-158.366959 101.140976 -287.582916	</position>
+        <speed0>	110.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-102.247986 155.916977 225.364975	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	61.461693 212.164963 272.423950	</position>
+        <speed0>	90.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	410.895081 155.899063 120.168175	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	770.790649 -1.500557 -748.211975	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc3_a4>
+    <somme_sc4_a1>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod3/mle_122_03_Plane.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_crash	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc4_a1.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	630.612122 0.184753 771.455994	</position>
+        <speed0>	85.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	152.553497 85.421143 508.764587	</position>
+        <speed0>	85.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-138.796265 81.363525 -137.348602	</position>
+        <speed0>	85.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-644.740295 -21.472763 -787.428406	</position>
+        <speed0>	85.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc4_a1>
+    <somme_sc4_a2>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod0/mle_122_02_Plane_eff.model	</modelName>
+        <rollMagnitude>	3.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_with_gun_bomber_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc4_a2_a3.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	392.950928 386.145721 764.522278	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-8.719558 99.217819 224.366119	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-71.809547 91.001450 29.812897	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-220.637161 95.242477 -216.674210	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-355.625397 84.879082 -254.383148	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-541.885864 82.491577 -198.726990	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-708.422668 9.682377 753.109802	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc4_a2>
+    <somme_sc4_a3>
+      <channel0>
+        <modelName>	content/MilitaryEnvironment/mle_122_02_Plane/normal/lod0/mle_122_02_Plane_eff.model	</modelName>
+        <rollMagnitude>	3.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 100.000000	</alphaFadeDistances>
+        <wwsoundName>	plane_with_gun_mustang_02	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Environment/scenarios/plane_engine_sc4_a2_a3.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	412.582794 397.284821 750.864319	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	17.110201 111.087685 239.395752	</position>
+        <speed0>	150.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-52.490841 99.507248 27.834972	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-219.201309 95.680305 -265.287048	</position>
+        <speed0>	120.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-370.097412 83.946533 -303.046631	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-554.432068 79.975777 -246.086563	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-740.509155 10.433208 725.648987	</position>
+        <speed0>	100.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </somme_sc4_a3>
     <stalingrad_2_ju87>
       <channel0>
         <modelName>	content/Environment/env713_BF109G/normal/lod0/env713_BF109G.model	</modelName>

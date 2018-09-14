@@ -10,7 +10,7 @@ from dossiers2.common.updater_utils import addBlock, removeBlock, addRecords, re
 import dossiers2.custom.tankmen_dossier1_updater
 from VersionUpdater import VersionUpdaterBase
 from wotdecorators import singleton
-ACCOUNT_DOSSIER_VERSION = 101
+ACCOUNT_DOSSIER_VERSION = 102
 ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
 VEHICLE_DOSSIER_VERSION = 94
 VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
@@ -1865,6 +1865,69 @@ def __updateFromAccountDossier100(compDescr):
     addRecords(updateCtx, 'achievements', formats, {})
     setVersion(updateCtx, 101)
     return (101, updateCtx['dossierCompDescr'])
+
+
+def __updateFromAccountDossier101(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute',
+     'maxGlobalMapMiddle',
+     'maxGlobalMapChampion',
+     'maxGlobalMapAbsolute',
+     'globalMapCommonCut',
+     'fallout',
+     'maxFallout',
+     'falloutCut',
+     'falloutAchievements']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    formats = [('markIBomberman', 'H'), ('markIRepairer', 'H'), ('markI100Years', 'B')]
+    addRecords(updateCtx, 'achievements', formats, {})
+    setVersion(updateCtx, 102)
+    return (102, updateCtx['dossierCompDescr'])
 
 
 def __updateFromVehicleDossier64(compDescr):

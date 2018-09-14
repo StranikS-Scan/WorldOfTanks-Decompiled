@@ -132,3 +132,7 @@ class ARENAS(object):
     C_112_EIFFEL_TOWER_DESCRIPTION = '#arenas:112_eiffel_tower/description'
     C_114_CZECH_NAME = '#arenas:114_czech/name'
     C_114_CZECH_DESCRIPTION = '#arenas:114_czech/description'
+    C_122_SOMME_NAME = '#arenas:122_somme/name'
+    C_122_SOMME_DESCRIPTION = '#arenas:122_somme/description'
+    EVENT_MARK1_DESCRIPTION_ATTACK = '#arenas:event/mark1/description/Attack'
+    EVENT_MARK1_DESCRIPTION_DEFENCE = '#arenas:event/mark1/description/Defence'

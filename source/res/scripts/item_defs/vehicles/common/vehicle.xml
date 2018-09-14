@@ -81,9 +81,15 @@
   </defaultTurretDetachmentEffects>
   <extras>
     <attributeModifier>	NoneExtra : AttributeModifier	</attributeModifier>
-    <shoot>	ShowShooting : Shoot	</shoot>
+    <shoot>	ShowShooting : Shoot	  <gunIdx>	0	</gunIdx>
+    </shoot>
+    <secondGunShoot>	ShowShooting : Shoot	  <gunIdx>	1	</gunIdx>
+    </secondGunShoot>
     <noAmmo>	NoneExtra : NoAmmo	</noAmmo>
-    <gunReload>	NoneExtra : GunReload	</gunReload>
+    <gunReload>	NoneExtra : GunReload	  <gunIdx>	0	</gunIdx>
+    </gunReload>
+    <secondGunReload>	NoneExtra : GunReload	  <gunIdx>	1	</gunIdx>
+    </secondGunReload>
     <deathZones>	NoneExtra: DeathZones	</deathZones>
     <trackInstantRepairDelay>	NoneExtra : TrackInstantRepairDelay	  <delay>	0.3	</delay>
     </trackInstantRepairDelay>
@@ -278,7 +284,47 @@
       </sounds>
       <deviceUserString>	#ingame_gui:tankmen/loader	</deviceUserString>
     </loader2Health>
+    <proximity>	NoneExtra : RangeBasedInteraction	  <range>	10	</range>
+      <appliesTo>	bot	</appliesTo>
+    </proximity>
+    <explosive>	ExplosiveInfo : Explosive	  <explodeOnDamage>	false	</explodeOnDamage>
+      <canDamageOthers>	true	</canDamageOthers>
+      <maxDamage>	400	</maxDamage>
+      <noDamageMinRange>	18	</noDamageMinRange>
+      <explodeAfter>	4	</explodeAfter>
+      <damageTargetBy>	break_left_track break_right_track kill_engine	</damageTargetBy>
+    </explosive>
+    <machinegunReload>	NoneExtra : InBattleAmmo	  <ammoCompactDescr>	33626	</ammoCompactDescr>
+      <ammoCount>	20	</ammoCount>
+      <reloadTimeDecreaseFactor>	15	</reloadTimeDecreaseFactor>
+      <firstReloadTimeDecreaseFactor>	1	</firstReloadTimeDecreaseFactor>
+    </machinegunReload>
+    <ingameammoBigGun>	NoneExtra : InBattleAmmo	  <ammoCompactDescr>	33370	</ammoCompactDescr>
+      <ammoCount>	3	</ammoCount>
+      <reloadTimeDecreaseFactor>	0.375	</reloadTimeDecreaseFactor>
+      <firstReloadTimeDecreaseFactor>	0.75	</firstReloadTimeDecreaseFactor>
+    </ingameammoBigGun>
   </extras>
+  <extrasOverrides>
+    <leftWheelHealth>	leftTrackHealth: WheelHealth	  <isLeft>	true	</isLeft>
+      <sounds>
+        <destroyed>	track_destroyed	</destroyed>
+        <critical>	track_damaged	</critical>
+        <functional>	track_functional	</functional>
+        <functionalCanMove>	track_functional_can_move	</functionalCanMove>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/left_wheel	</deviceUserString>
+    </leftWheelHealth>
+    <rightWheelHealth>	rightTrackHealth: WheelHealth	  <isLeft>	false	</isLeft>
+      <sounds>
+        <destroyed>	track_destroyed	</destroyed>
+        <critical>	track_damaged	</critical>
+        <functional>	track_functional	</functional>
+        <functionalCanMove>	track_functional_can_move	</functionalCanMove>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/left_wheel	</deviceUserString>
+    </rightWheelHealth>
+  </extrasOverrides>
   <deviceExtras>
     <devices>
       <engineHealth>	engine	</engineHealth>

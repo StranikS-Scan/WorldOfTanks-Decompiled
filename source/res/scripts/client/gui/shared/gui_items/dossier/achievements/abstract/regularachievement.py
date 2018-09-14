@@ -110,6 +110,9 @@ class RegularAchievement(GUIItem):
     def getSmallIcon(self):
         return self.getIcons()[self.ICON_TYPE.IT_67X71]
 
+    def getIcon32x32(self):
+        return self.getIcons()[self.ICON_TYPE.IT_32X32]
+
     def getUserName(self):
         return i18n.makeString('#achievements:%s' % self._getActualName())
 

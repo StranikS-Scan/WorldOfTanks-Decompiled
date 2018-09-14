@@ -32,6 +32,7 @@ class VehicleFilterTooltip(BlocksTooltipData):
         self._vehicleTypes = None
         self._levels = None
         self._hideRented = None
+        self._hideEvent = None
         self._specials = None
         return
 
@@ -43,16 +44,22 @@ class VehicleFilterTooltip(BlocksTooltipData):
         items = [self._packHeaderBlock()]
         if self.__hasBody():
             items.append(self._packBodyBlock())
-        if self._hideRented:
-            items.append(self._packRentBlock())
+        if self._hideEvent or self._hideRented:
+            items.append(self._packHiddenBlock())
         items.append(self._packCounterBlock())
         return items
 
     def _packHeaderBlock(self):
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_HEADER_TITLE), padding=formatters.packPadding(top=-5), desc=text_styles.main(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_HEADER_DESCRIPTION))
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(TANK_CAROUSEL_FILTER.INFOTIP_HEADER_TITLE), padding=formatters.packPadding(top=-5), desc=text_styles.main(TANK_CAROUSEL_FILTER.INFOTIP_HEADER_DESCRIPTION))
 
-    def _packRentBlock(self):
-        subBlocks = (formatters.packTextParameterWithIconBlockData(name=text_styles.main(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_RENTAL), value='', icon=ICON_TEXT_FRAMES.RENTALS, padding=formatters.packPadding(left=-50, top=-3, bottom=-18), nameOffset=20),)
+    def _packHiddenBlock(self):
+        subBlocks = []
+        if self._hideRented:
+            subBlocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TANK_CAROUSEL_FILTER.INFOTIP_RENT), value='', icon=ICON_TEXT_FRAMES.RENTALS, padding=formatters.packPadding(left=-50, top=-3, bottom=-18), nameOffset=20))
+        if self._hideEvent:
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_BATTLETYPES_40X40_EVENT, width=22, height=22, vSpace=-8)
+            text = text_styles.main(TANK_CAROUSEL_FILTER.INFOTIP_EVENT)
+            subBlocks.append(formatters.packTextBlockData(text='{}      {}'.format(icon, text), padding=formatters.packPadding(left=6, top=5, bottom=0)))
         return formatters.packBuildUpBlockData(subBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
     def _packCounterBlock(self):
@@ -60,21 +67,21 @@ class VehicleFilterTooltip(BlocksTooltipData):
             textStyle = text_styles.critical
         else:
             textStyle = text_styles.warning
-        return formatters.packImageTextBlockData(padding=formatters.packPadding(top=1), desc=textStyle(_ms(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_COUNTER, count=self._currentVehiclesCount, total=self._totalVehiclesCount)))
+        return formatters.packImageTextBlockData(padding=formatters.packPadding(top=1), desc=textStyle(_ms(TANK_CAROUSEL_FILTER.INFOTIP_COUNTER, count=self._currentVehiclesCount, total=self._totalVehiclesCount)))
 
     def _packBodyBlock(self):
         subBlocks = []
         if self._nations:
-            subBlocks.append(self.__getParagraphNameBlock(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_BODY_NATION))
+            subBlocks.append(self.__getParagraphNameBlock(TANK_CAROUSEL_FILTER.INFOTIP_NATIONS))
             subBlocks.append(self.__packNationsListBlock())
         if self._vehicleTypes:
-            subBlocks.append(self.__getParagraphNameBlock(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_BODY_TYPE))
+            subBlocks.append(self.__getParagraphNameBlock(TANK_CAROUSEL_FILTER.INFOTIP_VEHICLETYPES))
             subBlocks.append(self.__packTypesListBlock())
         if self._levels and len(self._levels) < len(VEHICLE_LEVELS):
-            subBlocks.append(self.__getParagraphNameBlock(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_BODY_LEVEL))
+            subBlocks.append(self.__getParagraphNameBlock(TANK_CAROUSEL_FILTER.INFOTIP_LEVELS))
             subBlocks.append(self.__packLevelBlock())
         if any(self._specials.values()):
-            subBlocks.append(self.__getParagraphNameBlock(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_BODY_ONLY))
+            subBlocks.append(self.__getParagraphNameBlock(TANK_CAROUSEL_FILTER.INFOTIP_ONLY))
             subBlocks.append(self.__packSpecialTypeBlock())
         return formatters.packBuildUpBlockData(subBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(top=-5, bottom=-5))
 
@@ -96,13 +103,13 @@ class VehicleFilterTooltip(BlocksTooltipData):
         string = ''
         addComma = lambda str: '{0}, '.format(str) if str else str
         if self._specials['premium']:
-            string += _ms(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_BODY_ONLY_PREMIUM)
+            string += _ms(TANK_CAROUSEL_FILTER.INFOTIP_ONLY_PREMIUM)
         if self._specials['elite']:
             string = addComma(string)
-            string += _ms(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_BODY_ONLY_ELITE)
+            string += _ms(TANK_CAROUSEL_FILTER.INFOTIP_ONLY_ELITE)
         if self._specials['favorite']:
             string = addComma(string)
-            string += _ms(TANK_CAROUSEL_FILTER.FILTER_TOOLTIP_BODY_ONLY_BASIC)
+            string += _ms(TANK_CAROUSEL_FILTER.INFOTIP_ONLY_FAVORITE)
         if self._specials['bonus']:
             icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MULTYXP)
             xpRate = text_styles.stats('x{0}'.format(g_itemsCache.items.shop.dailyXPFactor))
@@ -125,6 +132,7 @@ class VehicleFilterTooltip(BlocksTooltipData):
                 self._levels.append(level)
 
         self._hideRented = filters['hideRented']
+        self._hideEvent = filters['hideEvent']
         self._specials = {'premium': filters['premium'],
          'elite': filters['elite'],
          'igr': filters['igr'] if constants.IS_KOREA else False,

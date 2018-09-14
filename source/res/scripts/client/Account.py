@@ -902,6 +902,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def _update(self, triggerEvents, diff):
         LOG_DEBUG_DEV('_update', diff if triggerEvents else 'full sync')
         isFullSync = diff.get('prevRev', None) is None
+        LOG_NOTE('_update curRev={}, diffRev={}, diffPrevRev={}'.format(self.syncData.revision, diff.get('rev', None), diff.get('prevRev', None)))
+        self.__printEventsData(diff)
         if not self.syncData.updatePersistentCache(diff, isFullSync):
             return False
         else:
@@ -980,6 +982,23 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
         self.__onStreamComplete.clear()
         return
+
+    @classmethod
+    def __printEventsData(cls, diff):
+        keys = ('eventsData', ('eventsData', '_r'))
+        for key in keys:
+            if key in diff:
+                LOG_NOTE('Diff contains {} key, try to unpickle...'.format(key))
+                cls.__printUnPickled(EVENT_CLIENT_DATA.INGAME_EVENTS, diff[key])
+            LOG_NOTE('No event key {} in diff.'.format(key))
+
+    @classmethod
+    def __printUnPickled(cls, subKey, data):
+        if subKey in data:
+            unPickled = cPickle.loads(zlib.decompress(data[subKey]))
+            LOG_NOTE('The data contains {} subKey with decompressed data: {}'.format(subKey, unPickled))
+        else:
+            LOG_NOTE('The data has not {} subKey.'.format(subKey))
 
     def __synchronizeCacheDict(self, repDict, diffDict, key, syncMode, event):
         assert syncMode in ('update', 'replace')

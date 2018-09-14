@@ -56,6 +56,15 @@ class VehicleInfoSortKey(_SortKey):
         return result if result else cmp(xvInfoVO.player, yvInfoVO.player)
 
 
+class Mark1EventSort(VehicleInfoSortKey):
+    __slots__ = ()
+
+    def _cmp(self, other):
+        xvInfoVO = self.vInfoVO
+        yvInfoVO = other.vInfoVO
+        return cmp(xvInfoVO.player, yvInfoVO.player)
+
+
 class FragCorrelationSortKey(VehicleInfoSortKey):
     __slots__ = ()
 

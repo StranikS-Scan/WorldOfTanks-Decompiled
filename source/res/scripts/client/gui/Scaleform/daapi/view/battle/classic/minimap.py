@@ -15,6 +15,7 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from messenger import MessengerEntry
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
+_MARK_CELL_UNIQUE_ID = 0
 
 class ClassicMinimapComponent(component.MinimapComponent):
 
@@ -170,9 +171,15 @@ class MarkCellPlugin(common.AttentionToCellPlugin):
 
     def _doAttention(self, index, duration):
         matrix = minimap_utils.makePointMatrixByCellIndex(index, *self._boundingBox)
-        model = self._addEntryEx(index, _S_NAME.MARK_CELL, _C_NAME.PERSONAL, matrix=matrix, active=True)
+        uniqueID = _MARK_CELL_UNIQUE_ID
+        if uniqueID in self._entries:
+            model = self._entries[uniqueID]
+            self._clearCallback(uniqueID)
+            self._setMatrix(model.getID(), matrix)
+        else:
+            model = self._addEntryEx(uniqueID, _S_NAME.MARK_CELL, _C_NAME.PERSONAL, matrix=matrix, active=True)
         if model is not None:
             self._invoke(model.getID(), 'playAnimation')
-            self._setCallback(index, duration)
+            self._setCallback(uniqueID, duration)
             self._playSound2D(settings.MINIMAP_ATTENTION_SOUND_ID)
         return

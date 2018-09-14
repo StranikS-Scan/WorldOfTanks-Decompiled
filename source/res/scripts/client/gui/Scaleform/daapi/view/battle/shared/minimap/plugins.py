@@ -79,7 +79,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         for entryID, name, active in iterator:
             self.__cameraIDs[name] = entryID
             if active:
-                assert not self.__cameraID, 'One camera is active at one time'
+                assert not self.__cameraID, 'One camera is activated at one time'
                 self.__cameraID = entryID
 
         self.__createViewPointEntry(avatar)
@@ -220,7 +220,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 matrix = None
                 active = False
             name = _S_NAME.STRATEGIC_CAMERA
-            entryID = add(name, container, matrix=matrix, active=active)
+            entryID = add(name, container, matrix=matrix, active=active, transformProps=settings.TRANSFORM_FLAG.FULL)
             if entryID:
                 yield (entryID, name, active)
         if 'video' in modes:
@@ -239,13 +239,13 @@ class PersonalEntriesPlugin(common.SimplePlugin):
     def __createViewPointEntry(self, avatar):
         ownMatrix = avatar.getOwnVehicleMatrix()
         self.__viewPointID = self._addEntry(_S_NAME.VIEW_POINT, _C_NAME.PERSONAL, matrix=ownMatrix, active=self.__isAlive)
-        transformProps = settings.TRANSFORM_FLAG.FULL
+        transformProps = settings.TRANSFORM_FLAG.DEFAULT
         transformProps ^= settings.TRANSFORM_FLAG.NO_ROTATION
         self.__animationID = self._addEntry(_S_NAME.ANIMATION, _C_NAME.PERSONAL, matrix=ownMatrix, active=self.__isAlive, transformProps=transformProps)
 
     def __createViewRangeCircle(self, avatar):
         ownMatrix = avatar.getOwnVehicleMatrix()
-        transformProps = settings.TRANSFORM_FLAG.FULL
+        transformProps = settings.TRANSFORM_FLAG.DEFAULT
         transformProps ^= settings.TRANSFORM_FLAG.NO_ROTATION
         self.__circlesVisibilityState = 0
         self.__circlesID = self._addEntry(_S_NAME.VIEW_RANGE_CIRCLES, _C_NAME.PERSONAL, matrix=ownMatrix, active=self.__isAlive, transformProps=transformProps)
@@ -482,6 +482,13 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def _notifyVehicleRemoved(self, vehicleID):
         pass
 
+    def _notifyEntryAddedToPool(self, vehicleID, entryID):
+        """
+        This method notifies Mark1 plugin about creating an entry
+        Remove it after event finishing
+        """
+        pass
+
     def _getPlayerVehicleID(self):
         return self.__playerVehicleID
 
@@ -496,6 +503,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         model = self._addEntryEx(vehicleID, _S_NAME.VEHICLE, _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
         if model is not None:
             model.setLocation(location)
+            self._notifyEntryAddedToPool(vehicleID, model.getID())
         return model
 
     def __setVehicleInfo(self, vehicleID, entry, vInfo, guiProps):
@@ -668,7 +676,9 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
 
     def __onMinimapFeedbackReceived(self, eventID, entityID, value):
         if eventID == FEEDBACK_EVENT_ID.MINIMAP_SHOW_MARKER and entityID != self.__playerVehicleID and entityID in self._entries:
-            self._invoke(self._entries[entityID].getID(), 'setAnimation', value)
+            entry = self._entries[entityID]
+            if entry.isInAoI():
+                self._invoke(entry.getID(), 'setAnimation', value)
 
     def __handleShowExtendedInfo(self, event):
         isDown = event.ctx['isDown']

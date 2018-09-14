@@ -84,10 +84,14 @@ class Carousel(object):
     def __update(self):
         newElements = AccountSettings.getSettings('customization')
         newElementsSubset = newElements[self.__currentType].get(self.__currentVehicle.item.intCD, {})
+        topItems = defaultdict(list)
         installedItems = defaultdict(list)
         purchasedItems = defaultdict(list)
         otherItems = defaultdict(list)
-        allItems = [installedItems, purchasedItems, otherItems]
+        allItems = [topItems,
+         installedItems,
+         purchasedItems,
+         otherItems]
         currentSlotElement = self.__slots.getCurrentSlotData()['element']
         installedSlotElement = self.__slots.getInstalledSlotData()['element']
         currentCarouselItem = None
@@ -96,12 +100,16 @@ class Carousel(object):
             installedInCurrentSlot = False
             if installedSlotElement is not None:
                 installedInCurrentSlot = elementID == installedSlotElement.getID()
-            if self.__filter.check(element, installedInCurrentSlot):
+            if self.__filter.check(element, installedInCurrentSlot) or element.isDisplayedFirst:
                 appliedToCurrentSlot = False
                 if currentSlotElement is not None:
                     appliedToCurrentSlot = elementID == currentSlotElement.getID() and not installedInCurrentSlot
                 if not self.__hasAppliedItem and appliedToCurrentSlot:
                     self.__hasAppliedItem = True
+                if element.isDisplayedFirst:
+                    isEventElement = True
+                else:
+                    isEventElement = False
                 if elementID in newElementsSubset:
                     isNewElement = newElementsSubset[elementID]
                     newElementsSubset[elementID] = False
@@ -111,8 +119,11 @@ class Carousel(object):
                  'appliedToCurrentSlot': appliedToCurrentSlot,
                  'duration': self.__currentDuration,
                  'isNewElement': isNewElement,
+                 'isEventElement': isEventElement,
                  'installedInCurrentSlot': installedInCurrentSlot}
-                if installedInCurrentSlot:
+                if element.isDisplayedFirst:
+                    group = topItems[element.getGroup()]
+                elif installedInCurrentSlot:
                     group = installedItems[element.getGroup()]
                 elif element.isInDossier:
                     group = purchasedItems[element.getGroup()]

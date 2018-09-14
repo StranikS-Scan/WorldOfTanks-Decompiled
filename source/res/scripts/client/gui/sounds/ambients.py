@@ -387,19 +387,24 @@ class BattleResultsEnv(SoundEnv):
     Directly after music has finished music event should be cleared to EmptySound to
     avoid repeating of playing.
     """
-    _sounds = {WinStatus.WIN: SoundEvent(_MC.MUSIC_EVENT_COMBAT_VICTORY, checkFinish=True),
+    _battleEndSounds = {WinStatus.WIN: SoundEvent(_MC.MUSIC_EVENT_COMBAT_VICTORY, checkFinish=True),
      WinStatus.DRAW: SoundEvent(_MC.MUSIC_EVENT_COMBAT_DRAW, checkFinish=True),
      WinStatus.LOSE: SoundEvent(_MC.MUSIC_EVENT_COMBAT_LOSE, checkFinish=True)}
+    _eventBattleEndSounds = {WinStatus.WIN: SoundEvent(_MC.MUSIC_EVENT_COMBAT_EVENT_VICTORY, checkFinish=True),
+     WinStatus.DRAW: SoundEvent(_MC.MUSIC_EVENT_COMBAT_EVENT_DRAW, checkFinish=True),
+     WinStatus.LOSE: SoundEvent(_MC.MUSIC_EVENT_COMBAT_EVENT_LOSE, checkFinish=True)}
 
     def __init__(self, soundsCtrl):
         super(BattleResultsEnv, self).__init__(soundsCtrl, 'battleResults')
 
     def start(self):
         super(BattleResultsEnv, self).start()
-        lastWinStatus = g_sessionProvider.getCtx().extractLastArenaWinStatus()
+        ctx = g_sessionProvider.getCtx()
+        lastWinStatus = ctx.extractLastArenaWinStatus()
         if lastWinStatus is not None:
             SOUND_DEBUG('There is last arena win status need to be processed', lastWinStatus)
-            self._music = self._sounds.get(lastWinStatus.getStatus(), EmptySound())
+            sounds = self._eventBattleEndSounds if ctx.isEventBattle() else self._battleEndSounds
+            self._music = sounds.get(lastWinStatus.getStatus(), EmptySound())
             self._music.onFinished += self._onMusicFinished
         return
 

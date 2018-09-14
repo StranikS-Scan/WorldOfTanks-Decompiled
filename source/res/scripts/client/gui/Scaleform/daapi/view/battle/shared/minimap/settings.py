@@ -49,6 +49,7 @@ class TRANSFORM_FLAG(object):
     NO_POSITION = 1
     NO_ROTATION = 2
     NO_SCALE = 4
+    DEFAULT = FULL ^ NO_SCALE
 
 
 class CIRCLE_TYPE(object):

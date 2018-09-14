@@ -1,0 +1,31 @@
+<h18_bdtanks100_2016.xml>
+  <wwmusic>	hangar_h18_music_silence	</wwmusic>
+  <wwambientSound>	hangar_h18_ambient_silence	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	hangar_h18_bdtanks100_2016.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_v2.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
+  <roadMap></roadMap>
+  <mapActivities>
+    <warplane>
+      <preset>	h18_bdtanks100_2016_plane	</preset>
+      <position>	0.000000 -20.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	0.970000	</possibility>
+      <startTime>	5.005000 10.000000	</startTime>
+      <period>	250.000000	</period>
+    </warplane>
+    <warplane>
+      <preset>	h18_bdtanks100_2016_plane	</preset>
+      <position>	-300.000000 0.000000 0.000000	</position>
+      <yaw>	-150.000000	</yaw>
+      <possibility>	0.970000	</possibility>
+      <startTime>	20.000000 40.000000	</startTime>
+      <period>	250.000000	</period>
+    </warplane>
+  </mapActivities>
+</h18_bdtanks100_2016.xml>

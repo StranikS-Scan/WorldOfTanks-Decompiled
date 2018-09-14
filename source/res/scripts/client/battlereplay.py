@@ -15,9 +15,7 @@ import constants
 import Keys
 import Event
 import AreaDestructibles
-import gui.SystemMessages
-import gui.Scaleform.CursorDelegator
-from gui import GUI_SETTINGS
+from gui import GUI_CTRL_MODE_FLAG
 from gui.app_loader import g_appLoader
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
@@ -77,6 +75,7 @@ class BattleReplay():
         self.__fileName = None
         self.__replayCtrl = BigWorld.WGReplayController()
         self.__replayCtrl.replayFinishedCallback = self.onReplayFinished
+        self.__replayCtrl.timeWarpFinishedCallback = self.__onTimeWarpFinished
         self.__replayCtrl.controlModeChangedCallback = self.onControlModeChanged
         self.__replayCtrl.ammoButtonPressedCallback = self.__onAmmoButtonPressed
         self.__replayCtrl.playerVehicleIDChangedCallback = self.onPlayerVehicleIDChanged
@@ -120,7 +119,6 @@ class BattleReplay():
         self.replayTimeout = 0
         self.__arenaPeriod = -1
         self.enableAutoRecordingBattles(True)
-        gui.Scaleform.CursorDelegator.g_cursorDelegator.detachCursor()
         self.onCommandReceived = Event.Event()
         self.onAmmoSettingChanged = Event.Event()
         self.onStopped = Event.Event()
@@ -139,6 +137,7 @@ class BattleReplay():
         g_settingsCore.onSettingsChanged -= self.__onSettingsChanging
         self.enableAutoRecordingBattles(False)
         self.__replayCtrl.replayFinishedCallback = None
+        self.__replayCtrl.timeWarpFinishedCallback = None
         self.__replayCtrl.controlModeChangedCallback = None
         self.__replayCtrl.clientVersionDiffersCallback = None
         self.__replayCtrl.playerVehicleIDChangedCallback = None
@@ -270,11 +269,11 @@ class BattleReplay():
     def handleKeyEvent(self, isDown, key, mods, isRepeat, event):
         if not self.isPlaying:
             return False
-        if self.isTimeWarpInProgress:
+        elif self.isTimeWarpInProgress:
             return True
-        if key == Keys.KEY_F1:
+        elif key == Keys.KEY_F1:
             return True
-        if not self.isClientReady:
+        elif not self.isClientReady:
             return False
         cmdMap = CommandMapping.g_instance
         player = BigWorld.player()
@@ -292,7 +291,11 @@ class BattleReplay():
         finishReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_REPLAY_FINISHED)
         if currReplayTime > finishReplayTime:
             currReplayTime = finishReplayTime
-        isCursorVisible = gui.Scaleform.CursorDelegator.g_cursorDelegator._CursorDelegator__activated
+        app = g_appLoader.getDefBattleApp()
+        if app is not None:
+            isCursorVisible = app.ctrlModeFlags & GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED > 0
+        else:
+            isCursorVisible = False
         fastForwardStep = FAST_FORWARD_STEP * (2.0 if mods == 2 else 1.0)
         if (key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key)) and isDown and not isCursorVisible:
             if self.isControllingCamera:
@@ -315,24 +318,24 @@ class BattleReplay():
             else:
                 self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx if self.__savedPlaybackSpeedIdx != 0 else self.__playbackSpeedModifiers.index(1.0))
             return True
-        if key == Keys.KEY_DOWNARROW and isDown and not self.__isFinished:
+        elif key == Keys.KEY_DOWNARROW and isDown and not self.__isFinished:
             if self.__playbackSpeedIdx > 0:
                 self.setPlaybackSpeedIdx(self.__playbackSpeedIdx - 1)
             return True
-        if key == Keys.KEY_UPARROW and isDown and not self.__isFinished:
+        elif key == Keys.KEY_UPARROW and isDown and not self.__isFinished:
             if self.__playbackSpeedIdx < len(self.__playbackSpeedModifiers) - 1:
                 self.setPlaybackSpeedIdx(self.__playbackSpeedIdx + 1)
             return True
-        if key == Keys.KEY_RIGHTARROW and isDown and not self.__isFinished:
+        elif key == Keys.KEY_RIGHTARROW and isDown and not self.__isFinished:
             self.__timeWarp(currReplayTime + fastForwardStep)
             return True
-        if key == Keys.KEY_LEFTARROW:
+        elif key == Keys.KEY_LEFTARROW:
             self.__timeWarp(currReplayTime - fastForwardStep)
             return True
-        if key == Keys.KEY_HOME and isDown:
+        elif key == Keys.KEY_HOME and isDown:
             self.__timeWarp(0.0)
             return True
-        if key == Keys.KEY_END and isDown and not self.__isFinished:
+        elif key == Keys.KEY_END and isDown and not self.__isFinished:
             self.__timeWarp(finishReplayTime)
             return True
         if key == Keys.KEY_C and isDown:
@@ -342,8 +345,6 @@ class BattleReplay():
         suppressCommand = False
         if cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown:
             suppressCommand = True
-        elif (key == Keys.KEY_RETURN or key == Keys.KEY_NUMPADENTER) and isDown and mods != 4:
-            suppressCommand = not GUI_SETTINGS.useAS3Battle
         elif cmdMap.isFiredList((CommandMapping.CMD_CM_LOCK_TARGET,
          CommandMapping.CMD_CM_LOCK_TARGET_OFF,
          CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE,
@@ -365,7 +366,8 @@ class BattleReplay():
             if isVideoCamera:
                 playerControlMode.handleKeyEvent(isDown, key, mods, event)
             return True
-        return False
+        else:
+            return False
 
     def handleMouseEvent(self, dx, dy, dz):
         if not (self.isPlaying and self.isClientReady):
@@ -855,6 +857,9 @@ class BattleReplay():
                 self.__wasVideoBeforeRewind = False
             g_replayEvents.onTimeWarpFinish()
         return
+
+    def __onTimeWarpFinished(self):
+        self.__cleanupAfterTimeWarp()
 
     def __enableInGameEffects(self, enable):
         AreaDestructibles.g_destructiblesManager.forceNoAnimation = not enable

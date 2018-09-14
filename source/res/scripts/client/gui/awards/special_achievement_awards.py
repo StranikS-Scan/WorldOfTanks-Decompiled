@@ -275,7 +275,8 @@ class TelecomAward(AwardAbstract):
                 descriptionKey = MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION
         else:
             descriptionKey = MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION_WITHOUTCREW
-        description = i18n.makeString(descriptionKey, vehicles=vehicles)
+        premText = text_styles.neutral(MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION_PREM)
+        description = i18n.makeString(descriptionKey, vehicles=vehicles, prem=premText)
         return text_styles.main(description)
 
     def getAdditionalText(self):

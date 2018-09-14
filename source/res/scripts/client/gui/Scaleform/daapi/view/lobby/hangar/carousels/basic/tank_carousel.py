@@ -31,13 +31,12 @@ class TankCarousel(TankCarouselMeta):
         self._carouselFilterCls = CarouselFilter
         self._carouselDP = None
         self._itemsCache = None
-        self._currentVehicle = None
         return
 
-    def selectVehicle(self, vehicleInvId):
+    def selectVehicle(self, idx):
         """ This method is called from flash when user clicks on carousel item.
         """
-        self._currentVehicle.selectVehicle(vehicleInvId)
+        self._carouselDP.selectVehicle(idx)
 
     def buyTank(self):
         """ Open store with the shop tab and 'vehicle' component set
@@ -73,6 +72,9 @@ class TankCarousel(TankCarouselMeta):
 
     def hasRentedVehicles(self):
         return self._carouselDP.hasRentedVehicles()
+
+    def hasEventVehicles(self):
+        return self._carouselDP.hasEventVehicles()
 
     def blinkCounter(self):
         self.as_blinkCounterS()
@@ -114,10 +116,9 @@ class TankCarousel(TankCarouselMeta):
         g_gameCtrl.clanLock.onClanLockUpdate += self.__updateClanLocks
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
         self._itemsCache = g_itemsCache
-        self._currentVehicle = g_currentVehicle
         self._carouselDPConfig.update({'carouselFilter': self._carouselFilterCls(),
          'itemsCache': self._itemsCache,
-         'currentVehicle': self._currentVehicle})
+         'currentVehicle': g_currentVehicle})
         self._carouselDP = self._carouselDPCls(**self._carouselDPConfig)
         self._carouselDP.setEnvironment(self.app)
         self._carouselDP.setFlashObject(self.as_getDataProviderS())
@@ -131,7 +132,6 @@ class TankCarousel(TankCarouselMeta):
         g_gameCtrl.clanLock.onClanLockUpdate -= self.__updateClanLocks
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         self._itemsCache = None
-        self._currentVehicle = None
         self._carouselDP.fini()
         self._carouselDP = None
         self._carouselDPConfig.clear()
@@ -143,12 +143,12 @@ class TankCarousel(TankCarouselMeta):
         xpRateStr = 'x{}'.format(self._itemsCache.items.shop.dailyXPFactor)
         return {'counterCloseTooltip': makeTooltip('#tooltips:tanksFilter/counter/close/header', '#tooltips:tanksFilter/counter/close/body'),
          'mainBtn': {'value': getButtonsAssetPath('params'),
-                     'tooltip': makeTooltip('#tank_carousel_filter:filter/paramsFilter/header', '#tank_carousel_filter:filter/paramsFilter/body')},
+                     'tooltip': makeTooltip('#tank_carousel_filter:carousel/params/header', '#tank_carousel_filter:carousel/params/body')},
          'hotFilters': [{'value': getButtonsAssetPath('bonus_{}'.format(xpRateStr)),
                          'selected': filters['bonus'],
-                         'tooltip': makeTooltip('#tank_carousel_filter:filter/bonusFilter/header', i18n.makeString('#tank_carousel_filter:filter/bonusFilter/body', bonus=xpRateStr))}, {'value': getButtonsAssetPath('favorite'),
+                         'tooltip': makeTooltip('#tank_carousel_filter:carousel/bonus/header', i18n.makeString('#tank_carousel_filter:carousel/bonus/body', bonus=xpRateStr))}, {'value': getButtonsAssetPath('favorite'),
                          'selected': filters['favorite'],
-                         'tooltip': makeTooltip('#tank_carousel_filter:filter/favoriteFilter/header', '#tank_carousel_filter:filter/favoriteFilter/body')}]}
+                         'tooltip': makeTooltip('#tank_carousel_filter:carousel/favorite/header', '#tank_carousel_filter:carousel/favorite/body')}]}
 
     @decorators.process('buySlot')
     def __buySlot(self):

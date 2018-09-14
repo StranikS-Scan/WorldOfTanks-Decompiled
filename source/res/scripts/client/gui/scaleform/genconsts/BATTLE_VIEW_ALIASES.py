@@ -11,6 +11,7 @@ class BATTLE_VIEW_ALIASES(object):
     """
     TEAM_BASES_PANEL = 'teamBasesPanel'
     VEHICLE_MESSAGES = 'battleVehicleMessages'
+    EVENT_VEHICLE_MESSAGES = 'eventBattleVehicleMessages'
     VEHICLE_ERROR_MESSAGES = 'battleVehicleErrorMessages'
     PLAYER_MESSAGES = 'battlePlayerMessages'
     DAMAGE_PANEL = 'damagePanel'
@@ -42,3 +43,6 @@ class BATTLE_VIEW_ALIASES(object):
     FALLOUT_SCORE_PANEL = 'falloutScorePanel'
     BATTLE_END_WARNING_PANEL = 'battleEndWarningPanel'
     CROSSHAIR_PANEL = 'crosshairPanel'
+    EVENT_NOTIFICATION_PANEL = 'eventNotificationPanel'
+    EVENT_PROGRESS_PANEL = 'eventProgressPanel'
+    EVENT_CONSUMABLES_PANEL = 'eventConsumablesPanel'

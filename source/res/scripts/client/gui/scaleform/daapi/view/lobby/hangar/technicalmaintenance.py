@@ -124,6 +124,8 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
              'infoAfterShellBlock': ''})
             shells = data['shells']
             for shell in vehicle.shells:
+                if shell.isHidden:
+                    continue
                 price = shell.altPrice
                 defaultPrice = shell.defaultAltPrice
                 action = None

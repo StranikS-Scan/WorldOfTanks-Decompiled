@@ -226,6 +226,9 @@ class _CurrentVehicle(_CachedVehicle):
     def isEvent(self):
         return self.isPresent() and self.item.isEvent
 
+    def hasWheelBase(self):
+        return self.isPresent() and self.item.hasWheelBase
+
     def isAlive(self):
         return self.isPresent() and self.item.isAlive
 

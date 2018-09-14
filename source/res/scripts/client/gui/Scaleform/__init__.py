@@ -41,8 +41,8 @@ def getNationsAssetPath(nation, namePrefix='', extension='png'):
     return NATIONS_ICON_FILENAME % (NAMES[nation], namePrefix, extension)
 
 
-def getLevelsAssetPath(level, extension='.png'):
-    return ''.join([LEVEL_FILTER_ICONS_DIR_PARH, 'level_%d' % level, extension])
+def getLevelsAssetPath(level_str, extension='.png'):
+    return ''.join([LEVEL_FILTER_ICONS_DIR_PARH, level_str, extension])
 
 
 def getNecessaryArenaFrameName(arenaSubType, hasBase=None):

@@ -60,6 +60,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BROWSER_WINDOW = 'browserWindow'
     DEMONSTRATOR_WINDOW = 'demonstratorWindow'
     VEHICLE_PREVIEW = 'vehiclePreview'
+    MARK_PREVIEW = 'markPreview'
     SIMPLE_DIALOG = 'simpleDialog'
     CONFIRM_MODULE_DIALOG = 'confirmModuleDialog'
     CONFIRM_BOOSTER_DIALOG = 'confirmBoosterDialog'
@@ -112,6 +113,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     CUSTOMIZATION_FILTER_POPOVER = 'CustomizationFilterPopover'
     TANK_CAROUSEL_FILTER_POPOVER = 'TankCarouselFilterPopover'
     CLASSIC_BATTLE_PAGE = 'classicBattlePage'
+    EVENT_BATTLE_PAGE = 'eventBattlePage'
     TUTORIAL_BATTLE_PAGE = 'tutorialBattlePage'
     FALLOUT_CLASSIC_PAGE = 'falloutClassicPage'
     FALLOUT_MULTITEAM_PAGE = 'falloutMultiteamPage'
@@ -125,4 +127,5 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      TUTORIAL_BATTLE_PAGE,
      FALLOUT_CLASSIC_PAGE,
      FALLOUT_MULTITEAM_PAGE,
-     DEV_BATTLE_PAGE)
+     DEV_BATTLE_PAGE,
+     EVENT_BATTLE_PAGE)

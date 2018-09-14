@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSection.py
+from helpers import dependency
 from helpers import i18n
 from gui.Scaleform.daapi.view.meta.ProfileSectionMeta import ProfileSectionMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.LobbyContext import g_lobbyContext
-from gui.shared import g_itemsCache
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class ProfileSection(ProfileSectionMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, *args):
         super(ProfileSection, self).__init__()
@@ -17,7 +20,6 @@ class ProfileSection(ProfileSectionMeta):
         self._userID = args[1]
         self._databaseID = args[2]
         self._selectedData = args[3]
-        self._seasonID = None
         self._data = None
         self._dossier = None
         self.__needUpdate = False
@@ -37,14 +39,10 @@ class ProfileSection(ProfileSectionMeta):
         self._battlesType = bType
         self.invokeUpdate()
 
-    def setSeasonID(self, battleType, seasonID=None):
-        self._battlesType = battleType
-        self._seasonID = seasonID
-        self.invokeUpdate()
-
     def _dataProviderEntryAutoTranslate(self, key):
         return self._dataProviderEntry(key, i18n.makeString(PROFILE.profile_dropdown_labels(key)))
 
+    @classmethod
     def _dataProviderEntry(self, key, label):
         return {'key': key,
          'label': label}
@@ -56,24 +54,18 @@ class ProfileSection(ProfileSectionMeta):
     def __receiveDossier(self):
         if self.__isActive and self.__needUpdate:
             self.__needUpdate = False
-            accountDossier = g_itemsCache.items.getAccountDossier(self._userID)
+            accountDossier = self.itemsCache.items.getAccountDossier(self._userID)
             self._sendAccountData(self._getNecessaryStats(accountDossier), accountDossier)
 
     def _getNecessaryStats(self, accountDossier=None):
         if accountDossier is None:
-            accountDossier = g_itemsCache.items.getAccountDossier(self._userID)
+            accountDossier = self.itemsCache.items.getAccountDossier(self._userID)
         if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
             data = self._getTotalStatsBlock(accountDossier)
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.TEAM:
             data = accountDossier.getTeam7x7Stats()
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.STATICTEAM:
-            if self._seasonID is not None:
-                data = accountDossier.getSeasonRated7x7Stats(int(self._seasonID))
-            else:
-                data = accountDossier.getRated7x7Stats()
-        elif self._battlesType == PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON:
-            currentSeasonID = g_lobbyContext.getServerSettings().eSportCurrentSeason.getID()
-            data = accountDossier.getSeasonRated7x7Stats(currentSeasonID)
+            data = accountDossier.getRated7x7Stats()
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.HISTORICAL:
             data = accountDossier.getHistoricalStats()
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS:
@@ -88,6 +80,8 @@ class ProfileSection(ProfileSectionMeta):
             data = accountDossier.getGlobalMapStats()
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
             data = accountDossier.getFalloutStats()
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
+            data = accountDossier.getRankedStats()
         else:
             raise ValueError('ProfileSection: Unknown battle type: ' + self._battlesType)
         return data

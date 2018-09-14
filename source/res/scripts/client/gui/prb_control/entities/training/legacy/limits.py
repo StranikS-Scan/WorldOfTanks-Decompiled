@@ -2,13 +2,15 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/training/legacy/limits.py
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE
 from gui.prb_control.entities.base.limits import AbstractTeamIsValid, LimitsCollection, VehicleIsValid, TeamNoPlayersInBattle, TeamIsValid
-from gui.shared import g_itemsCache
+from helpers import dependency
 from items import vehicles
+from skeletons.gui.shared import IItemsCache
 
 class ObserverInTeamIsValid(AbstractTeamIsValid):
     """
     Observer's team limits
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def check(self, rosters, team, teamLimits):
         accountsInfo = self._getAccountsInfo(rosters, team)
@@ -33,7 +35,7 @@ class ObserverInTeamIsValid(AbstractTeamIsValid):
                 vehTypeCompDescr = vehDescr.type.compactDescr
             else:
                 vehTypeCompDescr = accInfo['vehTypeCompDescr']
-            if not g_itemsCache.items.getItemByCD(vehTypeCompDescr).isObserver:
+            if not cls.itemsCache.items.getItemByCD(vehTypeCompDescr).isObserver:
                 return False
 
         return True

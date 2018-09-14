@@ -258,6 +258,8 @@ class AS3_AppFactory(IAppFactory):
             event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE)
         elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
             event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE)
+        elif arenaGuiType == ARENA_GUI_TYPE.RANKED:
+            event = events.LoadViewEvent(VIEW_ALIAS.RANKED_BATTLE_PAGE)
         else:
             event = events.LoadViewEvent(VIEW_ALIAS.CLASSIC_BATTLE_PAGE)
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)

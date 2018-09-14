@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path>./res_mods/0.9.18.0</Path>
-    <Path mode="recursive" mask="*.wotmod" root="res">./mods/0.9.18.0</Path>
+    <Path>./res_mods/0.9.19.0.1</Path>
+    <Path mode="recursive" mask="*.wotmod" root="res">./mods/0.9.19.0.1</Path>
     <Path type="sd,hd">./res/packages/shared_content.pkg</Path>
     <Path type="hd">./res/packages/shared_content_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/shared_content_sandbox.pkg</Path>
@@ -14,7 +14,7 @@
     <Path type="sd,hd">./res/packages/02_malinovka.pkg</Path>
     <Path type="hd">./res/packages/02_malinovka_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/04_himmelsdorf.pkg</Path>
-    <Path type="sd,hd">./res/packages/05_prohorovka.pkg</Path>
+    <Path type="sandbox,sd,hd">./res/packages/05_prohorovka.pkg</Path>
     <Path type="sd,hd">./res/packages/06_ensk.pkg</Path>
     <Path type="hd">./res/packages/06_ensk_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/07_lakeville.pkg</Path>
@@ -40,7 +40,7 @@
     <Path type="hd">./res/packages/17_munchen_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/18_cliff.pkg</Path>
     <Path type="hd">./res/packages/18_cliff_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/19_monastery.pkg</Path>
+    <Path type="sandbox,sd,hd">./res/packages/19_monastery.pkg</Path>
     <Path type="hd">./res/packages/19_monastery_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/22_slough.pkg</Path>
     <Path type="hd">./res/packages/22_slough_hd.pkg</Path>
@@ -48,7 +48,7 @@
     <Path type="hd">./res/packages/23_westfeld_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/28_desert.pkg</Path>
     <Path type="sd,hd">./res/packages/29_el_hallouf.pkg</Path>
-    <Path type="sd,hd">./res/packages/31_airfield.pkg</Path>
+    <Path type="sandbox,sd,hd">./res/packages/31_airfield.pkg</Path>
     <Path type="hd">./res/packages/31_airfield_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/33_fjord.pkg</Path>
     <Path type="hd">./res/packages/33_fjord_hd.pkg</Path>
@@ -84,20 +84,15 @@
     <Path type="hd">./res/packages/95_lost_city_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/96_prohorovka_defense.pkg</Path>
     <Path type="hd">./res/packages/96_prohorovka_defense_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/h11_WGL_GrandFinal_2016.pkg</Path>
-    <Path type="hd">./res/packages/h11_WGL_GrandFinal_2016_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/h12_bday_EU_2015.pkg</Path>
-    <Path type="hd">./res/packages/h12_bday_EU_2015_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/hangar_premium_1may.pkg</Path>
-    <Path type="hd">./res/packages/hangar_premium_1may_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/hangar_premium_26apr.pkg</Path>
-    <Path type="hd">./res/packages/hangar_premium_26apr_hd.pkg</Path>
+    <Path type="sd,hd">./res/packages/h15_gamescom_2016.pkg</Path>
+    <Path type="hd">./res/packages/h15_gamescom_2016_hd.pkg</Path>
+    <Path type="sd,hd">./res/packages/h16_WG_bday_2016.pkg</Path>
+    <Path type="hd">./res/packages/h16_WG_bday_2016_hd.pkg</Path>
+    <Path type="sandbox,sd,hd">./res/packages/hangar_bootcamp.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/hangar_premium_v2.pkg</Path>
     <Path type="hd">./res/packages/hangar_premium_v2_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/hangar_v2.pkg</Path>
     <Path type="hd">./res/packages/hangar_v2_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/hangar_victory_day.pkg</Path>
-    <Path type="hd">./res/packages/hangar_victory_day_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/audioww.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/gui.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/misc.pkg</Path>

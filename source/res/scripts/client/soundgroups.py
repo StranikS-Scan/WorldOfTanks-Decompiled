@@ -9,7 +9,7 @@ import constants
 import PlayerEvents
 import MusicControllerWWISE
 from ReplayEvents import g_replayEvents
-from debug_utils import *
+from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import i18n
 from constants import ARENA_PERIOD
 from vehicle_systems.tankStructure import TankPartNames
@@ -33,6 +33,14 @@ _envStateDefs = {'login': ('ue_01_loginscreen_enter', 'ue_01_loginscreen_exit', 
  'battleLoading': ('ue_04_loadingscreen_enter', 'ue_04_loadingscreen_exit', 0),
  'battle': ('ue_05_arena_enter', 'ue_05_arena_exit', 0),
  'battleResults': ('ue_06_result_enter', 'ue_06_result_exit', 0)}
+
+class CREW_GENDER_SWITCHES(object):
+    GROUP = 'SWITCH_ext_vo_gender'
+    MALE = 'SWITCH_ext_vo_gender_male'
+    FEMALE = 'SWITCH_ext_vo_gender_female'
+    DEFAULT = MALE
+    GENDER_ALL = (MALE, FEMALE)
+
 
 class SoundModes():
     __MODES_FOLDER = 'gui/soundModes/'
@@ -214,7 +222,9 @@ class SoundModes():
             return False
         return True
 
-    def setCurrentNation(self, nation):
+    def setCurrentNation(self, nation, genderSwitch=CREW_GENDER_SWITCHES.DEFAULT):
+        if g_instance is not None:
+            g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, genderSwitch)
         arena = getattr(BigWorld.player(), 'arena', None)
         inTutorial = arena is not None and arena.guiType is constants.ARENA_GUI_TYPE.TUTORIAL
         if inTutorial:
@@ -305,7 +315,7 @@ class SoundGroups(object):
         if not userPrefs.has_key(Settings.KEY_SOUND_PREFERENCES):
             userPrefs.write(Settings.KEY_SOUND_PREFERENCES, '')
             self.__masterVolume = defMasterVolume
-            for categoryName in self.__categories.keys():
+            for categoryName in self.__categories.iterkeys():
                 self.__volumeByCategory[categoryName] = defCategoryVolumes.get(categoryName, 1.0)
 
             self.savePreferences()
@@ -321,7 +331,7 @@ class SoundGroups(object):
             self.__volumeByCategory['ev_music'] = ds.readFloat('volume_ev_music', 0.8)
             self.__volumeByCategory['ev_vehicles'] = ds.readFloat('volume_ev_vehicles', 0.8)
             self.__volumeByCategory['ev_voice'] = ds.readFloat('volume_ev_voice', 0.8)
-            for categoryName in self.__categories.keys():
+            for categoryName in self.__categories.iterkeys():
                 volume = ds.readFloat('volume_' + categoryName, defCategoryVolumes.get(categoryName, 1.0))
                 self.__volumeByCategory[categoryName] = volume
 
@@ -349,7 +359,6 @@ class SoundGroups(object):
         self.applyPreferences()
         self.__muteCallbackID = BigWorld.callback(0.25, self.__muteByWindowVisibility)
         g_replayEvents.onMuteSound += self.__onReplayMute
-        from gui.app_loader import g_appLoader
         g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         return
 
@@ -485,7 +494,7 @@ class SoundGroups(object):
     def savePreferences(self):
         ds = Settings.g_instance.userPrefs[Settings.KEY_SOUND_PREFERENCES]
         ds.writeFloat('masterVolume', self.__masterVolume)
-        for categoryName in self.__volumeByCategory.keys():
+        for categoryName in self.__volumeByCategory.iterkeys():
             ds.writeFloat('volume_' + categoryName, self.__volumeByCategory[categoryName])
 
         ds.writeInt('enable', self.__enableStatus)
@@ -513,7 +522,7 @@ class SoundGroups(object):
             WWISE.WW_setMasterVolume(0.0)
             return
         self.setMasterVolume(self.__masterVolume)
-        for categoryName in self.__volumeByCategory.keys():
+        for categoryName in self.__volumeByCategory.iterkeys():
             newVolume = self.__volumeByCategory[categoryName]
             if self.__muffledByReplay and categoryName in ('vehicles', 'effects', 'ambient'):
                 newVolume = 0.0

@@ -6,13 +6,12 @@ from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.goodies import g_goodiesCache
 from gui.goodies.goodie_items import MAX_ACTIVE_BOOSTERS_COUNT
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.game_control import IBoostersController
+from skeletons.gui.goodies import IGoodiesCache
 _GUI_SLOTS_PROPS = {'slotsCount': MAX_ACTIVE_BOOSTERS_COUNT,
  'slotWidth': 50,
  'paddings': 64,
@@ -26,10 +25,10 @@ _EMPTY_BOOSTER_ID = 'empty'
 
 class BoostersPanelComponent(SlotsPanelMeta):
     boosters = dependency.descriptor(IBoostersController)
+    goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self):
         super(BoostersPanelComponent, self).__init__()
-        self._items = g_itemsCache.items
         self._isPanelInactive = True
         self._wasPopulated = False
         self._slotsMap = {}
@@ -61,7 +60,6 @@ class BoostersPanelComponent(SlotsPanelMeta):
         self._wasPopulated = True
 
     def _dispose(self):
-        self._items = None
         self._isPanelInactive = None
         self._wasPopulated = None
         self._slotsMap = None
@@ -72,11 +70,11 @@ class BoostersPanelComponent(SlotsPanelMeta):
 
     def __getAvailableBoosters(self):
         criteria = REQ_CRITERIA.BOOSTER.IS_READY_TO_ACTIVATE
-        return g_goodiesCache.getBoosters(criteria=criteria)
+        return self.goodiesCache.getBoosters(criteria=criteria)
 
     def _buildList(self):
         result = []
-        activeBoosters = g_goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE)
+        activeBoosters = self.goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE)
         activeBoostersList = sorted(activeBoosters.values(), key=lambda b: b.getUsageLeftTime(), reverse=True)
         availableBoostersCount = len(self.__getAvailableBoosters())
         activeBoostersCount = min(len(activeBoostersList), MAX_ACTIVE_BOOSTERS_COUNT)

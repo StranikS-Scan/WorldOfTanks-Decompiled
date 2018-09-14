@@ -3,18 +3,24 @@
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
 class FittingSelectPopoverMeta(SmartPopOverView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends SmartPopOverView
-    """
 
     def setVehicleModule(self, newId, oldId, isRemove):
         self._printOverrideError('setVehicleModule')
 
     def showModuleInfo(self, moduleId):
         self._printOverrideError('showModuleInfo')
+
+    def setAutoRearm(self, autoRearm):
+        self._printOverrideError('setAutoRearm')
+
+    def buyVehicleModule(self, moduleId):
+        self._printOverrideError('buyVehicleModule')
+
+    def setCurrentTab(self, tabIndex):
+        self._printOverrideError('setCurrentTab')
+
+    def listOverlayClosed(self):
+        self._printOverrideError('listOverlayClosed')
 
     def as_updateS(self, data):
         """

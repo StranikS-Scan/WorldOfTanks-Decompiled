@@ -3,9 +3,8 @@
 from adisp import process, async
 import BigWorld
 from client_request_lib.exceptions import ResponseCodes
+from helpers import dependency
 from helpers import getClientLanguage
-from ConnectionManager import connectionManager
-from gui.LobbyContext import g_lobbyContext
 from gui.clans.restrictions import AccountClanLimits, DefaultAccountClanLimits
 from gui.clans import contexts
 from gui.clans.factory import g_clanFactory
@@ -14,6 +13,8 @@ from gui.clans.requests import ClanRequestResponse
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils import getPlayerDatabaseID, backoff
 from debug_utils import LOG_WARNING, LOG_DEBUG
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.lobby_context import ILobbyContext
 _PING_BACK_OFF_MIN_DELAY = 60
 _PING_BACK_OFF_MAX_DELAY = 1200
 _PING_BACK_OFF_MODIFIER = 30
@@ -21,6 +22,8 @@ _PING_BACK_OFF_EXP_RANDOM_FACTOR = 5
 
 @ReprInjector.simple(('getStateID', 'state'))
 class _ClanState(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, clansCtrl, stateID):
         self.__stateID = stateID
@@ -75,10 +78,10 @@ class _ClanState(object):
 
     def _getNextState(self):
         state = None
-        if connectionManager.isConnected():
-            if g_lobbyContext.getServerSettings().roaming.isInRoaming():
+        if self.connectionMgr.isConnected():
+            if self.lobbyContext.getServerSettings().roaming.isInRoaming():
                 state = ClanRoamingState(self._clanCtrl)
-            elif not g_lobbyContext.getServerSettings().clanProfile.isEnabled():
+            elif not self.lobbyContext.getServerSettings().clanProfile.isEnabled():
                 state = ClanDisabledState(self._clanCtrl)
         else:
             state = ClanUndefinedState(self._clanCtrl)
@@ -138,7 +141,7 @@ class _ClanWebState(_ClanState):
 
     def init(self):
         super(_ClanWebState, self).init()
-        self.__webRequester = g_clanFactory.createWebRequester(g_lobbyContext.getServerSettings().clanProfile, client_lang=getClientLanguage())
+        self.__webRequester = g_clanFactory.createWebRequester(self.lobbyContext.getServerSettings().clanProfile, client_lang=getClientLanguage())
         self.__requestsCtrl = g_clanFactory.createClanRequestsController(self._clanCtrl, g_clanFactory.createClanRequester(self.__webRequester))
 
     def fini(self):

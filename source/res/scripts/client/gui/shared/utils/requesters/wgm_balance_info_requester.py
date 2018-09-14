@@ -5,6 +5,7 @@ import AccountCommands
 from functools import partial
 from adisp import async, process
 from gui.shared.utils.requesters.common import RequestProcessor
+from gui.shared.money import Currency
 from debug_utils import LOG_WARNING
 from helpers import isPlayerAccount
 _REQUEST_COOLDOWN = 5.0
@@ -12,8 +13,8 @@ _TOKEN_CURRENCY_CODE = 'currency_code'
 _TOKEN_IS_PAID = 'is_paid'
 _TOKEN_CLASS = 'class'
 _TOKEN_AMOUNT = 'amount'
-_TOKEN_GOLD = 'gold'
-_TOKEN_CREDITS = 'credits'
+_TOKEN_GOLD = Currency.GOLD
+_TOKEN_CREDITS = Currency.CREDITS
 _ACTION_PURCHASED = '_purchased'
 _ACTION_EARNED = '_earned'
 GOLD_PURCHASED = _TOKEN_GOLD + _ACTION_PURCHASED

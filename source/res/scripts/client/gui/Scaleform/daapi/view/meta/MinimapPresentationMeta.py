@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.meta.MinimapEntityMeta import MinimapEntityMeta
 
 class MinimapPresentationMeta(MinimapEntityMeta):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends MinimapEntityMeta
-    """
 
     def setMap(self, arenaID):
         self._printOverrideError('setMap')

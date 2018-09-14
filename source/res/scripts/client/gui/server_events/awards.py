@@ -3,22 +3,25 @@
 from collections import namedtuple
 import BigWorld
 import constants
-from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 import potapov_quests
-from gui.shared.utils.functions import makeTooltip
-from helpers import dependency
-from helpers import i18n
-from shared_utils import findFirst
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward, packRibbonInfo, MissionAwardAbstract
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData, getAwardsWindowBonuses
+from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.decorators import process
+from gui.shared.money import Currency
+from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
+from helpers import dependency
+from helpers import i18n
+from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 
 def _getNextQuestInTileByID(questID):
@@ -193,7 +196,10 @@ class FormattedAward(AwardAbstract):
             result = []
             for item, count in bonus.getItems().iteritems():
                 if item is not None and count:
-                    tooltip = makeTooltip(header=item.userName, body=item.fullDescription)
+                    description = item.fullDescription
+                    if item.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.EQUIPMENT):
+                        description = stripColorTagDescrTags(description)
+                    tooltip = makeTooltip(header=item.userName, body=description)
                     result.append(self._BonusFmt(item.icon, BigWorld.wg_getIntegralFormat(count), tooltip, None))
 
             return result
@@ -219,10 +225,11 @@ class FormattedAward(AwardAbstract):
              'boosterId': booster.boosterID}
 
     def __init__(self):
-        self._formatters = {'gold': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG, tooltip=TOOLTIPS.AWARDITEM_GOLD),
-         'credits': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG_1, tooltip=TOOLTIPS.AWARDITEM_CREDITS),
-         'freeXP': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_FREEXPICONBIG, tooltip=TOOLTIPS.AWARDITEM_FREEXP),
-         'premium': self._SimpleNoValueFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_PREMDAYICONBIG, tooltip=TOOLTIPS.AWARDITEM_PREMIUM),
+        self._formatters = {Currency.GOLD: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_GOLD, tooltip=TOOLTIPS.AWARDITEM_GOLD),
+         Currency.CREDITS: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CREDITS, tooltip=TOOLTIPS.AWARDITEM_CREDITS),
+         Currency.CRYSTAL: self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTALICONBIG_1, tooltip=TOOLTIPS.AWARDITEM_CRYSTAL),
+         'freeXP': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_FREEEXP, tooltip=TOOLTIPS.AWARDITEM_FREEXP),
+         'premium': self._SimpleNoValueFormatter(RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_PREMIUM_1, tooltip=TOOLTIPS.AWARDITEM_PREMIUM),
          'items': self._ItemsFormatter(),
          'goodies': self._BoostersFormatter()}
 
@@ -305,7 +312,7 @@ class MotiveQuestAward(FormattedAward):
     def handleBodyButton(self):
         nextQuest = self.__getNextMotiveQuest()
         if nextQuest is not None:
-            self.__proxyEvent(nextQuest.getID(), constants.EVENT_TYPE.MOTIVE_QUEST)
+            self.__proxyEvent(nextQuest.getID())
         return
 
 
@@ -333,7 +340,12 @@ class MissionAward(MissionAwardAbstract):
         return text_styles.highTitle(self._quest.getUserName())
 
     def getCurrentQuestConditions(self):
-        return {'containerElements': events_helpers.getEventConditions(self._quest)}
+        containerElements = old_events_helpers.getEventConditions(self._quest)
+        if containerElements:
+            return {'containerElements': containerElements}
+        else:
+            return None
+            return None
 
     def getMainStatusText(self):
         return text_styles.success('#menu:awardWindow/mission/conditionComplete')
@@ -358,10 +370,11 @@ class MissionAward(MissionAwardAbstract):
         return not self.isNextAvailable()
 
     def getAwards(self):
-        return events_helpers.getCarouselAwardVO(self._quest.getBonuses(), isReceived=True)
+        bonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
+        return getAwardsWindowBonuses(bonuses)
 
     def handleNextButton(self):
-        self._proxyEvent(eventType=constants.EVENT_TYPE.BATTLE_QUEST)
+        self._proxyEvent()
 
     def __getMissionsCount(self):
         return len(self._eventsCache.getQuests(lambda q: q.isAvailable()[0] and q.getType() not in constants.EVENT_TYPE.SHARED_QUESTS and not q.isCompleted()))
@@ -442,7 +455,7 @@ class PersonalMissionAward(MissionAward):
             bonuses.extend(self._quest.getBonuses(isMain=True))
         if self._isAddReward:
             bonuses.extend(self._quest.getBonuses(isMain=False))
-        return events_helpers.getCarouselAwardVO(bonuses, isReceived=True)
+        return getAwardsWindowBonuses(bonuses)
 
     def getNextButtonText(self):
         if self._quest.isFinal():
@@ -477,6 +490,19 @@ class PersonalMissionAward(MissionAward):
 
     @process('updating')
     def __tryGetAward(self):
-        result = yield events_helpers.getPotapovQuestAward(self._quest)
+        result = yield old_events_helpers.getPotapovQuestAward(self._quest)
         if result and len(result.userMsg):
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+
+
+class RankedBoobyAward(MissionAward):
+
+    def __init__(self, quest, proxyEvent):
+        super(RankedBoobyAward, self).__init__(quest, {'eventsCache': None}, proxyEvent)
+        return
+
+    def getAvalableText(self):
+        pass
+
+    def isNextAvailable(self):
+        return False

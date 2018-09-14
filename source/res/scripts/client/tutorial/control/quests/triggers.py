@@ -1,18 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/triggers.py
-import BigWorld
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from gui.shared import g_eventBus, events
-from gui.shared.event_bus import EVENT_BUS_SCOPE
-from helpers import dependency
-from skeletons.account_helpers.settings_core import ISettingsCore
-from tutorial import doc_loader
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.shared.ItemsCache import g_itemsCache
+from gui.shared import g_eventBus, events
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA, RESEARCH_CRITERIA
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.shared import IItemsCache
+from tutorial import doc_loader
 from tutorial.control import g_tutorialWeaver
 from tutorial.control.lobby import aspects
 from tutorial.control.triggers import Trigger, TriggerWithValidateVar, TriggerWithSubscription
@@ -97,6 +96,7 @@ class ChapterBonusTrigger(TriggerWithValidateVar):
 
 
 class RandomBattlesCountTrigger(Trigger):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, triggerID):
         super(RandomBattlesCountTrigger, self).__init__(triggerID)
@@ -112,7 +112,7 @@ class RandomBattlesCountTrigger(Trigger):
         self.toggle(isOn=self.isOn())
 
     def isOn(self):
-        randomStats = g_itemsCache.items.getAccountDossier().getRandomStats()
+        randomStats = self.itemsCache.items.getAccountDossier().getRandomStats()
         return randomStats.getBattlesCount() > 0
 
     def clear(self):
@@ -122,6 +122,7 @@ class RandomBattlesCountTrigger(Trigger):
 
 
 class ResearchModuleTrigger(Trigger):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, triggerID):
         super(ResearchModuleTrigger, self).__init__(triggerID)
@@ -134,8 +135,8 @@ class ResearchModuleTrigger(Trigger):
         self.toggle(isOn=self.isOn())
 
     def isOn(self):
-        vehicles = g_itemsCache.items.getVehicles(criteria=REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT)
-        unlocks = g_itemsCache.items.stats.unlocks
+        vehicles = self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT)
+        unlocks = self.itemsCache.items.stats.unlocks
         unlockedItemsGetter = g_techTreeDP.getUnlockedVehicleItems
         for vehCD, vehicle in vehicles.iteritems():
             if len(unlockedItemsGetter(vehicle, unlocks)):
@@ -153,6 +154,7 @@ class ResearchModuleTrigger(Trigger):
 
 
 class InstallModuleTrigger(Trigger):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, triggerID):
         super(InstallModuleTrigger, self).__init__(triggerID)
@@ -165,13 +167,13 @@ class InstallModuleTrigger(Trigger):
         self.toggle(isOn=self.isOn())
 
     def isOn(self):
-        vehicles = g_itemsCache.items.getVehicles(criteria=RESEARCH_CRITERIA.VEHICLE_TO_UNLOCK)
-        unlocks = g_itemsCache.items.stats.unlocks
+        vehicles = self.itemsCache.items.getVehicles(criteria=RESEARCH_CRITERIA.VEHICLE_TO_UNLOCK)
+        unlocks = self.itemsCache.items.stats.unlocks
         unlockedItemsGetter = g_techTreeDP.getUnlockedVehicleItems
         for vehCD, vehicle in vehicles.iteritems():
             items = unlockedItemsGetter(vehicle, unlocks)
             for itemCD in items.iterkeys():
-                item = g_itemsCache.items.getItemByCD(itemCD)
+                item = self.itemsCache.items.getItemByCD(itemCD)
                 if item.isInstalled(vehicle):
                     return True
 
@@ -187,6 +189,7 @@ class InstallModuleTrigger(Trigger):
 
 
 class ResearchVehicleTrigger(TriggerWithValidateVar):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def run(self):
         self.isRunning = True
@@ -199,7 +202,7 @@ class ResearchVehicleTrigger(TriggerWithValidateVar):
         self.toggle(isOn=self.isOn())
 
     def isOn(self):
-        return bool(len(g_itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | REQ_CRITERIA.VEHICLE.LEVELS([self.getVar()]) | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT)))
+        return bool(len(self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | REQ_CRITERIA.VEHICLE.LEVELS([self.getVar()]) | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT)))
 
     def clear(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -208,6 +211,7 @@ class ResearchVehicleTrigger(TriggerWithValidateVar):
 
 
 class BuyVehicleTrigger(TriggerWithValidateVar):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def run(self):
         self.isRunning = True
@@ -217,7 +221,7 @@ class BuyVehicleTrigger(TriggerWithValidateVar):
         self.toggle(isOn=self.isOn())
 
     def isOn(self):
-        return bool(len(g_itemsCache.items.getVehicles(criteria=REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS([self.getVar()]) | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT)))
+        return bool(len(self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS([self.getVar()]) | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT)))
 
     def clear(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -234,17 +238,18 @@ class InventoryVehicleTrigger(BuyVehicleTrigger):
         vehicleCriteria = self.getVar()
         minLvl, maxLvl = vehicleCriteria.get('levelsRange', (1, 10))
         criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(minLvl, maxLvl)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
-        return bool(len(g_itemsCache.items.getVehicles(criteria)))
+        return bool(len(self.itemsCache.items.getVehicles(criteria)))
 
 
 class PermanentVehicleOwnTrigger(BuyVehicleTrigger):
 
     def isOn(self):
-        vehicle = g_itemsCache.items.getItemByCD(self.getVar()['vehicle'])
+        vehicle = self.itemsCache.items.getItemByCD(self.getVar()['vehicle'])
         return vehicle.isPurchased
 
 
 class VehicleBattleCountTrigger(TriggerWithValidateVar):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def run(self):
         self.isRunning = True
@@ -254,7 +259,7 @@ class VehicleBattleCountTrigger(TriggerWithValidateVar):
         self.toggle(isOn=self.isOn())
 
     def isOn(self):
-        vehicleDossier = g_itemsCache.items.getVehicleDossier(self.getVar()['vehicle'])
+        vehicleDossier = self.itemsCache.items.getVehicleDossier(self.getVar()['vehicle'])
         return vehicleDossier.getTotalStats().getBattlesCount() >= self.getVar()['battlesCount']
 
     def clear(self):
@@ -332,6 +337,7 @@ class XpExchangeTrigger(Trigger):
 
 
 class InstallItemsTrigger(TriggerWithValidateVar):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def run(self):
         self.isRunning = True
@@ -347,8 +353,8 @@ class InstallItemsTrigger(TriggerWithValidateVar):
         criteria = REQ_CRITERIA.EMPTY
         if itemsList:
             criteria = REQ_CRITERIA.IN_CD_LIST(itemsList)
-        vehicles = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
-        items = g_itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE_INDICES[itemType], criteria=criteria).values()
+        vehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        items = self.itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE_INDICES[itemType], criteria=criteria).values()
         for item in items:
             if len(item.getInstalledVehicles(vehicles)) > 0:
                 return True
@@ -362,35 +368,6 @@ class InstallItemsTrigger(TriggerWithValidateVar):
 
     def __inventoryUpdateCallBack(self, *args):
         self.toggle(isOn=self.isOn())
-
-
-class TimerTrigger(TriggerWithValidateVar):
-
-    def __init__(self, triggerID, validateVarID, setVarID=None, validateUpdateOnly=False):
-        super(TimerTrigger, self).__init__(triggerID, validateVarID, setVarID, validateUpdateOnly)
-        self.__timerCallback = None
-        return
-
-    def run(self):
-        self.isRunning = True
-        if self.__timerCallback is None:
-            self.isSubscribed = True
-            self.__timerCallback = BigWorld.callback(self.getVar(), self.__updateTimer)
-        self.toggle(isOn=False)
-        return
-
-    def clear(self):
-        if self.__timerCallback is not None:
-            BigWorld.cancelCallback(self.__timerCallback)
-            self.__timerCallback = None
-        self.isSubscribed = False
-        self.isRunning = False
-        return
-
-    def __updateTimer(self, *args):
-        self.__timerCallback = None
-        self.toggle(isOn=True)
-        return
 
 
 class SimpleWindowCloseTrigger(TriggerWithSubscription):

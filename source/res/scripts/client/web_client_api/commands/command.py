@@ -3,6 +3,7 @@
 from types import FunctionType, MethodType
 from functools import partial
 from collections import namedtuple
+from debug_utils import LOG_WARNING
 from .. import WebCommandException
 
 class SchemeValidator(object):
@@ -45,6 +46,14 @@ class SchemeValidator(object):
         self.__validate(scheme)
 
     def __validate(self, availableScheme):
+        deprecated = availableScheme.get('deprecated', [])
+
+        def checkDeprecated(field):
+            fieldName = field[0]
+            for name, message in deprecated:
+                if name == fieldName:
+                    LOG_WARNING('Web2Client: "%s" parameter is deprecated (%s)!' % (name, message))
+                    break
 
         def validateSection(sectionName, required):
             requiredFields = availableScheme.get(sectionName, [])
@@ -58,6 +67,7 @@ class SchemeValidator(object):
                         continue
                 if not isinstance(value, type):
                     raise WebCommandException("Command validation failed: Value '%s' for parameter '%s' is wrong!" % (value, name))
+                checkDeprecated(field)
 
             return
 
@@ -71,6 +81,7 @@ class SchemeValidator(object):
                 value = getattr(self, name)
                 if value is not None and isinstance(value, type):
                     unionFound = True
+                    checkDeprecated(field)
 
             if not unionFound:
                 raise WebCommandException('Command validation failed: Not found suitable parameters!')
@@ -100,9 +111,10 @@ def instantiateObject(objClass, data):
     return cmdInstance
 
 
-_WebCommand = namedtuple('_WebCommand', 'command, params')
-_WebCommand.__new__.__defaults__ = (None, None)
-_WebCommandScheme = {'required': (('command', basestring), ('params', dict))}
+_WebCommand = namedtuple('_WebCommand', ('command', 'params', 'web_id'))
+_WebCommand.__new__.__defaults__ = (None, None, None)
+_WebCommandScheme = {'required': (('command', basestring), ('params', dict)),
+ 'optional': (('web_id', basestring),)}
 
 class WebCommand(_WebCommand, SchemeValidator):
     """

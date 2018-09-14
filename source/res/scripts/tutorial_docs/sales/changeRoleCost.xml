@@ -1,0 +1,121 @@
+<changeRoleCost.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <post-effects>
+        <inactivate>	PersonalCaseChangeRoleBtnOnScene	</inactivate>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	CrewHint	  <condition>
+            <effect-not-triggered>	CrewHint	</effect-not-triggered>
+            <active>	CrewPanelOnScene	</active>
+          </condition>
+        </show-hint>
+        <show-hint>	PersonalCaseChangeRoleBtnHint	  <condition>
+            <active>	PersonalCaseChangeRoleBtnOnScene	</active>
+          </condition>
+        </show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	CrewPanel	  <on-scene-effects>
+            <activate>	CrewPanelOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>	&gt;	  <refuse-training>
+              <condition>
+                <effect-triggered>	CrewPanelOnScene	</effect-triggered>
+              </condition>
+            </refuse-training>
+            <inactivate>	CrewPanelOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	PersonalCaseChangeRoleBtn	  <on-scene-effects>
+            <activate>	PersonalCaseChangeRoleBtnOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	PersonalCaseChangeRoleBtnOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	CrewHint	  <item-id>	CrewPanel	</item-id>
+      <text>	#quests:action/chain/hint/openPersonalCase	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <padding>
+        <left>	0	</left>
+        <top>	0	</top>
+        <right>	0	</right>
+        <bottom>	0	</bottom>
+      </padding>
+      <actions>
+        <click>	CrewPanel	  <effects>
+            <run-trigger>	PersonalCaseWaitTimer	</run-trigger>
+            <active>	CrewPanelShown	</active>
+            <close-hint>	CrewHint	</close-hint>
+          </effects>
+        </click>
+        <click-outside>	CrewPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	CrewPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	PersonalCaseChangeRoleBtnHint	  <item-id>	PersonalCaseChangeRoleBtn	</item-id>
+      <text>	#quests:action/chain/hint/changeRole	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <padding>
+        <left>	-5	</left>
+        <top>	-5	</top>
+        <right>	-5	</right>
+        <bottom>	-5	</bottom>
+      </padding>
+      <actions>
+        <click>	PersonalCaseChangeRoleBtn	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	PersonalCaseChangeRoleBtn	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	PersonalCaseChangeRoleBtn	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+  </has-id>
+  <triggers>
+    <trigger>	PersonalCaseWaitTimer	  <type>	timer	</type>
+      <validate-var>	WaitTimer	</validate-var>
+      <on-effects>
+        <refuse-training>
+          <condition>
+            <inactive>	PersonalCaseChangeRoleBtnOnScene	</inactive>
+          </condition>
+        </refuse-training>
+      </on-effects>
+    </trigger>
+  </triggers>
+  <vars>
+    <var-set>	WaitTimer	  <asInt>	5	</asInt>
+    </var-set>
+  </vars>
+</changeRoleCost.xml>

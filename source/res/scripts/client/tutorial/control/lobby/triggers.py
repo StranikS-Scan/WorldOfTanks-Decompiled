@@ -5,8 +5,9 @@ import dossiers2
 from AccountCommands import RES_SUCCESS
 from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 from tutorial.control import game_vars, g_tutorialWeaver
 from tutorial.control.lobby import aspects
 from tutorial.control.triggers import Trigger, TriggerWithValidateVar, TriggerWithSubscription
@@ -254,10 +255,11 @@ class PremiumDiscountUseTrigger(Trigger):
 
 
 class PersonalSlotDiscountsUseTrigger(Trigger):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, triggerID):
         super(PersonalSlotDiscountsUseTrigger, self).__init__(triggerID)
-        self._slotsDiscounts = g_itemsCache.items.shop.personalSlotDiscounts
+        self._slotsDiscounts = self.itemsCache.items.shop.personalSlotDiscounts
 
     def run(self):
         if not self.isSubscribed:
@@ -265,7 +267,7 @@ class PersonalSlotDiscountsUseTrigger(Trigger):
             g_clientUpdateManager.addCallbacks({'goodies': self.__onDiscountsChange})
 
     def isOn(self):
-        newDiscounts = g_itemsCache.items.shop.personalSlotDiscounts
+        newDiscounts = self.itemsCache.items.shop.personalSlotDiscounts
         result = len(newDiscounts) < len(self._slotsDiscounts)
         self._slotsDiscounts = newDiscounts
         return result
@@ -296,3 +298,32 @@ class FreeXPChangedTrigger(Trigger):
             g_tutorialWeaver.clear(self.__startProcessPointcutId)
             self.__startProcessPointcutId = -1
         self.isSubscribed = False
+
+
+class TimerTrigger(TriggerWithValidateVar):
+
+    def __init__(self, triggerID, validateVarID, setVarID=None, validateUpdateOnly=False):
+        super(TimerTrigger, self).__init__(triggerID, validateVarID, setVarID, validateUpdateOnly)
+        self.__timerCallback = None
+        return
+
+    def run(self):
+        self.isRunning = True
+        if self.__timerCallback is None:
+            self.isSubscribed = True
+            self.__timerCallback = BigWorld.callback(self.getVar(), self.__updateTimer)
+        self.toggle(isOn=False)
+        return
+
+    def clear(self):
+        if self.__timerCallback is not None:
+            BigWorld.cancelCallback(self.__timerCallback)
+            self.__timerCallback = None
+        self.isSubscribed = False
+        self.isRunning = False
+        return
+
+    def __updateTimer(self, *args):
+        self.__timerCallback = None
+        self.toggle(isOn=True)
+        return

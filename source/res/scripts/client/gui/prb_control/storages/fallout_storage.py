@@ -6,10 +6,10 @@ from account_helpers.AccountSettings import FALLOUT_VEHICLES
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from constants import QUEUE_TYPE
 from gui.prb_control.storages.local_storage import LocalStorage
-from gui.shared import g_itemsCache
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 _SETTINGS_DEFAULTS = {'isEnabled': False,
  'isAutomatch': False,
  'falloutBattleType': QUEUE_TYPE.UNKNOWN,
@@ -18,6 +18,7 @@ _SETTINGS_DEFAULTS = {'isEnabled': False,
 
 class FalloutLocalStorage(LocalStorage):
     __slots__ = ('__settings', '__intCDs')
+    itemsCache = dependency.descriptor(IItemsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
     eventsCache = dependency.descriptor(IEventsCache)
 
@@ -70,7 +71,7 @@ class FalloutLocalStorage(LocalStorage):
         vehiclesIntCDs = self.__intCDs.get(self.getBattleType(), ())
         vehiclesInvIDs = []
         for intCD in vehiclesIntCDs:
-            vehicle = g_itemsCache.items.getItemByCD(intCD)
+            vehicle = self.itemsCache.items.getItemByCD(intCD)
             if vehicle is None:
                 if not excludeEmpty:
                     vehiclesInvIDs.append(INV_ID_CLEAR_VEHICLE)
@@ -81,7 +82,7 @@ class FalloutLocalStorage(LocalStorage):
     def setVehiclesInvIDs(self, vehicles):
         vehiclesIntCDs = []
         for invID in vehicles:
-            vehicle = g_itemsCache.items.getVehicle(invID)
+            vehicle = self.itemsCache.items.getVehicle(invID)
             if vehicle is None:
                 vehiclesIntCDs.append(INV_ID_CLEAR_VEHICLE)
             vehiclesIntCDs.append(vehicle.intCD)
@@ -91,7 +92,7 @@ class FalloutLocalStorage(LocalStorage):
         return
 
     def getSelectedVehicles(self):
-        return filter(None, map(g_itemsCache.items.getItemByCD, self.__intCDs.get(self.getBattleType(), ())))
+        return filter(None, map(self.itemsCache.items.getItemByCD, self.__intCDs.get(self.getBattleType(), ())))
 
     def validateSelectedVehicles(self):
         config = self.getConfig()
@@ -102,7 +103,7 @@ class FalloutLocalStorage(LocalStorage):
         else:
             maxVehs = config.maxVehiclesPerPlayer
             valid = [INV_ID_CLEAR_VEHICLE] * maxVehs
-            vehGetter = g_itemsCache.items.getItemByCD
+            vehGetter = self.itemsCache.items.getItemByCD
             for idx, intCD in enumerate(vehicles[:maxVehs]):
                 invVehicle = vehGetter(intCD)
                 if invVehicle is not None and invVehicle.isInInventory:

@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/EULA.py
 import BigWorld
-from ConnectionManager import connectionManager
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.meta.EULAMeta import EULAMeta
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.shared.events import CloseWindowEvent, OpenLinkEvent
+from helpers import dependency
+from skeletons.connection_mgr import IConnectionManager
 
 class EULADlg(EULAMeta):
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, ctx=None):
         super(EULADlg, self).__init__()
@@ -16,11 +18,11 @@ class EULADlg(EULAMeta):
 
     def _populate(self):
         super(EULADlg, self)._populate()
-        connectionManager.onDisconnected += self.__onDisconnected
+        self.connectionMgr.onDisconnected += self.__onDisconnected
 
     def _dispose(self):
         super(EULADlg, self)._dispose()
-        connectionManager.onDisconnected -= self.__onDisconnected
+        self.connectionMgr.onDisconnected -= self.__onDisconnected
         self.__eulaString = None
         return
 

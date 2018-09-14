@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class TechnicalMaintenanceMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def getEquipment(self, id1, currency1, id2, currency2, id3, currency3, installSlotIndex):
         self._printOverrideError('getEquipment')
@@ -36,7 +30,9 @@ class TechnicalMaintenanceMeta(AbstractWindowView):
 
     def as_setEquipmentS(self, installed, setup, modules):
         """
-        :param modules: Represented by Array (AS)
+        :param installed: Represented by Array (AS)
+        :param setup: Represented by Array (AS)
+        :param modules: Represented by Array.<ModuleVO> (AS)
         """
         return self.flashObject.as_setEquipment(installed, setup, modules) if self._isDAAPIInited() else None
 

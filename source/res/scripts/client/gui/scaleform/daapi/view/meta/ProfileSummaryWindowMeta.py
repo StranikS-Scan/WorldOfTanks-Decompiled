@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSummary import ProfileSummary
 
 class ProfileSummaryWindowMeta(ProfileSummary):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ProfileSummary
-    """
 
     def openClanStatistic(self):
         self._printOverrideError('openClanStatistic')

@@ -1,16 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/BATTLE_RESULT_TYPES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class BATTLE_RESULT_TYPES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     TOOLTIP_TEXT_BLOCK_LINKAGE = 'TooltipTextBlockUI'
     TOOLTIP_BUILDUP_BLOCK_LINKAGE = 'TooltipBuildUpBlockUI'
-    TOOLTIP_TOTAL_ITEMS_BLOCK_LINKAGE = 'EfficiencyBlockTotalItemsUI'
     TOOLTIP_ICON_TEXT_PARAMETER_LINKAGE = 'EfficiencyBlockIconTextParameterUI'
     TOOLTIP_RESULT_TTILE_LEFT_LINKAGE = 'EfficiencyBlockResultTitleLefttUI'
     TOOLTIP_RESULT_TTILE_RIGHT_CENTER_LINKAGE = 'EfficiencyBlockResultTitleRightCenterUI'

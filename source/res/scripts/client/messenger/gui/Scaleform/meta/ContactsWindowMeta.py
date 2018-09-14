@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class ContactsWindowMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def searchContact(self, criteria):
         self._printOverrideError('searchContact')

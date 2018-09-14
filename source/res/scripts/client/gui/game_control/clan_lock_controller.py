@@ -2,16 +2,18 @@
 # Embedded file name: scripts/client/gui/game_control/clan_lock_controller.py
 import Event
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared import g_itemsCache
 from gui.shared.gui_items import CLAN_LOCK
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
+from helpers import dependency
 from skeletons.gui.game_control import IClanLockController
+from skeletons.gui.shared import IItemsCache
 _UPDATE_LOCKS_PERIOD = 60
 
 class ClanLockController(IClanLockController, Notifiable):
     """ This controller handles occurrence of vehicle locks (global or by vehicle)
      and fires a special event each minute util these locks exist.
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(ClanLockController, self).__init__()
@@ -29,8 +31,8 @@ class ClanLockController(IClanLockController, Notifiable):
     def onLobbyStarted(self, ctx):
         g_clientUpdateManager.addCallbacks({'stats.vehTypeLocks': self.__updateVehicleLocks,
          'stats.globalVehicleLocks': self.__updateGlobalLocks})
-        self.__updateVehicleLocks(g_itemsCache.items.stats.vehicleTypeLocks)
-        self.__updateGlobalLocks(g_itemsCache.items.stats.globalVehicleLocks)
+        self.__updateVehicleLocks(self.itemsCache.items.stats.vehicleTypeLocks)
+        self.__updateGlobalLocks(self.itemsCache.items.stats.globalVehicleLocks)
 
     def onAvatarBecomePlayer(self):
         self.__stop()

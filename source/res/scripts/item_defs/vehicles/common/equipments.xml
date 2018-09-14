@@ -1277,4 +1277,301 @@
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
     </script>
   </bomber_fallout>
+  <toolboxBattleBooster>
+    <id>	103	</id>
+    <userString>	#artefacts:toolboxBattleBooster/name	</userString>
+    <description>	#artefacts:toolboxBattleBooster/descr	</description>
+    <icon>	toolbox 0 0	</icon>
+    <price>	6	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	equipmentBattleBooster	</tags>
+    <script>	FactorBattleBooster	  <level>
+        <deviceFilter>
+          <tags>
+            <required>	toolbox	</required>
+            <incompatible>	deluxe	</incompatible>
+          </tags>
+        </deviceFilter>
+        <attribute>	repairSpeed	</attribute>
+        <factor>	1.1	</factor>
+      </level>
+      <level>
+        <deviceFilter>
+          <tags>
+            <required>	toolbox deluxe	</required>
+          </tags>
+        </deviceFilter>
+        <attribute>	repairSpeed	</attribute>
+        <factor>	1.1	</factor>
+      </level>
+    </script>
+  </toolboxBattleBooster>
+  <improvedVentilationBattleBooster>
+    <id>	104	</id>
+    <userString>	#artefacts:improvedVentilationBattleBooster/name	</userString>
+    <description>	#artefacts:improvedVentilationBattleBooster/descr	</description>
+    <icon>	improvedVentilation 0 0	</icon>
+    <price>	12	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	equipmentBattleBooster	</tags>
+    <script>	AdditiveBattleBooster	  <level>
+        <deviceFilter>
+          <tags>
+            <required>	ventilation	</required>
+            <incompatible>	deluxe	</incompatible>
+          </tags>
+        </deviceFilter>
+        <attribute>	crewLevelIncrease	</attribute>
+        <value>	2.5	</value>
+      </level>
+      <level>
+        <deviceFilter>
+          <tags>
+            <required>	ventilation deluxe	</required>
+          </tags>
+        </deviceFilter>
+        <attribute>	crewLevelIncrease	</attribute>
+        <value>	2.5	</value>
+      </level>
+    </script>
+  </improvedVentilationBattleBooster>
+  <rammerBattleBooster>
+    <id>	105	</id>
+    <userString>	#artefacts:rammerBattleBooster/name	</userString>
+    <description>	#artefacts:rammerBattleBooster/descr	</description>
+    <icon>	rammer 0 0	</icon>
+    <price>	12	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	equipmentBattleBooster	</tags>
+    <script>	FactorBattleBooster	  <level>
+        <deviceFilter>
+          <tags>
+            <required>	rammer	</required>
+            <incompatible>	deluxe	</incompatible>
+          </tags>
+        </deviceFilter>
+        <attribute>	gun/reloadTime	</attribute>
+        <factor>	0.972	</factor>
+      </level>
+      <level>
+        <deviceFilter>
+          <tags>
+            <required>	rammer deluxe	</required>
+          </tags>
+        </deviceFilter>
+        <attribute>	gun/reloadTime	</attribute>
+        <factor>	0.971	</factor>
+      </level>
+    </script>
+  </rammerBattleBooster>
+  <coatedOpticsBattleBooster>
+    <id>	106	</id>
+    <userString>	#artefacts:coatedOpticsBattleBooster/name	</userString>
+    <description>	#artefacts:coatedOpticsBattleBooster/descr	</description>
+    <icon>	coatedOptics 0 0	</icon>
+    <price>	8	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	equipmentBattleBooster	</tags>
+    <script>	FactorBattleBooster	  <level>
+        <deviceFilter>
+          <tags>
+            <required>	coatedOptics	</required>
+            <incompatible>	deluxe	</incompatible>
+          </tags>
+        </deviceFilter>
+        <attribute>	circularVisionRadius	</attribute>
+        <factor>	1.023	</factor>
+      </level>
+      <level>
+        <deviceFilter>
+          <tags>
+            <required>	coatedOptics deluxe	</required>
+          </tags>
+        </deviceFilter>
+        <attribute>	circularVisionRadius	</attribute>
+        <factor>	1.022	</factor>
+      </level>
+    </script>
+  </coatedOpticsBattleBooster>
+  <aimingStabilizerBattleBooster>
+    <id>	107	</id>
+    <userString>	#artefacts:aimingStabilizerBattleBooster/name	</userString>
+    <description>	#artefacts:aimingStabilizerBattleBooster/descr	</description>
+    <icon>	aimingStabilizer 0 0	</icon>
+    <price>	10	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	equipmentBattleBooster	</tags>
+    <script>	FactorBattleBooster	  <level>
+        <deviceFilter>
+          <tags>
+            <required>	aimingStabilizer	</required>
+            <incompatible>	deluxe	</incompatible>
+          </tags>
+        </deviceFilter>
+        <attribute>	additiveShotDispersionFactor	</attribute>
+        <factor>	0.938	</factor>
+      </level>
+      <level>
+        <deviceFilter>
+          <tags>
+            <required>	aimingStabilizer deluxe	</required>
+          </tags>
+        </deviceFilter>
+        <attribute>	additiveShotDispersionFactor	</attribute>
+        <factor>	0.933	</factor>
+      </level>
+    </script>
+  </aimingStabilizerBattleBooster>
+  <enhancedAimDrivesBattleBooster>
+    <id>	108	</id>
+    <userString>	#artefacts:enhancedAimDrivesBattleBooster/name	</userString>
+    <description>	#artefacts:enhancedAimDrivesBattleBooster/descr	</description>
+    <icon>	enhancedAimDrives 0 0	</icon>
+    <price>	10	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	equipmentBattleBooster	</tags>
+    <script>	FactorBattleBooster	  <level>
+        <deviceFilter>
+          <tags>
+            <required>	enhancedAimDrives	</required>
+            <incompatible>	deluxe	</incompatible>
+          </tags>
+        </deviceFilter>
+        <attribute>	gun/aimingTime	</attribute>
+        <factor>	0.978	</factor>
+      </level>
+      <level>
+        <deviceFilter>
+          <tags>
+            <required>	enhancedAimDrives deluxe	</required>
+          </tags>
+        </deviceFilter>
+        <attribute>	gun/aimingTime	</attribute>
+        <factor>	0.98	</factor>
+      </level>
+    </script>
+  </enhancedAimDrivesBattleBooster>
+  <camouflageBattleBooster>
+    <id>	109	</id>
+    <userString>	#artefacts:camouflageBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <icon>	camouflage 0 0	</icon>
+    <price>	12	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	crewSkillBattleBooster	</tags>
+    <script>	FactorSkillBattleBooster	  <skillName>	camouflage	</skillName>
+      <efficiencyFactor>	1.1	</efficiencyFactor>
+    </script>
+  </camouflageBattleBooster>
+  <smoothTurretBattleBooster>
+    <id>	110	</id>
+    <userString>	#artefacts:smoothTurretBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <icon>	gunner_smoothTurret 0 0	</icon>
+    <price>	10	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	crewSkillBattleBooster	</tags>
+    <script>	FactorPerLevelBattleBooster	  <skillName>	gunner_smoothTurret	</skillName>
+      <factorName>	shotDispersionFactorPerLevel	</factorName>
+      <factorPerLevel>	0.0015	</factorPerLevel>
+    </script>
+  </smoothTurretBattleBooster>
+  <virtuosoBattleBooster>
+    <id>	111	</id>
+    <userString>	#artefacts:virtuosoBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <icon>	driver_virtuoso 0 0	</icon>
+    <price>	8	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	crewSkillBattleBooster	</tags>
+    <script>	FactorPerLevelBattleBooster	  <skillName>	driver_virtuoso	</skillName>
+      <factorName>	rotationSpeedFactorPerLevel	</factorName>
+      <factorPerLevel>	0.001	</factorPerLevel>
+    </script>
+  </virtuosoBattleBooster>
+  <smoothDrivingBattleBooster>
+    <id>	112	</id>
+    <userString>	#artefacts:smoothDrivingBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <icon>	driver_smoothDriving 0 0	</icon>
+    <price>	10	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	crewSkillBattleBooster	</tags>
+    <script>	FactorPerLevelBattleBooster	  <skillName>	driver_smoothDriving	</skillName>
+      <factorName>	shotDispersionFactorPerLevel	</factorName>
+      <factorPerLevel>	0.0008	</factorPerLevel>
+    </script>
+  </smoothDrivingBattleBooster>
+  <fireFightingBattleBooster>
+    <id>	113	</id>
+    <userString>	#artefacts:fireFightingBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <icon>	fireFighting 0 0	</icon>
+    <price>	2	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	crewSkillBattleBooster	</tags>
+    <script>	FactorSkillBattleBooster	  <skillName>	fireFighting	</skillName>
+      <efficiencyFactor>	1.5	</efficiencyFactor>
+    </script>
+  </fireFightingBattleBooster>
+  <sixthSenseBattleBooster>
+    <id>	114	</id>
+    <userString>	#artefacts:sixthSenseBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <icon>	commander_sixthSense 0 0	</icon>
+    <price>	6	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	crewSkillBattleBooster	</tags>
+    <script>	SixthSenseBattleBooster	  <delay>	2	</delay>
+    </script>
+  </sixthSenseBattleBooster>
+  <rancorousBattleBooster>
+    <id>	115	</id>
+    <userString>	#artefacts:rancorousBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <icon>	gunner_rancorous 0 0	</icon>
+    <price>	2	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	crewSkillBattleBooster	</tags>
+    <script>	RancorousBattleBooster	  <duration>	4	</duration>
+      <sectorHalfAngle>	5	</sectorHalfAngle>
+    </script>
+  </rancorousBattleBooster>
+  <pedantBattleBooster>
+    <id>	116	</id>
+    <userString>	#artefacts:pedantBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <icon>	loader_pedant 0 0	</icon>
+    <price>	6	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	crewSkillBattleBooster	</tags>
+    <script>	PedantBattleBooster	  <ammoBayHealthFactor>	1.375	</ammoBayHealthFactor>
+    </script>
+  </pedantBattleBooster>
+  <lastEffortBattleBooster>
+    <id>	117	</id>
+    <userString>	#artefacts:lastEffortBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <icon>	radioman_lastEffort 0 0	</icon>
+    <price>	4	  <crystal></crystal>
+    </price>
+    <type>	battleBoosters	</type>
+    <tags>	crewSkillBattleBooster	</tags>
+    <script>	LastEffortBattleBooster	  <duration>	5	</duration>
+    </script>
+  </lastEffortBattleBooster>
 </equipments.xml>

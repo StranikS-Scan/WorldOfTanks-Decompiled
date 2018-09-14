@@ -8,7 +8,6 @@ from gui.Scaleform.daapi.view.lobby.store.tabs import shop
 from gui.Scaleform.daapi.view.meta.ShopMeta import ShopMeta
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
-from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.utils import flashObject2Dict
@@ -24,25 +23,29 @@ class Shop(ShopMeta):
 
     def buyItem(self, itemCD, allowTradeIn):
         dataCompactId = int(itemCD)
-        item = g_itemsCache.items.getItemByCD(dataCompactId)
+        item = self.itemsCache.items.getItemByCD(dataCompactId)
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, dataCompactId, allowTradeIn)
         else:
             ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_MODULE, dataCompactId)
 
-    def requestTableData(self, nation, type, filter):
+    def requestTableData(self, nation, actionsSelected, type, filter):
         """
         Request table data for selected tab
         :param type: <str> tab ID
         :param nation: <int> gui nation
+        :param actionsSelected: <bool> discount's checkbox value
         :param filter: <obj> filter data
         """
         Waiting.show('updateShop')
-        AccountSettings.setFilter('shop_current', (nation, type))
         filter = flashObject2Dict(filter)
+        itemCD = AccountSettings.getFilter('scroll_to_item')
+        AccountSettings.setFilter('shop_current', (nation, type, actionsSelected))
         AccountSettings.setFilter('shop_' + type, flashObject2Dict(filter))
-        self._setTableData(filter, nation, type)
+        AccountSettings.setFilter('scroll_to_item', None)
+        self._setTableData(filter, nation, type, actionsSelected, itemCD)
         Waiting.hide('updateShop')
+        return
 
     def getName(self):
         """
@@ -53,15 +56,13 @@ class Shop(ShopMeta):
 
     def _populate(self):
         """
-        Prepare and set init data into Flash
-        Subscribe on account updates
+        Prepares and set init data into Flash. Subscribes to account updates.
         """
-        g_clientUpdateManager.addCallbacks({'stats.credits': self._onTableUpdate,
-         'stats.gold': self._onTableUpdate,
-         'cache.mayConsumeWalletResources': self._onTableUpdate,
+        super(Shop, self)._populate()
+        g_clientUpdateManager.addMoneyCallback(self._onTableUpdate)
+        g_clientUpdateManager.addCallbacks({'cache.mayConsumeWalletResources': self._onTableUpdate,
          'inventory.1': self._onTableUpdate})
         g_playerEvents.onCenterIsLongDisconnected += self._update
-        super(Shop, self)._populate()
 
     def _dispose(self):
         """

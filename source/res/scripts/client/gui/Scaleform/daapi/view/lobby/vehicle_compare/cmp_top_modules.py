@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_top_modules.py
-from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 _COMMON_CRITERIA = REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.HIDDEN
 
 class _BaseModuleComparator(object):
+    itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ('_items', '_vehicle')
 
     def __init__(self, items, vehicle):
@@ -131,7 +133,7 @@ class TopModulesChecker(object):
 class ChassisComparator(_BaseModuleComparator):
 
     def __init__(self, criteria, vehicle):
-        items = g_itemsCache.items.getItems(GUI_ITEM_TYPE.CHASSIS, criteria)
+        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CHASSIS, criteria)
         super(ChassisComparator, self).__init__(items, vehicle)
 
     def mostValuableParam(self, excludes=None):
@@ -141,7 +143,7 @@ class ChassisComparator(_BaseModuleComparator):
 class TurretComparator(_BaseModuleComparator):
 
     def __init__(self, criteria, vehicle):
-        items = g_itemsCache.items.getItems(GUI_ITEM_TYPE.TURRET, criteria)
+        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.TURRET, criteria)
         super(TurretComparator, self).__init__(items, vehicle)
 
     def mostValuableParam(self, excludes=None):
@@ -152,7 +154,7 @@ class GunComparator(_BaseModuleComparator):
     __slots__ = ('__vehicle',)
 
     def __init__(self, criteria, vehicle):
-        items = g_itemsCache.items.getItems(GUI_ITEM_TYPE.GUN, criteria)
+        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.GUN, criteria)
         super(GunComparator, self).__init__(items, vehicle)
 
     def mostValuableParam(self, excludes=None):
@@ -176,7 +178,7 @@ class GunComparator(_BaseModuleComparator):
 class EngineComparator(_BaseModuleComparator):
 
     def __init__(self, criteria, vehicle):
-        items = g_itemsCache.items.getItems(GUI_ITEM_TYPE.ENGINE, criteria)
+        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.ENGINE, criteria)
         super(EngineComparator, self).__init__(items, vehicle)
 
     def mostValuableParam(self, excludes=None):
@@ -186,7 +188,7 @@ class EngineComparator(_BaseModuleComparator):
 class RadioComparator(_BaseModuleComparator):
 
     def __init__(self, criteria, vehicle):
-        items = g_itemsCache.items.getItems(GUI_ITEM_TYPE.RADIO, criteria)
+        items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.RADIO, criteria)
         super(RadioComparator, self).__init__(items, vehicle)
 
     def mostValuableParam(self, excludes=None):

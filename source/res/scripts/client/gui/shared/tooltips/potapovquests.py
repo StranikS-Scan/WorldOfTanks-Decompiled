@@ -4,7 +4,6 @@ import BigWorld
 from helpers import dependency
 from helpers import i18n
 from gui import makeHtmlString
-from gui.LobbyContext import g_lobbyContext
 from gui.shared.tooltips import ToolTipDataField, ToolTipData, TOOLTIP_TYPE, ToolTipMethodField, formatters
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -15,6 +14,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.shared.formatters import icons
 from gui.shared.tooltips import contexts
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
 class PrivateQuestsTileMethodField(ToolTipMethodField):
@@ -165,6 +165,7 @@ class PrivateQuestsChainStatusField(ToolTipDataField):
 
 
 class PotapovQuestsData(ToolTipData):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def buildToolTip(self, *args, **kwargs):
         if self._areQuestsEnabled():
@@ -180,13 +181,13 @@ class PotapovQuestsData(ToolTipData):
 class RegularQuestsData(PotapovQuestsData):
 
     def _areQuestsEnabled(self):
-        return g_lobbyContext.getServerSettings().isRegularQuestEnabled()
+        return self.lobbyContext.getServerSettings().isRegularQuestEnabled()
 
 
 class FalloutQuestsData(PotapovQuestsData):
 
     def _areQuestsEnabled(self):
-        return g_lobbyContext.getServerSettings().isFalloutQuestEnabled()
+        return self.lobbyContext.getServerSettings().isFalloutQuestEnabled()
 
 
 class PrivateQuestsChainTooltipData(RegularQuestsData):

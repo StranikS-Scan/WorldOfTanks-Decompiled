@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesViewWithTable
 
 class ClanPersonalInvitesViewMeta(ClanInvitesViewWithTable):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ClanInvitesViewWithTable
-    """
 
     def acceptInvite(self, dbID):
         self._printOverrideError('acceptInvite')

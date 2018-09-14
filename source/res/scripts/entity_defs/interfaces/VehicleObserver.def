@@ -4,43 +4,19 @@
       <Type>	UINT8	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </observerFPVControlMode>
-    <remoteCameraArcade>
-      <Type>	REMOTE_CAMERA_ARCADE_DATA	</Type>
+    <remoteCamera>
+      <Type>	REMOTE_CAMERA_DATA	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
-    </remoteCameraArcade>
-    <remoteCameraSniper>
-      <Type>	REMOTE_CAMERA_SNIPER_DATA	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
-    </remoteCameraSniper>
-    <remoteCameraStrategic>
-      <Type>	REMOTE_CAMERA_STRATEGIC_DATA	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
-    </remoteCameraStrategic>
-    <remoteCameraArty>
-      <Type>	REMOTE_CAMERA_ARTY_DATA	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
-    </remoteCameraArty>
+    </remoteCamera>
   </Properties>
   <CellMethods>
     <switchObserverFPVControlMode>
       <Exposed></Exposed>
       <Arg>	UINT8	</Arg>
     </switchObserverFPVControlMode>
-    <setRemoteCameraArcade>
+    <setRemoteCamera>
       <Exposed></Exposed>
-      <Arg>	REMOTE_CAMERA_ARCADE_DATA	</Arg>
-    </setRemoteCameraArcade>
-    <setRemoteCameraSniper>
-      <Exposed></Exposed>
-      <Arg>	REMOTE_CAMERA_SNIPER_DATA	</Arg>
-    </setRemoteCameraSniper>
-    <setRemoteCameraStrategic>
-      <Exposed></Exposed>
-      <Arg>	REMOTE_CAMERA_STRATEGIC_DATA	</Arg>
-    </setRemoteCameraStrategic>
-    <setRemoteCameraArty>
-      <Exposed></Exposed>
-      <Arg>	REMOTE_CAMERA_ARTY_DATA	</Arg>
-    </setRemoteCameraArty>
+      <Arg>	REMOTE_CAMERA_DATA	</Arg>
+    </setRemoteCamera>
   </CellMethods>
 </VehicleObserver.def>

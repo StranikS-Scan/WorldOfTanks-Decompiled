@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.tank_carousel import TankCarousel
 
 class FalloutTankCarouselMeta(TankCarousel):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends TankCarousel
-    """
 
     def changeVehicle(self, id):
         self._printOverrideError('changeVehicle')

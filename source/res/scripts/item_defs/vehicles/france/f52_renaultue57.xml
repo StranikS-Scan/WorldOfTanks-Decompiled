@@ -21,7 +21,7 @@
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/french/F52_RenaultUE57/RenaultUE57_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -36,10 +36,7 @@
       <armor_5>	6	</armor_5>
       <armor_6>	6	</armor_6>
       <armor_7>	9	</armor_7>
-      <armor_8>	6	</armor_8>
       <armor_9>	0	</armor_9>
-      <armor_10>	0	</armor_10>
-      <armor_11>	9	</armor_11>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	1000	</weight>
@@ -63,9 +60,12 @@
     <exhaust>
       <pixie>	gas_small	</pixie>
       <nodes>	HP_Track_Exhaus_1	</nodes>
+      <tags>
+        <gasoline>	gas_small	</gasoline>
+      </tags>
     </exhaust>
     <turretPositions>
-      <turret>	-0.000014 0.333163 -0.856779	</turret>
+      <turret>	0.000000 0.237618 -0.9651	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/french/F52_RenaultUE57/collision/Hull.model	</collisionModelServer>
@@ -73,14 +73,17 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.426343 0.513276 0.341001	</rayStart>
-        <rayEnd>	0.426343 0.28947 0.254337	</rayEnd>
+        <rayStart>	0.436942 0.424391 0.236426	</rayStart>
+        <rayEnd>	0.436942 0.200278 0.15056	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.22	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F52_RenaultUE57/RenaultUE57_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	3 1.5 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_RenaultUE57>
@@ -118,22 +121,23 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	smallTank	</bufferPrefs>
-        <textureSet>	germany_01	</textureSet>
-        <size>	0.3 0.22	</size>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.1 0.2	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.08	</textureScale>
+        <textureScale>	-9.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.245619	</radius>
+          <syncAngle>	10.9091	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -144,9 +148,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R3	</name>
           <radius>	0.151528	</radius>
+          <syncAngle>	15.4425	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -157,9 +162,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.245619	</radius>
+          <syncAngle>	10.9091	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -170,9 +176,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L3	</name>
           <radius>	0.151528	</radius>
+          <syncAngle>	15.4425	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -189,12 +196,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.547369 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.660782 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F52_RenaultUE57/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F52_RenaultUE57/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.771623 0.561638	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.777957 0.726	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -207,6 +214,111 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F52_RenaultUE57/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F52_RenaultUE57/track/segment1.model	</segmentModelRight>
+        <left>	vehicles/french/F52_RenaultUE57/track/left.track	</left>
+        <right>	vehicles/french/F52_RenaultUE57/track/right.track	</right>
+        <segmentLength>	0.043	</segmentLength>
+        <segmentOffset>	0.125	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0141	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.042	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.042	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.038	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.038	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.038	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.038	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0326733	</minOffset>
+          <maxOffset>	0.0207921	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0326733	</minOffset>
+          <maxOffset>	0.0207921	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_RenaultUE57>
     <Chassis_RenaultUE57_2>
       <userString>	#france_vehicles:Chassis_RenaultUE57_2	</userString>
@@ -240,21 +352,22 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	smallTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.3 0.22	</size>
+        <size>	0.1 0.2	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.08	</textureScale>
+        <textureScale>	-9.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.245619	</radius>
+          <syncAngle>	10.9091	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -265,9 +378,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R3	</name>
           <radius>	0.151528	</radius>
+          <syncAngle>	15.4425	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -278,9 +392,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.245619	</radius>
+          <syncAngle>	10.9091	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -291,9 +406,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L3	</name>
           <radius>	0.151528	</radius>
+          <syncAngle>	15.4425	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -310,12 +426,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.547369 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.660782 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F52_RenaultUE57/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F52_RenaultUE57/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.771623 0.561638	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.777957 0.726	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -328,6 +444,111 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F52_RenaultUE57/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F52_RenaultUE57/track/segment1.model	</segmentModelRight>
+        <left>	vehicles/french/F52_RenaultUE57/track/left.track	</left>
+        <right>	vehicles/french/F52_RenaultUE57/track/right.track	</right>
+        <segmentLength>	0.043	</segmentLength>
+        <segmentOffset>	0.125	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0141	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.042	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.042	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.038	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.038	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.038	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.038	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0326733	</minOffset>
+          <maxOffset>	0.0207921	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0326733	</minOffset>
+          <maxOffset>	0.0207921	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_RenaultUE57_2>
   </chassis>
   <turrets0>
@@ -340,14 +561,8 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	9	</armor_1>
-        <armor_2>	6	</armor_2>
         <armor_3>	6	</armor_3>
         <armor_4>	0	</armor_4>
-        <armor_5>	0	</armor_5>
-        <armor_6>	0	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	6	</armor_9>
       </armor>
       <weight>	40	</weight>
       <maxHealth>	30	</maxHealth>
@@ -396,6 +611,9 @@
             <collisionModelServer>	vehicles/french/F52_RenaultUE57/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F52_RenaultUE57/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.5 1.5 0.000000 0.000000	</tiling>
+          </camouflage>
         </_47mm_SA-L_Mle.37>
         <_57mm_6_pdr_AT_Gun_Mk_IV>	shared	  <maxAmmo>	70	</maxAmmo>
           <unlocks>
@@ -430,40 +648,43 @@
             <collisionModelClient>	vehicles/french/F52_RenaultUE57/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+            <tiling>	1.5 1.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_57mm_6_pdr_AT_Gun_Mk_IV>
       </guns>
       <models>
-        <undamaged>	vehicles/french/F52_RenaultUE57/normal/lod0/Turret_02.model	</undamaged>
-        <destroyed>	vehicles/french/F52_RenaultUE57/crash/lod0/Turret_02.model	</destroyed>
-        <exploded>	vehicles/french/F52_RenaultUE57/crash/lod0/Turret_02.model	</exploded>
+        <undamaged>	vehicles/french/F52_RenaultUE57/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F52_RenaultUE57/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F52_RenaultUE57/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/french/F52_RenaultUE57/collision/Turret_02.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/french/F52_RenaultUE57/collision_client/Turret_02.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/french/F52_RenaultUE57/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F52_RenaultUE57/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000014 0.49722 0.020961	</gunPosition>
+      <gunPosition>	0.000000 0.4344 0.022702	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	0.822213 0.641805 -0.256149	</rayStart>
-          <rayEnd>	0.653466 0.627074 -0.426171	</rayEnd>
+          <rayStart>	0.828848 0.607452 -0.281489	</rayStart>
+          <rayEnd>	0.650453 0.601151 -0.441911	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	-0.704608 0.640638 -0.139011	</rayStart>
-          <rayEnd>	-0.535861 0.625907 -0.309033	</rayEnd>
+          <rayStart>	-0.736097 0.620557 -0.18009	</rayStart>
+          <rayEnd>	-0.558106 0.613873 -0.340946	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.54	</size>
+          <size>	0.5	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.045 0.500 0.314 0.000 0.020	</physicsShape>
+      <physicsShape>	1.027 0.000 1.039 0.000 0.984 0.012 1.000 0.000 0.544 0.500 0.032 0.500 0.349 0.000 0.016	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1 1 0.000000 2.1	</tiling>
+      </camouflage>
     </Turret_1_RenaultUE57>
   </turrets0>
   <engines>

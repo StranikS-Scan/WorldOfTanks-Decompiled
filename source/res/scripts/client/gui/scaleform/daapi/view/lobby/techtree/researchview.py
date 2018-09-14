@@ -7,9 +7,10 @@ from gui.Scaleform.daapi.view.lobby.techtree.listeners import TTListenerDecorato
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getTreeNodeCompareData
 from gui.Scaleform.daapi.view.meta.ResearchViewMeta import ResearchViewMeta
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 
 class ResearchView(LobbySubView, ResearchViewMeta):
     """
@@ -20,6 +21,7 @@ class ResearchView(LobbySubView, ResearchViewMeta):
     - refreshes data by server diff.
     """
     __background_alpha__ = 0.0
+    itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
     cmpBasket = dependency.descriptor(IVehicleComparisonBasket)
 
@@ -151,7 +153,7 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         """
         Overridden method of the class ResearchViewMeta.request4Info
         """
-        vehicle = g_itemsCache.items.getItemByCD(int(rootCD))
+        vehicle = self.itemsCache.items.getItemByCD(int(rootCD))
         if vehicle:
             shared_events.showModuleInfo(int(itemCD), vehicle.descriptor)
 
@@ -159,8 +161,11 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         """
         Updates compare add icon status of nodes if change status of comparison basket fullness.
         """
-        getVehicle = g_itemsCache.items.getItemByCD
-        getNodeData = lambda vehCD: getTreeNodeCompareData(getVehicle(vehCD))
+        getVehicle = self.itemsCache.items.getItemByCD
+
+        def getNodeData(vehCD):
+            return getTreeNodeCompareData(getVehicle(vehCD))
+
         self.as_setNodeVehCompareDataS([ (v, getNodeData(v)) for v in self._data.getVehicleCDs() ])
 
     def _populate(self):

@@ -5,14 +5,16 @@ from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, getProfileCommonInfo
 from gui.Scaleform.daapi.view.meta.ProfileSummaryMeta import ProfileSummaryMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
+from helpers import dependency
 from helpers import i18n
 from PlayerEvents import g_playerEvents
-from gui.shared import g_itemsCache
 from helpers.i18n import makeString
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.gui_items.dossier import dumpDossier
+from skeletons.gui.shared import IItemsCache
 
 class ProfileSummary(ProfileSummaryMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, *args):
         super(ProfileSummary, self).__init__(*args)
@@ -22,7 +24,7 @@ class ProfileSummary(ProfileSummaryMeta):
         outcome = ProfileUtils.packProfileDossierInfo(targetData)
         outcome['avgDamage'] = ProfileUtils.getValueOrUnavailable(targetData.getAvgDamage())
         outcome['maxDestroyed'] = targetData.getMaxFrags()
-        vehicle = g_itemsCache.items.getItemByCD(targetData.getMaxFragsVehicle())
+        vehicle = self.itemsCache.items.getItemByCD(targetData.getMaxFragsVehicle())
         outcome['maxDestroyedByVehicle'] = vehicle.shortUserName if vehicle is not None else ''
         outcome['globalRating'] = self.getGlobalRating(self._databaseID)
         totalStats = accountDossier.getTotalStats()
@@ -41,7 +43,7 @@ class ProfileSummary(ProfileSummaryMeta):
         self.__updateUserInfo()
 
     def __updateUserInfo(self):
-        dossier = g_itemsCache.items.getAccountDossier(self._userID)
+        dossier = self.itemsCache.items.getAccountDossier(self._userID)
         if dossier is not None:
             info = getProfileCommonInfo(self._userName, dossier.getDossierDescr())
             info['name'] = makeString(PROFILE.PROFILE_TITLE, info['name'])

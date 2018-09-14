@@ -3,9 +3,9 @@
 import BigWorld
 from adisp import process
 from constants import FORT_BUILDING_TYPE
+from helpers import dependency
 from helpers import i18n, time_utils
 from predefined_hosts import g_preDefinedHosts
-from ConnectionManager import connectionManager
 from fortified_regions import g_cache as g_fortCache
 from FortifiedRegionBase import FORT_EVENT_TYPE, NOT_ACTIVATED
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
@@ -24,6 +24,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.formatters import icons, text_styles
+from skeletons.connection_mgr import IConnectionManager
 
 class VIEW_ALIASES:
     DEFENCE_ACTIVATED = FORTIFICATION_ALIASES.FORT_SETTINGS_ACTIVATED_VIEW
@@ -31,6 +32,7 @@ class VIEW_ALIASES:
 
 
 class FortSettingsWindow(FortSettingsWindowMeta, FortViewHelper):
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, _=None):
         super(FortSettingsWindow, self).__init__()
@@ -76,7 +78,7 @@ class FortSettingsWindow(FortSettingsWindowMeta, FortViewHelper):
                 servername = name
 
         if servername is None:
-            servername = connectionManager.serverUserName
+            servername = self.connectionMgr.serverUserName
         _, inCooldown = fort.getPeripheryProcessing()
         timestamp, _, _ = fort.events.get(FORT_EVENT_TYPE.PERIPHERY_COOLDOWN, (0, 0, 0))
         buttonEnabled = not inCooldown

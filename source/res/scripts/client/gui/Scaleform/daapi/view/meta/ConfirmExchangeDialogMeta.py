@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class ConfirmExchangeDialogMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def exchange(self, goldValue):
         self._printOverrideError('exchange')

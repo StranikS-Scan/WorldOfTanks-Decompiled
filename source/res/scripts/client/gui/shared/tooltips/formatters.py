@@ -4,6 +4,7 @@ from gui import makeHtmlString
 from gui.Scaleform.genConsts.ACTION_PRICE_CONSTANTS import ACTION_PRICE_CONSTANTS
 from gui.Scaleform.genConsts.BATTLE_RESULT_TYPES import BATTLE_RESULT_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -41,12 +42,6 @@ def packAlignedTextBlockData(text, align, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_T
     return packBlockDataItem(linkage, {'text': makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': align,
               'message': text}),
      'useHtml': True}, padding)
-
-
-def packTotalItemsBlockData(counter, text, counterVisible):
-    return packBlockDataItem(BATTLE_RESULT_TYPES.TOOLTIP_TOTAL_ITEMS_BLOCK_LINKAGE, {'text': text,
-     'counter': counter,
-     'counterVisible': counterVisible})
 
 
 def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None):
@@ -115,10 +110,10 @@ def packBuildUpBlockData(blocks, gap=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUI
     return packBlockDataItem(linkage, data, padding)
 
 
-def packTitleDescBlock(title, desc=None, gap=TXT_GAP_FOR_BIG_TITLE, useHtml=True, textBlockLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, blocksLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None):
+def packTitleDescBlock(title, desc=None, gap=TXT_GAP_FOR_BIG_TITLE, useHtml=True, textBlockLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_BLOCK_LINKAGE, blocksLinkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None, descPadding=None):
     blocks = [packTextBlockData(title, useHtml, textBlockLinkage)]
     if desc is not None:
-        blocks.append(packTextBlockData(desc, useHtml, textBlockLinkage))
+        blocks.append(packTextBlockData(desc, useHtml, textBlockLinkage, descPadding))
     return packBuildUpBlockData(blocks, gap, blocksLinkage, padding)
 
 
@@ -131,7 +126,7 @@ def packResultBlockData(title, text):
 
 
 def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None):
-    data = {'imageAtLeft': imgAtLeft,
+    data = {'spriteAtLeft': imgAtLeft,
      'textsAlign': txtAlign}
     if title is not None:
         data['title'] = title
@@ -140,7 +135,56 @@ def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, img
     if img is not None:
         data['imagePath'] = img
     if imgPadding is not None:
-        data['imagePadding'] = imgPadding
+        data['spritePadding'] = imgPadding
+    if txtPadding is not None:
+        data['textsPadding'] = txtPadding
+    if txtGap != 0:
+        data['textsGap'] = txtGap
+    if txtOffset != 0:
+        data['textsOffset'] = txtOffset
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packItemTitleDescBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ITEM_TITLE_DESC_BLOCK_LANKAGE, padding=None, overlayPath=None, overlayPadding=None, highlightPath=None, highlightPadding=None):
+    data = {'spriteAtLeft': imgAtLeft,
+     'textsAlign': txtAlign}
+    if title is not None:
+        data['title'] = title
+    if desc is not None:
+        data['description'] = desc
+    if img is not None:
+        data['imagePath'] = img
+    if imgPadding is not None:
+        data['spritePadding'] = imgPadding
+    if txtPadding is not None:
+        data['textsPadding'] = txtPadding
+    if txtGap != 0:
+        data['textsGap'] = txtGap
+    if txtOffset != 0:
+        data['textsOffset'] = txtOffset
+    if overlayPath is not None:
+        data['overlayPath'] = overlayPath
+        if overlayPadding is not None:
+            data['overlayPadding'] = overlayPadding
+    if highlightPath is not None:
+        data['highlightPath'] = highlightPath
+        if highlightPadding is not None:
+            data['highlightPadding'] = highlightPadding
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packRendererTextBlockData(rendererType, dataType, rendererData, title=None, desc=None, rendererPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_RENDERER_TEXT_BLOCK_LINKAGE, padding=None):
+    data = {'rendererData': {'rendererType': rendererType,
+                      'data': rendererData,
+                      'dataType': dataType},
+     'spriteAtLeft': imgAtLeft,
+     'textsAlign': txtAlign}
+    if title is not None:
+        data['title'] = title
+    if desc is not None:
+        data['description'] = desc
+    if rendererPadding is not None:
+        data['spritePadding'] = rendererPadding
     if txtPadding is not None:
         data['textsPadding'] = txtPadding
     if txtGap != 0:
@@ -181,6 +225,24 @@ def packCrewSkillsBlockData(crewStr, skillsStr, crewfIconSrc='', linkage=BLOCKS_
     data = {'crewStr': crewStr,
      'skillsStr': skillsStr,
      'crewfIconSrc': crewfIconSrc}
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packGroupBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_GROUP_BLOCK_LINKAGE, padding=None):
+    data = {'rendererType': RANKEDBATTLES_ALIASES.RANKED_AWARD_RENDERER_ALIAS,
+     'listIconSrc': listData,
+     'align': BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER,
+     'rendererWidth': 48}
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packRankBlockData(rank, isEnabled=True, isMaster=False, rankCount='', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_RANK_BLOCK_LINKAGE, padding=None):
+    data = {'imageSrc': rank.getIcon('big'),
+     'smallImageSrc': rank.getIcon('small'),
+     'isEnabled': isEnabled,
+     'isMaster': isMaster,
+     'rankID': str(rank.getID()),
+     'rankCount': str(rankCount)}
     return packBlockDataItem(linkage, data, padding)
 
 
@@ -240,12 +302,12 @@ def packItemRentActionTooltipData(item, rentPackage):
     :param rentPackage:
     :return: action data dict
     """
-    goldState = creditsState = ACTION_TOOLTIPS_STATE.DISCOUNT
     defaultPrice = rentPackage['defaultRentPrice']
     price = rentPackage['rentPrice']
+    states = [ ACTION_TOOLTIPS_STATE.DISCOUNT for _ in price ]
     return {'type': ACTION_TOOLTIPS_TYPE.RENT,
      'key': str(item.intCD),
-     'state': (creditsState, goldState),
+     'state': states,
      'newPrice': price,
      'oldPrice': defaultPrice,
      'rentPackage': rentPackage['days']}
@@ -267,14 +329,35 @@ def packQuestAwardsBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE
      'rowHeight': 50}, padding)
 
 
+def packMissionVehiclesBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
+    """
+    Gets vehicles list for VehicleKill or VehicleDamage quest's conditions to display in tooltip
+    """
+    return packBlockDataItem(linkage, {'dataType': 'net.wg.gui.lobby.missions.data.MissionVehicleItemRendererVO',
+     'rendererType': 'MissionVehicleItemRendererUI',
+     'listIconSrc': listData,
+     'columnWidth': 290,
+     'rowHeight': 32}, padding)
+
+
+def packMissionVehiclesTypeBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
+    """
+    Gets filters data: nations, types, levels for VehicleKill or VehicleDamage quest's conditions to display in tooltip
+    """
+    return packBlockDataItem(linkage, {'dataType': 'net.wg.gui.lobby.missions.data.MissionVehicleTypeRendererVO',
+     'rendererType': 'MissionVehicleTypeRendererUI',
+     'listIconSrc': listData,
+     'columnWidth': 470,
+     'rowHeight': 70}, padding)
+
+
 def getActionPriceData(item):
     price = item.altPrice or item.buyPrice
     defaultPrice = item.defaultAltPrice or item.defaultPrice
     minRentPricePackage = item.getRentPackage()
     action = None
-    if minRentPricePackage:
-        if minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
-            action = packItemRentActionTooltipData(item, minRentPricePackage)
+    if minRentPricePackage and minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
+        action = packItemRentActionTooltipData(item, minRentPricePackage)
     elif not item.isRestoreAvailable():
         if price != defaultPrice:
             action = packItemActionTooltipData(item)
@@ -283,3 +366,9 @@ def getActionPriceData(item):
 
 def getLimitExceededPremiumTooltip():
     return makeTooltip(i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER), i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY, number=time_utils.ONE_YEAR / time_utils.ONE_DAY))
+
+
+def packCounterTextBlockData(countLabel, desc, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_COUNTER_TEXT_BLOCK_LINKAGE, padding=None):
+    data = {'label': str(countLabel),
+     'description': desc}
+    return packBlockDataItem(linkage, data, padding)

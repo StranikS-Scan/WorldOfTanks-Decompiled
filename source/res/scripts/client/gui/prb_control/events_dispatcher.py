@@ -10,6 +10,7 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.FALLOUT_ALIASES import FALLOUT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -115,6 +116,9 @@ class EventDispatcher(object):
     def loadSandboxQueue(self):
         self.__fireShowEvent(VIEW_ALIAS.SANDBOX_QUEUE_DIALOG)
 
+    def loadRanked(self):
+        self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_ALIAS)
+
     def startOffbattleTutorial(self):
         self.__fireEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='OFFBATTLE', reloadIfRun=True, restoreIfRun=True, isStopForced=True), scope=EVENT_BUS_SCOPE.GLOBAL)
 
@@ -215,8 +219,12 @@ class EventDispatcher(object):
     def strongholdsOnTimer(self, data):
         self.__fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_ON_TIMER, ctx=data), scope=EVENT_BUS_SCOPE.FORT)
 
-    def showSwitchPeripheryWindow(self, ctx):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+    def showSwitchPeripheryWindow(self, ctx, isModal=True):
+        if isModal:
+            alias = VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW_MODAL
+        else:
+            alias = VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW
+        g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def removeUnitFromCarousel(self, prbType, closeWindow=True):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)

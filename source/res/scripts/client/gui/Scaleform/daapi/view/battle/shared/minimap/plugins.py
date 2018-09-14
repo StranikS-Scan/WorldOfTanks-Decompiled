@@ -340,7 +340,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 else:
                     self.__removeViewRangeCircle()
                 self._setActive(self.__circlesID, True)
-            else:
+            elif self.__circlesID is not None:
                 self._setActive(self.__circlesID, False)
             return
 
@@ -524,7 +524,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                     self.__setInAoI(model, True)
                 self._notifyVehicleAdded(vehicleID)
 
-        for vehicleID in set(self._entries.iterkeys()).difference(handled):
+        for vehicleID in set(self._entries).difference(handled):
             self._delEntryEx(vehicleID)
 
         return
@@ -592,7 +592,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 self.__setActive(entry, True)
                 self._notifyVehicleAdded(vehicleID)
 
-        for vehicleID in set(self._entries.iterkeys()).difference(handled):
+        for vehicleID in set(self._entries).difference(handled):
             entry = self._entries[vehicleID]
             if entry.getLocation() in (VEHICLE_LOCATION.FAR, VEHICLE_LOCATION.AOI_TO_FAR):
                 self.__clearAoIToFarCallback(vehicleID)

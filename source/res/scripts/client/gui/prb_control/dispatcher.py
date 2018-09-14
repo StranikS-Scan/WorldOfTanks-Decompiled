@@ -10,7 +10,6 @@ from adisp import async, process
 from constants import IGR_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
-from gui.LobbyContext import g_lobbyContext
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities import initDevFunctional, finiDevFunctional
@@ -35,6 +34,7 @@ from gui.shared.utils.listeners_collection import ListenersCollection
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController, IRentalsController
 from skeletons.gui.game_control import IIGRController, IFalloutController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
 class _PreBattleDispatcher(ListenersCollection):
@@ -284,17 +284,13 @@ class _PreBattleDispatcher(ListenersCollection):
             entry: newly selected entry point
             callback: request callback
         """
-        if not entry.canSelect():
+        ctx = entry.makeDefCtx()
+        ctx.addFlags(entry.getModeFlags() & FUNCTIONAL_FLAG.LOAD_PAGE | FUNCTIONAL_FLAG.SWITCH)
+        if not self.__validateJoinOp(ctx):
             if callback is not None:
                 callback(False)
             return
         else:
-            ctx = entry.makeDefCtx()
-            ctx.addFlags(FUNCTIONAL_FLAG.SWITCH)
-            if not self.__validateJoinOp(ctx):
-                if callback is not None:
-                    callback(False)
-                return
             if entry.isVisualOnly():
                 result = True
             else:
@@ -666,6 +662,14 @@ class _PreBattleDispatcher(ListenersCollection):
         """
         self.__setPreQueue(flags=self.__requestCtx.getFlags(), queueType=queueType)
 
+    def ctrl_onPreQueueJoinFailure(self, errorCode):
+        """
+        Player event listener for prequeue join filure. Resets current entity to default.
+        Args:
+            errorCode: join error code
+        """
+        self.__setDefault()
+
     def ctrl_onPreQueueLeft(self):
         """
         Prebattle control events for pre queue leave. Unsets current unit entity
@@ -771,6 +775,7 @@ class _PreBattleDispatcher(ListenersCollection):
         g_prbCtrlEvents.onUnitIntroModeLeft += self.ctrl_onUnitIntroModeLeft
         g_prbCtrlEvents.onUnitBrowserModeLeft += self.ctrl_onUnitBrowserModeLeft
         g_prbCtrlEvents.onPreQueueJoined += self.ctrl_onPreQueueJoined
+        g_prbCtrlEvents.onPreQueueJoinFailure += self.ctrl_onPreQueueJoinFailure
         g_prbCtrlEvents.onPreQueueLeft += self.ctrl_onPreQueueLeft
         self.eventsCache.companies.onCompanyStateChanged += self.ec_onCompanyStateChanged
         return
@@ -938,6 +943,7 @@ class _PrbPeripheriesHandler(object):
     """
     Class of handler for join to prebattle/unit that is on another periphery.
     """
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, loader):
         """
@@ -980,7 +986,7 @@ class _PrbPeripheriesHandler(object):
             postActions: post actions chain
             finishActions: finish actions chain
         """
-        if not g_lobbyContext.isAnotherPeriphery(peripheryID):
+        if not self.lobbyContext.isAnotherPeriphery(peripheryID):
             LOG_ERROR('Player is in given periphery', peripheryID)
             return
         else:
@@ -1199,6 +1205,7 @@ class _PrbControlLoader(object):
         self.__isEnabled = False
         self.__removeDispatcher()
         self.__invitesManager.onAvatarBecomePlayer()
+        self.__storage.onAvatarBecomePlayer()
 
     def onDisconnected(self):
         """

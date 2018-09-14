@@ -276,7 +276,7 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
         self._requestCtx.stopProcessing(True)
         self._invokeListeners('onKickedFromQueue', self._queueType, *args)
         self._exitFromQueueUI()
-        SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
+        SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)
 
     def onKickedFromArena(self, *args):
         """

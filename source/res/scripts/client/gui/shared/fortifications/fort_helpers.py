@@ -8,11 +8,12 @@ from account_helpers.AccountSettings import AccountSettings
 from constants import PREBATTLE_TYPE
 from FortifiedRegionBase import NOT_ACTIVATED
 from gui import DialogsInterface, SystemMessages
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
 from gui.prb_control.entities.fort.unit.fort_battle.ctx import CreateOrJoinFortBattleCtx
 from gui.shared.fortifications.settings import ROSTER_INTRO_WINDOW
+from helpers import dependency
 from helpers import time_utils
+from skeletons.gui.lobby_context import ILobbyContext
 
 def adjustDefenceHourToUTC(defenceHour):
     date = datetime.datetime.now()
@@ -79,9 +80,10 @@ def getTimeZoneOffset():
 def tryToConnectFortBattle(battleID, peripheryID):
     from gui.prb_control.dispatcher import g_prbLoader
     yield lambda callback: callback(None)
-    if g_lobbyContext.isAnotherPeriphery(peripheryID):
-        if g_lobbyContext.isPeripheryAvailable(peripheryID):
-            result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.FORT_BATTLE, 'changePeriphery', messageCtx={'host': g_lobbyContext.getPeripheryName(peripheryID)}))
+    lobbyContext = dependency.instance(ILobbyContext)
+    if lobbyContext.isAnotherPeriphery(peripheryID):
+        if lobbyContext.isPeripheryAvailable(peripheryID):
+            result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.FORT_BATTLE, 'changePeriphery', messageCtx={'host': lobbyContext.getPeripheryName(peripheryID)}))
             if result:
                 g_prbLoader.getPeripheriesHandler().join(peripheryID, CreateOrJoinFortBattleCtx(battleID, waitingID='fort/fortBattle/createOrJoin'))
         else:

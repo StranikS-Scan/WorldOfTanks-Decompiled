@@ -198,7 +198,7 @@ class DebugView():
             block.insert(0, keyname)
             self.__listKeynames[ind + deltaLine:ind + 1] = block
         else:
-            block = self.__listKeynames[ind + 1, ind + 1 + deltaLine]
+            block = self.__listKeynames[ind + 1:ind + 1 + deltaLine]
             block.append(keyname)
             self.__listKeynames[ind:ind + 1 + deltaLine] = block
         if self.__bAutoUpdate:

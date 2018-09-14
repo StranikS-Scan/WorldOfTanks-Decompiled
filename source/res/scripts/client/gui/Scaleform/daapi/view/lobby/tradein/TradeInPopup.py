@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.view.meta.TradeInPopupMeta import TradeInPopupMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import VehicleBuyEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -14,8 +14,10 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.gui.game_control import ITradeInController
 from gui.shared.tooltips.formatters import packItemActionTooltipData
+from skeletons.gui.shared import IItemsCache
 
 class TradeInPopup(TradeInPopupMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
     tradeIn = dependency.descriptor(ITradeInController)
 
     def __init__(self, ctx=None):
@@ -31,11 +33,11 @@ class TradeInPopup(TradeInPopupMeta):
         self.__tradeInDP = _TradeInDataProvider()
         self.__tradeInDP.setFlashObject(self.as_getDPS())
         self.__fillDP()
-        g_itemsCache.onSyncCompleted += self.__onResync
+        self.itemsCache.onSyncCompleted += self.__onResync
         self.__initControls()
 
     def _dispose(self):
-        g_itemsCache.onSyncCompleted -= self.__onResync
+        self.itemsCache.onSyncCompleted -= self.__onResync
         self.__tradeInDP.fini()
         self.__tradeInDP = None
         super(TradeInPopup, self)._dispose()
@@ -46,7 +48,7 @@ class TradeInPopup(TradeInPopupMeta):
          packHeaderColumnData('typeIndex', 45, 40, tooltip=DIALOGS.TRADEINPOPOVER_SORTING_VEHTYPE, icon=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL, enabled=True),
          packHeaderColumnData('level', 45, 40, tooltip=DIALOGS.TRADEINPOPOVER_SORTING_VEHLVL, icon=RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL_6_8, enabled=True),
          packHeaderColumnData('shortUserName', 148, 40, label=DIALOGS.TRADEINPOPOVER_SORTING_VEHNAME_HEADER, tooltip=DIALOGS.TRADEINPOPOVER_SORTING_VEHNAME, enabled=True, verticalTextAlign='center'),
-         packHeaderColumnData('price', 95, 40, label=DIALOGS.TRADEINPOPOVER_SORTING_SAVING, tooltip=DIALOGS.TRADEINPOPOVER_SORTING_SAVING, enabled=True, verticalTextAlign='center')]
+         packHeaderColumnData('price', 95, 40, label=DIALOGS.TRADEINPOPOVER_SORTING_SAVING_FORMATTED, tooltip=DIALOGS.TRADEINPOPOVER_SORTING_SAVING, enabled=True, verticalTextAlign='center')]
         self.as_setInitDataS({'title': DIALOGS.TRADEINPOPOVER_TITLE,
          'description': DIALOGS.TRADEINPOPOVER_DESCR,
          'defaultSortField': 'price',
@@ -66,7 +68,7 @@ class TradeInPopup(TradeInPopupMeta):
             self.__fillDP()
 
     def __fillDP(self):
-        tradeInVehicle = g_itemsCache.items.getItemByCD(self.__tradeInVehCD)
+        tradeInVehicle = self.itemsCache.items.getItemByCD(self.__tradeInVehCD)
         self.__tradeInDP.setSelectedID(self.__tradeOffVehCD)
         self.__tradeInDP.buildList(self.tradeIn.getTradeOffVehicles(tradeInVehicle.level))
         self.__tradeInDP.refresh()

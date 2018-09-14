@@ -1,20 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/tabs/__init__.py
 import constants
+from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.shared import g_itemsCache
+from gui.prb_control.settings import VEHICLE_LEVELS
+from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.money import ZERO_MONEY
+from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
+from gui.shared.money import ZERO_MONEY, Money
 from gui.shared.utils import CLIP_ICON_PATH, HYDRAULIC_ICON_PATH, EXTRA_MODULE_INFO
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, time_utils, dependency
 from helpers.i18n import makeString
 from items import ITEM_TYPE_INDICES
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 from gui.shared.gui_items.Vehicle import Vehicle
 
 def _getBtnVehCompareData(vehicle):
@@ -27,7 +33,8 @@ def _getBtnVehCompareData(vehicle):
 
 class StoreItemsTab(object):
 
-    def __init__(self, nation, filtersData):
+    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+    def __init__(self, nation, filtersData, actionsSelected, itemCD, itemsCache=None):
         """
         Base class for accordion tab in store component
         :param nation: <int> nation idx
@@ -35,7 +42,11 @@ class StoreItemsTab(object):
         """
         self._nation = nation
         self._filterData = filtersData
-        self._items = g_itemsCache.items
+        self._actionsSelected = actionsSelected
+        self._itemCD = itemCD
+        self._items = itemsCache.items
+        self._scrollIdx = 0
+        self._hasDiscounts = False
 
     def clear(self):
         """
@@ -44,7 +55,27 @@ class StoreItemsTab(object):
         self._nation = None
         self._filterData = None
         self._items = None
+        self._actionsSelected = False
+        self._itemCD = None
+        self._scrollIdx = 0
+        self._hasDiscounts = False
         return
+
+    def getScrollIdx(self):
+        """
+        Get index of the item that we should scroll to.
+        Returns 0 if no scrolling is intended.
+        :return:<int>
+        """
+        return self._scrollIdx
+
+    def hasDiscounts(self):
+        """
+        Check whether there are some items with discounts among the items with
+        applied filters.
+        :return:<bool>
+        """
+        return self._hasDiscounts
 
     def buildItems(self, invVehicles):
         """
@@ -52,9 +83,14 @@ class StoreItemsTab(object):
         :param invVehicles: <list(Vehicle,..)>
         :return: dataProviderValues: <[(item:<FittingItem>, extraModuleInfo:<str>, installedVehiclesCount:<int>),..]>
         """
-        items = self._items.getItems(self._getItemTypeID(), self._getRequestCriteria(invVehicles), self._nation)
+        criteria = self._getRequestCriteria(invVehicles) | self._getDiscountCriteria()
+        items = self._items.getItems(self._getItemTypeID(), criteria, self._nation)
         dataProviderValues = []
-        for item in sorted(items.itervalues(), cmp=self._getComparator()):
+        for idx, item in enumerate(sorted(items.itervalues(), cmp=self._getComparator())):
+            if self._itemCD and item.intCD == self._itemCD:
+                self._scrollIdx = idx
+            if self._isItemOnDiscount(item):
+                self._hasDiscounts = True
             extraModuleInfo, installedVehiclesCount = self._getExtraParams(item, invVehicles)
             dataProviderValues.append((item, extraModuleInfo, installedVehiclesCount))
 
@@ -71,6 +107,9 @@ class StoreItemsTab(object):
         statusMessage, disabled, statusImgSrc, isCritLvl = self.__getStatusInfo(item)
         stats = self._items.stats
         shop = self._items.shop
+        price = self._getItemPrice(item)
+        creditsActionPrc, goldActionPrc = self._getActionAllPercents(item)
+        showActionGoldAndCredits = creditsActionPrc != 0 and goldActionPrc != 0 and creditsActionPrc != goldActionPrc
         return {'id': str(item.intCD),
          'name': self._getItemName(item),
          'desc': item.getShortInfo(),
@@ -79,7 +118,7 @@ class StoreItemsTab(object):
          'vehicleCount': installedVehiclesCount,
          'credits': stats.credits,
          'gold': stats.gold,
-         'price': self._getItemPrice(item),
+         'price': price,
          'currency': self._getCurrency(item),
          'level': item.level,
          'nation': item.nationID,
@@ -95,7 +134,11 @@ class StoreItemsTab(object):
          'actionPriceData': self._getItemActionData(item),
          'moduleLabel': item.getGUIEmblemID(),
          EXTRA_MODULE_INFO: extraModuleInfo,
-         'vehCompareData': _getBtnVehCompareData(item) if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE else {}}
+         'vehCompareData': _getBtnVehCompareData(item) if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE else {},
+         'highlightType': SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT,
+         'showActionGoldAndCredits': showActionGoldAndCredits,
+         'actionCreditsPercent': '-{}'.format(creditsActionPrc),
+         'actionGoldPercent': '-{}'.format(goldActionPrc)}
 
     def _getItemTypeIcon(self, item):
         """
@@ -159,7 +202,15 @@ class StoreItemsTab(object):
         :param item:<FittingItem>
         :return:<Money>
         """
-        raise ZERO_MONEY
+        return ZERO_MONEY
+
+    def _getItemDefaultPrice(self, item):
+        """
+        Get store item default price
+        :param item:<FittingItem>
+        :return:<Money>
+        """
+        return ZERO_MONEY
 
     def _getCurrency(self, item):
         """
@@ -207,6 +258,21 @@ class StoreItemsTab(object):
         """
         raise NotImplementedError
 
+    def _getDiscountCriteria(self):
+        """
+        Get additional request criteria from the discount field.
+        :return: <RequestCriteria>
+        """
+        raise NotImplementedError
+
+    def _isItemOnDiscount(self, item):
+        """
+        Determine whether item has discount or not.
+        :param item:<FittingItem>
+        :return: <Bool>
+        """
+        raise NotImplementedError
+
     @classmethod
     def getFilterInitData(cls):
         """
@@ -242,6 +308,18 @@ class StoreItemsTab(object):
          disabled,
          statusImgSrc,
          isCritLvl)
+
+    def _getActionAllPercents(self, item):
+        """
+        Returns tuple with values of percent credits and golds discount
+        :param item:
+        :return: tuple
+        """
+        price = self._getItemPrice(item)
+        defPrice = self._getItemDefaultPrice(item)
+        creditsActionPrc = abs(getActionPrc(price.credits, defPrice.credits))
+        goldActionPrc = abs(getActionPrc(price.gold, defPrice.gold))
+        return (creditsActionPrc, goldActionPrc)
 
 
 class StoreModuleTab(StoreItemsTab):
@@ -294,6 +372,24 @@ class StoreVehicleTab(StoreItemsTab):
     def _getItemTypeID(self):
         return GUI_ITEM_TYPE.VEHICLE
 
+    def _getVehicleRiterias(self, selectedTypes, selectedLevels):
+        requestCriteria = REQ_CRITERIA.EMPTY
+        selectedVehiclesIds = []
+        for idx, vehicleType in enumerate(VEHICLE_TYPES_ORDER):
+            if selectedTypes[idx]:
+                selectedVehiclesIds.append(vehicleType)
+
+        if selectedVehiclesIds:
+            requestCriteria |= REQ_CRITERIA.VEHICLE.CLASSES(selectedVehiclesIds)
+        selectedLevelIds = []
+        for level in VEHICLE_LEVELS:
+            if selectedLevels[level - 1]:
+                selectedLevelIds.append(level)
+
+        if selectedLevelIds:
+            requestCriteria |= REQ_CRITERIA.VEHICLE.LEVELS(selectedLevelIds)
+        return requestCriteria
+
     def __getItemRestoreInfo(self, item):
         """
         Get formatted vehicle restore info
@@ -324,8 +420,22 @@ class StoreVehicleTab(StoreItemsTab):
         if item.isRented:
             formatter = RentLeftFormatter(item.rentInfo, item.isPremiumIGR)
             return formatter.getRentLeftStr('#tooltips:vehicle/rentLeft/%s', formatter=lambda key, countType, count, _=None: ''.join([makeString(key % countType), ': ', str(count)]))
+        elif item.isRentable and item.isRentAvailable:
+            minRentPricePackage = item.getRentPackage()
+            priceText = ''
+            discountText = ''
+            if minRentPricePackage:
+                minRentPriceValue = Money(*minRentPricePackage['rentPrice'])
+                actionPrc = item.getRentPackageActionPrc(minRentPricePackage['days'])
+                currency = minRentPriceValue.getCurrency()
+                price = minRentPriceValue.get(currency)
+                priceText = makeHtmlString('html_templates:lobby/quests/actions', currency, {'value': price})
+                if actionPrc != 0:
+                    discountText = makeString('#menu:shop/menu/vehicle/rent/discount', discount=text_styles.gold('{} %'.format(actionPrc)))
+            rentText = makeString('#menu:shop/menu/vehicle/rent/available', price=priceText)
+            return '{}  {}'.format(rentText, discountText)
         else:
-            return makeString('#menu:shop/menu/vehicle/rent/available') if item.isRentable and item.isRentAvailable else ''
+            return ''
 
 
 class StoreShellTab(StoreItemsTab):
@@ -364,6 +474,13 @@ class StoreArtefactTab(StoreItemsTab):
 
 
 class StoreOptionalDeviceTab(StoreArtefactTab):
+
+    def itemWrapper(self, packedItem):
+        vo = super(StoreArtefactTab, self).itemWrapper(packedItem)
+        item = packedItem[0]
+        if item.isDeluxe():
+            vo['highlightType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+        return vo
 
     @classmethod
     def getTableType(cls):

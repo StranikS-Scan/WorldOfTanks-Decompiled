@@ -4,7 +4,6 @@ import Event
 from adisp import process, async
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import pushI18nMessage
 from gui.game_control.links import URLMarcos
@@ -13,6 +12,7 @@ from helpers import dependency
 from helpers.http.url_formatters import addParamsToUrlQuery
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
 from skeletons.gui.game_control import IEncyclopediaController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 _ACTIVATION_TOKEN = 'prmp:encyclopediaEnabled'
 _MAX_RECOMMENDATION_ID = 32767
@@ -22,6 +22,7 @@ class EncyclopediaController(IEncyclopediaController):
     eventsCache = dependency.descriptor(IEventsCache)
     settingsCache = dependency.descriptor(ISettingsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(EncyclopediaController, self).__init__()
@@ -126,7 +127,7 @@ class EncyclopediaController(IEncyclopediaController):
             return False
         else:
             tokensCount = self.eventsCache.questsProgress.getTokenCount(_ACTIVATION_TOKEN)
-            newState = g_lobbyContext.getServerSettings().isEncyclopediaEnabled(tokensCount)
+            newState = self.lobbyContext.getServerSettings().isEncyclopediaEnabled(tokensCount)
             self.__isStateSynced = True
             if newState != self.__activated:
                 self.__activated = newState

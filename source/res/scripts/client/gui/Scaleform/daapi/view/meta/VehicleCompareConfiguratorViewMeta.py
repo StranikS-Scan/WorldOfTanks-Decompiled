@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_base import VehicleCompareConfiguratorBaseView
 
 class VehicleCompareConfiguratorViewMeta(VehicleCompareConfiguratorBaseView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends VehicleCompareConfiguratorBaseView
-    """
 
     def removeDevice(self, slotType, slotIndex):
         self._printOverrideError('removeDevice')

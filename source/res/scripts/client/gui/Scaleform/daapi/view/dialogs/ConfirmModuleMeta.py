@@ -5,13 +5,13 @@ from gui.Scaleform.daapi.view.dialogs import IDialogMeta
 import Event
 from gui.Scaleform.framework import ScopeTemplates
 from gui.shared import events
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from helpers import i18n
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.decorators import process
 from gui.shared.gui_items.processors.module import ModuleBuyer, ModuleSeller
-from gui.shared.money import ZERO_MONEY, Currency
+from gui.shared.money import ZERO_MONEY, Currency, Money
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui import SystemMessages
 MAX_ITEMS_FOR_OPERATION = 1000000
@@ -108,7 +108,7 @@ class SellModuleMeta(ConfirmModuleMeta):
 class LocalSellModuleMeta(SellModuleMeta):
 
     def getViewScopeType(self):
-        return ScopeTemplates.LOBBY_SUB
+        return ScopeTemplates.LOBBY_SUB_SCOPE
 
 
 class BuyModuleMeta(ConfirmModuleMeta):
@@ -119,11 +119,9 @@ class BuyModuleMeta(ConfirmModuleMeta):
         g_clientUpdateManager.addCallbacks({'stats': self.__onStatsChanged})
 
     def __onStatsChanged(self, stats):
-        if 'credits' in stats:
-            self.__balance = self.__balance.replace(Currency.CREDITS, stats['credits'])
-            self.onInvalidate()
-        if 'gold' in stats:
-            self.__balance = self.__balance.replace(Currency.GOLD, stats['gold'])
+        newValues = Money.extractMoneyDict(stats)
+        if newValues:
+            self.__balance = self.__balance.replaceAll(newValues)
             self.onInvalidate()
 
     def __getMaxCount(self, module, currency):
@@ -159,6 +157,6 @@ class BuyModuleMeta(ConfirmModuleMeta):
 
     @process('buyItem')
     def submit(self, item, count, currency):
-        result = yield ModuleBuyer(item, count, currency == Currency.CREDITS).request()
+        result = yield ModuleBuyer(item, count, currency).request()
         if len(result.userMsg):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)

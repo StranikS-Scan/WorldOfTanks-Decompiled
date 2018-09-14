@@ -2,12 +2,13 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/achievement.py
 import constants
 from debug_utils import LOG_ERROR
+from helpers import dependency
 from helpers.i18n import makeString
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.ui.achievements import MARK_OF_MASTERY_RECORD
-from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipParameterField, ToolTipDataField, ToolTipData, ToolTipMethodField, ToolTipBaseData, TOOLTIP_TYPE
 from gui.shared.gui_items.dossier.achievements.abstract import achievementHasVehiclesList, isSeriesAchievement
+from skeletons.gui.shared import IItemsCache
 _ACHIEVEMENT_VEHICLES_MAX = 5
 _ACHIEVEMENT_VEHICLES_SHOW = 5
 
@@ -56,6 +57,7 @@ class AchievementIsInDossierField(ToolTipDataField):
 
 
 class AchievementRecordsField(ToolTipDataField):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def _getValue(self):
         records = {'current': None,
@@ -69,17 +71,17 @@ class AchievementRecordsField(ToolTipDataField):
             if achievement.getCompDescr() is not None:
                 if achievement.getPrevMarkOfMastery() < achievement.getMarkOfMastery():
                     records['current'] = makeString('#tooltips:achievement/newRecord')
-                records['nearest'] = [[makeString('#tooltips:achievement/recordOnVehicle', vehicleName=g_itemsCache.items.getItemByCD(int(achievement.getCompDescr())).shortUserName), max(achievement.getMarkOfMastery(), achievement.getPrevMarkOfMastery()) or achievement.MIN_LVL]]
+                records['nearest'] = [[makeString('#tooltips:achievement/recordOnVehicle', vehicleName=self.itemsCache.items.getItemByCD(int(achievement.getCompDescr())).shortUserName), max(achievement.getMarkOfMastery(), achievement.getPrevMarkOfMastery()) or achievement.MIN_LVL]]
         elif dossier is not None and dossierType == constants.DOSSIER_TYPE.ACCOUNT and isCurrentUserDossier:
             if achievement.getType() == 'series':
                 vehicleRecords = set()
                 vehsWereInBattle = set(dossier.getTotalStats().getVehicles().keys())
                 for vehCD in vehsWereInBattle:
-                    totalStats = g_itemsCache.items.getVehicleDossier(vehCD).getTotalStats()
+                    totalStats = self.itemsCache.items.getVehicleDossier(vehCD).getTotalStats()
                     if totalStats.isAchievementInLayout(achievement.getRecordName()):
                         vehAchieve = totalStats.getAchievement(achievement.getRecordName())
                         if vehAchieve and vehAchieve.getValue():
-                            vehicle = g_itemsCache.items.getItemByCD(vehCD)
+                            vehicle = self.itemsCache.items.getItemByCD(vehCD)
                             vehicleRecords.add((vehicle.userName, vehAchieve.getValue()))
                             if vehAchieve.getValue() == achievement.getValue():
                                 records['current'] = vehicle.userName

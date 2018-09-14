@@ -242,6 +242,7 @@ class ToolTipRefSysDirects(ToolTipBaseData):
             isCurrentBattle = battle.getCurrentBattle()
             mapVisible = battle.getMapId() is not None
             arenaType = ArenaType.g_cache[battle.getMapId()] if mapVisible else None
+            clan = data.getClan()
             if arenaType:
                 mapName = _ms(FORTIFICATIONS.FORT2BUILDS_MAPNAME, mapName=arenaType.name)
             else:
@@ -278,6 +279,6 @@ class ToolTipRefSysDirects(ToolTipBaseData):
             if mapVisible:
                 toolTipData['mapTexture'] = RES_ICONS.getMapPath(arenaType.geometryName)
                 toolTipData['mapPoints'] = arenaType.controlPoints or []
-                playerTeam = 1 if g_clanCache.clanDBID == battle.getFirstClanId() else 2
+                playerTeam = 1 if clan.getId() == battle.getFirstClanId() else 2
                 toolTipData['mapPoints'] = self.buildMapPoints(arenaType.boundingBox, arenaType.teamBasePositions, playerTeam, isCurrentBattle)
             return toolTipData

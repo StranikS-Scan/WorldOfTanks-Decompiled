@@ -110,6 +110,7 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
             self._doEnableNavButtons(not isReqInCoolDown)
         else:
             selectedIdx = self._searchDP.updateList(selectedID, units)
+            self.__refreshDetails(selectedIdx)
         if selectedIdx is not None:
             self.as_selectByIndexS(selectedIdx)
         return

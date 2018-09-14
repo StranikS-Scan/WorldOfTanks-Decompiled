@@ -1,35 +1,35 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
-from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
-from gui.shared.items_parameters.params_helper import SimplifiedBarVO
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared import g_itemsCache
 from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles, icons
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_PURCHASE_CODE
 from gui.shared.items_parameters import params_helper, formatters as params_formatters, bonus_helper
+from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import ZERO_MONEY
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME
 from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import VEHICLE_COMPONENT_TYPE_NAMES, ITEM_TYPES
-from gui.LobbyContext import g_lobbyContext
+from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 _TOOLTIP_MIN_WIDTH = 420
 _TOOLTIP_MAX_WIDTH = 480
 _AUTOCANNON_SHOT_DISTANCE = 400
 
 class ModuleBlockTooltipData(BlocksTooltipData):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(ModuleBlockTooltipData, self).__init__(context, TOOLTIP_TYPE.MODULE)
@@ -38,6 +38,12 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         self._setMargins(10, 15)
         self._setWidth(_TOOLTIP_MIN_WIDTH)
         return
+
+    def _getHighLightType(self):
+        if self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.item.isDeluxe():
+            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+        else:
+            return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
     def _packBlocks(self, *args, **kwargs):
         self.item = self.context.buildItem(*args, **kwargs)
@@ -71,7 +77,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
                 comparator = params_helper.artifactComparator(statsConfig.vehicle, module, statsConfig.slotIdx)
             else:
                 comparator = params_helper.itemOnVehicleComparator(statsConfig.vehicle, module)
-            stockParams = params_helper.getParameters(g_itemsCache.items.getStockVehicle(statsConfig.vehicle.intCD))
+            stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(statsConfig.vehicle.intCD))
             simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
             if len(simplifiedBlock) > 0:
                 items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
@@ -87,6 +93,8 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
         if bonus_helper.isSituationalBonus(module.name):
             items.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(TOOLTIPS.VEHICLEPARAMS_BONUS_SITUATIONAL), img=RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL, imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=20)))
+        if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle) and module.hasSimilarDevicesInstalled(statsConfig.vehicle):
+            items.append(formatters.packBuildUpBlockData(SimilarOptionalDeviceBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct(), gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=2), stretchBg=False))
         return items
 
 
@@ -157,6 +165,7 @@ class ModuleTooltipBlockConstructor(object):
                              AIMING_TIME_PROP_NAME,
                              'weight')}
     EXTRA_MODULE_PARAMS = {CLIP_GUN_MODULE_PARAM: (SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME)}
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, module, configuration, leftPadding=20, rightPadding=20):
         self.module = module
@@ -178,11 +187,18 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
         block = []
         title = module.userName
         imgPaddingLeft = 27
+        imgPaddingTop = 0
+        txtOffset = 130 - self.leftPadding
         desc = ''
         if module.itemTypeName in VEHICLE_COMPONENT_TYPE_NAMES:
             desc = text_styles.stats(_ms(TOOLTIPS.level(str(module.level)))) + ' ' + _ms(TOOLTIPS.VEHICLE_LEVEL)
             imgPaddingLeft = 22
-        block.append(formatters.packImageTextBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(desc), img=module.icon, imgPadding=formatters.packPadding(left=imgPaddingLeft), txtGap=-3, txtOffset=130 - self.leftPadding, padding=formatters.packPadding(top=-6)))
+        elif module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
+            imgPaddingLeft = 7
+            imgPaddingTop = 5
+            txtOffset = 90 - self.leftPadding
+        overlayPath, highlightPath, padding = self.__getOverlayAndHighlight()
+        block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(desc), img=module.icon, imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=txtOffset, padding=formatters.packPadding(top=-6), overlayPath=overlayPath, overlayPadding=padding, highlightPath=highlightPath, highlightPadding=padding))
         if module.itemTypeID == GUI_ITEM_TYPE.GUN:
             vehicle = self.configuration.vehicle
             vDescr = vehicle.descriptor if vehicle is not None else None
@@ -192,6 +208,18 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
             if module.isHydraulicChassis():
                 block.append(formatters.packImageTextBlockData(title=text_styles.standard(MENU.MODULEINFO_HYDRAULICCHASSISLABEL), desc='', img=RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
         return block
+
+    def __getOverlayAndHighlight(self):
+        """
+        Special highlight for equipment+(deluxe)
+        """
+        highlightPath = None
+        if self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isDeluxe():
+            overlayPath = RES_ICONS.MAPS_ICONS_ARTEFACT_EQUIPMENTPLUS_OVERLAY
+            padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_PADDING_LEFT)
+        else:
+            overlayPath = padding = None
+        return (overlayPath, highlightPath, padding)
 
 
 class PriceBlockConstructor(ModuleTooltipBlockConstructor):
@@ -225,7 +253,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
             isInInventory = checkState(NODE_STATE_FLAGS.IN_INVENTORY)
             isUnlocked = checkState(NODE_STATE_FLAGS.UNLOCKED)
             isAutoUnlock = checkState(NODE_STATE_FLAGS.AUTO_UNLOCKED)
-            items = g_itemsCache.items
+            items = self.itemsCache.items
             money = items.stats.money
             itemPrice = ZERO_MONEY
             if module is not None:
@@ -240,7 +268,7 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     neededValue = need
                 if cost > 0:
                     block.append(makePriceBlock(cost, CURRENCY_SETTINGS.UNLOCK_PRICE, neededValue, leftPadding=leftPadding, valueWidth=self._valueWidth))
-            creditsActionPercent, goldActionPercent = (0, 0)
+            creditsActionPercent, goldActionPercent, crystalActionPercent = (0, 0, 0)
             need = ZERO_MONEY
             if buyPrice and not isAutoUnlock:
                 price = module.altPrice or module.buyPrice
@@ -264,20 +292,26 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     if useGoldAndCredits:
                         block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=(101 if goldActionPercent > 0 else 81) + self.leftPadding)))
                     block.append(makePriceBlock(price.gold, CURRENCY_SETTINGS.BUY_GOLD_PRICE, need.gold if need.gold > 0 else None, defPrice.gold if defPrice.gold > 0 else None, goldActionPercent, self._valueWidth, leftPadding))
+                if price.crystal > 0:
+                    crystalActionPercent = getActionPrc(price.crystal, defPrice.crystal)
+                    block.append(makePriceBlock(price.crystal, CURRENCY_SETTINGS.BUY_CRYSTAL_PRICE, need.crystal if need.crystal > 0 else None, defPrice.crystal if defPrice.crystal > 0 else None, crystalActionPercent, self._valueWidth, leftPadding))
             if sellPrice:
                 block.append(makePriceBlock(module.sellPrice.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=module.defaultSellPrice.credits, percent=module.sellActionPrc, valueWidth=self._valueWidth, leftPadding=leftPadding))
             if inventoryCount:
                 count = module.inventoryCount
                 if count > 0:
-                    block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_INVENTORYCOUNT), value=text_styles.stats(count), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
+                    block.append(self._getInventoryBlock(count))
             if vehiclesCount:
                 inventoryVehicles = items.getVehicles(REQ_CRITERIA.INVENTORY)
                 count = len(module.getInstalledVehicles(inventoryVehicles.itervalues()))
                 if count > 0:
                     block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_VEHICLECOUNT), value=text_styles.stats(count), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
             notEnoughMoney = need > ZERO_MONEY
-            hasAction = creditsActionPercent > 0 or goldActionPercent > 0 or module.sellActionPrc > 0
+            hasAction = creditsActionPercent > 0 or goldActionPercent > 0 or crystalActionPercent > 0 or module.sellActionPrc > 0
             return (block, notEnoughMoney or hasAction)
+
+    def _getInventoryBlock(self, count):
+        return formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_INVENTORYCOUNT), value=text_styles.stats(count), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5))
 
 
 class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
@@ -308,7 +342,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     currModule = module
                 else:
                     currModuleDescr, _ = vehicle.descriptor.getComponentsByType(module.itemTypeName)
-                    currModule = g_itemsCache.items.getItemByCD(currModuleDescr['compactDescr'])
+                    currModule = self.itemsCache.items.getItemByCD(currModuleDescr['compactDescr'])
                 comparator = params_helper.itemsComparator(module, currModule, vehicle.descriptor)
                 for paramName in paramsList:
                     if paramName in moduleParams:
@@ -359,11 +393,28 @@ class ArtefactBlockConstructor(ModuleTooltipBlockConstructor):
         paddingTop = 8
         block.append(formatters.packImageTextBlockData(title=text_styles.alert(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_BODY), img=RES_ICONS.MAPS_ICONS_TOOLTIP_COMPLEX_EQUIPMENT, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20))
         block.append(formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_NOTE), padding=formatters.packPadding(top=paddingTop)))
-        block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE), value=text_styles.gold(g_itemsCache.items.shop.paidRemovalCost), icon=ICON_TEXT_FRAMES.GOLD, valueWidth=60, padding=formatters.packPadding(left=43, top=paddingTop)))
+        block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE), value=text_styles.gold(self.itemsCache.items.shop.paidRemovalCost), icon=ICON_TEXT_FRAMES.GOLD, valueWidth=60, padding=formatters.packPadding(left=43, top=paddingTop)))
+        return block
+
+
+class SimilarOptionalDeviceBlockConstructor(ModuleTooltipBlockConstructor):
+    """
+    Notification if the vehicle has an optional device with the same effect
+    """
+
+    def __init__(self, module, configuration, leftPadding, rightPadding):
+        super(SimilarOptionalDeviceBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
+
+    def construct(self):
+        block = list()
+        paddingTop = 8
+        block.append(formatters.packImageTextBlockData(title=text_styles.error(TOOLTIPS.MODULEFITS_DUPLICATED_HEADER), img=RES_ICONS.MAPS_ICONS_TOOLTIP_DUPLICATED_OPTIONAL, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20))
+        block.append(formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.MODULEFITS_DUPLICATED_NOTE), padding=formatters.packPadding(top=paddingTop)))
         return block
 
 
 class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, module, configuration, leftPadding, rightPadding):
         super(EffectsBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
@@ -376,7 +427,7 @@ class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
             localization = _ms('#artefacts:%s' % key)
             return (key != localization, localization)
 
-        if g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+        if self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
             isRemovingStun = module.isRemovingStun
         else:
             isRemovingStun = False
@@ -440,13 +491,13 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                     for i, e in enumerate(eqs):
                         if e is not None:
                             intCD = int(e)
-                            eq = g_itemsCache.items.getItemByCD(intCD)
+                            eq = self.itemsCache.items.getItemByCD(intCD)
                             cachedEqs[i] = eq
 
                     vehicle.eqs = cachedEqs
             isFit, reason = module.mayInstall(vehicle, slotIdx)
             vehicle.eqs = currentVehicleEqs
-        inventoryVehicles = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
+        inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
         totalInstalledVehicles = map(lambda x: x.shortUserName, module.getInstalledVehicles(inventoryVehicles))
         installedVehicles = totalInstalledVehicles[:self.MAX_INSTALLED_LIST_LEN]
         tooltipHeader = None
@@ -473,10 +524,10 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                 tooltipText = '%s\n%s' % (tooltipText, hiddenTxt)
             block.append(self._packStatusBlock(tooltipHeader, tooltipText, titleFormatter))
         if checkBuying:
-            isFit, reason = module.mayPurchase(g_itemsCache.items.stats.money)
+            isFit, reason = module.mayPurchase(self.itemsCache.items.stats.money)
             if not isFit:
                 reason = reason.replace(' ', '_')
-                if reason in ('gold_error', 'credits_error'):
+                if GUI_ITEM_PURCHASE_CODE.isMoneyError(reason):
                     titleFormatter = text_styles.critical
                 tooltipHeader, tooltipText = getComplexStatus('#tooltips:moduleFits/%s' % reason)
                 if tooltipHeader is not None or tooltipText is not None:

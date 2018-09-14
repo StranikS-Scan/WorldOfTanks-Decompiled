@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/Controllers/OnceController.py
-import BigWorld
 from Vibroeffects import VibroManager
-from debug_utils import *
 
 class OnceController:
 

@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/lobby/queries.py
 from CurrentVehicle import g_currentVehicle
-from gui.shared import g_itemsCache
 from gui.shared.items_parameters import formatters
 from items import vehicles, ITEM_TYPE_NAMES
 from tutorial.control import ContentQuery
+from tutorial.control import game_vars
 from tutorial.logger import LOG_CURRENT_EXCEPTION
 
 class VehicleItemParams(ContentQuery):
@@ -18,7 +18,7 @@ class VehicleItemParams(ContentQuery):
             itemTypeID, nationID, compTypeID = vehicles.parseIntCompactDescr(itemCD)
             assert itemTypeID != ITEM_TYPE_NAMES[1]
             try:
-                guiItem = g_itemsCache.items.getItemByCD(itemCD)
+                guiItem = game_vars.getItemByIntCD(itemCD)
                 content['itemTypeName'] = guiItem.itemTypeName
                 content['itemLevel'] = guiItem.level
                 params = guiItem.getParams(g_currentVehicle.item).get('parameters', dict())

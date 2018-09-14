@@ -6,6 +6,11 @@ from gui.game_control import gc_constants
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController, IChinaController, IGameSessionController
 
+class NoChinaController(IChinaController):
+    """It's stub to avoid cases when object is scanned to find some properties, methods."""
+    pass
+
+
 class ChinaController(IChinaController):
     gameSession = dependency.descriptor(IGameSessionController)
     browser = dependency.descriptor(IBrowserController)

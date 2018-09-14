@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/service.py
+import Event
 from adisp import async, process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import SystemMessages
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.battle_results import composer
 from gui.battle_results import emblems
@@ -13,20 +13,25 @@ from gui.battle_results import stored_sorting
 from gui.battle_results.settings import PREMIUM_STATE
 from gui.shared import event_dispatcher
 from gui.shared import g_eventBus, events
-from gui.shared import g_itemsCache
 from gui.shared.gui_items.processors.common import BattleResultsGetter
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class BattleResultsService(IBattleResultsService):
+    itemsCache = dependency.descriptor(IItemsCache)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('__composers', '__buy')
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    __slots__ = ('__composers', '__buy', '__eventsManager', 'onResultPosted')
 
     def __init__(self):
         super(BattleResultsService, self).__init__()
         self.__composers = {}
         self.__buy = set()
+        self.__eventsManager = Event.EventManager()
+        self.onResultPosted = Event.Event(self.__eventsManager)
 
     def init(self):
         g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyViewLoaded)
@@ -41,6 +46,8 @@ class BattleResultsService(IBattleResultsService):
         while self.__composers:
             _, item = self.__composers.popitem()
             item.clear()
+
+        self.__eventsManager.clear()
 
     @async
     @process
@@ -87,10 +94,11 @@ class BattleResultsService(IBattleResultsService):
         else:
             arenaUniqueID = reusableInfo.arenaUniqueID
             reusableInfo.premiumState = self.__makePremiumState(arenaUniqueID)
-            reusableInfo.clientIndex = g_lobbyContext.getClientIDByArenaUniqueID(arenaUniqueID)
-            created = composer.createComposer(reusableInfo)
-            created.setResults(result, reusableInfo)
-            self.__composers[arenaUniqueID] = created
+            reusableInfo.clientIndex = self.lobbyContext.getClientIDByArenaUniqueID(arenaUniqueID)
+            composerObj = composer.createComposer(reusableInfo)
+            composerObj.setResults(result, reusableInfo)
+            self.__composers[arenaUniqueID] = composerObj
+            self.onResultPosted(reusableInfo, composerObj)
             self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=needToShowUI)
             return True
 
@@ -151,10 +159,10 @@ class BattleResultsService(IBattleResultsService):
 
     def __makePremiumState(self, arenaUniqueID):
         state = PREMIUM_STATE.NONE
-        settings = g_lobbyContext.getServerSettings()
+        settings = self.lobbyContext.getServerSettings()
         if settings is not None and settings.isPremiumInPostBattleEnabled():
             state |= PREMIUM_STATE.BUY_ENABLED
-        if g_itemsCache.items.stats.isPremium:
+        if self.itemsCache.items.stats.isPremium:
             state |= PREMIUM_STATE.HAS_ALREADY
         if arenaUniqueID in self.__buy:
             state |= PREMIUM_STATE.BOUGHT

@@ -32,7 +32,6 @@ class BATTLE_ITEM_TYPE(CONST_CONTAINER):
 
 
 def getDivisionSettings(name):
-    import fortified_regions
     division = None
     divisions = fortified_regions.g_cache.divisions
     if name in divisions:

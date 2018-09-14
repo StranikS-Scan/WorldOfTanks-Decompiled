@@ -9,18 +9,22 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.TechnicalMaintenanceMeta import TechnicalMaintenanceMeta
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor, VehicleRepairer, VehicleAutoRepairProcessor, VehicleAutoLoadProcessor, VehicleAutoEquipProcessor
+from gui.shared.gui_items.processors.vehicle import VehicleRepairer, VehicleAutoRepairProcessor, VehicleAutoLoadProcessor, VehicleAutoEquipProcessor
+from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
 from gui.shared.utils import decorators
 from gui.shared.utils.requesters import REQ_CRITERIA as _RC
-from gui.shared import events, g_itemsCache, event_dispatcher as shared_events
+from gui.shared import events, event_dispatcher as shared_events
+from helpers import dependency
 from helpers import i18n
 from helpers.i18n import makeString
 from account_helpers.settings_core.settings_constants import TUTORIAL
+from skeletons.gui.shared import IItemsCache
 
 class TechnicalMaintenance(TechnicalMaintenanceMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, _=None):
         super(TechnicalMaintenance, self).__init__()
@@ -37,11 +41,11 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
 
     def _populate(self):
         super(TechnicalMaintenance, self)._populate()
-        g_itemsCache.onSyncCompleted += self._onShopResync
+        self.itemsCache.onSyncCompleted += self._onShopResync
         self.addListener(events.TechnicalMaintenanceEvent.RESET_EQUIPMENT, self.__resetEquipment, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_clientUpdateManager.addCallbacks({'stats.credits': self.onCreditsChange,
-         'stats.gold': self.onGoldChange,
-         'cache.mayConsumeWalletResources': self.onGoldChange,
+        g_clientUpdateManager.addCurrencyCallback(Currency.CREDITS, self.onCreditsChange)
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.onGoldChange)
+        g_clientUpdateManager.addCallbacks({'cache.mayConsumeWalletResources': self.onGoldChange,
          'cache.vehsLock': self.__onCurrentVehicleChanged})
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         if g_currentVehicle.isPresent():
@@ -51,18 +55,18 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         self.setupContextHints(TUTORIAL.TECHNICAL_MAINTENANCE)
 
     def _dispose(self):
-        g_itemsCache.onSyncCompleted -= self._onShopResync
+        self.itemsCache.onSyncCompleted -= self._onShopResync
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.removeListener(events.TechnicalMaintenanceEvent.RESET_EQUIPMENT, self.__resetEquipment, scope=EVENT_BUS_SCOPE.LOBBY)
         super(TechnicalMaintenance, self)._dispose()
 
     def onCreditsChange(self, value):
-        value = g_itemsCache.items.stats.credits
+        value = self.itemsCache.items.stats.credits
         self.as_setCreditsS(value)
 
     def onGoldChange(self, value):
-        value = g_itemsCache.items.stats.gold
+        value = self.itemsCache.items.stats.gold
         self.as_setGoldS(value)
 
     def _onShopResync(self, reason, diff):
@@ -90,7 +94,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
 
     @decorators.process('loadStats')
     def setRefillSettings(self, intCD, repair, load, equip):
-        vehicle = g_itemsCache.items.getItemByCD(int(intCD))
+        vehicle = self.itemsCache.items.getItemByCD(int(intCD))
         if vehicle.isAutoRepair != repair:
             yield VehicleAutoRepairProcessor(vehicle, repair).request()
         if vehicle.isAutoLoad != load:
@@ -104,8 +108,8 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         return
 
     def populateTechnicalMaintenance(self):
-        money = g_itemsCache.items.stats.money
-        goldShellsForCredits = g_itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits
+        money = self.itemsCache.items.stats.money
+        goldShellsForCredits = self.itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits
         data = {'gold': money.gold,
          'credits': money.credits}
         if g_currentVehicle.isPresent():
@@ -165,10 +169,10 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         return
 
     def populateTechnicalMaintenanceEquipment(self, eId1=None, currency1=None, eId2=None, currency2=None, eId3=None, currency3=None, slotIndex=None):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         goldEqsForCredits = items.shop.isEnabledBuyingGoldEqsForCredits
         vehicle = g_currentVehicle.item
-        money = g_itemsCache.items.stats.money
+        money = self.itemsCache.items.stats.money
         installedItems = list(vehicle.eqs)
         currencies = [None, None, None]
         selectedItems = [None, None, None]
@@ -177,7 +181,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             currencies = [currency1, currency2, currency3]
         inventoryVehicles = items.getVehicles(_RC.INVENTORY).values()
         itemsCriteria = ~_RC.HIDDEN | _RC.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.EQUIPMENT])
-        data = sorted(g_itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, itemsCriteria).values(), reverse=True)
+        data = sorted(self.itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, itemsCriteria).values(), reverse=True)
         vehicle.eqs = list(selectedItems)
         modules = []
         for module in data:
@@ -286,16 +290,9 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 self.populateTechnicalMaintenanceEquipmentDefaults()
                 self.__currentVehicleId = g_currentVehicle.item.intCD
 
-    @decorators.process('techMaintenance')
     def __setVehicleLayouts(self, vehicle, shellsLayout=list(), eqsLayout=list()):
         LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
-        result = yield VehicleLayoutProcessor(vehicle, shellsLayout, eqsLayout).request()
-        if result and result.auxData:
-            for m in result.auxData:
-                SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
-
-        if result and len(result.userMsg):
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, vehicle, shellsLayout, eqsLayout)
         self.destroy()
 
     def __seveCurrentLayout(self, **kwargs):

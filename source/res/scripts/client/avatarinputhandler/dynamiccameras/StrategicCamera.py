@@ -8,6 +8,7 @@ import Settings
 import constants
 from AvatarInputHandler import mathUtils, cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
+from AvatarInputHandler.AimingSystems.StrategicAimingSystemRemote import StrategicAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig
 from AvatarInputHandler.cameras import ICamera, getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
 from ClientArena import Plane
@@ -15,7 +16,6 @@ from Math import Vector2, Vector3
 from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from constants import AVATAR_SUBFILTERS
 from skeletons.account_helpers.settings_core import ISettingsCore
 
 def getCameraAsSettingsHolder(settingsDataSec):
@@ -50,13 +50,12 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__cam = BigWorld.CursorCamera()
         self.__curSense = self.__cfg['sensitivity']
         self.__onChangeControlMode = None
-        self.__aimingSystem = StrategicAimingSystem(self.__cfg['distRange'][0], StrategicCamera._CAMERA_YAW)
+        self.__aimingSystem = None
         self.__prevTime = BigWorld.time()
         self.__autoUpdatePosition = False
         self.__dxdydz = Vector3(0, 0, 0)
         self.__needReset = 0
         self.__smoothingPivotDelta = 0
-        self.__isRemoteCamera = False
         return
 
     def create(self, onChangeControlMode=None):
@@ -67,6 +66,8 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__cam.movementHalfLife = 0.0
         self.__cam.turningHalfLife = -1
         self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
+        aimingSystemClass = StrategicAimingSystemRemote if BigWorld.player().isObserver() else StrategicAimingSystem
+        self.__aimingSystem = aimingSystemClass(self.__cfg['distRange'][0], StrategicCamera._CAMERA_YAW)
 
     def destroy(self):
         CallbackDelayer.destroy(self)
@@ -78,7 +79,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
             self.__aimingSystem = None
         return
 
-    def enable(self, targetPos, saveDist, isRemoteCamera=False):
+    def enable(self, targetPos, saveDist):
         self.__prevTime = BigWorld.time()
         self.__aimingSystem.enable(targetPos)
         srcMat = mathUtils.createRotationMatrix((0.0, -math.pi * 0.499, 0.0))
@@ -90,7 +91,6 @@ class StrategicCamera(ICamera, CallbackDelayer):
         camTarget.b = self.__aimingSystem.matrix
         self.__cam.target = camTarget
         self.__cam.wg_applyParams()
-        self.__isRemoteCamera = isRemoteCamera
         BigWorld.camera(self.__cam)
         BigWorld.player().positionControl.moveTo(self.__aimingSystem.matrix.translation)
         BigWorld.player().positionControl.followCamera(True)
@@ -101,7 +101,8 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__needReset = 1
 
     def disable(self):
-        self.__aimingSystem.disable()
+        if self.__aimingSystem is not None:
+            self.__aimingSystem.disable()
         self.stopCallback(self.__cameraUpdate)
         BigWorld.camera(None)
         positionControl = BigWorld.player().positionControl
@@ -122,7 +123,6 @@ class StrategicCamera(ICamera, CallbackDelayer):
 
     def restoreDefaultsState(self):
         LOG_ERROR('StrategiCamera::restoreDefaultState is obsolete!')
-        return None
 
     def getConfigValue(self, name):
         return self.__cfg.get(name)
@@ -230,6 +230,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         curTime = BigWorld.time()
         deltaTime = curTime - self.__prevTime
         self.__prevTime = curTime
+        self.__aimingSystem.update(deltaTime)
         if replayCtrl.isPlaying:
             if self.__needReset != 0:
                 if self.__needReset > 1:
@@ -250,24 +251,12 @@ class StrategicCamera(ICamera, CallbackDelayer):
         else:
             self.__aimingSystem.handleMovement(self.__dxdydz.x * self.__curSense, -self.__dxdydz.y * self.__curSense)
         self.__calcSmoothingPivotDelta(deltaTime)
-        distRange = self.__cfg['distRange']
         self.__camDist -= self.__dxdydz.z * float(self.__curSense)
+        self.__camDist = self.__aimingSystem.overrideCamDist(self.__camDist)
+        distRange = self.__cfg['distRange']
         maxPivotHeight = distRange[1] - distRange[0]
         self.__camDist = mathUtils.clamp(0, maxPivotHeight, self.__camDist)
         self.__cfg['camDist'] = self.__camDist
-        player = BigWorld.player()
-        if self.__isRemoteCamera:
-            cameraShotPoint = player.remoteCameraStrategic.shotPoint
-            getVector3 = getattr(player.filter, 'getVector3', None)
-            if getVector3 is not None:
-                time = BigWorld.serverTime()
-                cameraShotPoint = getVector3(AVATAR_SUBFILTERS.CAMERA_STRATEGIC_SHOT_POINT, time)
-            self.__aimingSystem.updateTargetPos(cameraShotPoint)
-            self.__camDist = player.remoteCameraStrategic.shotPoint.y
-        vehicle = player.getVehicleAttached()
-        if not player.isObserver() and vehicle is not None:
-            shotPoint = self.__aimingSystem.getDesiredShotPoint()
-            vehicle.setStrategicCameraDataForObservers(Math.Vector3(shotPoint.x, self.__camDist, shotPoint.z))
         camDistWithSmoothing = self.__camDist + self.__smoothingPivotDelta - self.__aimingSystem.heightFromPlane
         self.__cam.pivotPosition = Math.Vector3(0.0, camDistWithSmoothing, 0.0)
         if self.__dxdydz.z != 0 and self.__onChangeControlMode is not None and mathUtils.almostZero(self.__camDist - maxPivotHeight):

@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class ProfileSectionMeta(BaseDAAPIComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIComponent
-    """
 
     def setActive(self, value):
         self._printOverrideError('setActive')

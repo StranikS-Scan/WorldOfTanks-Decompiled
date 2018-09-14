@@ -7,12 +7,14 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 
 class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, cmProxy, ctx=None):
         super(ResearchItemContextMenuHandler, self).__init__(cmProxy, ctx, {MODULE.INFO: 'showModuleInfo',
@@ -25,12 +27,12 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
         super(ResearchItemContextMenuHandler, self).fini()
 
     def showModuleInfo(self):
-        vehicle = g_itemsCache.items.getItemByCD(self._rootCD)
+        vehicle = self.itemsCache.items.getItemByCD(self._rootCD)
         if vehicle:
             shared_events.showModuleInfo(self._nodeCD, vehicle.descriptor)
 
     def unlockModule(self):
-        vehicle = g_itemsCache.items.getItemByCD(self._rootCD)
+        vehicle = self.itemsCache.items.getItemByCD(self._rootCD)
         if vehicle:
             unlockIdx, xpCost, _ = vehicle.getUnlockDescrByIntCD(self._nodeCD)
             ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, self._rootCD, unlockIdx, xpCost)
@@ -73,7 +75,7 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
         return not NODE_STATE.isInstalled(self._nodeState) and NODE_STATE.isAvailable2Buy(self._nodeState) and self._canInstallItems()
 
     def _canInstallItems(self):
-        rootItem = g_itemsCache.items.getItemByCD(self._rootCD)
+        rootItem = self.itemsCache.items.getItemByCD(self._rootCD)
         return rootItem.isInInventory and not rootItem.isLocked and not rootItem.repairCost
 
 
@@ -113,7 +115,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         self._nodeCD = int(ctx.nodeCD)
         self._rootCD = int(ctx.rootCD)
         self._nodeState = int(ctx.nodeState)
-        vehicle = g_itemsCache.items.getItemByCD(self._nodeCD)
+        vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
         self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
         self._nodeInvID = vehicle.invID if vehicle is not None else None
         return
@@ -126,7 +128,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         return
 
     def _generateOptions(self, ctx=None):
-        vehicle = g_itemsCache.items.getItemByCD(self._nodeCD)
+        vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
         options = [self._makeItem(VEHICLE.INFO, MENU.CONTEXTMENU_VEHICLEINFOEX)]
         if vehicle.isPreviewAllowed():
             options.append(self._makeItem(VEHICLE.PREVIEW, MENU.CONTEXTMENU_SHOWVEHICLEPREVIEW))

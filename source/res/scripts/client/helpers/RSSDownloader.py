@@ -4,7 +4,7 @@ import threading
 import helpers
 import BigWorld
 import feedparser
-from debug_utils import *
+from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 _CLIENT_VERSION = helpers.getFullClientVersion()
 feedparser.PARSE_MICROFORMATS = 0
 feedparser.SANITIZE_HTML = 0

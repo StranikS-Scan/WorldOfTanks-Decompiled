@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyRoomView import BaseRallyRoomView
 
 class SquadViewMeta(BaseRallyRoomView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseRallyRoomView
-    """
 
     def leaveSquad(self):
         self._printOverrideError('leaveSquad')

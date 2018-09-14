@@ -40,6 +40,8 @@ class Event(object):
                 LOG_CURRENT_EXCEPTION()
 
     def __iadd__(self, delegate):
+        if not callable(delegate):
+            raise TypeError('Event listener is not callable.')
         if delegate not in self.__delegates:
             self.__delegates.append(delegate)
         return self

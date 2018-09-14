@@ -3,12 +3,13 @@
 import copy
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
-from tutorial.control.functional import FunctionalEffect, FunctionalShowWindowEffect, FunctionalRunTriggerEffect
+from skeletons.gui.shared import IItemsCache
+from tutorial.control.functional import FunctionalEffect, FunctionalShowWindowEffect
+from tutorial.control.functional import FunctionalRunTriggerEffect
 from tutorial.logger import LOG_ERROR
 from gui.shared import event_dispatcher
 
@@ -38,6 +39,7 @@ class SaveAccountSettingEffect(FunctionalEffect):
 
 
 class SelectVehicleInHangar(FunctionalEffect):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def triggerEffect(self):
         vehicleCriteria = self._tutorial.getVars().get(self.getTargetID())
@@ -47,7 +49,7 @@ class SelectVehicleInHangar(FunctionalEffect):
         else:
             minLvl, maxLvl = vehicleCriteria.get('levelsRange', (1, 10))
             criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(minLvl, maxLvl)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
-            vehicles = sorted(g_itemsCache.items.getVehicles(criteria=criteria).values(), key=lambda item: item.level)
+            vehicles = sorted(self.itemsCache.items.getVehicles(criteria=criteria).values(), key=lambda item: item.level)
             vehicle = findFirst(None, vehicles)
             if vehicle is not None:
                 event_dispatcher.selectVehicleInHangar(vehicle.intCD)

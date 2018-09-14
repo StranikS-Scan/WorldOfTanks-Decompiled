@@ -5,10 +5,11 @@ from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared.ItemsCache import CACHE_SYNC_REASON, g_itemsCache
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket, IRentalsController, IRestoreController
+from skeletons.gui.shared import IItemsCache
 INV_ITEM_VCDESC_KEY = 'compDescr'
 CACHE_VEHS_LOCK_KEY = 'vehsLock'
 STAT_DIFF_KEY = 'stats'
@@ -97,6 +98,7 @@ class _StatsListener(_Listener):
 
 
 class _ItemsCacheListener(_Listener):
+    itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self):
@@ -108,15 +110,15 @@ class _ItemsCacheListener(_Listener):
         g_clientUpdateManager.addCallbacks({INVENTORY_DIFF_KEY: self.__onInventoryUpdate,
          CACHE_DIFF_KEY: self.__onCacheUpdate,
          GOODIES_DIFF_KEY: self.__onGoodiesUpdate})
-        g_itemsCache.onSyncCompleted += self.__items_onSyncCompleted
         g_playerEvents.onCenterIsLongDisconnected += self.__center_onIsLongDisconnected
+        self.itemsCache.onSyncCompleted += self.__items_onSyncCompleted
         self.comparisonBasket.onChange += self.__onVehCompareBasketChanged
         self.comparisonBasket.onSwitchChange += self.__onVehCompareBasketSwitchChange
 
     def stopListen(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
-        g_itemsCache.onSyncCompleted -= self.__items_onSyncCompleted
         g_playerEvents.onCenterIsLongDisconnected -= self.__center_onIsLongDisconnected
+        self.itemsCache.onSyncCompleted -= self.__items_onSyncCompleted
         self.comparisonBasket.onChange -= self.__onVehCompareBasketChanged
         self.comparisonBasket.onSwitchChange -= self.__onVehCompareBasketSwitchChange
         super(_ItemsCacheListener, self).stopListen()
@@ -126,7 +128,7 @@ class _ItemsCacheListener(_Listener):
 
     def __onGoodiesUpdate(self, goodies):
         invalidated = set()
-        vehicleDiscounts = g_itemsCache.items.shop.getVehicleDiscountDescriptions()
+        vehicleDiscounts = self.itemsCache.items.shop.getVehicleDiscountDescriptions()
         for goodieID in goodies:
             vehicleDiscount = vehicleDiscounts.get(goodieID)
             if vehicleDiscount:

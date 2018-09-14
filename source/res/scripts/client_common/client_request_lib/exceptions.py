@@ -149,7 +149,7 @@ class ClanDoesNotExistError(BaseRequestError):
 
 
 class ClanIsFullError(BaseRequestError):
-    description = 'Clan is full'
+    description = 'Clan has not free space'
     status_code = 409
     response_code = ResponseCodes.CLAN_IS_FULL
 

@@ -5,6 +5,7 @@
     <Interface>	RepairBase_Vehicle	</Interface>
     <Interface>	VehicleObserver	</Interface>
     <Interface>	BattleFeedback	</Interface>
+    <Interface>	Harm	</Interface>
   </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
@@ -75,6 +76,10 @@
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </publicStateModifiers>
+    <compDescr>
+      <Type>	STRING	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </compDescr>
     <stunInfo>
       <Type>	STUN_INFO	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -83,12 +88,6 @@
       <Type>	INT8	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
     </status>
-    <speeds>
-      <Type>	TUPLE	  <of>	FLOAT32	</of>
-        <size>	2	</size>
-      </Type>
-      <Flags>	CELL_PUBLIC	</Flags>
-    </speeds>
     <invisibility>
       <Type>	FLOAT32	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
@@ -187,6 +186,7 @@
     <_components></_components>
     <_battleFeedback></_battleFeedback>
     <_directVisibility></_directVisibility>
+    <_harm></_harm>
     <_entityExtraUserData></_entityExtraUserData>
     <_extras></_extras>
     <attrs></attrs>
@@ -326,63 +326,6 @@
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
     </onBattleRunning>
-    <receiveShot>
-      <Arg>	ATTACKER_INFO	</Arg>
-      <Arg>	SHOT_ID	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	TUPLE	  <of>	FLOAT32	</of>
-        <size>	2	</size>
-      </Arg>
-      <Arg>	TUPLE	  <of>	TUPLE	  <of>	FLOAT32	</of>
-          <size>	4	</size>
-        </of>
-      </Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	TUPLE	  <of>	FLOAT32	</of>
-      </Arg>
-    </receiveShot>
-    <receiveExplosion>
-      <Arg>	ATTACKER_INFO	</Arg>
-      <Arg>	SHOT_ID	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
-    </receiveExplosion>
-    <receiveRamming>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	BOOL	</Arg>
-    </receiveRamming>
-    <receivePressure>
-      <Arg>	BOOL	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	FLOAT32	</Arg>
-    </receivePressure>
-    <receiveMiss>
-      <Arg>	SHOT_ID	</Arg>
-      <Arg>	UINT16	</Arg>
-    </receiveMiss>
-    <receiveCeilingHit>
-      <Arg>	SHOT_ID	</Arg>
-      <Arg>	VECTOR3	</Arg>
-    </receiveCeilingHit>
-    <receiveAttackResults>
-      <Arg>	ATTACK_RESULTS	</Arg>
-    </receiveAttackResults>
     <receiveHitAssistBonus>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	SHOT_ID	</Arg>

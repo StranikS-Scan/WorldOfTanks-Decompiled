@@ -52,9 +52,10 @@ try:
 except AttributeError:
     LOG_ERROR('Could not read nations order from XML. Default order.')
 
-GUI_NATIONS_ORDER_INDEX = dict(((n, i) for i, n in enumerate(GUI_NATIONS)))
+GUI_NATIONS_ORDER_INDEX = {name:idx for idx, name in enumerate(GUI_NATIONS)}
 GUI_NATIONS_ORDER_INDEX[NONE_NATION_NAME] = nations.NONE_INDEX
-GUI_NATIONS_ORDER_INDEX_REVERSED = dict(((n, i) for i, n in enumerate(reversed(GUI_NATIONS))))
+GUI_NATIONS_ORDER_INDEX_REVERSED = {name:idx for idx, name in enumerate(reversed(GUI_NATIONS))}
+GUI_NATIONS_ORDER_INDICES = {nations.INDICES.get(name, nations.NONE_INDEX):idx for name, idx in GUI_NATIONS_ORDER_INDEX.iteritems()}
 
 def nationCompareByName(first, second):
     if second is None:
@@ -119,15 +120,22 @@ def getGuiServicesConfig(manager):
     from gui import battle_results
     from gui import clans
     from gui import game_control
+    from gui import goodies
     from gui import login
+    from gui import lobby_context
     from gui import server_events
+    from gui import shared
     from gui import sounds
     from gui import Scaleform as _sf
-    manager.install(game_control.getGameControllersConfig)
-    manager.install(_sf.getScaleformConfig)
-    manager.install(login.getLoginManagerConfig)
-    manager.install(server_events.getServerEventsConfig)
-    manager.install(battle_control.getBattleSessionConfig)
-    manager.install(sounds.getSoundsConfig)
-    manager.install(clans.getClanServicesConfig)
-    manager.install(battle_results.getBattleResultsServiceConfig)
+    from skeletons.gui.lobby_context import ILobbyContext
+    manager.addConfig(shared.getSharedServices)
+    manager.addConfig(game_control.getGameControllersConfig)
+    manager.addConfig(_sf.getScaleformConfig)
+    manager.addConfig(login.getLoginManagerConfig)
+    manager.addConfig(server_events.getServerEventsConfig)
+    manager.addConfig(battle_control.getBattleSessionConfig)
+    manager.addConfig(sounds.getSoundsConfig)
+    manager.addConfig(clans.getClanServicesConfig)
+    manager.addConfig(goodies.getGoodiesCacheConfig)
+    manager.addConfig(battle_results.getBattleResultsServiceConfig)
+    manager.addInstance(ILobbyContext, lobby_context.LobbyContext(), finalizer='clear')

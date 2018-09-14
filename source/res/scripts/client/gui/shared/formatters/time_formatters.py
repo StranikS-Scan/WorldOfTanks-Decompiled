@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/time_formatters.py
 import math
+import time
 from gui.Scaleform.locale.MENU import MENU
 from helpers import i18n, time_utils
 
@@ -8,6 +9,15 @@ def defaultFormatter(key, countType, count, ctx=None):
     kwargs = ctx.copy() if ctx else {}
     kwargs[countType] = count
     return i18n.makeString((key % countType), **kwargs)
+
+
+def formatDate(dateFormat, timestamp):
+    """
+    @param dateFormat: can be string of format or localization key
+    @param timestamp: timestamp
+    @return: formated date as string
+    """
+    return time.strftime(i18n.makeString(dateFormat), time_utils.getTimeStructInLocal(timestamp))
 
 
 def formatTime(timeLeft, divisor, timeStyle=None):

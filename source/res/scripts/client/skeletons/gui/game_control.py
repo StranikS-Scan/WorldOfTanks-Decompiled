@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/game_control.py
 from Event import Event
+from adisp import async, process
 
 class IGameController(object):
 
@@ -163,6 +164,10 @@ class IWalletController(IGameController):
     def useFreeXP(self):
         raise NotImplementedError
 
+    @property
+    def useCrystal(self):
+        raise NotImplementedError
+
 
 class INotifyController(IGameController):
     pass
@@ -173,7 +178,7 @@ class IExternalLinksController(IGameController):
     def open(self, url):
         raise NotImplementedError
 
-    def getURL(self, name, callback):
+    def getURL(self, name, params, callback):
         raise NotImplementedError
 
 
@@ -277,7 +282,7 @@ class IBrowserController(IGameController):
     def removeFilterHandler(self, handler):
         raise NotImplementedError
 
-    def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False, useBrowserWindow=True, isModal=False, showCreateWaiting=False, handlers=None, showBrowserCallback=None):
+    def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False, useBrowserWindow=True, isModal=False, showCreateWaiting=False, handlers=None, showBrowserCallback=None, isSolidBorder=False):
         raise NotImplementedError
 
     def getBrowser(self, browserID):
@@ -411,7 +416,7 @@ class IVehicleComparisonBasket(IGameController):
     def applyNewParameters(self, index, vehicle, crewLvl, crewSkills, selectedShellIndex=0):
         raise NotImplementedError
 
-    def addVehicle(self, vehicleCompactDesr, initParameters):
+    def addVehicle(self, vehicleCompactDesr, initParameters=None):
         raise NotImplementedError
 
     def addVehicles(self, vehCDs):
@@ -530,3 +535,142 @@ class IQuestsController(IGameController):
 
     def getQuestGroups(self):
         raise NotImplementedError
+
+
+class IRankedBattlesController(IGameController):
+    onUpdated = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isFrozen(self):
+        raise NotImplementedError
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def hasAnySeason(self):
+        raise NotImplementedError
+
+    def getCurrentCycleID(self):
+        raise NotImplementedError
+
+    def getSeasonPassed(self):
+        raise NotImplementedError
+
+    def getPreviousSeason(self):
+        raise NotImplementedError
+
+    def getCurrentSeason(self):
+        raise NotImplementedError
+
+    def getNextSeason(self):
+        raise NotImplementedError
+
+    def getSeason(self, seasonID):
+        raise NotImplementedError
+
+    def getRank(self, rankID, vehicle=None):
+        raise NotImplementedError
+
+    def getCurrentRank(self, vehicle=None):
+        raise NotImplementedError
+
+    def getMaxRank(self, vehicle=None):
+        raise NotImplementedError
+
+    def getMaxRankForCycle(self, cycleID):
+        raise NotImplementedError
+
+    def getLastRank(self, vehicle=None):
+        raise NotImplementedError
+
+    def setLastRank(self, vehicle=None):
+        raise NotImplementedError
+
+    def getAvailableBadges(self):
+        raise NotImplementedError
+
+    def getReceivedBadges(self):
+        raise NotImplementedError
+
+    def selectBadge(self, badgeID):
+        raise NotImplementedError
+
+    @async
+    @process
+    def getLeagueData(self, callback):
+        raise NotImplementedError
+
+    def getLeagueAwards(self):
+        raise NotImplementedError
+
+    def hasProgress(self):
+        raise NotImplementedError
+
+    def getAccRanksTotal(self):
+        raise NotImplementedError
+
+    def isAccountMastered(self):
+        raise NotImplementedError
+
+    def getConsolationQuest(self):
+        raise NotImplementedError
+
+    def getRanksChain(self):
+        raise NotImplementedError
+
+    def getVehicleRanksChain(self, vehicle):
+        raise NotImplementedError
+
+    def getAllRanksChain(self, vehicle=None):
+        raise NotImplementedError
+
+    def buildRanksChain(self, currentProgress, maxProgress, lastProgress):
+        raise NotImplementedError
+
+    def buildVehicleRanksChain(self, currentProgress, maxProgress, lastProgress, vehicle):
+        raise NotImplementedError
+
+    def runQuest(self, quest):
+        raise NotImplementedError
+
+    def getQuestsForCycle(self, cycleID, completedOnly=False):
+        raise NotImplementedError
+
+    def getVehicleQuestForCycle(self, cycleID):
+        raise NotImplementedError
+
+    def getVehicleMastersCount(self, cycleID):
+        raise NotImplementedError
+
+    def awardWindowShouldBeShown(self, rankChangeInfo):
+        raise NotImplementedError
+
+    @staticmethod
+    def setAwardWindowShown(rankID):
+        raise NotImplementedError
+
+    def getRankChangeStatus(self, changeInfo):
+        raise NotImplementedError
+
+    def getPrimeTimes(self):
+        raise NotImplementedError
+
+    def getPrimeTimeStatus(self, peripheryID=None):
+        raise NotImplementedError
+
+    def hasAnyPeripheryWithPrimeTime(self):
+        raise NotImplementedError
+
+    def openWebLeaguePage(self, ctx=None):
+        raise NotImplemented
+
+    def getPrevRanks(self, accRank, vehRank, rankChange):
+        raise NotImplemented
+
+    def getCycleRewards(self, cycleID):
+        """
+        returns reward for max rank achieved in current season for given cycle ID
+        """
+        raise NotImplemented

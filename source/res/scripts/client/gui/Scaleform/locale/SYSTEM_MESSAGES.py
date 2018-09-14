@@ -110,7 +110,7 @@ class SYSTEM_MESSAGES(object):
     ARENA_START_ERRORS_KICK_CREATOR_LEFT = '#system_messages:arena_start_errors/kick/CREATOR_LEFT'
     ARENA_START_ERRORS_KICK_PLAYERKICK = '#system_messages:arena_start_errors/kick/PLAYERKICK'
     ARENA_START_ERRORS_KICK_TIMEOUT = '#system_messages:arena_start_errors/kick/TIMEOUT'
-    ARENA_START_ERRORS_KICK_TIMEOUT = '#system_messages:arena_start_errors/kick/timeout'
+    ARENA_START_ERRORS_PRB_KICK_TIMEOUT = '#system_messages:arena_start_errors/prb/kick/timeout'
     PREBATTLE_START_FAILED_KICKEDFROMQUEUE_SQUAD = '#system_messages:prebattle_start_failed/kickedFromQueue/squad'
     PREBATTLE_START_FAILED_KICKEDFROMQUEUE_COMPANY = '#system_messages:prebattle_start_failed/kickedFromQueue/company'
     PREBATTLE_START_FAILED_KICKEDFROMQUEUE_DEAFULT = '#system_messages:prebattle_start_failed/kickedFromQueue/deafult'
@@ -300,16 +300,19 @@ class SYSTEM_MESSAGES(object):
     RECRUIT_WINDOW_FREE_TANKMEN_LIMIT = '#system_messages:recruit_window/free_tankmen_limit'
     RECRUIT_WINDOW_NOT_ENOUGH_SPACE = '#system_messages:recruit_window/not_enough_space'
     RECRUIT_WINDOW_DISCONNECTED_FROM_CENTER = '#system_messages:recruit_window/disconnected_from_center'
+    RECRUIT_WINDOW_FORBIDDEN = '#system_messages:recruit_window/FORBIDDEN'
     EQUIP_TANKMAN_SUCCESS = '#system_messages:equip_tankman/success'
     EQUIP_TANKMAN_SERVER_ERROR = '#system_messages:equip_tankman/server_error'
     EQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:equip_tankman/invalid_vehicle'
     EQUIP_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:equip_tankman/vehicle_need_repair'
     EQUIP_TANKMAN_VEHICLE_LOCKED = '#system_messages:equip_tankman/vehicle_locked'
+    EQUIP_TANKMAN_FORBIDDEN = '#system_messages:equip_tankman/FORBIDDEN'
     REEQUIP_TANKMAN_SUCCESS = '#system_messages:reequip_tankman/success'
     REEQUIP_TANKMAN_SERVER_ERROR = '#system_messages:reequip_tankman/server_error'
     REEQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:reequip_tankman/invalid_vehicle'
     REEQUIP_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:reequip_tankman/vehicle_need_repair'
     REEQUIP_TANKMAN_VEHICLE_LOCKED = '#system_messages:reequip_tankman/vehicle_locked'
+    REEQUIP_TANKMAN_FORBIDDEN = '#system_messages:reequip_tankman/FORBIDDEN'
     BUY_AND_EQUIP_TANKMAN_SUCCESS = '#system_messages:buy_and_equip_tankman/success'
     BUY_AND_EQUIP_TANKMAN_FINANCIAL_SUCCESS = '#system_messages:buy_and_equip_tankman/financial_success'
     BUY_AND_EQUIP_TANKMAN_SERVER_ERROR = '#system_messages:buy_and_equip_tankman/server_error'
@@ -319,6 +322,7 @@ class SYSTEM_MESSAGES(object):
     BUY_AND_EQUIP_TANKMAN_NOT_ENOUGH_GOLD = '#system_messages:buy_and_equip_tankman/not_enough_gold'
     BUY_AND_EQUIP_TANKMAN_WALLET_NOT_AVAILABLE = '#system_messages:buy_and_equip_tankman/wallet_not_available'
     BUY_AND_EQUIP_TANKMAN_FREE_TANKMEN_LIMIT = '#system_messages:buy_and_equip_tankman/free_tankmen_limit'
+    BUY_AND_EQUIP_TANKMAN_FORBIDDEN = '#system_messages:buy_and_equip_tankman/FORBIDDEN'
     BUY_AND_REEQUIP_TANKMAN_SUCCESS = '#system_messages:buy_and_reequip_tankman/success'
     BUY_AND_REEQUIP_TANKMAN_FINANCIAL_SUCCESS = '#system_messages:buy_and_reequip_tankman/financial_success'
     BUY_AND_REEQUIP_TANKMAN_SERVER_ERROR = '#system_messages:buy_and_reequip_tankman/server_error'
@@ -329,29 +333,34 @@ class SYSTEM_MESSAGES(object):
     BUY_AND_REEQUIP_TANKMAN_WALLET_NOT_AVAILABLE = '#system_messages:buy_and_reequip_tankman/wallet_not_available'
     BUY_AND_REEQUIP_TANKMAN_FREE_TANKMEN_LIMIT = '#system_messages:buy_and_reequip_tankman/free_tankmen_limit'
     BUY_AND_REEQUIP_TANKMAN_NOT_ENOUGH_SPACE = '#system_messages:buy_and_reequip_tankman/not_enough_space'
+    BUY_AND_REEQUIP_TANKMAN_FORBIDDEN = '#system_messages:buy_and_reequip_tankman/FORBIDDEN'
     DISMISS_TANKMAN_SUCCESS = '#system_messages:dismiss_tankman/success'
     DISMISS_TANKMAN_SERVER_ERROR = '#system_messages:dismiss_tankman/server_error'
     DISMISS_TANKMAN_INVALID_VEHICLE = '#system_messages:dismiss_tankman/invalid_vehicle'
     DISMISS_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:dismiss_tankman/vehicle_need_repair'
     DISMISS_TANKMAN_VEHICLE_LOCKED = '#system_messages:dismiss_tankman/vehicle_locked'
+    DISMISS_TANKMAN_FORBIDDEN = '#system_messages:dismiss_tankman/FORBIDDEN'
     UNLOAD_TANKMAN_SUCCESS = '#system_messages:unload_tankman/success'
     UNLOAD_TANKMAN_SERVER_ERROR = '#system_messages:unload_tankman/server_error'
     UNLOAD_TANKMAN_NOT_ENOUGH_SPACE = '#system_messages:unload_tankman/not_enough_space'
     UNLOAD_TANKMAN_INVALID_VEHICLE = '#system_messages:unload_tankman/invalid_vehicle'
     UNLOAD_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:unload_tankman/vehicle_need_repair'
     UNLOAD_TANKMAN_VEHICLE_LOCKED = '#system_messages:unload_tankman/vehicle_locked'
+    UNLOAD_TANKMAN_FORBIDDEN = '#system_messages:unload_tankman/FORBIDDEN'
     UNLOAD_CREW_SUCCESS = '#system_messages:unload_crew/success'
     UNLOAD_CREW_SERVER_ERROR = '#system_messages:unload_crew/server_error'
     UNLOAD_CREW_NOT_ENOUGH_SPACE = '#system_messages:unload_crew/not_enough_space'
     UNLOAD_CREW_INVALID_VEHICLE = '#system_messages:unload_crew/invalid_vehicle'
     UNLOAD_CREW_VEHICLE_NEED_REPAIR = '#system_messages:unload_crew/vehicle_need_repair'
     UNLOAD_CREW_VEHICLE_LOCKED = '#system_messages:unload_crew/vehicle_locked'
+    UNLOAD_CREW_FORBIDDEN = '#system_messages:unload_crew/FORBIDDEN'
     RETURN_CREW_SUCCESS = '#system_messages:return_crew/success'
     RETURN_CREW_SERVER_ERROR = '#system_messages:return_crew/server_error'
     RETURN_CREW_NOT_ENOUGH_SPACE = '#system_messages:return_crew/not_enough_space'
     RETURN_CREW_INVALID_VEHICLE = '#system_messages:return_crew/invalid_vehicle'
     RETURN_CREW_VEHICLE_NEED_REPAIR = '#system_messages:return_crew/vehicle_need_repair'
     RETURN_CREW_VEHICLE_LOCKED = '#system_messages:return_crew/vehicle_locked'
+    RETURN_CREW_FORBIDDEN = '#system_messages:return_crew/FORBIDDEN'
     RETRAINING_TANKMAN_SUCCESS = '#system_messages:retraining_tankman/success'
     RETRAINING_TANKMAN_FINANCIAL_SUCCESS = '#system_messages:retraining_tankman/financial_success'
     RETRAINING_TANKMAN_SERVER_ERROR = '#system_messages:retraining_tankman/server_error'
@@ -359,6 +368,7 @@ class SYSTEM_MESSAGES(object):
     RETRAINING_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:retraining_tankman/vehicle_need_repair'
     RETRAINING_TANKMAN_VEHICLE_LOCKED = '#system_messages:retraining_tankman/vehicle_locked'
     RETRAINING_TANKMAN_INVALID_OPERATION = '#system_messages:retraining_tankman/invalid_operation'
+    RETRAINING_TANKMAN_FORBIDDEN = '#system_messages:retraining_tankman/FORBIDDEN'
     RETRAINING_CREW_SUCCESS = '#system_messages:retraining_crew/success'
     RETRAINING_CREW_FINANCIAL_SUCCESS = '#system_messages:retraining_crew/financial_success'
     RETRAINING_CREW_SERVER_ERROR = '#system_messages:retraining_crew/server_error'
@@ -367,6 +377,7 @@ class SYSTEM_MESSAGES(object):
     RETRAINING_CREW_VEHICLE_LOCKED = '#system_messages:retraining_crew/vehicle_locked'
     RETRAINING_CREW_EMPTY_LIST = '#system_messages:retraining_crew/empty_list'
     RETRAINING_CREW_INVALID_OPERATION = '#system_messages:retraining_crew/invalid_operation'
+    RETRAINING_CREW_FORBIDDEN = '#system_messages:retraining_crew/FORBIDDEN'
     ADD_TANKMAN_SKILL_SUCCESS = '#system_messages:add_tankman_skill/success'
     ADD_TANKMAN_SKILL_SERVER_ERROR = '#system_messages:add_tankman_skill/server_error'
     ADD_TANKMAN_SKILL_INVALID_VEHICLE = '#system_messages:add_tankman_skill/invalid_vehicle'
@@ -387,6 +398,7 @@ class SYSTEM_MESSAGES(object):
     CHANGE_TANKMAN_ROLE_WALLET_NOT_AVAILABLE = '#system_messages:change_tankman_role/wallet_not_available'
     CHANGE_TANKMAN_ROLE_INVALID_VEHICLE = '#system_messages:change_tankman_role/invalid_vehicle'
     CHANGE_TANKMAN_ROLE_INVALID_ROLE = '#system_messages:change_tankman_role/invalid_role'
+    CHANGE_TANKMAN_ROLE_FORBIDDEN = '#system_messages:change_tankman_role/FORBIDDEN'
     FREE_XP_TO_TMAN_SKILL_SUCCESS = '#system_messages:free_xp_to_tman_skill/success'
     FREE_XP_TO_TMAN_SKILL_SERVER_ERROR = '#system_messages:free_xp_to_tman_skill/server_error'
     FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_TYPE = '#system_messages:free_xp_to_tman_skill/error/WRONG_ARGS_TYPE'
@@ -400,6 +412,7 @@ class SYSTEM_MESSAGES(object):
     REPLACE_TANKMAN_VEHICLE_NEED_REPAIR = '#system_messages:replace_tankman/vehicle_need_repair'
     REPLACE_TANKMAN_VEHICLE_LOCKED = '#system_messages:replace_tankman/vehicle_locked'
     REPLACE_TANKMAN_NOT_ENOUGH_MONEY = '#system_messages:replace_tankman/not_enough_money'
+    REPLACE_TANKMAN_FORBIDDEN = '#system_messages:replace_tankman/FORBIDDEN'
     VEHICLE_BUY_SUCCESS = '#system_messages:vehicle_buy/success'
     VEHICLE_BUY_SERVER_ERROR = '#system_messages:vehicle_buy/server_error'
     VEHICLE_BUY_INVALID_VEHICLE = '#system_messages:vehicle_buy/invalid_vehicle'
@@ -525,6 +538,7 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_BUY_INVALID_MODULE = '#system_messages:artefact_buy/invalid_module'
     ARTEFACT_BUY_NOT_ENOUGH_CREDITS = '#system_messages:artefact_buy/not_enough_credits'
     ARTEFACT_BUY_NOT_ENOUGH_GOLD = '#system_messages:artefact_buy/not_enough_gold'
+    ARTEFACT_BUY_NOT_ENOUGH_CRYSTAL = '#system_messages:artefact_buy/not_enough_crystal'
     ARTEFACT_BUY_WALLET_NOT_AVAILABLE = '#system_messages:artefact_buy/wallet_not_available'
     ARTEFACT_BUY_SERVER_ERROR = '#system_messages:artefact_buy/server_error'
     ARTEFACT_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:artefact_buy/server_error_centerDown'
@@ -533,6 +547,19 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_BUY_VEHICLE_LOCKED = '#system_messages:artefact_buy/vehicle_locked'
     ARTEFACT_BUY_INVALID_VEHICLE = '#system_messages:artefact_buy/invalid_vehicle'
     ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:artefact_buy/error_not_for_this_vehicle_type'
+    BATTLEBOOSTER_BUY_SUCCESS = '#system_messages:battleBooster_buy/success'
+    BATTLEBOOSTER_BUY_INVALID_MODULE = '#system_messages:battleBooster_buy/invalid_module'
+    BATTLEBOOSTER_BUY_NOT_ENOUGH_CREDITS = '#system_messages:battleBooster_buy/not_enough_credits'
+    BATTLEBOOSTER_BUY_NOT_ENOUGH_GOLD = '#system_messages:battleBooster_buy/not_enough_gold'
+    BATTLEBOOSTER_BUY_NOT_ENOUGH_CRYSTAL = '#system_messages:battleBooster_buy/not_enough_crystal'
+    BATTLEBOOSTER_BUY_WALLET_NOT_AVAILABLE = '#system_messages:battleBooster_buy/wallet_not_available'
+    BATTLEBOOSTER_BUY_SERVER_ERROR = '#system_messages:battleBooster_buy/server_error'
+    BATTLEBOOSTER_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:battleBooster_buy/server_error_centerDown'
+    BATTLEBOOSTER_BUY_ERROR_TOO_HEAVY = '#system_messages:battleBooster_buy/error_too_heavy'
+    BATTLEBOOSTER_BUY_VEHICLE_NEED_REPAIR = '#system_messages:battleBooster_buy/vehicle_need_repair'
+    BATTLEBOOSTER_BUY_VEHICLE_LOCKED = '#system_messages:battleBooster_buy/vehicle_locked'
+    BATTLEBOOSTER_BUY_INVALID_VEHICLE = '#system_messages:battleBooster_buy/invalid_vehicle'
+    BATTLEBOOSTER_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:battleBooster_buy/error_not_for_this_vehicle_type'
     SHELL_SELL_SUCCESS = '#system_messages:shell_sell/success'
     SHELL_SELL_INVALID_MODULE = '#system_messages:shell_sell/invalid_module'
     SHELL_SELL_SERVER_ERROR = '#system_messages:shell_sell/server_error'
@@ -593,6 +620,7 @@ class SYSTEM_MESSAGES(object):
     LAYOUT_APPLY_SHELLS_NO_WALLET_SESSION = '#system_messages:layout_apply/SHELLS_NO_WALLET_SESSION'
     LAYOUT_APPLY_EQS_NO_CREDITS = '#system_messages:layout_apply/EQS_NO_CREDITS'
     LAYOUT_APPLY_EQS_NO_GOLD = '#system_messages:layout_apply/EQS_NO_GOLD'
+    LAYOUT_APPLY_EQS_NO_CRYSTAL = '#system_messages:layout_apply/EQS_NO_CRYSTAL'
     LAYOUT_APPLY_EQS_NO_WALLET_SESSION = '#system_messages:layout_apply/EQS_NO_WALLET_SESSION'
     LAYOUT_APPLY_NOT_RESEARCHED_ITEM = '#system_messages:layout_apply/NOT_RESEARCHED_ITEM'
     LAYOUT_APPLY_BUYING_GOLD_EQS_FOR_CREDITS_DISABLED = '#system_messages:layout_apply/BUYING_GOLD_EQS_FOR_CREDITS_DISABLED'
@@ -600,7 +628,7 @@ class SYSTEM_MESSAGES(object):
     LAYOUT_APPLY_NO_VEHICLE_WITH_GIVEN_ID = '#system_messages:layout_apply/No vehicle with given id'
     LAYOUT_APPLY_VEHICLE_IS_LOCKED = '#system_messages:layout_apply/Vehicle is locked'
     LAYOUT_APPLY_CANNOT_EQUIP_SHELLS = '#system_messages:layout_apply/Cannot equip shells'
-    LAYOUT_APPLY_CANNOT_EQUIP_SHELLS__MAXAMMO_LIMIT_EXCEEDED_ = '#system_messages:layout_apply/Cannot equip shells (maxAmmo limit exceeded)'
+    LAYOUT_APPLY_CANNOT_EQUIP_SHELLS_MAXAMMO_LIMIT_EXCEEDED = '#system_messages:layout_apply/Cannot equip shells (maxAmmo limit exceeded)'
     LAYOUT_APPLY_CANNOT_EQUIP_EQUIPMENT = '#system_messages:layout_apply/Cannot equip equipment'
     LAYOUT_APPLY_COMPONENT_IS_NOT_IN_SHOP = '#system_messages:layout_apply/Component is not in shop'
     LAYOUT_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:layout_apply/wallet_not_available'
@@ -696,43 +724,43 @@ class SYSTEM_MESSAGES(object):
     CLUBS_REQUEST_SUCCESS_USERS_TRANSFEROWNERSHIP = '#system_messages:clubs/request/success/users/transferOwnership'
     CLUBS_REQUEST_SUCCESS_USERS_KICK = '#system_messages:clubs/request/success/users/kick'
     CLUBS_REQUEST_ERRORS_DEFAULT = '#system_messages:clubs/request/errors/default'
-    CLUBS_REQUEST_ERRORS_SOME_ERROR_ON_ESTB_SIDE__SEE_SERVER_LOG_FOR_DETAILS_ = '#system_messages:clubs/request/errors/Some error on estb side. See server log for details.'
-    CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_OWNS_THE_CLUB_ = '#system_messages:clubs/request/errors/Account already owns the club.'
-    CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_A_CLUB_MEMBER_ = '#system_messages:clubs/request/errors/Account already a club member.'
-    CLUBS_REQUEST_ERRORS_NO_CLUB_FOUND_ = '#system_messages:clubs/request/errors/No club found.'
-    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_MEMBER_ = '#system_messages:clubs/request/errors/Account not a club member.'
-    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_NON_EMPTY_CLUB_ = '#system_messages:clubs/request/errors/Forbidden operation for non-empty club.'
-    CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_FORBIDDEN_FOR_CLUB_OWNER_ = '#system_messages:clubs/request/errors/This operation is forbidden for club owner.'
-    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_APPLICANTS_LIMIT_REACHED_ = '#system_messages:clubs/request/errors/Forbidden operation because applicants limit reached.'
-    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_MEMBERS_LIMIT_REACHED_ = '#system_messages:clubs/request/errors/Forbidden operation because members limit reached.'
-    CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_ALREADY_SENT_TO_THIS_PLAYER_ = '#system_messages:clubs/request/errors/Invite to the club already sent to this player.'
-    CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_NOT_FOUND_FOR_THIS_PLAYER_ = '#system_messages:clubs/request/errors/Invite to the club not found for this player.'
-    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_APPLICANT_ = '#system_messages:clubs/request/errors/Account not a club applicant.'
-    CLUBS_REQUEST_ERRORS_INCORRECT_PARAMS_PASSED_TO_THE_HANDLER_ = '#system_messages:clubs/request/errors/Incorrect params passed to the handler.'
-    CLUBS_REQUEST_ERRORS_HANDLER_RESPONSE_NOT_REGISTERED_ = '#system_messages:clubs/request/errors/Handler response not registered.'
-    CLUBS_REQUEST_ERRORS_APPLICATIONS_TO_THE_CLOSED_CLUB_ARE_FORBIDDEN_ = '#system_messages:clubs/request/errors/Applications to the closed club are forbidden.'
-    CLUBS_REQUEST_ERRORS_NONE_OF_THE_SUB_REQUESTS_WAS_NOT_COMPLETED_SUCCESSFULLY_ = '#system_messages:clubs/request/errors/None of the sub-requests was not completed successfully.'
-    CLUBS_REQUEST_ERRORS_THIS_EMBLEM_NOT_REGISTERED_IN_EMULATOR_ = '#system_messages:clubs/request/errors/This emblem not registered in emulator.'
-    CLUBS_REQUEST_ERRORS_COMMAND_FAILED_BY_TIMEOUT_ = '#system_messages:clubs/request/errors/Command failed by timeout.'
-    CLUBS_REQUEST_ERRORS_UNKNOWN_OR_UNEXPECTED_ERROR_ = '#system_messages:clubs/request/errors/Unknown or unexpected error.'
-    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_FOUND_FOR_GIVEN_ID_ = '#system_messages:clubs/request/errors/Account not found for given ID.'
-    CLUBS_REQUEST_ERRORS_ACCOUNT_FOR_GIVEN_ID_IS_BANNED_ = '#system_messages:clubs/request/errors/Account for given ID is banned.'
-    CLUBS_REQUEST_ERRORS_INTERNAL_ERROR_IN_SPA__ = '#system_messages:clubs/request/errors/Internal error in SPA .'
-    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_THIS_ACCOUNT_ = '#system_messages:clubs/request/errors/Forbidden operation for this account.'
-    CLUBS_REQUEST_ERRORS_INACTIVE_CLUB_ = '#system_messages:clubs/request/errors/Inactive club.'
-    CLUBS_REQUEST_ERRORS_INACTIVE_APPLICATION_ = '#system_messages:clubs/request/errors/Inactive application.'
-    CLUBS_REQUEST_ERRORS_INACTIVE_INVITE_ = '#system_messages:clubs/request/errors/Inactive invite.'
-    CLUBS_REQUEST_ERRORS_TOO_MANY_REQUESTS_ARE_IN_THE_PENDING_STATE_ = '#system_messages:clubs/request/errors/Too many requests are in the pending state.'
-    CLUBS_REQUEST_ERRORS_TOO_MANY_INVITES_SENT_TO_THAT_PLAYER_ = '#system_messages:clubs/request/errors/Too many invites sent to that player.'
-    CLUBS_REQUEST_ERRORS_THIS_CLUB_NAME_IS_ALREADY_TAKEN_ = '#system_messages:clubs/request/errors/This club name is already taken.'
-    CLUBS_REQUEST_ERRORS_INCORRECT_CHECKOUT_TOKEN_ = '#system_messages:clubs/request/errors/Incorrect checkout token.'
-    CLUBS_REQUEST_ERRORS_CLUB_IS_LOCKED_ = '#system_messages:clubs/request/errors/Club is locked.'
-    CLUBS_REQUEST_ERRORS_ATTEMPT_TO_ACCESS_TO_THE_INCORRECT_URL_ = '#system_messages:clubs/request/errors/Attempt to access to the incorrect url.'
-    CLUBS_REQUEST_ERRORS_APPLICATION_FROM_THIS_ACCOUNT_ALREADY_EXISTS_ = '#system_messages:clubs/request/errors/Application from this account already exists.'
-    CLUBS_REQUEST_ERRORS_WRONG_OBTAINED_WEB_DATA_FORMAT__PLEASE_SEE_SERVER_LOGS_ = '#system_messages:clubs/request/errors/Wrong obtained web data format. Please see server logs.'
-    CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_RESTRICTED_ON_WEB_SIDE_ = '#system_messages:clubs/request/errors/This operation is restricted on web side.'
-    CLUBS_REQUEST_ERRORS_WEB_API_IS_NOT_AVAILABLE_AT_THIS_MOMENT_ = '#system_messages:clubs/request/errors/Web API is not available at this moment.'
-    CLUBS_REQUEST_ERRORS_THIS_CLUB_IS_NOT_IN_THE_LADDER_ = '#system_messages:clubs/request/errors/This club is not in the ladder.'
+    CLUBS_REQUEST_ERRORS_SOME_ERROR_ON_ESTB_SIDE_SEE_SERVER_LOG_FOR_DETAILS = '#system_messages:clubs/request/errors/Some error on estb side. See server log for details.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_OWNS_THE_CLUB = '#system_messages:clubs/request/errors/Account already owns the club.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_A_CLUB_MEMBER = '#system_messages:clubs/request/errors/Account already a club member.'
+    CLUBS_REQUEST_ERRORS_NO_CLUB_FOUND = '#system_messages:clubs/request/errors/No club found.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_MEMBER = '#system_messages:clubs/request/errors/Account not a club member.'
+    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_NON_EMPTY_CLUB = '#system_messages:clubs/request/errors/Forbidden operation for non-empty club.'
+    CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_FORBIDDEN_FOR_CLUB_OWNER = '#system_messages:clubs/request/errors/This operation is forbidden for club owner.'
+    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_APPLICANTS_LIMIT_REACHED = '#system_messages:clubs/request/errors/Forbidden operation because applicants limit reached.'
+    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_MEMBERS_LIMIT_REACHED = '#system_messages:clubs/request/errors/Forbidden operation because members limit reached.'
+    CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_ALREADY_SENT_TO_THIS_PLAYER = '#system_messages:clubs/request/errors/Invite to the club already sent to this player.'
+    CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_NOT_FOUND_FOR_THIS_PLAYER = '#system_messages:clubs/request/errors/Invite to the club not found for this player.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_APPLICANT = '#system_messages:clubs/request/errors/Account not a club applicant.'
+    CLUBS_REQUEST_ERRORS_INCORRECT_PARAMS_PASSED_TO_THE_HANDLER = '#system_messages:clubs/request/errors/Incorrect params passed to the handler.'
+    CLUBS_REQUEST_ERRORS_HANDLER_RESPONSE_NOT_REGISTERED = '#system_messages:clubs/request/errors/Handler response not registered.'
+    CLUBS_REQUEST_ERRORS_APPLICATIONS_TO_THE_CLOSED_CLUB_ARE_FORBIDDEN = '#system_messages:clubs/request/errors/Applications to the closed club are forbidden.'
+    CLUBS_REQUEST_ERRORS_NONE_OF_THE_SUB_REQUESTS_WAS_NOT_COMPLETED_SUCCESSFULLY = '#system_messages:clubs/request/errors/None of the sub-requests was not completed successfully.'
+    CLUBS_REQUEST_ERRORS_THIS_EMBLEM_NOT_REGISTERED_IN_EMULATOR = '#system_messages:clubs/request/errors/This emblem not registered in emulator.'
+    CLUBS_REQUEST_ERRORS_COMMAND_FAILED_BY_TIMEOUT = '#system_messages:clubs/request/errors/Command failed by timeout.'
+    CLUBS_REQUEST_ERRORS_UNKNOWN_OR_UNEXPECTED_ERROR = '#system_messages:clubs/request/errors/Unknown or unexpected error.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_FOUND_FOR_GIVEN_ID = '#system_messages:clubs/request/errors/Account not found for given ID.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_FOR_GIVEN_ID_IS_BANNED = '#system_messages:clubs/request/errors/Account for given ID is banned.'
+    CLUBS_REQUEST_ERRORS_INTERNAL_ERROR_IN_SPA = '#system_messages:clubs/request/errors/Internal error in SPA .'
+    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_THIS_ACCOUNT = '#system_messages:clubs/request/errors/Forbidden operation for this account.'
+    CLUBS_REQUEST_ERRORS_INACTIVE_CLUB = '#system_messages:clubs/request/errors/Inactive club.'
+    CLUBS_REQUEST_ERRORS_INACTIVE_APPLICATION = '#system_messages:clubs/request/errors/Inactive application.'
+    CLUBS_REQUEST_ERRORS_INACTIVE_INVITE = '#system_messages:clubs/request/errors/Inactive invite.'
+    CLUBS_REQUEST_ERRORS_TOO_MANY_REQUESTS_ARE_IN_THE_PENDING_STATE = '#system_messages:clubs/request/errors/Too many requests are in the pending state.'
+    CLUBS_REQUEST_ERRORS_TOO_MANY_INVITES_SENT_TO_THAT_PLAYER = '#system_messages:clubs/request/errors/Too many invites sent to that player.'
+    CLUBS_REQUEST_ERRORS_THIS_CLUB_NAME_IS_ALREADY_TAKEN = '#system_messages:clubs/request/errors/This club name is already taken.'
+    CLUBS_REQUEST_ERRORS_INCORRECT_CHECKOUT_TOKEN = '#system_messages:clubs/request/errors/Incorrect checkout token.'
+    CLUBS_REQUEST_ERRORS_CLUB_IS_LOCKED = '#system_messages:clubs/request/errors/Club is locked.'
+    CLUBS_REQUEST_ERRORS_ATTEMPT_TO_ACCESS_TO_THE_INCORRECT_URL = '#system_messages:clubs/request/errors/Attempt to access to the incorrect url.'
+    CLUBS_REQUEST_ERRORS_APPLICATION_FROM_THIS_ACCOUNT_ALREADY_EXISTS = '#system_messages:clubs/request/errors/Application from this account already exists.'
+    CLUBS_REQUEST_ERRORS_WRONG_OBTAINED_WEB_DATA_FORMAT_PLEASE_SEE_SERVER_LOGS = '#system_messages:clubs/request/errors/Wrong obtained web data format. Please see server logs.'
+    CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_RESTRICTED_ON_WEB_SIDE = '#system_messages:clubs/request/errors/This operation is restricted on web side.'
+    CLUBS_REQUEST_ERRORS_WEB_API_IS_NOT_AVAILABLE_AT_THIS_MOMENT = '#system_messages:clubs/request/errors/Web API is not available at this moment.'
+    CLUBS_REQUEST_ERRORS_THIS_CLUB_IS_NOT_IN_THE_LADDER = '#system_messages:clubs/request/errors/This club is not in the ladder.'
     CLUBS_REQUEST_ERRORS_UNITMGR_NOT_AVAILABLE = '#system_messages:clubs/request/errors/UnitMgr not available'
     CLUBS_REQUEST_ERRORS_TEAM_DOES_NOT_EXIST = '#system_messages:clubs/request/errors/TEAM_DOES_NOT_EXIST'
     CLUBS_REQUEST_ERRORS_TEAM_IS_FULL = '#system_messages:clubs/request/errors/TEAM_IS_FULL'
@@ -793,7 +821,7 @@ class SYSTEM_MESSAGES(object):
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_BANNED = '#system_messages:clans/request/errors/Account is banned'
     CLANS_REQUEST_ERRORS_ACCOUNT_IN_UNKNOWN = '#system_messages:clans/request/errors/Account in unknown'
     CLANS_REQUEST_ERRORS_CLAN_DOES_NOT_EXIST = '#system_messages:clans/request/errors/Clan does not exist'
-    CLANS_REQUEST_ERRORS_CLAN_IS_FULL = '#system_messages:clans/request/errors/Clan is full'
+    CLANS_REQUEST_ERRORS_CLAN_HAS_NOT_FREE_SPACE = '#system_messages:clans/request/errors/Clan has not free space'
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY = '#system_messages:clans/request/errors/Account is in clan already'
     CLANS_REQUEST_ERRORS_USER_IS_IN_CLAN_ALREADY = '#system_messages:clans/request/errors/user is in clan already'
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN = '#system_messages:clans/request/errors/Account is not in clan'
@@ -846,15 +874,19 @@ class SYSTEM_MESSAGES(object):
     WALLET_AVAILABLE = '#system_messages:wallet/available'
     WALLET_AVAILABLE_GOLD = '#system_messages:wallet/available_gold'
     WALLET_AVAILABLE_FREEXP = '#system_messages:wallet/available_freexp'
+    WALLET_AVAILABLE_CRYSTAL = '#system_messages:wallet/available_crystal'
     WALLET_NOT_AVAILABLE = '#system_messages:wallet/not_available'
     WALLET_NOT_AVAILABLE_GOLD = '#system_messages:wallet/not_available_gold'
     WALLET_NOT_AVAILABLE_FREEXP = '#system_messages:wallet/not_available_freexp'
+    WALLET_NOT_AVAILABLE_CRYSTAL = '#system_messages:wallet/not_available_crystal'
     WALLET_AVAILABLE_ASIA = '#system_messages:wallet/available_asia'
     WALLET_AVAILABLE_ASIA_GOLD = '#system_messages:wallet/available_asia_gold'
     WALLET_AVAILABLE_ASIA_FREEXP = '#system_messages:wallet/available_asia_freexp'
+    WALLET_AVAILABLE_ASIA_CRYSTAL = '#system_messages:wallet/available_asia_crystal'
     WALLET_NOT_AVAILABLE_ASIA = '#system_messages:wallet/not_available_asia'
     WALLET_NOT_AVAILABLE_ASIA_GOLD = '#system_messages:wallet/not_available_asia_gold'
     WALLET_NOT_AVAILABLE_ASIA_FREEXP = '#system_messages:wallet/not_available_asia_freexp'
+    WALLET_NOT_AVAILABLE_ASIA_CRYSTAL = '#system_messages:wallet/not_available_asia_crystal'
     POTAPOVQUESTS_SELECT_SUCCESS = '#system_messages:potapovQuests/select/success'
     POTAPOVQUESTS_SELECT_SERVER_ERROR = '#system_messages:potapovQuests/select/server_error'
     POTAPOVQUESTS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:potapovQuests/select/server_error/WRONG_ARGS_TYPE'
@@ -1116,6 +1148,29 @@ class SYSTEM_MESSAGES(object):
     VEHICLECOMPARE_PREVIEWNOTALLOWED = '#system_messages:vehicleCompare/previewNotAllowed'
     PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION = '#system_messages:prmp/notification/newEncyclopediaRecommendation'
     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES = '#system_messages:restoreController/hasLimitedRestoreVehicles'
+    ROTATION_LOCK = '#system_messages:rotation/lock'
+    ROTATION_UNLOCK = '#system_messages:rotation/unlock'
+    ROTATION_VEHICLEISLOCKED = '#system_messages:rotation/vehicleIsLocked'
+    RANKED_NOTIFICATION_CONGRATULATIONS = '#system_messages:ranked/notification/congratulations'
+    RANKED_NOTIFICATIONS_SINGLERANK_TEXT = '#system_messages:ranked/notifications/singleRank/text'
+    RANKED_NOTIFICATIONS_SINGLEVEHRANK_TEXT = '#system_messages:ranked/notifications/singleVehRank/text'
+    RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL = '#system_messages:ranked/notifications/bonusName/crystal'
+    RANKED_NOTIFICATIONS_BONUSNAME_CREDITS = '#system_messages:ranked/notifications/bonusName/credits'
+    RANKED_NOTIFICATIONS_BONUSNAME_GOLD = '#system_messages:ranked/notifications/bonusName/gold'
+    RANKED_NOTIFICATIONS_BONUSNAME_POINTS = '#system_messages:ranked/notifications/bonusName/points'
+    RANKED_NOTIFICATIONS_BONUSNAME_OTHER = '#system_messages:ranked/notifications/bonusName/other'
+    RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAY = '#system_messages:ranked/notifications/bonusValue/premiumDay'
+    RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAYS = '#system_messages:ranked/notifications/bonusValue/premiumDays'
+    RANKED_NOTIFICATIONS_CYCLERESULTS = '#system_messages:ranked/notifications/cycleResults'
+    RANKED_NOTIFICATIONS_SEASONRESULTS = '#system_messages:ranked/notifications/seasonResults'
+    RANKED_NOTIFICATION_FINAL_BEFORECOMMONLIST = '#system_messages:ranked/notification/final/beforeCommonList'
+    RANKED_NOTIFICATIONS_FINAL_BONUSNAME_CREDITS = '#system_messages:ranked/notifications/final/bonusName/credits'
+    RANKED_NOTIFICATIONS_FINAL_BONUSNAME_GOLD = '#system_messages:ranked/notifications/final/bonusName/gold'
+    RANKED_NOTIFICATIONS_FINAL_BONUSNAME_POINTS = '#system_messages:ranked/notifications/final/bonusName/points'
+    RANKED_NOTIFICATIONS_FINAL_BONUSNAME_LEAGUE = '#system_messages:ranked/notifications/final/bonusName/league'
+    RANKED_NOTIFICATIONS_FINAL_BONUSNAME_LEAGUE_CYCLE = '#system_messages:ranked/notifications/final/bonusName/league/cycle'
+    RANKED_NOTIFICATION_PRIMETIME = '#system_messages:ranked/notification/primeTime'
+    RANKED_NOTIFICATION_NOTAVAILABLE = '#system_messages:ranked/notification/notAvailable'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1191,7 +1246,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE,
      UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION,
      UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
-    UNITBROWSER_ERRORS_ENUM = UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT
+    UNITBROWSER_ERRORS_ENUM = (UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT,)
     PREBATTLE_REQUEST_NAME_ENUM = (PREBATTLE_REQUEST_NAME_CHANGE_SETTINGS,
      PREBATTLE_REQUEST_NAME_CHANGE_ARENA_VOIP,
      PREBATTLE_REQUEST_NAME_CHANGE_USER_STATUS,
@@ -1343,6 +1398,16 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_VEHICLE_DAMAGED,
      CUSTOMIZATION_VEHICLE_DESTROYED,
      CUSTOMIZATION_VEHICLE_EXPLODED)
+    RANKED_NOTIFICATIONSALL_BONUSNAME_ENUM = (RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL,
+     RANKED_NOTIFICATIONS_BONUSNAME_CREDITS,
+     RANKED_NOTIFICATIONS_BONUSNAME_GOLD,
+     RANKED_NOTIFICATIONS_BONUSNAME_POINTS,
+     RANKED_NOTIFICATIONS_BONUSNAME_OTHER,
+     RANKED_NOTIFICATIONS_FINAL_BONUSNAME_CREDITS,
+     RANKED_NOTIFICATIONS_FINAL_BONUSNAME_GOLD,
+     RANKED_NOTIFICATIONS_FINAL_BONUSNAME_POINTS,
+     RANKED_NOTIFICATIONS_FINAL_BONUSNAME_LEAGUE,
+     RANKED_NOTIFICATIONS_FINAL_BONUSNAME_LEAGUE_CYCLE)
     ALL_ENUM = (REPAIR_SUCCESS,
      REPAIR_CREDITS_ERROR,
      REPAIR_SERVER_ERROR,
@@ -1446,7 +1511,7 @@ class SYSTEM_MESSAGES(object):
      ARENA_START_ERRORS_KICK_CREATOR_LEFT,
      ARENA_START_ERRORS_KICK_PLAYERKICK,
      ARENA_START_ERRORS_KICK_TIMEOUT,
-     ARENA_START_ERRORS_KICK_TIMEOUT,
+     ARENA_START_ERRORS_PRB_KICK_TIMEOUT,
      PREBATTLE_START_FAILED_KICKEDFROMQUEUE_SQUAD,
      PREBATTLE_START_FAILED_KICKEDFROMQUEUE_COMPANY,
      PREBATTLE_START_FAILED_KICKEDFROMQUEUE_DEAFULT,
@@ -1636,16 +1701,19 @@ class SYSTEM_MESSAGES(object):
      RECRUIT_WINDOW_FREE_TANKMEN_LIMIT,
      RECRUIT_WINDOW_NOT_ENOUGH_SPACE,
      RECRUIT_WINDOW_DISCONNECTED_FROM_CENTER,
+     RECRUIT_WINDOW_FORBIDDEN,
      EQUIP_TANKMAN_SUCCESS,
      EQUIP_TANKMAN_SERVER_ERROR,
      EQUIP_TANKMAN_INVALID_VEHICLE,
      EQUIP_TANKMAN_VEHICLE_NEED_REPAIR,
      EQUIP_TANKMAN_VEHICLE_LOCKED,
+     EQUIP_TANKMAN_FORBIDDEN,
      REEQUIP_TANKMAN_SUCCESS,
      REEQUIP_TANKMAN_SERVER_ERROR,
      REEQUIP_TANKMAN_INVALID_VEHICLE,
      REEQUIP_TANKMAN_VEHICLE_NEED_REPAIR,
      REEQUIP_TANKMAN_VEHICLE_LOCKED,
+     REEQUIP_TANKMAN_FORBIDDEN,
      BUY_AND_EQUIP_TANKMAN_SUCCESS,
      BUY_AND_EQUIP_TANKMAN_FINANCIAL_SUCCESS,
      BUY_AND_EQUIP_TANKMAN_SERVER_ERROR,
@@ -1655,6 +1723,7 @@ class SYSTEM_MESSAGES(object):
      BUY_AND_EQUIP_TANKMAN_NOT_ENOUGH_GOLD,
      BUY_AND_EQUIP_TANKMAN_WALLET_NOT_AVAILABLE,
      BUY_AND_EQUIP_TANKMAN_FREE_TANKMEN_LIMIT,
+     BUY_AND_EQUIP_TANKMAN_FORBIDDEN,
      BUY_AND_REEQUIP_TANKMAN_SUCCESS,
      BUY_AND_REEQUIP_TANKMAN_FINANCIAL_SUCCESS,
      BUY_AND_REEQUIP_TANKMAN_SERVER_ERROR,
@@ -1665,29 +1734,34 @@ class SYSTEM_MESSAGES(object):
      BUY_AND_REEQUIP_TANKMAN_WALLET_NOT_AVAILABLE,
      BUY_AND_REEQUIP_TANKMAN_FREE_TANKMEN_LIMIT,
      BUY_AND_REEQUIP_TANKMAN_NOT_ENOUGH_SPACE,
+     BUY_AND_REEQUIP_TANKMAN_FORBIDDEN,
      DISMISS_TANKMAN_SUCCESS,
      DISMISS_TANKMAN_SERVER_ERROR,
      DISMISS_TANKMAN_INVALID_VEHICLE,
      DISMISS_TANKMAN_VEHICLE_NEED_REPAIR,
      DISMISS_TANKMAN_VEHICLE_LOCKED,
+     DISMISS_TANKMAN_FORBIDDEN,
      UNLOAD_TANKMAN_SUCCESS,
      UNLOAD_TANKMAN_SERVER_ERROR,
      UNLOAD_TANKMAN_NOT_ENOUGH_SPACE,
      UNLOAD_TANKMAN_INVALID_VEHICLE,
      UNLOAD_TANKMAN_VEHICLE_NEED_REPAIR,
      UNLOAD_TANKMAN_VEHICLE_LOCKED,
+     UNLOAD_TANKMAN_FORBIDDEN,
      UNLOAD_CREW_SUCCESS,
      UNLOAD_CREW_SERVER_ERROR,
      UNLOAD_CREW_NOT_ENOUGH_SPACE,
      UNLOAD_CREW_INVALID_VEHICLE,
      UNLOAD_CREW_VEHICLE_NEED_REPAIR,
      UNLOAD_CREW_VEHICLE_LOCKED,
+     UNLOAD_CREW_FORBIDDEN,
      RETURN_CREW_SUCCESS,
      RETURN_CREW_SERVER_ERROR,
      RETURN_CREW_NOT_ENOUGH_SPACE,
      RETURN_CREW_INVALID_VEHICLE,
      RETURN_CREW_VEHICLE_NEED_REPAIR,
      RETURN_CREW_VEHICLE_LOCKED,
+     RETURN_CREW_FORBIDDEN,
      RETRAINING_TANKMAN_SUCCESS,
      RETRAINING_TANKMAN_FINANCIAL_SUCCESS,
      RETRAINING_TANKMAN_SERVER_ERROR,
@@ -1695,6 +1769,7 @@ class SYSTEM_MESSAGES(object):
      RETRAINING_TANKMAN_VEHICLE_NEED_REPAIR,
      RETRAINING_TANKMAN_VEHICLE_LOCKED,
      RETRAINING_TANKMAN_INVALID_OPERATION,
+     RETRAINING_TANKMAN_FORBIDDEN,
      RETRAINING_CREW_SUCCESS,
      RETRAINING_CREW_FINANCIAL_SUCCESS,
      RETRAINING_CREW_SERVER_ERROR,
@@ -1703,6 +1778,7 @@ class SYSTEM_MESSAGES(object):
      RETRAINING_CREW_VEHICLE_LOCKED,
      RETRAINING_CREW_EMPTY_LIST,
      RETRAINING_CREW_INVALID_OPERATION,
+     RETRAINING_CREW_FORBIDDEN,
      ADD_TANKMAN_SKILL_SUCCESS,
      ADD_TANKMAN_SKILL_SERVER_ERROR,
      ADD_TANKMAN_SKILL_INVALID_VEHICLE,
@@ -1723,6 +1799,7 @@ class SYSTEM_MESSAGES(object):
      CHANGE_TANKMAN_ROLE_WALLET_NOT_AVAILABLE,
      CHANGE_TANKMAN_ROLE_INVALID_VEHICLE,
      CHANGE_TANKMAN_ROLE_INVALID_ROLE,
+     CHANGE_TANKMAN_ROLE_FORBIDDEN,
      FREE_XP_TO_TMAN_SKILL_SUCCESS,
      FREE_XP_TO_TMAN_SKILL_SERVER_ERROR,
      FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_TYPE,
@@ -1736,6 +1813,7 @@ class SYSTEM_MESSAGES(object):
      REPLACE_TANKMAN_VEHICLE_NEED_REPAIR,
      REPLACE_TANKMAN_VEHICLE_LOCKED,
      REPLACE_TANKMAN_NOT_ENOUGH_MONEY,
+     REPLACE_TANKMAN_FORBIDDEN,
      VEHICLE_BUY_SUCCESS,
      VEHICLE_BUY_SERVER_ERROR,
      VEHICLE_BUY_INVALID_VEHICLE,
@@ -1861,6 +1939,7 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_BUY_INVALID_MODULE,
      ARTEFACT_BUY_NOT_ENOUGH_CREDITS,
      ARTEFACT_BUY_NOT_ENOUGH_GOLD,
+     ARTEFACT_BUY_NOT_ENOUGH_CRYSTAL,
      ARTEFACT_BUY_WALLET_NOT_AVAILABLE,
      ARTEFACT_BUY_SERVER_ERROR,
      ARTEFACT_BUY_SERVER_ERROR_CENTERDOWN,
@@ -1869,6 +1948,19 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_BUY_VEHICLE_LOCKED,
      ARTEFACT_BUY_INVALID_VEHICLE,
      ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
+     BATTLEBOOSTER_BUY_SUCCESS,
+     BATTLEBOOSTER_BUY_INVALID_MODULE,
+     BATTLEBOOSTER_BUY_NOT_ENOUGH_CREDITS,
+     BATTLEBOOSTER_BUY_NOT_ENOUGH_GOLD,
+     BATTLEBOOSTER_BUY_NOT_ENOUGH_CRYSTAL,
+     BATTLEBOOSTER_BUY_WALLET_NOT_AVAILABLE,
+     BATTLEBOOSTER_BUY_SERVER_ERROR,
+     BATTLEBOOSTER_BUY_SERVER_ERROR_CENTERDOWN,
+     BATTLEBOOSTER_BUY_ERROR_TOO_HEAVY,
+     BATTLEBOOSTER_BUY_VEHICLE_NEED_REPAIR,
+     BATTLEBOOSTER_BUY_VEHICLE_LOCKED,
+     BATTLEBOOSTER_BUY_INVALID_VEHICLE,
+     BATTLEBOOSTER_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
      SHELL_SELL_SUCCESS,
      SHELL_SELL_INVALID_MODULE,
      SHELL_SELL_SERVER_ERROR,
@@ -1929,6 +2021,7 @@ class SYSTEM_MESSAGES(object):
      LAYOUT_APPLY_SHELLS_NO_WALLET_SESSION,
      LAYOUT_APPLY_EQS_NO_CREDITS,
      LAYOUT_APPLY_EQS_NO_GOLD,
+     LAYOUT_APPLY_EQS_NO_CRYSTAL,
      LAYOUT_APPLY_EQS_NO_WALLET_SESSION,
      LAYOUT_APPLY_NOT_RESEARCHED_ITEM,
      LAYOUT_APPLY_BUYING_GOLD_EQS_FOR_CREDITS_DISABLED,
@@ -1936,7 +2029,7 @@ class SYSTEM_MESSAGES(object):
      LAYOUT_APPLY_NO_VEHICLE_WITH_GIVEN_ID,
      LAYOUT_APPLY_VEHICLE_IS_LOCKED,
      LAYOUT_APPLY_CANNOT_EQUIP_SHELLS,
-     LAYOUT_APPLY_CANNOT_EQUIP_SHELLS__MAXAMMO_LIMIT_EXCEEDED_,
+     LAYOUT_APPLY_CANNOT_EQUIP_SHELLS_MAXAMMO_LIMIT_EXCEEDED,
      LAYOUT_APPLY_CANNOT_EQUIP_EQUIPMENT,
      LAYOUT_APPLY_COMPONENT_IS_NOT_IN_SHOP,
      LAYOUT_APPLY_WALLET_NOT_AVAILABLE,
@@ -2032,43 +2125,43 @@ class SYSTEM_MESSAGES(object):
      CLUBS_REQUEST_SUCCESS_USERS_TRANSFEROWNERSHIP,
      CLUBS_REQUEST_SUCCESS_USERS_KICK,
      CLUBS_REQUEST_ERRORS_DEFAULT,
-     CLUBS_REQUEST_ERRORS_SOME_ERROR_ON_ESTB_SIDE__SEE_SERVER_LOG_FOR_DETAILS_,
-     CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_OWNS_THE_CLUB_,
-     CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_A_CLUB_MEMBER_,
-     CLUBS_REQUEST_ERRORS_NO_CLUB_FOUND_,
-     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_MEMBER_,
-     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_NON_EMPTY_CLUB_,
-     CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_FORBIDDEN_FOR_CLUB_OWNER_,
-     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_APPLICANTS_LIMIT_REACHED_,
-     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_MEMBERS_LIMIT_REACHED_,
-     CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_ALREADY_SENT_TO_THIS_PLAYER_,
-     CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_NOT_FOUND_FOR_THIS_PLAYER_,
-     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_APPLICANT_,
-     CLUBS_REQUEST_ERRORS_INCORRECT_PARAMS_PASSED_TO_THE_HANDLER_,
-     CLUBS_REQUEST_ERRORS_HANDLER_RESPONSE_NOT_REGISTERED_,
-     CLUBS_REQUEST_ERRORS_APPLICATIONS_TO_THE_CLOSED_CLUB_ARE_FORBIDDEN_,
-     CLUBS_REQUEST_ERRORS_NONE_OF_THE_SUB_REQUESTS_WAS_NOT_COMPLETED_SUCCESSFULLY_,
-     CLUBS_REQUEST_ERRORS_THIS_EMBLEM_NOT_REGISTERED_IN_EMULATOR_,
-     CLUBS_REQUEST_ERRORS_COMMAND_FAILED_BY_TIMEOUT_,
-     CLUBS_REQUEST_ERRORS_UNKNOWN_OR_UNEXPECTED_ERROR_,
-     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_FOUND_FOR_GIVEN_ID_,
-     CLUBS_REQUEST_ERRORS_ACCOUNT_FOR_GIVEN_ID_IS_BANNED_,
-     CLUBS_REQUEST_ERRORS_INTERNAL_ERROR_IN_SPA__,
-     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_THIS_ACCOUNT_,
-     CLUBS_REQUEST_ERRORS_INACTIVE_CLUB_,
-     CLUBS_REQUEST_ERRORS_INACTIVE_APPLICATION_,
-     CLUBS_REQUEST_ERRORS_INACTIVE_INVITE_,
-     CLUBS_REQUEST_ERRORS_TOO_MANY_REQUESTS_ARE_IN_THE_PENDING_STATE_,
-     CLUBS_REQUEST_ERRORS_TOO_MANY_INVITES_SENT_TO_THAT_PLAYER_,
-     CLUBS_REQUEST_ERRORS_THIS_CLUB_NAME_IS_ALREADY_TAKEN_,
-     CLUBS_REQUEST_ERRORS_INCORRECT_CHECKOUT_TOKEN_,
-     CLUBS_REQUEST_ERRORS_CLUB_IS_LOCKED_,
-     CLUBS_REQUEST_ERRORS_ATTEMPT_TO_ACCESS_TO_THE_INCORRECT_URL_,
-     CLUBS_REQUEST_ERRORS_APPLICATION_FROM_THIS_ACCOUNT_ALREADY_EXISTS_,
-     CLUBS_REQUEST_ERRORS_WRONG_OBTAINED_WEB_DATA_FORMAT__PLEASE_SEE_SERVER_LOGS_,
-     CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_RESTRICTED_ON_WEB_SIDE_,
-     CLUBS_REQUEST_ERRORS_WEB_API_IS_NOT_AVAILABLE_AT_THIS_MOMENT_,
-     CLUBS_REQUEST_ERRORS_THIS_CLUB_IS_NOT_IN_THE_LADDER_,
+     CLUBS_REQUEST_ERRORS_SOME_ERROR_ON_ESTB_SIDE_SEE_SERVER_LOG_FOR_DETAILS,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_OWNS_THE_CLUB,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_A_CLUB_MEMBER,
+     CLUBS_REQUEST_ERRORS_NO_CLUB_FOUND,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_MEMBER,
+     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_NON_EMPTY_CLUB,
+     CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_FORBIDDEN_FOR_CLUB_OWNER,
+     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_APPLICANTS_LIMIT_REACHED,
+     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_MEMBERS_LIMIT_REACHED,
+     CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_ALREADY_SENT_TO_THIS_PLAYER,
+     CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_NOT_FOUND_FOR_THIS_PLAYER,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_APPLICANT,
+     CLUBS_REQUEST_ERRORS_INCORRECT_PARAMS_PASSED_TO_THE_HANDLER,
+     CLUBS_REQUEST_ERRORS_HANDLER_RESPONSE_NOT_REGISTERED,
+     CLUBS_REQUEST_ERRORS_APPLICATIONS_TO_THE_CLOSED_CLUB_ARE_FORBIDDEN,
+     CLUBS_REQUEST_ERRORS_NONE_OF_THE_SUB_REQUESTS_WAS_NOT_COMPLETED_SUCCESSFULLY,
+     CLUBS_REQUEST_ERRORS_THIS_EMBLEM_NOT_REGISTERED_IN_EMULATOR,
+     CLUBS_REQUEST_ERRORS_COMMAND_FAILED_BY_TIMEOUT,
+     CLUBS_REQUEST_ERRORS_UNKNOWN_OR_UNEXPECTED_ERROR,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_FOUND_FOR_GIVEN_ID,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_FOR_GIVEN_ID_IS_BANNED,
+     CLUBS_REQUEST_ERRORS_INTERNAL_ERROR_IN_SPA,
+     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_THIS_ACCOUNT,
+     CLUBS_REQUEST_ERRORS_INACTIVE_CLUB,
+     CLUBS_REQUEST_ERRORS_INACTIVE_APPLICATION,
+     CLUBS_REQUEST_ERRORS_INACTIVE_INVITE,
+     CLUBS_REQUEST_ERRORS_TOO_MANY_REQUESTS_ARE_IN_THE_PENDING_STATE,
+     CLUBS_REQUEST_ERRORS_TOO_MANY_INVITES_SENT_TO_THAT_PLAYER,
+     CLUBS_REQUEST_ERRORS_THIS_CLUB_NAME_IS_ALREADY_TAKEN,
+     CLUBS_REQUEST_ERRORS_INCORRECT_CHECKOUT_TOKEN,
+     CLUBS_REQUEST_ERRORS_CLUB_IS_LOCKED,
+     CLUBS_REQUEST_ERRORS_ATTEMPT_TO_ACCESS_TO_THE_INCORRECT_URL,
+     CLUBS_REQUEST_ERRORS_APPLICATION_FROM_THIS_ACCOUNT_ALREADY_EXISTS,
+     CLUBS_REQUEST_ERRORS_WRONG_OBTAINED_WEB_DATA_FORMAT_PLEASE_SEE_SERVER_LOGS,
+     CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_RESTRICTED_ON_WEB_SIDE,
+     CLUBS_REQUEST_ERRORS_WEB_API_IS_NOT_AVAILABLE_AT_THIS_MOMENT,
+     CLUBS_REQUEST_ERRORS_THIS_CLUB_IS_NOT_IN_THE_LADDER,
      CLUBS_REQUEST_ERRORS_UNITMGR_NOT_AVAILABLE,
      CLUBS_REQUEST_ERRORS_TEAM_DOES_NOT_EXIST,
      CLUBS_REQUEST_ERRORS_TEAM_IS_FULL,
@@ -2129,7 +2222,7 @@ class SYSTEM_MESSAGES(object):
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_BANNED,
      CLANS_REQUEST_ERRORS_ACCOUNT_IN_UNKNOWN,
      CLANS_REQUEST_ERRORS_CLAN_DOES_NOT_EXIST,
-     CLANS_REQUEST_ERRORS_CLAN_IS_FULL,
+     CLANS_REQUEST_ERRORS_CLAN_HAS_NOT_FREE_SPACE,
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY,
      CLANS_REQUEST_ERRORS_USER_IS_IN_CLAN_ALREADY,
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN,
@@ -2182,15 +2275,19 @@ class SYSTEM_MESSAGES(object):
      WALLET_AVAILABLE,
      WALLET_AVAILABLE_GOLD,
      WALLET_AVAILABLE_FREEXP,
+     WALLET_AVAILABLE_CRYSTAL,
      WALLET_NOT_AVAILABLE,
      WALLET_NOT_AVAILABLE_GOLD,
      WALLET_NOT_AVAILABLE_FREEXP,
+     WALLET_NOT_AVAILABLE_CRYSTAL,
      WALLET_AVAILABLE_ASIA,
      WALLET_AVAILABLE_ASIA_GOLD,
      WALLET_AVAILABLE_ASIA_FREEXP,
+     WALLET_AVAILABLE_ASIA_CRYSTAL,
      WALLET_NOT_AVAILABLE_ASIA,
      WALLET_NOT_AVAILABLE_ASIA_GOLD,
      WALLET_NOT_AVAILABLE_ASIA_FREEXP,
+     WALLET_NOT_AVAILABLE_ASIA_CRYSTAL,
      POTAPOVQUESTS_SELECT_SUCCESS,
      POTAPOVQUESTS_SELECT_SERVER_ERROR,
      POTAPOVQUESTS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE,
@@ -2451,7 +2548,30 @@ class SYSTEM_MESSAGES(object):
      VEHICLECOMPARE_DISABLED,
      VEHICLECOMPARE_PREVIEWNOTALLOWED,
      PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION,
-     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES)
+     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES,
+     ROTATION_LOCK,
+     ROTATION_UNLOCK,
+     ROTATION_VEHICLEISLOCKED,
+     RANKED_NOTIFICATION_CONGRATULATIONS,
+     RANKED_NOTIFICATIONS_SINGLERANK_TEXT,
+     RANKED_NOTIFICATIONS_SINGLEVEHRANK_TEXT,
+     RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL,
+     RANKED_NOTIFICATIONS_BONUSNAME_CREDITS,
+     RANKED_NOTIFICATIONS_BONUSNAME_GOLD,
+     RANKED_NOTIFICATIONS_BONUSNAME_POINTS,
+     RANKED_NOTIFICATIONS_BONUSNAME_OTHER,
+     RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAY,
+     RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAYS,
+     RANKED_NOTIFICATIONS_CYCLERESULTS,
+     RANKED_NOTIFICATIONS_SEASONRESULTS,
+     RANKED_NOTIFICATION_FINAL_BEFORECOMMONLIST,
+     RANKED_NOTIFICATIONS_FINAL_BONUSNAME_CREDITS,
+     RANKED_NOTIFICATIONS_FINAL_BONUSNAME_GOLD,
+     RANKED_NOTIFICATIONS_FINAL_BONUSNAME_POINTS,
+     RANKED_NOTIFICATIONS_FINAL_BONUSNAME_LEAGUE,
+     RANKED_NOTIFICATIONS_FINAL_BONUSNAME_LEAGUE_CYCLE,
+     RANKED_NOTIFICATION_PRIMETIME,
+     RANKED_NOTIFICATION_NOTAVAILABLE)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):
@@ -2529,6 +2649,15 @@ class SYSTEM_MESSAGES(object):
     def customization_vehicle(cls, key0):
         outcome = '#system_messages:customization/vehicle_{}'.format(key0)
         if outcome not in cls.CUSTOMIZATION_VEHICLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getRankedNotificationBonusName(cls, extra, name):
+        outcome = '#system_messages:ranked/notifications{}/bonusName/{}'.format(extra, name)
+        if outcome not in cls.RANKED_NOTIFICATIONSALL_BONUSNAME_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

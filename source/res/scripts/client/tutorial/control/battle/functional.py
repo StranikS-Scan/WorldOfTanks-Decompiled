@@ -11,7 +11,7 @@ from gui.battle_control import avatar_getter
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from tutorial import g_tutorialWeaver
+from tutorial.control import g_tutorialWeaver
 from tutorial.control.battle import aspects
 from tutorial.control.battle.context import BattleClientCtx
 from tutorial.control.battle.context import ExtendedBattleClientCtx

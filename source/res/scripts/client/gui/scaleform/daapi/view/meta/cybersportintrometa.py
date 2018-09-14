@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyIntroView import BaseRallyIntroView
 
 class CyberSportIntroMeta(BaseRallyIntroView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseRallyIntroView
-    """
 
     def requestVehicleSelection(self):
         self._printOverrideError('requestVehicleSelection')

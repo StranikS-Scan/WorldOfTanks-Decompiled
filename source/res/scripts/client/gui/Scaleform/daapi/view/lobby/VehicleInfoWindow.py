@@ -4,13 +4,14 @@ from debug_utils import LOG_ERROR
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.shared import g_itemsCache
 from gui.shared.items_parameters import formatters
 from helpers import i18n, dependency
 from items import tankmen
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 
 class VehicleInfoWindow(VehicleInfoMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, ctx=None):
@@ -25,7 +26,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
         self.destroy()
 
     def getVehicleInfo(self):
-        vehicle = g_itemsCache.items.getItemByCD(self.vehicleCompactDescr)
+        vehicle = self.itemsCache.items.getItemByCD(self.vehicleCompactDescr)
         if vehicle is None:
             LOG_ERROR('There is error while showing vehicle info window: ', self.vehicleCompactDescr)
             return
@@ -77,7 +78,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
         else:
             tooltip = ''
         self.as_setCompareButtonDataS({'visible': self.comparisonBasket.isEnabled(),
-         'enabled': self.comparisonBasket.isReadyToAdd(g_itemsCache.items.getItemByCD(self.vehicleCompactDescr)),
+         'enabled': self.comparisonBasket.isReadyToAdd(self.itemsCache.items.getItemByCD(self.vehicleCompactDescr)),
          'label': MENU.VEHICLEINFO_COMPAREBTN_LABEL,
          'tooltip': tooltip})
 

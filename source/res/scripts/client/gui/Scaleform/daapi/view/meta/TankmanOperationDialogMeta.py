@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.dialogs.SimpleDialog import SimpleDialog
 
 class TankmanOperationDialogMeta(SimpleDialog):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends SimpleDialog
-    """
 
     def as_setDataS(self, data):
         """

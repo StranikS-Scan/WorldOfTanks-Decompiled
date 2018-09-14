@@ -4,14 +4,15 @@ from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared import g_itemsCache
 from gui.shared.items_parameters import params_helper, formatters as params_formatters, NO_DATA, MAX_RELATIVE_VALUE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.formatters import text_styles
 from gui.shared.money import ZERO_MONEY
+from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.shared import IItemsCache
 _TOOLTIP_MIN_WIDTH = 380
 _TOOLTIP_MAX_WIDTH = 420
 _AUTOCANNON_SHOT_DISTANCE = 400
@@ -71,6 +72,7 @@ class ShellBlockToolTipData(BlocksTooltipData):
 
 
 class ShellTooltipBlockConstructor(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, shell, configuration, leftPadding=20, rightPadding=20, params=None):
         self.shell = shell
@@ -112,13 +114,13 @@ class PriceBlockConstructor(ShellTooltipBlockConstructor):
         else:
             need = ZERO_MONEY
             if buyPrice:
-                money = g_itemsCache.items.stats.money
+                money = self.itemsCache.items.stats.money
                 price = shell.altPrice or shell.buyPrice
                 need = price - money
                 need = need.toNonNegative()
                 defPrice = shell.defaultAltPrice or shell.defaultPrice
                 addCreditPrice = price.credits > 0
-                if price.isAllSet() and not g_itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits:
+                if price.isAllSet() and not self.itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits:
                     addCreditPrice = False
                 addGoldPrice = price.gold > 0
                 addDelimeter = addCreditPrice and addGoldPrice
@@ -147,7 +149,7 @@ class SimplifiedStatsBlockConstructor(ShellTooltipBlockConstructor):
         block = []
         if self.configuration.params:
             comparator = params_helper.shellOnVehicleComparator(self.shell, self.configuration.vehicle)
-            stockParams = params_helper.getParameters(g_itemsCache.items.getStockVehicle(self.configuration.vehicle.intCD))
+            stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(self.configuration.vehicle.intCD))
             for parameter in params_formatters.getRelativeDiffParams(comparator):
                 delta = parameter.state[1]
                 value = parameter.value
@@ -270,7 +272,7 @@ class StatusBlockConstructor(ShellTooltipBlockConstructor):
         status = None
         checkBuying = configuration.checkBuying
         if checkBuying:
-            couldBeBought, reason = shell.mayPurchase(g_itemsCache.items.stats.money)
+            couldBeBought, reason = shell.mayPurchase(self.itemsCache.items.stats.money)
             if not couldBeBought:
                 status = '#tooltips:shellFits/%s' % reason
         statusHeader, statusText = getComplexStatus(status)

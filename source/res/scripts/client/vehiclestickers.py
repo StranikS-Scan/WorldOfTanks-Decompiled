@@ -3,13 +3,15 @@
 from collections import namedtuple
 import math
 import Account
+import BigWorld
 from AvatarInputHandler import mathUtils
-from gui.LobbyContext import g_lobbyContext
 import items
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
+from helpers import dependency
 from items import vehicles
 import Math
 import BattleReplay
-from debug_utils import *
+from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import stricted_loading
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames, TankNodeNames
 TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
@@ -31,6 +33,7 @@ class SlotTypes():
 
 
 class ModelStickers():
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, vDesc, emblemSlots, onHull=True, insigniaRank=0):
         self.__slotsByType = {}
@@ -119,7 +122,7 @@ class ModelStickers():
                 if slotType != SlotTypes.CLAN:
                     self.__doAttachStickers(slotType)
             if slotType == SlotTypes.CLAN:
-                serverSettings = g_lobbyContext.getServerSettings()
+                serverSettings = self.lobbyContext.getServerSettings()
                 if serverSettings is not None and serverSettings.roaming.isInRoaming() or self.__isLoadingClanEmblems:
                     continue
                 self.__isLoadingClanEmblems = True

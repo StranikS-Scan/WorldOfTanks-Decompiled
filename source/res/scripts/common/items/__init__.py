@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/__init__.py
+from functools import partial
 import ResMgr
 import nations
 from items import _xml
 from constants import IS_CLIENT, IS_CELLAPP, ITEM_DEFS_PATH
 if IS_CLIENT:
     from helpers import i18n
+_g_itemTypes = None
 ITEM_TYPE_NAMES = ('_reserved', 'vehicle', 'vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'tankman', 'optionalDevice', 'shell', 'equipment')
 
 class ITEM_TYPES(dict):
@@ -24,12 +26,101 @@ SIMPLE_ITEM_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehi
 SIMPLE_ITEM_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in SIMPLE_ITEM_TYPE_NAMES))
 VEHICLE_COMPONENT_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio')
 VEHICLE_COMPONENT_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in VEHICLE_COMPONENT_TYPE_NAMES))
+EQUIPMENT_TYPE_NAMES = ('regular', 'battleBoosters')
+
+class EQUIPMENT_TYPES(dict):
+
+    def __init__(self):
+        super(dict, self).__init__()
+        for idx, name in enumerate(EQUIPMENT_TYPE_NAMES):
+            self[name] = idx
+            setattr(self, name, idx)
+
+
+EQUIPMENT_TYPES = EQUIPMENT_TYPES()
+
+class ItemsPrices(object):
+
+    def __init__(self, prices=None):
+        self._itemsPriceInfo = {}
+        if prices:
+            self.update(prices)
+
+    def __getitem__(self, descriptor):
+        info = self.getPrices(descriptor)
+        return self._tuplePrice(info)
+
+    def __setitem__(self, descriptor, prices):
+        if isinstance(prices, tuple):
+            info = {}
+            if prices[0] != 0:
+                info['credits'] = prices[0]
+            if prices[1] != 0:
+                info['gold'] = prices[1]
+            if len(prices) > 2:
+                info['crystal'] = prices[2]
+            self._itemsPriceInfo[descriptor] = info
+        elif isinstance(prices, dict):
+            self._itemsPriceInfo[descriptor] = prices
+        else:
+            raise TypeError('price info could be tuple or dict!')
+
+    def __delitem__(self, descriptor):
+        del self._itemsPriceInfo[descriptor]
+
+    def __contains__(self, key):
+        return key in self._itemsPriceInfo
+
+    def __len__(self):
+        return len(self._itemsPriceInfo)
+
+    def get(self, key, defaultValue=None):
+        return self.__getitem__(key) if key in self._itemsPriceInfo else defaultValue
+
+    def items(self):
+        return [ (compDescr, self._tuplePrice(prices)) for compDescr, prices in self._itemsPriceInfo.iteritems() ]
+
+    def update(self, other):
+        for d, p in other.iteritems():
+            self.__setitem__(d, p)
+
+    def getSpecialItemPrices(self, currencyCode):
+        return {compDescr:prices for compDescr, prices in self._itemsPriceInfo.iteritems() if currencyCode in prices}
+
+    @staticmethod
+    def _tuplePrice(priceInfo):
+        return (priceInfo.get('credits', 0), priceInfo.get('gold', 0))
+
+    def getPrices(self, descriptor):
+        return self._itemsPriceInfo[descriptor]
+
+    def getPrice(self, descriptor, currencyCode):
+        return self._itemsPriceInfo[descriptor].get(currencyCode, 0)
+
+    def getCrystalPrice(self, descriptor):
+        return self._itemsPriceInfo[descriptor].get('crystal', 0)
+
+    def hasPriceIn(self, descriptor, currencyCode):
+        return currencyCode in self._itemsPriceInfo[descriptor]
+
+    def __repr__(self):
+        return repr(self._itemsPriceInfo)
+
+    def intersect(self, other):
+        otherStorage = other._itemsPriceInfo
+        result = {}
+        for k, v in self._itemsPriceInfo.iteritems():
+            if k in otherStorage and otherStorage[k] != v:
+                result[k] = v
+
+        return ItemsPrices(result)
+
 
 def init(preloadEverything, pricesToCollect=None):
     global _g_itemTypes
     _g_itemTypes = _readItemTypes()
     if pricesToCollect is not None:
-        pricesToCollect['itemPrices'] = {}
+        pricesToCollect['itemPrices'] = ItemsPrices()
         pricesToCollect['vehiclesRentPrices'] = {}
         pricesToCollect['notInShopItems'] = set()
         pricesToCollect['vehiclesNotToBuy'] = set()

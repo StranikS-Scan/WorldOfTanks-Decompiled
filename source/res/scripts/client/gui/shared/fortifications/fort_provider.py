@@ -12,11 +12,12 @@ from gui.shared.fortifications.interfaces import IFortListener
 from gui.shared.fortifications.settings import FORT_PROVIDER_INITIAL_FLAGS, CLIENT_FORT_STATE
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.listeners_collection import ListenersCollection
-from gui.LobbyContext import g_lobbyContext
+from helpers import dependency
 from helpers import i18n
 from FortifiedRegionBase import FORT_ERROR, FORT_ERROR_NAMES
 from PlayerEvents import g_playerEvents
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from skeletons.gui.lobby_context import ILobbyContext
 
 class _ClientFortListeners(ListenersCollection):
 
@@ -46,6 +47,7 @@ def getFortErrorMessage(errorCode, errorString):
 
 
 class ClientFortProvider(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(ClientFortProvider, self).__init__()
@@ -110,12 +112,12 @@ class ClientFortProvider(object):
                 fortMgr.onFortStateChanged += self.__onFortStateChanged
             else:
                 LOG_ERROR('Fort manager is not found')
-            g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+            self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
             g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
             self.__controller = controls.createInitial()
             self.__controller.init(self.__clan, self.__listeners)
             states.create(self)
-            if not g_lobbyContext.getServerSettings().isFortsEnabled() and self.__cachedState is not None:
+            if not self.lobbyContext.getServerSettings().isFortsEnabled() and self.__cachedState is not None:
                 if self.__cachedState.getStateID() not in (CLIENT_FORT_STATE.UNSUBSCRIBED, CLIENT_FORT_STATE.DISABLED):
                     SystemMessages.pushI18nMessage(I18N_SM.FORTIFICATION_NOTIFICATION_TURNEDOFF, type=SystemMessages.SM_TYPE.Warning)
                     showFortDisabledDialog()
@@ -134,7 +136,7 @@ class ClientFortProvider(object):
             fortMgr.onFortUpdateReceived -= self.__onFortUpdateReceived
             fortMgr.onFortStateChanged -= self.__onFortStateChanged
         g_playerEvents.onCenterIsLongDisconnected -= self.__onCenterIsLongDisconnected
-        g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
 
     @async
     def sendRequest(self, ctx, callback=None):

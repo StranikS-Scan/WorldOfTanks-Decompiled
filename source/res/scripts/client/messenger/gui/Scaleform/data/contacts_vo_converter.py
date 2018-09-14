@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/contacts_vo_converter.py
 from constants import WG_GAMES
 from gui import makeHtmlString
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -15,6 +14,7 @@ from messenger.m_constants import USER_TAG
 from messenger.storage import storage_getter
 from predefined_hosts import g_preDefinedHosts
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.lobby_context import ILobbyContext
 _CATEGORY_I18N_KEY = {CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_FRIENDS,
  CONTACTS_ALIASES.GROUP_FORMATIONS_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_FORMATIONS,
  CONTACTS_ALIASES.GROUP_OTHER_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER}
@@ -108,6 +108,7 @@ class CategoryConverter(object):
 class ContactConverter(object):
     _colors = {}
     settingsCore = dependency.descriptor(ISettingsCore)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     @classmethod
     def getIcons(self, tags, note):
@@ -180,7 +181,7 @@ class ContactConverter(object):
     def makeBaseUserProps(cls, contact):
         return {'userName': contact.getName(),
          'tags': list(contact.getTags()),
-         'region': g_lobbyContext.getRegionCode(contact.getID()),
+         'region': cls.lobbyContext.getRegionCode(contact.getID()),
          'clanAbbrev': contact.getClanAbbrev()}
 
     @classmethod

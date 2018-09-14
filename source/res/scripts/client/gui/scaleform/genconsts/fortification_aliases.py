@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/FORTIFICATION_ALIASES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class FORTIFICATION_ALIASES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     FORT_BUILDING_PROCESS_WINDOW_ALIAS = 'FortBuildingProcessWindow'
     FORT_FIXED_PLAYERS_WINDOW_ALIAS = 'FortFixedPlayersWindow'
     FORTIFICATIONS_VIEW_ALIAS = 'FortificationsView'

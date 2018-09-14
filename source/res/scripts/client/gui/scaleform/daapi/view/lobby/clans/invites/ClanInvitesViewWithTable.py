@@ -93,6 +93,7 @@ class ClanInvitesAbstractDataProvider(SortableDAAPIDataProvider):
         self.__showMoreBtn = False
         self.__isActionsAllowed = True
         self.__extraData = {}
+        self._sort = ()
         return
 
     @property

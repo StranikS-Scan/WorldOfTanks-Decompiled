@@ -8,10 +8,10 @@ from helpers import i18n
 from gui import SystemMessages
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.shared import g_itemsCache
 from messenger import MessengerEntry, g_settings
 from messenger.storage import storage_getter
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.shared import IItemsCache
 
 class DENUNCIATIONS(object):
     APPEAL = 'appeal'
@@ -73,9 +73,10 @@ class Denunciator(object):
 
 
 class LobbyDenunciator(Denunciator):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def getDenunciationsLeft(self):
-        return g_itemsCache.items.stats.denunciationsLeft
+        return self.itemsCache.items.stats.denunciationsLeft
 
     def _getViolatorKind(self, player, violatorID):
         return constants.VIOLATOR_KIND.UNKNOWN

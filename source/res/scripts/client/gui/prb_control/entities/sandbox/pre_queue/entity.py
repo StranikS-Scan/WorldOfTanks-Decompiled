@@ -5,7 +5,6 @@ from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
@@ -19,6 +18,8 @@ from gui.prb_control.entities.sandbox.pre_queue.vehicles_watcher import SandboxV
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
 from gui.prb_control.storages import prequeue_storage_getter
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 
 class SandboxSubscriber(PreQueueSubscriber):
     """
@@ -55,6 +56,7 @@ class SandboxEntity(PreQueueEntity):
     """
     Sandbox entity
     """
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(SandboxEntity, self).__init__(FUNCTIONAL_FLAG.SANDBOX, QUEUE_TYPE.SANDBOX, SandboxSubscriber())
@@ -72,14 +74,14 @@ class SandboxEntity(PreQueueEntity):
         self.storage.release()
         self.__watcher = SandboxVehiclesWatcher()
         self.__watcher.start()
-        g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         return super(SandboxEntity, self).init(ctx)
 
     def fini(self, ctx=None, woEvents=False):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         return super(SandboxEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def isInQueue(self):
@@ -135,7 +137,7 @@ class SandboxEntity(PreQueueEntity):
         Args:
             diff: settings diff
         """
-        if not g_lobbyContext.getServerSettings().isSandboxEnabled():
+        if not self.lobbyContext.getServerSettings().isSandboxEnabled():
 
             def __leave(_=True):
                 g_prbCtrlEvents.onPreQueueLeft()

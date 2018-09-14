@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/VibroManager.py
 import copy
+import BigWorld
 from EffectsSettings import EffectsSettings
 from VibroEffect import VibroEffect
 import Settings
-from debug_utils import *
 import Event
 from PlayerEvents import g_playerEvents
+from debug_utils import LOG_DEBUG
 g_instance = None
 
 class VibroManager:

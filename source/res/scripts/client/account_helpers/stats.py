@@ -3,9 +3,10 @@
 import AccountCommands
 import items
 from functools import partial
+from debug_utils import LOG_DEBUG_DEV, LOG_WARNING, LOG_ERROR
 from diff_utils import synchronizeDicts
 from items import vehicles
-from debug_utils import *
+from gui.shared.money import Currency
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']
 _CHASSIS = items.ITEM_TYPE_INDICES['vehicleChassis']
 _TURRET = items.ITEM_TYPE_INDICES['vehicleTurret']
@@ -17,7 +18,7 @@ _TANKMAN = items.ITEM_TYPE_INDICES['tankman']
 _OPTIONALDEVICE = items.ITEM_TYPE_INDICES['optionalDevice']
 _SHELL = items.ITEM_TYPE_INDICES['shell']
 _EQUIPMENT = items.ITEM_TYPE_INDICES['equipment']
-_SIMPLE_VALUE_STATS = ('credits', 'fortResource', 'gold', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits')
+_SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits') + Currency.ALL
 _DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'refSystem')
 _GROWING_SET_STATS = ('unlocks', 'eliteVehicles', 'multipliedXPVehs')
 _ACCOUNT_STATS = ('clanDBID', 'attrs', 'premiumExpiryTime', 'autoBanTime', 'globalRating')
@@ -187,7 +188,7 @@ class Stats(object):
             self.__account.shop.waitForSync(partial(self.__berths_onShopSynced, callback))
             return
 
-    def setMoney(self, credits, gold=0, freeXP=0, callback=None):
+    def setMoney(self, credits, gold=0, freeXP=0, crystal=0, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -197,7 +198,7 @@ class Stats(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_SET_MONEY, credits, gold, freeXP, proxy)
+            self.__account._doCmdInt4(AccountCommands.CMD_SET_MONEY, credits, gold, freeXP, crystal, proxy)
             return
 
     def addExperience(self, vehTypeName, xp, callback=None):

@@ -2,10 +2,7 @@
 # Embedded file name: scripts/client/Vibroeffects/Controllers/TrackBreakingController.py
 import BigWorld
 import Math
-from Math import Matrix
-from debug_utils import *
 import math
-import copy
 from Vibroeffects.Controllers.OnceController import OnceController
 
 class TrackBreakingController:

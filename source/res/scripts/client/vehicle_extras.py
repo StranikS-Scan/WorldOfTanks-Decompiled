@@ -161,7 +161,6 @@ class Fire(EntityExtra):
         data['_isStarted'] = False
         vehicle = data['entity']
         isUnderwater = vehicle.appearance.isUnderwater
-        data['wasUnderwater'] = isUnderwater
         if not isUnderwater:
             self.__playEffect(data)
         data['_isStarted'] = True
@@ -196,13 +195,11 @@ class Fire(EntityExtra):
 
     def checkUnderwater(self, vehicle, isVehicleUnderwater):
         data = vehicle.extras[self.index]
-        wasUnderwater = data.get('wasUnderwater', False)
-        if isVehicleUnderwater and not wasUnderwater:
+        if isVehicleUnderwater:
             effectsListPlayer = self.__getEffectsListPlayer(data)
             if effectsListPlayer is not None:
                 effectsListPlayer.stop(forceCallback=True)
                 del data['_effectsPlayer']
-        if not isVehicleUnderwater and wasUnderwater:
+        if not isVehicleUnderwater:
             self.__playEffect(data)
-        data['wasUnderwater'] = isVehicleUnderwater
         return

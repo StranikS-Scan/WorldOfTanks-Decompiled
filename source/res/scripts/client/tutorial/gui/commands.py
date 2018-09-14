@@ -34,7 +34,7 @@ class _PyInvokeMethod(GUICommand):
             if method is None:
                 break
 
-        if type(method) not in [types.MethodType, types.FunctionType]:
+        if type(method) not in (types.MethodType, types.FunctionType):
             method = None
         return (ns, method)
 

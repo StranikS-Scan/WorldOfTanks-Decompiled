@@ -6,16 +6,18 @@ import BigWorld
 import Event
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
-from gui.LobbyContext import g_lobbyContext
 from gui.SystemMessages import SM_TYPE
-from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers import dependency
 from helpers.local_cache import FileLocalCache
 from items import getTypeOfCompactDescr, ITEM_TYPE_NAMES
 from items.vehicles import VehicleDescr
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 PARAMS_AFFECTED_TANKMEN_SKILLS = ('camouflage', 'brotherhood', 'commander_eagleEye', 'driver_virtuoso', 'driver_badRoadsKing', 'radioman_inventor', 'radioman_finder')
 MAX_VEHICLES_TO_COMPARE_COUNT = 20
 _NO_EQUIPMENT_LAYOUT = [None, None, None]
@@ -33,7 +35,8 @@ def isValidVehicleForComparing(vehicle):
     return validCriteria(vehicle)
 
 
-def getSuitableChassis(vehicle):
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getSuitableChassis(vehicle, itemsCache=None):
     """
     :param vehicle: instance of vehicle
     :return: list of chassis that is not installed and fit provided vehicle
@@ -42,7 +45,7 @@ def getSuitableChassis(vehicle):
     for _, _, nodeCD, _ in vehicle.getUnlocksDescrs():
         itemTypeID = getTypeOfCompactDescr(nodeCD)
         if itemTypeID == GUI_ITEM_TYPE.CHASSIS:
-            chassisCand = g_itemsCache.items.getItemByCD(nodeCD)
+            chassisCand = itemsCache.items.getItemByCD(nodeCD)
             if chassisCand.mayInstall(vehicle) and not chassisCand.isInstalled(vehicle):
                 chassis.append(chassisCand)
 
@@ -341,6 +344,8 @@ class _VehCompareData(object):
 
 
 class VehComparisonBasket(IVehicleComparisonBasket):
+    itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(VehComparisonBasket, self).__init__()
@@ -358,7 +363,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         self.__vehicles = []
 
     def onLobbyStarted(self, ctx):
-        self.__isEnabled = g_lobbyContext.getServerSettings().isVehicleComparingEnabled()
+        self.__isEnabled = self.lobbyContext.getServerSettings().isVehicleComparingEnabled()
 
     def onLobbyInited(self, event):
         if self.isEnabled() and self.isAvailable() and not self.isLocked:
@@ -566,12 +571,12 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         defShellIndex = initParameters.get('shellIndex')
         defHasCamouflage = initParameters.get('hasCamouflage')
         try:
-            vehicle = g_itemsCache.items.getItemByCD(intCD)
+            vehicle = self.itemsCache.items.getItemByCD(intCD)
             copyVehicle = Vehicle(_makeStrCD(vehicle))
             hasCamouflage = _isVehHasCamouflage(copyVehicle)
             if hasCamouflage:
                 _removeVehicleCamouflages(copyVehicle)
-            stockVehicle = g_itemsCache.items.getStockVehicle(intCD)
+            stockVehicle = self.itemsCache.items.getStockVehicle(intCD)
             vehCmpData = _VehCompareData(intCD, defStrCD or _makeStrCD(copyVehicle), _makeStrCD(stockVehicle), fromCache)
             self.__updateInventoryEquipment(vehCmpData, vehicle)
             self.__updateInventoryData(vehCmpData, vehicle)
@@ -638,12 +643,12 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         self.onChange(_ChangedData(addedIDXs, addedCDs, removedIDXs, removedCDs, self.__isFull != oldVal))
 
     def __initHandlers(self):
-        g_itemsCache.onSyncCompleted += self.__onCacheResync
-        g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.itemsCache.onSyncCompleted += self.__onCacheResync
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
 
     def __disposeHandlers(self):
-        g_itemsCache.onSyncCompleted -= self.__onCacheResync
-        settings = g_lobbyContext.getServerSettings()
+        self.itemsCache.onSyncCompleted -= self.__onCacheResync
+        settings = self.lobbyContext.getServerSettings()
         if settings:
             settings.onServerSettingsChange -= self.__onServerSettingChanged
 
@@ -660,7 +665,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
                 for changedVehCD in vehDiff:
                     for idx, vehCompareData in enumerate(self.__vehicles):
                         if changedVehCD == vehCompareData.getVehicleCD():
-                            vehicle = g_itemsCache.items.getItemByCD(changedVehCD)
+                            vehicle = self.itemsCache.items.getItemByCD(changedVehCD)
                             isCachedVehInInv = vehicle.isInInventory
                             if vehCompareData.isInInventory() != isCachedVehInInv:
                                 self.__updateInventoryData(vehCompareData, vehicle)

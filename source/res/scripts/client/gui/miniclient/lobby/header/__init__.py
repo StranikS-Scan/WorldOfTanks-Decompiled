@@ -11,4 +11,3 @@ def configure_pointcuts(config):
     _fight_button.DisableFightButtonPointcut(config)
     _account_popover.ClanBtnsUnavailable()
     _account_popover.MyClanInvitesBtnUnavailable()
-    _account_popover.CrewButtonStatusPointcut()

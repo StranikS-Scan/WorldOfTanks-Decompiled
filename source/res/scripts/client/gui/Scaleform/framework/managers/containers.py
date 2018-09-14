@@ -13,10 +13,12 @@ from shared_utils import findFirst
 _POPUPS_CONTAINERS = (ViewTypes.TOP_WINDOW, ViewTypes.BROWSER, ViewTypes.WINDOW)
 _CONTAINERS_DESTROY_ORDER = (ViewTypes.DEFAULT,
  ViewTypes.LOBBY_SUB,
+ ViewTypes.LOBBY_TOP_SUB,
  ViewTypes.WINDOW,
  ViewTypes.BROWSER,
  ViewTypes.TOP_WINDOW,
  ViewTypes.WAITING,
+ ViewTypes.OVERLAY,
  ViewTypes.CURSOR,
  ViewTypes.SERVICE_LAYOUT)
 
@@ -51,6 +53,15 @@ class AbstractViewContainer(object):
         :param pyView: view to be removed from this container.
         """
         raise NotImplementedError('AbstractViewContainer.remove must be implemented')
+
+    def removeSubContainers(self, pyView):
+        """
+        Removes all sub containers of the given view.
+        
+        :param pyView: view to be removed from this container.
+        """
+        for containerSettings in pyView.getSubContainersSettings():
+            self._manager.removeContainer(containerSettings.type)
 
     def clear(self):
         """
@@ -113,17 +124,13 @@ class DefaultContainer(AbstractViewContainer):
     def remove(self, pyView):
         if self.__view == pyView:
             self.__view.onModuleDispose -= self.__handleModuleDispose
-            self._manager.as_hideS(self.__view.uniqueName)
             self.__view = None
         return
 
     def clear(self):
         if self.__view is not None:
-            subContainerType = self.__view.getSubContainerType()
-            if subContainerType is not None:
-                self._manager.removeContainer(subContainerType)
+            self.removeSubContainers(self.__view)
             self.__view.onModuleDispose -= self.__handleModuleDispose
-            self._manager.as_hideS(self.__view.uniqueName)
             self.__view.destroy()
             self.__view = None
         return
@@ -132,11 +139,8 @@ class DefaultContainer(AbstractViewContainer):
         return True
 
     def __handleModuleDispose(self, pyView):
-        subContainerType = pyView.getSubContainerType()
-        if subContainerType is not None:
-            self._manager.removeContainer(subContainerType)
+        self.removeSubContainers(pyView)
         self.remove(pyView)
-        return
 
     def getView(self, criteria=None):
         result = None
@@ -196,7 +200,6 @@ class PopUpContainer(AbstractViewContainer):
         if uniqueName in self.__popUps:
             popUp = self.__popUps.pop(uniqueName)
             popUp.onModuleDispose -= self.__handleModuleDispose
-            self._manager.as_hideS(popUp.uniqueName)
             LOG_DEBUG('PopUp has been successfully removed', pyView, uniqueName)
         else:
             LOG_WARNING('PopUp not found', pyView, uniqueName)
@@ -207,14 +210,9 @@ class PopUpContainer(AbstractViewContainer):
     def clear(self):
         while len(self.__popUps):
             _, popUp = self.__popUps.popitem()
-            subContainerType = popUp.getSubContainerType()
-            if subContainerType is not None:
-                self._manager.removeContainer(subContainerType)
+            self.removeSubContainers(popUp)
             popUp.onModuleDispose -= self.__handleModuleDispose
-            self._manager.as_hideS(popUp.uniqueName)
             popUp.destroy()
-
-        return
 
     def getView(self, criteria=None):
         popUp = None
@@ -235,7 +233,7 @@ class PopUpContainer(AbstractViewContainer):
             for popUp in self.__popUps.itervalues():
                 try:
                     if isinstance(popUp, WindowViewMeta):
-                        if popUp.as_isModalS() == isModal:
+                        if popUp.isViewModal() == isModal:
                             result += 1
                 except AttributeError:
                     LOG_CURRENT_EXCEPTION()
@@ -263,11 +261,8 @@ class PopUpContainer(AbstractViewContainer):
         return findFirst(find, self.__popUps.iteritems(), ('', None))[1]
 
     def __handleModuleDispose(self, pyView):
-        subContainerType = pyView.getSubContainerType()
-        if subContainerType is not None:
-            self._manager.removeContainer(subContainerType)
+        self.removeSubContainers(pyView)
         self.remove(pyView)
-        return
 
 
 class ContainerManager(ContainerManagerMeta):
@@ -345,7 +340,7 @@ class ContainerManager(ContainerManagerMeta):
                 if canceledViews:
                     self.__cancelLoadingForPyEntities(canceledViews)
             if isViewExists:
-                pyEntity.validate()
+                pyEntity.validate(*args, **kwargs)
             else:
                 self.__scopeController.addLoadingView(pyEntity, False)
         return
@@ -364,31 +359,25 @@ class ContainerManager(ContainerManagerMeta):
             return False
             return
 
-    def addContainer(self, viewType, name, container=None):
+    def addContainer(self, viewType, name, clazz=None):
         """
-        Adds container to managed containers. The method can be used to create subcontainer of
+        Adds container to managed containers. The method can be used to create sub container of
         a top level view (if it can include subview)
         
         :param viewType: View type. @see ViewTypes.
         :param name: Container name.
-        :param container: Instance of object extending AbstractViewContainer.
-        :return:
+        :param clazz: A container class derived from AbstractViewContainer.
+        
+        :return: True if the container has been successfully created and registered,
+                 otherwise - False.
         """
-        result = True
-        if viewType not in self.__containers:
-            if container is None:
-                self.__containers[viewType] = DefaultContainer(viewType, weakref.proxy(self))
-                self.as_registerContainerS(viewType, name)
-            elif isinstance(container, AbstractViewContainer):
-                self.__containers[viewType] = container
-                self.as_registerContainerS(viewType, name)
-            else:
-                LOG_ERROR('Container must be implemented IViewContainer', container)
-                result = False
-        else:
+        if viewType in self.__containers:
             LOG_ERROR('Container already registered', viewType)
-            result = False
-        return result
+            return False
+        clazz = clazz or DefaultContainer
+        self.__containers[viewType] = clazz(viewType=viewType, manager=weakref.proxy(self))
+        self.as_registerContainerS(viewType, name)
+        return True
 
     def removeContainer(self, viewType):
         """
@@ -539,17 +528,16 @@ class ContainerManager(ContainerManagerMeta):
                     self.as_showS(pyView.uniqueName, 0, 0)
                     pyView.create()
                     if not pyView.isDisposed():
-                        subContainerType = pyView.getSubContainerType()
-                        if subContainerType is not None:
-                            LOG_DEBUG('Sub container {} is created for view {}.'.format(subContainerType, str(pyView)))
-                            self.addContainer(subContainerType, pyView.uniqueName)
+                        for subContainerSettings in pyView.getSubContainersSettings():
+                            LOG_DEBUG('Sub container {} is created for view {}.'.format(subContainerSettings, str(pyView)))
+                            self.addContainer(subContainerSettings.type, pyView.uniqueName, subContainerSettings.clazz)
+
                         LOG_DEBUG('View {} is added to container {}.'.format(str(pyView), str(container)))
                         self.onViewAddedToContainer(container, pyView)
                     else:
                         LOG_DEBUG('View {} has been destroyed during populating.'.format(str(pyView)))
             else:
                 LOG_DEBUG('{} view loading is cancelled because its scope has been destroyed.'.format(str(pyView)))
-                self.as_hideS(pyView.uniqueName)
                 pyView.destroy()
         else:
             LOG_ERROR('Type {} of view {} is not supported or sub container has not been properly created'.format(viewType, pyView))

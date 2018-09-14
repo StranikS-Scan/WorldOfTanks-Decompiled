@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class ResearchPanelMeta(BaseDAAPIComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIComponent
-    """
 
     def goToResearch(self):
         self._printOverrideError('goToResearch')
@@ -33,3 +27,6 @@ class ResearchPanelMeta(BaseDAAPIComponent):
 
     def as_actionIGRDaysLeftS(self, visible, value):
         return self.flashObject.as_actionIGRDaysLeft(visible, value) if self._isDAAPIInited() else None
+
+    def as_setNavigationEnabledS(self, value):
+        return self.flashObject.as_setNavigationEnabled(value) if self._isDAAPIInited() else None

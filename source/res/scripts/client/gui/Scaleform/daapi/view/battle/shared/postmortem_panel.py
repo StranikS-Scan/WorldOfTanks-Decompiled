@@ -257,7 +257,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                 battleCtx = self.sessionProvider.getCtx()
                 if killerVehID and not battleCtx.isCurrentPlayer(killerVehID) and battleCtx.getArenaDP().getVehicleInfo(killerVehID).vehicleType.compactDescr:
                     showVehicle = True
-                    vTypeInfoVO = battleCtx.getArenaDP().getVehicleInfo(killerVehID).vehicleType
+                    vInfoVO = battleCtx.getArenaDP().getVehicleInfo(killerVehID)
+                    vTypeInfoVO = vInfoVO.vehicleType
                     vehLvl = int2roman(vTypeInfoVO.level)
                     vehImg = _VEHICLE_SMALL_ICON_RES_PATH.format(vTypeInfoVO.iconName)
                     vehClass = Vehicle.getTypeBigIconPath(vTypeInfoVO.classTag, False)

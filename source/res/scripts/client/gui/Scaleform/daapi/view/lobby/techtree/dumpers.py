@@ -191,11 +191,11 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
                 vehicleBtnLabel = MENU.RESEARCH_SHOWINPREVIEWBTN_LABEL
         else:
             vClass.update({'name': item.itemTypeName})
-        credits, gold = node['GUIPrice']
+        price = node['GUIPrice']
         data = {'longName': item.longUserName,
          'smallIconPath': item.iconSmall,
          'earnedXP': node['earnedXP'],
-         'shopPrice': (credits, gold, getActionPriceData(item)),
+         'shopPrice': (price.credits, price.gold, getActionPriceData(item)),
          'unlockProps': node['unlockProps']._makeTuple(),
          'status': status,
          'statusLevel': statusLevel,
@@ -286,7 +286,7 @@ class NationObjDumper(_BaseDumper):
     def _getVehicleData(self, node, item):
         nodeCD = node['id']
         tags = item.tags
-        credits, gold = node['GUIPrice']
+        price = node['GUIPrice']
         status, statusLevel = self._getVehicleStatus(item)
         return {'id': nodeCD,
          'state': node['state'],
@@ -298,7 +298,7 @@ class NationObjDumper(_BaseDumper):
          'iconPath': item.icon,
          'smallIconPath': item.iconSmall,
          'earnedXP': node['earnedXP'],
-         'shopPrice': (credits, gold, getActionPriceData(item)),
+         'shopPrice': (price.credits, price.gold, getActionPriceData(item)),
          'displayInfo': node['displayInfo'],
          'unlockProps': node['unlockProps']._makeTuple(),
          'status': status,

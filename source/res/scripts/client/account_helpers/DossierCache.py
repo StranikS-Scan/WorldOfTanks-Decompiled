@@ -7,8 +7,8 @@ import os
 import base64
 from SyncController import SyncController
 from PlayerEvents import g_playerEvents as events
-from debug_utils import *
 from constants import DOSSIER_TYPE
+from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 class DossierCache(object):
 

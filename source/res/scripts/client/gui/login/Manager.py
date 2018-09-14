@@ -5,20 +5,24 @@ import time
 import BigWorld
 import Settings
 import constants
-from ConnectionManager import connectionManager, CONNECTION_METHOD
+from connection_mgr import CONNECTION_METHOD
 from Preferences import Preferences
 from Servers import Servers, DevelopmentServers
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, makeHtmlString, GUI_SETTINGS
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import ONE_MINUTE
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_ENABLED, AUTO_LOGIN_QUERY_URL
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 _PERIPHERY_DEFAULT_LIFETIME = 15 * ONE_MINUTE
 
 class Manager(ILoginManager):
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         self._preferences = None
@@ -31,10 +35,10 @@ class Manager(ILoginManager):
             self.__servers = DevelopmentServers(self._preferences)
         else:
             self.__servers = Servers(self._preferences)
-        connectionManager.onLoggedOn += self._onLoggedOn
+        self.connectionMgr.onLoggedOn += self._onLoggedOn
 
     def fini(self):
-        connectionManager.onLoggedOn -= self._onLoggedOn
+        self.connectionMgr.onLoggedOn -= self._onLoggedOn
         self._preferences = None
         self.__servers.fini()
         self.__servers = None
@@ -60,7 +64,7 @@ class Manager(ILoginManager):
             loginParams['token2'] = self._preferences['token2']
         if not isSocialToken2Login:
             self._preferences['login_type'] = 'credentials'
-        connectionManager.initiateConnection(loginParams, password, serverName)
+        self.connectionMgr.initiateConnection(loginParams, password, serverName)
 
     def initiateRelogin(self, login, token2, serverName):
         loginParams = {'login': login,
@@ -69,7 +73,7 @@ class Manager(ILoginManager):
          'temporary': str(int(not self._preferences['remember_user'])),
          'auth_method': CONNECTION_METHOD.TOKEN2}
         self._preferences['server_name'] = serverName
-        connectionManager.initiateConnection(loginParams, '', serverName)
+        self.connectionMgr.initiateConnection(loginParams, '', serverName)
 
     def getPreference(self, key):
         return self._preferences[key]
@@ -90,7 +94,7 @@ class Manager(ILoginManager):
     def _onLoggedOn(self, responseData):
         name = responseData.get('name', 'UNKNOWN')
         token2 = responseData.get('token2', '')
-        g_lobbyContext.setCredentials(name, token2)
+        self.lobbyContext.setCredentials(name, token2)
         if self._preferences['remember_user']:
             self._preferences['name'] = name
             self._preferences['token2'] = token2
@@ -121,8 +125,8 @@ class Manager(ILoginManager):
         return
 
     def writePeripheryLifetime(self):
-        if AUTO_LOGIN_QUERY_ENABLED and connectionManager.peripheryID:
-            self._preferences['peripheryLifetime'] = pickle.dumps((connectionManager.peripheryID, time.time() + _PERIPHERY_DEFAULT_LIFETIME))
+        if AUTO_LOGIN_QUERY_ENABLED and self.connectionMgr.peripheryID:
+            self._preferences['peripheryLifetime'] = pickle.dumps((self.connectionMgr.peripheryID, time.time() + _PERIPHERY_DEFAULT_LIFETIME))
             self._preferences.writeLoginInfo()
 
     def _getHost(self, authMethod, hostName):

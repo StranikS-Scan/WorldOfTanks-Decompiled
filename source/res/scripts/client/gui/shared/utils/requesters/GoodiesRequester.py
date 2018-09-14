@@ -4,9 +4,10 @@ import BigWorld
 from adisp import async
 from collections import defaultdict, namedtuple
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+from skeletons.gui.shared.utils.requesters import IGoodiesRequester
 GoodieVariable = namedtuple('GoodieVariable', 'state finishTime count')
 
-class GoodiesRequester(AbstractSyncDataRequester):
+class GoodiesRequester(AbstractSyncDataRequester, IGoodiesRequester):
 
     @async
     def _requestCache(self, callback):

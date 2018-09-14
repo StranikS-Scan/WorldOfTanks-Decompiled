@@ -5,7 +5,6 @@ from collections import defaultdict
 import weakref
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
@@ -18,6 +17,7 @@ from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
+from helpers import dependency
 from helpers import time_utils
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
@@ -26,6 +26,7 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
+from skeletons.gui.lobby_context import ILobbyContext
 
 class _NotificationListener(object):
 
@@ -84,6 +85,7 @@ class ServiceChannelListener(_NotificationListener):
 
 
 class FortServiceChannelListener(_NotificationListener):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(FortServiceChannelListener, self).__init__()
@@ -97,13 +99,13 @@ class FortServiceChannelListener(_NotificationListener):
         result = super(FortServiceChannelListener, self).start(model)
         if result:
             g_messengerEvents.serviceChannel.onCustomMessageDataReceived += self.__onMsgReceived
-            g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+            self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         return result
 
     def stop(self):
         self.__fortInvitesData = None
         g_messengerEvents.serviceChannel.onCustomMessageDataReceived -= self.__onMsgReceived
-        g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         super(FortServiceChannelListener, self).stop()
         return
 
@@ -133,7 +135,8 @@ class FortServiceChannelListener(_NotificationListener):
         if 'isFortsEnabled' in diff and not diff['isFortsEnabled']:
             model = self._model()
             if model:
-                for battleID in self.__fortInvitesData.keys():
+                battleIDs = self.__fortInvitesData.keys()
+                for battleID in battleIDs:
                     storedClientID = self.__fortInvitesData[battleID]
                     _, formatted, settings = self.proto.serviceChannel.getMessage(storedClientID)
                     if formatted and settings:

@@ -1,18 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/STORE_CONSTANTS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class STORE_CONSTANTS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     SHOP = 'shop'
     INVENTORY = 'inventory'
+    STORE_ACTIONS = 'storeActions'
     SHOP_LINKAGE = 'ShopUI'
     INVENTORY_LINKAGE = 'InventoryUI'
+    STORE_ACTIONS_LINKAGE = 'StoreActionsViewUI'
     STORE = 'store'
+    ACTION_CARD_HERO_LINKAGE = 'ActionCardHeroUI'
+    ACTION_CARD_NORMAL_LINKAGE = 'ActionCardNormalUI'
+    ACTION_CARD_SMALL_LINKAGE = 'ActionCardSmallUI'
+    ACTION_COMING_SOON_LINKAGE = 'ActionComingSoonUI'
+    ACTION_EMPTY_LINKAGE = 'StoreActionsEmptyUI'
+    ACTION_CARD_SELECT_LINKAGE = 'ActionCardSelectUI'
+    ACTION_CARD_NORMAL_SELECT_FRAME_LABEL = 'normal'
+    ACTION_CARD_SMALL_SELECT_FRAME_LABEL = 'small'
     SHELL = 'shell'
     MODULE = 'module'
     VEHICLE = 'vehicle'

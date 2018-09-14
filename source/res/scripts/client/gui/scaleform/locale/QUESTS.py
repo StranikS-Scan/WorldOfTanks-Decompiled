@@ -7,6 +7,12 @@ Please, don't edit this file manually.
 from debug_utils import LOG_WARNING
 
 class QUESTS(object):
+    BONUSES_COMPENSATION = '#quests:bonuses/compensation'
+    MISSIONS_TAB_MARATHONS = '#quests:missions/tab/marathons'
+    MISSIONS_TAB_CATEGORIES = '#quests:missions/tab/categories'
+    MISSIONS_TAB_CURRENTVEHICLE = '#quests:missions/tab/currentVehicle'
+    MISSIONS_FILTERCOUNTER_CLOSEBUTTON = '#quests:missions/filterCounter/closeButton'
+    MISSIONS_FILTER_FILTERBUTTON = '#quests:missions/filter/filterButton'
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -26,6 +32,8 @@ class QUESTS(object):
     TOOLTIP_VEHTABLE_AVAILABILITY_BODY = '#quests:tooltip/vehTable/availability/body'
     TOOLTIP_VEHTABLE_DISCOUNT_HEADER = '#quests:tooltip/vehTable/discount/header'
     TOOLTIP_VEHTABLE_DISCOUNT_BODY = '#quests:tooltip/vehTable/discount/body'
+    BONUSES_COMPENSATION_HEADER = '#quests:bonuses/compensation/header'
+    BONUSES_COMPENSATION_BODY = '#quests:bonuses/compensation/body'
     BONUSES_ITEMS_NAME = '#quests:bonuses/items/name'
     BONUSES_BOOSTERS_NAME = '#quests:bonuses/boosters/name'
     BONUSES_DISCOUNT_NAME = '#quests:bonuses/discount/name'
@@ -45,6 +53,7 @@ class QUESTS(object):
     BONUSES_ITEM_TASK = '#quests:bonuses/item/task'
     BONUSES_CREDITS_DESCRIPTION = '#quests:bonuses/credits/description'
     BONUSES_GOLD_DESCRIPTION = '#quests:bonuses/gold/description'
+    BONUSES_CRYSTAL_DESCRIPTION = '#quests:bonuses/crystal/description'
     BONUSES_TANKMEN_DESCRIPTION = '#quests:bonuses/tankmen/description'
     BONUSES_ITEM_TANKWOMAN = '#quests:bonuses/item/tankwoman'
     BONUSES_ITEM_ADDITIONBONUS = '#quests:bonuses/item/additionBonus'
@@ -190,6 +199,12 @@ class QUESTS(object):
     DETAILS_RELATIONS2_NOTEQUAL = '#quests:details/relations2/notEqual'
     DETAILS_RELATIONS2_LESSOREQUAL = '#quests:details/relations2/lessOrEqual'
     DETAILS_RELATIONS2_GREATEROREQUAL = '#quests:details/relations2/greaterOrEqual'
+    DETAILS_REQUIREMENTSRELATION_GREATER = '#quests:details/requirementsRelation/greater'
+    DETAILS_REQUIREMENTSRELATION_LESS = '#quests:details/requirementsRelation/less'
+    DETAILS_REQUIREMENTSRELATION_EQUAL = '#quests:details/requirementsRelation/equal'
+    DETAILS_REQUIREMENTSRELATION_NOTEQUAL = '#quests:details/requirementsRelation/notEqual'
+    DETAILS_REQUIREMENTSRELATION_LESSOREQUAL = '#quests:details/requirementsRelation/lessOrEqual'
+    DETAILS_REQUIREMENTSRELATION_GREATEROREQUAL = '#quests:details/requirementsRelation/greaterOrEqual'
     DETAILS_GROUPS_OR = '#quests:details/groups/or'
     DETAILS_REQUIREMENTS_IGR = '#quests:details/requirements/igr'
     DETAILS_REQUIREMENTS_IGRBASIC = '#quests:details/requirements/igrBasic'
@@ -246,7 +261,19 @@ class QUESTS(object):
     DETAILS_REQUIREMENTS_VEHICLE_NOTRECEIVEDMULTXP = '#quests:details/requirements/vehicle/notReceivedMultXp'
     DETAILS_REQUIREMENTS_VEHICLE_ANY = '#quests:details/requirements/vehicle/any'
     DETAILS_REQUIREMENTS_LADDER = '#quests:details/requirements/ladder'
+    DETAILS_REQUIREMENTS_RELATION = '#quests:details/requirements/relation'
     DETAILS_CONDITIONS_TITLE = '#quests:details/conditions/title'
+    DETAILS_CONDITIONS_TARGET_TITLE = '#quests:details/conditions/target/title'
+    DETAILS_CONDITIONS_WIN_TITLE = '#quests:details/conditions/win/title'
+    DETAILS_CONDITIONS_ALIVE_TITLE = '#quests:details/conditions/alive/title'
+    DETAILS_CONDITIONS_ACHIEVEMENTS_TITLE = '#quests:details/conditions/achievements/title'
+    DETAILS_CONDITIONS_CLANKILLS_TITLE = '#quests:details/conditions/clanKills/title'
+    DETAILS_CONDITIONS_KILL_VEHICLES_TITLE = '#quests:details/conditions/kill_vehicles/title'
+    DETAILS_CONDITIONS_DAMAGE_TITLE = '#quests:details/conditions/damage/title'
+    DETAILS_CONDITIONS_PLAYBATTLE_TITLE = '#quests:details/conditions/playBattle/title'
+    DETAILS_CONDITIONS_TOP_TITLE = '#quests:details/conditions/top/title'
+    DETAILS_CONDITIONS_ALTERNATIVE = '#quests:details/conditions/alternative'
+    DETAILS_CONDITIONS_ADDITIONAL = '#quests:details/conditions/additional'
     DETAILS_CONDITIONS_VEHICLEDESCR = '#quests:details/conditions/vehicleDescr'
     DETAILS_CONDITIONS_VEHICLE = '#quests:details/conditions/vehicle'
     DETAILS_CONDITIONS_VEHICLEKILLS = '#quests:details/conditions/vehicleKills'
@@ -328,6 +355,8 @@ class QUESTS(object):
     DETAILS_CONDITIONS_VEHICLESKILLS = '#quests:details/conditions/vehiclesKills'
     DETAILS_CONDITIONS_VEHICLESKILLS_NOT = '#quests:details/conditions/vehiclesKills/not'
     DETAILS_CONDITIONS_VEHICLESKILLS_ALL = '#quests:details/conditions/vehiclesKills/all'
+    DETAILS_CONDITIONS_VEHICLESKILLS_LIST = '#quests:details/conditions/vehiclesKills/list'
+    DETAILS_CONDITIONS_VEHICLESKILLS_LIST_NOT = '#quests:details/conditions/vehiclesKills/list/not'
     DETAILS_CONDITIONS_VEHICLESKILLS_NATION = '#quests:details/conditions/vehiclesKills/nation'
     DETAILS_CONDITIONS_VEHICLESKILLS_NATION_NOT = '#quests:details/conditions/vehiclesKills/nation/not'
     DETAILS_CONDITIONS_VEHICLESKILLS_TYPE = '#quests:details/conditions/vehiclesKills/type'
@@ -370,9 +399,14 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_HEALTH = '#quests:details/conditions/cumulative/health'
     DETAILS_CONDITIONS_CUMULATIVE_XP = '#quests:details/conditions/cumulative/xp'
     DETAILS_CONDITIONS_CUMULATIVE_DIRECTHITS = '#quests:details/conditions/cumulative/directHits'
+    DETAILS_CONDITIONS_CUMULATIVE_DIRECTENEMYHITS = '#quests:details/conditions/cumulative/directEnemyHits'
+    DETAILS_CONDITIONS_CUMULATIVE_ENEMYHITS = '#quests:details/conditions/cumulative/enemyHits'
+    DETAILS_CONDITIONS_CUMULATIVE_INDIRECTENEMYHITS = '#quests:details/conditions/cumulative/indirectEnemyHits'
     DETAILS_CONDITIONS_CUMULATIVE_DIRECTTEAMHITS = '#quests:details/conditions/cumulative/directTeamHits'
     DETAILS_CONDITIONS_CUMULATIVE_EXPLOSIONHITS = '#quests:details/conditions/cumulative/explosionHits'
+    DETAILS_CONDITIONS_CUMULATIVE_EXPLOSIONENEMYHITS = '#quests:details/conditions/cumulative/explosionEnemyHits'
     DETAILS_CONDITIONS_CUMULATIVE_PIERCINGS = '#quests:details/conditions/cumulative/piercings'
+    DETAILS_CONDITIONS_CUMULATIVE_PIERCINGENEMYHITS = '#quests:details/conditions/cumulative/piercingEnemyHits'
     DETAILS_CONDITIONS_CUMULATIVE_SHOTS = '#quests:details/conditions/cumulative/shots'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDEALT = '#quests:details/conditions/cumulative/damageDealt'
     DETAILS_CONDITIONS_CUMULATIVE_MAXDAMAGE = '#quests:details/conditions/cumulative/maxDamage'
@@ -408,6 +442,24 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_MARKOFMASTERY4 = '#quests:details/conditions/cumulative/markOfMastery4'
     DETAILS_CONDITIONS_CUMULATIVE_INNERMODULECRITCOUNT = '#quests:details/conditions/cumulative/innerModuleCritCount'
     DETAILS_CONDITIONS_CUMULATIVE_CRITSCOUNT = '#quests:details/conditions/cumulative/critsCount'
+    DETAILS_CONDITIONS_CUMULATIVE_SNIPERDAMAGEDEALT = '#quests:details/conditions/cumulative/sniperDamageDealt'
+    DETAILS_CONDITIONS_CUMULATIVE_MILEAGE = '#quests:details/conditions/cumulative/mileage'
+    DETAILS_CONDITIONS_CUMULATIVE_LIFETIME = '#quests:details/conditions/cumulative/lifeTime'
+    DETAILS_CONDITIONS_CUMULATIVE_INNERMODULEDESTRCOUNT = '#quests:details/conditions/cumulative/innerModuleDestrCount'
+    DETAILS_CONDITIONS_CUMULATIVE_KILLSASSISTEDRADIO = '#quests:details/conditions/cumulative/killsAssistedRadio'
+    DETAILS_CONDITIONS_CUMULATIVE_KILLSASSISTEDTRACK = '#quests:details/conditions/cumulative/killsAssistedTrack'
+    DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDVEHICLECNTASSISTEDRADIO = '#quests:details/conditions/cumulative/damagedVehicleCntAssistedRadio'
+    DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDVEHICLECNTASSISTEDTRACK = '#quests:details/conditions/cumulative/damagedVehicleCntAssistedTrack'
+    DETAILS_CONDITIONS_CUMULATIVE_DAMAGEASSISTEDRADIOWHILEINVISIBLE = '#quests:details/conditions/cumulative/damageAssistedRadioWhileInvisible'
+    DETAILS_CONDITIONS_CUMULATIVE_DAMAGEASSISTEDTRACKWHILEINVISIBLE = '#quests:details/conditions/cumulative/damageAssistedTrackWhileInvisible'
+    DETAILS_CONDITIONS_CUMULATIVE_FORTRESOURCE = '#quests:details/conditions/cumulative/fortResource'
+    DETAILS_CONDITIONS_CUMULATIVE_PERCENTFROMTOTALTEAMDAMAGE = '#quests:details/conditions/cumulative/percentFromTotalTeamDamage'
+    DETAILS_CONDITIONS_CUMULATIVE_KILLEDANDDAMAGEDBYALLSQUADMATES = '#quests:details/conditions/cumulative/killedAndDamagedByAllSquadmates'
+    DETAILS_CONDITIONS_CUMULATIVE_MARKSONGUN = '#quests:details/conditions/cumulative/marksOnGun'
+    DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDWHILEENEMYMOVING = '#quests:details/conditions/cumulative/damagedWhileEnemyMoving'
+    DETAILS_CONDITIONS_CUMULATIVE_INBATTLEMAXPIERCINGSERIES = '#quests:details/conditions/cumulative/inBattleMaxPiercingSeries'
+    DETAILS_CONDITIONS_CUMULATIVE_INBATTLEMAXSNIPERSERIES = '#quests:details/conditions/cumulative/inBattleMaxSniperSeries'
+    DETAILS_CONDITIONS_CUMULATIVE_SPOTTEDANDDAMAGEDSPG = '#quests:details/conditions/cumulative/spottedAndDamagedSPG'
     DETAILS_CONDITIONS_CLUBS_GETDIVISION = '#quests:details/conditions/clubs/getDivision'
     DETAILS_CONDITIONS_CLUBS_BATTLES = '#quests:details/conditions/clubs/battles'
     DETAILS_CONDITIONS_CLUBS_HASCLUB = '#quests:details/conditions/clubs/hasClub'
@@ -626,6 +678,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_LADDER_ORIGINALXP = '#quests:details/dossier/ladder/originalXP'
     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDTRACK = '#quests:details/dossier/ladder/damageAssistedTrack'
     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDRADIO = '#quests:details/dossier/ladder/damageAssistedRadio'
+    DETAILS_DOSSIER_RANKED_BATTLESCOUNT = '#quests:details/dossier/ranked/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -661,8 +714,10 @@ class QUESTS(object):
     DETAILS_MODIFIERS_ECONOMICS_EMBLEMPACKET30COST = '#quests:details/modifiers/economics/emblemPacket30Cost'
     DETAILS_MODIFIERS_EQUIPMENT_GOLD = '#quests:details/modifiers/equipment/gold'
     DETAILS_MODIFIERS_EQUIPMENT_CREDITS = '#quests:details/modifiers/equipment/credits'
+    DETAILS_MODIFIERS_EQUIPMENT_CRYSTAL = '#quests:details/modifiers/equipment/crystal'
     DETAILS_MODIFIERS_EQUIPMENT_GOLDPRICEMULTIPLIER = '#quests:details/modifiers/equipment/goldPriceMultiplier'
     DETAILS_MODIFIERS_EQUIPMENT_CREDITSPRICEMULTIPLIER = '#quests:details/modifiers/equipment/creditsPriceMultiplier'
+    DETAILS_MODIFIERS_EQUIPMENT_CRYSTALPRICEMULTIPLIER = '#quests:details/modifiers/equipment/crystalPriceMultiplier'
     DETAILS_MODIFIERS_OPTDEVICE = '#quests:details/modifiers/optDevice'
     DETAILS_MODIFIERS_OPTDEVICE_GOLDPRICEMULTIPLIER = '#quests:details/modifiers/optDevice/goldPriceMultiplier'
     DETAILS_MODIFIERS_OPTDEVICE_CREDITSPRICEMULTIPLIER = '#quests:details/modifiers/optDevice/creditsPriceMultiplier'
@@ -689,11 +744,17 @@ class QUESTS(object):
     DETAILS_MODIFIERS_BOOSTER = '#quests:details/modifiers/booster'
     DETAILS_MODIFIERS_BOOSTERS_GOLDPRICEMULTIPLIER = '#quests:details/modifiers/boosters/goldPriceMultiplier'
     DETAILS_MODIFIERS_BOOSTERS_CREDITSPRICEMULTIPLIER = '#quests:details/modifiers/boosters/creditsPriceMultiplier'
+    DETAILS_MODIFIERS_BOOSTERS_CRYSTALPRICEMULTIPLIER = '#quests:details/modifiers/boosters/crystalPriceMultiplier'
     CLASSES_LIGHTTANK = '#quests:classes/lightTank'
     CLASSES_MEDIUMTANK = '#quests:classes/mediumTank'
     CLASSES_HEAVYTANK = '#quests:classes/heavyTank'
     CLASSES_SPG = '#quests:classes/SPG'
     CLASSES_AT_SPG = '#quests:classes/AT-SPG'
+    CLASSES_SMALL_LIGHTTANK = '#quests:classes/small/lightTank'
+    CLASSES_SMALL_MEDIUMTANK = '#quests:classes/small/mediumTank'
+    CLASSES_SMALL_HEAVYTANK = '#quests:classes/small/heavyTank'
+    CLASSES_SMALL_SPG = '#quests:classes/small/SPG'
+    CLASSES_SMALL_AT_SPG = '#quests:classes/small/AT-SPG'
     SEASONAWARDSWINDOW_TITLE = '#quests:seasonAwardsWindow/title'
     SEASONAWARDSWINDOW_VEHICLEAWARD_BUTTONABOUT_TEXT = '#quests:seasonAwardsWindow/vehicleAward/buttonAbout/text'
     SEASONAWARDSWINDOW_TILEAWARDSTITLE = '#quests:seasonAwardsWindow/tileAwardsTitle'
@@ -763,13 +824,989 @@ class QUESTS(object):
     QUESTTASKDETAILSVIEW_FORADDITIONALAWARD = '#quests:QuestTaskDetailsView/forAdditionalAward'
     TILECHAINSVIEW_CHAINNAME_MULTITEAM = '#quests:tileChainsView/chainName/multiteam'
     TILECHAINSVIEW_CHAINNAME_CLASSIC = '#quests:tileChainsView/chainName/classic'
-    BEGINNERQUESTS_DETAILS_CONDITIONSTITLE = '#quests:beginnerQuests/details/conditionsTitle'
-    BEGINNERQUESTS_DETAILS_DESCRIPTIONTITLE = '#quests:beginnerQuests/details/descriptionTitle'
-    BEGINNERQUESTS_DETAILS_BUTTONSHOWVIDEOTIP = '#quests:beginnerQuests/details/buttonShowVideoTip'
-    BEGINNERQUESTS_DETAILS_BUTTONSTARTQUEST = '#quests:beginnerQuests/details/buttonStartQuest'
-    BEGINNERQUESTS_DETAILS_NOAWARD = '#quests:beginnerQuests/details/noAward'
+    MISSIONS_GROUP_OTHERS_LABEL = '#quests:missions/group/others/label'
+    MISSIONS_GROUP_MOTIVE_LABEL = '#quests:missions/group/motive/label'
+    MISSIONS_AWARDS_MERGED = '#quests:missions/awards/merged'
+    MISSIONS_TAB_LABEL_MARATHONS = '#quests:missions/tab/label/marathons'
+    MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
+    MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
+    MISSIONS_TAB_LABEL_CATEGORIES = '#quests:missions/tab/label/categories'
+    MISSIONS_TAB_CATEGORIES_HEADER = '#quests:missions/tab/categories/header'
+    MISSIONS_TAB_CATEGORIES_BODY = '#quests:missions/tab/categories/body'
+    MISSIONS_TAB_LABEL_CURRENTVEHICLE = '#quests:missions/tab/label/currentVehicle'
+    MISSIONS_TAB_CURRENTVEHICLE_HEADER = '#quests:missions/tab/currentVehicle/header'
+    MISSIONS_TAB_CURRENTVEHICLE_BODY = '#quests:missions/tab/currentVehicle/body'
+    MISSIONS_FILTERCOUNTER_LABEL = '#quests:missions/filterCounter/label'
+    MISSIONS_FILTERCOUNTER_CLOSEBUTTON_HEADER = '#quests:missions/filterCounter/closeButton/header'
+    MISSIONS_FILTERCOUNTER_CLOSEBUTTON_BODY = '#quests:missions/filterCounter/closeButton/body'
+    MISSIONS_FILTER_FILTERBUTTON_HEADER = '#quests:missions/filter/filterButton/header'
+    MISSIONS_FILTER_FILTERBUTTON_BODY = '#quests:missions/filter/filterButton/body'
+    MISSIONS_TAB_MARATHONS_HEADER_TITLE_ACTION = '#quests:missions/tab/marathons/header/title/action'
+    MISSIONS_TAB_MARATHONS_HEADER_PERIOD = '#quests:missions/tab/marathons/header/period'
+    MISSIONS_TAB_MARATHONS_HEADER_DESC = '#quests:missions/tab/marathons/header/desc'
+    MISSIONS_TAB_MARATHONS_HEADER_CONDITION = '#quests:missions/tab/marathons/header/condition'
+    MISSIONS_TAB_MARATHONS_HEADER_AWARD = '#quests:missions/tab/marathons/header/award'
+    MISSIONS_TAB_MARATHONS_HEADER_MOREAWARDS = '#quests:missions/tab/marathons/header/moreAwards'
+    MISSIONS_TAB_CATEGORY_HEADER_PERFORMEDTASKS = '#quests:missions/tab/category/header/performedTasks'
+    MISSIONS_FILTER_POPOVER_TITLE = '#quests:missions/filter/popover/title'
+    MISSIONS_FILTER_POPOVER_HIDEUNAVAILABLE = '#quests:missions/filter/popover/hideUnavailable'
+    MISSIONS_FILTER_POPOVER_HIDEDONE = '#quests:missions/filter/popover/hideDone'
+    MISSIONS_FILTER_POPOVER_DEFAULTBUTTON_LABEL = '#quests:missions/filter/popover/defaultButton/label'
+    MISSIONS_FILTER_POPOVER_DEFAULTBUTTON_HEADER = '#quests:missions/filter/popover/defaultButton/header'
+    MISSIONS_FILTER_POPOVER_DEFAULTBUTTON_BODY = '#quests:missions/filter/popover/defaultButton/body'
+    MISSIONS_NOTASKS_DUMMY_TEXT = '#quests:missions/noTasks/dummy/text'
+    MISSIONS_NOTASKSBODY_DUMMY_TEXT = '#quests:missions/noTasksBody/dummy/text'
+    MISSIONS_NOTASKSBODY_DUMMY_BTNLABEL = '#quests:missions/noTasksBody/dummy/btnLabel'
+    MISSIONDETAILS_VEHICLE_CONDITIONS_HEADER = '#quests:missionDetails/vehicle/conditions/header'
+    MISSIONDETAILS_VEHICLE_CONDITIONS_NATIONS = '#quests:missionDetails/vehicle/conditions/nations'
+    MISSIONDETAILS_VEHICLE_CONDITIONS_NATIONS_ALL = '#quests:missionDetails/vehicle/conditions/nations/all'
+    MISSIONDETAILS_VEHICLE_CONDITIONS_NATIONS_TOOLTIP = '#quests:missionDetails/vehicle/conditions/nations/tooltip'
+    MISSIONDETAILS_VEHICLE_CONDITIONS_TYPE = '#quests:missionDetails/vehicle/conditions/type'
+    MISSIONDETAILS_VEHICLE_CONDITIONS_TYPE_ALL = '#quests:missionDetails/vehicle/conditions/type/all'
+    MISSIONDETAILS_VEHICLE_CONDITIONS_TYPE_TOOLTIP = '#quests:missionDetails/vehicle/conditions/type/tooltip'
+    MISSIONDETAILS_VEHICLE_CONDITIONS_LEVEL = '#quests:missionDetails/vehicle/conditions/level'
+    MISSIONDETAILS_VEHICLE_CONDITIONS_LEVEL_ALL = '#quests:missionDetails/vehicle/conditions/level/all'
+    MISSIONDETAILS_STATUS_COMPLETED_DAILY = '#quests:missionDetails/status/completed/daily'
+    MISSIONDETAILS_STATUS_NOTAVAILABLE = '#quests:missionDetails/status/notAvailable'
+    MISSIONDETAILS_STATUS_WRONGVEHICLE = '#quests:missionDetails/status/wrongVehicle'
+    MISSIONDETAILS_STATUS_NOTAVAILABLEBYTIME = '#quests:missionDetails/status/notAvailableByTime'
+    MISSIONDETAILS_STATUS_WRONGTIME = '#quests:missionDetails/status/wrongTime'
+    MISSIONDETAILS_BATTLECONDITION_LIST = '#quests:missionDetails/battleCondition/list'
+    MISSIONDETAILS_STATUS_NOTAVAILABLE_IN_FUTURE = '#quests:missionDetails/status/notAvailable/in_future'
+    MISSIONDETAILS_STATUS_NOTAVAILABLE_INVALID_WEEKDAY = '#quests:missionDetails/status/notAvailable/invalid_weekday'
+    MISSIONDETAILS_STATUS_NOTAVAILABLE_INVALID_TIME_INTERVAL = '#quests:missionDetails/status/notAvailable/invalid_time_interval'
+    MISSIONDETAILS_STATUS_NOTAVAILABLE_NEARESTTIME = '#quests:missionDetails/status/notAvailable/nearestTime'
+    MISSIONDETAILS_CONDITIONS_MAPSTYPE = '#quests:missionDetails/conditions/mapsType'
+    MISSIONDETAILS_CONDITIONS_MAPSTYPE_BODY = '#quests:missionDetails/conditions/mapsType/body'
+    MISSIONDETAILS_CONDITIONS_MAPS = '#quests:missionDetails/conditions/maps'
+    MISSIONDETAILS_CONDITIONS_MAPS_NOT = '#quests:missionDetails/conditions/maps/not'
+    MISSIONDETAILS_CONDITIONS_CLANMEMBERSHIP_SAME = '#quests:missionDetails/conditions/clanMembership/same'
+    MISSIONDETAILS_CONDITIONS_CLANMEMBERSHIP_ANY = '#quests:missionDetails/conditions/clanMembership/any'
+    MISSIONDETAILS_CONDITIONS_FORMATION = '#quests:missionDetails/conditions/formation'
+    MISSIONDETAILS_CONDITIONS_FORMATION_SQUAD = '#quests:missionDetails/conditions/formation/squad'
+    MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE = '#quests:missionDetails/conditions/battleBonusType'
+    MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE_BODY = '#quests:missionDetails/conditions/battleBonusType/body'
+    MISSIONDETAILS_CONDITIONS_LEVEL = '#quests:missionDetails/conditions/level'
+    MISSIONDETAILS_CONDITIONS_PLAYBATTLE = '#quests:missionDetails/conditions/playBattle'
+    MISSIONDETAILS_CONDITIONS_BATTLES = '#quests:missionDetails/conditions/battles'
+    MISSIONDETAILS_CONDITIONS_BATTLESUPPERLIMIT = '#quests:missionDetails/conditions/battlesUpperLimit'
+    MISSIONDETAILS_CONDITIONS_BATTLESINROW = '#quests:missionDetails/conditions/battlesInRow'
+    MISSIONDETAILS_CONDITIONS_GROUPBY_NOPROGRESS = '#quests:missionDetails/conditions/groupBy/noProgress'
+    MISSIONDETAILS_MISSIONSCOMPLETE = '#quests:missionDetails/missionsComplete'
+    MISSIONDETAILS_MISSIONSCOMPLETE_DAILY = '#quests:missionDetails/missionsComplete/daily'
+    MISSIONDETAILS_MISSIONSCOMPLETECOUNTER = '#quests:missionDetails/missionsCompleteCounter'
+    MISSIONDETAILS_PERSONALQUEST_COMPLETE_LEFT = '#quests:missionDetails/personalQuest/complete/left'
+    MISSIONDETAILS_PERSONALQUEST_COMPLETE_LEFT_DAILY = '#quests:missionDetails/personalQuest/complete/left/daily'
+    MISSIONDETAILS_PERSONALQUEST_DETAILS_COMPLETE_LEFT_DAILY = '#quests:missionDetails/personalQuest/details/complete/left/daily'
+    MISSIONDETAILS_RESETDATE = '#quests:missionDetails/resetDate'
+    MISSIONDETAILS_DATE = '#quests:missionDetails/date'
+    MISSIONDETAILS_DATESINCE = '#quests:missionDetails/dateSince'
+    MISSIONDETAILS_DATETO = '#quests:missionDetails/dateTo'
+    MISSIONDETAILS_DESCRIPTION = '#quests:missionDetails/description'
+    MISSIONDETAILS_REQUIREMENTS_HEADER_UNAVAILABLE = '#quests:missionDetails/requirements/header/unavailable'
+    MISSIONDETAILS_REQUIREMENTS_HEADER_AVAILABLE = '#quests:missionDetails/requirements/header/available'
+    MISSIONDETAILS_REQUIREMENTS_CONCLUSION_AVAILABLE = '#quests:missionDetails/requirements/conclusion/available'
+    MISSIONDETAILS_REQUIREMENTS_CONCLUSION_UNAVAILABLE = '#quests:missionDetails/requirements/conclusion/unavailable'
+    MISSIONDETAILS_VEHICLESSELECT = '#quests:missionDetails/vehiclesSelect'
+    MISSIONDETAILS_VEHICLESAVAILABLE = '#quests:missionDetails/vehiclesAvailable'
+    MISSIONDETAILS_BOTTOMSTATUSCOMPLETE = '#quests:missionDetails/bottomStatusComplete'
+    MISSIONDETAILS_BOTTOMSTATUSTOKENS = '#quests:missionDetails/bottomStatusTokens'
+    MISSIONDETAILS_BOTTOMSTATUSNEXTTRY = '#quests:missionDetails/bottomStatusNextTry'
+    MISSIONS_TOKENPOPOVER_HEADER = '#quests:missions/tokenPopover/header'
+    MISSIONS_TOKENPOPOVER_DESCR = '#quests:missions/tokenPopover/descr'
+    MISSIONS_TOKENPOPOVER_DESCR_SHOP = '#quests:missions/tokenPopover/descr/shop'
+    MISSIONS_TOKENPOPOVER_BUYBTN_LABEL = '#quests:missions/tokenPopover/buyBtn/label'
+    MISSIONS_TOKENPOPOVER_QUEST_HEADER = '#quests:missions/tokenPopover/quest/header'
+    MISSIONS_TOKENPOPOVER_QUEST_DESCR_DATE = '#quests:missions/tokenPopover/quest/descr/date'
+    MISSIONS_TOKENPOPOVER_QUEST_DESCR_READY = '#quests:missions/tokenPopover/quest/descr/ready'
+    MISSIONS_TOKENPOPOVER_QUEST_DESCR_NOTAVAILABLE = '#quests:missions/tokenPopover/quest/descr/notAvailable'
+    MISSIONS_VEHICLESELECTOR_TITLE = '#quests:missions/vehicleSelector/title'
+    MISSIONS_VEHICLESELECTOR_STATUS_SELECTED = '#quests:missions/vehicleSelector/status/selected'
+    MISSIONS_VEHICLESELECTOR_STATUS_SELECT = '#quests:missions/vehicleSelector/status/select'
+    MISSIONS_VEHICLESELECTOR_STATUS_LIST = '#quests:missions/vehicleSelector/status/list'
+    MISSIONS_VEHICLESELECTOR_STATUS_NOTAVAILABLE = '#quests:missions/vehicleSelector/status/notAvailable'
+    TOKEN_UNDEFINED = '#quests:token/undefined'
+    TOKEN_DEFAULT_USSR = '#quests:token/default/ussr'
+    TOKEN_DEFAULT_GERMANY = '#quests:token/default/germany'
+    TOKEN_DEFAULT_USA = '#quests:token/default/usa'
+    TOKEN_DEFAULT_FRANCE = '#quests:token/default/france'
+    TOKEN_DEFAULT_UK = '#quests:token/default/uk'
+    TOKEN_DEFAULT_CZECH = '#quests:token/default/czech'
+    TOKEN_DEFAULT_CHINA = '#quests:token/default/china'
+    TOKEN_DEFAULT_JAPAN = '#quests:token/default/japan'
+    TOKEN_DEFAULT_SWEDEN = '#quests:token/default/sweden'
+    TOKEN_DEFAULT_WOT = '#quests:token/default/wot'
+    TOKEN_DEFAULT_LIGHTTANK = '#quests:token/default/lightTank'
+    TOKEN_DEFAULT_MEDIUMTANK = '#quests:token/default/mediumTank'
+    TOKEN_DEFAULT_HEAVYTANK = '#quests:token/default/heavyTank'
+    TOKEN_DEFAULT_AT_SPG = '#quests:token/default/at-spg'
+    TOKEN_DEFAULT_SPG = '#quests:token/default/spg'
+    BONUSNAME_CREDITS = '#quests:bonusName/credits'
+    BONUSNAME_GOLD = '#quests:bonusName/gold'
+    BONUSNAME_XP = '#quests:bonusName/xp'
+    BONUSNAME_FREEXP = '#quests:bonusName/freeXP'
+    BONUSNAME_TANKMENXP = '#quests:bonusName/tankmenXP'
+    BONUSNAME_XPFACTOR = '#quests:bonusName/xpFactor'
+    BONUSNAME_CREDITSFACTOR = '#quests:bonusName/creditsFactor'
+    BONUSNAME_FREEXPFACTOR = '#quests:bonusName/freeXPFactor'
+    BONUSNAME_TANKMENXPFACTOR = '#quests:bonusName/tankmenXPFactor'
+    BONUSNAME_DAILYXPFACTOR = '#quests:bonusName/dailyXPFactor'
+    BONUSNAME_SLOTS = '#quests:bonusName/slots'
+    BONUSNAME_BERTHS = '#quests:bonusName/berths'
+    BONUSNAME_PREMIUM = '#quests:bonusName/premium'
+    BONUSNAME_TANKMEN_WITH_SKILLS = '#quests:bonusName/tankmen/with_skills'
+    BONUSNAME_TANKMEN_NO_SKILLS = '#quests:bonusName/tankmen/no_skills'
+    BONUSNAME_CAMOUFLAGES = '#quests:bonusName/camouflages'
+    BONUSNAME_EMBLEMS = '#quests:bonusName/emblems'
+    BONUSNAME_INSCRIPTIONS = '#quests:bonusName/inscriptions'
+    BONUSNAME_POTAPOVTOKEN = '#quests:bonusName/potapovToken'
+    ACTION_AUTO_EXCHANGERATE = '#quests:action/auto/exchangeRate'
+    ACTION_FULL_EXCHANGERATE = '#quests:action/full/exchangeRate'
+    ACTION_HERO_FULL_EXCHANGERATE = '#quests:action/hero/full/exchangeRate'
+    ACTION_SHORT_EXCHANGERATE = '#quests:action/short/exchangeRate'
+    ACTION_BUTTON_EXCHANGERATE = '#quests:action/button/exchangeRate'
+    ACTION_AUTO_PAIDREMOVALCOST = '#quests:action/auto/paidRemovalCost'
+    ACTION_FULL_PAIDREMOVALCOST = '#quests:action/full/paidRemovalCost'
+    ACTION_HERO_FULL_PAIDREMOVALCOST = '#quests:action/hero/full/paidRemovalCost'
+    ACTION_SHORT_PAIDREMOVALCOST = '#quests:action/short/paidRemovalCost'
+    ACTION_BUTTON_PAIDREMOVALCOST = '#quests:action/button/paidRemovalCost'
+    ACTION_AUTO_CHANGEROLECOST = '#quests:action/auto/changeRoleCost'
+    ACTION_FULL_CHANGEROLECOST = '#quests:action/full/changeRoleCost'
+    ACTION_HERO_FULL_CHANGEROLECOST = '#quests:action/hero/full/changeRoleCost'
+    ACTION_SHORT_CHANGEROLECOST = '#quests:action/short/changeRoleCost'
+    ACTION_BUTTON_CHANGEROLECOST = '#quests:action/button/changeRoleCost'
+    ACTION_AUTO_FREEXPCONVERSIONDISCRECITY = '#quests:action/auto/freeXPConversionDiscrecity'
+    ACTION_FULL_FREEXPCONVERSIONDISCRECITY = '#quests:action/full/freeXPConversionDiscrecity'
+    ACTION_HERO_FULL_FREEXPCONVERSIONDISCRECITY = '#quests:action/hero/full/freeXPConversionDiscrecity'
+    ACTION_SHORT_FREEXPCONVERSIONDISCRECITY = '#quests:action/short/freeXPConversionDiscrecity'
+    ACTION_BUTTON_FREEXPCONVERSIONDISCRECITY = '#quests:action/button/freeXPConversionDiscrecity'
+    ACTION_AUTO_SLOTSPRICES = '#quests:action/auto/slotsPrices'
+    ACTION_FULL_SLOTSPRICES = '#quests:action/full/slotsPrices'
+    ACTION_HERO_FULL_SLOTSPRICES = '#quests:action/hero/full/slotsPrices'
+    ACTION_SHORT_SLOTSPRICES = '#quests:action/short/slotsPrices'
+    ACTION_BUTTON_SLOTSPRICES = '#quests:action/button/slotsPrices'
+    ACTION_AUTO_BERTHSPRICES = '#quests:action/auto/berthsPrices'
+    ACTION_FULL_BERTHSPRICES = '#quests:action/full/berthsPrices'
+    ACTION_HERO_FULL_BERTHSPRICES = '#quests:action/hero/full/berthsPrices'
+    ACTION_SHORT_BERTHSPRICES = '#quests:action/short/berthsPrices'
+    ACTION_BUTTON_BERTHSPRICES = '#quests:action/button/berthsPrices'
+    ACTION_AUTO_CREDITSTANKMANCOST = '#quests:action/auto/creditsTankmanCost'
+    ACTION_FULL_CREDITSTANKMANCOST = '#quests:action/full/creditsTankmanCost'
+    ACTION_HERO_FULL_CREDITSTANKMANCOST = '#quests:action/hero/full/creditsTankmanCost'
+    ACTION_SHORT_CREDITSTANKMANCOST = '#quests:action/short/creditsTankmanCost'
+    ACTION_BUTTON_CREDITSTANKMANCOST = '#quests:action/button/creditsTankmanCost'
+    ACTION_AUTO_GOLDTANKMANCOST = '#quests:action/auto/goldTankmanCost'
+    ACTION_FULL_GOLDTANKMANCOST = '#quests:action/full/goldTankmanCost'
+    ACTION_HERO_FULL_GOLDTANKMANCOST = '#quests:action/hero/full/goldTankmanCost'
+    ACTION_SHORT_GOLDTANKMANCOST = '#quests:action/short/goldTankmanCost'
+    ACTION_BUTTON_GOLDTANKMANCOST = '#quests:action/button/goldTankmanCost'
+    ACTION_AUTO_TANKMEN_MIXED = '#quests:action/auto/tankmen/mixed'
+    ACTION_FULL_TANKMEN_MIXED = '#quests:action/full/tankmen/mixed'
+    ACTION_HERO_FULL_TANKMEN_MIXED = '#quests:action/hero/full/tankmen/mixed'
+    ACTION_SHORT_TANKMEN_MIXED = '#quests:action/short/tankmen/mixed'
+    ACTION_BUTTON_TANKMEN_MIXED = '#quests:action/button/tankmen/mixed'
+    ACTION_AUTO_CREDITSDROPSKILLSCOST = '#quests:action/auto/creditsDropSkillsCost'
+    ACTION_FULL_CREDITSDROPSKILLSCOST = '#quests:action/full/creditsDropSkillsCost'
+    ACTION_HERO_FULL_CREDITSDROPSKILLSCOST = '#quests:action/hero/full/creditsDropSkillsCost'
+    ACTION_SHORT_CREDITSDROPSKILLSCOST = '#quests:action/short/creditsDropSkillsCost'
+    ACTION_BUTTON_CREDITSDROPSKILLSCOST = '#quests:action/button/creditsDropSkillsCost'
+    ACTION_AUTO_GOLDDROPSKILLSCOST = '#quests:action/auto/goldDropSkillsCost'
+    ACTION_FULL_GOLDDROPSKILLSCOST = '#quests:action/full/goldDropSkillsCost'
+    ACTION_HERO_FULL_GOLDDROPSKILLSCOST = '#quests:action/hero/full/goldDropSkillsCost'
+    ACTION_SHORT_GOLDDROPSKILLSCOST = '#quests:action/short/goldDropSkillsCost'
+    ACTION_BUTTON_GOLDDROPSKILLSCOST = '#quests:action/button/goldDropSkillsCost'
+    ACTION_AUTO_DROPSKILLS_MIXED = '#quests:action/auto/dropSkills/mixed'
+    ACTION_FULL_DROPSKILLS_MIXED = '#quests:action/full/dropSkills/mixed'
+    ACTION_HERO_FULL_DROPSKILLS_MIXED = '#quests:action/hero/full/dropSkills/mixed'
+    ACTION_SHORT_DROPSKILLS_MIXED = '#quests:action/short/dropSkills/mixed'
+    ACTION_BUTTON_DROPSKILLS_MIXED = '#quests:action/button/dropSkills/mixed'
+    ACTION_AUTO_CAMOUFLAGE_GOLD = '#quests:action/auto/camouflage/gold'
+    ACTION_FULL_CAMOUFLAGE_GOLD = '#quests:action/full/camouflage/gold'
+    ACTION_HERO_FULL_CAMOUFLAGE_GOLD = '#quests:action/hero/full/camouflage/gold'
+    ACTION_SHORT_CAMOUFLAGE_GOLD = '#quests:action/short/camouflage/gold'
+    ACTION_BUTTON_CAMOUFLAGE_GOLD = '#quests:action/button/camouflage/gold'
+    ACTION_AUTO_CAMOUFLAGE_CREDITS = '#quests:action/auto/camouflage/credits'
+    ACTION_FULL_CAMOUFLAGE_CREDITS = '#quests:action/full/camouflage/credits'
+    ACTION_HERO_FULL_CAMOUFLAGE_CREDITS = '#quests:action/hero/full/camouflage/credits'
+    ACTION_SHORT_CAMOUFLAGE_CREDITS = '#quests:action/short/camouflage/credits'
+    ACTION_BUTTON_CAMOUFLAGE_CREDITS = '#quests:action/button/camouflage/credits'
+    ACTION_AUTO_CAMOUFLAGE_MIXED = '#quests:action/auto/camouflage/mixed'
+    ACTION_FULL_CAMOUFLAGE_MIXED = '#quests:action/full/camouflage/mixed'
+    ACTION_HERO_FULL_CAMOUFLAGE_MIXED = '#quests:action/hero/full/camouflage/mixed'
+    ACTION_SHORT_CAMOUFLAGE_MIXED = '#quests:action/short/camouflage/mixed'
+    ACTION_BUTTON_CAMOUFLAGE_MIXED = '#quests:action/button/camouflage/mixed'
+    ACTION_AUTO_CAMOUFLAGEPACKETINFCOST = '#quests:action/auto/camouflagePacketInfCost'
+    ACTION_FULL_CAMOUFLAGEPACKETINFCOST = '#quests:action/full/camouflagePacketInfCost'
+    ACTION_HERO_FULL_CAMOUFLAGEPACKETINFCOST = '#quests:action/hero/full/camouflagePacketInfCost'
+    ACTION_SHORT_CAMOUFLAGEPACKETINFCOST = '#quests:action/short/camouflagePacketInfCost'
+    ACTION_BUTTON_CAMOUFLAGEPACKETINFCOST = '#quests:action/button/camouflagePacketInfCost'
+    ACTION_AUTO_CAMOUFLAGEPACKET30COST = '#quests:action/auto/camouflagePacket30Cost'
+    ACTION_FULL_CAMOUFLAGEPACKET30COST = '#quests:action/full/camouflagePacket30Cost'
+    ACTION_HERO_FULL_CAMOUFLAGEPACKET30COST = '#quests:action/hero/full/camouflagePacket30Cost'
+    ACTION_SHORT_CAMOUFLAGEPACKET30COST = '#quests:action/short/camouflagePacket30Cost'
+    ACTION_BUTTON_CAMOUFLAGEPACKET30COST = '#quests:action/button/camouflagePacket30Cost'
+    ACTION_AUTO_CAMOUFLAGEPACKET7COST = '#quests:action/auto/camouflagePacket7Cost'
+    ACTION_FULL_CAMOUFLAGEPACKET7COST = '#quests:action/full/camouflagePacket7Cost'
+    ACTION_HERO_FULL_CAMOUFLAGEPACKET7COST = '#quests:action/hero/full/camouflagePacket7Cost'
+    ACTION_SHORT_CAMOUFLAGEPACKET7COST = '#quests:action/short/camouflagePacket7Cost'
+    ACTION_BUTTON_CAMOUFLAGEPACKET7COST = '#quests:action/button/camouflagePacket7Cost'
+    ACTION_AUTO_EMBLEM_GOLD = '#quests:action/auto/emblem/gold'
+    ACTION_FULL_EMBLEM_GOLD = '#quests:action/full/emblem/gold'
+    ACTION_HERO_FULL_EMBLEM_GOLD = '#quests:action/hero/full/emblem/gold'
+    ACTION_SHORT_EMBLEM_GOLD = '#quests:action/short/emblem/gold'
+    ACTION_BUTTON_EMBLEM_GOLD = '#quests:action/button/emblem/gold'
+    ACTION_AUTO_EMBLEM_CREDITS = '#quests:action/auto/emblem/credits'
+    ACTION_FULL_EMBLEM_CREDITS = '#quests:action/full/emblem/credits'
+    ACTION_HERO_FULL_EMBLEM_CREDITS = '#quests:action/hero/full/emblem/credits'
+    ACTION_SHORT_EMBLEM_CREDITS = '#quests:action/short/emblem/credits'
+    ACTION_BUTTON_EMBLEM_CREDITS = '#quests:action/button/emblem/credits'
+    ACTION_AUTO_EMBLEM_MIXED = '#quests:action/auto/emblem/mixed'
+    ACTION_FULL_EMBLEM_MIXED = '#quests:action/full/emblem/mixed'
+    ACTION_HERO_FULL_EMBLEM_MIXED = '#quests:action/hero/full/emblem/mixed'
+    ACTION_SHORT_EMBLEM_MIXED = '#quests:action/short/emblem/mixed'
+    ACTION_BUTTON_EMBLEM_MIXED = '#quests:action/button/emblem/mixed'
+    ACTION_AUTO_EMBLEMPACKETINFCOST = '#quests:action/auto/emblemPacketInfCost'
+    ACTION_FULL_EMBLEMPACKETINFCOST = '#quests:action/full/emblemPacketInfCost'
+    ACTION_HERO_FULL_EMBLEMPACKETINFCOST = '#quests:action/hero/full/emblemPacketInfCost'
+    ACTION_SHORT_EMBLEMPACKETINFCOST = '#quests:action/short/emblemPacketInfCost'
+    ACTION_BUTTON_EMBLEMPACKETINFCOST = '#quests:action/button/emblemPacketInfCost'
+    ACTION_AUTO_EMBLEMPACKET7COST = '#quests:action/auto/emblemPacket7Cost'
+    ACTION_FULL_EMBLEMPACKET7COST = '#quests:action/full/emblemPacket7Cost'
+    ACTION_HERO_FULL_EMBLEMPACKET7COST = '#quests:action/hero/full/emblemPacket7Cost'
+    ACTION_SHORT_EMBLEMPACKET7COST = '#quests:action/short/emblemPacket7Cost'
+    ACTION_BUTTON_EMBLEMPACKET7COST = '#quests:action/button/emblemPacket7Cost'
+    ACTION_AUTO_EMBLEMPACKET30COST = '#quests:action/auto/emblemPacket30Cost'
+    ACTION_FULL_EMBLEMPACKET30COST = '#quests:action/full/emblemPacket30Cost'
+    ACTION_HERO_FULL_EMBLEMPACKET30COST = '#quests:action/hero/full/emblemPacket30Cost'
+    ACTION_SHORT_EMBLEMPACKET30COST = '#quests:action/short/emblemPacket30Cost'
+    ACTION_BUTTON_EMBLEMPACKET30COST = '#quests:action/button/emblemPacket30Cost'
+    ACTION_AUTO_INSCRIPTION_GOLD = '#quests:action/auto/inscription/gold'
+    ACTION_FULL_INSCRIPTION_GOLD = '#quests:action/full/inscription/gold'
+    ACTION_HERO_FULL_INSCRIPTION_GOLD = '#quests:action/hero/full/inscription/gold'
+    ACTION_SHORT_INSCRIPTION_GOLD = '#quests:action/short/inscription/gold'
+    ACTION_BUTTON_INSCRIPTION_GOLD = '#quests:action/button/inscription/gold'
+    ACTION_AUTO_INSCRIPTION_CREDITS = '#quests:action/auto/inscription/credits'
+    ACTION_FULL_INSCRIPTION_CREDITS = '#quests:action/full/inscription/credits'
+    ACTION_HERO_FULL_INSCRIPTION_CREDITS = '#quests:action/hero/full/inscription/credits'
+    ACTION_SHORT_INSCRIPTION_CREDITS = '#quests:action/short/inscription/credits'
+    ACTION_BUTTON_INSCRIPTION_CREDITS = '#quests:action/button/inscription/credits'
+    ACTION_AUTO_INSCRIPTION_MIXED = '#quests:action/auto/inscription/mixed'
+    ACTION_FULL_INSCRIPTION_MIXED = '#quests:action/full/inscription/mixed'
+    ACTION_HERO_FULL_INSCRIPTION_MIXED = '#quests:action/hero/full/inscription/mixed'
+    ACTION_SHORT_INSCRIPTION_MIXED = '#quests:action/short/inscription/mixed'
+    ACTION_BUTTON_INSCRIPTION_MIXED = '#quests:action/button/inscription/mixed'
+    ACTION_AUTO_INSCRIPTIONPACKETINFCOST = '#quests:action/auto/inscriptionPacketInfCost'
+    ACTION_FULL_INSCRIPTIONPACKETINFCOST = '#quests:action/full/inscriptionPacketInfCost'
+    ACTION_HERO_FULL_INSCRIPTIONPACKETINFCOST = '#quests:action/hero/full/inscriptionPacketInfCost'
+    ACTION_SHORT_INSCRIPTIONPACKETINFCOST = '#quests:action/short/inscriptionPacketInfCost'
+    ACTION_BUTTON_INSCRIPTIONPACKETINFCOST = '#quests:action/button/inscriptionPacketInfCost'
+    ACTION_AUTO_INSCRIPTIONPACKET7COST = '#quests:action/auto/inscriptionPacket7Cost'
+    ACTION_FULL_INSCRIPTIONPACKET7COST = '#quests:action/full/inscriptionPacket7Cost'
+    ACTION_HERO_FULL_INSCRIPTIONPACKET7COST = '#quests:action/hero/full/inscriptionPacket7Cost'
+    ACTION_SHORT_INSCRIPTIONPACKET7COST = '#quests:action/short/inscriptionPacket7Cost'
+    ACTION_BUTTON_INSCRIPTIONPACKET7COST = '#quests:action/button/inscriptionPacket7Cost'
+    ACTION_AUTO_INSCRIPTIONPACKET30COST = '#quests:action/auto/inscriptionPacket30Cost'
+    ACTION_FULL_INSCRIPTIONPACKET30COST = '#quests:action/full/inscriptionPacket30Cost'
+    ACTION_HERO_FULL_INSCRIPTIONPACKET30COST = '#quests:action/hero/full/inscriptionPacket30Cost'
+    ACTION_SHORT_INSCRIPTIONPACKET30COST = '#quests:action/short/inscriptionPacket30Cost'
+    ACTION_BUTTON_INSCRIPTIONPACKET30COST = '#quests:action/button/inscriptionPacket30Cost'
+    ACTION_AUTO_PASSPORTCHANGECOST = '#quests:action/auto/passportChangeCost'
+    ACTION_FULL_PASSPORTCHANGECOST = '#quests:action/full/passportChangeCost'
+    ACTION_HERO_FULL_PASSPORTCHANGECOST = '#quests:action/hero/full/passportChangeCost'
+    ACTION_SHORT_PASSPORTCHANGECOST = '#quests:action/short/passportChangeCost'
+    ACTION_BUTTON_PASSPORTCHANGECOST = '#quests:action/button/passportChangeCost'
+    ACTION_AUTO_FEMALEPASSPORTCHANGECOST = '#quests:action/auto/femalePassportChangeCost'
+    ACTION_FULL_FEMALEPASSPORTCHANGECOST = '#quests:action/full/femalePassportChangeCost'
+    ACTION_HERO_FULL_FEMALEPASSPORTCHANGECOST = '#quests:action/hero/full/femalePassportChangeCost'
+    ACTION_SHORT_FEMALEPASSPORTCHANGECOST = '#quests:action/short/femalePassportChangeCost'
+    ACTION_BUTTON_FEMALEPASSPORTCHANGECOST = '#quests:action/button/femalePassportChangeCost'
+    ACTION_AUTO_MUL_EQUIPMENTPRICEALL = '#quests:action/auto/mul_EquipmentPriceAll'
+    ACTION_AUTO_EQUIPMENT_CREDITSPRICEMULTIPLIER = '#quests:action/auto/equipment/creditsPriceMultiplier'
+    ACTION_SHORT_EQUIPMENT_CREDITSPRICEMULTIPLIER = '#quests:action/short/equipment/creditsPriceMultiplier'
+    ACTION_BUTTON_EQUIPMENT_CREDITSPRICEMULTIPLIER = '#quests:action/button/equipment/creditsPriceMultiplier'
+    ACTION_AUTO_EQUIPMENT_GOLDPRICEMULTIPLIER = '#quests:action/auto/equipment/goldPriceMultiplier'
+    ACTION_SHORT_EQUIPMENT_GOLDPRICEMULTIPLIER = '#quests:action/short/equipment/goldPriceMultiplier'
+    ACTION_BUTTON_EQUIPMENT_GOLDPRICEMULTIPLIER = '#quests:action/button/equipment/goldPriceMultiplier'
+    ACTION_AUTO_EQUIPMENT_MIXED = '#quests:action/auto/equipment/mixed'
+    ACTION_SHORT_EQUIPMENT_MIXED = '#quests:action/short/equipment/mixed'
+    ACTION_BUTTON_EQUIPMENT_MIXED = '#quests:action/button/equipment/mixed'
+    ACTION_AUTO_SET_EQUIPMENTPRICE = '#quests:action/auto/set_EquipmentPrice'
+    ACTION_SHORT_SET_EQUIPMENTPRICE = '#quests:action/short/set_EquipmentPrice'
+    ACTION_BUTTON_SET_EQUIPMENTPRICE = '#quests:action/button/set_EquipmentPrice'
+    ACTION_AUTO_MUL_EQUIPMENTPRICE = '#quests:action/auto/mul_EquipmentPrice'
+    ACTION_SHORT_MUL_EQUIPMENTPRICE = '#quests:action/short/mul_EquipmentPrice'
+    ACTION_BUTTON_MUL_EQUIPMENTPRICE = '#quests:action/button/mul_EquipmentPrice'
+    ACTION_AUTO_MUL_OPTIONALDEVICEPRICEALL = '#quests:action/auto/mul_OptionalDevicePriceAll'
+    ACTION_SHORT_MUL_OPTIONALDEVICEPRICEALL = '#quests:action/short/mul_OptionalDevicePriceAll'
+    ACTION_BUTTON_MUL_OPTIONALDEVICEPRICEALL = '#quests:action/button/mul_OptionalDevicePriceAll'
+    ACTION_AUTO_SET_OPTIONALDEVICEPRICE = '#quests:action/auto/set_OptionalDevicePrice'
+    ACTION_SHORT_SET_OPTIONALDEVICEPRICE = '#quests:action/short/set_OptionalDevicePrice'
+    ACTION_BUTTON_SET_OPTIONALDEVICEPRICE = '#quests:action/button/set_OptionalDevicePrice'
+    ACTION_AUTO_MUL_OPTIONALDEVICEPRICE = '#quests:action/auto/mul_OptionalDevicePrice'
+    ACTION_SHORT_MUL_OPTIONALDEVICEPRICE = '#quests:action/short/mul_OptionalDevicePrice'
+    ACTION_BUTTON_MUL_OPTIONALDEVICEPRICE = '#quests:action/button/mul_OptionalDevicePrice'
+    ACTION_AUTO_MUL_SHELLPRICEALL = '#quests:action/auto/mul_ShellPriceAll'
+    ACTION_AUTO_SHELL_CREDITSPRICEMULTIPLIER = '#quests:action/auto/shell/creditsPriceMultiplier'
+    ACTION_FULL_SHELL_CREDITSPRICEMULTIPLIER = '#quests:action/full/shell/creditsPriceMultiplier'
+    ACTION_HERO_FULL_SHELL_CREDITSPRICEMULTIPLIER = '#quests:action/hero/full/shell/creditsPriceMultiplier'
+    ACTION_SHORT_SHELL_CREDITSPRICEMULTIPLIER = '#quests:action/short/shell/creditsPriceMultiplier'
+    ACTION_BUTTON_SHELL_CREDITSPRICEMULTIPLIER = '#quests:action/button/shell/creditsPriceMultiplier'
+    ACTION_AUTO_SHELL_GOLDPRICEMULTIPLIER = '#quests:action/auto/shell/goldPriceMultiplier'
+    ACTION_FULL_SHELL_GOLDPRICEMULTIPLIER = '#quests:action/full/shell/goldPriceMultiplier'
+    ACTION_HERO_FULL_SHELL_GOLDPRICEMULTIPLIER = '#quests:action/hero/full/shell/goldPriceMultiplier'
+    ACTION_SHORT_SHELL_GOLDPRICEMULTIPLIER = '#quests:action/short/shell/goldPriceMultiplier'
+    ACTION_BUTTON_SHELL_GOLDPRICEMULTIPLIER = '#quests:action/button/shell/goldPriceMultiplier'
+    ACTION_AUTO_SHELL_MIXED = '#quests:action/auto/shell/mixed'
+    ACTION_FULL_SHELL_MIXED = '#quests:action/full/shell/mixed'
+    ACTION_HERO_FULL_SHELL_MIXED = '#quests:action/hero/full/shell/mixed'
+    ACTION_SHORT_SHELL_MIXED = '#quests:action/short/shell/mixed'
+    ACTION_BUTTON_SHELL_MIXED = '#quests:action/button/shell/mixed'
+    ACTION_AUTO_MUL_SHELLPRICE = '#quests:action/auto/mul_ShellPrice'
+    ACTION_FULL_MUL_SHELLPRICE = '#quests:action/full/mul_ShellPrice'
+    ACTION_HERO_FULL_MUL_SHELLPRICE = '#quests:action/hero/full/mul_ShellPrice'
+    ACTION_SHORT_MUL_SHELLPRICE = '#quests:action/short/mul_ShellPrice'
+    ACTION_BUTTON_MUL_SHELLPRICE = '#quests:action/button/mul_ShellPrice'
+    ACTION_AUTO_SET_SHELLPRICE = '#quests:action/auto/set_ShellPrice'
+    ACTION_FULL_SET_SHELLPRICE = '#quests:action/full/set_ShellPrice'
+    ACTION_HERO_FULL_SET_SHELLPRICE = '#quests:action/hero/full/set_ShellPrice'
+    ACTION_SHORT_SET_SHELLPRICE = '#quests:action/short/set_ShellPrice'
+    ACTION_BUTTON_SET_SHELLPRICE = '#quests:action/button/set_ShellPrice'
+    ACTION_AUTO_COND_VEHPRICE = '#quests:action/auto/cond_VehPrice'
+    ACTION_SHORT_COND_VEHPRICE_MORE = '#quests:action/short/cond_VehPrice/more'
+    ACTION_SHORT_COND_VEHPRICE_TWO = '#quests:action/short/cond_VehPrice/two'
+    ACTION_SHORT_COND_VEHPRICE_ONE = '#quests:action/short/cond_VehPrice/one'
+    ACTION_BUTTON_COND_VEHPRICE = '#quests:action/button/cond_VehPrice'
+    ACTION_AUTO_MUL_VEHPRICE = '#quests:action/auto/mul_VehPrice'
+    ACTION_FULL_MUL_VEHPRICE = '#quests:action/full/mul_VehPrice'
+    ACTION_SHORT_MUL_VEHPRICE_MORE = '#quests:action/short/mul_VehPrice/more'
+    ACTION_SHORT_MUL_VEHPRICE_TWO = '#quests:action/short/mul_VehPrice/two'
+    ACTION_SHORT_MUL_VEHPRICE_ONE = '#quests:action/short/mul_VehPrice/one'
+    ACTION_BUTTON_MUL_VEHPRICE = '#quests:action/button/mul_VehPrice'
+    ACTION_AUTO_SET_VEHPRICE = '#quests:action/auto/set_VehPrice'
+    ACTION_FULL_SET_VEHPRICE = '#quests:action/full/set_VehPrice'
+    ACTION_SHORT_SET_VEHPRICE = '#quests:action/short/set_VehPrice'
+    ACTION_BUTTON_SET_VEHPRICE = '#quests:action/button/set_VehPrice'
+    ACTION_AUTO_MUL_VEHRENTPRICE = '#quests:action/auto/mul_VehRentPrice'
+    ACTION_SHORT_MUL_VEHRENTPRICE_MORE = '#quests:action/short/mul_VehRentPrice/more'
+    ACTION_SHORT_MUL_VEHRENTPRICE_TWO = '#quests:action/short/mul_VehRentPrice/two'
+    ACTION_SHORT_MUL_VEHRENTPRICE_ONE = '#quests:action/short/mul_VehRentPrice/one'
+    ACTION_FULL_MUL_VEHRENTPRICE = '#quests:action/full/mul_VehRentPrice'
+    ACTION_BUTTON_MUL_VEHRENTPRICE = '#quests:action/button/mul_VehRentPrice'
+    ACTION_AUTO_SET_VEHRENTPRICE = '#quests:action/auto/set_VehRentPrice'
+    ACTION_FULL_SET_VEHRENTPRICE = '#quests:action/full/set_VehRentPrice'
+    ACTION_SHORT_SET_VEHRENTPRICE_MORE = '#quests:action/short/set_VehRentPrice/more'
+    ACTION_SHORT_SET_VEHRENTPRICE_TWO = '#quests:action/short/set_VehRentPrice/two'
+    ACTION_SHORT_SET_VEHRENTPRICE_ONE = '#quests:action/short/set_VehRentPrice/one'
+    ACTION_BUTTON_SET_VEHRENTPRICE = '#quests:action/button/set_VehRentPrice'
+    ACTION_AUTO_CLANCREATIONCOST = '#quests:action/auto/clanCreationCost'
+    ACTION_FULL_CLANCREATIONCOST = '#quests:action/full/clanCreationCost'
+    ACTION_HERO_FULL_CLANCREATIONCOST = '#quests:action/hero/full/clanCreationCost'
+    ACTION_SHORT_CLANCREATIONCOST = '#quests:action/short/clanCreationCost'
+    ACTION_BUTTON_CLANCREATIONCOST = '#quests:action/button/clanCreationCost'
+    ACTION_AUTO_PREMIUMPACKET1COST = '#quests:action/auto/premiumPacket1Cost'
+    ACTION_FULL_PREMIUMPACKET1COST = '#quests:action/full/premiumPacket1Cost'
+    ACTION_HERO_FULL_PREMIUMPACKET1COST = '#quests:action/hero/full/premiumPacket1Cost'
+    ACTION_SHORT_PREMIUMPACKET1COST = '#quests:action/short/premiumPacket1Cost'
+    ACTION_BUTTON_PREMIUMPACKET_NEW = '#quests:action/button/premiumPacket/new'
+    ACTION_BUTTON_PREMIUMPACKET_CONTINUE = '#quests:action/button/premiumPacket/continue'
+    ACTION_AUTO_PREMIUMPACKET3COST = '#quests:action/auto/premiumPacket3Cost'
+    ACTION_FULL_PREMIUMPACKET3COST = '#quests:action/full/premiumPacket3Cost'
+    ACTION_HERO_FULL_PREMIUMPACKET3COST = '#quests:action/hero/full/premiumPacket3Cost'
+    ACTION_SHORT_PREMIUMPACKET3COST = '#quests:action/short/premiumPacket3Cost'
+    ACTION_AUTO_PREMIUMPACKET7COST = '#quests:action/auto/premiumPacket7Cost'
+    ACTION_FULL_PREMIUMPACKET7COST = '#quests:action/full/premiumPacket7Cost'
+    ACTION_HERO_FULL_PREMIUMPACKET7COST = '#quests:action/hero/full/premiumPacket7Cost'
+    ACTION_SHORT_PREMIUMPACKET7COST = '#quests:action/short/premiumPacket7Cost'
+    ACTION_AUTO_PREMIUMPACKET180COST = '#quests:action/auto/premiumPacket180Cost'
+    ACTION_FULL_PREMIUMPACKET180COST = '#quests:action/full/premiumPacket180Cost'
+    ACTION_HERO_FULL_PREMIUMPACKET180COST = '#quests:action/hero/full/premiumPacket180Cost'
+    ACTION_SHORT_PREMIUMPACKET180COST = '#quests:action/short/premiumPacket180Cost'
+    ACTION_AUTO_PREMIUMPACKET360COST = '#quests:action/auto/premiumPacket360Cost'
+    ACTION_FULL_PREMIUMPACKET360COST = '#quests:action/full/premiumPacket360Cost'
+    ACTION_HERO_FULL_PREMIUMPACKET360COST = '#quests:action/hero/full/premiumPacket360Cost'
+    ACTION_SHORT_PREMIUMPACKET360COST = '#quests:action/short/premiumPacket360Cost'
+    ACTION_AUTO_PREMIUMPACKET30COST = '#quests:action/auto/premiumPacket30Cost'
+    ACTION_FULL_PREMIUMPACKET30COST = '#quests:action/full/premiumPacket30Cost'
+    ACTION_HERO_FULL_PREMIUMPACKET30COST = '#quests:action/hero/full/premiumPacket30Cost'
+    ACTION_SHORT_PREMIUMPACKET30COST = '#quests:action/short/premiumPacket30Cost'
+    ACTION_AUTO_WINXPFACTORMODE_ALWAYS = '#quests:action/auto/winXPFactorMode/always'
+    ACTION_FULL_WINXPFACTORMODE_ALWAYS = '#quests:action/full/winXPFactorMode/always'
+    ACTION_SHORT_WINXPFACTORMODE_ALWAYS = '#quests:action/short/winXPFactorMode/always'
+    ACTION_BUTTON_WINXPFACTORMODE_ALWAYS = '#quests:action/button/winXPFactorMode/always'
+    ACTION_AUTO_WINXPFACTORMODE_DAILY = '#quests:action/auto/winXPFactorMode/daily'
+    ACTION_FULL_WINXPFACTORMODE_DAILY = '#quests:action/full/winXPFactorMode/daily'
+    ACTION_SHORT_WINXPFACTORMODE_DAILY = '#quests:action/short/winXPFactorMode/daily'
+    ACTION_BUTTON_WINXPFACTORMODE_DAILY = '#quests:action/button/winXPFactorMode/daily'
+    ACTION_AUTO_FREEXPTOTMANXPRATE = '#quests:action/auto/freeXPToTManXPRate'
+    ACTION_FULL_FREEXPTOTMANXPRATE = '#quests:action/full/freeXPToTManXPRate'
+    ACTION_HERO_FULL_FREEXPTOTMANXPRATE = '#quests:action/hero/full/freeXPToTManXPRate'
+    ACTION_SHORT_FREEXPTOTMANXPRATE = '#quests:action/short/freeXPToTManXPRate'
+    ACTION_BUTTON_FREEXPTOTMANXPRATE = '#quests:action/button/freeXPToTManXPRate'
+    ACTION_AUTO_MUL_GOODIEPRICEALL = '#quests:action/auto/mul_GoodiePriceAll'
+    ACTION_SHORT_MUL_GOODIEPRICEALL = '#quests:action/short/mul_GoodiePriceAll'
+    ACTION_BUTTON_MUL_GOODIEPRICEALL = '#quests:action/button/mul_GoodiePriceAll'
+    ACTION_AUTO_SET_GOODIEPRICE = '#quests:action/auto/set_GoodiePrice'
+    ACTION_SHORT_SET_GOODIEPRICE = '#quests:action/short/set_GoodiePrice'
+    ACTION_BUTTON_SET_GOODIEPRICE = '#quests:action/button/set_GoodiePrice'
+    ACTION_AUTO_MUL_GOODIEPRICE = '#quests:action/auto/mul_GoodiePrice'
+    ACTION_SHORT_MUL_GOODIEPRICE = '#quests:action/short/mul_GoodiePrice'
+    ACTION_BUTTON_MUL_GOODIEPRICE = '#quests:action/button/mul_GoodiePrice'
+    ACTION_AUTO_MUL_CAMOUFLAGEPRICEFACTOR = '#quests:action/auto/mul_CamouflagePriceFactor'
+    ACTION_FULL_MUL_CAMOUFLAGEPRICEFACTOR = '#quests:action/full/mul_CamouflagePriceFactor'
+    ACTION_HERO_FULL_MUL_CAMOUFLAGEPRICEFACTOR = '#quests:action/hero/full/mul_CamouflagePriceFactor'
+    ACTION_SHORT_MUL_CAMOUFLAGEPRICEFACTOR = '#quests:action/short/mul_CamouflagePriceFactor'
+    ACTION_BUTTON_MUL_CAMOUFLAGEPRICEFACTOR = '#quests:action/button/mul_CamouflagePriceFactor'
+    ACTION_AUTO_TRADEINSELLPRICEFACTOR = '#quests:action/auto/tradeInSellPriceFactor'
+    ACTION_FULL_TRADEINSELLPRICEFACTOR = '#quests:action/full/tradeInSellPriceFactor'
+    ACTION_HERO_FULL_TRADEINSELLPRICEFACTOR = '#quests:action/hero/full/tradeInSellPriceFactor'
+    ACTION_SHORT_TRADEINSELLPRICEFACTOR = '#quests:action/short/tradeInSellPriceFactor'
+    ACTION_BUTTON_TRADEINSELLPRICEFACTOR = '#quests:action/button/tradeInSellPriceFactor'
+    ACTION_DISCOUNT_MORE = '#quests:action/discount/more'
+    ACTION_DISCOUNT_DISCOUNTTEXT = '#quests:action/discount/discountText'
+    ACTION_DISCOUNT_TRADEINLABELTEXT = '#quests:action/discount/tradeInLabelText'
+    ACTION_DISCOUNT_PERCENT = '#quests:action/discount/percent'
+    ACTION_DISCOUNT_MODIFIER = '#quests:action/discount/modifier'
+    ACTION_DISCOUNT_XP = '#quests:action/discount/xp'
+    ACTION_CHAIN_HINT_REMOVALCOST = '#quests:action/chain/hint/removalCost'
+    ACTION_CHAIN_HINT_OPENPERSONALCASE = '#quests:action/chain/hint/openPersonalCase'
+    ACTION_CHAIN_HINT_CHANGEROLE = '#quests:action/chain/hint/changeRole'
+    ACTION_CHAIN_HINT_DROPSKILLS = '#quests:action/chain/hint/dropSkills'
+    ACTION_CHAIN_HINT_CHANGEDOCUMENTS = '#quests:action/chain/hint/changeDocuments'
+    ACTION_CHAIN_HINT_CREWRETRAINING = '#quests:action/chain/hint/crewRetraining'
+    ACTION_CHAIN_HINT_WINXPFACTORMODE = '#quests:action/chain/hint/winXPFactorMode'
+    ACTION_CHAIN_HINT_FREEXPTOTMAN = '#quests:action/chain/hint/freeXPToTMan'
+    ACTION_CHAIN_HINT_PREMDAYS = '#quests:action/chain/hint/premDays'
+    ACTION_CHAIN_HINT_CUSTOMIZATION = '#quests:action/chain/hint/customization'
+    ACTION_CHAIN_HINT_CAMOUFLAGES = '#quests:action/chain/hint/camouflages'
+    ACTION_CHAIN_HINT_EMBLEMS = '#quests:action/chain/hint/emblems'
+    ACTION_CHAIN_HINT_INSCRIPTIONS = '#quests:action/chain/hint/inscriptions'
+    ACTION_LABEL_BATTLEQUESTS = '#quests:action/label/battleQuests'
+    ACTION_EMPTY_INFO = '#quests:action/empty/info'
+    ACTION_EMPTY_BTNLABEL = '#quests:action/empty/btnLabel'
+    ACTION_COMINGSOON_LABEL = '#quests:action/comingsoon/label'
+    ACTION_COMINGSOON_TIME = '#quests:action/comingsoon/time'
+    ACTION_TIME_FINISH = '#quests:action/time/finish'
+    ACTION_TIME_LEFT = '#quests:action/time/left'
+    ACTION_MORE_TYPE_EQUIPMENT = '#quests:action/more/type/equipment'
+    ACTION_MORE_TYPE_OPTIONALDEVICES = '#quests:action/more/type/optionalDevices'
+    ACTION_MORE_TYPE_GOODIES = '#quests:action/more/type/goodies'
+    ACTION_MORE_TYPE_VEHICLES = '#quests:action/more/type/vehicles'
+    ACTION_BOOSTER_BOOSTER_XP = '#quests:action/booster/booster_xp'
+    ACTION_BOOSTER_BOOSTER_FREE_XP = '#quests:action/booster/booster_free_xp'
+    ACTION_BOOSTER_BOOSTER_CREW_XP = '#quests:action/booster/booster_crew_xp'
+    ACTION_BOOSTER_BOOSTER_CREDITS = '#quests:action/booster/booster_credits'
+    ACTION_BOOSTER_BOOSTER_REPAIR = '#quests:action/booster/booster_repair'
+    ACTION_EXCHANGERATE_GOLD2CREDIT = '#quests:action/exchangeRate/gold2credit'
     QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK3)
     QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK3)
+    TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
+     TOKEN_DEFAULT_GERMANY,
+     TOKEN_DEFAULT_USA,
+     TOKEN_DEFAULT_FRANCE,
+     TOKEN_DEFAULT_UK,
+     TOKEN_DEFAULT_CZECH,
+     TOKEN_DEFAULT_CHINA,
+     TOKEN_DEFAULT_JAPAN,
+     TOKEN_DEFAULT_SWEDEN,
+     TOKEN_DEFAULT_WOT,
+     TOKEN_DEFAULT_LIGHTTANK,
+     TOKEN_DEFAULT_MEDIUMTANK,
+     TOKEN_DEFAULT_HEAVYTANK,
+     TOKEN_DEFAULT_AT_SPG,
+     TOKEN_DEFAULT_SPG)
+    BONUSNAME_ENUM = (BONUSNAME_CREDITS,
+     BONUSNAME_GOLD,
+     BONUSNAME_XP,
+     BONUSNAME_FREEXP,
+     BONUSNAME_TANKMENXP,
+     BONUSNAME_XPFACTOR,
+     BONUSNAME_CREDITSFACTOR,
+     BONUSNAME_FREEXPFACTOR,
+     BONUSNAME_TANKMENXPFACTOR,
+     BONUSNAME_DAILYXPFACTOR,
+     BONUSNAME_SLOTS,
+     BONUSNAME_BERTHS,
+     BONUSNAME_PREMIUM,
+     BONUSNAME_TANKMEN_WITH_SKILLS,
+     BONUSNAME_TANKMEN_NO_SKILLS,
+     BONUSNAME_CAMOUFLAGES,
+     BONUSNAME_EMBLEMS,
+     BONUSNAME_INSCRIPTIONS,
+     BONUSNAME_POTAPOVTOKEN)
+    ACTION_ENUM = (ACTION_AUTO_EXCHANGERATE,
+     ACTION_FULL_EXCHANGERATE,
+     ACTION_HERO_FULL_EXCHANGERATE,
+     ACTION_SHORT_EXCHANGERATE,
+     ACTION_BUTTON_EXCHANGERATE,
+     ACTION_AUTO_PAIDREMOVALCOST,
+     ACTION_FULL_PAIDREMOVALCOST,
+     ACTION_HERO_FULL_PAIDREMOVALCOST,
+     ACTION_SHORT_PAIDREMOVALCOST,
+     ACTION_BUTTON_PAIDREMOVALCOST,
+     ACTION_AUTO_CHANGEROLECOST,
+     ACTION_FULL_CHANGEROLECOST,
+     ACTION_HERO_FULL_CHANGEROLECOST,
+     ACTION_SHORT_CHANGEROLECOST,
+     ACTION_BUTTON_CHANGEROLECOST,
+     ACTION_AUTO_FREEXPCONVERSIONDISCRECITY,
+     ACTION_FULL_FREEXPCONVERSIONDISCRECITY,
+     ACTION_HERO_FULL_FREEXPCONVERSIONDISCRECITY,
+     ACTION_SHORT_FREEXPCONVERSIONDISCRECITY,
+     ACTION_BUTTON_FREEXPCONVERSIONDISCRECITY,
+     ACTION_AUTO_SLOTSPRICES,
+     ACTION_FULL_SLOTSPRICES,
+     ACTION_HERO_FULL_SLOTSPRICES,
+     ACTION_SHORT_SLOTSPRICES,
+     ACTION_BUTTON_SLOTSPRICES,
+     ACTION_AUTO_BERTHSPRICES,
+     ACTION_FULL_BERTHSPRICES,
+     ACTION_HERO_FULL_BERTHSPRICES,
+     ACTION_SHORT_BERTHSPRICES,
+     ACTION_BUTTON_BERTHSPRICES,
+     ACTION_AUTO_CREDITSTANKMANCOST,
+     ACTION_FULL_CREDITSTANKMANCOST,
+     ACTION_HERO_FULL_CREDITSTANKMANCOST,
+     ACTION_SHORT_CREDITSTANKMANCOST,
+     ACTION_BUTTON_CREDITSTANKMANCOST,
+     ACTION_AUTO_GOLDTANKMANCOST,
+     ACTION_FULL_GOLDTANKMANCOST,
+     ACTION_HERO_FULL_GOLDTANKMANCOST,
+     ACTION_SHORT_GOLDTANKMANCOST,
+     ACTION_BUTTON_GOLDTANKMANCOST,
+     ACTION_AUTO_TANKMEN_MIXED,
+     ACTION_FULL_TANKMEN_MIXED,
+     ACTION_HERO_FULL_TANKMEN_MIXED,
+     ACTION_SHORT_TANKMEN_MIXED,
+     ACTION_BUTTON_TANKMEN_MIXED,
+     ACTION_AUTO_CREDITSDROPSKILLSCOST,
+     ACTION_FULL_CREDITSDROPSKILLSCOST,
+     ACTION_HERO_FULL_CREDITSDROPSKILLSCOST,
+     ACTION_SHORT_CREDITSDROPSKILLSCOST,
+     ACTION_BUTTON_CREDITSDROPSKILLSCOST,
+     ACTION_AUTO_GOLDDROPSKILLSCOST,
+     ACTION_FULL_GOLDDROPSKILLSCOST,
+     ACTION_HERO_FULL_GOLDDROPSKILLSCOST,
+     ACTION_SHORT_GOLDDROPSKILLSCOST,
+     ACTION_BUTTON_GOLDDROPSKILLSCOST,
+     ACTION_AUTO_DROPSKILLS_MIXED,
+     ACTION_FULL_DROPSKILLS_MIXED,
+     ACTION_HERO_FULL_DROPSKILLS_MIXED,
+     ACTION_SHORT_DROPSKILLS_MIXED,
+     ACTION_BUTTON_DROPSKILLS_MIXED,
+     ACTION_AUTO_CAMOUFLAGE_GOLD,
+     ACTION_FULL_CAMOUFLAGE_GOLD,
+     ACTION_HERO_FULL_CAMOUFLAGE_GOLD,
+     ACTION_SHORT_CAMOUFLAGE_GOLD,
+     ACTION_BUTTON_CAMOUFLAGE_GOLD,
+     ACTION_AUTO_CAMOUFLAGE_CREDITS,
+     ACTION_FULL_CAMOUFLAGE_CREDITS,
+     ACTION_HERO_FULL_CAMOUFLAGE_CREDITS,
+     ACTION_SHORT_CAMOUFLAGE_CREDITS,
+     ACTION_BUTTON_CAMOUFLAGE_CREDITS,
+     ACTION_AUTO_CAMOUFLAGE_MIXED,
+     ACTION_FULL_CAMOUFLAGE_MIXED,
+     ACTION_HERO_FULL_CAMOUFLAGE_MIXED,
+     ACTION_SHORT_CAMOUFLAGE_MIXED,
+     ACTION_BUTTON_CAMOUFLAGE_MIXED,
+     ACTION_AUTO_CAMOUFLAGEPACKETINFCOST,
+     ACTION_FULL_CAMOUFLAGEPACKETINFCOST,
+     ACTION_HERO_FULL_CAMOUFLAGEPACKETINFCOST,
+     ACTION_SHORT_CAMOUFLAGEPACKETINFCOST,
+     ACTION_BUTTON_CAMOUFLAGEPACKETINFCOST,
+     ACTION_AUTO_CAMOUFLAGEPACKET30COST,
+     ACTION_FULL_CAMOUFLAGEPACKET30COST,
+     ACTION_HERO_FULL_CAMOUFLAGEPACKET30COST,
+     ACTION_SHORT_CAMOUFLAGEPACKET30COST,
+     ACTION_BUTTON_CAMOUFLAGEPACKET30COST,
+     ACTION_AUTO_CAMOUFLAGEPACKET7COST,
+     ACTION_FULL_CAMOUFLAGEPACKET7COST,
+     ACTION_HERO_FULL_CAMOUFLAGEPACKET7COST,
+     ACTION_SHORT_CAMOUFLAGEPACKET7COST,
+     ACTION_BUTTON_CAMOUFLAGEPACKET7COST,
+     ACTION_AUTO_EMBLEM_GOLD,
+     ACTION_FULL_EMBLEM_GOLD,
+     ACTION_HERO_FULL_EMBLEM_GOLD,
+     ACTION_SHORT_EMBLEM_GOLD,
+     ACTION_BUTTON_EMBLEM_GOLD,
+     ACTION_AUTO_EMBLEM_CREDITS,
+     ACTION_FULL_EMBLEM_CREDITS,
+     ACTION_HERO_FULL_EMBLEM_CREDITS,
+     ACTION_SHORT_EMBLEM_CREDITS,
+     ACTION_BUTTON_EMBLEM_CREDITS,
+     ACTION_AUTO_EMBLEM_MIXED,
+     ACTION_FULL_EMBLEM_MIXED,
+     ACTION_HERO_FULL_EMBLEM_MIXED,
+     ACTION_SHORT_EMBLEM_MIXED,
+     ACTION_BUTTON_EMBLEM_MIXED,
+     ACTION_AUTO_EMBLEMPACKETINFCOST,
+     ACTION_FULL_EMBLEMPACKETINFCOST,
+     ACTION_HERO_FULL_EMBLEMPACKETINFCOST,
+     ACTION_SHORT_EMBLEMPACKETINFCOST,
+     ACTION_BUTTON_EMBLEMPACKETINFCOST,
+     ACTION_AUTO_EMBLEMPACKET7COST,
+     ACTION_FULL_EMBLEMPACKET7COST,
+     ACTION_HERO_FULL_EMBLEMPACKET7COST,
+     ACTION_SHORT_EMBLEMPACKET7COST,
+     ACTION_BUTTON_EMBLEMPACKET7COST,
+     ACTION_AUTO_EMBLEMPACKET30COST,
+     ACTION_FULL_EMBLEMPACKET30COST,
+     ACTION_HERO_FULL_EMBLEMPACKET30COST,
+     ACTION_SHORT_EMBLEMPACKET30COST,
+     ACTION_BUTTON_EMBLEMPACKET30COST,
+     ACTION_AUTO_INSCRIPTION_GOLD,
+     ACTION_FULL_INSCRIPTION_GOLD,
+     ACTION_HERO_FULL_INSCRIPTION_GOLD,
+     ACTION_SHORT_INSCRIPTION_GOLD,
+     ACTION_BUTTON_INSCRIPTION_GOLD,
+     ACTION_AUTO_INSCRIPTION_CREDITS,
+     ACTION_FULL_INSCRIPTION_CREDITS,
+     ACTION_HERO_FULL_INSCRIPTION_CREDITS,
+     ACTION_SHORT_INSCRIPTION_CREDITS,
+     ACTION_BUTTON_INSCRIPTION_CREDITS,
+     ACTION_AUTO_INSCRIPTION_MIXED,
+     ACTION_FULL_INSCRIPTION_MIXED,
+     ACTION_HERO_FULL_INSCRIPTION_MIXED,
+     ACTION_SHORT_INSCRIPTION_MIXED,
+     ACTION_BUTTON_INSCRIPTION_MIXED,
+     ACTION_AUTO_INSCRIPTIONPACKETINFCOST,
+     ACTION_FULL_INSCRIPTIONPACKETINFCOST,
+     ACTION_HERO_FULL_INSCRIPTIONPACKETINFCOST,
+     ACTION_SHORT_INSCRIPTIONPACKETINFCOST,
+     ACTION_BUTTON_INSCRIPTIONPACKETINFCOST,
+     ACTION_AUTO_INSCRIPTIONPACKET7COST,
+     ACTION_FULL_INSCRIPTIONPACKET7COST,
+     ACTION_HERO_FULL_INSCRIPTIONPACKET7COST,
+     ACTION_SHORT_INSCRIPTIONPACKET7COST,
+     ACTION_BUTTON_INSCRIPTIONPACKET7COST,
+     ACTION_AUTO_INSCRIPTIONPACKET30COST,
+     ACTION_FULL_INSCRIPTIONPACKET30COST,
+     ACTION_HERO_FULL_INSCRIPTIONPACKET30COST,
+     ACTION_SHORT_INSCRIPTIONPACKET30COST,
+     ACTION_BUTTON_INSCRIPTIONPACKET30COST,
+     ACTION_AUTO_PASSPORTCHANGECOST,
+     ACTION_FULL_PASSPORTCHANGECOST,
+     ACTION_HERO_FULL_PASSPORTCHANGECOST,
+     ACTION_SHORT_PASSPORTCHANGECOST,
+     ACTION_BUTTON_PASSPORTCHANGECOST,
+     ACTION_AUTO_FEMALEPASSPORTCHANGECOST,
+     ACTION_FULL_FEMALEPASSPORTCHANGECOST,
+     ACTION_HERO_FULL_FEMALEPASSPORTCHANGECOST,
+     ACTION_SHORT_FEMALEPASSPORTCHANGECOST,
+     ACTION_BUTTON_FEMALEPASSPORTCHANGECOST,
+     ACTION_AUTO_MUL_EQUIPMENTPRICEALL,
+     ACTION_AUTO_EQUIPMENT_CREDITSPRICEMULTIPLIER,
+     ACTION_SHORT_EQUIPMENT_CREDITSPRICEMULTIPLIER,
+     ACTION_BUTTON_EQUIPMENT_CREDITSPRICEMULTIPLIER,
+     ACTION_AUTO_EQUIPMENT_GOLDPRICEMULTIPLIER,
+     ACTION_SHORT_EQUIPMENT_GOLDPRICEMULTIPLIER,
+     ACTION_BUTTON_EQUIPMENT_GOLDPRICEMULTIPLIER,
+     ACTION_AUTO_EQUIPMENT_MIXED,
+     ACTION_SHORT_EQUIPMENT_MIXED,
+     ACTION_BUTTON_EQUIPMENT_MIXED,
+     ACTION_AUTO_SET_EQUIPMENTPRICE,
+     ACTION_SHORT_SET_EQUIPMENTPRICE,
+     ACTION_BUTTON_SET_EQUIPMENTPRICE,
+     ACTION_AUTO_MUL_EQUIPMENTPRICE,
+     ACTION_SHORT_MUL_EQUIPMENTPRICE,
+     ACTION_BUTTON_MUL_EQUIPMENTPRICE,
+     ACTION_AUTO_MUL_OPTIONALDEVICEPRICEALL,
+     ACTION_SHORT_MUL_OPTIONALDEVICEPRICEALL,
+     ACTION_BUTTON_MUL_OPTIONALDEVICEPRICEALL,
+     ACTION_AUTO_SET_OPTIONALDEVICEPRICE,
+     ACTION_SHORT_SET_OPTIONALDEVICEPRICE,
+     ACTION_BUTTON_SET_OPTIONALDEVICEPRICE,
+     ACTION_AUTO_MUL_OPTIONALDEVICEPRICE,
+     ACTION_SHORT_MUL_OPTIONALDEVICEPRICE,
+     ACTION_BUTTON_MUL_OPTIONALDEVICEPRICE,
+     ACTION_AUTO_MUL_SHELLPRICEALL,
+     ACTION_AUTO_SHELL_CREDITSPRICEMULTIPLIER,
+     ACTION_FULL_SHELL_CREDITSPRICEMULTIPLIER,
+     ACTION_HERO_FULL_SHELL_CREDITSPRICEMULTIPLIER,
+     ACTION_SHORT_SHELL_CREDITSPRICEMULTIPLIER,
+     ACTION_BUTTON_SHELL_CREDITSPRICEMULTIPLIER,
+     ACTION_AUTO_SHELL_GOLDPRICEMULTIPLIER,
+     ACTION_FULL_SHELL_GOLDPRICEMULTIPLIER,
+     ACTION_HERO_FULL_SHELL_GOLDPRICEMULTIPLIER,
+     ACTION_SHORT_SHELL_GOLDPRICEMULTIPLIER,
+     ACTION_BUTTON_SHELL_GOLDPRICEMULTIPLIER,
+     ACTION_AUTO_SHELL_MIXED,
+     ACTION_FULL_SHELL_MIXED,
+     ACTION_HERO_FULL_SHELL_MIXED,
+     ACTION_SHORT_SHELL_MIXED,
+     ACTION_BUTTON_SHELL_MIXED,
+     ACTION_AUTO_MUL_SHELLPRICE,
+     ACTION_FULL_MUL_SHELLPRICE,
+     ACTION_HERO_FULL_MUL_SHELLPRICE,
+     ACTION_SHORT_MUL_SHELLPRICE,
+     ACTION_BUTTON_MUL_SHELLPRICE,
+     ACTION_AUTO_SET_SHELLPRICE,
+     ACTION_FULL_SET_SHELLPRICE,
+     ACTION_HERO_FULL_SET_SHELLPRICE,
+     ACTION_SHORT_SET_SHELLPRICE,
+     ACTION_BUTTON_SET_SHELLPRICE,
+     ACTION_AUTO_COND_VEHPRICE,
+     ACTION_SHORT_COND_VEHPRICE_MORE,
+     ACTION_SHORT_COND_VEHPRICE_TWO,
+     ACTION_SHORT_COND_VEHPRICE_ONE,
+     ACTION_BUTTON_COND_VEHPRICE,
+     ACTION_AUTO_MUL_VEHPRICE,
+     ACTION_FULL_MUL_VEHPRICE,
+     ACTION_SHORT_MUL_VEHPRICE_MORE,
+     ACTION_SHORT_MUL_VEHPRICE_TWO,
+     ACTION_SHORT_MUL_VEHPRICE_ONE,
+     ACTION_BUTTON_MUL_VEHPRICE,
+     ACTION_AUTO_SET_VEHPRICE,
+     ACTION_FULL_SET_VEHPRICE,
+     ACTION_SHORT_SET_VEHPRICE,
+     ACTION_BUTTON_SET_VEHPRICE,
+     ACTION_AUTO_MUL_VEHRENTPRICE,
+     ACTION_SHORT_MUL_VEHRENTPRICE_MORE,
+     ACTION_SHORT_MUL_VEHRENTPRICE_TWO,
+     ACTION_SHORT_MUL_VEHRENTPRICE_ONE,
+     ACTION_FULL_MUL_VEHRENTPRICE,
+     ACTION_BUTTON_MUL_VEHRENTPRICE,
+     ACTION_AUTO_SET_VEHRENTPRICE,
+     ACTION_FULL_SET_VEHRENTPRICE,
+     ACTION_SHORT_SET_VEHRENTPRICE_MORE,
+     ACTION_SHORT_SET_VEHRENTPRICE_TWO,
+     ACTION_SHORT_SET_VEHRENTPRICE_ONE,
+     ACTION_BUTTON_SET_VEHRENTPRICE,
+     ACTION_AUTO_CLANCREATIONCOST,
+     ACTION_FULL_CLANCREATIONCOST,
+     ACTION_HERO_FULL_CLANCREATIONCOST,
+     ACTION_SHORT_CLANCREATIONCOST,
+     ACTION_BUTTON_CLANCREATIONCOST,
+     ACTION_AUTO_PREMIUMPACKET1COST,
+     ACTION_FULL_PREMIUMPACKET1COST,
+     ACTION_HERO_FULL_PREMIUMPACKET1COST,
+     ACTION_SHORT_PREMIUMPACKET1COST,
+     ACTION_BUTTON_PREMIUMPACKET_NEW,
+     ACTION_BUTTON_PREMIUMPACKET_CONTINUE,
+     ACTION_AUTO_PREMIUMPACKET3COST,
+     ACTION_FULL_PREMIUMPACKET3COST,
+     ACTION_HERO_FULL_PREMIUMPACKET3COST,
+     ACTION_SHORT_PREMIUMPACKET3COST,
+     ACTION_AUTO_PREMIUMPACKET7COST,
+     ACTION_FULL_PREMIUMPACKET7COST,
+     ACTION_HERO_FULL_PREMIUMPACKET7COST,
+     ACTION_SHORT_PREMIUMPACKET7COST,
+     ACTION_AUTO_PREMIUMPACKET180COST,
+     ACTION_FULL_PREMIUMPACKET180COST,
+     ACTION_HERO_FULL_PREMIUMPACKET180COST,
+     ACTION_SHORT_PREMIUMPACKET180COST,
+     ACTION_AUTO_PREMIUMPACKET360COST,
+     ACTION_FULL_PREMIUMPACKET360COST,
+     ACTION_HERO_FULL_PREMIUMPACKET360COST,
+     ACTION_SHORT_PREMIUMPACKET360COST,
+     ACTION_AUTO_PREMIUMPACKET30COST,
+     ACTION_FULL_PREMIUMPACKET30COST,
+     ACTION_HERO_FULL_PREMIUMPACKET30COST,
+     ACTION_SHORT_PREMIUMPACKET30COST,
+     ACTION_AUTO_WINXPFACTORMODE_ALWAYS,
+     ACTION_FULL_WINXPFACTORMODE_ALWAYS,
+     ACTION_SHORT_WINXPFACTORMODE_ALWAYS,
+     ACTION_BUTTON_WINXPFACTORMODE_ALWAYS,
+     ACTION_AUTO_WINXPFACTORMODE_DAILY,
+     ACTION_FULL_WINXPFACTORMODE_DAILY,
+     ACTION_SHORT_WINXPFACTORMODE_DAILY,
+     ACTION_BUTTON_WINXPFACTORMODE_DAILY,
+     ACTION_AUTO_FREEXPTOTMANXPRATE,
+     ACTION_FULL_FREEXPTOTMANXPRATE,
+     ACTION_HERO_FULL_FREEXPTOTMANXPRATE,
+     ACTION_SHORT_FREEXPTOTMANXPRATE,
+     ACTION_BUTTON_FREEXPTOTMANXPRATE,
+     ACTION_AUTO_MUL_GOODIEPRICEALL,
+     ACTION_SHORT_MUL_GOODIEPRICEALL,
+     ACTION_BUTTON_MUL_GOODIEPRICEALL,
+     ACTION_AUTO_SET_GOODIEPRICE,
+     ACTION_SHORT_SET_GOODIEPRICE,
+     ACTION_BUTTON_SET_GOODIEPRICE,
+     ACTION_AUTO_MUL_GOODIEPRICE,
+     ACTION_SHORT_MUL_GOODIEPRICE,
+     ACTION_BUTTON_MUL_GOODIEPRICE,
+     ACTION_AUTO_MUL_CAMOUFLAGEPRICEFACTOR,
+     ACTION_FULL_MUL_CAMOUFLAGEPRICEFACTOR,
+     ACTION_HERO_FULL_MUL_CAMOUFLAGEPRICEFACTOR,
+     ACTION_SHORT_MUL_CAMOUFLAGEPRICEFACTOR,
+     ACTION_BUTTON_MUL_CAMOUFLAGEPRICEFACTOR,
+     ACTION_AUTO_TRADEINSELLPRICEFACTOR,
+     ACTION_FULL_TRADEINSELLPRICEFACTOR,
+     ACTION_HERO_FULL_TRADEINSELLPRICEFACTOR,
+     ACTION_SHORT_TRADEINSELLPRICEFACTOR,
+     ACTION_BUTTON_TRADEINSELLPRICEFACTOR,
+     ACTION_DISCOUNT_MORE,
+     ACTION_DISCOUNT_DISCOUNTTEXT,
+     ACTION_DISCOUNT_TRADEINLABELTEXT,
+     ACTION_DISCOUNT_PERCENT,
+     ACTION_DISCOUNT_MODIFIER,
+     ACTION_DISCOUNT_XP,
+     ACTION_CHAIN_HINT_REMOVALCOST,
+     ACTION_CHAIN_HINT_OPENPERSONALCASE,
+     ACTION_CHAIN_HINT_CHANGEROLE,
+     ACTION_CHAIN_HINT_DROPSKILLS,
+     ACTION_CHAIN_HINT_CHANGEDOCUMENTS,
+     ACTION_CHAIN_HINT_CREWRETRAINING,
+     ACTION_CHAIN_HINT_WINXPFACTORMODE,
+     ACTION_CHAIN_HINT_FREEXPTOTMAN,
+     ACTION_CHAIN_HINT_PREMDAYS,
+     ACTION_CHAIN_HINT_CUSTOMIZATION,
+     ACTION_CHAIN_HINT_CAMOUFLAGES,
+     ACTION_CHAIN_HINT_EMBLEMS,
+     ACTION_CHAIN_HINT_INSCRIPTIONS,
+     ACTION_LABEL_BATTLEQUESTS,
+     ACTION_EMPTY_INFO,
+     ACTION_EMPTY_BTNLABEL,
+     ACTION_COMINGSOON_LABEL,
+     ACTION_COMINGSOON_TIME,
+     ACTION_TIME_FINISH,
+     ACTION_TIME_LEFT,
+     ACTION_MORE_TYPE_EQUIPMENT,
+     ACTION_MORE_TYPE_OPTIONALDEVICES,
+     ACTION_MORE_TYPE_GOODIES,
+     ACTION_MORE_TYPE_VEHICLES,
+     ACTION_BOOSTER_BOOSTER_XP,
+     ACTION_BOOSTER_BOOSTER_FREE_XP,
+     ACTION_BOOSTER_BOOSTER_CREW_XP,
+     ACTION_BOOSTER_BOOSTER_CREDITS,
+     ACTION_BOOSTER_BOOSTER_REPAIR,
+     ACTION_EXCHANGERATE_GOLD2CREDIT)
+    DETAILS_DOSSIER_ALL_ENUM = (DETAILS_DOSSIER_RANDOM_XP,
+     DETAILS_DOSSIER_RANDOM_MAXXP,
+     DETAILS_DOSSIER_RANDOM_BATTLESCOUNT,
+     DETAILS_DOSSIER_RANDOM_WINS,
+     DETAILS_DOSSIER_RANDOM_LOSSES,
+     DETAILS_DOSSIER_RANDOM_SURVIVEDBATTLES,
+     DETAILS_DOSSIER_RANDOM_LASTBATTLETIME,
+     DETAILS_DOSSIER_RANDOM_WINANDSURVIVED,
+     DETAILS_DOSSIER_RANDOM_BATTLEHEROES,
+     DETAILS_DOSSIER_RANDOM_FRAGS,
+     DETAILS_DOSSIER_RANDOM_MAXFRAGS,
+     DETAILS_DOSSIER_RANDOM_MAXDAMAGE,
+     DETAILS_DOSSIER_RANDOM_FRAGS8P,
+     DETAILS_DOSSIER_RANDOM_FRAGSBEAST,
+     DETAILS_DOSSIER_RANDOM_DIRECTHITS,
+     DETAILS_DOSSIER_RANDOM_SPOTTED,
+     DETAILS_DOSSIER_RANDOM_DAMAGEDEALT,
+     DETAILS_DOSSIER_RANDOM_DAMAGERECEIVED,
+     DETAILS_DOSSIER_RANDOM_DIRECTHITSRECEIVED,
+     DETAILS_DOSSIER_RANDOM_CAPTUREPOINTS,
+     DETAILS_DOSSIER_RANDOM_DROPPEDCAPTUREPOINTS,
+     DETAILS_DOSSIER_RANDOM_PIERCINGS,
+     DETAILS_DOSSIER_RANDOM_NODAMAGEDIRECTHITSRECEIVED,
+     DETAILS_DOSSIER_RANDOM_PIERCINGSRECEIVED,
+     DETAILS_DOSSIER_RANDOM_POTENTIALDAMAGERECEIVED,
+     DETAILS_DOSSIER_RANDOM_DAMAGEBLOCKEDBYARMOR,
+     DETAILS_DOSSIER_RANDOM_ORIGINALXP,
+     DETAILS_DOSSIER_RANDOM_DAMAGEASSISTEDTRACK,
+     DETAILS_DOSSIER_RANDOM_DAMAGEASSISTEDRADIO,
+     DETAILS_DOSSIER_RANDOM_SHOTS,
+     DETAILS_DOSSIER_RANDOM_EXPLOSIONHITSRECEIVED,
+     DETAILS_DOSSIER_COMPANY_XP,
+     DETAILS_DOSSIER_COMPANY_BATTLESCOUNT,
+     DETAILS_DOSSIER_COMPANY_WINS,
+     DETAILS_DOSSIER_COMPANY_LOSSES,
+     DETAILS_DOSSIER_COMPANY_SURVIVEDBATTLES,
+     DETAILS_DOSSIER_COMPANY_FRAGS,
+     DETAILS_DOSSIER_COMPANY_DIRECTHITS,
+     DETAILS_DOSSIER_COMPANY_SPOTTED,
+     DETAILS_DOSSIER_COMPANY_DAMAGEDEALT,
+     DETAILS_DOSSIER_COMPANY_MAXDAMAGE,
+     DETAILS_DOSSIER_COMPANY_DAMAGERECEIVED,
+     DETAILS_DOSSIER_COMPANY_CAPTUREPOINTS,
+     DETAILS_DOSSIER_COMPANY_DROPPEDCAPTUREPOINTS,
+     DETAILS_DOSSIER_COMPANY_PIERCINGS,
+     DETAILS_DOSSIER_COMPANY_NODAMAGEDIRECTHITSRECEIVED,
+     DETAILS_DOSSIER_COMPANY_PIERCINGSRECEIVED,
+     DETAILS_DOSSIER_COMPANY_POTENTIALDAMAGERECEIVED,
+     DETAILS_DOSSIER_COMPANY_DAMAGEBLOCKEDBYARMOR,
+     DETAILS_DOSSIER_COMPANY_ORIGINALXP,
+     DETAILS_DOSSIER_COMPANY_DAMAGEASSISTEDTRACK,
+     DETAILS_DOSSIER_COMPANY_DAMAGEASSISTEDRADIO,
+     DETAILS_DOSSIER_CLAN_XP,
+     DETAILS_DOSSIER_CLAN_BATTLESCOUNT,
+     DETAILS_DOSSIER_CLAN_WINS,
+     DETAILS_DOSSIER_CLAN_LOSSES,
+     DETAILS_DOSSIER_CLAN_SURVIVEDBATTLES,
+     DETAILS_DOSSIER_CLAN_FRAGS,
+     DETAILS_DOSSIER_CLAN_DIRECTHITS,
+     DETAILS_DOSSIER_CLAN_SPOTTED,
+     DETAILS_DOSSIER_CLAN_DAMAGEDEALT,
+     DETAILS_DOSSIER_CLAN_MAXDAMAGE,
+     DETAILS_DOSSIER_CLAN_DAMAGERECEIVED,
+     DETAILS_DOSSIER_CLAN_CAPTUREPOINTS,
+     DETAILS_DOSSIER_CLAN_DROPPEDCAPTUREPOINTS,
+     DETAILS_DOSSIER_CLAN_PIERCINGS,
+     DETAILS_DOSSIER_CLAN_NODAMAGEDIRECTHITSRECEIVED,
+     DETAILS_DOSSIER_CLAN_PIERCINGSRECEIVED,
+     DETAILS_DOSSIER_CLAN_POTENTIALDAMAGERECEIVED,
+     DETAILS_DOSSIER_CLAN_DAMAGEBLOCKEDBYARMOR,
+     DETAILS_DOSSIER_CLAN_ORIGINALXP,
+     DETAILS_DOSSIER_CLAN_DAMAGEASSISTEDTRACK,
+     DETAILS_DOSSIER_CLAN_DAMAGEASSISTEDRADIO,
+     DETAILS_DOSSIER_HISTORICAL_XP,
+     DETAILS_DOSSIER_HISTORICAL_BATTLESCOUNT,
+     DETAILS_DOSSIER_HISTORICAL_WINS,
+     DETAILS_DOSSIER_HISTORICAL_LOSSES,
+     DETAILS_DOSSIER_HISTORICAL_SURVIVEDBATTLES,
+     DETAILS_DOSSIER_HISTORICAL_FRAGS,
+     DETAILS_DOSSIER_HISTORICAL_DIRECTHITS,
+     DETAILS_DOSSIER_HISTORICAL_SPOTTED,
+     DETAILS_DOSSIER_HISTORICAL_DAMAGEDEALT,
+     DETAILS_DOSSIER_HISTORICAL_MAXDAMAGE,
+     DETAILS_DOSSIER_HISTORICAL_DAMAGERECEIVED,
+     DETAILS_DOSSIER_HISTORICAL_CAPTUREPOINTS,
+     DETAILS_DOSSIER_HISTORICAL_DROPPEDCAPTUREPOINTS,
+     DETAILS_DOSSIER_HISTORICAL_PIERCINGS,
+     DETAILS_DOSSIER_HISTORICAL_NODAMAGEDIRECTHITSRECEIVED,
+     DETAILS_DOSSIER_HISTORICAL_PIERCINGSRECEIVED,
+     DETAILS_DOSSIER_HISTORICAL_POTENTIALDAMAGERECEIVED,
+     DETAILS_DOSSIER_HISTORICAL_DAMAGEBLOCKEDBYARMOR,
+     DETAILS_DOSSIER_HISTORICAL_ORIGINALXP,
+     DETAILS_DOSSIER_HISTORICAL_DAMAGEASSISTEDTRACK,
+     DETAILS_DOSSIER_HISTORICAL_DAMAGEASSISTEDRADIO,
+     DETAILS_DOSSIER_TEAM_XP,
+     DETAILS_DOSSIER_TEAM_BATTLESCOUNT,
+     DETAILS_DOSSIER_TEAM_WINS,
+     DETAILS_DOSSIER_TEAM_LOSSES,
+     DETAILS_DOSSIER_TEAM_SURVIVEDBATTLES,
+     DETAILS_DOSSIER_TEAM_FRAGS,
+     DETAILS_DOSSIER_TEAM_DIRECTHITS,
+     DETAILS_DOSSIER_TEAM_SPOTTED,
+     DETAILS_DOSSIER_TEAM_DAMAGEDEALT,
+     DETAILS_DOSSIER_TEAM_MAXDAMAGE,
+     DETAILS_DOSSIER_TEAM_DAMAGERECEIVED,
+     DETAILS_DOSSIER_TEAM_CAPTUREPOINTS,
+     DETAILS_DOSSIER_TEAM_DROPPEDCAPTUREPOINTS,
+     DETAILS_DOSSIER_TEAM_PIERCINGS,
+     DETAILS_DOSSIER_TEAM_NODAMAGEDIRECTHITSRECEIVED,
+     DETAILS_DOSSIER_TEAM_PIERCINGSRECEIVED,
+     DETAILS_DOSSIER_TEAM_POTENTIALDAMAGERECEIVED,
+     DETAILS_DOSSIER_TEAM_DAMAGEBLOCKEDBYARMOR,
+     DETAILS_DOSSIER_TEAM_ORIGINALXP,
+     DETAILS_DOSSIER_TEAM_DAMAGEASSISTEDTRACK,
+     DETAILS_DOSSIER_TEAM_DAMAGEASSISTEDRADIO,
+     DETAILS_DOSSIER_LADDER_XP,
+     DETAILS_DOSSIER_LADDER_BATTLESCOUNT,
+     DETAILS_DOSSIER_LADDER_WINS,
+     DETAILS_DOSSIER_LADDER_LOSSES,
+     DETAILS_DOSSIER_LADDER_SURVIVEDBATTLES,
+     DETAILS_DOSSIER_LADDER_FRAGS,
+     DETAILS_DOSSIER_LADDER_DIRECTHITS,
+     DETAILS_DOSSIER_LADDER_SPOTTED,
+     DETAILS_DOSSIER_LADDER_DAMAGEDEALT,
+     DETAILS_DOSSIER_LADDER_MAXDAMAGE,
+     DETAILS_DOSSIER_LADDER_DAMAGERECEIVED,
+     DETAILS_DOSSIER_LADDER_CAPTUREPOINTS,
+     DETAILS_DOSSIER_LADDER_DROPPEDCAPTUREPOINTS,
+     DETAILS_DOSSIER_LADDER_PIERCINGS,
+     DETAILS_DOSSIER_LADDER_NODAMAGEDIRECTHITSRECEIVED,
+     DETAILS_DOSSIER_LADDER_PIERCINGSRECEIVED,
+     DETAILS_DOSSIER_LADDER_POTENTIALDAMAGERECEIVED,
+     DETAILS_DOSSIER_LADDER_DAMAGEBLOCKEDBYARMOR,
+     DETAILS_DOSSIER_LADDER_ORIGINALXP,
+     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDTRACK,
+     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDRADIO,
+     DETAILS_DOSSIER_RANKED_BATTLESCOUNT)
 
     @classmethod
     def questspersonalwelcomeview_textblock_header(cls, key0):
@@ -784,6 +1821,42 @@ class QUESTS(object):
     def questspersonalwelcomeview_textblock_body(cls, key0):
         outcome = '#quests:QuestsPersonalWelcomeView/textBlock/body/{}'.format(key0)
         if outcome not in cls.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getTokenTitle(cls, style):
+        outcome = '#quests:token/default/{}'.format(style)
+        if outcome not in cls.TOKEN_DEFAULT_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getBonusName(cls, bonusName):
+        outcome = '#quests:bonusName/{}'.format(bonusName)
+        if outcome not in cls.BONUSNAME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getActionDescription(cls, action):
+        outcome = '#quests:action/{}'.format(action)
+        if outcome not in cls.ACTION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getDetailsDossier(cls, battleTypeName, keyName):
+        outcome = '#quests:details/dossier/{}/{}'.format(battleTypeName, keyName)
+        if outcome not in cls.DETAILS_DOSSIER_ALL_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

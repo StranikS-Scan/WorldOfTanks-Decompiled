@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/SkillDropWindow.py
 import cPickle as pickle
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from helpers import dependency
 from items import tankmen
 from gui import SystemMessages
 from gui.shared.utils import decorators
@@ -9,22 +10,24 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.serializers import packTankman
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.processors.tankman import TankmanDropSkills
-from gui.shared.money import Money
+from gui.shared.money import Money, Currency
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.Scaleform.daapi.view.meta.SkillDropMeta import SkillDropMeta
-from gui.shared import events, g_itemsCache
+from gui.shared import events
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.MENU import MENU
 from helpers import i18n
+from skeletons.gui.shared import IItemsCache
 
 class SkillDropWindow(SkillDropMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(SkillDropWindow, self).__init__()
         self.tmanInvID = ctx.get('tankmanID')
 
     def __setData(self, *args):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
         if tankman is None:
             self.onWindowClose()
@@ -64,14 +67,14 @@ class SkillDropWindow(SkillDropMeta):
     def _populate(self):
         super(SkillDropWindow, self)._populate()
         self.__setData()
-        g_itemsCache.onSyncCompleted += self.__setData
+        self.itemsCache.onSyncCompleted += self.__setData
+        g_clientUpdateManager.addCurrencyCallback(Currency.CREDITS, self.onCreditsChange)
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.onGoldChange)
         g_clientUpdateManager.addCallbacks({'inventory.8.compDescr': self.onTankmanChanged,
-         'stats.credits': self.onCreditsChange,
-         'stats.gold': self.onGoldChange,
          'cache.mayConsumeWalletResources': self.onGoldChange})
 
     def _dispose(self):
-        g_itemsCache.onSyncCompleted -= self.__setData
+        self.itemsCache.onSyncCompleted -= self.__setData
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(SkillDropWindow, self)._dispose()
 
@@ -87,7 +90,7 @@ class SkillDropWindow(SkillDropMeta):
         self.as_setCreditsS(credits)
 
     def onGoldChange(self, gold):
-        self.as_setGoldS(g_itemsCache.items.stats.gold)
+        self.as_setGoldS(self.itemsCache.items.stats.gold)
 
     def onWindowClose(self):
         self.destroy()
@@ -112,7 +115,7 @@ class SkillDropWindow(SkillDropMeta):
         Drops all tankman skill using @dropSkillCostIdx modificator
         @param dropSkillCostIdx: tankman experience modificator index
         """
-        tankman = g_itemsCache.items.getTankman(self.tmanInvID)
+        tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         proc = TankmanDropSkills(tankman, dropSkillCostIdx)
         result = yield proc.request()
         if len(result.userMsg):

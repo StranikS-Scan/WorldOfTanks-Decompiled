@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/factories.py
 import nations
-from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD
+from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, getType as getAchieveType, ACHIEVEMENT_BLOCK as _AB, WHITE_TIGER_RECORD, RARE_STORAGE_RECORD, HONORED_RANK_RECORD
 from gui.shared.gui_items.dossier import achievements as _as
 from gui.shared.gui_items.dossier.achievements import abstract as _abstract_achievements
 
@@ -225,6 +225,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_a
  (_AB.FALLOUT, 'champion'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.FALLOUT, 'bannerman'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  WHITE_TIGER_RECORD: _CustomAchieveFactory.get(_as.WhiteTigerAchievement),
+ HONORED_RANK_RECORD: _CustomAchieveFactory.get(_as.HonoredRankAchievement),
  RARE_STORAGE_RECORD: _RareAchievesFactory.get()}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.TankExpertAchievement, _nID)

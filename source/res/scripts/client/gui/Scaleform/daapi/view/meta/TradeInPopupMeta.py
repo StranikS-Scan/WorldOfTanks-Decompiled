@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
 class TradeInPopupMeta(SmartPopOverView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends SmartPopOverView
-    """
 
     def onSelectVehicle(self, index):
         self._printOverrideError('onSelectVehicle')

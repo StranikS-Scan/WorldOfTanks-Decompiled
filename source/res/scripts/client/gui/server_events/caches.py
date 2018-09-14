@@ -2,12 +2,13 @@
 # Embedded file name: scripts/client/gui/server_events/caches.py
 from collections import namedtuple
 from debug_utils import LOG_ERROR
+from helpers import dependency
 from shared_utils import first
 from gui import nationCompareByIndex, getNationIndex
-from gui.LobbyContext import g_lobbyContext
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES, compareByVehTableTypeName
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES as _QA
+from skeletons.gui.lobby_context import ILobbyContext
 _g_sortedVehs = {}
 VehiclesListProps = namedtuple('VehiclesListProps', ['disableChecker',
  'nationIdx',
@@ -43,12 +44,16 @@ def clearVehiclesData():
 
 PQ_TABS = (_QA.SEASON_VIEW_TAB_RANDOM, _QA.SEASON_VIEW_TAB_FALLOUT)
 
-def getEnabledPQTabs():
-    tabs = list(PQ_TABS)
-    if not g_lobbyContext.getServerSettings().isRegularQuestEnabled():
-        tabs.remove(_QA.SEASON_VIEW_TAB_RANDOM)
-    if not g_lobbyContext.getServerSettings().isFalloutQuestEnabled():
-        tabs.remove(_QA.SEASON_VIEW_TAB_FALLOUT)
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getEnabledPQTabs(lobbyContext=None):
+    if lobbyContext is not None:
+        tabs = list(PQ_TABS)
+        if not lobbyContext.getServerSettings().isRegularQuestEnabled():
+            tabs.remove(_QA.SEASON_VIEW_TAB_RANDOM)
+        if not lobbyContext.getServerSettings().isFalloutQuestEnabled():
+            tabs.remove(_QA.SEASON_VIEW_TAB_FALLOUT)
+    else:
+        tabs = []
     return tabs
 
 
@@ -83,16 +88,16 @@ class PQInfo(QuestInfo):
     __slots__ = ('tileID', 'questID', 'filters')
 
 
-@ReprInjector.simple('tabID', 'random', 'falloutQuests', 'common', 'tutorial')
+@ReprInjector.simple('tabID', 'random', 'falloutQuests')
 class _NavigationInfo(object):
 
     def __init__(self):
         self.tabID = None
         self.random = PQInfo(None, None, None)
         self.falloutQuests = PQInfo(None, None, None)
-        self.common = QuestInfo(None)
-        self.tutorial = QuestInfo(None)
         self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
+        self._missionsTab = None
+        self._vehicleSelectorFilters = {}
         return
 
     @property
@@ -119,8 +124,6 @@ class _NavigationInfo(object):
             if tabID == _QA.TAB_PERSONAL_QUESTS:
                 self.random.clear()
                 self.falloutQuests.clear()
-            else:
-                self.common.clear()
         self.tabID = tabID
 
     def selectPotapovQuest(self, tileID, questID=None):
@@ -141,13 +144,25 @@ class _NavigationInfo(object):
     def changePQFilters(self, *args):
         self.selectedPQ.update(filters=args)
 
-    def selectCommonQuest(self, questID):
-        self.tabID = _QA.TAB_COMMON_QUESTS
-        self.common = self.common.update(questID=questID)
+    def getMissionsTab(self):
+        """ Get current missions tab for the current game session.
+        """
+        return self._missionsTab
 
-    def selectTutorialQuest(self, questID):
-        self.tabID = _QA.TAB_BEGINNER_QUESTS
-        self.tutorial = self.tutorial.update(questID=questID)
+    def setMissionsTab(self, tabID):
+        """ Set current missions tab for the current game session.
+        """
+        self._missionsTab = tabID
+
+    def getVehicleSelectorFilters(self):
+        """ Get missions vehicle selector carousel's filters.
+        """
+        return self._vehicleSelectorFilters
+
+    def setVehicleSelectorFilters(self, filters):
+        """ Set missions vehicle selector carousel's filters.
+        """
+        self._vehicleSelectorFilters = filters
 
 
 _g_navInfo = None
@@ -163,36 +178,3 @@ def clearNavInfo():
     global _g_navInfo
     _g_navInfo = None
     return
-
-
-_SORTINGS = {'nation': lambda (veh1, _), (veh2, __): nationCompareByIndex(veh1.nationID, veh2.nationID),
- 'type': lambda (veh1, _), (veh2, __): compareByVehTableTypeName(veh2.type, veh1.type),
- 'level': lambda (veh1, _), (veh2, __): veh1.level - veh2.level,
- 'vName': lambda (veh1, _), (veh2, __): cmp(veh1.userName, veh2.userName),
- 'notAvailable': lambda (_, vData1), (__, vData2): cmp(vData1[0], vData2[0]),
- 'discount': lambda (_, vData1), (__, vData2): cmp(vData1[1], vData2[1])}
-
-def sortVehTable(tableID, btnID, direction, nation=None, vehType=None, level=None, cbSelected=None, isAction=None):
-    result = []
-    vehData = getVehiclesData(tableID)
-    if vehData is None:
-        return result
-    else:
-        vehList, props = vehData
-        updateVehiclesDataProps(tableID, nationIdx=nation, vehTypeIdx=vehType, levelIdx=level, selectedBtn=btnID, sortDirect=direction, checkbox=cbSelected)
-        for v, data in vehList:
-            if nation != -1 and getNationIndex(nation) != v.nationID:
-                continue
-            if vehType != -1 and vehType != VEHICLE_TYPES_ORDER_INDICES[v.type]:
-                continue
-            if level != -1 and level != v.level:
-                continue
-            if isAction and cbSelected and v.isInInventory:
-                continue
-            if not isAction and cbSelected and not v.isInInventory:
-                continue
-            result.append((v, data))
-
-        if btnID in _SORTINGS:
-            result.sort(cmp=_SORTINGS[btnID], reverse=direction == 'descending')
-        return (result, props.disableChecker)

@@ -151,9 +151,9 @@ class VehicleTypeInfoVO(object):
 
 
 class VehicleArenaInfoVO(object):
-    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus')
+    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked')
 
-    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, **kwargs):
+    def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
         self.vehicleID = vehicleID
         self.team = team
@@ -165,6 +165,8 @@ class VehicleArenaInfoVO(object):
         self.invitationDeliveryStatus = self.__getInvitationStatus(forbidInBattleInvitations)
         self.events = events or {}
         self.squadIndex = 0
+        self.ranked = PlayerRankedInfoVO(*ranked) if ranked is not None else PlayerRankedInfoVO()
+        return
 
     def __repr__(self):
         return 'VehicleArenaInfoVO(vehicleID = {0!r:s}, team = {1!r:s}, player = {2!r:s}, playerStatus = {3:n}, vehicleType = {4!r:s}, vehicleStatus = {5:n}, prebattleID = {6!r:s})'.format(self.vehicleID, self.team, self.player, self.playerStatus, self.vehicleType, self.vehicleStatus, self.prebattleID)
@@ -217,6 +219,12 @@ class VehicleArenaInfoVO(object):
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.INVITATION_DELIVERY_STATUS)
         return invalidate
 
+    def updateRanked(self, invalidate=_INVALIDATE_OP.NONE, ranked=None, **kwargs):
+        if ranked is not None:
+            self.ranked = PlayerRankedInfoVO(*ranked)
+            invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
+        return invalidate
+
     def update(self, **kwargs):
         invalidate = _INVALIDATE_OP.VEHICLE_INFO
         newPrbID = kwargs.get('prebattleID', 0)
@@ -228,6 +236,7 @@ class VehicleArenaInfoVO(object):
         invalidate = self.updateVehicleStatus(invalidate=invalidate, **kwargs)
         invalidate = self.updatePlayerStatus(invalidate=invalidate, **kwargs)
         invalidate = self.updateInvitationStatus(invalidate=invalidate, **kwargs)
+        invalidate = self.updateRanked(invalidate=invalidate, **kwargs)
         return invalidate
 
     def getSquadID(self):
@@ -435,6 +444,20 @@ class VehicleArenaStatsVO(object):
         else:
             return _INVALIDATE_OP.NONE
             return
+
+
+class PlayerRankedInfoVO(object):
+    """Value object containing information about player rank."""
+    __slots__ = ('rank', 'rankStep', 'badges', 'selectedBadge')
+
+    def __init__(self, rank=None, badges=None):
+        super(PlayerRankedInfoVO, self).__init__()
+        self.rank, self.rankStep = rank or (0, 0)
+        self.badges = badges or ()
+
+    @property
+    def selectedBadge(self):
+        return self.badges[0] if self.badges else 0
 
 
 class VehicleArenaStatsDict(defaultdict):

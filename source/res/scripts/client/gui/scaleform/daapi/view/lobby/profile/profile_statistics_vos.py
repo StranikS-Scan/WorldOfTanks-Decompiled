@@ -4,15 +4,17 @@ import BigWorld
 import nations
 from dossiers2.ui import layouts
 from gui import GUI_NATIONS, getNationIndex
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, FORT_STATISTICS_LAYOUT, STATISTICS_LAYOUT
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import DetailedStatisticsUtils as DSUtils
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.PROFILE import PROFILE
+from gui.battle_results.components import style
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
+from helpers import dependency
 from helpers import i18n
+from skeletons.gui.lobby_context import ILobbyContext
 
 def _packAvgDmgLditItemData(avgDmg):
     return PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(avgDmg), PROFILE.SECTION_SUMMARY_SCORES_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDAMAGE, 'avgDamage40x32.png')
@@ -31,30 +33,7 @@ def _getDetailedStatisticsData(label, targetData, isCurrentUser, layout=STATISTI
     return PUtils.getLabelViewTypeDataObject(label, result, PUtils.VIEW_TYPE_TABLES)
 
 
-def _getBattleChartsStatistics(battlesStats, levelDisabledTooltip):
-    outcome = []
-    tDict = battlesStats[0]
-    typesRes = []
-    for vehType in VEHICLE_TYPES_ORDER:
-        typesRes.append({'xField': i18n.makeString(DIALOGS.vehicleselldialog_vehicletype(vehType)),
-         'icon': '../maps/icons/filters/tanks/{0}.png'.format(vehType),
-         'yField': tDict[vehType],
-         'tooltip': PROFILE.SECTION_STATISTICS_CHART_TYPE_TOOLTIP})
-
-    _setChartDataPercentages(typesRes)
-    outcome.append(typesRes)
-    tDict = battlesStats[1]
-    nationRes = []
-    for guiNationIdx, _ in enumerate(GUI_NATIONS):
-        nationIdx = getNationIndex(guiNationIdx)
-        nationName = nations.NAMES[nationIdx]
-        nationRes.append({'xField': i18n.makeString(MENU.nations(nationName)),
-         'icon': '../maps/icons/filters/nations/{0}.png'.format(nationName),
-         'yField': tDict[nationIdx],
-         'tooltip': PROFILE.SECTION_STATISTICS_CHART_NATION_TOOLTIP})
-
-    _setChartDataPercentages(nationRes)
-    outcome.append(nationRes)
+def _getVehStatsByLevel(battlesStats, levelDisabledTooltip):
     tDict = battlesStats[2]
     lvlRes = len(tDict) * [None]
     for level, value in tDict.iteritems():
@@ -69,8 +48,35 @@ def _getBattleChartsStatistics(battlesStats, levelDisabledTooltip):
          'tooltip': tooltip}
 
     _setChartDataPercentages(lvlRes)
-    outcome.append(lvlRes)
-    return {'data': outcome}
+    return lvlRes
+
+
+def _getVehStatsByTypes(battlesStats):
+    tDict = battlesStats[0]
+    typesRes = []
+    for vehType in VEHICLE_TYPES_ORDER:
+        typesRes.append({'xField': i18n.makeString(DIALOGS.vehicleselldialog_vehicletype(vehType)),
+         'icon': '../maps/icons/filters/tanks/{0}.png'.format(vehType),
+         'yField': tDict[vehType],
+         'tooltip': PROFILE.SECTION_STATISTICS_CHART_TYPE_TOOLTIP})
+
+    _setChartDataPercentages(typesRes)
+    return typesRes
+
+
+def _getVehStatsByNation(battlesStats):
+    tDict = battlesStats[1]
+    nationRes = []
+    for guiNationIdx, _ in enumerate(GUI_NATIONS):
+        nationIdx = getNationIndex(guiNationIdx)
+        nationName = nations.NAMES[nationIdx]
+        nationRes.append({'xField': i18n.makeString(MENU.nations(nationName)),
+         'icon': '../maps/icons/filters/nations/{0}.png'.format(nationName),
+         'yField': tDict[nationIdx],
+         'tooltip': PROFILE.SECTION_STATISTICS_CHART_NATION_TOOLTIP})
+
+    _setChartDataPercentages(nationRes)
+    return nationRes
 
 
 def _setChartDataPercentages(chartData):
@@ -81,8 +87,13 @@ def _setChartDataPercentages(chartData):
         data['percentValue'] = int(100 * data['yField'] / yMax)
 
 
-def _getChartsData(targetData, levelDisabledTooltip=None):
-    return PUtils.getLabelViewTypeDataObject(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_CHARTS, _getBattleChartsStatistics(targetData.getBattlesStats(), levelDisabledTooltip), PUtils.VIEW_TYPE_CHARTS)
+def _formatChartsData(data):
+    return PUtils.getLabelViewTypeDataObject(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_CHARTS, {'data': data}, PUtils.VIEW_TYPE_CHARTS)
+
+
+def _getChartsFullData(targetData, levelDisabledTooltip=None):
+    stats = targetData.getBattlesStats()
+    return _formatChartsData((_getVehStatsByTypes(stats), _getVehStatsByNation(stats), _getVehStatsByLevel(stats, levelDisabledTooltip)))
 
 
 def _getFortAvgLoot(targetData, totalLootValue):
@@ -143,11 +154,11 @@ class ProfileAllStatisticsVO(ProfileDictStatisticsVO):
          _packAvgDmgLditItemData(self._avgDmg),
          _packAvgXPLditItemData(self._avgXP),
          PUtils.packLditItemData(self._maxXP_formattedStr, PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, 'maxExp40x32.png', PUtils.getVehicleRecordTooltipData(targetData.getMaxXpVehicle)),
-         PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(targetData.getMarksOfMastery()[3]), PROFILE.SECTION_STATISTICS_SCORES_COOLSIGNS, PROFILE.PROFILE_PARAMS_TOOLTIP_MARKOFMASTERY, 'markOfMastery40x32.png'))
+         PUtils.packLditItemData(style.makeMarksOfMasteryText(BigWorld.wg_getIntegralFormat(targetData.getMarksOfMastery()[3]), len(targetData.getVehicles())), PROFILE.SECTION_STATISTICS_SCORES_COOLSIGNS, PROFILE.PROFILE_PARAMS_TOOLTIP_MARKOFMASTERY, 'markOfMastery40x32.png'))
 
     def _getDetailedData(self, data):
         targetData = data[0]
-        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _getChartsData(targetData))
+        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _getChartsFullData(targetData))
 
 
 class ProfileHistoricalStatisticsVO(ProfileDictStatisticsVO):
@@ -188,7 +199,7 @@ class Profile7x7StatisticsVO(ProfileDictStatisticsVO):
 
     def _getDetailedData(self, data):
         targetData = data[0]
-        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _getChartsData(targetData, PROFILE.SECTION_STATISTICS_CHART_LEVELDISABLED7X7_TOOLTIP))
+        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _getChartsFullData(targetData, PROFILE.SECTION_STATISTICS_CHART_LEVELDISABLED7X7_TOOLTIP))
 
 
 class StaticProfile7x7StatisticsVO(Profile7x7StatisticsVO):
@@ -199,6 +210,7 @@ class StaticProfile7x7StatisticsVO(Profile7x7StatisticsVO):
 
 
 class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, targetData, accountDossier, isCurrentUser):
         self.__fortMiscTargetData = accountDossier.getFortMiscStats()
@@ -212,7 +224,7 @@ class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
 
     def _getHeaderData(self, data):
         headerParams = []
-        if g_lobbyContext.getServerSettings().isStrongholdsEnabled():
+        if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
             headerParams.append(PUtils.getTotalBattlesHeaderParam(self.__fortBattlesTargetData, PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES))
             headerParams.append(PUtils.packLditItemData(PUtils.getFormattedWinsEfficiency(self.__fortBattlesTargetData), PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLESWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLESWINSEFFICIENCY, 'wins40x32.png'))
         else:
@@ -225,7 +237,7 @@ class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
     def _getDetailedData(self, data):
         targetData = data[0]
         dataList = []
-        if g_lobbyContext.getServerSettings().isStrongholdsEnabled():
+        if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
             dataList.append(_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTBATTLES, self.__fortBattlesTargetData, isCurrentUser=self._isCurrentUser, layout=FORT_STATISTICS_LAYOUT))
         dataList.append(_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTSORTIE, targetData, isCurrentUser=self._isCurrentUser))
         return dataList
@@ -275,7 +287,7 @@ class ProfileFalloutStatisticsVO(ProfileDictStatisticsVO):
 
     def _getDetailedData(self, data):
         targetData = data[0]
-        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser, FALLOUT_STATISTICS_LAYOUT), _getChartsData(targetData, PROFILE.SECTION_STATISTICS_CHART_LEVELDISABLEDFALLOUT_TOOLTIP))
+        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser, FALLOUT_STATISTICS_LAYOUT), _getChartsFullData(targetData, PROFILE.SECTION_STATISTICS_CHART_LEVELDISABLEDFALLOUT_TOOLTIP))
 
     def __packAvgVictoryPointsData(self, avgVictoryPoints):
         return PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(avgVictoryPoints), PROFILE.SECTION_STATISTICS_SCORES_AVGVICTORYPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGVICTORYPOINTS, 'avgVictoryPoints40x32.png')
@@ -290,6 +302,28 @@ class ProfileFalloutStatisticsVO(ProfileDictStatisticsVO):
         return PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(avgDmg), PROFILE.SECTION_SUMMARY_SCORES_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_AVGDAMAGE, 'avgDamage40x32.png')
 
 
+class ProfileRankedStatisticsVO(ProfileDictStatisticsVO):
+
+    def _getHeaderText(self, data):
+        return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_RANKED)
+
+    def _getHeaderData(self, data):
+        targetData = data[0]
+        avgPointsPercent = PUtils.formatFloatPercent(PUtils.getValueOrUnavailable(targetData.getStepsEfficiency()))
+        avgPointsTooltipData = (BigWorld.wg_getIntegralFormat(targetData.getStepsCount()), BigWorld.wg_getIntegralFormat(targetData.getBattlesCount()))
+        return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
+         PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(targetData.getLadderPts()), PROFILE.SECTION_STATISTICS_SCORES_RANKED_POINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_RANKED_POINTS, 'rankPoints40x32.png'),
+         PUtils.packLditItemData(avgPointsPercent, PROFILE.SECTION_STATISTICS_SCORES_RANKED_AVGPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_RANKED_AVGPOINTS, 'rankStageFactor40x32.png', PUtils.createToolTipData(avgPointsTooltipData)),
+         _packAvgDmgLditItemData(self._avgDmg),
+         _packAvgXPLditItemData(self._avgXP),
+         PUtils.packLditItemData(BigWorld.wg_getNiceNumberFormat(PUtils.getValueOrUnavailable(targetData.getAvgFrags())), PROFILE.SECTION_STATISTICS_SCORES_RANKED_AVGFRAGS, PROFILE.PROFILE_PARAMS_TOOLTIP_RANKED_AVGFRAGS, 'maxFrags40x32.png'))
+
+    def _getDetailedData(self, data):
+        targetData = data[0]
+        stats = targetData.getBattlesStats()
+        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _formatChartsData((_getVehStatsByTypes(stats), _getVehStatsByNation(stats), tuple())))
+
+
 _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,
  PROFILE_DROPDOWN_KEYS.FALLOUT: ProfileFalloutStatisticsVO,
  PROFILE_DROPDOWN_KEYS.HISTORICAL: ProfileHistoricalStatisticsVO,
@@ -297,7 +331,8 @@ _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,
  PROFILE_DROPDOWN_KEYS.STATICTEAM: StaticProfile7x7StatisticsVO,
  PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON: StaticProfile7x7StatisticsVO,
  PROFILE_DROPDOWN_KEYS.CLAN: ProfileGlobalMapStatisticsVO,
- PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: ProfileFortStatisticsVO}
+ PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: ProfileFortStatisticsVO,
+ PROFILE_DROPDOWN_KEYS.RANKED: ProfileRankedStatisticsVO}
 
 def getStatisticsVO(battlesType, targetData, accountDossier, isCurrentUser):
     return _VO_MAPPING[battlesType](targetData=targetData, accountDossier=accountDossier, isCurrentUser=isCurrentUser)

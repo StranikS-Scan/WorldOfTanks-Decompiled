@@ -8,11 +8,10 @@ from gui.Scaleform.daapi.view.meta.PremiumWindowMeta import PremiumWindowMeta
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared import g_itemsCache
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.processors.common import PremiumAccountBuyer
-from gui.shared.money import Money
+from gui.shared.money import Money, Currency
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips import formatters
@@ -20,15 +19,16 @@ from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils.decorators import process
 from helpers import i18n, time_utils, dependency
 from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.shared import IItemsCache
 BTN_WIDTH = 120
 PREMIUM_PACKET_LOCAL_KEY = '#menu:premium/packet/days%s'
 
 class PremiumWindow(PremiumWindowMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
     gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self, ctx=None):
         super(PremiumWindow, self).__init__()
-        self._items = g_itemsCache.items
         self._actualPremiumCost = None
         self._arenaUniqueID = 0
         self._premiumBonusesDiff = None
@@ -50,19 +50,18 @@ class PremiumWindow(PremiumWindowMeta):
 
     def _populate(self):
         super(PremiumWindow, self)._populate()
-        g_clientUpdateManager.addCallbacks({'stats.gold': self.__onUpdateHandler,
-         'stats.unlocks': self.__onUpdateHandler,
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__onUpdateHandler)
+        g_clientUpdateManager.addCallbacks({'stats.unlocks': self.__onUpdateHandler,
          'cache.mayConsumeWalletResources': self.__onUpdateHandler,
          'goodies': self.__onUpdateHandler})
         self.gameSession.onPremiumNotify += self.__onUpdateHandler
-        g_itemsCache.onSyncCompleted += self.__onUpdateHandler
+        self.itemsCache.onSyncCompleted += self.__onUpdateHandler
         self.__populateData()
 
     def _dispose(self):
-        g_itemsCache.onSyncCompleted -= self.__onUpdateHandler
+        self.itemsCache.onSyncCompleted -= self.__onUpdateHandler
         self.gameSession.onPremiumNotify -= self.__onUpdateHandler
         g_clientUpdateManager.removeObjectCallbacks(self)
-        self._items = None
         self._actualPremiumCost = None
         super(PremiumWindow, self)._dispose()
         return
@@ -72,7 +71,7 @@ class PremiumWindow(PremiumWindowMeta):
 
     def __canUpdatePremium(self):
         if self.__isPremiumAccount():
-            deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self._items.stats.premiumExpiryTime)))
+            deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.itemsCache.items.stats.premiumExpiryTime)))
             return deltaInSeconds < time_utils.ONE_YEAR
         return True
 
@@ -91,7 +90,7 @@ class PremiumWindow(PremiumWindowMeta):
 
     @process('loadStats')
     def __premiumBuyRequest(self, days, cost):
-        wasPremium = g_itemsCache.items.stats.isPremium
+        wasPremium = self.itemsCache.items.stats.isPremium
         arenaUniqueID = self._arenaUniqueID
         result = yield PremiumAccountBuyer(days, cost, arenaUniqueID).request()
         if not result.success and result.auxData and result.auxData.get('errStr', '') in ('Battle not in cache', 'Not supported'):
@@ -102,7 +101,7 @@ class PremiumWindow(PremiumWindowMeta):
         if result.success:
             if arenaUniqueID and self._premiumBonusesDiff:
                 SystemMessages.pushI18nMessage('#system_messages:premium/post_battle_premium', type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM, **self._premiumBonusesDiff)
-            becomePremium = g_itemsCache.items.stats.isPremium and not wasPremium
+            becomePremium = self.itemsCache.items.stats.isPremium and not wasPremium
             self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.PREMIUM_BOUGHT, ctx={'arenaUniqueID': arenaUniqueID,
              'becomePremium': becomePremium}))
             self.onWindowClose()
@@ -120,13 +119,13 @@ class PremiumWindow(PremiumWindowMeta):
         return MENU.PREMIUM_SUBMITCONTINUE if self.__isPremiumAccount() else MENU.PREMIUM_SUBMITBUY
 
     def __isPremiumAccount(self):
-        return self._items.stats.isPremium
+        return self.itemsCache.items.stats.isPremium
 
     def __getPremiumPackets(self, canUpdatePremium):
-        premiumCost = sorted(self._items.shop.getPremiumCostWithDiscount().items(), reverse=True)
-        defaultPremiumCost = sorted(self._items.shop.defaults.premiumCost.items(), reverse=True)
+        premiumCost = sorted(self.itemsCache.items.shop.getPremiumCostWithDiscount().items(), reverse=True)
+        defaultPremiumCost = sorted(self.itemsCache.items.shop.defaults.premiumCost.items(), reverse=True)
         packetVOs = []
-        accGold = self._items.stats.gold
+        accGold = self.itemsCache.items.stats.gold
         canBuyPremium = self.__canBuyPremium()
         selectedPacket = 0
         actualPremiumCost = {}
@@ -155,7 +154,7 @@ class PremiumWindow(PremiumWindowMeta):
 
     def __canBuyPremium(self):
         if self.__isPremiumAccount():
-            premiumExpiryTime = self._items.stats.premiumExpiryTime
+            premiumExpiryTime = self.itemsCache.items.stats.premiumExpiryTime
         else:
             premiumExpiryTime = 0
         deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(premiumExpiryTime)))
@@ -193,8 +192,8 @@ class PremiumWindow(PremiumWindowMeta):
           'btnName': 'closeButton'}]
 
     def __isBuyBtnEnabled(self):
-        premiumCost = self._items.shop.getPremiumCostWithDiscount()
+        premiumCost = self.itemsCache.items.shop.getPremiumCostWithDiscount()
         if len(premiumCost) > 0:
             minPremiumPacketCost = min(premiumCost.values())
-            return self._items.stats.gold >= minPremiumPacketCost and self.__canBuyPremium()
+            return self.itemsCache.items.stats.gold >= minPremiumPacketCost and self.__canBuyPremium()
         return False

@@ -1,16 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/GetPremiumPopover.py
 import BigWorld
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.meta.GetPremiumPopoverMeta import GetPremiumPopoverMeta
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import event_dispatcher
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.shared.formatters import text_styles
+from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.lobby_context import ILobbyContext
 
 class GetPremiumPopover(GetPremiumPopoverMeta):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(GetPremiumPopover, self).__init__()
@@ -26,7 +28,7 @@ class GetPremiumPopover(GetPremiumPopoverMeta):
         return
 
     def onActionBtnClick(self, clientUniqueID):
-        event_dispatcher.showPremiumWindow(arenaUniqueID=g_lobbyContext.getArenaUniqueIDByClientID(clientUniqueID), premiumBonusesDiff={'xpDiff': self.__context.xpDiff,
+        event_dispatcher.showPremiumWindow(arenaUniqueID=self.lobbyContext.getArenaUniqueIDByClientID(clientUniqueID), premiumBonusesDiff={'xpDiff': self.__context.xpDiff,
          'creditDiff': self.__context.creditsDiff})
         self.destroy()
 

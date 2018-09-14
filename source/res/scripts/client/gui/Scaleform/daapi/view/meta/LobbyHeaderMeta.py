@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class LobbyHeaderMeta(BaseDAAPIComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIComponent
-    """
 
     def menuItemClick(self, alias):
         self._printOverrideError('menuItemClick')
@@ -28,6 +22,9 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def onPremShopClick(self):
         self._printOverrideError('onPremShopClick')
 
+    def onCrystalClick(self):
+        self._printOverrideError('onCrystalClick')
+
     def onPayment(self):
         self._printOverrideError('onPayment')
 
@@ -40,11 +37,11 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_setScreenS(self, alias):
         return self.flashObject.as_setScreen(alias) if self._isDAAPIInited() else None
 
-    def as_creditsResponseS(self, credits, btnDoText, tooltip, tooltipType):
-        return self.flashObject.as_creditsResponse(credits, btnDoText, tooltip, tooltipType) if self._isDAAPIInited() else None
-
-    def as_goldResponseS(self, gold, btnDoText, tooltip, tooltipType):
-        return self.flashObject.as_goldResponse(gold, btnDoText, tooltip, tooltipType) if self._isDAAPIInited() else None
+    def as_updateWalletBtnS(self, btnID, data):
+        """
+        :param data: Represented by HBC_FinanceVo (AS)
+        """
+        return self.flashObject.as_updateWalletBtn(btnID, data) if self._isDAAPIInited() else None
 
     def as_doDisableNavigationS(self):
         return self.flashObject.as_doDisableNavigation() if self._isDAAPIInited() else None
@@ -64,8 +61,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
         """
         return self.flashObject.as_nameResponse(data) if self._isDAAPIInited() else None
 
-    def as_setClanEmblemS(self, tID):
-        return self.flashObject.as_setClanEmblem(tID) if self._isDAAPIInited() else None
+    def as_setBadgeIconS(self, tID):
+        return self.flashObject.as_setBadgeIcon(tID) if self._isDAAPIInited() else None
 
     def as_setPremiumParamsS(self, btnLabel, doLabel, isHasAction, tooltip, tooltipType):
         return self.flashObject.as_setPremiumParams(btnLabel, doLabel, isHasAction, tooltip, tooltipType) if self._isDAAPIInited() else None
@@ -73,8 +70,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_setPremShopDataS(self, iconSrc, premShopText, tooltip, tooltipType):
         return self.flashObject.as_setPremShopData(iconSrc, premShopText, tooltip, tooltipType) if self._isDAAPIInited() else None
 
-    def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID):
-        return self.flashObject.as_updateBattleType(battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID) if self._isDAAPIInited() else None
+    def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID, eventBgEnabled, eventAnimEnabled):
+        return self.flashObject.as_updateBattleType(battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID, eventBgEnabled, eventAnimEnabled) if self._isDAAPIInited() else None
 
     def as_setServerS(self, name, tooltip, tooltipType):
         return self.flashObject.as_setServer(name, tooltip, tooltipType) if self._isDAAPIInited() else None
@@ -84,9 +81,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_setWalletStatusS(self, walletStatus):
         return self.flashObject.as_setWalletStatus(walletStatus) if self._isDAAPIInited() else None
-
-    def as_setFreeXPS(self, freeXP, btnDoText, isHasAction, tooltip, tooltipType):
-        return self.flashObject.as_setFreeXP(freeXP, btnDoText, isHasAction, tooltip, tooltipType) if self._isDAAPIInited() else None
 
     def as_disableFightButtonS(self, isDisabled):
         return self.flashObject.as_disableFightButton(isDisabled) if self._isDAAPIInited() else None
@@ -111,7 +105,7 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_setHangarMenuDataS(self, data):
         """
-        :param data: Represented by HangarMenuVO (AS)
+        :param data: Represented by DataProvider.<HangarMenuTabItemVO> (AS)
         """
         return self.flashObject.as_setHangarMenuData(data) if self._isDAAPIInited() else None
 

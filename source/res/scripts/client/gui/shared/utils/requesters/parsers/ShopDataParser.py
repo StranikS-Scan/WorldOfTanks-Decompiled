@@ -4,7 +4,7 @@ import weakref
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params
 from gui.shared.money import Money
-from items import vehicles
+from items import vehicles, EQUIPMENT_TYPES, ItemsPrices
 import nations
 
 class ShopDataParser(object):
@@ -27,6 +27,7 @@ class ShopDataParser(object):
          GUI_ITEM_TYPE.GUN: vehicles.g_cache.guns,
          GUI_ITEM_TYPE.SHELL: vehicles.g_cache.shells,
          GUI_ITEM_TYPE.EQUIPMENT: wrapper('getEquipments'),
+         GUI_ITEM_TYPE.BATTLE_BOOSTER: wrapper('getBattleBoosters'),
          GUI_ITEM_TYPE.OPTIONALDEVICE: wrapper('getOptionalDevices')}
         self.data = data or {}
 
@@ -37,11 +38,15 @@ class ShopDataParser(object):
 
     def getEquipments(self, nationID):
         allEquipments = vehicles.g_cache.equipments()
-        return self.__filterByNation(allEquipments, params.EquipmentParams, nationID)
+        return self.__filterByNationAndEqType(allEquipments, params.EquipmentParams, nationID, EQUIPMENT_TYPES.regular)
+
+    def getBattleBoosters(self, nationID):
+        allEquipments = vehicles.g_cache.equipments()
+        return self.__filterByNationAndEqType(allEquipments, params.EquipmentParams, nationID, EQUIPMENT_TYPES.battleBoosters)
 
     def getOptionalDevices(self, nationID):
         allOptDevices = vehicles.g_cache.optionalDevices()
-        return self.__filterByNation(allOptDevices, params.OptionalDeviceParams, nationID)
+        return self.__filterByNationAndEqType(allOptDevices, params.OptionalDeviceParams, nationID)
 
     def getItemsIterator(self, nationID=None, itemTypeID=None):
         hiddenInShop = self.data.get('notInShopItems', [])
@@ -55,7 +60,7 @@ class ShopDataParser(object):
                  intCD in sellForGold)
 
     def getPrices(self):
-        return self.data.get('itemPrices', {})
+        return self.data.get('itemPrices', ItemsPrices())
 
     def getHiddenItems(self, nationID=None):
         hiddenItems = self.data.get('notInShopItems', set([]))
@@ -97,14 +102,19 @@ class ShopDataParser(object):
 
         return result
 
-    def __filterByNation(self, items, getParameters, nationID):
-        if nationID == nations.NONE_INDEX or nationID is None:
+    @staticmethod
+    def __filterByNationAndEqType(items, getParameters, nationID, eqType=None):
+        ignoreNation = nationID == nations.NONE_INDEX or nationID is None
+        ignoreEquipmentType = eqType is None
+        if ignoreNation and ignoreEquipmentType:
             return items
         else:
             result = {}
             for key, value in items.iteritems():
-                params = getParameters(value)
-                if nationID in params.nations:
+                itemParams = getParameters(value)
+                conditionNation = True if ignoreNation else nationID in itemParams.nations
+                conditionType = True if ignoreEquipmentType else eqType == itemParams.equipmentType
+                if conditionNation and conditionType:
                     result[key] = value
 
             return result

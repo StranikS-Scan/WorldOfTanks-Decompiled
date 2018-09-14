@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/club_shared.py
 from itertools import chain
 SUBSCRIPTION_EXPIRY_TIME = 300
+_g_id = None
 
 class CLUB_SUBSCRIPTION_TYPE:
     NONE = 0

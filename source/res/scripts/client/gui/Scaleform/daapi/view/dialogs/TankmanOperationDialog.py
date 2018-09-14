@@ -11,16 +11,16 @@ from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles, icons, currency
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items.serializers import packTankman
-from gui.shared.money import Currency
+from gui.shared.money import Currency, ZERO_MONEY
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
 from items.tankmen import MAX_SKILL_LEVEL
 from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.shared import IItemsCache
 
 class _TankmanOperationDialogBase(TankmanOperationDialogMeta):
     restore = dependency.descriptor(IRestoreController)
@@ -135,13 +135,16 @@ class DismissTankmanDialog(_TankmanOperationDialogBase):
 
 
 class RestoreTankmanDialog(_TankmanOperationDialogBase):
+    _CURRENCY_TO_TEXT_FRAME = {Currency.GOLD: ICON_TEXT_FRAMES.GOLD,
+     Currency.CREDITS: ICON_TEXT_FRAMES.CREDITS}
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def _populate(self):
         self._isDismissState = False
         super(RestoreTankmanDialog, self)._populate()
         restorePrice, _ = getTankmenRestoreInfo(self._tankman)
         isEnabled = True
-        if g_itemsCache.items.stats.money.getShortage(restorePrice):
+        if self.itemsCache.items.stats.money.getShortage(restorePrice):
             isEnabled = False
         if isLongDisconnectedFromCenter():
             isEnabled = False
@@ -153,12 +156,15 @@ class RestoreTankmanDialog(_TankmanOperationDialogBase):
         actionPriceVO = None
         restorePrice, lengthInHours = getTankmenRestoreInfo(self._tankman)
         warningTexts = []
-        if restorePrice.credits == 0:
-            restoreCurrency = ICON_TEXT_FRAMES.EMPTY
+        if restorePrice == ZERO_MONEY:
+            currencyTextFrame = ICON_TEXT_FRAMES.EMPTY
             restorePriceStr = text_styles.success(_ms(DIALOGS.RESTORETANKMAN_FORFREE))
+            isEnoughMoney = True
         else:
-            restoreCurrency = ICON_TEXT_FRAMES.CREDITS
-            restorePriceStr = str(currency.getBWFormatter(Currency.CREDITS)(restorePrice.credits))
+            currencyName = restorePrice.getCurrency()
+            currencyTextFrame = self._CURRENCY_TO_TEXT_FRAME[currencyName]
+            restorePriceStr = str(currency.getBWFormatter(currencyName)(restorePrice.credits))
+            isEnoughMoney = self.itemsCache.items.stats.money.get(currencyName) >= restorePrice.get(currencyName)
             if self._showPeriodEndWarning:
                 daysCount = lengthInHours / time_utils.HOURS_IN_DAY
                 warningTexts.append(text_styles.alert(_ms(DIALOGS.RESTORETANKMAN_NEWPERIODWARNING, daysCount=daysCount)))
@@ -167,8 +173,8 @@ class RestoreTankmanDialog(_TankmanOperationDialogBase):
         if isLongDisconnectedFromCenter():
             warningTexts.append(text_styles.error(DIALOGS.RESTORETANKMAN_DISCONNECTEDFROMCENTER))
         return {'questionText': text_styles.stats(_ms(DIALOGS.RESTORETANKMAN_PRICE)),
-         'restoreCurrency': restoreCurrency,
+         'restoreCurrency': currencyTextFrame,
          'restorePrice': restorePriceStr,
-         'isEnoughMoneyForRestore': g_itemsCache.items.stats.money.credits >= restorePrice.credits,
+         'isEnoughMoneyForRestore': isEnoughMoney,
          'actionPriceVO': actionPriceVO,
          'warningText': '\n\n'.join(warningTexts)}

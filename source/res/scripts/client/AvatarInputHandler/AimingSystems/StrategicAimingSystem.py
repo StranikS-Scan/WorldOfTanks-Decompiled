@@ -18,6 +18,7 @@ class StrategicAimingSystem(IAimingSystem):
         IAimingSystem.__init__(self)
         self._matrix = mathUtils.createRotationMatrix((yaw, 0, 0))
         self._planePosition = Vector3(0, 0, 0)
+        self.__camDist = 0.0
         self.__height = height
         self.__heightFromPlane = 0.0
 
@@ -42,6 +43,20 @@ class StrategicAimingSystem(IAimingSystem):
         self._planePosition.x = targetPos.x
         self._planePosition.z = targetPos.z
         self._updateMatrix()
+
+    def getCamDist(self):
+        return self.__camDist
+
+    def overrideCamDist(self, camDist):
+        self.__camDist = camDist
+        return camDist
+
+    def getShotPoint(self):
+        desiredShotPoint = self.getDesiredShotPoint()
+        return Vector3(desiredShotPoint.x, self.getCamDist(), desiredShotPoint.z)
+
+    def getZoom(self):
+        pass
 
     def _clampToArenaBB(self):
         bb = BigWorld.player().arena.arenaType.boundingBox

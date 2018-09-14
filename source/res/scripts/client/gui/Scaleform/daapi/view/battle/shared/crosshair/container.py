@@ -3,8 +3,8 @@
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui import DEPTH_OF_Aim
 from gui.Scaleform.daapi.view.battle.shared.crosshair import gm_factory, plugins, settings
-from gui.Scaleform.daapi.view.battle.shared.external_components import ExternalFlashComponent
-from gui.Scaleform.daapi.view.battle.shared.external_components import ExternalFlashSettings
+from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
+from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
 from gui.Scaleform.daapi.view.meta.CrosshairPanelContainerMeta import CrosshairPanelContainerMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI

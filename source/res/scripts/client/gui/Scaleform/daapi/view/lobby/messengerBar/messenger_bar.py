@@ -9,11 +9,11 @@ from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CO
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import events
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from helpers import int2roman, dependency
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 
 def _formatIcon(iconName, width=32, height=32):
     return makeHtmlString('html_templates:lobby/messengerBar', 'iconTemplate', {'iconName': iconName,
@@ -22,6 +22,7 @@ def _formatIcon(iconName, width=32, height=32):
 
 
 class _CompareBasketListener(object):
+    itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, view):
@@ -55,7 +56,7 @@ class _CompareBasketListener(object):
                     if self.comparisonBasket.getVehiclesCount() == 1:
                         self.__view.as_openVehicleCompareCartPopoverS(True)
                     else:
-                        vehicle = g_itemsCache.items.getItemByCD(vehCmpData.getVehicleCD())
+                        vehicle = self.itemsCache.items.getItemByCD(vehCmpData.getVehicleCD())
                         vehName = '  '.join([int2roman(vehicle.level), vehicle.shortUserName])
                         vehTypeIcon = RES_ICONS.maps_icons_vehicletypes_gold(vehicle.type + '.png')
                         self.__view.as_showAddVehicleCompareAnimS({'vehName': vehName,

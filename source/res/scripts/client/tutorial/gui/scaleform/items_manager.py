@@ -3,7 +3,7 @@
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import ExternalCriteria
 from gui.app_loader.decorators import sf_lobby
-from tutorial import LOG_WARNING
+from tutorial.logger import LOG_WARNING
 
 class AttributeCriteria(ExternalCriteria):
 

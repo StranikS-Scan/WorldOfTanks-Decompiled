@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class BattlePageMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def as_checkDAAPIS(self):
         return self.flashObject.as_checkDAAPI() if self._isDAAPIInited() else None

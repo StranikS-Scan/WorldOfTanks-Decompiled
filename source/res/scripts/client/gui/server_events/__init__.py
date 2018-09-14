@@ -10,4 +10,4 @@ def getServerEventsConfig(manager):
     """
     cache = EventsCache()
     cache.init()
-    manager.bindInstance(IEventsCache, cache, finalizer='fini')
+    manager.addInstance(IEventsCache, cache, finalizer='fini')

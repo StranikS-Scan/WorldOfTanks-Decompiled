@@ -5,8 +5,8 @@ from gui.shared.events import ShowDialogEvent
 
 class IngameDeserterDialogMeta(I18nConfirmDialogMeta):
 
-    def __init__(self, key, focusedID=None):
-        super(IngameDeserterDialogMeta, self).__init__(key, focusedID=focusedID)
+    def __init__(self, key, additionalInfo='', focusedID=None):
+        super(IngameDeserterDialogMeta, self).__init__(key, messageCtx={'additionalInfo': additionalInfo}, focusedID=focusedID)
         self.__imagePath = '../maps/icons/battle/deserterLeaveBattle.png'
         self.__offsetY = 270
 

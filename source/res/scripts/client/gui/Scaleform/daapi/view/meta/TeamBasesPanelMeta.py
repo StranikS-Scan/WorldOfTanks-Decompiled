@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class TeamBasesPanelMeta(BaseDAAPIComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIComponent
-    """
 
     def as_addS(self, barId, sortWeight, colorType, title, points, captureTime, vehiclesCount):
         return self.flashObject.as_add(barId, sortWeight, colorType, title, points, captureTime, vehiclesCount) if self._isDAAPIInited() else None

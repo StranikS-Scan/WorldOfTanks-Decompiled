@@ -1,17 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AreaDestructibles.py
-import BigWorld
-from debug_utils import *
-import Math
 import math
 import random
-import ResMgr
-from DestructiblesCache import *
-from time import clock
 from functools import partial
+from time import clock
+import BigWorld
+import Math
+import DestructiblesCache
 from constants import DESTRUCTIBLE_MATKIND
+from debug_utils import LOG_ERROR, LOG_CODEPOINT_WARNING
 from helpers import isPlayerAccount
-import re
 import physics_shared
 import WWISE
 g_cache = None
@@ -39,7 +37,7 @@ def clear():
     g_destructiblesAnimator.clear()
 
 
-class ClientDestructiblesCache(DestructiblesCache):
+class ClientDestructiblesCache(DestructiblesCache.DestructiblesCache):
 
     def getDestructibleDesc(self, spaceID, chunkID, destrIndex):
         filename = BigWorld.wg_getDestructibleFilename(spaceID, chunkID, destrIndex)
@@ -49,13 +47,13 @@ class ClientDestructiblesCache(DestructiblesCache):
 def _extractEffectLists(desc):
     type = desc['type']
     effectLists = []
-    if type == DESTR_TYPE_TREE:
+    if type == DestructiblesCache.DESTR_TYPE_TREE:
         effTypes = ('fractureEffect', 'touchdownEffect')
         effDescs = [desc]
-    elif type == DESTR_TYPE_FALLING_ATOM:
+    elif type == DestructiblesCache.DESTR_TYPE_FALLING_ATOM:
         effTypes = ('fractureEffect', 'touchdownEffect', 'touchdownBreakEffect')
         effDescs = [desc]
-    elif type == DESTR_TYPE_STRUCTURE:
+    elif type == DestructiblesCache.DESTR_TYPE_STRUCTURE:
         effTypes = ('ramEffect', 'hitEffect', 'decayEffect')
         effDescs = desc['modules'].itervalues()
     else:
@@ -99,60 +97,60 @@ class AreaDestructibles(BigWorld.Entity):
     def onEnterWorld(self, prereqs):
         if g_destructiblesManager.getSpaceID() != self.spaceID:
             g_destructiblesManager.startSpace(self.spaceID)
-        chunkID = chunkIDFromPosition(self.position)
+        chunkID = DestructiblesCache.chunkIDFromPosition(self.position)
         self.__chunkID = chunkID
         g_destructiblesManager._addController(chunkID, self)
         self.__prevFallenColumns = frozenset(self.fallenColumns)
         for fallData in self.fallenColumns:
-            g_destructiblesManager.orderDestructibleDestroy(chunkID, DESTR_TYPE_FALLING_ATOM, fallData, False)
+            g_destructiblesManager.orderDestructibleDestroy(chunkID, DestructiblesCache.DESTR_TYPE_FALLING_ATOM, fallData, False)
 
         self.__prevFallenTrees = frozenset(self.fallenTrees)
         for fallData in self.fallenTrees:
-            g_destructiblesManager.orderDestructibleDestroy(chunkID, DESTR_TYPE_TREE, fallData, False)
+            g_destructiblesManager.orderDestructibleDestroy(chunkID, DestructiblesCache.DESTR_TYPE_TREE, fallData, False)
 
         self.__prevDestroyedFragiles = frozenset(self.destroyedFragiles)
         for fragileData in self.destroyedFragiles:
-            g_destructiblesManager.orderDestructibleDestroy(chunkID, DESTR_TYPE_FRAGILE, fragileData, False)
+            g_destructiblesManager.orderDestructibleDestroy(chunkID, DestructiblesCache.DESTR_TYPE_FRAGILE, fragileData, False)
 
         self.__prevDestroyedModules = frozenset(self.destroyedModules)
         for moduleData in self.destroyedModules:
-            g_destructiblesManager.orderDestructibleDestroy(chunkID, DESTR_TYPE_STRUCTURE, moduleData, False)
+            g_destructiblesManager.orderDestructibleDestroy(chunkID, DestructiblesCache.DESTR_TYPE_STRUCTURE, moduleData, False)
 
     def onLeaveWorld(self):
         g_destructiblesManager._delController(self.__chunkID)
 
     def isDestructibleBroken(self, itemIndex, matKind, destrType=None):
         if destrType is None:
-            for t in (DESTR_TYPE_FRAGILE,
-             DESTR_TYPE_STRUCTURE,
-             DESTR_TYPE_FALLING_ATOM,
-             DESTR_TYPE_TREE):
+            for t in (DestructiblesCache.DESTR_TYPE_FRAGILE,
+             DestructiblesCache.DESTR_TYPE_STRUCTURE,
+             DestructiblesCache.DESTR_TYPE_FALLING_ATOM,
+             DestructiblesCache.DESTR_TYPE_TREE):
                 if self.isDestructibleBroken(itemIndex, matKind, t):
                     return True
 
             return False
         else:
-            if destrType == DESTR_TYPE_FRAGILE:
+            if destrType == DestructiblesCache.DESTR_TYPE_FRAGILE:
                 for fragileData in self.destroyedFragiles:
-                    itemIndex_, _ = decodeFragile(fragileData)
+                    itemIndex_, _ = DestructiblesCache.decodeFragile(fragileData)
                     if itemIndex_ == itemIndex:
                         return True
 
-            elif destrType == DESTR_TYPE_STRUCTURE:
+            elif destrType == DestructiblesCache.DESTR_TYPE_STRUCTURE:
                 for moduleData in self.destroyedModules:
-                    itemIndex_, matKind_, _ = decodeDestructibleModule(moduleData)
+                    itemIndex_, matKind_, _ = DestructiblesCache.decodeDestructibleModule(moduleData)
                     if itemIndex_ == itemIndex and matKind_ == matKind:
                         return True
 
-            elif destrType == DESTR_TYPE_TREE:
+            elif destrType == DestructiblesCache.DESTR_TYPE_TREE:
                 for fallData in self.fallenTrees:
-                    itemIndex_, _, _, _ = decodeFallenTree(fallData)
+                    itemIndex_, _, _, _ = DestructiblesCache.decodeFallenTree(fallData)
                     if itemIndex_ == itemIndex:
                         return True
 
             else:
                 for fallData in self.fallenColumns:
-                    itemIndex_, _, _ = decodeFallenColumn(fallData)
+                    itemIndex_, _, _ = DestructiblesCache.decodeFallenColumn(fallData)
                     if itemIndex_ == itemIndex:
                         return True
 
@@ -163,30 +161,30 @@ class AreaDestructibles(BigWorld.Entity):
         curr = frozenset(self.fallenTrees)
         self.__prevFallenTrees = curr
         for fallData in curr.difference(prev):
-            g_destructiblesManager.orderDestructibleDestroy(self.__chunkID, DESTR_TYPE_TREE, fallData, True)
+            g_destructiblesManager.orderDestructibleDestroy(self.__chunkID, DestructiblesCache.DESTR_TYPE_TREE, fallData, True)
 
     def set_fallenColumns(self, prev):
         prev = self.__prevFallenColumns
         curr = frozenset(self.fallenColumns)
         self.__prevFallenColumns = curr
         for fallData in curr.difference(prev):
-            g_destructiblesManager.orderDestructibleDestroy(self.__chunkID, DESTR_TYPE_FALLING_ATOM, fallData, True)
+            g_destructiblesManager.orderDestructibleDestroy(self.__chunkID, DestructiblesCache.DESTR_TYPE_FALLING_ATOM, fallData, True)
 
     def set_destroyedFragiles(self, prev):
         prev = self.__prevDestroyedFragiles
         curr = frozenset(self.destroyedFragiles)
         self.__prevDestroyedFragiles = curr
         for fragileData in curr.difference(prev):
-            _, isShotDamage = decodeFragile(fragileData)
-            g_destructiblesManager.orderDestructibleDestroy(self.__chunkID, DESTR_TYPE_FRAGILE, fragileData, True, isShotDamage)
+            _, isShotDamage = DestructiblesCache.decodeFragile(fragileData)
+            g_destructiblesManager.orderDestructibleDestroy(self.__chunkID, DestructiblesCache.DESTR_TYPE_FRAGILE, fragileData, True, isShotDamage)
 
     def set_destroyedModules(self, prev):
         prev = self.__prevDestroyedModules
         curr = frozenset(self.destroyedModules)
         self.__prevDestroyedModules = curr
         for moduleData in curr.difference(prev):
-            _, _, isShotDamage = decodeDestructibleModule(moduleData)
-            g_destructiblesManager.orderDestructibleDestroy(self.__chunkID, DESTR_TYPE_STRUCTURE, moduleData, True, isShotDamage)
+            _, _, isShotDamage = DestructiblesCache.decodeDestructibleModule(moduleData)
+            g_destructiblesManager.orderDestructibleDestroy(self.__chunkID, DestructiblesCache.DESTR_TYPE_STRUCTURE, moduleData, True, isShotDamage)
 
 
 def _fallCollideCallback(curItemIndex, curChunkID, matKind, collFlags, itemIndex, chunkID):
@@ -287,7 +285,7 @@ class DestructiblesManager():
             for destr in explDestrs:
                 time, itemInfo = destr
                 chunkID_, itemIndex_, matKind_, dmgType, destrData = itemInfo
-                if chunkID_ == chunkID and itemIndex_ == itemIndex and (dmgType == DESTR_TYPE_FRAGILE or matKind_ == matKind):
+                if chunkID_ == chunkID and itemIndex_ == itemIndex and (dmgType == DestructiblesCache.DESTR_TYPE_FRAGILE or matKind_ == matKind):
                     self.__destroyDestructible(chunkID, dmgType, destrData, True, explosionInfo)
                     explDestrs.remove(destr)
                     found = True
@@ -308,11 +306,11 @@ class DestructiblesManager():
             isNeedAnimation = False
         if self.__loadedChunkIDs.has_key(chunkID):
             if isNeedAnimation and syncWithProjectile:
-                if dmgType == DESTR_TYPE_FRAGILE:
-                    itemIndex, _ = decodeFragile(destrData)
+                if dmgType == DestructiblesCache.DESTR_TYPE_FRAGILE:
+                    itemIndex, _ = DestructiblesCache.decodeFragile(destrData)
                     matKind = 0
-                elif dmgType == DESTR_TYPE_STRUCTURE:
-                    itemIndex, matKind, _ = decodeDestructibleModule(destrData)
+                elif dmgType == DestructiblesCache.DESTR_TYPE_STRUCTURE:
+                    itemIndex, matKind, _ = DestructiblesCache.decodeDestructibleModule(destrData)
                 else:
                     LOG_CODEPOINT_WARNING()
                     return
@@ -321,7 +319,7 @@ class DestructiblesManager():
                     time, explInfo, damagedDestrs = expl
                     for destr in damagedDestrs:
                         chunkID_, itemIndex_, matKind_ = destr
-                        if chunkID == chunkID_ and itemIndex == itemIndex_ and (dmgType == DESTR_TYPE_FRAGILE or matKind == matKind_):
+                        if chunkID == chunkID_ and itemIndex == itemIndex_ and (dmgType == DestructiblesCache.DESTR_TYPE_FRAGILE or matKind == matKind_):
                             self.__destroyDestructible(chunkID, dmgType, destrData, isNeedAnimation, explInfo)
                             damagedDestrs.remove(destr)
                             if not damagedDestrs:
@@ -394,7 +392,7 @@ class DestructiblesManager():
         self.__explodedDestructibles = newItemCache
 
     def __logErrorTooMuchDestructibles(self, chunkID):
-        x, y = chunkIndexesFromChunkID(chunkID)
+        x, y = DestructiblesCache.chunkIndexesFromChunkID(chunkID)
         player = BigWorld.player()
         if player is None:
             LOG_ERROR('Number of destructibles more than 256, chunk: %i %i' % (x, y))
@@ -420,23 +418,23 @@ class DestructiblesManager():
     def __destroyDestructible(self, chunkID, dmgType, destData, isNeedAnimation, explosionInfo=None):
         if self.forceNoAnimation:
             isNeedAnimation = False
-        if dmgType == DESTR_TYPE_FALLING_ATOM:
-            destrIndex, fallDirYaw, fallSpeed = decodeFallenColumn(destData)
+        if dmgType == DestructiblesCache.DESTR_TYPE_FALLING_ATOM:
+            destrIndex, fallDirYaw, fallSpeed = DestructiblesCache.decodeFallenColumn(destData)
             pitchConstr, collisionFlags = BigWorld.wg_getDestructibleFallPitchConstr(self.__spaceID, chunkID, destrIndex, fallDirYaw)
             if pitchConstr is None:
                 pitchConstr = math.pi / 2.0
             self.__dropDestructible(chunkID, destrIndex, dmgType, fallDirYaw, pitchConstr, fallSpeed, isNeedAnimation, collisionFlags)
-        if dmgType == DESTR_TYPE_TREE:
-            destrIndex, fallDirYaw, pitchConstr, fallSpeed = decodeFallenTree(destData)
+        if dmgType == DestructiblesCache.DESTR_TYPE_TREE:
+            destrIndex, fallDirYaw, pitchConstr, fallSpeed = DestructiblesCache.decodeFallenTree(destData)
             _, collisionFlags = BigWorld.wg_getDestructibleFallPitchConstr(self.__spaceID, chunkID, destrIndex, fallDirYaw)
             self.__dropDestructible(chunkID, destrIndex, dmgType, fallDirYaw, pitchConstr, fallSpeed, isNeedAnimation, collisionFlags)
             WWISE.WG_lightSoundRemove(self.__spaceID, chunkID, destrIndex)
-        elif dmgType == DESTR_TYPE_FRAGILE:
-            destrIndex, isShotDamage = decodeFragile(destData)
+        elif dmgType == DestructiblesCache.DESTR_TYPE_FRAGILE:
+            destrIndex, isShotDamage = DestructiblesCache.decodeFragile(destData)
             self.__destroyFragile(chunkID, destrIndex, isNeedAnimation, isShotDamage, explosionInfo)
             WWISE.WG_lightSoundRemove(self.__spaceID, chunkID, destrIndex)
-        elif dmgType == DESTR_TYPE_STRUCTURE:
-            destrIndex, matKind, isShotDamage = decodeDestructibleModule(destData)
+        elif dmgType == DestructiblesCache.DESTR_TYPE_STRUCTURE:
+            destrIndex, matKind, isShotDamage = DestructiblesCache.decodeDestructibleModule(destData)
             self.__destroyModule(chunkID, destrIndex, matKind, isNeedAnimation, isShotDamage)
         return
 
@@ -506,7 +504,7 @@ class DestructiblesManager():
     def __dropDestructible(self, chunkID, destrIndex, dmgType, fallDirYaw, pitchConstr, fallSpeed, isAnimate, obstacleCollisionFlags):
         self.__stopLifetimeEffect(chunkID, destrIndex, 0)
         useEffectsOnTouchDown = obstacleCollisionFlags & 8 or pitchConstr > _MAX_PITCH_TO_CHECK_TERRAIN
-        if dmgType == DESTR_TYPE_FALLING_ATOM:
+        if dmgType == DestructiblesCache.DESTR_TYPE_FALLING_ATOM:
             if isAnimate:
                 self.__launchFallEffect(chunkID, destrIndex, 'fractureEffect', fallDirYaw)
                 if useEffectsOnTouchDown:
@@ -532,13 +530,13 @@ class DestructiblesManager():
     def __launchEffect(self, chunkID, destrIndex, moduleIndex, effectType, isHavokVisible, callbackOnStop=None):
         destrType = BigWorld.wg_getDestructibleEffectCategory(self.__spaceID, chunkID, destrIndex, moduleIndex)
         effectCat = ''
-        if destrType == DESTR_TYPE_TREE:
+        if destrType == DestructiblesCache.DESTR_TYPE_TREE:
             effectCat = 'trees'
-        elif destrType == DESTR_TYPE_FALLING_ATOM:
+        elif destrType == DestructiblesCache.DESTR_TYPE_FALLING_ATOM:
             effectCat = 'fallingAtoms'
-        elif destrType == DESTR_TYPE_FRAGILE:
+        elif destrType == DestructiblesCache.DESTR_TYPE_FRAGILE:
             effectCat = 'fragiles'
-        elif destrType == DESTR_TYPE_STRUCTURE:
+        elif destrType == DestructiblesCache.DESTR_TYPE_STRUCTURE:
             effectCat = 'structures'
         effectName = BigWorld.wg_getDestructibleEffectName(self.__spaceID, chunkID, destrIndex, moduleIndex, effectType)
         if effectName == 'none':
@@ -548,12 +546,12 @@ class DestructiblesManager():
             if effectVars is None:
                 LOG_ERROR('Could not find any effects vars for: ' + str(effectName) + ' - type: ' + str(effectType) + ' - cat: ' + str(effectCat) + ' (' + str(destrType) + ')')
                 return
-            if destrType == DESTR_TYPE_TREE or destrType == DESTR_TYPE_FALLING_ATOM:
+            if destrType == DestructiblesCache.DESTR_TYPE_TREE or destrType == DestructiblesCache.DESTR_TYPE_FALLING_ATOM:
                 chunkMatrix = BigWorld.wg_getChunkMatrix(self.__spaceID, chunkID)
                 destrMatrix = BigWorld.wg_getDestructibleMatrix(self.__spaceID, chunkID, destrIndex)
                 dir = destrMatrix.applyVector((0, 0, 1))
                 pos = chunkMatrix.translation + destrMatrix.translation
-                if destrType == DESTR_TYPE_TREE:
+                if destrType == DestructiblesCache.DESTR_TYPE_TREE:
                     treeScale = destrMatrix.applyVector((0.0, 1.0, 0.0)).length
                     scale = 1.0 + (treeScale - 1.0) * _TREE_EFFECTS_SCALE_RATIO
                 else:

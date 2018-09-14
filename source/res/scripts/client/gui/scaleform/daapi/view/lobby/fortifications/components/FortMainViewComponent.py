@@ -9,7 +9,6 @@ from adisp import process
 from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications import FortificationEffects
 from gui.Scaleform.daapi.view.lobby.fortifications.FortRosterIntroWindow import FortRosterIntroWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
@@ -38,8 +37,10 @@ from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.fortifications.settings import MUST_SHOW_FORT_UPGRADE, MUST_SHOW_DEFENCE_START
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils import isPopupsWindowsOpenDisabled
+from helpers import dependency
 from helpers import i18n, time_utils, setHangarVisibility
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.lobby_context import ILobbyContext
 
 def _checkBattleConsumesIntro(fort):
     settings = dict(AccountSettings.getSettings('fortSettings'))
@@ -76,6 +77,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
      events.FortEvent.TRANSPORTATION_STEPS.FIRST_STEP: FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL_FIRST_STEP,
      events.FortEvent.TRANSPORTATION_STEPS.NEXT_STEP: FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL_NEXT_STEP,
      events.FortEvent.TRANSPORTATION_STEPS.CONFIRMED: FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL_FIRST_STEP}
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(FortMainViewComponent, self).__init__()
@@ -234,7 +236,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
 
     def onIntelligenceClick(self):
         isDefenceHourEnabled = self.fortCtrl.getFort().isDefenceHourEnabled()
-        if not g_lobbyContext.getServerSettings().isFortsEnabled():
+        if not self.lobbyContext.getServerSettings().isFortsEnabled():
             isDefenceHourEnabled = False
             alias = FORTIFICATION_ALIASES.FORT_INTELLIGENCE_NOT_AVAILABLE_WINDOW
         elif not isDefenceHourEnabled:

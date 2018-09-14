@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.meta.SimpleDialogMeta import SimpleDialogMeta
 
 class WGNCDialogMeta(SimpleDialogMeta):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends SimpleDialogMeta
-    """
 
     def doAction(self, actionId, isButtonClicked):
         self._printOverrideError('doAction')

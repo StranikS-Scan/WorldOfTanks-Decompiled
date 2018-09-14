@@ -156,7 +156,9 @@ class VideoSettingsStorage(ISettingsStorage):
             exclusiveFullscreenMonitorIndex = g_monitorSettings.noRestartExclusiveFullscreenMonitorIndex
             restartNeeded = windowMode == BigWorld.WindowModeExclusiveFullscreen and monitor != exclusiveFullscreenMonitorIndex
             cVideoMode = g_monitorSettings.currentVideoMode
+            cAspectRation = float(cVideoMode.width) / cVideoMode.height
             videoMode = self.videoModeForAdapterOutputIndex(monitor)
+            aspectRation = float(videoMode.width) / videoMode.height
             windowSizeChanged = cWindowSize is not None and windowSizeWidth is not None and windowSizeHeight is not None and (windowSizeWidth != cWindowSize.width or windowSizeHeight != cWindowSize.height)
             borderlessSizeChanged = cBorderlessSize is not None and borderlessSizeWidth is not None and borderlessSizeHeight is not None and (borderlessSizeWidth != cBorderlessSize.width or borderlessSizeHeight != cBorderlessSize.height)
             monitorChanged = monitor != cMonitor
@@ -178,11 +180,12 @@ class VideoSettingsStorage(ISettingsStorage):
             elif (not monitorChanged or restartApproved) and (videModeChanged or windowModeChanged):
                 deviseRecreated = True
                 BigWorld.changeVideoMode(videoMode.index, windowMode)
+            BigWorld.changeFullScreenAspectRatio(aspectRation)
             self.clear()
             self._core.isDeviseRecreated = deviseRecreated
             if deviseRecreated:
 
-                def wrapper(monitorChanged, windowSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode):
+                def wrapper(monitorChanged, windowSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode, cAspectRation):
 
                     def revert():
                         if monitorChanged:
@@ -191,6 +194,7 @@ class VideoSettingsStorage(ISettingsStorage):
                             g_monitorSettings.changeWindowSize(cWindowSize.width, cWindowSize.height)
                         elif not monitorChanged and (videModeChanged or windowModeChanged):
                             BigWorld.changeVideoMode(cVideoMode.index, cWindowMode)
+                        BigWorld.changeFullScreenAspectRatio(cAspectRation)
 
                     return revert
 
@@ -198,7 +202,7 @@ class VideoSettingsStorage(ISettingsStorage):
                 def confirmator(callback=None):
                     BigWorld.callback(0.0, lambda : DialogsInterface.showI18nConfirmDialog('graphicsChangeConfirmation', callback, TimerConfirmDialogMeta('graphicsChangeConfirmation', timer=15)))
 
-                return (confirmator, wrapper(monitorChanged, windowSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode))
+                return (confirmator, wrapper(monitorChanged, windowSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode, cAspectRation))
         return super(VideoSettingsStorage, self).apply(restartApproved)
 
 

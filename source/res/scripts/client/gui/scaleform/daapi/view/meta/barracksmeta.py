@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class BarracksMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def invalidateTanksList(self):
         self._printOverrideError('invalidateTanksList')
@@ -41,6 +35,9 @@ class BarracksMeta(View):
         return self.flashObject.as_setTankmen(data) if self._isDAAPIInited() else None
 
     def as_updateTanksListS(self, provider):
+        """
+        :param provider: Represented by DataProvider (AS)
+        """
         return self.flashObject.as_updateTanksList(provider) if self._isDAAPIInited() else None
 
     def as_setTankmenFilterS(self, nation, role, tankType, location, nationID):

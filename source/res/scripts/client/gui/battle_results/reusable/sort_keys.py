@@ -71,3 +71,10 @@ class TeamItemSortKey(_VehicleSortKey):
     def _cmp(self, other):
         result = super(TeamItemSortKey, self)._cmp(other)
         return -result if result else cmp(self.info.player.name, other.info.player.name)
+
+
+class VehicleXpSortKey(_VehicleSortKey):
+    __slots__ = ()
+
+    def _cmp(self, other):
+        return cmp(other.info.xp, self.info.xp)

@@ -9,8 +9,8 @@ def getSettingsCoreConfig(manager):
     :param manager: helpers.dependency.DependencyManager
     """
     cache = SettingsCache()
-    manager.bindInstance(ISettingsCache, cache, finalizer='fini')
+    manager.addInstance(ISettingsCache, cache, finalizer='fini')
     core = SettingsCore()
-    manager.bindInstance(ISettingsCore, core, finalizer='fini')
+    manager.addInstance(ISettingsCore, core, finalizer='fini')
     cache.init()
     core.init()

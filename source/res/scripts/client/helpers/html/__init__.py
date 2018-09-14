@@ -16,10 +16,8 @@ def escape(text):
 def translation(text):
     result = text
     try:
-        try:
-            result = _getText_re.sub(_search, text)
-        except re.error:
-            LOG_CURRENT_EXCEPTION()
+        result = _getText_re.sub(_search, text)
+    except re.error:
+        LOG_CURRENT_EXCEPTION()
 
-    finally:
-        return result
+    return result

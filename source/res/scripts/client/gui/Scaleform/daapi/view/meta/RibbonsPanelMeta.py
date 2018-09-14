@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class RibbonsPanelMeta(BaseDAAPIComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIComponent
-    """
 
     def onShow(self):
         self._printOverrideError('onShow')
@@ -20,6 +14,9 @@ class RibbonsPanelMeta(BaseDAAPIComponent):
         self._printOverrideError('onHide')
 
     def as_setupS(self, items, isExtendedAnim, isVisible, isWithRibbonName, isWithVehName):
+        """
+        :param items: Represented by Array (AS)
+        """
         return self.flashObject.as_setup(items, isExtendedAnim, isVisible, isWithRibbonName, isWithVehName) if self._isDAAPIInited() else None
 
     def as_resetS(self):

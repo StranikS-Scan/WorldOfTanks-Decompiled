@@ -174,13 +174,13 @@ class Inventory(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_EQUIP_EQS, arr, proxy)
             return
 
-    def setAndFillLayouts(self, vehInvID, shellsLayout, eqsLayout, callback):
+    def setAndFillLayouts(self, vehInvID, shellsLayout, eqsLayout, equipmentType, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, '', {})
             return
         else:
-            self.__account.shop.waitForSync(partial(self.__setAndFillLayouts_onShopSynced, vehInvID, shellsLayout, eqsLayout, callback))
+            self.__account.shop.waitForSync(partial(self.__setAndFillLayouts_onShopSynced, vehInvID, shellsLayout, equipmentType, eqsLayout, callback))
             return
 
     def equipTankman(self, vehInvID, slot, tmanInvID, callback):
@@ -529,7 +529,7 @@ class Inventory(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_VEH_CAMOUFLAGE, arr, proxy)
             return
 
-    def __setAndFillLayouts_onShopSynced(self, vehInvID, shellsLayout, eqsLayout, callback, resultID, shopRev):
+    def __setAndFillLayouts_onShopSynced(self, vehInvID, shellsLayout, equipmentType, eqsLayout, callback, resultID, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID, '', {})
@@ -545,6 +545,7 @@ class Inventory(object):
                 arr += shellsLayout
             else:
                 arr.append(0)
+            arr.append(equipmentType)
             if eqsLayout is not None:
                 arr.append(len(eqsLayout))
                 arr += eqsLayout

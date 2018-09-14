@@ -1,12 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/parsers.py
 import weakref
-from collections import defaultdict
-from constants import EVENT_TYPE
-from helpers import i18n
-from gui import makeHtmlString, GUI_NATIONS_ORDER_INDEX
 from gui.server_events import formatters, conditions
-from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 
 class ConditionsParser(object):
     LOGICAL_OPS = {'and': conditions.AndGroup,
@@ -24,6 +23,9 @@ class ConditionsParser(object):
             self._rootNode = self._parse()
         return self._rootNode
 
+    def getSection(self):
+        return self._section
+
     def clearCache(self):
         self._rootNode = None
         return
@@ -32,10 +34,6 @@ class ConditionsParser(object):
         assert handler is not None
         self.__forEachNode(self.getConditions(), handler)
         return
-
-    def format(self, svrEvents, event=None):
-        conds = self.getConditions()
-        return formatters.packTopLevelContainer(subBlocks=conds._formatSubBlocks(svrEvents, event)) if not conds.isEmpty() else None
 
     def _handleCondition(self, name, data, uniqueName, group):
         return None
@@ -87,10 +85,9 @@ class ConditionsParser(object):
 
 class AccountRequirements(ConditionsParser):
 
-    def __init__(self, questType, section):
+    def __init__(self, section):
         super(AccountRequirements, self).__init__(section, rootName='account')
         self._hasIgrCondition = False
-        self._questType = questType
 
     def clearItemsCache(self):
         self.forEachNodeInTree(lambda node: node.clearItemsCache())
@@ -135,17 +132,27 @@ class AccountRequirements(ConditionsParser):
         self.forEachNodeInTree(handler)
         return results
 
-    def format(self, svrEvents, event=None):
-        subBlocks = self.getConditions()._formatSubBlocks(svrEvents, event)
-        return formatters.packTopLevelContainer(title=i18n.makeString('#quests:details/tasks/requirements/accountLabel'), subBlocks=subBlocks) if len(subBlocks) else None
+
+class TokenQuestAccountRequirements(AccountRequirements):
+    """ Account requirements of TokenQuest
+    
+    We need a special token conditions that acts like a regular one but
+    is always available (see WOTD-81694). Other than that they work the same.
+    """
+
+    def _handleCondition(self, name, data, uniqueName, group):
+        return conditions.TokenQuestToken(uniqueName, data) if name == 'token' else super(TokenQuestAccountRequirements, self)._handleCondition(name, data, uniqueName, group)
 
 
 class VehicleRequirements(ConditionsParser):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, section):
         super(VehicleRequirements, self).__init__(section, rootName='vehicle')
+        self._suitableVehicles = []
 
     def clearItemsCache(self):
+        self._suitableVehicles = []
         self.forEachNodeInTree(lambda node: node.clearItemsCache())
 
     def isAvailable(self, vehicle):
@@ -165,33 +172,25 @@ class VehicleRequirements(ConditionsParser):
         return False not in results
 
     def getSuitableVehicles(self):
-        from gui.shared.utils.requesters import REQ_CRITERIA
-        from gui.shared import g_itemsCache
-        invVehs = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
-        return [ v for v in invVehs if self.isAvailable(v) ]
+        if self._suitableVehicles:
+            return self._suitableVehicles
+        invVehs = self.itemsCache.items.inventory.getItems(GUI_ITEM_TYPE.VEHICLE) or {}
+        vehGetter = self.itemsCache.items.getVehicle
+        suitableVehiclesAppend = self._suitableVehicles.append
+        isAvailable = self.isAvailable
+        for invID in invVehs.iterkeys():
+            vehicleItem = vehGetter(invID)
+            if isAvailable(vehicleItem):
+                suitableVehiclesAppend(vehicleItem)
 
-    def format(self, svrEvents, event=None):
-        conds = self.getConditions()
-        if conds.isEmpty():
-            subBlocks = [formatters.packTextBlock(i18n.makeString('#quests:details/requirements/vehicle/any'))]
-        else:
-            subBlocks = conds._formatSubBlocks(svrEvents, event)
-        title, note = i18n.makeString('#quests:details/tasks/requirements/vehicleLabel'), ''
-        if conds:
-            vehDescr = conds.find('vehicleDescr')
-            if vehDescr is not None:
-                note = makeHtmlString('html_templates:lobby/quests', 'vehicleDescrLabel', {'count': len(self.getSuitableVehicles()),
-                 'total': len(vehDescr.getVehiclesList())})
-        return formatters.packTopLevelContainer(title=title, note=note, subBlocks=subBlocks) if len(subBlocks) else None
+        return self._suitableVehicles
 
     def _handleCondition(self, name, data, uniqueName, group):
         if name == 'premium':
             return conditions.PremiumVehicle(uniqueName, data)
         if name == 'hasReceivedMultipliedXP':
             return conditions.XPMultipliedVehicle(uniqueName, data)
-        if name == 'dossier':
-            return conditions.VehicleDossierValue(uniqueName, data)
-        return conditions.VehicleDescr(uniqueName, data, self) if name == 'vehicleDescr' else None
+        return conditions.VehicleDescr(uniqueName, data) if name == 'vehicleDescr' else None
 
 
 class PreBattleConditions(ConditionsParser):
@@ -215,10 +214,6 @@ class PreBattleConditions(ConditionsParser):
                 return conditions.BattleCamouflage(uniqueName, data)
             if name == 'geometryNames':
                 return conditions.BattleMap(uniqueName, data)
-
-    def format(self, svrEvents, event=None):
-        conds = self.getConditions()
-        return conds._formatSubBlocks(svrEvents, event) if not conds.isEmpty() else []
 
 
 class PostBattleConditions(ConditionsParser):
@@ -244,12 +239,9 @@ class PostBattleConditions(ConditionsParser):
             return conditions.BattleResults(uniqueName, data)
         return conditions.UnitResults(uniqueName, data, self.__preBattleCond) if name == 'unit' else None
 
-    def format(self, svrEvents, event=None):
-        conds = self.getConditions()
-        return conds._formatSubBlocks(svrEvents, event) if not conds.isEmpty() else []
-
 
 class BonusConditions(ConditionsParser):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, section, progress, preBattleCond):
         self.__preBattleCond = weakref.proxy(preBattleCond)
@@ -279,40 +271,6 @@ class BonusConditions(ConditionsParser):
     def getProgress(self):
         return self._progress
 
-    def format(self, svrEvents, event=None):
-        result = []
-        for c in self.getConditions().items:
-            if isinstance(c, conditions._Cumulativable) and self.getGroupByValue() is None:
-                fmtVal = c.formatByGroup(svrEvents, None, event)
-            else:
-                fmtVal = c.format(svrEvents, event)
-            result.extend(fmtVal)
-
-        return result
-
-    def formatGroupByProgresses(self, svrEvents, event=None):
-        battlesLeft = {}
-        groups = defaultdict(list)
-        for c in self.getConditions().items:
-            if isinstance(c, conditions._Cumulativable):
-                for groupByKey, (current, total, _, _) in c.getProgressPerGroup().iteritems():
-                    groups[groupByKey].extend(c.formatByGroup(svrEvents, groupByKey, event))
-                    if c.getName() == 'battles':
-                        battlesLeft[groupByKey] = total - current
-
-        result = []
-        if event is None or not event.isCompleted():
-            for groupByKey, groupConds in groups.iteritems():
-                isGroupCompleted = self.__isGroupProgressCompleted(groupByKey)
-                groupByItem, packedData = self.__packGroupByBlock(self.getGroupByValue(), groupByKey, battlesLeft.get(groupByKey), self.isInRow(), formatters.indexing(groupConds), isGroupCompleted)
-                result.append((groupByItem, packedData, isGroupCompleted))
-
-        def _sortFunc(a, b):
-            res = int(a[2]) - int(b[2])
-            return res if res else cmp(a, b)
-
-        return map(lambda v: v[1], sorted(result, cmp=_sortFunc))
-
     def _handleCondition(self, name, data, uniqueName, group):
         if name == 'battles':
             return conditions.BattlesCount(uniqueName, data, self)
@@ -333,23 +291,8 @@ class BonusConditions(ConditionsParser):
 
             return result
 
-    def __isGroupProgressCompleted(self, groupByKey):
+    def isGroupProgressCompleted(self, groupByKey):
         progress = {}
         if self._progress is not None:
             progress = self._progress.get(groupByKey, {})
         return progress.get('bonusCount', 0) >= self._bonusLimit if self._bonusLimit is not None else False
-
-    @classmethod
-    def __packGroupByBlock(cls, groupByValue, groupByKey, battlesLeft, inrow, conds, isGroupCompleted):
-        from gui.shared import g_itemsCache
-        if isGroupCompleted:
-            conds = []
-        if groupByValue == 'vehicle':
-            vehicle = g_itemsCache.items.getItemByCD(groupByKey)
-            return (vehicle, formatters.packGroupByVehicleConditions(g_itemsCache.items.getItemByCD(groupByKey), battlesLeft, inrow, conds, isCompleted=isGroupCompleted))
-        if groupByValue == 'nation':
-            return (GUI_NATIONS_ORDER_INDEX[groupByKey], formatters.packGroupByNationConditions(groupByKey, battlesLeft, inrow, conds, isCompleted=isGroupCompleted))
-        if groupByValue == 'level':
-            levelValue = int(groupByKey.replace('level ', ''))
-            return (levelValue, formatters.packGroupByLevelConditions(levelValue, battlesLeft, inrow, conds, isCompleted=isGroupCompleted))
-        return (VEHICLE_TYPES_ORDER_INDICES[groupByKey], formatters.packGroupByClassConditions(groupByKey, battlesLeft, inrow, conds, isCompleted=isGroupCompleted)) if groupByValue == 'class' else None

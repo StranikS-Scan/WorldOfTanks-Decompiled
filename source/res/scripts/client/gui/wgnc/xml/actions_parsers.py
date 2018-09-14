@@ -27,7 +27,8 @@ class _BrowseActionParser(SectionParser):
             size = parseSize(section.readString('size'))
             showRefresh = section.readBool('show_refresh')
             webClientHandler = section.readString('web_client_handler')
-            action = actions.OpenInternalBrowser(name, url, size, showRefresh, webClientHandler)
+            isSolidBorder = section.readBool('is_solid_border')
+            action = actions.OpenInternalBrowser(name, url, size, showRefresh, webClientHandler, isSolidBorder)
         elif target == 'external':
             action = actions.OpenExternalBrowser(name, url)
         elif target == 'promo':

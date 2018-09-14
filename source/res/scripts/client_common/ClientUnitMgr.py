@@ -3,10 +3,8 @@
 import cPickle
 from ClientUnit import ClientUnit
 import Event
-import constants
-from debug_utils import LOG_DEBUG, LOG_DEBUG, LOG_CURRENT_EXCEPTION
-from UnitBase import UNIT_SLOT, UNIT_BROWSER_CMD, CLIENT_UNIT_CMD, INV_ID_CLEAR_VEHICLE, UNIT_BROWSER_TYPE, UNIT_ERROR, CMD_NAMES
-from constants import PREBATTLE_TYPE
+from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
+from UnitBase import UNIT_SLOT, UNIT_BROWSER_CMD, UNIT_BROWSER_TYPE, UNIT_ERROR, CMD_NAMES
 from unit_roster_config import UnitRosterSlot
 import AccountCommands
 from AccountUnitAPI import UnitClientAPI
@@ -229,9 +227,11 @@ class ClientUnitBrowser(object):
         self.__account.enqueueUnitAssembler(vehTypes)
 
     def _search(self, vehInvIDs=[]):
-        from gui.shared import g_itemsCache
+        from helpers import dependency
+        from skeletons.gui.shared import IItemsCache
+        itemsCache = dependency.instance(IItemsCache)
         for vehInvID in vehInvIDs:
-            vehicle = g_itemsCache.items.getVehicle(vehInvID)
+            vehicle = itemsCache.items.getVehicle(vehInvID)
             LOG_DEBUG('vehicle[%s]=%r' % (vehInvID, vehicle))
 
     def stopSearch(self):

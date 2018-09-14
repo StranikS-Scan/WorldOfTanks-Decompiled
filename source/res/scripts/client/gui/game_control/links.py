@@ -40,30 +40,28 @@ class URLMarcos(object):
 
     @async
     @process
-    def parse(self, url, callback):
+    def parse(self, url, params=None, callback=lambda *args: None):
         """
         Finds macros and replace to required value.
         @return: string containing parsed url.
         """
-        yield lambda callback: callback(True)
         for macros in self.__filter.findall(url):
             macroName, _, args = self.__argsFilter.match(macros).groups()
-            replacement = yield self._replace(macroName, args)
+            replacement = yield self._replace(macroName, args, params)
             url = url.replace(macros, replacement)
 
         callback(url)
 
     @async
     @process
-    def _replace(self, macros, args, callback):
-        yield lambda callback: callback(True)
+    def _replace(self, macros, args, params, callback):
         result = ''
         if macros in self.__asyncMacroses:
-            result = yield self.__asyncMacroses[macros](self, args)
+            result = yield self.__asyncMacroses[macros](self, args, params)
         elif macros in self.__syncMacroses:
             result = self.__syncMacroses[macros](args)
         else:
-            LOG_ERROR('URL marcos is not found', macros)
+            LOG_ERROR('URL macros is not found', macros)
         callback(result)
 
     def _getUserMacrosName(self, macros):

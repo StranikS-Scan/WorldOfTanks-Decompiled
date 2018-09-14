@@ -13,6 +13,7 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
+    from gui.Scaleform.daapi.view.lobby.store.StoreActions import StoreActions
     from gui.Scaleform.daapi.view.lobby.store.Inventory import Inventory
     from gui.Scaleform.daapi.view.lobby.store.Shop import Shop
     from gui.Scaleform.daapi.view.lobby.store.StoreView import StoreView
@@ -20,7 +21,8 @@ def getViewSettings():
     return (ViewSettings(VIEW_ALIAS.LOBBY_STORE, StoreView, 'store.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_STORE, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.SHOP_TABLE, StoreTable, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_INVENTORY, Inventory, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.LOBBY_SHOP, Shop, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(VIEW_ALIAS.LOBBY_SHOP, Shop, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.LOBBY_STORE_ACTIONS, StoreActions, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

@@ -7,9 +7,13 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from helpers import dependency
+from helpers.statistics import HANGAR_LOADING_STATE
 from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE
 from messenger.proto import proto_getter
-from tutorial import LOG_DEBUG, LOG_ERROR, LOG_WARNING
+from skeletons.helpers.statistics import IStatisticsCollector
+from tutorial.gui.commands import GUICommandsFactory
+from tutorial.logger import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from tutorial.data.events import ClickEvent, ClickOutsideEvent, EscEvent
 from tutorial.doc_loader import gui_config
 from tutorial.gui import GUIProxy, GUI_EFFECT_NAME
@@ -18,12 +22,14 @@ from gui.app_loader.decorators import sf_lobby
 _TEvent = events.TutorialEvent
 
 class SfLobbyProxy(GUIProxy):
+    statsCollector = dependency.descriptor(IStatisticsCollector)
 
     def __init__(self, effectPlayer):
         super(SfLobbyProxy, self).__init__()
         self.config = None
         self.items = ItemsManager()
         self.effects = effectPlayer
+        self._commands = GUICommandsFactory()
         return
 
     @sf_lobby
@@ -39,6 +45,10 @@ class SfLobbyProxy(GUIProxy):
 
     def getViewsAliases(self):
         raise Exception('Routine getViewsAliases must be implemented')
+
+    def invokeCommand(self, command):
+        self._commands.invoke(None, command)
+        return
 
     def init(self):
         result = False
@@ -67,6 +77,7 @@ class SfLobbyProxy(GUIProxy):
         return result
 
     def fini(self):
+        self._commands = None
         self.eManager.clear()
         self.effects.stopAll()
         self.effects.clear()
@@ -89,13 +100,11 @@ class SfLobbyProxy(GUIProxy):
         self.effects.stopAll()
 
     def lock(self):
-        from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
-        g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_TUTORIAL)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_TUTORIAL)
         self.showWaiting('update-scene', isSingle=True)
 
     def release(self):
-        from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
-        g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL, showSummaryNow=True)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL, showSummaryNow=True)
         self.hideWaiting('update-scene')
 
     def loadConfig(self, filePath):

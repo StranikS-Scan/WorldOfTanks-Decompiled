@@ -12,12 +12,12 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import RESEARCH_ITEMS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.settings import makeDefUnlockProps
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
-from items import vehicles, ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD, vehicles as vehicles_core
+from items import ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD, vehicles as vehicles_core
 from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.shared import IItemsCache
 __all__ = ['ResearchItemsData', 'NationTreeData']
 
 class _ItemsData(object):
@@ -26,7 +26,8 @@ class _ItemsData(object):
     """
     tradeIn = dependency.descriptor(ITradeInController)
 
-    def __init__(self, dumper):
+    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+    def __init__(self, dumper, itemsCache=None):
         super(_ItemsData, self).__init__()
         if dumper is not None and isinstance(dumper, _BaseDumper):
             self._dumper = dumper
@@ -34,8 +35,8 @@ class _ItemsData(object):
             raise Exception('Dumper is invalid.')
         self._nodes = []
         self._nodesIdx = {}
-        self._items = g_itemsCache.items
-        self._stats = g_itemsCache.items.stats
+        self._items = itemsCache.items
+        self._stats = itemsCache.items.stats
         self._wereInBattle = self._getNodesWereInBattle()
         return
 
@@ -482,7 +483,7 @@ class ResearchItemsData(_ItemsData):
     def getNationID(cls):
         result = 0
         if cls._rootCD is not None:
-            result = vehicles.getVehicleType(cls._rootCD).id[0]
+            result = vehicles_core.getVehicleType(cls._rootCD).id[0]
         return result
 
     def getRootItem(self):
@@ -618,7 +619,7 @@ class ResearchItemsData(_ItemsData):
         for node in nodes:
             nodeCD = node['id']
             state = node['state']
-            itemTypeID, _, _ = vehicles.parseIntCompactDescr(nodeCD)
+            itemTypeID, _, _ = vehicles_core.parseIntCompactDescr(nodeCD)
             if itemTypeID == GUI_ITEM_TYPE.VEHICLE and (nodeCD in topLevelCDs or nodeCD == self.getRootCD()):
                 available, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, **unlockKwargs)
                 xp = g_techTreeDP.getAllVehiclePossibleXP(unlockProps.parentID, unlockStats)
@@ -857,7 +858,7 @@ class NationTreeData(_ItemsData):
         :param nationID: ID of nation. Index in nations.NAMES.
         """
         self.clear()
-        vehicleList = sorted(vehicles.g_list.getList(nationID).values(), key=lambda item: item['level'])
+        vehicleList = sorted(vehicles_core.g_list.getList(nationID).values(), key=lambda item: item['level'])
         g_techTreeDP.setOverride(override)
         g_techTreeDP.load()
         getDisplayInfo = g_techTreeDP.getDisplayInfo

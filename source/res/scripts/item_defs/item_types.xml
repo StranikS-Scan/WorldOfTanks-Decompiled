@@ -54,7 +54,6 @@
       <aimingStabilizer_Mk1_user></aimingStabilizer_Mk1_user>
       <aimingStabilizer_Mk2_user></aimingStabilizer_Mk2_user>
       <afterburning_user></afterburning_user>
-      <noImprovedVentilation></noImprovedVentilation>
       <lightTankArtefacts_User></lightTankArtefacts_User>
       <enhancedVertical_springs_user></enhancedVertical_springs_user>
       <enhancedHorizontal_springs_user></enhancedHorizontal_springs_user>
@@ -88,6 +87,7 @@
       <telecom></telecom>
       <unrecoverable></unrecoverable>
       <siegeMode></siegeMode>
+      <lockCrew></lockCrew>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -134,6 +134,15 @@
   <optionalDevice>
     <userString>	#item_types:optionalDevice/name	</userString>
     <description>	#item_types:optionalDevice/desc	</description>
+    <tags>
+      <deluxe></deluxe>
+      <toolbox></toolbox>
+      <ventilation></ventilation>
+      <rammer></rammer>
+      <coatedOptics></coatedOptics>
+      <aimingStabilizer></aimingStabilizer>
+      <enhancedAimDrives></enhancedAimDrives>
+    </tags>
   </optionalDevice>
   <shell>
     <userString>	#item_types:shot/name	</userString>
@@ -150,6 +159,15 @@
       <stimulator></stimulator>
       <trigger></trigger>
       <avatar></avatar>
+      <equipmentBattleBooster></equipmentBattleBooster>
+      <crewSkillBattleBooster></crewSkillBattleBooster>
+      <deluxe></deluxe>
+      <toolbox></toolbox>
+      <ventilation></ventilation>
+      <rammer></rammer>
+      <coatedOptics></coatedOptics>
+      <aimingStabilizer></aimingStabilizer>
+      <enhancedAimDrives></enhancedAimDrives>
     </tags>
   </equipment>
 </item_types.xml>

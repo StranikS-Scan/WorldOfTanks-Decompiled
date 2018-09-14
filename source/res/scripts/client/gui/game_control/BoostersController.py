@@ -3,13 +3,16 @@
 from operator import itemgetter
 import BigWorld
 import Event
-from gui.goodies import g_goodiesCache
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers import dependency
 from helpers import time_utils
 from skeletons.gui.game_control import IBoostersController
+from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.shared import IItemsCache
 
 class BoostersController(IBoostersController):
+    itemsCache = dependency.descriptor(IItemsCache)
+    goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self):
         super(BoostersController, self).__init__()
@@ -23,7 +26,7 @@ class BoostersController(IBoostersController):
         super(BoostersController, self).fini()
 
     def onLobbyInited(self, event):
-        g_itemsCache.onSyncCompleted += self._update
+        self.itemsCache.onSyncCompleted += self._update
         if self.__boosterNotifyTimeCallback is None:
             self.__startBoosterTimeNotifyCallback()
         return
@@ -38,7 +41,7 @@ class BoostersController(IBoostersController):
         self.__clearBoosterTimeNotifyCallback()
         self.__boostersForUpdate = None
         self.onBoosterChangeNotify.clear()
-        g_itemsCache.onSyncCompleted -= self._update
+        self.itemsCache.onSyncCompleted -= self._update
         return
 
     def _update(self, *args):
@@ -47,7 +50,7 @@ class BoostersController(IBoostersController):
 
     def __startBoosterTimeNotifyCallback(self):
         self.__boostersForUpdate = []
-        activeBoosters = g_goodiesCache.getBoosters(REQ_CRITERIA.BOOSTER.ACTIVE).values()
+        activeBoosters = self.goodiesCache.getBoosters(REQ_CRITERIA.BOOSTER.ACTIVE).values()
         notificationList = []
         for booster in activeBoosters:
             notificationList.append((booster.boosterID, booster.getUsageLeftTime() % time_utils.ONE_MINUTE))

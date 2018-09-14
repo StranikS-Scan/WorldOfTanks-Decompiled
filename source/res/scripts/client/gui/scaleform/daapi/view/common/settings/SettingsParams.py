@@ -30,6 +30,11 @@ class SettingsParams(object):
                 diff[settings_constants.GRAPHICS.CUSTOM_AA] = smoothing
             else:
                 diff[settings_constants.GRAPHICS.MULTISAMPLING] = smoothing
+        for option in settings_constants.FEEDBACK.ALL():
+            feedbackTab = diff.pop(option, None)
+            if feedbackTab is not None:
+                diff.update(feedbackTab)
+
         return diff
 
     def getGameSettings(self):
@@ -147,6 +152,8 @@ class SettingsParams(object):
             else:
                 self.settingsCore.previewSetting(settings_constants.GRAPHICS.MULTISAMPLING, value)
             return
+        if settingName in settings_constants.FEEDBACK.ALL():
+            settingName, value = value.popitem()
         self.settingsCore.previewSetting(settingName, value)
 
     def revert(self):

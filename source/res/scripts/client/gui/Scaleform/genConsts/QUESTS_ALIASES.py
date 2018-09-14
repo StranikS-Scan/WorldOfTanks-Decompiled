@@ -1,17 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/QUESTS_ALIASES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class QUESTS_ALIASES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     TAB_PERSONAL_QUESTS = 'tabPersonalQuests'
-    TAB_COMMON_QUESTS = 'tabCommonQuests'
     TAB_LADDER_QUESTS = 'tabLadderQuests'
-    TAB_BEGINNER_QUESTS = 'tabBeginnerQuests'
     PERSONAL_WELCOME_VIEW_ALIAS = 'QuestsPersonalWelcomeView'
     PERSONAL_WELCOME_VIEW_LINKAGE = 'QuestsPersonalWelcomeViewUI'
     SEASONS_VIEW_ALIAS = 'QuestsSeasonsView'
@@ -19,10 +15,6 @@ class QUESTS_ALIASES(object):
     RANDOM_TILE_CHAINS_VIEW_ALIAS = 'RandomQuestsTileChainsView'
     FALLOUT_TILE_CHAINS_VIEW_ALIAS = 'FalloutQuestsTileChainsView'
     TILE_CHAINS_VIEW_LINKAGE = 'QuestsTileChainsViewUI'
-    COMMON_QUESTS_VIEW_ALIAS = 'CommonQuestsView'
-    COMMON_QUESTS_VIEW_LINKAGE = 'CurrentTab_UI'
-    BEGINNER_QUESTS_VIEW_ALIAS = 'BeginnerQuestsView'
-    BEGINNER_QUESTS_VIEW_LINKAGE = 'QuestsBeginnerTabUI'
     SLOTS_COUNT = 5
     NEED_RECEIVED_AWARD = 'needReceivedAward'
     FREE_SLOTS_AND_FREE_QUESTS = 'freeSlotsAndFreeQuests'
@@ -36,11 +28,21 @@ class QUESTS_ALIASES(object):
     QUESTS_CONTENT_TABS_PY_ALIAS = 'questsContentTabs'
     RENDERER_TYPE_BLOCK_TITLE = 1
     RENDERER_TYPE_QUEST = 2
-    TUTORIAL_HANGAR_QUEST_DETAILS_LINKAGE = 'TutorialHangarDetailsBlockUI'
-    TUTORIAL_HANGAR_MOTIVE_QUEST_DETAILS_LINKAGE = 'TutorialHangarMotiveDetailsBlockUI'
-    BEGINNER_DETAILS_LINKAGES = [TUTORIAL_HANGAR_QUEST_DETAILS_LINKAGE, TUTORIAL_HANGAR_MOTIVE_QUEST_DETAILS_LINKAGE]
-    TUTORIAL_HANGAR_QUEST_DETAILS_PY_ALIAS = 'tutorialHangarQuestDetails'
-    TUTORIAL_HANGAR_MOTIVE_QUEST_DETAILS_PY_ALIAS = 'tutorialHangarMotiveQuestDetails'
-    BEGINNER_DETAILS_PY_ALIASES = [TUTORIAL_HANGAR_QUEST_DETAILS_PY_ALIAS, TUTORIAL_HANGAR_MOTIVE_QUEST_DETAILS_PY_ALIAS]
-    QUEST_RENDERER_ALIAS = 'QuestRenderer_UI'
-    QUEST_RENDERER_BZ_ALIAS = 'QuestBattleTaskRenderer_UI'
+    MISSIONS_MARATHONS_VIEW_PY_ALIAS = 'MissionsMarathonsView'
+    MISSIONS_MARATHONS_VIEW_LINKAGE = 'MissionsMarathonsViewUI'
+    MISSIONS_CATEGORIES_VIEW_PY_ALIAS = 'MissionsCategoriesView'
+    MISSIONS_CATEGORIES_VIEW_LINKAGE = 'MissionsCategoriesViewUI'
+    CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS = 'CurrentVehicleMissionsView'
+    CURRENT_VEHICLE_MISSIONS_VIEW_LINKAGE = 'CurrentVehicleMissionsViewUI'
+    MISSIONS_FILTER_POPOVER_ALIAS = 'MissionsFilterPopover'
+    MISSIONS_TOKEN_POPOVER_ALIAS = 'MissionsTokenPopover'
+    MISSIONS_VEHICLE_SELECTOR_ALIAS = 'MissionsVehicleSelector'
+    MISSIONS_VEHICLE_SELECTOR_LINKAGE = 'MissionsVehicleSelectorUI'
+    VEHICLE_SELECTOR_CAROUSEL_ALIAS = 'VehicleSelectorCarousel'
+    VEHICLE_SELECTOR_CAROUSEL_LINKAGE = 'VehicleSelectorCarouselUI'
+    MISSION_CARD_RENDERER_LINKAGE = 'MissionCardRendererUI'
+    MISSION_PACK_MARATHON_HEADER_LINKAGE = 'MissionPackMarathonHeaderUI'
+    MISSION_PACK_MARATHON_BODY_LINKAGE = 'MissionPackMarathonBodyUI'
+    MISSION_PACK_CATEGORY_HEADER_LINKAGE = 'MissionPackCategoryHeaderUI'
+    MISSION_PACK_CURRENT_VEHICLE_HEADER_LINKAGE = 'MissionPackCurrentVehicleHeaderUI'
+    MISSIONS_VIEW_PY_ALIASES = [MISSIONS_MARATHONS_VIEW_PY_ALIAS, MISSIONS_CATEGORIES_VIEW_PY_ALIAS, CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS]

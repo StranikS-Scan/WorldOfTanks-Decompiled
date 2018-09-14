@@ -8,6 +8,7 @@ from gui.game_control.links import URLMarcos
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
 from skeletons.gui.game_control import IExternalLinksController
+from helpers.http.url_formatters import addParamsToUrlQuery
 _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.REGISTRATION: '_handleOpenRegistrationURL',
  OpenLinkEvent.RECOVERY_PASSWORD: '_handleOpenRecoveryPasswordURL',
@@ -23,7 +24,8 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO_SUMMARY: '_handleGmPromoSummaryURL',
  OpenLinkEvent.GLOBAL_MAP_CAP: '_handleGmCapURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO: '_handleGmPromoURL',
- OpenLinkEvent.PREM_SHOP: '_handleOpenPremShopURL'}
+ OpenLinkEvent.PREM_SHOP: '_handleOpenPremShopURL',
+ OpenLinkEvent.TOKEN_SHOP: '_handleTokenShopURL'}
 
 class ExternalLinksHandler(IExternalLinksController):
 
@@ -72,10 +74,10 @@ class ExternalLinksHandler(IExternalLinksController):
 
     @async
     @process
-    def getURL(self, name, callback):
+    def getURL(self, name, params=None, callback=lambda *args: None):
         urlSettings = GUI_SETTINGS.lookup(name)
         if urlSettings:
-            url = yield self.__urlMarcos.parse(str(urlSettings))
+            url = yield self.__urlMarcos.parse(str(urlSettings), params)
         else:
             url = yield lambda callback: callback('')
         callback(url)
@@ -84,8 +86,8 @@ class ExternalLinksHandler(IExternalLinksController):
         self.open(event.url)
 
     @process
-    def __openParsedUrl(self, urlName):
-        parsedUrl = yield self.getURL(urlName)
+    def __openParsedUrl(self, urlName, params=None):
+        parsedUrl = yield self.getURL(urlName, params)
         self.open(parsedUrl)
 
     def _handleOpenRegistrationURL(self, _):
@@ -132,3 +134,6 @@ class ExternalLinksHandler(IExternalLinksController):
 
     def _handleOpenPremShopURL(self, _):
         self.__openParsedUrl('premShopURL')
+
+    def _handleTokenShopURL(self, event):
+        self.__openParsedUrl('tokenShopURL', event.params)

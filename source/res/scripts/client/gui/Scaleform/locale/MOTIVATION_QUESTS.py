@@ -6,6 +6,7 @@ Please, don't edit this file manually.
 """
 
 class MOTIVATION_QUESTS(object):
+    GROUP = '#motivation_quests:group'
     COMMON_REQUIREMENTS = '#motivation_quests:common/requirements'
     COMMON_CONGRATULATION = '#motivation_quests:common/congratulation'
     G1_NAME = '#motivation_quests:g1/name'

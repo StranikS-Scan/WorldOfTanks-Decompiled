@@ -4,8 +4,9 @@ import BigWorld
 import Vehicle
 import Math
 from collections import defaultdict
+from constants import VEHICLE_SETTING
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, CTRL_MODES
-from constants import AVATAR_SUBFILTERS, FILTER_INTERPOLATION_TYPE, VEHICLE_SETTING
+from AvatarInputHandler.subfilters_constants import AVATAR_SUBFILTERS, FILTER_INTERPOLATION_TYPE
 from debug_utils import LOG_DEBUG_DEV, LOG_ERROR
 from helpers.CallbackDelayer import CallbackDelayer
 _STRATEGIC_VIEW = (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY)
@@ -70,51 +71,39 @@ class AvatarObserver(CallbackDelayer):
     observedVehicleData = property(lambda self: self.__observedVehicleData)
 
     def __init__(self):
-        LOG_DEBUG_DEV('client AvatarObserver.init')
         CallbackDelayer.__init__(self)
         self.__observedVehicleID = None
         self.__observedVehicleData = defaultdict(ObservedVehicleData)
         return
 
     def onBecomePlayer(self):
-        LOG_DEBUG_DEV('AvatarObserver.onBecomePlayer')
         self.cell.switchObserverFPV(False)
 
     def onBecomeNonPlayer(self):
         CallbackDelayer.destroy(self)
 
     def onEnterWorld(self):
-        LOG_DEBUG_DEV('AvatarObserver.onEnterWorld')
 
         def getFilterMethod(methodName):
             method = getattr(self.filter, methodName, None)
-            if not method:
-                LOG_ERROR('Avatar.onEnterWorld: filter doesnt have method %s' % methodName)
-                return lambda : None
-            else:
-                return method
+            if method is None:
+                LOG_ERROR('AvatarObserver.onEnterWorld(): filter does not have method %s' % methodName)
+                assert False
+            return method
 
         self.__filterSyncVector3 = getFilterMethod('syncVector3')
         self.__filterGetVector3 = getFilterMethod('getVector3')
         self.__filterResetVector3 = getFilterMethod('resetVector3')
         self.__filterSetInterpolationType = getFilterMethod('setInterpolationType')
-        self.__setInterpolationTypes()
-        self.__resetArcadeCameraData()
-        self.__resetSniperCameraData()
-        self.__resetStrategicCameraData()
+        if self.isObserver():
+            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, FILTER_INTERPOLATION_TYPE.LINEAR)
+            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT)
 
     def onVehicleChanged(self):
         LOG_DEBUG_DEV('Avatar vehicle has changed to %s' % self.vehicle)
         if self.vehicle is not None:
             typeofveh = 'observed' if self.__observedVehicleID == self.vehicle.id else 'players'
             LOG_DEBUG_DEV('Vehicle ID is ' + str(self.vehicle.id) + ' and is ' + typeofveh)
-            for v in BigWorld.entities.values():
-                if isinstance(v, Vehicle.Vehicle):
-                    if self.vehicle is v:
-                        v.subscribeToCameraChanged()
-                    else:
-                        v.unsubscribeFromCameraChanged()
-
         if self.isObserver() and self.vehicle is not None and self.__observedVehicleID != self.vehicle.id:
             self.__observedVehicleID = self.vehicle.id
             self.guiSessionProvider.getArenaDP().switchCurrentTeam(self.vehicle.publicInfo['team'])
@@ -124,7 +113,8 @@ class AvatarObserver(CallbackDelayer):
             if self.gunRotator is not None:
                 self.gunRotator.start()
             self.updateObservedVehicleData()
-            self.vehicle.filter.enableStabilisedMatrix(True)
+            if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
+                self.vehicle.filter.enableStabilisedMatrix(True)
             BigWorld.target.exclude = self.vehicle
             for v in BigWorld.entities.values():
                 if isinstance(v, Vehicle.Vehicle) and v.appearance is not None:
@@ -150,7 +140,6 @@ class AvatarObserver(CallbackDelayer):
     def vehicle_onEnterWorld(self, vehicle):
         if vehicle.id != self.playerVehicleID:
             if self.isObserver() and vehicle.id == self.__observedVehicleID:
-                LOG_DEBUG_DEV('AvatarObserver.vehicle_onEnterWorld', vehicle.id)
                 extraData = self.observedVehicleData[self.__observedVehicleID]
                 extraData.gunSettings = vehicle.typeDescriptor.gun
 
@@ -212,11 +201,14 @@ class AvatarObserver(CallbackDelayer):
             self.observedVehicleData[vehicleID].setEquipment(compactDescr, quantity, stage, timeRemaining)
 
     def set_isObserverFPV(self, prev):
-        LOG_DEBUG_DEV('Avatar::set_isObserverFPV', self.isObserverFPV)
+        LOG_DEBUG_DEV('AvatarObserver.set_isObserverFPV()', self.isObserverFPV)
         self.__applyObserverModeChange()
 
     def __applyObserverModeChange(self):
-        if self.vehicle is None and self.inputHandler.ctrlModeName not in _STRATEGIC_VIEW:
+        if not self.inputHandler.isStarted:
+            self.delayCallback(0.0, self.__applyObserverModeChange)
+            return
+        elif self.vehicle is None and self.inputHandler.ctrlModeName not in _STRATEGIC_VIEW:
             self.delayCallback(0.0, self.__applyObserverModeChange)
             return
         else:
@@ -234,18 +226,9 @@ class AvatarObserver(CallbackDelayer):
     def set_observerFPVControlMode(self, prev):
         if self.isObserver() is not None:
             eMode = CTRL_MODES[self.observerFPVControlMode]
-            LOG_DEBUG_DEV('Avatar::set_observerFPVControlMode', eMode)
-            if eMode == CTRL_MODE_NAME.ARCADE:
-                self.__resetArcadeCameraData()
-            elif eMode == CTRL_MODE_NAME.SNIPER:
-                self.__resetSniperCameraData()
-            elif eMode == CTRL_MODE_NAME.STRATEGIC:
-                self.__resetStrategicCameraData()
-            elif eMode == CTRL_MODE_NAME.ARTY:
-                self.__resetArtyCameraData()
             if self.isObserverFPV:
                 if eMode not in (CTRL_MODE_NAME.ARCADE, CTRL_MODE_NAME.SNIPER) + _STRATEGIC_VIEW:
-                    LOG_DEBUG_DEV("Avatar::set_observerFPVControlMode requested control mode '{0}' is not supported, switching out of FPV".format(eMode))
+                    LOG_DEBUG_DEV("AvatarObserver.set_observerFPVControlMode() requested control mode '{0}' is not supported, switching out of FPV".format(eMode))
                     self.cell.switchObserverFPV(False)
                 else:
                     self.__switchToObservedControlMode()
@@ -253,69 +236,19 @@ class AvatarObserver(CallbackDelayer):
 
     def __switchToObservedControlMode(self):
         eMode = CTRL_MODES[self.observerFPVControlMode]
-        LOG_DEBUG_DEV('Avatar::__switchToObservedControlMode: ', self.observerFPVControlMode, eMode)
+        LOG_DEBUG_DEV('AvatarObserver.__switchToObservedControlMode():', self.observerFPVControlMode, eMode)
         filteredValue = None
         time = BigWorld.serverTime()
-        if eMode == CTRL_MODE_NAME.ARCADE:
-            filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_ARCADE_REL_TRANSLATION, time)
-        elif eMode == CTRL_MODE_NAME.SNIPER:
-            filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_SNIPER_ROTATION, time)
-        elif eMode == CTRL_MODE_NAME.STRATEGIC:
-            filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_STRATEGIC_SHOT_POINT, time)
-        elif eMode == CTRL_MODE_NAME.ARTY:
-            filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_SHOT_POINT, time)
+        if eMode in (CTRL_MODE_NAME.ARCADE, CTRL_MODE_NAME.SNIPER) + _STRATEGIC_VIEW:
+            filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, time)
         if filteredValue is None or filteredValue == Math.Vector3(0, 0, 0):
-            LOG_DEBUG_DEV('Avatar.__switchToObservedControlMode: no filtered value yet, rescheduling switch')
-            BigWorld.callback(0.0, self.__switchToObservedControlMode)
+            LOG_DEBUG_DEV('AvatarObserver.__switchToObservedControlMode(): no filtered value yet.Rescheduling switch...', filteredValue)
+            self.delayCallback(0.0, self.__switchToObservedControlMode)
             return
         else:
             self.inputHandler.onVehicleControlModeChanged(eMode)
             return
 
-    def __setInterpolationTypes(self):
-        if self.isObserver():
-            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_ARCADE_REL_TRANSLATION, FILTER_INTERPOLATION_TYPE.SLERP_OF_CARTESIAN)
-            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_ARCADE_SHOT_POINT, FILTER_INTERPOLATION_TYPE.SLERP_OF_CARTESIAN)
-            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_SNIPER_ROTATION, FILTER_INTERPOLATION_TYPE.ANGLE_RADIANS)
-            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_STRATEGIC_SHOT_POINT, FILTER_INTERPOLATION_TYPE.LINEAR)
-            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_ARTY_SHOT_POINT, FILTER_INTERPOLATION_TYPE.LINEAR)
-            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_ARTY_TRANSLATION, FILTER_INTERPOLATION_TYPE.SLERP_OF_CARTESIAN)
-            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_ARTY_ROTATION, FILTER_INTERPOLATION_TYPE.ANGLE_RADIANS)
-
-    def __resetArcadeCameraData(self):
-        if self.isObserver():
-            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_ARCADE_REL_TRANSLATION)
-            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_ARCADE_SHOT_POINT)
-
-    def __resetSniperCameraData(self):
-        if self.isObserver():
-            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_SNIPER_ROTATION)
-
-    def __resetStrategicCameraData(self):
-        if self.isObserver():
-            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_STRATEGIC_SHOT_POINT)
-
-    def __resetArtyCameraData(self):
-        if self.isObserver():
-            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_SHOT_POINT)
-            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_TRANSLATION)
-            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_ROTATION)
-
-    def set_remoteCameraArcade(self, prev):
+    def set_remoteCamera(self, prev):
         if self.inWorld:
-            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_ARCADE_REL_TRANSLATION, self.remoteCameraArcade.relTranslation, self.remoteCameraArcade.time)
-            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_ARCADE_SHOT_POINT, self.remoteCameraArcade.shotPoint, self.remoteCameraArcade.time)
-
-    def set_remoteCameraSniper(self, prev):
-        if self.inWorld:
-            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_SNIPER_ROTATION, self.remoteCameraSniper.camMatrixRotation, self.remoteCameraSniper.time)
-
-    def set_remoteCameraStrategic(self, prev):
-        if self.inWorld:
-            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_STRATEGIC_SHOT_POINT, self.remoteCameraStrategic.shotPoint, self.remoteCameraStrategic.time)
-
-    def set_remoteCameraArty(self, prev):
-        if self.inWorld:
-            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_SHOT_POINT, self.remoteCameraArty.shotPoint, self.remoteCameraArty.time)
-            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_TRANSLATION, self.remoteCameraArty.translation, self.remoteCameraArty.time)
-            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_ROTATION, self.remoteCameraArty.rotation, self.remoteCameraArty.time)
+            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_SHOT_POINT, self.remoteCamera.shotPoint, self.remoteCamera.time)

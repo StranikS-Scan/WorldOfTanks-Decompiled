@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/GuiSoundsLoader.py
 import ResMgr
+from debug_utils import LOG_WARNING
 from items import _xml
 from gui import doc_loaders
-from debug_utils import *
 import WWISE
 
 class GuiSoundsLoader(object):

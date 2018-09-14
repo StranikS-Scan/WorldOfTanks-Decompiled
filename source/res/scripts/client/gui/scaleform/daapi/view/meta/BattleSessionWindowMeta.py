@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattleWindow import PrebattleWindow
 
 class BattleSessionWindowMeta(PrebattleWindow):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends PrebattleWindow
-    """
 
     def requestToAssignMember(self, accId):
         self._printOverrideError('requestToAssignMember')
@@ -33,7 +27,7 @@ class BattleSessionWindowMeta(PrebattleWindow):
 
     def as_setNationsLimitsS(self, nations):
         """
-        :param nations: Represented by DataProvider (AS)
+        :param nations: Represented by DataProvider.<BSFlagRendererVO> (AS)
         """
         return self.flashObject.as_setNationsLimits(nations) if self._isDAAPIInited() else None
 

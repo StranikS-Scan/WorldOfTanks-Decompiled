@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class LoginPageMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def onLogin(self, user, password, host, isSocial):
         self._printOverrideError('onLogin')
@@ -117,7 +111,7 @@ class LoginPageMeta(View):
 
     def as_showSimpleFormS(self, isShow, socialList):
         """
-        :param socialList: Represented by DataProvider (AS)
+        :param socialList: Represented by DataProvider.<SocialIconVo> (AS)
         """
         return self.flashObject.as_showSimpleForm(isShow, socialList) if self._isDAAPIInited() else None
 

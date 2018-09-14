@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DebugMonitorView.py
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.DebugView import DebugView
 from gui.DebugView import DebugViewItem
-from debug_utils import *
 
 class DebugMonitorView(DebugView):
     """Debug monitor view."""

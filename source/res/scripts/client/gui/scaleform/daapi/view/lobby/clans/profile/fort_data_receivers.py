@@ -1,11 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/fort_data_receivers.py
-from ConnectionManager import connectionManager
 from adisp import process, async
 from constants import FORT_BUILDING_TYPE, DOSSIER_TYPE
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.clans.items import BuildingStats, Building
+from helpers import dependency
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from predefined_hosts import g_preDefinedHosts
@@ -21,7 +20,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortTransportation
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from shared_utils import makeTupleByDict
+from skeletons.connection_mgr import IConnectionManager
 
 def _getFortBuildingsVO(sortiesStats, battlesStats, buildingList, texts):
     return {'sortiesStats': sortiesStats,
@@ -59,7 +58,8 @@ def _getFortSortiesSchemaTexts(activatedDefModeParams, peripheryID, buildingsCou
     if periphery is not None:
         serverName = periphery.name
     else:
-        serverName = connectionManager.serverUserName
+        connectionMgr = dependency.instance(IConnectionManager)
+        serverName = connectionMgr.serverUserName
     return {'totalBuildingsCount': str(buildingsCount),
      'totalDirectionsCount': str(dirsCount),
      'defenceHour': defHour,

@@ -389,13 +389,6 @@ class VideoCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         if delta > 1.0:
             delta = 0.0
         return delta
-        replaySpeed = BattleReplay.g_replayCtrl.playbackSpeed
-        if replaySpeed == 0:
-            replaySpeed = 1e-08
-        delta = delta / replaySpeed
-        if delta > 1.0:
-            delta = 0.0
-        return delta
 
     def __getMovementDirections(self):
         m = mathUtils.createRotationMatrix(self.__ypr)

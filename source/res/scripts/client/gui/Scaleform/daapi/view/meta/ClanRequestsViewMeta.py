@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesWindowAbstractTabView import ClanInvitesWindowAbstractTabView
 
 class ClanRequestsViewMeta(ClanInvitesWindowAbstractTabView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ClanInvitesWindowAbstractTabView
-    """
 
     def acceptRequest(self, dbId):
         self._printOverrideError('acceptRequest')

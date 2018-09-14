@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/dictionaries.py
-from debug_utils import *
 import re
 import sre_compile
 import ResMgr
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 _defaultReplacementFunction = lambda word: '*' * len(word)
 
 class ObsceneLanguageDictionary(object):

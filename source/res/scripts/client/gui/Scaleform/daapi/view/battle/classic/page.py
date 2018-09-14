@@ -56,7 +56,7 @@ class ClassicPage(SharedPage):
             if self.as_isComponentVisibleS(self._fullStatsAlias) != isShown:
                 if isShown:
                     if len(self._fsToggling) == 0:
-                        self._fsToggling = set(self.as_getComponentsVisibilityS())
+                        self._fsToggling.update(self.as_getComponentsVisibilityS())
                     if permanent is not None:
                         self._fsToggling.difference_update(permanent)
                     self._setComponentsVisibility(visible={self._fullStatsAlias}, hidden=self._fsToggling)

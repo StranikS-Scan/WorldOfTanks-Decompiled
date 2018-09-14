@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/helpers/DecalMap.py
 import BigWorld
 import ResMgr
-from debug_utils import *
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 g_instance = None
 
 class DecalMap:

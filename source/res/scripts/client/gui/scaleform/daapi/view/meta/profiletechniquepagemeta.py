@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.profile.ProfileTechnique import ProfileTechnique
 
 class ProfileTechniquePageMeta(ProfileTechnique):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ProfileTechnique
-    """
 
     def setIsInHangarSelected(self, value):
         self._printOverrideError('setIsInHangarSelected')

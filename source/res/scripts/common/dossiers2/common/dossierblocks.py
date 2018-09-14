@@ -146,6 +146,10 @@ class DictDossierBlockDescr(object):
         self.__isExpanded = True
         _callEventHandlers(eventsEnabled=self.eventsEnabled, handlers=self.__eventsHandlers.get('_delete_', []), dossierDescr=self.__dossierDescrRef(), dossierBlockDescr=self, args=(key,))
 
+    def clear(self):
+        self.__data.clear()
+        self.__isExpanded = True
+
     def __contains__(self, key):
         return key in self.__data
 

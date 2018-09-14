@@ -3,12 +3,14 @@
 from operator import itemgetter
 import BigWorld
 import Event
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers import dependency
 from helpers import time_utils
 from skeletons.gui.game_control import IRentalsController
+from skeletons.gui.shared import IItemsCache
 
 class RentalsController(IRentalsController):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(RentalsController, self).__init__()
@@ -22,7 +24,7 @@ class RentalsController(IRentalsController):
         super(RentalsController, self).fini()
 
     def onLobbyInited(self, event):
-        g_itemsCache.onSyncCompleted += self._update
+        self.itemsCache.onSyncCompleted += self._update
         if self.__rentNotifyTimeCallback is None:
             self.__startRentTimeNotifyCallback()
         return
@@ -37,7 +39,7 @@ class RentalsController(IRentalsController):
         self.__clearRentTimeNotifyCallback()
         self.__vehiclesForUpdate = None
         self.onRentChangeNotify.clear()
-        g_itemsCache.onSyncCompleted -= self._update
+        self.itemsCache.onSyncCompleted -= self._update
         return
 
     def _update(self, *args):
@@ -46,7 +48,7 @@ class RentalsController(IRentalsController):
 
     def __startRentTimeNotifyCallback(self):
         self.__vehiclesForUpdate = []
-        rentedVehicles = g_itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.ACTIVE_RENT).values()
+        rentedVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.ACTIVE_RENT).values()
         notificationList = []
         for vehicle in rentedVehicles:
             delta = vehicle.rentLeftTime

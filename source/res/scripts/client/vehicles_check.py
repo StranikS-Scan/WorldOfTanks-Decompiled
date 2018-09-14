@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicles_check.py
-import BigWorld
 from items import vehicles
-from debug_utils import *
 import Math
 import ResMgr
 EPSILON = 0.001

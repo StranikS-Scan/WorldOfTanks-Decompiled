@@ -3,7 +3,6 @@
 import ArenaType
 from adisp import process
 from constants import PREBATTLE_TYPE
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -22,10 +21,13 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import getArenaFullName
 from gui.sounds.ambients import LobbySubViewEnv
+from helpers import dependency
 from helpers import i18n
+from skeletons.gui.lobby_context import ILobbyContext
 
 class Trainings(LobbySubView, TrainingFormMeta, ILegacyListener):
     __sound_env__ = LobbySubViewEnv
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         super(Trainings, self).__init__()
@@ -86,7 +88,7 @@ class Trainings(LobbySubView, TrainingFormMeta, ILegacyListener):
              'creatorName': item.creator,
              'creatorClan': item.clanAbbrev,
              'creatorIgrType': item.creatorIgrType,
-             'creatorRegion': g_lobbyContext.getRegionCode(item.creatorDbId),
+             'creatorRegion': self.lobbyContext.getRegionCode(item.creatorDbId),
              'icon': formatters.getMapIconPath(arena, prefix='small/'),
              'disabled': not item.isOpened})
 

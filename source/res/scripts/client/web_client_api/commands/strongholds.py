@@ -11,7 +11,7 @@ _StrongholdsJoinBattleScheme = {'required': (('unit_id', (int, long)), ('periphe
 
 class StrongholdsBattleCommand(_StrongholdsBattleCommand, SchemeValidator):
     """
-    Represents web command for playing sound by id.
+    Represents Strongholds specific web command.
     """
 
     def __init__(self, *args, **kwargs):

@@ -7,7 +7,7 @@ import Pixie
 from Math import Matrix
 from constants import VEHICLE_HIT_EFFECT
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_WARNING, LOG_ERROR
-from items import _xml
+from items import _xml, vehicles
 import material_kinds
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 from CustomEffect import RangeTable
@@ -105,7 +105,7 @@ class RepaintParams(object):
 
     @staticmethod
     def getRepaintParams(vehicleDescr):
-        tintGroups = items.vehicles.g_cache.customization(vehicleDescr.type.customizationNationID)['tintGroups']
+        tintGroups = vehicles.g_cache.customization(vehicleDescr.type.customizationNationID)['tintGroups']
         for i in tintGroups.keys():
             grp = tintGroups[i]
             repaintReplaceColor = Math.Vector4(grp.x, grp.y, grp.z, 0.0) / 255.0

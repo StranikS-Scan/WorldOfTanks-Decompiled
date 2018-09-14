@@ -2,17 +2,19 @@
 # Embedded file name: scripts/client/gui/shared/view_helpers/UsersInfoHelper.py
 from collections import defaultdict
 from debug_utils import LOG_DEBUG
-from gui.LobbyContext import g_lobbyContext
 from gui.shared import formatters as shared_fmts
 from gui.shared.view_helpers.UsersInfoController import UsersInfoController
+from helpers import dependency
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
 from messenger.proto import proto_getter, PROTO_TYPE
 from messenger.proto.entities import SharedUserEntity
+from skeletons.gui.lobby_context import ILobbyContext
 
 class UsersInfoHelper(object):
     _rqCtrl = UsersInfoController()
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         self._invalid = defaultdict(set)
@@ -68,7 +70,7 @@ class UsersInfoHelper(object):
         return self.getContact(userDbID).getClanAbbrev()
 
     def getUserRegionCode(self, userDbID):
-        return g_lobbyContext.getRegionCode(userDbID)
+        return self.lobbyContext.getRegionCode(userDbID)
 
     def getUserFullName(self, userDbID, isClan=True, isRegion=True):
         user = self.getContact(userDbID)

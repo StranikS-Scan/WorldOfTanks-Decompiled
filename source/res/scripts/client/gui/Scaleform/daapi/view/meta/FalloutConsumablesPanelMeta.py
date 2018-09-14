@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel
 
 class FalloutConsumablesPanelMeta(ConsumablesPanel):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ConsumablesPanel
-    """
 
     def as_initializeRageProgressS(self, show, barProps):
         return self.flashObject.as_initializeRageProgress(show, barProps) if self._isDAAPIInited() else None

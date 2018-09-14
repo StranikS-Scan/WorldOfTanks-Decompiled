@@ -1,20 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CrosshairPanelContainerMeta.py
-from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
+from gui.Scaleform.daapi.view.meta.DAAPISimpleContainerMeta import DAAPISimpleContainerMeta
 
-class CrosshairPanelContainerMeta(BaseDAAPIComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIComponent
-    """
-
-    def as_populateS(self):
-        return self.flashObject.as_populate() if self._isDAAPIInited() else None
-
-    def as_disposeS(self):
-        return self.flashObject.as_dispose() if self._isDAAPIInited() else None
+class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_setSettingsS(self, data):
         return self.flashObject.as_setSettings(data) if self._isDAAPIInited() else None
@@ -40,7 +28,7 @@ class CrosshairPanelContainerMeta(BaseDAAPIComponent):
     def as_setHealthS(self, percent):
         return self.flashObject.as_setHealth(percent) if self._isDAAPIInited() else None
 
-    def as_setAmmoStockS(self, quantity, quantityInClip, isLow, clipState, clipReloaded):
+    def as_setAmmoStockS(self, quantity, quantityInClip, isLow, clipState, clipReloaded=False):
         return self.flashObject.as_setAmmoStock(quantity, quantityInClip, isLow, clipState, clipReloaded) if self._isDAAPIInited() else None
 
     def as_setClipParamsS(self, clipCapacity, burst):

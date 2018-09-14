@@ -5,20 +5,24 @@ from adisp import process, async
 from debug_utils import LOG_WARNING
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
+from items import tankmen as tmen_core, vehicles as vehs_core
 from gui import DialogsInterface
 from gui.game_control import restore_contoller
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import g_itemsCache
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_PURCHASE_CODE
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.money import Currency
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 _SHELLS_MONEY_ERRORS = {Currency.CREDITS: 'SHELLS_NO_CREDITS',
- Currency.GOLD: 'SHELLS_NO_GOLD'}
+ Currency.GOLD: 'SHELLS_NO_GOLD',
+ Currency.CRYSTAL: 'SHELLS_NO_CRYSTAL'}
 _EQS_MONEY_ERRORS = {Currency.CREDITS: 'EQS_NO_CREDITS',
- Currency.GOLD: 'EQS_NO_GOLD'}
+ Currency.GOLD: 'EQS_NO_GOLD',
+ Currency.CRYSTAL: 'EQS_NO_CRYSTAL'}
 PluginResult = namedtuple('PluginResult', 'success errorMsg ctx')
 
 def makeSuccess(**kwargs):
@@ -35,6 +39,8 @@ class ProcessorPlugin(object):
         """ Plugins type. """
         VALIDATOR = 0
         CONFIRMATOR = 1
+
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, pluginType, isAsync=False, isEnabled=True):
         """
@@ -189,6 +195,16 @@ class ModuleTypeValidator(SyncValidator):
         return makeError('invalid_module_type') if self.module.itemTypeID not in self.allowableTypes else makeSuccess()
 
 
+class ModuleConfigValidator(SyncValidator):
+
+    def __init__(self, module):
+        super(ModuleConfigValidator, self).__init__()
+        self.module = module
+
+    def _validate(self):
+        return makeError() if not self.module.fullyConfigured else makeSuccess()
+
+
 class EliteVehiclesValidator(SyncValidator):
 
     def __init__(self, vehiclesCD):
@@ -197,7 +213,7 @@ class EliteVehiclesValidator(SyncValidator):
 
     def _validate(self):
         for vehCD in self.vehiclesCD:
-            item = g_itemsCache.items.getItemByCD(int(vehCD))
+            item = self.itemsCache.items.getItemByCD(int(vehCD))
             if item is None:
                 return makeError('invalid_vehicle')
             if item.itemTypeID is not GUI_ITEM_TYPE.VEHICLE:
@@ -262,21 +278,24 @@ class CompatibilityRemoveValidator(CompatibilityValidator):
 
 
 class MoneyValidator(SyncValidator):
+    """
+    Validates money. Possible errors: not_enough_credits, not_enough_gold, not_enough_crystal (see Currency enum)
+    """
 
     def __init__(self, price):
         super(MoneyValidator, self).__init__()
         self.price = price
 
     def _validate(self):
-        stats = g_itemsCache.items.stats
+        stats = self.itemsCache.items.stats
         delta = self.price - stats.money
         delta = delta.toNonNegative()
         if delta:
             currency = delta.getCurrency(byWeight=False)
             if currency == Currency.GOLD and not stats.mayConsumeWalletResources:
-                error = 'wallet_not_available'
+                error = GUI_ITEM_PURCHASE_CODE.WALLET_NOT_AVAILABLE
             else:
-                error = 'not_enough_{}'.format(currency)
+                error = GUI_ITEM_PURCHASE_CODE.getMoneyError(currency)
             return makeError(error)
         return makeSuccess()
 
@@ -287,8 +306,8 @@ class WalletValidator(SyncValidator):
         super(WalletValidator, self).__init__(isEnabled)
 
     def _validate(self):
-        stats = g_itemsCache.items.stats
-        return makeError('wallet_not_available') if not stats.mayConsumeWalletResources else makeSuccess()
+        stats = self.itemsCache.items.stats
+        return makeError(GUI_ITEM_PURCHASE_CODE.WALLET_NOT_AVAILABLE) if not stats.mayConsumeWalletResources else makeSuccess()
 
 
 class VehicleSellsLeftValidator(SyncValidator):
@@ -298,7 +317,7 @@ class VehicleSellsLeftValidator(SyncValidator):
         self.vehicle = vehicle
 
     def _validate(self):
-        return makeError('vehicle_sell_limit') if g_itemsCache.items.stats.vehicleSellsLeft <= 0 else makeSuccess()
+        return makeError('vehicle_sell_limit') if self.itemsCache.items.stats.vehicleSellsLeft <= 0 else makeSuccess()
 
 
 class VehicleLayoutValidator(SyncValidator):
@@ -309,7 +328,7 @@ class VehicleLayoutValidator(SyncValidator):
         self.eqsPrice = eqsPrice
 
     def _validate(self):
-        money = g_itemsCache.items.stats.money
+        money = self.itemsCache.items.stats.money
         error = self.__checkMoney(money, self.shellsPrice, _SHELLS_MONEY_ERRORS)
         if error is not None:
             return error
@@ -337,15 +356,15 @@ class BarracksSlotsValidator(SyncValidator):
         self.berthsNeeded = berthsNeeded
 
     def _validate(self):
-        barracksTmen = g_itemsCache.items.getTankmen(~REQ_CRITERIA.TANKMAN.IN_TANK | REQ_CRITERIA.TANKMAN.ACTIVE)
-        tmenBerthsCount = g_itemsCache.items.stats.tankmenBerthsCount
+        barracksTmen = self.itemsCache.items.getTankmen(~REQ_CRITERIA.TANKMAN.IN_TANK | REQ_CRITERIA.TANKMAN.ACTIVE)
+        tmenBerthsCount = self.itemsCache.items.stats.tankmenBerthsCount
         return makeError('not_enough_space') if self.berthsNeeded > 0 and self.berthsNeeded > tmenBerthsCount - len(barracksTmen) else makeSuccess()
 
 
 class FreeTankmanValidator(SyncValidator):
 
     def _validate(self):
-        return makeError('free_tankmen_limit') if not g_itemsCache.items.stats.freeTankmenLeft else makeSuccess()
+        return makeError('free_tankmen_limit') if not self.itemsCache.items.stats.freeTankmenLeft else makeSuccess()
 
 
 class TankmanDropSkillValidator(SyncValidator):
@@ -544,7 +563,7 @@ class VehicleSlotsConfirmator(MessageInformator):
         super(VehicleSlotsConfirmator, self).__init__('haveNoEmptySlots', isEnabled=isEnabled)
 
     def _activeHandler(self):
-        return g_itemsCache.items.stats.vehicleSlots <= len(g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY))
+        return self.itemsCache.items.stats.vehicleSlots <= len(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY))
 
 
 class VehicleFreeLimitConfirmator(MessageInformator):
@@ -555,7 +574,7 @@ class VehicleFreeLimitConfirmator(MessageInformator):
         self.crewType = crewType
 
     def _activeHandler(self):
-        return not self.vehicle.buyPrice and self.crewType < 1 and not g_itemsCache.items.stats.freeVehiclesLeft
+        return not self.vehicle.buyPrice and self.crewType < 1 and not self.itemsCache.items.stats.freeVehiclesLeft
 
 
 class PotapovQuestValidator(SyncValidator):
@@ -723,3 +742,42 @@ class IsLongDisconnectedFromCenter(SyncValidator):
 
     def _validate(self):
         return makeError('disconnected_from_center') if isLongDisconnectedFromCenter() else makeSuccess()
+
+
+class VehicleCrewLockedValidator(SyncValidator):
+
+    def __init__(self, vehicle):
+        super(VehicleCrewLockedValidator, self).__init__()
+        self.__vehicle = vehicle
+
+    def _validate(self):
+        return makeError('FORBIDDEN') if self.__vehicle.isCrewLocked else makeSuccess()
+
+
+class TankmanLockedValidator(SyncValidator):
+
+    def __init__(self, tankman):
+        super(TankmanLockedValidator, self).__init__()
+        self.__tankman = tankman
+
+    def _validate(self):
+        return makeError('FORBIDDEN') if tmen_core.ownVehicleHasTags(self.__tankman.strCD, (VEHICLE_TAGS.CREW_LOCKED,)) else makeSuccess()
+
+
+class BattleBoosterConfirmator(I18nMessageAbstractConfirmator):
+
+    def __init__(self, localeKey, notSuitableLocaleKey, vehicle, battleBooster):
+        self.__notSuitableLocaleKey = notSuitableLocaleKey
+        self.__vehicle = vehicle
+        self.__battleBooster = battleBooster
+        super(BattleBoosterConfirmator, self).__init__(localeKey)
+
+    def _activeHandler(self):
+        return not self.__battleBooster.isAffectsOnVehicle(self.__vehicle)
+
+    def _makeMeta(self):
+        data = self.itemsCache.items.getItems(GUI_ITEM_TYPE.OPTIONALDEVICE, REQ_CRITERIA.VEHICLE.SUITABLE([self.__vehicle], [GUI_ITEM_TYPE.OPTIONALDEVICE])).values()
+        optDevicesList = [ device for device in data if self.__battleBooster.isOptionalDeviceCompatible(device) ]
+        ctx = {'devices': ', '.join([ device.userName for device in optDevicesList ])}
+        localeKey = self.localeKey if optDevicesList else self.__notSuitableLocaleKey
+        return I18nConfirmDialogMeta(localeKey, meta=HtmlMessageLocalDialogMeta('html_templates:lobby/dialogs', localeKey, ctx=ctx))

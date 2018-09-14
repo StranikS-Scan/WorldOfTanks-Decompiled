@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/personality.py
 import BigWorld
 import SoundGroups
-from ConnectionManager import connectionManager
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers import isPremiumAccount
@@ -12,17 +11,15 @@ from constants import HAS_DEV_RESOURCES
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, g_guiResetters, miniclient
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.app_loader import g_appLoader
-from gui.goodies import g_goodiesCache
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared import g_eventBus, g_itemsCache, events, EVENT_BUS_SCOPE
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
@@ -30,14 +27,19 @@ from gui.shared.utils import requesters
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.wgnc import g_wgncProvider
 from helpers import isPlayerAccount, time_utils, dependency
-from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
+from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.clans import IClanController
 from skeletons.gui.game_control import IGameStateTracker
+from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
+from skeletons.helpers.statistics import IStatisticsCollector
 try:
     from gui import mods
     guiModsInit = mods.init
@@ -48,6 +50,7 @@ except ImportError:
     guiModsInit = guiModsFini = guiModsSendEvent = lambda *args: None
 
 class ServicesLocator(object):
+    itemsCache = dependency.descriptor(IItemsCache)
     gameState = dependency.descriptor(IGameStateTracker)
     loginManager = dependency.descriptor(ILoginManager)
     eventsCache = dependency.descriptor(IEventsCache)
@@ -55,25 +58,32 @@ class ServicesLocator(object):
     clanCtrl = dependency.descriptor(IClanController)
     settingsCache = dependency.descriptor(ISettingsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
+    goodiesCache = dependency.descriptor(IGoodiesCache)
     battleResults = dependency.descriptor(IBattleResultsService)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    connectionMgr = dependency.descriptor(IConnectionManager)
+    statsCollector = dependency.descriptor(IStatisticsCollector)
 
     @classmethod
     def clear(cls):
+        cls.itemsCache.clear()
+        cls.goodiesCache.clear()
         cls.eventsCache.clear()
+        cls.lobbyContext.clear()
 
 
 @process
 def onAccountShowGUI(ctx):
     global onCenterIsLongDisconnected
-    g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
-    g_lobbyContext.onAccountShowGUI(ctx)
-    yield g_itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
-    g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
+    ServicesLocator.lobbyContext.onAccountShowGUI(ctx)
+    yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
     ServicesLocator.eventsCache.start()
     yield ServicesLocator.eventsCache.update()
-    g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
     yield ServicesLocator.settingsCache.update()
-    if not g_itemsCache.isSynced():
+    if not ServicesLocator.itemsCache.isSynced():
         g_appLoader.goToLoginByError('#menu:disconnect/codes/0')
         return
     eula = EULADispatcher()
@@ -85,10 +95,10 @@ def onAccountShowGUI(ctx):
         g_appLoader.goToLoginByError('#menu:disconnect/codes/%d' % code)
         return
     ServicesLocator.settingsCore.serverSettings.applySettings()
-    ServicesLocator.gameState.onAccountShowGUI(g_lobbyContext.getGuiCtx())
-    accDossier = g_itemsCache.items.getAccountDossier()
+    ServicesLocator.gameState.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
+    accDossier = ServicesLocator.itemsCache.items.getAccountDossier()
     g_rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
-    premium = isPremiumAccount(g_itemsCache.items.stats.attributes)
+    premium = isPremiumAccount(ServicesLocator.itemsCache.items.stats.attributes)
     if g_hangarSpace.inited:
         g_hangarSpace.refreshSpace(premium)
     else:
@@ -98,7 +108,7 @@ def onAccountShowGUI(ctx):
     if not g_prbLoader.isEnabled():
         isLobbyLoaded = g_appLoader
     g_appLoader.showLobby()
-    g_prbLoader.onAccountShowGUI(g_lobbyContext.getGuiCtx())
+    g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
     g_clanCache.onAccountShowGUI()
     ServicesLocator.clanCtrl.start()
     ServicesLocator.soundCtrl.start()
@@ -109,8 +119,8 @@ def onAccountShowGUI(ctx):
 
 
 def onAccountBecomeNonPlayer():
-    g_itemsCache.clear()
-    g_goodiesCache.clear()
+    ServicesLocator.itemsCache.clear()
+    ServicesLocator.goodiesCache.clear()
     g_currentVehicle.destroy()
     g_currentPreviewVehicle.destroy()
     g_hangarSpace.destroy()
@@ -136,20 +146,23 @@ def onAvatarBecomePlayer():
 
 
 def onAccountBecomePlayer():
-    g_lobbyContext.onAccountBecomePlayer()
+    ServicesLocator.lobbyContext.onAccountBecomePlayer()
     ServicesLocator.gameState.onAccountBecomePlayer()
     guiModsSendEvent('onAccountBecomePlayer')
 
 
 @process
-def onClientUpdate(diff):
+def onClientUpdate(diff, updateOnlyLobbyCtx):
     yield lambda callback: callback(None)
-    if isPlayerAccount():
-        yield g_itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
-        yield ServicesLocator.eventsCache.update(diff)
-        yield g_clanCache.update(diff)
-    g_lobbyContext.update(diff)
-    g_clientUpdateManager.update(diff)
+    if updateOnlyLobbyCtx:
+        ServicesLocator.lobbyContext.update(diff)
+    else:
+        if isPlayerAccount():
+            yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
+            yield ServicesLocator.eventsCache.update(diff)
+            yield g_clanCache.update(diff)
+        ServicesLocator.lobbyContext.update(diff)
+        g_clientUpdateManager.update(diff)
 
 
 def onShopResyncStarted():
@@ -158,8 +171,8 @@ def onShopResyncStarted():
 
 @process
 def onShopResync():
-    yield g_itemsCache.update(CACHE_SYNC_REASON.SHOP_RESYNC)
-    if not g_itemsCache.isSynced():
+    yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOP_RESYNC)
+    if not ServicesLocator.itemsCache.isSynced():
         Waiting.hide('sinhronize')
         return
     yield ServicesLocator.eventsCache.update()
@@ -177,7 +190,7 @@ def onCenterIsLongDisconnected(isLongDisconnected):
 
 
 def onIGRTypeChanged(roomType, xpFactor):
-    g_lobbyContext.updateGuiCtx({'igrData': {'roomType': roomType,
+    ServicesLocator.lobbyContext.updateGuiCtx({'igrData': {'roomType': roomType,
                  'igrXPFactor': xpFactor}})
 
 
@@ -192,7 +205,7 @@ def init(loadingScreenGUI=None):
     global onKickedFromServer
     global onShopResync
     miniclient.configure_state()
-    connectionManager.onKickedFromServer += onKickedFromServer
+    ServicesLocator.connectionMgr.onKickedFromServer += onKickedFromServer
     g_playerEvents.onAccountShowGUI += onAccountShowGUI
     g_playerEvents.onAccountBecomeNonPlayer += onAccountBecomeNonPlayer
     g_playerEvents.onAccountBecomePlayer += onAccountBecomePlayer
@@ -208,9 +221,7 @@ def init(loadingScreenGUI=None):
     if loadingScreenGUI and loadingScreenGUI.script:
         loadingScreenGUI.script.active(False)
     g_prbLoader.init()
-    g_itemsCache.init()
     g_clanCache.init()
-    g_goodiesCache.init()
     BigWorld.wg_setScreenshotNotifyCallback(onScreenShotMade)
     if HAS_DEV_RESOURCES:
         try:
@@ -237,10 +248,8 @@ def fini():
     g_prbLoader.fini()
     g_clanCache.fini()
     requesters.fini()
-    g_itemsCache.fini()
-    g_goodiesCache.fini()
     UsersInfoHelper.fini()
-    connectionManager.onKickedFromServer -= onKickedFromServer
+    ServicesLocator.connectionMgr.onKickedFromServer -= onKickedFromServer
     g_playerEvents.onIGRTypeChanged -= onIGRTypeChanged
     g_playerEvents.onAccountShowGUI -= onAccountShowGUI
     g_playerEvents.onAccountBecomeNonPlayer -= onAccountBecomeNonPlayer
@@ -265,13 +274,13 @@ def fini():
 
 
 def onConnected():
-    g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.CONNECTED)
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.CONNECTED)
     guiModsSendEvent('onConnected')
     ServicesLocator.gameState.onConnected()
 
 
 def onDisconnected():
-    g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.DISCONNECTED)
+    ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.DISCONNECTED)
     guiModsSendEvent('onDisconnected')
     g_appLoader.goToLoginByEvent()
     ServicesLocator.battleResults.clear()
@@ -281,10 +290,7 @@ def onDisconnected():
     ServicesLocator.gameState.onDisconnected()
     ServicesLocator.clanCtrl.stop()
     g_wgncProvider.clear()
-    g_itemsCache.clear()
-    g_goodiesCache.clear()
     ServicesLocator.clear()
-    g_lobbyContext.clear()
     UsersInfoHelper.clear()
     Waiting.rollback()
     Waiting.cancelCallback()

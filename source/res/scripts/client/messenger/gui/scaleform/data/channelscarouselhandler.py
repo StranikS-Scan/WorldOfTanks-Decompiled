@@ -299,7 +299,8 @@ class ChannelsCarouselHandler(object):
         self.__closeExcept(event.clientID)
 
     def __closeExcept(self, clientID):
-        for key in self.__handlers.keys():
+        clientIDs = self.__handlers.keys()
+        for key in clientIDs:
             if key != clientID:
                 cntrler = self.__guiEntry.channelsCtrl.getController(key)
                 if cntrler is not None:

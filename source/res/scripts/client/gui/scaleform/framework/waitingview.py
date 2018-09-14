@@ -3,7 +3,6 @@
 import Keys
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import InputHandler
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.WaitingViewMeta import WaitingViewMeta
 
 class WaitingView(WaitingViewMeta):

@@ -3,8 +3,11 @@
 from dossiers2.custom.helpers import getMechanicEngineerRequirements
 from abstract import NationSpecificAchievement
 from abstract.mixins import HasVehiclesList
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 
 class MechEngineerAchievement(HasVehiclesList, NationSpecificAchievement):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, nationID, block, dossier, value=None):
         self.__vehTypeCompDescrs = self._parseVehiclesDescrsList(NationSpecificAchievement.makeFullName('mechanicEngineer', nationID), nationID, dossier)
@@ -25,8 +28,4 @@ class MechEngineerAchievement(HasVehiclesList, NationSpecificAchievement):
 
     @classmethod
     def _parseVehiclesDescrsList(cls, name, nationID, dossier):
-        if dossier is not None and dossier.isCurrentUser():
-            from gui.shared import g_itemsCache
-            return getMechanicEngineerRequirements(set(), g_itemsCache.items.stats.unlocks, nationID).get(name, [])
-        else:
-            return []
+        return getMechanicEngineerRequirements(set(), cls.itemsCache.items.stats.unlocks, nationID).get(name, []) if dossier is not None and dossier.isCurrentUser() else []

@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
 
 class ProfileTechniqueMeta(ProfileSection):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ProfileSection
-    """
 
     def setSelectedTableColumn(self, index, sortDirection):
         self._printOverrideError('setSelectedTableColumn')

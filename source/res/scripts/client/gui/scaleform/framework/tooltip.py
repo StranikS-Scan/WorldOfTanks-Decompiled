@@ -94,7 +94,6 @@ class ToolTip(ToolTipMgrMeta):
             self._areTooltipsDisabled = True
 
     def __getDefaultTooltipType(self):
-        from gui.Scaleform.daapi.settings.tooltips import TOOLTIPS
         item = TOOLTIPS['default']
         return item['tooltip']
 

@@ -202,7 +202,12 @@ def readTupleOfNonNegativeInts(xmlCtx, section, subsectionName, count=None):
 
 
 def readPrice(xmlCtx, section, subsectionName):
-    return (0, readInt(xmlCtx, section, subsectionName, 0)) if section[subsectionName + '/gold'] is not None else (readInt(xmlCtx, section, subsectionName, 0), 0)
+    key = 'credits'
+    if section[subsectionName + '/gold'] is not None:
+        key = 'gold'
+    if section[subsectionName + '/crystal'] is not None:
+        key = 'crystal'
+    return {key: readInt(xmlCtx, section, subsectionName, 0)}
 
 
 def readRentPrice(xmlCtx, section, subsectionName):
@@ -214,8 +219,8 @@ def readRentPrice(xmlCtx, section, subsectionName):
             compensation = readPrice(xmlCtx, subSection, 'compensation')
             if days in res:
                 raiseWrongXml(xmlCtx, '', 'Rent duration is not unique.')
-            res[days] = {'cost': price,
-             'compensation': compensation}
+            res[days] = {'cost': (price.get('credits', 0), price.get('gold', 0)),
+             'compensation': (compensation.get('credits', 0), compensation.get('gold', 0))}
 
     return res
 

@@ -17,9 +17,9 @@ from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
+from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import CREW_TYPES, PARAMS_AFFECTED_TANKMEN_SKILLS
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import Tankman, GUI_ITEM_TYPE
@@ -33,6 +33,7 @@ from helpers.i18n import makeString as _ms
 from items import tankmen
 from shared_utils import findFirst
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 
 @process
 def _installModulesSet(vehicle, modules, notFitted):
@@ -42,8 +43,8 @@ def _installModulesSet(vehicle, modules, notFitted):
         for i in xrange(len(mList)):
             if mList[i].itemTypeID == moduleTypeID:
                 return i
-        else:
-            return UNDEFINED_INDEX
+
+        return UNDEFINED_INDEX
 
     def __updateVehicleModule(vehicle, module):
         typeID = module.itemTypeID
@@ -155,10 +156,18 @@ class _ConfigFittingSlotVO(FittingSlotVO):
         if slotEmpty:
             self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
             self['tooltip'] = VEH_COMPARE.VEHCONF_TOOLTIPS_EMPTYEQSLOT if slotType == 'equipment' else VEH_COMPARE.VEHCONF_TOOLTIPS_EMPTYOPTDEVICESLOT
-        elif slotType == FITTING_TYPES.VEHICLE_TURRET and not vehicle.hasTurrets:
-            self['tooltipType'] = ''
         else:
-            self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPARE_MODULE
+            if slotType == FITTING_TYPES.VEHICLE_TURRET and not vehicle.hasTurrets:
+                self['tooltipType'] = ''
+            if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
+                optDev = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
+                if optDev is not None and optDev.isDeluxe():
+                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+                else:
+                    self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+            else:
+                self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPARE_MODULE
+        return
 
 
 class _DefaultSkillCompletenessChecker(object):
@@ -190,6 +199,7 @@ class _FullCrewSkillsCompletenessChecker(_DefaultSkillCompletenessChecker):
 class _CurrentCrewMonitor(object):
     _DEF_SKILL_CHECKER = _DefaultSkillCompletenessChecker()
     _FULL_CREW_SKILL_CHECKER = _FullCrewSkillsCompletenessChecker()
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, container):
         super(_CurrentCrewMonitor, self).__init__()
@@ -198,7 +208,7 @@ class _CurrentCrewMonitor(object):
         skillsCheckerStorage = defaultdict(lambda : self._DEF_SKILL_CHECKER)
         skillsCheckerStorage[PARAMS_AFFECTED_TANKMEN_SKILLS[0]] = self._FULL_CREW_SKILL_CHECKER
         skillsCheckerStorage[PARAMS_AFFECTED_TANKMEN_SKILLS[1]] = self._FULL_CREW_SKILL_CHECKER
-        vehicleCrew = g_itemsCache.items.getItemByCD(self.__container.getCurrentVehicle().intCD).crew
+        vehicleCrew = self.itemsCache.items.getItemByCD(self.__container.getCurrentVehicle().intCD).crew
         levelsBySkills = defaultdict(list)
         for roleIndex, tankman in vehicleCrew:
             if tankman is not None:
@@ -349,6 +359,7 @@ class _CrewSkillsManager(object):
 
 
 class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorViewMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         self.__parametersView = None
@@ -508,7 +519,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
                 newSlotData = newVoData.pop(0)
                 slotDataID = newSlotData.get('id', 0)
                 if slotDataID > 0:
-                    moduleItem = g_itemsCache.items.getItemByCD(slotDataID)
+                    moduleItem = self.itemsCache.items.getItemByCD(slotDataID)
                     itemTypeID = moduleItem.itemTypeID
                     itemName = moduleItem.name
                     if itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
@@ -561,7 +572,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
         self.__updateCrewSelectionAvailability(crewLevel)
 
     def __updateShellSlots(self):
-        shells = map(lambda shot: g_itemsCache.items.getItemByCD(shot['shell']['compactDescr']), self._container.getCurrentVehicle().descriptor.gun['shots'])
+        shells = map(lambda shot: self.itemsCache.items.getItemByCD(shot['shell']['compactDescr']), self._container.getCurrentVehicle().descriptor.gun['shots'])
         self.as_setAmmoS(getAmmo(shells))
 
     def __updateCrewAttentionIcon(self):
@@ -576,6 +587,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
 
 
 class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMainMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, ctx=None):
@@ -746,7 +758,7 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
 
     def installOptionalDevice(self, newId, slotIndex):
         newId = int(newId)
-        optDev = g_itemsCache.items.getItemByCD(newId)
+        optDev = self.itemsCache.items.getItemByCD(newId)
         itemTypeID = optDev.itemTypeID
         mayInstall, reason = optDev.mayInstall(self.__vehicle, slotIndex)
         if mayInstall:
@@ -817,6 +829,9 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
 
     def _dispose(self):
         self.comparisonBasket.onSwitchChange -= self.__onBasketStateChanged
+        if self.__crewSkillsManager is not None:
+            self.__crewSkillsManager.dispose()
+            self.__crewSkillsManager = None
         self.__views = None
         self.comparisonBasket.isLocked = False
         super(VehicleCompareConfiguratorMain, self)._dispose()

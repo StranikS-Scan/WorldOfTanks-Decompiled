@@ -29,8 +29,9 @@ class SniperAimingSystem(IAimingSystem):
     def getStabilizerSettings():
         return (SniperAimingSystem.__CONSTRAINTS_MULTIPLIERS.x > 0.0, SniperAimingSystem.__CONSTRAINTS_MULTIPLIERS.y > 0.0)
 
-    def __init__(self, dataSec):
+    def __init__(self):
         IAimingSystem.__init__(self)
+        self.__zoom = None
         self.__idealTurretYaw = 0.0
         self.__idealGunPitch = 0.0
         self.__worldYaw = 0.0
@@ -68,33 +69,34 @@ class SniperAimingSystem(IAimingSystem):
         self.__playerGunMatFunction = playerGunMatFunction
         self.__vehicleTypeDescriptor = player.vehicleTypeDescriptor
         self.__vehicleMProv = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
-        if player.isObserver():
-            self.__vehicleMProv = vehicle.matrix
         IAimingSystem.enable(self, targetPos)
+        self.focusOnPos(targetPos)
+        self.__oscillator.reset()
+        SniperAimingSystem.__activeSystem = self
+        self.__timeBeyondLimits = 0.0
+
+    def disable(self):
+        SniperAimingSystem.__activeSystem = None
+        return
+
+    def focusOnPos(self, preferredPos):
         self.__yawLimits = self.__vehicleTypeDescriptor.gun['turretYawLimits']
         if self.__isTurretHasStaticYaw():
             self.__yawLimits = None
         if self.__yawLimits is not None and abs(self.__yawLimits[0] - self.__yawLimits[1]) < 1e-05:
             self.__yawLimits = None
-        self.__idealTurretYaw, self.__idealGunPitch = self.__getTurretYawGunPitch(targetPos, True)
+        self.__idealTurretYaw, self.__idealGunPitch = self.__getTurretYawGunPitch(preferredPos, True)
         self.__returningOscillator.reset()
         self.__idealTurretYaw, self.__idealGunPitch = self.__clampToLimits(self.__idealTurretYaw, self.__idealGunPitch)
         currentGunMat = self.__getPlayerGunMat(self.__idealTurretYaw, self.__idealGunPitch)
         self.__worldYaw = currentGunMat.yaw
-        self.__worldPitch = (targetPos - currentGunMat.translation).pitch
+        self.__worldPitch = (preferredPos - currentGunMat.translation).pitch
         self.__idealTurretYaw, self.__idealGunPitch = self.__worldYawPitchToTurret(self.__worldYaw, self.__worldPitch)
         self.__idealTurretYaw, self.__idealGunPitch = self.__clampToLimits(self.__idealTurretYaw, self.__idealGunPitch)
         currentGunMat = self.__getPlayerGunMat(self.__idealTurretYaw, self.__idealGunPitch)
         self.__worldYaw = currentGunMat.yaw
         self.__worldPitch = currentGunMat.pitch
         self._matrix.set(currentGunMat)
-        self.__oscillator.reset()
-        SniperAimingSystem.__activeSystem = self
-        self.__timeBeyondLimits = 0.0
-        return
-
-    def disable(self):
-        SniperAimingSystem.__activeSystem = None
         return
 
     def getDesiredShotPoint(self):
@@ -189,6 +191,16 @@ class SniperAimingSystem(IAimingSystem):
         self.__worldYaw = currentGunMat.yaw
         self.__worldPitch = currentGunMat.pitch
         self._matrix.set(currentGunMat)
+
+    def getShotPoint(self):
+        return self.getDesiredShotPoint()
+
+    def getZoom(self):
+        return self.__zoom
+
+    def overrideZoom(self, zoom):
+        self.__zoom = zoom
+        return zoom
 
     def __getPlayerGunMat(self, turretYaw, gunPitch):
         return self.__playerGunMatFunction(turretYaw, gunPitch)

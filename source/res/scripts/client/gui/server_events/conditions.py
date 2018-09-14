@@ -3,21 +3,20 @@
 import operator
 import weakref
 from abc import ABCMeta, abstractmethod
-import BigWorld
 import account_helpers
 import constants
-import nations
 from debug_utils import LOG_WARNING
-from gui import makeHtmlString
+from gui import GUI_NATIONS_ORDER_INDICES
 from gui.server_events import formatters
-from gui.shared import g_itemsCache
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
-from helpers import i18n, int2roman, dependency
+from helpers import i18n, dependency
 from items import vehicles
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.locale.QUESTS import QUESTS
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.COMPANY: 'company',
  constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
@@ -43,7 +42,7 @@ class GROUP_TYPE(CONST_CONTAINER):
     AND = 'and'
 
 
-_SORT_ORDER = ('igrType', 'premiumAccount', 'token', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'clanKills', 'cumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative')
+_SORT_ORDER = ('igrType', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'clanKills', 'cumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative')
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
@@ -125,11 +124,8 @@ class _Condition(object):
     def clearItemsCache(self):
         pass
 
-    def format(self, svrEvents, event=None):
-        return self._format(svrEvents, event)
-
-    def _format(self, svrEvents, event=None):
-        return []
+    def getValue(self):
+        raise NotImplementedError
 
 
 class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
@@ -181,12 +177,6 @@ class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
     def isEmpty(self):
         return not len(self.items)
 
-    def format(self, svrEvents, event=None):
-        subBlocks = self._formatSubBlocks(svrEvents, event)
-        if len(subBlocks) > 1:
-            return [formatters.packContainer(subBlocks=subBlocks)]
-        return subBlocks if len(subBlocks) > 0 else []
-
     def getSortedItems(self):
         return sorted(self.items, cmp=self._sortItems, key=operator.methodcaller('getName'))
 
@@ -207,14 +197,12 @@ class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
             self.items.append(cond)
         return
 
-    def _formatSubBlocks(self, svrEvents, event=None):
-        return []
-
     def __repr__(self):
         return '%s<count=%d>' % (self.__class__.__name__, len(self.items))
 
 
 class _Requirement(_Condition, _AvailabilityCheckable, _Negatable):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __repr__(self):
         return '%s<>' % self.__class__.__name__
@@ -223,66 +211,78 @@ class _Requirement(_Condition, _AvailabilityCheckable, _Negatable):
 class _VehicleRequirement(_Requirement):
 
     def _isAvailable(self, vehicle):
+        """ Checks given vehicle availability
+        """
         return True
 
 
 class _VehsListParser(object):
+    """ Mix-in for vehicles list parsing functionality
+    """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         self.__vehsCache = None
         return
 
+    def isAnyVehicleAcceptable(self):
+        return self._isAnyVehicleAcceptable(self._data)
+
     def _clearItemsCache(self):
         self.__vehsCache = None
         return
 
-    def _preProcessCriteria(self, criteria):
-        return criteria
+    def _postProcessCriteria(self, defaultCriteria, criteria):
+        return defaultCriteria | criteria
 
     def _isAnyVehicleAcceptable(self, data):
+        """ Checks for all vehicles acceptance
+        """
         return not len(set(data.keys()) & {'types',
          'nations',
          'levels',
          'classes'})
 
-    def _getFilterCriteria(self, data):
-        fTypes, fNations, fLevels, fClasses = self._parseFilters(data)
-        if fTypes is not None:
-            criteria = REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(fTypes)
+    def getFilterCriteria(self, data):
+        types, nations, levels, classes = self._parseFilters(data)
+        defaultCriteria = self._getDefaultCriteria()
+        if types:
+            criteria = REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(types)
         else:
-            criteria = self._getDefaultCriteria()
-            if fNations is not None:
-                criteria |= REQ_CRITERIA.NATIONS(fNations)
-            if fLevels is not None:
-                criteria |= REQ_CRITERIA.VEHICLE.LEVELS(fLevels)
-            if fClasses is not None:
-                criteria |= REQ_CRITERIA.VEHICLE.CLASSES(fClasses)
-        return self._preProcessCriteria(criteria)
+            criteria = REQ_CRITERIA.EMPTY
+            if nations:
+                criteria |= REQ_CRITERIA.NATIONS(nations)
+            if levels:
+                criteria |= REQ_CRITERIA.VEHICLE.LEVELS(levels)
+            if classes:
+                criteria |= REQ_CRITERIA.VEHICLE.CLASSES(classes)
+        return self._postProcessCriteria(defaultCriteria, criteria)
 
     def _getDefaultCriteria(self):
-        return ~REQ_CRITERIA.SECRET
+        return REQ_CRITERIA.DISCLOSABLE
 
     def _getVehiclesCache(self, data):
         if self.__vehsCache is None:
-            self.__vehsCache = g_itemsCache.items.getVehicles(self._getFilterCriteria(data))
+            self.__vehsCache = self.itemsCache.items.getVehicles(self.getFilterCriteria(data))
         return self.__vehsCache
 
     def _getVehiclesList(self, data):
         return self._getVehiclesCache(data).values()
 
     def _parseFilters(self, data):
-        types, nationsList, levels, classes = (None, None, None, None)
+        types, nations, levels, classes = (None, None, None, None)
         if 'types' in data:
             types = _getNodeValue(data, 'types')
         if 'nations' in data:
-            nationsList = _getNodeValue(data, 'nations')
+            nations = _getNodeValue(data, 'nations')
+            nations = sorted(nations, key=GUI_NATIONS_ORDER_INDICES.get)
         if 'levels' in data:
             levels = _getNodeValue(data, 'levels')
         if 'classes' in data:
             acceptedClasses = _getNodeValue(data, 'classes')
             classes = [ name for name, index in constants.VEHICLE_CLASS_INDICES.items() if index in acceptedClasses ]
         return (types,
-         nationsList,
+         nations,
          levels,
          classes)
 
@@ -295,6 +295,24 @@ class _VehsListCondition(_Condition, _VehsListParser):
         self._relationValue = _getNodeValue(self._data, self._relation)
         self._isNegative = False
 
+    @property
+    def relationValue(self):
+        return self._relationValue
+
+    @property
+    def relation(self):
+        return self._relation
+
+    @property
+    def data(self):
+        return self._data
+
+    def isNegative(self):
+        return self._isNegative
+
+    def getVehiclesList(self):
+        return self._getVehiclesList(self._data)
+
     def negate(self):
         if self._relation is not None:
             self._relation = _RELATIONS.getOppositeRelation(self._relation)
@@ -305,55 +323,11 @@ class _VehsListCondition(_Condition, _VehsListParser):
     def clearItemsCache(self):
         self._clearItemsCache()
 
-    def _formatVehsTable(self, event=None):
+    def getVehiclesData(self):
         return []
 
-    def _getLabelKey(self):
-        pass
-
-    def _formatData(self, svrEvents, current=None, total=None, event=None):
-        if self._isAnyVehicleAcceptable(self._data):
-            if event is None or not event.isGuiDisabled():
-                return formatters.packTextBlock(i18n.makeString('%s/all' % self._getLabelKey()), value=self._relationValue, relation=self._relation)
-        elif 'types' not in self._data:
-            if event is None or not event.isGuiDisabled():
-                _, fNations, fLevels, fClasses = self._parseFilters(self._data)
-                keys, kwargs = [], {}
-                if fNations:
-                    keys.append('nation')
-                    kwargs['nation'] = ', '.join((i18n.makeString('#menu:nations/%s' % nations.NAMES[idx]) for idx in fNations))
-                if fClasses:
-                    keys.append('type')
-                    kwargs['type'] = ', '.join([ i18n.makeString('#menu:classes/%s' % name) for name in fClasses ])
-                if fLevels:
-                    keys.append('level')
-                    kwargs['level'] = ', '.join([ int2roman(lvl) for lvl in fLevels ])
-                labelKey = '%s/%s' % (self._getLabelKey(), '_'.join(keys))
-                if self._relationValue is None and self._isNegative:
-                    labelKey = '%s/not' % labelKey
-                if current is not None and total is not None:
-                    return formatters.packTextCondition(i18n.makeString(labelKey, **kwargs), current=current, total=total)
-                else:
-                    return formatters.packTextBlock(i18n.makeString(labelKey, **kwargs), value=self._relationValue, relation=self._relation)
-        else:
-            subBlocks = []
-            titleKey = self._getLabelKey()
-            if self._isNegative:
-                titleKey = '%s/not' % titleKey
-            relation, value = self._relation, self._relationValue
-            subBlocks.append(self._formatVehsTable(event=event))
-            if len(subBlocks):
-                if event is not None and event.isCompleted():
-                    current, total = (None, None)
-                return formatters.packContainer(i18n.makeString(titleKey), isResizable=True, isOpened=True, subBlocks=subBlocks, value=value, relation=relation, current=current, total=total)
-        return
-
-    def _format(self, svrEvents, event=None):
-        fmtData = self._formatData(svrEvents, event=event)
-        return [fmtData] if fmtData is not None else []
-
-    def _makeUniqueTableID(self, event):
-        return formatters.makeUniqueTableID(event, self.getUniqueName())
+    def parseFilters(self):
+        return self._parseFilters(self._data)
 
 
 class _VehsListRequirement(_VehsListCondition, _AvailabilityCheckable, _Negatable):
@@ -381,13 +355,6 @@ class AndGroup(_ConditionsGroup):
     def __init__(self, isNegative=False):
         super(AndGroup, self).__init__(GROUP_TYPE.AND, isNegative)
 
-    def _formatSubBlocks(self, svrEvents, event=None):
-        subBlocks = []
-        for cond in self.getSortedItems():
-            subBlocks.extend(cond.format(svrEvents, event))
-
-        return subBlocks
-
     def _isAvailable(self, *args, **kwargs):
         res = True
         for cond in self.items:
@@ -402,19 +369,6 @@ class OrGroup(_ConditionsGroup):
 
     def __init__(self, isNegative=False):
         super(OrGroup, self).__init__(GROUP_TYPE.OR, isNegative)
-
-    def _formatSubBlocks(self, svrEvents, event=None):
-        subBlocks = []
-        for cond in self.getSortedItems():
-            subBlocks.extend(cond.format(svrEvents, event))
-
-        result = []
-        for idx, block in enumerate(subBlocks):
-            result.append(block)
-            if idx < len(subBlocks) - 1:
-                result.append(formatters.packSeparator(makeHtmlString('html_templates:lobby/quests', 'or'), needAlign=True))
-
-        return result
 
     def _isAvailable(self, *args, **kwargs):
         for cond in self.items:
@@ -431,6 +385,9 @@ class IGR(_Requirement, _Updatable):
         super(IGR, self).__init__('igrType', dict(data), path)
         self._igrTypes = {self._data.get('value')}
 
+    def getIgrTypes(self):
+        return self._igrTypes
+
     def negate(self):
         igrTypes = constants.IGR_TYPE
         self._igrTypes ^= {igrTypes.BASE, igrTypes.PREMIUM}
@@ -445,24 +402,6 @@ class IGR(_Requirement, _Updatable):
     def _isAvailable(self):
         return self.igrCtrl.getRoomType() in self._igrTypes
 
-    def _format(self, svrEvents, event=None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            label = None
-            igrTypes = constants.IGR_TYPE
-            if constants.IS_CHINA or self._igrTypes.issuperset({igrTypes.BASE, igrTypes.PREMIUM}):
-                label = 'igr'
-            elif self._igrTypes & {igrTypes.BASE}:
-                label = 'igrBasic'
-            elif self._igrTypes & {igrTypes.PREMIUM}:
-                label = 'igrPremium'
-            if label is not None:
-                result.append(formatters.packTextBlock(makeHtmlString('html_templates:lobby/quests', 'playInIgr', {'label': i18n.makeString('#quests:details/requirements/%s' % label)}), isAvailable=self.isAvailable()))
-        return result
-
-    def __repr__(self):
-        return 'IGR<types=%s>' % self._igrTypes
-
 
 class GlobalRating(_Requirement):
 
@@ -471,17 +410,19 @@ class GlobalRating(_Requirement):
         self._relation = _findRelation(self._data.keys())
         self._relationValue = float(_getNodeValue(self._data, self._relation))
 
+    @property
+    def relation(self):
+        return self._relation
+
+    @property
+    def relationValue(self):
+        return self._relationValue
+
     def negate(self):
         self._relation = _RELATIONS.getOppositeRelation(self._relation)
 
     def _isAvailable(self):
-        return False if self._relationValue is None else _handleRelation(self._relation, g_itemsCache.items.stats.globalRating, self._relationValue)
-
-    def _format(self, svrEvents, event=None):
-        return [formatters.packTextBlock(i18n.makeString('#quests:details/requirements/globalRating'), value=self._relationValue, relation=self._relation, isAvailable=self.isAvailable())] if event is None or not event.isGuiDisabled() else []
-
-    def __repr__(self):
-        return 'GlobalRating<%s=%s>' % (self._relation, str(self._relationValue))
+        return False if self._relationValue is None else _handleRelation(self._relation, self.itemsCache.items.stats.globalRating, self._relationValue)
 
 
 class PremiumAccount(_Requirement):
@@ -490,25 +431,18 @@ class PremiumAccount(_Requirement):
         super(PremiumAccount, self).__init__('premiumAccount', dict(data), path)
         self._needValue = self._data.get('value')
 
+    def isPremiumNeeded(self):
+        return self._needValue
+
     def negate(self):
         self._needValue = not self._needValue
 
     def _isAvailable(self):
         if self._needValue is not None:
-            isPremium = account_helpers.isPremiumAccount(g_itemsCache.items.stats.attributes)
+            isPremium = account_helpers.isPremiumAccount(self.itemsCache.items.stats.attributes)
             return isPremium == self._needValue
         else:
             return True
-
-    def _format(self, svrEvents, event=None):
-        if event is None or not event.isGuiDisabled():
-            labelKey = '#quests:details/requirements/%s' % ('premiumAccount' if self._needValue else 'notPremiumAccount')
-            return [formatters.packTextBlock(i18n.makeString(labelKey), isAvailable=self.isAvailable())]
-        else:
-            return []
-
-    def __repr__(self):
-        return 'PremiumAccount<value=%r>' % self._needValue
 
 
 class InClan(_Requirement):
@@ -519,39 +453,23 @@ class InClan(_Requirement):
         self._isNegative = False
         return
 
+    def getClanIds(self):
+        return self._ids
+
+    def isNegative(self):
+        return self._isNegative
+
     def negate(self):
         self._isNegative = not self._isNegative
 
     def _isAvailable(self):
-        clanDBID = g_itemsCache.items.stats.clanDBID
+        clanDBID = self.itemsCache.items.stats.clanDBID
         if self._ids is not None:
             if not self._isNegative:
                 return clanDBID in self._ids
             else:
                 return clanDBID not in self._ids
         return bool(clanDBID) != self._isNegative
-
-    def _format(self, svrEvents, event=None):
-        labelKey = None
-        result = []
-        if event is None or not event.isGuiDisabled():
-            if self._ids is None:
-                labelKey = 'notInAnyClan' if self._isNegative else 'inAnyClan'
-            else:
-                clanDBID = g_itemsCache.items.stats.clanDBID
-                if not self._isNegative:
-                    if clanDBID:
-                        labelKey = 'forCurrentClan' if clanDBID in self._ids else 'notForCurrentClan'
-                    else:
-                        labelKey = 'inClan'
-                elif clanDBID and clanDBID in self._ids:
-                    labelKey = 'notForCurrentClan'
-            if labelKey is not None:
-                result.append(formatters.packTextBlock(i18n.makeString('#quests:details/requirements/%s' % labelKey), isAvailable=self.isAvailable()))
-        return result
-
-    def __repr__(self):
-        return 'InClan<value=%r>' % self._ids
 
 
 class Token(_Requirement):
@@ -560,12 +478,48 @@ class Token(_Requirement):
     def __init__(self, path, data):
         super(Token, self).__init__('token', dict(data), path)
         self._id = _getNodeValue(self._data, 'id')
-        self._consumable = 'consumable' in self._data
+        self._consumable = 'consume' in self._data
         self._relation = _findRelation(self._data.keys())
         self._relationValue = int(_getNodeValue(self._data, self._relation, 0))
+        self._complex = formatters.parseComplexToken(self._id)
+
+    def isConsumable(self):
+        return self._consumable
+
+    def getConsumeCount(self):
+        if self.isConsumable():
+            consumeData, forceData = self._data['consume']
+            return dict(consumeData).get('value', 0)
 
     def getID(self):
         return self._id
+
+    def isDisplayable(self):
+        """ Token should be visualized only if it has a special marker
+        """
+        return self._complex.isDisplayable
+
+    def getUserName(self):
+        userName = self.eventsCache.prefetcher.getTokenInfo(self._complex.styleID)
+        return userName
+
+    def isOnSale(self):
+        """ Returns true if token is on sale on the prem shop.
+        """
+        return self.eventsCache.prefetcher.isTokenOnSale(self._complex.webID)
+
+    def getImage(self, size):
+        return self.eventsCache.prefetcher.getTokenImage(self._complex.styleID, size)
+
+    def getStyleID(self):
+        """ Get identifier of token's visual resources (i.e. images, title, description)
+        """
+        return self._complex.styleID
+
+    def getWebID(self):
+        """ Get token's identifier on external web resources.
+        """
+        return self._complex.webID
 
     def negate(self):
         self._relation = _RELATIONS.getOppositeRelation(self._relation)
@@ -573,64 +527,21 @@ class Token(_Requirement):
     def getNeededCount(self):
         return self._relationValue + 1 if self._relation == _RELATIONS.GT else self._relationValue
 
+    def getReceivedCount(self):
+        return self.eventsCache.questsProgress.getTokenCount(self.getID())
+
     def _isAvailable(self):
-        return _handleRelation(self._relation, self.__getTokensCount(), self._relationValue)
+        return _handleRelation(self._relation, self.eventsCache.questsProgress.getTokenCount(self._id), self._relationValue)
 
-    def _format(self, svrEvents, event=None):
-        result = []
-        eventScope = [event] if event is not None else svrEvents.values()
-        tokensCountNeed = self.getNeededCount()
-        isAvailable = event is None or event.isCompleted() or self.isAvailable()
-        for e in eventScope:
-            if e.getType() not in _TOKEN_REQUIREMENT_QUESTS:
-                continue
-            children = e.getChildren()
-            if self._id not in children:
-                continue
-            ungroupedResult = []
-            groupedResult = {}
-            if e.getType() not in (_ET.TOKEN_QUEST, _ET.PERSONAL_QUEST, _ET.BATTLE_QUEST):
-                counterDescr = i18n.makeString('#quests:quests/table/battlesLeft')
-            else:
-                counterDescr = None
-            for qID in children[self._id]:
-                quest = svrEvents.get(qID)
-                if quest is not None:
-                    battlesLeft = None
-                    if tokensCountNeed > 1:
-                        label = i18n.makeString('#quests:details/requirements/token/N', count=BigWorld.wg_getIntegralFormat(tokensCountNeed), questName=quest.getUserName())
-                        if not isAvailable:
-                            battlesLeft = tokensCountNeed - self.__getTokensCount()
-                    else:
-                        label = i18n.makeString('#quests:details/requirements/token', questName=quest.getUserName())
-                    groupID = quest.getGroupID()
-                    group = self.__getGroup(groupID)
-                    if group is not None and tokensCountNeed > 1 and group.withManyTokenSources(svrEvents):
-                        groupName = group.getUserName()
-                        label = i18n.makeString('#quests:details/requirements/group/token/N', groupName=groupName, count=BigWorld.wg_getIntegralFormat(tokensCountNeed))
-                        groupedResult[groupID, group.getPriority()] = formatters.packTextBlock(label, isAvailable=isAvailable, counterValue=battlesLeft, counterDescr=counterDescr)
-                    else:
-                        ungroupedResult.append(formatters.packTextBlock(label, questID=qID, isAvailable=isAvailable, counterValue=battlesLeft, counterDescr=counterDescr))
-                LOG_WARNING('Unknown quest id in token conditions', qID)
 
-            for key, info in sorted(groupedResult.items(), key=lambda ((gID, priority), block): priority):
-                result.append(info)
+class TokenQuestToken(Token):
+    """ Token condition inside account requirements of TokenQuest.
+    
+    We don't check availability in this case (see WOTD-81694).
+    """
 
-            result.extend(ungroupedResult)
-
-        return result
-
-    def __getTokensCount(self):
-        return self.eventsCache.questsProgress.getTokenCount(self._id)
-
-    def __getGroup(self, groupID):
-        return self.eventsCache.getGroups().get(groupID, None)
-
-    def __repr__(self):
-        return 'Token<id=%s; %s=%d; consumable=%r>' % (self._id,
-         self._relation,
-         self._relationValue,
-         self._consumable)
+    def _isAvailable(self):
+        return True
 
 
 class VehiclesUnlocked(_VehsListRequirement):
@@ -641,14 +552,8 @@ class VehiclesUnlocked(_VehsListRequirement):
     def _checkVehicle(self, vehicle):
         return vehicle.isUnlocked and not vehicle.isInitiallyUnlocked
 
-    def _getLabelKey(self):
-        pass
-
     def _getDefaultCriteria(self):
         return RESEARCH_CRITERIA.VEHICLE_TO_UNLOCK
-
-    def _formatVehsTable(self, event=None):
-        return formatters.packVehiclesBlock(self._makeUniqueTableID(event), formatters.VEH_UNLOCKS_HEADER, disableChecker=lambda v: not v.isUnlocked, vehs=_prepareVehData(self._getVehiclesList(self._data)))
 
 
 class VehiclesOwned(_VehsListRequirement):
@@ -659,12 +564,6 @@ class VehiclesOwned(_VehsListRequirement):
     def _checkVehicle(self, vehicle):
         return vehicle.isInInventory
 
-    def _getLabelKey(self):
-        pass
-
-    def _formatVehsTable(self, event=None):
-        return formatters.packVehiclesBlock(self._makeUniqueTableID(event), formatters.VEH_OWNED_HEADER, disableChecker=lambda v: not v.isInInventory, vehs=_prepareVehData(self._getVehiclesList(self._data)), showInHangarCB=True, isShowInHangarCBChecked=False)
-
 
 class PremiumVehicle(_VehicleRequirement):
 
@@ -674,6 +573,13 @@ class PremiumVehicle(_VehicleRequirement):
 
     def negate(self):
         self._needValue = not self._needValue
+
+    def getFilterCriteria(self, data):
+        criteria = REQ_CRITERIA.DISCLOSABLE
+        if self._needValue:
+            return criteria | REQ_CRITERIA.VEHICLE.PREMIUM
+        else:
+            return criteria | ~REQ_CRITERIA.VEHICLE.PREMIUM
 
     def _isAvailable(self, vehicle):
         return vehicle.isPremium == self._needValue
@@ -691,12 +597,16 @@ class XPMultipliedVehicle(_VehicleRequirement):
     def negate(self):
         self._needValue = not self._needValue
 
-    def _format(self, svrEvents, event=None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            key = '#quests:details/requirements/vehicle/%s' % ('receivedMultXp' if self._needValue else 'notReceivedMultXp')
-            result.append(formatters.packTextBlock(i18n.makeString(key, mult=g_itemsCache.items.shop.dailyXPFactor)))
-        return result
+    def isAvailableReason(self, vehicle):
+        isOk = self._isAvailable(vehicle)
+        if self._needValue:
+            reason = 'xpMultReceived'
+        else:
+            reason = 'xpMultReceived/not'
+        return (isOk, reason)
+
+    def getValue(self):
+        return self._needValue
 
     def _isAvailable(self, vehicle):
         return (vehicle.dailyXPFactor == -1) == self._needValue
@@ -707,14 +617,10 @@ class XPMultipliedVehicle(_VehicleRequirement):
 
 class VehicleDescr(_VehicleRequirement, _VehsListParser, _Updatable):
 
-    def __init__(self, path, data, vehReqs):
+    def __init__(self, path, data):
         super(VehicleDescr, self).__init__('vehicleDescr', dict(data), path)
         self._otherCriteria = REQ_CRITERIA.EMPTY
         self._isNegative = False
-        self._isMultXpReceived = None
-        self._isPremium = None
-        self._vehReqs = weakref.proxy(vehReqs)
-        return
 
     def clearItemsCache(self):
         self._clearItemsCache()
@@ -722,40 +628,24 @@ class VehicleDescr(_VehicleRequirement, _VehsListParser, _Updatable):
     def negate(self):
         self._isNegative = not self._isNegative
 
-    def isAnyVehicleAcceptable(self):
-        return self._isAnyVehicleAcceptable(self._data)
-
     def update(self, other, groupType):
         if groupType != GROUP_TYPE.AND:
             return False
-        if other.getName() == 'vehicleDescr':
-            self._otherCriteria |= other._getFilterCriteria(other._data)
+        if other.getName() in ('vehicleDescr', 'premiumVehicle'):
+            self._otherCriteria |= other.getFilterCriteria(other._data)
             return True
-        if other.getName() == 'hasReceivedMultipliedXP':
-            self._isMultXpReceived = other._needValue
-        elif other.getName() == 'premiumVehicle':
-            self._isPremium = other._needValue
         return False
 
     def getVehiclesList(self):
         return self._getVehiclesList(self._data)
 
-    def _preProcessCriteria(self, criteria):
-        if self._isPremium is not None:
-            if self._isPremium:
-                criteria |= REQ_CRITERIA.VEHICLE.PREMIUM
-            else:
-                criteria |= ~REQ_CRITERIA.VEHICLE.PREMIUM
-        return ~criteria | ~REQ_CRITERIA.SECRET if self._isNegative else criteria | self._otherCriteria
+    def _postProcessCriteria(self, defaultCriteria, criteria):
+        if self._isNegative:
+            criteria = ~criteria
+        return defaultCriteria | criteria | self._otherCriteria
 
     def _isAvailable(self, vehicle):
         return vehicle.intCD in self._getVehiclesCache(self._data)
-
-    def _format(self, svrEvents, event=None):
-        predicate = None
-        if self._vehReqs is not None:
-            predicate = self._vehReqs.isAvailable
-        return [formatters.packVehiclesBlock(formatters.makeUniqueTableID(event, self.getUniqueName()), formatters.VEH_REQUIRED_HEADER, disableChecker=lambda v: not v.isInInventory, vehs=_prepareVehData(self._getVehiclesList(self._data), predicate), showInHangarCB=True, isShowInHangarCBChecked=True)]
 
 
 class _DossierValue(_Requirement):
@@ -766,6 +656,22 @@ class _DossierValue(_Requirement):
         self._average = 'average' in self._data
         self._relation = _findRelation(self._data.keys())
         self._relationValue = float(_getNodeValue(self._data, self._relation, 0.0))
+
+    @property
+    def relation(self):
+        return self._relation
+
+    @property
+    def relationValue(self):
+        return self._relationValue
+
+    @property
+    def average(self):
+        return self._average
+
+    @property
+    def recordName(self):
+        return self._recordName
 
     def negate(self):
         self._relation = _RELATIONS.getOppositeRelation(self._relation)
@@ -779,38 +685,6 @@ class _DossierValue(_Requirement):
             dossierValue /= float(battlesCount or 1)
         return _handleRelation(self._relation, dossierValue, self._relationValue)
 
-    def _getFmtValues(self):
-        i18nLabel = i18n.makeString('#quests:details/requirements/%s' % ('dossierValue' if not self._average else 'dossierAvgValue'), label=self.__getLabelKey())
-        return (i18nLabel, self._relationValue, self._relation)
-
-    def __getLabelKey(self):
-        _, record = self._recordName
-        battleMode = self.__dossierBlock2BattleMode()
-        return i18n.makeString('#quests:details/dossier/%s/%s' % (battleMode, record)) if len(battleMode) else i18n.makeString('#quests:details/dossier/%s' % record)
-
-    def __dossierBlock2BattleMode(self):
-        block, _ = self._recordName
-        if block in ('a15x15', 'a15x15_2'):
-            return 'random'
-        if block in ('company', 'company2'):
-            return 'company'
-        if block in ('clan', 'clan2'):
-            return 'clan'
-        if block in ('a7x7',):
-            return 'team'
-        if block in ('rated7x7',):
-            return 'ladder'
-        if block in ('historical',):
-            return 'historical'
-        return 'achievements' if block in ('achievements',) else 'random'
-
-    def __repr__(self):
-        return '%s<record=%s; average=%r; %s=%.2f>' % (self.__class__.__name__,
-         self._recordName,
-         self._average,
-         self._relation,
-         self._relationValue)
-
 
 class AccountDossierValue(_DossierValue):
 
@@ -818,30 +692,7 @@ class AccountDossierValue(_DossierValue):
         super(AccountDossierValue, self).__init__('accountDossier', dict(data), path)
 
     def _isAvailable(self):
-        return self._checkDossier(g_itemsCache.items.getAccountDossier())
-
-    def _format(self, svrEvents, event=None):
-        if event is None or not event.isGuiDisabled():
-            label, value, relation = self._getFmtValues()
-            return [formatters.packTextBlock(label, value=value, relation=relation, isAvailable=self.isAvailable())]
-        else:
-            return []
-
-
-class VehicleDossierValue(_DossierValue):
-
-    def __init__(self, path, data):
-        super(VehicleDossierValue, self).__init__('vehicleDossier', dict(data), path)
-
-    def _isAvailable(self, vehicle):
-        return self._checkDossier(g_itemsCache.items.getVehicleDossier(vehicle.intCD))
-
-    def _format(self, svrEvents, event=None):
-        if event is None or not event.isGuiDisabled():
-            label, value, relation = self._getFmtValues()
-            return [formatters.packTextBlock(label, value=value, relation=relation)]
-        else:
-            return []
+        return self._checkDossier(self.itemsCache.items.getAccountDossier())
 
 
 class BattleBonusType(_Condition, _Negatable):
@@ -861,9 +712,6 @@ class BattleBonusType(_Condition, _Negatable):
     def getValue(self):
         return self._types
 
-    def _format(self, svrEvents, event=None):
-        return [formatters.packIconTextBlock(formatters.formatGray('#quests:details/conditions/battleBonusType'), iconTexts=formatters.packBonusTypeElements(self._types))] if event is None or not event.isGuiDisabled() else []
-
     def __repr__(self):
         return 'BonusType<types=%r>' % self._types
 
@@ -879,15 +727,6 @@ class BattleSquad(_Condition, _Negatable):
 
     def getValue(self):
         return self._isSquad
-
-    def _format(self, svrEvents, event=None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            if self._isSquad:
-                result.append(formatters.packIconTextBlock(formatters.formatGray('#quests:details/conditions/formation'), iconTexts=[formatters.packFormationElement('squad')]))
-            else:
-                result.append(formatters.packTextBlock('#quests:details/conditions/notSquad'))
-        return result
 
     def __repr__(self):
         return 'BattleSquad<isSquad=%r>' % self._isSquad
@@ -907,11 +746,11 @@ class BattleClanMembership(_Condition, _Negatable):
     def negate(self):
         pass
 
-    def _format(self, svrEvents, event=None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            result.append(formatters.packTextBlock('#quests:details/conditions/clanMembership/%s/%s' % (self._value, _getArenaBonusType(self.__proxy))))
-        return result
+    def getValue(self):
+        return self._value
+
+    def getArenaBonusType(self):
+        return _getArenaBonusType(self.__proxy)
 
     def __repr__(self):
         return 'BattleClanMembership<relation=%r; bonusType=%s>' % (self._value, _getArenaBonusType(self.__proxy))
@@ -923,6 +762,9 @@ class BattleCamouflage(_Condition, _Negatable):
         super(BattleCamouflage, self).__init__('camouflageKind', dict(data), path)
         self._camos = self._data.get('value')
 
+    def getValue(self):
+        return self._camos
+
     def negate(self):
         newCamos = []
         for camoTypeName, camoID in vehicles.CAMOUFLAGE_KINDS.iteritems():
@@ -930,18 +772,6 @@ class BattleCamouflage(_Condition, _Negatable):
                 newCamos.append(camoID)
 
         self._camos = newCamos
-
-    def _format(self, svrEvents, event=None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            camos = []
-            for camoTypeName, camoID in vehicles.CAMOUFLAGE_KINDS.iteritems():
-                if camoID in self._camos:
-                    camos.append(formatters.packCamoElement(camoTypeName))
-
-            if len(camos):
-                result.append(formatters.packIconTextBlock(formatters.formatGray('#quests:details/conditions/mapsType'), iconTexts=camos))
-        return result
 
     def __repr__(self):
         return 'BattleCamouflage<camos=%r>' % self._camos
@@ -957,22 +787,11 @@ class BattleMap(_Condition, _Negatable):
     def negate(self):
         self._isNegative = not self._isNegative
 
-    def _format(self, svrEvents, event=None):
-        if event is not None and event.isGuiDisabled():
-            return []
-        else:
-            maps = []
-            mapsLabels = []
-            for atID in self._maps:
-                fmt = formatters.packMapElement(atID)
-                if fmt is not None and fmt.getLabel() not in mapsLabels:
-                    mapsLabels.append(fmt.getLabel())
-                    maps.append(fmt)
+    def isNegative(self):
+        return self._isNegative
 
-            key = 'maps' if len(maps) > 1 else 'map'
-            if self._isNegative:
-                key = '%s/not' % key
-            return [formatters.packIconTextBlock(formatters.formatGray('#quests:details/conditions/%s' % key), iconTexts=sorted(maps, key=operator.methodcaller('getLabel')))]
+    def getMaps(self):
+        return self._maps
 
     def __repr__(self):
         return 'BattleMap<maps=%r>' % self._maps
@@ -990,13 +809,6 @@ class Win(_Condition, _Negatable):
     def getValue(self):
         return self._isWin
 
-    def _format(self, svrEvents, event=None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            key = 'win' if self._isWin else 'notWin'
-            result.append(formatters.packTextBlock(i18n.makeString('#quests:details/conditions/%s' % key)))
-        return result
-
     def __repr__(self):
         return 'Win<value=%r>' % self._isWin
 
@@ -1010,12 +822,8 @@ class Survive(_Condition, _Negatable):
     def negate(self):
         self._isAlive = not self._isAlive
 
-    def _format(self, svrEvents, event=None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            key = 'survive' if self._isAlive else 'notSurvive'
-            result.append(formatters.packTextBlock(i18n.makeString('#quests:details/conditions/%s' % key)))
-        return result
+    def getValue(self):
+        return self._isAlive
 
     def __repr__(self):
         return 'Survive<value=%r>' % self._isAlive
@@ -1037,14 +845,11 @@ class Achievements(_Condition, _Negatable, _Updatable):
             return True
         return False
 
-    def _format(self, svrEvents, event=None):
-        if event is not None and event.isGuiDisabled():
-            return []
-        else:
-            key = 'oneAchievement' if len(self._achieves) == 1 else 'achievements'
-            if self._isNegative:
-                key = '%s/not' % key
-            return [formatters.packIconTextBlock(formatters.formatBright('#quests:details/conditions/%s' % key), iconTexts=[ formatters.packAchieveElement(idx) for idx in self._achieves ])]
+    def isNegative(self):
+        return self._isNegative
+
+    def getValue(self):
+        return self._achieves
 
     def __repr__(self):
         return 'Achievements<idx=%r>' % self._achieves
@@ -1062,21 +867,11 @@ class ClanKills(_Condition, _Negatable):
     def negate(self):
         self._isNegative = not self._isNegative
 
-    def format(self, svrEvents, event=None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            camos = []
-            for camo in self._camos2ids.keys():
-                camoI18key = '#quests:details/conditions/clanKills/camo/%s' % str(camo)
-                if i18n.doesTextExist(camoI18key):
-                    camos.append(i18n.makeString(camoI18key))
+    def isNegative(self):
+        return self._isNegative
 
-            i18nKey = '#quests:details/conditions/clanKills'
-            if self._isNegative:
-                i18nKey = '%s/not' % i18nKey
-            if len(camos):
-                result = [formatters.packTextBlock(i18n.makeString(i18nKey, camos=', '.join(camos)))]
-        return result
+    def getCamos2ids(self):
+        return self._camos2ids
 
     def __repr__(self):
         return 'ClanKills<camos=%r>' % str(self._camos2ids)
@@ -1088,37 +883,31 @@ class _Cumulativable(_Condition):
     def getProgressPerGroup(self, curProgData=None, prevProgData=None):
         return self._parseProgress(curProgData, prevProgData)
 
-    def formatByGroup(self, svrEvents, groupByKey, event=None):
-        return self._formatByGroup(svrEvents, groupByKey, event)
-
-    def getUserString(self):
+    def getUserString(self, battleTypeName=''):
         pass
-
-    def _formatByGroup(self, svrEvents, groupByKey, event=None):
-        return []
 
     @abstractmethod
     def _getKey(self):
         pass
 
     @abstractmethod
-    def _getTotalValue(self):
+    def getTotalValue(self):
         pass
 
     @abstractmethod
-    def _getBonusData(self):
+    def getBonusData(self):
         pass
 
     def _parseProgress(self, curProgData, prevProgData):
         result = {}
-        bonus = self._getBonusData()
+        bonus = self.getBonusData()
         curProgData = bonus.getProgress() if curProgData is None else curProgData
         if bonus is None:
             return result
         else:
             key = self._getKey()
             groupBy = bonus.getGroupByValue()
-            total = self._getTotalValue()
+            total = self.getTotalValue()
             if groupBy is None:
                 diff = 0
                 curProg = curProgData.get(None, {})
@@ -1152,7 +941,7 @@ class _Cumulativable(_Condition):
             return curProg.get(key, 0) - prevProg.get(key, 0)
 
     def __isProgressCompleted(self, progress):
-        bonusLimit = self._getBonusData().getBonusLimit()
+        bonusLimit = self.getBonusData().getBonusLimit()
         return progress.get('bonusCount', 0) >= bonusLimit if bonusLimit is not None else False
 
 
@@ -1162,20 +951,23 @@ class BattlesCount(_Cumulativable):
         super(BattlesCount, self).__init__('battles', dict(data), path)
         self._bonus = weakref.proxy(bonusCond)
 
-    def getUserString(self):
-        return i18n.makeString('#quests:details/dossier/random/battlesCount')
+    def getUserString(self, battleTypeName='random'):
+        return i18n.makeString(QUESTS.getDetailsDossier(battleTypeName, self._getKey()))
 
     def _getKey(self):
         pass
 
-    def _getTotalValue(self):
+    def getTotalValue(self):
         return _getNodeValue(self._data, 'count', 0)
 
-    def _getBonusData(self):
+    def hasUpperLimit(self):
+        return _getNodeValue(self._data, 'upperLimit', False)
+
+    def getBonusData(self):
         return self._bonus
 
     def __repr__(self):
-        return 'BattlesCount<key=%s; total=%d>' % (self._getKey(), self._getTotalValue())
+        return 'BattlesCount<key=%s; total=%d>' % (self._getKey(), self.getTotalValue())
 
 
 class BattleResults(_Condition, _Negatable, _Updatable):
@@ -1193,6 +985,34 @@ class BattleResults(_Condition, _Negatable, _Updatable):
         self._localeKey = localeKey
         self._isNegative = False
 
+    @property
+    def relationValue(self):
+        return self._relationValue
+
+    @property
+    def localeKey(self):
+        return self._localeKey
+
+    @property
+    def keyName(self):
+        return self._keyName
+
+    @property
+    def relation(self):
+        return self._relation
+
+    def isNegative(self):
+        return self._isNegative
+
+    def isAvg(self):
+        return self._isAvg
+
+    def isTotal(self):
+        return self._isTotal
+
+    def getMaxRange(self):
+        return self._max
+
     def getTopRange(self):
         return self._max if not self._isNegative else (min(self._max[1] + 1, self.TOP_RANGE_LOWEST), self.TOP_RANGE_LOWEST)
 
@@ -1208,48 +1028,6 @@ class BattleResults(_Condition, _Negatable, _Updatable):
         self._relation = _RELATIONS.getOppositeRelation(self._relation)
         self._isNegative = not self._isNegative
 
-    def format(self, svrEvents, event=None):
-
-        def _makeStr(i18nKey, *args, **kwargs):
-            if self._isNegative:
-                i18nKey = '%s/not' % i18nKey
-            return i18n.makeString(i18nKey, *args, **kwargs)
-
-        if event is not None and event.isGuiDisabled():
-            return []
-        else:
-            key = i18n.makeString('#quests:details/conditions/cumulative/%s' % self._keyName)
-            labelKey = '#quests:details/conditions/results'
-            topRangeUpper, topRangeLower = self._max
-            if topRangeLower < self.TOP_RANGE_LOWEST:
-                labelKey = '%s/%s/%s' % (labelKey, self._localeKey, 'bothTeams' if self._isTotal else 'halfTeam')
-                if topRangeUpper == self.TOP_RANGE_HIGHEST:
-                    label = _makeStr('%s/top' % labelKey, param=key, count=topRangeLower)
-                elif topRangeLower == topRangeUpper:
-                    label = _makeStr('%s/position' % labelKey, param=key, position=topRangeUpper)
-                else:
-                    label = _makeStr('%s/range' % labelKey, param=key, high=topRangeUpper, low=topRangeLower)
-            elif self._isAvg:
-                label = i18n.makeString('#quests:details/conditions/results/%s/avg' % self._localeKey, param=key)
-            else:
-                label = i18n.makeString('#quests:details/conditions/results/%s/simple' % self._localeKey, param=key)
-            value, relation, relationI18nType = self._relationValue, self._relation, _RELATIONS_SCHEME.DEFAULT
-            if self._keyName == 'markOfMastery':
-                relationI18nType = _RELATIONS_SCHEME.ALTERNATIVE
-                if self._relationValue == 0:
-                    if self._relation in (_RELATIONS.EQ, _RELATIONS.LSQ):
-                        i18nLabelKey = '#quests:details/conditions/cumulative/markOfMastery0'
-                    else:
-                        if self._relation in (_RELATIONS.LS,):
-                            raise Exception('Mark of mastery 0 can be used with greater or equal relation types')
-                        i18nLabelKey = '#quests:details/conditions/cumulative/markOfMastery0/not'
-                    label, value, relation = i18n.makeString(i18nLabelKey), None, None
-                else:
-                    i18nValueKey = '#quests:details/conditions/cumulative/markOfMastery%d' % int(self._relationValue)
-                    i18nLabel = i18n.makeString('#quests:details/conditions/cumulative/markOfMastery')
-                    label, value, relation = i18nLabel, i18n.makeString(i18nValueKey), self._relation
-            return [formatters.packTextBlock(label, value=value, relation=relation, relationI18nType=relationI18nType)]
-
     def __repr__(self):
         return 'BattleResults<key=%s; %s=%r; max=%r; total=%r; avg=%r>' % (self._keyName,
          self._relation,
@@ -1264,7 +1042,7 @@ class UnitResults(_Condition, _Negatable):
     def __init__(self, path, data, preBattleCond=None):
         super(UnitResults, self).__init__('unitResults', dict(data), path)
         self._isAllAlive = _getNodeValue(self._data, 'allAlive')
-        unitKey = _getArenaBonusType(preBattleCond)
+        self._unitKey = _getArenaBonusType(preBattleCond)
         self._results = []
         for idx, (keyName, value) in enumerate(data):
             resultData, isNegative = None, False
@@ -1273,7 +1051,7 @@ class UnitResults(_Condition, _Negatable):
             elif keyName == 'results':
                 resultData = value
             if resultData is not None:
-                results = BattleResults('%s.battleResults%d' % (path, idx), resultData, localeKey=unitKey)
+                results = BattleResults('%s.battleResults%d' % (path, idx), resultData, localeKey=self._unitKey)
                 if isNegative:
                     results.negate()
                 self._results.append(results)
@@ -1285,16 +1063,14 @@ class UnitResults(_Condition, _Negatable):
         for result in self._results:
             result.negate()
 
-    def _format(self, svrEvents, event=None):
-        results = []
-        if event is None or not event.isGuiDisabled():
-            if self._isAllAlive is not None:
-                key = 'alive' if self._isAllAlive else 'alive/not'
-                results.append(formatters.packTextBlock(i18n.makeString('#quests:details/conditions/results/unit/%s' % key)))
-            for r in self._results:
-                results.extend(r.format(svrEvents, event))
+    def getResults(self):
+        return self._results
 
-        return results
+    def getUnitKey(self):
+        return self._unitKey
+
+    def isAllAlive(self):
+        return self._isAllAlive
 
     def __repr__(self):
         return 'UnitResults<resultsCount=%d>' % len(self._results)
@@ -1310,38 +1086,21 @@ class CumulativeResult(_Cumulativable):
         self._unitName = _getArenaBonusType(preBattleCond)
         return None
 
-    def getUserString(self):
+    def getUserString(self, battleTypeName=''):
         return self.__getLabelString()
 
     def _getKey(self):
         return 'unit_%s' % self._key if self._isUnit else self._key
 
-    def _getTotalValue(self):
+    @property
+    def keyName(self):
+        return self._key
+
+    def getTotalValue(self):
         return self._total
 
-    def _getBonusData(self):
+    def getBonusData(self):
         return self._bonus
-
-    def _format(self, svrEvents, event=None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            result.append(formatters.packTextCondition(self.__getLabelString(), value=self._getTotalValue()))
-        return result
-
-    def _formatByGroup(self, svrEvents, groupByKey, event=None):
-        result = []
-        progress = self.getProgressPerGroup()
-        if groupByKey in progress:
-            if event is None or not event.isGuiDisabled():
-                current, total, _, isGroupCompleted = progress[groupByKey]
-                if event is not None and event.isCompleted() or isGroupCompleted:
-                    result.append(formatters.packTextCondition(self.__getLabelString(), value=self._getTotalValue()))
-                else:
-                    isConditionCompleted = False
-                    if current is not None and total is not None:
-                        isConditionCompleted = current >= total
-                    result.append(formatters.packTextCondition(self.__getLabelString(), current=current, total=total, isCompleted=isConditionCompleted))
-        return result
 
     def __getLabelString(self):
         param = i18n.makeString('#quests:details/conditions/cumulative/%s' % self._key)
@@ -1352,7 +1111,7 @@ class CumulativeResult(_Cumulativable):
         return i18n.makeString(label, param=param)
 
     def __repr__(self):
-        return 'CumulativeResult<key=%s; total=%d>' % (self._getKey(), self._getTotalValue())
+        return 'CumulativeResult<key=%s; total=%d>' % (self._getKey(), self.getTotalValue())
 
 
 class VehicleKills(_VehsListCondition):
@@ -1360,11 +1119,11 @@ class VehicleKills(_VehsListCondition):
     def __init__(self, path, data):
         super(VehicleKills, self).__init__('vehicleKills', dict(data), path)
 
+    def getVehiclesData(self):
+        return _prepareVehData(self._getVehiclesList(self._data))
+
     def _getLabelKey(self):
         pass
-
-    def _formatVehsTable(self, event=None):
-        return formatters.packVehiclesBlock(self._makeUniqueTableID(event), formatters.VEH_KILLS_HEADER, vehs=_prepareVehData(self._getVehiclesList(self._data)))
 
     def __repr__(self):
         return 'VehicleKills<%s=%d>' % (self._relation, self._relationValue)
@@ -1376,37 +1135,23 @@ class VehicleKillsCumulative(_Cumulativable, VehicleKills):
         super(VehicleKills, self).__init__('vehicleKillsCumulative', dict(data), path)
         self._bonus = weakref.proxy(bonusCond)
 
-    def getUserString(self):
+    def getUserString(self, battleTypeName=''):
         return i18n.makeString(self._getLabelKey())
 
     def _getKey(self):
         pass
 
-    def _getTotalValue(self):
+    def getTotalValue(self):
         return self._relationValue
 
-    def _getBonusData(self):
+    def getBonusData(self):
         return self._bonus
-
-    def _formatByGroup(self, svrEvents, groupByKey, event=None):
-        if self._bonus is not None:
-            progress = self.getProgressPerGroup()
-            if groupByKey in progress:
-                current, total, _, _ = progress[groupByKey]
-                if event is not None and event.isCompleted():
-                    current, total = (None, None)
-                if self._bonus.getGroupByValue() is not None:
-                    return [formatters.packTextCondition(i18n.makeString(self._getLabelKey()), relation=self._relation, value=self._relationValue, current=current, total=total)]
-                fmtData = self._formatData(svrEvents, current, total, event=event)
-                if fmtData is not None:
-                    return [fmtData]
-        return []
 
     def __repr__(self):
         return 'VehicleKills<key=%s; %s=%d; total=%d>' % (self._getKey(),
          self._relation,
          self._relationValue,
-         self._getTotalValue())
+         self.getTotalValue())
 
 
 class VehicleDamage(_VehsListCondition):
@@ -1414,11 +1159,11 @@ class VehicleDamage(_VehsListCondition):
     def __init__(self, path, data):
         super(VehicleDamage, self).__init__('vehicleDamage', dict(data), path)
 
+    def getVehiclesData(self):
+        return _prepareVehData(self._getVehiclesList(self._data))
+
     def _getLabelKey(self):
         pass
-
-    def _formatVehsTable(self, event=None):
-        return formatters.packVehiclesBlock(self._makeUniqueTableID(event), formatters.VEH_KILLS_HEADER, vehs=_prepareVehData(self._getVehiclesList(self._data)))
 
     def __repr__(self):
         return 'VehicleDamage<%s=%d>' % (self._relation, self._relationValue)
@@ -1430,37 +1175,23 @@ class VehicleDamageCumulative(_Cumulativable, VehicleDamage):
         super(VehicleDamage, self).__init__('vehicleDamageCumulative', dict(data), path)
         self._bonus = weakref.proxy(bonusCond)
 
-    def getUserString(self):
+    def getUserString(self, battleTypeName=''):
         return i18n.makeString(self._getLabelKey())
 
     def _getKey(self):
         pass
 
-    def _getTotalValue(self):
+    def getTotalValue(self):
         return self._relationValue
 
-    def _getBonusData(self):
+    def getBonusData(self):
         return self._bonus
-
-    def _formatByGroup(self, svrEvents, groupByKey, event=None):
-        if self._bonus is not None:
-            progress = self.getProgressPerGroup()
-            if groupByKey in progress:
-                current, total, _, _ = progress[groupByKey]
-                if event is not None and event.isCompleted():
-                    current, total = (None, None)
-                if self._bonus.getGroupByValue() is not None:
-                    return [formatters.packTextCondition(i18n.makeString(self._getLabelKey()), relation=self._relation, value=self._relationValue, current=current, total=total)]
-                fmtData = self._formatData(svrEvents, current, total, event=event)
-                if fmtData is not None:
-                    return [fmtData]
-        return []
 
     def __repr__(self):
         return 'VehicleKills<key=%s; %s=%d; total=%d>' % (self._getKey(),
          self._relation,
          self._relationValue,
-         self._getTotalValue())
+         self.getTotalValue())
 
 
 class RefSystemRalXPPoolCondition(_Requirement):

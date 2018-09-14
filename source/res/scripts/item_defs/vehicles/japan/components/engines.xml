@@ -27,9 +27,11 @@
     <BMW_IV_Kai>	25	</BMW_IV_Kai>
     <BMW_IV_Kai_Ni>	26	</BMW_IV_Kai_Ni>
     <_Type98_V12_x2_1100>	27	</_Type98_V12_x2_1100>
-    <_62CV_bot>	29	</_62CV_bot>
     <_Type98_V12_x2_1200>	28	</_Type98_V12_x2_1200>
+    <_62CV_bot>	29	</_62CV_bot>
     <_Type98_V12_x2_1200_Kai>	30	</_Type98_V12_x2_1200_Kai>
+    <Nameless_Engine>	31	</Nameless_Engine>
+    <Edelweiss_Engine>	32	</Edelweiss_Engine>
     <_Mitsubishi_12HM20WT_IGR>	60001	</_Mitsubishi_12HM20WT_IGR>
     <_Type98_V12_IGR>	60002	</_Type98_V12_IGR>
     <_Mitsubishi_10ZF21WT_IGR>	60003	</_Mitsubishi_10ZF21WT_IGR>
@@ -525,6 +527,40 @@
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </Maybach_HL_210_TRM_P45>
+    <Nameless_Engine>
+      <userString>	#japan_vehicles:Nameless_Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	570	</power>
+      <weight>	1600	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	368	</rpm_min>
+      <rpm_max>	2096	</rpm_max>
+    </Nameless_Engine>
+    <Edelweiss_Engine>
+      <userString>	#japan_vehicles:Edelweiss_Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </Edelweiss_Engine>
     <_Mitsubishi_12HM20WT_IGR>
       <userString>	#igr_vehicles:_Mitsubishi_12HM20WT_IGR	</userString>
       <tags>	diesel	</tags>

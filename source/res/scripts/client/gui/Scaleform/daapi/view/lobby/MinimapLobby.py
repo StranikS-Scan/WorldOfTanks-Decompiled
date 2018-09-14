@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/MinimapLobby.py
 import Math
 import ArenaType
-from gui.Scaleform.daapi.view.meta.MinimapLobbyMeta import MinimapLobbyMeta
+from gui.Scaleform.daapi.view.meta.MinimapPresentationMeta import MinimapPresentationMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 
-class MinimapLobby(MinimapLobbyMeta):
+class MinimapLobby(MinimapPresentationMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):

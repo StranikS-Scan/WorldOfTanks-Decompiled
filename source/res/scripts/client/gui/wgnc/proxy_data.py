@@ -209,20 +209,21 @@ class EncyclopediaContentItem(_ProxyDataItem):
 class ShowInBrowserItem(_ProxyDataItem, WebHandlersContainer):
     browserCtrl = dependency.descriptor(IBrowserController)
 
-    def __init__(self, url, size=None, title=None, showRefresh=False, webHandlerName='', titleKey=''):
+    def __init__(self, url, size=None, title=None, showRefresh=False, webHandlerName='', titleKey='', isSolidBorder=False):
         self.__url = url
         self.__size = size
         self.__title = title
         self.__titleKey = titleKey
         self.__showRefresh = showRefresh
         self.__webHandlerName = webHandlerName
+        self.__isSolidBorder = isSolidBorder
 
     def getType(self):
         return WGNC_DATA_PROXY_TYPE.SHOW_IN_BROWSER
 
     @process
     def show(self, _):
-        browserId = yield self.browserCtrl.load(self.__url, browserSize=self.__size, title=self.__getTitle(), showActionBtn=self.__showRefresh, handlers=self.getWebHandler(self.__webHandlerName))
+        browserId = yield self.browserCtrl.load(self.__url, browserSize=self.__size, title=self.__getTitle(), showActionBtn=self.__showRefresh, handlers=self.getWebHandler(self.__webHandlerName), isSolidBorder=self.__isSolidBorder)
         browser = self.browserCtrl.getBrowser(browserId)
         if browser:
             browser.useSpecialKeys = False

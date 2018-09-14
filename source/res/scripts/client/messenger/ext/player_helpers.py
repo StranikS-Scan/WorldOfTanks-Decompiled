@@ -3,11 +3,12 @@
 import BigWorld
 from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared import g_itemsCache
 from gui.shared.utils import getPlayerDatabaseID, getPlayerName
+from helpers import dependency
 from messenger.m_constants import USER_TAG
 from messenger.proto.entities import ClanInfo
 from messenger.storage import storage_getter
+from skeletons.gui.shared import IItemsCache
 _CLAN_INFO_ABBREV_INDEX = 1
 _CLAN_INFO_ROLE_INDEX = 3
 
@@ -34,6 +35,7 @@ def isCurrentPlayer(dbID):
 
 
 class CurrentPlayerHelper(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(CurrentPlayerHelper, self).__init__()
@@ -62,9 +64,9 @@ class CurrentPlayerHelper(object):
         return
 
     def initCachedData(self):
-        accountAttrs = g_itemsCache.items.stats.attributes
+        accountAttrs = self.itemsCache.items.stats.attributes
         self.__setAccountAttrs(accountAttrs)
-        clanInfo = g_itemsCache.items.stats.clanInfo
+        clanInfo = self.itemsCache.items.stats.clanInfo
         self.__setClanInfo(clanInfo)
         g_clientUpdateManager.addCallbacks({'account.attrs': self.__setAccountAttrs,
          'stats.clanInfo': self.__setClanInfo})
@@ -102,7 +104,7 @@ class CurrentPlayerHelper(object):
             role = info[_CLAN_INFO_ROLE_INDEX]
         else:
             role = 0
-        clanDBID = g_itemsCache.items.stats.clanDBID
+        clanDBID = self.itemsCache.items.stats.clanDBID
         clanInfo = ClanInfo(dbID=clanDBID, abbrev=abbrev, role=role)
         self.playerCtx.setClanInfo(clanInfo)
         user = self.usersStorage.getUser(getPlayerDatabaseID())

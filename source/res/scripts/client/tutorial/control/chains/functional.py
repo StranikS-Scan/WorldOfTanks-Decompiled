@@ -2,13 +2,13 @@
 # Embedded file name: scripts/client/tutorial/control/chains/functional.py
 from adisp import process
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
-from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EVENT_STATUS
-from gui.shared.ItemsCache import g_itemsCache
 from gui.server_events import events_dispatcher
+from gui.server_events.events_helpers import EVENT_STATUS
 from gui.shared.utils import isPopupsWindowsOpenDisabled
+from tutorial.control import game_vars
 from tutorial.control.functional import FunctionalEffect
 from tutorial.data.hints import HintProps
+from tutorial.doc_loader import getQuestsDescriptor
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.logger import LOG_ERROR
 
@@ -70,8 +70,8 @@ class FunctionalShowUnlockedChapter(FunctionalEffect):
 
     def triggerEffect(self):
         chapterID = self._tutorial.getVars().get(self.getTargetID())
-        descriptor = events_helpers.getTutorialEventsDescriptor()
-        completed = g_itemsCache.items.stats.tutorialsCompleted
+        descriptor = getQuestsDescriptor()
+        completed = game_vars.getTutorialsCompleted()
         chapterIdx = descriptor.getChapterIdx(chapterID)
         chaptersCount = descriptor.getNumberOfChapters()
         nextChapterID = self.__getOpenedChapterID(descriptor, completed, chapterIdx, chaptersCount) or self.__getOpenedChapterID(descriptor, completed, 0, chapterIdx)

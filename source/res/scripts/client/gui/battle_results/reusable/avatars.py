@@ -4,15 +4,18 @@ from gui.battle_results.reusable import shared
 
 class AvatarInfo(shared.ItemInfo):
     """Information about each avatar which took part in a battle."""
-    __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__fairplayViolations', '__weakref__')
+    __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__fairplayViolations', '__accRank', '__prevAccRank', '__weakref__')
 
-    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, **kwargs):
+    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, rankedBadge=0, **kwargs):
         super(AvatarInfo, self).__init__(wasInBattle=wasInBattle)
         self.__totalDamaged = totalDamaged
         self.__avatarKills = avatarKills
         self.__avatarDamaged = avatarDamaged
         self.__avatarDamageDealt = avatarDamageDealt
         self.__fairplayViolations = shared.FairplayViolationsInfo(*(fairplayViolations or ()))
+        self.__accRank = accRank
+        self.__prevAccRank = prevAccRank
+        self.__badge = rankedBadge
 
     @property
     def totalDamaged(self):
@@ -37,6 +40,21 @@ class AvatarInfo(shared.ItemInfo):
     def hasPenalties(self):
         """Has specified avatar penalties"""
         return self.__fairplayViolations.hasPenalties()
+
+    @property
+    def accRank(self):
+        """Return just a rank value without a step. If new rank has been just received"""
+        return self.__accRank[0] if self.__accRank else 0
+
+    @property
+    def prevAccRank(self):
+        """Account rank before battle. Return just a rank value without a step."""
+        return self.__prevAccRank[0] if self.__prevAccRank else 0
+
+    @property
+    def badge(self):
+        """Currently selected user badge."""
+        return self.__badge
 
 
 class AvatarsInfo(shared.UnpackedInfo):

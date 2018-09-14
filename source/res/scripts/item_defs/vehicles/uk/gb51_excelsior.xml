@@ -23,7 +23,7 @@
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB51_Excelsior/Excelsior_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -38,12 +38,13 @@
       <armor_9>	19.1	</armor_9>
       <armor_10>	19.1	</armor_10>
       <armor_11>	0	</armor_11>
-      <armor_12>	19.1	</armor_12>
+      <armor_12>	63.5	</armor_12>
       <armor_13>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_13>
       <armor_14>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_14>
       <armor_15>	38.1	</armor_15>
+      <armor_16>	69	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25514	</weight>
@@ -69,7 +70,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.0039 0.522874 0.397108	</turret>
+      <turret>	0.000488 0.259736 0.478761	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB51_Excelsior/collision/Hull.model	</collisionModelServer>
@@ -77,16 +78,16 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	1.86396 0.258089 1.9181	</rayStart>
-        <rayEnd>	1.46396 0.258089 1.9181	</rayEnd>
+        <rayStart>	1.71634 0.00251854 1.91312	</rayStart>
+        <rayEnd>	1.61834 0.00251853 1.91312	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/british/GB51_Excelsior/Excelsior_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+      <tiling>	2.6 2.6 0.5 0.6	</tiling>
     </camouflage>
   </hull>
   <chassis>
@@ -123,13 +124,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.44 0.63	</size>
+        <size>	0.18 0.63	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	0.64	</textureScale>
+        <textureScale>	-2	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -137,25 +138,27 @@
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.320127	</radius>
+          <radius>	0.3265	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
-          <radius>	0.118316	</radius>
+          <radius>	0.165843	</radius>
           <startIndex>	1	</startIndex>
-          <count>	3	</count>
+          <count>	2	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
-          <name>	WD_L4	</name>
-          <radius>	0.385815	</radius>
+          <name>	WD_L3	</name>
+          <radius>	0.384928	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.272667	</radius>
+          <radius>	0.294881	</radius>
           <startIndex>	0	</startIndex>
           <count>	6	</count>
         </group>
@@ -163,42 +166,44 @@
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
-          <radius>	0.320127	</radius>
+          <radius>	0.3265	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	WD_R	</template>
-          <radius>	0.118316	</radius>
+          <radius>	0.165843	</radius>
           <startIndex>	1	</startIndex>
-          <count>	3	</count>
+          <count>	2	</count>
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
-          <name>	WD_R4	</name>
-          <radius>	0.385815	</radius>
+          <name>	WD_R3	</name>
+          <radius>	0.384928	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	W_R	</template>
-          <radius>	0.272667	</radius>
+          <radius>	0.294881	</radius>
           <startIndex>	0	</startIndex>
           <count>	6	</count>
         </group>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.899899 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.22023 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB51_Excelsior/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB51_Excelsior/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.25117 2.12114	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.27201 2.206	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -211,6 +216,95 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB51_Excelsior/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB51_Excelsior/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB51_Excelsior/track/left.track	</left>
+        <right>	vehicles/british/GB51_Excelsior/track/right.track	</right>
+        <segmentLength>	0.11	</segmentLength>
+        <segmentOffset>	0.116	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.002	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+      </trackNodes>
     </Chassis_GB51_Excelsior>
   </chassis>
   <turrets0>
@@ -236,6 +330,8 @@
         <armor_12>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_12>
         <armor_13>	25.4	</armor_13>
+        <armor_15>	40.4	</armor_15>
+        <armor_16>	107.1	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6000	</weight>
@@ -275,75 +371,75 @@
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/british/GB51_Excelsior/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/british/GB51_Excelsior/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/british/GB51_Excelsior/crash/lod0/Gun_05.model	</exploded>
+            <undamaged>	vehicles/british/GB51_Excelsior/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB51_Excelsior/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB51_Excelsior/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB51_Excelsior/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB51_Excelsior/collision_client/Gun_05.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB51_Excelsior/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB51_Excelsior/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0473155 -0.00755356 1.34178	</rayStart>
+              <rayStart>	-0.000000 -0.000000 1.34178	</rayStart>
               <rayEnd>	0.0758496 -0.0194876 1.34113	</rayEnd>
-              <rayUp>	0.052 0.05 3	</rayUp>
+              <rayUp>	0.052 0.052 4	</rayUp>
               <size>	0.296	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+            <tiling>	0.5 0.5 0.2 0.2	</tiling>
           </camouflage>
         </_75mm_Gun_Mk_V_A>
       </guns>
       <models>
-        <undamaged>	vehicles/british/GB51_Excelsior/normal/lod0/Turret_02.model	</undamaged>
-        <destroyed>	vehicles/british/GB51_Excelsior/crash/lod0/Turret_02.model	</destroyed>
-        <exploded>	vehicles/british/GB51_Excelsior/crash/lod0/Turret_02.model	</exploded>
+        <undamaged>	vehicles/british/GB51_Excelsior/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB51_Excelsior/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB51_Excelsior/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/british/GB51_Excelsior/collision/Turret_02.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/british/GB51_Excelsior/collision_client/Turret_02.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/british/GB51_Excelsior/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB51_Excelsior/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.0039 0.390893 0.60283	</gunPosition>
+      <gunPosition>	0.047988 0.352126 0.645668	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.17682 0.391206 -0.00995172	</rayStart>
-          <rayEnd>	-0.776825 0.391206 -0.00995172	</rayEnd>
+          <rayStart>	-1.07378 0.397076 -0.23053	</rayStart>
+          <rayEnd>	-0.873786 0.397076 -0.23053	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.32	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	-1.05478 0.435455 0.637819	</rayStart>
-          <rayEnd>	-0.680319 0.435455 0.497196	</rayEnd>
+          <rayStart>	-1.04748 0.425627 0.596246	</rayStart>
+          <rayEnd>	-0.67176 0.425626 0.459021	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.6	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <inscription>
-          <rayStart>	1.05478 0.435455 0.637819	</rayStart>
-          <rayEnd>	0.680319 0.435455 0.497196	</rayEnd>
+          <rayStart>	1.04748 0.425627 0.596246	</rayStart>
+          <rayEnd>	0.67176 0.425626 0.459021	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.6	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	1.17682 0.391206 -0.00995172	</rayStart>
-          <rayEnd>	0.776825 0.391206 -0.00995172	</rayEnd>
+          <rayStart>	1.07275 0.403696 -0.163513	</rayStart>
+          <rayEnd>	0.872748 0.403696 -0.163513	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.32	</size>
+          <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.008 0.000 0.611 0.203 0.743 0.515 0.268 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	1.017 -0.011 1.017 0.000 0.572 0.134 0.747 0.515 0.290 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
+        <tiling>	2.5 1.5 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_2_GB51_Excelsior>
   </turrets0>

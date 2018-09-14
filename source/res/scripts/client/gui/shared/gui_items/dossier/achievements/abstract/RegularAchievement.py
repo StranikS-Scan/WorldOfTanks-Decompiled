@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/RegularAchievement.py
 import BigWorld
 from helpers import i18n
-from gui.shared.gui_items import GUIItem
+from gui.shared.gui_items.gui_item import GUIItem
 from dossiers2.custom.records import RECORD_MAX_VALUES
 from dossiers2.ui import achievements
 

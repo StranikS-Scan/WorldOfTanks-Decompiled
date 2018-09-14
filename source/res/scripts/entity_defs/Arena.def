@@ -166,6 +166,10 @@
     <stopByFailure>
       <Arg>	UINT8	</Arg>
     </stopByFailure>
+    <onObserverTeamUpdate>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onObserverTeamUpdate>
     <reuse>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>

@@ -10,7 +10,6 @@ from constants import EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
 from gui import TANKMEN_ROLES_ORDER_DICT
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
@@ -25,6 +24,7 @@ from helpers import dependency
 from helpers import i18n
 from shared_utils import forEach
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.lobby_context import ILobbyContext
 AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/%s'
 NO_AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/NO_%s'
 COMMAND_AMMO_CHOICE_MASK = 'CMD_AMMO_CHOICE_{0:d}'
@@ -58,6 +58,7 @@ def _isEquipmentAvailableToUse(eq):
 
 class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(ConsumablesPanel, self).__init__()
@@ -173,7 +174,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         cmdMappingKey = COMMAND_AMMO_CHOICE_MASK.format(idx + 1 if idx < 9 else 0)
         bwKey = CommandMapping.g_instance.get(cmdMappingKey)
         sfKey = 0
-        if bwKey is not None and bwKey != 0:
+        if bwKey is not None:
             sfKey = getScaleformKey(bwKey)
         return (bwKey, sfKey)
 
@@ -184,7 +185,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             tooltipStr = INGAME_GUI.SHELLS_KINDS_PARAMS
             paramsDict = {'damage': str(int(descriptor['damage'][0])),
              'piercingPower': str(piercingPower)}
-            if descriptor['hasStun'] and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+            if descriptor['hasStun'] and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 tooltipStr = INGAME_GUI.SHELLS_KINDS_STUNPARAMS
                 paramsDict['stunMinDuration'] = BigWorld.wg_getNiceNumberFormat(descriptor['guaranteedStunDuration'] * descriptor['stunDuration'])
                 paramsDict['stunMaxDuration'] = BigWorld.wg_getNiceNumberFormat(descriptor['stunDuration'])
@@ -447,7 +448,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         idx = self.__genNextIdx(OPT_DEVICE_FULL_MASK, OPT_DEVICE_START_IDX)
         self.__cds[idx] = intCD
         iconPath = descriptor.icon[0]
-        toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
+        toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description.format(colorTagOpen='', colorTagClose=''))
         self.as_addOptionalDeviceSlotS(idx, -1 if isOn else 0, iconPath, toolTip)
 
     def __onOptionalDeviceUpdated(self, intCD, isOn):

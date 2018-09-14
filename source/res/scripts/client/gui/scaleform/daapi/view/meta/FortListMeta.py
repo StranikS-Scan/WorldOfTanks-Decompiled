@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyListView import BaseRallyListView
 
 class FortListMeta(BaseRallyListView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseRallyListView
-    """
 
     def changeDivisionIndex(self, index):
         self._printOverrideError('changeDivisionIndex')

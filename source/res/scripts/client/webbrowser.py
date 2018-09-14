@@ -7,6 +7,7 @@ import BigWorld
 import Keys
 import helpers
 from gui.Scaleform.managers.Cursor import Cursor
+from gui.shared import event_dispatcher
 from Event import Event, EventManager
 from debug_utils import _doLog, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from constants import IS_DEVELOPMENT
@@ -33,18 +34,33 @@ class WebBrowser(object):
     skipEscape = property(lambda self: self.__skipEscape)
     ignoreKeyEvents = property(lambda self: self.__ignoreKeyEvents)
     useSpecialKeys = property(lambda self: self.__useSpecialKeys)
+    allowRightClick = property(lambda self: self.__allowRightClick)
+    allowMouseWheel = property(lambda self: self.__allowMouseWheel)
 
     @skipEscape.setter
     def skipEscape(self, value):
+        LOG_BROWSER('skipEscape set %s (was: %s)' % (value, self.__skipEscape))
         self.__skipEscape = value
 
     @ignoreKeyEvents.setter
     def ignoreKeyEvents(self, value):
+        LOG_BROWSER('ignoreKeyEvents set %s (was: %s)' % (value, self.__ignoreKeyEvents))
         self.__ignoreKeyEvents = value
 
     @useSpecialKeys.setter
     def useSpecialKeys(self, value):
+        LOG_BROWSER('useSpecialKeys set %s (was: %s)' % (value, self.__useSpecialKeys))
         self.__useSpecialKeys = value
+
+    @allowRightClick.setter
+    def allowRightClick(self, value):
+        LOG_BROWSER('allowRightClick set %s (was: %s)' % (value, self.__allowRightClick))
+        self.__allowRightClick = value
+
+    @allowMouseWheel.setter
+    def allowMouseWheel(self, value):
+        LOG_BROWSER('allowMouseWheel set %s (was: %s)' % (value, self.__allowMouseWheel))
+        self.__allowMouseWheel = value
 
     def __init__(self, browserID, uiObj, texName, size, url='about:blank', isFocused=False, handlers=None):
         """
@@ -55,7 +71,7 @@ class WebBrowser(object):
         :param size: tuple(width, height) of mapped texture in pixels
         :param url: optioal initial URL to open
         :param isFocused: initial value for isFocused attribute
-        :param handlers: list of callable functiona that will be called for
+        :param handlers: list of callable functions that will be called for
                          each URL clicked on the browser page
         """
         self.__browserID = browserID
@@ -73,7 +89,10 @@ class WebBrowser(object):
         self.__skipEscape = True
         self.__ignoreKeyEvents = False
         self.__useSpecialKeys = True
+        self.__allowRightClick = False
+        self.__allowMouseWheel = True
         self.__allowAutoLoadingScreenChange = True
+        self.__isCloseTriggered = False
         self.__eventMgr = EventManager()
         self.onLoadStart = Event(self.__eventMgr)
         self.onLoadEnd = Event(self.__eventMgr)
@@ -319,6 +338,8 @@ class WebBrowser(object):
          e.isCtrlDown())
         if not (self.hasBrowser and self.enableUpdate):
             return False
+        if not self.allowRightClick and e.key == Keys.KEY_RIGHTMOUSE:
+            return False
         if not self.skipEscape and e.key == Keys.KEY_ESCAPE and e.isKeyDown():
             self.__getBrowserKeyHandler(*keyState)(self, e)
             return True
@@ -327,11 +348,11 @@ class WebBrowser(object):
             return False
         if _BROWSER_KEY_LOGGING:
             LOG_BROWSER('handleKeyEvent', keyState)
-        if self.ignoreKeyEvents and e.key != Keys.KEY_LEFTMOUSE:
+        if self.ignoreKeyEvents and e.key not in (Keys.KEY_LEFTMOUSE, Keys.KEY_RIGHTMOUSE):
             return False
         if e.key in (Keys.KEY_ESCAPE, Keys.KEY_SYSRQ):
             return False
-        if e.key == Keys.KEY_RETURN and e.isAltDown():
+        if e.key in (Keys.KEY_RETURN, Keys.KEY_NUMPADENTER) and e.isAltDown():
             return False
         self.__getBrowserKeyHandler(*keyState)(self, e)
         return True
@@ -340,7 +361,8 @@ class WebBrowser(object):
         if not (self.hasBrowser and self.enableUpdate and self.isFocused):
             return
         if z != 0:
-            self.__browser.injectMouseWheelEvent(z * 20)
+            if self.allowMouseWheel:
+                self.__browser.injectMouseWheelEvent(z * 20)
             return
         self.__browser.injectMouseMoveEvent(x, y)
 
@@ -405,15 +427,20 @@ class WebBrowser(object):
         query = urlparse.urlparse(url).query
         tags = urlparse.parse_qs(query).get(_WOT_CLIENT_PARAM_NAME, [])
         stopNavigation = False
+        closeBrowser = False
         for handler in self.__navigationFilters:
             try:
-                currFilterStopNavigation = handler(url, tags)
-                stopNavigation |= currFilterStopNavigation
-                if currFilterStopNavigation:
+                result = handler(url, tags)
+                stopNavigation |= result.stopNavigation
+                closeBrowser |= result.closeBrowser
+                if result.stopNavigation:
                     LOG_DEBUG('Navigation filter triggered navigation stop:', handler)
+                if result.closeBrowser:
+                    LOG_DEBUG('Navigation filter triggered browser close:', handler)
             except:
                 LOG_CURRENT_EXCEPTION()
 
+        self.__isCloseTriggered = closeBrowser
         return stopNavigation
 
     def setLoadingScreenVisible(self, visible):
@@ -452,7 +479,9 @@ class WebBrowser(object):
     def __onLoadingStateChange(self, isLoading):
         LOG_BROWSER('onLoadingStateChange', isLoading, self.__allowAutoLoadingScreenChange)
         self.onLoadingStateChange(isLoading, self.__allowAutoLoadingScreenChange)
-        if not isLoading:
+        if self.__isCloseTriggered:
+            event_dispatcher.hideWebBrowser(self.__browserID)
+        elif not isLoading:
             self.onCanCreateNewBrowser()
 
     def __onReadyToShowContent(self, url):

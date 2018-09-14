@@ -5,6 +5,7 @@ from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTL
 from gui.prb_control.settings import makePrebattleSettings, VEHICLE_MAX_LEVEL
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.lobby_context import ILobbyContext
 
 def isInRandomQueue():
     return getattr(BigWorld.player(), 'isInRandomQueue', False)
@@ -28,6 +29,10 @@ def isInFalloutMultiteam():
 
 def isInSandboxQueue():
     return getattr(BigWorld.player(), 'isInSandboxQueue', False)
+
+
+def isInRankedQueue():
+    return getattr(BigWorld.player(), 'isInRankedQueue', False)
 
 
 def getQueueType():
@@ -129,7 +134,8 @@ _ARENA_GUI_TYPE_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: ARENA_GUI_TYPE.RANDOM,
 _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
  QUEUE_TYPE.EVENT_BATTLES: ARENA_GUI_TYPE.EVENT_BATTLES,
  QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_GUI_TYPE.FALLOUT_CLASSIC,
- QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_GUI_TYPE.FALLOUT_MULTITEAM}
+ QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_GUI_TYPE.FALLOUT_MULTITEAM,
+ QUEUE_TYPE.RANKED: ARENA_GUI_TYPE.RANKED}
 
 def getArenaGUIType(prbType=None, queueType=None):
     if prbType is None:
@@ -197,12 +203,15 @@ def getPrebattleLocalizedData(extraData=None):
     return led
 
 
-def getCreatorFullName():
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getCreatorFullName(lobbyContext=None):
     settings = getPrebattleSettings()
     creatorName = settings['creator']
     clanAbbrev = settings['creatorClanAbbrev']
-    from gui.LobbyContext import g_lobbyContext
-    creatorRegion = g_lobbyContext.getRegionCode(settings['creatorDBID'])
+    if lobbyContext is not None:
+        creatorRegion = lobbyContext.getRegionCode(settings['creatorDBID'])
+    else:
+        creatorRegion = None
     if clanAbbrev:
         fullName = '{0:>s}[{1:>s}]'.format(creatorName, clanAbbrev)
     else:
@@ -228,9 +237,9 @@ def isBattleSession(settings=None):
     return getPrebattleType(settings=settings) in (PREBATTLE_TYPE.TOURNAMENT, PREBATTLE_TYPE.CLAN)
 
 
-def isParentControlActivated():
-    gameSession = dependency.instance(IGameSessionController)
-    return gameSession.isParentControlActive and not isTraining()
+@dependency.replace_none_kwargs(gameSession=IGameSessionController)
+def isParentControlActivated(gameSession=None):
+    return gameSession is not None and gameSession.isParentControlActive and not isTraining()
 
 
 def getClientUnitMgr():

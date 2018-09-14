@@ -15,7 +15,7 @@ from gui.shared.utils.decorators import ReprInjector
 from items import vehicles
 from math import fabs
 import BattleReplay
-__all__ = ('AmmoController', 'AmmoReplayRecord', 'AmmoReplayPlayer')
+__all__ = ('AmmoController', 'AmmoReplayPlayer')
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
 
 class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect')):
@@ -401,20 +401,16 @@ class AmmoController(MethodsRules, IBattleController):
             self.onGunReloadTimeSet(self.__currShellCD, self._reloadingState.getSnapshot())
 
     def triggerReloadEffect(self, timeLeft, baseTime):
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-            return
-        else:
-            if timeLeft > 0.0 and self.__gunSettings.reloadEffect is not None:
-                shellCounts = self.__ammo[self.__currShellCD]
-                clipCapacity = self.__gunSettings.clip.size
-                ammoLow = False
-                if clipCapacity > shellCounts[0]:
-                    ammoLow = True
-                    clipCapacity = shellCounts[0]
-                reloadStart = fabs(timeLeft - baseTime) < 0.001
-                self.__gunSettings.reloadEffect.start(timeLeft, ammoLow, shellCounts[1], clipCapacity, self.__currShellCD, reloadStart)
-            return
+        if timeLeft > 0.0 and self.__gunSettings.reloadEffect is not None:
+            shellCounts = self.__ammo[self.__currShellCD]
+            clipCapacity = self.__gunSettings.clip.size
+            ammoLow = False
+            if clipCapacity > shellCounts[0]:
+                ammoLow = True
+                clipCapacity = shellCounts[0]
+            reloadStart = fabs(timeLeft - baseTime) < 0.001
+            self.__gunSettings.reloadEffect.start(timeLeft, ammoLow, shellCounts[1], clipCapacity, self.__currShellCD, reloadStart)
+        return
 
     def getGunReloadingState(self):
         """ Gets snapshot of reloading state.

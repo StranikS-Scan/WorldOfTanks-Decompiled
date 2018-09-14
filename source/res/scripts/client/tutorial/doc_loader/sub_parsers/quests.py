@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/quests.py
+from items import _xml
 from tutorial.control.quests import triggers
+from tutorial.data import chapter
+from tutorial.data import effects
 from tutorial.doc_loader import sub_parsers
 from tutorial.doc_loader.sub_parsers import chains, readVarValue
 from tutorial.doc_loader.sub_parsers import lobby
-from items import _xml
-from tutorial.data import chapter
-from tutorial.data import effects
 _EFFECT_TYPE = effects.EFFECT_TYPE
 
 def _readAllTurorialBonusesTriggerSection(xmlCtx, section, chapter, triggerID):
@@ -69,10 +69,6 @@ def _readItemsInstallTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.InstallItemsTrigger)
 
 
-def _readTimerTriggerSection(xmlCtx, section, _, triggerID):
-    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.TimerTrigger)
-
-
 def readSaveTutorialSettingSection(xmlCtx, section, _, conditions):
     settingID = sub_parsers.parseID(xmlCtx, section, 'Specify a setting ID')
     return effects.HasTargetEffect(settingID, _EFFECT_TYPE.SAVE_TUTORIAL_SETTING, conditions=conditions)
@@ -132,6 +128,7 @@ def init():
      'tutorial-setting': readTutorialSettingSection})
     sub_parsers.setTriggersParsers({'bonus': lobby.readBonusTriggerSection,
      'premiumDiscount': lobby.readPremiumDiscountsUseTriggerSection,
+     'timer': lobby.readTimerTriggerSection,
      'tankmanAcademyDiscount': chains.readTankmanPriceDiscountTriggerSection,
      'allTutorialBonuses': _readAllTurorialBonusesTriggerSection,
      'randomBattlesCount': _readRandomBattlesCountTriggerSection,
@@ -149,7 +146,6 @@ def init():
      'chapterBonus': _readChapterBonusTriggerSection,
      'installItems': _readItemsInstallTriggerSection,
      'invalidateFlags': _readInvalidateFlagsTriggerSection,
-     'timer': _readTimerTriggerSection,
      'fightBtn': chains.readFightBtnDisableTriggerSection,
      'windowClosed': _readSimpleWindowCloseTriggerSection,
      'windowProcessed': _readSimpleWindowProcessTriggerSection,

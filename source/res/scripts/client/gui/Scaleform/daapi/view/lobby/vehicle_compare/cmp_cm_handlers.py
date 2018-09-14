@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import SimpleVehic
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket
@@ -53,7 +53,7 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
         if vehicle.isPurchased:
             options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell}))
         elif vehicle.isUnlocked:
-            items = g_itemsCache.items
+            items = self.itemsCache.items
             if vehicle.isRestoreAvailable():
                 label = MENU.CONTEXTMENU_RESTORE
             elif vehicle.canTradeIn:
@@ -80,7 +80,7 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
 
     @classmethod
     def __getVehicle(cls, intCD):
-        return g_itemsCache.items.getItemByCD(intCD)
+        return cls.itemsCache.items.getItemByCD(intCD)
 
 
 class VehicleCompareContextMenuHandler(CommonContextMenuHandler):

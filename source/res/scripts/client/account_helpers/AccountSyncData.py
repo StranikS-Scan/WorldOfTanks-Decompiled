@@ -1,17 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/AccountSyncData.py
-import cPickle
-import BigWorld
-import os
-import base64
-import constants
 import AccountCommands
 from SyncController import SyncController
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from persistent_caches import SimpleCache
 from live_crc_accountdata import accountDataPersistentHash, accountDataExtractPersistent, accountDataGetDiffForPersistent, accountDataMergePersistent
-from copy import copy, deepcopy
 from diff_utils import synchronizeDicts
-from debug_utils import *
 
 class AccountSyncData(object):
 

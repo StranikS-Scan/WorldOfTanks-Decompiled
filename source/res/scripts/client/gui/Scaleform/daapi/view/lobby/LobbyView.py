@@ -5,18 +5,16 @@ import constants
 import gui
 from PlayerEvents import g_playerEvents
 from gui import SystemMessages
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
-from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import EVENT_BUS_SCOPE, events
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.functions import getViewName
@@ -24,6 +22,8 @@ from helpers import i18n, dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.gui.game_control import IIGRController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class _LobbySubViewsCtrl(object):
     """
@@ -46,7 +46,9 @@ class _LobbySubViewsCtrl(object):
      VIEW_ALIAS.LOBBY_TECHTREE,
      FORTIFICATION_ALIASES.FORTIFICATIONS_VIEW_ALIAS,
      VIEW_ALIAS.BATTLE_QUEUE,
-     VIEW_ALIAS.LOBBY_ACADEMY)
+     VIEW_ALIAS.LOBBY_ACADEMY,
+     RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
+     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW)
 
     def __init__(self):
         super(_LobbySubViewsCtrl, self).__init__()
@@ -120,7 +122,9 @@ class LobbyView(LobbyPageMeta):
     class COMPONENTS:
         HEADER = 'lobbyHeader'
 
+    itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
@@ -130,9 +134,6 @@ class LobbyView(LobbyPageMeta):
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
         return None
-
-    def getSubContainerType(self):
-        return ViewTypes.LOBBY_SUB
 
     def _populate(self):
         View._populate(self)
@@ -144,14 +145,14 @@ class LobbyView(LobbyPageMeta):
         g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
         self.__subViesCtrl.start(self.app.loaderManager)
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
-        battlesCount = g_itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
-        g_lobbyContext.updateBattlesCount(battlesCount)
+        battlesCount = self.itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
+        self.lobbyContext.updateBattlesCount(battlesCount)
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
         self.bwProto.voipController.invalidateMicrophoneMute()
 
-    def _invalidate(self):
+    def _invalidate(self, *args, **kwargs):
         g_prbLoader.setEnabled(True)
-        super(LobbyView, self)._invalidate()
+        super(LobbyView, self)._invalidate(*args, **kwargs)
 
     def _dispose(self):
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged

@@ -81,6 +81,20 @@ def getSuitableWindowSizes():
 
 GraphicSetting = namedtuple('GraphicSetting', 'label value options hint advanced needRestart isArray delayed')
 
+def getCustomAAMode():
+    """
+    Returns Custom AA-Mode value
+    """
+    return BigWorld.getCustomAAMode()
+
+
+def getMultisamplingType():
+    """
+    Returns current Multisampling Type
+    """
+    return BigWorld.getMultisamplingType()
+
+
 def getGraphicsSetting(settingName):
     setting = BigWorld.graphicSetting(settingName)
     if setting is None:

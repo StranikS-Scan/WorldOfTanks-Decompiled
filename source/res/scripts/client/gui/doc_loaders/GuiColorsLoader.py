@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/doc_loaders/GuiColorsLoader.py
 import Math
 import ResMgr
-from debug_utils import *
+from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from items import _xml
 DEFAULT_SUB_SCHEME = 'default'
 COLOR_BLIND_SUB_SCHEME = 'color_blind'

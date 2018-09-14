@@ -1,18 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ShopRequester.py
 import weakref
-from collections import defaultdict, namedtuple
+from collections import namedtuple
 from abc import ABCMeta, abstractmethod
 import BigWorld
 from adisp import async
-from constants import WIN_XP_FACTOR_MODE
+from constants import WIN_XP_FACTOR_MODE, IS_CHINA
+from items import ItemsPrices
 from debug_utils import LOG_DEBUG
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData, getPriceTupleWithDiscount
-from gui.shared.money import Money
+from gui.shared.money import Money, ZERO_MONEY, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+from skeletons.gui.shared.utils.requesters import IShopCommonStats, IShopRequester
 _VehiclesRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'restoreDuration restoreCooldown restorePriceModif')
-_TankmenRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'freeDuration creditsDuration cost limit')
+_TankmenRestoreConfig = namedtuple('_TankmenRestoreConfig', 'freeDuration billableDuration cost limit')
 _TargetData = namedtuple('_TargetData', 'targetType, targetValue, limit')
 _ResourceData = namedtuple('_ResourceData', 'resourceType, value, isPercentage')
 _ConditionData = namedtuple('_ConditionData', 'conditionType, value')
@@ -81,7 +83,7 @@ class TradeInData(_TradeInData):
         return self.sellPriceFactor > 0
 
 
-class ShopCommonStats(object):
+class ShopCommonStats(IShopCommonStats):
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -89,7 +91,7 @@ class ShopCommonStats(object):
         pass
 
     def getPrices(self):
-        return self.getItemsData().get('itemPrices', {})
+        return self.getItemsData().get('itemPrices', ItemsPrices())
 
     def getBoosterPrices(self):
         return self.getGoodiesData().get('prices', {})
@@ -113,8 +115,8 @@ class ShopCommonStats(object):
         return self.getItemsData().get('vehicleSellPriceFactors', {})
 
     def getItemPrice(self, intCD):
-        asTuple = self.getPrices().get(intCD, tuple())
-        return Money(*asTuple)
+        prices = self.getPrices()
+        return Money(**prices.getPrices(intCD)) if intCD in prices else ZERO_MONEY
 
     def getBoosterPrice(self, boosterID):
         asTuple = self.getBoosterPrices().get(boosterID, tuple())
@@ -146,6 +148,13 @@ class ShopCommonStats(object):
         return self.getValue('exchangeRate', 400)
 
     @property
+    def crystalExchangeRate(self):
+        """
+        @return: rate of crystals for credits exchanging
+        """
+        return self.getValue('crystalExchangeRate', 200)
+
+    @property
     def exchangeRateForShellsAndEqs(self):
         """
         @return: rate of gold for credits exchanging for F2W
@@ -165,7 +174,13 @@ class ShopCommonStats(object):
     @property
     def tankmenRestoreConfig(self):
         config = self.__getRestoreConfig().get('tankmen', {})
-        return _TankmenRestoreConfig(config.get('freeDuration', 0), config.get('creditsDuration', 0), Money(credits=config.get('creditsCost', 0)), config.get('limit', 100))
+        if IS_CHINA:
+            duration = config.get('goldDuration', 0)
+            price = Money(gold=config.get('goldCost', 0))
+        else:
+            duration = config.get('creditsDuration', 0)
+            price = Money(credits=config.get('creditsCost', 0))
+        return _TankmenRestoreConfig(config.get('freeDuration', 0), duration, price, config.get('limit', 100))
 
     def sellPriceModifiers(self, compDescr):
         sellPriceModif = self.sellPriceModif
@@ -385,7 +400,7 @@ class ShopCommonStats(object):
         return self.getValue('restore_config', {})
 
 
-class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
+class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
 
     def __init__(self, goodies):
         super(ShopRequester, self).__init__()
@@ -399,7 +414,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
     def getValue(self, key, defaultValue=None):
         return self.getCacheValue(key, defaultValue)
 
-    def _response(self, resID, invData, callback):
+    def _response(self, resID, invData, callback=None):
         if invData is not None:
             self.defaults.update(invData.get('defaults'))
         super(ShopRequester, self)._response(resID, invData, callback)
@@ -576,7 +591,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
         def convert(price):
             newPrice = price.copy()
             if price['isPremium']:
-                newPrice['gold'] = getPriceWithDiscount(price['gold'], goody.resource)
+                newPrice[Currency.GOLD] = getPriceWithDiscount(price[Currency.GOLD], goody.resource)
             return newPrice
 
         return tuple(map(convert, prices))
@@ -638,7 +653,8 @@ class DefaultShopRequester(ShopCommonStats):
         return self.getItemsData().get('vehicleSellPriceFactors', {})
 
     def getItemPrice(self, intCD):
-        return Money(*self.getPrices().get(intCD, self.__proxy.getItemPrice(intCD)))
+        prices = self.getPrices()
+        return Money(**prices.getPrices(intCD)) if intCD in prices else self.__proxy.getItemPrice(intCD)
 
     def getBoosterPrice(self, boosterID):
         return Money(*self.getBoosterPrices().get(boosterID, self.__proxy.getBoosterPrice(boosterID)))

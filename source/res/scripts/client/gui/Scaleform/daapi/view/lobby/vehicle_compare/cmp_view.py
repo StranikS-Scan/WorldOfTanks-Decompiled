@@ -11,7 +11,6 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProv
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import MAX_VEHICLES_TO_COMPARE_COUNT
-from gui.shared import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview
 from gui.shared.formatters import text_styles
@@ -19,6 +18,7 @@ from gui.shared.items_parameters.formatters import getAllParametersTitles
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 from tutorial.loader import g_loader
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
@@ -27,6 +27,7 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
 
 class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
     __background_alpha__ = 0.0
+    itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, ctx=None):
@@ -56,7 +57,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
 
     def onGoToPreviewClick(self, vehicleID):
         intVehicleID = int(vehicleID)
-        vehicle = g_itemsCache.items.getItemByCD(intVehicleID)
+        vehicle = self.itemsCache.items.getItemByCD(intVehicleID)
         if vehicle.isPreviewAllowed():
             showVehiclePreview(intVehicleID, VIEW_ALIAS.VEHICLE_COMPARE)
         else:

@@ -1,56 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/emblems.py
-import BigWorld
-import ResMgr
 from functools import partial
-from debug_utils import LOG_WARNING
-from gui.LobbyContext import g_lobbyContext
-from gui.shared.utils import mapTextureToTheMemory, getImageSize
 from gui.clans import settings as clan_settings
+from gui.shared.view_helpers.image_helper import ImageHelper, readLocalImage
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 
-def _readEmblem(filePath):
-    data = ResMgr.openSection(filePath)
-    return data.asBinary if data is not None else None
-
-
-class _EmblemsHelper(object):
-
-    @property
-    def remoteCache(self):
-        from gui.shared.RemoteDataDownloader import g_remoteCache
-        return g_remoteCache
-
-    @classmethod
-    def getMemoryTexturePath(cls, emblem):
-        return mapTextureToTheMemory(emblem)
-
-    @classmethod
-    def requestEmblemByUrl(cls, url, size, callback, defaultEmblemGetter=None):
-        defaultEmblemGetter = defaultEmblemGetter or (lambda v: None)
-
-        def _onEmblemReceived(_, emblem):
-            imgSize = getImageSize(emblem)
-            if imgSize != size:
-                LOG_WARNING('Received emblem has invalid size, use default instead', imgSize, size, url, type(emblem))
-                emblem = defaultEmblemGetter(size)
-            callback(emblem)
-
-        if hasattr(BigWorld.player(), 'customFilesCache'):
-            if url is not None:
-                BigWorld.player().customFilesCache.get(url, _onEmblemReceived)
-            else:
-                BigWorld.callback(0.0, lambda : callback(defaultEmblemGetter(size)))
-        else:
-            LOG_WARNING('Trying to get emblem by url from non-account', url)
-        return
-
-
-class ClanEmblemsHelper(_EmblemsHelper):
-    __default = {16: _readEmblem(clan_settings.getDefaultEmblem16x16()),
-     32: _readEmblem(clan_settings.getDefaultEmblem32x32()),
+class ClanEmblemsHelper(ImageHelper):
+    __default = {16: clan_settings.getDefaultEmblem16x16(),
+     32: clan_settings.getDefaultEmblem32x32(),
      64: None,
-     128: _readEmblem(clan_settings.getDefaultEmblem128x128()),
-     256: _readEmblem(clan_settings.getDefaultEmblem256x256())}
+     128: clan_settings.getDefaultEmblem128x128(),
+     256: clan_settings.getDefaultEmblem256x256()}
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def requestClanEmblem16x16(self, clanDbID):
         self.__makeRequest(clanDbID, 16, self.onClanEmblem16x16Received)
@@ -84,14 +46,11 @@ class ClanEmblemsHelper(_EmblemsHelper):
 
     def getDefaultClanEmblem(self, size):
         width, _ = size
-        return self.__default.get(width, None)
+        return readLocalImage(self.__default.get(width, None))
 
-    def _requestClanEmblem(self, clanDbID, url, size, handler):
-        cb = partial(handler, clanDbID)
-        self.requestEmblemByUrl(url, (size, size), cb, self.getDefaultClanEmblem)
-
-    def __makeRequest(self, clanDbID, size, requestHandler):
-        svrSettings = g_lobbyContext.getServerSettings()
+    def __makeRequest(self, clanDbID, size, handler):
+        svrSettings = self.lobbyContext.getServerSettings()
         url = svrSettings.fileServer.getClanEmblemBySize(clanDbID, size) if svrSettings is not None else None
-        self._requestClanEmblem(clanDbID, url, size, requestHandler)
+        cb = partial(handler, clanDbID)
+        self.requestImageByUrl(url, (size, size), cb, self.getDefaultClanEmblem)
         return

@@ -35,18 +35,17 @@ from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.prb_control.items.stronghold_items import REQUISITION_TYPE
 from gui.prb_control.formatters import messages
 from gui.shared import events
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.ClanCache import g_clanCache
 from gui.shared.utils.functions import getViewName
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.view_helpers import UsersInfoHelper
 from skeletons.gui.game_control import IBrowserController
 from messenger.proto.events import g_messengerEvents
-from gui.Scaleform.managers.Cursor import Cursor
+from skeletons.gui.shared import IItemsCache
 
 class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdListener, MethodsRules, UsersInfoHelper):
     browserCtrl = dependency.descriptor(IBrowserController)
+    itemsCache = dependency.descriptor(IItemsCache)
 
     class TIMER_GLOW_COLORS(CONST_CONTAINER):
         NORMAL = int('BB6200', 16)
@@ -101,7 +100,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
+                vehicleVO = makeVehicleVO(self.itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
                 slotCost = vInfo.vehLevel
             else:
                 slotState = entity.getSlotState(slotIdx)
@@ -254,7 +253,6 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         return
 
     def _closeSendInvitesWindow(self):
-        from gui.Scaleform.framework import ViewTypes
         self._destroyRelatedView(ViewTypes.WINDOW, FORTIFICATION_ALIASES.STRONGHOLD_SEND_INVITES_WINDOW_PY)
 
     def _rebuildCandidatesDP(self):

@@ -28,7 +28,7 @@ from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 import SoundGroups
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-_DAMAGE_INDICATOR_SWF = 'damageIndicator.swf'
+_DAMAGE_INDICATOR_SWF = 'battleDamageIndicatorApp.swf'
 _DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
 _DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
 _DAMAGE_INDICATOR_SWF_SIZE = (680, 680)
@@ -37,7 +37,7 @@ _BEGIN_ANIMATION_FRAMES = 11
 _DAMAGE_INDICATOR_FRAME_RATE = 24
 _BEGIN_ANIMATION_DURATION = _BEGIN_ANIMATION_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
 _DAMAGE_INDICATOR_ANIMATION_DURATION = _DAMAGE_INDICATOR_TOTAL_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
-_DIRECT_INDICATOR_SWF = 'directionIndicator.swf'
+_DIRECT_INDICATOR_SWF = 'battleDirectionIndicatorApp.swf'
 _DIRECT_INDICATOR_COMPONENT = 'WGDirectionIndicatorFlash'
 _DIRECT_INDICATOR_MC_NAME = '_root.directionalIndicatorMc'
 _DIRECT_ARTY_INDICATOR_MC_NAME = '_root.artyDirectionalIndicatorMc'

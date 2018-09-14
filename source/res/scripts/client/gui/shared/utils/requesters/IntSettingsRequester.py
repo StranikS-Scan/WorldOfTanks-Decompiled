@@ -46,7 +46,9 @@ class IntSettingsRequester(object):
      'FALLOUT_CAROUSEL_FILTER_2': 76,
      'ENCYCLOPEDIA_RECOMMENDATIONS_1': 77,
      'ENCYCLOPEDIA_RECOMMENDATIONS_2': 78,
-     'ENCYCLOPEDIA_RECOMMENDATIONS_3': 79}
+     'ENCYCLOPEDIA_RECOMMENDATIONS_3': 79,
+     'RANKED_CAROUSEL_FILTER_1': 80,
+     'RANKED_CAROUSEL_FILTER_2': 81}
 
     def __init__(self):
         self.__cache = dict()

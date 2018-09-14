@@ -56,7 +56,8 @@ class UsersStorage(RevCachedStorage):
         Removes not critical data to reduce memory usage.
         Currently, removes all temp users (having USER_TAG.TEMP tag)
         """
-        for dbID in self.__contacts.keys():
+        dbIDs = self.__contacts.keys()
+        for dbID in dbIDs:
             user = self.__contacts[dbID]
             if USER_TAG.TEMP in user.getTags():
                 self.__contacts.pop(dbID)

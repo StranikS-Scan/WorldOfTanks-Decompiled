@@ -13,7 +13,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getBtnCompareData
 from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.sounds.ambients import LobbySubViewEnv
@@ -45,7 +45,7 @@ class Research(ResearchMeta):
         LOG_DEBUG('ResearchPage deleted')
 
     def goToVehicleView(self, itemCD):
-        vehicle = g_itemsCache.items.getItemByCD(int(itemCD))
+        vehicle = self.itemsCache.items.getItemByCD(int(itemCD))
         if vehicle:
             if vehicle.isPreviewAllowed():
                 shared_events.showVehiclePreview(int(itemCD), self.alias)
@@ -117,7 +117,7 @@ class Research(ResearchMeta):
         Updates compare add icon status of nodes if change status of comparison basket fullness.
         """
         super(Research, self).invalidateVehCompare()
-        self.as_setRootNodeVehCompareDataS(getBtnCompareData(g_itemsCache.items.getItemByCD(self._data.getRootCD())))
+        self.as_setRootNodeVehCompareDataS(getBtnCompareData(self.itemsCache.items.getItemByCD(self._data.getRootCD())))
 
     def invalidateUnlocks(self, unlocks):
         """
@@ -155,7 +155,7 @@ class Research(ResearchMeta):
         """
         Overridden method of the class ResearchView.invalidateFreeXP.
         """
-        self.as_setFreeXPS(g_itemsCache.items.stats.actualFreeXP)
+        self.as_setFreeXPS(self.itemsCache.items.stats.actualFreeXP)
         super(Research, self).invalidateFreeXP()
 
     def invalidateRent(self, vehicles):
@@ -208,7 +208,7 @@ class Research(ResearchMeta):
         rootCD = self._data.getRootCD()
         hasParents = len(g_techTreeDP.getTopLevel(rootCD))
         hasChildren = len(g_techTreeDP.getNextLevel(rootCD))
-        vehicle = g_itemsCache.items.getItemByCD(rootCD)
+        vehicle = self.itemsCache.items.getItemByCD(rootCD)
         if hasParents and hasChildren:
             return RESEARCH_HINT_ID.BASE
         elif hasParents:

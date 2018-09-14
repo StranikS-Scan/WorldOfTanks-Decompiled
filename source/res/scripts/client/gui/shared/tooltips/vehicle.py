@@ -3,7 +3,7 @@
 import collections
 import constants
 from BigWorld import wg_getIntegralFormat as _int
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
@@ -11,10 +11,10 @@ from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles, moneyWithIcon, icons
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
-from gui.shared.gui_items import RentalInfoProvider
+from gui.shared.gui_items import GUI_ITEM_PURCHASE_CODE
+from gui.shared.gui_items.fitting_item import RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.shared.gui_items.Vehicle import Vehicle, getBattlesLeft, getTypeBigIconPath
@@ -27,10 +27,10 @@ from gui.shared.money import Money, Currency
 from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
-from helpers import dependency
-from helpers import i18n, time_utils, int2roman
+from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IFalloutController, ITradeInController
+from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.shared import IItemsCache
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _ARTEFACT_TYPES = (_EQUIPMENT, _OPTION_DEVICE)
@@ -49,6 +49,10 @@ _CREW_TOOLTIP_PARAMS = {Tankman.ROLES.COMMANDER: {'paramName': TOOLTIPS.VEHICLEP
 
 def _bonusCmp(x, y):
     return cmp(x[1], y[1]) or cmp(x[0], y[0])
+
+
+def _makeModuleFitTooltipError(reason):
+    return '#tooltips:moduleFits/{}'.format(reason)
 
 
 class VehicleInfoTooltipData(BlocksTooltipData):
@@ -203,8 +207,6 @@ def _packBonusName(bnsType, bnsId, enabled=True, hasFemales=False):
     elif bnsType == _OPTION_DEVICE:
         itemStr = textStyle(_ms('#artefacts:%s/name' % bnsId))
     elif bnsType == _SKILL_BONUS_TYPE:
-        if enabled and hasFemales and bnsId == 'brotherhood':
-            bnsId = 'brotherhood_female'
         itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_SKILL_TEMPLATE, name=_ms(ITEM_TYPES.tankman_skills(bnsId)), type=text_styles.standard(_ms(TOOLTIPS.VEHICLEPARAMS_SKILL_NAME))))
     elif bnsType == _ROLE_BONUS_TYPE:
         itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_ROLE_TEMPLATE, name=_ms(TOOLTIPS.vehicleparams_bonus_tankmanlevel(bnsId))))
@@ -365,6 +367,7 @@ class VehicleTradeInPriceTooltipData(ToolTipBaseData):
 
 
 class VehicleTooltipBlockConstructor(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicle, configuration, leftPadding=20, rightPadding=20):
         self.vehicle = vehicle
@@ -454,7 +457,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                     icon = ICON_TEXT_FRAMES.FREE_XP if self.vehicle.isPremium else ICON_TEXT_FRAMES.XP
                     block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_XP), value=xPText, icon=icon, valueWidth=self._valueWidth, padding=paddings))
             if dailyXP:
-                attrs = g_itemsCache.items.stats.attributes
+                attrs = self.itemsCache.items.stats.attributes
                 if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and self.vehicle.dailyXPFactor > 0:
                     dailyXPText = text_styles.main(text_styles.expText('x' + _int(self.vehicle.dailyXPFactor)))
                     block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, valueWidth=self._valueWidth, padding=paddings))
@@ -571,7 +574,7 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
         block = []
         if self.configuration.params:
             comparator = params_helper.idealCrewComparator(self.vehicle)
-            stockParams = params_helper.getParameters(g_itemsCache.items.getStockVehicle(self.vehicle.intCD))
+            stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(self.vehicle.intCD))
             for paramName in RELATIVE_PARAMS:
                 paramInfo = comparator.getExtendedData(paramName)
                 fmtValue = param_formatter.colorizedFormatParameter(paramInfo, param_formatter.NO_BONUS_SIMPLIFIED_SCHEME)
@@ -676,7 +679,6 @@ class ClanLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstructo
 
 
 class StatusBlockConstructor(VehicleTooltipBlockConstructor):
-    falloutCtrl = dependency.descriptor(IFalloutController)
 
     def construct(self):
         block = []
@@ -729,13 +731,11 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
         else:
             if nodeState & NODE_STATE_FLAGS.IN_INVENTORY:
                 return self.__getVehicleStatus(False, vehicle)
-            mayObtain, reason = vehicle.mayObtainForMoney(g_itemsCache.items.stats.money)
+            mayObtain, reason = vehicle.mayObtainForMoney(self.itemsCache.items.stats.money)
             if not mayObtain:
                 level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
-                if reason == 'gold_error':
-                    tooltip = TOOLTIPS.MODULEFITS_GOLD_ERROR
-                elif reason == 'credits_error':
-                    tooltip = TOOLTIPS.MODULEFITS_CREDITS_ERROR
+                if GUI_ITEM_PURCHASE_CODE.isMoneyError(reason):
+                    tooltip = _makeModuleFitTooltipError(reason)
                 else:
                     tooltip = TOOLTIPS.MODULEFITS_OPERATION_ERROR
         header, text = getComplexStatus(tooltip)
@@ -753,7 +753,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                  'text': '',
                  'level': level}
             isUnlocked = vehicle.isUnlocked
-            mayObtain, reason = vehicle.mayObtainForMoney(g_itemsCache.items.stats.money)
+            mayObtain, reason = vehicle.mayObtainForMoney(self.itemsCache.items.stats.money)
             msg = None
             if not isUnlocked:
                 msg = 'notUnlocked'
@@ -761,9 +761,9 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                 msg = 'inHangar'
             elif not mayObtain:
                 level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
-                if reason == 'gold_error':
+                if reason == GUI_ITEM_PURCHASE_CODE.NOT_ENOUGH_GOLD:
                     msg = 'notEnoughGold'
-                elif reason == 'credits_error':
+                elif reason == GUI_ITEM_PURCHASE_CODE.NOT_ENOUGH_CREDITS:
                     msg = 'notEnoughCredits'
                 else:
                     msg = 'operationError'
@@ -777,11 +777,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             state, level = vehicle.getState()
             if state == Vehicle.VEHICLE_STATE.SERVER_RESTRICTION:
                 return
-            isSuitableVeh = self.falloutCtrl.isSuitableVeh(vehicle)
-            if not isSuitableVeh:
-                header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % Vehicle.VEHICLE_STATE.NOT_SUITABLE)
-                level = Vehicle.VEHICLE_STATE_LEVEL.WARNING
-            elif state == Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED:
+            if state == Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % state, groupNum=vehicle.rotationGroupNum, battlesLeft=getBattlesLeft(vehicle))
             else:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % state)
@@ -816,6 +812,7 @@ def _formatValueChange(paramName, value):
 
 
 def _getNeedValue(price, currency):
-    money = g_itemsCache.items.stats.money
+    itemsCache = dependency.instance(IItemsCache)
+    money = itemsCache.items.stats.money
     neededValue = price.get(currency) - money.get(currency)
     return neededValue if neededValue > 0 else None

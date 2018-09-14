@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class HangarMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def onEscape(self):
         self._printOverrideError('onEscape')
@@ -44,6 +38,9 @@ class HangarMeta(View):
         return self.flashObject.as_showMiniClientInfo(description, hyperlink) if self._isDAAPIInited() else None
 
     def as_show3DSceneTooltipS(self, id, args):
+        """
+        :param args: Represented by Array (AS)
+        """
         return self.flashObject.as_show3DSceneTooltip(id, args) if self._isDAAPIInited() else None
 
     def as_hide3DSceneTooltipS(self):
@@ -51,3 +48,6 @@ class HangarMeta(View):
 
     def as_setCarouselS(self, linkage, alias):
         return self.flashObject.as_setCarousel(linkage, alias) if self._isDAAPIInited() else None
+
+    def as_setDefaultHeaderS(self, isDefault):
+        return self.flashObject.as_setDefaultHeader(isDefault) if self._isDAAPIInited() else None

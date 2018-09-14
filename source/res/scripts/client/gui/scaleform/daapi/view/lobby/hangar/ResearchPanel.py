@@ -9,15 +9,21 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveSta
 from gui.Scaleform.daapi.view.meta.ResearchPanelMeta import ResearchPanelMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket, IIGRController
+from skeletons.gui.shared import IItemsCache
 
 class ResearchPanel(ResearchPanelMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     igrCtrl = dependency.descriptor(IIGRController)
+
+    def __init__(self):
+        super(ResearchPanel, self).__init__()
+        self.__isNavigationEnabled = True
 
     def _populate(self):
         super(ResearchPanel, self)._populate()
@@ -33,11 +39,16 @@ class ResearchPanel(ResearchPanelMeta):
         self.comparisonBasket.onChange -= self.__onCompareBasketChanged
         self.comparisonBasket.onSwitchChange -= self.onCurrentVehicleChanged
 
+    def setNavigationEnabled(self, isEnabled):
+        if self.__isNavigationEnabled != isEnabled:
+            self.as_setNavigationEnabledS(isEnabled)
+            self.__isNavigationEnabled = isEnabled
+
     def goToResearch(self):
-        if g_currentVehicle.isPresent():
+        if g_currentVehicle.isPresent() and self.__isNavigationEnabled:
             shared_events.showResearchView(g_currentVehicle.item.intCD)
         else:
-            LOG_ERROR('Current vehicle is not preset')
+            LOG_ERROR('Current vehicle is not preset or navigation is disabled')
 
     def addVehToCompare(self):
         if g_currentVehicle.isPresent():
@@ -46,7 +57,7 @@ class ResearchPanel(ResearchPanelMeta):
 
     def onCurrentVehicleChanged(self):
         if g_currentVehicle.isPresent():
-            xps = g_itemsCache.items.stats.vehiclesXPs
+            xps = self.itemsCache.items.stats.vehiclesXPs
             vehicle = g_currentVehicle.item
             xp = xps.get(vehicle.intCD, 0)
             self.as_updateCurrentVehicleS({'earnedXP': xp,

@@ -9,6 +9,7 @@ from collections import namedtuple, defaultdict
 from math import ceil
 from operator import itemgetter
 from constants import SHELL_TYPES, PIERCING_POWER
+from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors
@@ -20,10 +21,11 @@ from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_
 from gui.shared.utils import DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME
 from gui.shared.utils import GUN_CAN_BE_CLIP, RELOAD_TIME_PROP_NAME
 from gui.shared.utils import RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP
-from helpers import time_utils
+from helpers import time_utils, dependency
 from items import getTypeOfCompactDescr, vehicles, getTypeInfoByIndex, ITEM_TYPES
 from items import utils as items_utils
 from shared_utils import findFirst
+from skeletons.gui.lobby_context import ILobbyContext
 MAX_VISION_RADIUS = 500
 MIN_VISION_RADIUS = 150
 PIERCING_DISTANCES = (50, 200, 500)
@@ -92,8 +94,8 @@ def _average(listOfNumbers):
 
 
 def _isStunParamVisible(shellDict):
-    from gui.LobbyContext import g_lobbyContext
-    return shellDict['hasStun'] and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+    lobbyContext = dependency.instance(ILobbyContext)
+    return shellDict['hasStun'] and lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
 
 
 class _ParameterBase(object):
@@ -819,6 +821,10 @@ class OptionalDeviceParams(WeightedParam):
 class EquipmentParams(_ParameterBase):
 
     @property
+    def equipmentType(self):
+        return self._itemDescr['equipmentType']
+
+    @property
     def nations(self):
         return self._getPrecachedInfo().nations
 
@@ -903,7 +909,7 @@ class _ParamsDictProxy(dict):
 
     def __iter__(self):
         self.__loadAllValues()
-        for k in self.__cachedParams.keys():
+        for k in self.__cachedParams.iterkeys():
             if k not in self.__popped:
                 yield k
 

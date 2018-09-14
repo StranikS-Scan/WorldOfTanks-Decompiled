@@ -3,14 +3,13 @@
 from collections import namedtuple
 from datetime import datetime
 import BigWorld
-from helpers import time_utils
+from helpers import time_utils, int2roman
 from messenger.ext import passCensor
 from shared_utils import makeTupleByDict
 from predefined_hosts import g_preDefinedHosts
 from debug_utils import LOG_WARNING
 from gui.clans import formatters as clans_fmts
 from gui.clans.settings import MAX_CLAN_MEMBERS_COUNT, CLAN_INVITE_STATES_SORT_RULES, CLAN_INVITE_STATES
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from debug_utils import LOG_ERROR
 from helpers.time_utils import getTimeDeltaTilNow, ONE_DAY
 
@@ -24,6 +23,10 @@ def _toPercents(value):
 
 def _getEfficiency(dividend, delimiter):
     return float(dividend) / delimiter
+
+
+def _getTextLevel(level):
+    return int2roman(max(level, 1))
 
 
 _defDateTime = datetime.fromtimestamp(0)
@@ -644,7 +647,7 @@ class StrongholdStatisticsData(_StrongholdStatisticsData, FieldsCheckerMixin):
     def getFortBattlesIn28Days(self):
         return self.fort_battles_in_28_days
 
-    @simpleFormatter(fort_formatters.getTextLevel)
+    @simpleFormatter(_getTextLevel)
     def getStrongholdLevel(self):
         return self.stronghold_level
 

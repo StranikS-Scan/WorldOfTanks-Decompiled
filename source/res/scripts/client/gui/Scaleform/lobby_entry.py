@@ -54,7 +54,7 @@ class LobbyEntry(SFApplication):
         return LoaderManager(self.proxy)
 
     def _createContainerManager(self):
-        return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), DefaultContainer(ViewTypes.WAITING), PopUpContainer(ViewTypes.WINDOW), PopUpContainer(ViewTypes.BROWSER), PopUpContainer(ViewTypes.TOP_WINDOW), DefaultContainer(ViewTypes.SERVICE_LAYOUT))
+        return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), DefaultContainer(ViewTypes.WAITING), PopUpContainer(ViewTypes.WINDOW), PopUpContainer(ViewTypes.BROWSER), PopUpContainer(ViewTypes.TOP_WINDOW), PopUpContainer(ViewTypes.OVERLAY), DefaultContainer(ViewTypes.SERVICE_LAYOUT))
 
     def _createToolTipManager(self):
         tooltip = ToolTip(GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)

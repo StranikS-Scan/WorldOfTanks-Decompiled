@@ -63,7 +63,7 @@ class TrainingIntroEntryPoint(LegacyIntroEntryPoint):
     """
 
     def __init__(self):
-        super(TrainingIntroEntryPoint, self).__init__(FUNCTIONAL_FLAG.TRAINING, PREBATTLE_TYPE.TRAINING)
+        super(TrainingIntroEntryPoint, self).__init__(FUNCTIONAL_FLAG.TRAINING | FUNCTIONAL_FLAG.LOAD_PAGE, PREBATTLE_TYPE.TRAINING)
 
 
 class TrainingIntroEntity(LegacyIntroEntity):

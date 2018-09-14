@@ -69,16 +69,7 @@ class UnitUserCMHandler(BaseUserCMHandler, IGlobalListener):
         return options
 
     def _canKick(self):
-        unitEntity = self.prbEntity
-        pInfo = unitEntity.getPlayerInfo(dbID=self.databaseID)
-        flags = pInfo.unit.getFlags()
-        isInPreArena = flags & UNIT_FLAGS.IN_PRE_ARENA > 0
-        isInArena = flags & UNIT_FLAGS.IN_ARENA > 0
-        canKick = self.prbEntity.getPermissions().canKick()
-        if isInArena or isInPreArena:
-            return canKick and not pInfo.isInSlot
-        else:
-            return canKick
+        return self.prbEntity.getPermissions().canKick()
 
     def _canGiveLeadership(self):
         unitEntity = self.prbEntity

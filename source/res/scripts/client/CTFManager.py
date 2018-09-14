@@ -6,7 +6,7 @@ import operator
 import Event
 import ResMgr
 from functools import partial
-from debug_utils import *
+from debug_utils import LOG_ERROR, LOG_WARNING
 from shared_utils import findFirst
 from constants import FLAG_STATE, RESOURCE_POINT_STATE
 from Math import Vector2, Vector3

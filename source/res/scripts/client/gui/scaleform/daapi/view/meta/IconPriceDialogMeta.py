@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.dialogs.IconDialog import IconDialog
 
 class IconPriceDialogMeta(IconDialog):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends IconDialog
-    """
 
     def as_setMessagePriceS(self, price, currency, actionPriceData):
         """

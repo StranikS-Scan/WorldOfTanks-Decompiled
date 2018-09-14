@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/chat_message.py
-from gui.LobbyContext import g_lobbyContext
 from helpers import dependency
 from helpers import i18n
 from messenger import g_settings
@@ -8,6 +7,7 @@ from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.formatters import TimeFormatter
 from messenger.storage import storage_getter
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.lobby_context import ILobbyContext
 
 class _BattleMessageBuilder(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -95,6 +95,7 @@ class SquadMessageBuilder(_BattleMessageBuilder):
 
 
 class LobbyMessageBuilder(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(LobbyMessageBuilder, self).__init__()
@@ -120,7 +121,7 @@ class LobbyMessageBuilder(object):
         return self
 
     def setName(self, dbID, nickName, clanAbbrev=None):
-        self.__name = g_lobbyContext.getPlayerFullName(nickName, pDBID=dbID, clanAbbrev=clanAbbrev)
+        self.__name = self.lobbyContext.getPlayerFullName(nickName, pDBID=dbID, clanAbbrev=clanAbbrev)
         return self
 
     def setText(self, text):

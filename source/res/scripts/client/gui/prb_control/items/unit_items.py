@@ -8,14 +8,17 @@ from account_helpers import getAccountDatabaseID
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
-from gui.LobbyContext import g_lobbyContext
+from helpers import dependency
 from gui.prb_control.settings import CREATOR_SLOT_INDEX
-from gui.shared import g_itemsCache
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.requesters import REQ_CRITERIA
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class PlayerUnitInfo(object):
     __slots__ = ('dbID', 'unitIdx', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType')
+    itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, dbID, unitIdx, unit, nickName='', rating=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, clanDBID=None, **kwargs):
         self.dbID = dbID
@@ -42,10 +45,10 @@ class PlayerUnitInfo(object):
         return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitIdx = {2:n} rating = {3:n}, isCommander = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}, igrType = {9:n})'.format(self.dbID, self.getFullName(), self.unitIdx, self.rating, self.isCommander(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType)
 
     def getFullName(self):
-        return g_lobbyContext.getPlayerFullName(self.name, clanAbbrev=self.clanAbbrev, pDBID=self.dbID)
+        return self.lobbyContext.getPlayerFullName(self.name, clanAbbrev=self.clanAbbrev, pDBID=self.dbID)
 
     def getRegion(self):
-        return g_lobbyContext.getRegionCode(self.dbID)
+        return self.lobbyContext.getRegionCode(self.dbID)
 
     def isCommander(self):
         return self.role & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR and self.slotIdx == CREATOR_SLOT_INDEX
@@ -77,7 +80,7 @@ class PlayerUnitInfo(object):
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         if self.isCurrentPlayer():
-            vehicles = g_itemsCache.items.getVehicles(requestCriteria).keys()
+            vehicles = self.itemsCache.items.getVehicles(requestCriteria).keys()
         else:
             vehicles = self.vehDict.keys()
         return vehicles or []
@@ -85,7 +88,10 @@ class PlayerUnitInfo(object):
     def getVehiclesToSlot(self, slotIdx):
         if self.unit is not None:
             checkVehicle = self.unit.getRoster().checkVehicle
-            validator = lambda vehCD: checkVehicle(vehCD, slotIdx)[0]
+
+            def validator(vehCD):
+                return checkVehicle(vehCD, slotIdx)[0]
+
             return filter(validator, self.getVehiclesCDs())
         else:
             return []
@@ -116,13 +122,14 @@ class PlayerUnitInfo(object):
         slots = set(itertools.chain(*matches.values()))
         result = {}
         for slot in slots:
-            result[slot] = list(itertools.ifilter(lambda v: slot in matches[v], matches.iterkeys()))
+            result[slot] = list(itertools.ifilter(lambda v, s=slot: s in matches[v], matches.iterkeys()))
 
         return result
 
 
 class VehicleInfo(object):
     __slots__ = ('vehInvID', 'vehTypeCD', 'vehLevel')
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehInvID=0, vehTypeCompDescr=0, vehLevel=0, **kwargs):
         super(VehicleInfo, self).__init__()
@@ -139,13 +146,13 @@ class VehicleInfo(object):
     def isReadyToBattle(self, state):
         result = False
         if self.vehInvID:
-            vehicle = g_itemsCache.items.getVehicle(self.vehInvID)
+            vehicle = self.itemsCache.items.getVehicle(self.vehInvID)
             if vehicle:
                 result = vehicle.isReadyToPrebattle()
         return result
 
     def getVehicle(self):
-        return g_itemsCache.items.getVehicle(self.vehInvID) if self.vehInvID else None
+        return self.itemsCache.items.getVehicle(self.vehInvID) if self.vehInvID else None
 
 
 class SlotState(object):

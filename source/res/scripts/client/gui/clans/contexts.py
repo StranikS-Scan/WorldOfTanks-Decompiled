@@ -1,19 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/contexts.py
 from account_helpers import getAccountDatabaseID
+from helpers import dependency
 from shared_utils import makeTupleByDict
 from gui.clans import items
 from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, SEND_INVITES_COOLDOWN, ACCEPT_INVITES_COOLDOWN, DECLINE_INVITES_COOLDOWN, DEFAULT_COOLDOWN
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.requesters import RequestCtx
-from gui.shared import g_itemsCache
-
-def _getOwnClanDbID():
-    return g_itemsCache.items.stats.clanDBID
-
+from skeletons.gui.shared import IItemsCache
 
 @ReprInjector.withParent()
 class CommonClanRequestCtx(RequestCtx):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, waitingID=''):
         super(CommonClanRequestCtx, self).__init__(waitingID=waitingID)
@@ -32,6 +30,9 @@ class CommonClanRequestCtx(RequestCtx):
 
     def isClanSyncRequired(self):
         return True
+
+    def _getOwnClanDbID(self):
+        return self.itemsCache.items.stats.clanDBID
 
 
 @ReprInjector.withParent(('getTokenID', 'token'), ('getUserDatabaseID', 'dbID'))
@@ -118,11 +119,11 @@ class ClanInfoCtx(_ClanRequestBaseCtx):
         return True
 
     def isAuthorizationRequired(self):
-        return self.getClanID() == _getOwnClanDbID()
+        return self.getClanID() == self._getOwnClanDbID()
 
     def getFields(self):
         fields = list(items.ClanExtInfoData._fields)
-        if self.getClanID() != _getOwnClanDbID():
+        if self.getClanID() != self._getOwnClanDbID():
             fields.remove('treasury')
         return fields
 
@@ -191,7 +192,7 @@ class ClanGlobalMapStatsCtx(_ClanRequestBaseCtx):
         return items.ClanGlobalMapStatsData()
 
     def isAuthorizationRequired(self):
-        return self.getClanID() == _getOwnClanDbID()
+        return self.getClanID() == self._getOwnClanDbID()
 
 
 @ReprInjector.withParent(('getAccountsIDs', 'ids'))
@@ -299,7 +300,7 @@ class GetProvincesCtx(_ClanRequestBaseCtx):
         return []
 
     def isAuthorizationRequired(self):
-        return self.getClanID() == _getOwnClanDbID()
+        return self.getClanID() == self._getOwnClanDbID()
 
 
 @ReprInjector.withParent()
@@ -1201,3 +1202,23 @@ class StrongholdJoinBattleCtx(StrongholdRequestCtx):
 
     def getRequestType(self):
         return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_JOIN_BATTLE
+
+
+class RankedPositionCtx(CommonClanRequestCtx):
+
+    def getRequestType(self):
+        return CLAN_REQUESTED_DATA_TYPE.RANKED_LEAGUE_POSITION
+
+    def isAuthorizationRequired(self):
+        return True
+
+    def isClanSyncRequired(self):
+        return False
+
+    @staticmethod
+    def getDataObj(incomeData):
+        return incomeData
+
+    @staticmethod
+    def getDefDataObj():
+        return None

@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/QueuedVehicleDossierReceiver.py
-import BigWorld
 from Event import Event
 from adisp import process
 from debug_utils import LOG_ERROR
-from gui.shared import g_itemsCache
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 MIN_INTERVAL_BETWEEN_INVOKES = 300
 
 class QueuedVehicleDossierReceiver(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(QueuedVehicleDossierReceiver, self).__init__()
@@ -26,7 +27,7 @@ class QueuedVehicleDossierReceiver(object):
     @process
     def __requestData(self, databaseID, vehicleID):
         self.__isUnderRequesting = True
-        vehDossier = yield g_itemsCache.items.requestUserVehicleDossier(int(databaseID), vehicleID)
+        vehDossier = yield self.itemsCache.items.requestUserVehicleDossier(int(databaseID), vehicleID)
         if vehDossier:
             self.onDataReceived(databaseID, vehicleID)
         else:

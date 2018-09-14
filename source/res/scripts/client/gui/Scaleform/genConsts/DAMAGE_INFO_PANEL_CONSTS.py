@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/DAMAGE_INFO_PANEL_CONSTS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class DAMAGE_INFO_PANEL_CONSTS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     GUN = 0
     TURRET_ROTATOR = 1
     SURVEYING_DEVICE = 2

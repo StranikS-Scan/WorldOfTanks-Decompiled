@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class CursorMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def as_setCursorS(self, cursor):
         return self.flashObject.as_setCursor(cursor) if self._isDAAPIInited() else None

@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortPeriodDefenceWindow.py
 from FortifiedRegionBase import NOT_ACTIVATED
 from adisp import process
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.meta.FortPeriodDefenceWindowMeta import FortPeriodDefenceWindowMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -11,10 +10,14 @@ from gui.shared.formatters import text_styles
 from gui.shared.fortifications.context import SettingsCtx
 from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC, adjustOffDayToUTC, adjustDefenceHourToLocal, adjustDefenceHoursListToLocal
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from helpers import dependency
 from predefined_hosts import g_preDefinedHosts
-from ConnectionManager import connectionManager
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.lobby_context import ILobbyContext
 
 class FortPeriodDefenceWindow(FortPeriodDefenceWindowMeta, FortViewHelper):
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, _=None):
         super(FortPeriodDefenceWindow, self).__init__()
@@ -99,20 +102,20 @@ class FortPeriodDefenceWindow(FortPeriodDefenceWindowMeta, FortViewHelper):
          'hour': -1,
          'minutes': defenceMin,
          'isWrongLocalTime': self._isWrongLocalTime(),
-         'skipValues': adjustDefenceHoursListToLocal(g_lobbyContext.getServerSettings().getForbiddenFortDefenseHours()),
+         'skipValues': adjustDefenceHoursListToLocal(self.lobbyContext.getServerSettings().getForbiddenFortDefenseHours()),
          'isTwelveHoursFormat': self.app.utilsManager.isTwelveHoursFormat()}
 
-    @staticmethod
-    def __getPeripheryList():
+    @classmethod
+    def __getPeripheryList(cls):
         result = []
         optionsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
         for _, name, _, peripheryID in optionsList:
             result.append({'id': peripheryID,
              'label': name})
 
-        if connectionManager.peripheryID == 0:
+        if cls.connectionMgr.peripheryID == 0:
             result.append({'id': 0,
-             'label': connectionManager.serverUserName})
+             'label': cls.connectionMgr.serverUserName})
         return result
 
     @process

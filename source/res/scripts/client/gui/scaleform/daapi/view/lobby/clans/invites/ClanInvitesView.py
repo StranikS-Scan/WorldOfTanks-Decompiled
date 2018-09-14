@@ -2,11 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanInvitesView.py
 import BigWorld
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
+from gui.Scaleform.locale.CLANS import CLANS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters
 from gui.clans.items import formatField, isValueAvailable
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
 from gui.Scaleform.daapi.view.meta.ClanInvitesViewMeta import ClanInvitesViewMeta
-from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesWindowAbstractTabView import *
+from gui.clans.settings import CLAN_INVITE_STATES
 from gui.shared.formatters import text_styles
 from helpers.i18n import makeString as _ms
 from debug_utils import LOG_DEBUG

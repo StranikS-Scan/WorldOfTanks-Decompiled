@@ -5,7 +5,7 @@ import AccountCommands
 import cPickle
 import zlib
 from functools import partial
-from debug_utils import *
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_CODEPOINT_WARNING, LOG_ERROR
 
 class SyncController:
     __STREAM_ERRORS_LIMIT = 3

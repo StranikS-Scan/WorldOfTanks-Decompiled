@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ProjectileMover.py
 from collections import namedtuple
+import BigWorld
 import Math
 import constants
 import TriggersManager
 from TriggersManager import TRIGGER_TYPE
-from debug_utils import *
 import FlockManager
 from vehicle_systems.tankStructure import TankPartNames, TankNodeNames
 from helpers import gEffectsDisabled
@@ -47,7 +47,8 @@ class ProjectileMover(object):
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
         self.__ballistics = None
-        for shotID in self.__projectiles.keys():
+        shotIDs = self.__projectiles.keys()
+        for shotID in shotIDs:
             self.__delProjectile(shotID)
 
         return

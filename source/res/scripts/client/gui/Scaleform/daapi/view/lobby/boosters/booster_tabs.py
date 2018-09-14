@@ -9,16 +9,15 @@ from gui import DialogsInterface, SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs.ConfirmBoosterMeta import BuyBoosterMeta
-from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
 from gui.Scaleform.genConsts.ACTION_PRICE_CONSTANTS import ACTION_PRICE_CONSTANTS
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies.goodie_items import BOOSTERS_ORDERS
-from gui.goodies.goodies_cache import g_goodiesCache
 from gui.server_events import events_dispatcher as quests_events
-from gui.shared.ItemsCache import g_itemsCache
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
@@ -26,9 +25,12 @@ from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils import decorators
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.shared.money import Money
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 MAX_GUI_COUNT = 999
 DEFAULT_SHOP_COUNT = 1
 
@@ -44,6 +46,7 @@ class _PRICE_STATE(object):
 
 
 class BoosterTab(object):
+    goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self):
         super(BoosterTab, self).__init__()
@@ -114,7 +117,7 @@ class InventoryBoostersTab(BoosterTab):
 
     @process
     def doAction(self, boosterID, questID):
-        booster = g_goodiesCache.getBooster(boosterID)
+        booster = self.goodiesCache.getBooster(boosterID)
         activeBooster = self.__getActiveBoosterByType(booster.boosterType)
         if activeBooster is not None:
             canActivate = yield DialogsInterface.showDialog(I18nConfirmDialogMeta(BOOSTER_CONSTANTS.BOOSTER_ACTIVATION_CONFORMATION_TEXT_KEY, messageCtx={'newBoosterName': text_styles.middleTitle(booster.description),
@@ -127,7 +130,7 @@ class InventoryBoostersTab(BoosterTab):
 
     def _processBoostersData(self):
         criteria = REQ_CRITERIA.BOOSTER.IN_ACCOUNT | REQ_CRITERIA.BOOSTER.ENABLED
-        boosters = sorted(g_goodiesCache.getBoosters(criteria=criteria).values(), self._sort)
+        boosters = sorted(self.goodiesCache.getBoosters(criteria=criteria).values(), self._sort)
         self._boosters = []
         self._count = 0
         self._totalCount = 0
@@ -158,35 +161,36 @@ class InventoryBoostersTab(BoosterTab):
         if len(result.userMsg):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
-    @staticmethod
-    def __getActiveBoosterByType(bType):
+    @classmethod
+    def __getActiveBoosterByType(cls, bType):
         criteria = REQ_CRITERIA.BOOSTER.ACTIVE | REQ_CRITERIA.BOOSTER.BOOSTER_TYPES([bType])
-        activeBoosters = g_goodiesCache.getBoosters(criteria=criteria).values()
+        activeBoosters = cls.goodiesCache.getBoosters(criteria=criteria).values()
         return max(activeBoosters, key=attrgetter('effectValue')) if activeBoosters else None
 
 
 class ShopBoostersTab(BoosterTab):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(ShopBoostersTab, self).__init__()
-        self.__balance = g_itemsCache.items.stats.money
+        self.__balance = self.itemsCache.items.stats.money
 
     def getID(self):
         return TABS_IDS.SHOP
 
     @process
     def doAction(self, boosterID, questID):
-        booster = g_goodiesCache.getBooster(boosterID)
+        booster = self.goodiesCache.getBooster(boosterID)
         if booster:
             yield DialogsInterface.showDialog(BuyBoosterMeta(boosterID, self.__balance))
 
     def updateBalance(self):
-        self.__balance = g_itemsCache.items.stats.money
+        self.__balance = self.itemsCache.items.stats.money
         self.update()
 
     def _processBoostersData(self):
         criteria = REQ_CRITERIA.BOOSTER.ENABLED | ~REQ_CRITERIA.HIDDEN
-        boosters = sorted(g_goodiesCache.getBoosters(criteria=criteria).values(), self._sort)
+        boosters = sorted(self.goodiesCache.getBoosters(criteria=criteria).values(), self._sort)
         self._boosters = []
         self._count = 0
         self._totalCount = 0
@@ -233,7 +237,7 @@ class QuestsBoostersTab(BoosterTab):
     def __init__(self):
         super(QuestsBoostersTab, self).__init__()
         self.__boosterQuests = self.__getBoosterQuests()
-        self.__questsDescriptor = events_helpers.getTutorialEventsDescriptor()
+        self.__questsDescriptor = old_events_helpers.getTutorialEventsDescriptor()
 
     def getID(self):
         return TABS_IDS.QUESTS
@@ -248,14 +252,8 @@ class QuestsBoostersTab(BoosterTab):
         self.__boosterQuests = self.__getBoosterQuests()
 
     def doAction(self, boosterID, questID):
-        if questID and questID.isdigit():
-            questID = int(questID)
-        quest = self.eventsCache.getAllQuests(includePotapovQuests=True).get(questID)
-        if quest is not None:
-            quests_events.showEventsWindow(quest.getID(), quest.getType())
-        elif self.__questsDescriptor and self.__questsDescriptor.getChapter(questID):
-            quests_events.showEventsWindow(questID, constants.EVENT_TYPE.TUTORIAL)
-        return
+        quests_events.showMission(questID)
+        g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BOOSTERS_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _sort(self, qBoosterInfoA, qBoosterInfoB):
         _, _, boosterA, _ = qBoosterInfoA
@@ -302,7 +300,7 @@ class QuestsBoostersTab(BoosterTab):
     @staticmethod
     def __getBoosterQuests():
         result = defaultdict(list)
-        quests = events_helpers.getBoosterQuests()
+        quests = old_events_helpers.getBoosterQuests()
         for q in quests.itervalues():
             bonuses = q.getBonuses('goodies')
             for b in bonuses:
@@ -310,7 +308,7 @@ class QuestsBoostersTab(BoosterTab):
                 for booster, count in boosters.iteritems():
                     result[q.getID(), q.getUserName()].append((booster, count))
 
-        for chapter, boosters in events_helpers.getTutorialQuestsBoosters().iteritems():
+        for chapter, boosters in old_events_helpers.getTutorialQuestsBoosters().iteritems():
             result[chapter.getID(), chapter.getTitle()].extend(boosters)
 
         return result
@@ -318,6 +316,7 @@ class QuestsBoostersTab(BoosterTab):
 
 class TabsContainer(object):
     eventsCache = dependency.descriptor(IEventsCache)
+    goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self):
         self.__tabs = {TABS_IDS.INVENTORY: InventoryBoostersTab(),
@@ -330,7 +329,7 @@ class TabsContainer(object):
         return
 
     def init(self):
-        self.__activeBoostersCount = len(g_goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values())
+        self.__activeBoostersCount = len(self.goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values())
         g_clientUpdateManager.addCallbacks({'goodies': self.__onUpdateBoosters,
          'shop': self.__onUpdateBoosters,
          'stats': self.__onStatsChanged})
@@ -381,7 +380,7 @@ class TabsContainer(object):
         for tab in self.__tabs.itervalues():
             tab.update()
 
-        self.__activeBoostersCount = len(g_goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values())
+        self.__activeBoostersCount = len(self.goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values())
         self.onTabsUpdate()
 
     def __onQuestsUpdate(self, *args):
@@ -389,7 +388,7 @@ class TabsContainer(object):
         self.__onUpdateBoosters()
 
     def __onStatsChanged(self, stats):
-        if 'credits' in stats or 'gold' in stats:
+        if Money.hasMoney(stats):
             self.shopTab.updateBalance()
             self.onTabsUpdate()
 

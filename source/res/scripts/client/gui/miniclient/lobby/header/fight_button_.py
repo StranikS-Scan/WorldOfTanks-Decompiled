@@ -21,3 +21,9 @@ class DisableFightButtonPointcut(aop.Pointcut):
 
     def __init__(self, config):
         aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.header.LobbyHeader', 'LobbyHeader', 'as_disableFightButtonS', aspects=(_DisableFightButtonAspect(config),))
+
+
+class DisableTrainingFightButtonPointcut(aop.Pointcut):
+
+    def __init__(self, config):
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.trainings.TrainingRoom', 'TrainingRoom', 'as_disableStartButtonS', aspects=(_DisableFightButtonAspect(config),))

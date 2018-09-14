@@ -3,7 +3,6 @@
 import BigWorld
 from adisp import process
 from constants import PREBATTLE_TYPE
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
 from gui.Scaleform.daapi.view.meta.FortListMeta import FortListMeta
 from gui.Scaleform.framework import ViewTypes
@@ -14,11 +13,13 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.battle_availability import getForbiddenPeriods
 from gui.shared.fortifications.fort_listener import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
+from helpers import dependency
 from helpers import int2roman
 from helpers.time_utils import ONE_HOUR
 from messenger.m_constants import USER_ACTION_ID
 from messenger.proto.events import g_messengerEvents
 from predefined_hosts import g_preDefinedHosts
+from skeletons.gui.lobby_context import ILobbyContext
 
 def formatGuiTimeLimitStr(startHour, endHour):
 
@@ -38,6 +39,7 @@ def _createTableBtnInfo(label, btnId, buttonWidth, sortOrder, toolTip):
 
 
 class FortBattlesSortieListView(FortListMeta, FortListener):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(FortBattlesSortieListView, self).__init__()
@@ -197,7 +199,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener):
 
     def __updateForbiddenSortiesData(self):
         sortiesAvailable, servAvailable = self.__getSortieCurfewStatus()
-        settings = g_lobbyContext.getServerSettings()
+        settings = self.lobbyContext.getServerSettings()
         guiData = {'timeLimits': getForbiddenPeriods(settings.getForbiddenSortieHours(), formatGuiTimeLimitStr)}
         pIds = settings.getForbiddenSortiePeripheryIDs()
         if pIds:

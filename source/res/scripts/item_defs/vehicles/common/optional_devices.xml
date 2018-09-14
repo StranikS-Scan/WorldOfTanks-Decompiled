@@ -6,6 +6,10 @@
     <icon>	../maps/icons/artefact/toolbox.png 0 0	</icon>
     <price>	500000	</price>
     <removable>	true	</removable>
+    <tags>	toolbox	</tags>
+    <incompatibleTags>
+      <installed>	toolbox	</installed>
+    </incompatibleTags>
     <script>	StaticFactorDevice	  <weight>	100	</weight>
       <attribute>	miscAttrs/repairSpeedFactor	</attribute>
       <factor>	1.25	</factor>
@@ -103,6 +107,10 @@
     <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
     <price>	500000	</price>
     <removable>	false	</removable>
+    <tags>	coatedOptics	</tags>
+    <incompatibleTags>
+      <installed>	coatedOptics	</installed>
+    </incompatibleTags>
     <script>	StaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
       <factor>	1.1	</factor>
     </script>
@@ -318,15 +326,14 @@
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	lightTank improvedVentilation_class1_user	</tags>
+          <tags>	improvedVentilation_class1_user	</tags>
         </vehicle>
       </include>
-      <exclude>
-        <vehicle>
-          <tags>	noImprovedVentilation	</tags>
-        </vehicle>
-      </exclude>
     </vehicleFilter>
+    <tags>	ventilation	</tags>
+    <incompatibleTags>
+      <installed>	ventilation	</installed>
+    </incompatibleTags>
     <script>	StaticAdditiveDevice	  <weight>	100	</weight>
       <attribute>	miscAttrs/crewLevelIncrease	</attribute>
       <value>	5	</value>
@@ -342,15 +349,14 @@
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	mediumTank mediumAT-SPG improvedVentilation_class2_user	</tags>
+          <tags>	improvedVentilation_class2_user	</tags>
         </vehicle>
       </include>
-      <exclude>
-        <vehicle>
-          <tags>	noImprovedVentilation lightTankArtefacts_User	</tags>
-        </vehicle>
-      </exclude>
     </vehicleFilter>
+    <tags>	ventilation	</tags>
+    <incompatibleTags>
+      <installed>	ventilation	</installed>
+    </incompatibleTags>
     <script>	StaticAdditiveDevice	  <weight>	150	</weight>
       <attribute>	miscAttrs/crewLevelIncrease	</attribute>
       <value>	5	</value>
@@ -366,15 +372,14 @@
     <vehicleFilter>
       <include>
         <vehicle>
-          <tags>	heavyTank heavyAT-SPG improvedVentilation_class3_user	</tags>
+          <tags>	improvedVentilation_class3_user	</tags>
         </vehicle>
       </include>
-      <exclude>
-        <vehicle>
-          <tags>	noImprovedVentilation	</tags>
-        </vehicle>
-      </exclude>
     </vehicleFilter>
+    <tags>	ventilation	</tags>
+    <incompatibleTags>
+      <installed>	ventilation	</installed>
+    </incompatibleTags>
     <script>	StaticAdditiveDevice	  <weight>	200	</weight>
       <attribute>	miscAttrs/crewLevelIncrease	</attribute>
       <value>	5	</value>
@@ -413,6 +418,10 @@
         </vehicle>
       </include>
     </vehicleFilter>
+    <tags>	rammer	</tags>
+    <incompatibleTags>
+      <installed>	rammer	</installed>
+    </incompatibleTags>
     <script>	StaticFactorDevice	  <weight>	200	</weight>
       <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
       <factor>	0.9	</factor>
@@ -432,6 +441,10 @@
         </vehicle>
       </include>
     </vehicleFilter>
+    <tags>	rammer	</tags>
+    <incompatibleTags>
+      <installed>	rammer	</installed>
+    </incompatibleTags>
     <script>	StaticFactorDevice	  <weight>	400	</weight>
       <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
       <factor>	0.9	</factor>
@@ -458,6 +471,10 @@
         </vehicle>
       </include>
     </vehicleFilter>
+    <tags>	rammer	</tags>
+    <incompatibleTags>
+      <installed>	rammer	</installed>
+    </incompatibleTags>
     <script>	StaticFactorDevice	  <weight>	300	</weight>
       <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
       <factor>	0.9	</factor>
@@ -485,6 +502,10 @@
         </vehicle>
       </include>
     </vehicleFilter>
+    <tags>	rammer	</tags>
+    <incompatibleTags>
+      <installed>	rammer	</installed>
+    </incompatibleTags>
     <script>	StaticFactorDevice	  <weight>	500	</weight>
       <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
       <factor>	0.9	</factor>
@@ -497,6 +518,10 @@
     <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
     <price>	500000	</price>
     <removable>	false	</removable>
+    <tags>	enhancedAimDrives	</tags>
+    <incompatibleTags>
+      <installed>	enhancedAimDrives	</installed>
+    </incompatibleTags>
     <script>	StaticFactorDevice	  <weight>	100	</weight>
       <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
       <factor>	0.91	</factor>
@@ -595,6 +620,10 @@
         </vehicle>
       </include>
     </vehicleFilter>
+    <tags>	aimingStabilizer	</tags>
+    <incompatibleTags>
+      <installed>	aimingStabilizer	</installed>
+    </incompatibleTags>
     <script>	StaticFactorDevice	  <weight>	100	</weight>
       <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
       <factor>	0.8	</factor>
@@ -607,6 +636,10 @@
     <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
     <price>	600000	</price>
     <removable>	false	</removable>
+    <tags>	aimingStabilizer	</tags>
+    <incompatibleTags>
+      <installed>	aimingStabilizer	</installed>
+    </incompatibleTags>
     <vehicleFilter>
       <include>
         <vehicle>
@@ -830,4 +863,126 @@
       <stunResistanceDuration>	0.1	</stunResistanceDuration>
     </script>
   </antifragmentationLining_superheavy>
+  <deluxToolbox>
+    <id>	43	</id>
+    <userString>	#artefacts:deluxToolbox/name	</userString>
+    <description>	#artefacts:deluxToolbox/descr	</description>
+    <icon>	../maps/icons/artefact/toolbox.png 0 0	</icon>
+    <price>	3000	  <crystal></crystal>
+    </price>
+    <removable>	true	</removable>
+    <tags>	toolbox deluxe	</tags>
+    <incompatibleTags>
+      <installed>	toolbox	</installed>
+    </incompatibleTags>
+    <script>	StaticFactorDevice	  <weight>	100	</weight>
+      <attribute>	miscAttrs/repairSpeedFactor	</attribute>
+      <factor>	1.4	</factor>
+    </script>
+  </deluxToolbox>
+  <deluxImprovedVentilation>
+    <id>	44	</id>
+    <userString>	#artefacts:deluxImprovedVentilation/name	</userString>
+    <description>	#artefacts:deluxImprovedVentilation/descr	</description>
+    <icon>	../maps/icons/artefact/improvedVentilation.png 0 0	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	improvedVentilation_class1_user improvedVentilation_class2_user improvedVentilation_class3_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	ventilation deluxe	</tags>
+    <incompatibleTags>
+      <installed>	ventilation	</installed>
+    </incompatibleTags>
+    <script>	StaticAdditiveDevice	  <weight>	100	</weight>
+      <attribute>	miscAttrs/crewLevelIncrease	</attribute>
+      <value>	7.5	</value>
+    </script>
+  </deluxImprovedVentilation>
+  <deluxRammer>
+    <id>	45	</id>
+    <userString>	#artefacts:deluxRammer/name	</userString>
+    <description>	#artefacts:deluxRammer/descr	</description>
+    <icon>	../maps/icons/artefact/rammer.png 0 0	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	mediumCaliberTankRammer_user largeCaliberTankRammer_user mediumCaliberHowitzerRammer_user largeCaliberHowitzerRammer_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	rammer deluxe	</tags>
+    <incompatibleTags>
+      <installed>	rammer	</installed>
+    </incompatibleTags>
+    <script>	StaticFactorDevice	  <weight>	200	</weight>
+      <attribute>	miscAttrs/gunReloadTimeFactor	</attribute>
+      <factor>	0.875	</factor>
+    </script>
+  </deluxRammer>
+  <deluxCoatedOptics>
+    <id>	46	</id>
+    <userString>	#artefacts:deluxCoatedOptics/name	</userString>
+    <description>	#artefacts:deluxCoatedOptics/descr	</description>
+    <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
+    <price>	4000	  <crystal></crystal>
+    </price>
+    <removable>	false	</removable>
+    <tags>	coatedOptics deluxe	</tags>
+    <incompatibleTags>
+      <installed>	coatedOptics	</installed>
+    </incompatibleTags>
+    <script>	StaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
+      <factor>	1.125	</factor>
+    </script>
+  </deluxCoatedOptics>
+  <deluxAimingStabilizer>
+    <id>	47	</id>
+    <userString>	#artefacts:deluxAimingStabilizer/name	</userString>
+    <description>	#artefacts:deluxAimingStabilizer/descr	</description>
+    <icon>	../maps/icons/artefact/aimingStabilizer.png 0 0	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	aimingStabilizer_Mk1_user aimingStabilizer_Mk2_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	aimingStabilizer deluxe	</tags>
+    <incompatibleTags>
+      <installed>	aimingStabilizer	</installed>
+    </incompatibleTags>
+    <script>	StaticFactorDevice	  <weight>	100	</weight>
+      <attribute>	miscAttrs/additiveShotDispersionFactor	</attribute>
+      <factor>	0.75	</factor>
+    </script>
+  </deluxAimingStabilizer>
+  <deluxEnhancedAimDrives>
+    <id>	48	</id>
+    <userString>	#artefacts:deluxEnhancedAimDrives/name	</userString>
+    <description>	#artefacts:deluxEnhancedAimDrives/descr	</description>
+    <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <removable>	false	</removable>
+    <tags>	enhancedAimDrives deluxe	</tags>
+    <incompatibleTags>
+      <installed>	enhancedAimDrives	</installed>
+    </incompatibleTags>
+    <script>	StaticFactorDevice	  <weight>	100	</weight>
+      <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+      <factor>	0.89	</factor>
+    </script>
+  </deluxEnhancedAimDrives>
 </optional_devices.xml>

@@ -6,9 +6,11 @@ import BigWorld
 from gui.shared.utils import graphics
 from gui import g_guiResetters
 from account_helpers.settings_core import settings_constants
-from ConnectionManager import connectionManager
+from helpers import dependency
+from skeletons.connection_mgr import IConnectionManager
 
 class InterfaceScaleManager(object):
+    connectionMgr = dependency.descriptor(IConnectionManager)
     onScaleChanged = Event.Event()
 
     def __init__(self, settingsCore):
@@ -19,14 +21,14 @@ class InterfaceScaleManager(object):
 
     def init(self):
         g_guiResetters.add(self.scaleChanged)
-        connectionManager.onConnected += self.scaleChanged
-        connectionManager.onDisconnected += self.scaleChanged
+        self.connectionMgr.onConnected += self.scaleChanged
+        self.connectionMgr.onDisconnected += self.scaleChanged
         self.proxy.onSettingsChanged += self.onSettingsChanged
         self.scaleChanged()
 
     def fini(self):
-        connectionManager.onDisconnected -= self.scaleChanged
-        connectionManager.onConnected -= self.scaleChanged
+        self.connectionMgr.onDisconnected -= self.scaleChanged
+        self.connectionMgr.onConnected -= self.scaleChanged
         self.proxy.onSettingsChanged -= self.onSettingsChanged
         g_guiResetters.discard(self.scaleChanged)
 

@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class Fortifications2ViewMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def onEscapePress(self):
         self._printOverrideError('onEscapePress')

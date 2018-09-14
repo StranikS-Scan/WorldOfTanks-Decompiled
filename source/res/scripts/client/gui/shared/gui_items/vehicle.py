@@ -15,16 +15,18 @@ from gui.prb_control import prb_getters
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items import CLAN_LOCK, HasStrCD, FittingItem, GUI_ITEM_TYPE, getItemIconName, RentalInfoProvider
+from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_PURCHASE_CODE
+from gui.shared.gui_items import BATTLE_BOOSTER_SLOT_IDX, DEFAULT_EQUIPMENT_LAYOUT
+from gui.shared.gui_items.gui_item import HasStrCD
+from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
-from gui.shared.gui_items.artefacts import Equipment, OptionalDevice
-from gui.shared.gui_items.vehicle_modules import Shell, VehicleChassis, VehicleEngine, VehicleRadio, VehicleFuelTank, VehicleTurret, VehicleGun
 from gui.shared.money import ZERO_MONEY, Currency, Money
 from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency
 from items import vehicles, tankmen, getTypeInfoByName, getTypeOfCompactDescr
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IFalloutController, IIGRController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
@@ -78,6 +80,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     TELECOM = 'telecom'
     FALLOUT = 'fallout'
     UNRECOVERABLE = 'unrecoverable'
+    CREW_LOCKED = 'lockCrew'
 
 
 class Vehicle(FittingItem, HasStrCD):
@@ -96,13 +99,12 @@ class Vehicle(FittingItem, HasStrCD):
         AMMO_NOT_FULL = 'ammoNotFull'
         AMMO_NOT_FULL_EVENTS = 'ammoNotFullEvents'
         SERVER_RESTRICTION = 'serverRestriction'
-        RENTAL_IS_ORVER = 'rentalIsOver'
-        IGR_RENTAL_IS_ORVER = 'igrRentalIsOver'
+        RENTAL_IS_OVER = 'rentalIsOver'
+        IGR_RENTAL_IS_OVER = 'igrRentalIsOver'
         IN_PREMIUM_IGR_ONLY = 'inPremiumIgrOnly'
-        NOT_SUITABLE = 'not_suitable'
         GROUP_IS_NOT_READY = 'group_is_not_ready'
-        NOT_PRESENT = ('notpresent',)
-        UNAVAILABLE = ('unavailable',)
+        NOT_PRESENT = 'notpresent'
+        UNAVAILABLE = 'unavailable'
         FALLOUT_ONLY = 'fallout_only'
         FALLOUT_MIN = 'fallout_min'
         FALLOUT_MAX = 'fallout_max'
@@ -110,7 +112,7 @@ class Vehicle(FittingItem, HasStrCD):
         FALLOUT_BROKEN = 'fallout_broken'
         UNSUITABLE_TO_QUEUE = 'unsuitableToQueue'
         UNSUITABLE_TO_UNIT = 'unsuitableToUnit'
-        CUSTOM = (NOT_SUITABLE, UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT)
+        CUSTOM = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT)
         DEAL_IS_OVER = 'dealIsOver'
         ROTATION_GROUP_UNLOCKED = 'rotationGroupUnlocked'
         ROTATION_GROUP_LOCKED = 'rotationGroupLocked'
@@ -143,6 +145,7 @@ class Vehicle(FittingItem, HasStrCD):
     falloutCtrl = dependency.descriptor(IFalloutController)
     igrCtrl = dependency.descriptor(IIGRController)
     eventsCache = dependency.descriptor(IEventsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None):
         if strCompactDescr is not None:
@@ -209,12 +212,12 @@ class Vehicle(FittingItem, HasStrCD):
         self.settings = invData.get('settings', 0)
         self.lock = invData.get('lock', (0, 0))
         self.repairCost, self.health = invData.get('repair', (0, 0))
-        self.gun = VehicleGun(vehDescr.gun['compactDescr'], proxy, vehDescr.gun)
-        self.turret = VehicleTurret(vehDescr.turret['compactDescr'], proxy, vehDescr.turret)
-        self.engine = VehicleEngine(vehDescr.engine['compactDescr'], proxy, vehDescr.engine)
-        self.chassis = VehicleChassis(vehDescr.chassis['compactDescr'], proxy, vehDescr.chassis)
-        self.radio = VehicleRadio(vehDescr.radio['compactDescr'], proxy, vehDescr.radio)
-        self.fuelTank = VehicleFuelTank(vehDescr.fuelTank['compactDescr'], proxy, vehDescr.fuelTank)
+        self.gun = self.itemsFactory.createVehicleGun(vehDescr.gun['compactDescr'], proxy, vehDescr.gun)
+        self.turret = self.itemsFactory.createVehicleTurret(vehDescr.turret['compactDescr'], proxy, vehDescr.turret)
+        self.engine = self.itemsFactory.createVehicleEngine(vehDescr.engine['compactDescr'], proxy, vehDescr.engine)
+        self.chassis = self.itemsFactory.createVehicleChassis(vehDescr.chassis['compactDescr'], proxy, vehDescr.chassis)
+        self.radio = self.itemsFactory.createVehicleRadio(vehDescr.radio['compactDescr'], proxy, vehDescr.radio)
+        self.fuelTank = self.itemsFactory.createVehicleFuelTank(vehDescr.fuelTank['compactDescr'], proxy, vehDescr.fuelTank)
         self.sellPrice = self._calcSellPrice(proxy)
         self.defaultSellPrice = self._calcDefaultSellPrice(proxy)
         if tradeInData is not None and tradeInData.isEnabled and self.isPremium and not self.isPremiumIGR:
@@ -230,8 +233,10 @@ class Vehicle(FittingItem, HasStrCD):
             gunAmmoLayout += (shell.intCD, shell.defaultCount)
 
         self.shells = self._parseShells(invData.get('shells', list()), invData.get('shellsLayout', dict()).get(self.shellsLayoutIdx, gunAmmoLayout), proxy)
-        self.eqs = self._parseEqs(invData.get('eqs') or [0, 0, 0], proxy)
-        self.eqsLayout = self._parseEqs(invData.get('eqsLayout') or [0, 0, 0], proxy)
+        self.eqs = self._parseEqs(invData.get('eqs') or DEFAULT_EQUIPMENT_LAYOUT, proxy)
+        self.eqsLayout = self._parseEqs(invData.get('eqsLayout') or DEFAULT_EQUIPMENT_LAYOUT, proxy)
+        self.battleBooster = self._parseBattleBoosters(invData.get('eqs') or DEFAULT_EQUIPMENT_LAYOUT, proxy)
+        self.battleBoosterLayout = self._parseBattleBoosters(invData.get('eqsLayout') or DEFAULT_EQUIPMENT_LAYOUT, proxy)
         defaultCrew = [None] * len(vehDescr.type.crewRoles)
         crewList = invData.get('crew', defaultCrew)
         self.bonuses = self._calcCrewBonuses(crewList, proxy)
@@ -313,7 +318,6 @@ class Vehicle(FittingItem, HasStrCD):
         bonuses['commander'] = 0
         commanderEffRoleLevel = 0
         bonuses['brotherhood'] = tankmen.getSkillsConfig()['brotherhood']['crewLevelIncrease']
-        femalesCount = 0
         for tankmanID in crew:
             if tankmanID is None:
                 bonuses['brotherhood'] = 0
@@ -322,16 +326,12 @@ class Vehicle(FittingItem, HasStrCD):
             if not tmanInvData:
                 continue
             tdescr = tankmen.TankmanDescr(compactDescr=tmanInvData['compDescr'])
-            if tdescr.isFemale:
-                femalesCount += 1
             if 'brotherhood' not in tdescr.skills or tdescr.skills.index('brotherhood') == len(tdescr.skills) - 1 and tdescr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
                 bonuses['brotherhood'] = 0
             if tdescr.role == Tankman.ROLES.COMMANDER:
                 factor, addition = tdescr.efficiencyOnVehicle(self.descriptor)
                 commanderEffRoleLevel = round(tdescr.roleLevel * factor + addition)
 
-        if femalesCount and len(crew) != femalesCount:
-            bonuses['brotherhood'] = 0
         bonuses['commander'] += round((commanderEffRoleLevel + bonuses['brotherhood'] + bonuses['equipment']) / tankmen.COMMANDER_ADDITION_RATIO)
         return bonuses
 
@@ -342,7 +342,7 @@ class Vehicle(FittingItem, HasStrCD):
             tankman = None
             if tankmanID is not None:
                 tmanInvData = proxy.inventory.getItems(GUI_ITEM_TYPE.TANKMAN, tankmanID)
-                tankman = Tankman(strCompactDescr=tmanInvData['compDescr'], inventoryID=tankmanID, vehicle=self, proxy=proxy)
+                tankman = self.itemsFactory.createTankman(strCompactDescr=tmanInvData['compDescr'], inventoryID=tankmanID, vehicle=self, proxy=proxy)
             crewItems.append((idx, tankman))
 
         return _sortCrew(crewItems, crewRoles)
@@ -367,7 +367,7 @@ class Vehicle(FittingItem, HasStrCD):
         result = list()
         for intCD, count, _ in LayoutIterator(layoutList):
             defaultCount, isBoughtForCredits = defaultsDict.get(intCD, (0, False))
-            result.append(Shell(intCD, count, defaultCount, proxy, isBoughtForCredits))
+            result.append(self.itemsFactory.createShell(intCD, count, defaultCount, proxy, isBoughtForCredits))
 
         return result
 
@@ -375,8 +375,9 @@ class Vehicle(FittingItem, HasStrCD):
     def _parseEqs(cls, layoutList, proxy):
         result = list()
         for i in xrange(len(layoutList)):
-            intCD = abs(layoutList[i])
-            result.append(Equipment(intCD, proxy, layoutList[i] < 0) if intCD != 0 else None)
+            if i < BATTLE_BOOSTER_SLOT_IDX:
+                intCD = abs(layoutList[i])
+                result.append(cls.itemsFactory.createEquipment(intCD, proxy, layoutList[i] < 0) if intCD != 0 else None)
 
         return result
 
@@ -385,8 +386,17 @@ class Vehicle(FittingItem, HasStrCD):
         result = list()
         for i in xrange(len(layoutList)):
             optDevDescr = layoutList[i]
-            result.append(OptionalDevice(optDevDescr['compactDescr'], proxy) if optDevDescr is not None else None)
+            result.append(cls.itemsFactory.createOptionalDevice(optDevDescr['compactDescr'], proxy) if optDevDescr is not None else None)
 
+        return result
+
+    @classmethod
+    def _parseBattleBoosters(cls, layoutList, proxy):
+        result = None
+        if len(layoutList) > BATTLE_BOOSTER_SLOT_IDX:
+            intCD = abs(layoutList[BATTLE_BOOSTER_SLOT_IDX])
+            if intCD != 0:
+                result = cls.itemsFactory.createEquipment(intCD, proxy, layoutList[BATTLE_BOOSTER_SLOT_IDX] < 0)
         return result
 
     @property
@@ -523,12 +533,14 @@ class Vehicle(FittingItem, HasStrCD):
 
     def getState(self, isCurrnentPlayer=True):
         ms = self.modelState
+        if not self.isInInventory and isCurrnentPlayer:
+            ms = Vehicle.VEHICLE_STATE.NOT_PRESENT
         if self.isInBattle:
             ms = Vehicle.VEHICLE_STATE.BATTLE
         elif self.rentalIsOver:
-            ms = Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER
+            ms = Vehicle.VEHICLE_STATE.RENTAL_IS_OVER
             if self.isPremiumIGR:
-                ms = Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER
+                ms = Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER
             elif self.isTelecom:
                 ms = Vehicle.VEHICLE_STATE.DEAL_IS_OVER
         elif self.isDisabledInPremIGR:
@@ -619,13 +631,13 @@ class Vehicle(FittingItem, HasStrCD):
          Vehicle.VEHICLE_STATE.EXPLODED,
          Vehicle.VEHICLE_STATE.DESTROYED,
          Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
-         Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER,
-         Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER,
+         Vehicle.VEHICLE_STATE.RENTAL_IS_OVER,
+         Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS,
-         Vehicle.VEHICLE_STATE.NOT_SUITABLE,
+         Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
          Vehicle.VEHICLE_STATE.DEAL_IS_OVER,
-         Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED,
-         Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT):
+         Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,
+         Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED):
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
         return Vehicle.VEHICLE_STATE_LEVEL.INFO if state in (Vehicle.VEHICLE_STATE.UNDAMAGED, Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED) else Vehicle.VEHICLE_STATE_LEVEL.WARNING
 
@@ -667,8 +679,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isDisabledInRoaming(self):
-        from gui.LobbyContext import g_lobbyContext
-        return _checkForTags(self.tags, VEHICLE_TAGS.DISABLED_IN_ROAMING) and g_lobbyContext.getServerSettings().roaming.isInRoaming()
+        return _checkForTags(self.tags, VEHICLE_TAGS.DISABLED_IN_ROAMING) and self.lobbyContext.getServerSettings().roaming.isInRoaming()
 
     @property
     def canNotBeSold(self):
@@ -677,6 +688,10 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def isUnrecoverable(self):
         return _checkForTags(self.tags, VEHICLE_TAGS.UNRECOVERABLE)
+
+    @property
+    def isCrewLocked(self):
+        return _checkForTags(self.tags, VEHICLE_TAGS.CREW_LOCKED)
 
     @property
     def isDisabledInPremIGR(self):
@@ -718,11 +733,13 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def canSell(self):
+        if not self.isInInventory:
+            return False
         st, _ = self.getState()
         if self.isRented:
             if not self.rentalIsOver:
                 return False
-            if st in (self.VEHICLE_STATE.RENTAL_IS_ORVER, self.VEHICLE_STATE.IGR_RENTAL_IS_ORVER):
+            if st in (self.VEHICLE_STATE.RENTAL_IS_OVER, self.VEHICLE_STATE.IGR_RENTAL_IS_OVER):
                 st = self.__checkUndamagedState(self.modelState)
         return st in self.CAN_SELL_STATES and not _checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_SOLD)
 
@@ -830,6 +847,9 @@ class Vehicle(FittingItem, HasStrCD):
     def isAutoEquip(self):
         return bool(self.settings & VEHICLE_SETTINGS_FLAG.AUTO_EQUIP)
 
+    def isAutoBattleBoosterEquip(self):
+        return bool(self.settings & VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER)
+
     @property
     def isFavorite(self):
         return bool(self.settings & VEHICLE_SETTINGS_FLAG.GROUP_0)
@@ -859,7 +879,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     def mayRent(self, money):
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
-            return (False, 'center_unavailable')
+            return (False, GUI_ITEM_PURCHASE_CODE.CENTER_UNAVAILABLE)
         elif self.isDisabledForBuy and not self.isRentable:
             return (False, 'rental_disabled')
         elif self.isRentable and not self.isRentAvailable:
@@ -880,14 +900,14 @@ class Vehicle(FittingItem, HasStrCD):
         :return: tuple(mayRestore:<bool>, errorReason:<str>
         """
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
-            return (False, 'center_unavailable')
+            return (False, GUI_ITEM_PURCHASE_CODE.CENTER_UNAVAILABLE)
         if not self.isRestoreAvailable() or constants.IS_CHINA and self.rentalIsActive:
             return (False, 'restore_disabled')
         shortage = money.getShortage(self.restorePrice)
         if shortage:
             currency, _ = shortage.pop()
-            return (False, '%s_error' % currency)
-        return (True, '')
+            return (False, GUI_ITEM_PURCHASE_CODE.getMoneyError(currency))
+        return (True, GUI_ITEM_PURCHASE_CODE.OK)
 
     def mayRestoreWithExchange(self, money, exchangeRate):
         """
@@ -899,7 +919,7 @@ class Vehicle(FittingItem, HasStrCD):
         mayRestore, reason = self.mayRestore(money)
         if mayRestore:
             return mayRestore
-        elif reason == 'credits_error':
+        elif reason == GUI_ITEM_PURCHASE_CODE.NOT_ENOUGH_CREDITS:
             money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate)
             return self.restorePrice <= money
         else:
@@ -970,7 +990,7 @@ class Vehicle(FittingItem, HasStrCD):
                 else:
                     lastSkillLevel = tmanDescr.lastSkillLevel
                 skills.remove(skillName)
-                unskilledTman = Tankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel), vehicle=self)
+                unskilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel), vehicle=self)
                 crewItems.append((slotIdx, unskilledTman))
             crewItems.append((slotIdx, tman))
 
@@ -1002,7 +1022,7 @@ class Vehicle(FittingItem, HasStrCD):
                     nationID, vehicleTypeID = nativeVehicle.descriptor.type.id
                 else:
                     nationID, vehicleTypeID = self.descriptor.type.id
-                tankman = Tankman(tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, defRoleLevel, skillsByIdxs.get(idx, [])), vehicle=self)
+                tankman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, defRoleLevel, skillsByIdxs.get(idx, [])), vehicle=self)
             else:
                 tankman = None
             crewItems.append((idx, tankman))
@@ -1011,11 +1031,10 @@ class Vehicle(FittingItem, HasStrCD):
 
     def getCustomizedDescriptor(self):
         if self.invID > 0:
-            from gui.LobbyContext import g_lobbyContext
             igrRoomType = self.igrCtrl.getRoomType()
             igrLayout = {self.invID: self.igrCustomizationsLayout}
             updatedVehCompactDescr = getCustomizedVehCompDescr(igrLayout, self.invID, igrRoomType, self.descriptor.makeCompactDescr())
-            serverSettings = g_lobbyContext.getServerSettings()
+            serverSettings = self.lobbyContext.getServerSettings()
             if serverSettings is not None and serverSettings.roaming.isInRoaming():
                 updatedVehCompactDescr = vehicles.stripCustomizationFromVehicleCompactDescr(updatedVehCompactDescr, True, True, False)[0]
             newDescriptor = vehicles.VehicleDescr(compactDescr=updatedVehCompactDescr)
@@ -1030,11 +1049,7 @@ class Vehicle(FittingItem, HasStrCD):
         Check the possibility of vehicle restore, right now or in future
         :return: <bool>
         """
-        from gui.LobbyContext import g_lobbyContext
-        if g_lobbyContext.getServerSettings().isVehicleRestoreEnabled() and not self.isUnrecoverable:
-            if self.restoreInfo is not None and not self.isPurchased:
-                return self.restoreInfo.isRestorePossible()
-        return False
+        return self.restoreInfo.isRestorePossible() if not self.isPurchased and not self.isUnrecoverable and self.lobbyContext.getServerSettings().isVehicleRestoreEnabled() and self.restoreInfo is not None else False
 
     def isRestoreAvailable(self):
         """
@@ -1064,6 +1079,13 @@ class Vehicle(FittingItem, HasStrCD):
         :return: <bool>
         """
         return self.isPurchased and self.restoreInfo.isInCooldown() if self.restoreInfo is not None else False
+
+    def __cmp__(self, other):
+        if self.isRestorePossible() and not other.isRestorePossible():
+            return -1
+        if not self.isRestorePossible() and other.isRestorePossible():
+            return 1
+        return cmp(other.hasLimitedRestore(), self.hasLimitedRestore()) or cmp(self.restoreInfo.getRestoreTimeLeft(), other.restoreInfo.getRestoreTimeLeft()) if self.isRestorePossible() and other.isRestorePossible() else super(Vehicle, self).__cmp__(other)
 
     def __eq__(self, other):
         return False if other is None else self.descriptor.type.id == other.descriptor.type.id
@@ -1232,21 +1254,15 @@ def getVehicleClassTag(tags):
     return result
 
 
-def getBattlesLeft(vehicle):
-    if vehicle.isInfiniteRotationGroup:
-        return i18n.makeString('#menu:infinitySymbol')
-    else:
-        return str(vehicle.rotationBattlesLeft)
-
-
 _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_BATTLE,
  Vehicle.VEHICLE_STATE.IN_PREBATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_INPREBATTLE,
  Vehicle.VEHICLE_STATE.DAMAGED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
  Vehicle.VEHICLE_STATE.DESTROYED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
  Vehicle.VEHICLE_STATE.EXPLODED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
  Vehicle.VEHICLE_STATE.CREW_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_CREWNOTFULL,
- Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTALISOVER,
+ Vehicle.VEHICLE_STATE.RENTAL_IS_OVER: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTALISOVER,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
+ Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY}
 
 def getVehicleStateIcon(vState):
@@ -1260,3 +1276,10 @@ def getVehicleStateIcon(vState):
     else:
         icon = ''
     return icon
+
+
+def getBattlesLeft(vehicle):
+    if vehicle.isInfiniteRotationGroup:
+        return i18n.makeString('#menu:infinitySymbol')
+    else:
+        return str(vehicle.rotationBattlesLeft)

@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class ResearchViewMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def request4Unlock(self, itemCD, parentID, unlockIdx, xpCost):
         self._printOverrideError('request4Unlock')
@@ -26,19 +20,34 @@ class ResearchViewMeta(View):
         self._printOverrideError('showSystemMessage')
 
     def as_setNodesStatesS(self, primary, data):
+        """
+        :param data: Represented by Array (AS)
+        """
         return self.flashObject.as_setNodesStates(primary, data) if self._isDAAPIInited() else None
 
     def as_setNext2UnlockS(self, data):
+        """
+        :param data: Represented by Array (AS)
+        """
         return self.flashObject.as_setNext2Unlock(data) if self._isDAAPIInited() else None
 
     def as_setVehicleTypeXPS(self, xps):
+        """
+        :param xps: Represented by Array (AS)
+        """
         return self.flashObject.as_setVehicleTypeXP(xps) if self._isDAAPIInited() else None
 
     def as_setInventoryItemsS(self, data):
+        """
+        :param data: Represented by Array (AS)
+        """
         return self.flashObject.as_setInventoryItems(data) if self._isDAAPIInited() else None
 
     def as_useXMLDumpingS(self):
         return self.flashObject.as_useXMLDumping() if self._isDAAPIInited() else None
 
     def as_setNodeVehCompareDataS(self, data):
+        """
+        :param data: Represented by Array (AS)
+        """
         return self.flashObject.as_setNodeVehCompareData(data) if self._isDAAPIInited() else None

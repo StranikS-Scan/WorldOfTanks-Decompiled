@@ -5,9 +5,10 @@ import base64
 from urllib import quote_plus
 import constants
 from adisp import async, process
-from ConnectionManager import connectionManager
 from helpers import getClientLanguage, dependency
+from helpers.http.url_formatters import addParamsToUrlQuery
 from skeletons.gui.clans import IClanController
+from skeletons.connection_mgr import IConnectionManager
 
 def getLanguageCode(args=None):
     """
@@ -19,12 +20,16 @@ def getLanguageCode(args=None):
     return code.replace('_', '-')
 
 
-def getAreaID(args=None):
+@dependency.replace_none_kwargs(connectionMgr=IConnectionManager)
+def getAreaID(args=None, connectionMgr=None):
     """
     Gets area ID. It used in china. Macros is $AREA_ID.
     @return: string containing area ID.
     """
-    areaID = connectionManager.areaID
+    if connectionMgr is not None:
+        areaID = connectionMgr.areaID
+    else:
+        areaID = None
     if areaID:
         result = str(areaID)
     else:
@@ -32,12 +37,16 @@ def getAreaID(args=None):
     return result
 
 
-def getEncodedLogin(args=None):
+@dependency.replace_none_kwargs(connectionMgr=IConnectionManager)
+def getEncodedLogin(args=None, connectionMgr=None):
     """
     Gets encoded name of login. Macros is $ENCODED_LOGIN.
     @return: string containing encoded name of login.
     """
-    login = connectionManager.loginName
+    if connectionMgr is not None:
+        login = connectionMgr.loginName
+    else:
+        login = None
     if login:
         result = login
     else:
@@ -45,12 +54,16 @@ def getEncodedLogin(args=None):
     return base64.b64encode(result)
 
 
-def getQuotedLogin(args=None):
+@dependency.replace_none_kwargs(connectionMgr=IConnectionManager)
+def getQuotedLogin(args=None, connectionMgr=None):
     """
     Gets quoted name of login. Macros is $QUOTED_LOGIN.
     @return: string containing quoted name of login.
     """
-    login = connectionManager.lastLoginName
+    if connectionMgr is not None:
+        login = connectionMgr.lastLoginName
+    else:
+        login = None
     if login:
         result = quote_plus(login)
     else:
@@ -58,12 +71,16 @@ def getQuotedLogin(args=None):
     return result
 
 
-def getDatabaseID(args=None):
+@dependency.replace_none_kwargs(connectionMgr=IConnectionManager)
+def getDatabaseID(args=None, connectionMgr=None):
     """
     Gets DB ID. It used in china. Macros is $DB_ID.
     @return: string containing DB ID.
     """
-    dbID = connectionManager.databaseID
+    if connectionMgr is not None:
+        dbID = connectionMgr.databaseID
+    else:
+        dbID = None
     if dbID:
         result = str(dbID)
     else:
@@ -71,12 +88,13 @@ def getDatabaseID(args=None):
     return result
 
 
-def getPeripheryID(args=None):
+@dependency.replace_none_kwargs(connectionMgr=IConnectionManager)
+def getPeripheryID(args=None, connectionMgr=None):
     """
     Gets periphery ID. Macros is $PERIPHERY_ID.
     @return: string containing periphery ID.
     """
-    return str(connectionManager.peripheryID)
+    return str(connectionMgr.peripheryID) if connectionMgr is not None else '0'
 
 
 def getUnitServerID(args=None):
@@ -90,22 +108,6 @@ def getUnitServerID(args=None):
         unitID = ''
 
     return unitID
-
-
-def getTargetURL(args=None):
-    """
-    Gets target URL, that sets manual. Macros is $TARGET_URL.
-    trying to get target url from given args
-    or take it from stored attribute
-    @return: string containing quoted target URL.
-    """
-    if args:
-        result = args
-    else:
-        result = ''
-    if result:
-        result = quote_plus(result)
-    return result
 
 
 def getAuthRealm(args=None):
@@ -134,7 +136,7 @@ def getSyncMacroses():
 
 
 @async
-def getWgniToken(proxy, args, callback):
+def getWgniToken(proxy, args, params, callback):
     """
     Gets WGNI login token. Macros is $WGNI_TOKEN.
     @return: string containing WGNI token
@@ -157,24 +159,36 @@ def getWgniToken(proxy, args, callback):
 
 @async
 @process
-def getTargetURL(proxy, args, callback):
+def getTargetURL(proxy, args, params, callback):
     """
     Gets target URL, that sets manual. Macros is $TARGET_URL.
     trying to get target url from given args
     or take it from stored attribute
     @return: string containing quoted target URL.
     """
-    yield lambda callback: callback(True)
-    if args:
-        result = args
-    else:
-        result = ''
+    result = args or ''
     if result:
-        url = yield proxy.parse(result)
+        url = yield proxy.parse(result, params)
         result = quote_plus(url)
+    callback(result)
+
+
+@async
+@process
+def getUrlParams(proxy, args, params, callback):
+    """
+    Gets url GET parameters from external params dict.
+    @return: url-encoded params.
+    """
+    result = args or ''
+    params = params or {}
+    if result:
+        url = yield proxy.parse(result, params)
+        result = addParamsToUrlQuery(url, params)
     callback(result)
 
 
 def getAsyncMacroses():
     return {'WGNI_TOKEN': getWgniToken,
-     'TARGET_URL': getTargetURL}
+     'TARGET_URL': getTargetURL,
+     'PARAMS': getUrlParams}

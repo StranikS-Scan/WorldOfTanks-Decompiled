@@ -15,13 +15,14 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared import events, g_itemsCache, event_dispatcher as shared_events
+from gui.shared import events, event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons, moneyWithIcon
 from gui.shared.gui_items import Tankman, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRestore
+from gui.shared.money import ZERO_MONEY, Currency
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.tankman import getRecoveryStatusText, formatRecoveryLeftValue
@@ -32,11 +33,13 @@ from gui.sounds.ambients import LobbySubViewEnv
 from helpers import i18n, time_utils, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.shared import IItemsCache
 
-def _packTankmanData(tankman):
-    tankmanVehicle = g_itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _packTankmanData(tankman, itemsCache=None):
+    tankmanVehicle = itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
     if tankman.isInTank:
-        vehicle = g_itemsCache.items.getVehicle(tankman.vehicleInvID)
+        vehicle = itemsCache.items.getVehicle(tankman.vehicleInvID)
         if vehicle is None:
             LOG_ERROR('Cannot find vehicle for tankman: ', tankman, tankman.descriptor.role, tankman.vehicle.name, tankman.firstname, tankman.lastname)
             return
@@ -95,11 +98,12 @@ def _getTankmanLockMessage(invVehicle):
         return (False, '')
 
 
-def _packBuyBerthsSlot():
-    berths = g_itemsCache.items.stats.tankmenBerthsCount
-    berthPrice, berthCount = g_itemsCache.items.shop.getTankmanBerthPrice(berths)
-    defaultBerthPrice, _ = g_itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
-    gold = g_itemsCache.items.stats.money.gold
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _packBuyBerthsSlot(itemsCache=None):
+    berths = itemsCache.items.stats.tankmenBerthsCount
+    berthPrice, berthCount = itemsCache.items.shop.getTankmanBerthPrice(berths)
+    defaultBerthPrice, _ = itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
+    gold = itemsCache.items.stats.money.gold
     action = None
     if berthPrice != defaultBerthPrice:
         action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'berthsPrices', True, berthPrice, defaultBerthPrice)
@@ -114,11 +118,18 @@ def _packBuyBerthsSlot():
 def _makeRecoveryPeriodText(restoreInfo):
     price, timeLeft = restoreInfo
     timeStr = formatRecoveryLeftValue(timeLeft)
-    return text_styles.main(timeStr) if price.credits == 0 else text_styles.credits(timeStr)
+    if price == ZERO_MONEY:
+        textStyle = text_styles.main
+    elif price.getCurrency() == Currency.GOLD:
+        textStyle = text_styles.gold
+    else:
+        textStyle = text_styles.credits
+    return textStyle(timeStr)
 
 
 class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     __sound_env__ = LobbySubViewEnv
+    itemsCache = dependency.descriptor(IItemsCache)
     restore = dependency.descriptor(IRestoreController)
 
     def __init__(self, ctx=None):
@@ -127,7 +138,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     def openPersonalCase(self, tankmanInvID, tabNumber):
         tmanInvID = int(tankmanInvID)
-        tankman = g_itemsCache.items.getTankman(tmanInvID)
+        tankman = self.itemsCache.items.getTankman(tmanInvID)
         if tankman and not tankman.isDismissed:
             shared_events.showPersonalCase(tmanInvID, int(tabNumber), EVENT_BUS_SCOPE.LOBBY)
 
@@ -143,7 +154,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     @decorators.process('buyBerths')
     def buyBerths(self):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         berthPrice, berthsCount = items.shop.getTankmanBerthPrice(items.stats.tankmenBerthsCount)
         result = yield TankmanBerthsBuyer(berthPrice, berthsCount).request()
         if len(result.userMsg):
@@ -163,7 +174,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
 
     @decorators.process('updating')
     def actTankman(self, invID):
-        tankman = g_itemsCache.items.getTankman(int(invID))
+        tankman = self.itemsCache.items.getTankman(int(invID))
         if tankman is None:
             LOG_ERROR('Attempt to dismiss tankman by invalid invID:', invID)
             return
@@ -171,7 +182,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
             if tankman.isDismissed:
                 result = yield TankmanRestore(tankman).request()
             elif tankman.isInTank:
-                tmanVehile = g_itemsCache.items.getVehicle(tankman.vehicleInvID)
+                tmanVehile = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
                 if tmanVehile is None:
                     LOG_ERROR("Target tankman's vehicle is not found in inventory", tankman, tankman.vehicleInvID)
                     return
@@ -203,7 +214,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         super(Barracks, self)._populate()
         self.app.component.wg_inputKeyMode = 1
         self.startGlobalListening()
-        g_itemsCache.onSyncCompleted += self.__updateTankmen
+        self.itemsCache.onSyncCompleted += self.__updateTankmen
         g_clientUpdateManager.addCallbacks({'inventory.8': self.__updateTankmen,
          'stats.berths': self.__updateTankmen,
          'recycleBin.tankmen': self.__updateTankmen})
@@ -213,13 +224,13 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     def _dispose(self):
         self.restore.onTankmenBufferUpdated -= self.__updateDismissedTankmen
         g_clientUpdateManager.removeObjectCallbacks(self)
-        g_itemsCache.onSyncCompleted -= self.__updateTankmen
+        self.itemsCache.onSyncCompleted -= self.__updateTankmen
         self.stopGlobalListening()
         super(LobbySubView, self)._dispose()
 
     def __updateTanksList(self):
         data = list()
-        modulesAll = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        modulesAll = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
         modulesAll.sort()
         for module in modulesAll:
             if self.filter['nation'] != -1 and self.filter['nation'] != module.descriptor.type.id[0] or self.filter['tankType'] != 'None' and self.filter['tankType'] != -1 and self.filter['tankType'] != module.type:
@@ -238,10 +249,10 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
             self.__showActiveTankmen(self.__buildCriteria())
 
     def __showActiveTankmen(self, criteria):
-        tankmen = g_itemsCache.items.getTankmen().values()
+        tankmen = self.itemsCache.items.getTankmen().values()
         tankmenInBarracks = 0
         tankmenList = [_packBuyBerthsSlot()]
-        for tankman in sorted(tankmen, TankmenComparator(g_itemsCache.items.getVehicle)):
+        for tankman in sorted(tankmen, TankmenComparator(self.itemsCache.items.getVehicle)):
             if not tankman.isInTank:
                 tankmenInBarracks += 1
             if not criteria(tankman):
@@ -263,7 +274,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
                 tankmenList.append(tankmanData)
 
         tankmenInSlots = len(tankmenList) - 1
-        slots = g_itemsCache.items.stats.tankmenBerthsCount
+        slots = self.itemsCache.items.stats.tankmenBerthsCount
         if tankmenInBarracks < slots:
             tankmenList.insert(1, {'empty': True,
              'freePlaces': slots - tankmenInBarracks})
@@ -316,11 +327,11 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         hasNoInfoData = len(tankmenList) == 0
         if hasNoInfoData:
             if len(tankmen) == 0:
-                tankmenRestoreConfig = g_itemsCache.items.shop.tankmenRestoreConfig
+                tankmenRestoreConfig = self.itemsCache.items.shop.tankmenRestoreConfig
                 freeDays = tankmenRestoreConfig.freeDuration / time_utils.ONE_DAY
-                creditsDays = tankmenRestoreConfig.creditsDuration / time_utils.ONE_DAY - freeDays
+                billableDays = tankmenRestoreConfig.billableDuration / time_utils.ONE_DAY - freeDays
                 noInfoData = {'title': text_styles.highTitle(MENU.BARRACKS_NORECOVERYTANKMEN_TITLE),
-                 'message': text_styles.main(_ms(MENU.BARRACKS_NORECOVERYTANKMEN_MESSAGE, price=moneyWithIcon(tankmenRestoreConfig.cost), totalDays=freeDays + creditsDays, freeDays=freeDays, paidDays=creditsDays))}
+                 'message': text_styles.main(_ms(MENU.BARRACKS_NORECOVERYTANKMEN_MESSAGE, price=moneyWithIcon(tankmenRestoreConfig.cost), totalDays=freeDays + billableDays, freeDays=freeDays, paidDays=billableDays))}
             else:
                 noInfoData = {'message': text_styles.main(MENU.BARRACKS_NOFILTEREDRECOVERYTANKMEN_MESSAGE)}
         placesCountTooltip = makeTooltip(TOOLTIPS.BARRACKS_PLACESCOUNT_DISMISS_HEADER, _ms(TOOLTIPS.BARRACKS_PLACESCOUNT_DISMISS_BODY, placeCount=placeCount))
@@ -345,7 +356,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         elif self.filter['location'] == BARRACKS_CONSTANTS.LOCATION_FILTER_BARRACKS:
             criteria |= ~REQ_CRITERIA.TANKMAN.IN_TANK
         if self.filter['nationID'] is not None:
-            vehicle = g_itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, int(self.filter['nationID']), int(self.filter['location']))
+            vehicle = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, int(self.filter['nationID']), int(self.filter['location']))
             criteria |= REQ_CRITERIA.TANKMAN.NATIVE_TANKS([vehicle.intCD])
         return criteria
 

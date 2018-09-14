@@ -2,12 +2,15 @@
 # Embedded file name: scripts/client/gui/prb_control/items/prb_items.py
 from collections import namedtuple
 from account_helpers import getAccountDatabaseID, getPlayerID
+from helpers import dependency
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE
 from gui.prb_control.settings import PREBATTLE_PLAYERS_COMPARATORS
 from gui.shared.gui_items.Vehicle import Vehicle
+from skeletons.gui.lobby_context import ILobbyContext
 
 class PlayerPrbInfo(object):
     __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode')
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None):
         self.accID = accID
@@ -38,8 +41,7 @@ class PlayerPrbInfo(object):
             pDBID = self.dbID
         else:
             pDBID = None
-        from gui.LobbyContext import g_lobbyContext
-        return g_lobbyContext.getPlayerFullName(self.name, clanAbbrev=clanAbbrev, pDBID=pDBID)
+        return self.lobbyContext.getPlayerFullName(self.name, clanAbbrev=clanAbbrev, pDBID=pDBID)
 
     def isVehicleSpecified(self):
         return self.isReady() or self.inBattle()

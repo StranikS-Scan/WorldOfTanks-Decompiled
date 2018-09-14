@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/tooltips.py
-from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, potapovquests, tutorial, fortifications, clans, boosters, veh_cmp, quests
+from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_day_tooltip import RankedCalendarDayTooltip
+from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_selector_tooltip import RankedSelectorTooltip
+from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_step_tooltip import RankedStepTooltip
+from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, potapovquests, tutorial, fortifications, clans, boosters, veh_cmp, quests, ranked, battle_booster
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import BonusTooltip as CustomizationBonusTooltip
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip, QuestElementTooltip as CustomizationQuestElementTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -68,6 +71,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.HANGAR_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                     'method': module.ModuleBlockTooltipData(contexts.HangarContext()).buildToolTip,
                                     'complex': None},
+ TOOLTIPS_CONSTANTS.BATTLE_BOOSTER: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                     'method': battle_booster.BattleBoosterBlockTooltipData(contexts.HangarContext()).buildToolTip,
+                                     'complex': None},
  TOOLTIPS_CONSTANTS.COMPARE_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                      'method': module.ModuleBlockTooltipData(contexts.VehCmpConfigurationContext()).buildToolTip,
                                      'complex': None},
@@ -314,12 +320,27 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.BOOSTERS_QUESTS: {'tooltip': TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI,
                                       'method': boosters.BoosterTooltipData(contexts.QuestsBoosterContext()).buildToolTip,
                                       'complex': None},
- TOOLTIPS_CONSTANTS.QUESTS_PREVIEW: {'tooltip': TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI,
+ TOOLTIPS_CONSTANTS.QUESTS_PREVIEW: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                      'method': quests.QuestsPreviewTooltipData(contexts.QuestsBoosterContext()).buildToolTip,
                                      'complex': None},
- TOOLTIPS_CONSTANTS.PERSONAL_QUESTS_PREVIEW: {'tooltip': TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO_UI,
+ TOOLTIPS_CONSTANTS.PERSONAL_QUESTS_PREVIEW: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                               'method': quests.PersonalQuestsPreviewTooltipData(contexts.QuestsBoosterContext()).buildToolTip,
                                               'complex': None},
+ TOOLTIPS_CONSTANTS.SHEDULE_QUEST: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                    'method': quests.ScheduleQuestTooltipData(contexts.QuestContext()).buildToolTip,
+                                    'complex': None},
+ TOOLTIPS_CONSTANTS.MISSION_VEHICLE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                      'method': quests.MissionVehiclesConditionTooltipData(contexts.QuestContext()).buildToolTip,
+                                      'complex': None},
+ TOOLTIPS_CONSTANTS.MISSION_VEHICLE_TYPE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                           'method': quests.MissionVehiclesTypeTooltipData(contexts.QuestContext()).buildToolTip,
+                                           'complex': None},
+ TOOLTIPS_CONSTANTS.ADDITIONAL_AWARDS: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                        'method': quests.AdditionalAwardTooltipData(contexts.QuestContext()).buildToolTip,
+                                        'complex': None},
+ TOOLTIPS_CONSTANTS.UNAVAILABLE_QUEST: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                        'method': quests.UnavailableQuestTooltipData(contexts.QuestContext()).buildToolTip,
+                                        'complex': None},
  TOOLTIPS_CONSTANTS.VEHICLE_FILTER: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                      'method': VehicleFilterTooltip(contexts.TechCustomizationContext()).buildToolTip,
                                      'complex': None},
@@ -341,9 +362,18 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.SELECTED_VEHICLE_TRADEOFF: {'tooltip': TOOLTIPS_CONSTANTS.SELECTED_VEHICLE_UI,
                                                 'method': cybersport.CybersportSelectedVehicleToolTipData(contexts.CyberSportUnitContext()).buildToolTip,
                                                 'complex': None},
+ TOOLTIPS_CONSTANTS.RANKED_BATTLES_RANK: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                          'method': ranked.RankedTooltipData(contexts.RankedRankContext()).buildToolTip,
+                                          'complex': None},
+ TOOLTIPS_CONSTANTS.MISSIONS_TOKEN: {'tooltip': TOOLTIPS_CONSTANTS.MISSIONS_TOKEN_UI,
+                                     'method': common.MissionsToken(contexts.QuestContext()).buildToolTip,
+                                     'complex': None},
  TOOLTIPS_CONSTANTS.RESERVE_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.REF_SYS_RESERVES_UI,
                                      'method': common.ReserveTooltipData(contexts.ReserveContext()).buildToolTip,
                                      'complex': None},
+ TOOLTIPS_CONSTANTS.RANKED_STEP: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                  'method': RankedStepTooltip(contexts.ToolTipContext(None)).buildToolTip,
+                                  'complex': None},
  'default': {'tooltip': TOOLTIPS_CONSTANTS.COMPLEX_UI,
              'method': None,
              'complex': None},
@@ -355,4 +385,13 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
                                  'complex': None},
  TOOLTIPS_CONSTANTS.CREDITS_STATS: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                     'method': DYNAMIC_TOOLTIPS[TOOLTIPS_CONSTANTS.CREDITS_STATS].buildToolTip,
-                                    'complex': None}}
+                                    'complex': None},
+ TOOLTIPS_CONSTANTS.CRYSTAL_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                   'method': common.HeaderCrystalInfo(contexts.ToolTipContext(None)).buildToolTip,
+                                   'complex': None},
+ TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                               'method': RankedCalendarDayTooltip(contexts.ToolTipContext(None)).buildToolTip,
+                                               'complex': None},
+ TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                           'method': RankedSelectorTooltip(contexts.ToolTipContext(None)).buildToolTip,
+                                           'complex': None}}

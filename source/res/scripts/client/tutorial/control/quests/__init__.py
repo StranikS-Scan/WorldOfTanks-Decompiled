@@ -24,7 +24,6 @@ class QuestsControlsFactory(ControlsFactory):
          EFFECT_TYPE.REQUEST_BONUS: core_func.FunctionalRequestBonusEffect,
          EFFECT_TYPE.NEXT_CHAPTER: core_func.FunctionalNextChapterEffect,
          EFFECT_TYPE.CLEAR_SCENE: core_func.FunctionalClearScene,
-         EFFECT_TYPE.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
          EFFECT_TYPE.GO_SCENE: core_func.GoToSceneEffect,
          EFFECT_TYPE.SHOW_HINT: chains_func.FunctionalShowHint,
          EFFECT_TYPE.CLOSE_HINT: chains_func.FunctionalCloseHint,

@@ -9,12 +9,13 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FIL
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NATION_TREE_REL_FILE_PATH
 from gui.Scaleform.daapi.view.lobby.techtree.settings import makeDefUnlockProps
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers import dependency
 from items import _xml, vehicles, getTypeOfCompactDescr
 import nations
 import ResMgr
+from skeletons.gui.shared import IItemsCache
 
 class _ConfigError(Exception):
 
@@ -40,6 +41,7 @@ _VEHICLE = GUI_ITEM_TYPE.VEHICLE
 _VEHICLE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[_VEHICLE]
 
 class _TechTreeDataProvider(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(_TechTreeDataProvider, self).__init__()
@@ -333,7 +335,7 @@ class _TechTreeDataProvider(object):
                     childPos = childInfo['position']
                     pinPos = pin['inPin']
                     pin['inPin'] = (pinPos[0] + childPos[0], pinPos[1] + childPos[1])
-                    pin['viaPins'] = map(lambda item: (item[0] + nodePos[0], item[1] + nodePos[1]), pin['viaPins'])
+                    pin['viaPins'] = map(lambda item, offset=nodePos: (item[0] + offset[0], item[1] + offset[1]), pin['viaPins'])
 
     def __makeGridCoordsWithRoot(self, grid, nationIndex, rows, columns):
         start = grid['root']['start']
@@ -510,23 +512,23 @@ class _TechTreeDataProvider(object):
 
     def getAllVehiclePossibleXP(self, nodeCD, unlockStats):
         criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | ~REQ_CRITERIA.IN_CD_LIST([nodeCD])
-        eliteVehicles = g_itemsCache.items.getVehicles(criteria)
+        eliteVehicles = self.itemsCache.items.getVehicles(criteria)
         dirtyResult = sum(map(operator.attrgetter('xp'), eliteVehicles.values()))
-        exchangeRate = g_itemsCache.items.shop.freeXPConversion[0]
-        result = min(int(dirtyResult / exchangeRate) * exchangeRate, g_itemsCache.items.stats.gold * exchangeRate)
+        exchangeRate = self.itemsCache.items.shop.freeXPConversion[0]
+        result = min(int(dirtyResult / exchangeRate) * exchangeRate, self.itemsCache.items.stats.gold * exchangeRate)
         result += unlockStats.getVehTotalXP(nodeCD)
         return result
 
     def isVehicleAvailableToUnlock(self, nodeCD):
-        unlocks = g_itemsCache.items.stats.unlocks
-        xps = g_itemsCache.items.stats.vehiclesXPs
-        freeXP = g_itemsCache.items.stats.actualFreeXP
+        unlocks = self.itemsCache.items.stats.unlocks
+        xps = self.itemsCache.items.stats.vehiclesXPs
+        freeXP = self.itemsCache.items.stats.actualFreeXP
         allPossibleXp = self.getAllVehiclePossibleXP(nodeCD, UnlockStats(unlocks, xps, freeXP))
         isAvailable, props = self.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=xps, freeXP=freeXP)
         return (isAvailable and allPossibleXp >= props.xpCost, props.xpCost, allPossibleXp)
 
     def getUnlockProps(self, vehicleCD):
-        _, unlockProps = self.isNext2Unlock(vehicleCD, unlocked=g_itemsCache.items.stats.unlocks, xps=g_itemsCache.items.stats.vehiclesXPs, freeXP=g_itemsCache.items.stats.actualFreeXP)
+        _, unlockProps = self.isNext2Unlock(vehicleCD, unlocked=self.itemsCache.items.stats.unlocks, xps=self.itemsCache.items.stats.vehiclesXPs, freeXP=self.itemsCache.items.stats.actualFreeXP)
         return unlockProps
 
 

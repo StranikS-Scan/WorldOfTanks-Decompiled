@@ -1,24 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_log_panel.py
-import BigWorld
-from gui.LobbyContext import g_lobbyContext
-from helpers import dependency
 from collections import defaultdict
-from shared_utils import BitmaskHelper
-from constants import SHELL_TYPES
+import BigWorld
+from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from account_helpers.settings_core.options import DamageLogDetailsSetting as _VIEW_MODE, DamageLogEventPositionsSetting as _EVENT_POSITIONS, DamageLogEventTypesSetting as _DISPLAYED_EVENT_TYPES
 from account_helpers.settings_core.settings_constants import DAMAGE_LOG, GRAPHICS
-from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from constants import SHELL_TYPES
 from gui.Scaleform.daapi.view.meta.BattleDamageLogPanelMeta import BattleDamageLogPanelMeta
-from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
-from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from gui.Scaleform.genConsts.BATTLEDAMAGELOG_IMAGES import BATTLEDAMAGELOG_IMAGES as _IMAGES
+from gui.Scaleform.genConsts.DAMAGE_LOG_SHELL_BG_TYPES import DAMAGE_LOG_SHELL_BG_TYPES
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
+from gui.shared import events, EVENT_BUS_SCOPE
+from helpers import dependency
+from helpers import i18n
+from shared_utils import BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from helpers import i18n
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from gui.Scaleform.genConsts.DAMAGE_LOG_SHELL_BG_TYPES import DAMAGE_LOG_SHELL_BG_TYPES
+from skeletons.gui.lobby_context import ILobbyContext
 _POSITIVE_EVENTS_MASK = _ETYPE.DAMAGE | _ETYPE.ASSIST_DAMAGE | _ETYPE.STUN
 _NEGATIVE_EVENTS_MASK = _ETYPE.BLOCKED_DAMAGE | _ETYPE.RECEIVED_DAMAGE | _ETYPE.RECEIVED_CRITICAL_HITS
 _ALL_EVENTS_MASK = _POSITIVE_EVENTS_MASK | _NEGATIVE_EVENTS_MASK
@@ -56,6 +55,29 @@ _SHELL_TYPES_TO_STR = {SHELL_TYPES.ARMOR_PIERCING: INGAME_GUI.DAMAGELOG_SHELLTYP
 
 def _formatTotalValue(value):
     return BigWorld.wg_getIntegralFormat(value)
+
+
+class _VOModel(dict):
+    """
+    Base VO model class. Use _VOModelProperty to define properties in derived classes.
+    """
+    pass
+
+
+class _VOModelProperty(object):
+    """
+    VO Model property class.
+    """
+    __slots__ = ('name',)
+
+    def __init__(self, name):
+        self.name = name
+
+    def __get__(self, model, objtype):
+        return model[self.name]
+
+    def __set__(self, model, val):
+        model[self.name] = val
 
 
 class _IVOBuilder(object):
@@ -96,21 +118,68 @@ class _LogRecordVOBuilder(_IVOBuilder):
         return vo
 
 
+class _VehicleVOModel(_VOModel):
+    vehicleTypeImg = _VOModelProperty(name='vehicleTypeImg')
+    vehicleName = _VOModelProperty(name='vehicleName')
+
+    def __init__(self, vehicleTypeImg='', vehicleName=''):
+        super(_VehicleVOModel, self).__init__()
+        self.vehicleTypeImg = vehicleTypeImg
+        self.vehicleName = vehicleName
+
+
 class _VehicleVOBuilder(_IVOBuilder):
     """
     Builder of vehicle specific VO.
     """
 
     def buildVO(self, info, arenaDP):
+        vo = _VehicleVOModel()
         if arenaDP is not None:
-            vTypeInfoVO = arenaDP.getVehicleInfo(info.getArenaVehicleID()).vehicleType
-            vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(vTypeInfoVO.classTag, '')
-            vehicleName = vTypeInfoVO.shortNameWithPrefix
-        else:
-            vehicleTypeImg = ''
-            vehicleName = ''
-        return {'vehicleTypeImg': vehicleTypeImg,
-         'vehicleName': vehicleName}
+            self._populateVO(vo, info, arenaDP)
+        return vo
+
+    def _populateVO(self, vehicleVO, info, arenaDP):
+        """
+        Populates the given VO with the proper data.
+        
+        :param vehicleVO: vo, instance of _VehicleVOModel class
+        :param info: data to be used for VO construction
+        :param arenaDP: battle-specific data provider, see ArenaDataProvider class.
+        """
+        vTypeInfoVO = arenaDP.getVehicleInfo(info.getArenaVehicleID()).vehicleType
+        vehicleVO.vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS.get(vTypeInfoVO.classTag, '')
+        vehicleVO.vehicleName = vTypeInfoVO.shortNameWithPrefix
+
+
+class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
+    """
+    Builder of vehicle specific VO for events associated with the received damage. For own ram
+    do not show vehicle name.
+    """
+
+    def _populateVO(self, vehicleVO, info, arenaDP):
+        """
+        Populates the given VO with the proper data. For own ram do not show vehicle name.
+        
+        :param vehicleVO: vo, instance of _VehicleVOModel class
+        :param info: data to be used for VO construction
+        :param arenaDP: battle-specific data provider, see ArenaDataProvider class.
+        """
+        super(_ReceivedHitVehicleVOBuilder, self)._populateVO(vehicleVO, info, arenaDP)
+        if info.getArenaVehicleID() == arenaDP.getPlayerVehicleID() and info.isRam():
+            vehicleVO.vehicleName = ''
+            vehicleVO.vehicleTypeImg = ''
+
+
+class _ShellVOModel(_VOModel):
+    shellTypeStr = _VOModelProperty(name='shellTypeStr')
+    shellTypeBG = _VOModelProperty(name='shellTypeBG')
+
+    def __init__(self, shellTypeStr='', shellTypeBG=''):
+        super(_ShellVOModel, self).__init__()
+        self.shellTypeStr = shellTypeStr
+        self.shellTypeBG = shellTypeBG
 
 
 class _ShellVOBuilder(_IVOBuilder):
@@ -119,8 +188,7 @@ class _ShellVOBuilder(_IVOBuilder):
     """
 
     def buildVO(self, info, arenaDP):
-        return {'shellTypeStr': self._getShellTypeStr(info),
-         'shellTypeBG': self._getShellTypeBg(info)}
+        return _ShellVOModel(self._getShellTypeStr(info), self._getShellTypeBg(info))
 
     def _getShellTypeStr(self, info):
         shType = info.getShellType()
@@ -171,13 +239,21 @@ class _CritsShellVOBuilder(_ShellVOBuilder):
         return shellVOBuilder.buildVO(info, arenaDP)
 
 
+class _ValueVOModel(_VOModel):
+    value = _VOModelProperty(name='value')
+
+    def __init__(self, value=0):
+        super(_ValueVOModel, self).__init__()
+        self.value = value
+
+
 class _ValueVOBuilder(_IVOBuilder):
     """
     Base builder of value specific VO.
     """
 
     def buildVO(self, info, arenaDP):
-        return {'value': self._getValue(info)}
+        return _ValueVOModel(self._getValue(info))
 
     def _getValue(self, info):
         pass
@@ -201,6 +277,14 @@ class _DamageValueVOBuilder(_ValueVOBuilder):
         return BigWorld.wg_getIntegralFormat(info.getDamage())
 
 
+class _ActionImgVOModel(_VOModel):
+    actionTypeImg = _VOModelProperty(name='actionTypeImg')
+
+    def __init__(self, image=''):
+        super(_ActionImgVOModel, self).__init__()
+        self.actionTypeImg = image
+
+
 class _ActionImgVOBuilder(_IVOBuilder):
     """
     Builder of action (event) description VO.
@@ -211,7 +295,7 @@ class _ActionImgVOBuilder(_IVOBuilder):
         self._image = image
 
     def buildVO(self, info, arenaDP):
-        return {'actionTypeImg': self._getImage(info)}
+        return _ActionImgVOModel(self._getImage(info))
 
     def _getImage(self, info):
         return self._image
@@ -255,10 +339,10 @@ _DEFAULT_VEHICLE_VO_BUILDER = _VehicleVOBuilder()
 _EMPTY_SHELL_VO_BUILDER = _EmptyShellVOBuilder()
 _DAMAGE_VALUE_VO_BUILDER = _DamageValueVOBuilder()
 _ETYPE_TO_RECORD_VO_BUILDER = {_ETYPE.DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_16X16, fireIcon=_IMAGES.DAMAGELOG_FIRE_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_16X16, wcIcon=_IMAGES.DAMAGELOG_ICON_WORLD_COLLISION)),
- _ETYPE.RECEIVED_DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _DamageShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, fireIcon=_IMAGES.DAMAGELOG_BURN_ENEMY_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_ENEMY_16X16, wcIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16)),
+ _ETYPE.RECEIVED_DAMAGE: _LogRecordVOBuilder(_ReceivedHitVehicleVOBuilder(), _DamageShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, fireIcon=_IMAGES.DAMAGELOG_BURN_ENEMY_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_ENEMY_16X16, wcIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16)),
  _ETYPE.BLOCKED_DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _ShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_REFLECT_16X16)),
  _ETYPE.ASSIST_DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _AssistActionImgVOBuilder()),
- _ETYPE.RECEIVED_CRITICAL_HITS: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _CritsShellVOBuilder(), _CriticalHitValueVOBuilder(), _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_CRITICAL_ENEMY_16X16)),
+ _ETYPE.RECEIVED_CRITICAL_HITS: _LogRecordVOBuilder(_ReceivedHitVehicleVOBuilder(), _CritsShellVOBuilder(), _CriticalHitValueVOBuilder(), _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_CRITICAL_ENEMY_16X16)),
  _ETYPE.STUN: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_STUN_16X16))}
 
 class _LogViewComponent(object):
@@ -356,15 +440,15 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
     """
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(DamageLogPanel, self).__init__()
         self.__efficiencyCtrl = None
-        self.__arenaDP = self.sessionProvider.getCtx().getArenaDP()
+        self.__arenaDP = self.sessionProvider.getArenaDP()
         self.__vehStateCtrl = self.sessionProvider.shared.vehicleState
         self.__isVisible = False
         self.__logViewMode = _VIEW_MODE.SHOW_ALWAYS
-        self.__isSPG = None
         self.__totalDamageContentMask = 0
         self.__totalValues = defaultdict(int)
         self._totalEvents = None
@@ -443,11 +527,9 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         Updates the content of the total panel based on the user preferences.
         """
         contentMask = 0
+        isDamageSettingEnabled = self.__isDamageSettingEnabled
         for settingName, bit in _TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK.iteritems():
-            if settingName == DAMAGE_LOG.ASSIST_STUN:
-                if self._canShowStunAssist():
-                    contentMask |= bit
-            if self.settingsCore.getSetting(settingName):
+            if isDamageSettingEnabled(settingName):
                 contentMask |= bit
 
         if contentMask != self.__totalDamageContentMask:
@@ -455,16 +537,6 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
             getter = self.__efficiencyCtrl.getTotalEfficiency
             args = [ self._setTotalValue(e, getter(e))[1] for e, _ in self._totalEvents ]
             self.as_summaryStatsS(*args)
-
-    def _canShowStunAssist(self):
-        if self.__isSPG is None:
-            if self.__arenaDP is None:
-                return False
-            vehicleType = self.__arenaDP.getVehicleInfo(None).vehicleType
-            if vehicleType is None or vehicleType.classTag is None:
-                return False
-            self.__isSPG = vehicleType.classTag == VEHICLE_CLASS_NAME.SPG
-        return self.__isSPG and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
 
     def _onTotalEfficiencyUpdated(self, diff):
         """
@@ -539,6 +611,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         :return:
         """
         self._invalidatePanelVisibility()
+        self._invalidateTotalDamages()
 
     def _handleShowExtendedInfo(self, event):
         """
@@ -606,3 +679,13 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def _setSettings(self, isVisible, isColorBlind):
         self.as_setSettingsDamageLogComponentS(isVisible, isColorBlind)
+
+    def __isDamageSettingEnabled(self, settingName):
+        if settingName != DAMAGE_LOG.ASSIST_STUN:
+            return self.settingsCore.getSetting(settingName)
+        elif self.__arenaDP is None:
+            return False
+        else:
+            isSPG = self.__arenaDP.getVehicleInfo(self.__vehStateCtrl.getControllingVehicleID()).isSPG()
+            return isSPG and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+            return

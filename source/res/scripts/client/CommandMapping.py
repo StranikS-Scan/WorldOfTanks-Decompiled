@@ -5,7 +5,7 @@ import ResMgr
 import Keys
 import Event
 import Settings
-from debug_utils import *
+from debug_utils import LOG_DEBUG
 g_instance = None
 CMD_MOVE_FORWARD = 1
 CMD_MOVE_FORWARD_SPEC = 2

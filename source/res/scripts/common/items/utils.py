@@ -3,7 +3,7 @@
 import copy
 from operator import sub
 from constants import IS_CLIENT, VEHICLE_TTC_ASPECTS
-from items import tankmen
+from items import tankmen, EQUIPMENT_TYPES
 from items.qualifiers import QUALIFIER_TYPE
 from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
 from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS, CAMOUFLAGE_KIND_INDICES
@@ -178,7 +178,7 @@ if IS_CLIENT:
         extras = {}
         extraAspects = {VEHICLE_TTC_ASPECTS.WHEN_STILL: ('invisibility',)}
         updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT)
-        for aspect in extraAspects.keys():
+        for aspect in extraAspects.iterkeys():
             currFactors = copy.deepcopy(factors)
             updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, currFactors, aspect)
             for coefficient in extraAspects[aspect]:
@@ -214,8 +214,8 @@ if IS_CLIENT:
     def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, aspect):
         factors['crewLevelIncrease'] = _sumCrewLevelIncrease(eqs)
         for eq in eqs:
-            if eq is not None:
-                eq.updateVehicleAttrFactors(factors)
+            if eq is not None and eq.equipmentType == EQUIPMENT_TYPES.regular:
+                eq.updateVehicleAttrFactors(vehicleDescr, factors, aspect)
 
         for device in vehicleDescr.optionalDevices:
             if device is not None:

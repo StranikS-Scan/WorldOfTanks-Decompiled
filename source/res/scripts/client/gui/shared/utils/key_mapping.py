@@ -5,7 +5,7 @@ import CommandMapping
 import Keys
 from helpers.i18n import makeString
 from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
-BW_TO_SCALEFORM = {Keys.KEY_NONE: 666,
+BW_TO_SCALEFORM = {Keys.KEY_NONE: 777,
  Keys.KEY_MOUSE0: 0,
  Keys.KEY_MOUSE1: 1,
  Keys.KEY_MOUSE2: 2,

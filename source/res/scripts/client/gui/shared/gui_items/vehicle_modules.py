@@ -7,7 +7,7 @@ from gui.shared.items_parameters.params_cache import g_paramsCache
 import nations
 from helpers import i18n
 from items import vehicles as veh_core
-from gui.shared.gui_items import FittingItem, _ICONS_MASK
+from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
 from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP
 from gui.shared.money import Currency
 MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
@@ -272,7 +272,7 @@ class Shell(FittingItem):
 
     @property
     def icon(self):
-        return _ICONS_MASK[:-4] % {'type': self.itemTypeName,
+        return ICONS_MASK[:-4] % {'type': self.itemTypeName,
          'subtype': '',
          'unicName': self.descriptor['icon'][0]}
 

@@ -7,12 +7,14 @@ from gui.shared.utils.requesters import wgm_balance_info_requester
 from gui.shared.tooltips import formatters
 from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared import g_itemsCache
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 _WAITING_FOR_DATA = ''
 _UNKNOWN_VALUE = '-'
 
 class _WGMCurrencyTooltip(DynamicBlocksTooltipData):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx):
         super(_WGMCurrencyTooltip, self).__init__(ctx, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI)
@@ -43,9 +45,9 @@ class _WGMCurrencyTooltip(DynamicBlocksTooltipData):
         if isVisible and self.isWGMAvailable():
             self.__requester.requestInfo(lambda result: self.__onDataResponse(result))
 
-    @staticmethod
-    def isWGMAvailable():
-        return g_itemsCache.items.stats.mayConsumeWalletResources
+    @classmethod
+    def isWGMAvailable(cls):
+        return cls.itemsCache.items.stats.mayConsumeWalletResources
 
     def __onDataResponse(self, data):
         if self.__data is None or self.__checkDiff(self.__data, data):
@@ -78,7 +80,7 @@ class WGMGoldCurrencyTooltip(_WGMCurrencyTooltip):
         return text_styles.gold(result) if result != _WAITING_FOR_DATA else result
 
     def __getGoldTotal(self):
-        return BigWorld.wg_getIntegralFormat(g_itemsCache.items.stats.gold) if self.isWGMAvailable() else _UNKNOWN_VALUE
+        return BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.gold) if self.isWGMAvailable() else _UNKNOWN_VALUE
 
 
 class WGMCreditsCurrencyTooltip(_WGMCurrencyTooltip):
@@ -99,4 +101,4 @@ class WGMCreditsCurrencyTooltip(_WGMCurrencyTooltip):
         return text_styles.credits(result) if result != _WAITING_FOR_DATA else result
 
     def __getCreditsTotal(self):
-        return BigWorld.wg_getIntegralFormat(g_itemsCache.items.stats.credits) if self.isWGMAvailable() else _UNKNOWN_VALUE
+        return BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.credits) if self.isWGMAvailable() else _UNKNOWN_VALUE

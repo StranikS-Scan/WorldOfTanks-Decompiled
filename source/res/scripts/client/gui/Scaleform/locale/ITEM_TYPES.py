@@ -51,6 +51,7 @@ class ITEM_TYPES(object):
     EQUIPMENT_NAME = '#item_types:equipment/name'
     EQUIPMENT_DESC = '#item_types:equipment/desc'
     EQUIPMENT_TAGS = '#item_types:equipment/tags'
+    BATTLEBOOSTER_NAME = '#item_types:battleBooster/name'
     TANKMAN_SKILLS_MAIN = '#item_types:tankman/skills/main'
     TANKMAN_ROLES_COMMANDER = '#item_types:tankman/roles/commander'
     TANKMAN_ROLES_DRIVER = '#item_types:tankman/roles/driver'
@@ -61,6 +62,7 @@ class ITEM_TYPES(object):
     TANKMAN_SKILLS_REPAIR = '#item_types:tankman/skills/repair'
     TANKMAN_SKILLS_REPAIR_DESCR = '#item_types:tankman/skills/repair_descr'
     TANKMAN_SKILLS_FIRE_FIGHTING = '#item_types:tankman/skills/fire_fighting'
+    TANKMAN_SKILLS_FIREFIGHTING = '#item_types:tankman/skills/fireFighting'
     TANKMAN_SKILLS_FIRE_FIGHTING_DESCR = '#item_types:tankman/skills/fire_fighting_descr'
     TANKMAN_SKILLS_CAMOUFLAGE = '#item_types:tankman/skills/camouflage'
     TANKMAN_SKILLS_CAMOUFLAGE_DESCR = '#item_types:tankman/skills/camouflage_descr'
@@ -68,7 +70,6 @@ class ITEM_TYPES(object):
     TANKMAN_SKILLS_BROTHERHOOD_DESCR = '#item_types:tankman/skills/brotherhood_descr'
     TANKMAN_SKILLS_BROTHERHOOD_PERMANENT = '#item_types:tankman/skills/brotherhood_permanent'
     TANKMAN_SKILLS_BROTHERHOOD_PERMANENT_DESCR = '#item_types:tankman/skills/brotherhood_permanent_descr'
-    TANKMAN_SKILLS_BROTHERHOOD_FEMALE = '#item_types:tankman/skills/brotherhood_female'
     TANKMAN_SKILLS_BROTHERHOOD_FEMALE_DESCR = '#item_types:tankman/skills/brotherhood_female_descr'
     TANKMAN_SKILLS_COMMANDER_TUTOR = '#item_types:tankman/skills/commander_tutor'
     TANKMAN_SKILLS_COMMANDER_TUTOR_DESCR = '#item_types:tankman/skills/commander_tutor_descr'
@@ -96,8 +97,6 @@ class ITEM_TYPES(object):
     TANKMAN_SKILLS_GUNNER_GUNSMITH_DESCR = '#item_types:tankman/skills/gunner_gunsmith_descr'
     TANKMAN_SKILLS_GUNNER_SNIPER = '#item_types:tankman/skills/gunner_sniper'
     TANKMAN_SKILLS_GUNNER_SNIPER_DESCR = '#item_types:tankman/skills/gunner_sniper_descr'
-    TANKMAN_SKILLS_GUNNER_WOODHUNTER = '#item_types:tankman/skills/gunner_woodHunter'
-    TANKMAN_SKILLS_GUNNER_WOODHUNTER_DESCR = '#item_types:tankman/skills/gunner_woodHunter_descr'
     TANKMAN_SKILLS_GUNNER_RANCOROUS = '#item_types:tankman/skills/gunner_rancorous'
     TANKMAN_SKILLS_GUNNER_RANCOROUS_DESCR = '#item_types:tankman/skills/gunner_rancorous_descr'
     TANKMAN_SKILLS_LOADER_PEDANT = '#item_types:tankman/skills/loader_pedant'
@@ -147,6 +146,7 @@ class ITEM_TYPES(object):
      TANKMAN_SKILLS_REPAIR,
      TANKMAN_SKILLS_REPAIR_DESCR,
      TANKMAN_SKILLS_FIRE_FIGHTING,
+     TANKMAN_SKILLS_FIREFIGHTING,
      TANKMAN_SKILLS_FIRE_FIGHTING_DESCR,
      TANKMAN_SKILLS_CAMOUFLAGE,
      TANKMAN_SKILLS_CAMOUFLAGE_DESCR,
@@ -154,7 +154,6 @@ class ITEM_TYPES(object):
      TANKMAN_SKILLS_BROTHERHOOD_DESCR,
      TANKMAN_SKILLS_BROTHERHOOD_PERMANENT,
      TANKMAN_SKILLS_BROTHERHOOD_PERMANENT_DESCR,
-     TANKMAN_SKILLS_BROTHERHOOD_FEMALE,
      TANKMAN_SKILLS_BROTHERHOOD_FEMALE_DESCR,
      TANKMAN_SKILLS_COMMANDER_TUTOR,
      TANKMAN_SKILLS_COMMANDER_TUTOR_DESCR,
@@ -182,8 +181,6 @@ class ITEM_TYPES(object):
      TANKMAN_SKILLS_GUNNER_GUNSMITH_DESCR,
      TANKMAN_SKILLS_GUNNER_SNIPER,
      TANKMAN_SKILLS_GUNNER_SNIPER_DESCR,
-     TANKMAN_SKILLS_GUNNER_WOODHUNTER,
-     TANKMAN_SKILLS_GUNNER_WOODHUNTER_DESCR,
      TANKMAN_SKILLS_GUNNER_RANCOROUS,
      TANKMAN_SKILLS_GUNNER_RANCOROUS_DESCR,
      TANKMAN_SKILLS_LOADER_PEDANT,

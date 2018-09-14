@@ -150,7 +150,8 @@ CONDITIONAL_BONUSES = {'invisibilityMovingFactor': (('camouflage', 'skill'), [('
                                ('ration_czech', 'equipment'),
                                ('improvedVentilation_class1', 'optionalDevice'),
                                ('improvedVentilation_class2', 'optionalDevice'),
-                               ('improvedVentilation_class3', 'optionalDevice')]),
+                               ('improvedVentilation_class3', 'optionalDevice'),
+                               ('deluxImprovedVentilation', 'optionalDevice')]),
  'invisibilityStillFactor': (('camouflage', 'skill'), [('brotherhood', 'skill'),
                               ('chocolate', 'equipment'),
                               ('cocacola', 'equipment'),
@@ -162,7 +163,8 @@ CONDITIONAL_BONUSES = {'invisibilityMovingFactor': (('camouflage', 'skill'), [('
                               ('ration_czech', 'equipment'),
                               ('improvedVentilation_class1', 'optionalDevice'),
                               ('improvedVentilation_class2', 'optionalDevice'),
-                              ('improvedVentilation_class3', 'optionalDevice')])}
+                              ('improvedVentilation_class3', 'optionalDevice'),
+                              ('deluxImprovedVentilation', 'optionalDevice')])}
 
 def _getComparableValue(currentValue, comparableList, idx):
     return comparableList[idx] if len(comparableList) > idx else currentValue

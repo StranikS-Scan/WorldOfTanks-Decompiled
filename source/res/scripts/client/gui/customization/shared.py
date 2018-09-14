@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/customization/shared.py
 import cPickle
 from CurrentVehicle import g_currentVehicle
+from helpers import dependency
 from items.qualifiers import CREW_ROLE
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from skeletons.gui.shared import IItemsCache
 
 class CUSTOMIZATION_TYPE(object):
     CAMOUFLAGE = 0
@@ -88,18 +89,22 @@ def getBonusIcon42x42(qualifierType):
         return BONUS_ICONS['42x42']['main_skill'].format(qualifierType)
 
 
-def formatPriceGold(value):
-    if g_itemsCache.items.stats.gold >= value:
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def formatPriceGold(value, itemsCache=None):
+    if itemsCache is None or itemsCache.items.stats.gold >= value:
         return text_styles.goldTextBig(value)
     else:
         return formatPriceAlert(value)
+        return
 
 
-def formatPriceCredits(value):
-    if g_itemsCache.items.stats.credits >= value:
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def formatPriceCredits(value, itemsCache=None):
+    if itemsCache is None or itemsCache.items.stats.credits >= value:
         return text_styles.creditsTextBig(value)
     else:
         return formatPriceAlert(value)
+        return
 
 
 def formatPriceAlert(value):

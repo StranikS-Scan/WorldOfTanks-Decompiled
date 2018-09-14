@@ -3,7 +3,7 @@
 from constants import QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.listener import IGlobalListener
-from tutorial import LOG_ERROR
+from tutorial.logger import LOG_ERROR
 from tutorial.control.context import GlobalStorage, GLOBAL_FLAG
 from tutorial.control.offbattle.context import OffBattleClientCtx
 from tutorial.control.offbattle.functional import ContentChangedEvent

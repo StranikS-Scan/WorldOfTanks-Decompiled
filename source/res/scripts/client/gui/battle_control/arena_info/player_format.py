@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/player_format.py
 from collections import namedtuple
-from gui.LobbyContext import g_lobbyContext
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 
 class _FORMAT_MASK(object):
     NONE = 0
@@ -22,13 +23,15 @@ _PLAYER_FULL_NAME_FORMATS = {_FORMAT_MASK.VEHICLE: '{0:>s} ({2:>s})',
  _FORMAT_MASK.REG_CLAN: '{0:>s}[{1:>s}] {3:>s}',
  _FORMAT_MASK.ALL: '{0:>s}[{1:>s}] {3:>s} ({2:>s})'}
 
-def getRegionCode(accountDBID):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getRegionCode(accountDBID, lobbyContext=None):
     regionCode = None
-    serverSettings = g_lobbyContext.getServerSettings()
-    if serverSettings is not None:
-        roaming = serverSettings.roaming
-        if accountDBID and not roaming.isSameRealm(accountDBID):
-            _, regionCode = roaming.getPlayerHome(accountDBID)
+    if lobbyContext is not None:
+        serverSettings = lobbyContext.getServerSettings()
+        if serverSettings is not None:
+            roaming = serverSettings.roaming
+            if accountDBID and not roaming.isSameRealm(accountDBID):
+                _, regionCode = roaming.getPlayerHome(accountDBID)
     return regionCode
 
 

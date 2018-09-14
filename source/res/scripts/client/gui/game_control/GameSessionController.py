@@ -9,25 +9,18 @@ import account_shared
 import constants
 from debug_utils import LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.LobbyContext import g_lobbyContext
-from gui.shared import g_itemsCache
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
+from helpers import dependency
 from helpers import time_utils
 from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 _BAN_RESTR = constants.RESTRICTION_TYPE.BAN
 
 def _checkForNegative(t):
     if t <= 0:
         t += time_utils.ONE_DAY
     return t
-
-
-def _stats():
-    return g_itemsCache.items.stats
-
-
-def _regionals():
-    return g_lobbyContext.getServerSettings().regionals
 
 
 def _getSvrLocalToday():
@@ -54,6 +47,8 @@ class GameSessionController(IGameSessionController, Notifiable):
     onTimeTillBan = Event.Event()
     onNewDayNotify = Event.Event()
     onPremiumNotify = Event.Event()
+    itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def init(self):
         self.addNotificators(PeriodicNotifier(self.__getClosestPremiumNotification, self.__notifyPremiumTime), PeriodicNotifier(lambda : self.NOTIFY_PERIOD, self.__notifyClient), PeriodicNotifier(self.__getClosestNewDayNotification, self.__notifyNewDay))
@@ -80,7 +75,7 @@ class GameSessionController(IGameSessionController, Notifiable):
     def onLobbyStarted(self, ctx):
         LOG_DEBUG('GameSessionController::start', self.__sessionStartedAt)
         self.__sessionStartedAt = ctx.get('sessionStartedAt', -1)
-        self.__curfewBlockTime, self.__curfewUnblockTime = self.__getCurfewBlockTime(g_itemsCache.items.stats.restrictions)
+        self.__curfewBlockTime, self.__curfewUnblockTime = self.__getCurfewBlockTime(self._stats.restrictions)
         if self.__doNotifyInStart:
             self.__notifyClient()
         self.startNotification()
@@ -97,18 +92,18 @@ class GameSessionController(IGameSessionController, Notifiable):
 
     def isSessionStartedThisDay(self):
         svrDaysCount = int(_getSvrLocal()) / time_utils.ONE_DAY
-        clientDaysCount = int(self.__sessionStartedAt + _regionals().getDayStartingTime()) / time_utils.ONE_DAY
+        clientDaysCount = int(self.__sessionStartedAt + self.__regionals().getDayStartingTime()) / time_utils.ONE_DAY
         return svrDaysCount == clientDaysCount
 
     def getDailyPlayTimeLeft(self):
-        return _stats().getDailyTimeLimits() - self._getDailyPlayHours()
+        return self._stats.getDailyTimeLimits() - self._getDailyPlayHours()
 
     def getWeeklyPlayTimeLeft(self):
-        return _stats().getWeeklyTimeLimits() - self._getWeeklyPlayHours()
+        return self._stats.getWeeklyTimeLimits() - self._getWeeklyPlayHours()
 
     @property
     def isParentControlEnabled(self):
-        d, w = g_itemsCache.items.stats.getPlayTimeLimits()
+        d, w = self._stats.getPlayTimeLimits()
         return d < time_utils.ONE_DAY or w < 7 * time_utils.ONE_DAY
 
     @property
@@ -146,7 +141,7 @@ class GameSessionController(IGameSessionController, Notifiable):
 
     def getCurfewBlockTime(self):
         if self.__curfewBlockTime is not None:
-            blockTime = self.__curfewBlockTime - _regionals().getDayStartingTime()
+            blockTime = self.__curfewBlockTime - self.__regionals().getDayStartingTime()
             notifyStart = blockTime - self.PLAY_TIME_LEFT_NOTIFY
         else:
             notifyStart = blockTime = 0
@@ -158,9 +153,16 @@ class GameSessionController(IGameSessionController, Notifiable):
             return I18nInfoDialogMeta('koreaPlayTimeNotification')
         else:
             notifyStartTime, blockTime = self.getCurfewBlockTime()
-            formatter = lambda t: time.strftime('%H:%M', time.localtime(t))
+
+            def formatter(t):
+                return time.strftime('%H:%M', time.localtime(t))
+
             return I18nInfoDialogMeta('koreaParentNotification', messageCtx={'preBlockTime': formatter(notifyStartTime),
              'blockTime': formatter(blockTime)})
+
+    @property
+    def _stats(self):
+        return self.itemsCache.items.stats
 
     def _stop(self, doNotifyInStart=False):
         LOG_DEBUG('GameSessionController::stop')
@@ -178,20 +180,22 @@ class GameSessionController(IGameSessionController, Notifiable):
             offset = _getSevUtc() - self.__sessionStartedAt
         else:
             offset = _getSvrLocal() % time_utils.ONE_DAY
-        return _stats().todayPlayHours + offset
+        return self._stats.todayPlayHours + offset
 
     def _getWeeklyPlayHours(self):
-        regionals = _regionals()
+        regionals = self.__regionals()
         weekDaysCount = account_shared.currentWeekPlayDaysCount(_getSevUtc(), regionals.getDayStartingTime(), regionals.getWeekStartingDay())
-        return self._getDailyPlayHours() + sum(_stats().dailyPlayHours[1:weekDaysCount])
+        return self._getDailyPlayHours() + sum(self._stats.dailyPlayHours[1:weekDaysCount])
+
+    def __regionals(self):
+        return self.lobbyContext.getServerSettings().regionals
 
     @classmethod
     def __getClosestNewDayNotification(cls):
         return time_utils.ONE_DAY - _getSvrLocalToday()
 
-    @classmethod
-    def __getClosestPremiumNotification(cls):
-        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(_stats().premiumExpiryTime))
+    def __getClosestPremiumNotification(self):
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self._stats.premiumExpiryTime))
 
     def __getBlockTimeLeft(self):
         playTimeLeft = min(self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft())
@@ -229,7 +233,7 @@ class GameSessionController(IGameSessionController, Notifiable):
         self.onNewDayNotify(time_utils.ONE_DAY - _getSvrLocalToday())
 
     def __notifyPremiumTime(self):
-        stats = g_itemsCache.items.stats
+        stats = self._stats
         self.onPremiumNotify(stats.isPremium, stats.attributes, stats.premiumExpiryTime)
 
     def __onBanNotifyHandler(self):
@@ -242,11 +246,11 @@ class GameSessionController(IGameSessionController, Notifiable):
     def __onAccountChanged(self, diff):
         if 'attrs' in diff or 'premiumExpiryTime' in diff:
             self.startNotification()
-            stats = g_itemsCache.items.stats
+            stats = self._stats
             self.onPremiumNotify(stats.isPremium, stats.attributes, stats.premiumExpiryTime)
 
     def __onRestrictionsChanged(self, _):
-        self.__curfewBlockTime, self.__curfewUnblockTime = self.__getCurfewBlockTime(g_itemsCache.items.stats.restrictions)
+        self.__curfewBlockTime, self.__curfewUnblockTime = self.__getCurfewBlockTime(self._stats.restrictions)
         self.__loadBanCallback()
 
     def __onPlayLimitsChanged(self, _):

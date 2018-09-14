@@ -11,7 +11,6 @@ from gui.Scaleform.daapi.view.meta.VehicleBuyWindowMeta import VehicleBuyWindowM
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.shared import g_itemsCache
 from gui.shared.events import VehicleBuyEvent
 from gui.shared.formatters import text_styles, moneyWithIcon
 from gui.shared.formatters.text_styles import neutral
@@ -25,6 +24,7 @@ from gui.shared.utils import decorators
 from helpers import i18n, time_utils, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController
+from skeletons.gui.shared import IItemsCache
 
 class _TABS(CONST_CONTAINER):
     UNDEFINED = -1
@@ -33,6 +33,7 @@ class _TABS(CONST_CONTAINER):
 
 
 class VehicleBuyWindow(VehicleBuyWindowMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
     rentals = dependency.descriptor(IRentalsController)
     tradeIn = dependency.descriptor(ITradeInController)
 
@@ -65,14 +66,14 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
     def _populate(self):
         super(VehicleBuyWindow, self)._populate()
         self._initData()
-        g_itemsCache.onSyncCompleted += self._initData
+        self.itemsCache.onSyncCompleted += self._initData
         self.rentals.onRentChangeNotify += self.__onRentChange
-        g_clientUpdateManager.addCallbacks({'stats.credits': self.__setCreditsCallBack,
-         'stats.gold': self.__setGoldCallBack})
+        g_clientUpdateManager.addCurrencyCallback(Currency.CREDITS, self.__setCreditsCallBack)
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__setGoldCallBack)
         self.addListener(VehicleBuyEvent.VEHICLE_SELECTED, self.__setTradeOffVehicle)
 
     def _dispose(self):
-        g_itemsCache.onSyncCompleted -= self._initData
+        self.itemsCache.onSyncCompleted -= self._initData
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.rentals.onRentChangeNotify -= self.__onRentChange
         self.removeListener(VehicleBuyEvent.VEHICLE_SELECTED, self.__setTradeOffVehicle)
@@ -101,7 +102,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
 
     def __getTradeInContentFields(self, vehicle):
         if self.selectedTab == _TABS.UNDEFINED:
-            if vehicle.mayPurchase(g_itemsCache.items.stats.money)[0]:
+            if vehicle.mayPurchase(self.itemsCache.items.stats.money)[0]:
                 self.selectedTab = _TABS.BUY
             else:
                 self.selectedTab = _TABS.TRADE
@@ -116,15 +117,15 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
     def _isSubmitBtnEnabled(self, vehicle):
         if vehicle.isPurchased:
             return False
-        money = g_itemsCache.items.stats.money
+        money = self.itemsCache.items.stats.money
         canBuy, _ = vehicle.mayObtainForMoney(money)
         return canBuy
 
     def _initData(self, *args):
-        stats = g_itemsCache.items.stats
+        stats = self.itemsCache.items.stats
         self.as_setGoldS(stats.gold)
         self.as_setCreditsS(stats.credits)
-        self.vehicle = g_itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
+        self.vehicle = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
         self.as_setEnabledSubmitBtnS(self._isSubmitBtnEnabled(self.vehicle))
         if self.vehicle is None:
             LOG_ERROR("Vehicle Item mustn't be None!", 'NationID:', self.nationID, 'InNationID:', self.inNationID)
@@ -162,7 +163,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
          'nationID': self.nationID}
 
     def _getByuContentData(self, vehicle, stats, isTradeIn):
-        shop = g_itemsCache.items.shop
+        shop = self.itemsCache.items.shop
         shopDefaults = shop.defaults
         tankMenCount = len(vehicle.crew)
         vehiclePricesActionData = self._getItemPriceActionData(vehicle)
@@ -264,7 +265,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         return VehicleBuyer(vehicle, data.buySlot, data.buyAmmo, data.crewType)
 
     def __onRentChange(self, vehicles):
-        vehicle = g_itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
+        vehicle = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
         if vehicle and vehicle.intCD in vehicles:
             self._initData()
 
@@ -272,7 +273,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
     def __requestForMoneyObtain(self, data):
         isTradeIn = data.tradeOff != -1
         if isTradeIn:
-            tradeOffVehicle = g_itemsCache.items.getItemByCD(int(data.tradeOff))
+            tradeOffVehicle = self.itemsCache.items.getItemByCD(int(data.tradeOff))
             confirmationType = 'tradeInConfirmation'
             addition = ''
             operations = []
@@ -292,7 +293,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
             result = yield showI18nConfirmDialog(confirmationType, meta=I18nConfirmDialogMeta(confirmationType, ctx, ctx), focusedID=DIALOG_BUTTON_ID.SUBMIT)
             if not result:
                 return
-            tradeOffVehicle = g_itemsCache.items.getItemByCD(int(data.tradeOff))
+            tradeOffVehicle = self.itemsCache.items.getItemByCD(int(data.tradeOff))
             result = yield VehicleTradeInProcessor(self.vehicle, tradeOffVehicle, data.buySlot, data.buyAmmo, data.crewType).request()
             if len(result.userMsg):
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
@@ -322,7 +323,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
 
     def __setTradeOffVehicle(self, event):
         selectedVehCD = int(event.ctx)
-        self.tradeOffVehicle = g_itemsCache.items.getItemByCD(selectedVehCD)
+        self.tradeOffVehicle = self.itemsCache.items.getItemByCD(selectedVehCD)
         tradeOffVehicleHtml = moneyWithIcon(self.tradeOffVehicle.tradeOffPrice, currType=Currency.GOLD)
         tradeOffVehicleStatus = i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TRADEIN_INFO_SAVING, cost=tradeOffVehicleHtml)
         tradeOffVehicleVo = makeVehicleVO(self.tradeOffVehicle)
@@ -380,7 +381,7 @@ class VehicleRestoreWindow(VehicleBuyWindow):
         return False
 
     def __onRestoreChange(self, _):
-        vehicle = g_itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
+        vehicle = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
         if vehicle and not vehicle.isRestoreAvailable():
             self.onWindowClose()
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.VEHICLE_RESTORE_FINISHED, vehicleName=vehicle.userName)

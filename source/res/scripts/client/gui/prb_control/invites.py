@@ -3,20 +3,17 @@
 from collections import namedtuple, defaultdict
 import BigWorld
 import Event
-from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from account_helpers import isRoamingEnabled
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui import SystemMessages
-from gui.LobbyContext import g_lobbyContext
 from gui.app_loader import g_appLoader
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
 from gui.prb_control import prb_getters
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import prb_seqs
 from gui.prb_control.settings import PRB_INVITE_STATE
-from gui.shared import g_itemsCache
 from gui.shared.actions import ActionsChain
 from gui.shared.utils import getPlayerDatabaseID, getPlayerName, showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
@@ -30,7 +27,10 @@ from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from predefined_hosts import g_preDefinedHosts
 from shared_utils.account_helpers.ClientInvitations import UniqueId
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 def isInviteSenderIgnoredInBattle(user, areFriendsOnly, isFromBattle):
     return isNotFriendSenderIgnored(user, False) if isFromBattle else isNotFriendSenderIgnored(user, areFriendsOnly)
@@ -62,6 +62,8 @@ _PrbInviteData = namedtuple('_PrbInviteData', ' '.join(['clientID',
  'id']))
 
 class PrbInviteWrapper(_PrbInviteData):
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     @staticmethod
     def __new__(cls, clientID=-1, createTime=None, type=0, comment=str(), creator=str(), creatorDBID=-1, creatorClanAbbrev=None, receiver=str(), receiverDBID=-1, receiverClanAbbrev=None, state=None, count=0, peripheryID=0, prebattleID=0, extraData=None, alwaysAvailable=None, ownerDBID=-1, expiryTime=None, id=-1, **kwargs):
@@ -73,15 +75,15 @@ class PrbInviteWrapper(_PrbInviteData):
 
     @property
     def senderFullName(self):
-        return g_lobbyContext.getPlayerFullName(self.creator, clanAbbrev=self.creatorClanAbbrev, pDBID=self.creatorDBID, regionCode=g_lobbyContext.getRegionCode(self.creatorDBID))
+        return self.lobbyContext.getPlayerFullName(self.creator, clanAbbrev=self.creatorClanAbbrev, pDBID=self.creatorDBID, regionCode=self.lobbyContext.getRegionCode(self.creatorDBID))
 
     @property
     def receiverFullName(self):
-        return g_lobbyContext.getPlayerFullName(self.receiver, clanAbbrev=self.receiverClanAbbrev, pDBID=self.receiverDBID, regionCode=g_lobbyContext.getRegionCode(self.receiverDBID))
+        return self.lobbyContext.getPlayerFullName(self.receiver, clanAbbrev=self.receiverClanAbbrev, pDBID=self.receiverDBID, regionCode=self.lobbyContext.getRegionCode(self.receiverDBID))
 
     @property
     def anotherPeriphery(self):
-        return connectionManager.peripheryID != self.peripheryID
+        return self.connectionMgr.peripheryID != self.peripheryID
 
     @property
     def alreadyJoined(self):
@@ -117,10 +119,10 @@ class PrbInviteWrapper(_PrbInviteData):
         return PRB_INVITE_STATE.getFromOldState(self)
 
     def accept(self, callback=None):
-        if connectionManager.peripheryID == self.peripheryID:
+        if self.connectionMgr.peripheryID == self.peripheryID:
             BigWorld.player().prb_acceptInvite(self.prebattleID, self.peripheryID)
         else:
-            LOG_ERROR('Invalid periphery', (self.prebattleID, self.peripheryID), connectionManager.peripheryID)
+            LOG_ERROR('Invalid periphery', (self.prebattleID, self.peripheryID), self.connectionMgr.peripheryID)
 
     def decline(self, callback=None):
         BigWorld.player().prb_declineInvite(self.prebattleID, self.peripheryID)
@@ -207,10 +209,10 @@ class PrbInvitationWrapper(PrbInviteWrapper):
         return PRB_INVITE_STATE.getFromNewState(self)
 
     def accept(self, callback=None):
-        if connectionManager.peripheryID == self.peripheryID:
+        if self.connectionMgr.peripheryID == self.peripheryID:
             BigWorld.player().prebattleInvitations.acceptInvitation(self.id, self.creatorDBID, callback)
         else:
-            LOG_ERROR('Invalid periphery', (self.prebattleID, self.peripheryID), connectionManager.peripheryID)
+            LOG_ERROR('Invalid periphery', (self.prebattleID, self.peripheryID), self.connectionMgr.peripheryID)
 
     def decline(self, callback=None):
         BigWorld.player().prebattleInvitations.declineInvitation(self.id, self.creatorDBID, callback)
@@ -246,7 +248,9 @@ def _getNewInvites():
 
 class InvitesManager(UsersInfoHelper):
     __clanInfo = None
+    itemsCache = dependency.descriptor(IItemsCache)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, loader):
         super(InvitesManager, self).__init__()
@@ -368,10 +372,10 @@ class InvitesManager(UsersInfoHelper):
                 if g_preDefinedHosts.periphery(invite.peripheryID) is None:
                     LOG_ERROR('Periphery not found')
                     result = False
-                elif g_lobbyContext.getCredentials() is None:
+                elif self.lobbyContext.getCredentials() is None:
                     LOG_ERROR('Login info not found')
                     result = False
-                elif g_preDefinedHosts.isRoamingPeriphery(invite.peripheryID) and not isRoamingEnabled(g_itemsCache.items.stats.attributes):
+                elif g_preDefinedHosts.isRoamingPeriphery(invite.peripheryID) and not isRoamingEnabled(self.itemsCache.items.stats.attributes):
                     LOG_ERROR('Roaming is not supported')
                     result = False
                 else:
@@ -507,7 +511,7 @@ class InvitesManager(UsersInfoHelper):
     def _getOldInviteMaker(self, rosterGetter):
         receiver = getPlayerName()
         receiverDBID = getPlayerDatabaseID()
-        receiverClanAbbrev = g_lobbyContext.getClanAbbrev(self.__clanInfo)
+        receiverClanAbbrev = self.lobbyContext.getClanAbbrev(self.__clanInfo)
 
         def _inviteMaker(item):
             (prebattleID, peripheryID), data = item
@@ -683,6 +687,7 @@ class InvitesManager(UsersInfoHelper):
 
 
 class AutoInvitesNotifier(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, loader):
         super(AutoInvitesNotifier, self).__init__()
@@ -735,8 +740,8 @@ class AutoInvitesNotifier(object):
         if dispatcher is not None and dispatcher.getEntity().hasLockedState():
             result = False
         peripheryID = invite.peripheryID
-        if result and g_lobbyContext.isAnotherPeriphery(peripheryID):
-            result = g_lobbyContext.isPeripheryAvailable(peripheryID)
+        if result and self.lobbyContext.isAnotherPeriphery(peripheryID):
+            result = self.lobbyContext.isPeripheryAvailable(peripheryID)
         return result
 
     def __doNotify(self):

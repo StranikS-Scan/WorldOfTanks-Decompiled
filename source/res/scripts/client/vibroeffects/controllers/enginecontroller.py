@@ -2,8 +2,6 @@
 # Embedded file name: scripts/client/Vibroeffects/Controllers/EngineController.py
 import BigWorld
 import Vibroeffects.VibroManager as VibroManager
-from debug_utils import *
-from OnceController import OnceController
 from Vibroeffects.EffectsSettings import EffectsSettings
 import time
 
@@ -117,13 +115,4 @@ class EngineController:
         VibroManager.g_instance.stopEffect(self.__idleEffect)
 
     def __doApplyTurn(self):
-        return
-        if self.__turn == 'left':
-            VibroManager.g_instance.startEffect(self.__turnLeftEffect)
-            VibroManager.g_instance.stopEffect(self.__turnRightEffect)
-        elif self.__turn == 'right':
-            VibroManager.g_instance.startEffect(self.__turnRightEffect)
-            VibroManager.g_instance.stopEffect(self.__turnLeftEffect)
-        else:
-            VibroManager.g_instance.stopEffect(self.__turnLeftEffect)
-            VibroManager.g_instance.stopEffect(self.__turnRightEffect)
+        pass

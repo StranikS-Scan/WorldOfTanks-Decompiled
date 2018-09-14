@@ -71,7 +71,7 @@ class ArcadeAimingSystem(IAimingSystem):
         self.__cursor.base = vehicleMProv
         self.__cursor.heightAboveBase = heightAboveTarget
         self.__cursor.focusRadius = focusRadius
-        self.__idealMatrix = Matrix(self._matrix)
+        self.__idealMatrix = Math.Matrix(self._matrix)
         self.__shotPointCalculator = ShotPointCalculatorPlanar() if enableSmartShotPointCalc else None
         return
 
@@ -92,6 +92,12 @@ class ArcadeAimingSystem(IAimingSystem):
                 self.__adjustFocus((turretYaw, gunPitch))
         return
 
+    def getShotPoint(self):
+        return self.getThirdPersonShotPoint()
+
+    def getZoom(self):
+        return self.distanceFromFocus
+
     def __adjustFocus(self, yawPitch=None):
         if self.__shotPointCalculator is None:
             return
@@ -105,6 +111,12 @@ class ArcadeAimingSystem(IAimingSystem):
 
     def setDynamicColliders(self, colliders):
         self.__cursor.setDynamicColliders(colliders)
+
+    def initAdvancedCollider(self, fovRatio, rollbackSpeed, minimalCameraDistance, speedThreshold, minVolume):
+        self.__cursor.initAdvancedCollider(fovRatio, rollbackSpeed, minimalCameraDistance, speedThreshold, minVolume)
+
+    def addVolumeGroup(self, group):
+        self.__cursor.addVolumeGroup(group)
 
     def focusOnPos(self, preferredPos):
         vehPos = Matrix(self.__vehicleMProv).translation
@@ -169,9 +181,9 @@ class ArcadeAimingSystem(IAimingSystem):
         aimMatrix = self.__getLookToAimMatrix()
         aimMatrix.postMultiply(self.__cursor.matrix)
         self._matrix.set(aimMatrix)
-        aimMatrix = self.__getLookToAimMatrix()
-        aimMatrix.postMultiply(self.__cursor.idealMatrix)
-        self.__idealMatrix.set(aimMatrix)
+        aimWithIdealMatrix = self.__getLookToAimMatrix()
+        aimWithIdealMatrix.postMultiply(self.__cursor.idealMatrix)
+        self.__idealMatrix.set(aimWithIdealMatrix)
         if self.__shotPointCalculator is not None:
             self.__shotPointCalculator.update(*self.__getScanRay())
         return 0.0

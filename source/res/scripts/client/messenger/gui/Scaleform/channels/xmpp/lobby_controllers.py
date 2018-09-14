@@ -139,8 +139,7 @@ class ChatSessionController(_ChannelController):
                 uid = makeContactJID(user.getID())
             member = self._channel.getMember(uid)
             if member is not None:
-                presence = user.getItem().getPresence()
-                member.update(status=presence)
+                member.update(status=user.isOnline())
         return
 
 

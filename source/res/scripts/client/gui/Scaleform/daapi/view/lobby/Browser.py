@@ -28,7 +28,7 @@ class Browser(BrowserMeta):
         self.__browserID = browserID
         self.__browser = self.browserCtrl.getBrowser(self.__browserID)
         assert self.__browser is not None, 'Cannot find browser'
-        self.__webCommandHandler = WebCommandHandler(self.__browserID, alias)
+        self.__webCommandHandler = WebCommandHandler(self.__browserID, alias, self)
         if webHandlersMap is not None:
             self.__webCommandHandler.addHandlers(webHandlersMap)
         self.__webCommandHandler.onCallback += self.__onWebCommandCallback

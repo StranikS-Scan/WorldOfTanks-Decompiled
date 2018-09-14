@@ -2,19 +2,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortSettingsDefenceHourPopover.py
 import BigWorld
 from adisp import process
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortSettingsDefenceHourPopoverMeta import FortSettingsDefenceHourPopoverMeta
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.shared.fortifications.context import DefenceHourCtx
 from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC, adjustDefenceHoursListToLocal
+from helpers import dependency
 from helpers import i18n, time_utils
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from skeletons.gui.lobby_context import ILobbyContext
 
 class FortSettingsDefenceHourPopover(FortSettingsDefenceHourPopoverMeta, FortViewHelper):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         super(FortSettingsDefenceHourPopover, self).__init__()
@@ -31,7 +31,7 @@ class FortSettingsDefenceHourPopover(FortSettingsDefenceHourPopoverMeta, FortVie
         defenceDate = fort.getLocalDefenceDate()
         data = {'hour': defenceDate.tm_hour,
          'minutes': defenceDate.tm_min,
-         'skipValues': adjustDefenceHoursListToLocal(g_lobbyContext.getServerSettings().getForbiddenFortDefenseHours()),
+         'skipValues': adjustDefenceHoursListToLocal(self.lobbyContext.getServerSettings().getForbiddenFortDefenseHours()),
          'isWrongLocalTime': self._isWrongLocalTime(),
          'isTwelveHoursFormat': self.app.utilsManager.isTwelveHoursFormat()}
         self.as_setDataS(data)

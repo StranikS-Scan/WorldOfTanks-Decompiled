@@ -4,7 +4,9 @@ from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES
 from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT
 from gui.shared.utils.functions import getShortDescr
-from gui.shared.gui_items import HasStrCD, GUIItem, ItemsCollection, GUI_ITEM_TYPE
+from gui.shared.gui_items import ItemsCollection, GUI_ITEM_TYPE
+from gui.shared.gui_items.gui_item import HasStrCD, GUIItem
+from items.vehicles import VEHICLE_CLASS_TAGS
 
 class TankmenCollection(ItemsCollection):
 
@@ -73,6 +75,7 @@ class Tankman(GUIItem, HasStrCD):
         self.combinedRoles = (self.descriptor.role,)
         self.dismissedAt = dismissedAt
         self.isDismissed = self.dismissedAt is not None
+        self.areClassesCompatible = False
         self.vehicleNativeDescr = vehicles.VehicleDescr(typeID=(self.nationID, self.descriptor.vehicleTypeID))
         self.vehicleInvID = -1
         self.vehicleDescr = None
@@ -86,6 +89,7 @@ class Tankman(GUIItem, HasStrCD):
             crewRoles = self.vehicleDescr.type.crewRoles
             if -1 < self.vehicleSlotIdx < len(crewRoles):
                 self.combinedRoles = crewRoles[self.vehicleSlotIdx]
+            self.areClassesCompatible = len(VEHICLE_CLASS_TAGS & self.vehicleDescr.type.tags & self.vehicleNativeDescr.type.tags) > 0
         self.skills = self._buildSkills(proxy)
         self.skillsMap = self._buildSkillsMap()
         if proxy is not None:
@@ -299,27 +303,6 @@ class Tankman(GUIItem, HasStrCD):
          'enabled': True,
          'tankmanID': self.invID}
 
-    def __cmp__(self, other):
-        if other is None:
-            return -1
-        res = nationCompareByIndex(self.nationID, other.nationID)
-        if res:
-            return res
-        elif self.isInTank and not other.isInTank:
-            return -1
-        elif not self.isInTank and other.isInTank:
-            return 1
-        if self.isInTank and other.isInTank:
-            if self.vehicleInvID != other.vehicleInvID:
-                return -1
-            res = self.TANKMEN_ROLES_ORDER[self.descriptor.role] - self.TANKMEN_ROLES_ORDER[other.descriptor.role]
-            if res:
-                return res
-        if self.lastUserName < other.lastUserName:
-            return -1
-        else:
-            return 1 if self.lastUserName > other.lastUserName else 0
-
     def __eq__(self, other):
         return False if other is None or not isinstance(other, Tankman) else self.invID == other.invID
 
@@ -387,8 +370,6 @@ class TankmanSkill(GUIItem):
     @property
     def userName(self):
         if self.name == 'brotherhood':
-            if self.isFemale:
-                return i18n.makeString('#item_types:tankman/skills/brotherhood_female')
             if self.isPermanent:
                 return i18n.makeString('#item_types:tankman/skills/brotherhood_permanent')
         return getSkillUserName(self.name)
@@ -508,6 +489,56 @@ def calculateRoleLevel(startRoleLevel, freeXpValue=0, typeID=(0, 0)):
 
 def calculateRankID(startRoleLevel, freeXpValue=0, typeID=(0, 0)):
     return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID).rankID
+
+
+def isSkillLearnt(skillName, vehicle):
+    """
+    Check if the provided skill is learnt (100%) on the vehicle.
+    For common skill - the whole crew will be checked
+    :param skillName: string with skill
+    :param vehicle: instance of gui_item.Vehicle
+    :return: boolean result
+    """
+    isCommonSkill = skillName in tankmen.COMMON_SKILLS
+    if isCommonSkill:
+        return __isCommonSkillLearnt(skillName, vehicle)
+    else:
+        return __isPersonalSkillLearnt(skillName, vehicle)
+
+
+def __isCommonSkillLearnt(skillName, vehicle):
+    """
+    Check if the provide COMMON skill is learnt. It means each member in crew
+    should learn the skill
+    :param skillName: string with skill
+    :param vehicle: instance of gui_item.Vehicle
+    :return: boolean result
+    """
+    for roleIndex, tankman in vehicle.crew:
+        if tankman is not None:
+            if skillName in tankman.skillsMap:
+                if tankman.skillsMap[skillName].level != tankmen.MAX_SKILL_LEVEL:
+                    return False
+            else:
+                return False
+        return False
+
+    return True
+
+
+def __isPersonalSkillLearnt(skillName, vehicle):
+    """
+    Check if the personal skill is learnt for one member in crew.
+    :param skillName: string with skill
+    :param vehicle: vehicle: instance of gui_item.Vehicle
+    :return: boolean result
+    """
+    for roleIndex, tankman in vehicle.crew:
+        if tankman is not None:
+            if skillName in tankman.skillsMap and tankman.skillsMap[skillName].level == tankmen.MAX_SKILL_LEVEL:
+                return True
+
+    return False
 
 
 def __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID):

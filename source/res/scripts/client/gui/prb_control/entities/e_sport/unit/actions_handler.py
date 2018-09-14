@@ -63,4 +63,4 @@ class ESportActionsHandler(UnitActionsHandler):
         """
         Listener for queue kick event. Is fix for for WOTD-43677
         """
-        SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
+        SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)

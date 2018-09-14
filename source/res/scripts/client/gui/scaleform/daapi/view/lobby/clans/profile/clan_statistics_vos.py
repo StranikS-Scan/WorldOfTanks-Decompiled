@@ -7,7 +7,7 @@ from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import BaseDictStatisticsVO
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import DetailedStatisticsUtils as SUtils
-from gui.Scaleform.locale.CLANS import CLANS as CL, CLANS
+from gui.Scaleform.locale.CLANS import CLANS as CL
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, icons
@@ -65,7 +65,7 @@ class FortSortiesStatisticsVO(BaseDictStatisticsVO):
         super(FortSortiesStatisticsVO, self).__init__(data)
 
     def _getHeaderText(self, data):
-        return _ms(CLANS.SECTION_FORT_VIEW_STATISTICS_SORTIES_HEADER)
+        return _ms(CL.SECTION_FORT_VIEW_STATISTICS_SORTIES_HEADER)
 
     def _getHeaderData(self, data):
         return (PUtils.getTotalBattlesHeaderParam(data, FORTIFICATIONS.CLANSTATS_PARAMS_SORTIE_BATTLESCOUNT_LABEL, FORTIFICATIONS.CLANSTATS_PARAMS_SORTIE_BATTLESCOUNT_TOOLTIP), PUtils.packLditItemData(PUtils.getFormattedWinsEfficiency(data), FORTIFICATIONS.CLANSTATS_PARAMS_SORTIE_WINS_LABEL, FORTIFICATIONS.CLANSTATS_PARAMS_SORTIE_WINS_TOOLTIP, 'wins40x32.png'), PUtils.packLditItemData(PUtils.formatEfficiency(data.getBattlesCount(), data.getAvgLoot), FORTIFICATIONS.CLANSTATS_PARAMS_SORTIE_AVGDEFRES_LABEL, FORTIFICATIONS.CLANSTATS_PARAMS_SORTIE_AVGDEFRES_TOOLTIP, 'avgDefes40x32.png'))
@@ -91,7 +91,7 @@ class FortBattlesStatisticsVO(BaseDictStatisticsVO):
         super(FortBattlesStatisticsVO, self).__init__(data)
 
     def _getHeaderText(self, data):
-        return _ms(CLANS.SECTION_FORT_VIEW_STATISTICS_BATTLES_HEADER)
+        return _ms(CL.SECTION_FORT_VIEW_STATISTICS_BATTLES_HEADER)
 
     def _getHeaderData(self, data):
         return (PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(data.getBattlesCount()), FORTIFICATIONS.CLANSTATS_PARAMS_PERIODDEFENCE_BATTLESCOUNT_LABEL, TOOLTIPS.FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_BATTLESCOUNT, 'battles40x32.png', PUtils.createToolTipData([BigWorld.wg_getIntegralFormat(data.getWinsCount()), BigWorld.wg_getIntegralFormat(data.getLossesCount())])), PUtils.packLditItemData(PUtils.getFormattedWinsEfficiency(data), FORTIFICATIONS.CLANSTATS_PARAMS_PERIODDEFENCE_WINS_LABEL, FORTIFICATIONS.CLANSTATS_PARAMS_PERIODDEFENCE_WINS_TOOLTIP, 'wins40x32.png'), PUtils.packLditItemData(PUtils.formatEfficiency(self.__resourceLossCount, lambda : float(self.__resourceCaptureCount) / self.__resourceLossCount), FORTIFICATIONS.CLANSTATS_PARAMS_PERIODDEFENCE_AVGDEFRES_LABEL, FORTIFICATIONS.CLANSTATS_PARAMS_PERIODDEFENCE_AVGDEFRES_TOOLTIP, 'defresRatio40x32.png'))
@@ -123,7 +123,7 @@ class FortGlobalMapStatistics(BaseDictStatisticsVO):
 
     def _getHeaderData(self, data):
         stats = data['stats']
-        return (PUtils.packLditItemData(formatField(getter=stats.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat), CLANS.GLOBALMAPVIEW_STATS_BATTLES, CLANS.GLOBALMAPVIEW_STATS_BATTLES_TOOLTIP, 'battles40x32.png'), PUtils.packLditItemData(formatField(getter=stats.getWinsEfficiency, formatter=PUtils.formatFloatPercent), CLANS.GLOBALMAPVIEW_STATS_WINS, CLANS.GLOBALMAPVIEW_STATS_WINS_TOOLTIP, 'wins40x32.png'), PUtils.packLditItemData(formatField(getter=stats.getCapturedProvincesCount, formatter=BigWorld.wg_getIntegralFormat), CLANS.GLOBALMAPVIEW_STATS_SEIZED, CLANS.GLOBALMAPVIEW_STATS_SEIZED_TOOLTIP, 'seizedProvinces40x32.png'))
+        return (PUtils.packLditItemData(formatField(getter=stats.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat), CL.GLOBALMAPVIEW_STATS_BATTLES, CL.GLOBALMAPVIEW_STATS_BATTLES_TOOLTIP, 'battles40x32.png'), PUtils.packLditItemData(formatField(getter=stats.getWinsEfficiency, formatter=PUtils.formatFloatPercent), CL.GLOBALMAPVIEW_STATS_WINS, CL.GLOBALMAPVIEW_STATS_WINS_TOOLTIP, 'wins40x32.png'), PUtils.packLditItemData(formatField(getter=stats.getCapturedProvincesCount, formatter=BigWorld.wg_getIntegralFormat), CL.GLOBALMAPVIEW_STATS_SEIZED, CL.GLOBALMAPVIEW_STATS_SEIZED_TOOLTIP, 'seizedProvinces40x32.png'))
 
     def _getDetailedData(self, data):
         stats = data['stats']
@@ -131,4 +131,4 @@ class FortGlobalMapStatistics(BaseDictStatisticsVO):
         favouriteAttrs = data['favouriteAttrs']
         ratingsOutDated = ratings.isGlobalMapOutdated()
         columns = [[PUtils.getLabelDataObject(CL.GLOBALMAPVIEW_LEVEL10, _getLevelParams(CL.globalmapview_statistics10, stats.getBattles10LevelCount, stats.getWins10LevelEfficiency, ratings.getGlobalMapEloRating10, ratings.getGlobalMapEloRatingRank10, favouriteAttrs.getFavouriteArena10, ratingsOutDated))], [PUtils.getLabelDataObject(CL.GLOBALMAPVIEW_LEVEL8, _getLevelParams(CL.globalmapview_statistics8, stats.getBattles8LevelCount, stats.getWins8LevelEfficiency, ratings.getGlobalMapEloRating8, ratings.getGlobalMapEloRatingRank8, favouriteAttrs.getFavouriteArena8, ratingsOutDated))], [PUtils.getLabelDataObject(CL.GLOBALMAPVIEW_LEVEL6, _getLevelParams(CL.globalmapview_statistics6, stats.getBattles6LevelCount, stats.getWins6LevelEfficiency, ratings.getGlobalMapEloRating6, ratings.getGlobalMapEloRatingRank6, favouriteAttrs.getFavouriteArena6, ratingsOutDated))]]
-        return (PUtils.getLabelViewTypeDataObject(CLANS.GLOBALMAPVIEW_TABS_STATS, columns, PUtils.VIEW_TYPE_TABLES), PUtils.getLabelViewTypeDataObject(CLANS.GLOBALMAPVIEW_TABS_PROVINCES, None, PUtils.VIEW_TYPE_TABLE))
+        return (PUtils.getLabelViewTypeDataObject(CL.GLOBALMAPVIEW_TABS_STATS, columns, PUtils.VIEW_TYPE_TABLES), PUtils.getLabelViewTypeDataObject(CL.GLOBALMAPVIEW_TABS_PROVINCES, None, PUtils.VIEW_TYPE_TABLE))

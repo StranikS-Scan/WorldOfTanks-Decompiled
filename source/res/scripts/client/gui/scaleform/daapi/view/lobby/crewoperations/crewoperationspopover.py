@@ -6,20 +6,23 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.Crew import Crew
 from gui.Scaleform.daapi.view.meta.CrewOperationsPopOverMeta import CrewOperationsPopOverMeta
 from gui.Scaleform.locale.CREW_OPERATIONS import CREW_OPERATIONS
-from gui.shared import g_itemsCache, EVENT_BUS_SCOPE
+from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.processors.tankman import TankmanReturn
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers import dependency
 from helpers import i18n
 from gui.shared.utils import decorators
 from gui import SystemMessages
+from skeletons.gui.shared import IItemsCache
 OPERATION_RETRAIN = 'retrain'
 OPERATION_RETURN = 'return'
 OPERATION_DROP_IN_BARRACK = 'dropInBarrack'
 
 class CrewOperationsPopOver(CrewOperationsPopOverMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, _=None):
         super(CrewOperationsPopOver, self).__init__()
@@ -47,10 +50,10 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
     def __getReturnOperationData(self, vehicle):
         crew = vehicle.crew
         lastCrewIDs = vehicle.lastCrew
-        tankmen = g_itemsCache.items.getTankmen().values()
-        berths = g_itemsCache.items.stats.tankmenBerthsCount
+        tankmen = self.itemsCache.items.getTankmen().values()
+        berths = self.itemsCache.items.stats.tankmenBerthsCount
         tankmenInBarracks = 0
-        for tankman in sorted(tankmen, TankmenComparator(g_itemsCache.items.getVehicle)):
+        for tankman in sorted(tankmen, TankmenComparator(self.itemsCache.items.getVehicle)):
             if not tankman.isInTank:
                 tankmenInBarracks += 1
 
@@ -65,10 +68,10 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         if lastCrewIDs is not None:
             for i in xrange(len(lastCrewIDs)):
                 lastTankmenInvID = lastCrewIDs[i]
-                actualLastTankman = g_itemsCache.items.getTankman(lastTankmenInvID)
+                actualLastTankman = self.itemsCache.items.getTankman(lastTankmenInvID)
                 if actualLastTankman is not None:
                     if actualLastTankman.isInTank:
-                        lastTankmanVehicle = g_itemsCache.items.getVehicle(actualLastTankman.vehicleInvID)
+                        lastTankmanVehicle = self.itemsCache.items.getVehicle(actualLastTankman.vehicleInvID)
                         if lastTankmanVehicle:
                             if lastTankmanVehicle.isLocked:
                                 return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP)
@@ -119,8 +122,8 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
     def __isNotEnoughSpaceInBarrack(self, crew):
         berthsNeeded = len(filter(lambda (role, t): t is not None, crew))
-        barracksTmen = g_itemsCache.items.getTankmen(~REQ_CRITERIA.TANKMAN.IN_TANK | REQ_CRITERIA.TANKMAN.ACTIVE)
-        tmenBerthsCount = g_itemsCache.items.stats.tankmenBerthsCount
+        barracksTmen = self.itemsCache.items.getTankmen(~REQ_CRITERIA.TANKMAN.IN_TANK | REQ_CRITERIA.TANKMAN.ACTIVE)
+        tmenBerthsCount = self.itemsCache.items.stats.tankmenBerthsCount
         return berthsNeeded > 0 and berthsNeeded > tmenBerthsCount - len(barracksTmen)
 
     def invokeOperation(self, operationName):

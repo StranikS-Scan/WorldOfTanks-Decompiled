@@ -5,23 +5,11 @@ import TriggersManager
 from constants import ARENA_PERIOD
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from tutorial import g_tutorialWeaver
+from tutorial.control import g_tutorialWeaver
 from tutorial.control.battle import aspects
 from tutorial.control.triggers import Trigger, TriggerWithValidateVar
 from tutorial.logger import LOG_ERROR, LOG_DEBUG, LOG_MEMORY
-__all__ = ['VehicleOnArenaTrigger',
- 'PlayerVehicleNoAmmoTrigger',
- 'ObjectAIMTrigger',
- 'AreaTrigger',
- 'AimAtVehicleTrigger',
- 'AutoAimAtVehicleTrigger',
- 'VehicleDestroyedTrigger',
- 'VehicleOnSoftTerrainTrigger',
- 'ShotMissedTrigger',
- 'ShotNoDamageTrigger',
- 'ShotDamageTrigger',
- 'SniperModeTrigger',
- 'TriggersDispatcher']
+__all__ = ('VehicleOnArenaTrigger', 'PlayerVehicleNoAmmoTrigger', 'ObjectAIMTrigger', 'AreaTrigger', 'AimAtVehicleTrigger', 'AutoAimAtVehicleTrigger', 'VehicleDestroyedTrigger', 'VehicleOnSoftTerrainTrigger', 'ShotMissedTrigger', 'ShotNoDamageTrigger', 'ShotDamageTrigger', 'SniperModeTrigger', 'TriggersDispatcher')
 
 class VehicleOnArenaTrigger(TriggerWithValidateVar):
 

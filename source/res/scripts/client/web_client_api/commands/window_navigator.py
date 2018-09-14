@@ -11,19 +11,23 @@ _OpenClanCardScheme = {'required': (('clan_dbid', (int, long)), ('clan_abbrev', 
 _OpenProfileCommand = namedtuple('_OpenProfileCommand', ('database_id', 'user_name'))
 _OpenProfileCommand.__new__.__defaults__ = (None, None)
 _OpenProfileScheme = {'required': (('database_id', (int, long)), ('user_name', basestring))}
-_OpenBrowserCommand = namedtuple('_OpenBrowserCommand', ('url', 'title', 'is_modal', 'show_refresh', 'show_create_waiting', 'width', 'height'))
+_OpenBrowserCommand = namedtuple('_OpenBrowserCommand', ('url', 'title', 'is_modal', 'show_refresh', 'show_create_waiting', 'width', 'height', 'is_solid_border'))
 _OpenBrowserCommand.__new__.__defaults__ = (None,
  None,
  False,
  True,
  False,
  None,
- None)
+ None,
+ False)
 _OpenBrowserScheme = {'required': (('url', basestring),
               ('title', basestring),
               ('width', (int, long)),
               ('height', (int, long))),
- 'optional': (('is_modal', bool), ('show_refresh', bool), ('show_create_waiting', bool))}
+ 'optional': (('is_modal', bool),
+              ('show_refresh', bool),
+              ('show_create_waiting', bool),
+              ('is_solid_border', bool))}
 _CloseWindowCommand = namedtuple('_CloseWindowCommand', ('window_id',))
 _CloseWindowCommand.__new__.__defaults__ = (None,)
 _CloseWindowCommandScheme = {'required': (('window_id', basestring),)}

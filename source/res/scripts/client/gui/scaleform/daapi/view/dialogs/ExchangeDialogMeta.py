@@ -17,14 +17,15 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.managers.ColorSchemeManager import ColorSchemeManager
 from gui.shared import events
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import FreeXPExchanger, GoldToCreditsExchanger
+from gui.shared.money import Currency
 from gui.shared.utils import decorators, CLIP_ICON_PATH
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IWalletController
+from skeletons.gui.shared import IItemsCache
 STEP_SIZE = 1
 I18N_NEEDGOLDTEXT_KEY = '{0:>s}/needGoldText'
 I18N_NEEDITEMSTEXT_KEY = '{0:>s}/needItemsText'
@@ -35,13 +36,13 @@ TEXT_COLOR_ID_XP = 'textColorXp'
 TEXT_COLOR_ID_CREDITS = 'textColorCredits'
 
 class _ExchangeDialogMeta(I18nConfirmDialogMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
 
     def __init__(self, typeCompactDescr, key):
         self.__typeCompactDescr = typeCompactDescr
         self.onInvalidate = Event.Event()
         self.onCloseDialog = Event.Event()
-        self._items = g_itemsCache.items
         self.colorManager = ColorSchemeManager()
         super(_ExchangeDialogMeta, self).__init__(key, scope=ScopeTemplates.LOBBY_SUB_SCOPE)
         self.wallet.onWalletStatusChanged += self._onStatsChanged
@@ -50,11 +51,9 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
         """
         destroy operation after exchange dialog close
         """
-        self._items = None
         self.wallet.onWalletStatusChanged -= self._onStatsChanged
         self.onInvalidate.clear()
         self.onCloseDialog.clear()
-        return
 
     def getEventType(self):
         """
@@ -99,7 +98,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
         Makes VO for ConfirmExchangeDialog
         :return: <obj>
         """
-        item = self._items.getItemByCD(self.getTypeCompDescr())
+        item = self.itemsCache.items.getItemByCD(self.getTypeCompDescr())
         resToExchange = self._getResourceToExchange()
         extraData = None
         if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun():
@@ -256,7 +255,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
         :param resToExchange: <int> resource for exchange
         :return: <bool>
         """
-        return self.__getGoldToExchange(resToExchange) <= self._items.stats.gold
+        return self.__getGoldToExchange(resToExchange) <= self.itemsCache.items.stats.gold
 
     def __getResourceToExchangeTxt(self, resToExchange):
         """
@@ -319,18 +318,17 @@ class ExchangeCreditsMeta(_ExchangeDialogMeta):
         :param key: <str> localization key
         """
         super(ExchangeCreditsMeta, self).__init__(itemCD, key)
-        item = self._items.getItemByCD(self.getTypeCompDescr())
+        item = self.itemsCache.items.getItemByCD(self.getTypeCompDescr())
         self.__installVehicleCD = installVehicle
         self.__isInstalled = False
         if item and item.itemTypeID != GUI_ITEM_TYPE.VEHICLE and self.__installVehicleCD:
-            vehicle = self._items.getItemByCD(self.__installVehicleCD)
+            vehicle = self.itemsCache.items.getItemByCD(self.__installVehicleCD)
             self.__isInstalled = item.isInstalled(vehicle)
         self.__inventoryCount = 0
         if item:
             self.__inventoryCount = item.inventoryCount
-        g_clientUpdateManager.addCallbacks({'stats.credits': self._onStatsChanged,
-         'stats.gold': self._onStatsChanged,
-         'shop.exchangeRate': self._onStatsChanged,
+        g_clientUpdateManager.addMoneyCallback(self._onStatsChanged)
+        g_clientUpdateManager.addCallbacks({'shop.exchangeRate': self._onStatsChanged,
          'inventory.1': self.__checkInventory})
 
     def destroy(self):
@@ -367,14 +365,14 @@ class ExchangeCreditsMeta(_ExchangeDialogMeta):
         """
         :return: <int> exchange rate for gold
         """
-        return self._items.shop.exchangeRate
+        return self.itemsCache.items.shop.exchangeRate
 
     def _getDefaultExchangeRate(self):
         """
         Gets shop default exchange rate for gold
         :return: <int>
         """
-        return self._items.shop.defaults.exchangeRate
+        return self.itemsCache.items.shop.defaults.exchangeRate
 
     def _getCurrencyIconStr(self):
         """
@@ -402,16 +400,16 @@ class ExchangeCreditsMeta(_ExchangeDialogMeta):
         Calculates max available gold value for exchange
         :return: <int>
         """
-        return self._items.stats.actualGold
+        return self.itemsCache.items.stats.actualGold
 
     def _getResourceToExchange(self):
         """
         # calculate necessary credits for exchange
         :return: <int>
         """
-        item = self._items.getItemByCD(self.getTypeCompDescr())
+        item = self.itemsCache.items.getItemByCD(self.getTypeCompDescr())
         price = item.altPrice or item.buyPrice
-        return price.credits - self._items.stats.credits
+        return price.credits - self.itemsCache.items.stats.credits
 
     def _getRateToColorScheme(self):
         """
@@ -438,12 +436,12 @@ class ExchangeCreditsMeta(_ExchangeDialogMeta):
         Checks if item is already in inventory
         and call Event onCloseDialog
         """
-        item = self._items.getItemByCD(self.getTypeCompDescr())
+        item = self.itemsCache.items.getItemByCD(self.getTypeCompDescr())
         if item is not None:
             if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE and item.isInInventory or item.inventoryCount > self.__inventoryCount:
                 self.onCloseDialog()
             elif self.__installVehicleCD:
-                vehicle = self._items.getItemByCD(self.__installVehicleCD)
+                vehicle = self.itemsCache.items.getItemByCD(self.__installVehicleCD)
                 if not self.__isInstalled and item.isInstalled(vehicle):
                     self.onCloseDialog()
         return
@@ -465,9 +463,9 @@ class RestoreExchangeCreditsMeta(ExchangeCreditsMeta):
         # calculate necessary credits for exchange by restoring vehicle
         :return: <int> credits
         """
-        item = self._items.getItemByCD(self.getTypeCompDescr())
+        item = self.itemsCache.items.getItemByCD(self.getTypeCompDescr())
         price = item.restorePrice
-        return price.credits - self._items.stats.credits
+        return price.credits - self.itemsCache.items.stats.credits
 
 
 class ExchangeXpMeta(_ExchangeDialogMeta):
@@ -483,8 +481,8 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
         super(ExchangeXpMeta, self).__init__(itemCD, 'confirmExchangeDialog/exchangeXp')
         self._parentCD = parentCD
         self._xpCost = xpCost
-        g_clientUpdateManager.addCallbacks({'stats.gold': self._onStatsChanged,
-         'shop.freeXPConversion': self._onStatsChanged,
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self._onStatsChanged)
+        g_clientUpdateManager.addCallbacks({'shop.freeXPConversion': self._onStatsChanged,
          'inventory.1': self._onStatsChanged,
          'stats.vehTypeXP': self._onStatsChanged,
          'stats.freeXP': self._onStatsChanged,
@@ -510,7 +508,7 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
         :param callback: <function>
         """
         criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | ~REQ_CRITERIA.IN_CD_LIST([self._parentCD])
-        eliteVehicles = self._items.getVehicles(criteria).keys()
+        eliteVehicles = self.itemsCache.items.getVehicles(criteria).keys()
         result = yield FreeXPExchanger(xpToExchange, eliteVehicles).request()
         if callback is not None:
             callback(result)
@@ -526,22 +524,22 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
         """
         :return: <int> exchange rate for xp
         """
-        return self._items.shop.freeXPConversion[0]
+        return self.itemsCache.items.shop.freeXPConversion[0]
 
     def _getDefaultExchangeRate(self):
         """
         Gets shop default exchange rate for xp
         :return: <int>
         """
-        return self._items.shop.defaults.freeXPConversion[0]
+        return self.itemsCache.items.shop.defaults.freeXPConversion[0]
 
     def _getResourceToExchange(self):
         """
         # calculate necessary xp for exchange
         :return: <int>
         """
-        item = self._items.getItemByCD(self.getTypeCompDescr())
-        stats = self._items.stats
+        item = self.itemsCache.items.getItemByCD(self.getTypeCompDescr())
+        stats = self.itemsCache.items.stats
         unlockStats = UnlockStats(stats.unlocks, stats.vehiclesXPs, stats.freeXP)
         if item.isUnlocked:
             return 0
@@ -574,9 +572,9 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
         Calculates max available resource value for exchange
         :return: <int>
         """
-        eliteVehicles = self._items.getVehicles(REQ_CRITERIA.VEHICLE.FULLY_ELITE).values()
+        eliteVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.FULLY_ELITE).values()
         result = sum(map(operator.attrgetter('xp'), eliteVehicles))
-        return min(int(result / self.getExchangeRate()), self._items.stats.actualGold)
+        return min(int(result / self.getExchangeRate()), self.itemsCache.items.stats.actualGold)
 
     def _getRateToColorScheme(self):
         """
@@ -603,7 +601,7 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
         Checks if item is already unlocked
         and call Event onCloseDialog
         """
-        item = self._items.getItemByCD(self.getTypeCompDescr())
+        item = self.itemsCache.items.getItemByCD(self.getTypeCompDescr())
         if item is not None and item.isUnlocked:
             self.onCloseDialog()
         return

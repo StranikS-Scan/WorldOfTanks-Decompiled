@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.AbstractRallyWindow import AbstractRallyWindow
 
 class CompanyMainWindowMeta(AbstractRallyWindow):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractRallyWindow
-    """
 
     def getCompanyName(self):
         self._printOverrideError('getCompanyName')

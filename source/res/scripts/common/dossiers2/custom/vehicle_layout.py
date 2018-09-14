@@ -7,6 +7,7 @@ from dossiers2.custom.dependencies import ACHIEVEMENT7X7_DEPENDENCIES
 from dossiers2.custom.dependencies import FALLOUT_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import FORT_ACHIEVEMENTS_DEPENDENCIES
 from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
+from dossiers2.custom.dependencies import RANKED_STATS_DEPENDENCIES
 TOTAL_BLOCK_LAYOUT = ['creationTime',
  'lastBattleTime',
  'battleLifeTime',
@@ -26,6 +27,7 @@ _fortBattlesBlockBuilder = StaticSizeBlockBuilder('fortBattles', FORT_BLOCK_LAYO
 _fortSortiesBlockBuilder = StaticSizeBlockBuilder('fortSorties', FORT_BLOCK_LAYOUT, FORT_SORTIES_STATS_DEPENDENCIES, [])
 _globalMapCommonBlockBuilder = StaticSizeBlockBuilder('globalMapCommon', GLOBAL_MAP_BLOCK_LAYOUT, GLOBAL_MAP_STATS_DEPENDENCIES, [])
 _falloutBlockBuilder = StaticSizeBlockBuilder('fallout', FALLOUT_VEHICLE_BLOCK_LAYOUT, FALLOUT_STATS_DEPENDENCIES, [])
+_rankedBlockBuilder = StaticSizeBlockBuilder('ranked', RANKED_BLOCK_LAYOUT, RANKED_STATS_DEPENDENCIES, [])
 _maxPopUps = ['maxXP', 'maxFrags', 'maxDamage']
 _maxFalloutPopUps = _maxPopUps + ['maxWinPoints', 'maxCoins']
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
@@ -36,7 +38,9 @@ _maxFortSortiesBlockBuilder = StaticSizeBlockBuilder('maxFortSorties', MAX_BLOCK
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_BLOCK_LAYOUT, {}, [])
 _maxGlobalMapCommonBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapCommon', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
 _maxFalloutBlockBuilder = StaticSizeBlockBuilder('maxFallout', MAX_FALLOUT_BLOCK_LAYOUT, {}, _maxFalloutPopUps)
+_maxRankedBlockBuilder = StaticSizeBlockBuilder('maxRanked', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
+_rankedSeasonsBlockBuilder = DictBlockBuilder('rankedSeasons', 'II', 'BB', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -236,7 +240,7 @@ FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT = ['shoulderToShoulder',
  'champion',
  'bannerman',
  'falloutDieHard',
- 'sauronEye']
+ 'deleted']
 _falloutAchievementsPopUps = ['falloutDieHard']
 _falloutAchievementsBlockBuilder = StaticSizeBlockBuilder('falloutAchievements', FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT, {}, _falloutAchievementsPopUps)
 _playerInscriptionsBlockBuilder = ListBlockBuilder('inscriptions', 'H', {})
@@ -277,4 +281,7 @@ vehicleDossierLayout = (_a15x15BlockBuilder,
  _maxGlobalMapCommonBlockBuilder,
  _falloutBlockBuilder,
  _maxFalloutBlockBuilder,
- _falloutAchievementsBlockBuilder)
+ _falloutAchievementsBlockBuilder,
+ _rankedBlockBuilder,
+ _maxRankedBlockBuilder,
+ _rankedSeasonsBlockBuilder)

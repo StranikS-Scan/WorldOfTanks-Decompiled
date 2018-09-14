@@ -27,7 +27,7 @@ Usage:
 """
 import Math
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA
-_FLOAT_EPSILON = 0.002
+_FLOAT_EPSILON = 0.003
 
 class BINDING_ID(object):
     CTRL_MODE_NAME = 1

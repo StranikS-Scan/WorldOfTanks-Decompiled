@@ -14,6 +14,9 @@ class InventoryItemsTab(StoreItemsTab):
     def _getItemPrice(self, item):
         return item.sellPrice
 
+    def _getItemDefaultPrice(self, item):
+        return item.defaultSellPrice
+
     def _getItemActionData(self, item):
         return packItemActionTooltipData(item, False) if item.sellPrice != item.defaultSellPrice and not item.isRented else None
 
@@ -27,6 +30,12 @@ class InventoryItemsTab(StoreItemsTab):
             requestCriteria |= REQ_CRITERIA.INVENTORY
         return requestCriteria
 
+    def _getDiscountCriteria(self):
+        if self._actionsSelected:
+            return REQ_CRITERIA.DISCOUNT_SELL
+        else:
+            return REQ_CRITERIA.EMPTY
+
     def _getStatusParams(self, item):
         disabled = False
         statusMessage = ''
@@ -37,6 +46,9 @@ class InventoryItemsTab(StoreItemsTab):
 
     def _getItemStatusLevel(self, item):
         return Vehicle.VEHICLE_STATE_LEVEL.INFO
+
+    def _isItemOnDiscount(self, item):
+        return item.sellActionPrc != 0
 
 
 class InventoryModuleTab(InventoryItemsTab, StoreModuleTab):
@@ -66,10 +78,8 @@ class InventoryVehicleTab(InventoryItemsTab, StoreVehicleTab):
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = super(InventoryVehicleTab, self)._getRequestCriteria(invVehicles)
         requestCriteria |= REQ_CRITERIA.INVENTORY
-        vehicleType = self._filterData['vehicleType']
+        requestCriteria |= self._getVehicleRiterias(self._filterData['selectedTypes'], self._filterData['selectedLevels'])
         extra = self._filterData['extra']
-        if vehicleType != 'all':
-            requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: item.type.lower() == vehicleType.lower())
         return self._getExtraCriteria(extra, requestCriteria, invVehicles)
 
     def _getExtraCriteria(self, extra, requestCriteria, invVehicles):
@@ -87,7 +97,7 @@ class InventoryVehicleTab(InventoryItemsTab, StoreVehicleTab):
         disable = False
         statusMessage = ''
         state = item.getState()[0]
-        isStateSuitable = state in (Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER, Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER)
+        isStateSuitable = state in (Vehicle.VEHICLE_STATE.RENTAL_IS_OVER, Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER)
         isExcludedState = state in (Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,)
         if isStateSuitable or not isExcludedState and not item.canSell:
             statusMessage = makeString('#menu:store/vehicleStates/%s' % state)

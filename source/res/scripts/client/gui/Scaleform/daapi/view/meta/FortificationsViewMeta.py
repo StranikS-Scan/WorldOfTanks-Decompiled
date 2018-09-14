@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class FortificationsViewMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def onFortCreateClick(self):
         self._printOverrideError('onFortCreateClick')

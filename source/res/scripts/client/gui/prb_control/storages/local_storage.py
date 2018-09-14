@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/storages/local_storage.py
-from constants import QUEUE_TYPE
+
 
 class LocalStorage(object):
     __slots__ = ()
@@ -24,4 +24,7 @@ class LocalStorage(object):
         return False
 
     def clear(self):
+        pass
+
+    def onAvatarBecomePlayer(self):
         pass

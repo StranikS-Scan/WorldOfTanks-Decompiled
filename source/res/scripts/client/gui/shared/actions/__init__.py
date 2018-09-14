@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/actions/__init__.py
 import BigWorld
-from ConnectionManager import connectionManager
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import ViewTypes
 from gui.app_loader import g_appLoader
@@ -14,6 +12,8 @@ from gui.shared.actions.chains import ActionsChain
 from gui.shared.events import LoginEventEx, GUICommonEvent
 from helpers import dependency
 from predefined_hosts import g_preDefinedHosts, getHostURL
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 __all__ = ['LeavePrbModalEntity',
  'DisconnectFromPeriphery',
@@ -76,13 +76,41 @@ class LeavePrbModalEntity(Action):
     def __doLeave(self, dispatcher, ctx):
         self._completed = yield dispatcher.leave(ctx)
         if self._completed:
-            LOG_DEBUG('Leave modal entity. Player left prebattle/unit.')
+            LOG_DEBUG('Leave modal entity. Player left prebattle.')
         else:
             LOG_DEBUG('Leave modal entity. Action was failed.')
         self._running = False
 
 
+class SelectPrb(Action):
+
+    def __init__(self, prbAction):
+        super(SelectPrb, self).__init__()
+        self._running = False
+        self._prbAction = prbAction
+
+    def invoke(self):
+        from gui.prb_control.dispatcher import g_prbLoader
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher:
+            self._running = True
+            self.__doSelect(dispatcher)
+
+    def isInstantaneous(self):
+        return False
+
+    @process
+    def __doSelect(self, dispatcher):
+        self._completed = yield dispatcher.doSelectAction(self._prbAction)
+        if self._completed:
+            LOG_DEBUG('Select prebattle entity. Player has joined prebattle.')
+        else:
+            LOG_DEBUG('Select prebattle entity. Action was failed.')
+        self._running = False
+
+
 class DisconnectFromPeriphery(Action):
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         super(DisconnectFromPeriphery, self).__init__()
@@ -99,7 +127,7 @@ class DisconnectFromPeriphery(Action):
         if app:
             from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
             view = app.containerManager.getView(ViewTypes.DEFAULT)
-            if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and connectionManager.isDisconnected():
+            if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and self.connectionMgr.isDisconnected():
                 LOG_DEBUG('Disconnect action. Player came to login')
                 self._completed = True
                 self._running = False
@@ -108,12 +136,14 @@ class DisconnectFromPeriphery(Action):
 
 class ConnectToPeriphery(Action):
     loginManager = dependency.descriptor(ILoginManager)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, peripheryID):
         super(ConnectToPeriphery, self).__init__()
         self.__host = g_preDefinedHosts.periphery(peripheryID)
         self.__endTime = None
-        self.__credentials = g_lobbyContext.getCredentials()
+        self.__credentials = self.lobbyContext.getCredentials()
         return
 
     def isInstantaneous(self):
@@ -151,13 +181,13 @@ class ConnectToPeriphery(Action):
 
     def __addHandlers(self):
         g_eventBus.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        connectionManager.onConnected += self.__onConnected
-        connectionManager.onRejected += self.__onRejected
+        self.connectionMgr.onConnected += self.__onConnected
+        self.connectionMgr.onRejected += self.__onRejected
 
     def __removeHandlers(self):
         g_eventBus.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        connectionManager.onConnected -= self.__onConnected
-        connectionManager.onRejected -= self.__onRejected
+        self.connectionMgr.onConnected -= self.__onConnected
+        self.connectionMgr.onRejected -= self.__onRejected
 
     def __onConnected(self):
         self.__removeHandlers()

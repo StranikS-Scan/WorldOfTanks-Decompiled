@@ -7,8 +7,10 @@ from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.items_parameters import params_helper, formatters
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, getParameters, getCommonParam, SimplifiedBarVO
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
+from gui.shared.items_parameters.comparator import PARAM_STATE
 
 class VehicleParameters(VehicleParametersMeta):
 
@@ -88,6 +90,7 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
     _AVERAGE_PARAMS = ('avgDamage', 'avgPiercingPower')
     _AVERAGE_TOOLTIPS_MAP = {TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS: TOOLTIPS_CONSTANTS.VEHICLE_AVG_PARAMETERS,
      TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_ADVANCED_PARAMETERS: TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_AVG_PARAMETERS}
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, tooltipType=TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS):
         super(_VehParamsGenerator, self).__init__()
@@ -101,11 +104,15 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
         return formatters.colorizedFormatParameter(param, formatters.NO_BONUS_SIMPLIFIED_SCHEME)
 
     def _makeSimpleParamBottomVO(self, param, vehIntCD=None):
-        stockParams = getParameters(g_itemsCache.items.getStockVehicle(vehIntCD))
+        stockParams = getParameters(self.itemsCache.items.getStockVehicle(vehIntCD))
         data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM, param.name)
+        delta = 0
+        state, diff = param.state
+        if state == PARAM_STATE.WORSE:
+            delta = abs(diff)
         data.update({'isEnabled': True,
          'tooltip': self._tooltipType,
-         'indicatorVO': SimplifiedBarVO(value=param.value, markerValue=stockParams[param.name], useAnim=self.useAnim)})
+         'indicatorVO': SimplifiedBarVO(value=param.value, delta=delta, markerValue=stockParams[param.name], useAnim=self.useAnim)})
         return data
 
     def _getAdvancedParamTooltip(self, param):

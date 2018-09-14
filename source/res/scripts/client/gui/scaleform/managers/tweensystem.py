@@ -328,7 +328,7 @@ class _AbstractTween(AbstractTweenMeta):
 
     def __creatDeltaData(self):
         deltaProps = {}
-        for prop in _AbstractTween.PROPS_IN_USE.keys():
+        for prop in _AbstractTween.PROPS_IN_USE.iterkeys():
             if self.__animTargetProps.has_key(prop) and self.__animTargetProps[prop] is not None:
                 deltaProps[prop] = self.__animTargetProps[prop] - self.__startTargetProps[prop]
             deltaProps[prop] = 0
@@ -337,9 +337,9 @@ class _AbstractTween(AbstractTweenMeta):
 
     def __createAnimPropsFromObject(self, newProps):
         resultProps = {}
-        for propName in _AbstractTween.PROPS_IN_USE.keys():
+        for propName in _AbstractTween.PROPS_IN_USE.iterkeys():
             propValue = getattr(newProps, propName, None)
-            if propValue is not None and not str(propValue) == _AbstractTween.NAN:
+            if propValue is not None and str(propValue) != _AbstractTween.NAN:
                 resultProps[propName] = propValue
 
         return resultProps

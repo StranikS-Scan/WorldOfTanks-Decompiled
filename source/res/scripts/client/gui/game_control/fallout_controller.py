@@ -15,8 +15,7 @@ from gui.prb_control.entities.base.unit.ctx import SetVehiclesUnitCtx
 from gui.prb_control.entities.fallout.squad.ctx import ChangeFalloutQueueTypeCtx
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.shared import g_itemsCache
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import int2roman, i18n, dependency
@@ -24,8 +23,10 @@ from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IFalloutController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 
 class _BaseDataStorage(IGlobalListener):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, proxy):
         super(_BaseDataStorage, self).__init__()
@@ -51,7 +52,7 @@ class _BaseDataStorage(IGlobalListener):
         pass
 
     def getSelectedVehicles(self):
-        return filter(None, map(g_itemsCache.items.getVehicle, filter(None, self.getSelectedSlots())))
+        return filter(None, map(self.itemsCache.items.getVehicle, filter(None, self.getSelectedSlots())))
 
     def addSelectedVehicle(self, vehInvID):
         pass
@@ -87,11 +88,11 @@ class _UserDataStorage(_BaseDataStorage):
 
     def init(self):
         super(_UserDataStorage, self).init()
-        g_itemsCache.onSyncCompleted += self.__onItemsResync
+        self.itemsCache.onSyncCompleted += self.__onItemsResync
         self.settingsCore.onSettingsChanged += self.__onSettingsResync
 
     def fini(self):
-        g_itemsCache.onSyncCompleted -= self.__onItemsResync
+        self.itemsCache.onSyncCompleted -= self.__onItemsResync
         self.settingsCore.onSettingsChanged -= self.__onSettingsResync
         super(_UserDataStorage, self).fini()
 
@@ -107,7 +108,7 @@ class _UserDataStorage(_BaseDataStorage):
             self.falloutStorage.validateSelectedVehicles()
 
     def addSelectedVehicle(self, vehInvID):
-        canSelect = self._proxy.canSelectVehicle(g_itemsCache.items.getVehicle(vehInvID))
+        canSelect = self._proxy.canSelectVehicle(self.itemsCache.items.getVehicle(vehInvID))
         if not canSelect:
             LOG_ERROR('Selected vehicle in invalid!', vehInvID)
             return
@@ -205,7 +206,7 @@ class _SquadDataStorage(_BaseDataStorage):
             self.__setFalloutType(battleType)
 
     def addSelectedVehicle(self, vehInvID):
-        canSelect = self._proxy.canSelectVehicle(g_itemsCache.items.getVehicle(vehInvID))
+        canSelect = self._proxy.canSelectVehicle(self.itemsCache.items.getVehicle(vehInvID))
         if not canSelect:
             LOG_ERROR('Selected vehicle in invalid!', vehInvID)
             return
@@ -270,7 +271,7 @@ class _SquadDataStorage(_BaseDataStorage):
         if self._proxy.getConfig().hasRequiredVehicles():
             slots = self.prbEntity.getVehiclesInfo()
             vehicles = map(lambda vInfo: vInfo.vehInvID, slots)
-            vehGetter = g_itemsCache.items.getVehicle
+            vehGetter = self.itemsCache.items.getVehicle
             for idx, invID in enumerate(vehicles[:maxVehs]):
                 invVehicle = vehGetter(invID)
                 if invVehicle is not None:

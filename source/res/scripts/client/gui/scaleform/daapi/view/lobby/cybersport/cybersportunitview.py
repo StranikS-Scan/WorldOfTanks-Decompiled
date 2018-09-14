@@ -11,7 +11,7 @@ from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.prb_control import settings
 from gui.prb_control.settings import REQUEST_TYPE
-from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from helpers import int2roman, i18n
 
@@ -32,6 +32,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
             slotGetter = entity.getSlotState
             slotLabels = map(lambda idx: vo_converters.makeSlotLabel(flags, slotGetter(idx), isCreator, len(vehGetter(idx))), rosterSettings.getAllSlotsRange())
             self.as_lockUnitS(flags.isLocked(), slotLabels)
+            self._updateRallyData()
         if isCreator and flags.isOpenedStateChanged():
             self.as_setOpenedS(flags.isOpened(), vo_converters.makeUnitStateLabel(flags))
         self._setActionButtonState()
@@ -65,7 +66,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange())
+                vehicleVO = makeVehicleVO(self.itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange())
                 slotCost = vInfo.vehLevel
             else:
                 slotState = entity.getSlotState(slotIdx)

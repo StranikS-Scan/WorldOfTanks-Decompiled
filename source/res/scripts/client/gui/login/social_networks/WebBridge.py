@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/login/social_networks/WebBridge.py
 import base64
 import socket
-from ConnectionManager import connectionManager
 from urllib import urlencode, quote_plus
 import BigWorld
 from constants import HAS_DEV_RESOURCES
@@ -10,7 +9,9 @@ from Event import Event
 from DataServer import ThreadedDataServer, EncryptingThreadedDataServer
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
+from helpers import dependency
 from helpers import getLanguageCode
+from skeletons.connection_mgr import IConnectionManager
 
 class _STATUS:
     OK = 0
@@ -19,22 +20,23 @@ class _STATUS:
 
 
 class WebBridge(object):
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, preferences):
         self.__dataServer = None
         self.__preferences = preferences
         self.__loginParams = None
         self.dataServerReceivedData = Event()
-        connectionManager.onConnected += self.__finiDataServer
-        connectionManager.onRejected += self.__finiDataServer
-        connectionManager.onDisconnected += self.__finiDataServer
+        self.connectionMgr.onConnected += self.__finiDataServer
+        self.connectionMgr.onRejected += self.__finiDataServer
+        self.connectionMgr.onDisconnected += self.__finiDataServer
         return
 
     def fini(self):
         self.__finiDataServer()
-        connectionManager.onConnected -= self.__finiDataServer
-        connectionManager.onRejected -= self.__finiDataServer
-        connectionManager.onDisconnected -= self.__finiDataServer
+        self.connectionMgr.onConnected -= self.__finiDataServer
+        self.connectionMgr.onRejected -= self.__finiDataServer
+        self.connectionMgr.onDisconnected -= self.__finiDataServer
         if HAS_DEV_RESOURCES:
             from gui.development.mock.social_network_login import fini as finalizeWGNIServerMock
             finalizeWGNIServerMock()
@@ -65,7 +67,7 @@ class WebBridge(object):
         self.__loginParams['account_id'] = spaID
         from Manager import SOCIAL_NETWORKS
         self.__preferences['login_type'] = socialNetwork or SOCIAL_NETWORKS.WGNI
-        connectionManager.initiateConnection(self.__loginParams, '', self.__preferences['server_name'])
+        self.connectionMgr.initiateConnection(self.__loginParams, '', self.__preferences['server_name'])
 
     def __getWgniParams(self, isExternal, isRegistration):
         params = {'game': 'wot',

@@ -38,11 +38,14 @@ _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
 
 class _IStunAnimPlayer(object):
 
+    def __init__(self):
+        self._hasStun = False
+
     def showStun(self, time, animated):
-        raise NotImplementedError
+        self._hasStun = True
 
     def hideStun(self, animated):
-        raise NotImplementedError
+        self._hasStun = False
 
 
 class _ActionScriptTimer(_IStunAnimPlayer):
@@ -52,31 +55,39 @@ class _ActionScriptTimer(_IStunAnimPlayer):
         self._view = view
 
     def showStun(self, time, animated):
-        self._view.as_showStunS(time, True)
+        super(_ActionScriptTimer, self).showStun(time, animated)
+        self._view.as_showStunS(time, animated)
 
     def hideStun(self, animated):
-        self._view.as_hideStunS(animated)
+        if self._hasStun:
+            self._view.as_hideStunS(animated)
+        super(_ActionScriptTimer, self).hideStun(animated)
 
 
 class _PythonTimer(PythonTimer, _IStunAnimPlayer):
 
     def __init__(self, panel):
         super(_PythonTimer, self).__init__(panel, 0, 0, 0)
+        self.__hideAnimated = False
 
     def showStun(self, totalTime, animated):
+        super(_PythonTimer, self).showStun(totalTime, animated)
         self._totalTime = totalTime
         self._startTime = BigWorld.serverTime()
         self._finishTime = self._startTime + totalTime if totalTime else 0
         self.show()
 
     def hideStun(self, animated):
+        self.__hideAnimated = animated
         self.hide()
+        super(_PythonTimer, self).hideStun(animated)
 
     def _showView(self, isBubble):
         self._panel.as_setStunTimerSnapshotS(self._totalTime)
 
     def _hideView(self):
-        self._panel.as_hideStunS(True)
+        if self._hasStun:
+            self._panel.as_hideStunS(self.__hideAnimated)
 
     def _setViewSnapshot(self, timeLeft):
         self._panel.as_setStunTimerSnapshotS(math.ceil(timeLeft))
@@ -152,7 +163,11 @@ class DamagePanel(DamagePanelMeta):
         self.__changeVehicleSetting('extinguisher', None)
         return
 
-    def hideStunImmidiate(self):
+    def clickToStunTimer(self):
+        self.__changeVehicleSetting('medkit', None)
+        return
+
+    def hideStunImmediate(self):
         self.__stunAnimPlayer.hideStun(False)
 
     def _populate(self):
@@ -171,11 +186,12 @@ class DamagePanel(DamagePanelMeta):
         if self.sessionProvider.isReplayPlaying:
             self.__stunAnimPlayer = _PythonTimer(weakref.proxy(self))
         else:
-            self.__stunAnimPlayer = _ActionScriptTimer(self)
+            self.__stunAnimPlayer = _ActionScriptTimer(weakref.proxy(self))
         return
 
     def _dispose(self):
         self.as_resetS()
+        self.hideStunImmediate()
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleControlling -= self.__onVehicleControlling
@@ -200,9 +216,11 @@ class DamagePanel(DamagePanelMeta):
 
     def _updateCrewDeactivated(self, _):
         self.as_setCrewDeactivatedS()
+        self.hideStunImmediate()
 
     def _updateDestroyed(self, _=None):
         self.as_setVehicleDestroyedS()
+        self.hideStunImmediate()
 
     def _updateVehicleMovementState(self, runAnimation):
         if runAnimation:
@@ -229,7 +247,7 @@ class DamagePanel(DamagePanelMeta):
 
     def _switching(self, _):
         self.as_resetS()
-        self.__stunAnimPlayer.hideStun(False)
+        self.hideStunImmediate()
 
     def _updateStun(self, stunDuration):
         if stunDuration > 0:

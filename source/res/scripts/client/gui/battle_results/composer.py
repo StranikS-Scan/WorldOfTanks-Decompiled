@@ -99,6 +99,29 @@ class StrongholdBattleStatsComposer(StatsComposer):
         super(StrongholdBattleStatsComposer, self).__init__(reusable, templates.STRONGHOLD_BATTLE_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.REGULAR_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
 
 
+class RankedBattlesStatsComposer(StatsComposer):
+
+    def __init__(self, reusable):
+        super(RankedBattlesStatsComposer, self).__init__(reusable, templates.RANKED_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.RANKED_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
+        self.__resultsTeamsBlock = base.StatsBlock(templates.RANKED_RESULTS_BLOCK)
+        self.__resultsTeamsBlock.addNextComponent(templates.RANKED_RESULTS_BLOCK_TITLE.clone())
+        self.__resultsTeamsBlock.addNextComponent(templates.RANKED_RESULTS_TEAMS_STATS_BLOCK.clone())
+
+    def clear(self):
+        super(RankedBattlesStatsComposer, self).clear()
+        self.__resultsTeamsBlock.clear()
+
+    def setResults(self, results, reusable):
+        super(RankedBattlesStatsComposer, self).setResults(results, reusable)
+        self.__resultsTeamsBlock.setRecord(results, reusable)
+
+    def getResultsTeamsVO(self):
+        """
+        Returns VO for external RankedBattlesBattleResults view.
+        """
+        return self.__resultsTeamsBlock.getVO()
+
+
 def createComposer(reusable):
     """Create composer to build data by type of bonus.
     :param reusable: instance of _ReusableInfo.
@@ -119,6 +142,8 @@ def createComposer(reusable):
         composer = SandboxStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.FORT_BATTLE_2:
         composer = StrongholdBattleStatsComposer(reusable)
+    elif bonusType == ARENA_BONUS_TYPE.RANKED:
+        composer = RankedBattlesStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

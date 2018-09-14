@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/main_view.py
 from CurrentVehicle import g_currentVehicle
-from adisp import process
+from adisp import process, async
 from constants import IGR_TYPE, EVENT_TYPE
 from gui import DialogsInterface, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -17,7 +17,6 @@ from gui.customization import g_customizationController
 from gui.customization.shared import checkInQuest, formatPriceCredits, formatPriceGold, getSalePriceString, DURATION, CUSTOMIZATION_TYPE, QUALIFIER_TYPE, QUALIFIER_TYPE_INDEX, FILTER_TYPE
 from gui.server_events import events_dispatcher
 from gui.shared import events
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.formatters import text_styles, icons
@@ -26,6 +25,8 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared import getDialogRemoveElement, getDialogReplaceElement
 from skeletons.gui.game_control import IIGRController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 _DURATION_TOOLTIPS = {DURATION.PERMANENT: (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_ALWAYS, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_LOWERCASE_ALWAYS),
  DURATION.MONTH: (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_MONTH, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_LOWERCASE_MONTH),
  DURATION.WEEK: (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_WEEK, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_LOWERCASE_WEEK)}
@@ -44,7 +45,8 @@ def _getSlotsPanelDataVO(slotsData):
         for slotIdx in range(0, len(slotsData[cType])):
             selectorSlotsData.append(_getSlotVO(slotsData[cType][slotIdx], cType, slotIdx))
 
-        slotsDataVO['data'].append({'header': header,
+        slotsDataVO['data'].append({'id': str(cType),
+         'header': header,
          'data': selectorSlotsData})
 
     return slotsDataVO
@@ -128,6 +130,8 @@ def _getInvoiceItemDialogMeta(dialogType, cType, carouselItem, l10nExtraParams):
 
 
 class MainView(CustomizationMainViewMeta):
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, ctx=None):
@@ -178,7 +182,7 @@ class MainView(CustomizationMainViewMeta):
         cType = self.__controller.slots.currentType
         quests = self.__controller.dataAggregator.getIncompleteQuestItems()
         questData = quests[cType][item.getID()]
-        events_dispatcher.showEventsWindow(eventID=questData.id, eventType=EVENT_TYPE.BATTLE_QUEST)
+        events_dispatcher.showMission(questData.id)
 
     def _populate(self):
         super(MainView, self)._populate()
@@ -193,16 +197,17 @@ class MainView(CustomizationMainViewMeta):
         self.__controller.events.onBonusesUpdated += self.__setBonusData
         self.__controller.start()
         self.as_setSlotsPanelDataS(_getSlotsPanelDataVO(self.__controller.slots.currentSlotsData))
-        g_clientUpdateManager.addCallbacks({'stats.credits': self.__setBottomPanelData,
-         'stats.gold': self.__setBottomPanelData})
+        g_clientUpdateManager.addMoneyCallback(self.__setBottomPanelData)
         g_currentVehicle.onChanged += self.__setHeaderInitData
         self.__setHeaderInitData()
         self.__setFooterInitData()
         self.__setCarouselInitData()
         self.__setBottomPanelData()
         self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.HIDE_HANGAR, True))
+        self.lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
 
     def _dispose(self):
+        self.lobbyContext.deleteHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
         self.__controller.tankModel.applyInitialModelAttributes()
         self.__controller.events.onCartUpdated -= self.__setBottomPanelData
         self.__controller.events.onMultiplePurchaseProcessed -= self.__onPurchaseProcessed
@@ -236,13 +241,13 @@ class MainView(CustomizationMainViewMeta):
         totalGold = self.__controller.cart.totalPriceGold
         totalCredits = self.__controller.cart.totalPriceCredits
         notEnoughGoldTooltip = notEnoughCreditsTooltip = ''
-        enoughGold = g_itemsCache.items.stats.gold >= totalGold
-        enoughCredits = g_itemsCache.items.stats.credits >= totalCredits
+        enoughGold = self.itemsCache.items.stats.gold >= totalGold
+        enoughCredits = self.itemsCache.items.stats.credits >= totalCredits
         if not enoughGold:
-            diff = text_styles.gold(totalGold - g_itemsCache.items.stats.gold)
+            diff = text_styles.gold(totalGold - self.itemsCache.items.stats.gold)
             notEnoughGoldTooltip = makeTooltip(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER), _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_BODY, count='{0}{1}'.format(diff, icons.gold())))
         if not enoughCredits:
-            diff = text_styles.credits(totalCredits - g_itemsCache.items.stats.credits)
+            diff = text_styles.credits(totalCredits - self.itemsCache.items.stats.credits)
             notEnoughCreditsTooltip = makeTooltip(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER), _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_BODY, count='{0}{1}'.format(diff, icons.credits())))
         self.as_setBottomPanelHeaderS({'newHeaderText': label,
          'buyBtnLabel': _ms(MENU.CUSTOMIZATION_BUTTONS_APPLY, count=len(self.__controller.cart.items)),
@@ -372,3 +377,12 @@ class MainView(CustomizationMainViewMeta):
         if isContinue:
             self.__controller.carousel.pickElement(idx)
         return
+
+    @async
+    @process
+    def __confirmHeaderNavigation(self, callback):
+        if self.__controller.cart.items:
+            confirmed = yield DialogsInterface.showI18nConfirmDialog('customization/close')
+        else:
+            confirmed = True
+        callback(confirmed)

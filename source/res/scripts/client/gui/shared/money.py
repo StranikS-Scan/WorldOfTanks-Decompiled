@@ -13,10 +13,12 @@ class Currency(CONST_CONTAINER):
     """
     CREDITS = 'credits'
     GOLD = 'gold'
-    BY_WEIGHT = (GOLD, CREDITS)
+    CRYSTAL = 'crystal'
+    ALL = (CREDITS, GOLD, CRYSTAL)
+    BY_WEIGHT = (GOLD, CRYSTAL, CREDITS)
 
 
-_Money = namedtuple('Money', Currency.ALL())
+_Money = namedtuple('Money', Currency.ALL)
 
 class Money(_Money):
     """
@@ -33,8 +35,8 @@ class Money(_Money):
     """
 
     @staticmethod
-    def __new__(cls, credits=0, gold=0, *args, **kwargs):
-        return _Money.__new__(cls, credits=credits, gold=gold)
+    def __new__(cls, credits=0, gold=0, crystal=0, *args, **kwargs):
+        return _Money.__new__(cls, credits=credits, gold=gold, crystal=crystal)
 
     @classmethod
     def makeFrom(cls, currency, value):
@@ -47,6 +49,45 @@ class Money(_Money):
         :return: A new instance of Money class.
         """
         return Money(**{currency: value})
+
+    @classmethod
+    def makeMoney(cls, data):
+        """
+        Converts the given data to Money. Supported types: tuple, dict, Money. If data has invalid type, returns None.
+        
+        :param data: data to be converted (tuple, dict or Money).
+        :return: A new instance of Money class or None if the data has unsupported type.
+        """
+        if isinstance(data, tuple):
+            return Money(*data)
+        elif isinstance(data, dict):
+            return Money(**data)
+        else:
+            return data if isinstance(data, Money) else None
+
+    @classmethod
+    def hasMoney(cls, data):
+        """
+        Checks whether the given dictionary has a key equal to an existing currency.
+        
+        :param data: any dictionary.
+        :return: Returns True if the given dictionary has a key equal to an existing currency. Otherwise, false.
+        """
+        for c in Currency.ALL:
+            if c in data:
+                return True
+
+        return False
+
+    @classmethod
+    def extractMoneyDict(cls, data):
+        """
+        Copies all existing currencies from the given dict to a new one.
+        
+        :param data: any dictionary.
+        :return: Returns dict with currencies that are present in the given one.
+        """
+        return dict([ (c, data[c]) for c in Currency.ALL if c in data ])
 
     def get(self, currency):
         """
@@ -66,7 +107,26 @@ class Money(_Money):
         :param value: A new value for the given currency.
         :return: A copy of original money object with the given value for the given currency.
         """
-        return self._replace(**{currency: value})
+        return self.replaceAll({currency: value})
+
+    def replaceAll(self, values):
+        """
+        Creates a copy of money object and replaces values of the given currencies. Values of all
+        other currencies are copied without any changes..
+        
+        :param values: Values that replace current values. Represented by dict, where keys correspond to
+                       Currency strings.
+        :return: A copy of original money object with updated values.
+        """
+        return self._replace(**values)
+
+    def copy(self):
+        """
+        Creates a deep copy of money.
+        
+        :return: A deep copy of original money object.
+        """
+        return Money(*self)
 
     def exchange(self, currency, toCurrency, rate):
         """
@@ -114,7 +174,7 @@ class Money(_Money):
         
         :return: List of set currencies from Currency enumeration.
         """
-        currencies = Currency.BY_WEIGHT if byWeight else Currency.ALL()
+        currencies = Currency.BY_WEIGHT if byWeight else Currency.ALL
         return [ c for c in currencies if self.isSet(c) ]
 
     def getCurrency(self, byWeight=True):
@@ -128,7 +188,7 @@ class Money(_Money):
         
         :return: A currency from the Currency enumeration.
         """
-        currencies = Currency.BY_WEIGHT if byWeight else Currency.ALL()
+        currencies = Currency.BY_WEIGHT if byWeight else Currency.ALL
         for c in currencies:
             if self.isSet(c):
                 return c
@@ -156,13 +216,34 @@ class Money(_Money):
         """
         return dict(((c, v) for c, v in self.iteritems()))
 
+    def toSignDict(self):
+        """
+        Converts money to dictionary that includes only set currencies.
+        NOTE: As per Money 2.0 concept, if v != 0 is not correct condition!
+        """
+        return dict(((c, v) for c, v in self.iteritems() if v != 0))
+
+    def toMoneySet(self):
+        """
+        Converts Money to MoneySet.
+        
+        :return: Returns MoneySet instance including self.
+        """
+        return MoneySet((self,))
+
+    def toDictsList(self):
+        """
+        Returns money in [{}] format.
+        """
+        return [self.toSignDict()]
+
     def iteritems(self):
         """
         Returns an iterator that allows to iterate money by currency and value simultaneously.
         
         :return: Returns an iterator over the money's (currency, value) pairs.
         """
-        for c in Currency.ALL():
+        for c in Currency.ALL:
             yield (c, self.get(c))
 
     def apply(self, formatter):
@@ -209,7 +290,7 @@ class Money(_Money):
         Iterable values are represented by currency's value in order determined by Currency
         enumeration.
         """
-        for c in Currency.ALL():
+        for c in Currency.ALL:
             yield self.get(c)
 
     def __contains__(self, currency):
@@ -408,3 +489,17 @@ class Money(_Money):
 
 
 ZERO_MONEY = Money()
+
+class MoneySet(tuple):
+    """
+    Represents container of moneys. Corresponds to Money 2.0 concept - implements the OR condition.
+    """
+
+    def __init__(self, prices=()):
+        super(MoneySet, self).__init__(prices)
+
+    def toDictsList(self):
+        """
+        Returns money set in [{}, {}, ... ,{}] format.
+        """
+        return [ money.toSignDict() for money in self ]

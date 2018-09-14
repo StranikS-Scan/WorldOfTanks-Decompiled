@@ -22,7 +22,6 @@ class FalloutTankCarousel(FalloutTankCarouselMeta, IGlobalListener):
         self._carouselDPConfig.update({'falloutCtrl': None})
         self._carouselDPCls = FalloutCarouselDataProvider
         self._carouselFilterCls = FalloutCarouselFilter
-        self._falloutCtrl = None
         self._slotDP = None
         return
 
@@ -31,17 +30,17 @@ class FalloutTankCarousel(FalloutTankCarouselMeta, IGlobalListener):
         
         :param vehicleInvId: vehicle's inventory id
         """
-        if vehicleInvId in self._falloutCtrl.getSelectedSlots():
-            self._falloutCtrl.removeSelectedVehicle(vehicleInvId)
+        if vehicleInvId in self.falloutCtrl.getSelectedSlots():
+            self.falloutCtrl.removeSelectedVehicle(vehicleInvId)
         else:
-            self._falloutCtrl.addSelectedVehicle(vehicleInvId)
+            self.falloutCtrl.addSelectedVehicle(vehicleInvId)
 
     def clearSlot(self, vehicleInvId):
         """ Remove vehicle from fallout slot.
         
         :param vehicleInvId: vehicle's inventory id
         """
-        self._falloutCtrl.removeSelectedVehicle(vehicleInvId)
+        self.falloutCtrl.removeSelectedVehicle(vehicleInvId)
 
     def shiftSlot(self, vehicleInvId):
         """ Shift vehicles in fallout slot clockwise.

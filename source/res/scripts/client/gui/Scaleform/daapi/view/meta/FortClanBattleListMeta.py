@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyListView import BaseRallyListView
 
 class FortClanBattleListMeta(BaseRallyListView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseRallyListView
-    """
 
     def as_setClanBattleDataS(self, data):
         """

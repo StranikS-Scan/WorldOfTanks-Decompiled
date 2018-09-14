@@ -99,6 +99,7 @@
     <KZ-V16>	129	</KZ-V16>
     <V_2_10M>	130	</V_2_10M>
     <V-4M>	131	</V-4M>
+    <MH_1>	132	</MH_1>
     <Engine_01_KV>	200	</Engine_01_KV>
     <V-54K_T>	201	</V-54K_T>
     <Engine_T-50-2>	202	</Engine_T-50-2>
@@ -530,7 +531,7 @@
       <price>	15200	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	300	</power>
+      <power>	400	</power>
       <weight>	540	</weight>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -718,6 +719,22 @@
       <rpm_min>	253	</rpm_min>
       <rpm_max>	2440	</rpm_max>
     </V-55UM>
+    <V-54-6>
+      <userString>	#ussr_vehicles:V-54-6	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	338	</rpm_min>
+      <rpm_max>	2184	</rpm_max>
+    </V-54-6>
     <T-26>
       <userString>	#ussr_vehicles:T-26	</userString>
       <tags>	gasoline	</tags>
@@ -767,22 +784,6 @@
       <rpm_min>	336	</rpm_min>
       <rpm_max>	2522	</rpm_max>
     </T-26F>
-    <V-54-6>
-      <userString>	#ussr_vehicles:V-54-6	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	82300	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	680	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	338	</rpm_min>
-      <rpm_max>	2184	</rpm_max>
-    </V-54-6>
     <T-26M>
       <userString>	#ussr_vehicles:T-26M	</userString>
       <tags>	gasoline	</tags>
@@ -1434,6 +1435,23 @@
       <rpm_min>	491	</rpm_min>
       <rpm_max>	2026	</rpm_max>
     </GAZ-34-BT>
+    <MH_1>
+      <userString>	#ussr_vehicles:MH_1	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1300	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
+    </MH_1>
     <TDDG>
       <userString>	#ussr_vehicles:TDDG	</userString>
       <tags>	diesel	</tags>

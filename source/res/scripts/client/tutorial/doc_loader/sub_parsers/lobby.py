@@ -18,6 +18,10 @@ def readItemUnlockedTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.ItemUnlockedTrigger, validateUpdateOnly='validate-update-only' in section.keys())
 
 
+def readTimerTriggerSection(xmlCtx, section, _, triggerID):
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.TimerTrigger)
+
+
 def _readVehicleItemsChangedTrigger(xmlCtx, section, triggerID, clazz):
     validateVarID = _xml.readString(xmlCtx, section, 'validate-var')
     vehicleVarID = _xml.readString(xmlCtx, section, 'vehicle-var')

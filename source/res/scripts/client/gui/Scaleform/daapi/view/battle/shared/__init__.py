@@ -31,10 +31,10 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
     from gui.Scaleform.daapi.view.battle.shared import damage_log_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_loading_minimap
-    return (ViewSettings(VIEW_ALIAS.INGAME_MENU, ingame_menu.IngameMenu, 'ingameMenu.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.INGAME_DESERTER, deserter_dialog.IngameDeserterDialog, 'deserterDialog.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DYNAMIC_SCOPE),
+    return (ViewSettings(VIEW_ALIAS.INGAME_MENU, ingame_menu.IngameMenu, 'ingameMenu.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False, canDrag=False),
+     ViewSettings(VIEW_ALIAS.INGAME_DESERTER, deserter_dialog.IngameDeserterDialog, 'deserterDialog.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL, damage_log_panel.DamageLogPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.INGAME_HELP, ingame_help.IngameHelpWindow, 'ingameHelpWindow.swf', ViewTypes.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.INGAME_HELP, ingame_help.IngameHelpWindow, 'ingameHelpWindow.swf', ViewTypes.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE, canClose=False, canDrag=False),
      ViewSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, damage_panel.DamagePanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.DEBUG_PANEL, debug_panel.DebugPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.ConsumablesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

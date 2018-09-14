@@ -207,6 +207,17 @@
       </players>
     </Properties>
   </EVENT_QUEUE_INFO>
+  <RANKED_BATTLES_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <classes>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </classes>
+      <players>
+        <Type>	UINT32	</Type>
+      </players>
+    </Properties>
+  </RANKED_BATTLES_QUEUE_INFO>
   <PUBLIC_ARENA_INFO>	FIXED_DICT	  <Properties>
       <id>
         <Type>	OBJECT_ID	</Type>
@@ -589,6 +600,9 @@
       <battlesNum>
         <Type>	UINT32	</Type>
       </battlesNum>
+      <ranked>
+        <Type>	PYTHON	</Type>
+      </ranked>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -736,56 +750,17 @@
       </lastDeathReasonID>
     </Properties>
   </BATTLE_EVENTS_SUMMARY>
-  <REMOTE_CAMERA_ARCADE_DATA>	FIXED_DICT	  <Properties>
+  <REMOTE_CAMERA_DATA>	FIXED_DICT	  <Properties>
       <time>
         <Type>	FLOAT64	</Type>
       </time>
-      <relTranslation>
-        <Type>	VECTOR3	</Type>
-      </relTranslation>
       <shotPoint>
         <Type>	VECTOR3	</Type>
       </shotPoint>
-    </Properties>
-  </REMOTE_CAMERA_ARCADE_DATA>
-  <REMOTE_CAMERA_SNIPER_DATA>	FIXED_DICT	  <Properties>
-      <time>
-        <Type>	FLOAT64	</Type>
-      </time>
-      <camMatrixTranslation>
-        <Type>	VECTOR3	</Type>
-      </camMatrixTranslation>
-      <camMatrixRotation>
-        <Type>	VECTOR3	</Type>
-      </camMatrixRotation>
       <zoom>
         <Type>	UINT8	</Type>
       </zoom>
     </Properties>
-  </REMOTE_CAMERA_SNIPER_DATA>
-  <REMOTE_CAMERA_STRATEGIC_DATA>	FIXED_DICT	  <Properties>
-      <time>
-        <Type>	FLOAT64	</Type>
-      </time>
-      <shotPoint>
-        <Type>	VECTOR3	</Type>
-      </shotPoint>
-    </Properties>
-  </REMOTE_CAMERA_STRATEGIC_DATA>
-  <REMOTE_CAMERA_ARTY_DATA>	FIXED_DICT	  <Properties>
-      <time>
-        <Type>	FLOAT64	</Type>
-      </time>
-      <shotPoint>
-        <Type>	VECTOR3	</Type>
-      </shotPoint>
-      <translation>
-        <Type>	VECTOR3	</Type>
-      </translation>
-      <rotation>
-        <Type>	VECTOR3	</Type>
-      </rotation>
-    </Properties>
-  </REMOTE_CAMERA_ARTY_DATA>
+  </REMOTE_CAMERA_DATA>
   <STUN_INFO>	FLOAT64	</STUN_INFO>
 </alias.xml>

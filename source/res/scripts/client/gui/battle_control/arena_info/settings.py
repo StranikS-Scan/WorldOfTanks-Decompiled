@@ -3,7 +3,7 @@
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
 from helpers import i18n
 from shared_utils import BitmaskHelper
-__all__ = ('CONTOUR_ICON_PATH', 'UNKNOWN_CONTOUR_ICON_PATH', 'UNKNOWN_VEHICLE_NAME', 'UNKNOWN_VEHICLE_CLASS_NAME', 'UNKNOWN_PLAYER_NAME', 'UNKNOWN_VEHICLE_LEVEL', 'UNKNOWN_VEHICLE_CLASS_ORDER', 'SQUAD_RANGE_TO_SHOW', 'VEHICLE_STATUS', 'PLAYER_STATUS', 'INVALIDATE_OP', 'makeContourIconPath', 'getOrderByVehicleClass')
+__all__ = ('UNKNOWN_VEHICLE_NAME', 'UNKNOWN_VEHICLE_CLASS_NAME', 'UNKNOWN_PLAYER_NAME', 'UNKNOWN_VEHICLE_LEVEL', 'UNKNOWN_VEHICLE_CLASS_ORDER', 'SQUAD_RANGE_TO_SHOW', 'VEHICLE_STATUS', 'PLAYER_STATUS', 'INVALIDATE_OP', 'getOrderByVehicleClass')
 CONTOUR_ICON_SF_PATH = '../maps/icons/vehicle/contour/{0}.png'
 CONTOUR_ICON_RES_PATH = 'gui/maps/icons/vehicle/contour/{0}.png'
 SMALL_MAP_IMAGE_SF_PATH = '../maps/icons/map/battleLoading/%s.png'

@@ -3,23 +3,11 @@
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
 class AbstractTweenMeta(BaseDAAPIModule):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIModule
-    """
 
     def initialiaze(self, props):
-        """
-        :param props: Represented by ITweenPropertiesVO (AS)
-        """
         self._printOverrideError('initialiaze')
 
     def creatTweenPY(self, tween):
-        """
-        :param tween: Represented by DisplayObject (AS)
-        """
         self._printOverrideError('creatTweenPY')
 
     def getPaused(self):

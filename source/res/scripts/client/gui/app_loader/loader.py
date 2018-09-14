@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/app_loader/loader.py
 import BigWorld
-from ConnectionManager import connectionManager
 import Event
 from constants import ARENA_GUI_TYPE
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
@@ -13,10 +12,13 @@ from gui.app_loader.settings import APP_STATE_ID as _STATE_ID
 from gui.app_loader.settings import DISCONNECT_REASON as _DSN_REASON
 from gui.app_loader.states import StartState
 from gui.shared.utils.decorators import ReprInjector
+from helpers import dependency
+from skeletons.connection_mgr import IConnectionManager
 
 @ReprInjector.simple('guiSpaceID', 'appsStates', 'dsnReason', 'dsnDesc')
 class _GlobalCtx(object):
     __slots__ = ('guiSpaceID', 'arenaGuiType', 'appsStates', 'dsnReason', 'dsnDesc')
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         super(_GlobalCtx, self).__init__()
@@ -26,9 +28,9 @@ class _GlobalCtx(object):
         self.dsnReason = _DSN_REASON.UNDEFINED
         self.dsnDesc = ()
 
-    @staticmethod
-    def isConnected():
-        return connectionManager.isConnected()
+    @classmethod
+    def isConnected(cls):
+        return cls.connectionMgr.isConnected()
 
     def resetDsn(self):
         self.dsnReason = _DSN_REASON.UNDEFINED
@@ -41,6 +43,7 @@ class _EmptyFactory(IAppFactory):
 
 class _AppLoader(object):
     __slots__ = ('__state', '__ctx', '__appFactory', 'onGUISpaceLeft', 'onGUISpaceEntered')
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         super(_AppLoader, self).__init__()
@@ -156,7 +159,7 @@ class _AppLoader(object):
         if self.__ctx.dsnReason != _DSN_REASON.REQUEST or forced:
             LOG_DEBUG('Disconnects from server by request')
             self.__ctx.dsnReason = _DSN_REASON.REQUEST
-            connectionManager.disconnect()
+            self.connectionMgr.disconnect()
         return self.showLogin()
 
     def goToLoginByEvent(self):
@@ -195,7 +198,7 @@ class _AppLoader(object):
         LOG_DEBUG('Disconnects from server by client error')
         self.__ctx.dsnReason = _DSN_REASON.ERROR
         self.__ctx.dsnDesc = (reason, False, 0)
-        connectionManager.disconnect()
+        self.connectionMgr.disconnect()
         return self.showLogin()
 
     @staticmethod

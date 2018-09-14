@@ -2,15 +2,16 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/FortOrder.py
 from constants import FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES
 from FortifiedRegionBase import FORT_EVENT_TYPE
-from gui.LobbyContext import g_lobbyContext
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.items_parameters import params_helper, formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import text_styles, time_formatters
+from helpers import dependency
 from helpers import time_utils, i18n
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class FortOrder(object):
     ORDERS_ICONS = {FORT_ORDER_TYPE.SPECIAL_MISSION: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_RESERVEROULETTE, RES_ICONS.MAPS_ICONS_ORDERS_BIG_RESERVEROULETTE),
@@ -23,6 +24,8 @@ class FortOrder(object):
      FORT_ORDER_TYPE.HEAVY_TRANSPORT: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_HEAVYTRANSPORT, RES_ICONS.MAPS_ICONS_ORDERS_BIG_HEAVYTRANSPORT),
      FORT_ORDER_TYPE.ARTILLERY: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_ARTILLERY, RES_ICONS.MAPS_ICONS_ORDERS_BIG_ARTILLERY),
      FORT_ORDER_TYPE.BOMBER: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_BOMBER, RES_ICONS.MAPS_ICONS_ORDERS_BIG_BOMBER)}
+    itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, orderID, proxy=None, level=0):
         self.orderID = orderID
@@ -118,7 +121,7 @@ class FortOrder(object):
             return fort_formatters.getBonusText('%s%%' % effectValueStr, FortViewHelper.getBuildingUIDbyID(self.buildingID))
 
     def _isSupported(self, orderID):
-        if not g_lobbyContext.getServerSettings().isFortsEnabled():
+        if not self.lobbyContext.getServerSettings().isFortsEnabled():
             if orderID in (FORT_ORDER_TYPE.EVACUATION, FORT_ORDER_TYPE.REQUISITION):
                 return False
         return True
@@ -155,7 +158,7 @@ class FortOrder(object):
             from ClientFortifiedRegion import getBattleEquipmentByOrderID
             eqDescr = getBattleEquipmentByOrderID(self.orderID, self.level)
             if eqDescr is not None:
-                eqItem = g_itemsCache.items.getItemByCD(eqDescr['compactDescr'])
+                eqItem = self.itemsCache.items.getItemByCD(eqDescr['compactDescr'])
                 params = params_helper.getParameters(eqItem)
                 result = formatters.getFormattedParamsList(eqDescr, params)
         return result

@@ -140,11 +140,10 @@ class CurrentVehicleNeedChangeTrigger(_CurrentVehicleViewStateTrigger):
          Vehicle.VEHICLE_STATE.DAMAGED,
          Vehicle.VEHICLE_STATE.DESTROYED,
          Vehicle.VEHICLE_STATE.EXPLODED,
-         Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER,
+         Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER,
          Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY,
          Vehicle.VEHICLE_STATE.LOCKED,
-         Vehicle.VEHICLE_STATE.NOT_SUITABLE,
-         Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER)
+         Vehicle.VEHICLE_STATE.RENTAL_IS_OVER)
 
 
 class QueueTrigger(_CurrentVehicleViewStateTrigger):

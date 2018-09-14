@@ -158,11 +158,8 @@ class BattleContext(IBattleContext):
     def getArenaWinString(self, isInBattle=True):
         return self.__arenaDP.getPersonalDescription().getWinString(isInBattle)
 
-    def getArenaFrameLabel(self, isLegacy=False):
-        if isLegacy:
-            return self.__arenaDP.getPersonalDescription().getLegacyFrameLabel()
-        else:
-            return self.__arenaDP.getPersonalDescription().getFrameLabel()
+    def getArenaFrameLabel(self):
+        return '../maps/icons/battleTypes/136x136/%s.png' % self.__arenaDP.getPersonalDescription().getFrameLabel()
 
     def getGuiEventType(self):
         return self.__arenaDP.getPersonalDescription().getGuiEventType()

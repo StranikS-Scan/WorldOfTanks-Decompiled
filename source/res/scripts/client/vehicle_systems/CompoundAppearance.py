@@ -2,12 +2,15 @@
 # Embedded file name: scripts/client/vehicle_systems/CompoundAppearance.py
 import random
 import math
+import time
+import BigWorld
 from AvatarInputHandler.aih_constants import ShakeReason
 import Math
-from VehicleAppearance import VehicleDamageState, _setupVehicleFashion, setupSplineTracks, VehicleAppearance
+from svarog_script.auto_properties import TypedProperty, AutoProperty
+from vehicle_systems.components import engine_state
 from vehicle_systems.stricted_loading import makeCallbackWeak
+from vehicle_systems.vehicle_damage_state import VehicleDamageState
 from vehicle_systems.components.CrashedTracks import CrashedTrackController
-from debug_utils import *
 from vehicle_systems.tankStructure import VehiclePartsTuple, TankNodeNames
 import constants
 from vehicle_systems.components.vehicleDecal import VehicleDecal
@@ -16,23 +19,19 @@ from helpers import bound_effects
 from helpers.EffectsList import EffectsListPlayer, SpecialKeyPointNames
 import items.vehicles
 from Event import Event
-import material_kinds
 from VehicleStickers import VehicleStickers
-import AuxiliaryFx
-import TriggersManager
-from TriggersManager import TRIGGER_TYPE
-from Vibroeffects.ControllersManager import ControllersManager as VibrationControllersManager
-from LightFx.LightControllersManager import LightControllersManager as LightFxControllersManager
-import LightFx.LightManager
 import BattleReplay
 from vehicle_systems import camouflages
 from vehicle_systems.tankStructure import TankPartNames
-from svarog_script.py_component_system import ComponentSystem
 from svarog_script.py_component_system import ComponentDescriptor, ComponentSystem
 from vehicle_systems import model_assembler
 from CustomEffectManager import EffectSettings
 from vehicle_systems.tankStructure import TankPartIndexes
+from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
+import material_kinds
 import DataLinks
+import Vehicular
+import BigWorld
 _VEHICLE_APPEAR_TIME = 0.2
 _ROOT_NODE_NAME = 'V'
 _GUN_RECOIL_NODE_NAME = 'G'
@@ -46,13 +45,12 @@ _PITCH_SWINGING_MODIFIERS = (0.9, 1.88, 0.3, 4.0, 1.0, 1.0)
 _MIN_DEPTH_FOR_HEAVY_SPLASH = 0.5
 MAX_DISTANCE = 500
 _MATKIND_COUNT = 3
+_DEFAULT_STICKERS_ALPHA = 1.0
 
 class CompoundAppearance(ComponentSystem, CallbackDelayer):
-    distanceFromPlayer = property(lambda self: self.__distanceFromPlayer)
     compoundModel = property(lambda self: self.__compoundModel)
     boundEffects = property(lambda self: self.__boundEffects)
     fashion = property(lambda self: self.__fashions.chassis)
-    filter = property(lambda self: self.__filter)
     typeDescriptor = property(lambda self: self.__typeDesc)
     id = property(lambda self: self.__vID)
     isAlive = property(lambda self: self.__isAlive)
@@ -67,17 +65,19 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     fashions = property(lambda self: self.__fashions, __setFashions)
     terrainMatKind = property(lambda self: self.__currTerrainMatKind)
-    isInWater = property(lambda self: self.__isInWater)
-    isUnderwater = property(lambda self: self.__isUnderWater)
-    waterHeight = property(lambda self: self.__waterHeight)
+    terrainEffectMaterialNames = property(lambda self: self.__terrainEffectMaterialNames)
+    isInWater = property(lambda self: self.waterSensor.isInWater)
+    isUnderwater = property(lambda self: self.waterSensor.isUnderWater)
+    waterHeight = property(lambda self: self.waterSensor.waterHeight)
     damageState = property(lambda self: self.__currentDamageState)
     frameTimeStamp = 0
-    engineMode = property(lambda self: self.__engineMode)
     rightTrackScroll = property(lambda self: self.__rightTrackScroll)
     leftTrackScroll = property(lambda self: self.__leftTrackScroll)
-    gunSound = property(lambda self: self.__gunSound)
-    isPillbox = property(lambda self: self.__isPillbox)
+    splineTracks = property(lambda self: self.__splineTracks)
     activated = property(lambda self: self.__activated)
+    isFlying = property(lambda self: self.flyingInfoProvider is not None and self.flyingInfoProvider.isFlying)
+    isLeftSideFlying = property(lambda self: self.flyingInfoProvider is not None and self.flyingInfoProvider.isLeftSideFlying)
+    isRightSideFlying = property(lambda self: self.flyingInfoProvider is not None and self.flyingInfoProvider.isRightSideFlying)
 
     @property
     def rpm(self):
@@ -96,19 +96,29 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             return
 
     trackScrollController = property(lambda self: self.__trackScrollCtl)
+    filter = AutoProperty()
     detailedEngineState = ComponentDescriptor()
     engineAudition = ComponentDescriptor()
     trackCrashAudition = ComponentDescriptor()
     customEffectManager = ComponentDescriptor()
     highlighter = ComponentDescriptor()
     gunRecoil = ComponentDescriptor()
+    gunLinkedNodesAnimator = ComponentDescriptor()
     swingingAnimator = ComponentDescriptor()
     suspensionSound = ComponentDescriptor()
     siegeEffects = ComponentDescriptor()
     lodCalculator = ComponentDescriptor()
     frictionAudition = ComponentDescriptor()
+    suspension = ComponentDescriptor()
     leveredSuspension = ComponentDescriptor()
     suspensionController = ComponentDescriptor()
+    wheelsAnimator = ComponentDescriptor()
+    trackNodesAnimator = ComponentDescriptor()
+    vehicleTraces = ComponentDescriptor()
+    flyingInfoProvider = ComponentDescriptor()
+    terrainMatKindSensor = ComponentDescriptor()
+    waterSensor = ComponentDescriptor()
+    peripheralsController = ComponentDescriptor()
 
     def __init__(self):
         CallbackDelayer.__init__(self)
@@ -119,48 +129,26 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__filter = None
         self.__originalFilter = None
         self.__typeDesc = None
-        self.__waterHeight = -1.0
-        self.__isInWater = False
-        self.__isUnderWater = False
-        self.__splashedWater = False
-        self.__vibrationsCtrl = None
-        self.__lightFxCtrl = None
-        self.__auxiliaryFxCtrl = None
         self.__fashion = None
         self.__crashedTracksCtrl = None
-        self.__gunRecoil = None
-        self.__suspensionSound = None
-        self.__siegeEffects = None
         self.__currentDamageState = VehicleDamageState()
-        self.__loadingProgress = 0
         self.__effectsPlayer = None
         self.__engineMode = (0, 0)
-        self.__swingMoveFlags = 0
         self.__currTerrainMatKind = [-1] * _MATKIND_COUNT
-        self.__leftLightRotMat = None
-        self.__rightLightRotMat = None
-        self.__leftFrontLight = None
-        self.__rightFrontLight = None
-        self.__prevVelocity = None
-        self.__prevTime = None
-        self.__isPillbox = False
+        self.__terrainEffectMaterialNames = [''] * _MATKIND_COUNT
         self.__chassisDecal = VehicleDecal(self)
         self.__splodge = None
         self.__vehicleStickers = None
         self.onModelChanged = Event()
-        self.__speedInfo = Math.Vector4(0.0, 0.0, 0.0, 0.0)
-        self.__wasOnSoftTerrain = False
         self.__leftTrackScroll = 0.0
         self.__rightTrackScroll = 0.0
-        self.__distanceFromPlayer = 0.0
         self.__fashions = None
         self.__compoundModel = None
         self.__boundEffects = None
-        self.__swingingAnimator = None
         self.__splineTracks = None
-        self.__leveredSuspension = None
-        self.__customEffectManager = None
+        self.flyingInfoProvider = Vehicular.FlyingInfoProvider()
         self.__trackScrollCtl = BigWorld.PyTrackScroll()
+        self.__trackScrollCtl.setFlyingInfo(DataLinks.createBoolLink(self.flyingInfoProvider, 'isLeftSideFlying'), DataLinks.createBoolLink(self.flyingInfoProvider, 'isRightSideFlying'))
         self.__weaponEnergy = 0.0
         self.__activated = False
         self.__systemStarted = False
@@ -173,7 +161,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         return
 
     def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached):
-        self.__currentDamageState.update(health, isCrewActive, self.__isUnderWater)
+        self.__currentDamageState.update(health, isCrewActive, False)
         out = []
         out.append(typeDescriptor.type.camouflageExclusionMask)
         splineDesc = typeDescriptor.chassis['splineDesc']
@@ -203,8 +191,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def setVehicle(self, vehicle):
         self.__vehicle = vehicle
-        if self.__customEffectManager is not None:
-            self.__customEffectManager.setVehicle(vehicle)
+        if self.customEffectManager is not None:
+            self.customEffectManager.setVehicle(vehicle)
         if self.__crashedTracksCtrl is not None:
             self.__crashedTracksCtrl.setVehicle(vehicle)
         if self.frictionAudition is not None:
@@ -212,23 +200,24 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.highlighter.setVehicle(vehicle)
         return
 
+    def __arenaPeriodChanged(self, period, *otherArgs):
+        if self.detailedEngineState is None:
+            return
+        else:
+            periodEndTime = BigWorld.player().arena.periodEndTime
+            serverTime = BigWorld.serverTime()
+            engine_state.notifyEngineOnArenaPeriodChange(self.detailedEngineState, period, periodEndTime, serverTime)
+            return
+
     def activate(self):
         if self.__activated or self.__vehicle is None:
             return
         else:
-            if self.__currentDamageState.isCurrentModelDamaged:
-                if self.__customEffectManager is not None:
-                    self.__customEffectManager.destroy()
-                    self.__customEffectManager = None
-                if self.detailedEngineState is not None:
-                    self.detailedEngineState.destroy()
-                    self.detailedEngineState = None
             super(CompoundAppearance, self).activate()
             isPlayerVehicle = self.__vehicle.isPlayerVehicle
             isObserver = 'observer' in self.__typeDesc.type.tags
             player = BigWorld.player()
             self.__originalFilter = self.__vehicle.filter
-            self.__createFilter()
             self.__vehicle.filter = self.__filter
             self.__vehicle.filter.enableStabilisedMatrix(isPlayerVehicle)
             self.__filter.isStrafing = self.__vehicle.isStrafing
@@ -242,15 +231,11 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__linkCompound()
             if not isObserver:
                 self.__chassisDecal.attach()
-            self.__createStickers()
-            if self.__currentDamageState.isCurrentModelDamaged:
-                self.__attachStickers(items.vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha'], True)
-            else:
-                self.__startSystems()
-                self.__attachStickers()
-                self.setupGunMatrixTargets()
-                if not isObserver:
-                    self.__vehicle.filter.enableLagDetection(True)
+            self.__createAndAttachStickers()
+            self.__startSystems()
+            self.setupGunMatrixTargets()
+            if not isObserver:
+                self.__vehicle.filter.enableLagDetection(not self.__currentDamageState.isCurrentModelDamaged)
             self.onModelChanged()
             if self.lodCalculator is not None:
                 self.lodCalculator.setupPosition(DataLinks.linkMatrixTranslation(self.__compoundModel.matrix))
@@ -262,15 +247,13 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__periodicTimerID = BigWorld.callback(_PERIODIC_TIME, self.__onPeriodicTimer)
             if self.fashion is not None:
                 self.fashion.activate()
-            self.__activated = True
-            if 'observer' in self.__vehicle.typeDescriptor.type.tags:
+            if isObserver:
                 self.__compoundModel.visible = False
-            if self.__currentDamageState.isCurrentModelDamaged:
-                if not self.__wasDeactivated:
-                    if not self.__vehicle.isPlayerVehicle:
-                        self.setupGunMatrixTargets()
-                    else:
-                        self.setupGunMatrixTargets(self.__vehicle.filter)
+            BigWorld.player().arena.onPeriodChange += self.__arenaPeriodChanged
+            BigWorld.player().inputHandler.onCameraChanged += self.__onCameraChanged
+            if self.detailedEngineState is not None:
+                engine_state.checkEngineStart(self.detailedEngineState, BigWorld.player().arena.period)
+            self.__activated = True
             return
 
     def deactivate(self, stopEffects=True):
@@ -284,17 +267,14 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__stopSystems()
             super(CompoundAppearance, self).deactivate()
             self.__chassisDecal.detach()
-            self.__vibrationsCtrl = None
             if self.__inSpeedTreeCollision:
                 BigWorld.setSpeedTreeCollisionBody(None)
             BigWorld.player().inputHandler.removeVehicleFromCameraCollider(self.__vehicle)
             self.__vehicle.filter.enableLagDetection(False)
-            self.turretMatrix.setStaticTransform(self.turretMatrix)
             self.turretMatrix.target = None
-            self.gunMatrix.setStaticTransform(self.gunMatrix)
             self.gunMatrix.target = None
             self.__vehicle.filter = self.__originalFilter
-            self.__filter = None
+            self.__filter.reset()
             self.__originalFilter = None
             self.__vehicleStickers.detach()
             if stopEffects:
@@ -305,35 +285,33 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__vehicle = None
             if self.__crashedTracksCtrl is not None:
                 self.__crashedTracksCtrl.deactivate()
+            BigWorld.player().arena.onPeriodChange -= self.__arenaPeriodChanged
+            BigWorld.player().inputHandler.onCameraChanged -= self.__onCameraChanged
             return
 
     def __startSystems(self):
-        if self.__trackScrollCtl is not None:
-            self.__trackScrollCtl.activate()
-            self.__trackScrollCtl.setData(self.__vehicle.filter, self.fashions.chassis)
-        if self.__vehicle.isPlayerVehicle:
-            self.delayCallback(_PERIODIC_TIME_ENGINE, self.__onPeriodicTimerEngine)
-            self.highlighter.highlight(True)
-        if self.detailedEngineState is not None:
-            self.detailedEngineState.setVehicle(self.__vehicle)
-            self.detailedEngineState.activate()
-        if self.engineAudition is not None:
-            self.engineAudition.vehicleFilter = self.filter
-            self.engineAudition.activate()
-            self.engineAudition.attachToModel(self.__compoundModel, self.__weaponEnergy)
-        if self.__customEffectManager is not None:
-            self.__customEffectManager.activate()
-        if self.__vehicle.isAlive() and self.__vehicle.isPlayerVehicle:
-            if self.__vibrationsCtrl is None:
-                self.__vibrationsCtrl = VibrationControllersManager()
-            if LightFx.LightManager.g_instance is not None and LightFx.LightManager.g_instance.isEnabled():
-                self.__lightFxCtrl = LightFxControllersManager(self.__vehicle)
-            if AuxiliaryFx.g_instance is not None:
-                self.__auxiliaryFxCtrl = AuxiliaryFx.g_instance.createFxController(self.__vehicle)
-        if self.suspensionController is not None:
-            self.suspensionController.setData(self.__vehicle.filter, self.__vehicle.typeDescriptor)
-        self.__systemStarted = True
-        return
+        if self.__systemStarted or self.__currentDamageState.isCurrentModelDamaged:
+            return
+        else:
+            if self.flyingInfoProvider is not None:
+                self.flyingInfoProvider.setData(self.__vehicle.filter, self.suspension)
+            if self.__trackScrollCtl is not None:
+                self.__trackScrollCtl.activate()
+                self.__trackScrollCtl.setData(self.__vehicle.filter)
+            if self.__vehicle.isPlayerVehicle:
+                self.delayCallback(_PERIODIC_TIME_ENGINE, self.__onPeriodicTimerEngine)
+                self.highlighter.highlight(True)
+            if self.engineAudition is not None:
+                self.engineAudition.setWeaponEnergy(self.__weaponEnergy)
+                self.engineAudition.attachToModel(self.__compoundModel)
+            if self.peripheralsController is not None:
+                self.peripheralsController.attachToVehicle(self.__vehicle)
+            if self.suspensionController is not None:
+                self.suspensionController.setData(self.__vehicle.filter, self.__vehicle.typeDescriptor)
+            if self.detailedEngineState is not None:
+                self.detailedEngineState.onGearUpCbk = self.__onEngineStateGearUp
+            self.__systemStarted = True
+            return
 
     def __stopSystems(self):
         if not self.__systemStarted:
@@ -343,132 +321,103 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             if self.__periodicTimerID is not None:
                 BigWorld.cancelCallback(self.__periodicTimerID)
                 self.__periodicTimerID = None
-            if self.detailedEngineState is not None:
-                self.detailedEngineState.deactivate()
+            if self.flyingInfoProvider is not None:
+                self.flyingInfoProvider.setData(None, None)
             if self.__vehicle.isPlayerVehicle:
                 self.highlighter.highlight(False)
                 self.stopCallback(self.__onPeriodicTimerEngine)
             if self.__trackScrollCtl is not None:
                 self.__trackScrollCtl.deactivate()
-                self.__trackScrollCtl.setData(None, None)
-            if self.engineAudition is not None:
-                self.engineAudition.deactivate()
-            if self.trackCrashAudition is not None:
-                self.trackCrashAudition.deactivate()
-            if self.__customEffectManager is not None:
-                self.__customEffectManager.deactivate()
-            if self.engineAudition is not None:
-                self.engineAudition.destroy()
-            if self.__lightFxCtrl is not None:
-                self.__lightFxCtrl.destroy()
-                self.__lightFxCtrl = None
-            if self.__auxiliaryFxCtrl is not None:
-                self.__auxiliaryFxCtrl.destroy()
-                self.__auxiliaryFxCtrl = None
+                self.__trackScrollCtl.setData(None)
+            if self.detailedEngineState is not None:
+                self.detailedEngineState.onGearUpCbk = None
             return
 
     def __destroySystems(self):
         if self.__periodicTimerID is not None:
             BigWorld.cancelCallback(self.__periodicTimerID)
             self.__periodicTimerID = None
-        if self.customEffectManager is not None:
-            self.customEffectManager.destroy()
-            self.customEffectManager = None
         if self.__trackScrollCtl is not None:
             self.__trackScrollCtl.deactivate()
             self.__trackScrollCtl = None
-        if self.engineAudition is not None:
-            self.engineAudition.destroy()
-            self.engineAudition = None
-        if self.__vibrationsCtrl is not None:
-            self.__vibrationsCtrl.destroy()
-            self.__vibrationsCtrl = None
-        if self.__lightFxCtrl is not None:
-            self.__lightFxCtrl.destroy()
-            self.__lightFxCtrl = None
-        if self.__auxiliaryFxCtrl is not None:
-            self.__auxiliaryFxCtrl.destroy()
-            self.__auxiliaryFxCtrl = None
-        if self.detailedEngineState is not None:
-            self.detailedEngineState.destroy()
-            self.detailedEngineState = None
-        self.trackCrashAudition = None
-        self.frictionAudition = None
         if self.__crashedTracksCtrl is not None:
             self.__crashedTracksCtrl.destroy()
             self.__crashedTracksCtrl = None
+        self.__systemStarted = False
+        return
+
+    def __destroyEngineAudition(self):
+        self.engineAudition = None
+        if self.detailedEngineState is not None:
+            self.detailedEngineState.onEngineStart = None
+            self.detailedEngineState.onStateChanged = None
+        return
+
+    def __prepareSystemsForDamagedVehicle(self, vehicle, isTurretDetached):
+        if self.flyingInfoProvider is not None:
+            self.flyingInfoProvider.setData(vehicle.filter, None)
+        self.vehicleTraces = None
+        self.suspensionSound = None
+        self.swingingAnimator = None
+        self.gunRecoil = None
+        self.gunLinkedNodesAnimator = None
+        self.suspension = None
+        self.leveredSuspension = None
+        self.trackNodesAnimator = None
+        self.wheelsAnimator = None
+        fashions = VehiclePartsTuple(None, None, None, None)
+        self.__setFashions(fashions, isTurretDetached)
+        self.customEffectManager = None
+        self.__destroyEngineAudition()
+        self.detailedEngineState = None
+        self.trackCrashAudition = None
+        self.frictionAudition = None
+        self.terrainMatKindSensor = None
+        self.__splineTracks = None
+        model = self.compoundModel
+        self.waterSensor.sensorPlaneLink = model.root
+        self.peripheralsController = None
+        self.__destroySystems()
         return
 
     def destroy(self):
-        self.__trackScrollCtl = None
         if self.__vehicle is not None:
             self.deactivate()
         self.__destroySystems()
         ComponentSystem.destroy(self)
         self.__typeDesc = None
-        self.highlighter.destroy()
-        if self.__vibrationsCtrl is not None:
-            self.__vibrationsCtrl.destroy()
-            self.__vibrationsCtrl = None
-        if self.__lightFxCtrl is not None:
-            self.__lightFxCtrl.destroy()
-            self.__lightFxCtrl = None
-        if self.__auxiliaryFxCtrl is not None:
-            self.__auxiliaryFxCtrl.destroy()
-            self.__auxiliaryFxCtrl = None
         if self.__boundEffects is not None:
             self.__boundEffects.destroy()
         self.__vehicleStickers = None
         self.onModelChanged = None
-        if self.__crashedTracksCtrl is not None:
-            self.__crashedTracksCtrl.destroy()
-            self.__crashedTracksCtrl = None
         self.__chassisDecal.destroy()
         self.__chassisDecal = None
         self.__compoundModel = None
         CallbackDelayer.destroy(self)
         return
 
-    def __createFilter(self):
-        isPillbox = 'pillbox' in self.__typeDesc.type.tags
-        assert not isPillbox, 'Pillboxes are not supported and have never been'
-        self.__filter = model_assembler.createVehicleFilter(self.typeDescriptor)
-        fashion = self.__fashions[0]
-        if fashion is not None:
-            fashion.physicsInfo = self.__filter.physicsInfo
-            fashion.movementInfo = self.__filter.movementInfo
-        if self.suspensionSound is not None:
-            self.suspensionSound.vehicleMatrix = self.__filter.groundPlacingMatrix
-            self.suspensionSound.bodyMatrix = self.__filter.bodyMatrix
-        return
-
     def start(self, prereqs=None):
-        if prereqs is None:
-            self.__typeDesc.chassis['hitTester'].loadBspModel()
-            self.__typeDesc.hull['hitTester'].loadBspModel()
-            self.__typeDesc.turret['hitTester'].loadBspModel()
         for hitTester in self.__typeDesc.getHitTesters():
             hitTester.loadBspModel()
 
         self.__compoundModel = prereqs[self.__typeDesc.name]
         self.__boundEffects = bound_effects.ModelBoundEffects(self.__compoundModel)
-        fashions = camouflages.prepareFashions(self.__typeDesc, self.__currentDamageState.isCurrentModelDamaged, self.__getCamouflageParams(self.__typeDesc, self.__vID)[0])
-        if not self.__currentDamageState.isCurrentModelDamaged:
-            _setupVehicleFashion(fashions[0], self.__typeDesc)
+        isCurrentModelDamaged = self.__currentDamageState.isCurrentModelDamaged
+        fashions = camouflages.prepareFashions(self.__typeDesc, isCurrentModelDamaged, self.__getCamouflageParams(self.__typeDesc, self.__vID)[0])
+        if not isCurrentModelDamaged:
+            model_assembler.setupVehicleFashion(fashions[0], self.__typeDesc)
         self.__compoundModel.setupFashions(fashions)
-        fashions = camouflages.applyCamouflage(self.__typeDesc, fashions, self.__currentDamageState.isCurrentModelDamaged, self.__getCamouflageParams(self.__typeDesc, self.__vID)[0])
+        fashions = camouflages.applyCamouflage(self.__typeDesc, fashions, isCurrentModelDamaged, self.__getCamouflageParams(self.__typeDesc, self.__vID)[0])
         fashions = camouflages.applyRepaint(self.__typeDesc, fashions)
         self.__setFashions(fashions, self.__isTurretDetached)
         self.__setupModels()
-        if not VehicleDamageState.isDamagedModel(self.__currentDamageState.modelState):
-            self.__splineTracks = setupSplineTracks(self.__fashion, self.__typeDesc, self.__compoundModel, prereqs)
+        if not isCurrentModelDamaged:
+            self.__splineTracks = model_assembler.setupSplineTracks(self.__fashion, self.__typeDesc, self.__compoundModel, prereqs)
+            self.__crashedTracksCtrl = CrashedTrackController(self.__typeDesc, self.__fashion)
+        else:
+            self.__trackScrollCtl = None
         if self.__currentDamageState.effect is not None:
             self.__playEffect(self.__currentDamageState.effect, SpecialKeyPointNames.STATIC)
-        if self.__currentDamageState.isCurrentModelDamaged:
-            self.__trackScrollCtl = None
-            self.__crashedTracksCtrl = None
-        else:
-            self.__crashedTracksCtrl = CrashedTrackController(self.__typeDesc, self.__fashion)
         self.__chassisDecal.create()
         return
 
@@ -496,12 +445,12 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def onVehicleHealthChanged(self):
         vehicle = self.__vehicle
-        if not vehicle.isAlive():
-            if vehicle.health > 0:
-                self.changeEngineMode((0, 0))
+        if not vehicle.isAlive() and vehicle.health > 0:
+            self.changeEngineMode((0, 0))
         currentState = self.__currentDamageState
         previousState = currentState.state
-        currentState.update(vehicle.health, vehicle.isCrewActive, self.__isUnderWater)
+        isUnderWater = self.waterSensor.isUnderWater
+        currentState.update(vehicle.health, vehicle.isCrewActive, isUnderWater)
         if previousState != currentState.state:
             if currentState.effect is not None:
                 self.__playEffect(currentState.effect)
@@ -536,14 +485,14 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     def changeEngineMode(self, mode, forceSwinging=False):
         self.__engineMode = mode
         if self.detailedEngineState is not None:
-            self.detailedEngineState.setMode(self.__engineMode[0])
+            self.detailedEngineState.mode = self.__engineMode[0]
         if self.__trackScrollCtl is not None:
             self.__trackScrollCtl.setMode(self.__engineMode)
         return None if BattleReplay.isPlaying() and BattleReplay.g_replayCtrl.isTimeWarpInProgress else None
 
     def stopSwinging(self):
-        if self.__swingingAnimator is not None:
-            self.__swingingAnimator.accelSwingingPeriod = 0.0
+        if self.swingingAnimator is not None:
+            self.swingingAnimator.accelSwingingPeriod = 0.0
         return
 
     def removeDamageSticker(self, code):
@@ -557,7 +506,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             return
         else:
             if not VehicleDamageState.isDamagedModel(self.__currentDamageState.modelState):
-                self.__swingingAnimator.receiveShotImpulse(dir, impulse)
+                self.swingingAnimator.receiveShotImpulse(dir, impulse)
                 if self.__crashedTracksCtrl is not None:
                     self.__crashedTracksCtrl.receiveShotImpulse(dir, impulse)
             return
@@ -567,7 +516,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
         impulseValue = self.__typeDesc.gun['impulse']
         self.receiveShotImpulse(impulseDir, impulseValue)
-        self.__gunRecoil.recoil()
+        self.gunRecoil.recoil()
         node = self.compoundModel.node('HP_gunFire')
         gunPos = Math.Matrix(node).translation
         BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, gunPos, impulseDir, self.__typeDesc.shot['shell']['caliber'], ShakeReason.OWN_SHOT_DELAYED)
@@ -577,7 +526,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             return
         else:
             if self.__crashedTracksCtrl is not None:
-                self.__crashedTracksCtrl.addTrack(isLeft)
+                self.__crashedTracksCtrl.addTrack(isLeft, self.isLeftSideFlying if isLeft else self.isRightSideFlying)
             if not self.__vehicle.isEnteringWorld and self.trackCrashAudition:
                 self.trackCrashAudition.playCrashSound(isLeft)
             return
@@ -602,42 +551,31 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             assert modelState == self.__currentDamageState.modelState
             if self.__vehicle is None:
                 return
+            prevTurretYaw = Math.Matrix(self.turretMatrix).yaw
+            prevGunPitch = Math.Matrix(self.gunMatrix).pitch
             vehicle = self.__vehicle
             newCompoundModel = resourceList[self.__typeDesc.name]
             self.deactivate(False)
             self.__compoundModel = newCompoundModel
             self.__isTurretDetached = vehicle.isTurretDetached
-            if self.__currentDamageState.isCurrentModelDamaged:
-                fashions = VehiclePartsTuple(None, None, None, None)
-                self.suspensionSound = None
-                self.swingingAnimator = None
-                self.gunRecoil = None
-                self.leveredSuspension = None
-                self.__setFashions(fashions, self.__isTurretDetached)
-                self.__destroySystems()
-                self.__splineTracks = None
+            self.__prepareSystemsForDamagedVehicle(vehicle, self.__isTurretDetached)
             self.__setupModels()
             self.setVehicle(vehicle)
             self.activate()
             self.__reattachComponents(self.__compoundModel)
-            lodLink = DataLinks.createFloatLink(self.lodCalculator, 'lodDistance')
+            self.__filter.syncGunAngles(prevTurretYaw, prevGunPitch)
             model_assembler.setupTurretRotations(self)
             return
 
     def __setupModels(self):
-        if not self.__currentDamageState.isCurrentModelDamaged:
-            self.__gunFireNode = self.__compoundModel.node('HP_gunFire')
-            self.__isAlive = True
+        self.__isAlive = not self.__currentDamageState.isCurrentModelDamaged
+        if self.__isAlive:
             _, gunLength = self.__computeVehicleHeight()
             self.__weaponEnergy = gunLength * self.__typeDesc.shot['shell']['caliber']
             self.__setupHavok()
-        else:
-            self.__isAlive = False
-            self.__gunFireNode = None
         if MAX_DISTANCE > 0:
             transform = self.__typeDesc.chassis['AODecals'][0]
             self.__attachSplodge(BigWorld.Splodge(transform, MAX_DISTANCE, self.__typeDesc.chassis['hullPosition'].y))
-        return
 
     def __setupHavok(self):
         vDesc = self.__typeDesc
@@ -673,11 +611,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             return
         else:
             enableDecal = True
-            if not self.__isPillbox and kind in ('explosion', 'destruction'):
-                filter = self.__vehicle.filter
-                isFlying = filter.numLeftTrackContacts < 2 and filter.numRightTrackContacts < 2
-                if isFlying:
-                    enableDecal = False
+            if kind in ('explosion', 'destruction') and self.isFlying:
+                enableDecal = False
             if self.isUnderwater:
                 if kind not in ('submersionDeath',):
                     return
@@ -696,7 +631,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     def __getCamouflageParams(self, vDesc, vID):
         vehicleInfo = BigWorld.player().arena.vehicles.get(vID)
         if vehicleInfo is not None:
-            camouflageIdPerTeam = VehicleAppearance.SPORT_ACTIONS_CAMOUFLAGES.get(vDesc.name)
+            camouflageIdPerTeam = CompoundAppearance.__SPORT_ACTIONS_CAMOUFLAGES.get(vDesc.name)
             if camouflageIdPerTeam is not None:
                 camouflageId = camouflageIdPerTeam[0] if vehicleInfo['team'] == 1 else camouflageIdPerTeam[1]
                 return (camouflageId, time.time(), 100.0)
@@ -754,63 +689,21 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         return
 
     def __onCrewKilled(self):
-        if self.engineAudition is not None:
-            self.engineAudition.destroy()
-            self.engineAudition = None
+        self.__destroyEngineAudition()
         if self.customEffectManager is not None:
-            self.customEffectManager.destroy()
             self.customEffectManager = None
         return
 
-    def __calcIsUnderwater(self):
-        if not self.__isInWater:
-            return False
-        turretOffs = self.__vehicle.typeDescriptor.chassis['hullPosition'] + self.__vehicle.typeDescriptor.hull['turretPositions'][0]
-        turretOffsetMat = Math.Matrix()
-        turretOffsetMat.setTranslate(turretOffs)
-        turretJointMat = Math.Matrix(self.__vehicle.matrix)
-        turretJointMat.preMultiply(turretOffsetMat)
-        turretHeight = turretJointMat.translation.y - self.__vehicle.position.y
-        return turretHeight < self.__waterHeight
+    def onWaterSplash(self, waterHitPoint, isHeavySplash):
+        effectName = 'waterCollisionHeavy' if isHeavySplash else 'waterCollisionLight'
+        self.__vehicle.showCollisionEffect(waterHitPoint, effectName, Math.Vector3(0.0, 1.0, 0.0))
 
-    def __updateWaterStatus(self):
-        vehiclePosition = self.__vehicle.position
-        self.__waterHeight = BigWorld.wg_collideWater(vehiclePosition, vehiclePosition + Math.Vector3(0.0, 1.0, 0.0), False)
-        self.__isInWater = self.__waterHeight != -1
-        self.__isUnderWater = self.__calcIsUnderwater()
-        wasSplashed = self.__splashedWater
-        waterHitPoint = None
-        if self.__isInWater:
-            self.__splashedWater = True
-            waterHitPoint = vehiclePosition + Math.Vector3(0.0, self.__waterHeight, 0.0)
-        else:
-            trPoint = self.__typeDesc.chassis['topRightCarryingPoint']
-            cornerPoints = (Math.Vector3(trPoint.x, 0.0, trPoint.y),
-             Math.Vector3(trPoint.x, 0.0, -trPoint.y),
-             Math.Vector3(-trPoint.x, 0.0, -trPoint.y),
-             Math.Vector3(-trPoint.x, 0.0, trPoint.y))
-            vehMat = Math.Matrix(self.__compoundModel.matrix)
-            for cornerPoint in cornerPoints:
-                pointToTest = vehMat.applyPoint(cornerPoint)
-                dist = BigWorld.wg_collideWater(pointToTest, pointToTest + Math.Vector3(0.0, 1.0, 0.0))
-                if dist != -1:
-                    self.__splashedWater = True
-                    waterHitPoint = pointToTest + Math.Vector3(0.0, dist, 0.0)
-                    break
-
-            self.__splashedWater = False
-        if self.__splashedWater and not wasSplashed:
-            lightVelocityThreshold = self.__typeDesc.type.collisionEffectVelocities['waterContact']
-            heavyVelocityThreshold = self.__typeDesc.type.heavyCollisionEffectVelocities['waterContact']
-            vehicleVelocity = abs(self.__speedInfo[0])
-            if vehicleVelocity >= lightVelocityThreshold:
-                collRes = BigWorld.wg_collideSegment(self.__vehicle.spaceID, waterHitPoint, waterHitPoint + (0.0, -_MIN_DEPTH_FOR_HEAVY_SPLASH, 0.0), 18, 8)
-                deepEnough = collRes is None
-                effectName = 'waterCollisionLight' if vehicleVelocity < heavyVelocityThreshold or not deepEnough else 'waterCollisionHeavy'
-                self.__vehicle.showCollisionEffect(waterHitPoint, effectName, Math.Vector3(0.0, 1.0, 0.0))
-        if self.__effectsPlayer is not None:
-            if self.isUnderwater != (self.__currentDamageState.effect in ('submersionDeath',)):
-                self.__stopEffects()
+    def onUnderWaterSwitch(self, isUnderWater):
+        if isUnderWater and self.__effectsPlayer is not None and self.__currentDamageState.effect not in ('submersionDeath',):
+            self.__stopEffects()
+        extra = self.__vehicle.typeDescriptor.extrasDict['fire']
+        if extra.isRunningFor(self.__vehicle):
+            extra.checkUnderwater(self.__vehicle, isUnderWater)
         return
 
     def updateTracksScroll(self, leftScroll, rightScroll):
@@ -824,126 +717,91 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if self.detailedEngineState is None or self.engineAudition is None:
             return
         else:
-            self.detailedEngineState.refresh(_PERIODIC_TIME_ENGINE)
-            self.engineAudition.tick()
             if self.siegeEffects is not None:
                 self.siegeEffects.tick(_PERIODIC_TIME_ENGINE)
             return _PERIODIC_TIME_ENGINE
 
     def __onPeriodicTimer(self):
         timeStamp = BigWorld.wg_getFrameTimestamp()
-        if VehicleAppearance.frameTimeStamp >= timeStamp:
+        if CompoundAppearance.frameTimeStamp >= timeStamp:
             self.__periodicTimerID = BigWorld.callback(0.0, self.__onPeriodicTimer)
             return
         else:
-            VehicleAppearance.frameTimeStamp = timeStamp
+            CompoundAppearance.frameTimeStamp = timeStamp
             self.__periodicTimerID = BigWorld.callback(_PERIODIC_TIME, self.__onPeriodicTimer)
-            if self.__isPillbox or self.__vehicle is None:
+            if self.__vehicle is None:
                 return
             vehicle = self.__vehicle
-            self.__speedInfo = vehicle.speedInfo.value
-            if not self.__vehicle.isPlayerVehicle and self.detailedEngineState is not None:
-                self.detailedEngineState.refresh(_PERIODIC_TIME)
-            try:
-                self.__updateVibrations()
-                if self.__lightFxCtrl is not None:
-                    self.__lightFxCtrl.update(vehicle)
-                if self.__auxiliaryFxCtrl is not None:
-                    self.__auxiliaryFxCtrl.update(vehicle)
-                self.__updateWaterStatus()
-                if not vehicle.isAlive():
-                    return
-                self.__distanceFromPlayer = (BigWorld.camera().position - vehicle.position).length
-                extra = vehicle.typeDescriptor.extrasDict['fire']
-                if extra.isRunningFor(vehicle):
-                    extra.checkUnderwater(vehicle, self.isUnderwater)
-                if self.__fashion is None:
-                    return
-                self.__updateCurrTerrainMatKinds()
-                if not self.__vehicle.isPlayerVehicle:
-                    self.engineAudition.tick()
-                    if self.siegeEffects is not None:
-                        self.siegeEffects.tick(_PERIODIC_TIME)
-                self.__updateEffectsLOD()
-                placingOnGround = not (self.__fashion.suspensionWorking or self.leveredSuspension is not None)
-                vehicle.filter.placingOnGround = placingOnGround
-                if self.customEffectManager:
-                    self.__customEffectManager.update()
-            except:
-                LOG_CURRENT_EXCEPTION()
-
+            if self.peripheralsController is not None:
+                self.peripheralsController.update(vehicle, self.__crashedTracksCtrl)
+            if not vehicle.isAlive():
+                return
+            distanceFromPlayer = (BigWorld.camera().position - vehicle.position).length
+            self.__updateCurrTerrainMatKinds()
+            if not self.__vehicle.isPlayerVehicle:
+                if self.siegeEffects is not None:
+                    self.siegeEffects.tick(_PERIODIC_TIME)
+            self.__updateEffectsLOD(distanceFromPlayer)
+            if self.customEffectManager:
+                self.customEffectManager.update()
             return
 
-    def __updateEffectsLOD(self):
+    def __updateEffectsLOD(self, distanceFromPlayer):
         if self.customEffectManager:
-            enableExhaust = self.__distanceFromPlayer <= _LOD_DISTANCE_EXHAUST and not self.isUnderwater
-            enableTrails = self.__distanceFromPlayer <= _LOD_DISTANCE_TRAIL_PARTICLES and BigWorld.wg_isVehicleDustEnabled()
-            self.__customEffectManager.enable(enableTrails, EffectSettings.SETTING_DUST)
-            self.__customEffectManager.enable(enableExhaust, EffectSettings.SETTING_EXHAUST)
+            enableExhaust = distanceFromPlayer <= _LOD_DISTANCE_EXHAUST and not self.isUnderwater
+            enableTrails = distanceFromPlayer <= _LOD_DISTANCE_TRAIL_PARTICLES and BigWorld.wg_isVehicleDustEnabled()
+            self.customEffectManager.enable(enableTrails, EffectSettings.SETTING_DUST)
+            self.customEffectManager.enable(enableExhaust, EffectSettings.SETTING_EXHAUST)
 
     def __updateCurrTerrainMatKinds(self):
-        leftNode = self.compoundModel.node(TankNodeNames.TRACK_LEFT_MID)
-        rightNode = self.compoundModel.node(TankNodeNames.TRACK_RIGHT_MID)
-        testPoints = (Math.Matrix(leftNode).translation, Math.Matrix(rightNode).translation, self.__vehicle.position)
-        isOnSoftTerrain = False
-        for i in xrange(_MATKIND_COUNT):
-            testPoint = testPoints[i]
-            res = BigWorld.wg_collideSegment(self.__vehicle.spaceID, testPoint + Math.Vector3(0.0, 2.0, 0.0), testPoint + Math.Vector3(0.0, -2.0, 0.0), 18)
-            matKind = res[2] if res is not None else 0
-            self.__currTerrainMatKind[i] = matKind
-            if not isOnSoftTerrain:
-                groundStr = material_kinds.GROUND_STRENGTHS_BY_IDS.get(matKind)
-                isOnSoftTerrain = groundStr == 'soft'
+        if self.terrainMatKindSensor is None:
+            return
+        else:
+            matKinds = self.terrainMatKindSensor.matKinds
+            matKindsCount = len(matKinds)
+            for i in xrange(_MATKIND_COUNT):
+                matKind = matKinds[i] if i < matKindsCount else 0
+                self.__currTerrainMatKind[i] = matKind
+                effectIndex = calcEffectMaterialIndex(matKind)
+                effectMaterialName = ''
+                if effectIndex is not None:
+                    effectMaterialName = material_kinds.EFFECT_MATERIALS[effectIndex]
+                self.__terrainEffectMaterialNames[i] = effectMaterialName
 
-        if self.__vehicle.isPlayerVehicle and self.__wasOnSoftTerrain != isOnSoftTerrain:
-            self.__wasOnSoftTerrain = isOnSoftTerrain
-            if isOnSoftTerrain:
-                TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_ON_SOFT_TERRAIN)
-            else:
-                TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_ON_SOFT_TERRAIN)
-        self.__fashion.setCurrTerrainMatKinds(self.__currTerrainMatKind[0], self.__currTerrainMatKind[1])
-        return
+            if self.vehicleTraces is not None:
+                self.vehicleTraces.setCurrTerrainMatKinds(self.__currTerrainMatKind[0], self.__currTerrainMatKind[1])
+            return
 
     def switchFireVibrations(self, bStart):
-        if self.__vibrationsCtrl is not None:
-            self.__vibrationsCtrl.switchFireVibrations(bStart)
+        if self.peripheralsController is not None:
+            self.peripheralsController.switchFireVibrations(bStart)
         return
 
     def executeHitVibrations(self, hitEffectCode):
-        if self.__vibrationsCtrl is not None:
-            self.__vibrationsCtrl.executeHitVibrations(hitEffectCode)
+        if self.peripheralsController is not None:
+            self.peripheralsController.executeHitVibrations(hitEffectCode)
         return
 
     def executeRammingVibrations(self, matKind=None):
-        if self.__vibrationsCtrl is not None:
-            self.__vibrationsCtrl.executeRammingVibrations(self.__vehicle.getSpeed(), matKind)
+        if self.peripheralsController is not None:
+            self.peripheralsController.executeRammingVibrations(self.__vehicle, matKind)
         return
 
     def executeShootingVibrations(self, caliber):
-        if self.__vibrationsCtrl is not None:
-            self.__vibrationsCtrl.executeShootingVibrations(caliber)
+        if self.peripheralsController is not None:
+            self.peripheralsController.executeShootingVibrations(caliber)
         return
 
     def executeCriticalHitVibrations(self, vehicle, extrasName):
-        if self.__vibrationsCtrl is not None:
-            self.__vibrationsCtrl.executeCriticalHitVibrations(vehicle, extrasName)
+        if self.peripheralsController is not None:
+            self.peripheralsController.executeCriticalHitVibrations(vehicle, extrasName)
         return
 
     def deviceStateChanged(self, deviceName, state):
-        if self.detailedEngineState is not None and deviceName == 'engine':
-            if not self.isUnderwater:
-                self.detailedEngineState.deviceStateChanged(state)
+        if not self.isUnderwater and self.detailedEngineState is not None and deviceName == 'engine':
+            engineState = engine_state.getEngineStateFromName(state)
+            self.detailedEngineState.engineState = engineState
         return
-
-    def __updateVibrations(self):
-        if self.__vibrationsCtrl is None:
-            return
-        else:
-            vehicle = self.__vehicle
-            if self.__crashedTracksCtrl is not None:
-                crashedTrackCtrl = self.__crashedTracksCtrl
-                self.__vibrationsCtrl.update(vehicle, crashedTrackCtrl.isLeftTrackBroken(), crashedTrackCtrl.isRightTrackBroken())
-            return
 
     def __linkCompound(self):
         vehicle = self.__vehicle
@@ -963,12 +821,19 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__vehicleStickers.setClanID(clanID)
             return
 
-    def __attachStickers(self, alpha=1.0, emblemsOnly=False):
-        try:
-            self.__vehicleStickers.alpha = alpha
-            self.__vehicleStickers.attach(self.compoundModel, self.__currentDamageState.isCurrentModelDamaged, not emblemsOnly)
-        except:
-            LOG_CURRENT_EXCEPTION()
+    def __attachStickers(self, alpha=_DEFAULT_STICKERS_ALPHA, emblemsOnly=False):
+        assert self.__vehicleStickers is not None
+        self.__vehicleStickers.alpha = alpha
+        self.__vehicleStickers.attach(self.compoundModel, self.__currentDamageState.isCurrentModelDamaged, not emblemsOnly)
+        return
+
+    def __createAndAttachStickers(self):
+        isCurrentModelDamaged = self.__currentDamageState.isCurrentModelDamaged
+        stickersAlpha = _DEFAULT_STICKERS_ALPHA
+        if isCurrentModelDamaged:
+            stickersAlpha = items.vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha']
+        self.__createStickers()
+        self.__attachStickers(stickersAlpha, isCurrentModelDamaged)
 
     def __attachSplodge(self, splodge):
         node = self.__compoundModel.node(TankPartNames.HULL)
@@ -1024,8 +889,20 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.engineAudition.onSiegeStateChanged(newState)
         if self.suspensionController is not None:
             self.suspensionController.onSiegeStateChanged(newState)
-        if self.__suspensionSound is not None:
+        if self.suspensionSound is not None:
             self.__suspensionSound.vehicleState = newState
-        if self.__siegeEffects is not None:
-            self.__siegeEffects.onSiegeStateChanged(newState)
+        if self.siegeEffects is not None:
+            self.siegeEffects.onSiegeStateChanged(newState)
+        return
+
+    def __onCameraChanged(self, cameraName, currentVehicleId=None):
+        if self.engineAudition is not None:
+            self.engineAudition.onCameraChanged(cameraName, currentVehicleId if currentVehicleId is not None else 0)
+        return
+
+    def __onEngineStateGearUp(self):
+        if self.customEffectManager is not None:
+            self.customEffectManager.onGearUp()
+        if self.engineAudition is not None:
+            self.engineAudition.onEngineGearUp()
         return

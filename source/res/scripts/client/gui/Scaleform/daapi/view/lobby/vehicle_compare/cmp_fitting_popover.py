@@ -1,20 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_fitting_popover.py
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.view.lobby.shared import fitting_select_popover as fitting
+from gui.Scaleform.daapi.view.lobby.shared.fitting_select_popover import PopoverLogicProvider, CommonFittingSelectPopover
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA as _RC
 _NOT_AFFECTED_TEXT = text_styles.alert(VEH_COMPARE.VEHCONF_DOESNTAFFECT)
 
-class VehCmpConfigSelectPopover(fitting.CommonFittingSelectPopover):
+class VehCmpConfigSelectPopover(CommonFittingSelectPopover):
 
     def __init__(self, ctx=None):
         data_ = ctx['data']
@@ -23,13 +22,20 @@ class VehCmpConfigSelectPopover(fitting.CommonFittingSelectPopover):
         cmpVeh = cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
         if self.__isEquipment(slotType):
             logicProvider = _CmpVehEquipmentLogicProvider(slotType, slotIndex, cmpVeh)
-        elif self.__isOptioanlDevice(slotType):
+        elif self.__isOptionalDevice(slotType):
             logicProvider = _CmpVehOptDevicesLogicProvider(slotType, slotIndex, cmpVeh)
+            self._TABS = [{'label': MENU.OPTIONALDEVICESELECTPOPOVER_TABS_SIMPLE,
+              'id': 'simpleOptDevices'}, {'label': MENU.OPTIONALDEVICESELECTPOPOVER_TABS_DELUXE,
+              'id': 'deluxeOptDevices'}]
         else:
             logicProvider = None
             LOG_ERROR('Unsupported slotType: {}'.format(slotType))
         super(VehCmpConfigSelectPopover, self).__init__(cmpVeh, logicProvider, ctx)
         return
+
+    def setCurrentTab(self, tabIndex):
+        if self.__isOptionalDevice(self._slotType):
+            super(VehCmpConfigSelectPopover, self).setCurrentTab(tabIndex)
 
     def _getCommonData(self):
         if self.__isEquipment(self._slotType):
@@ -45,11 +51,11 @@ class VehCmpConfigSelectPopover(fitting.CommonFittingSelectPopover):
         return slotType == cmp_helpers.EQUIPMENT_TYPE_NAME
 
     @staticmethod
-    def __isOptioanlDevice(slotType):
+    def __isOptionalDevice(slotType):
         return slotType == cmp_helpers.OPTIONAL_DEVICE_TYPE_NAME
 
 
-class _CmpVehArtefactLogicProvider(fitting.PopoverLogicProvider):
+class _CmpVehArtefactLogicProvider(PopoverLogicProvider):
 
     def __init__(self, slotType, slotIndex, vehicle, notAffectedArtefacts):
         super(_CmpVehArtefactLogicProvider, self).__init__(slotType, slotIndex, vehicle)
@@ -81,7 +87,6 @@ class _CmpVehArtefactLogicProvider(fitting.PopoverLogicProvider):
     def _buildModuleData(self, module, isInstalledInSlot, stats):
         isFit, reason = module.mayInstall(self._vehicle, self._slotIndex)
         moduleData = self._buildCommonModuleData(module, reason)
-        fitting.extendByArtefactData(moduleData, module, self._slotIndex)
         isNotAffected = self._isNotAffected(module)
         isInstalled = module.isInstalled(self._vehicle)
         disabled = False
@@ -93,7 +98,6 @@ class _CmpVehArtefactLogicProvider(fitting.PopoverLogicProvider):
         moduleData['disabled'] = disabled
         moduleData['isSelected'] = isInstalledInSlot
         moduleData['targetVisible'] = isInstalled
-        moduleData['removable'] = True
         moduleData['removeButtonLabel'] = VEH_COMPARE.VEHCONF_BTNCLEANUP
         moduleData['removeButtonTooltip'] = VEH_COMPARE.VEHCONF_TOOLTIPS_BTNCLEANUP
         moduleData['notAffectedTTC'] = isNotAffected
@@ -102,15 +106,25 @@ class _CmpVehArtefactLogicProvider(fitting.PopoverLogicProvider):
             moduleData['notAffectedTTCTooltip'] = makeTooltip(module.userName, attention=VEH_COMPARE.VEHCONF_TOOLTIPS_DEVICENOTAFFECTEDTTC)
         return moduleData
 
+    def _buildList(self):
+        """
+        Override 'removable' property fo each item, in CMP view any module can be removed
+        """
+        moduleList = super(_CmpVehArtefactLogicProvider, self)._buildList()
+        for item in moduleList:
+            item['removable'] = True
+
+        return moduleList
+
+    def _getSuitableItems(self, typeId):
+        return self._sortNotAffected(super(_CmpVehArtefactLogicProvider, self)._getSuitableItems(typeId))
+
 
 class _CmpVehOptDevicesLogicProvider(_CmpVehArtefactLogicProvider):
 
     def __init__(self, slotType, slotIndex, vehicle):
         super(_CmpVehOptDevicesLogicProvider, self).__init__(slotType, slotIndex, vehicle, cmp_helpers.NOT_AFFECTED_DEVICES)
         self._tooltipType = TOOLTIPS_CONSTANTS.COMPARE_MODULE
-
-    def _getSuitableItems(self, typeId):
-        return self._sortNotAffected(super(_CmpVehOptDevicesLogicProvider, self)._getSuitableItems(typeId))
 
     def _removeArtifact(self, cmp_config_view, slotIndex):
         cmp_config_view.removeOptionalDevice(slotIndex)
@@ -125,10 +139,8 @@ class _CmpVehEquipmentLogicProvider(_CmpVehArtefactLogicProvider):
         super(_CmpVehEquipmentLogicProvider, self).__init__(slotType, slotIndex, vehicle, cmp_helpers.NOT_AFFECTED_EQUIPMENTS)
         self._tooltipType = TOOLTIPS_CONSTANTS.COMPARE_MODULE
 
-    def _getSuitableItems(self, typeId):
-        equipments = g_itemsCache.items.getItems(typeId, ~_RC.HIDDEN | _RC.VEHICLE.SUITABLE([self._vehicle], [typeId])).values()
-        equipments.sort(reverse=True)
-        return self._sortNotAffected(equipments)
+    def _getSpecificCriteria(self, _):
+        return ~_RC.HIDDEN
 
     def _removeArtifact(self, cmp_config_view, slotIndex):
         cmp_config_view.removeEquipment(slotIndex)

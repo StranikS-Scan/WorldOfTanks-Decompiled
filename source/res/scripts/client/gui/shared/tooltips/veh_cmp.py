@@ -9,17 +9,19 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.customization.data_aggregator import VEHICLE_CAMOUFLAGE_BONUS
 from gui.customization.elements import CamouflageQualifier, Camouflage
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles, icons
-from gui.shared.gui_items.Tankman import getSkillSmallIconPath, getRoleWhiteIconPath
+from gui.shared.gui_items.Tankman import getSkillSmallIconPath, getRoleWhiteIconPath, Tankman
 from gui.shared.items_parameters import params_helper
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
+from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.shared import IItemsCache
 
 class VehCmpCustomizationTooltip(BlocksTooltipData):
     """Tooltip data provider for the customization element in vehicle config view.
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(VehCmpCustomizationTooltip, self).__init__(context, TOOLTIP_TYPE.VEH_CMP_CUSTOMIZATION)
@@ -55,7 +57,7 @@ class VehCmpCustomizationTooltip(BlocksTooltipData):
          'top': 3}, txtGap=-4, txtOffset=65, padding={'top': -1,
          'left': 7}))
         if not self._showTTC and vehicle is not None:
-            stockVehicle = g_itemsCache.items.getStockVehicle(vehicle.intCD)
+            stockVehicle = self.itemsCache.items.getStockVehicle(vehicle.intCD)
             comparator = params_helper.camouflageComparator(vehicle, cmpItem)
             stockParams = params_helper.getParameters(stockVehicle)
             simplifiedBlocks = SimplifiedStatsBlockConstructor(stockParams, comparator).construct()
@@ -140,8 +142,6 @@ class VehCmpSkillsTooltip(BlocksTooltipData):
         configurator_view = cmp_helpers.getCmpConfiguratorMainView()
         configured_vehicle = configurator_view.getCurrentVehicle()
         skills_by_roles = cmp_helpers.getVehicleCrewSkills(configured_vehicle)
-        for idx, (role, skillsSet) in enumerate(skills_by_roles):
-            skills_by_roles[idx][1] = skillsSet
-
+        skills_by_roles.sort(key=lambda (role, skillsSet): Tankman.TANKMEN_ROLES_ORDER[role])
         blocks.extend(map(lambda data: __packSkill(*data), skills_by_roles))
         return formatters.packBuildUpBlockData(blocks, gap=0, padding={'bottom': -10})

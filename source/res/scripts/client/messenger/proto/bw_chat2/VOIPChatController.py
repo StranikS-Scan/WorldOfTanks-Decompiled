@@ -162,18 +162,21 @@ class VOIPChatController(IVOIPChatController):
         """
         serverSettings = getattr(BigWorld.player(), 'serverSettings', None)
         if serverSettings is not None and 'voipDomain' in serverSettings:
-            domain = serverSettings['voipDomain']
+            domain = serverSettings['voipUserDomain']
+            server = serverSettings['voipDomain']
         else:
             domain = ''
-        yield self.__initializeSettings(domain)
+            server = ''
+        yield self.__initializeSettings(domain, server)
         yield self.requestCaptureDevices(True)
         return
 
     @async
-    def __initializeSettings(self, domain, callback):
+    def __initializeSettings(self, domain, server, callback):
         """
         Check if VOIP is enabled in client and initialize manager if necessary.
-        :param domain: voip server URL
+        :param domain: user domain name for sip URL constructing
+        :param server: voip server FQDN
         :param callback: pass callback to get results
         """
         if self.isReady():
@@ -187,7 +190,7 @@ class VOIPChatController(IVOIPChatController):
         self.__callbacks.append(callback)
         voipMgr = VOIP.getVOIPManager()
         if voipMgr.isNotInitialized():
-            voipMgr.initialize(domain)
+            voipMgr.initialize(domain, server)
         vOIPSetting = self.settingsCore.options.getSetting('enableVoIP')
         vOIPSetting.initFromPref()
 

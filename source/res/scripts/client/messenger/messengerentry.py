@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/MessengerEntry.py
-from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
+from helpers import dependency
 from messenger import g_settings
 from messenger.ext.filters import MessageFiltersChain
 from messenger.ext.player_helpers import CurrentPlayerHelper
@@ -9,8 +9,11 @@ from messenger.gui.entry_decorator import GUIDecorator
 from messenger.m_constants import MESSENGER_SCOPE
 from messenger.proto import ProtoPluginsDecorator
 from messenger.storage import StorageDecorator
+from skeletons.connection_mgr import IConnectionManager
 
 class MessengerEntry(object):
+    """Main entry to messenger package."""
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         self.__protoPlugins = ProtoPluginsDecorator()
@@ -43,7 +46,7 @@ class MessengerEntry(object):
         g_playerEvents.onAvatarBecomePlayer += self.__pe_onAvatarBecomePlayer
         g_playerEvents.onAccountBecomeNonPlayer += self.__pe_onAccountBecomeNonPlayer
         g_playerEvents.onAvatarBecomeNonPlayer += self.__pe_onAvatarBecomeNonPlayer
-        connectionManager.onDisconnected += self.__cm_onDisconnected
+        self.connectionMgr.onDisconnected += self.__cm_onDisconnected
 
     def fini(self):
         self.__msgFiltersChain.fini()
@@ -58,7 +61,7 @@ class MessengerEntry(object):
         g_playerEvents.onAvatarBecomePlayer -= self.__pe_onAvatarBecomePlayer
         g_playerEvents.onAccountBecomeNonPlayer -= self.__pe_onAccountBecomeNonPlayer
         g_playerEvents.onAvatarBecomeNonPlayer -= self.__pe_onAvatarBecomeNonPlayer
-        connectionManager.onDisconnected -= self.__cm_onDisconnected
+        self.connectionMgr.onDisconnected -= self.__cm_onDisconnected
 
     def onAccountShowGUI(self):
         self.__playerHelper.initPersonalAccount()

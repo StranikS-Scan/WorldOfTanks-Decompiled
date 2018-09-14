@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsPersonalWelcomeView.py
 import weakref
-from gui.LobbyContext import g_lobbyContext
+from helpers import dependency
 from helpers import i18n
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.shared.formatters import text_styles
@@ -10,8 +10,10 @@ from gui.Scaleform.daapi.view.meta.QuestsPersonalWelcomeViewMeta import QuestsPe
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from constants import ARENA_GUI_TYPE_LABEL, ARENA_GUI_TYPE
+from skeletons.gui.lobby_context import ILobbyContext
 
 class QuestsPersonalWelcomeView(QuestsPersonalWelcomeViewMeta):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(QuestsPersonalWelcomeView, self).__init__()
@@ -31,7 +33,7 @@ class QuestsPersonalWelcomeView(QuestsPersonalWelcomeViewMeta):
 
     def _populate(self):
         super(QuestsPersonalWelcomeView, self)._populate()
-        falloutEnabled = g_lobbyContext.getServerSettings().isFalloutQuestEnabled()
+        falloutEnabled = self.lobbyContext.getServerSettings().isFalloutQuestEnabled()
         if falloutEnabled:
             announcementIcon = ARENA_GUI_TYPE_LABEL.LABELS[ARENA_GUI_TYPE.FALLOUT_CLASSIC]
             announcementText = text_styles.promoSubTitle(QUESTS.QUESTSPERSONALWELCOMEVIEW_ANNOUNCEMENTTEXT)

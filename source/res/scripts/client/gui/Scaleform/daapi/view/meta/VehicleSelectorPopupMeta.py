@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class VehicleSelectorPopupMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def onFiltersUpdate(self, nation, vehicleType, isMain, level, compatibleOnly):
         self._printOverrideError('onFiltersUpdate')
@@ -24,8 +18,8 @@ class VehicleSelectorPopupMeta(AbstractWindowView):
 
     def as_setListDataS(self, listData, selectedItems):
         """
-        :param listData: Represented by DataProvider (AS)
-        :param selectedItems: Represented by Array (AS)
+        :param listData: Represented by DataProvider.<VehicleSelectorItemVO> (AS)
+        :param selectedItems: Represented by Array.<VehicleAlertVO> (AS)
         """
         return self.flashObject.as_setListData(listData, selectedItems) if self._isDAAPIInited() else None
 

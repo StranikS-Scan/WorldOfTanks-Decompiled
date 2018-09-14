@@ -5,8 +5,10 @@ from collections import defaultdict
 from debug_utils import LOG_WARNING
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
 from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers import dependency
+from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.shared import IItemsCache
 
 def _createBooster(boosterID, boosterDescription, proxy):
     """
@@ -34,24 +36,25 @@ _GOODIES_VARIETY_MAPPING = {GOODIE_VARIETY.BOOSTER: _createBooster,
  GOODIE_VARIETY.DISCOUNT: _createDiscount}
 _DISCOUNT_TYPES_MAPPING = {GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: PersonalVehicleDiscount}
 
-class _GoodiesCache(object):
+class GoodiesCache(IGoodiesCache):
     """
     Global goodies cache. Contains booster and goodie GUI items.
-    Uses g_itemsCache.items.shop and g_itemsCache.items.goodies to create goodies cache
-    Listen g_itemsCache events and keep cache in valid state
+    Uses IItemsCache.items.shop and IItemsCache.items.goodies to create goodies cache
+    Listen IItemsCache events and keep cache in valid state
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
-        self._items = weakref.proxy(g_itemsCache.items)
+        self._items = weakref.proxy(self.itemsCache.items)
         self.__goodiesCache = defaultdict(dict)
         self.__activeBoostersTypes = None
         return
 
     def init(self):
-        g_itemsCache.onSyncStarted += self.__clearCache
+        self.itemsCache.onSyncStarted += self.__clearCache
 
     def fini(self):
-        g_itemsCache.onSyncStarted -= self.__clearCache
+        self.itemsCache.onSyncStarted -= self.__clearCache
 
     def clear(self):
         self.__activeBoostersTypes = None
@@ -152,6 +155,3 @@ class _GoodiesCache(object):
 
     def __clearCache(self, *args):
         self.clear()
-
-
-g_goodiesCache = _GoodiesCache()

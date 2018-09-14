@@ -12,7 +12,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_format
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeBuildingIndicatorsVOByDescr
 from gui.Scaleform.daapi.view.meta.FortBuildingCardPopoverMeta import FortBuildingCardPopoverMeta
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as ALIAS, FORTIFICATION_ALIASES
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as ALIAS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as FORT
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import events
@@ -138,7 +138,7 @@ class FortBuildingCardPopover(FortViewHelper, FortBuildingCardPopoverMeta):
         return
 
     def openDirectionControlWindow(self):
-        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CREATE_DIRECTION_WINDOW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(ALIAS.FORT_CREATE_DIRECTION_WINDOW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def openUpgradeWindow(self, value):
         self.fireEvent(events.LoadViewEvent(ALIAS.FORT_MODERNIZATION_WINDOW_ALIAS, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)

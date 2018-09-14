@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/BasePrebattleRoomView.py
 from CurrentVehicle import g_currentVehicle
 from adisp import process
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.meta.BasePrebattleRoomViewMeta import BasePrebattleRoomViewMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -14,6 +13,7 @@ from gui.prb_control.entities.base.legacy.listener import ILegacyListener
 from gui.prb_control.items import prb_items
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
+from helpers import dependency
 from helpers import int2roman
 from messenger import g_settings
 from messenger.ext import channel_num_gen
@@ -25,8 +25,10 @@ from messenger.storage import storage_getter
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from prebattle_shared import decodeRoster
+from skeletons.gui.lobby_context import ILobbyContext
 
 class BasePrebattleRoomView(BasePrebattleRoomViewMeta, ILegacyListener):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, prbName='prebattle'):
         super(BasePrebattleRoomView, self).__init__()
@@ -191,7 +193,7 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, ILegacyListener):
              'dbID': account.dbID,
              'userName': account.name,
              'clanAbbrev': account.clanAbbrev,
-             'region': g_lobbyContext.getRegionCode(account.dbID),
+             'region': self.lobbyContext.getRegionCode(account.dbID),
              'fullName': account.getFullName(),
              'igrType': account.igrType,
              'time': account.time,

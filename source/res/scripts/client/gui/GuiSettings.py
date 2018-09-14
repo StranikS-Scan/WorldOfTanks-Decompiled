@@ -126,7 +126,9 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'compulsoryIntroVideos': [],
  'encyclopedia': {},
  'useDefaultGunMarkers': False,
- 'spgAlternativeAimingCameraEnabled': False}
+ 'spgAlternativeAimingCameraEnabled': False,
+ 'tokenShopAvailabilityURL': '',
+ 'tokenShopAPIKey': ''}
 
 class GuiSettings(object):
 

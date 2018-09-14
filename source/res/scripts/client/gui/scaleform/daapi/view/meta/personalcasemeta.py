@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class PersonalCaseMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def dismissTankman(self, inventoryID):
         self._printOverrideError('dismissTankman')
@@ -65,6 +59,9 @@ class PersonalCaseMeta(AbstractWindowView):
         return self.flashObject.as_setRetrainingData(data) if self._isDAAPIInited() else None
 
     def as_setSkillsDataS(self, data):
+        """
+        :param data: Represented by Array (AS)
+        """
         return self.flashObject.as_setSkillsData(data) if self._isDAAPIInited() else None
 
     def as_setDocumentsDataS(self, data):

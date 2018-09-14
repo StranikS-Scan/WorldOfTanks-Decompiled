@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class RoleChangeMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def onVehicleSelected(self, vehicleId):
         self._printOverrideError('onVehicleSelected')
@@ -24,7 +18,7 @@ class RoleChangeMeta(AbstractWindowView):
 
     def as_setRolesS(self, roles):
         """
-        :param roles: Represented by Array (AS)
+        :param roles: Represented by Array.<RoleChangeItemVO> (AS)
         """
         return self.flashObject.as_setRoles(roles) if self._isDAAPIInited() else None
 

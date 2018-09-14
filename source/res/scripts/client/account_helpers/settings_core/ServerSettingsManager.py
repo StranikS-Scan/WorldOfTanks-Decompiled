@@ -27,6 +27,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
     FALLOUT_CAROUSEL_FILTER_1 = 'FALLOUT_CAROUSEL_FILTER_1'
     FALLOUT_CAROUSEL_FILTER_2 = 'FALLOUT_CAROUSEL_FILTER_2'
+    RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
+    RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -145,6 +147,38 @@ class ServerSettingsManager(object):
                                            'favorite': 5,
                                            'bonus': 6,
                                            'event': 7}, offsets={}),
+     SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
+                                                  'germany': 1,
+                                                  'usa': 2,
+                                                  'china': 3,
+                                                  'france': 4,
+                                                  'uk': 5,
+                                                  'japan': 6,
+                                                  'czech': 7,
+                                                  'sweden': 8,
+                                                  'lightTank': 15,
+                                                  'mediumTank': 16,
+                                                  'heavyTank': 17,
+                                                  'SPG': 18,
+                                                  'AT-SPG': 19,
+                                                  'level_1': 20,
+                                                  'level_2': 21,
+                                                  'level_3': 22,
+                                                  'level_4': 23,
+                                                  'level_5': 24,
+                                                  'level_6': 25,
+                                                  'level_7': 26,
+                                                  'level_8': 27,
+                                                  'level_9': 28,
+                                                  'level_10': 29}, offsets={}),
+     SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
+                                                  'elite': 1,
+                                                  'rented': 2,
+                                                  'igr': 3,
+                                                  'gameMode': 4,
+                                                  'favorite': 5,
+                                                  'bonus': 6,
+                                                  'event': 7}, offsets={}),
      SETTINGS_SECTIONS.FALLOUT_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                    'germany': 1,
                                                    'usa': 2,
@@ -177,7 +211,9 @@ class ServerSettingsManager(object):
                                                    'favorite': 5,
                                                    'bonus': 6,
                                                    'event': 7}, offsets={}),
-     SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={'isFreeXPInfoDialogShowed': 0}, offsets={}),
+     SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={'isFreeXPInfoDialogShowed': 0,
+                                            'isRankedWelcomeViewShowed': 1,
+                                            'isRankedWelcomeViewStarted': 2}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,

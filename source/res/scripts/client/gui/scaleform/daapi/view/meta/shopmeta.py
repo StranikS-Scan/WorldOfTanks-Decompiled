@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.store.StoreComponent import StoreComponent
 
 class ShopMeta(StoreComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends StoreComponent
-    """
 
     def buyItem(self, itemCD, allowTradeIn):
         self._printOverrideError('buyItem')

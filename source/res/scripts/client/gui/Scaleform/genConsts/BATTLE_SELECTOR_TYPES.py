@@ -1,14 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/BATTLE_SELECTOR_TYPES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class BATTLE_SELECTOR_TYPES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     BATTLE_SELECTOR_TYPE_RANDOM = 'joinRandomQueue'
+    BATTLE_SELECTOR_TYPE_RANKED = 'ranked'
     BATTLE_SELECTOR_TYPE_FALLOUT = 'fallout'
     BATTLE_SELECTOR_TYPE_UNIT = 'unit'
     BATTLE_SELECTOR_TYPE_COMPANY = 'companyList'

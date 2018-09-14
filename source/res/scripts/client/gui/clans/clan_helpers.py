@@ -6,7 +6,6 @@ from adisp import async, process
 import Event
 from client_request_lib.exceptions import ResponseCodes
 from gui import SystemMessages, GUI_SETTINGS
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -16,7 +15,6 @@ from helpers import i18n
 from helpers.local_cache import FileLocalCache
 from gui.shared.utils import sortByFields
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
-from gui.LobbyContext import g_lobbyContext
 from gui.clans import interfaces, items, formatters
 from gui.clans.contexts import SearchClansCtx, GetRecommendedClansCtx, AccountInvitesCtx, ClanRatingsCtx
 from gui.clans.contexts import ClansInfoCtx, AcceptInviteCtx, DeclineInviteCtx, DeclineInvitesCtx
@@ -30,6 +28,7 @@ from helpers import time_utils
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.clans import IClanController
+from skeletons.gui.lobby_context import ILobbyContext
 _RequestData = namedtuple('_RequestData', ['pattern',
  'offset',
  'count',
@@ -730,12 +729,18 @@ class CachedValue(object):
         return time_utils.getTimestampFromUTC(datetime.utcnow().timetuple())
 
 
-def isStrongholdsEnabled():
-    try:
-        settings = g_lobbyContext.getServerSettings()
-        return settings.isStrongholdsEnabled()
-    except:
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def isStrongholdsEnabled(lobbyContext=None):
+    if lobbyContext is None:
         return False
+    else:
+        try:
+            settings = lobbyContext.getServerSettings()
+            return settings.isStrongholdsEnabled()
+        except:
+            return False
+
+        return
 
 
 def getStrongholdUrl(urlName):
@@ -752,11 +757,15 @@ def getStrongholdClanCardUrl(clanDBID):
     return getStrongholdUrl('clanCardUrl') + str(clanDBID)
 
 
-def _getWgshHost():
-    try:
-        return g_lobbyContext.getServerSettings().stronghold.wgshHostUrl
-    except AttributeError:
-        LOG_CURRENT_EXCEPTION()
-        return None
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def _getWgshHost(lobbyContext=None):
+    if lobbyContext is None:
+        return
+    else:
+        try:
+            return lobbyContext.getServerSettings().stronghold.wgshHostUrl
+        except AttributeError:
+            LOG_CURRENT_EXCEPTION()
+            return
 
-    return None
+        return

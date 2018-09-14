@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/dependencies.py
+import time
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import getVehicleNationID
+_SECONDS_IN_DAY = 86400
 A15X15_STATS_DEPENDENCIES = {}
 
 def _set_A15X15_STATS_DEPENDENCIES():
@@ -237,6 +239,44 @@ def _set_FALLOUT_STATS_DEPENDENCIES():
     global FALLOUT_STATS_DEPENDENCIES
     FALLOUT_STATS_DEPENDENCIES.update({'avatarKills': [_updateStormLord],
      'winPoints': [_updateWinnerLaurels]})
+
+
+RANKED_BADGES_DEPENDENCIES = {}
+
+def _set_RANKED_BADGES_DEPENDENCIES():
+    global RANKED_BADGES_DEPENDENCIES
+    RANKED_BADGES_DEPENDENCIES.update({'1': [_updateRankedBadge],
+     '2': [_updateRankedBadge],
+     '3': [_updateRankedBadge],
+     '4': [_updateRankedBadge],
+     '5': [_updateRankedBadge],
+     '6': [_updateRankedBadge],
+     '7': [_updateRankedBadge],
+     '8': [_updateRankedBadge],
+     '9': [_updateRankedBadge]})
+
+
+def _updateRankedBadge(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    eventsEnabled = dossierBlockDescr.eventsEnabled
+    if eventsEnabled:
+        dossierBlockDescr.eventsEnabled = False
+    dossierBlockDescr[key] = int(time.time()) / _SECONDS_IN_DAY if value == 1 else 0
+    if eventsEnabled:
+        dossierBlockDescr.eventsEnabled = True
+
+
+RANKED_STATS_DEPENDENCIES = {}
+
+def _set_RANKED_STATS_DEPENDENCIES():
+    global RANKED_STATS_DEPENDENCIES
+    RANKED_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
+     'frags': [_updateMedalCarius],
+     'frags8p': [_updateMedalEkins],
+     'damageDealt': [_updateMedalKnispel],
+     'damageReceived': [_updateMedalKnispel],
+     'spotted': [_updateMedalPoppel],
+     'capturePoints': [_updateMedalLeClerc],
+     'droppedCapturePoints': [_updateMedalLavrinenko]})
 
 
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
@@ -880,3 +920,5 @@ def init():
     _set_CLUB_ACHIEVEMENTS_DEPENDENCIES()
     _set_GLOBAL_MAP_STATS_DEPENDENCIES()
     _set_FALLOUT_STATS_DEPENDENCIES()
+    _set_RANKED_STATS_DEPENDENCIES()
+    _set_RANKED_BADGES_DEPENDENCIES()

@@ -3,10 +3,11 @@
 import BigWorld
 import constants
 from adisp import process, async
+from helpers import dependency
 from items import vehicles, tankmen, ITEM_TYPE_NAMES, parseIntCompactDescr
 from debug_utils import LOG_WARNING, LOG_ERROR
-from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from skeletons.gui.shared import IItemsCache
 
 class ValidateException(Exception):
 
@@ -17,6 +18,7 @@ class ValidateException(Exception):
 
 
 class AccountValidator(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     class CODES:
         OK = 0
@@ -35,6 +37,7 @@ class AccountValidator(object):
         DOSSIER_CAMOUFLAGES_ERROR = 1013
         DOSSIER_INSCRIPTIONS_ERROR = 1014
         DOSSIER_EMBLEMS_ERROR = 1015
+        INVENTORY_BATTLE_BOOSTER_MISMATCH = 1016
 
     @classmethod
     def __packItemData(cls, itemTypeID, itemData, *args):
@@ -59,15 +62,15 @@ class AccountValidator(object):
         BigWorld.player().inventory.dismissTankman(tmanInvID, response)
 
     def __validateEliteVehicleCDs(self):
-        for vehicleCD in g_itemsCache.items.stats.eliteVehicles:
+        for vehicleCD in self.itemsCache.items.stats.eliteVehicles:
             try:
-                g_itemsCache.items.getItemByCD(vehicleCD)
+                self.itemsCache.items.getItemByCD(vehicleCD)
             except KeyError:
                 LOG_ERROR('No vehicle corresponding to compact descriptor: {0}. Account data is inconsistent.'.format(vehicleCD))
 
     def __validateInventoryVehicles(self):
-        inventory = g_itemsCache.items.inventory
-        vehsInvData = g_itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {})
+        inventory = self.itemsCache.items.inventory
+        vehsInvData = self.itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {})
         for invID, vehCompDescr in vehsInvData.get('compDescr', {}).iteritems():
             try:
                 vehicles.VehicleDescr(vehCompDescr)
@@ -80,7 +83,7 @@ class AccountValidator(object):
                     raise ValidateException('Exceeded tankmen in tank', self.CODES.INVENTORY_VEHICLE_CREW_MISMATCH, self.__packItemData(GUI_ITEM_TYPE.VEHICLE, vehInvData, tankmanID))
 
     def __validateInventoryTankmen(self):
-        tmenInvData = g_itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.TANKMAN, {})
+        tmenInvData = self.itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.TANKMAN, {})
         for invID, tmanCompDescr in tmenInvData.get('compDescr', {}).iteritems():
             try:
                 tankmen.TankmanDescr(tmanCompDescr)
@@ -88,14 +91,14 @@ class AccountValidator(object):
                 raise ValidateException(e.message, self.CODES.INVENTORY_TANKMEN_MISMATCH, self.__packItemData(GUI_ITEM_TYPE.TANKMAN, (invID, tmanCompDescr)))
 
     def __validateInvItem(self, itemTypeID, errorCode):
-        for intCompactDescr, itemData in g_itemsCache.items.inventory.getItemsData(itemTypeID).iteritems():
+        for intCompactDescr, itemData in self.itemsCache.items.inventory.getItemsData(itemTypeID).iteritems():
             try:
                 vehicles.getDictDescr(abs(intCompactDescr))
             except Exception as e:
                 raise ValidateException(e.message, errorCode, self.__packItemData(itemTypeID, itemData))
 
     def __validateCustomization(self):
-        for intCD, dossier in g_itemsCache.items.getVehicleDossiersIterator():
+        for intCD, dossier in self.itemsCache.items.getVehicleDossiersIterator():
             _, nationID, _ = parseIntCompactDescr(intCD)
             customization = vehicles.g_cache.customization(nationID)
             camouflages = customization['camouflages']
@@ -131,6 +134,7 @@ class AccountValidator(object):
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.OPTIONALDEVICE, self.CODES.INVENTORY_OPT_DEV_MISMATCH),
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.SHELL, self.CODES.INVENTORY_SHELL_MISMATCH),
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.EQUIPMENT, self.CODES.INVENTORY_EQ_MISMATCH),
+         lambda : self.__validateInvItem(GUI_ITEM_TYPE.BATTLE_BOOSTER, self.CODES.INVENTORY_BATTLE_BOOSTER_MISMATCH),
          self.__validateEliteVehicleCDs,
          self.__validateInventoryTankmen,
          self.__validateInventoryVehicles]

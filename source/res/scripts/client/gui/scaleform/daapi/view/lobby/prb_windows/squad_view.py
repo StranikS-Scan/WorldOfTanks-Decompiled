@@ -15,7 +15,6 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control import settings
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.utils.functions import makeTooltip
@@ -43,7 +42,7 @@ class SquadView(SquadViewMeta):
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
+                vehicleVO = makeVehicleVO(self.itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
                 slotCost = vInfo.vehLevel
             else:
                 slotState = entity.getSlotState(slotIdx)

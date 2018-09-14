@@ -139,10 +139,10 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler):
     def __updateMenu(self):
         data = []
         for state in SHORTCUT_STATES.ALL:
-            stateData = map(lambda x: {'title': x.title,
+            stateData = map(lambda x, s=state: {'title': x.title,
              'action': x.action,
              'icon': x.icon,
-             'key': getKeyFromAction(x.action, state)}, SHORTCUT_SETS[state])
+             'key': getKeyFromAction(x.action, s)}, SHORTCUT_SETS[state])
             data.append({'state': state,
              'data': stateData})
 

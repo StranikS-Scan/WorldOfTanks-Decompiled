@@ -11,6 +11,7 @@ import fallout_controller as _fallout_controller
 import preview as _preview
 import promo_controller as _promo_controller
 import shop as _shop
+import ranked_battles_controller as _ranked_battles_controller
 from .fortified_regions import configure_pointcuts as _configure_fort_pointcuts
 from .notifications import configure_pointcuts as _notifications_configure_pointcuts
 from .invitations import configure_pointcuts as _configure_invitation_pointcuts
@@ -75,20 +76,22 @@ def _enable_all_pointcuts(config):
     _dynamic_squads.InviteReceivedMessagePointcut()
     _promo_controller.ShowPromoBrowserPointcut()
     _fallout_controller.InitFalloutPointcut()
+    _ranked_battles_controller.InitRankedPointcut()
     _event.InitEventPointcut()
     _preview.ChangeVehicleIsPreviewAllowed(config)
     _configure_vehicle_compare_pointcuts()
 
 
 def _enable_sandbox_platform_pointcuts(config):
-    from .lobby.header.fight_button_ import DisableFightButtonPointcut
+    from .lobby.header.fight_button_ import DisableFightButtonPointcut, DisableTrainingFightButtonPointcut
     from .lobby.header.battle_type_selector.pointcuts import CommandBattle
     from .lobby.header.account_popover import MyClanInvitesBtnUnavailable, ClanBtnsUnavailable
     from .lobby.profile.pointcuts import MakeClanBtnUnavailable, MakeClubProfileButtonUnavailable
     from .lobby.tank_carousel import configure_pointcuts as _configure_carousel_pointcuts
-    from .lobby.hangar.pointcuts import DisableTankServiceButtons, MaintenanceButtonFlickering, DeviceButtonsFlickering, TankModelHangarVisibility, TankHangarStatus
+    from .lobby.hangar.pointcuts import DisableTankServiceButtons, MaintenanceButtonFlickering, DeviceButtonsFlickering, TankModelHangarVisibility, TankHangarStatus, EnableCrew
     from .lobby.profile.pointcuts import MakeClanBtnUnavailable
     DisableFightButtonPointcut(config)
+    DisableTrainingFightButtonPointcut(config)
     CommandBattle()
     MakeClanBtnUnavailable()
     ClanBtnsUnavailable()
@@ -102,6 +105,7 @@ def _enable_sandbox_platform_pointcuts(config):
     TankHangarStatus(config)
     _configure_carousel_pointcuts(config)
     _preview.ChangeVehicleIsPreviewAllowed(config)
+    EnableCrew(config)
 
 
 __all__ = ('configure_state',)

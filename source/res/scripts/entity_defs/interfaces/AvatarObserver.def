@@ -1,21 +1,9 @@
 <AvatarObserver.def>
   <Properties>
-    <remoteCameraArcade>
-      <Type>	REMOTE_CAMERA_ARCADE_DATA	</Type>
+    <remoteCamera>
+      <Type>	REMOTE_CAMERA_DATA	</Type>
       <Flags>	OWN_CLIENT	</Flags>
-    </remoteCameraArcade>
-    <remoteCameraSniper>
-      <Type>	REMOTE_CAMERA_SNIPER_DATA	</Type>
-      <Flags>	OWN_CLIENT	</Flags>
-    </remoteCameraSniper>
-    <remoteCameraStrategic>
-      <Type>	REMOTE_CAMERA_STRATEGIC_DATA	</Type>
-      <Flags>	OWN_CLIENT	</Flags>
-    </remoteCameraStrategic>
-    <remoteCameraArty>
-      <Type>	REMOTE_CAMERA_ARTY_DATA	</Type>
-      <Flags>	OWN_CLIENT	</Flags>
-    </remoteCameraArty>
+    </remoteCamera>
     <isObserverFPV>
       <Type>	BOOL	</Type>
       <Flags>	OWN_CLIENT	</Flags>
@@ -37,18 +25,9 @@
     <switchObserverFPVControlMode>
       <Arg>	UINT8	</Arg>
     </switchObserverFPVControlMode>
-    <setRemoteCameraArcade>
-      <Arg>	REMOTE_CAMERA_ARCADE_DATA	</Arg>
-    </setRemoteCameraArcade>
-    <setRemoteCameraSniper>
-      <Arg>	REMOTE_CAMERA_SNIPER_DATA	</Arg>
-    </setRemoteCameraSniper>
-    <setRemoteCameraStrategic>
-      <Arg>	REMOTE_CAMERA_STRATEGIC_DATA	</Arg>
-    </setRemoteCameraStrategic>
-    <setRemoteCameraArty>
-      <Arg>	REMOTE_CAMERA_ARTY_DATA	</Arg>
-    </setRemoteCameraArty>
+    <setRemoteCamera>
+      <Arg>	REMOTE_CAMERA_DATA	</Arg>
+    </setRemoteCamera>
     <setNumOfObservers>
       <Arg>	UINT8	</Arg>
     </setNumOfObservers>

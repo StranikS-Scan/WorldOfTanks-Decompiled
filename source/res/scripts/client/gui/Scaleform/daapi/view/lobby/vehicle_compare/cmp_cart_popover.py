@@ -8,13 +8,13 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIData
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_dispatcher import showVehicleCompare
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from nations import AVAILABLE_NAMES
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 
 class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
@@ -96,6 +96,7 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
 
 
 class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
+    itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self):
@@ -166,7 +167,7 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
         self.flashObject.invalidateItem(index, item)
 
     def _makeVO(self, vehicleCD, index):
-        vehicle = g_itemsCache.items.getItemByCD(vehicleCD)
+        vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
         complectation = _ms(VEH_COMPARE.cartpopover_configurationtype(self.comparisonBasket.getVehicleAt(index).getConfigurationType()))
         iconFunc = RES_ICONS.maps_icons_vehicletypes_elite if vehicle.isPremium else RES_ICONS.maps_icons_vehicletypes
         basketLocked = self.comparisonBasket.isLocked

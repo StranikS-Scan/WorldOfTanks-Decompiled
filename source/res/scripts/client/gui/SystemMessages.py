@@ -5,11 +5,15 @@ from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.system_messages import ISystemMessages
 SM_TYPE = Enumeration('System message type', ['Error',
+ 'ErrorHeader',
+ 'ErrorSimple',
  'Warning',
+ 'WarningHeader',
  'Information',
  'GameGreeting',
  'PowerLevel',
  'FinancialTransactionWithGold',
+ 'FinancialTransactionWithGoldHeader',
  'FinancialTransactionWithCredits',
  'FortificationStartUp',
  'PurchaseForGold',
@@ -20,16 +24,19 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'Repair',
  'CustomizationForGold',
  'CustomizationForCredits',
- 'Restore'])
+ 'Restore',
+ 'PurchaseForCrystal',
+ 'PrimeTime'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
- Currency.GOLD: SM_TYPE.PurchaseForGold}
+ Currency.GOLD: SM_TYPE.PurchaseForGold,
+ Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal}
 
 def _getSystemMessages():
     return dependency.instance(ISystemMessages)
 
 
-def pushMessage(text, type=SM_TYPE.Information, priority=None):
-    _getSystemMessages().pushMessage(text, type, priority)
+def pushMessage(text, type=SM_TYPE.Information, priority=None, messageData=None):
+    _getSystemMessages().pushMessage(text, type, priority, messageData=messageData)
 
 
 def pushI18nMessage(key, *args, **kwargs):

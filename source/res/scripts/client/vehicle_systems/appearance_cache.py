@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/vehicle_systems/appearance_cache.py
 import BigWorld
 import weakref
-from debug_utils import *
 from functools import partial
+from debug_utils import LOG_DEBUG, LOG_WARNING
 from vehicle_systems import vehicle_assembler
 from collections import namedtuple
 _ENABLE_CACHE_TRACKER = False

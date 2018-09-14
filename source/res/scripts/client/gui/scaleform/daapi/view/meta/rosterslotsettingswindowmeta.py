@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class RosterSlotSettingsWindowMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def onFiltersUpdate(self, nation, vehicleType, isMain, level, compatibleOnly):
         self._printOverrideError('onFiltersUpdate')
@@ -42,7 +36,7 @@ class RosterSlotSettingsWindowMeta(AbstractWindowView):
 
     def as_setListDataS(self, listData):
         """
-        :param listData: Represented by DataProvider (AS)
+        :param listData: Represented by DataProvider.<VehicleSelectorItemVO> (AS)
         """
         return self.flashObject.as_setListData(listData) if self._isDAAPIInited() else None
 

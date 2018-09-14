@@ -11,6 +11,7 @@ from debug_utils import LOG_ERROR
 from gui.shared.utils import code2str
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from gui.shared.utils.requesters.common import RequestProcessor
+from skeletons.gui.shared.utils.requesters import IDossierRequester
 
 class UserDossier(object):
     __queue = []
@@ -25,7 +26,8 @@ class UserDossier(object):
          'hidden': False,
          'available': True,
          'rating': None,
-         'rated7x7Seasons': {}}
+         'rated7x7Seasons': {},
+         'ranked': None}
         return
 
     def __setLastResponseTime(self):
@@ -53,17 +55,19 @@ class UserDossier(object):
                 self.__cache['clan'] = value[2]
                 self.__cache['rating'] = value[3]
                 self.__cache['rated7x7Seasons'] = seasons = {}
+                self.__cache['ranked'] = value[5]
                 for sID, d in (value[4] or {}).iteritems():
                     seasons[sID] = dossiers2.getRated7x7DossierDescr(d)
 
             callback(self.__cache['account'])
             return
 
-        self.__queue.append(lambda : BigWorld.player().requestPlayerInfo(self.__cache['databaseID'], partial(lambda c, code, databaseID, dossier, clanID, clanInfo, gRating, eSportSeasons: self.__processValueResponse(c, code, (databaseID,
+        self.__queue.append(lambda : BigWorld.player().requestPlayerInfo(self.__cache['databaseID'], partial(lambda c, code, databaseID, dossier, clanID, clanInfo, gRating, eSportSeasons, ranked: self.__processValueResponse(c, code, (databaseID,
          dossier,
          (clanID, clanInfo),
          gRating,
-         eSportSeasons)), proxyCallback)))
+         eSportSeasons,
+         ranked)), proxyCallback)))
         self.__processQueue()
 
     def __requestAccountDossier(self, callback):
@@ -142,6 +146,22 @@ class UserDossier(object):
             return
 
     @async
+    def getRankedInfo(self, callback):
+        """
+        Provides current ranked season info asynchronously
+        :param callback:
+        :return:
+        """
+        if not self.isValid:
+            callback({})
+        if self.__cache.get('ranked') is None:
+            self.__requestPlayerInfo(lambda accDossier: callback(self.__cache['ranked']))
+            return
+        else:
+            callback(self.__cache['ranked'])
+            return
+
+    @async
     def getGlobalRating(self, callback):
         if not self.isValid:
             callback(None)
@@ -176,7 +196,7 @@ class UserDossier(object):
         return not self.isHidden and self.isAvailable
 
 
-class DossierRequester(AbstractSyncDataRequester):
+class DossierRequester(AbstractSyncDataRequester, IDossierRequester):
 
     def __init__(self):
         super(DossierRequester, self).__init__()

@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.meta.SimpleWindowMeta import SimpleWindowMeta
 
 class SquadPromoWindowMeta(SimpleWindowMeta):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends SimpleWindowMeta
-    """
 
     def onHyperlinkClick(self):
         self._printOverrideError('onHyperlinkClick')

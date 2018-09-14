@@ -2,12 +2,14 @@
 # Embedded file name: scripts/client/gui/miniclient/tech_tree/aspects.py
 import BigWorld
 from gui.DialogsInterface import showDialog
-from gui.Scaleform.daapi.view.dialogs import SimpleDialogMeta, I18nConfirmDialogButtons, DIALOG_BUTTON_ID
-from gui.shared import g_itemsCache
+from gui.Scaleform.daapi.view.dialogs import SimpleDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogButtons, DIALOG_BUTTON_ID
 from gui.shared.formatters import icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import aop
+from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.shared import IItemsCache
 
 class OnTechTreePopulate(aop.Aspect):
 
@@ -16,6 +18,7 @@ class OnTechTreePopulate(aop.Aspect):
 
 
 class OnBuyVehicle(aop.Aspect):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, config):
         self.__vehicle_is_available = config['vehicle_is_available']
@@ -23,7 +26,7 @@ class OnBuyVehicle(aop.Aspect):
         aop.Aspect.__init__(self)
 
     def atCall(self, cd):
-        vehicleItem = g_itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, cd.self.nationID, cd.self.inNationID)
+        vehicleItem = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, cd.self.nationID, cd.self.inNationID)
         if self.__vehicle_is_available(vehicleItem):
             return None
         else:

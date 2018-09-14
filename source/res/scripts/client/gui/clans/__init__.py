@@ -10,4 +10,4 @@ def getClanServicesConfig(manager):
     from gui.clans.clan_controller import ClanController
     ctrl = ClanController()
     ctrl.init()
-    manager.bindInstance(IClanController, ctrl, finalizer='fini')
+    manager.addInstance(IClanController, ctrl, finalizer='fini')

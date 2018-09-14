@@ -80,14 +80,14 @@ class _StringPrepProfile(object):
         return result
 
     def _checkProhibited(self, data):
-        for table in self._prohibited:
-            map(lambda char: _isCharProhibited(table, char), data)
+        for item in self._prohibited:
+            map(lambda char, table=item: _isCharProhibited(table, char), data)
 
         return data
 
     def _checkUnassigned(self, data):
-        for table in self._unassigned:
-            map(lambda char: _isCharUnassigned(table, char), data)
+        for item in self._unassigned:
+            map(lambda char, table=item: _isCharUnassigned(table, char), data)
 
         return data
 

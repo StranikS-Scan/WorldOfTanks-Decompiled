@@ -6,7 +6,6 @@ from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from gui.shared.events import GameEvent
 from helpers import i18n
 from items import vehicles
-_VEHICLE_TYPE_FORMATTER = ' <img src="img://gui/maps/icons/vehicleTypes/{0}.png" vspace="-4"/>'
 _VEHICLE_STYLE_FORMATTER = '<font size="%(fontSize)s" face="%(fontFace)s" color="%(fontColor)s">{0}</font>'
 
 class VehicleMessages(fading_messages.FadingMessages):
@@ -85,7 +84,6 @@ class VehicleMessages(fading_messages.FadingMessages):
         ctx = self.sessionProvider.getCtx()
         vTypeInfoVO = ctx.getArenaDP().getVehicleInfo(entityID).vehicleType
         playerName = ctx.getPlayerFullName(entityID, showVehShortName=False)
-        iconTag = _VEHICLE_TYPE_FORMATTER.format(vTypeInfoVO.classTag)
-        playerInfo = '%s%s%s' % (playerName, iconTag, vTypeInfoVO.shortNameWithPrefix)
+        playerInfo = '%s | %s' % (playerName, vTypeInfoVO.shortNameWithPrefix)
         entityInfo = self.__styleFormatter.format(playerInfo)
         return entityInfo

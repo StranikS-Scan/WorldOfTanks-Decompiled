@@ -10,6 +10,7 @@ BATTLE_HERO_TEXTS = {'warrior': '#achievements:warrior',
  'supporter': '#achievements:supporter',
  'scout': '#achievements:scout',
  'evileye': '#achievements:evileye'}
+BADGES_BLOCK = 'rankedBadges'
 
 class ACHIEVEMENT_BLOCK:
     CLIENT = 'client'
@@ -43,7 +44,8 @@ class ACHIEVEMENT_MODE:
     TEAM_7X7 = 2
     HISTORICAL = 4
     RATED_7X7 = 8
-    ALL = RANDOM | TEAM_7X7 | HISTORICAL | RATED_7X7
+    RANKED = 22
+    ALL = RANDOM | TEAM_7X7 | HISTORICAL | RATED_7X7 | RANKED
 
 
 class ACHIEVEMENT_TYPE:
@@ -90,7 +92,9 @@ WHITE_TIGER_RECORD = (_AB.CLIENT, 'whiteTiger')
 RARE_STORAGE_RECORD = makeAchievesStorageName(_AB.RARE)
 MARK_OF_MASTERY_RECORD = (_AB.TOTAL, 'markOfMastery')
 MARK_ON_GUN_RECORD = (_AB.TOTAL, 'marksOnGun')
+HONORED_RANK_RECORD = (_AB.CLIENT, 'honoredRank')
 _MODE_CONVERTER = {'random': ACHIEVEMENT_MODE.RANDOM,
+ 'ranked': ACHIEVEMENT_MODE.RANKED,
  '7x7': ACHIEVEMENT_MODE.TEAM_7X7,
  'historical': ACHIEVEMENT_MODE.HISTORICAL,
  'rated7x7': ACHIEVEMENT_MODE.RATED_7X7,

@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/AuxiliaryFx/__init__.py
 from AuxiliaryFx.FxController import AuxiliaryFxController
 from AuxiliaryFx.Roccat import RoccatFxManager
-import AuxiliaryFx
+from helpers import dependency
+from skeletons.connection_mgr import IConnectionManager
 
 class IAuxiliaryFxManager:
 
@@ -54,7 +55,6 @@ class AuxiliaryFxManager:
 
 
 from PlayerEvents import g_playerEvents
-from ConnectionManager import connectionManager as g_connectionManager
 import gui.SystemMessages
 from gui.prb_control.dispatcher import g_prbLoader
 from messenger.proto.events import g_messengerEvents
@@ -62,10 +62,11 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.ext.player_helpers import isCurrentPlayer
 
 class _ChatActionsHandler:
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         g_playerEvents.onAccountBecomePlayer += self.__subscribe
-        g_connectionManager.onDisconnected += self.__onDisconnected
+        self.connectionMgr.onDisconnected += self.__onDisconnected
 
     def __subscribe(self):
         invitesManager = g_prbLoader.getInvitesManager()
@@ -85,8 +86,7 @@ class _ChatActionsHandler:
         g_messengerEvents.serviceChannel.onServerMessageReceived -= self.__onSysMessage
         g_messengerEvents.serviceChannel.onClientMessageReceived -= self.__onSysMessage
         g_messengerEvents.channels.onConnectStateChanged -= self.__onConnectStateChanged
-        if g_connectionManager is not None:
-            g_connectionManager.onDisconnected -= self.__onDisconnected
+        self.connectionMgr.onDisconnected -= self.__onDisconnected
         if g_playerEvents is not None:
             g_playerEvents.onAccountBecomePlayer -= self.__subscribe
         return

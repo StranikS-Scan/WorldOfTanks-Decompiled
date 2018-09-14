@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyIntroView import BaseRallyIntroView
 
 class FortIntroMeta(BaseRallyIntroView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseRallyIntroView
-    """
 
     def as_setIntroDataS(self, data):
         """

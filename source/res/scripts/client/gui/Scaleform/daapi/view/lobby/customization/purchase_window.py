@@ -6,17 +6,18 @@ from Event import Event
 from gui import makeHtmlString
 from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip, getAbsoluteUrl
 from gui.Scaleform.daapi.view.meta.CustomizationBuyWindowMeta import CustomizationBuyWindowMeta
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared import getDialogReplaceElements
 from gui.customization import g_customizationController
 from gui.customization.shared import formatPriceCredits, formatPriceGold, getSalePriceString, DURATION
+from skeletons.gui.shared import IItemsCache
 _CUSTOMIZATION_TYPE_TITLES = (VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_CAMOUFLAGE, VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_EMBLEM, VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_INSCRIPTION)
 _DURATION_LABELS = (VEHICLE_CUSTOMIZATION.BUYWINDOW_BUYTIME_EVER, VEHICLE_CUSTOMIZATION.BUYWINDOW_BUYTIME_THIRTYDAYS, VEHICLE_CUSTOMIZATION.BUYWINDOW_BUYTIME_SEVENDAYS)
 
@@ -55,6 +56,7 @@ def _getColumnHeaderVO(idx, label, buttonWidth):
 
 
 class PurchaseWindow(CustomizationBuyWindowMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(PurchaseWindow, self).__init__()
@@ -106,8 +108,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         super(PurchaseWindow, self)._populate()
         self.__controller = g_customizationController
         self.__controller.events.onMultiplePurchaseProcessed += self.destroy
-        g_clientUpdateManager.addCallbacks({'stats.credits': self.__setTotalData,
-         'stats.gold': self.__setTotalData})
+        g_clientUpdateManager.addMoneyCallback(self.__setTotalData)
         self.__searchDP = PurchaseDataProvider(self.__controller.cart)
         self.__searchDP.setFlashObject(self.as_getPurchaseDPS())
         self.__searchDP.selectionChanged += self.__setTotalData
@@ -127,14 +128,14 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         priceGold = self.__controller.cart.totalPriceGold
         priceCredits = self.__controller.cart.totalPriceCredits
         notEnoughGoldTooltip = notEnoughCreditsTooltip = ''
-        enoughGold = g_itemsCache.items.stats.gold >= priceGold
-        enoughCredits = g_itemsCache.items.stats.credits >= priceCredits
+        enoughGold = self.itemsCache.items.stats.gold >= priceGold
+        enoughCredits = self.itemsCache.items.stats.credits >= priceCredits
         canBuy = bool(priceGold or priceCredits) and enoughGold and enoughCredits
         if not enoughGold:
-            diff = text_styles.gold(priceGold - g_itemsCache.items.stats.gold)
+            diff = text_styles.gold(priceGold - self.itemsCache.items.stats.gold)
             notEnoughGoldTooltip = makeTooltip(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER), _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_BODY, count='{0}{1}'.format(diff, icons.gold())))
         if not enoughCredits:
-            diff = text_styles.credits(priceCredits - g_itemsCache.items.stats.credits)
+            diff = text_styles.credits(priceCredits - self.itemsCache.items.stats.credits)
             notEnoughCreditsTooltip = makeTooltip(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER), _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_BODY, count='{0}{1}'.format(diff, icons.credits())))
         self.as_setTotalDataS({'credits': formatPriceCredits(priceCredits),
          'gold': formatPriceGold(priceGold),

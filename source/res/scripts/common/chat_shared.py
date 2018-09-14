@@ -10,7 +10,7 @@ from wotdecorators import noexcept
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from constants import CHAT_LOG, RESTRICTION_TYPE
 from enumerations import Enumeration, AttributeEnumItem
-__all__ = ['CHAT_ACTIONS', 'CHAT_ACTION_RESPONSES']
+__all__ = ['CHAT_ACTIONS']
 NOTIFICATION_GROUP = Enumeration('Group of members for notification', ['All',
  'None',
  'Originator',
@@ -950,7 +950,7 @@ class ChatActionHandlers(object):
         handlers -= handler
 
 
-class ChatError:
+class ChatError(Exception):
 
     def __init__(self, response=None, auxMessage=None, messageArgs=None):
         self.__response = CHAT_RESPONSES.internalError if response is None else response
@@ -1282,7 +1282,8 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'prbVehicleKick',
  'goodieDisabled',
  'vehicleGroupLocked',
- 'vehicleGroupUnlocked'])
+ 'vehicleGroupUnlocked',
+ 'rankedQuests'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2

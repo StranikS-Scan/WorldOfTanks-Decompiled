@@ -2,15 +2,17 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
 import math
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
-from gui.shared import g_itemsCache
+from gui.shared.money import ZERO_MONEY
 from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
+from helpers import dependency
 from helpers import time_utils
 from helpers.i18n import makeString
 from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, moneyWithIcon
 from shared_utils import findFirst
+from skeletons.gui.shared import IItemsCache
 TANKMAN_DISMISSED = 'dismissed'
 _TIME_FORMAT_UNITS = [('days', time_utils.ONE_DAY), ('hours', time_utils.ONE_HOUR), ('minutes', time_utils.ONE_MINUTE)]
 
@@ -46,17 +48,21 @@ class TankmanRoleBonusesField(ToolTipDataField):
 
 
 class TankmanCurrentVehicleAttrField(ToolTipAttrField):
+    """Tankman current vehicle data field"""
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def _getItem(self):
         tankman = self._tooltip.item
-        return g_itemsCache.items.getVehicle(tankman.vehicleInvID) if tankman.isInTank else None
+        return self.itemsCache.items.getVehicle(tankman.vehicleInvID) if tankman.isInTank else None
 
 
 class TankmanNativeVehicleAttrField(ToolTipAttrField):
+    """Tankman native vehicle data field."""
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def _getItem(self):
         tankman = self._tooltip.item
-        return g_itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
+        return self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
 
 
 class TankmanSkillListField(ToolTipDataField):
@@ -110,16 +116,19 @@ def formatRecoveryLeftValue(secondsLeft):
 
 def getRecoveryStatusText(restoreInfo):
     price, timeLeft = restoreInfo
-    if price.credits == 0:
-        restoreConfig = g_itemsCache.items.shop.tankmenRestoreConfig
-        creditsDuration = restoreConfig.creditsDuration - restoreConfig.freeDuration
-        text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_FREE_BODY, totalLeftValue=formatRecoveryLeftValue(timeLeft), freeLeftValue=formatRecoveryLeftValue(timeLeft - creditsDuration), price=moneyWithIcon(restoreConfig.cost), withMoneyLeftValue=formatRecoveryLeftValue(creditsDuration))
+    if price == ZERO_MONEY:
+        itemsCache = dependency.instance(IItemsCache)
+        restoreConfig = itemsCache.items.shop.tankmenRestoreConfig
+        duration = restoreConfig.billableDuration - restoreConfig.freeDuration
+        text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_FREE_BODY, totalLeftValue=formatRecoveryLeftValue(timeLeft), freeLeftValue=formatRecoveryLeftValue(timeLeft - duration), price=moneyWithIcon(restoreConfig.cost), withMoneyLeftValue=formatRecoveryLeftValue(duration))
     else:
         text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_GOLD_BODY, totalLeftValue=formatRecoveryLeftValue(timeLeft), price=moneyWithIcon(price))
     return text_styles.main(text)
 
 
 class TankmanStatusField(ToolTipDataField):
+    """Tankman status data field."""
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def _getValue(self):
         header = ''
@@ -128,8 +137,8 @@ class TankmanStatusField(ToolTipDataField):
         tankman = self._tooltip.item
         vehicle = None
         if tankman.isInTank:
-            vehicle = g_itemsCache.items.getVehicle(tankman.vehicleInvID)
-        nativeVehicle = g_itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
+            vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
+        nativeVehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
         if tankman.isDismissed:
             return {'header': text_styles.warning(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_HEADER),
              'text': getRecoveryStatusText(getTankmenRestoreInfo(tankman)),

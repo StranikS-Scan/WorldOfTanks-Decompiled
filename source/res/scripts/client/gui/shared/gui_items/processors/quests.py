@@ -3,7 +3,7 @@
 import operator
 import BigWorld
 from debug_utils import LOG_DEBUG
-from items import tankmen
+from items import tankmen, ITEM_TYPES
 from helpers import i18n
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
 from potapov_quests import PQ_BRANCH
@@ -129,7 +129,10 @@ class FalloutQuestRefuse(_PotapovQuestRefuse):
 class _PotapovQuestsGetReward(Processor):
 
     def __init__(self, potapovQuestItem, needTankman, nationID, inNationID, role):
-        super(_PotapovQuestsGetReward, self).__init__((plugins.PotapovQuestValidator([potapovQuestItem]), plugins.PotapovQuestRewardValidator(potapovQuestItem)))
+        plugs = [plugins.PotapovQuestValidator([potapovQuestItem]), plugins.PotapovQuestRewardValidator(potapovQuestItem)]
+        if needTankman:
+            plugs.insert(0, plugins.VehicleCrewLockedValidator(self.itemsCache.items.getItem(ITEM_TYPES.vehicle, nationID, inNationID)))
+        super(_PotapovQuestsGetReward, self).__init__(tuple(plugs))
         self.__quest = potapovQuestItem
         self.__nationID = nationID
         self.__inNationID = inNationID

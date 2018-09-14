@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.meta.ModulesPanelMeta import ModulesPanelMeta
 
 class AmmunitionPanelMeta(ModulesPanelMeta):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ModulesPanelMeta
-    """
 
     def showTechnicalMaintenance(self):
         self._printOverrideError('showTechnicalMaintenance')

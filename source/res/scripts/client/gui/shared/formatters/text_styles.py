@@ -3,7 +3,41 @@
 import types
 from helpers import i18n
 from gui import makeHtmlString
-__all__ = ('standard', 'main', 'neutral', 'stats', 'statInfo', 'middleTitle', 'highTitle', 'disabled', 'promoTitle', 'promoSubTitle', 'alert', 'success', 'error', 'warning', 'critical', 'expText', 'gold', 'credits', 'defRes', 'counter', 'titleFont', 'tutorial', 'playerOnline', 'getRawStyles', 'getStyles', 'concatStylesToSingleLine', 'concatStylesToMultiLine')
+from gui.shared.money import Currency
+__all__ = ('standard',
+ 'main',
+ 'neutral',
+ 'stats',
+ 'statInfo',
+ 'statusAlert',
+ 'middleTitle',
+ 'highTitle',
+ 'disabled',
+ 'promoTitle',
+ 'promoSubTitle',
+ 'alert',
+ 'success',
+ 'error',
+ 'warning',
+ 'critical',
+ 'expText',
+ 'expTextBig',
+ Currency.GOLD,
+ Currency.CREDITS,
+ Currency.CRYSTAL,
+ 'defRes',
+ 'counter',
+ 'titleFont',
+ 'tutorial',
+ 'playerOnline',
+ 'getRawStyles',
+ 'getStyles',
+ 'concatStylesToSingleLine',
+ 'concatStylesToMultiLine',
+ 'superPromoTitle',
+ 'highlightText',
+ 'unavailable',
+ 'missionStatusAvailable')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -45,6 +79,10 @@ def statInfo(text):
     return _formatText('statusInfoText', text)
 
 
+def statusAlert(text):
+    return _formatText('statusAlert', text)
+
+
 def middleTitle(text):
     return _formatText('middleTitle', text)
 
@@ -65,6 +103,10 @@ def creditsTextBig(text):
     return _formatText('creditsTextBig', text)
 
 
+def expTextBig(text):
+    return _formatText('expTextBig', text)
+
+
 def errCurrencyTextBig(text):
     return _formatText('errCurrencyTextBig', text)
 
@@ -75,6 +117,10 @@ def disabled(text):
 
 def promoTitle(text):
     return _formatText('promoTitle', text)
+
+
+def superPromoTitle(text):
+    return _formatText('superPromoTitle', text)
 
 
 def bonusLocalText(text):
@@ -133,6 +179,10 @@ def creditsSmall(text):
     return _formatText('creditsTextSmall', text)
 
 
+def crystal(text):
+    return _formatText('crystalText', text)
+
+
 def defRes(text):
     return _formatText('defresText', text)
 
@@ -155,6 +205,10 @@ def tutorial(text):
 
 def playerOnline(text):
     return _formatText('playerOnline', text)
+
+
+def hightlight(text):
+    return _formatText('highlightText', text)
 
 
 def alignText(text, align):
@@ -180,6 +234,22 @@ def vehicleName(text):
 
 def premiumVehicleName(text):
     return _formatText('premiumVehicleName', text)
+
+
+def superPromoTitle(text):
+    return _formatText('superPromoTitle', text)
+
+
+def highlightText(text):
+    return _formatText('highlightText', text)
+
+
+def unavailable(text):
+    return _formatText('missionStatusUnavailable', text)
+
+
+def missionStatusAvailable(text):
+    return _formatText('missionStatusAvailable', text)
 
 
 def getRawStyles(names):

@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/fort/unit/sortie/scheduler.py
+from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.entities.base.unit.scheduler import UnitScheduler
 from gui.shared.fortifications.fort_listener import FortListener
 
-class SortiesScheduler(UnitScheduler, FortListener):
+class SortiesScheduler(BaseScheduler, FortListener):
 
     def __init__(self, entity):
         super(SortiesScheduler, self).__init__(entity)

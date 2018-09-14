@@ -4,10 +4,11 @@ import random
 import types
 import time
 from string import Template
-from ConnectionManager import connectionManager
+from helpers import dependency
 from ids_generators import SequenceIDGenerator
 from messenger import g_settings
 from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_CHANNEL_TYPE
+from skeletons.connection_mgr import IConnectionManager
 
 class BareJID(object):
     __slots__ = ('_node', '_domain')
@@ -189,8 +190,12 @@ def makeSystemRoomJID(room='', channelType=XMPP_MUC_CHANNEL_TYPE.STANDARD):
     return jid
 
 
-def _getSystemChannelNameFormatter(service):
-    peripheryID = connectionManager.peripheryID
+@dependency.replace_none_kwargs(connectionMgr=IConnectionManager)
+def _getSystemChannelNameFormatter(service, connectionMgr=None):
+    if connectionMgr is not None:
+        peripheryID = connectionMgr.peripheryID
+    else:
+        peripheryID = 0
     chanTemplate = Template(service['format'])
     return chanTemplate.safe_substitute(peripheryID=peripheryID, userString=service['userString'], hostname=service['hostname'], type=service['type']) if chanTemplate else None
 

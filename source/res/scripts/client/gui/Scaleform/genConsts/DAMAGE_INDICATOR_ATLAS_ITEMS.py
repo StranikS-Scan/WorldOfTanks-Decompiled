@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/DAMAGE_INDICATOR_ATLAS_ITEMS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class DAMAGE_INDICATOR_ATLAS_ITEMS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     BLOCKED_BIG = 'blockedBig'
     BLOCKED_MEDIUM = 'blockedMedium'
     BLOCKED_SMALL = 'blockedSmall'
@@ -36,5 +34,6 @@ class DAMAGE_INDICATOR_ATLAS_ITEMS(object):
     CRITS_RELOADER_CIRCLE = 'reloaderCircle'
     CRITS_TANKS_CIRCLE = 'tanksCircle'
     CRITS_TURRET_CIRCLE = 'turretCircle'
+    VALUE_LINE = 'lineForValue'
     DAMAGE_CIRCLE_BLIND = 'damageCircleBlind'
     DAMAGE_STANDARD_BLIND = 'damageStandardBlind'

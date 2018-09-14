@@ -4,6 +4,7 @@
 This file was generated using the wgpygen.
 Please, don't edit this file manually.
 """
+from debug_utils import LOG_WARNING
 
 class ARTEFACTS(object):
     TOOLBOX_NAME = '#artefacts:toolbox/name'
@@ -76,6 +77,18 @@ class ARTEFACTS(object):
     ENHANCEDVERTICAL_ELASTIC_ELEMENTS_DESCR = '#artefacts:enhancedVertical_elastic_elements/descr'
     ENHANCEDHORIZONTAL_ELASTIC_ELEMENTS_NAME = '#artefacts:enhancedHorizontal_elastic_elements/name'
     ENHANCEDHORIZONTAL_ELASTIC_ELEMENTS_DESCR = '#artefacts:enhancedHorizontal_elastic_elements/descr'
+    DELUXTOOLBOX_NAME = '#artefacts:deluxToolbox/name'
+    DELUXTOOLBOX_DESCR = '#artefacts:deluxToolbox/descr'
+    DELUXIMPROVEDVENTILATION_NAME = '#artefacts:deluxImprovedVentilation/name'
+    DELUXIMPROVEDVENTILATION_DESCR = '#artefacts:deluxImprovedVentilation/descr'
+    DELUXRAMMER_NAME = '#artefacts:deluxRammer/name'
+    DELUXRAMMER_DESCR = '#artefacts:deluxRammer/descr'
+    DELUXCOATEDOPTICS_NAME = '#artefacts:deluxCoatedOptics/name'
+    DELUXCOATEDOPTICS_DESCR = '#artefacts:deluxCoatedOptics/descr'
+    DELUXAIMINGSTABILIZER_NAME = '#artefacts:deluxAimingStabilizer/name'
+    DELUXAIMINGSTABILIZER_DESCR = '#artefacts:deluxAimingStabilizer/descr'
+    DELUXENHANCEDAIMDRIVES_NAME = '#artefacts:deluxEnhancedAimDrives/name'
+    DELUXENHANCEDAIMDRIVES_DESCR = '#artefacts:deluxEnhancedAimDrives/descr'
     HANDEXTINGUISHERS_NAME = '#artefacts:handExtinguishers/name'
     HANDEXTINGUISHERS_DESCR = '#artefacts:handExtinguishers/descr'
     HANDEXTINGUISHERS_ONUSE = '#artefacts:handExtinguishers/onUse'
@@ -186,3 +199,107 @@ class ARTEFACTS(object):
     ARTILLERY_DESCR = '#artefacts:artillery/descr'
     BOMBER_NAME = '#artefacts:bomber/name'
     BOMBER_DESCR = '#artefacts:bomber/descr'
+    TOOLBOXBATTLEBOOSTER_NAME = '#artefacts:toolboxBattleBooster/name'
+    TOOLBOXBATTLEBOOSTER_DESCR = '#artefacts:toolboxBattleBooster/descr'
+    TOOLBOXBATTLEBOOSTER_GAIN_SIMPLE = '#artefacts:toolboxBattleBooster/gain/simple'
+    TOOLBOXBATTLEBOOSTER_GAIN_DELUXE = '#artefacts:toolboxBattleBooster/gain/deluxe'
+    IMPROVEDVENTILATIONBATTLEBOOSTER_NAME = '#artefacts:improvedVentilationBattleBooster/name'
+    IMPROVEDVENTILATIONBATTLEBOOSTER_DESCR = '#artefacts:improvedVentilationBattleBooster/descr'
+    IMPROVEDVENTILATIONBATTLEBOOSTER_GAIN_SIMPLE = '#artefacts:improvedVentilationBattleBooster/gain/simple'
+    IMPROVEDVENTILATIONBATTLEBOOSTER_GAIN_DELUXE = '#artefacts:improvedVentilationBattleBooster/gain/deluxe'
+    RAMMERBATTLEBOOSTER_NAME = '#artefacts:rammerBattleBooster/name'
+    RAMMERBATTLEBOOSTER_DESCR = '#artefacts:rammerBattleBooster/descr'
+    RAMMERBATTLEBOOSTER_GAIN_SIMPLE = '#artefacts:rammerBattleBooster/gain/simple'
+    RAMMERBATTLEBOOSTER_GAIN_DELUXE = '#artefacts:rammerBattleBooster/gain/deluxe'
+    COATEDOPTICSBATTLEBOOSTER_NAME = '#artefacts:coatedOpticsBattleBooster/name'
+    COATEDOPTICSBATTLEBOOSTER_DESCR = '#artefacts:coatedOpticsBattleBooster/descr'
+    COATEDOPTICSBATTLEBOOSTER_GAIN_SIMPLE = '#artefacts:coatedOpticsBattleBooster/gain/simple'
+    COATEDOPTICSBATTLEBOOSTER_GAIN_DELUXE = '#artefacts:coatedOpticsBattleBooster/gain/deluxe'
+    AIMINGSTABILIZERBATTLEBOOSTER_NAME = '#artefacts:aimingStabilizerBattleBooster/name'
+    AIMINGSTABILIZERBATTLEBOOSTER_DESCR = '#artefacts:aimingStabilizerBattleBooster/descr'
+    AIMINGSTABILIZERBATTLEBOOSTER_GAIN_SIMPLE = '#artefacts:aimingStabilizerBattleBooster/gain/simple'
+    AIMINGSTABILIZERBATTLEBOOSTER_GAIN_DELUXE = '#artefacts:aimingStabilizerBattleBooster/gain/deluxe'
+    ENHANCEDAIMDRIVESBATTLEBOOSTER_NAME = '#artefacts:enhancedAimDrivesBattleBooster/name'
+    ENHANCEDAIMDRIVESBATTLEBOOSTER_DESCR = '#artefacts:enhancedAimDrivesBattleBooster/descr'
+    ENHANCEDAIMDRIVESBATTLEBOOSTER_GAIN_SIMPLE = '#artefacts:enhancedAimDrivesBattleBooster/gain/simple'
+    ENHANCEDAIMDRIVESBATTLEBOOSTER_GAIN_DELUXE = '#artefacts:enhancedAimDrivesBattleBooster/gain/deluxe'
+    CREWBATTLEBOOSTER_DESCR_COMMON = '#artefacts:crewBattleBooster/descr/common'
+    CREWBATTLEBOOSTER_DESCR_REPLACE = '#artefacts:crewBattleBooster/descr/replace'
+    CREWBATTLEBOOSTER_DESCR_BOOST = '#artefacts:crewBattleBooster/descr/boost'
+    CREWBATTLEBOOSTER_DESCR_PERK = '#artefacts:crewBattleBooster/descr/perk'
+    CREWBATTLEBOOSTER_DESCR_SKILL = '#artefacts:crewBattleBooster/descr/skill'
+    CAMOUFLAGEBATTLEBOOSTER_NAME = '#artefacts:camouflageBattleBooster/name'
+    CAMOUFLAGEBATTLEBOOSTER_ACTION_PERK = '#artefacts:camouflageBattleBooster/action/perk'
+    CAMOUFLAGEBATTLEBOOSTER_ACTION_BOOST = '#artefacts:camouflageBattleBooster/action/boost'
+    SMOOTHTURRETBATTLEBOOSTER_NAME = '#artefacts:smoothTurretBattleBooster/name'
+    SMOOTHTURRETBATTLEBOOSTER_ACTION_PERK = '#artefacts:smoothTurretBattleBooster/action/perk'
+    SMOOTHTURRETBATTLEBOOSTER_ACTION_BOOST = '#artefacts:smoothTurretBattleBooster/action/boost'
+    VIRTUOSOBATTLEBOOSTER_NAME = '#artefacts:virtuosoBattleBooster/name'
+    VIRTUOSOBATTLEBOOSTER_ACTION_PERK = '#artefacts:virtuosoBattleBooster/action/perk'
+    VIRTUOSOBATTLEBOOSTER_ACTION_BOOST = '#artefacts:virtuosoBattleBooster/action/boost'
+    SMOOTHDRIVINGBATTLEBOOSTER_NAME = '#artefacts:smoothDrivingBattleBooster/name'
+    SMOOTHDRIVINGBATTLEBOOSTER_ACTION_PERK = '#artefacts:smoothDrivingBattleBooster/action/perk'
+    SMOOTHDRIVINGBATTLEBOOSTER_ACTION_BOOST = '#artefacts:smoothDrivingBattleBooster/action/boost'
+    FIREFIGHTINGBATTLEBOOSTER_NAME = '#artefacts:fireFightingBattleBooster/name'
+    FIREFIGHTINGBATTLEBOOSTER_ACTION_PERK = '#artefacts:fireFightingBattleBooster/action/perk'
+    FIREFIGHTINGBATTLEBOOSTER_ACTION_BOOST = '#artefacts:fireFightingBattleBooster/action/boost'
+    SIXTHSENSEBATTLEBOOSTER_NAME = '#artefacts:sixthSenseBattleBooster/name'
+    SIXTHSENSEBATTLEBOOSTER_ACTION_PERK = '#artefacts:sixthSenseBattleBooster/action/perk'
+    SIXTHSENSEBATTLEBOOSTER_ACTION_BOOST = '#artefacts:sixthSenseBattleBooster/action/boost'
+    RANCOROUSBATTLEBOOSTER_NAME = '#artefacts:rancorousBattleBooster/name'
+    RANCOROUSBATTLEBOOSTER_ACTION_PERK = '#artefacts:rancorousBattleBooster/action/perk'
+    RANCOROUSBATTLEBOOSTER_ACTION_BOOST = '#artefacts:rancorousBattleBooster/action/boost'
+    PEDANTBATTLEBOOSTER_NAME = '#artefacts:pedantBattleBooster/name'
+    PEDANTBATTLEBOOSTER_ACTION_PERK = '#artefacts:pedantBattleBooster/action/perk'
+    PEDANTBATTLEBOOSTER_ACTION_BOOST = '#artefacts:pedantBattleBooster/action/boost'
+    LASTEFFORTBATTLEBOOSTER_NAME = '#artefacts:lastEffortBattleBooster/name'
+    LASTEFFORTBATTLEBOOSTER_ACTION_PERK = '#artefacts:lastEffortBattleBooster/action/perk'
+    LASTEFFORTBATTLEBOOSTER_ACTION_BOOST = '#artefacts:lastEffortBattleBooster/action/boost'
+    ALL_GAIN_ENUM = (TOOLBOXBATTLEBOOSTER_GAIN_SIMPLE,
+     TOOLBOXBATTLEBOOSTER_GAIN_DELUXE,
+     IMPROVEDVENTILATIONBATTLEBOOSTER_GAIN_SIMPLE,
+     IMPROVEDVENTILATIONBATTLEBOOSTER_GAIN_DELUXE,
+     RAMMERBATTLEBOOSTER_GAIN_SIMPLE,
+     RAMMERBATTLEBOOSTER_GAIN_DELUXE,
+     COATEDOPTICSBATTLEBOOSTER_GAIN_SIMPLE,
+     COATEDOPTICSBATTLEBOOSTER_GAIN_DELUXE,
+     AIMINGSTABILIZERBATTLEBOOSTER_GAIN_SIMPLE,
+     AIMINGSTABILIZERBATTLEBOOSTER_GAIN_DELUXE,
+     ENHANCEDAIMDRIVESBATTLEBOOSTER_GAIN_SIMPLE,
+     ENHANCEDAIMDRIVESBATTLEBOOSTER_GAIN_DELUXE)
+    ALL_ACTION_ENUM = (CAMOUFLAGEBATTLEBOOSTER_ACTION_PERK,
+     CAMOUFLAGEBATTLEBOOSTER_ACTION_BOOST,
+     SMOOTHTURRETBATTLEBOOSTER_ACTION_PERK,
+     SMOOTHTURRETBATTLEBOOSTER_ACTION_BOOST,
+     VIRTUOSOBATTLEBOOSTER_ACTION_PERK,
+     VIRTUOSOBATTLEBOOSTER_ACTION_BOOST,
+     SMOOTHDRIVINGBATTLEBOOSTER_ACTION_PERK,
+     SMOOTHDRIVINGBATTLEBOOSTER_ACTION_BOOST,
+     FIREFIGHTINGBATTLEBOOSTER_ACTION_PERK,
+     FIREFIGHTINGBATTLEBOOSTER_ACTION_BOOST,
+     SIXTHSENSEBATTLEBOOSTER_ACTION_PERK,
+     SIXTHSENSEBATTLEBOOSTER_ACTION_BOOST,
+     RANCOROUSBATTLEBOOSTER_ACTION_PERK,
+     RANCOROUSBATTLEBOOSTER_ACTION_BOOST,
+     PEDANTBATTLEBOOSTER_ACTION_PERK,
+     PEDANTBATTLEBOOSTER_ACTION_BOOST,
+     LASTEFFORTBATTLEBOOSTER_ACTION_PERK,
+     LASTEFFORTBATTLEBOOSTER_ACTION_BOOST)
+
+    @classmethod
+    def getDeviceGainForBattleBooster(cls, boosterName, deviceType):
+        outcome = '#artefacts:{}/gain/{}'.format(boosterName, deviceType)
+        if outcome not in cls.ALL_GAIN_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getCrewActionForBattleBooster(cls, crewBoosterName, crewFactor):
+        outcome = '#artefacts:{}/action/{}'.format(crewBoosterName, crewFactor)
+        if outcome not in cls.ALL_ACTION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/requests.py
-import BigWorld
 from functools import partial
 import types
 import weakref
-from ConnectionManager import connectionManager
 from account_helpers import getAccountDatabaseID
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.clans.contexts import GetFrontsCtx
@@ -14,6 +12,8 @@ from gui.clans.settings import DEFAULT_COOLDOWN, CLAN_REQUESTED_DATA_TYPE, REQUE
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from gui.shared.utils.requesters.RequestsController import RequestsController
 from gui.shared.utils.requesters.abstract import Response, ClientRequestsByIDProcessor
+from helpers import dependency
+from skeletons.connection_mgr import IConnectionManager
 
 class ClanRequestResponse(Response):
 
@@ -84,6 +84,7 @@ class ClanCooldownManager(RequestCooldownManager):
 
 
 class ClanRequestsController(RequestsController):
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, clansCtrl, requester, cooldown=ClanCooldownManager()):
         super(ClanRequestsController, self).__init__(requester, cooldown)
@@ -131,7 +132,8 @@ class ClanRequestsController(RequestsController):
          CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_UNSET_RESERVE: self.__unsetReserve,
          CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_UPDATE: self.__updateStronghold,
          CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_STATISTICS: self.__getStrongholdStatistics,
-         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_JOIN_BATTLE: self.__joinBattle}
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_JOIN_BATTLE: self.__joinBattle,
+         CLAN_REQUESTED_DATA_TYPE.RANKED_LEAGUE_POSITION: self.__getRankedPosition}
 
     def fini(self):
         super(ClanRequestsController, self).fini()
@@ -306,7 +308,7 @@ class ClanRequestsController(RequestsController):
         self._requester._stopProcessing(ctx, reason, callback)
 
     def __getPeripheryIDStr(self):
-        return str(connectionManager.peripheryID)
+        return str(self.connectionMgr.peripheryID)
 
     def __getAccountID(self):
         return getAccountDatabaseID()
@@ -358,3 +360,6 @@ class ClanRequestsController(RequestsController):
 
     def __getStrongholdStatistics(self, ctx, callback):
         return self._requester.doRequestEx(ctx, callback, ('wgsh', 'clan_statistics'), clan_id=ctx.getClanID())
+
+    def __getRankedPosition(self, ctx, callback):
+        return self._requester.doRequestEx(ctx, callback, ('rblb', 'user_ranked_position'))

@@ -12,7 +12,7 @@ from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_I
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.decorators import ReprInjector
 from helpers import i18n
-from items import vehicles
+from items import vehicles, EQUIPMENT_TYPES
 from shared_utils import findFirst, forEach
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
 
@@ -476,23 +476,23 @@ class EquipmentsController(IBattleController):
 
     def setEquipment(self, intCD, quantity, stage, timeRemaining):
         if not intCD:
-            self._order.append(0)
-            self.onEquipmentAdded(0, None)
-            return
+            if len(self._order) < vehicles.NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regular]:
+                self._order.append(0)
+                self.onEquipmentAdded(0, None)
+        elif intCD in self._equipments:
+            item = self._equipments[intCD]
+            item.update(quantity, stage, timeRemaining)
+            self.onEquipmentUpdated(intCD, item)
+            if item.becomeReady:
+                EquipmentSound.playReady(item)
         else:
-            if intCD in self._equipments:
-                item = self._equipments[intCD]
-                item.update(quantity, stage, timeRemaining)
-                self.onEquipmentUpdated(intCD, item)
-                if item.becomeReady:
-                    EquipmentSound.playReady(item)
-            else:
-                descriptor = vehicles.getDictDescr(intCD)
+            descriptor = vehicles.getDictDescr(intCD)
+            if descriptor.equipmentType == EQUIPMENT_TYPES.regular:
                 item = self.createItem(descriptor, quantity, stage, timeRemaining)
                 self._equipments[intCD] = item
                 self._order.append(intCD)
                 self.onEquipmentAdded(intCD, item)
-            return
+        return
 
     def getActivationCode(self, intCD, entityName=None, avatar=None):
         code = None

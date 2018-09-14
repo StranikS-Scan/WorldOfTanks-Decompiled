@@ -8,6 +8,7 @@ class IEventsCache(object):
     onSelectedQuestsChanged = None
     onSlotsCountChanged = None
     onProgressUpdated = None
+    onEventsVisited = None
 
     def init(self):
         raise NotImplementedError
@@ -56,6 +57,10 @@ class IEventsCache(object):
     def companies(self):
         raise NotImplementedError
 
+    @property
+    def prefetcher(self):
+        raise NotImplementedError
+
     def getLockedQuestTypes(self):
         raise NotImplementedError
 
@@ -77,11 +82,20 @@ class IEventsCache(object):
     def getHiddenQuests(self, filterFunc=None):
         raise NotImplementedError
 
+    def getRankedQuests(self, filterFunc=None):
+        raise NotImplementedError
+
     def getAllQuests(self, filterFunc=None, includePotapovQuests=False):
         raise NotImplementedError
 
     def getActions(self, filterFunc=None):
         raise NotImplementedError
+
+    def getActionEntities(self):
+        raise NotImplemented
+
+    def getAnnouncedActions(self):
+        raise NotImplemented
 
     def getEventBattles(self):
         raise NotImplementedError
@@ -92,7 +106,7 @@ class IEventsCache(object):
     def isGasAttackEnabled(self):
         raise NotImplementedError
 
-    def getEventVehicles(self):
+    def getEventVehicles(self, itemsCache=None):
         raise NotImplementedError
 
     def getEvents(self, filterFunc=None):
@@ -112,6 +126,9 @@ class IEventsCache(object):
 
     def getFalloutConfig(self, queueType):
         raise NotImplementedError
+
+    def getAffectedAction(self, item):
+        raise NotImplemented
 
     def getItemAction(self, item, isBuying=True, forCredits=False):
         raise NotImplementedError
@@ -156,4 +173,13 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getQuestsByTokenBonus(self, token):
+        raise NotImplementedError
+
+    def getCompensation(self, tokenID):
+        raise NotImplementedError
+
+    def getAdvisableQuests(self, filterFunc=None):
+        raise NotImplementedError
+
+    def getActiveQuests(self, filterFunc=None):
         raise NotImplementedError

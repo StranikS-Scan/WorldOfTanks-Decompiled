@@ -4,7 +4,7 @@ import weakref
 import BigWorld
 import account_helpers
 from constants import IS_TUTORIAL_ENABLED
-from tutorial import Tutorial
+from tutorial import core
 from tutorial import settings as _settings
 from tutorial import cache as _cache
 from tutorial.control.context import GLOBAL_FLAG, GlobalStorage
@@ -232,7 +232,7 @@ class TutorialLoader(object):
             self.__doStop()
             if self.__dispatcher is None:
                 self.__setDispatcher(settings.dispatcher)
-            tutorial = Tutorial(settings, descriptor)
+            tutorial = core.Tutorial(settings, descriptor)
             result = tutorial.run(weakref.proxy(self.__dispatcher), runCtx)
             if result:
                 self.__tutorial = tutorial

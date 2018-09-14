@@ -8,7 +8,6 @@ from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.permissions import SquadPermissions
 from gui.prb_control.entities.base.unit.entity import UnitEntryPoint, UnitEntity
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.shared import g_itemsCache
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
 
@@ -49,7 +48,7 @@ class SquadEntity(UnitEntity):
 
     def unit_onUnitRosterChanged(self):
         rosterSettings = self._createRosterSettings()
-        if rosterSettings != self._rosterSettings:
+        if rosterSettings != self.getRosterSettings():
             self._rosterSettings = rosterSettings
             self.invalidateVehicleStates()
             self._vehiclesWatcher.validate()
@@ -71,7 +70,7 @@ class SquadEntity(UnitEntity):
             criteria = REQ_CRITERIA.IN_CD_LIST(vehicles)
         else:
             criteria = REQ_CRITERIA.INVENTORY
-        vehicles = g_itemsCache.items.getVehicles(criteria)
+        vehicles = self.itemsCache.items.getVehicles(criteria)
         updatedVehicles = [ intCD for intCD, v in vehicles.iteritems() if self._updateVehicleState(v, state) ]
         if updatedVehicles:
             g_prbCtrlEvents.onVehicleClientStateChanged(updatedVehicles)
@@ -95,30 +94,27 @@ class SquadEntity(UnitEntity):
 
     def _updateVehicleState(self, vehicle, state):
         """
-        Updates vehicle custom state set by this entity
+        Sets given state if vehicle is not valid for current entity, deletes any custom state otherwise
         Args:
             vehicle: vehicle item
             state: new state
-        
         Returns:
-            state set
+            True if vehicle state was change, False otherwise
         """
         invalid = not self._vehicleStateCondition(vehicle)
         stateSet = vehicle.getCustomState() == state
-        changed = invalid ^ stateSet
-        if changed:
-            if invalid:
-                vehicle.setCustomState(state)
-            else:
-                vehicle.clearCustomState()
+        if invalid and not stateSet:
+            vehicle.setCustomState(state)
+        elif not invalid and stateSet:
+            vehicle.clearCustomState()
+        changed = invalid != stateSet
         return changed
 
-    @staticmethod
-    def __clearCustomVehicleStates():
+    def __clearCustomVehicleStates(self):
         """
         Removes all custom states in inventory vehicles
         """
-        vehicles = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
+        vehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
         updatedVehicles = []
         for intCD, v in vehicles.iteritems():
             if v.isCustomStateSet():

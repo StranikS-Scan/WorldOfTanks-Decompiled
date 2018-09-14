@@ -3,17 +3,8 @@
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
 class FortIntelligenceClanFilterPopoverMeta(SmartPopOverView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends SmartPopOverView
-    """
 
     def useFilter(self, value, isDefaultData):
-        """
-        :param value: Represented by IntelligenceClanFilterVO (AS)
-        """
         self._printOverrideError('useFilter')
 
     def getAvailabilityProvider(self):

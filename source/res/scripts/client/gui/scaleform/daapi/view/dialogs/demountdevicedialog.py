@@ -20,8 +20,8 @@ class DemountDeviceDialog(IconPriceDialog):
             self.as_setButtonFocusS(DIALOG_BUTTON_ID.CLOSE)
 
     def _dispose(self):
-        self._meta.onConfirmationStatusChnaged -= self.__confirmationStatusChangeHandler
-        self._meta.dispose()
-        self._meta = None
+        if self._meta is not None:
+            self._meta.onConfirmationStatusChnaged -= self.__confirmationStatusChangeHandler
+            self._meta.dispose()
         super(IconPriceDialog, self)._dispose()
         return

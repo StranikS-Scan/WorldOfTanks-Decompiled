@@ -3,15 +3,15 @@
 from UnitBase import UNIT_SLOT
 from account_helpers import getAccountDatabaseID
 from constants import PREBATTLE_TYPE
-from gui import game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.base.unit.ctx import AssignUnitCtx
-from gui.shared import g_itemsCache
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.game_control import IRentalsController, IIGRController
+from skeletons.gui.shared import IItemsCache
 
 class UnitVehiclesWatcher(object):
+    itemsCache = dependency.descriptor(IItemsCache)
     rentals = dependency.descriptor(IRentalsController)
     igrCtrl = dependency.descriptor(IIGRController)
 
@@ -41,7 +41,7 @@ class UnitVehiclesWatcher(object):
         Args:
             update: is this unit update
         """
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         invVehicles = items.getVehicles(REQ_CRITERIA.INVENTORY)
         vehCDs = invVehicles.keys()
         pInfo = self.__entity.getPlayerInfo()

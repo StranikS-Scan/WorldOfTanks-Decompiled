@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class PrebattleWindowMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def requestToReady(self, value):
         self._printOverrideError('requestToReady')
@@ -45,7 +39,7 @@ class PrebattleWindowMeta(AbstractWindowView):
 
     def as_setRosterListS(self, team, assigned, rosters):
         """
-        :param rosters: Represented by DataProvider (AS)
+        :param rosters: Represented by DataProvider.<PlayerPrbInfoVO> (AS)
         """
         return self.flashObject.as_setRosterList(team, assigned, rosters) if self._isDAAPIInited() else None
 

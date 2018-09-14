@@ -24,7 +24,6 @@ from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import icons, text_styles
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
@@ -82,7 +81,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, IUnitListener, FortViewHelper, 
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
+                vehicleVO = makeVehicleVO(self.itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
                 slotCost = vInfo.vehLevel
             else:
                 slotState = entity.getSlotState(slotIdx)
@@ -301,7 +300,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, IUnitListener, FortViewHelper, 
         for building in fullBuildingsList:
             if building is not None:
                 buildingID, status, level, _, _ = building
-                buildingData = findFirst(lambda x: x[0] == buildingID, buildingsList)
+                buildingData = findFirst(lambda x, findID=buildingID: x[0] == findID, buildingsList)
                 isLooted = (buildingData, isAttack) in lootedBuildingsList
                 isAvailable = status == FORT_BUILDING_STATUS.READY_FOR_BATTLE
                 data = self.__makeBuildingData(buildingID, isAttack, level, isLooted, isAvailable)

@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/__init__.py
 from collections import namedtuple
-from debug_utils import *
+from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from helpers import dependency
 from helpers import i18n
 from adisp import process, async
 from gui.SystemMessages import SM_TYPE
 from gui.shared.utils import code2str
 from gui.shared.gui_items.processors import plugins
+from skeletons.gui.shared import IItemsCache
 ResultMsg = namedtuple('ResultMsg', 'success userMsg sysMsgType auxData')
 
 def makeSuccess(userMsg='', msgType=SM_TYPE.Information, auxData=None):
@@ -34,6 +36,7 @@ class Processor(object):
     Request processor. Process server request, its response,
     given plugins and returns user string to show.
     """
+    itemsCache = dependency.descriptor(IItemsCache)
     PLUGIN_RES_CODE = -33
 
     def __init__(self, plugins=list()):

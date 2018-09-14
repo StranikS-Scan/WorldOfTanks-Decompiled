@@ -1,19 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
-from ConnectionManager import connectionManager
 from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import NotificationPopUpViewerMeta
 from gui.shared.notifications import NotificationPriorityLevel
+from helpers import dependency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
 from notification import NotificationMVC
 from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import NOTIFICATION_STATE, NOTIFICATION_GROUP
+from skeletons.connection_mgr import IConnectionManager
 
 class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView):
     """
     WARNING! This class uses ids mapping! It means that all ids coming outside should be maped with special method
     from base class.
     """
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         mvc = NotificationMVC.g_instance
@@ -65,7 +67,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         mvcInstance = NotificationMVC.g_instance
         mvcInstance.getAlertController().onAllAlertsClosed -= self.__allAlertsMessageCloseHandler
         self.cleanUp()
-        mvcInstance.cleanUp(resetCounter=connectionManager.isDisconnected())
+        mvcInstance.cleanUp(resetCounter=self.connectionMgr.isDisconnected())
         super(NotificationPopUpViewer, self)._dispose()
 
     def __onNotificationReceived(self, notification):

@@ -3,11 +3,9 @@
 import BigWorld
 import Math
 from AvatarInputHandler.DynamicCameras.ArcadeCamera import ArcadeCamera
-import DynamicCameras
-import constants
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
-from debug_utils import *
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 import math
 
 class PostmortemDelay:

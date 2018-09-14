@@ -13,7 +13,6 @@ import CommandMapping
 import ResMgr
 from helpers import dependency
 from post_processing import g_postProcessing
-from ConnectionManager import connectionManager
 import GUI
 from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler, GUI_SETTINGS
 from gui.Scaleform.game_loading import GameLoading
@@ -28,6 +27,7 @@ import VOIP
 import WebBrowser
 import SoundGroups
 from functools import reduce
+from skeletons.connection_mgr import IConnectionManager
 loadingScreenClass = None
 tutorialLoaderInit = lambda : None
 tutorialLoaderFini = lambda : None
@@ -50,6 +50,7 @@ if GUI_SETTINGS.isGuiEnabled():
     from gui.Scaleform import fonts_config
     fonts_config.g_fontConfigMap.load()
 g_replayCtrl = None
+g_onBeforeSendEvent = None
 
 def autoFlushPythonLog():
     BigWorld.flushPythonLog()
@@ -58,9 +59,12 @@ def autoFlushPythonLog():
 
 def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
     global g_replayCtrl
+    global g_onBeforeSendEvent
     try:
         if constants.IS_DEVELOPMENT:
             autoFlushPythonLog()
+        import Event
+        g_onBeforeSendEvent = Event.Event()
         BigWorld.wg_initCustomSettings()
         g_postProcessing.init()
         Settings.g_instance = Settings.Settings(scriptConfig, engineConfig, userPreferences)
@@ -69,7 +73,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         DecalMap.g_instance = DecalMap.DecalMap(scriptConfig['decal'])
         from helpers import EdgeDetectColorController
         EdgeDetectColorController.g_instance = EdgeDetectColorController.EdgeDetectColorController(scriptConfig['silhouetteColors'])
-        import SoundGroups
         SoundGroups.g_instance = SoundGroups.SoundGroups()
         import BattleReplay
         g_replayCtrl = BattleReplay.g_replayCtrl = BattleReplay.BattleReplay()
@@ -138,8 +141,9 @@ def start():
         LOG_DEBUG('OfflineMode')
         return
     else:
-        connectionManager.onConnected += onConnected
-        connectionManager.onDisconnected += onDisconnected
+        manager = dependency.instance(IConnectionManager)
+        manager.onConnected += onConnected
+        manager.onDisconnected += onDisconnected
         if len(sys.argv) > 2:
             if sys.argv[1] == 'scriptedTest':
                 try:
@@ -161,7 +165,7 @@ def start():
 
             elif sys.argv[1] == 'offlineTest':
                 try:
-                    from cat.tasks.TestArena2 import TestArena2Object
+                    from Cat.Tasks.TestArena2 import TestArena2Object
                     LOG_DEBUG(sys.argv)
                     LOG_DEBUG('starting offline test: %s', sys.argv[2])
                     if len(sys.argv) > 3:
@@ -174,7 +178,7 @@ def start():
 
             elif sys.argv[1] == 'spinTest':
                 try:
-                    from cat.tasks.TestArena2 import TestArena2Object
+                    from Cat.Tasks.TestArena2 import TestArena2Object
                     LOG_DEBUG(sys.argv)
                     targetDirectory = sys.argv[4] if len(sys.argv) > 4 else 'SpinTestResult'
                     LOG_DEBUG('starting offline test: %s %s %s', sys.argv[2], sys.argv[3], targetDirectory)
@@ -186,7 +190,7 @@ def start():
             elif sys.argv[1] == 'hangarOverride':
                 try:
                     LOG_DEBUG(sys.argv)
-                    from tests.auto.HangarOverride import HangarOverride
+                    from Tests.auto.HangarOverride import HangarOverride
                     HangarOverride.setHangar('spaces/' + sys.argv[2])
                     if len(sys.argv) > 3 and sys.argv[3] is not None:
                         LOG_DEBUG('Setting default client inactivity timeout: %s' % sys.argv[3])
@@ -244,6 +248,7 @@ def abort():
 
 
 def fini():
+    global g_onBeforeSendEvent
     global g_scenario
     LOG_DEBUG('fini')
     if OfflineMode.enabled():
@@ -260,8 +265,9 @@ def fini():
         MusicControllerWWISE.destroy()
         if RSSDownloader.g_downloader is not None:
             RSSDownloader.g_downloader.destroy()
-        connectionManager.onConnected -= onConnected
-        connectionManager.onDisconnected -= onDisconnected
+        manager = dependency.instance(IConnectionManager)
+        manager.onConnected -= onConnected
+        manager.onDisconnected -= onDisconnected
         MessengerEntry.g_instance.fini()
         g_postProcessing.fini()
         from helpers import EdgeDetectColorController
@@ -276,14 +282,11 @@ def fini():
         if g_replayCtrl is not None:
             g_replayCtrl.unsubscribe()
         gui_personality.fini()
-        dependency.clear()
         tutorialLoaderFini()
         import Vibroeffects
         if Vibroeffects.VibroManager.g_instance is not None:
             Vibroeffects.VibroManager.g_instance.destroy()
             Vibroeffects.VibroManager.g_instance = None
-        if g_replayCtrl is not None:
-            g_replayCtrl.destroy()
         from LightFx import LightManager
         if LightManager.g_instance is not None:
             LightManager.g_instance.destroy()
@@ -295,14 +298,17 @@ def fini():
         from predefined_hosts import g_preDefinedHosts
         if g_preDefinedHosts is not None:
             g_preDefinedHosts.fini()
+        dependency.clear()
+        if g_replayCtrl is not None:
+            g_replayCtrl.destroy()
         voipRespHandler = VOIP.getVOIPManager()
         if voipRespHandler is not None:
             VOIP.getVOIPManager().destroy()
-        import SoundGroups
         SoundGroups.g_instance.destroy()
         Settings.g_instance.save()
         if g_scenario is not None:
             g_scenario.fini()
+        g_onBeforeSendEvent = None
         return
 
 
@@ -311,12 +317,8 @@ def onChangeEnvironments(inside):
 
 
 def onBeforeSend():
-    player = BigWorld.player()
-    if type(player).__name__ == 'PlayerAvatar':
-        if player.numOfObservers > 0:
-            vehicle = player.getVehicleAttached()
-            if vehicle is not None:
-                vehicle.transmitCameraData()
+    if g_onBeforeSendEvent is not None:
+        g_onBeforeSendEvent()
     return
 
 
@@ -472,13 +474,14 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'leave': 'BigWorld.player().leaveArena',
  'cv': 'import vehicles_check;vehicles_check.check',
  'cls': "print '\\n' * 100",
- 'items': 'from gui.shared import g_itemsCache; items = g_itemsCache.items; items',
  'unlockAll': 'BigWorld.player().stats.unlockAll(lambda *args:None)',
  'hangar': 'from gui.ClientHangarSpace import g_clientHangarSpaceOverride; g_clientHangarSpaceOverride',
  'cvi': 'from CurrentVehicle import g_currentVehicle; cvi = g_currentVehicle.item; cvi',
  'wc': 'from gui.Scaleform.Waiting import Waiting; Waiting.close()',
  'clan': 'from gui.shared.ClanCache import g_clanCache; clan = g_clanCache',
- 'camera': 'BigWorld.player().inputHandler.ctrl'}
+ 'camera': 'BigWorld.player().inputHandler.ctrl',
+ 'rankedCtrl': 'from helpers import dependency; from skeletons.gui.game_control import IRankedBattlesController;rc = dependency.instance(IRankedBattlesController)',
+ 'eventsCache': 'from helpers import dependency; from skeletons.gui.server_events import IEventsCache;ec = dependency.instance(IEventsCache)'}
 
 def expandMacros(line):
     import re

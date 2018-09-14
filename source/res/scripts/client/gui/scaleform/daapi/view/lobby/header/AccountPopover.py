@@ -3,8 +3,7 @@
 import BigWorld
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, BOOSTERS
-from gui import game_control
-from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform import settings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.AccountPopoverMeta import AccountPopoverMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
@@ -19,7 +18,7 @@ from gui.clans.settings import getNoClanEmblem32x32
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import event_dispatcher as shared_events
-from gui.shared import g_itemsCache, events
+from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
@@ -28,9 +27,13 @@ from helpers import dependency
 from helpers import isPlayerAccount
 from helpers.i18n import makeString
 from skeletons.gui.game_control import IRefSystemController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmblemsHelper):
+    itemsCache = dependency.descriptor(IItemsCache)
     refSystem = dependency.descriptor(IRefSystemController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _):
         super(AccountPopover, self).__init__()
@@ -68,6 +71,11 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
+    def openBadgesWindow(self):
+        from gui.shared import g_eventBus
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BADGES_PAGE, ctx={}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.destroy()
+
     def onUnitFlagsChanged(self, flags, timeLeft):
         self.__updateButtonsStates()
 
@@ -86,6 +94,10 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         self.__setClanData()
         self.__syncUserInfo()
 
+    def onClanEmblem32x32Received(self, clanDbID, emblem):
+        if emblem:
+            self.as_setClanEmblemS(self.getMemoryTexturePath(emblem))
+
     def onClanInfoReceived(self, clanDbID, clanInfo):
         self.__syncUserInfo()
         self.__setClanData()
@@ -100,10 +112,6 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
 
     def onAccountInvitesReceived(self, invitesCount):
         self.__syncUserInfo()
-
-    def onClanEmblem32x32Received(self, clanDbID, emblem):
-        if emblem:
-            self.as_setClanEmblemS(self.getMemoryTexturePath(emblem))
 
     def _populate(self):
         super(AccountPopover, self)._populate()
@@ -139,14 +147,14 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
             btnEnabled = self.clansCtrl.isAvailable()
             if not btnEnabled:
                 btnTooltip = TOOLTIPS.HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE
-        elif not g_lobbyContext.getServerSettings().isStrongholdsEnabled():
+        elif not self.lobbyContext.getServerSettings().isStrongholdsEnabled():
             btnEnabled = False
             btnTooltip = TOOLTIPS.HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE
         return {'searchClanTooltip': searchClanTooltip,
          'btnEnabled': btnEnabled,
-         'requestInviteBtnTooltip': requestInviteBtnTooltip,
          'btnTooltip': btnTooltip,
-         'isOpenInviteBtnEnabled': isAvailable,
+         'requestInviteBtnTooltip': requestInviteBtnTooltip,
+         'requestInviteBtnEnabled': isAvailable,
          'isSearchClanBtnEnabled': isAvailable}
 
     def _dispose(self):
@@ -189,12 +197,12 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
     def __setUserData(self):
         userName = BigWorld.player().name
         clanAbbrev = self.clansCtrl.getAccountProfile().getClanAbbrev()
-        self.__userData = {'fullName': g_lobbyContext.getPlayerFullName(userName, clanAbbrev=clanAbbrev),
+        self.__userData = {'fullName': self.lobbyContext.getPlayerFullName(userName, clanAbbrev=clanAbbrev),
          'userName': userName,
          'clanAbbrev': clanAbbrev}
 
     def __setAchieves(self):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         randomStats = items.getAccountDossier().getRandomStats()
         winsEfficiency = randomStats.getWinsEfficiency()
         if winsEfficiency is None:
@@ -221,7 +229,7 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
             btnLabel = makeString(MENU.HEADER_ACCOUNT_POPOVER_CLAN_NOT_ENABLED_BTNLABEL)
         if isInClan:
             permissions = ClanMemberPermissions(g_clanCache.clanRole)
-            isOpenInviteBtnVisible = isClanFeaturesEnabled and permissions.canHandleClanInvites()
+            requestInviteBtnVisible = isClanFeaturesEnabled and permissions.canHandleClanInvites()
             appsCount = clanDossier.getAppsCount() or 0
             clanBtnsParams = self._getClanBtnsParams(appsCount)
             self.requestClanEmblem32x32(profile.getClanDbID())
@@ -233,48 +241,48 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
              'formationName': profile.getClanFullName(),
              'position': profile.getRoleUserString(),
              'btnLabel': btnLabel,
-             'inviteBtnIcon': envelopeIcon,
+             'requestInviteBtnIcon': envelopeIcon,
              'clanResearchIcon': RES_ICONS.MAPS_ICONS_BUTTONS_SEARCH,
              'clanResearchTFText': MENU.HEADER_ACCOUNT_POPOVER_CLAN_SEARCHCLAN2}
             self.__clanData.update(clanBtnsParams)
         else:
-            isOpenInviteBtnVisible = False
+            requestInviteBtnVisible = False
             clanBtnsParams = self._getClanBtnsParams(clans_fmts.formatDataToString(None))
+            clanProfile = self.clansCtrl.getAccountProfile()
+            invitesCount = 0
+            if not clanProfile.isInClan():
+                invitesCount = clanProfile.getInvitesCount() or 0
+            if invitesCount == 0:
+                envelopeIcon = RES_ICONS.MAPS_ICONS_BUTTONS_ENVELOPEOPENED
+            else:
+                envelopeIcon = RES_ICONS.MAPS_ICONS_BUTTONS_ENVELOPE
             self.__clanData = {'formation': makeString(MENU.HEADER_ACCOUNT_POPOVER_CLAN_HEADER),
-             'position': MENU.HEADER_ACCOUNT_POPOVER_CLAN_NOTINCLAN,
              'clanResearchIcon': RES_ICONS.MAPS_ICONS_BUTTONS_SEARCH,
              'clanResearchTFText': MENU.HEADER_ACCOUNT_POPOVER_CLAN_SEARCHCLAN1,
              'searchClanTooltip': clanBtnsParams['searchClanTooltip'],
-             'isSearchClanBtnEnabled': clanBtnsParams['isSearchClanBtnEnabled']}
+             'isSearchClanBtnEnabled': clanBtnsParams['isSearchClanBtnEnabled'],
+             'inviteBtnIcon': envelopeIcon}
+            self.__clanData.update(self._getMyInvitesBtnParams())
             self.as_setClanEmblemS(getNoClanEmblem32x32())
         self.__clanData.update({'isInClan': isInClan,
          'isClanFeaturesEnabled': isClanFeaturesEnabled,
          'isDoActionBtnVisible': isInClan,
-         'isOpenInviteBtnVisible': isOpenInviteBtnVisible,
+         'requestInviteBtnVisible': requestInviteBtnVisible,
          'isSearchClanBtnVisible': isClanFeaturesEnabled,
          'isTextFieldNameVisible': isInClan,
-         'clansResearchBtnYposition': 119 if isInClan else 72,
-         'textFieldPositionYposition': 57 if isInClan else 42})
+         'clansResearchBtnYposition': 119 if isInClan else 72})
         self.as_setClanDataS(self.__clanData)
         return
 
     def __syncUserInfo(self):
-        clanProfile = self.clansCtrl.getAccountProfile()
-        invitesCount = 0
-        if not clanProfile.isInClan():
-            invitesCount = clanProfile.getInvitesCount() or 0
-        if invitesCount == 0:
-            envelopeIcon = RES_ICONS.MAPS_ICONS_BUTTONS_ENVELOPEOPENED
-        else:
-            envelopeIcon = RES_ICONS.MAPS_ICONS_BUTTONS_ENVELOPE
+        selectedBages = self.itemsCache.items.ranked.badges
+        badge = selectedBages[0] if selectedBages else 'default'
         title = text_styles.middleTitle(MENU.HEADER_ACCOUNT_POPOVER_BOOSTERS_BLOCKTITLE) + ' ' + icons.info()
         userVO = {'userData': self.__userData,
-         'isInClan': clanProfile.isInClan() or not self.clansCtrl.isEnabled(),
-         'isTeamKiller': g_itemsCache.items.stats.isTeamKiller,
-         'openInviteBtnIcon': envelopeIcon,
+         'isTeamKiller': self.itemsCache.items.stats.isTeamKiller,
          'boostersBlockTitle': title,
-         'boostersBlockTitleTooltip': TOOLTIPS.HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE}
-        userVO.update(self._getMyInvitesBtnParams())
+         'boostersBlockTitleTooltip': TOOLTIPS.HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE,
+         'badgeIcon': settings.getBadgeIconPath(settings.BADGES_ICONS.X48, badge)}
         self.as_setDataS(userVO)
 
     def __setInfoButtonState(self):

@@ -11,7 +11,7 @@ def getActionPrc(price, defaultPrice):
     if isinstance(price, Money):
         for currency in Currency.BY_WEIGHT:
             value = calculate(price.get(currency), defaultPrice.get(currency))
-            if value > 0:
+            if value != 0:
                 return value
 
         return 0

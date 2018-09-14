@@ -6,10 +6,11 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.view import dialogs
 from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import Processor, plugins
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 UnlockItemCtx = namedtuple('UnlockItemCtx', ('unlockCD', 'vehCD', 'unlockIdx', 'xpCost'))
 
 def makeCostCtx(vehXP, xpCost):
@@ -39,7 +40,7 @@ class UnlockItemConfirmator(plugins.DialogAbstractConfirmator):
         return
 
     def _makeMeta(self):
-        item = g_itemsCache.items.getItemByCD(self._unlockCtx.unlockCD)
+        item = self.itemsCache.items.getItemByCD(self._unlockCtx.unlockCD)
         xpCost = BigWorld.wg_getIntegralFormat(self._costCtx['xpCost'])
         freeXp = BigWorld.wg_getIntegralFormat(self._costCtx['freeXP'])
         ctx = {'xpCost': text_styles.expText(xpCost),
@@ -65,7 +66,7 @@ class UnlockItemValidator(plugins.SyncValidator):
 
     def _validate(self):
         unlockCD, vehCD, unlockIdx, xpCost = self._unlockCtx[:]
-        itemGetter = g_itemsCache.items.getItemByCD
+        itemGetter = self.itemsCache.items.getItemByCD
         vehicle = itemGetter(vehCD)
         item = itemGetter(unlockCD)
         if vehicle.itemTypeID != GUI_ITEM_TYPE.VEHICLE:
@@ -76,7 +77,7 @@ class UnlockItemValidator(plugins.SyncValidator):
             return plugins.makeError('vehicle_locked')
         if item.isUnlocked:
             return plugins.makeError('already_unlocked')
-        stats = g_itemsCache.items.stats
+        stats = self.itemsCache.items.stats
         unlockStats = UnlockStats(stats.unlocks, stats.vehiclesXPs, stats.freeXP)
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             result, _ = g_techTreeDP.isNext2Unlock(unlockCD, **unlockStats._asdict())

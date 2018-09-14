@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/settings.py
 from AvatarInputHandler import aih_constants
-CROSSHAIR_CONTAINER_SWF = 'crosshairPanelContainer.swf'
+from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
+CROSSHAIR_CONTAINER_SWF = 'battleCrosshairsApp.swf'
 CROSSHAIR_ROOT_PATH = 'root.main'
-CROSSHAIR_INIT_CALLBACK = 'registerCrosshairPanel'
+CROSSHAIR_INIT_CALLBACK = ROOT_SWF_CONSTANTS.BATTLE_CROSSHAIRS_REGISTER_CALLBACK
 CROSSHAIR_ITEM_PATH_FORMAT = '_level0.' + CROSSHAIR_ROOT_PATH + '.{}'
 CROSSHAIR_RADIUS_MC_NAME = 'radiusMC'
 SPG_GUN_MARKER_ELEMENTS_COUNT = aih_constants.SPG_GUN_MARKER_ELEMENTS_COUNT

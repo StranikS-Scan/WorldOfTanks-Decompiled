@@ -3,48 +3,66 @@
 from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.RetrainCrewWindowMeta import RetrainCrewWindowMeta
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.gui_items.processors.tankman import TankmanCrewRetraining
 from gui.shared.utils import decorators
 from gui.shared.money import Money
 from gui import SystemMessages
+from helpers import dependency
 from items import tankmen
 from gui.shared.formatters import text_styles
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.RETRAIN_CREW import RETRAIN_CREW
+from skeletons.gui.shared import IItemsCache
 
 class RetrainCrewWindow(RetrainCrewWindowMeta):
     AVAILABLE_OPERATIONS = range(3)
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(RetrainCrewWindow, self).__init__()
+        self.__vehicle = g_currentVehicle.item
+        self.__crew = []
+        for idx, tMan in self.__vehicle.crew:
+            if tMan is not None:
+                if tMan.vehicleNativeDescr.type.compactDescr != tMan.vehicleDescr.type.compactDescr:
+                    self.__crew.append(tMan)
+                elif tMan.efficiencyRoleLevel < tankmen.MAX_SKILL_LEVEL:
+                    self.__crew.append(tMan)
+
+        return
 
     def _populate(self):
         super(RetrainCrewWindow, self)._populate()
-        vehicle = g_currentVehicle.item
-        crewInfo = []
-        g_clientUpdateManager.addCallbacks({'stats.credits': self.__updateDataCallBack,
-         'stats.gold': self.__updateDataCallBack})
-        for idx, tMan in vehicle.crew:
-            if tMan is not None:
-                if tMan.vehicleNativeDescr.type.compactDescr != tMan.vehicleDescr.type.compactDescr:
-                    crewInfo.append(self.__getTankmanRoleInfo(tMan))
-                elif tMan.efficiencyRoleLevel < tankmen.MAX_SKILL_LEVEL:
-                    crewInfo.append(self.__getTankmanRoleInfo(tMan))
-
-        self.as_setVehicleDataS({'nationID': vehicle.nationID,
-         'vType': vehicle.type,
-         'vIntCD': vehicle.intCD,
-         'vLevel': vehicle.level,
-         'vName': vehicle.shortUserName,
-         'vIconSmall': vehicle.iconSmall})
+        g_clientUpdateManager.addMoneyCallback(self.__updateDataCallBack)
+        crewInfo = map(self.__getTankmanRoleInfo, self.__crew)
+        self.as_setVehicleDataS({'nationID': self.__vehicle.nationID,
+         'vType': self.__vehicle.type,
+         'vIntCD': self.__vehicle.intCD,
+         'vLevel': self.__vehicle.level,
+         'vName': self.__vehicle.shortUserName,
+         'vIconSmall': self.__vehicle.iconSmall})
         self.as_setAllCrewDataS({'crew': crewInfo})
         self.__updateDataCallBack()
-        return
 
     def __updateDataCallBack(self, data=None):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         shopPrices, actionPrc = items.shop.getTankmanCostWithDefaults()
+        skillValues = []
+        for cost in shopPrices:
+            minValue = maxValue = cost['roleLevel']
+            baseRolleLoss = cost['baseRoleLoss']
+            classChangeRoleLoss = cost['classChangeRoleLoss']
+            for tankman in self.__crew:
+                currentRoleLevel = tankman.roleLevel
+                if tankman.areClassesCompatible:
+                    roleValue = currentRoleLevel - currentRoleLevel * classChangeRoleLoss
+                else:
+                    roleValue = currentRoleLevel - currentRoleLevel * baseRolleLoss
+                if roleValue > maxValue:
+                    maxValue = int(round(roleValue))
+
+            skillValues.append((minValue, maxValue))
+
         data = {'credits': items.stats.credits,
          'gold': items.stats.gold,
          'actionPrc': actionPrc,
@@ -52,7 +70,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
         self.as_setCrewOperationDataS(data)
 
     def __getTankmanRoleInfo(self, tankman):
-        vehicle = g_itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
+        vehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
         return {'realRoleLevel': tankman.efficiencyRoleLevel,
          'roleLevel': tankman.roleLevel,
          'nativeVehicleType': vehicle.type,
@@ -68,7 +86,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
 
     @decorators.process('crewRetraining')
     def __processCrewRetrianing(self, operationId):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         vehicle = g_currentVehicle.item
         shopPrices = items.shop.tankmanCost
         currentSelection = shopPrices[operationId]
@@ -90,7 +108,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
 
     def changeRetrainType(self, operationId):
         operationId = int(operationId)
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         vehicle = g_currentVehicle.item
         shopPrices = items.shop.tankmanCost
         currentSelection = shopPrices[operationId]

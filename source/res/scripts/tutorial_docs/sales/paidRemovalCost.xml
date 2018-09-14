@@ -1,0 +1,60 @@
+<paidRemovalCost.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <post-effects></post-effects>
+      <runtime-effects>
+        <show-hint>	AmmunitionPanelHint	  <condition>
+            <active>	AmmunitionPanelOnScene	</active>
+          </condition>
+        </show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	AmmunitionPanel	  <on-scene-effects>
+            <activate>	AmmunitionPanelOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	AmmunitionPanelOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	AmmunitionPanelHint	  <item-id>	AmmunitionPanel	</item-id>
+      <text>	#quests:action/chain/hint/removalCost	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <padding>
+        <left>	258	</left>
+        <top>	72	</top>
+        <right>	321	</right>
+        <bottom>	4	</bottom>
+      </padding>
+      <actions>
+        <click>	AmmunitionPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	AmmunitionPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	AmmunitionPanel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+  </has-id>
+  <triggers></triggers>
+  <vars></vars>
+</paidRemovalCost.xml>

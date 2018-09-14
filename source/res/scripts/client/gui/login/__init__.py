@@ -7,7 +7,6 @@ __all__ = ('getLoginManagerConfig',)
 def getLoginManagerConfig(manager):
     """ Configures services for package login.
     :param manager: instance of dependency manager.
-    :return: instance of dependency manager.
     """
     if GUI_SETTINGS.socialNetworkLogin['enabled']:
         from social_networks import Manager, SOCIAL_NETWORKS
@@ -16,4 +15,4 @@ def getLoginManagerConfig(manager):
         from Manager import Manager
         instance = Manager()
     instance.init()
-    manager.bindInstance(ILoginManager, instance, finalizer='fini')
+    manager.addInstance(ILoginManager, instance, finalizer='fini')

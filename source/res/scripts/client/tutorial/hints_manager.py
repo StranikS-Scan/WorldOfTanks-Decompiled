@@ -35,7 +35,8 @@ class HintsManager(object):
     def stop(self):
         if self._data is not None:
             self._data = None
-        for itemID in self.__activeHints.keys():
+        hintsIDs = self.__activeHints.keys()
+        for itemID in hintsIDs:
             self.__hideHint(itemID)
 
         if self._gui is not None:

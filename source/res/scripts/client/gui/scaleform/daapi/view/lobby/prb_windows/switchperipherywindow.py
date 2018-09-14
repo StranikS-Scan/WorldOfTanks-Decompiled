@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/SwitchPeripheryWindow.py
 import constants
-from ConnectionManager import connectionManager
 from adisp import process
 from debug_utils import LOG_DEBUG
 from gui import DialogsInterface
@@ -13,16 +12,19 @@ from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import text_styles
+from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from predefined_hosts import g_preDefinedHosts, REQUEST_RATE
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IReloginController
 
-class SwitchPeripheryWindow(SwitchPeripheryWindowMeta):
+class SwitchPeripheryWindow(SwitchPeripheryWindowMeta, Notifiable):
     _BTN_WIDTH = 140
     _CLOSE_BTN_ACTION = 'closeAction'
     _SWITCH_BTN_ACTION = 'switchAction'
     relogin = dependency.descriptor(IReloginController)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, ctx):
         super(SwitchPeripheryWindow, self).__init__()
@@ -33,7 +35,7 @@ class SwitchPeripheryWindow(SwitchPeripheryWindowMeta):
             self.onWindowClose()
 
     def requestForChange(self, peripheryId):
-        if connectionManager.peripheryID != peripheryId:
+        if self.connectionMgr.peripheryID != peripheryId:
             self.__relogin(peripheryId)
         else:
             LOG_DEBUG('Current server for relogin has been chosen: %s' % peripheryId)
@@ -59,13 +61,16 @@ class SwitchPeripheryWindow(SwitchPeripheryWindowMeta):
         hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
         serversList = []
         for hostName, name, csisStatus, peripheryID in hostsList:
-            if peripheryID not in self.__ctx.getForbiddenPeripherieIDs():
+            if self.__ctx.isPeripheryAvailable(peripheryID):
                 serversList.append({'label': name,
                  'id': peripheryID,
                  'csisStatus': csisStatus,
                  'data': hostName})
 
         label = _ms(self.__ctx.getSelectServerLabel())
+        if not serversList:
+            self.onWindowClose()
+            return
         if len(serversList) == 1:
             label = _ms(self.__ctx.getApplySwitchLabel(), server=text_styles.stats(serversList[0]['label']))
         self._serversDP.rebuildList(serversList)
@@ -78,8 +83,10 @@ class SwitchPeripheryWindow(SwitchPeripheryWindowMeta):
         self._serversDP.setFlashObject(self.as_getServersDPS())
         self.as_setImageS(RES_ICONS.MAPS_ICONS_WINDOWS_SWITCH_PERIPHERY_WINDOW_BG, 0)
         self.as_setWindowTitleS(_ms(DIALOGS.SWITCHPERIPHERYWINDOW_WINDOWTITLE))
-        currentServer = connectionManager.serverUserName
+        currentServer = self.connectionMgr.serverUserName
         self.as_setTextS(_ms(self.__ctx.getHeader()), _ms(self.__ctx.getDescription(), server=text_styles.error(currentServer)))
+        self.addNotificator(SimpleNotifier(self.__ctx.getUpdateTime, self.__onServersUpdate))
+        self.startNotification()
         self._updateServersList()
         if not constants.IS_CHINA:
             if GUI_SETTINGS.csisRequestRate == REQUEST_RATE.ALWAYS:
@@ -98,6 +105,8 @@ class SwitchPeripheryWindow(SwitchPeripheryWindowMeta):
           'tooltip': ''}], TEXT_ALIGN.RIGHT, self._BTN_WIDTH)
 
     def _dispose(self):
+        self.stopNotification()
+        self.clearNotification()
         if not constants.IS_CHINA:
             g_preDefinedHosts.stopCSISUpdate()
             g_preDefinedHosts.onCsisQueryStart -= self.__onServersUpdate
@@ -110,7 +119,6 @@ class SwitchPeripheryWindow(SwitchPeripheryWindowMeta):
 
     @process
     def __relogin(self, peripheryID):
-        self.__isGuiUpdateSuppressed = True
         if g_preDefinedHosts.isRoamingPeriphery(peripheryID):
             success = yield DialogsInterface.showI18nConfirmDialog('changeRoamingPeriphery')
         else:
@@ -118,5 +126,5 @@ class SwitchPeripheryWindow(SwitchPeripheryWindowMeta):
         if success:
             self.relogin.doRelogin(peripheryID, extraChainSteps=self.__ctx.getExtraChainSteps())
 
-    def __onServersUpdate(self, _):
+    def __onServersUpdate(self, *args):
         self._updateServersList()

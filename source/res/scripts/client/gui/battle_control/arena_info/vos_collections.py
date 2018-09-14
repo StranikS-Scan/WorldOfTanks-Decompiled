@@ -69,6 +69,25 @@ class RespawnSortKey(VehicleInfoSortKey):
         return result if result else cmp(xvInfoVO.player, yvInfoVO.player)
 
 
+class RankSortKey(VehicleInfoSortKey):
+    __slots__ = ()
+
+    def _cmp(self, other):
+        xvInfoVO = self.vInfoVO
+        yvInfoVO = other.vInfoVO
+        result = cmp(xvInfoVO.team, yvInfoVO.team)
+        if result:
+            return result
+        result = cmp(yvInfoVO.isAlive(), xvInfoVO.isAlive())
+        if result:
+            return result
+        result = cmp(yvInfoVO.ranked.rank, xvInfoVO.ranked.rank)
+        if result:
+            return result
+        result = cmp(xvInfoVO.vehicleType, yvInfoVO.vehicleType)
+        return result if result else cmp(xvInfoVO.player, yvInfoVO.player)
+
+
 class _WinPointsSortKey(SortKey):
     __slots__ = ('teamWinPoints', 'internal')
 

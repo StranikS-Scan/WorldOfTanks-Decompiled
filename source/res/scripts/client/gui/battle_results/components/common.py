@@ -3,11 +3,15 @@
 import BigWorld
 from constants import ARENA_GUI_TYPE, FINISH_REASON
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
+from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.battle_results.components import base
 from gui.battle_results.components import style
 from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT, UI_VISIBILITY
+from gui.ranked_battles.ranked_models import RANK_CHANGE_STATES
 from gui.shared.fortifications.FortBuilding import FortBuilding
-from helpers import i18n
+from skeletons.gui.game_control import IRankedBattlesController
+from helpers import i18n, dependency
 _ARENA_TYPE_FORMAT = '#arenas:type/{0}/name'
 _ARENA_TYPE_EXT_FORMAT = '#menu:loading/battleTypes/{0}'
 _ARENA_FULL_NAME_FORMAT = '{0} - {1}'
@@ -51,6 +55,97 @@ def makeFortBattleFinishResultLabel(teamResult, isDefender, buildingName):
         return i18n.makeString(_FORT_BATTLE_FINISH_REASON_DEF.format(teamResult), buildingName=buildingName)
     else:
         return i18n.makeString(_FORT_BATTLE_FINISH_REASON_ATTACK.format(teamResult), buildingName=buildingName)
+
+
+class RankInfoHelper(object):
+    """
+    Helper class for filling RankChangesBlock.
+    """
+    rankedController = dependency.descriptor(IRankedBattlesController)
+    __TITLE_LABEL_MAP = {RANK_CHANGE_STATES.RANK_EARNED: RANKED_BATTLES.BATTLERESULT_RANKEARNED,
+     RANK_CHANGE_STATES.RANK_LOST: RANKED_BATTLES.BATTLERESULT_RANKLOST,
+     RANK_CHANGE_STATES.STEP_EARNED: RANKED_BATTLES.BATTLERESULT_STAGEEARNED,
+     RANK_CHANGE_STATES.STEP_LOST: RANKED_BATTLES.BATTLERESULT_STAGELOST,
+     RANK_CHANGE_STATES.NOTHING_CHANGED: RANKED_BATTLES.BATTLERESULT_STAGENOTEARNED}
+    __DESCRIPTION_LABEL_MAP = {RANK_CHANGE_STATES.RANK_EARNED: RANKED_BATTLES.getBattleResultsInTop,
+     RANK_CHANGE_STATES.RANK_LOST: RANKED_BATTLES.getBattleResultsNotInTop,
+     RANK_CHANGE_STATES.STEP_EARNED: RANKED_BATTLES.getBattleResultsInTop,
+     RANK_CHANGE_STATES.STEP_LOST: RANKED_BATTLES.getBattleResultsNotInTop,
+     RANK_CHANGE_STATES.NOTHING_CHANGED: RANKED_BATTLES.getBattleResultsNotInTop}
+    __STATE_LABEL_MAP = {RANK_CHANGE_STATES.RANK_EARNED: (True, True, RANKEDBATTLES_ALIASES.getStateRankEarned),
+     RANK_CHANGE_STATES.RANK_LOST: (True, False, RANKEDBATTLES_ALIASES.getStateRankLost),
+     RANK_CHANGE_STATES.STEP_EARNED: (False, True, RANKEDBATTLES_ALIASES.getStateStageEarned),
+     RANK_CHANGE_STATES.STEP_LOST: (False, False, RANKEDBATTLES_ALIASES.STATE_STAGE_LOST),
+     RANK_CHANGE_STATES.NOTHING_CHANGED: (False, True, RANKEDBATTLES_ALIASES.getStateStageNotEarned)}
+
+    def __init__(self, reusable):
+        self.__reusable = reusable
+
+    def getState(self):
+        """
+        Return a state, describing changes: is it rank or step changes.
+        :return: one from self.STATES
+        """
+        return self.rankedController.getRankChangeStatus(self.__reusable.personal.getRankInfo())
+
+    def makeStateLabel(self):
+        """
+        Returns 'state' field for RankChangesBlock
+        :return: string, one from RANKEDBATTLES_ALIASES constants
+        """
+        rankInfo = self.__reusable.personal.getRankInfo()
+        rankAfterBattle = rankInfo.accRank
+        if rankAfterBattle == self.rankedController.getAccRanksTotal() and rankInfo.vehRank > 0:
+            rankAfterBattle += 1
+        if self.getState() == RANK_CHANGE_STATES.RANK_LOST:
+            rankAfterBattle += 1
+        isRankArgNecessary, isTopNumberArgNecessary, state = self.__STATE_LABEL_MAP[self.getState()]
+        if isRankArgNecessary and isTopNumberArgNecessary:
+            result = state(rankAfterBattle, self.__getTopBoundForPersonalTeam())
+        elif isRankArgNecessary and not isTopNumberArgNecessary:
+            result = state(rankAfterBattle)
+        elif isTopNumberArgNecessary:
+            result = state(self.__getTopBoundForPersonalTeam())
+        else:
+            result = state
+        return result
+
+    def makeTitleLabel(self):
+        """
+        Returns 'title' field for RankChangesBlock
+        :return: string, one from RANKED_BATTLES constants
+        """
+        return self.__TITLE_LABEL_MAP[self.getState()]
+
+    def makeDescriptionLabel(self):
+        """
+        Returns 'description' field for RankChangesBlock
+        :return: string, one from RANKED_BATTLES constants
+        """
+        descriptionMethod = self.__DESCRIPTION_LABEL_MAP[self.getState()]
+        return descriptionMethod(self.__getTopBoundForPersonalTeam())
+
+    def getTopBoundForTeam(self, team):
+        """
+        Returns a top bound for the team(integer value) depending on battle result.
+        For example: Win - TOP_12, Lose - TOP_3
+        :param team: team index
+        """
+        return self.getWinnerTopBound() if self.__reusable.common.winnerTeam == team else self.getLoserTopBound()
+
+    @staticmethod
+    def getWinnerTopBound():
+        pass
+
+    @staticmethod
+    def getLoserTopBound():
+        pass
+
+    def __getTopBoundForPersonalTeam(self):
+        """
+        Returns a top bound for self team(integer value) depending on battle result.
+        """
+        return self.getTopBoundForTeam(self.__reusable.getPersonalTeam())
 
 
 class ArenaShortTimeVO(base.StatsItem):
@@ -277,6 +372,32 @@ class ClansInfoBlock(base.StatsBlock):
         players = reusable.players
         self.allies = players.getFirstAllyClan(team)
         self.enemies = players.getFirstEnemyClan(team)
+
+
+class RankChangesBlock(base.StatsBlock):
+    __slots__ = ('state', 'linkage', 'title', 'description')
+
+    def __init__(self, meta=None, field='', *path):
+        super(RankChangesBlock, self).__init__(meta, field, *path)
+        self.state = None
+        self.linkage = None
+        self.title = None
+        self.description = None
+        return
+
+    def setRecord(self, result, reusable):
+        helper = RankInfoHelper(reusable)
+        self.state = helper.makeStateLabel()
+        self.linkage = 'RankedBattleSubTaskUI'
+        self.title = helper.makeTitleLabel()
+        self.description = helper.makeDescriptionLabel()
+
+
+class RankedResultsBlockTitle(base.StatsItem):
+
+    def _convert(self, value, reusable):
+        helper = RankInfoHelper(reusable)
+        return style.makeRankedResultsTitle(helper.makeTitleLabel())
 
 
 class TotalFortResourceItem(base.StatsItem):

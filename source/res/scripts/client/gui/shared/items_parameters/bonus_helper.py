@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/bonus_helper.py
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParamExtendedData
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params import EXTRAS_CAMOUFLAGE
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 
 def isSituationalBonus(bonusName):
     return bonusName in _SITUATIONAL_BONUSES
@@ -91,12 +92,13 @@ class _BonusSorter(object):
 
 
 class BonusExtractor(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicle, bonuses, paramName):
         """
         step by step remove bonus influence factors from vehicle
         """
-        self.__vehicle = g_itemsCache.items.getVehicleCopy(vehicle)
+        self.__vehicle = self.itemsCache.items.getVehicleCopy(vehicle)
         self.__paramName = paramName
         self.__bonuses = _BonusSorter(self.__paramName).sort(bonuses)
         self.__removeCamouflage = False

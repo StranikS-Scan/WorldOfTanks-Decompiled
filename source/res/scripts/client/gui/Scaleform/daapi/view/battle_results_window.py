@@ -28,14 +28,15 @@ class BattleResultsWindow(BattleResultsMeta):
         assert 'arenaUniqueID' in ctx
         assert ctx['arenaUniqueID'], 'arenaUniqueID must be greater than 0'
         self.__arenaUniqueID = ctx['arenaUniqueID']
-        self.__isResultsSet = False
+        self.__dataSet = False
 
     def onWindowClose(self):
         self.destroy()
 
     def showEventsWindow(self, eID, eventType):
         if self.__canNavigate():
-            quests_events.showEventsWindow(eID, eventType)
+            quests_events.showMission(eID, eventType)
+            self.destroy()
 
     def saveSorting(self, iconType, sortDirection, bonusType):
         self.battleResults.saveStatsSorting(bonusType, iconType, sortDirection)
@@ -70,13 +71,9 @@ class BattleResultsWindow(BattleResultsMeta):
             self.as_setClanEmblemS(textureID, _wrapEmblemUrl(emblemID))
 
     def __setBattleResults(self):
-        if not self.__isResultsSet:
-            self.__isResultsSet = True
+        if not self.__dataSet:
             self.as_setDataS(self.battleResults.getResultsVO(self.__arenaUniqueID))
-            animation = self.battleResults.popResultsAnimation(self.__arenaUniqueID)
-            if animation is not None:
-                self.as_setAnimationS(animation)
-        return
+            self.__dataSet = True
 
     @event_bus_handlers.eventBusHandler(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, EVENT_BUS_SCOPE.LOBBY)
     def __handleBattleResultsPosted(self, event):

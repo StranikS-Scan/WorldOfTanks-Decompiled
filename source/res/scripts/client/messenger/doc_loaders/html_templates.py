@@ -28,16 +28,16 @@ class _MessageTemplate(templates.Template):
         vo['message'] = super(_MessageTemplate, self).format(ctx=ctx, sourceKey='message')
         return vo
 
-    def priority(self):
-        pass
-
 
 class MessageTemplates(templates.XMLCollection):
 
     def format(self, key, ctx=None, **kwargs):
         bgIconSource = kwargs.pop('bgIconSource', None)
         formatted = super(MessageTemplates, self).format(key, ctx, **kwargs)
-        source = formatted['bgIcon']
+        if 'bgIcon' in formatted:
+            source = formatted['bgIcon']
+        else:
+            source = {}
         if bgIconSource in source:
             formatted['bgIcon'] = source[bgIconSource]
         else:

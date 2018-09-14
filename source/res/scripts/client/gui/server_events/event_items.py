@@ -6,27 +6,39 @@ from abc import ABCMeta
 from collections import namedtuple
 import constants
 import nations
-from ConnectionManager import connectionManager
-from debug_utils import LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.server_events.bonuses import getBonusObj, compareBonuses
+from gui.ranked_battles import ranked_helpers
+from gui.server_events.bonuses import getBonusObj, compareBonuses, BoxBonus
+from gui.server_events.formatters import isMarathon, getLinkedActionID
 from gui.server_events.modifiers import getModifierObj, compareModifiers
-from gui.server_events.parsers import AccountRequirements, VehicleRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
-from gui.shared import g_itemsCache
+from gui.server_events.parsers import AccountRequirements, VehicleRequirements, TokenQuestAccountRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
+from helpers import dependency
 from helpers import getLocalizedData, i18n, time_utils
 from potapov_quests import PQ_STATE as _PQS, PQ_BRANCH
 from predefined_hosts import g_preDefinedHosts
-from shared_utils import findFirst
+from shared_utils import first, findFirst
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.shared import IItemsCache
 EventBattles = namedtuple('EventBattles', ['vehicleTags',
  'vehicles',
  'enabled',
  'arenaTypeID'])
 
 class DEFAULTS_GROUPS(object):
-    CURRENTLY_AVAILABLE = 'currentlyAvailable'
+    FOR_CURRENT_VEHICLE = 'currentlyAvailable'
     UNGROUPED_ACTIONS = 'ungroupedActions'
     UNGROUPED_QUESTS = 'ungroupedQuests'
+    MOTIVE_QUESTS = 'motiveQuests'
+
+
+class TOKEN_SHOP(object):
+    """ Possible states of the token's sale availability.
+    """
+    SHOW = 'show'
+    HIDE = 'hide'
+    WEB = 'web'
 
 
 class ServerEventAbstract(object):
@@ -71,23 +83,14 @@ class ServerEventAbstract(object):
     def getType(self):
         return self._data.get('type', 0)
 
+    def getBattleTypeName(self):
+        pass
+
     def getStartTime(self):
         return time_utils.makeLocalServerTime(self._data['startTime']) if 'startTime' in self._data else time.time()
 
     def getFinishTime(self):
         return time_utils.makeLocalServerTime(self._data['finishTime']) if 'finishTime' in self._data else time.time()
-
-    def getCreationTime(self):
-        return time_utils.makeLocalServerTime(self._data['gStartTime']) if 'gStartTime' in self._data else time.time()
-
-    def getDestroyingTime(self):
-        return time_utils.makeLocalServerTime(self._data['gFinishTime']) if 'gFinishTime' in self._data else time.time()
-
-    def getCreationTimeLeft(self):
-        return time_utils.getTimeDeltaFromNowInLocal(self.getCreationTime())
-
-    def getDestroyingTimeLeft(self):
-        return time_utils.getTimeDeltaFromNowInLocal(self.getDestroyingTime())
 
     def getUserName(self):
         return getLocalizedData(self._data, 'name')
@@ -113,6 +116,17 @@ class ServerEventAbstract(object):
     def isCompleted(self, progress=None):
         return False
 
+    def isTokensOnSale(self):
+        """ Returns true if tokens are always statically on sale, false otherwise.
+        """
+        state = self._getTokenSaleState()
+        return state == TOKEN_SHOP.SHOW
+
+    def isTokensOnSaleDynamic(self):
+        """ Returns true if the state of tokens availability on shop is dynamic.
+        """
+        return self._getTokenSaleState() == TOKEN_SHOP.WEB
+
     def getNearestActivityTimeLeft(self):
         timeLeft = None
         if self.getStartTimeLeft() > 0:
@@ -131,11 +145,12 @@ class ServerEventAbstract(object):
             return (False, 'in_future')
         if self.isOutOfDate():
             return (False, 'out_of_date')
-        if len(self.getWeekDays()) and time_utils.getServerRegionalWeekDay() not in self.getWeekDays():
+        weekDays = self.getWeekDays()
+        if len(weekDays) and time_utils.getServerRegionalWeekDay() not in weekDays:
             return (False, 'invalid_weekday')
         intervals = self.getActiveTimeIntervals()
         serverTime = time_utils.getServerTimeCurrentDay()
-        if len(intervals):
+        if intervals:
             for low, high in intervals:
                 if low <= serverTime <= high:
                     break
@@ -150,7 +165,13 @@ class ServerEventAbstract(object):
         result, error = self.isAvailable()
         return (False, 'requirement') if result and not self._checkVehicleConditions(vehicle) else (result, error)
 
-    def getBonuses(self, bonusName=None):
+    def isValidVehicleCondition(self, vehicle):
+        """
+        Check if quest's vehicle condition is available for provided vehicle.
+        """
+        return self._checkVehicleConditions(vehicle)
+
+    def getBonuses(self, bonusName=None, isCompensation=False):
         return []
 
     def getParents(self):
@@ -167,6 +188,9 @@ class ServerEventAbstract(object):
         """
         return True
 
+    def _getTokenSaleState(self):
+        return self._data.get('shopButton', TOKEN_SHOP.HIDE)
+
     def __repr__(self):
         return '%s(qID = %s, groupID = %s)' % (self.__class__.__name__, self._id, self._groupID)
 
@@ -175,6 +199,41 @@ class Group(ServerEventAbstract):
 
     def getGroupEvents(self):
         return self._data.get('groupContent', [])
+
+    def getGroupContent(self, srvEvents):
+        """ Isolate quests of the current group from the given events.
+        """
+        groupQuests = []
+        for questID in self.getGroupEvents():
+            quest = srvEvents.get(questID)
+            if quest is not None:
+                groupQuests.append(quest)
+
+        return groupQuests
+
+    def isMarathon(self):
+        return isMarathon(self.getID())
+
+    def getLinkedAction(self, actions):
+        """
+        Gets linked action ID
+        """
+        return getLinkedActionID(self.getID(), actions)
+
+    def getMainQuest(self, events):
+        """ Get marathon's main quest (quest with special prefix)
+        """
+        if not self.isMarathon():
+            LOG_ERROR('Trying to find main quest in non-marathon group', self.getID())
+            return None
+        else:
+            tokenQuests = []
+            for quest in events:
+                if isMarathon(quest.getID()):
+                    return quest
+
+            LOG_ERROR('There is no main token quest in the marathon', self.getID())
+            return None
 
     def withManyTokenSources(self, svrEvents):
         uniqueTokens = set()
@@ -192,21 +251,35 @@ class Group(ServerEventAbstract):
 
 
 class Quest(ServerEventAbstract):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, qID, data, progress=None):
-        import copy
-        tmpData = copy.deepcopy(data)
         super(Quest, self).__init__(qID, data)
         self._progress = progress
         self._children, self._parents, self._parentsName = {}, {}, {}
-        conds = dict(tmpData['conditions'])
+        conds = dict(data['conditions'])
         preBattle = dict(conds['preBattle'])
-        self.accountReqs = AccountRequirements(self.getType(), preBattle['account'])
+        self.accountReqs = AccountRequirements(preBattle['account'])
         self.vehicleReqs = VehicleRequirements(preBattle['vehicle'])
         self.preBattleCond = PreBattleConditions(preBattle['battle'])
-        self.bonusCond = BonusConditions(conds['bonus'], self.getProgressData(), self.preBattleCond)
+        self.bonusCond = BonusConditions(conds['common'], self.getProgressData(), self.preBattleCond)
         self.postBattleCond = PostBattleConditions(conds['postBattle'], self.preBattleCond)
         self._groupID = DEFAULTS_GROUPS.UNGROUPED_QUESTS
+        self.__linkedActions = []
+
+    def isCompensationPossible(self):
+        return isMarathon(self.getGroupID()) and bool(self.getBonuses('tokens'))
+
+    def isAvailable(self):
+        return (False, 'dailyComplete') if self.bonusCond.getBonusLimit() is not None and self.bonusCond.isDaily() and self.isCompleted() else super(Quest, self).isAvailable()
+
+    @property
+    def linkedActions(self):
+        return self.__linkedActions
+
+    @linkedActions.setter
+    def linkedActions(self, value):
+        self.__linkedActions = value
 
     def getUserType(self):
         return i18n.makeString(QUESTS.ITEM_TYPE_SPECIALMISSION) if self.getType() == constants.EVENT_TYPE.FORT_QUEST else i18n.makeString(QUESTS.ITEM_TYPE_QUEST)
@@ -274,23 +347,49 @@ class Quest(ServerEventAbstract):
     def getProgressData(self):
         return self._progress or {}
 
-    def getBonuses(self, bonusName=None):
+    def getBonuses(self, bonusName=None, isCompensation=False):
+        """ Get quest's bonuses.
+        
+        :param bonusName: str, bonus name to be find
+        :param isCompensation: bool, treat returned bonuses as compensation
+        :return: list with found bonuses
+        """
         result = []
-        for n, v in self._data.get('bonus', {}).iteritems():
-            if bonusName is not None and n != bonusName:
-                continue
-            b = getBonusObj(self, n, v)
-            if b is not None:
-                result.append(b)
+        bonusData = self._data.get('bonus', {})
+        if bonusName is None:
+            for name, value in bonusData.iteritems():
+                bonus = getBonusObj(self, name, value, isCompensation)
+                if bonus is not None:
+                    result.append(self._bonusDecorator(bonus))
 
+        elif bonusName in bonusData:
+            bonus = getBonusObj(self, bonusName, bonusData[bonusName], isCompensation)
+            if bonus is not None:
+                result.append(self._bonusDecorator(bonus))
         return sorted(result, cmp=compareBonuses, key=operator.methodcaller('getName'))
+
+    def getCompensation(self):
+        """ Get possible compensation for the token.
+        
+        This method is only makes sense for the compensation quest, i.e.
+        a special token quest that consumes extra tokens and gives bonuses instead.
+        
+        This extra bonuses are needed in case of marathon, when the main token
+        quest is already completed, but still player can complete battle quests
+        and get some rewards.
+        """
+        compensatedToken = findFirst(lambda t: t.isDisplayable(), self.accountReqs.getTokens())
+        if compensatedToken:
+            return {compensatedToken.getID(): self.getBonuses(isCompensation=True)}
+        else:
+            return {}
 
     def hasPremIGRVehBonus(self):
         vehBonuses = self.getBonuses('vehicles')
         for vehBonus in vehBonuses:
             vehicles = vehBonus.getValue()
             for intCD, data in vehicles.iteritems():
-                item = g_itemsCache.items.getItemByCD(intCD)
+                item = self.itemsCache.items.getItemByCD(intCD)
                 if item.isPremiumIGR and data.get('rent', None) is not None:
                     return True
 
@@ -298,6 +397,18 @@ class Quest(ServerEventAbstract):
 
     def getSuitableVehicles(self):
         return self.vehicleReqs.getSuitableVehicles()
+
+    def _bonusDecorator(self, bonus):
+        """
+            allows to do some additional bonus configuration when they are created in getBonuses.
+            Originally is used in RankedQuest to set BoxBonus icon configuration
+        """
+        if self.getType() == constants.EVENT_TYPE.TOKEN_QUEST and bonus.getName() == 'oneof':
+            if ranked_helpers.isRankedQuestID(self.getID()):
+                _, cohort, _ = ranked_helpers.getRankedDataFromTokenQuestID(self.getID())
+                bonus.setupIconHandler(BoxBonus.HANDLER_NAMES.RANKED, ('metal', cohort))
+                bonus.setTooltipType('rankedSeason')
+        return bonus
 
     def __checkGroupedCompletion(self, values, progress, bonusLimit=None, keyMaker=lambda v: v):
         bonusLimit = bonusLimit or self.bonusCond.getBonusLimit()
@@ -308,12 +419,28 @@ class Quest(ServerEventAbstract):
         return True
 
     def _checkConditions(self):
-        isAccAvailable = self.accountReqs.isAvailable()
-        isVehAvailable = self.vehicleReqs.isAnyVehicleAcceptable() or len(self.vehicleReqs.getSuitableVehicles()) > 0
-        return isAccAvailable and isVehAvailable
+        if not self.accountReqs.isAvailable():
+            return False
+        else:
+            return self.vehicleReqs.isAnyVehicleAcceptable() or self.vehicleReqs.getSuitableVehicles()
 
     def _checkVehicleConditions(self, vehicle):
         return self.vehicleReqs.isAnyVehicleAcceptable() or vehicle in self.vehicleReqs.getSuitableVehicles()
+
+
+class TokenQuest(Quest):
+    """ Quest without battle conditions (only consumes tokens from other quests).
+    
+    The key difference is that we don't check token requirements availability
+    when checking overall quest availability (see WOTD-81694)
+    """
+
+    def __init__(self, qID, data, progress=None):
+        super(TokenQuest, self).__init__(qID, data, progress)
+        self.accountReqs = TokenQuestAccountRequirements(self.accountReqs.getSection())
+
+    def _checkConditions(self):
+        return self.accountReqs.isAvailable()
 
 
 class PersonalQuest(Quest):
@@ -325,15 +452,117 @@ class PersonalQuest(Quest):
     def getFinishTime(self):
         return min(super(PersonalQuest, self).getFinishTime(), self.expiryTime) if self.expiryTime is not None else super(PersonalQuest, self).getFinishTime()
 
+    def getRequiredToken(self):
+        return self._data.get('requiredToken', None)
+
+
+class RankedQuest(Quest):
+    boxIconSizes = {'big': '450x400',
+     'small': '100x88'}
+
+    def __init__(self, qID, data, progress=None):
+        super(RankedQuest, self).__init__(qID, data, progress)
+        self.__rankedData = self.__parseRankSeasonData(data)
+
+    def getRank(self):
+        return self.__rankedData.get('rank')
+
+    def getSeasonID(self):
+        return self.__rankedData.get('season')
+
+    def getCycleID(self):
+        return self.__rankedData.get('cycle')
+
+    def isProcessedAtCycleEnd(self):
+        return self.__rankedData['subtype'] == 'cycle'
+
+    def isForVehicleMastering(self):
+        return self.__rankedData['subtype'] == 'vehicle'
+
+    def isForRank(self):
+        return self.__rankedData['subtype'] == 'rank'
+
+    def isBooby(self):
+        return self.__rankedData['subtype'] == 'booby'
+
+    def getBattleTypeName(self):
+        pass
+
+    def _bonusDecorator(self, bonus):
+        if bonus.getName() == 'oneof':
+            if self.isProcessedAtCycleEnd():
+                bonus.setupIconHandler(BoxBonus.HANDLER_NAMES.RANKED, ('wooden', self.getRank()))
+                bonus.setTooltipType('rankedCycle')
+        return bonus
+
+    @classmethod
+    def __parseRankSeasonData(cls, data):
+        conditionsDict = cls.__dictMaker(data.get('conditions', {}))
+        rankedData = conditionsDict.get('common', {})
+        result = {}
+        if rankedData:
+            for key in ('season', 'cycle'):
+                if key in rankedData:
+                    result[key] = rankedData[key]['value']
+
+            if 'maxRank' in rankedData:
+                rank = rankedData['maxRank']
+                if 'and' in rank:
+                    rankBounds = rank['and']
+                    result['rank'] = int(first(rankBounds.values())['value'])
+                else:
+                    result['rank'] = int(rank['greaterOrEqual']['value'])
+        result['subtype'] = data.get('subtype')
+        return result
+
+    @classmethod
+    def __dictMaker(cls, kVList):
+        result = {}
+        for key, value in dict(kVList).iteritems():
+            if isinstance(value, (list, tuple)) and len(value):
+                result[key] = cls.__dictMaker(value)
+            result[key] = value
+
+        return result
+
+
+ActionData = namedtuple('ActionData', 'discountObj priority uiDecoration')
 
 class Action(ServerEventAbstract):
 
     def __init__(self, qID, data):
         super(Action, self).__init__(qID, data)
         self._groupID = DEFAULTS_GROUPS.UNGROUPED_ACTIONS
+        self.__linkedQuests = []
+
+    @property
+    def linkedQuests(self):
+        return self.__linkedQuests
+
+    @linkedQuests.setter
+    def linkedQuests(self, value):
+        self.__linkedQuests = value
 
     def getUserType(self):
         return i18n.makeString(QUESTS.ITEM_TYPE_ACTION)
+
+    def getActions(self):
+        result = {}
+        for stepData in self._data.get('steps'):
+            mName = stepData.get('name')
+            priority = stepData.get('priority')
+            params = stepData.get('params')
+            uiDecoration = stepData.get('uiDecoration')
+            m = getModifierObj(mName, params)
+            if m is None:
+                continue
+            modifiers = m.splitModifiers()
+            for modifier in modifiers:
+                if mName in result:
+                    result[mName].extend([ActionData(modifier, priority, uiDecoration)])
+                result[mName] = [ActionData(modifier, priority, uiDecoration)]
+
+        return result
 
     def getModifiers(self):
         result = {}
@@ -416,11 +645,11 @@ class PQTile(object):
         return self.__info['description']
 
     def getChainVehicleClass(self, chainID):
-        firstQuest = findFirst(None, self.__quests.get(chainID, {}).itervalues())
-        return findFirst(None, firstQuest.getVehicleClasses()) if firstQuest is not None else None
+        firstQuest = first(self.__quests.get(chainID, {}).itervalues())
+        return first(firstQuest.getVehicleClasses()) if firstQuest is not None else None
 
     def getChainMajorTag(self, chainID):
-        firstQuest = findFirst(None, self.__quests.get(chainID, {}).itervalues())
+        firstQuest = first(self.__quests.get(chainID, {}).itervalues())
         return firstQuest.getMajorTag() if firstQuest is not None else None
 
     def getChainSortKey(self, chainID):
@@ -722,7 +951,7 @@ class PotapovQuest(Quest):
     def getTankmanBonus(self):
         for isMainBonus in (True, False):
             for bonus in self.getBonuses(isMain=isMainBonus):
-                if bonus.getName() == 'tankmen':
+                if bonus.getName() == 'potapovTankmen':
                     return (bonus, isMainBonus)
 
         return (None, None)
@@ -738,6 +967,9 @@ class MotiveQuest(Quest):
 
     def getUserName(self):
         return i18n.makeString(Quest.getUserName(self))
+
+    def getGroupID(self):
+        return DEFAULTS_GROUPS.MOTIVE_QUESTS
 
     def getDescription(self):
         return i18n.makeString(Quest.getDescription(self))
@@ -757,6 +989,7 @@ class MotiveQuest(Quest):
 
 class CompanyBattles(namedtuple('CompanyBattles', ['startTime', 'finishTime', 'peripheryIDs'])):
     DELTA = 1
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def getCreationTimeLeft(self):
         if self.startTime is not None:
@@ -785,10 +1018,10 @@ class CompanyBattles(namedtuple('CompanyBattles', ['startTime', 'finishTime', 'p
         return destroyingTime > 0 or destroyingTime is None
 
     def needToChangePeriphery(self):
-        return not connectionManager.isStandalone() and connectionManager.peripheryID not in self.peripheryIDs
+        return not self.connectionMgr.isStandalone() and self.connectionMgr.peripheryID not in self.peripheryIDs
 
     def isValid(self):
-        return (self.startTime is None or self.startTime > 0) and (self.finishTime is None or self.finishTime > 0) and (connectionManager.isStandalone() or self.__validatePeripheryIDs())
+        return (self.startTime is None or self.startTime > 0) and (self.finishTime is None or self.finishTime > 0) and (self.connectionMgr.isStandalone() or self.__validatePeripheryIDs())
 
     def isRunning(self):
         return self.isCreationTimeCorrect() and self.isDestroyingTimeCorrect()
@@ -804,13 +1037,13 @@ class FalloutConfig(namedtuple('FalloutConfig', ['allowedVehicles',
  'minVehiclesPerPlayer',
  'maxVehiclesPerPlayer',
  'vehicleLevelRequired'])):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def getAllowedVehicles(self):
-        from gui.shared import g_itemsCache
         result = []
         for v in self.allowedVehicles:
             try:
-                item = g_itemsCache.items.getItemByCD(v)
+                item = self.itemsCache.items.getItemByCD(v)
             except KeyError:
                 LOG_CURRENT_EXCEPTION()
                 item = None
@@ -867,7 +1100,11 @@ def createQuest(questType, qID, data, progress=None, expiryTime=None):
         return PersonalQuest(qID, data, progress, expiryTime)
     if questType == constants.EVENT_TYPE.GROUP:
         return Group(qID, data)
-    return MotiveQuest(qID, data, progress) if questType == constants.EVENT_TYPE.MOTIVE_QUEST else Quest(qID, data, progress)
+    if questType == constants.EVENT_TYPE.MOTIVE_QUEST:
+        return MotiveQuest(qID, data, progress)
+    if questType == constants.EVENT_TYPE.RANKED_QUEST:
+        return RankedQuest(qID, data, progress)
+    return TokenQuest(qID, data, progress) if questType == constants.EVENT_TYPE.TOKEN_QUEST else Quest(qID, data, progress)
 
 
 def createAction(eventType, aID, data):

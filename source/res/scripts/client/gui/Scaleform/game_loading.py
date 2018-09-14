@@ -1,51 +1,50 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/game_loading.py
 import GUI
-import BigWorld
-import constants
 from debug_utils import LOG_DEBUG
 from gui import g_guiResetters
-from gui.Scaleform.Flash import Flash
-from gui.Scaleform import SCALEFORM_SWF_PATH_V3
+from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
+from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
+from gui.Scaleform.daapi.view.meta.GameLoadingMeta import GameLoadingMeta
+from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils import graphics
 from helpers import getFullClientVersion, getClientOverride, getClientLanguage
 
-class GameLoading(Flash):
+class GameLoading(ExternalFlashComponent, GameLoadingMeta):
 
-    def __init__(self, component=None):
-        Flash.__init__(self, 'gameLoading.swf', path=SCALEFORM_SWF_PATH_V3)
-        self._displayRoot = self.getMember('root.main')
-        if self._displayRoot is not None:
-            self._displayRoot.resync()
-            self._displayRoot.setLocale(getClientOverride())
-            self._displayRoot.setVersion(getFullClientVersion())
-            if getClientLanguage() == 'ko':
-                self._displayRoot.setInfo(MENU.LOADING_GAMEINFO)
-            g_guiResetters.add(self.onUpdateStage)
-            self.onUpdateStage()
-        return
+    def __init__(self, _):
+        super(GameLoading, self).__init__(ExternalFlashSettings('gameLoading', 'gameLoadingApp.swf', 'root.main', ROOT_SWF_CONSTANTS.GAME_LOADING_REGISTER_CALLBACK))
+
+    def afterCreate(self):
+        super(GameLoading, self).afterCreate()
+        self.as_setLocaleS(getClientOverride())
+        self.as_setVersionS(getFullClientVersion())
+        if getClientLanguage() == 'ko':
+            self.as_setInfoS(MENU.LOADING_GAMEINFO)
+        self._updateStage()
 
     def onUpdateStage(self):
-        width, height = GUI.screenResolution()
-        scaleLength = len(graphics.getInterfaceScalesList([width, height]))
-        self._displayRoot.updateStage(width, height, scaleLength - 1)
+        self._updateStage()
 
     def onLoad(self, dataSection):
+        g_guiResetters.add(self.onUpdateStage)
         self.active(True)
 
     def onDelete(self):
         g_guiResetters.discard(self.onUpdateStage)
-        if self._displayRoot is not None:
-            self._displayRoot.cleanup()
-            self._displayRoot = None
-        return
+        self.close()
 
     def setProgress(self, value):
-        self._displayRoot.setProgress(value)
+        self.as_setProgressS(value)
 
     def addMessage(self, message):
         LOG_DEBUG(message)
 
     def reset(self):
-        self._displayRoot.setProgress(0)
+        self.as_setProgressS(0)
+
+    def _updateStage(self):
+        width, height = GUI.screenResolution()
+        scaleLength = len(graphics.getInterfaceScalesList([width, height]))
+        self.as_updateStageS(width, height, scaleLength - 1)

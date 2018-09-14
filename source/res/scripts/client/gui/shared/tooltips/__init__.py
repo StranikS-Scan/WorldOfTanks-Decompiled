@@ -2,15 +2,16 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/__init__.py
 import weakref
 import sys
+from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader.decorators import sf_lobby
-from gui.shared import g_itemsCache
 from gui.shared.formatters import icons
 from helpers.i18n import makeString
 from items import vehicles
+from skeletons.gui.shared import IItemsCache
 
 class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE = 'vehicle'
@@ -39,6 +40,10 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE_FILTER = 'vehicleFilter'
     VEH_CMP_CUSTOMIZATION = 'vehCmpCustomization'
     RESERVE = 'reserve'
+    RANKED_STEP = 'rankedStep'
+    RANKED_RANK = 'rankedRank'
+    RANKED_CALENDAR_DAY = 'rankedCalendarDayInfo'
+    RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -61,6 +66,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     HANGAR_TUTORIAL = 'hangarTutorial'
     TECH_CUSTOMIZATION = 'techCustomization'
     BOOSTER = 'booster'
+    RANK = 'ranked'
     RESERVE = 'reserve'
 
 
@@ -224,9 +230,10 @@ def getComplexStatus(statusKey, **kwargs):
 
 def getUnlockPrice(compactDescr, parentCD=None):
     item_type_id, _, _ = vehicles.parseIntCompactDescr(compactDescr)
-    freeXP = g_itemsCache.items.stats.actualFreeXP
-    unlocks = g_itemsCache.items.stats.unlocks
-    xpVehs = g_itemsCache.items.stats.vehiclesXPs
+    itemsCache = dependency.instance(IItemsCache)
+    freeXP = itemsCache.items.stats.actualFreeXP
+    unlocks = itemsCache.items.stats.unlocks
+    xpVehs = itemsCache.items.stats.vehiclesXPs
     g_techTreeDP.load()
     pricesDict = g_techTreeDP.getUnlockPrices(compactDescr)
 

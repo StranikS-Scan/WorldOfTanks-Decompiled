@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.exchange.BaseExchangeWindow import BaseExchangeWindow
 
 class ExchangeWindowMeta(BaseExchangeWindow):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseExchangeWindow
-    """
 
     def as_setSecondaryCurrencyS(self, credits):
         return self.flashObject.as_setSecondaryCurrency(credits) if self._isDAAPIInited() else None

@@ -3,7 +3,6 @@
 import AccountCommands
 from functools import partial
 from diff_utils import synchronizeDicts
-from debug_utils import *
 
 class QuestProgress(object):
 

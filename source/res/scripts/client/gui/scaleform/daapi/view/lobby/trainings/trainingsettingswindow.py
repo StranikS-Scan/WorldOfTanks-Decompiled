@@ -9,8 +9,9 @@ from gui.prb_control import prbEntityProperty
 from gui.prb_control.entities.training.legacy.ctx import TrainingSettingsCtx
 from gui.prb_control.prb_getters import getTrainingBattleRoundLimits
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared import g_itemsCache
+from helpers import dependency
 from helpers import i18n
+from skeletons.gui.shared import IItemsCache
 
 class ArenasCache(object):
 
@@ -42,6 +43,7 @@ class ArenasCache(object):
 
 
 class TrainingSettingsWindow(TrainingWindowMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(TrainingSettingsWindow, self).__init__()
@@ -66,8 +68,8 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         settings = TrainingSettingsCtx()
         if not self.__isCreateRequest:
             settings = settings.fetch(self.prbEntity.getSettings())
-        if g_itemsCache.isSynced():
-            accountAttrs = g_itemsCache.items.stats.attributes
+        if self.itemsCache.isSynced():
+            accountAttrs = self.itemsCache.items.stats.attributes
         else:
             accountAttrs = 0
         _, maxBound = getTrainingBattleRoundLimits(accountAttrs)

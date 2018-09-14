@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
 class PythonTweenMeta(BaseDAAPIModule):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIModule
-    """
 
     def getFinishScaleX(self):
         self._printOverrideError('getFinishScaleX')

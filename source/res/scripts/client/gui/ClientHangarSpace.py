@@ -7,6 +7,7 @@ import math
 import weakref
 from collections import namedtuple
 from functools import partial
+import BigWorld
 import Keys
 import MapActivities
 import Math
@@ -19,23 +20,25 @@ import constants
 import items.vehicles
 from AvatarInputHandler import mathUtils
 from AvatarInputHandler.cameras import FovExtended
-from ConnectionManager import connectionManager
 from HangarVehicle import HangarVehicle
 from ModelHitTester import ModelHitTester
 from PlayerEvents import g_playerEvents
-from debug_utils import *
+from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import g_keyEventHandlers, g_mouseEventHandlers
 from gui import g_tankActiveCamouflage
-from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
 from post_processing import g_postProcessing
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IIGRController
+from skeletons.gui.shared import IItemsCache
 from vehicle_systems import camouflages
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from vehicle_systems.tankStructure import TankPartNames
 from vehicle_systems.tankStructure import VehiclePartsTuple
+from vehicle_systems import model_assembler
+from svarog_script.py_component_system import ComponentDescriptor, ComponentSystem
 _DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
@@ -234,9 +237,9 @@ class ClientHangarSpace():
         if self.igrCtrl.getRoomType() == constants.IGR_TYPE.PREMIUM:
             if _CFG.get(self.__igrHangarPathKey) is not None:
                 spacePath = _CFG[self.__igrHangarPathKey]
-        if _EVENT_HANGAR_PATHS.has_key(isPremium):
+        if isPremium in _EVENT_HANGAR_PATHS:
             spacePath = _EVENT_HANGAR_PATHS[isPremium]
-        if _EVENT_HANGAR_VISIBILITY_MASK.has_key(isPremium):
+        if isPremium in _EVENT_HANGAR_VISIBILITY_MASK:
             visibilityMask = _EVENT_HANGAR_VISIBILITY_MASK[isPremium]
         safeSpacePath = _DEFAULT_CFG[type]['path']
         if ResMgr.openSection(spacePath) is None:
@@ -259,7 +262,7 @@ class ClientHangarSpace():
                 return
 
         spacePathLC = spacePath.lower()
-        if _HANGAR_CFGS.has_key(spacePathLC):
+        if spacePathLC in _HANGAR_CFGS:
             loadConfig(_CFG, _HANGAR_CFGS[spacePathLC], _CFG)
         self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
         self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
@@ -594,11 +597,15 @@ class ClientHangarSpace():
             return
 
 
-class _VehicleAppearance():
+class _VehicleAppearance(ComponentSystem):
     __ROOT_NODE_NAME = 'V'
+    itemsCache = dependency.descriptor(IItemsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
+    wheelsAnimator = ComponentDescriptor()
+    trackNodesAnimator = ComponentDescriptor()
 
     def __init__(self, spaceId, vEntityId, hangarSpace):
+        ComponentSystem.__init__(self)
         self.__isLoaded = False
         self.__curBuildInd = 0
         self.__vDesc = None
@@ -616,10 +623,11 @@ class _VehicleAppearance():
         self.__removeHangarShadowMap()
         self.__showMarksOnGun = self.settingsCore.getSetting('showMarksOnGun')
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-        g_itemsCache.onSyncCompleted += self.__onItemsCacheSyncCompleted
+        self.itemsCache.onSyncCompleted += self.__onItemsCacheSyncCompleted
         return
 
     def recreate(self, vDesc, vState, onVehicleLoadedCallback=None):
+        ComponentSystem.deactivate(self)
         self.__onLoadedCallback = onVehicleLoadedCallback
         self.__isLoaded = False
         self.__startBuild(vDesc, vState)
@@ -635,6 +643,8 @@ class _VehicleAppearance():
         return
 
     def destroy(self):
+        ComponentSystem.deactivate(self)
+        ComponentSystem.destroy(self)
         self.__onLoadedCallback = None
         self.__vDesc = None
         self.__vState = None
@@ -648,7 +658,7 @@ class _VehicleAppearance():
             BigWorld.cancelCallback(self.__smRemoveCb)
             self.__smRemoveCb = None
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
-        g_itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
+        self.itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
         return
 
     def isLoaded(self):
@@ -680,7 +690,6 @@ class _VehicleAppearance():
         splineDesc = vDesc.chassis['splineDesc']
         if splineDesc is not None:
             resources.extend(splineDesc.values())
-        from vehicle_systems import model_assembler
         resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, self.__vState, self.__spaceId))
         BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onResourcesLoaded, self.__curBuildInd))
         return
@@ -699,6 +708,7 @@ class _VehicleAppearance():
 
         if succesLoaded:
             self.__setupModel(buildInd)
+        super(_VehicleAppearance, self).activate()
 
     def __onSettingsChanged(self, diff):
         if 'showMarksOnGun' in diff:
@@ -720,15 +730,17 @@ class _VehicleAppearance():
         self.__model = resources[self.__vDesc.name]
         self.__setupEmblems(self.__vDesc)
         if not self.__isVehicleDestroyed:
-            self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(False, _CFG['v_scale']), None, None, None)
-            import VehicleAppearance
-            VehicleAppearance.setupTracksFashion(self.__fashions.chassis, self.__vDesc, self.__isVehicleDestroyed)
+            self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(False), None, None, None)
+            model_assembler.setupTracksFashion(self.__fashions.chassis, self.__vDesc, self.__isVehicleDestroyed)
             self.__model.setupFashions(self.__fashions)
             chassisFashion = self.__fashions.chassis
-            chassisFashion.initialUpdateTracks(1.0, 10.0)
-            VehicleAppearance.setupSplineTracks(chassisFashion, self.__vDesc, self.__model, self.__resources)
+            model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__model, self.__resources)
+            self.wheelsAnimator = model_assembler.createWheelsAnimator(self.__model, self.__vDesc, None)
+            self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self.__model, self.__vDesc, self.wheelsAnimator)
         else:
             self.__fashions = VehiclePartsTuple(None, None, None, None)
+            self.wheelsAnimator = None
+            self.trackNodesAnimator = None
         self.updateCamouflage()
         yaw = self.__vDesc.gun.get('staticTurretYaw', 0.0)
         pitch = self.__vDesc.gun.get('staticPitch', 0.0)
@@ -783,7 +795,7 @@ class _VehicleAppearance():
         return
 
     def __getThisVehicleDossierInsigniaRank(self):
-        vehicleDossier = g_itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
+        vehicleDossier = self.itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
         return vehicleDossier.getRandomStats().getAchievement(MARK_ON_GUN_RECORD).getValue()
 
     def __setupEmblems(self, vDesc):
@@ -965,11 +977,11 @@ class _ClientHangarSpacePathOverride():
 
     def __init__(self):
         g_playerEvents.onEventNotificationsChanged += self.__onEventNotificationsChanged
-        connectionManager.onDisconnected += self.__onDisconnected
+        g_playerEvents.onDisconnected += self.__onDisconnected
 
     def destroy(self):
         g_playerEvents.onEventNotificationsChanged -= self.__onEventNotificationsChanged
-        connectionManager.onDisconnected -= self.__onDisconnected
+        g_playerEvents.onDisconnected -= self.__onDisconnected
 
     def setPremium(self, isPremium):
         from gui.shared.utils.HangarSpace import g_hangarSpace

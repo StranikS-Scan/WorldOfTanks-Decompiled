@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/battle_session/legacy/entity.py
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui import SystemMessages
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
 from gui.prb_control import prb_getters
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -17,7 +16,9 @@ from gui.prb_control.settings import PREBATTLE_SETTING_NAME, FUNCTIONAL_FLAG
 from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER, PREBATTLE_ACTION_NAME
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelCarouselEvent
+from helpers import dependency
 from helpers import i18n
+from skeletons.gui.lobby_context import ILobbyContext
 
 class BattleSessionListEntryPoint(LegacyEntryPoint):
     """
@@ -46,6 +47,7 @@ class BattleSessionEntryPoint(LegacyEntryPoint):
     """
     Battle sessions room entry point
     """
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(BattleSessionEntryPoint, self).__init__(FUNCTIONAL_FLAG.BATTLE_SESSION)
@@ -61,8 +63,8 @@ class BattleSessionEntryPoint(LegacyEntryPoint):
                 callback(False)
             return
         peripheryID = AutoInvitesNotifier.getInvite(prbID).peripheryID
-        if g_lobbyContext.isAnotherPeriphery(peripheryID):
-            hostName = g_lobbyContext.getPeripheryName(peripheryID)
+        if self.lobbyContext.isAnotherPeriphery(peripheryID):
+            hostName = self.lobbyContext.getPeripheryName(peripheryID)
             if hostName:
                 message = i18n.makeString(I18N_SYSTEM_MESSAGES.ARENA_START_ERRORS_JOIN_WRONG_PERIPHERY_KNOWN, hostName)
             else:
@@ -125,7 +127,7 @@ class BattleSessionEntity(LegacyEntity):
         result = dict(((r, []) for r in prbRosters))
         for roster in prbRosters:
             if roster in rosters:
-                result[roster] = map(lambda accInfo: prb_items.PlayerPrbInfo(accInfo[0], entity=self, roster=roster, **accInfo[1]), rosters[roster].iteritems())
+                result[roster] = map(lambda accInfo, rosterBits=roster: prb_items.PlayerPrbInfo(accInfo[0], entity=self, roster=rosterBits, **accInfo[1]), rosters[roster].iteritems())
 
         return result
 

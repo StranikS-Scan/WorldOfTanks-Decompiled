@@ -75,6 +75,33 @@ def isShootPositionInsideOtherVehicle(vehicle, turretPosition, shootPosition):
     return False
 
 
+def getPenetratedVehicles(vehicle, turretPosition, shootPosition):
+    if IS_CLIENT:
+
+        def getNearVehicles(vehicle, shootPosition):
+            nearVehicles = []
+            arenaVehicles = BigWorld.player().arena.vehicles
+            for id in arenaVehicles.iterkeys():
+                v = BigWorld.entities.get(id)
+                if v and not v.isPlayerVehicle:
+                    nearVehicles.append(v)
+
+            return nearVehicles
+
+    elif IS_CELLAPP:
+
+        def getNearVehicles(vehicle, shootPosition):
+            return vehicle.entitiesInRange(MAX_VEHICLE_RADIUS, 'Vehicle', shootPosition)
+
+    penetratedVehicles = []
+    nearVehicles = getNearVehicles(vehicle, shootPosition)
+    for v in nearVehicles:
+        if shootPosition.distTo(v.position) < v.typeDescriptor.boundingRadius and isSegmentCollideWithVehicle(v, turretPosition, shootPosition):
+            penetratedVehicles.append(v.id)
+
+    return penetratedVehicles
+
+
 def isSegmentCollideWithVehicle(vehicle, startPoint, endPoint):
     if IS_CLIENT:
 

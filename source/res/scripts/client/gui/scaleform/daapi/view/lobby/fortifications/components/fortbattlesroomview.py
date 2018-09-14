@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesRoomView.py
 import BigWorld
-from gui.LobbyContext import g_lobbyContext
-from gui.shared.fortifications.settings import CLIENT_FORT_STATE
+from helpers import dependency
 from helpers import i18n
 from UnitBase import UNIT_OP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import event_dispatcher
 from gui.shared.formatters import icons, text_styles
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import MIN_MAX_VEH_LVLS_MAPPING
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
@@ -22,11 +22,12 @@ from gui.prb_control import settings
 from gui.prb_control.items.sortie_items import getDivisionNameByType, getDivisionLevel
 from gui.prb_control.items.sortie_items import getDivisionLevelByUnit
 from gui.prb_control.settings import REQUEST_TYPE
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from skeletons.gui.lobby_context import ILobbyContext
 
 class FortBattlesRoomView(FortRoomMeta, FortViewHelper):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(FortBattlesRoomView, self).__init__()
@@ -68,7 +69,7 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper):
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange())
+                vehicleVO = makeVehicleVO(self.itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange())
                 slotCost = vInfo.vehLevel
             else:
                 slotState = entity.getSlotState(slotIdx)
@@ -139,13 +140,13 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper):
             self.__updateVehiclesLabelSingle(fort_formatters.getTextLevel(maxLvl))
         else:
             self._updateVehiclesLabel(fort_formatters.getTextLevel(minLevel), fort_formatters.getTextLevel(maxLvl))
-        g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onSettingsChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onSettingsChanged
         self.addListener(events.CoolDownEvent.PREBATTLE, self._handleChangedDivision, scope=EVENT_BUS_SCOPE.LOBBY)
         self._setChangeDivisionCooldown()
 
     def _dispose(self):
         super(FortBattlesRoomView, self)._dispose()
-        g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onSettingsChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onSettingsChanged
         self.removeListener(events.CoolDownEvent.PREBATTLE, self._handleChangedDivision, scope=EVENT_BUS_SCOPE.LOBBY)
         self._cancelChangeDivisionCooldown()
 

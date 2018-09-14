@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/SKILLS_CONSTANTS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class SKILLS_CONSTANTS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     TYPE_SKILL = 'skill'
     TYPE_NEW_SKILL = 'new_skill'
     TYPE_SKILLS = 'skills'

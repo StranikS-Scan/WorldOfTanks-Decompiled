@@ -62,6 +62,13 @@ def stripShortDescrTags(descr):
     return re.sub('<shortDesc>|</shortDesc>', '', descr)
 
 
+def stripColorTagDescrTags(descr):
+    """
+    Strips short description tags from passed string
+    """
+    return re.sub('{colorTagOpen}|{colorTagClose}', '', descr)
+
+
 def stripShortDescr(descr):
     """
     Removes short description from passed string
@@ -100,11 +107,11 @@ def checkAmmoLevel(vehicles, callback):
     @return: True if ammo level is ok or user confirm, False otherwise
     """
     showAmmoWarning = False
+    ammoWarningMessage = 'lowAmmo'
     for vehicle in vehicles:
         if vehicle.isReadyToFight:
             if not vehicle.isAutoLoadFull() or not vehicle.isAutoEquipFull():
-                from gui import SystemMessages
-                from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor
+                from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
                 shellsLayout = []
                 eqsLayout = []
                 for shell in vehicle.shells:
@@ -116,18 +123,14 @@ def checkAmmoLevel(vehicles, callback):
                     eqsLayout.extend((0, 0))
 
                 LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
-                result = yield VehicleLayoutProcessor(vehicle, shellsLayout, eqsLayout).request()
-                if result and result.auxData:
-                    for m in result.auxData:
-                        SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
-
-                if result and len(result.userMsg):
-                    SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+                ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, vehicle, shellsLayout, eqsLayout)
             showAmmoWarning = showAmmoWarning or not vehicle.isAmmoFull
+            if vehicle.isAutoLoadFull() and showAmmoWarning:
+                ammoWarningMessage = 'lowAmmoAutoLoad'
 
     if showAmmoWarning:
         from gui import DialogsInterface
-        success = yield DialogsInterface.showI18nConfirmDialog('lowAmmo')
+        success = yield DialogsInterface.showI18nConfirmDialog(ammoWarningMessage)
         callback(success)
     else:
         yield lambda callback: callback(None)

@@ -4,14 +4,15 @@ from account_helpers.AccountSettings import AccountSettings
 from gui.customization.shared import CUSTOMIZATION_TYPE, TYPE_NAME
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 
 class Inventory(object):
+    _itemsCache = dependency.descriptor(IItemsCache)
     _questsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, events, dependencies):
         self._events = events
         self._currentVehicle = dependencies.g_currentVehicle
-        self._itemsCache = dependencies.g_itemsCache
         self._vehiclesCache = dependencies.g_vehiclesCache
 
     def init(self):

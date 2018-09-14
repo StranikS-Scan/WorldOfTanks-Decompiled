@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class BattleTutorialMeta(BaseDAAPIComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIComponent
-    """
 
     def as_populateProgressBarS(self, currentChapter, totalChapters):
         return self.flashObject.as_populateProgressBar(currentChapter, totalChapters) if self._isDAAPIInited() else None

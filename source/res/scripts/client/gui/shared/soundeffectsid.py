@@ -3,12 +3,16 @@
 from shared_utils import CONST_CONTAINER
 
 class SoundEffectsId(CONST_CONTAINER):
+    SPEND_DEFAULT_SOUND = 'wwspend_default_currency'
     SPEND_CREDITS_GOLD = 'wwspend_credits_and_gold'
     SPEND_CREDITS = 'wwspend_credits'
     SPEND_GOLD = 'wwspend_gold'
+    SPEND_CRYSTAL = 'wwspend_crystal'
+    EARN_DEFAULT_SOUND = 'wwearn_default_currency'
     EARN_CREDITS_GOLD = 'wwearn_credits_and_gold'
     EARN_CREDITS = 'wwearn_credits'
     EARN_GOLD = 'wwearn_gold'
+    EARN_CRYSTAL = 'wwearn_crystal'
     TRANSPORT_ENTER = 'wwtransport_enter'
     TRANSPORT_EXIT = 'wwtransport_exit'
     TRANSPORT_FIRST_STEP = 'wwtransport_first_step'

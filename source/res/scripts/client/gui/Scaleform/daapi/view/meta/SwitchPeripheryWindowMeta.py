@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.meta.SimpleWindowMeta import SimpleWindowMeta
 
 class SwitchPeripheryWindowMeta(SimpleWindowMeta):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends SimpleWindowMeta
-    """
 
     def requestForChange(self, id):
         self._printOverrideError('requestForChange')

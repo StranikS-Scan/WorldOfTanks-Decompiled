@@ -10,7 +10,6 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.customization import g_customizationController as controller
 from gui.customization.shared import DURATION, CUSTOMIZATION_TYPE, PURCHASE_TYPE
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles, icons
 from gui.shared.items_parameters import params_helper, formatters as params_formatters
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
@@ -20,6 +19,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from nations import NONE_INDEX as ANY_NATION
 from skeletons.gui.game_control import IIGRController
+from skeletons.gui.shared import IItemsCache
 
 class STATUS(object):
     NONE = 0
@@ -62,6 +62,7 @@ class SimplifiedStatsBlockConstructor(object):
 class ElementTooltip(BlocksTooltipData):
     """Tooltip data provider for the customization elements in customization windows.
     """
+    itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, context):
@@ -143,7 +144,7 @@ class ElementTooltip(BlocksTooltipData):
          'top': 3}, txtGap=-4, txtOffset=70, padding={'top': -1,
          'left': 7}))
         if data['showTTC'] and vehicle is not None and self._cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
-            stockVehicle = g_itemsCache.items.getStockVehicle(vehicle.intCD)
+            stockVehicle = self.itemsCache.items.getStockVehicle(vehicle.intCD)
             comparator = params_helper.camouflageComparator(vehicle, self._item)
             stockParams = params_helper.getParameters(stockVehicle)
             simplifiedBlocks = SimplifiedStatsBlockConstructor(stockParams, comparator).construct()
@@ -157,8 +158,8 @@ class ElementTooltip(BlocksTooltipData):
         notAllowedVehicles = data['notAllowedVehicles']
         allowedNations = data['allowedNations']
         notAllowedNations = data['notAllowedNations']
-        allowedVehicles = map(lambda vId: g_itemsCache.items.getItemByCD(vId), allowedVehicles)
-        notAllowedVehicles = map(lambda vId: g_itemsCache.items.getItemByCD(vId), notAllowedVehicles)
+        allowedVehicles = map(lambda vId: self.itemsCache.items.getItemByCD(vId), allowedVehicles)
+        notAllowedVehicles = map(lambda vId: self.itemsCache.items.getItemByCD(vId), notAllowedVehicles)
         allowedVehicles = filter(lambda vehicle: not vehicle.isSecret, allowedVehicles)
         notAllowedVehicles = filter(lambda vehicle: not vehicle.isSecret, notAllowedVehicles)
         if data['boundToCurrentVehicle']:

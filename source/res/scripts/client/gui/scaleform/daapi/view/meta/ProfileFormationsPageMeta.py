@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
 
 class ProfileFormationsPageMeta(ProfileSection):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ProfileSection
-    """
 
     def showFort(self):
         self._printOverrideError('showFort')

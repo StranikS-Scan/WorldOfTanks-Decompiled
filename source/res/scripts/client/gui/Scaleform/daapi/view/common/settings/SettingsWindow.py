@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsWindow.py
 import functools
+import BigWorld
 import VOIP
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
-from debug_utils import *
+from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getNewSettings, invalidateSettings
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager

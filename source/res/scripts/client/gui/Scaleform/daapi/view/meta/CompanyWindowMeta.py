@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattleWindow import PrebattleWindow
 
 class CompanyWindowMeta(PrebattleWindow):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends PrebattleWindow
-    """
 
     def requestToAssign(self, pID):
         self._printOverrideError('requestToAssign')
@@ -44,6 +38,9 @@ class CompanyWindowMeta(PrebattleWindow):
         self._printOverrideError('canChangeDivision')
 
     def as_setDivisionsListS(self, data, selected):
+        """
+        :param data: Represented by DataProvider (AS)
+        """
         return self.flashObject.as_setDivisionsList(data, selected) if self._isDAAPIInited() else None
 
     def as_setOpenedS(self, isOpened):
@@ -62,9 +59,15 @@ class CompanyWindowMeta(PrebattleWindow):
         return self.flashObject.as_setMaxCountLimitLabel(label) if self._isDAAPIInited() else None
 
     def as_setClassesLimitsS(self, data):
+        """
+        :param data: Represented by Array (AS)
+        """
         return self.flashObject.as_setClassesLimits(data) if self._isDAAPIInited() else None
 
     def as_setInvalidVehiclesS(self, data):
+        """
+        :param data: Represented by Array (AS)
+        """
         return self.flashObject.as_setInvalidVehicles(data) if self._isDAAPIInited() else None
 
     def as_setChangeSettingCoolDownS(self, coolDown):

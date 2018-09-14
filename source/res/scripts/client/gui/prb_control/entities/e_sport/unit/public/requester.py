@@ -7,13 +7,15 @@ from gui.prb_control.entities.base.cooldown import PrbCooldownManager
 from gui.prb_control.entities.base.requester import IPrbListRequester
 from gui.prb_control.items.unit_seqs import UnitsListIterator, UnitsUpdateIterator
 from gui.prb_control.settings import REQUEST_TYPE
-from gui.shared import g_itemsCache
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 
 class UnitsListRequester(IPrbListRequester):
     """
     Class for units list requester. It has basic pagination functionality,
     and could store items found in local cache.
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         self.__selectedID = None
@@ -170,7 +172,7 @@ class UnitsListRequester(IPrbListRequester):
         """
         result = False
         if 'unitTypeFlags' in kwargs:
-            browser.recenter(g_itemsCache.items.stats.globalRating, unitTypeFlags=kwargs['unitTypeFlags'])
+            browser.recenter(self.itemsCache.items.stats.globalRating, unitTypeFlags=kwargs['unitTypeFlags'])
             result = True
         else:
             LOG_ERROR('Types of units are not defined', kwargs)

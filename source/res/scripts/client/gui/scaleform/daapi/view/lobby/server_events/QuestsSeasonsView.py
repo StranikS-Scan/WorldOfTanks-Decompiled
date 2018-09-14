@@ -3,7 +3,7 @@
 import weakref
 import operator
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
-from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.shared.formatters import icons, text_styles
 from helpers import dependency
@@ -21,15 +21,15 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from skeletons.gui.server_events import IEventsCache
 
 def _getQuestsCache():
-    return events_helpers.getPotapovQuestsCache()
+    return old_events_helpers.getPotapovQuestsCache()
 
 
 def _getQuestsProgress():
-    return events_helpers.getPotapovQuestsProgress()
+    return old_events_helpers.getPotapovQuestsProgress()
 
 
 def _sortWithQuestType(items, key):
-    return events_helpers.sortWithQuestType(items, key)
+    return old_events_helpers.sortWithQuestType(items, key)
 
 
 def _packTabDataItem(label, tabID):
@@ -99,12 +99,12 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta):
         self.__proxy = weakref.proxy(eventsWindow)
 
     def _onSelectedQuestsChanged(self, _, pqType):
-        targetTab = events_helpers.getTabAliasByQuestBranchName(pqType)
+        targetTab = old_events_helpers.getTabAliasByQuestBranchName(pqType)
         if targetTab == self.__navInfo.selectedPQType:
             self.__populateSlotsData()
 
     def _onProgressUpdated(self, pqType):
-        targetTab = events_helpers.getTabAliasByQuestBranchName(pqType)
+        targetTab = old_events_helpers.getTabAliasByQuestBranchName(pqType)
         if targetTab == self.__navInfo.selectedPQType:
             self.__populateSeasonsData()
             self.__populateSlotsData()

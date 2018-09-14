@@ -25,18 +25,18 @@ from gui.prb_control.entities.base.unit.ctx import JoinUnitModeCtx, SetVehicleUn
 from gui.prb_control.entities.base.unit.listener import IUnitListener, IUnitIntroListener
 from gui.prb_control.entities.base.unit.permissions import IUnitPermissions, UnitIntroPermissions, UnitPermissions
 from gui.prb_control.entities.base.unit.requester import UnitRequestProcessor
-from gui.prb_control.entities.base.unit.scheduler import UnitScheduler
 from gui.prb_control.entities.base.unit.vehicles_watcher import UnitVehiclesWatcher
 from gui.prb_control.items import unit_items, ValidationResult
 from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
-from gui.shared import g_itemsCache
 from gui.shared.utils.listeners_collection import ListenersCollection
 from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency
 from helpers import time_utils
 from items import vehicles as core_vehicles
 from messenger.ext import passCensor
 from shared_utils import findFirst
+from skeletons.gui.shared import IItemsCache
 
 class BaseUnitEntity(BasePrbEntity):
     """
@@ -361,6 +361,7 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
     """
     Base class for unit entity
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, entityFlags, modeFlags, requestHandlers, listenerClass, prbType):
         """
@@ -676,7 +677,6 @@ class UnitEntity(_UnitEntity):
         self._vehiclesWatcher = None
         self._cooldown = self._createCooldownManager()
         self._deferredReset = False
-        self._scheduler = self._createScheduler()
         self._showLeadershipNotification = False
         return
 
@@ -703,11 +703,9 @@ class UnitEntity(_UnitEntity):
                 listener.onUnitFlagsChanged(flags, timeLeftInIdle)
 
         g_eventDispatcher.loadHangar()
-        self._scheduler.init()
         return initResult | FUNCTIONAL_FLAG.LOAD_WINDOW
 
     def fini(self, ctx=None, woEvents=False):
-        self._scheduler.fini()
         self._requestHandlers.clear()
         if self._requestsProcessor:
             self._requestsProcessor.fini()
@@ -724,7 +722,6 @@ class UnitEntity(_UnitEntity):
             g_eventDispatcher.removeUnitFromCarousel(self._prbType)
         self._removeClientUnitListeners()
         self._deferredReset = False
-        g_eventDispatcher.loadHangar()
         return super(UnitEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def restore(self):
@@ -1032,7 +1029,7 @@ class UnitEntity(_UnitEntity):
             vehsList = ctx.getVehsList()
             if vehsList:
                 for vehInvID in vehsList:
-                    if vehInvID != INV_ID_CLEAR_VEHICLE and g_itemsCache.items.getVehicle(vehInvID) is None:
+                    if vehInvID != INV_ID_CLEAR_VEHICLE and self.itemsCache.items.getVehicle(vehInvID) is None:
                         LOG_ERROR('Vehicle is not in inventory', ctx)
                         if callback:
                             callback(False)
@@ -1483,7 +1480,7 @@ class UnitEntity(_UnitEntity):
         vInfo = unit_items.VehicleInfo(vehInvID, vehTypeCD, vehLevel)
         LOG_DEBUG('onUnitVehicleChanged', dbID, vInfo)
         if dbID == account_helpers.getAccountDatabaseID() and not vInfo.isEmpty():
-            vehicle = g_itemsCache.items.getItemByCD(vInfo.vehTypeCD)
+            vehicle = self.itemsCache.items.getItemByCD(vInfo.vehTypeCD)
             if vehicle is not None:
                 g_currentVehicle.selectVehicle(vehicle.invID)
         self._invokeListeners('onUnitVehiclesChanged', dbID, (vInfo,))
@@ -1506,7 +1503,7 @@ class UnitEntity(_UnitEntity):
                 vehLevel = 0
             vInfo = unit_items.VehicleInfo(vehInvID, vehTypeCD, vehLevel)
             if dbID == account_helpers.getAccountDatabaseID() and not vInfo.isEmpty():
-                vehicle = g_itemsCache.items.getItemByCD(vInfo.vehTypeCD)
+                vehicle = self.itemsCache.items.getItemByCD(vInfo.vehTypeCD)
                 if vehicle is not None:
                     g_currentVehicle.selectVehicle(vehicle.invID)
             vInfos.append(vInfo)
@@ -1721,12 +1718,6 @@ class UnitEntity(_UnitEntity):
         """
         self._actionsValidator = self._createActionsValidator()
 
-    def _createScheduler(self):
-        """
-        Creates unit's scheduler object.
-        """
-        return UnitScheduler(self)
-
     def _createCooldownManager(self):
         """
         Creates unit's cooldown manager object.
@@ -1853,7 +1844,7 @@ class UnitEntity(_UnitEntity):
         """
         vehTypeCD = ctx.getVehTypeCD()
         vehInvID = ctx.getVehInvID()
-        invVehs = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
+        invVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
         if vehInvID:
             invMap = invVehs.inventoryMap()
             if vehInvID not in invMap.keys():

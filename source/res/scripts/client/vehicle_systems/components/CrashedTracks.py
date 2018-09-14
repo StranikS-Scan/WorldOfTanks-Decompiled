@@ -6,7 +6,7 @@ import Math
 import BigWorld
 import TriggersManager
 from TriggersManager import TRIGGER_TYPE
-from VehicleAppearance import setupTracksFashion
+from vehicle_systems import model_assembler
 from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames
 
 def testAllocate(spaceID):
@@ -73,27 +73,18 @@ class CrashedTrackController:
         compoundAssembler.spaceID = entity.spaceID
         return compoundAssembler
 
-    def addTrack(self, isLeft):
+    def addTrack(self, isLeft, isFlying=False):
         if self.__entity is None:
             return
         else:
             if self.__flags == 0 and self.__triggerEvents:
                 TriggersManager.g_manager.activateTrigger(TriggersManager.TRIGGER_TYPE.PLAYER_VEHICLE_TRACKS_DAMAGED)
-            if self.__entity.filter.placingOnGround:
-                flying = self.__entity.filter.numLeftTrackContacts == 0
-                self.__flags |= 1 if isLeft else 2
-            elif isLeft:
-                flying = self.__baseTrackFashion.isFlyingLeft
-                self.__flags |= 1
-            else:
-                flying = self.__baseTrackFashion.isFlyingRight
-                self.__flags |= 2
             if isLeft:
                 self.__flags |= 1
             else:
                 self.__flags |= 2
             trackAssembler = self.__setupTrackAssembler(self.__entity)
-            if self.__model is None and not flying:
+            if self.__model is None and not isFlying:
                 if not self.__loading:
                     BigWorld.loadResourceListBG((trackAssembler,), self.__onModelLoaded)
                     self.__loading = True
@@ -164,11 +155,10 @@ class CrashedTrackController:
             model = resources[TankPartNames.CHASSIS]
             self.__model = model
             self.__model.matrix = self.__entity.filter.groundPlacingMatrix
-            self.__fashion = BigWorld.WGVehicleFashion(True, 1.0)
-            setupTracksFashion(self.__fashion, self.__vehicleDesc, True)
+            self.__fashion = BigWorld.WGVehicleFashion(True)
+            model_assembler.setupTracksFashion(self.__fashion, self.__vehicleDesc, True)
             self.__model.setupFashions([self.__fashion])
             rotationMProv = mathUtils.MatrixProviders.product(self.__entity.model.node('hull'), Math.MatrixInverse(self.__model.node('Tank')))
-            self.__fashion.setupSwinging(rotationMProv, 'V')
             self.__model.node('V', rotationMProv)
             self.__fashion.setCrashEffectCoeff(0.0)
             self.__setupTracksHiding()

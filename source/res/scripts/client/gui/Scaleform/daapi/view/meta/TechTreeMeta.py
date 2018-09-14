@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.techtree.ResearchView import ResearchView
 
 class TechTreeMeta(ResearchView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ResearchView
-    """
 
     def requestNationTreeData(self):
         self._printOverrideError('requestNationTreeData')
@@ -26,6 +20,9 @@ class TechTreeMeta(ResearchView):
         self._printOverrideError('request4VehCompare')
 
     def as_setAvailableNationsS(self, nations):
+        """
+        :param nations: Represented by DataProvider (AS)
+        """
         return self.flashObject.as_setAvailableNations(nations) if self._isDAAPIInited() else None
 
     def as_setSelectedNationS(self, nationName):
@@ -35,6 +32,9 @@ class TechTreeMeta(ResearchView):
         return self.flashObject.as_refreshNationTreeData(nationName) if self._isDAAPIInited() else None
 
     def as_setUnlockPropsS(self, data):
+        """
+        :param data: Represented by Array (AS)
+        """
         return self.flashObject.as_setUnlockProps(data) if self._isDAAPIInited() else None
 
     def as_showMiniClientInfoS(self, description, hyperlink):

@@ -5,15 +5,17 @@ from constants import MAX_VEHICLE_LEVEL
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.settings import SANDBOX_MAX_VEHICLE_LEVEL
-from gui.shared import g_itemsCache
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 
 class SandboxVehiclesWatcher(object):
     """
     Sandbox vehicles watcher class: listens for proper events
     and updates the states of vehicles selected
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def start(self):
         """
@@ -33,8 +35,8 @@ class SandboxVehiclesWatcher(object):
         """
         Gets all unsupported vehicles
         """
-        vehs = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(SANDBOX_MAX_VEHICLE_LEVEL + 1, MAX_VEHICLE_LEVEL + 1))).itervalues()
-        eventVehs = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
+        vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(SANDBOX_MAX_VEHICLE_LEVEL + 1, MAX_VEHICLE_LEVEL + 1))).itervalues()
+        eventVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE).itervalues()
         return chain(vehs, eventVehs)
 
     def __setUnsuitableState(self):

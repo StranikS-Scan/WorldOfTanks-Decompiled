@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBattleRoomOrdersPanelComponent.py
 import fortified_regions
-from gui.LobbyContext import g_lobbyContext
+from helpers import dependency
 from helpers import i18n
 from collections import namedtuple
 from gui.prb_control.entities.base.unit.listener import IUnitListener
@@ -15,6 +15,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.fortifications.FortBuilding import FortBuilding
+from skeletons.gui.lobby_context import ILobbyContext
 _SlotDataVO = namedtuple('_SlotDataVO', ['id',
  'slotID',
  'buildingStr',
@@ -34,6 +35,7 @@ def _makeEmptySlotVO(slotIdx, isInactive):
 
 
 class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, IUnitListener):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         super(FortBattleRoomOrdersPanelComponent, self).__init__()
@@ -86,7 +88,7 @@ class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, IUnitLi
         else:
             extra = self.prbEntity.getExtra()
             consumablesVisible = self.fortCtrl.getPermissions().canActivateConsumable() and self.prbEntity.getPermissions().canChangeConsumables()
-            consumablesDisabled = not g_lobbyContext.getServerSettings().isFortsEnabled()
+            consumablesDisabled = not self.lobbyContext.getServerSettings().isFortsEnabled()
             result = []
             if extra is not None:
                 activeConsumes = extra.getConsumables()

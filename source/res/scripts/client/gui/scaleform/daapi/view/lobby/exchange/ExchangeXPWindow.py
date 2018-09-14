@@ -9,36 +9,38 @@ from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared import g_itemsCache
 from gui.shared.formatters import icons
 from gui.shared.formatters.text_styles import builder
 from gui.shared.gui_items.processors.common import FreeXPExchanger
+from gui.shared.money import Currency
 from gui.shared.utils.decorators import process
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IWalletController
+from skeletons.gui.shared import IItemsCache
 
 class ExchangeXPWindow(ExchangeXpWindowMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
 
     def _populate(self):
         super(ExchangeXPWindow, self)._populate()
-        self.__xpForFree = g_itemsCache.items.shop.freeXPConversionLimit
-        self.as_setPrimaryCurrencyS(g_itemsCache.items.stats.actualGold)
+        self.__xpForFree = self.itemsCache.items.shop.freeXPConversionLimit
+        self.as_setPrimaryCurrencyS(self.itemsCache.items.stats.actualGold)
         self.__setRates()
-        self.as_totalExperienceChangedS(g_itemsCache.items.stats.actualFreeXP)
+        self.as_totalExperienceChangedS(self.itemsCache.items.stats.actualFreeXP)
         self.as_setWalletStatusS(self.wallet.status)
         self.__prepareAndPassVehiclesData()
 
     def _subscribe(self):
-        g_clientUpdateManager.addCallbacks({'stats.gold': self._setGoldCallBack,
-         'shop.freeXPConversion': self.__setXPConversationCallBack,
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self._setGoldCallBack)
+        g_clientUpdateManager.addCallbacks({'shop.freeXPConversion': self.__setXPConversationCallBack,
          'shop.goodies': self.__discountChangedCallback,
          'goodies.4': self.__discountChangedCallback,
          'inventory.1': self.__vehiclesDataChangedCallBack,
          'stats.vehTypeXP': self.__vehiclesDataChangedCallBack,
          'stats.freeXP': self.__setFreeXPCallBack})
         self.wallet.onWalletStatusChanged += self.__setWalletCallback
-        g_itemsCache.onSyncCompleted += self.__setXPConversationCallBack
+        self.itemsCache.onSyncCompleted += self.__setXPConversationCallBack
 
     def __vehiclesDataChangedCallBack(self, _):
         self.__prepareAndPassVehiclesData()
@@ -50,15 +52,15 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         self.__setRates()
 
     def __setWalletCallback(self, status):
-        self.as_setPrimaryCurrencyS(g_itemsCache.items.stats.actualGold)
-        self.as_totalExperienceChangedS(g_itemsCache.items.stats.actualFreeXP)
+        self.as_setPrimaryCurrencyS(self.itemsCache.items.stats.actualGold)
+        self.as_totalExperienceChangedS(self.itemsCache.items.stats.actualFreeXP)
         self.as_setWalletStatusS(status)
 
     def __prepareAndPassVehiclesData(self):
         values = []
-        for vehicleCD in g_itemsCache.items.stats.eliteVehicles:
+        for vehicleCD in self.itemsCache.items.stats.eliteVehicles:
             try:
-                vehicle = g_itemsCache.items.getItemByCD(vehicleCD)
+                vehicle = self.itemsCache.items.getItemByCD(vehicleCD)
                 if not vehicle.xp:
                     continue
                 values.append({'id': vehicle.intCD,
@@ -108,8 +110,8 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
     def exchange(self, data):
         exchangeXP = data.exchangeXp
         vehTypeCompDescrs = list(data.selectedVehicles)
-        eliteVcls = g_itemsCache.items.stats.eliteVehicles
-        xps = g_itemsCache.items.stats.vehiclesXPs
+        eliteVcls = self.itemsCache.items.stats.eliteVehicles
+        xps = self.itemsCache.items.stats.vehiclesXPs
         commonXp = 0
         for vehicleCD in vehTypeCompDescrs:
             if vehicleCD in eliteVcls:
@@ -126,26 +128,26 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         self.destroy()
 
     def _dispose(self):
-        g_itemsCache.onSyncCompleted -= self.__setXPConversationCallBack
+        self.itemsCache.onSyncCompleted -= self.__setXPConversationCallBack
         self.wallet.onWalletStatusChanged -= self.__setWalletCallback
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(ExchangeXPWindow, self)._dispose()
 
     def __discountChangedCallback(self, _):
         self.__setRates()
-        newLimit = g_itemsCache.items.shop.freeXPConversionLimit
+        newLimit = self.itemsCache.items.shop.freeXPConversionLimit
         if newLimit != self.__xpForFree:
             self.__xpForFree = newLimit
             self.__prepareAndPassVehiclesData()
 
     def __setRates(self):
-        rate = g_itemsCache.items.shop.freeXPConversionWithDiscount
-        defaultRate = g_itemsCache.items.shop.defaults.freeXPConversion
+        rate = self.itemsCache.items.shop.freeXPConversionWithDiscount
+        defaultRate = self.itemsCache.items.shop.defaults.freeXPConversion
         self.as_exchangeRateS({'value': defaultRate[0],
          'actionValue': rate[0],
-         'actionMode': g_itemsCache.items.shop.isXPConversionActionActive})
+         'actionMode': self.itemsCache.items.shop.isXPConversionActionActive})
 
     def __getActionStyle(self):
-        rate = g_itemsCache.items.shop.defaults.freeXPConversion
-        actionRate = g_itemsCache.items.shop.freeXPConversionWithDiscount
+        rate = self.itemsCache.items.shop.defaults.freeXPConversion
+        actionRate = self.itemsCache.items.shop.freeXPConversionWithDiscount
         return 'statsText' if rate != actionRate and actionRate > 0 else 'alertText'

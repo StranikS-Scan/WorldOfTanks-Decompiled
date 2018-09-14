@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/LobbyAutomation.py
 import BigWorld
-from ConnectionManager import connectionManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
@@ -9,6 +8,8 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader.loader import g_appLoader
 from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
 from AccountCommands import CMD_PRB_TEAM_READY
+from helpers import dependency
+from skeletons.connection_mgr import IConnectionManager
 
 def _getLobby():
     return g_appLoader.getApp(_SPACE.SF_LOBBY)
@@ -90,7 +91,8 @@ def _detectCurrentScreen():
             if dialog is not None:
                 dialog.cancel()
         view = lobby.containerManager.getView(ViewTypes.DEFAULT)
-        if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and connectionManager.isDisconnected() and not _isConnecting:
+        connectionMgr = dependency.instance(IConnectionManager)
+        if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and connectionMgr.isDisconnected() and not _isConnecting:
             _isConnecting = True
             _connect()
             BigWorld.callback(0.2, lambda : _detectCurrentScreen())
@@ -112,7 +114,8 @@ def _detectCurrentScreen():
 
 
 def _connect():
-    connectionManager.connect(_server, _login, _password, isNeedSavingPwd=True)
+    connectionMgr = dependency.instance(IConnectionManager)
+    connectionMgr.connect(_server, _login, _password, isNeedSavingPwd=True)
 
 
 def _leaveDevRoom():

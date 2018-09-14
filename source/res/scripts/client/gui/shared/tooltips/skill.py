@@ -3,7 +3,6 @@
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.items_parameters import params
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS

@@ -3,8 +3,10 @@
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserWindowMeta import BrowserWindowMeta
 from gui.Scaleform.locale.WAITING import WAITING
+from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE
 
 class BrowserWindow(BrowserWindowMeta):
+    __metaclass__ = event_bus_handlers.EventBusListener
 
     def __init__(self, ctx=None):
         super(BrowserWindow, self).__init__()
@@ -14,6 +16,7 @@ class BrowserWindow(BrowserWindowMeta):
         self.__showActionBtn = ctx.get('showActionBtn', True)
         self.__showWaiting = ctx.get('showWaiting', False)
         self.__showCloseBtn = ctx.get('showCloseBtn', False)
+        self.__isSolidBorder = ctx.get('isSolidBorder', False)
         self.__alias = ctx.get('alias', '')
         self.__handlers = ctx.get('handlers', None)
         return
@@ -28,7 +31,12 @@ class BrowserWindow(BrowserWindowMeta):
 
     def _populate(self):
         super(BrowserWindow, self)._populate()
-        self.as_configureS(self.__customTitle, self.__showActionBtn, self.__showCloseBtn)
+        self.as_configureS(self.__customTitle, self.__showActionBtn, self.__showCloseBtn, self.__isSolidBorder)
         self.as_setSizeS(*self.__size)
         if self.__showWaiting:
             self.as_showWaitingS(WAITING.LOADCONTENT, {})
+
+    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_BROWSER_WINDOW, EVENT_BUS_SCOPE.LOBBY)
+    def __handleBrowserClose(self, event):
+        if event.ctx.get('browserID') == self.__browserID:
+            self.destroy()

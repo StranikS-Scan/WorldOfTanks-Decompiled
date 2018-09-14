@@ -3,13 +3,15 @@
 import BigWorld
 from adisp import process
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
+from gui.Scaleform.locale.CLANS import CLANS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters
 from gui.clans.clan_helpers import isInClanEnterCooldown
 from gui.clans.items import formatField, isValueAvailable
 from gui.clans.contexts import AcceptApplicationCtx, DeclineApplicationCtx, CreateInviteCtx, AccountsInfoCtx
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
 from gui.Scaleform.daapi.view.meta.ClanRequestsViewMeta import ClanRequestsViewMeta
-from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesWindowAbstractTabView import *
+from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLAN_INVITE_STATES
 from gui.shared.events import CoolDownEvent
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers import CooldownHelper

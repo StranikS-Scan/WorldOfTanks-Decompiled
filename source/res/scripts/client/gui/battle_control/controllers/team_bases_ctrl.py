@@ -283,7 +283,8 @@ class BattleTeamsBasesController(ITeamsBasesController, IViewComponentsControlle
         return
 
     def __stopCaptureSounds(self):
-        for team in self.__sounds.keys():
+        teams = self.__sounds.keys()
+        for team in teams:
             self.__stopCaptureSound(team)
 
     def __updatePoints(self, clientID):

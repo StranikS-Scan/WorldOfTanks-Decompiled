@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class BoostersWindowMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def requestBoostersArray(self, tabIndex):
         self._printOverrideError('requestBoostersArray')
@@ -36,6 +30,6 @@ class BoostersWindowMeta(AbstractWindowView):
 
     def as_setListDataS(self, boosters, scrollToTop):
         """
-        :param boosters: Represented by DataProvider (AS)
+        :param boosters: Represented by DataProvider.<BoostersTableRendererVO> (AS)
         """
         return self.flashObject.as_setListData(boosters, scrollToTop) if self._isDAAPIInited() else None

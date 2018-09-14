@@ -3,8 +3,9 @@
 import BigWorld
 from adisp import async
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+from skeletons.gui.shared.utils.requesters import IVehicleRotationRequester
 
-class VehicleRotationRequester(AbstractSyncDataRequester):
+class VehicleRotationRequester(AbstractSyncDataRequester, IVehicleRotationRequester):
 
     def getBattlesCount(self, groupNum):
         battlesCount = self._groupLocks['groupBattles']

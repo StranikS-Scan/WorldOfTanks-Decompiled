@@ -29,7 +29,7 @@ class MakeTankUnavailableInCarousel(aop.Aspect):
         original_return_value = cd.returned
         original_args = cd.args
         if not self.__vehicle_is_available(original_args[0]):
-            state = _ms('#menu:tankCarousel/vehicleStates/%s' % Vehicle.VEHICLE_STATE.UNAVAILABLE)
+            state = _ms('#menu:tankCarousel/vehicleStates/{}'.format(Vehicle.VEHICLE_STATE.UNAVAILABLE))
             original_return_value['infoText'] = text_styles.vehicleStatusCriticalText(state)
             original_return_value['smallInfoText'] = text_styles.critical(state)
         return original_return_value

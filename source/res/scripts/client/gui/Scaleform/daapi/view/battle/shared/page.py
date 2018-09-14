@@ -48,6 +48,7 @@ class SharedPage(BattlePageMeta):
         all controllers when player rewinds replay back.
         """
         self._stopBattleSession()
+        self.__onPostMortemReload()
         self._startBattleSession()
         self.reloadComponents()
         for component in self._external:
@@ -174,11 +175,21 @@ class SharedPage(BattlePageMeta):
         if self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(hidden={alias})
 
+    def _reloadPostmortem(self):
+        alias = _ALIASES.CONSUMABLES_PANEL
+        if not self.as_isComponentVisibleS(alias):
+            self._setComponentsVisibility(visible={alias})
+
     def __onPostMortemSwitched(self):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(True)
+        if not self.sessionProvider.getCtx().isPlayerObserver():
             self._isInPostmortem = True
             self._switchToPostmortem()
+
+    def __onPostMortemReload(self):
+        self._isInPostmortem = False
+        self._reloadPostmortem()
 
     def __handleShowCursor(self, _):
         self.as_toggleCtrlPressFlagS(True)

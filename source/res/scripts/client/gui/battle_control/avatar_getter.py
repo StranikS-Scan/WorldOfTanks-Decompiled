@@ -1,5 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/avatar_getter.py
+"""
+Collection of getters to get some attribute of Avatar. Uses direct access
+to attributes that wraps to try ... except AttributeError, because it's more
+faster than getattr, but it's slower if attribute is not found.
+"""
 import BigWorld
 import Math
 from gui import GUI_CTRL_MODE_FLAG
@@ -48,6 +53,11 @@ def setForcedGuiControlMode(value, stopVehicle=False, enableAiming=True, cursorV
 
 
 def getPlayerName(avatar=None):
+    """
+    Gets player's name.
+    :param avatar: cached avatar or if None using BigWorld.player()
+    :return: string containing player's name or empty string.
+    """
     if avatar is None:
         avatar = BigWorld.player()
     try:
@@ -60,18 +70,34 @@ def getPlayerName(avatar=None):
 
 
 def getPlayerTeam(avatar=None):
+    """
+    Gets player's team. Uses getattr, i.e. it invokes on battle
+    loading and attribute can not be defined.
+    :param avatar: cached avatar or if None using BigWorld.player()
+    :return: number containing team or 0.
+    """
     if avatar is None:
         avatar = BigWorld.player()
     return getattr(avatar, 'team', 0)
 
 
 def getPlayerVehicleID(avatar=None):
+    """
+    Gets player's vehicleID on world. Uses getattr, i.e. it invokes on battle
+    loading and attribute can not be defined.
+    :param avatar: cached avatar or if None using BigWorld.player()
+    :return: number containing vehicleID or 0.
+    """
     if avatar is None:
         avatar = BigWorld.player()
     return getattr(avatar, 'playerVehicleID', 0)
 
 
 def isPlayerTeamKillSuspected():
+    """
+    If player has global team killer status
+    :return: bool
+    """
     return bool(getattr(BigWorld.player(), 'tkillIsSuspected', 0))
 
 

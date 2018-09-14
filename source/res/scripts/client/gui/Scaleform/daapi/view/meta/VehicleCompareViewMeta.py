@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.meta.VehicleCompareCommonViewMeta import VehicleCompareCommonViewMeta
 
 class VehicleCompareViewMeta(VehicleCompareCommonViewMeta):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends VehicleCompareCommonViewMeta
-    """
 
     def onBackClick(self):
         self._printOverrideError('onBackClick')
@@ -50,6 +44,9 @@ class VehicleCompareViewMeta(VehicleCompareCommonViewMeta):
         return self.flashObject.as_setParamsDelta(data) if self._isDAAPIInited() else None
 
     def as_setVehicleParamsDataS(self, data):
+        """
+        :param data: Represented by Array (AS)
+        """
         return self.flashObject.as_setVehicleParamsData(data) if self._isDAAPIInited() else None
 
     def as_getVehiclesDPS(self):

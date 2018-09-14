@@ -8,7 +8,7 @@ import struct
 import nations
 from items import _xml, vehicles, ITEM_TYPES
 from vehicles import VEHICLE_CLASS_TAGS
-from debug_utils import *
+from debug_utils import LOG_ERROR
 from constants import IS_CLIENT, IS_WEB, ITEM_DEFS_PATH
 from account_shared import AmmoIterator
 if IS_CLIENT:
@@ -56,7 +56,7 @@ SKILL_NAMES = ('reserved',
  'gunner_sniper',
  'gunner_smoothTurret',
  'gunner_rancorous',
- 'gunner_woodHunter',
+ 'reserved',
  'reserved',
  'reserved',
  'reserved',
@@ -82,6 +82,8 @@ ROLES = frozenset(('commander',
  'driver',
  'gunner',
  'loader'))
+ROLE_LIMITS = {'commander': 1,
+ 'driver': 1}
 COMMON_SKILLS = frozenset(('repair',
  'fireFighting',
  'camouflage',
@@ -112,7 +114,6 @@ PERKS = frozenset(('brotherhood',
  'commander_expert',
  'driver_tidyPerson',
  'gunner_rancorous',
- 'gunner_woodHunter',
  'gunner_sniper',
  'loader_pedant',
  'loader_desperado',
@@ -165,6 +166,7 @@ def generatePassport(nationID, isPremium=False):
     groups = getNationConfig(nationID)['normalGroups' if not isPremium else 'premiumGroups']
     w = random.random()
     summWeight = 0.0
+    group = None
     for group in groups:
         weight = group['weight']
         if summWeight <= w < summWeight + weight:
@@ -340,16 +342,21 @@ class TankmanDescr(object):
             level = MAX_SKILL_LEVEL if skillName != self.__skills[-1] else self.__lastSkillLevel
             yield (skillName, level)
 
-    def efficiencyOnVehicle(self, vehicleDescr):
-        _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehicleDescr.type.compactDescr)
-        assert nationID == self.nationID
+    def efficiencyFactorOnVehicle(self, vehicleDescrType):
+        _, _, vehicleTypeID = vehicles.parseIntCompactDescr(vehicleDescrType.compactDescr)
         factor = 1.0
         if vehicleTypeID != self.vehicleTypeID:
-            isPremium, isSameClass = self.__paramsOnVehicle(vehicleDescr.type)
+            isPremium, isSameClass = self.__paramsOnVehicle(vehicleDescrType)
             if isSameClass:
                 factor = 1.0 if isPremium else 0.75
             else:
                 factor = 0.75 if isPremium else 0.5
+        return factor
+
+    def efficiencyOnVehicle(self, vehicleDescr):
+        _, nationID, _ = vehicles.parseIntCompactDescr(vehicleDescr.type.compactDescr)
+        assert nationID == self.nationID
+        factor = self.efficiencyFactorOnVehicle(vehicleDescr.type)
         addition = vehicleDescr.miscAttrs['crewLevelIncrease']
         return (factor, addition)
 
@@ -480,7 +487,6 @@ class TankmanDescr(object):
         if newRoleLevel > self.roleLevel:
             self.__updateRankAtSkillLevelUp(newRoleLevel - self.roleLevel)
             self.roleLevel = newRoleLevel
-            self.freeXp = 0
         elif newRoleLevel < self.roleLevel:
             if self.numLevelsToNextRank != 0:
                 self.numLevelsToNextRank += self.roleLevel - newRoleLevel
@@ -551,6 +557,14 @@ class TankmanDescr(object):
          self.lastNameID,
          self.iconID)
 
+    @property
+    def group(self):
+        """
+        Returns tankman composite group.
+        TODO: add additional group range when implemented
+        """
+        return self.isFemale | self.isPremium >> 1
+
     def makeCompactDescr(self):
         pack = struct.pack
         header = ITEM_TYPES.tankman + (self.nationID << 4)
@@ -569,10 +583,12 @@ class TankmanDescr(object):
     def isRestorable(self):
         """
         Tankman is restorable if he has at least one skill fully developed or
-        if his main speciality is 100% and he has enough free experience for one skill
+        if his main speciality is 100% and he has enough free experience for one skill provided that
+        vehicle is recoverable and crew is not locked.
         :return: bool
         """
-        return len(self.skills) > 0 and self.skillLevel(self.skills[0]) == MAX_SKILL_LEVEL or self.roleLevel == MAX_SKILL_LEVEL and self.freeXP >= _g_totalFirstSkillXpCost
+        vehicleTags = self.__vehicleTags
+        return (len(self.skills) > 0 and self.skillLevel(self.skills[0]) == MAX_SKILL_LEVEL or self.roleLevel == MAX_SKILL_LEVEL and self.freeXP >= _g_totalFirstSkillXpCost) and not ('lockCrew' in vehicleTags and 'unrecoverable' in vehicleTags)
 
     def __initFromCompactDescr(self, compactDescr, battleOnly):
         cd = compactDescr
@@ -740,6 +756,12 @@ def makeTmanDescrByTmanData(tmanData):
 def isRestorable(tankmanCD):
     tankmanDescr = TankmanDescr(tankmanCD)
     return tankmanDescr.isRestorable()
+
+
+def ownVehicleHasTags(tankmanCD, tags=()):
+    nation, vehTypeID, _ = parseNationSpecAndRole(tankmanCD)
+    vehicleType = vehicles.g_cache.vehicle(nation, vehTypeID)
+    return bool(vehicleType.tags.intersection(tags))
 
 
 def __validateSkills(skills):
@@ -970,7 +992,6 @@ _g_skillConfigReaders = {'repair': _readRole,
  'gunner_smoothTurret': partial(_readSkillNonNegFloat, 'shotDispersionFactorPerLevel'),
  'gunner_sniper': partial(_readSkillFraction, 'deviceChanceToHitBoost'),
  'gunner_rancorous': _readGunnerRancorous,
- 'gunner_woodHunter': partial(_readSkillNonNegFloat, 'curtainEffectDistanceBonus'),
  'gunner_gunsmith': _readGunnerGunsmith,
  'loader_pedant': partial(_readSkillNonNegFloat, 'ammoBayHealthFactor'),
  'loader_desperado': _readLoaderDesperado,

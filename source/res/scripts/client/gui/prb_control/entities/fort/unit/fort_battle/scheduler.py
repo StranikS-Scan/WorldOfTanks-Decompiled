@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/fort/unit/fort_battle/scheduler.py
 from gui.prb_control import prb_getters
+from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.entities.base.unit.scheduler import UnitScheduler
 from gui.shared.fortifications.fort_listener import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.shared.utils.scheduled_notifications import DeltaNotifier
 
-class FortBattleScheduler(UnitScheduler, FortListener):
+class FortBattleScheduler(BaseScheduler, FortListener):
     """
     Class that process schedules for unit functionality
     """

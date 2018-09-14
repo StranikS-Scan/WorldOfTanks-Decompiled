@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortIntelligenceClanFilterPopover.py
 import time
-from gui.LobbyContext import g_lobbyContext
 from gui.shared.formatters import text_styles
 from gui.shared.fortifications.fort_helpers import adjustDefenceHoursListToLocal
+from helpers import dependency
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -14,8 +14,10 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
 from FortifiedRegionBase import NOT_ACTIVATED
+from skeletons.gui.lobby_context import ILobbyContext
 
 class FortIntelligenceClanFilterPopover(FortIntelligenceClanFilterPopoverMeta, FortViewHelper):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         super(FortIntelligenceClanFilterPopover, self).__init__()
@@ -48,7 +50,7 @@ class FortIntelligenceClanFilterPopover(FortIntelligenceClanFilterPopoverMeta, F
          'startDefenseMinutes': startDefenseMin,
          'isTwelveHoursFormat': self.app.utilsManager.isTwelveHoursFormat(),
          'isWrongLocalTime': self._isWrongLocalTime(),
-         'skipValues': adjustDefenceHoursListToLocal(g_lobbyContext.getServerSettings().getForbiddenFortDefenseHours())}
+         'skipValues': adjustDefenceHoursListToLocal(self.lobbyContext.getServerSettings().getForbiddenFortDefenseHours())}
         defenceStart, _ = self.fortCtrl.getFort().getLocalDefenceHour()
         if defenceStart != NOT_ACTIVATED:
             data['yourOwnClanStartDefenseHour'] = defenceStart

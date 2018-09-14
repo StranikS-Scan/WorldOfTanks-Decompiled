@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/SocialLoginView.py
 import BigWorld
-from ConnectionManager import connectionManager, LOGIN_STATUS
+from connection_mgr import LOGIN_STATUS
 from gui import makeHtmlString
 from gui.login.social_networks import SOCIAL_NETWORKS
 from gui.Scaleform.Waiting import Waiting
@@ -44,10 +44,10 @@ class SocialLoginView(LoginView):
 
     def _populate(self):
         LoginView._populate(self)
-        connectionManager.onLoggedOn += self.__onLoggedOn
+        self.connectionMgr.onLoggedOn += self.__onLoggedOn
 
     def _dispose(self):
-        connectionManager.onLoggedOn -= self.__onLoggedOn
+        self.connectionMgr.onLoggedOn -= self.__onLoggedOn
         LoginView._dispose(self)
 
     def _showForm(self):

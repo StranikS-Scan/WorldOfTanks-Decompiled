@@ -5,7 +5,6 @@ from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES, QUEUE_TYPE
 from gui import makeHtmlString
 from helpers import dependency
-from gui.LobbyContext import g_lobbyContext
 from gui.shared.utils.functions import getArenaShortName
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as FORT_ALIAS
@@ -17,7 +16,6 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.prb_control import settings
 from gui.prb_control.items.sortie_items import getDivisionNameByType, getDivisionLevel
 from gui.prb_control.settings import UNIT_RESTRICTION
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, Vehicle
@@ -30,7 +28,9 @@ from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
 from skeletons.gui.game_control import IFalloutController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 MAX_PLAYER_COUNT_ALL = 0
 
 def getPlayerStatus(slotState, pInfo):
@@ -132,13 +132,18 @@ def makeFiltersVO(nationIDRange, vTypeRange, vLevelRange):
      'vLevelRange': vLevelRange}
 
 
-def makeUserVO(user, colorGetter, isPlayerSpeaking=False):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def makeUserVO(user, colorGetter, isPlayerSpeaking=False, lobbyContext=None):
     if user is not None:
         colors = colorGetter(user.getGuiType())
         tags = list(user.getTags())
     else:
         colors = colorGetter(USER_GUI_TYPE.OTHER)
         tags = []
+    if lobbyContext is not None:
+        regionCode = lobbyContext.getRegionCode(user.getID())
+    else:
+        regionCode = None
     return {'isInvite': False,
      'dbID': user.getID(),
      'accID': -1,
@@ -146,7 +151,7 @@ def makeUserVO(user, colorGetter, isPlayerSpeaking=False):
      'userName': user.getName(),
      'fullName': user.getFullName(),
      'clanAbbrev': user.getClanAbbrev(),
-     'region': g_lobbyContext.getRegionCode(user.getID()),
+     'region': regionCode,
      'colors': colors,
      'rating': None,
      'readyState': False,
@@ -242,7 +247,8 @@ def _getSlotsData(unitIdx, fullData, app=None, levelsRange=None, checkForVehicle
     slots = []
     userGetter = storage_getter('users')().getUser
     colorGetter = g_settings.getColorScheme('rosters').getColors
-    vehicleGetter = g_itemsCache.items.getItemByCD
+    itemsCache = dependency.instance(IItemsCache)
+    vehicleGetter = itemsCache.items.getItemByCD
     canTakeSlot = not pInfo.isLegionary()
     bwPlugin = proto_getter(PROTO_TYPE.BW_CHAT2)(None)
     isPlayerSpeaking = bwPlugin.voipController.isPlayerSpeaking
@@ -563,6 +569,7 @@ def freezedInSlots(slots):
     for player in slots:
         if player['player'] is not None and player['selectedVehicle'] is not None:
             player['isFreezed'] = True
+            player['isDragNDropFreezed'] = True
         player['canBeTaken'] = False
 
     return slots
@@ -573,6 +580,7 @@ def showCanInviteButton(canInvite, isCommander, slots, selfAccID):
     for player in slots:
         if player['player'] is not None and player['selectedVehicle'] is not None and player['player']['readyState'] and not isCommander and player['player']['accID'] == selfAccID:
             player['isFreezed'] = True
+            player['isDragNDropFreezed'] = True
             userCanInvite = False
             break
 
@@ -580,7 +588,8 @@ def showCanInviteButton(canInvite, isCommander, slots, selfAccID):
 
 
 def makeUnitRosterVO(unit, pInfo, index=None, isSortie=False, levelsRange=None):
-    vehicleGetter = g_itemsCache.items.getItemByCD
+    itemsCache = dependency.instance(IItemsCache)
+    vehicleGetter = itemsCache.items.getItemByCD
     if index is None:
         vehiclesData = pInfo.getVehiclesToSlots().keys()
     else:
@@ -596,7 +605,8 @@ def makeUnitRosterConditions(slots, isDefaultSlot, index=None, isSortie=False, l
     if index is None:
         return [None, None]
     else:
-        vehicleGetter = g_itemsCache.items.getItemByCD
+        itemsCache = dependency.instance(IItemsCache)
+        vehicleGetter = itemsCache.items.getItemByCD
         rosterSlotConditions = [None, None]
         rosterSlotIdx = index * 2
         if rosterSlotIdx in slots:
@@ -619,10 +629,10 @@ def makeUnitRosterConditions(slots, isDefaultSlot, index=None, isSortie=False, l
             if not isDefault:
                 if not rosterSlot.isNationMaskFull():
                     nationMask = rosterSlot.nationMask
-                    params['nationIDRange'] = filter(lambda k: 1 << NATIONS_INDICES[k] & nationMask, NATIONS_NAMES)
+                    params['nationIDRange'] = filter(lambda k, mask=nationMask: 1 << NATIONS_INDICES[k] & mask, NATIONS_NAMES)
                 if not rosterSlot.isVehClassMaskFull():
                     vehClassMask = rosterSlot.vehClassMask
-                    params['vTypeRange'] = filter(lambda k: 1 << VEHICLE_CLASS_INDICES[k] & vehClassMask, VEHICLE_CLASSES)
+                    params['vTypeRange'] = filter(lambda k, mask=vehClassMask: 1 << VEHICLE_CLASS_INDICES[k] & mask, VEHICLE_CLASSES)
                 levels = rosterSlot.levels
                 if levels != rosterSlot.DEFAULT_LEVELS or isSortie:
                     params['vLevelRange'] = levels

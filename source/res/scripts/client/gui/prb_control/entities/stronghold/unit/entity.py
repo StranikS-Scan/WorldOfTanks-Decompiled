@@ -257,12 +257,18 @@ class StrongholdEntity(UnitEntity):
         return self.__strongholdData
 
     def unit_onUnitFlagsChanged(self, prevFlags, nextFlags):
-        super(StrongholdEntity, self).unit_onUnitFlagsChanged(prevFlags, nextFlags)
         isInQueue = self.getFlags().isInQueue()
+        if isInQueue:
+            _, unit = self.getUnit()
+            matchmakerNextTick = self.forceTimerEvent(invokeListeners=False)
+            if matchmakerNextTick is not None:
+                unit.setModalTimestamp(matchmakerNextTick)
+        super(StrongholdEntity, self).unit_onUnitFlagsChanged(prevFlags, nextFlags)
         if isInQueue:
             self._invokeListeners('onCommanderIsReady', True)
         elif prevFlags != nextFlags and nextFlags == 0:
             self._invokeListeners('onCommanderIsReady', False)
+        return
 
     def unit_onUnitExtraChanged(self, extras):
         super(StrongholdEntity, self).unit_onUnitExtraChanged(extras)
@@ -290,15 +296,13 @@ class StrongholdEntity(UnitEntity):
     def leave(self, ctx, callback=None):
 
         def callbackWrapper(response):
-            if self.__processResponseMessage(response):
-                callback(response)
-            else:
+            if not self.__processResponseMessage(response):
                 super(StrongholdEntity, self).leave(ctx, callback)
 
-        isSwitch = ctx.hasFlags(FUNCTIONAL_FLAG.SWITCH)
-        if self.__errorCount > 0 or isSwitch:
+        if self.__errorCount > 0:
             super(StrongholdEntity, self).leave(ctx, callback)
         else:
+            ctx.startProcessing(callback)
             self._requestsProcessor.doRequest(ctx, 'leave', callback=callbackWrapper)
 
     def doBattleQueue(self, ctx, callback=None):
@@ -412,6 +416,12 @@ class StrongholdEntity(UnitEntity):
         else:
             return True
 
+    def forceTimerEvent(self, invokeListeners=True):
+        return self.__updateMatchmakingData(invokeListeners=invokeListeners) if self.__strongholdData is not None else None
+
+    def _isInQueue(self):
+        return self.getFlags().isInIdle() and not self.getFlags().isInArena()
+
     def _updateMatchmakingTimer(self):
         self.__cancelMatchmakingTimer()
         self.__updateMatchmakingData()
@@ -500,7 +510,12 @@ class StrongholdEntity(UnitEntity):
             if unit is None:
                 return
             diffToUpdate = self.__strongholdDataDiffer.makeDiff(strongholdData)
-            self.__strongholdData = makeTupleByDict(StrongholdSettings, strongholdData)
+            try:
+                self.__strongholdData = makeTupleByDict(StrongholdSettings, strongholdData)
+            except:
+                self._invokeListeners('onStrongholdMaintenance')
+                return
+
             if diffToUpdate is None or self.__strongholdData is None:
                 return
             self._updateMatchmakingTimer()
@@ -625,13 +640,17 @@ class StrongholdEntity(UnitEntity):
         peripheryStartTimeUTC = baseTimeUTC.replace(hour=peripheryStartTimeUTC.tm_hour, minute=peripheryStartTimeUTC.tm_min, second=0, microsecond=0)
         peripheryEndTimeUTC = baseTimeUTC.replace(hour=peripheryEndTimeUTC.tm_hour, minute=peripheryEndTimeUTC.tm_min, second=0, microsecond=0)
         if peripheryStartTimeUTC > peripheryEndTimeUTC:
-            peripheryEndTimeUTC += datetime.timedelta(days=1)
+            shiftedStartTimeUTC = peripheryStartTimeUTC - datetime.timedelta(days=1)
+            if shiftedStartTimeUTC <= baseTimeUTC <= peripheryEndTimeUTC:
+                peripheryStartTimeUTC = shiftedStartTimeUTC
+            else:
+                peripheryEndTimeUTC += datetime.timedelta(days=1)
         if baseTimeUTC > peripheryEndTimeUTC and baseTimeUTC > peripheryStartTimeUTC:
             peripheryEndTimeUTC += datetime.timedelta(days=1)
             peripheryStartTimeUTC += datetime.timedelta(days=1)
         return (peripheryStartTimeUTC, peripheryEndTimeUTC)
 
-    def __updateMatchmakingData(self):
+    def __updateMatchmakingData(self, invokeListeners=True):
         self.__cancelMatchmakingTimer()
         data = self.getStrongholdData()
         isInSlot = False
@@ -648,6 +667,7 @@ class StrongholdEntity(UnitEntity):
                         isVehicleInBattle = True
 
         isInBattle = isVehicleInBattle or not isInSlot and self.getFlags().isInIdle() or isInSlot and self.getFlags().isInArena() and playerInfo.isInArena()
+        isInQueue = self._isInQueue()
         dtime = None
         textid = None
         peripheryStartTimestampUTC = 0
@@ -670,7 +690,12 @@ class StrongholdEntity(UnitEntity):
             dtime = 0
         if data.isSortie():
             textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_UNAVAILABLE
-            if isInBattle:
+            if isInQueue:
+                textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINQUEUE
+                dtime = peripheryStartTimestampUTC - currentTimestampUTC
+                if dtime < 0 or dtime > data.getSortiesBeforeStartLag():
+                    dtime = 0
+            elif isInBattle:
                 textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINBATTLE
             elif peripheryStartTimeUTC <= currentTimeUTC <= peripheryEndTimeUTC:
                 dtime = int((peripheryEndTimeUTC - currentTimeUTC).total_seconds())
@@ -712,7 +737,11 @@ class StrongholdEntity(UnitEntity):
                     matchmakerNextTick = data.getMatchmakerNextTick()
                     if matchmakerNextTick is not None:
                         dtime = matchmakerNextTick - currentTimestampUTC
-                if isInBattle:
+                if isInQueue:
+                    textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINQUEUE
+                    if dtime < 0 or dtime > data.getFortBattlesBeforeStartLag():
+                        dtime = 0
+                elif isInBattle:
                     textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINBATTLE
                 elif dtime >= data.getFortBattlesBeforeStartLag():
                     textid = FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_UNAVAILABLE
@@ -735,18 +764,19 @@ class StrongholdEntity(UnitEntity):
                         self.__isInactiveMatchingButton = False
                 else:
                     dtime = 0
-        g_eventDispatcher.strongholdsOnTimer({'peripheryStartTimestamp': peripheryStartTimestampUTC,
-         'matchmakerNextTick': matchmakerNextTick,
-         'clan': data.getClan(),
-         'enemyClan': data.getEnemyClan(),
-         'textid': textid,
-         'dtime': dtime,
-         'isSortie': data.isSortie(),
-         'isFirstBattle': data.isFirstBattle(),
-         'currentBattle': data.getCurrentBattle(),
-         'maxLevel': data.getMaxLevel(),
-         'direction': data.getDirection()})
+        if invokeListeners:
+            g_eventDispatcher.strongholdsOnTimer({'peripheryStartTimestamp': peripheryStartTimestampUTC,
+             'matchmakerNextTick': matchmakerNextTick,
+             'clan': data.getClan(),
+             'enemyClan': data.getEnemyClan(),
+             'textid': textid,
+             'dtime': dtime,
+             'isSortie': data.isSortie(),
+             'isFirstBattle': data.isFirstBattle(),
+             'currentBattle': data.getCurrentBattle(),
+             'maxLevel': data.getMaxLevel(),
+             'direction': data.getDirection()})
         if tempIsInactiveMatchingButton != self.__isInactiveMatchingButton:
             self._invokeListeners('onStrongholdOnReadyStateChanged')
         self.__timerID = BigWorld.callback(1.0, self.__updateMatchmakingData)
-        return
+        return matchmakerNextTick

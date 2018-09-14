@@ -47,13 +47,14 @@ class DisposableEntity(object):
         else:
             LOG_DEBUG('Entity {} is already created! Current state {}.'.format(self, self.__lcState))
 
-    def validate(self):
+    def validate(self, *args, **kwargs):
         """
-        Re-initializes object.
+        Re-initializes object. If method is called without args and kwargs, it means that it is just required to
+        invalidate the inner state.
         """
         if self.__lcState == ENTITY_STATE.CREATED:
             self.__changeStateTo(ENTITY_STATE.CREATING)
-            self._invalidate()
+            self._invalidate(*args, **kwargs)
             self.__changeStateTo(ENTITY_STATE.CREATED)
             self.__invalidatePostponedState()
         elif self.__lcState in (ENTITY_STATE.UNDEFINED, ENTITY_STATE.DISPOSING, ENTITY_STATE.DISPOSED):
@@ -98,7 +99,7 @@ class DisposableEntity(object):
         """
         pass
 
-    def _invalidate(self):
+    def _invalidate(self, *args, **kwargs):
         """
         Performs re-initialization of disposable object. Derived classes can override it to
         invalidate object state.

@@ -9,4 +9,4 @@ def getBattleSessionConfig(manager):
     """ Configures services for package battle_control.
     :param manager: helpers.dependency.DependencyManager
     """
-    manager.bindInstance(IBattleSessionProvider, BattleSessionProvider(), finalizer='stop')
+    manager.addInstance(IBattleSessionProvider, BattleSessionProvider(), finalizer='stop')

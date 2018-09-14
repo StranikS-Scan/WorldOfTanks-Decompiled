@@ -10,8 +10,8 @@ from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.lobby_context import ILobbyContext
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
-from gui.LobbyContext import g_lobbyContext
 from .actions_handler import BalancedSquadActionsHandler, RandomSquadActionsHandler
 from .actions_validator import BalancedSquadActionsValidator, RandomSquadActionsValidator
 from .actions_validator import SPGForbiddenSquadActionsValidator, SPGForbiddenBalancedSquadActionsValidator
@@ -70,6 +70,7 @@ class RandomSquadEntity(SquadEntity):
     Random squad entity class
     """
     eventsCache = dependency.descriptor(IEventsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         self._isBalancedSquad = False
@@ -83,14 +84,14 @@ class RandomSquadEntity(SquadEntity):
         self._isSPGForbidden = self.isSPGForbiddenInSquads()
         self._switchActionsValidator()
         self._switchRosterSettings()
-        g_lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
         self.eventsCache.onSyncCompleted += self._onServerSettingChanged
         if self._isBalancedSquad or self._isSPGForbidden:
             g_clientUpdateManager.addCallbacks({'inventory.1': self._onInventoryVehiclesUpdated})
         return rv
 
     def fini(self, ctx=None, woEvents=False):
-        g_lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingChanged
         self.eventsCache.onSyncCompleted -= self._onServerSettingChanged
         if self._isBalancedSquad or self._isSPGForbidden:
             g_clientUpdateManager.removeObjectCallbacks(self, force=True)
@@ -136,12 +137,11 @@ class RandomSquadEntity(SquadEntity):
         """
         return self.eventsCache.getBalancedSquadBounds()
 
-    @staticmethod
-    def isSPGForbiddenInSquads():
+    def isSPGForbiddenInSquads(self):
         """
         Is SPG forbidden in squads on server side.
         """
-        return g_lobbyContext.getServerSettings().isSPGForbiddenInSquads()
+        return self.lobbyContext.getServerSettings().isSPGForbiddenInSquads()
 
     def _createRosterSettings(self):
         if self._isBalancedSquad:

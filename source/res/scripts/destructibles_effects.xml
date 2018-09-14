@@ -830,6 +830,42 @@
         </effects>
       </variant1>
     </inf_envAM_005_sign_fracture>
+    <inf_rw406_Indicators2>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_rw406_Indicators2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_box_mid	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_rw406_Indicators2>
+    <inf_rw406_Indicators_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_rw406_Indicators_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_box_mid	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_rw406_Indicators_touchdown>
     <inf_envAM_005_sign_touchdown>
       <variant1>
         <stages>
@@ -2628,7 +2664,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
+            <wwsound>	obj_touch	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -2646,7 +2682,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
+            <wwsound>	obj_touch	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -2664,7 +2700,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
+            <wwsound>	obj_touch	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -2718,7 +2754,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
+            <wwsound>	obj_pole_metall_touch	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -7740,7 +7776,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_fuel_barrel_mid	</wwsound>
+            <wwsound>	obj_wood_box_mid	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -13782,7 +13818,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
+            <wwsound>	obj_stone_crash_light	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -14359,7 +14395,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
+            <wwsound>	obj_touch	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -15338,7 +15374,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
+            <wwsound>	obj_fence_stone_metall_mid	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -15356,7 +15392,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
+            <wwsound>	obj_touch	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -15446,7 +15482,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
+            <wwsound>	obj_stone_building_mid	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -15464,7 +15500,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
+            <wwsound>	obj_stone_building_mid	</wwsound>
           </sound>
         </effects>
       </variant1>

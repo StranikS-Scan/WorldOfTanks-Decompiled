@@ -9,7 +9,6 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.battle_results.components import base
 from gui.battle_results.settings import PROGRESS_ACTION
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman, getVehicleComponentsByType
 from gui.shared.gui_items.Vehicle import getLevelIconPath
@@ -17,23 +16,23 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 import potapov_quests
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 MIN_BATTLES_TO_SHOW_PROGRESS = 5
 
 class VehicleProgressHelper(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehTypeCompDescr):
-        self._items = g_itemsCache.items
-        self._stats = self._items.stats
-        self._unlocks = self._stats.unlocks
+        items = self.itemsCache.items
+        stats = items.stats
+        self.__unlocks = stats.unlocks
         self.__vehTypeCompDescr = vehTypeCompDescr
-        self.__vehicle = self._items.getItemByCD(vehTypeCompDescr)
-        self.__vehicleXp = self._stats.vehiclesXPs.get(self.__vehTypeCompDescr, 0)
+        self.__vehicle = items.getItemByCD(vehTypeCompDescr)
+        self.__vehicleXp = stats.vehiclesXPs.get(self.__vehTypeCompDescr, 0)
         self.__avgVehicleXp = self.__getAvgVehicleXp(self.__vehTypeCompDescr)
 
     def clear(self):
-        self._items = None
-        self._stats = None
-        self._unlocks = None
+        self.__unlocks = None
         self.__vehicle = None
         self.__vehicleXp = None
         self.__avgVehicleXp = None
@@ -52,7 +51,7 @@ class VehicleProgressHelper(object):
         return result
 
     def __getAvgVehicleXp(self, vehTypeCompDescr):
-        vehiclesStats = self._items.getAccountDossier().getRandomStats().getVehicles()
+        vehiclesStats = self.itemsCache.items.getAccountDossier().getRandomStats().getVehicles()
         vehicleStats = vehiclesStats.get(vehTypeCompDescr, None)
         if vehicleStats is not None:
             battlesCount, wins, markOfMastery, xp = vehicleStats
@@ -65,8 +64,8 @@ class VehicleProgressHelper(object):
     def __getReady2UnlockItems(self, vehicleBattleXp):
         ready2UnlockModules = []
         ready2UnlockVehicles = []
-        possible2UnlockItems = g_techTreeDP.getAllPossibleItems2Unlock(self.__vehicle, self._unlocks)
-        getter = self._items.getItemByCD
+        possible2UnlockItems = g_techTreeDP.getAllPossibleItems2Unlock(self.__vehicle, self.__unlocks)
+        getter = self.itemsCache.items.getItemByCD
         for itemTypeCD, unlockProps in possible2UnlockItems.iteritems():
             item = getter(itemTypeCD)
             if self.__vehicleXp - unlockProps.xpCost <= vehicleBattleXp and item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
@@ -82,9 +81,9 @@ class VehicleProgressHelper(object):
     def __getReady2BuyItems(self, pureCreditsReceived):
         ready2BuyModules = []
         ready2BuyVehicles = []
-        creditsValue = self._stats.credits
-        unlockedVehicleItems = g_techTreeDP.getUnlockedVehicleItems(self.__vehicle, self._unlocks)
-        getter = self._items.getItemByCD
+        creditsValue = self.itemsCache.items.stats.credits
+        unlockedVehicleItems = g_techTreeDP.getUnlockedVehicleItems(self.__vehicle, self.__unlocks)
+        getter = self.itemsCache.items.getItemByCD
         for itemTypeCD, unlockProps in unlockedVehicleItems.iteritems():
             item = getter(itemTypeCD)
             price = item.altPrice or item.buyPrice
@@ -112,7 +111,7 @@ class VehicleProgressHelper(object):
                     if tmanBattleXp - tman.descriptor.freeXP > 0:
                         skilledTankmans.append(self.__makeTankmanVO(tman, avgBattles2NewSkill))
                 else:
-                    tmanDossier = self._items.getTankmanDossier(tman.invID)
+                    tmanDossier = self.itemsCache.items.getTankmanDossier(tman.invID)
                     avgBattles2NewSkill = self.__getAvgBattles2NewSkill(tmanDossier.getAvgXP(), tman)
                     if 0 < avgBattles2NewSkill <= MIN_BATTLES_TO_SHOW_PROGRESS:
                         skilledTankmans.append(self.__makeTankmanVO(tman, avgBattles2NewSkill))
@@ -245,7 +244,7 @@ class QuestsProgressBlock(base.StatsBlock):
                         return res
                 return cmp(aQuest.getID(), bQuest.getID())
 
-            from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+            from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
             quests = self.eventsCache.getQuests()
             isFallout = reusable.common.arenaVisitor.gui.isFalloutBattle()
             commonQuests, potapovQuests = [], {}
@@ -278,12 +277,12 @@ class QuestsProgressBlock(base.StatsBlock):
                     complete = (True, False)
                 else:
                     complete = (False, False)
-                info = events_helpers.getEventPostBattleInfo(e, quests, None, None, False, complete)
+                info = old_events_helpers.getEventPostBattleInfo(e, quests, None, None, False, complete)
                 if info is not None:
                     self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 
             for e, pCur, pPrev, reset, complete in sorted(commonQuests, cmp=_sortCommonQuestsFunc):
-                info = events_helpers.getEventPostBattleInfo(e, quests, pCur, pPrev, reset, complete)
+                info = old_events_helpers.getEventPostBattleInfo(e, quests, pCur, pPrev, reset, complete)
                 if info is not None:
                     self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 

@@ -9,6 +9,7 @@ from gui.prb_control.settings import CTRL_ENTITY_TYPE_NAMES as _C_NAMES
 from gui.prb_control.storages.fallout_storage import FalloutLocalStorage
 from gui.prb_control.storages.local_storage import LocalStorage
 from gui.prb_control.storages.prb_storage import TrainingStorage
+from gui.prb_control.storages.ranked_storage import RankedStorage
 from gui.prb_control.storages.sandbox_storage import SandboxStorage
 from helpers.ro_property import ROPropertyMeta
 __all__ = ('legacy_storage_getter', 'prequeue_storage_getter', 'PrbStorageDecorator')
@@ -31,7 +32,8 @@ def _makeLegacyName(legacyType):
 
 _PRB_STORAGE = {_makeLegacyName(_P_TYPE.TRAINING): TrainingStorage(),
  _makeQueueName(_Q_TYPE.FALLOUT): FalloutLocalStorage(),
- _makeQueueName(_Q_TYPE.SANDBOX): SandboxStorage()}
+ _makeQueueName(_Q_TYPE.SANDBOX): SandboxStorage(),
+ _makeQueueName(_Q_TYPE.RANKED): RankedStorage()}
 
 class _storage_getter(object):
 
@@ -76,3 +78,7 @@ class PrbStorageDecorator(LocalStorage):
     def clear(self):
         for storage in self.__readonly__.itervalues():
             storage.clear()
+
+    def onAvatarBecomePlayer(self):
+        for storage in self.__readonly__.itervalues():
+            storage.onAvatarBecomePlayer()

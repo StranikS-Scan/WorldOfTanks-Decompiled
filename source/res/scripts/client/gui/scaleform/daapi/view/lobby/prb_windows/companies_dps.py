@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/companies_dps.py
 from constants import PREBATTLE_COMPANY_DIVISION, PREBATTLE_COMPANY_DIVISION_NAMES
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.prb_control.formatters import getCompanyDivisionString
 from gui.prb_control.settings import PREBATTLE_ROSTER
+from helpers import dependency
 from helpers import i18n
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
+from skeletons.gui.lobby_context import ILobbyContext
 
 def getDivisionsList(addAll=True):
     result = []
@@ -24,6 +25,7 @@ def getDivisionsList(addAll=True):
 
 
 class CompaniesDataProvider(DAAPIDataProvider):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(CompaniesDataProvider, self).__init__()
@@ -44,7 +46,7 @@ class CompaniesDataProvider(DAAPIDataProvider):
              'creatorName': item.creator,
              'creatorClan': item.clanAbbrev,
              'creatorIgrType': item.creatorIgrType,
-             'creatorRegion': g_lobbyContext.getRegionCode(item.creatorDbId),
+             'creatorRegion': self.lobbyContext.getRegionCode(item.creatorDbId),
              'comment': item.getCensoredComment(),
              'playersCount': item.playersCount,
              'division': getCompanyDivisionString(item.getDivisionName()),
@@ -77,7 +79,7 @@ class CompaniesDataProvider(DAAPIDataProvider):
                          'userName': info.name,
                          'clanAbbrev': info.clanAbbrev,
                          'igrType': info.igrType,
-                         'region': g_lobbyContext.getRegionCode(info.dbID),
+                         'region': self.lobbyContext.getRegionCode(info.dbID),
                          'color': getColor(key)})
 
                 item['players'] = players

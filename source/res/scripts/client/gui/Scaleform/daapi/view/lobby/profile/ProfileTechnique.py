@@ -3,9 +3,8 @@
 import BigWorld
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE_MEMBER
-from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD
+from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD, HONORED_RANK_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils, STATISTICS_LAYOUT, FORT_STATISTICS_LAYOUT, FALLOUT_STATISTICS_LAYOUT
 from gui.Scaleform.daapi.view.meta.ProfileTechniqueMeta import ProfileTechniqueMeta
@@ -13,7 +12,6 @@ from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared import g_itemsCache
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
 from gui.shared.gui_items.dossier import dumpDossier
 from helpers import i18n, dependency
@@ -31,11 +29,12 @@ class ProfileTechnique(ProfileTechniqueMeta):
         self.as_setInitDataS(self._getInitData())
 
     def _getInitData(self, accountDossier=None, isFallout=False):
-        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT)]
+        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.RANKED)]
+        self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT)
         if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL))
         dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN)))
-        if g_lobbyContext.getServerSettings().isStrongholdsEnabled():
+        if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
             dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES)))
         storedData = self._getStorageData()
         return {'dropDownProvider': dropDownProvider,
@@ -63,7 +62,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         return (self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
          self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL),
          self._createTableBtnInfo('level', 32, 2, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_LVL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL),
-         self._createTableBtnInfo('shortUserName', 154, 7, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NAME, 'ascending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_VEHICLENAME, sortType='string'),
+         self._createTableBtnInfo('shortUserName', 154, 7, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NAME, 'ascending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_VEHICLENAME, inverted=True, sortType='string'),
          self._createTableBtnInfo('battlesCount', 74, 3, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_BATTLESCOUNT, 'descending', label=PROFILE.SECTION_SUMMARY_SCORES_TOTALBATTLES),
          self._createTableBtnInfo('winsEfficiency', 74, 4, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINS if isFallout else PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINRATE, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_TOTALWINS),
          self._createTableBtnInfo('avgExperience', 90, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_AVGEXPERIENCE),
@@ -91,6 +90,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
          PROFILE_DROPDOWN_KEYS.STATICTEAM: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_STATICTEAM,
          PROFILE_DROPDOWN_KEYS.HISTORICAL: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_HISTORICAL,
          PROFILE_DROPDOWN_KEYS.CLAN: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_GLOBALMAP,
+         PROFILE_DROPDOWN_KEYS.RANKED: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_RANKED,
          PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTBATTLES,
          PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTSORTIES}
         return i18n.makeString(emptyScreenLabelsDictionary[self._battlesType])
@@ -104,7 +104,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         result = []
         for intCD, (battlesCount, wins, markOfMastery, xp) in targetData.getVehicles().iteritems():
             avgXP = xp / battlesCount if battlesCount else 0
-            vehicle = g_itemsCache.items.getItemByCD(intCD)
+            vehicle = self.itemsCache.items.getItemByCD(intCD)
             if vehicle is not None:
                 isInHangar = vehicle.invID > 0
                 if addVehiclesThatInHangarOnly and not isInHangar:
@@ -143,13 +143,14 @@ class ProfileTechnique(ProfileTechniqueMeta):
         return markOfMastery if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL else ProfileUtils.UNAVAILABLE_VALUE
 
     def _receiveVehicleDossier(self, vehicleIntCD, databaseId):
-        vehDossier = g_itemsCache.items.getVehicleDossier(vehicleIntCD, databaseId)
+        vehDossier = self.itemsCache.items.getVehicleDossier(vehicleIntCD, databaseId)
         achievementsList = None
         specialMarksStats = []
+        specialRankedStats = []
         if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
             stats = vehDossier.getRandomStats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
-            if g_itemsCache.items.getItemByCD(int(vehicleIntCD)).level > 4:
+            if self.itemsCache.items.getItemByCD(int(vehicleIntCD)).level > 4:
                 specialMarksStats.append(AchievementsUtils.packAchievement(stats.getAchievement(MARK_ON_GUN_RECORD), vehDossier.getDossierType(), dumpDossier(vehDossier), self._userID is None))
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.TEAM:
             stats = vehDossier.getTeam7x7Stats()
@@ -168,10 +169,15 @@ class ProfileTechnique(ProfileTechniqueMeta):
             stats = vehDossier.getGlobalMapStats()
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
             stats = vehDossier.getFalloutStats()
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
+            stats = vehDossier.getRankedStats()
+            achievementsList = self.__getAchievementsList(stats, vehDossier)
+            specialRankedStats.append(AchievementsUtils.packAchievement(stats.getAchievement(HONORED_RANK_RECORD), vehDossier.getDossierType(), dumpDossier(vehDossier), self._userID is None))
         else:
             raise ValueError('Profile Technique: Unknown battle type: ' + self._battlesType)
         if achievementsList is not None:
-            achievementsList.insert(0, specialMarksStats)
+            achievementsList.insert(0, specialRankedStats)
+            achievementsList.insert(1, specialMarksStats)
         if self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES:
             layout = FORT_STATISTICS_LAYOUT
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:

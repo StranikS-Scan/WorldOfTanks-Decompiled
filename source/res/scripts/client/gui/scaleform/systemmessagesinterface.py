@@ -2,18 +2,18 @@
 # Embedded file name: scripts/client/gui/Scaleform/SystemMessagesInterface.py
 import time
 import account_helpers
-from ConnectionManager import connectionManager
 from MemoryCriticalController import g_critMemHandler
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.SystemMessages import SM_TYPE
-from gui.shared import g_itemsCache
 from helpers import i18n, dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto import proto_getter
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IEventsNotificationsController, IAOGASController, IGameSessionController
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
 from helpers import getClientLanguage
 KOREA_TIME_TILL_MIDNIGHT = 7200
@@ -21,12 +21,14 @@ KOREA_TIME_TILL_MIDNIGHT = 7200
 class SystemMessagesInterface(ISystemMessages):
     __CMD_BLOCK_PREFIX = 'cmd_'
     __PROMO_BLOCK_PREFIX = 'promo_'
+    itemsCache = dependency.descriptor(IItemsCache)
     aogas = dependency.descriptor(IAOGASController)
     gameSession = dependency.descriptor(IGameSessionController)
     eventsNotification = dependency.descriptor(IEventsNotificationsController)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def init(self):
-        connectionManager.onConnected += self.__onConnected
+        self.connectionMgr.onConnected += self.__onConnected
         self.__expirationShown = False
         g_playerEvents.onAccountShowGUI += self.__onAccountShowGUI
         g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
@@ -35,7 +37,7 @@ class SystemMessagesInterface(ISystemMessages):
         self.eventsNotification.onEventNotificationsChanged += self.__onReceiveEventNotification
 
     def destroy(self):
-        connectionManager.onConnected -= self.__onConnected
+        self.connectionMgr.onConnected -= self.__onConnected
         g_playerEvents.onAccountShowGUI -= self.__onAccountShowGUI
         g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         self.aogas.onNotifyAccount -= self.__AOGAS_onNotifyAccount
@@ -47,9 +49,9 @@ class SystemMessagesInterface(ISystemMessages):
     def proto(self):
         return None
 
-    def pushMessage(self, text, type, priority=None):
+    def pushMessage(self, text, type, priority=None, messageData=None):
         if GUI_SETTINGS.isGuiEnabled():
-            self.proto.serviceChannel.pushClientSysMessage(text, type, priority=priority)
+            self.proto.serviceChannel.pushClientSysMessage(text, type, priority=priority, messageData=messageData)
         else:
             LOG_DEBUG('[SYSTEM MESSAGE]', text, type)
 
@@ -57,7 +59,8 @@ class SystemMessagesInterface(ISystemMessages):
         text = i18n.makeString(key, *args, **kwargs)
         msgType = kwargs.get('type', SM_TYPE.Information)
         msgPriority = kwargs.get('priority', None)
-        self.pushMessage(text, msgType, msgPriority)
+        messageData = kwargs.get('messageData', None)
+        self.pushMessage(text, msgType, msgPriority, messageData)
         return
 
     def __onAccountShowGUI(self, ctx):
@@ -82,10 +85,10 @@ class SystemMessagesInterface(ISystemMessages):
         return
 
     def __onConnected(self):
-        self.pushI18nMessage('#system_messages:connected', connectionManager.serverUserName, type=SM_TYPE.GameGreeting)
+        self.pushI18nMessage('#system_messages:connected', self.connectionMgr.serverUserName, type=SM_TYPE.GameGreeting)
 
     def __checkPremiumAccountExpiry(self, ctx=None):
-        expiryUTCTime = g_itemsCache.items.stats.premiumExpiryTime
+        expiryUTCTime = self.itemsCache.items.stats.premiumExpiryTime
         delta = account_helpers.getPremiumExpiryDelta(expiryUTCTime)
         if delta.days == 0 and expiryUTCTime and not self.__expirationShown:
             self.proto.serviceChannel.pushClientMessage(expiryUTCTime, SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG)

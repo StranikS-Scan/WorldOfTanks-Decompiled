@@ -91,6 +91,10 @@ class PublicEntity(ESportEntity):
             return SelectResult(True)
         return super(PublicEntity, self).doSelectAction(action)
 
+    def unit_onUnitPlayerRoleChanged(self, playerID, prevRoleFlags, nextRoleFlags):
+        super(PublicEntity, self).unit_onUnitPlayerRoleChanged(playerID, prevRoleFlags, nextRoleFlags)
+        self._rosterSettings = self._createRosterSettings()
+
     def _createRosterSettings(self):
         _, unit = self.getUnit()
         return PublicDynamicRosterSettings(unit)

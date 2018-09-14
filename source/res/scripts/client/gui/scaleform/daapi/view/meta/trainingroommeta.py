@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class TrainingRoomMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def showTrainingSettings(self):
         self._printOverrideError('showTrainingSettings')
@@ -125,12 +119,21 @@ class TrainingRoomMeta(View):
         return self.flashObject.as_setPlayerStateInOther(uid, stateString, vContourIcon, vShortName, vLevel, igrType) if self._isDAAPIInited() else None
 
     def as_setPlayerTagsInTeam1S(self, uid, tags):
+        """
+        :param tags: Represented by Array (AS)
+        """
         return self.flashObject.as_setPlayerTagsInTeam1(uid, tags) if self._isDAAPIInited() else None
 
     def as_setPlayerTagsInTeam2S(self, uid, tags):
+        """
+        :param tags: Represented by Array (AS)
+        """
         return self.flashObject.as_setPlayerTagsInTeam2(uid, tags) if self._isDAAPIInited() else None
 
     def as_setPlayerTagsInOtherS(self, uid, tags):
+        """
+        :param tags: Represented by Array (AS)
+        """
         return self.flashObject.as_setPlayerTagsInOther(uid, tags) if self._isDAAPIInited() else None
 
     def as_enabledCloseButtonS(self, value):

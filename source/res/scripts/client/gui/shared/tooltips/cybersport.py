@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/cybersport.py
-import BigWorld
-from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
@@ -9,11 +7,14 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.settings import UNIT_RESTRICTION
-from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE
+from helpers import dependency
 from helpers import i18n
+from skeletons.gui.shared import IItemsCache
 
 class CybersportToolTipData(ToolTipBaseData):
+    """Cyber sport class for tool tip context."""
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(CybersportToolTipData, self).__init__(context, TOOLTIP_TYPE.CYBER_SPORT)
@@ -23,7 +24,7 @@ class CybersportSelectedVehicleToolTipData(CybersportToolTipData):
 
     def getDisplayableData(self, intCD):
         if intCD is not None:
-            vehicle = g_itemsCache.items.getItemByCD(int(intCD))
+            vehicle = self.itemsCache.items.getItemByCD(int(intCD))
             return vo_converters.makeVehicleVO(vehicle)
         else:
             super(CybersportSelectedVehicleToolTipData, self).getDisplayableData(intCD)
@@ -56,7 +57,7 @@ class CybersportSlotSelectedToolTipData(CybersportToolTipData):
             accountDBID = unit.getMembers()[index]['accountDBID']
             vehicles = unit.getVehicles()[accountDBID]
             if vehicles:
-                vehicle = g_itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
+                vehicle = self.itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
                 return vo_converters.makeVehicleVO(vehicle, entity.getRosterSettings().getLevelsRange())
         return super(CybersportSlotSelectedToolTipData, self).getDisplayableData(index, unitIdx)
 
@@ -73,7 +74,7 @@ class SquadSlotSelectedToolTipData(CybersportToolTipData):
             accountDBID = unit.getMembers()[index]['accountDBID']
             vehicles = unit.getVehicles()[accountDBID]
             if vehicles:
-                vehicle = g_itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
+                vehicle = self.itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
                 return vo_converters.makeVehicleVO(vehicle)
         super(SquadSlotSelectedToolTipData, self).getDisplayableData()
         return

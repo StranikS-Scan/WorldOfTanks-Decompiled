@@ -9,6 +9,12 @@ class _BattleItemSelector(aop.Pointcut):
         aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.header', 'battle_selector_items', battleTypeBuilderMethod, aspects=aspects_)
 
 
+class RankedBattle(_BattleItemSelector):
+
+    def __init__(self):
+        _BattleItemSelector.__init__(self, '_addRankedBattleType', (aspects.RankedBattle,))
+
+
 class CommandBattle(_BattleItemSelector):
 
     def __init__(self):

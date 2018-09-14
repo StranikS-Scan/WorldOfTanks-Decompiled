@@ -6,7 +6,7 @@ from collections import namedtuple
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, makeHtmlString
-from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
 from gui.Scaleform.daapi.view.meta.QuestsTileChainsViewMeta import QuestsTileChainsViewMeta
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.QUEST_TASK_FILTERS_TYPES import QUEST_TASK_FILTERS_TYPES
@@ -16,7 +16,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters.vehicle_filters import packIntVehicleTypesFilter
 from gui.server_events import caches
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import Vehicle
 from gui.shared.utils import decorators
@@ -25,6 +25,7 @@ from helpers import int2roman
 from helpers.i18n import makeString as _ms
 from potapov_quests import PQ_BRANCH
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 
 class _QuestsFilter(object):
     VEH_TYPE_DEFAULT = -1
@@ -71,13 +72,14 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
     DEFAULT_FILTERS = {QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM: (-1, QUEST_TASK_FILTERS_TYPES.ALL),
      QUESTS_ALIASES.SEASON_VIEW_TAB_FALLOUT: (-1, QUEST_TASK_FILTERS_TYPES.ALL)}
     _HEADER_ICON_PATH = '../maps/icons/quests/headers/%s.png'
+    itemsCache = dependency.descriptor(IItemsCache)
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         super(_QuestsTileChainsView, self).__init__()
         self._navInfo = caches.getNavInfo()
         self.__proxy = None
-        self.__tile = events_helpers.getPotapovQuestsCache().getTiles()[self._navInfo.selectedPQ.tileID]
+        self.__tile = old_events_helpers.getPotapovQuestsCache().getTiles()[self._navInfo.selectedPQ.tileID]
         self._tasksProgressLinkage = None
         self._tooltipType = None
         self._showVehicleFilter = True
@@ -103,17 +105,17 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
 
     @decorators.process('updating')
     def selectTask(self, questID):
-        quest = events_helpers.getPotapovQuestsCache().getQuests()[questID]
+        quest = old_events_helpers.getPotapovQuestsCache().getQuests()[questID]
         if quest.needToGetReward():
-            result = yield events_helpers.getPotapovQuestAward(quest)
+            result = yield old_events_helpers.getPotapovQuestAward(quest)
         else:
-            result = yield events_helpers.getPotapovQuestsSelectProcessor()(quest, events_helpers.getPotapovQuestsCache()).request()
+            result = yield old_events_helpers.getPotapovQuestsSelectProcessor()(quest, old_events_helpers.getPotapovQuestsCache()).request()
         if result and len(result.userMsg):
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.process('updating')
     def refuseTask(self, questID):
-        result = yield events_helpers.getPotapovQuestsRefuseProcessor()(events_helpers.getPotapovQuestsCache().getQuests()[questID], events_helpers.getPotapovQuestsCache()).request()
+        result = yield old_events_helpers.getPotapovQuestsRefuseProcessor()(old_events_helpers.getPotapovQuestsCache().getQuests()[questID], old_events_helpers.getPotapovQuestsCache()).request()
         if len(result.userMsg):
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
@@ -122,7 +124,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
 
     def showAwardVehicleInHangar(self, vehTypeCompDescr):
         try:
-            vehicle = g_itemsCache.items.getItemByCD(int(vehTypeCompDescr))
+            vehicle = self.itemsCache.items.getItemByCD(int(vehTypeCompDescr))
             g_currentVehicle.selectVehicle(vehicle.invID)
             shared_events.showHangar()
             self.__proxy.destroy()
@@ -158,7 +160,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
         return
 
     def _onProgressUpdated(self, pqType):
-        targetTab = events_helpers.getTabAliasByQuestBranchName(pqType)
+        targetTab = old_events_helpers.getTabAliasByQuestBranchName(pqType)
         if targetTab == self._navInfo.selectedPQType:
             self._populateTileData()
 
@@ -174,7 +176,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
         return NotImplemented
 
     def _sortChains(self, questsByChains):
-        return events_helpers.sortWithQuestType(questsByChains, key=operator.itemgetter(0))
+        return old_events_helpers.sortWithQuestType(questsByChains, key=operator.itemgetter(0))
 
     def __updateTileData(self, vehType, questState, selectItemID=-1):
         self._navInfo.changePQFilters(vehType, questState)
@@ -245,8 +247,8 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
         return map(operator.itemgetter(1), self._sortChains(result))
 
     def __makeQuestDetailsInfo(self, questID):
-        quest = events_helpers.getPotapovQuestsCache().getQuests()[questID]
-        questInfoData = events_helpers.getEventInfoData(quest)
+        quest = old_events_helpers.getPotapovQuestsCache().getQuests()[questID]
+        questInfoData = old_events_helpers.getEventInfoData(quest)
         self._navInfo.selectPotapovQuest(self.__tile.getID(), questID)
         vehMinLevel, vehClasses = quest.getVehMinLevel(), quest.getVehicleClasses()
         if vehMinLevel > 1:
@@ -280,7 +282,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
             btnInfo = _makeSelectBtn(QUESTS.QUESTTASKDETAILSVIEW_BTNLABEL_REPEAT, TOOLTIPS.PRIVATEQUESTS_ACTIONPANNEL_REPEAT, text_styles.success(icons.checkmark() + _ms(QUESTS.QUESTTASKDETAILSVIEW_TASKDESCRIPTION_DONE)))
         else:
             btnInfo = _makeSelectBtn(QUESTS.QUESTTASKDETAILSVIEW_BTNLABEL_BEGIN, TOOLTIPS.PRIVATEQUESTS_ACTIONPANNEL_PERFORM, _ms(QUESTS.QUESTTASKDETAILSVIEW_TASKDESCRIPTION_AVAILABLE))
-        mainAwards, addAwards = questInfoData._getBonuses(events_helpers.getPotapovQuestsCache().getQuests().values())
+        mainAwards, addAwards = questInfoData._getBonuses(old_events_helpers.getPotapovQuestsCache().getQuests().values())
         result = {'taskID': questID,
          'headerText': text_styles.highTitle(quest.getUserName()),
          'conditionsText': condition,

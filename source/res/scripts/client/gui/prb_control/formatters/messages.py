@@ -25,6 +25,7 @@ def getKickReasonMessage(reasonCode):
         reason = KICK_REASON_NAMES[reasonCode]
     else:
         reason = reasonCode
+        LOG_ERROR('Invalid sub key %s for localization #system_messages:arena_start_errors/kick/' % reason)
     return i18n.makeString('#system_messages:arena_start_errors/kick/%s' % reason)
 
 

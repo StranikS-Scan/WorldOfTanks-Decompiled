@@ -66,3 +66,4 @@ from StormLordAchievement import StormLordAchievement
 from WinnerLaurelsAchievement import WinnerLaurelsAchievement
 from EFC2016Achievement import EFC2016Achievement
 from MarkI100Years import MarkI100Years
+from HonoredRankAchievement import HonoredRankAchievement

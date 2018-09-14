@@ -45,7 +45,8 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.telecomOrderDeleted.index(): _sc.TelecomRemovedInvoiceFormatter(),
  _SM_TYPE.prbVehicleKick.index(): _sc.PrbVehicleKickFormatter(),
  _SM_TYPE.vehicleGroupLocked.index(): _sc.RotationGroupLockFormatter(),
- _SM_TYPE.vehicleGroupUnlocked.index(): _sc.RotationGroupUnlockFormatter()}
+ _SM_TYPE.vehicleGroupUnlocked.index(): _sc.RotationGroupUnlockFormatter(),
+ _SM_TYPE.rankedQuests.index(): _sc.RankedQuestFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),

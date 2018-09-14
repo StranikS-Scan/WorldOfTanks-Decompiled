@@ -7,6 +7,7 @@ import constants
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from adisp import process, async
+from helpers import dependency
 from items.tankmen import getSkillsConfig
 from helpers.i18n import convert
 from gui import GUI_NATIONS, SystemMessages
@@ -14,14 +15,15 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.RecruitWindowMeta import RecruitWindowMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import g_itemsCache
 from gui.shared.utils import decorators
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.tankman import TankmanRecruit, TankmanEquip, TankmanRecruitAndEquip
-from gui.shared.money import Money
+from gui.shared.money import Money, Currency
 from gui.shared.tooltips.formatters import packActionTooltipData
+from skeletons.gui.shared import IItemsCache
 
 class RecruitWindow(RecruitWindowMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(RecruitWindow, self).__init__()
@@ -35,13 +37,13 @@ class RecruitWindow(RecruitWindowMeta):
         self.__getInitialData()
         if self._currentVehicleInvId != -1:
             g_clientUpdateManager.addCallbacks({'inventory': self.onInventoryChanged})
-        g_clientUpdateManager.addCallbacks({'stats.credits': self.onCreditsChange,
-         'stats.gold': self.onGoldChange,
-         'cache.mayConsumeWalletResources': self.onGoldChange})
+        g_clientUpdateManager.addCurrencyCallback(Currency.CREDITS, self.onCreditsChange)
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.onGoldChange)
+        g_clientUpdateManager.addCallbacks({'cache.mayConsumeWalletResources': self.onGoldChange})
 
     def onGoldChange(self, value):
         if self._currentVehicleInvId is not None:
-            self.as_setGoldChangedS(g_itemsCache.items.stats.gold)
+            self.as_setGoldChangedS(self.itemsCache.items.stats.gold)
         return
 
     def onCreditsChange(self, value):
@@ -62,8 +64,8 @@ class RecruitWindow(RecruitWindowMeta):
         super(RecruitWindow, self)._dispose()
 
     def __getInitialData(self):
-        money = g_itemsCache.items.stats.money
-        shop = g_itemsCache.items.shop
+        money = self.itemsCache.items.stats.money
+        shop = self.itemsCache.items.shop
         upgradeParams = shop.tankmanCost
         defUpgradeParams = shop.defaults.tankmanCost
         schoolUpgradePrice = round(upgradeParams[1]['credits'])
@@ -98,7 +100,7 @@ class RecruitWindow(RecruitWindowMeta):
           'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}]
         rolesDP = [{'id': None,
           'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}]
-        modulesAll = g_itemsCache.items.getVehicles(self.__getRoleCriteria(nationID, tankType, typeID)).values()
+        modulesAll = self.itemsCache.items.getVehicles(self.__getRoleCriteria(nationID, tankType, typeID)).values()
         modulesAll.sort()
         for module in modulesAll:
             typesDP.append({'id': module.innationID,
@@ -117,7 +119,7 @@ class RecruitWindow(RecruitWindowMeta):
         return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
 
     def updateNationDropdown(self):
-        vehsItems = g_itemsCache.items.getVehicles(self.__getNationsCriteria())
+        vehsItems = self.itemsCache.items.getVehicles(self.__getNationsCriteria())
         data = [{'id': None,
           'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}]
         for name in GUI_NATIONS:
@@ -135,7 +137,7 @@ class RecruitWindow(RecruitWindowMeta):
 
     def updateVehicleClassDropdown(self, nationID):
         Waiting.show('updating')
-        modulesAll = g_itemsCache.items.getVehicles(self.__getClassesCriteria(nationID)).values()
+        modulesAll = self.itemsCache.items.getVehicles(self.__getClassesCriteria(nationID)).values()
         classes = []
         data = [{'id': None,
           'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}]
@@ -161,7 +163,7 @@ class RecruitWindow(RecruitWindowMeta):
 
     def updateVehicleTypeDropdown(self, nationID, vclass):
         Waiting.show('updating')
-        modulesAll = g_itemsCache.items.getVehicles(self.__getVehicleTypeCriteria(nationID, vclass)).values()
+        modulesAll = self.itemsCache.items.getVehicles(self.__getVehicleTypeCriteria(nationID, vclass)).values()
         data = [{'id': None,
           'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}]
         modulesAll.sort()
@@ -178,7 +180,7 @@ class RecruitWindow(RecruitWindowMeta):
 
     def updateRoleDropdown(self, nationID, vclass, typeID):
         Waiting.show('updating')
-        modulesAll = g_itemsCache.items.getVehicles(self.__getRoleCriteria(nationID, vclass, typeID)).values()
+        modulesAll = self.itemsCache.items.getVehicles(self.__getRoleCriteria(nationID, vclass, typeID)).values()
         roles = []
         data = [{'id': None,
           'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}]
@@ -207,7 +209,7 @@ class RecruitWindow(RecruitWindowMeta):
         if len(msg):
             SystemMessages.pushI18nMessage(msg, type=msgType)
         if success:
-            tankman = g_itemsCache.items.getTankman(tmanInvID)
+            tankman = self.itemsCache.items.getTankman(tmanInvID)
         callback(tankman)
         return
 
@@ -230,7 +232,7 @@ class RecruitWindow(RecruitWindowMeta):
     @decorators.process('recruting')
     def buyTankman(self, nationID, vehTypeID, role, studyType, slot):
         if slot is not None and slot != -1:
-            vehicle = g_itemsCache.items.getVehicle(self._currentVehicleInvId)
+            vehicle = self.itemsCache.items.getVehicle(self._currentVehicleInvId)
             yield self.__buyAndEquipTankman(vehicle, int(slot), int(studyType))
         else:
             yield self.__buyTankman(int(nationID), int(vehTypeID), role, int(studyType))

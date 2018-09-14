@@ -24,8 +24,9 @@ from gui.shared.fortifications.settings import FORT_RESTRICTION, FORT_BATTLE_DIV
 from gui.shared.utils.functions import makeTooltip
 from gui.shared import events
 from gui.shared.formatters import icons, text_styles
-from gui.LobbyContext import g_lobbyContext
+from helpers import dependency
 from helpers import i18n
+from skeletons.gui.lobby_context import ILobbyContext
 
 class MAX_LEVEL:
     MAX_BUILD_LEVEL = 4
@@ -34,6 +35,7 @@ class MAX_LEVEL:
 
 
 class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(FortModernizationWindow, self).__init__()
@@ -135,7 +137,7 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
             self.destroy()
 
     def __makeData(self):
-        isFortsEnabled = g_lobbyContext.getServerSettings().isFortsEnabled()
+        isFortsEnabled = self.lobbyContext.getServerSettings().isFortsEnabled()
         if isFortsEnabled:
             baseBuildingMaxLevel = MAX_LEVEL.MAX_BASE_LEVEL_SECOND_ITERATION
         else:

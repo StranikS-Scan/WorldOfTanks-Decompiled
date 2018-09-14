@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/user_cm_handlers.py
 import math
+from Event import Event
 from adisp import process
 from constants import DENUNCIATIONS_PER_DAY, ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
@@ -15,7 +15,7 @@ from gui.clans.contexts import CreateInviteCtx
 from gui.prb_control import prbDispatcherProperty, prbEntityProperty
 from gui.prb_control.entities.base.ctx import PrbAction, SendInvitesCtx
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.shared import g_itemsCache, event_dispatcher as shared_events, utils
+from gui.shared import event_dispatcher as shared_events, utils
 from gui.shared.ClanCache import ClanInfo
 from gui.shared.denunciator import LobbyDenunciator, DENUNCIATIONS, DENUNCIATIONS_MAP
 from gui.shared.utils.functions import showSentInviteMessage
@@ -27,7 +27,9 @@ from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from skeletons.gui.clans import IClanController
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 
 class _EXTENDED_OPT_IDS(object):
     VEHICLE_COMPARE = 'userVehicleCompare'
@@ -55,8 +57,10 @@ class USER(object):
 
 
 class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
+    itemsCache = dependency.descriptor(IItemsCache)
     eventsCache = dependency.descriptor(IEventsCache)
     clanCtrl = dependency.descriptor(IClanController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, cmProxy, ctx=None):
         super(BaseUserCMHandler, self).__init__(cmProxy, ctx, handlers=self._getHandlers())
@@ -95,12 +99,12 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         shared_events.requestProfile(self.databaseID, self.userName, successCallback=onDossierReceived)
 
     def showClanInfo(self):
-        if not g_lobbyContext.getServerSettings().clanProfile.isEnabled():
+        if not self.lobbyContext.getServerSettings().clanProfile.isEnabled():
             SystemMessages.pushMessage(makeString(SYSTEM_MESSAGES.CLANS_ISCLANPROFILEDISABLED), type=SystemMessages.SM_TYPE.Error)
             return
 
         def onDossierReceived(databaseID, _):
-            clanID, clanInfo = g_itemsCache.items.getClanInfo(databaseID)
+            clanID, clanInfo = self.itemsCache.items.getClanInfo(databaseID)
             if clanID != 0:
                 clanInfo = ClanInfo(*clanInfo)
                 shared_events.showClanProfileWindow(clanID, clanInfo.getClanAbbrev())
@@ -274,12 +278,12 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return options
 
     def _addClanProfileInfo(self, options, userCMInfo):
-        if g_lobbyContext.getServerSettings().clanProfile.isEnabled() and userCMInfo.hasClan and self.showClanProfile:
+        if self.lobbyContext.getServerSettings().clanProfile.isEnabled() and userCMInfo.hasClan and self.showClanProfile:
             options.append(self._makeItem(USER.CLAN_INFO, MENU.contextmenu(USER.CLAN_INFO), optInitData={'enabled': self.clanCtrl.isAvailable()}))
         return options
 
     def _addInviteClanInfo(self, options, userCMInfo):
-        if g_lobbyContext.getServerSettings().clanProfile.isEnabled() and not userCMInfo.hasClan:
+        if self.lobbyContext.getServerSettings().clanProfile.isEnabled() and not userCMInfo.hasClan:
             profile = self.clanCtrl.getAccountProfile()
             canHandleClanInvites = profile.getMyClanPermissions().canHandleClanInvites()
             if profile.isInClan() and canHandleClanInvites:
@@ -333,7 +337,7 @@ class AppealCMHandler(BaseUserCMHandler):
         if vehicleCD is not None and not math.isnan(vehicleCD):
             self._vehicleCD = int(vehicleCD)
         clientArenaIdx = getattr(ctx, 'clientArenaIdx', 0)
-        self._arenaUniqueID = g_lobbyContext.getArenaUniqueIDByClientID(clientArenaIdx)
+        self._arenaUniqueID = self.lobbyContext.getArenaUniqueIDByClientID(clientArenaIdx)
         self._arenaGuiType = getattr(ctx, 'arenaType', ARENA_GUI_TYPE.UNKNOWN)
         self._isAlly = getattr(ctx, 'isAlly', False)
         super(AppealCMHandler, self)._initFlashValues(ctx)
@@ -363,7 +367,7 @@ class AppealCMHandler(BaseUserCMHandler):
 
     def _addVehicleInfo(self, options):
         if self._vehicleCD > 0:
-            vehicle = g_itemsCache.items.getItemByCD(self._vehicleCD)
+            vehicle = self.itemsCache.items.getItemByCD(self._vehicleCD)
             if not vehicle.isSecret:
                 isEnabled = True
                 if vehicle.isPreviewAllowed():
@@ -411,10 +415,61 @@ class UserVehicleCMHandler(AppealCMHandler):
 
     def _manageVehCompareOptions(self, options):
         if self.comparisonBasket.isEnabled():
-            options.insert(2, self._makeItem(_EXTENDED_OPT_IDS.VEHICLE_COMPARE, MENU.contextmenu(_EXTENDED_OPT_IDS.VEHICLE_COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(g_itemsCache.items.getItemByCD(self._vehicleCD))}))
+            options.insert(2, self._makeItem(_EXTENDED_OPT_IDS.VEHICLE_COMPARE, MENU.contextmenu(_EXTENDED_OPT_IDS.VEHICLE_COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(self.itemsCache.items.getItemByCD(self._vehicleCD))}))
+
+
+class CustomUserCMHandler(BaseUserCMHandler):
+    """
+    Class for user menu with custom items.
+    Creation context should contain list of custom items ('customItems').
+    Each item should have 3-elements length (id, label, enabled).
+    Context also should contain list of IDs for base-items that must be excluded ('excludedItems').
+    """
+
+    def __init__(self, cmProxy, ctx=None):
+        super(CustomUserCMHandler, self).__init__(cmProxy, ctx=ctx)
+        assert ctx is not None and hasattr(ctx, 'customItems') and hasattr(ctx, 'excludedItems')
+        self.__customOptions = ctx.customItems
+        self.__excludedOptions = ctx.excludedItems
+        self.__optionSelected = False
+        self.onSelected = Event(self._eManager)
+        return
+
+    def fini(self):
+        if not self.__optionSelected:
+            self.onSelected(None)
+        super(CustomUserCMHandler, self).fini()
+        return
+
+    def onOptionSelect(self, optionId):
+        self.__optionSelected = True
+        self.onSelected(optionId)
+        if optionId not in self.__customOptions:
+            super(CustomUserCMHandler, self).onOptionSelect(optionId=optionId)
+
+    def _generateOptions(self, ctx=None):
+        options = super(CustomUserCMHandler, self)._generateOptions(ctx)
+        options = self._addCustomInfo(options)
+        options = self._excludeOptions(options)
+        return options
+
+    def _addCustomInfo(self, options):
+        customOptions = []
+        if self.__customOptions:
+            for id, label, enabled in self.__customOptions:
+                customOptions.append(self._makeItem(id, label, optInitData={'enabled': enabled}))
+
+            customOptions.append(self._makeSeparator())
+        return customOptions + options
+
+    def _excludeOptions(self, options):
+        excludedOptions = self.__excludedOptions
+        options = [ opt for opt in options if opt['id'] not in excludedOptions ]
+        return options
 
 
 class UserContextMenuInfo(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, databaseID, userName):
         self.user = self.usersStorage.getUser(databaseID)
@@ -448,11 +503,11 @@ class UserContextMenuInfo(object):
 
     @property
     def isSameRealm(self):
-        return g_lobbyContext.getServerSettings().roaming.isSameRealm(self.databaseID)
+        return self.lobbyContext.getServerSettings().roaming.isSameRealm(self.databaseID)
 
     @property
     def canCreateChannel(self):
-        roaming = g_lobbyContext.getServerSettings().roaming
+        roaming = self.lobbyContext.getServerSettings().roaming
         if g_settings.server.XMPP.isEnabled():
             canCreate = roaming.isSameRealm(self.databaseID)
         else:

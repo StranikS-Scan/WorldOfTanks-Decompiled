@@ -5,20 +5,22 @@ from adisp import process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
+from gui.shared.formatters.servers import wrapServerName
 from helpers import dependency
 from helpers import i18n
-from ConnectionManager import connectionManager
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, REQUEST_RATE
-from gui import GUI_SETTINGS, DialogsInterface, makeHtmlString
+from gui import GUI_SETTINGS, DialogsInterface
 from gui.shared import events
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.ServerStatsMeta import ServerStatsMeta
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IServerStatsController, IReloginController
 
 class ServerStats(ServerStatsMeta, ILegacyListener):
     serverStats = dependency.descriptor(IServerStatsController)
     reloginCtrl = dependency.descriptor(IReloginController)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         super(ServerStats, self).__init__()
@@ -81,10 +83,9 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
         return
 
     def _updateCurrentServerInfo(self):
-        from ConnectionManager import connectionManager
-        if connectionManager.serverUserName:
+        if self.connectionMgr.serverUserName:
             tooltipBody = i18n.makeString('#tooltips:header/info/players_online_full/body')
-            tooltipFullData = makeTooltip('#tooltips:header/info/players_online_full/header', tooltipBody % {'servername': connectionManager.serverUserName})
+            tooltipFullData = makeTooltip('#tooltips:header/info/players_online_full/header', tooltipBody % {'servername': self.connectionMgr.serverUserName})
             self.as_setServerStatsInfoS(tooltipFullData)
         self.__onStatsReceived()
 
@@ -93,22 +94,22 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
         simpleHostList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
         if len(simpleHostList):
             for idx, (hostName, name, csisStatus, peripheryID) in enumerate(simpleHostList):
-                result.append({'label': self.__wrapServerName(name),
+                result.append({'label': wrapServerName(name),
                  'data': hostName,
                  'id': peripheryID,
                  'csisStatus': csisStatus})
 
-        if connectionManager.peripheryID == 0:
-            result.insert(0, {'label': self.__wrapServerName(connectionManager.serverUserName),
+        if self.connectionMgr.peripheryID == 0:
+            result.insert(0, {'label': wrapServerName(self.connectionMgr.serverUserName),
              'id': 0,
              'csisStatus': HOST_AVAILABILITY.IGNORED,
-             'data': connectionManager.url})
+             'data': self.connectionMgr.url})
         if not self.__isListSelected:
             self.__isListSelected = True
             index = 0
-            if connectionManager.peripheryID != 0:
+            if self.connectionMgr.peripheryID != 0:
                 for idx, (hostName, name, csisStatus, peripheryID) in enumerate(simpleHostList):
-                    if hostName == connectionManager.url:
+                    if hostName == self.connectionMgr.url:
                         index = idx
                         break
 
@@ -127,9 +128,6 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
 
     def __onServersUpdate(self, _=None):
         self._updateServersList()
-
-    def __wrapServerName(self, name):
-        return makeHtmlString('html_templates:lobby/serverStats', 'serverName', {'name': name}) if constants.IS_CHINA else name
 
     def __onReloing(self, isCompleted):
         if not isCompleted:

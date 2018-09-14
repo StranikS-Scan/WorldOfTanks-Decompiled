@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class StoreViewMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def onClose(self):
         self._printOverrideError('onClose')
@@ -16,11 +10,32 @@ class StoreViewMeta(View):
     def onTabChange(self, tabId):
         self._printOverrideError('onTabChange')
 
-    def as_showStorePageS(self, viewAlias):
-        return self.flashObject.as_showStorePage(viewAlias) if self._isDAAPIInited() else None
+    def onBackButtonClick(self):
+        self._printOverrideError('onBackButtonClick')
+
+    def as_showStorePageS(self, tabId):
+        return self.flashObject.as_showStorePage(tabId) if self._isDAAPIInited() else None
 
     def as_initS(self, data):
         """
         :param data: Represented by StoreViewInitVO (AS)
         """
         return self.flashObject.as_init(data) if self._isDAAPIInited() else None
+
+    def as_showBackButtonS(self, label, description):
+        return self.flashObject.as_showBackButton(label, description) if self._isDAAPIInited() else None
+
+    def as_hideBackButtonS(self):
+        return self.flashObject.as_hideBackButton() if self._isDAAPIInited() else None
+
+    def as_setBtnTabCountersS(self, counters):
+        """
+        :param counters: Represented by Vector.<StoreTabCountersVo> (AS)
+        """
+        return self.flashObject.as_setBtnTabCounters(counters) if self._isDAAPIInited() else None
+
+    def as_removeBtnTabCountersS(self, counters):
+        """
+        :param counters: Represented by Vector.<String> (AS)
+        """
+        return self.flashObject.as_removeBtnTabCounters(counters) if self._isDAAPIInited() else None

@@ -5,7 +5,7 @@ import MapActivities
 import Math
 import Keys
 import GUI
-from debug_utils import *
+from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from functools import partial
 from gui.app_loader import g_appLoader
 import items.vehicles
@@ -38,6 +38,7 @@ _CAM_START_ANGLES = None
 _CAM_START_TARGET_POS = None
 _CAM_DIST_CONSTR = None
 _CAM_PITCH_CONSTR = None
+_CAM_YAW_CONSTR = None
 _CAM_SENS = None
 _CAM_PIVOT_POS = None
 _CAM_FLUENCY = None

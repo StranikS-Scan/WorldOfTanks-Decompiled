@@ -3,7 +3,6 @@
 from CurrentVehicle import g_currentVehicle
 from adisp import process
 from debug_utils import LOG_ERROR
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.meta.PrebattleWindowMeta import PrebattleWindowMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -18,6 +17,7 @@ from gui.prb_control.items import prb_items
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, PREBATTLE_PLAYERS_COMPARATORS
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.events import FocusEvent
+from helpers import dependency
 from helpers import int2roman
 from messenger import g_settings, MessengerEntry
 from messenger.ext import channel_num_gen
@@ -27,9 +27,11 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from prebattle_shared import decodeRoster
+from skeletons.gui.lobby_context import ILobbyContext
 
 @stored_window(DATA_TYPE.CAROUSEL_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, prbName='prebattle'):
         super(PrebattleWindow, self).__init__()
@@ -217,7 +219,7 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
              'dbID': account.dbID,
              'userName': account.name,
              'clanAbbrev': account.clanAbbrev,
-             'region': g_lobbyContext.getRegionCode(account.dbID),
+             'region': self.lobbyContext.getRegionCode(account.dbID),
              'fullName': account.getFullName(),
              'igrType': account.igrType,
              'time': account.time,

@@ -36,11 +36,13 @@ def getGlobalRatingFmt(globalRating):
     return BigWorld.wg_getIntegralFormat(globalRating) if globalRating >= 0 else '--'
 
 
-def moneyWithIcon(money, currType=Currency.CREDITS):
+def moneyWithIcon(money, currType=None):
+    if currType is None:
+        currType = money.getCurrency()
     style = getattr(text_styles, currType)
     icon = getattr(icons, currType)
     value = money.get(currType)
-    formatter = currency.getBWFormatter(currType)
+    formatter = getBWFormatter(currType)
     if style is not None and icon is not None and value is not None:
         return style(formatter(value)) + icon()
     else:

@@ -3,18 +3,12 @@
 from gui.Scaleform.framework.entities.View import View
 
 class LobbyPageMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def moveSpace(self, x, y, delta):
         self._printOverrideError('moveSpace')
 
-    def getSubContainerType(self):
-        self._printOverrideError('getSubContainerType')
+    def getSubContainerTypes(self):
+        self._printOverrideError('getSubContainerTypes')
 
     def notifyCursorOver3dScene(self, isOver3dScene):
         self._printOverrideError('notifyCursorOver3dScene')

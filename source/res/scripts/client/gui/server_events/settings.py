@@ -15,8 +15,8 @@ class _PQSettings(utils.SettingRecord):
 
 class _QuestSettings(utils.SettingRootRecord):
 
-    def __init__(self, lastVisitTime=-1, visited=set(), naVisited=set(), potapov=None):
-        super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited, naVisited=naVisited, potapov=_PQSettings(**(potapov or {})))
+    def __init__(self, lastVisitTime=-1, visited=set(), naVisited=set(), minimized=set(), potapov=None):
+        super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited, naVisited=naVisited, minimized=minimized, potapov=_PQSettings(**(potapov or {})))
 
     def updateVisited(self, visitSettingName, eventID):
         settingsValue = set(self[visitSettingName])
@@ -28,6 +28,13 @@ class _QuestSettings(utils.SettingRootRecord):
     def removeCompleted(self, completedIDs):
         self.update(visited=tuple(set(self.visited).difference(completedIDs)))
         self.update(naVisited=tuple(set(self.naVisited).difference(completedIDs)))
+
+    def updateExpanded(self, eventID, isExpanded):
+        settingsValue = set(self['minimized'])
+        if isExpanded:
+            self.update(minimized=tuple(settingsValue.difference([eventID])))
+        else:
+            self.update(minimized=tuple(settingsValue.union([eventID])))
 
     def save(self):
         self.update(lastVisitTime=time.time())
@@ -56,8 +63,16 @@ def isNewCommonEvent(svrEvent, settings=None):
     return svrEvent.getID() not in settings[setting] and not svrEvent.isCompleted() and not svrEvent.isOutOfDate()
 
 
-def getNewCommonEvents(svrEvents):
-    return filter(lambda e: isNewCommonEvent(e, get()), svrEvents.itervalues())
+def isGroupMinimized(groupID, settings=None):
+    settings = settings or get()
+    return groupID in settings['minimized']
+
+
+def getNewCommonEvents(events):
+    """ Acquire subset of not viewed events from the given events.
+    """
+    settings = get()
+    return filter(lambda e: isNewCommonEvent(e, settings), events)
 
 
 def visitEventGUI(event):
@@ -73,6 +88,23 @@ def visitEventGUI(event):
         if isNaVisitedChanged or isVisitedChanged:
             s.save()
             g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.EVENTS_UPDATED))
+        return
+
+
+def visitEventsGUI(events):
+    """ Mark given events as viewed.
+    """
+    for event in events:
+        visitEventGUI(event)
+
+
+def expandGroup(groupID, isExpanded):
+    if groupID is None:
+        return
+    else:
+        s = get()
+        s.updateExpanded(groupID, isExpanded)
+        s.save()
         return
 
 

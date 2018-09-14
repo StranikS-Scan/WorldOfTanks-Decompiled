@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyListView import BaseRallyListView
 
 class CyberSportUnitsListMeta(BaseRallyListView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseRallyListView
-    """
 
     def getTeamData(self, index):
         self._printOverrideError('getTeamData')

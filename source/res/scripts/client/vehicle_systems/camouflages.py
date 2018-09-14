@@ -15,10 +15,10 @@ def prepareFashions(vDesc, isCurrentModelDamaged, camouflageId=None):
          None]
     else:
         drivenJoints = vDesc.gun.get('drivenJoints', None)
-        fashions = [BigWorld.WGVehicleFashion(False, 1.0),
+        fashions = [BigWorld.WGVehicleFashion(False),
          None,
          None,
-         BigWorld.WGGunRecoil('G', drivenJoints)]
+         None]
     camouflagePresent = False
     texture = ''
     customization = items.vehicles.g_cache.customization(vDesc.type.customizationNationID)

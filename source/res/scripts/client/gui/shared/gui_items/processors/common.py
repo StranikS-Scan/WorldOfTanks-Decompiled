@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
 import BigWorld
-from debug_utils import *
+from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE
-from gui.shared import g_itemsCache
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
-from gui.shared.money import Money
+from gui.shared.money import Money, Currency
 
 class TankmanBerthsBuyer(Processor):
 
@@ -30,7 +29,7 @@ class TankmanBerthsBuyer(Processor):
 class PremiumAccountBuyer(Processor):
 
     def __init__(self, period, price, arenaUniqueID=0, withoutBenefits=False):
-        self.wasPremium = g_itemsCache.items.stats.isPremium
+        self.wasPremium = self.itemsCache.items.stats.isPremium
         super(PremiumAccountBuyer, self).__init__((self.__getConfirmator(withoutBenefits, period, price), plugins.MoneyValidator(Money(gold=price))))
         self.premiumPrice = price
         self.period = period
@@ -50,18 +49,18 @@ class PremiumAccountBuyer(Processor):
     def __getConfirmator(self, withoutBenefits, period, price):
         if withoutBenefits:
             return plugins.HtmlMessageConfirmator('buyPremWithoutBenefitsConfirmation', 'html_templates:lobby/dialogs', 'confirmBuyPremWithoutBenefeits', {'days': text_styles.stats(period),
-             'gold': text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
+             Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
         else:
             localKey = 'premiumContinueConfirmation' if self.wasPremium else 'premiumBuyConfirmation'
             return plugins.MessageConfirmator(localKey, ctx={'days': text_styles.stats(period),
-             'gold': text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
+             Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
 
 
 class GoldToCreditsExchanger(Processor):
 
     def __init__(self, gold):
         self.gold = gold
-        self.credits = int(gold) * g_itemsCache.items.shop.exchangeRate
+        self.credits = int(gold) * self.itemsCache.items.shop.exchangeRate
         super(GoldToCreditsExchanger, self).__init__(plugins=(plugins.HtmlMessageConfirmator('exchangeGoldConfirmation', 'html_templates:lobby/dialogs', 'confirmExchange', {'primaryCurrencyAmount': BigWorld.wg_getGoldFormat(self.gold),
           'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.credits)}), plugins.MoneyValidator(Money(gold=self.gold))))
 
@@ -79,7 +78,7 @@ class GoldToCreditsExchanger(Processor):
 class FreeXPExchanger(Processor):
 
     def __init__(self, xp, vehiclesCD, freeConversion=False):
-        rate = g_itemsCache.items.shop.freeXPConversion
+        rate = self.itemsCache.items.shop.freeXPConversion
         self.xp = xp
         self.__freeConversion = bool(freeConversion)
         self.gold = round(rate[1] * xp / rate[0]) if not freeConversion else 0
@@ -97,7 +96,7 @@ class FreeXPExchanger(Processor):
         BigWorld.player().stats.convertToFreeXP(self.vehiclesCD, self.xp, lambda code: self._response(code, callback), int(self.__freeConversion))
 
     def __makeConfirmator(self):
-        xpLimit = g_itemsCache.items.shop.freeXPConversionLimit
+        xpLimit = self.itemsCache.items.shop.freeXPConversionLimit
         extra = {'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.xp),
          'primaryCurrencyAmount': BigWorld.wg_getGoldFormat(self.gold)}
         if self.__freeConversion:

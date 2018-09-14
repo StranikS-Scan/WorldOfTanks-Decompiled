@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ClientUpdateManager.py
 import inspect
+from gui.shared.money import Currency
 
 class _ClientUpdateManager(object):
     EVENT_TYPE_DELIMITER = '.'
@@ -27,8 +28,18 @@ class _ClientUpdateManager(object):
         for diffpath, handler in map_of_handlers.iteritems():
             self.__subscribeHandler(handler, diffpath)
 
+    def addCurrencyCallback(self, currency, handler):
+        self.__subscribeHandler(handler, 'stats.{}'.format(currency))
+
+    def addMoneyCallback(self, handler):
+        for c in Currency.ALL:
+            self.addCurrencyCallback(c, handler)
+
     def removeCallback(self, diffpath, handler):
         self.__unsubscribeHandler(handler, diffpath)
+
+    def removeCurrencyCallback(self, currency, handler):
+        self.__unsubscribeHandler(handler, 'stats.{}'.format(currency))
 
     def removeObjectCallbacks(self, obj_instance, force=False):
         removed = set(filter(lambda key: inspect.ismethod(key) and key.__self__ is obj_instance, self.__handlers.iterkeys()))

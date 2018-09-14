@@ -3,14 +3,8 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class StoreComponentMeta(BaseDAAPIComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIComponent
-    """
 
-    def requestTableData(self, nation, type, filters):
+    def requestTableData(self, nation, actionsSelected, type, filters):
         self._printOverrideError('requestTableData')
 
     def requestFilterData(self, filterType):
@@ -25,8 +19,11 @@ class StoreComponentMeta(BaseDAAPIComponent):
     def onAddVehToCompare(self, itemCD):
         self._printOverrideError('onAddVehToCompare')
 
-    def as_setNationsS(self, nations):
-        return self.flashObject.as_setNations(nations) if self._isDAAPIInited() else None
+    def as_initFiltersDataS(self, nations, actionsFilterName):
+        """
+        :param nations: Represented by Array (AS)
+        """
+        return self.flashObject.as_initFiltersData(nations, actionsFilterName) if self._isDAAPIInited() else None
 
     def as_completeInitS(self):
         return self.flashObject.as_completeInit() if self._isDAAPIInited() else None
@@ -36,7 +33,7 @@ class StoreComponentMeta(BaseDAAPIComponent):
 
     def as_setFilterTypeS(self, data):
         """
-        :param data: Represented by ShopNationFilterData (AS)
+        :param data: Represented by ShopNationFilterDataVo (AS)
         """
         return self.flashObject.as_setFilterType(data) if self._isDAAPIInited() else None
 
@@ -52,5 +49,11 @@ class StoreComponentMeta(BaseDAAPIComponent):
         """
         return self.flashObject.as_setFilterOptions(data) if self._isDAAPIInited() else None
 
+    def as_scrollPositionS(self, index):
+        return self.flashObject.as_scrollPosition(index) if self._isDAAPIInited() else None
+
     def as_setVehicleCompareAvailableS(self, value):
         return self.flashObject.as_setVehicleCompareAvailable(value) if self._isDAAPIInited() else None
+
+    def as_setActionAvailableS(self, value):
+        return self.flashObject.as_setActionAvailable(value) if self._isDAAPIInited() else None

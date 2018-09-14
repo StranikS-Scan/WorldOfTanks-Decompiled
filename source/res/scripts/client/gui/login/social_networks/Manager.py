@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/login/social_networks/Manager.py
 import BigWorld
 from gui import GUI_SETTINGS
-from ConnectionManager import CONNECTION_METHOD
+from connection_mgr import CONNECTION_METHOD
 from gui.login.Manager import Manager as CredentialsLoginManager
 from WebBridge import WebBridge
 

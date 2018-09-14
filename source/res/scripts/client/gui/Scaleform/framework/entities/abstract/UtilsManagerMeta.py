@@ -1,14 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/UtilsManagerMeta.py
-from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class UtilsManagerMeta(BaseDAAPIModule):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIModule
-    """
+class UtilsManagerMeta(BaseDAAPIComponent):
 
     def getNationNames(self):
         self._printOverrideError('getNationNames')
@@ -20,18 +14,12 @@ class UtilsManagerMeta(BaseDAAPIModule):
         self._printOverrideError('getGUINations')
 
     def changeStringCasing(self, string, isUpper, properties):
-        """
-        :param properties: Represented by IStrCaseProperties (AS)
-        """
         self._printOverrideError('changeStringCasing')
 
     def getAbsoluteUrl(self, relativeUrl):
         self._printOverrideError('getAbsoluteUrl')
 
     def getHtmlIconText(self, properties):
-        """
-        :param properties: Represented by IImageUrlProperties (AS)
-        """
         self._printOverrideError('getHtmlIconText')
 
     def getFirstDayOfWeek(self):

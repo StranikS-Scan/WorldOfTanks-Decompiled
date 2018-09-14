@@ -3,16 +3,17 @@
 import weakref
 import MusicControllerWWISE as _MC
 import SoundGroups
-from gui.shared import g_itemsCache
 from gui.sounds.ambients import GuiAmbientsCtrl
 from gui.sounds.sound_constants import EnabledStatus
 from gui.sounds.sound_systems import getCurrentSoundSystem
 from gui.sounds.sound_utils import SOUND_DEBUG
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
 
 class SoundsController(ISoundsController):
+    itemsCache = dependency.descriptor(IItemsCache)
     gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self):
@@ -69,5 +70,5 @@ class SoundsController(ISoundsController):
         self.__setAccountAttrs(restartSounds=True)
 
     def __setAccountAttrs(self, restartSounds=False):
-        SOUND_DEBUG('Set current account attributes', g_itemsCache.items.stats.attributes, restartSounds)
-        _MC.g_musicController.setAccountAttrs(g_itemsCache.items.stats.attributes, restart=restartSounds)
+        SOUND_DEBUG('Set current account attributes', self.itemsCache.items.stats.attributes, restartSounds)
+        _MC.g_musicController.setAccountAttrs(self.itemsCache.items.stats.attributes, restart=restartSounds)

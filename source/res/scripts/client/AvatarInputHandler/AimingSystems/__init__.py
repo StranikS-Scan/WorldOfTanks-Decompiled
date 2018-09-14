@@ -42,6 +42,12 @@ class IAimingSystem(object):
     def update(self, deltaTime):
         pass
 
+    def getShotPoint(self):
+        return None
+
+    def getZoom(self):
+        return None
+
 
 def getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw=0.0, overrideTurretLocalZ=None):
     turretOffset = getTurretJointOffset(vehicleTypeDescriptor)

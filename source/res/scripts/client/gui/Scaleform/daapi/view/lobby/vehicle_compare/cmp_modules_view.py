@@ -12,15 +12,16 @@ from gui.Scaleform.daapi.view.meta.VehicleModulesViewMeta import VehicleModulesV
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import getSuitableChassis, getInstalledModulesCDs
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
 from gui.shared.items_parameters.params_cache import g_paramsCache
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from nations import AVAILABLE_NAMES
 from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
+from skeletons.gui.shared import IItemsCache
 
 class _MODULES_TYPES(object):
     BASIC = 'basic'
@@ -40,8 +41,9 @@ def _getModule(moduleId):
     return module
 
 
-def _getItem(itemID):
-    return g_itemsCache.items.getItemByCD(itemID)
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _getItem(itemID, itemsCache=None):
+    return itemsCache.items.getItemByCD(itemID)
 
 
 @process

@@ -666,3 +666,21 @@ class GameAttribute(HasIDAndTarget):
 
     def getArgs(self):
         return self.__args
+
+
+class LoadViewData(HasID):
+
+    def __init__(self, entityID, alias, scope, ctx):
+        super(LoadViewData, self).__init__(entityID=entityID)
+        self.__alias = alias
+        self.__scope = scope
+        self.__ctx = ctx
+
+    def getAlias(self):
+        return self.__alias
+
+    def getScope(self):
+        return self.__scope
+
+    def getCtx(self):
+        return self.__ctx

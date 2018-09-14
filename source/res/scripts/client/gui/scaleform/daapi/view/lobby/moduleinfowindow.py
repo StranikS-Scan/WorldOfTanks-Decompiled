@@ -1,20 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ModuleInfoWindow.py
-from debug_utils import LOG_DEBUG
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters
 from gui.shared.utils import GUN_RELOADING_TYPE, GUN_CAN_BE_CLIP, GUN_CLIP, CLIP_ICON_PATH, EXTRA_MODULE_INFO, HYDRAULIC_ICON_PATH
-from gui.shared.utils.functions import stripShortDescrTags
+from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
+from gui.shared.utils.functions import stripShortDescrTags, stripColorTagDescrTags
+from helpers import dependency
 from helpers import i18n
-from items import ITEM_TYPE_NAMES
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 _DEF_SHOT_DISTANCE = 720
 
 class ModuleInfoWindow(ModuleInfoMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(ModuleInfoWindow, self).__init__()
@@ -34,11 +37,11 @@ class ModuleInfoWindow(ModuleInfoMeta):
 
     def _populate(self):
         super(View, self)._populate()
-        module = g_itemsCache.items.getItemByCD(self.moduleCompactDescr)
+        module = self.itemsCache.items.getItemByCD(self.moduleCompactDescr)
         description = ''
-        if module.itemTypeName in (ITEM_TYPE_NAMES[9], ITEM_TYPE_NAMES[11]):
-            description = stripShortDescrTags(module.fullDescription)
-        if module.itemTypeName in (ITEM_TYPE_NAMES[9], ITEM_TYPE_NAMES[10], ITEM_TYPE_NAMES[11]):
+        if module.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.EQUIPMENT):
+            description = stripColorTagDescrTags(module.fullDescription)
+        if module.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.SHELL, GUI_ITEM_TYPE.EQUIPMENT):
             icon = module.icon
         else:
             icon = module.level
@@ -57,9 +60,10 @@ class ModuleInfoWindow(ModuleInfoMeta):
         moduleParameters = params.get('parameters', {})
         formattedModuleParameters = formatters.getFormattedParamsList(module.descriptor, moduleParameters)
         extraParamsInfo = params.get('extras', {})
-        isGun = module.itemTypeName == ITEM_TYPE_NAMES[4]
-        isShell = module.itemTypeName == ITEM_TYPE_NAMES[10]
-        isChassis = module.itemTypeName == ITEM_TYPE_NAMES[2]
+        isGun = module.itemTypeID == GUI_ITEM_TYPE.GUN
+        isShell = module.itemTypeID == GUI_ITEM_TYPE.SHELL
+        isChassis = module.itemTypeID == GUI_ITEM_TYPE.CHASSIS
+        isOptionalDevice = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE
         excludedParametersNames = extraParamsInfo.get('excludedParams', tuple())
         if isGun:
             if 'maxShotDistance' in moduleParameters:
@@ -100,9 +104,9 @@ class ModuleInfoWindow(ModuleInfoMeta):
             compatible.append({'type': i18n.makeString(MENU.moduleinfo_compatible(paramType)),
              'value': paramValue})
 
-        if module.itemTypeName == ITEM_TYPE_NAMES[11]:
+        if module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
             effectsNametemplate = '#artefacts:%s/%s'
-            if g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+            if self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 isRemovingStun = module.isRemovingStun
             else:
                 isRemovingStun = False
@@ -116,6 +120,8 @@ class ModuleInfoWindow(ModuleInfoMeta):
                  'value': text_styles.stats(cooldownSeconds) + '\n'}
         if isShell and self.__isAdditionalInfoShow is not None:
             moduleData['additionalInfo'] = self.__isAdditionalInfoShow
+        if isOptionalDevice:
+            moduleData['highlightType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if module.isDeluxe() else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
         self.as_setModuleInfoS(moduleData)
         self._updateActionButton()
         return

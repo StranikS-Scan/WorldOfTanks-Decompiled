@@ -163,6 +163,10 @@ class DIALOGS(object):
     LOWAMMO_MESSAGE = '#dialogs:lowAmmo/message'
     LOWAMMO_SUBMIT = '#dialogs:lowAmmo/submit'
     LOWAMMO_CANCEL = '#dialogs:lowAmmo/cancel'
+    LOWAMMOAUTOLOAD_TITLE = '#dialogs:lowAmmoAutoLoad/title'
+    LOWAMMOAUTOLOAD_MESSAGE = '#dialogs:lowAmmoAutoLoad/message'
+    LOWAMMOAUTOLOAD_SUBMIT = '#dialogs:lowAmmoAutoLoad/submit'
+    LOWAMMOAUTOLOAD_CANCEL = '#dialogs:lowAmmoAutoLoad/cancel'
     SANDBOX_TITLE = '#dialogs:sandBox/title'
     SANDBOX_MESSAGE = '#dialogs:sandBox/message'
     SANDBOX_SUBMIT = '#dialogs:sandBox/submit'
@@ -281,7 +285,7 @@ class DIALOGS(object):
     TRADEINPOPOVER_SORTING_VEHLVL_BODY = '#dialogs:tradeInPopover/sorting/vehLvl/body'
     TRADEINPOPOVER_SORTING_VEHNAME_HEADER = '#dialogs:tradeInPopover/sorting/vehName/header'
     TRADEINPOPOVER_SORTING_VEHNAME_BODY = '#dialogs:tradeInPopover/sorting/vehName/body'
-    TRADEINPOPOVER_SORTING_SAVING = '#dialogs:tradeInPopover/sorting/saving'
+    TRADEINPOPOVER_SORTING_SAVING_FORMATTED = '#dialogs:tradeInPopover/sorting/saving/formatted'
     TRADEINPOPOVER_SORTING_SAVING_HEADER = '#dialogs:tradeInPopover/sorting/saving/header'
     TRADEINPOPOVER_SORTING_SAVING_BODY = '#dialogs:tradeInPopover/sorting/saving/body'
     RESTOREVEHICLEDIALOG_TITLE = '#dialogs:restoreVehicleDialog/title'
@@ -620,6 +624,10 @@ class DIALOGS(object):
     VEHICLESELL_UNIQUE_MESSAGE = '#dialogs:vehicleSell/unique/message'
     VEHICLESELL_UNIQUE_SUBMIT = '#dialogs:vehicleSell/unique/submit'
     VEHICLESELL_UNIQUE_CANCEL = '#dialogs:vehicleSell/unique/cancel'
+    VEHICLESELL_UNIQUE_CREWLOCKED_TITLE = '#dialogs:vehicleSell/unique/crewLocked/title'
+    VEHICLESELL_UNIQUE_CREWLOCKED_MESSAGE = '#dialogs:vehicleSell/unique/crewLocked/message'
+    VEHICLESELL_UNIQUE_CREWLOCKED_SUBMIT = '#dialogs:vehicleSell/unique/crewLocked/submit'
+    VEHICLESELL_UNIQUE_CREWLOCKED_CANCEL = '#dialogs:vehicleSell/unique/crewLocked/cancel'
     VEHICLESELL_RESTORECOOLDOWN_TITLE = '#dialogs:vehicleSell/restoreCooldown/title'
     VEHICLESELL_RESTORECOOLDOWN_MESSAGE = '#dialogs:vehicleSell/restoreCooldown/message'
     VEHICLESELL_RESTORECOOLDOWN_SUBMIT = '#dialogs:vehicleSell/restoreCooldown/submit'
@@ -638,6 +646,7 @@ class DIALOGS(object):
     REPLAYNOTIFICATION_CANCEL = '#dialogs:replayNotification/cancel'
     REPLAYSTOPPED_TITLE = '#dialogs:replayStopped/title'
     REPLAYSTOPPED_MESSAGE = '#dialogs:replayStopped/message'
+    REPLAYSTOPPED_SUBMIT = '#dialogs:replayStopped/submit'
     REPLAYSTOPPED_CANCEL = '#dialogs:replayStopped/cancel'
     PUNISHMENTWINDOW_TITLE = '#dialogs:punishmentWindow/title'
     PUNISHMENTWINDOW_MSGTITLE_WARNING = '#dialogs:punishmentWindow/msgTitle/warning'
@@ -909,6 +918,17 @@ class DIALOGS(object):
     VEHCONF_EXITDIALOG_MESSAGE = '#dialogs:vehConf/exitDialog/message'
     VEHCONF_EXITDIALOG_SUBMIT = '#dialogs:vehConf/exitDialog/submit'
     VEHCONF_EXITDIALOG_CANCEL = '#dialogs:vehConf/exitDialog/cancel'
+    CONFIRMBATTLEBOOSTERINSTALL_TITLE = '#dialogs:confirmBattleBoosterInstall/title'
+    CONFIRMBATTLEBOOSTERINSTALL_MESSAGE = '#dialogs:confirmBattleBoosterInstall/message'
+    CONFIRMBATTLEBOOSTERINSTALL_SUBMIT = '#dialogs:confirmBattleBoosterInstall/submit'
+    CONFIRMBATTLEBOOSTERINSTALL_CANCEL = '#dialogs:confirmBattleBoosterInstall/cancel'
+    CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_TITLE = '#dialogs:confirmBattleBoosterInstallNotSuitable/title'
+    CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_MESSAGE = '#dialogs:confirmBattleBoosterInstallNotSuitable/message'
+    CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_SUBMIT = '#dialogs:confirmBattleBoosterInstallNotSuitable/submit'
+    CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_CANCEL = '#dialogs:confirmBattleBoosterInstallNotSuitable/cancel'
+    CONFIRMBATTLEBOOSTERBUYANDINSTALL_TITLE = '#dialogs:confirmBattleBoosterBuyAndInstall/title'
+    CONFIRMBATTLEBOOSTERBUYANDINSTALL_SUBMIT = '#dialogs:confirmBattleBoosterBuyAndInstall/submit'
+    CONFIRMBATTLEBOOSTERBUYANDINSTALL_CANCEL = '#dialogs:confirmBattleBoosterBuyAndInstall/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1067,6 +1087,10 @@ class DIALOGS(object):
      LOWAMMO_MESSAGE,
      LOWAMMO_SUBMIT,
      LOWAMMO_CANCEL,
+     LOWAMMOAUTOLOAD_TITLE,
+     LOWAMMOAUTOLOAD_MESSAGE,
+     LOWAMMOAUTOLOAD_SUBMIT,
+     LOWAMMOAUTOLOAD_CANCEL,
      SANDBOX_TITLE,
      SANDBOX_MESSAGE,
      SANDBOX_SUBMIT,
@@ -1185,7 +1209,7 @@ class DIALOGS(object):
      TRADEINPOPOVER_SORTING_VEHLVL_BODY,
      TRADEINPOPOVER_SORTING_VEHNAME_HEADER,
      TRADEINPOPOVER_SORTING_VEHNAME_BODY,
-     TRADEINPOPOVER_SORTING_SAVING,
+     TRADEINPOPOVER_SORTING_SAVING_FORMATTED,
      TRADEINPOPOVER_SORTING_SAVING_HEADER,
      TRADEINPOPOVER_SORTING_SAVING_BODY,
      RESTOREVEHICLEDIALOG_TITLE,
@@ -1524,6 +1548,10 @@ class DIALOGS(object):
      VEHICLESELL_UNIQUE_MESSAGE,
      VEHICLESELL_UNIQUE_SUBMIT,
      VEHICLESELL_UNIQUE_CANCEL,
+     VEHICLESELL_UNIQUE_CREWLOCKED_TITLE,
+     VEHICLESELL_UNIQUE_CREWLOCKED_MESSAGE,
+     VEHICLESELL_UNIQUE_CREWLOCKED_SUBMIT,
+     VEHICLESELL_UNIQUE_CREWLOCKED_CANCEL,
      VEHICLESELL_RESTORECOOLDOWN_TITLE,
      VEHICLESELL_RESTORECOOLDOWN_MESSAGE,
      VEHICLESELL_RESTORECOOLDOWN_SUBMIT,
@@ -1542,6 +1570,7 @@ class DIALOGS(object):
      REPLAYNOTIFICATION_CANCEL,
      REPLAYSTOPPED_TITLE,
      REPLAYSTOPPED_MESSAGE,
+     REPLAYSTOPPED_SUBMIT,
      REPLAYSTOPPED_CANCEL,
      PUNISHMENTWINDOW_TITLE,
      PUNISHMENTWINDOW_MSGTITLE_WARNING,
@@ -1812,7 +1841,18 @@ class DIALOGS(object):
      VEHCONF_EXITDIALOG_TITLE,
      VEHCONF_EXITDIALOG_MESSAGE,
      VEHCONF_EXITDIALOG_SUBMIT,
-     VEHCONF_EXITDIALOG_CANCEL)
+     VEHCONF_EXITDIALOG_CANCEL,
+     CONFIRMBATTLEBOOSTERINSTALL_TITLE,
+     CONFIRMBATTLEBOOSTERINSTALL_MESSAGE,
+     CONFIRMBATTLEBOOSTERINSTALL_SUBMIT,
+     CONFIRMBATTLEBOOSTERINSTALL_CANCEL,
+     CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_TITLE,
+     CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_MESSAGE,
+     CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_SUBMIT,
+     CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_CANCEL,
+     CONFIRMBATTLEBOOSTERBUYANDINSTALL_TITLE,
+     CONFIRMBATTLEBOOSTERBUYANDINSTALL_SUBMIT,
+     CONFIRMBATTLEBOOSTERBUYANDINSTALL_CANCEL)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

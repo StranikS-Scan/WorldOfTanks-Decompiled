@@ -22,7 +22,6 @@ from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.customization.shared import getBonusIcon42x42
 from gui.shared import event_dispatcher
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.economics import getGUIPrice
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
@@ -33,6 +32,7 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController, IRestoreController
+from skeletons.gui.shared import IItemsCache
 CREW_INFO_TAB_ID = 'crewInfoTab'
 FACT_SHEET_TAB_ID = 'factSheetTab'
 TAB_ORDER = [FACT_SHEET_TAB_ID, CREW_INFO_TAB_ID]
@@ -51,6 +51,7 @@ def _buildBuyButtonTooltip(key):
 
 class VehiclePreview(LobbySubView, VehiclePreviewMeta):
     __background_alpha__ = 0.0
+    itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     tradeIn = dependency.descriptor(ITradeInController)
     restores = dependency.descriptor(IRestoreController)
@@ -65,9 +66,8 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
     def _populate(self):
         g_currentPreviewVehicle.selectVehicle(self.__vehicleCD)
         super(VehiclePreview, self)._populate()
-        g_clientUpdateManager.addCallbacks({'stats.credits': self.__updateBtnState,
-         'stats.gold': self.__updateBtnState,
-         'stats.freeXP': self.__updateBtnState})
+        g_clientUpdateManager.addMoneyCallback(self.__updateBtnState)
+        g_clientUpdateManager.addCallbacks({'stats.freeXP': self.__updateBtnState})
         g_currentPreviewVehicle.onComponentInstalled += self.__updateStatus
         g_currentPreviewVehicle.onVehicleUnlocked += self.__updateBtnState
         g_currentPreviewVehicle.onVehicleInventoryChanged += self.__onInventoryChanged
@@ -191,12 +191,12 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
 
     def __getBtnData(self):
         vehicle = g_currentPreviewVehicle.item
-        stats = g_itemsCache.items.stats
+        stats = self.itemsCache.items.stats
         tooltip = ''
         if vehicle.isUnlocked:
             money = stats.money
             money = self.tradeIn.addTradeInPriceIfNeeded(vehicle, money)
-            exchangeRate = g_itemsCache.items.shop.exchangeRate
+            exchangeRate = self.itemsCache.items.shop.exchangeRate
             price = getGUIPrice(vehicle, money, exchangeRate)
             currency = price.getCurrency(byWeight=True)
             action = getActionPriceData(vehicle)
@@ -220,7 +220,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
             isAvailableToUnlock, xpCost, possibleXp = g_techTreeDP.isVehicleAvailableToUnlock(nodeCD)
             formatter = text_styles.creditsTextBig if possibleXp >= xpCost else text_styles.errCurrencyTextBig
             if not isAvailableToUnlock:
-                unlocks = g_itemsCache.items.stats.unlocks
+                unlocks = self.itemsCache.items.stats.unlocks
                 next2Unlock, _ = g_techTreeDP.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=stats.vehiclesXPs, freeXP=stats.freeXP)
                 if next2Unlock:
                     tooltip = _buildBuyButtonTooltip('notEnoughXp')

@@ -5,34 +5,34 @@
     <shortUserString>	#france_vehicles:RenaultFT_short	</shortUserString>
     <description>	#france_vehicles:RenaultFT_descr	</description>
     <price>	0	</price>
-    <tags>	lightTank HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user HD	</tags>
     <level>	1	</level>
   </F01_RenaultFT>
-  <F03_D2>
-    <id>	1	</id>
-    <userString>	#france_vehicles:D2	</userString>
-    <shortUserString>	#france_vehicles:D2_short	</shortUserString>
-    <description>	#france_vehicles:D2_descr	</description>
-    <price>	42500	</price>
-    <tags>	mediumTank wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
-    <level>	3	</level>
-  </F03_D2>
   <F20_RenaultBS>
     <id>	3	</id>
     <userString>	#france_vehicles:RenaultBS	</userString>
     <shortUserString>	#france_vehicles:RenaultBS_short	</shortUserString>
     <description>	#france_vehicles:RenaultBS_descr	</description>
     <price>	3700	</price>
-    <tags>	SPG lightSPG improvedVentilation_class1_user mediumCaliberHowitzerRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	SPG lightSPG improvedVentilation_class1_user mediumCaliberHowitzerRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	2	</level>
   </F20_RenaultBS>
+  <F03_D2>
+    <id>	1	</id>
+    <userString>	#france_vehicles:D2	</userString>
+    <shortUserString>	#france_vehicles:D2_short	</shortUserString>
+    <description>	#france_vehicles:D2_descr	</description>
+    <price>	42500	</price>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
+    <level>	3	</level>
+  </F03_D2>
   <F04_B1>
     <id>	4	</id>
     <userString>	#france_vehicles:B1	</userString>
     <shortUserString>	#france_vehicles:B1_short	</shortUserString>
     <description>	#france_vehicles:B1_descr	</description>
     <price>	185000	</price>
-    <tags>	heavyTank wetCombatPack_class2_user enhancedSprings_class3_user HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user wetCombatPack_class2_user enhancedSprings_class3_user HD	</tags>
     <level>	4	</level>
   </F04_B1>
   <F12_Hotchkiss_H35>
@@ -41,7 +41,7 @@
     <shortUserString>	#france_vehicles:Hotchkiss_H35_short	</shortUserString>
     <description>	#france_vehicles:Hotchkiss_H35_descr	</description>
     <price>	4200	</price>
-    <tags>	lightTank wetCombatPack_class1_user enhancedHorizontal_springs_user enhancedHorizontal_springs_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedHorizontal_springs_user enhancedHorizontal_springs_user HD	</tags>
     <level>	2	</level>
   </F12_Hotchkiss_H35>
   <F02_D1>
@@ -50,7 +50,7 @@
     <shortUserString>	#france_vehicles:D1_short	</shortUserString>
     <description>	#france_vehicles:D1_descr	</description>
     <price>	3800	</price>
-    <tags>	lightTank wetCombatPack_class1_user enhancedVertical_springs_user	</tags>
+    <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedVertical_springs_user	</tags>
     <level>	2	</level>
   </F02_D1>
   <F28_105_leFH18B2>
@@ -61,7 +61,7 @@
     <price>	1500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	SPG lightSPG noImprovedVentilation mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSprings_class3_user HD	</tags>
+    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSprings_class3_user HD	</tags>
     <level>	5	</level>
   </F28_105_leFH18B2>
   <F27_FCM_36Pak40>
@@ -81,7 +81,7 @@
     <shortUserString>	#france_vehicles:ARL_44_short	</shortUserString>
     <description>	#france_vehicles:ARL_44_descr	</description>
     <price>	925000	</price>
-    <tags>	heavyTank largeCaliberTankRammer_user wetCombatPack_class2_user enhancedSprings_class3_user HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedSprings_class3_user HD	</tags>
     <level>	6	</level>
   </F06_ARL_44>
   <F14_AMX40>
@@ -90,7 +90,7 @@
     <shortUserString>	#france_vehicles:AMX40_short	</shortUserString>
     <description>	#france_vehicles:AMX40_descr	</description>
     <price>	147500	</price>
-    <tags>	lightTank wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedVertical_springs_user	</tags>
+    <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedVertical_springs_user	</tags>
     <level>	4	</level>
   </F14_AMX40>
   <F08_AMX_50_100>
@@ -99,7 +99,7 @@
     <shortUserString>	#france_vehicles:AMX_50_100_short	</shortUserString>
     <description>	#france_vehicles:AMX_50_100_descr	</description>
     <price>	2552500	</price>
-    <tags>	heavyTank aimingStabilizer_Mk2_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	8	</level>
   </F08_AMX_50_100>
   <F21_Lorraine39_L_AM>
@@ -117,7 +117,7 @@
     <shortUserString>	#france_vehicles:Bat_Chatillon25t_short	</shortUserString>
     <description>	#france_vehicles:Bat_Chatillon25t_descr	</description>
     <price>	6100000	</price>
-    <tags>	mediumTank wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user	</tags>
     <level>	10	</level>
   </F18_Bat_Chatillon25t>
   <F09_AMX_50_120>
@@ -126,7 +126,7 @@
     <shortUserString>	#france_vehicles:AMX_50_120_short	</shortUserString>
     <description>	#france_vehicles:AMX_50_120_descr	</description>
     <price>	3565000	</price>
-    <tags>	heavyTank aimingStabilizer_Mk2_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	9	</level>
   </F09_AMX_50_120>
   <F22_AMX_105AM>
@@ -144,7 +144,7 @@
     <shortUserString>	#france_vehicles:Renault_G1R_short	</shortUserString>
     <description>	#france_vehicles:Renault_G1R_descr	</description>
     <price>	350000	</price>
-    <tags>	mediumTank wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedTorsions3t_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedTorsions3t_user HD	</tags>
     <level>	5	</level>
   </F11_Renault_G1R>
   <F23_AMX_13F3AM>
@@ -162,7 +162,7 @@
     <shortUserString>	#france_vehicles:AMX_13_90_short	</shortUserString>
     <description>	#france_vehicles:AMX_13_90_descr	</description>
     <price>	3500000	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
     <level>	9	</level>
   </F17_AMX_13_90>
   <F16_AMX_13_75>
@@ -171,7 +171,7 @@
     <shortUserString>	#france_vehicles:AMX_13_75_short	</shortUserString>
     <description>	#france_vehicles:AMX_13_75_descr	</description>
     <price>	1345000	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
     <level>	7	</level>
   </F16_AMX_13_75>
   <F13_AMX38>
@@ -180,7 +180,7 @@
     <shortUserString>	#france_vehicles:AMX38_short	</shortUserString>
     <description>	#france_vehicles:AMX38_descr	</description>
     <price>	41000	</price>
-    <tags>	lightTank wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
     <level>	3	</level>
   </F13_AMX38>
   <F10_AMX_50B>
@@ -189,7 +189,7 @@
     <shortUserString>	#france_vehicles:AMX_50_68t_short	</shortUserString>
     <description>	#france_vehicles:AMX_50_68t_descr	</description>
     <price>	6100000	</price>
-    <tags>	heavyTank wetCombatPack_class2_user aimingStabilizer_Mk2_user enhancedTorsions5t_user HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user wetCombatPack_class2_user aimingStabilizer_Mk2_user enhancedTorsions5t_user HD	</tags>
     <level>	10	</level>
   </F10_AMX_50B>
   <F15_AMX_12t>
@@ -198,7 +198,7 @@
     <shortUserString>	#france_vehicles:AMX_12t_short	</shortUserString>
     <description>	#france_vehicles:AMX_12t_descr	</description>
     <price>	875000	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
     <level>	6	</level>
   </F15_AMX_12t>
   <F05_BDR_G1B>
@@ -207,7 +207,7 @@
     <shortUserString>	#france_vehicles:BDR_G1B_short	</shortUserString>
     <description>	#france_vehicles:BDR_G1B_descr	</description>
     <price>	400000	</price>
-    <tags>	heavyTank mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedSprings_class3_user	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedSprings_class3_user HD	</tags>
     <level>	5	</level>
   </F05_BDR_G1B>
   <F07_AMX_M4_1945>
@@ -216,7 +216,7 @@
     <shortUserString>	#france_vehicles:AMX_M4_1945_short	</shortUserString>
     <description>	#france_vehicles:AMX_M4_1945_descr	</description>
     <price>	1395000	</price>
-    <tags>	heavyTank largeCaliberTankRammer_user wetCombatPack_class2_user enhancedSprings_class3_user HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedSprings_class3_user HD	</tags>
     <level>	7	</level>
   </F07_AMX_M4_1945>
   <F24_Lorraine155_50>
@@ -243,7 +243,7 @@
     <shortUserString>	#france_vehicles:RenaultFT_AC_short	</shortUserString>
     <description>	#france_vehicles:RenaultFT_AC_descr	</description>
     <price>	3600	</price>
-    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user	</tags>
+    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user HD	</tags>
     <level>	2	</level>
   </F30_RenaultFT_AC>
   <F52_RenaultUE57>
@@ -252,7 +252,7 @@
     <shortUserString>	#france_vehicles:RenaultUE57_short	</shortUserString>
     <description>	#france_vehicles:RenaultUE57_descr	</description>
     <price>	42500	</price>
-    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user enhancedSprings_user	</tags>
+    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user enhancedSprings_user HD	</tags>
     <level>	3	</level>
   </F52_RenaultUE57>
   <F32_Somua_Sau_40>
@@ -279,7 +279,7 @@
     <description>	#france_vehicles:AMX_AC_Mle1946_descr	</description>
     <shortUserString>	#france_vehicles:AMX_AC_Mle1946_short	</shortUserString>
     <price>	1350000	</price>
-    <tags>	AT-SPG heavyAT-SPG enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	7	</level>
   </F35_AMX_AC_Mle1946>
   <F37_AMX50_Foch>
@@ -288,7 +288,7 @@
     <description>	#france_vehicles:AMX50_Foch_descr	</description>
     <shortUserString>	#france_vehicles:AMX50_Foch_short	</shortUserString>
     <price>	3670000	</price>
-    <tags>	AT-SPG heavyAT-SPG enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	9	</level>
   </F37_AMX50_Foch>
   <F34_ARL_V39>
@@ -297,7 +297,7 @@
     <shortUserString>	#france_vehicles:ARL_V39_short	</shortUserString>
     <description>	#france_vehicles:ARL_V39_descr	</description>
     <price>	900000	</price>
-    <tags>	AT-SPG mediumAT-SPG wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_class2_user HD	</tags>
+    <tags>	AT-SPG mediumAT-SPG improvedVentilation_class2_user wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_class2_user HD	</tags>
     <level>	6	</level>
   </F34_ARL_V39>
   <F38_Bat_Chatillon155_58>
@@ -315,7 +315,7 @@
     <description>	#france_vehicles:AMX_AC_Mle1948_descr	</description>
     <shortUserString>	#france_vehicles:AMX_AC_Mle1948_short	</shortUserString>
     <price>	2570000	</price>
-    <tags>	AT-SPG heavyAT-SPG largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	8	</level>
   </F36_AMX_AC_Mle1948>
   <F44_Somua_S35>
@@ -324,7 +324,7 @@
     <shortUserString>	#france_vehicles:Somua_S35_short	</shortUserString>
     <description>	#france_vehicles:Somua_S35_descr	</description>
     <price>	42000	</price>
-    <tags>	mediumTank wetCombatPack_class1_user enhancedSprings_class2_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user enhancedSprings_class2_user HD	</tags>
     <level>	3	</level>
   </F44_Somua_S35>
   <F64_AMX_50Fosh_155>
@@ -333,7 +333,7 @@
     <description>	#france_vehicles:AMX_50Fosh_155_descr	</description>
     <shortUserString>	#france_vehicles:AMX_50Fosh_155_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	AT-SPG heavyAT-SPG enhancedLongitudinalTorsions_user  wetCombatPack_class2_user HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user enhancedLongitudinalTorsions_user wetCombatPack_class2_user HD	</tags>
     <level>	10	</level>
   </F64_AMX_50Fosh_155>
   <F62_ELC_AMX>
@@ -342,7 +342,7 @@
     <shortUserString>	#france_vehicles:ELC_AMX_short	</shortUserString>
     <description>	#france_vehicles:ELC_AMX_descr	</description>
     <price>	315000	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user enhancedTorsions1t_user HD	</tags>
+    <tags>	lightTank scout improvedVentilation_class1_user wetCombatPack_class1_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user enhancedTorsions1t_user HD	</tags>
     <level>	5	</level>
   </F62_ELC_AMX>
   <F67_Bat_Chatillon155_55>
@@ -369,7 +369,7 @@
     <shortUserString>	#france_vehicles:SARL42_short	</shortUserString>
     <description>	#france_vehicles:SARL42_descr	</description>
     <price>	155000	</price>
-    <tags>	mediumTank wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_class2_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_class2_user HD	</tags>
     <level>	4	</level>
   </F70_SARL42>
   <F50_FCM36_20t>
@@ -378,7 +378,7 @@
     <shortUserString>	#france_vehicles:FCM36_20t_short	</shortUserString>
     <description>	#france_vehicles:FCM36_20t_descr	</description>
     <price>	3900	</price>
-    <tags>	lightTank wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
     <level>	2	</level>
   </F50_FCM36_20t>
   <F72_AMX_30>
@@ -387,7 +387,7 @@
     <shortUserString>	#france_vehicles:F72_AMX_30_short	</shortUserString>
     <description>	#france_vehicles:F72_AMX_30_descr	</description>
     <price>	6100000	</price>
-    <tags>	mediumTank wetCombatPack_class1_user mediumCaliberTankRammer_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user mediumCaliberTankRammer_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
     <level>	10	</level>
   </F72_AMX_30>
   <F71_AMX_30_prototype>
@@ -396,7 +396,7 @@
     <shortUserString>	#france_vehicles:AMX_30_prototype_short	</shortUserString>
     <description>	#france_vehicles:AMX_30_prototype_descr	</description>
     <price>	3550000	</price>
-    <tags>	mediumTank wetCombatPack_class1_user mediumCaliberTankRammer_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user mediumCaliberTankRammer_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
     <level>	9	</level>
   </F71_AMX_30_prototype>
   <F49_RenaultR35>
@@ -405,7 +405,7 @@
     <shortUserString>	#france_vehicles:RenaultR35_short	</shortUserString>
     <description>	#france_vehicles:RenaultR35_descr	</description>
     <price>	3850	</price>
-    <tags>	lightTank wetCombatPack_class1_user enhancedHorizontal_springs_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user wetCombatPack_class1_user enhancedHorizontal_springs_user HD	</tags>
     <level>	2	</level>
   </F49_RenaultR35>
   <F75_Char_de_25t>
@@ -414,7 +414,7 @@
     <shortUserString>	#france_vehicles:F75_Char_de_25t_short	</shortUserString>
     <description>	#france_vehicles:F75_Char_de_25t_descr	</description>
     <price>	3450000	</price>
-    <tags>	mediumTank wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
     <level>	9	</level>
   </F75_Char_de_25t>
   <F88_AMX_13_105>
@@ -423,7 +423,7 @@
     <shortUserString>	#france_vehicles:F88_AMX_13_105_short	</shortUserString>
     <description>	#france_vehicles:F88_AMX_13_105_descr	</description>
     <price>	6100000	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
     <level>	10	</level>
   </F88_AMX_13_105>
   <F87_Batignolles-Chatillon_12t>
@@ -432,7 +432,7 @@
     <shortUserString>	#france_vehicles:F87_Batignolles-Chatillon_12t_short	</shortUserString>
     <description>	#france_vehicles:F87_Batignolles-Chatillon_12t_descr	</description>
     <price>	2370000	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
     <level>	8	</level>
   </F87_Batignolles-Chatillon_12t>
   <F74_AMX_M4_1949_Liberte>
@@ -443,7 +443,7 @@
     <price>	11700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	8	</level>
   </F74_AMX_M4_1949_Liberte>
   <F84_Somua_SM>
@@ -454,7 +454,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank aimingStabilizer_Mk2_user wetCombatPack_class2_user enhancedTorsions5t_user HD secret testTank	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user wetCombatPack_class2_user enhancedTorsions5t_user HD secret testTank	</tags>
     <level>	8	</level>
   </F84_Somua_SM>
   <F19_Lorraine40t>
@@ -465,7 +465,7 @@
     <price>	10700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
     <level>	8	</level>
   </F19_Lorraine40t>
   <F74_AMX_M4_1949>
@@ -476,7 +476,7 @@
     <price>	11700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	8	</level>
   </F74_AMX_M4_1949>
   <F73_M4A1_Revalorise>
@@ -486,7 +486,7 @@
     <description>	#france_vehicles:F73_M4A1_Revalorise_descr	</description>
     <price>	7200	  <gold></gold>
     </price>
-    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user aimingStabilizer_Mk1_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </F73_M4A1_Revalorise>
   <F69_AMX13_57_100_GrandFinal>
@@ -497,7 +497,7 @@
     <price>	5000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank scout wetCombatPack_class1_user enhancedTorsions1t_user aimingStabilizer_Mk1_user HD inGame	</tags>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user enhancedTorsions1t_user aimingStabilizer_Mk1_user HD inGame	</tags>
     <level>	7	</level>
   </F69_AMX13_57_100_GrandFinal>
   <F68_AMX_Chasseur_de_char_46>
@@ -507,7 +507,7 @@
     <description>	#france_vehicles:F68_AMX_Chasseur_de_char_46_descr	</description>
     <price>	7450	  <gold></gold>
     </price>
-    <tags>	mediumTank enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </F68_AMX_Chasseur_de_char_46>
   <F69_AMX13_57_100>
@@ -518,7 +518,7 @@
     <price>	5000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank secret scout wetCombatPack_class1_user enhancedTorsions1t_user aimingStabilizer_Mk1_user HD inGame	</tags>
+    <tags>	lightTank improvedVentilation_class1_user secret scout wetCombatPack_class1_user enhancedTorsions1t_user aimingStabilizer_Mk1_user HD inGame	</tags>
     <level>	7	</level>
   </F69_AMX13_57_100>
   <F65_FCM_50t>
@@ -528,7 +528,7 @@
     <description>	#france_vehicles:FCM_50t_descr	</description>
     <price>	11900	  <gold></gold>
     </price>
-    <tags>	heavyTank aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	8	</level>
   </F65_FCM_50t>
   <F10_AMX_50B_fallout>
@@ -538,7 +538,7 @@
     <description>	#france_vehicles:AMX_50_68t_fallout_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank wetCombatPack_class2_user aimingStabilizer_Mk2_user enhancedTorsions5t_user HD fallout secret	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user wetCombatPack_class2_user aimingStabilizer_Mk2_user enhancedTorsions5t_user HD fallout secret	</tags>
     <level>	10	</level>
   </F10_AMX_50B_fallout>
   <F36_AMX_AC_Mle1948_IGR>
@@ -547,7 +547,7 @@
     <description>	#igr_vehicles:AMX_AC_Mle1948_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:AMX_AC_Mle1948_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	AT-SPG heavyAT-SPG largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user premiumIGR secret HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user premiumIGR secret HD	</tags>
     <level>	8	</level>
   </F36_AMX_AC_Mle1948_IGR>
   <F17_AMX_13_90_IGR>
@@ -556,7 +556,7 @@
     <shortUserString>	#igr_vehicles:AMX_13_90_IGR_short	</shortUserString>
     <description>	#igr_vehicles:AMX_13_90_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user premiumIGR secret HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user premiumIGR secret HD	</tags>
     <level>	9	</level>
   </F17_AMX_13_90_IGR>
   <F08_AMX_50_100_IGR>
@@ -565,7 +565,7 @@
     <shortUserString>	#igr_vehicles:AMX_50_100_IGR_short	</shortUserString>
     <description>	#igr_vehicles:AMX_50_100_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	heavyTank aimingStabilizer_Mk2_user wetCombatPack_class2_user enhancedTorsions5t_user premiumIGR secret HD	</tags>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user wetCombatPack_class2_user enhancedTorsions5t_user premiumIGR secret HD	</tags>
     <level>	8	</level>
   </F08_AMX_50_100_IGR>
   <F28_105_leFH18B2_IGR>
@@ -575,7 +575,7 @@
     <description>	#igr_vehicles:_105_leFH18B2_IGR_descr	</description>
     <price>	1	  <gold></gold>
     </price>
-    <tags>	SPG lightSPG noImprovedVentilation mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSprings_class3_user premiumIGR secret HD	</tags>
+    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSprings_class3_user premiumIGR secret HD	</tags>
     <level>	5	</level>
   </F28_105_leFH18B2_IGR>
   <F33_S_35CA_IGR>
@@ -593,7 +593,7 @@
     <shortUserString>	#igr_vehicles:ELC_AMX_IGR_short	</shortUserString>
     <description>	#igr_vehicles:ELC_AMX_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user enhancedTorsions1t_user premiumIGR secret HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user enhancedTorsions1t_user premiumIGR secret HD	</tags>
     <level>	5	</level>
   </F62_ELC_AMX_IGR>
   <F18_Bat_Chatillon25t_IGR>
@@ -602,7 +602,7 @@
     <shortUserString>	#igr_vehicles:Bat_Chatillon25t_IGR_short	</shortUserString>
     <description>	#igr_vehicles:Bat_Chatillon25t_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	mediumTank wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user premiumIGR secret	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user premiumIGR secret	</tags>
     <level>	10	</level>
   </F18_Bat_Chatillon25t_IGR>
   <F01_RenaultFT_bot>
@@ -612,7 +612,7 @@
     <description>	#france_vehicles:RenaultFT_bot_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank secret unrecoverable HD	</tags>
+    <tags>	lightTank improvedVentilation_class1_user secret unrecoverable HD	</tags>
     <level>	1	</level>
   </F01_RenaultFT_bot>
 </list.xml>

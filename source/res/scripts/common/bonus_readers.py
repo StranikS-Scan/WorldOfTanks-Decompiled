@@ -13,22 +13,26 @@ def getBonusReaders(bonusTypes):
     return dict(((k, __BONUS_READERS[k]) for k in bonusTypes))
 
 
-def readUTC(section, field, default=None):
-    timeData = section.readString(field, '')
+def timeDataToUTC(timeData, default=None):
     try:
         if timeData is None:
             raise Exception('Wrong timeData')
         if timeData != '':
-            timeData = time.strptime(timeData, '%d.%m.%Y %H:%M')
-            timeData = int(calendar.timegm(timeData))
+            timeData = int(calendar.timegm(time.strptime(timeData, '%d.%m.%Y %H:%M')))
         else:
-            if default is None:
-                raise Exception('Wrong default')
             return default
     except:
-        raise Exception('Invalid %s format (%s). Format must be like %s, for example 23.01.2011 00:00.' % (field, timeData, "'%d.%m.%Y %H:%M'"))
+        raise Exception('Invalid format (%s). Format must be like %s, for example 23.01.2011 00:00.' % (timeData, "'%d.%m.%Y %H:%M'"))
 
     return timeData
+
+
+def readUTC(section, field, default=None):
+    timeData = section.readString(field, '')
+    try:
+        return timeDataToUTC(timeData, default)
+    except Exception as e:
+        raise Exception('Invalid field %s: %s' % (field, e))
 
 
 def __readBonus_bool(bonus, name, section):
@@ -252,10 +256,17 @@ def __readBonus_goodies(bonus, _name, section):
 
 
 def __readBonus_expires(id, expires, section):
-    if section['expires'].has_key('after'):
-        expires['after'] = section['expires']['after'].asInt
+    if section['expires'].has_key('endOfGameDay'):
+        expires['endOfGameDay'] = True
+        return
     else:
-        expires['at'] = readUTC(section, 'expires')
+        if section['expires'].has_key('after'):
+            expires['after'] = section['expires']['after'].asInt
+        else:
+            expires['at'] = readUTC(section, 'expires')
+            if expires['at'] is None:
+                raise Exception('Invalid expiry time for %s' % id)
+        return
 
 
 def __readBonus_dossier(bonus, _name, section):
@@ -347,6 +358,7 @@ __BONUS_READERS = {'buyAllVehicles': __readBonus_bool,
  'premiumAmmo': __readBonus_int,
  'gold': __readBonus_int,
  'credits': __readBonus_int,
+ 'crystal': __readBonus_int,
  'freeXP': __readBonus_int,
  'slots': __readBonus_int,
  'berths': __readBonus_int,

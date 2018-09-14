@@ -5,9 +5,9 @@ import BigWorld
 import ResMgr
 import BattleReplay
 from functools import partial
-from debug_utils import *
 import SoundGroups
 import WWISE
+from debug_utils import LOG_WARNING
 
 class IngameSoundNotifications(object):
     __CFG_SECTION_PATH = 'gui/sound_notifications.xml'

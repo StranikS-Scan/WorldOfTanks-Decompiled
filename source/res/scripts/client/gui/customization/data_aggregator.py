@@ -4,11 +4,12 @@ import nations
 from constants import IGR_TYPE
 from gui.customization.elements import InstalledElement, Emblem, Inscription, Camouflage, Qualifier, CamouflageQualifier
 from gui.customization.shared import CUSTOMIZATION_TYPE, SLOT_TYPE, TYPE_NAME, EMBLEM_IGR_GROUP_NAME, ELEMENT_PLACEMENT
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers import dependency
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 _ITEM_CLASS = {CUSTOMIZATION_TYPE.EMBLEM: Emblem,
  CUSTOMIZATION_TYPE.INSCRIPTION: Inscription,
  CUSTOMIZATION_TYPE.CAMOUFLAGE: Camouflage}
@@ -24,6 +25,7 @@ class DataAggregator(object):
     """
     Class which aggregates customization data for currently selected vehicle.
     """
+    _itemsCache = dependency.descriptor(IItemsCache)
     _questsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, events, dependencies):
@@ -32,7 +34,6 @@ class DataAggregator(object):
         self.__incompleteQuestItems = None
         self.__inventoryItems = None
         self._currentVehicle = dependencies.g_currentVehicle
-        self._itemsCache = dependencies.g_itemsCache
         self._vehiclesCache = dependencies.g_vehiclesCache
         self._activeCamouflage = dependencies.g_tankActiveCamouflage
         self._qualifiersCache = dependencies.g_qualifiersCache
@@ -167,7 +168,7 @@ class DataAggregator(object):
     def __getPriceAttributes(self, cNationID, cType):
         price = (self._itemsCache.items.shop.camouflageCost, self._itemsCache.items.shop.playerEmblemCost, self._itemsCache.items.shop.playerInscriptionCost)
         priceFactor = (self._itemsCache.items.shop.getCamouflagesPriceFactors(cNationID), self._itemsCache.items.shop.getEmblemsGroupPriceFactors(), self._itemsCache.items.shop.getInscriptionsGroupPriceFactors(cNationID))
-        vehiclePriceFactor = (self._itemsCache.items.shop.defaults.getVehCamouflagePriceFactor(self._currentVehicle.item.descriptor.type.compactDescr), self._currentVehicle.item.level, self._currentVehicle.item.level)
+        vehiclePriceFactor = (self._itemsCache.items.shop.getVehCamouflagePriceFactor(self._currentVehicle.item.descriptor.type.compactDescr), self._currentVehicle.item.level, self._currentVehicle.item.level)
         defaultPrice = (self._itemsCache.items.shop.defaults.camouflageCost, self._itemsCache.items.shop.defaults.playerEmblemCost, self._itemsCache.items.shop.defaults.playerInscriptionCost)
         defaultPriceFactor = (self._itemsCache.items.shop.defaults.getCamouflagesPriceFactors(cNationID), self._itemsCache.items.shop.defaults.getEmblemsGroupPriceFactors(), self._itemsCache.items.shop.defaults.getInscriptionsGroupPriceFactors(cNationID))
         defaultVehiclePriceFactor = (self._itemsCache.items.shop.defaults.getVehCamouflagePriceFactor(self._currentVehicle.item.descriptor.type.compactDescr), self._currentVehicle.item.level, self._currentVehicle.item.level)

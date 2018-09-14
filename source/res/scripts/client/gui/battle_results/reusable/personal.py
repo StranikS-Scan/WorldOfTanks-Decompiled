@@ -11,13 +11,15 @@ from gui.battle_results.reusable import shared
 from gui.battle_results.reusable import sort_keys
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 from gui.battle_results.settings import FACTOR_VALUE
-from gui.shared import g_itemsCache
+from gui.ranked_battles.ranked_models import PostBattleRankInfo
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 _LifeTimeInfo = namedtuple('_LifeTimeInfo', ('isKilled', 'lifeTime'))
 _FortTotalResourceInfo = namedtuple('_FortTotalResourceInfo', ('totalInfluencePoints', 'totalFortResource'))
 
 class _SquadBonusInfo(object):
+    itemsCache = dependency.descriptor(IItemsCache)
     eventsCache = dependency.descriptor(IEventsCache)
     __slots__ = ('__vehicles', '__joinedOnArena', '__size')
 
@@ -28,7 +30,7 @@ class _SquadBonusInfo(object):
         self.__size = size
 
     def getVehiclesLevelsDistance(self):
-        getter = g_itemsCache.items.getItemByCD
+        getter = self.itemsCache.items.getItemByCD
         levels = [ getter(typeCompDescr).level for typeCompDescr in self.__vehicles ]
         levels.sort()
         if levels:
@@ -50,7 +52,7 @@ class _SquadBonusInfo(object):
             else:
                 distance = self.getVehiclesLevelsDistance()
                 if intCD:
-                    level = g_itemsCache.items.getItemByCD(intCD).level
+                    level = self.itemsCache.items.getItemByCD(intCD).level
                     key = (distance, level)
                     showSquadLabels = key not in self.eventsCache.getSquadZeroBonuses()
                 squadHasBonus = distance in self.eventsCache.getSquadBonusLevelDistance()
@@ -294,7 +296,8 @@ class _EconomicsRecordsChains(object):
 class PersonalInfo(shared.UnpackedInfo):
     """Class contains reusable personal information about player.
     This information is fetched from battle_results['personal']"""
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '__economicsRecords', '__isPremium', '__fortResources', '__questsProgress')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '__economicsRecords', '__isPremium', '__fortResources', '__questsProgress', '__rankInfo')
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
         super(PersonalInfo, self).__init__()
@@ -310,6 +313,7 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__lifeTimeInfo = _LifeTimeInfo(False, 0)
         self.__fortResources = _FortTotalResourceInfo(0, 0)
         self.__questsProgress = {}
+        self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0)
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
         return
@@ -345,7 +349,7 @@ class PersonalInfo(shared.UnpackedInfo):
         """Gets generator to iterate GUI wrappers of vehicles that player used in the battle.
         :return: generator containing all GUI wrappers of vehicles.
         """
-        getItemByCD = g_itemsCache.items.getItemByCD
+        getItemByCD = self.itemsCache.items.getItemByCD
         for intCD in self.__vehicles:
             yield (intCD, getItemByCD(intCD))
 
@@ -383,6 +387,11 @@ class PersonalInfo(shared.UnpackedInfo):
         :return: dictionary containing information about quests.
         """
         return self.__questsProgress
+
+    def getRankInfo(self):
+        """Gets union information about rank changing from personal['avatar']
+        """
+        return self.__rankInfo
 
     def getBaseCreditsRecords(self):
         """Gets credits records without premium factor."""
@@ -429,7 +438,7 @@ class PersonalInfo(shared.UnpackedInfo):
         return self.__fortResources
 
     def __collectRequiredData(self, info):
-        getItemByCD = g_itemsCache.items.getItemByCD
+        getItemByCD = self.itemsCache.items.getItemByCD
         items = sorted(map(getItemByCD, filter(lambda key: isinstance(key, (int, long, float)), info.keys())))
         lifeTimes = []
         totalResource, totalInfluence = (0, 0)
@@ -437,6 +446,7 @@ class PersonalInfo(shared.UnpackedInfo):
         infoAvatar = info['avatar']
         if infoAvatar:
             self.__questsProgress.update(infoAvatar.get('questsProgress', {}))
+            self.__rankInfo = PostBattleRankInfo.fromDict(infoAvatar)
         for item in items:
             intCD = item.intCD
             assert intCD in info

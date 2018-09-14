@@ -3,14 +3,11 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class DamageInfoPanelMeta(BaseDAAPIComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIComponent
-    """
 
     def as_showS(self, itemList, showFire):
+        """
+        :param itemList: Represented by Array (AS)
+        """
         return self.flashObject.as_show(itemList, showFire) if self._isDAAPIInited() else None
 
     def as_hideS(self):

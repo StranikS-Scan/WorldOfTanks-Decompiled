@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ContactsListPopover.py
 from account_helpers.AccountSettings import AccountSettings, CONTACTS
 from debug_utils import LOG_DEBUG, LOG_WARNING
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.locale.WAITING import WAITING
 from helpers import dependency
@@ -14,9 +13,11 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.lobby_context import ILobbyContext
 
 class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
     settingsCore = dependency.descriptor(ISettingsCore)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(ContactsListPopover, self).__init__(ctx)
@@ -64,6 +65,12 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
                 self.__moveToGroupProcess(dbID, targetGroup, None)
         return
 
+    def getContactListSettings(self):
+        settings = self.settingsCore.serverSettings.getSection(CONTACTS, AccountSettings.getFilterDefault(CONTACTS))
+        onlineMode = None if settings['showOfflineUsers'] else True
+        showOthers = bool(settings['showOthersCategory'])
+        return (onlineMode, showOthers)
+
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(ContactsListPopover, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == CONTACTS_ALIASES.CONTACTS_TREE:
@@ -71,9 +78,7 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
             if tree:
                 g_messengerEvents.users.onEmptyGroupsChanged += self.__onEmptyGroupsChanged
                 tree.onGroupToggled += self.__onGroupToggled
-                settings = self.settingsCore.serverSettings.getSection(CONTACTS, AccountSettings.getFilterDefault(CONTACTS))
-                onlineMode = None if settings['showOfflineUsers'] else True
-                showOthers = bool(settings['showOthersCategory'])
+                onlineMode, showOthers = self.getContactListSettings()
                 tree.showContacts(onlineMode=onlineMode, showVisibleOthers=showOthers, showEmptyGroups=True)
                 myDP = tree.getMainDP()
                 openedGroups = self.usersStorage.getOpenedGroups()
@@ -81,13 +86,11 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
                     for groupName in groupsSet:
                         myDP.toggleGroup(categoryId, groupName)
 
-        return
-
     def onWindowClose(self):
         self.destroy()
 
     def isEnabledInRoaming(self, uid):
-        roaming = g_lobbyContext.getServerSettings().roaming
+        roaming = self.lobbyContext.getServerSettings().roaming
         return not roaming.isInRoaming() and not roaming.isPlayerInRoaming(uid)
 
     def addToFriends(self, uid, name):
@@ -193,7 +196,8 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
                 self.usersStorage.setOpenedGroups(CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID, group, False)
 
     def __onSettingsChanged(self, diff):
-        isChanged, onlineMode, showOthers = False, True, False
+        isChanged = False
+        onlineMode, showOthers = self.getContactListSettings()
         tree = self.pyTree
         if 'showOthersCategory' in diff:
             value = diff['showOthersCategory']

@@ -615,6 +615,9 @@ class FunctionalScene(TutorialProxyHolder):
 
     def leave(self):
         LOG_DEBUG('Leave scene', self._scene.getID())
+        for itemID in list(self._itemsOnScene):
+            self.removeItemFromScene(itemID)
+
         if self._mustBeUpdated:
             self._gui.release()
             self._mustBeUpdated = False

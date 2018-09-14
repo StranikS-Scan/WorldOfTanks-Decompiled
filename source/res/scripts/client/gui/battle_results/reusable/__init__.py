@@ -15,8 +15,9 @@ from gui.battle_results.reusable.shared import VehicleSummarizeInfo
 from gui.battle_results.reusable.vehicles import VehiclesInfo
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD, PREMIUM_STATE
 from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT
-from gui.shared import g_itemsCache
-from gui.LobbyContext import g_lobbyContext
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 def _fetchRecord(results, recordName):
     if recordName in results:
@@ -86,6 +87,8 @@ class _ReusableInfo(object):
     """Class contains reusable information that is fetched from dictionary
     containing results of battle."""
     __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder')
+    itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, arenaUniqueID, common, personal, players, vehicles, avatars):
         super(_ReusableInfo, self).__init__()
@@ -159,7 +162,7 @@ class _ReusableInfo(object):
     @property
     def isStunEnabled(self):
         """Is stun info should be visible."""
-        return g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+        return self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
 
     @property
     def common(self):
@@ -263,7 +266,7 @@ class _ReusableInfo(object):
         getBotInfo = self.__common.getBotInfo
         getPlayerInfo = self.__players.getPlayerInfo
         makePlayerInfo = self.__players.makePlayerInfo
-        getItemByCD = g_itemsCache.items.getItemByCD
+        getItemByCD = self.itemsCache.items.getItemByCD
         for _, vData in self.__personal.getVehicleCDsIterator(result):
             details = vData.get('details', {})
             enemies = []
@@ -300,7 +303,7 @@ class _ReusableInfo(object):
         """
         player = weakref.proxy(self.getPlayerInfo())
         info = VehicleSummarizeInfo(0, player)
-        getItemByCD = g_itemsCache.items.getItemByCD
+        getItemByCD = self.itemsCache.items.getItemByCD
         for intCD, records in self.__personal.getVehicleCDsIterator(result):
             critsRecords = []
             if 'details' in records:
@@ -318,9 +321,10 @@ class _ReusableInfo(object):
         info.addAvatarInfo(weakref.proxy(self.getAvatarInfo()))
         return info
 
-    def getBiDirectionTeamsIterator(self, result):
+    def getBiDirectionTeamsIterator(self, result, sortKey=sort_keys.TeamItemSortKey):
         """Gets two generators to iterate details for each vehicle.
         :param result: dict containing results['vehicles'].
+        :param sortKey: sort order for allies and enemies.
         :return: tuple containing generator of allied vehicles and generator of enemy vehicles.
         """
         allies = []
@@ -335,11 +339,11 @@ class _ReusableInfo(object):
             enemies.append(info)
 
         def __allies():
-            for ally in sorted(allies, key=sort_keys.TeamItemSortKey):
+            for ally in sorted(allies, key=sortKey):
                 yield ally
 
         def __enemies():
-            for enemy in sorted(enemies, key=sort_keys.TeamItemSortKey):
+            for enemy in sorted(enemies, key=sortKey):
                 yield enemy
 
         return (__allies(), __enemies())

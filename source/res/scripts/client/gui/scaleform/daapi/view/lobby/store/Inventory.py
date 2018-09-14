@@ -10,7 +10,7 @@ from gui.Scaleform.daapi.view.lobby.store.tabs import inventory
 from gui.Scaleform.daapi.view.meta.InventoryMeta import InventoryMeta
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
-from gui.shared import g_itemsCache, event_dispatcher as shared_event_dispatcher
+from gui.shared import event_dispatcher as shared_event_dispatcher
 from gui.shared.utils import flashObject2Dict
 from adisp import process
 from items import ITEM_TYPE_INDICES
@@ -25,25 +25,29 @@ class Inventory(InventoryMeta):
 
     def sellItem(self, itemCD):
         dataCompactId = int(itemCD)
-        item = g_itemsCache.items.getItemByCD(dataCompactId)
+        item = self.itemsCache.items.getItemByCD(dataCompactId)
         if ITEM_TYPE_INDICES[item.itemTypeName] == vehicles._VEHICLE:
             shared_event_dispatcher.showVehicleSellDialog(int(item.invID))
         else:
             self.__sellItem(item.intCD)
 
-    def requestTableData(self, nation, type, filter):
+    def requestTableData(self, nation, actionsSelected, type, filter):
         """
         Request table data for selected tab
         :param type: <str> tab ID
         :param nation: <int> gui nation
+        :param actionsSelected: <bool> discount's checkbox value
         :param filter: <obj> filter data
         """
         Waiting.show('updateInventory')
-        AccountSettings.setFilter('inventory_current', (nation, type))
         filter = flashObject2Dict(filter)
+        itemCD = AccountSettings.getFilter('scroll_to_item')
+        AccountSettings.setFilter('inventory_current', (nation, type, actionsSelected))
         AccountSettings.setFilter('inventory_' + type, filter)
-        self._setTableData(filter, nation, type)
+        AccountSettings.setFilter('scroll_to_item', None)
+        self._setTableData(filter, nation, type, actionsSelected, itemCD)
         Waiting.hide('updateInventory')
+        return
 
     def getName(self):
         """

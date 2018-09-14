@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.meta.SimpleWindowMeta import SimpleWindowMeta
 
 class GoldFishWindowMeta(SimpleWindowMeta):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends SimpleWindowMeta
-    """
 
     def eventHyperLinkClicked(self):
         self._printOverrideError('eventHyperLinkClicked')

@@ -1,19 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/FITTING_TYPES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class FITTING_TYPES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     OPTIONAL_DEVICE = 'optionalDevice'
     EQUIPMENT = 'equipment'
     SHELL = 'shell'
     VEHICLE = 'vehicle'
     MODULE = 'module'
     ORDER = 'order'
+    BOOSTER = 'battleBooster'
     STORE_SLOTS = [VEHICLE,
      MODULE,
      SHELL,
@@ -37,6 +36,7 @@ class FITTING_TYPES(object):
     TARGET_OTHER = 'other'
     TARGET_HANGAR = 'hangar'
     TARGET_HANGAR_CANT_INSTALL = 'hangarCantInstall'
+    TARGET_HANGAR_DUPLICATE = 'hangarDuplicate'
     TARGET_VEHICLE = 'vehicle'
     ITEM_TARGETS = [TARGET_OTHER,
      TARGET_HANGAR,
@@ -47,14 +47,17 @@ class FITTING_TYPES(object):
     RESERVE_FITTING_ITEM_RENDERER = 'ReserveFittingItemRendererUI'
     ENGINE_CHASSIS_FITTING_ITEM_RENDERER = 'EngineChassisFittingItemRendererUI'
     RADIO_FITTING_ITEM_RENDERER = 'RadioFittingItemRendererUI'
+    BOOSTER_FITTING_ITEM_RENDERER = 'BoosterFittingItemRendererUI'
     FITTING_RENDERERS = [OPTIONAL_DEVICE_FITTING_ITEM_RENDERER,
      GUN_TURRET_FITTING_ITEM_RENDERER,
      RESERVE_FITTING_ITEM_RENDERER,
      ENGINE_CHASSIS_FITTING_ITEM_RENDERER,
-     RADIO_FITTING_ITEM_RENDERER]
+     RADIO_FITTING_ITEM_RENDERER,
+     BOOSTER_FITTING_ITEM_RENDERER]
     OPTIONAL_DEVICE_RENDERER_DATA_CLASS_NAME = 'net.wg.gui.lobby.modulesPanel.data.OptionalDeviceVO'
     MODULE_FITTING_RENDERER_DATA_CLASS_NAME = 'net.wg.gui.lobby.modulesPanel.data.ModuleVO'
-    FITTING_RENDERER_DATA_NAMES = [OPTIONAL_DEVICE_RENDERER_DATA_CLASS_NAME, MODULE_FITTING_RENDERER_DATA_CLASS_NAME]
+    BOOSTER_FITTING_RENDERER_DATA_CLASS_NAME = 'net.wg.gui.lobby.modulesPanel.data.BoosterFittingItemVO'
+    FITTING_RENDERER_DATA_NAMES = [OPTIONAL_DEVICE_RENDERER_DATA_CLASS_NAME, MODULE_FITTING_RENDERER_DATA_CLASS_NAME, BOOSTER_FITTING_RENDERER_DATA_CLASS_NAME]
     HANGAR_POPOVER_TOP_MARGIN = 80
     VEHPREVIEW_POPOVER_MIN_AVAILABLE_HEIGHT = 575
     LARGE_POPOVER_WIDTH = 540

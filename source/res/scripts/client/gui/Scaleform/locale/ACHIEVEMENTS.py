@@ -636,6 +636,8 @@ class ACHIEVEMENTS(object):
     MARKSONGUN_DESCR_PARAM_VALUE_1 = '#achievements:marksOnGun/descr/param/value/1'
     MARKSONGUN_DESCR_PARAM_VALUE_2 = '#achievements:marksOnGun/descr/param/value/2'
     MARKSONGUN_DESCR_PARAM_VALUE_3 = '#achievements:marksOnGun/descr/param/value/3'
+    HONOREDRANK = '#achievements:honoredRank'
+    HONOREDRANK_DESCR = '#achievements:honoredRank_descr'
     ACHIEVEMENT_ENUM = (ACHIEVEMENT_RANK1,
      ACHIEVEMENT_RANK2,
      ACHIEVEMENT_RANK3,
@@ -1272,7 +1274,9 @@ class ACHIEVEMENTS(object):
      MARKSONGUN_DESCR_PARAM_LABEL_3,
      MARKSONGUN_DESCR_PARAM_VALUE_1,
      MARKSONGUN_DESCR_PARAM_VALUE_2,
-     MARKSONGUN_DESCR_PARAM_VALUE_3)
+     MARKSONGUN_DESCR_PARAM_VALUE_3,
+     HONOREDRANK,
+     HONOREDRANK_DESCR)
 
     @classmethod
     def achievement(cls, key0):

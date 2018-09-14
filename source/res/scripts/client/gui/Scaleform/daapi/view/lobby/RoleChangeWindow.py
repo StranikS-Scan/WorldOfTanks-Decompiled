@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/RoleChangeWindow.py
 import BigWorld
+from helpers import dependency
 from helpers.i18n import makeString
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -9,11 +10,12 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items import Tankman
 from gui.shared.gui_items.serializers import packTankman
 from gui.shared.gui_items.processors.tankman import TankmanChangeRole
-from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.money import Currency
 from gui.shared.utils import decorators, isVehicleObserver
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.formatters import icons, text_styles
 from nations import NAMES
+from skeletons.gui.shared import IItemsCache
 
 def _getTankmanVO(tankman):
     packedTankman = packTankman(tankman, isCountPermanentSkills=False)
@@ -59,24 +61,24 @@ def _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, role, selectedVeh
 
 
 class RoleChangeWindow(RoleChangeMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(RoleChangeWindow, self).__init__()
-        self.__items = g_itemsCache.items
-        self.__tankman = self.__items.getTankman(ctx.get('tankmanID', None))
+        self.__tankman = self.itemsCache.items.getTankman(ctx.get('tankmanID', None))
         self.__nativeVehicleCD = self.__tankman.vehicleNativeDescr.type.compactDescr
         self.__selectedVehicleCD = self.__nativeVehicleCD
         self.__currentVehicleCD = None
         if self.__tankman.vehicleDescr is not None:
             self.__currentVehicleCD = self.__tankman.vehicleDescr.type.compactDescr
-        g_clientUpdateManager.addCallbacks({'stats.gold': self._onMoneyUpdate,
-         'stats.unlock': self._onStatsUpdate,
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self._onMoneyUpdate)
+        g_clientUpdateManager.addCallbacks({'stats.unlock': self._onStatsUpdate,
          'stats.inventory': self._onStatsUpdate})
         return
 
     def onVehicleSelected(self, vehTypeCompDescr):
         self.__selectedVehicleCD = int(vehTypeCompDescr)
-        selectedVehicle = self.__items.getItemByCD(self.__selectedVehicleCD)
+        selectedVehicle = self.itemsCache.items.getItemByCD(self.__selectedVehicleCD)
         data = []
         mainRoles = []
         for slotIdx, tman in selectedVehicle.crew:
@@ -84,7 +86,7 @@ class RoleChangeWindow(RoleChangeMeta):
             if mainRole not in mainRoles:
                 mainRoles.append(mainRole)
                 criteria = REQ_CRITERIA.TANKMAN.NATIVE_TANKS([self.__selectedVehicleCD]) | REQ_CRITERIA.TANKMAN.ROLES([mainRole]) | REQ_CRITERIA.TANKMAN.ACTIVE
-                roleTankmen = self.__items.getTankmen(criteria).values()
+                roleTankmen = self.itemsCache.items.getTankmen(criteria).values()
                 sameTankmen = len(roleTankmen)
                 roleSlotIsTaken = _isRoleSlotTaken(roleTankmen, selectedVehicle, mainRole)
                 roleStr = Tankman.getRoleUserName(mainRole)
@@ -118,7 +120,6 @@ class RoleChangeWindow(RoleChangeMeta):
         self.__checkMoney()
 
     def _dispose(self):
-        self.__items = None
         self.__tankman = None
         self.__selectedVehicleCD = None
         self.__currentVehicleCD = None
@@ -133,9 +134,9 @@ class RoleChangeWindow(RoleChangeMeta):
         self.__setCommonData()
 
     def __checkMoney(self):
-        changeRoleCost = self.__items.shop.changeRoleCost
+        changeRoleCost = self.itemsCache.items.shop.changeRoleCost
         formattedPrice = BigWorld.wg_getIntegralFormat(changeRoleCost)
-        actualGold = self.__items.stats.gold
+        actualGold = self.itemsCache.items.stats.gold
         enoughGold = actualGold - changeRoleCost >= 0
         if enoughGold:
             priceString = text_styles.gold(formattedPrice)
@@ -152,10 +153,10 @@ class RoleChangeWindow(RoleChangeMeta):
     def __getVehiclesData(self, nationID, nativeVehicleCD):
         items = []
         criteria = REQ_CRITERIA.NATIONS([nationID]) | REQ_CRITERIA.UNLOCKED
-        vehicles = self.__items.getVehicles(criteria)
+        vehicles = self.itemsCache.items.getVehicles(criteria)
         vehiclesData = vehicles.values()
         if nativeVehicleCD not in vehicles:
-            vehiclesData.append(self.__items.getItemByCD(nativeVehicleCD))
+            vehiclesData.append(self.itemsCache.items.getItemByCD(nativeVehicleCD))
         for vehicle in sorted(vehiclesData):
             vDescr = vehicle.descriptor
             if isVehicleObserver(vDescr.type.compactDescr):

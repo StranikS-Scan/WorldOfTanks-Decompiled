@@ -6,12 +6,14 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils import isPopupsWindowsOpenDisabled
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 
 class SETTINGS_TAB_INDEX(object):
     GAME = 0
@@ -29,6 +31,22 @@ def showBattleResultsWindow(arenaUniqueID):
 
 def notifyBattleResultsPosted(arenaUniqueID):
     g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showRankedBattleResultsWindow(rankedResultsVO, vehicle, rankInfo):
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, ctx={'rankedResultsVO': rankedResultsVO,
+     'vehicle': vehicle,
+     'rankInfo': rankInfo}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showRankedAwardWindow(rankID, showNext=True, vehicle=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ctx={'rankID': rankID,
+     'showNext': showNext,
+     'vehicle': vehicle}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showRankedPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showVehicleInfo(vehTypeCompDescr):
@@ -50,6 +68,11 @@ def showVehicleBuyDialog(vehicle, isTradeIn=False):
     g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'nationID': vehicle.nationID,
      'itemID': vehicle.innationID,
      'isTradeIn': isTradeIn}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTER_BUY_WINDOW, ctx={'typeCompDescr': battleBoosterIntCD,
+     'install': install}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showResearchView(vehTypeCompDescr):
@@ -80,6 +103,10 @@ def hideBattleResults():
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def hideWebBrowser(browserID=None):
+    g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BROWSER_WINDOW, ctx={'browserID': browserID}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showAwardWindow(award, isUniqueName=True):
     """
     :param award: AwardAbstract instance object
@@ -96,7 +123,10 @@ def showAwardWindow(award, isUniqueName=True):
 
 
 def showMissionAwardWindow(award):
-    name = getUniqueViewName(VIEW_ALIAS.MISSION_AWARD_WINDOW)
+    """
+    Shows modal dialog with award(s) and congratulations.
+    :param award: AwardAbstract instance object
+    """
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MISSION_AWARD_WINDOW, name=getUniqueViewName(VIEW_ALIAS.MISSION_AWARD_WINDOW), ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -134,7 +164,8 @@ def selectVehicleInHangar(itemCD):
     :param itemCD: int-type compact descriptor of vehicle
     """
     from CurrentVehicle import g_currentVehicle
-    veh = g_itemsCache.items.getItemByCD(int(itemCD))
+    itemsCache = dependency.instance(IItemsCache)
+    veh = itemsCache.items.getItemByCD(int(itemCD))
     assert veh.isInInventory, 'Vehicle must be in inventory.'
     g_currentVehicle.selectVehicle(veh.invID)
     showHangar()
@@ -176,6 +207,10 @@ def runTutorialChain(chapterID):
     g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='TRIGGERS_CHAINS', initialChapter=chapterID, restoreIfRun=True))
 
 
+def runSalesChain(chapterID):
+    g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='SALES_TRIGGERS', initialChapter=chapterID, restoreIfRun=True))
+
+
 def changeAppResolution(width, height, scale):
     g_eventBus.handleEvent(events.GameEvent(events.GameEvent.CHANGE_APP_RESOLUTION, ctx={'width': width,
      'height': height,
@@ -184,7 +219,8 @@ def changeAppResolution(width, height, scale):
 
 @process
 def requestProfile(databaseID, userName, successCallback):
-    userDossier, _, isHidden = yield g_itemsCache.items.requestUserDossier(databaseID)
+    itemsCache = dependency.instance(IItemsCache)
+    userDossier, _, isHidden = yield itemsCache.items.requestUserDossier(databaseID)
     if userDossier is None:
         if isHidden:
             key = 'messenger/userInfoHidden'

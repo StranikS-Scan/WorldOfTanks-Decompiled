@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/game_control/trade_in.py
 from collections import namedtuple
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared import g_itemsCache
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency
 from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.shared import IItemsCache
 
 class TradeInInfo(namedtuple('TradeInInfo', ['minDiscountVehicleCD',
  'minDiscountPrice',
@@ -30,6 +31,7 @@ class TradeInController(ITradeInController):
     Controller is used to store information about Trade In and
     handle events from shop
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(TradeInController, self).__init__()
@@ -39,11 +41,11 @@ class TradeInController(ITradeInController):
         return
 
     def init(self):
-        g_itemsCache.onSyncCompleted += self.__onSync
+        self.itemsCache.onSyncCompleted += self.__onSync
         g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehicleUpdate})
 
     def fini(self):
-        g_itemsCache.onSyncCompleted -= self.__onSync
+        self.itemsCache.onSyncCompleted -= self.__onSync
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def onLobbyInited(self, event):
@@ -76,7 +78,7 @@ class TradeInController(ITradeInController):
         """
         levels = self.__config.allowedVehicleLevels
         tradeInLevels = range(min(levels), level + 1)
-        return g_itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.CAN_TRADE_OFF | REQ_CRITERIA.VEHICLE.LEVELS(tradeInLevels))
+        return self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.CAN_TRADE_OFF | REQ_CRITERIA.VEHICLE.LEVELS(tradeInLevels))
 
     def isEnabled(self):
         return self.__config.isEnabled
@@ -89,7 +91,7 @@ class TradeInController(ITradeInController):
         return money
 
     def __fillConfig(self):
-        self.__config = g_itemsCache.items.shop.tradeIn
+        self.__config = self.itemsCache.items.shop.tradeIn
 
     def __clearConfig(self):
         self.__config = None

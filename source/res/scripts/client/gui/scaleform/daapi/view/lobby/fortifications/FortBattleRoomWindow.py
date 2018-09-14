@@ -7,7 +7,6 @@ from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface, SystemMessages
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
 from gui.Scaleform.daapi.view.meta.FortBattleRoomWindowMeta import FortBattleRoomWindowMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
@@ -29,11 +28,14 @@ from gui.shared.events import FortEvent
 from gui.shared.fortifications.fort_listener import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.shared.utils import getPlayerDatabaseID
+from helpers import dependency
 from helpers import i18n
 from messenger.storage import storage_getter
+from skeletons.gui.lobby_context import ILobbyContext
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         self.__isMinimize = False
@@ -96,8 +98,8 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
 
     def onJoinRally(self, rallyId, slotIndex, peripheryID):
         ctx = JoinUnitCtx(rallyId, PREBATTLE_TYPE.SORTIE, slotIndex, waitingID='prebattle/join')
-        if g_lobbyContext.isAnotherPeriphery(peripheryID):
-            if g_lobbyContext.isPeripheryAvailable(peripheryID):
+        if self.lobbyContext.isAnotherPeriphery(peripheryID):
+            if self.lobbyContext.isPeripheryAvailable(peripheryID):
                 self.__requestToReloginAndJoinSortie(peripheryID, ctx)
             else:
                 SystemMessages.pushI18nMessage('#system_messages:periphery/errors/isNotAvailable', type=SystemMessages.SM_TYPE.Error)
@@ -214,7 +216,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
 
     @process
     def __requestToReloginAndJoinSortie(self, peripheryID, ctx):
-        result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'changePeriphery', messageCtx={'host': g_lobbyContext.getPeripheryName(peripheryID)}))
+        result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'changePeriphery', messageCtx={'host': self.lobbyContext.getPeripheryName(peripheryID)}))
         if result:
             self.prbPeripheriesHandler.join(peripheryID, ctx)
 
@@ -223,8 +225,8 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
         yield self.prbDispatcher.join(ctx)
 
     def __handleCreateOrJoinFortBattle(self, peripheryID, battleID, slotIndex=-1):
-        if g_lobbyContext.isAnotherPeriphery(peripheryID):
-            if g_lobbyContext.isPeripheryAvailable(peripheryID):
+        if self.lobbyContext.isAnotherPeriphery(peripheryID):
+            if self.lobbyContext.isPeripheryAvailable(peripheryID):
                 self.__requestToReloginAndCreateOrJoinFortBattle(peripheryID, battleID, slotIndex)
             else:
                 SystemMessages.pushI18nMessage('#system_messages:periphery/errors/isNotAvailable', type=SystemMessages.SM_TYPE.Error)
@@ -237,7 +239,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
 
     @process
     def __requestToReloginAndCreateOrJoinFortBattle(self, peripheryID, battleID, slotIndex=-1):
-        result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.FORT_BATTLE, 'changePeriphery', messageCtx={'host': g_lobbyContext.getPeripheryName(peripheryID)}))
+        result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.FORT_BATTLE, 'changePeriphery', messageCtx={'host': self.lobbyContext.getPeripheryName(peripheryID)}))
         if result:
             self.prbPeripheriesHandler.join(peripheryID, CreateOrJoinFortBattleCtx(battleID, slotIndex, 'fort/fortBattle/createOrJoin'))
 

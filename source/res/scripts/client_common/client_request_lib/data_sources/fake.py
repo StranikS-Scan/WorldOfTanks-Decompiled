@@ -32,9 +32,6 @@ def fake_method(example):
                 response_code = e.response_code
             except:
                 raise
-                result = 'Internal error'
-                status_code = 500
-                response_code = exceptions.ResponseCodes.UNKNOWN_ERROR
 
             _doResponse(callback, result, status_code, response_code)
 
@@ -328,7 +325,9 @@ class FakeDataAccessor(base.BaseDataAccessor):
      'clan_id': 343,
      'role_bw_flag': 13,
      'role_name': 'commander',
-     'in_clan_cooldown_till': datetime.now()})
+     'in_clan_cooldown_till': datetime.now(),
+     'clan_tag': 'fake',
+     'clan_color': 123})
     def get_accounts_clans(self, account_ids, fields):
         """
         return fake data from `accounts_clans` section
@@ -832,3 +831,25 @@ class FakeDataAccessor(base.BaseDataAccessor):
         return fake data from `join_room` section
         """
         return self._request_data('join_room', unit_id)
+
+    @fake_method(example={'results': {'season': {'avg_exp': 6113244,
+                            'total_battles': 2,
+                            'battles_with_steps': 1,
+                            'points': 91,
+                            'avg_assist_damage': 2,
+                            'avg_damage': 348}},
+     'meta': {'spa': {'id': 519}}})
+    def user_season_statistics(self, fields=None):
+        """
+        return fake data from `user_season_statistics` section
+        """
+        return self._request_data('user_season_statistics', None)
+
+    @fake_method(example={'meta': {'total': 224},
+     'results': {'spa_id': 502,
+                 'position': 1}})
+    def user_ranked_position(self, fields=None):
+        """
+        return fake data from `user_ranked_position` section
+        """
+        return self._request_data('user_ranked_position', None)

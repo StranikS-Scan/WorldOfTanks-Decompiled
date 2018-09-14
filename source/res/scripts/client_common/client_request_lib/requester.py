@@ -1897,6 +1897,67 @@ class WgshAccessor(BaseAccessor):
         return self._data_source.account_statistics(callback, account_id, fields=fields)
 
 
+class RblbAccessor(BaseAccessor):
+
+    def user_season_statistics(self, callback, fields=None):
+        """
+        get current user season statistics and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.rblb.user_season_statistics(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type fields: list of strings
+        """
+        return self._data_source.user_season_statistics(callback, fields=fields)
+
+    def user_ranked_position(self, callback, fields=None):
+        """
+        get current user position and league in ranked battles and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.rblb.user_ranked_position(printer)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type fields: list of strings
+        """
+        return self._data_source.user_ranked_position(callback, fields=fields)
+
+
 class Requester(object):
     """
     request all clan related information using data accessor provided
@@ -1917,6 +1978,7 @@ class Requester(object):
     exporter = RequestDescriptor(ExporterAccessor)
     spa = RequestDescriptor(SpaAccessor)
     wgsh = RequestDescriptor(WgshAccessor)
+    rblb = RequestDescriptor(RblbAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

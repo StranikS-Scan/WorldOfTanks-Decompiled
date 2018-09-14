@@ -242,6 +242,9 @@ class ClientUnit(UnitBase):
         UnitBase.updateUnitExtras(self, updateStr)
         self.onUnitExtraChanged(self._extras)
 
+    def setModalTimestamp(self, serverTimestamp):
+        self._setModalTimestamp(int(serverTimestamp))
+
     def _setUnitFlags(self, flags):
         prevFlags = self._flags
         UnitBase._setUnitFlags(self, flags)

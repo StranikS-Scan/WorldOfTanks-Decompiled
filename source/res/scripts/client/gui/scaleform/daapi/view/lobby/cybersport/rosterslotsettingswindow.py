@@ -7,10 +7,11 @@ from gui.Scaleform.daapi.view.meta.RosterSlotSettingsWindowMeta import RosterSlo
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.events import CSRosterSlotSettingsWindow
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 VEHICLE_SELECTOR_TAB_ID = 'vehicleSelectorTab'
 RANGE_SELECTOR_TAB_ID = 'rangeSelectorTab'
 TAB_ORDER = [VEHICLE_SELECTOR_TAB_ID, RANGE_SELECTOR_TAB_ID]
@@ -18,6 +19,7 @@ TAB_DATA_MAP = {VEHICLE_SELECTOR_TAB_ID: (CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_V
  RANGE_SELECTOR_TAB_ID: (CYBER_SPORT_ALIASES.RANGE_ROSTER_SETTINGS_VIEW, CYBERSPORT.WINDOW_ROSTERSLOTSETTINGS_TABBTNLBL_RANGE)}
 
 class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(RosterSlotSettingsWindow, self).__init__()
@@ -38,7 +40,7 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
         self.updateData()
 
     def updateData(self):
-        result = self._updateData(g_itemsCache.items.getVehicles(~REQ_CRITERIA.SECRET))
+        result = self._updateData(self.itemsCache.items.getVehicles(~REQ_CRITERIA.SECRET))
         self.as_setListDataS(result)
 
     def requestVehicleFilters(self):
@@ -123,7 +125,7 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
         if currentSlotSetting is None:
             return (makeFiltersVO([], [], self.__convertLevelsRange(self._levelsRange)), RANGE_SELECTOR_TAB_ID)
         elif currentSlotSetting.selectedVehicle > 0:
-            vehicle = g_itemsCache.items.getItemByCD(int(currentSlotSetting.selectedVehicle))
+            vehicle = self.itemsCache.items.getItemByCD(int(currentSlotSetting.selectedVehicle))
             return (makeVehicleVO(vehicle, self.__convertLevelsRange(self._levelsRange), self.__vehicleTypes), VEHICLE_SELECTOR_TAB_ID)
         elif currentSlotSetting.nationIDRange or currentSlotSetting.vTypeRange or currentSlotSetting.vLevelRange:
             levelsRange = self.__convertLevelsRange(currentSlotSetting.vLevelRange or self._levelsRange)

@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/filter.py
 import constants
+from helpers import dependency
 from helpers import int2roman
 from helpers.i18n import makeString as _ms
 from gui import GUI_NATIONS
 from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.Scaleform import getNationsFilterAssetPath, getVehicleTypeAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -15,11 +18,12 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.shared.formatters import text_styles, icons
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
+from skeletons.gui.shared import IItemsCache
 
 class VehicleFilterTooltip(BlocksTooltipData):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx):
         super(VehicleFilterTooltip, self).__init__(ctx, TOOLTIP_TYPE.VEHICLE_FILTER)
@@ -38,18 +42,27 @@ class VehicleFilterTooltip(BlocksTooltipData):
 
     def _packBlocks(self, *args):
         container = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
-        window = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_HANGAR})
-        tankCarousel = window.tankCarousel
-        self.__gatherData(tankCarousel)
-        items = [self._packHeaderBlock()]
-        if self.__hasBody():
-            items.append(self._packBodyBlock())
-        if not self._event or not self._rented:
-            items.append(self._packHiddenBlock())
-        if self._searchNameVehicle:
-            items.append(self._packSearchNameVehicle())
-        items.append(self._packCounterBlock())
-        return items
+        view = container.getView()
+        if view.alias == VIEW_ALIAS.LOBBY_HANGAR:
+            tankCarousel = view.getComponent(HANGAR_ALIASES.TANK_CAROUSEL)
+        elif view.alias == VIEW_ALIAS.LOBBY_MISSIONS:
+            currentTab = view.getComponent(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS)
+            tankCarousel = currentTab.getComponent(HANGAR_ALIASES.TANK_CAROUSEL)
+        else:
+            tankCarousel = None
+        if tankCarousel is None:
+            return []
+        else:
+            self.__gatherData(tankCarousel)
+            items = [self._packHeaderBlock()]
+            if self.__hasBody():
+                items.append(self._packBodyBlock())
+            if not self._event or not self._rented:
+                items.append(self._packHiddenBlock())
+            if self._searchNameVehicle:
+                items.append(self._packSearchNameVehicle())
+            items.append(self._packCounterBlock())
+            return items
 
     def _packSearchNameVehicle(self):
         subBlocks = [self.__getParagraphNameBlock(TANK_CAROUSEL_FILTER.INFOTIP_SEARCHNAMEVEHICLE), self.__packSearchNameVehicle(self._searchNameVehicle)]
@@ -117,7 +130,7 @@ class VehicleFilterTooltip(BlocksTooltipData):
             string += _ms(TANK_CAROUSEL_FILTER.INFOTIP_ONLY_FAVORITE)
         if self._specials['bonus']:
             icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MULTYXP)
-            xpRate = text_styles.stats('x{0}'.format(g_itemsCache.items.shop.dailyXPFactor))
+            xpRate = text_styles.stats('x{0}'.format(self.itemsCache.items.shop.dailyXPFactor))
             string = addComma(string)
             string += '{0}{1}'.format(icon, xpRate)
         if self._specials['igr']:

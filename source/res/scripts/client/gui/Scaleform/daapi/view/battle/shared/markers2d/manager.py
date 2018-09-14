@@ -3,12 +3,13 @@
 import weakref
 import GUI
 from gui import DEPTH_OF_VehicleMarker, GUI_SETTINGS
-from gui.Scaleform.daapi.view.meta.VehicleMarkersManagerMeta import VehicleMarkersManagerMeta
-from gui.Scaleform.daapi.view.battle.shared.external_components import ExternalFlashComponent
-from gui.Scaleform.daapi.view.battle.shared.external_components import ExternalFlashSettings
-from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins
+from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
+from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
+from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
+from gui.Scaleform.daapi.view.meta.VehicleMarkersManagerMeta import VehicleMarkersManagerMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
+from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
 from gui.shared.utils.plugins import PluginsCollection
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -23,7 +24,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
     """
 
     def __init__(self):
-        super(MarkersManager, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.MARKERS_2D, settings.MARKERS_MANAGER_SWF, 'root.vehicleMarkersCanvas', 'registerMarkersManager'))
+        super(MarkersManager, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.MARKERS_2D, settings.MARKERS_MANAGER_SWF, 'root.vehicleMarkersCanvas', ROOT_SWF_CONSTANTS.BATTLE_VEHICLE_MARKERS_REGISTER_CALLBACK))
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_VehicleMarker
         self.component.drawWithRestrictedViewPort = False

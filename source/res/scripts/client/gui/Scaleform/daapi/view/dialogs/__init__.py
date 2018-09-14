@@ -3,11 +3,14 @@
 import BigWorld
 import Event
 from gui.ClientUpdateManager import g_clientUpdateManager
+from helpers import dependency
 from helpers import i18n, time_utils
 from gui import makeHtmlString
-from gui.shared import events, g_itemsCache
+from gui.shared import events
+from gui.shared.money import Currency
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.DIALOGS import DIALOGS
+from skeletons.gui.shared import IItemsCache
 I18N_PRICE_KEY = '{0:>s}/messagePrice'
 I18N_TITLE_KEY = '{0:>s}/title'
 I18N_MESSAGE_KEY = '{0:>s}/message'
@@ -292,14 +295,15 @@ class DestroyDeviceDialogMeta(IconDialogMeta):
 class DemountDeviceDialogMeta(IconPriceDialogMeta):
     DISMANTLE_DEVICE_PATH = '../maps/icons/modules/dismantleDevice.png'
 
-    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
+    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None, itemsCache=None):
         super(DemountDeviceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
         self.onConfirmationStatusChnaged = Event.Event()
-        self.__userGoldAmount = g_itemsCache.items.stats.gold
+        self.__userGoldAmount = itemsCache.items.stats.gold
         self.__isOperationAllowed = False
         self.__checkIsOperationAllowed()
-        g_clientUpdateManager.addCallbacks({'stats.gold': self.__goldChangeHandler,
-         'shop.paidRemovalCost': self.__paidRemovalCostChangeHandler})
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__goldChangeHandler)
+        g_clientUpdateManager.addCallbacks({'shop.paidRemovalCost': self.__paidRemovalCostChangeHandler})
 
     @property
     def isOperationAllowed(self):

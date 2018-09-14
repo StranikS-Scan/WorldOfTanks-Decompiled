@@ -72,6 +72,7 @@ def translate_field_names(response, field_mapping, requested_fields=None):
     for key, field_iter in groupby(backward_mapping, key=lambda x: x[0].split('.', 1)[0]):
         inner_mapping = {}
         sibling_mapping = {}
+        our = ''
         for their, our in field_iter:
             if '.' in their:
                 if '.' in our:
@@ -197,7 +198,7 @@ def get_ratings_error(data):
 
 
 def get_wgsh_error(data):
-    exceptions.WgshError
+    return exceptions.WgshError
 
 
 ERROR_MAP = {'ratings': get_ratings_error,
@@ -994,7 +995,7 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'fb_battles_count_10': 'fb_battles_count_10',
      'fb_battles_count_8': 'fb_battles_count_8',
      'total_resource_amount': 'total_resource_amount'})
-    def get_stronghold_info(self, callback, clan_id, fields=None):
+    def get_stronghold_info(self, callback, clan_id=None, fields=None):
         """
         return data from WGCCFE backend using `stronghold info API method`_
         
@@ -1426,6 +1427,30 @@ class StagingDataAccessor(base.BaseDataAccessor):
             return data or {}
 
         return self._request_data(inner_callback, 'wgsh', url, method='POST')
+
+    def user_season_statistics(self, callback, fields=None):
+        """
+        use season statistics
+        """
+        url = '/user-season-statistics/{account_id}/'.format(account_id=self._account)
+
+        @preprocess_callback(callback, 'rblb')
+        def inner_callback(data):
+            return data or {}
+
+        return self._request_data(inner_callback, 'rblb', url, method='GET')
+
+    def user_ranked_position(self, callback, fields=None):
+        """
+        user position
+        """
+        url = '/user-position/{account_id}/'.format(account_id=self._account)
+
+        @preprocess_callback(callback, 'rblb')
+        def inner_callback(data):
+            return data or {}
+
+        return self._request_data(inner_callback, 'rblb', url, method='GET')
 
     @convert_data({'defence_hour': lambda x: dt_time(x, 0) if x >= 0 else None})
     @mapped_fields({'clan_id': 'clan_id',

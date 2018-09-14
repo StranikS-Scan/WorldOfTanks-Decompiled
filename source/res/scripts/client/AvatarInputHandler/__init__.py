@@ -4,6 +4,7 @@ import functools
 import math
 from functools import partial
 from AvatarInputHandler.AimingSystems.steady_vehicle_matrix import SteadyVehicleMatrixCalculator
+import BigWorld
 import BattleReplay
 import DynamicCameras.ArcadeCamera
 import DynamicCameras.SniperCamera
@@ -17,15 +18,17 @@ import ResMgr
 import cameras
 import constants
 import control_modes
+import CommandMapping
 from AvatarInputHandler import aih_global_binding, aih_constants, gun_marker_ctrl
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker
+from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from Event import Event
 from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
-from debug_utils import *
+from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
 from gui.app_loader import g_appLoader, settings
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
@@ -123,7 +126,9 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     isFlashBangAllowed = property(lambda self: self.__ctrls['video'] != self.__curCtrl)
     isDetached = property(lambda self: self.__isDetached)
     isGuiVisible = property(lambda self: self.__isGUIVisible)
+    isStarted = property(lambda self: self.__isStarted)
     isObserverFPV = property(lambda self: BigWorld.player().isObserver() and BigWorld.player().isObserverFPV)
+    remoteCameraSender = property(lambda self: self.__remoteCameraSender)
     __ctrlModeName = aih_global_binding.bindRW(_BINDING_ID.CTRL_MODE_NAME)
     __aimOffset = aih_global_binding.bindRW(_BINDING_ID.AIM_OFFSET)
     _DYNAMIC_CAMERAS_ENABLED_KEY = 'global/dynamicCameraEnabled'
@@ -183,6 +188,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         self.__observerVehicle = None
         self.__observerIsSwitching = False
         self.__commands = []
+        self.__remoteCameraSender = None
+        self.__isGUIVisible = False
         return
 
     def __constructComponents(self):
@@ -210,6 +217,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         if isRepeat:
             return False
         elif self.__isStarted and self.__isDetached:
+            if CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
+                return self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
             return BigWorld.player().handleKey(isDown, key, mods)
         elif not self.__isStarted or self.__isDetached:
             return False
@@ -401,6 +410,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged += self.__onVehicleChanged
         self.__onArenaStarted(arena.period)
+        if not BigWorld.player().isObserver() and arena.hasObservers:
+            self.__remoteCameraSender = RemoteCameraSender(self)
         return
 
     def stop(self):
@@ -414,6 +425,9 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.setPlayerVehicleID(0)
+        if self.__remoteCameraSender is not None:
+            self.__remoteCameraSender.destroy()
+            self.__remoteCameraSender = None
         self.onCameraChanged.clear()
         self.onCameraChanged = None
         self.onPostmortemVehicleChanged.clear()
@@ -448,7 +462,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             control.setObservedVehicle(vehicleID)
 
     def onControlModeChanged(self, eMode, **args):
-        self.steadyVehicleMatrixCalculator.relinkSources()
+        if self.steadyVehicleMatrixCalculator is not None:
+            self.steadyVehicleMatrixCalculator.relinkSources()
         if not self.__isArenaStarted and eMode != _CTRL_MODE.POSTMORTEM:
             return
         else:
@@ -527,7 +542,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
                 eMode = _CTRL_MODES[BigWorld.player().observerFPVControlMode]
             targetPos = self.getDesiredShotPoint() or Math.Vector3(0, 0, 0)
             LOG_DEBUG('onVehicleControlModeChanged: ', eMode, targetPos)
-            self.onControlModeChanged(eMode, preferredPos=targetPos, aimingMode=0, saveZoom=False, saveDist=True, equipmentID=None, curVehicleID=BigWorld.player().getVehicleAttached(), isRemoteCamera=True)
+            self.onControlModeChanged(eMode, preferredPos=targetPos, aimingMode=0, saveZoom=False, saveDist=True, equipmentID=None, curVehicleID=BigWorld.player().getVehicleAttached())
             return
 
     def getTargeting(self):
@@ -796,10 +811,14 @@ class _VertScreenshotCamera(object):
     isEnabled = property(lambda self: self.__isEnabled)
 
     def __init__(self):
+        super(_VertScreenshotCamera, self).__init__()
         self.__isEnabled = False
+        self.__savedCamera = None
+        self.__savedWatchers = {}
         self.__nearPlane = 0.0
         self.__farPlane = 0.0
         self.__watcherNames = ('Render/Fov', 'Render/Near Plane', 'Render/Far Plane', 'Render/Objects Far Plane/Enabled', 'Render/Shadows/qualityPreset', 'Visibility/Draw tanks', 'Visibility/Control Points', 'Visibility/GUI', 'Visibility/particles', 'Visibility/Sky', 'Client Settings/Script tick')
+        return
 
     def destroy(self):
         self.enable(False)

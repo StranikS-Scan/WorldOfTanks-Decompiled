@@ -342,6 +342,9 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isTutorialBattle(self):
         return self._guiType == _GUI_TYPE.TUTORIAL
 
+    def isRankedBattle(self):
+        return self._guiType == _GUI_TYPE.RANKED
+
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
 

@@ -1,14 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/destroy_timers_panel.py
-import math
 import weakref
 from collections import defaultdict
-import BattleReplay
 import BigWorld
+import math
+import BattleReplay
+from AvatarInputHandler import AvatarInputHandler
 from ReplayEvents import g_replayEvents
 from debug_utils import LOG_DEBUG
-from AvatarInputHandler import AvatarInputHandler
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.battle.shared import destroy_times_mapping as _mapping
 from gui.Scaleform.daapi.view.battle.shared.timers_common import TimerComponent, PythonTimer
 from gui.Scaleform.daapi.view.meta.DestroyTimersPanelMeta import DestroyTimersPanelMeta
@@ -17,6 +16,7 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.lobby_context import ILobbyContext
 _TIMER_STATES = BATTLE_DESTROY_TIMER_STATES
 _TIMERS_PRIORITY = {(_TIMER_STATES.STUN, _TIMER_STATES.WARNING_VIEW): 0,
  (_TIMER_STATES.OVERTURNED, _TIMER_STATES.CRITICAL_VIEW): 1,
@@ -261,8 +261,9 @@ class _RegularTimersCollection(_ActionScriptTimerMixin, _TimersCollection):
 
 def _createTimersCollection(panel):
     sessionProvider = dependency.instance(IBattleSessionProvider)
+    lobbyContext = dependency.instance(ILobbyContext)
     isReplayPlaying = sessionProvider.isReplayPlaying
-    if g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+    if lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
         TimersCollection = _ReplayStackTimersCollection if isReplayPlaying else _RegularStackTimersCollection
     else:
         TimersCollection = _ReplayTimersCollection if isReplayPlaying else _RegularTimersCollection
@@ -271,10 +272,11 @@ def _createTimersCollection(panel):
 
 class DestroyTimersPanel(DestroyTimersPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, mapping=None):
         super(DestroyTimersPanel, self).__init__()
-        self.as_turnOnStackViewS(g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled())
+        self.as_turnOnStackViewS(self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled())
         if mapping is not None:
             assert isinstance(mapping, _mapping.FrontendMapping)
             self.__mapping = mapping

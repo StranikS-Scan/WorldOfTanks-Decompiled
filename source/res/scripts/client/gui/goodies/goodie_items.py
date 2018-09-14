@@ -3,6 +3,7 @@
 import BigWorld
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE, GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from gui import GUI_SETTINGS
+from gui.shared.gui_items import GUI_ITEM_PURCHASE_CODE
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.economics import getActionPrc
@@ -337,7 +338,11 @@ class Booster(_Goodie):
         return text_styles.standard(text)
 
     def getBuyPriceCurrency(self):
-        return Currency.GOLD if self.buyPrice.gold else Currency.CREDITS
+        """
+        Returns the buy price of the goodie item.
+        :return: <str>, see Currency enum.
+        """
+        return self.buyPrice.getCurrency(byWeight=True)
 
     def mayPurchase(self, money):
         """
@@ -347,17 +352,17 @@ class Booster(_Goodie):
         else return False and error msg.
         """
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
-            return (False, 'center_unavailable')
+            return (False, GUI_ITEM_PURCHASE_CODE.CENTER_UNAVAILABLE)
         if self.isHidden:
-            return (False, 'isHidden')
+            return (False, GUI_ITEM_PURCHASE_CODE.ITEM_IS_HIDDEN)
         price = self.buyPrice
         if not price:
-            return (False, 'noPrice')
+            return (False, GUI_ITEM_PURCHASE_CODE.ITEM_NO_PRICE)
         shortage = money.getShortage(price)
         if shortage:
             currency, _ = shortage.pop()
             return (False, '%s_error' % currency)
-        return (True, '')
+        return (True, GUI_ITEM_PURCHASE_CODE.OK)
 
     def getFormattedValue(self, formatter=None):
         """

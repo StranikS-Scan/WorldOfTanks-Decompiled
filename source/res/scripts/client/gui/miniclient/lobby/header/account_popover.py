@@ -46,17 +46,3 @@ class MyClanInvitesBtnUnavailable(aop.Pointcut):
 
     def __init__(self):
         aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.header.AccountPopover', 'AccountPopover', '_getMyInvitesBtnParams', aspects=(MyClanInvitesBtnUnavailableAspect,))
-
-
-class CrewButtonStatusAspect(aop.Aspect):
-
-    def atCall(self, cd):
-        cd.avoid()
-        return {'isEnabled': False,
-         'disabledTooltip': makeTooltip(attention='#menu:header/account/popover/crewButton/disabledTooltip')}
-
-
-class CrewButtonStatusPointcut(aop.Pointcut):
-
-    def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.header.AccountPopover', 'AccountPopover', '_crewDataButtonStatus', aspects=(CrewButtonStatusAspect,))

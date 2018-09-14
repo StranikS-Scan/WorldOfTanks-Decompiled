@@ -40,12 +40,12 @@
         <postBattle>
           <win></win>
         </postBattle>
-        <bonus>
+        <common>
           <battles>
             <count>	3	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
-        </bonus>
+        </common>
       </conditions>
       <bonus>
         <token>
@@ -101,13 +101,13 @@
             </vehicleDescr>
           </vehicle>
         </preBattle>
-        <bonus>
+        <common>
           <bonusLimit>	1	</bonusLimit>
           <vehicleDamage>
             <classes>	heavyTank	</classes>
             <greaterOrEqual>	600	</greaterOrEqual>
           </vehicleDamage>
-        </bonus>
+        </common>
       </conditions>
       <bonus>
         <token>
@@ -158,13 +158,13 @@
             </vehicleDescr>
           </vehicle>
         </preBattle>
-        <bonus>
+        <common>
           <bonusLimit>	1	</bonusLimit>
           <vehicleDamage>
             <classes>	mediumTank	</classes>
             <greaterOrEqual>	1000	</greaterOrEqual>
           </vehicleDamage>
-        </bonus>
+        </common>
       </conditions>
       <bonus>
         <token>
@@ -215,13 +215,13 @@
             </vehicleDescr>
           </vehicle>
         </preBattle>
-        <bonus>
+        <common>
           <bonusLimit>	1	</bonusLimit>
           <vehicleDamage>
             <classes>	lightTank	</classes>
             <greaterOrEqual>	1000	</greaterOrEqual>
           </vehicleDamage>
-        </bonus>
+        </common>
       </conditions>
       <bonus>
         <token>
@@ -272,13 +272,13 @@
             </vehicleDescr>
           </vehicle>
         </preBattle>
-        <bonus>
+        <common>
           <bonusLimit>	1	</bonusLimit>
           <vehicleDamage>
             <classes>	AT-SPG	</classes>
             <greaterOrEqual>	1000	</greaterOrEqual>
           </vehicleDamage>
-        </bonus>
+        </common>
       </conditions>
       <bonus>
         <token>
@@ -352,12 +352,12 @@
             </vehicleDescr>
           </vehicle>
         </preBattle>
-        <bonus>
+        <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
             <kills>	5	</kills>
           </cumulative>
-        </bonus>
+        </common>
       </conditions>
       <bonus>
         <freeXP>	2000	</freeXP>
@@ -408,12 +408,12 @@
             </vehicleDescr>
           </vehicle>
         </preBattle>
-        <bonus>
+        <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
             <critsCount>	10	</critsCount>
           </cumulative>
-        </bonus>
+        </common>
       </conditions>
       <bonus>
         <token>
@@ -469,9 +469,9 @@
             </results>
           </and>
         </postBattle>
-        <bonus>
+        <common>
           <bonusLimit>	1	</bonusLimit>
-        </bonus>
+        </common>
       </conditions>
       <bonus>
         <token>
@@ -551,12 +551,12 @@
             <max>	5	</max>
           </results>
         </postBattle>
-        <bonus>
+        <common>
           <battles>
             <count>	2	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
-        </bonus>
+        </common>
       </conditions>
       <bonus>
         <credits>	30000	</credits>
@@ -609,12 +609,12 @@
             <key>	damageDealt	</key>
           </results>
         </postBattle>
-        <bonus>
+        <common>
           <battles>
             <count>	2	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
-        </bonus>
+        </common>
       </conditions>
       <bonus>
         <credits>	30000	</credits>

@@ -7,9 +7,9 @@ import random
 import DecalMap
 import material_kinds
 import helpers
-from debug_utils import *
 from functools import partial
 from PixieBG import PixieBG
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_OBSOLETE
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 from ReplayEvents import g_replayEvents
 import string
@@ -633,7 +633,7 @@ class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
     TYPE = '_CollisionSoundEffectDesc'
 
     def __init__(self, dataSection):
-        _EffectDesc.__init__(self, dataSection)
+        _NodeSoundEffectDesc.__init__(self, dataSection)
         pcSounds, npcSounds = dataSection.readString('wwsoundPC', ''), dataSection.readString('wwsoundNPC', '')
         if pcSounds == '' and npcSounds == '':
             pcSounds = npcSounds = dataSection.readString('wwsound', '')

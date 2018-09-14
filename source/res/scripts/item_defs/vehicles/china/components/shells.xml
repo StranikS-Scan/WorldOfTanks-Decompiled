@@ -1013,4 +1013,49 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_130mm_HEAT>
+  <_130mm_Chuan_bei_482G>
+    <id>	85	</id>
+    <userString>	#china_vehicles:_130mm_Chuan_bei_482G	</userString>
+    <icon>	ap	</icon>
+    <price>	1215	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	560	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_Chuan_bei_482G>
+  <_130mm_Po_130G>
+    <id>	86	</id>
+    <userString>	#china_vehicles:_130mm_Po_130G	</userString>
+    <icon>	hc	</icon>
+    <price>	13	  <gold></gold>
+    </price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	560	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_130mm_Po_130G>
+  <_130mm_Sha_bao_482G>
+    <id>	87	</id>
+    <userString>	#china_vehicles:_130mm_Sha_bao_482G	</userString>
+    <icon>	he	</icon>
+    <price>	1020	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	130	</caliber>
+    <explosionRadius>	2.78	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	660	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_Sha_bao_482G>
 </shells.xml>

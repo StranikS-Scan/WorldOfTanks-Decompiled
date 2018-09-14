@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/Controllers/ShootingController.py
-import BigWorld
 from OnceController import OnceController
-from debug_utils import *
 
 class ShootingController:
 

@@ -331,15 +331,13 @@ def isValidClientVersion(clientVersion, serverVersion):
 def getClientMainVersion():
     mainVersion = None
     try:
-        try:
-            _, clentVersion = readClientServerVersion()
-            parsedVersion = parseVersion(clentVersion)
-            _, mainVersion, _ = parsedVersion
-        except:
-            LOG_ERROR('Can not read or parse client-server version')
+        _, clentVersion = readClientServerVersion()
+        parsedVersion = parseVersion(clentVersion)
+        _, mainVersion, _ = parsedVersion
+    except:
+        LOG_ERROR('Can not read or parse client-server version')
 
-    finally:
-        return mainVersion
+    return mainVersion
 
 
 def readClientServerVersion():

@@ -7,11 +7,11 @@ import ResMgr
 import nations
 import ArenaType
 import battle_results_shared
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_WARNING
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
 from items import vehicles, tankmen
-from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, FORT_QUEST_SUFFIX
+from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, FORT_QUEST_SUFFIX, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME
 from bonus_readers import readBonusSection, readUTC
 from optional_bonuses import walkBonuses, FilterVisitor, StripVisitor
 _WEEKDAYS = {'Mon': 1,
@@ -21,6 +21,7 @@ _WEEKDAYS = {'Mon': 1,
  'Fri': 5,
  'Sat': 6,
  'Sun': 7}
+_YEAR = 31556926
 MAX_BONUS_LIMIT = 1000000
 
 class XMLNode(object):
@@ -86,21 +87,16 @@ class Source(object):
         section = ResMgr.openSection(path)
         if section is None:
             raise Exception("Can not open '%s'" % path)
-        return {} if not section.has_key('quests') else self.__readXML(section['quests'], gStartTime, gFinishTime, curTime)
+        return {} if not section.has_key('quests') else self.__readXML(section['quests'], curTime, gStartTime, gFinishTime)
 
     def readFromInternalFile(self, path, curTime):
         ResMgr.purge(path)
         section = ResMgr.openSection(path)
         if section is None:
             raise Exception("Can not open '%s'" % path)
-        if not section.has_key('quests'):
-            return {}
-        else:
-            gStartTime = 1
-            gFinishTime = 4102444800L
-            return self.__readXML(section['quests'], gStartTime, gFinishTime, curTime)
+        return {} if not section.has_key('quests') else self.__readXML(section['quests'], curTime)
 
-    def __readXML(self, section, gStartTime, gFinishTime, curTime):
+    def __readXML(self, section, curTime, gStartTime=DEFAULT_QUEST_START_TIME, gFinishTime=DEFAULT_QUEST_FINISH_TIME):
         nodes = {}
         for typeName, questSection in section.items():
             enabled = questSection.readBool('enabled', False)
@@ -108,15 +104,17 @@ class Source(object):
                 continue
             eventType = EVENT_TYPE.NAME_TO_TYPE[typeName]
             mainNode = XMLNode('main')
-            mainNode.info = info = self.__readHeader(eventType, questSection, gStartTime, gFinishTime, curTime)
+            mainNode.info = info = self.__readHeader(eventType, questSection, curTime, gStartTime, gFinishTime)
+            if not info['announceTime'] <= curTime <= info['finishTime']:
+                LOG_WARNING('Skipping outdated quest', info['id'], curTime, info['announceTime'], info['finishTime'])
+                continue
             if eventType == EVENT_TYPE.GROUP:
                 mainNode.groupContent = tuple(self.__readGroupContent(questSection))
             conditionReaders = self.__getConditionReaders(eventType)
             availableBonuses = self.__getAvailableBonuses(eventType)
+            commonNode = XMLNode('common')
             bonusNode = XMLNode('bonus')
             prebattleNode = XMLNode('preBattle')
-            prebattleNode.addChild(bonusNode, False)
-            mainNode.addChild(prebattleNode)
             accountNode = XMLNode('account')
             prebattleNode.addChild(accountNode)
             vehicleNode = XMLNode('vehicle')
@@ -124,9 +122,11 @@ class Source(object):
             battleNode = XMLNode('battle')
             prebattleNode.addChild(battleNode)
             postbattleNode = XMLNode('postBattle')
+            mainNode.addChild(prebattleNode)
             mainNode.addChild(postbattleNode)
-            postbattleNode.addChild(bonusNode, False)
+            mainNode.addChild(commonNode)
             mainNode.addChild(bonusNode)
+            info['isIGR'] = accountNode.isExistChildNode('igrType')
             conditions = questSection['conditions']
             if conditions and conditions.has_key('preBattle'):
                 condition = conditions['preBattle']
@@ -140,25 +140,24 @@ class Source(object):
             if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS and conditions and conditions.has_key('postBattle'):
                 condition = conditions['postBattle']
                 self.__readBattleResultsConditionList(conditionReaders, condition, postbattleNode)
-            if conditions and conditions.has_key('bonus'):
-                condition = conditions['bonus']
-                self.__readBattleResultsConditionList(conditionReaders, condition, bonusNode)
-            daily = bonusNode.getChildNode('daily')
+            if conditions and conditions.has_key('common'):
+                condition = conditions['common']
+                self.__readBattleResultsConditionList(conditionReaders, condition, commonNode)
+            daily = commonNode.getChildNode('daily')
             info['isDaily'] = daily is not None
-            groupBy = bonusNode.getChildNode('groupBy')
+            groupBy = commonNode.getChildNode('groupBy')
             info['groupBy'] = groupBy.getChildNode('groupName').getFirstChildValue() if groupBy else None
-            info['isIGR'] = accountNode.isExistChildNode('igrType')
-            inrow = bonusNode.getChildNode('inrow')
-            unit = bonusNode.getChildNode('unit')
-            bonusLimit = bonusNode.getChildNode('bonusLimit')
-            cumulative = bonusNode.getChildNode('cumulative')
-            vehicleKills = bonusNode.getChildNode('vehicleKills')
-            battles = bonusNode.getChildNode('battles')
+            inrow = commonNode.getChildNode('inrow')
+            unit = commonNode.getChildNode('unit')
+            bonusLimit = commonNode.getChildNode('bonusLimit')
+            cumulative = commonNode.getChildNode('cumulative')
+            vehicleKills = commonNode.getChildNode('vehicleKills')
+            battles = commonNode.getChildNode('battles')
             battleCount = battles.getChildNode('count').getFirstChildValue() if battles else None
             if bonusLimit is None:
                 bonusLimitNode = XMLNode('bonusLimit')
                 bonusLimitNode.addChild(1 if eventType in EVENT_TYPE.ONE_BONUS_QUEST else MAX_BONUS_LIMIT)
-                bonusNode.addChild(bonusLimitNode)
+                commonNode.addChild(bonusLimitNode)
             if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
                 if (cumulative or unit or vehicleKills) and inrow:
                     raise Exception('battleQuest: Unexpected tags (vehicleKills, cumulative, unit/cumulative) with inrow')
@@ -188,7 +187,7 @@ class Source(object):
         questClientData['bonus'] = walkBonuses(questClientData['bonus'], StripVisitor())
         return
 
-    def __readHeader(self, eventType, questSection, gStartTime, gFinishTime, curTime):
+    def __readHeader(self, eventType, questSection, curTime, gStartTime, gFinishTime):
         id = questSection.readString('id', '')
         if not id:
             raise Exception('Quest id must be specified.')
@@ -200,21 +199,27 @@ class Source(object):
             description = self.__readMetaSection(questSection['description'])
         else:
             description = ''
-        progressExpiryTime = readUTC(questSection, 'progressExpiryTime', gFinishTime)
         startTime = readUTC(questSection, 'startTime', gStartTime)
         finishTime = readUTC(questSection, 'finishTime', gFinishTime)
+        progressExpiryTime = readUTC(questSection, 'progressExpiryTime', finishTime)
+        defaultAnnounceTime = gStartTime if gStartTime != DEFAULT_QUEST_START_TIME else startTime
+        announceTime = readUTC(questSection, 'announceTime', defaultAnnounceTime)
         weekDayNames = questSection.readString('weekDays', '').split()
         weekDays = set([ _WEEKDAYS[val] for val in weekDayNames ])
         intervalsInString = questSection.readString('activeTimeIntervals', '').split()
         makeHM = lambda hm: tuple((int(v) for v in hm.split(':')))
         makeIntervals = lambda intervals: tuple((makeHM(v) for v in intervals.split('_')))
         activeTimeIntervals = [ makeIntervals(i) for i in intervalsInString ]
+        if announceTime < gStartTime:
+            raise Exception('Invalid announce time. announceTime:%s < gStartTime:%s' % (announceTime, gStartTime))
+        if startTime < announceTime:
+            raise Exception('Invalid announce time. startTime:%s < announceTime:%s' % (startTime, announceTime))
         if startTime < gStartTime:
             raise Exception('Invalid start time. startTime:%s < gStartTime:%s' % (startTime, gStartTime))
         if finishTime > gFinishTime:
             raise Exception('Invalid finish time. finishTime:%s > gFinishTime:%s' % (finishTime, gFinishTime))
-        if progressExpiryTime < gFinishTime:
-            raise Exception('Invalid progress expiry time. progressExpiryTime:%s < gFinishTime:%s' % (progressExpiryTime, gFinishTime))
+        if progressExpiryTime < finishTime:
+            raise Exception('Invalid progress expiry time. progressExpiryTime:%s < finishTime:%s' % (progressExpiryTime, finishTime))
         requiredToken = questSection.readString('requiredToken', '')
         if eventType == EVENT_TYPE.PERSONAL_QUEST:
             if not requiredToken:
@@ -224,7 +229,13 @@ class Source(object):
                 raise Exception('Fort quest must contain "stronghold" in its id.')
         elif FORT_QUEST_SUFFIX in id:
             raise Exception('Quest must not contain "stronghold" in its id.')
-        tOption = curTime > time.gmtime()
+        runFlags = []
+        if questSection.has_key('run'):
+            for flagName, flagValue in questSection['run'].items():
+                if flagName == 'on':
+                    runFlags.append(QUEST_RUN_FLAGS.NAME_TO_TYPE[flagValue.asString])
+
+        tOption = curTime > time.time()
         showCongrats = questSection.readBool('showCongrats', eventType in (EVENT_TYPE.POTAPOV_QUEST,))
         info = {'id': id,
          'hidden': questSection.readBool('hidden', False),
@@ -237,20 +248,37 @@ class Source(object):
          'activeTimeIntervals': activeTimeIntervals,
          'startTime': startTime if not tOption else time.time() - 300,
          'finishTime': finishTime,
-         'gStartTime': gStartTime,
-         'gFinishTime': gFinishTime,
+         'announceTime': announceTime,
          'disableGui': questSection.readBool('disableGui', False),
          'showCongrats': showCongrats,
          'requiredToken': requiredToken,
          'Toption': None if not tOption else startTime,
          'priority': questSection.readInt('priority', 0),
-         'uiDecoration': questSection.readInt('uiDecoration', 0)}
+         'uiDecoration': questSection.readInt('uiDecoration', 0),
+         'runFlags': runFlags}
         if eventType == EVENT_TYPE.MOTIVE_QUEST:
             extraSubsectionsNames = ('advice', 'requirements', 'congratulation')
             for subsectionName in extraSubsectionsNames:
                 if questSection.has_key(subsectionName):
                     info[subsectionName] = self.__readMetaSection(questSection[subsectionName])
 
+        if eventType == EVENT_TYPE.RANKED_QUEST:
+            if finishTime > curTime + _YEAR:
+                raise Exception("'finishTime' section is missing or too far into the future", info['id'])
+            seasonSectionName = 'conditions/common/season'
+            if questSection.has_key(seasonSectionName):
+                season = questSection[seasonSectionName].asInt
+            else:
+                raise Exception("'season' condition is compulsory", info['id'])
+            cycleSectionName = 'conditions/common/cycle'
+            if questSection.has_key(cycleSectionName):
+                cycle = questSection[cycleSectionName].asInt
+            else:
+                cycle = None
+            info['subtype'] = questSection['subtype'].asString
+            info['ranked'] = (season, cycle)
+        if eventType in EVENT_TYPE.QUESTS_WITH_SHOP_BUTTON:
+            info['shopButton'] = questSection.readString('shopButton', 'hide')
         return info
 
     def __readGroupContent(self, questSection):
@@ -369,11 +397,18 @@ class Source(object):
              'silver': self.__readClanIds,
              'gold': self.__readClanIds,
              'black': self.__readClanIds})
+        if eventType in (EVENT_TYPE.RANKED_QUEST,):
+            condition_readers.update({'season': self.__readCondition_int,
+             'cycle': self.__readCondition_int,
+             'rank': self.__readCondition_int,
+             'step': self.__readCondition_int,
+             'maxRank': self.__readBattleResultsConditionList})
         return condition_readers
 
     def __getAvailableBonuses(self, eventType):
         bonusTypes = {'gold',
          'credits',
+         'crystal',
          'freeXP',
          'item',
          'equipment',

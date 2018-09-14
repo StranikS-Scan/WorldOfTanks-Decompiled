@@ -3,9 +3,10 @@
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events
 from helpers import dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 
 class PROFILE(object):
     VEHICLE_COMPARE = 'profileVehicleCompare'
@@ -13,6 +14,7 @@ class PROFILE(object):
 
 
 class ProfileVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
+    itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, cmProxy, ctx=None):
@@ -26,7 +28,7 @@ class ProfileVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         shared_events.showVehicleInfo(self.__vehCD)
 
     def _generateOptions(self, ctx=None):
-        vehicle = g_itemsCache.items.getItemByCD(self.__vehCD)
+        vehicle = self.itemsCache.items.getItemByCD(self.__vehCD)
         options = []
         if not vehicle.isSecret or vehicle.isInInventory:
             options.append(self._makeItem(PROFILE.VEHICLE_INFO, MENU.CONTEXTMENU_VEHICLEINFOEX))

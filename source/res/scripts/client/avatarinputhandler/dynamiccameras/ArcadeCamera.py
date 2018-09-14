@@ -11,6 +11,7 @@ import Settings
 import constants
 from AvatarInputHandler import mathUtils, cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.ArcadeAimingSystem import ArcadeAimingSystem
+from AvatarInputHandler.AimingSystems.ArcadeAimingSystemRemote import ArcadeAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, AccelerationSmoother
 from AvatarInputHandler.VideoCamera import KeySensor
 from AvatarInputHandler.cameras import ICamera, readFloat, readVec2, ImpulseReason, FovExtended
@@ -18,7 +19,6 @@ from Math import Vector2, Vector3, Vector4, Matrix
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
-from constants import AVATAR_SUBFILTERS
 from skeletons.account_helpers.settings_core import ISettingsCore
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 
@@ -159,14 +159,19 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         else:
             self.__defaultAimOffset = Vector2()
             self.__cam = None
-        self.__isRemoteCamera = False
         return
 
     def create(self, pivotPos, onChangeControlMode=None, postmortemMode=False):
         self.__onChangeControlMode = onChangeControlMode
         self.__postmortemMode = postmortemMode
         targetMat = self.getTargetMProv()
-        self.__aimingSystem = ArcadeAimingSystem(self.__refineVehicleMProv(targetMat), pivotPos.y, pivotPos.z, self.__calcAimMatrix(), self.__cfg['angleRange'], not postmortemMode)
+        aimingSystemClass = ArcadeAimingSystemRemote if BigWorld.player().isObserver() else ArcadeAimingSystem
+        self.__aimingSystem = aimingSystemClass(self.__refineVehicleMProv(targetMat), pivotPos.y, pivotPos.z, self.__calcAimMatrix(), self.__cfg['angleRange'], not postmortemMode)
+        if self.__adCfg['enable']:
+            self.__aimingSystem.initAdvancedCollider(self.__adCfg['fovRatio'], self.__adCfg['rollbackSpeed'], self.__adCfg['minimalCameraDistance'], self.__adCfg['speedThreshold'], self.__adCfg['minimalVolume'])
+            for group_name in VOLUME_GROUPS_NAMES:
+                self.__aimingSystem.addVolumeGroup(self.__adCfg['volumeGroups'][group_name])
+
         self.setCameraDistance(self.__cfg['startDist'])
         self.__aimingSystem.pitch = self.__cfg['startAngle']
         self.__aimingSystem.yaw = Math.Matrix(targetMat).yaw
@@ -250,7 +255,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             shiftMat.setIdentity()
         return
 
-    def enable(self, preferredPos=None, closesDist=False, postmortemParams=None, turretYaw=None, gunPitch=None, isRemoteCamera=False):
+    def enable(self, preferredPos=None, closesDist=False, postmortemParams=None, turretYaw=None, gunPitch=None):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.setAimClipPosition(self.__aimOffset)
@@ -280,7 +285,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             self.__inputInertia.teleport(self.__calcRelativeDist())
         self.vehicleMProv = vehicleMProv
         self.__setModelsToCollideWith(self.__vehiclesToCollideWith)
-        self.__isRemoteCamera = isRemoteCamera
         BigWorld.camera(self.__cam)
         self.__aimingSystem.enable(preferredPos, turretYaw, gunPitch)
         self.__aimingSystem.aimMatrix = self.__calcAimMatrix()
@@ -449,7 +453,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         if delta != 0.0:
             self.__cam.setScrollDelta(math.copysign(delta, sign))
         FovExtended.instance().setFovByMultiplier(self.__inputInertia.fovZoomMultiplier)
-        unshakenPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.idealMatrix if self.__adCfg['enable'] else self.__aimingSystem.matrix)
+        unshakenPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.matrix)
         vehMatrix = Math.Matrix(self.__aimingSystem.vehicleMProv)
         vehiclePos = vehMatrix.translation
         fromVehicleToUnshakedPos = unshakenPos - vehiclePos
@@ -464,16 +468,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         relTranslation = relCamPosMatrix.translation
         shotPoint = self.__calcFocalPoint(virginShotPoint, deltaTime)
         vehToShotPoint = shotPoint - vehiclePos
-        if self.__isRemoteCamera and vehicle is not None:
-            relTranslation = player.remoteCameraArcade.relTranslation
-            vehToShotPoint = player.remoteCameraArcade.shotPoint
-            getVector3 = getattr(player.filter, 'getVector3', None)
-            if getVector3 is not None:
-                time = BigWorld.serverTime()
-                relTranslation = getVector3(AVATAR_SUBFILTERS.CAMERA_ARCADE_REL_TRANSLATION, time)
-                vehToShotPoint = getVector3(AVATAR_SUBFILTERS.CAMERA_ARCADE_SHOT_POINT, time)
-            else:
-                LOG_WARNING("ArcadeCamera.__cameraUpdate, the filter doesn't have getVector3 method!")
         self.__setCameraAimPoint(vehToShotPoint)
         self.__setCameraPosition(relTranslation)
         replayCtrl = BattleReplay.g_replayCtrl
@@ -487,8 +481,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
                 replayCtrl.setAimClipPosition(aimOffset)
         self.__cam.aimPointClipCoords = aimOffset
         self.__aimOffset = aimOffset
-        if vehicle is not None and not player.isObserver():
-            vehicle.setArcadeCameraDataForObservers(vehToShotPoint, relTranslation)
         if self.__shiftKeySensor is not None:
             self.__shiftKeySensor.update(1.0)
             if self.__shiftKeySensor.currentVelocity.lengthSquared > 0.0:

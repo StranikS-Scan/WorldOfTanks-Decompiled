@@ -3,21 +3,23 @@
 import constants
 from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
 from gui.Scaleform.daapi.view.meta.HangarHeaderMeta import HangarHeaderMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.server_events.events_dispatcher import showEventsWindow
-from gui.shared.ItemsCache import g_itemsCache
+from gui.server_events import events_helpers
+from gui.server_events.events_dispatcher import showEventsWindow, showMissionsForCurrentVehicle
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared_utils import first
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IQuestsController
+from gui.Scaleform.daapi.view.lobby.missions import missions_page
 
 class WIDGET_PQ_STATE(object):
     """ State of the personal quests overall relatively to current vehicle.
@@ -96,6 +98,7 @@ class HangarHeader(HangarHeaderMeta):
     """ This class is responsible for displaying current vehicle information
     and battle/personal quests widgets (those two flags on top of hangar).
     """
+    _itemsCache = dependency.descriptor(IItemsCache)
     _eventsCache = dependency.descriptor(IEventsCache)
     _questController = dependency.descriptor(IQuestsController)
 
@@ -103,7 +106,6 @@ class HangarHeader(HangarHeaderMeta):
         super(HangarHeader, self).__init__()
         self._currentVehicle = None
         self._personalQuestID = None
-        self._battleQuestId = None
         return
 
     def showPersonalQuests(self):
@@ -111,7 +113,8 @@ class HangarHeader(HangarHeaderMeta):
         return
 
     def showCommonQuests(self):
-        showEventsWindow(eventID=self._battleQuestId, eventType=constants.EVENT_TYPE.BATTLE_QUEST)
+        missions_page.setHideDoneFilter()
+        showMissionsForCurrentVehicle()
 
     def showBeginnerQuests(self):
         showEventsWindow(eventID=self._battleQuestId, eventType=constants.EVENT_TYPE.TUTORIAL)
@@ -157,13 +160,14 @@ class HangarHeader(HangarHeaderMeta):
         return
 
     def _getTutorialChapters(self):
-        completed = g_itemsCache.items.stats.tutorialsCompleted
-        questsDescriptor = events_helpers.getTutorialEventsDescriptor()
+        completed = self._itemsCache.items.stats.tutorialsCompleted
+        questsDescriptor = old_events_helpers.getTutorialEventsDescriptor()
         chapters = []
-        for chapter in questsDescriptor:
-            chapterStatus = chapter.getChapterStatus(questsDescriptor, completed)
-            if chapterStatus != events_helpers.EVENT_STATUS.NOT_AVAILABLE and chapterStatus != events_helpers.EVENT_STATUS.COMPLETED:
-                chapters.append(chapter)
+        if questsDescriptor is not None:
+            for chapter in questsDescriptor:
+                chapterStatus = chapter.getChapterStatus(questsDescriptor, completed)
+                if chapterStatus != events_helpers.EVENT_STATUS.NOT_AVAILABLE and chapterStatus != events_helpers.EVENT_STATUS.COMPLETED:
+                    chapters.append(chapter)
 
         return chapters
 
@@ -178,16 +182,14 @@ class HangarHeader(HangarHeaderMeta):
     def __getBattleQuestsVO(self, vehicle):
         """ Get part of VO responsible for battle quests flag.
         """
-        quests = sorted(self._questController.getQuestForVehicle(vehicle), events_helpers.questsSortFunc)
+        quests = self._questController.getQuestForVehicle(vehicle)
         totalCount = len(quests)
         completedQuests = len([ q for q in quests if q.isCompleted() ])
         if totalCount > 0:
             if completedQuests != totalCount:
                 label = _ms(MENU.hangarHeaderBattleQuestsLabel(LABEL_STATE.ACTIVE), total=totalCount - completedQuests)
-                self._battleQuestId = first(quests).getID()
             else:
                 label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE)
-                self._battleQuestId = first(quests).getID() if quests else None
             commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
         else:
             commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED

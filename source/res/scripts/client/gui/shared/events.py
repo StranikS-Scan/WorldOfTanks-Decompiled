@@ -11,7 +11,6 @@ __all__ = ['ArgsEvent',
  'LoginEvent',
  'LoginCreateEvent',
  'LoginEventEx',
- 'ShowWindowEvent',
  'LobbySimpleEvent',
  'FightButtonDisablingEvent',
  'FightButtonEvent',
@@ -203,6 +202,9 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_ROSTER_SLOT_SETTINGS_WINDOW = 'showRosterSlotSettingsWindow'
     HIDE_LEGAL_INFO_WINDOW = 'showLegalInfoWindow'
     HIDE_SANDBOX_QUEUE_DIALOG = 'hideSandboxQueueDialog'
+    HIDE_MISSION_DETAILS_VIEW = 'hideMissionDetailsView'
+    HIDE_BROWSER_WINDOW = 'hideBrowserWindow'
+    HIDE_BOOSTERS_WINDOW = 'hideBoostersWindow'
 
 
 class HidePopoverEvent(HasCtxEvent):
@@ -220,6 +222,12 @@ class LobbySimpleEvent(HasCtxEvent):
     PREMIUM_BOUGHT = 'premiumBought'
     WAITING_SHOWN = 'waitingShown'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
+
+
+class MissionsEvent(HasCtxEvent):
+    ON_FILTER_CHANGED = 'onFilterChanged'
+    ON_FILTER_CLOSED = 'onFilterClosed'
+    ON_GROUPS_DATA_CHANGED = 'onGroupsDataChanged'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
@@ -453,11 +461,13 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_CAP = 'globalMapCap'
     GLOBAL_MAP_PROMO = 'globalMapPromo'
     PREM_SHOP = 'premShopURL'
+    TOKEN_SHOP = 'tokenShopUrl'
 
-    def __init__(self, eventType, url='', title=''):
+    def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
         self.url = url
         self.title = title
+        self.params = params
 
 
 class CalendarEvent(SharedEvent):

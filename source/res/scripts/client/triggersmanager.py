@@ -4,8 +4,8 @@ import BigWorld
 import Math
 import math
 import PlayerEvents
-from debug_utils import *
 from constants import ARENA_PERIOD
+from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers import isPlayerAvatar
 
 class TRIGGER_TYPE():
@@ -103,10 +103,10 @@ class TriggersManager():
         self.__nextTriggerId = self.__nextTriggerId + 1
         return self.__nextTriggerId - 1
 
-    def delTrigger(self, id):
-        if self.__autoTriggers.has_key(id):
-            del self.__autoTriggers[id]
-            self.__activeAutoTriggers.discard(id)
+    def delTrigger(self, triggerID):
+        if triggerID in self.__autoTriggers:
+            del self.__autoTriggers[triggerID]
+            self.__activeAutoTriggers.discard(triggerID)
 
     def fireTrigger(self, type, **args):
         params = dict(args) if args is not None else {}
@@ -114,24 +114,24 @@ class TriggersManager():
         self.__pendingManualTriggers[type] = (False, params)
         return
 
-    def activateTrigger(self, type, **args):
-        if self.__activeManualTriggers.has_key(type):
-            self.deactivateTrigger(type)
+    def activateTrigger(self, triggerType, **args):
+        if triggerType in self.__activeManualTriggers:
+            self.deactivateTrigger(triggerType)
         params = dict(args) if args is not None else {}
-        params['type'] = type
-        self.__pendingManualTriggers[type] = (True, params)
+        params['type'] = triggerType
+        self.__pendingManualTriggers[triggerType] = (True, params)
         return
 
-    def deactivateTrigger(self, type):
-        if self.__pendingManualTriggers.has_key(type):
-            del self.__pendingManualTriggers[type]
-        if self.__activeManualTriggers.has_key(type):
+    def deactivateTrigger(self, triggerType):
+        if triggerType in self.__pendingManualTriggers:
+            del self.__pendingManualTriggers[triggerType]
+        if triggerType in self.__activeManualTriggers:
             if self.isActive:
-                params = self.__activeManualTriggers[type]
+                params = self.__activeManualTriggers[triggerType]
                 for listener in self.__listeners:
                     listener.onTriggerDeactivated(params)
 
-            del self.__activeManualTriggers[type]
+            del self.__activeManualTriggers[triggerType]
 
     def update(self):
         self.__cbID = BigWorld.callback(self.UPDATE_PERIOD, self.update)

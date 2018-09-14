@@ -9,13 +9,13 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIData
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import MAX_VEHICLES_TO_COMPARE_COUNT, getVehicleCriteriaForComparing
-from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getSmallIconPath, VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
 from gui.shared.utils import sortByFields
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 
 def _makeVehicleCmpVO(vehicle):
     iconFunc = RES_ICONS.maps_icons_vehicletypes_elite if vehicle.isPremium else RES_ICONS.maps_icons_vehicletypes
@@ -31,6 +31,7 @@ def _makeVehicleCmpVO(vehicle):
 
 
 class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, VehicleSelectorBase):
+    itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, ctx=None):
@@ -49,7 +50,7 @@ class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, Vehic
 
     def updateData(self, allVehicles=[]):
         if not allVehicles:
-            allVehicles.append(g_itemsCache.items.getVehicles(getVehicleCriteriaForComparing()))
+            allVehicles.append(self.itemsCache.items.getVehicles(getVehicleCriteriaForComparing()))
         vehicles = self._updateData(allVehicles[0], compatiblePredicate=lambda vo: vo['inHangar'])
         self._vehDP.buildList(vehicles)
         self.__updateSortField()

@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/CONFIRM_EXCHANGE_DIALOG_TYPES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class CONFIRM_EXCHANGE_DIALOG_TYPES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     VEHICLE_ICON = 1
     MODULE_ICON = 2
     NORMAL_STATE = 1

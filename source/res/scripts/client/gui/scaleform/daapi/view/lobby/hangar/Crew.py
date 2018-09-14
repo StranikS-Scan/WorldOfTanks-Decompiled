@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Crew.py
 from CurrentVehicle import g_currentVehicle
 from gui import SystemMessages
-from gui.shared import events, g_itemsCache, event_dispatcher as shared_events
+from gui.shared import events, event_dispatcher as shared_events
 from gui.shared.events import LoadViewEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
@@ -14,11 +14,14 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.CrewMeta import CrewMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
+from helpers import dependency
 from items.tankmen import getSkillsConfig, compareMastery, ACTIVE_SKILLS
 from helpers.i18n import convert
 from gui.ClientUpdateManager import g_clientUpdateManager
+from skeletons.gui.shared import IItemsCache
 
 class Crew(CrewMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(Crew, self).__init__()
@@ -40,7 +43,7 @@ class Crew(CrewMeta):
     def updateTankmen(self):
         Waiting.show('updateTankmen')
         if g_currentVehicle.isPresent():
-            tankmen = g_itemsCache.items.getTankmen()
+            tankmen = self.itemsCache.items.getTankmen()
             vehicle = g_currentVehicle.item
             commander_bonus = vehicle.bonuses['commander']
             roles = []
@@ -66,7 +69,7 @@ class Crew(CrewMeta):
             for tankman in tankmen.itervalues():
                 if tankman.isInTank and tankman.vehicleInvID != vehicle.invID:
                     continue
-                tankmanVehicle = g_itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
+                tankmanVehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
                 bonus_role_level = commander_bonus if tankman.descriptor.role != 'commander' else 0.0
                 skills_count = len(list(ACTIVE_SKILLS))
                 skillsList = []
@@ -113,7 +116,7 @@ class Crew(CrewMeta):
             self.as_tankmenResponseS({'roles': roles,
              'tankmen': tankmenData})
             dogName = ''
-            if 'dog' in g_itemsCache.items.getItemByCD(g_currentVehicle.item.intCD).tags:
+            if 'dog' in self.itemsCache.items.getItemByCD(g_currentVehicle.item.intCD).tags:
                 dogName = MENU.HANGAR_CREW_RODY_DOG_NAME
             self.as_dogResponseS(dogName)
         Waiting.hide('updateTankmen')
@@ -139,7 +142,7 @@ class Crew(CrewMeta):
 
     @decorators.process('equipping')
     def equipTankman(self, tmanInvID, slot):
-        tankman = g_itemsCache.items.getTankman(int(tmanInvID))
+        tankman = self.itemsCache.items.getTankman(int(tmanInvID))
         result = yield TankmanEquip(tankman, g_currentVehicle.item, int(slot)).request()
         if len(result.userMsg):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)

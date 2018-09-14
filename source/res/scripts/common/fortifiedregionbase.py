@@ -1,5 +1,156 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/FortifiedRegionBase.py
+""" FortifiedRegion data structure:
+    -------------------------------
+    dbID: int, # 0 if FR is not created (initial version_updater state).
+    peripheryID: int,
+    level: int, # Actually == buildings[MILITARY_BASE].level; accessor?..
+    defenceHour: <-1 | 0..23> # -1 if not activated.
+    offDay: <-1 | 0..6> # -1 if not activated.
+    vacationStart: unixtime
+    vacationFinish: unixtime
+    dirMask: int8 # Binary mask of open directions (1<<dir), dir>0.
+    lockedDirMask: int8 # Binary mask of locked directions (where battle goes on). (1<<dir), dir>0.
+    state: int # Binary mask of FORT_STATE.* flags.
+    _devMode: bool # Debug 'development mode' flag, to allow debug hacks.
+    _debugTimeShift: int # Debug 'global time' increment (to quickly test those 2-week cooldowns).
+    influencePoints : int,
+    creatorDBID: int,
+
+    # When we change "defence hour" or "off-day", change will go into effect only after 2-week period;
+    #  and also cooldown will be slapped on changing this value. So we need a "postponed events" list.
+    # Also when we activate orders, we need exactly the same mechanics for "orders expiration".
+    #  Orders will be also stored here as {orderTypeID: (unixtime_expiration, orderValue)} entries.
+    #     eventTypeID -- active ORDER_TYPE (xp bonuses etc.) or FORT_EVENT_TYPE (changeDefHour etc.)
+    #                   or FORT_EVENT_TYPE.PRODUCT_ORDERS_BASE+buildTypeID (order production)
+    #  Building maps will be also stored here as {buildEventID : (map_expiration, nextMapID, currentMapID)}
+    #    buildEventID -- FORT_EVENT_TYPE.BUILDING_MAPS_BASE+buildTypeID
+    # -------------------------------
+    events: { eventTypeID: ( unixtime, eventValue:int32, initiatorDBID ) }
+
+    # buildingCompactDescr - packed string. Unpack with BuildingDescr(buildingCompactDescr).
+    buildings = { buildTypeID: buildingCompactDescr }
+
+    # INTERNAL Index, to easily see which buildings are positioned in what direction.
+    _dirPosToBuildType = {
+        [dir|pos]: buildTypeID
+    }
+
+    # INTERNAL Index: which clan member account is attached to which building.
+    _playerAttachments = { accountDBID: buildTypeID }
+
+    # Players attached to buildings bring their 'prom-resource' loot into that building hp/storage.
+    playerContributions: {
+        accountDBID: {TOTAL:int, date:int, .. } # Keeping timeday:value pair for last 7 days.
+    }
+
+    orders = {
+        orderType: (count, level) # *)Level is always equal to corrresponding building level
+    }
+
+    # Temporary list of activated consumables. For rollback in case of crash
+    consumables : {(unitMgrID, peripheryID): {revision: [(orderTypeId, level, slotIndex)]}}
+    consumablesMeta : {(unitMgrID, peripheryID): (deadline, unitMgrFlags, isAlive, maxRevision)}
+
+    # "Favorite clans", for attack planning.
+    favorites = set([clanDBID,])
+
+    # Planned (and recently finished) attacks/defences.
+    attacks = {(time, dirFrom): (defenderClanDBID, defenderClanAbbrev, dirTo, battleID,         atkFortLevel, defFortLevel, division, peripheryID, attackResult, attackResource)}
+    defences = {(time, dirTo): (attackerClanDBID, attackerClanAbbrev, dirFrom, battleID,         atkFortLevel, defFortLevel, division, attackResult, attackResource)}
+
+    # INTERNAL Index: when was the last attack (on each enemyClanDBID)
+    _lastAttacks = { clanDBID: timestamp }
+
+    # FR battles currently going on.
+    battles = {
+        battleID: {
+            'direction': direction,
+            'isDefence': bool,
+            'attackTime': attackTime, # 'ideal', scheduled timestamp ~'09:00'.
+            'attackerClanDBID': attackerClanDBID,
+            'defenderClanDBID': defenderClanDBID,
+            'attackerBuildList': [(buildingTypeID, resCount, map),] or None,
+            'defenderBuildList': [[(buildingTypeID, resCount, map),] or None,
+            'attackerFullBuildList': [(buildingTypeID, status, level, hp, storage),] or None, #FORT_BUILDING_STATUS
+            'defenderFullBuildList': [(buildingTypeID, status, level, hp, storage),] or None, #FORT_BUILDING_STATUS
+            'battleResultList' : [FORT_COMBAT_RESULTS.*] index array is round number.
+            'prevBuildNum' : index of prev final build,
+            'currentBuildNum': index of final building,
+            'roundStart' : time start next round.
+            'isBattleRound': 0/1, if active battle round (arena) is going on.
+            'isEnemyReadyForBattle': 0/1, if enemy clan is ready for next battle round.
+            'canUseEquipments': canUseEquipments,
+            'division': division,
+        }
+    }
+
+    # Units currently created for fort battles.
+    battleUnits = { battleID: strUnitPack }
+
+    # [SERVER-SIDE-ONLY] Auxiliary battle info.
+    _battleInfo = {
+        battleID: {
+            'isCommanderRegistered': False,
+            'unitMgrID': None,
+            'scheduleTime': scheduleTime,
+            'isBothScheduled': False,
+            'inviteData': {
+                'createdAt': int(scheduleTime),
+                'battleID': battleID,
+                'direction': direction,
+                'isDefence': isDefence,
+                'timeLeft': FortBattleMgr.BATTLE_SCHEDULE_TIME,
+                'enemyClanAbbrev': enemyClanAbbrev,
+                'attackTime': attackTime,
+                'peripheryID': defencePeripheryID,
+            }
+        }
+    }
+
+    # Mini-"UnitFinder" for clan members (only sorties headers, without unit slot/vehicle info).
+    sorties = {
+        (unitMgrID, peripheryID): (cmdrDBID, rosterTypeID, state, count, maxCount, timestamp,             cmdrIgrType, cmdrName, strComment),
+    }
+
+    # Full sortie unit info (with packed Unit data, available upon special request from account).
+    _sortieUnits = {
+        (unitMgrID, peripheryID): strUnitPack,
+    }
+
+    # Fort statistics, in packed dossier format.
+    statistics = <Dossier2>
+
+    _packed: packed representation (string) for persistence.
+    _dirty: bool flag, True when pdata representation needs to be updated.
+
+
+    FortifiedRegion PERSISTENT data structure, for database storage in Clan.pdata['fort']:
+    -------------------------------
+    {
+        'dbID': int,
+        'statistics': <Dossier2>,
+
+        'attrs': ( level, state, dirMask, peripheryID, defenceHour, offDay,             vacationStart, vacationFinish, _devMode, _debugTimeShift, influencePoints, creatorDBID),
+        'events': { eventTypeID: ( unixtime, eventValue, initiatorDBID ) },
+        'buildings': { buildTypeID: buildingCompactDescr } ,
+        'contributions': {
+            accountDBID: {TOTAL:int, date:int, .. },
+        },
+        'orders' = {
+            orderType: (count, level)
+        },
+        'favorites': set([clanDBID,]),
+        'battles' = {
+            see battles comment in the class property description above
+        }
+
+        # Planned (and recently finished) attacks/defences.
+        # (!THESE KEYS ARE ADDED FOR WEBEXPORT ONLY!)
+        attacks = {(time, dirFrom): (defenderClanDBID, defenderClanAbbrev, dirTo, battleID,             peripheryID, attackResult, attackResource)}
+        defences = {(time, dirTo): (attackerClanDBID, attackerClanAbbrev, dirFrom, battleID,             attackResult, attackResource)}
+    }
+"""
 import time
 import struct
 import random
@@ -15,11 +166,11 @@ from UnitRoster import buildNamesDict
 NOT_ACTIVATED = -1
 TOTAL_CONTRIBUTION = 0
 FORT_AUTO_UNSUBSCRIBE_TIMEOUT = 60
-SECONDS_PER_HOUR = 60 * 60
+SECONDS_PER_HOUR = 3600
 SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR
 SECONDS_PER_WEEK = 7 * SECONDS_PER_DAY
-INT_MAX = (1 << 31) - 1
-INT_MIN = -(1 << 31)
+INT_MAX = 2147483647L
+INT_MIN = -2147483648L
 OFF_DAY_SETTING_PERIOD = 10
 MAX_BUILDING_POSITIONS = 2
 MAX_DIRECTION_NUM = 6
@@ -30,7 +181,7 @@ DEF_SHUTDOWN_LEVEL = 4
 MAX_PERIPHERY_ID = 999
 ALL_DIRS = 100
 
-class FORT_EVENT_TYPE():
+class FORT_EVENT_TYPE:
     ACTIVE_ORDERS_BASE = 0
     DIR_OPEN_ATTACKS_BASE = 90
     DIR_OPEN_ATTACKS_FIRST = DIR_OPEN_ATTACKS_BASE + 1
@@ -63,7 +214,7 @@ class FORT_EVENT_TYPE():
      PERIPHERY_COOLDOWN] + _DIR_OPEN_EVENTS + _BUILDING_MAPS_EVENTS)
 
 
-class FORT_ERROR():
+class FORT_ERROR:
     WAIT_OK = -1
     OK = 0
     BAD_METHOD = 1
@@ -185,7 +336,7 @@ OK = FORT_ERROR.OK
 FORT_ERROR_NAMES = dict([ (v, k) for k, v in FORT_ERROR.__dict__.iteritems() if not k.startswith('_') ])
 MIL_BASE = FORT_BUILDING_TYPE.MILITARY_BASE
 
-class FORT_OP():
+class FORT_OP:
     CREATE_NEW = 1
     ADD_BUILDING = 2
     DEL_BUILDING = 3
@@ -256,11 +407,11 @@ class FORT_OP():
     SET_INFLUENCE_POINTS = 106
 
 
-class FORT_NOTIFICATION():
+class FORT_NOTIFICATION:
     DING = 1
 
 
-class FORT_STATE():
+class FORT_STATE:
     FIRST_DIR_OPEN = 1
     FIRST_BUILD_START = 2
     FIRST_BUILD_DONE = 4
@@ -273,13 +424,13 @@ class FORT_STATE():
 
 FORT_STATE_NAMES = buildNamesDict(FORT_STATE)
 
-class FORT_CONTRIBUTION_TYPE():
+class FORT_CONTRIBUTION_TYPE:
     CLIENT = 0
     SORTIE_BASE = 100
     BATTLE_BASE = 200
 
 
-class FORT_ATTACK_RESULT():
+class FORT_ATTACK_RESULT:
     DRAW = 0
     BUILDINGS_CAPTURED_MASK = 3
     BASE_CAPTURED_FLAG = 16
@@ -299,7 +450,7 @@ class FORT_ATTACK_RESULT():
      FAILED_TO_SCHEDULE)
 
 
-class FORT_ATK_IDX():
+class FORT_ATK_IDX:
     ENEMY_DBID = 0
     ENEMY_ABBREV = 1
     ENEMY_DIR = 2
@@ -312,7 +463,7 @@ class FORT_ATK_IDX():
     ATTACK_RESOURCE = -1
 
 
-class DELETE_BATTLE_REASON():
+class DELETE_BATTLE_REASON:
     UNKNOWN = 0
     ADMIN_REQUEST = 1
     BASE_DAMAGED = 2
@@ -323,7 +474,7 @@ class DELETE_BATTLE_REASON():
     WRONG_LEVEL_RATIO = 7
 
 
-class FORT_CLIENT_METHOD():
+class FORT_CLIENT_METHOD:
     CREATE = 1
     DELETE = 2
     SUBSCRIBE = 3
@@ -411,7 +562,7 @@ def parseDirPosByte(dirPosByte):
     return (dirPosByte >> 4 & 15, dirPosByte & 15)
 
 
-class BuildingDescr():
+class BuildingDescr:
     FORMAT_HEADER = '<BBBbiiii'
     SIZE_HEADER = struct.calcsize(FORMAT_HEADER)
 
@@ -1902,7 +2053,8 @@ class FortifiedRegionBase(OpsUnpacker):
 
     def _deleteBattlesByTime(self, timeStart, timeFinish, dir, reason):
         LOG_DEBUG_DEV('_deleteBattlesByTime', timeStart, timeFinish, dir, reason, self.dbID)
-        for key in self.attacks.keys():
+        attacks = self.attacks.keys()
+        for key in attacks:
             timeAttack, dirFrom = key
             if dir != ALL_DIRS and dir != dirFrom:
                 continue
@@ -1910,7 +2062,8 @@ class FortifiedRegionBase(OpsUnpacker):
                 args = self.attacks.pop(key)
                 self._onDeleteBattle(key, args, reason, isDefence=False)
 
-        for key in self.defences.keys():
+        defences = self.defences.keys()
+        for key in defences:
             timeAttack, dirTo = key
             if dir != ALL_DIRS and dir != dirTo:
                 continue
@@ -1923,7 +2076,8 @@ class FortifiedRegionBase(OpsUnpacker):
 
     def _deleteBattlesByClan(self, enemyClanDBID, timeStart, timeFinish, enemyDir, reason):
         LOG_DEBUG_DEV('_deleteBattlesByClan', enemyClanDBID, timeStart, timeFinish, enemyDir, reason, self.dbID)
-        for key in self.attacks.keys():
+        attacks = self.attacks.keys()
+        for key in attacks:
             timeAttack, dirFrom = key
             defenderClanDBID = self.attacks[key][FORT_ATK_IDX.ENEMY_DBID]
             dirTo = self.attacks[key][FORT_ATK_IDX.ENEMY_DIR]
@@ -1933,7 +2087,8 @@ class FortifiedRegionBase(OpsUnpacker):
                 args = timeStart <= timeAttack <= timeFinish and self.attacks.pop(key)
                 self._onDeleteBattle(key, args, reason, isDefence=False)
 
-        for key in self.defences.keys():
+        defences = self.defences.keys()
+        for key in defences:
             timeAttack, dirTo = key
             attackerClanDBID = self.defences[key][FORT_ATK_IDX.ENEMY_DBID]
             dirFrom = self.defences[key][FORT_ATK_IDX.ENEMY_DIR]
@@ -1998,7 +2153,8 @@ class FortifiedRegionBase(OpsUnpacker):
                  attackResult,
                  attackResource)
         else:
-            for key in self.defences.keys():
+            defences = self.defences.keys()
+            for key in defences:
                 defenceTime, defenceDir = key
                 if defenceTime != attackTime:
                     continue

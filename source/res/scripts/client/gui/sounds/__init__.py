@@ -10,4 +10,4 @@ def getSoundsConfig(manager):
     """
     ctrl = SoundsController()
     ctrl.init()
-    manager.bindInstance(ISoundsController, ctrl, finalizer='fini')
+    manager.addInstance(ISoundsController, ctrl, finalizer='fini')

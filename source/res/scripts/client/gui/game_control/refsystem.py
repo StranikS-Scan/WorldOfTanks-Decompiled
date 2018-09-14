@@ -8,12 +8,11 @@ from PlayerEvents import g_playerEvents
 from constants import REF_SYSTEM_FLAG, EVENT_TYPE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import ExplosionBackAward
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared import g_itemsCache, events, g_eventBus, event_dispatcher as shared_events, EVENT_BUS_SCOPE
+from gui.shared import events, g_eventBus, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from gui.shared.formatters import icons, text_styles
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
@@ -23,10 +22,20 @@ from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from shared_utils import findFirst
 from skeletons.gui.game_control import IRefSystemController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 
-def _getRefSysCfg():
-    return g_itemsCache.items.shop.refSystem or {}
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _getRefSysCfg(itemsCache=None):
+    default = {'periods': 0,
+     'maxReferralXPPool': 0,
+     'maxNumberOfReferrals': 0}
+    if itemsCache is not None:
+        return itemsCache.items.shop.refSystem or default
+    else:
+        return default
+        return
 
 
 def _getRefSystemPeriods():
@@ -136,6 +145,7 @@ class TankmanAward(ExplosionBackAward):
 
 
 class RefSystem(IRefSystemController):
+    itemsCache = dependency.descriptor(IItemsCache)
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
@@ -169,7 +179,7 @@ class RefSystem(IRefSystemController):
         g_clientUpdateManager.addCallbacks({'stats.refSystem': self.__onRefStatsUpdated})
         self.eventsCache.onSyncCompleted += self.__onEventsUpdated
         g_playerEvents.onShopResync += self.__onShopUpdated
-        self.__update(g_itemsCache.items.stats.refSystem)
+        self.__update(self.itemsCache.items.stats.refSystem)
         self.__updateQuests()
 
     def onAvatarBecomePlayer(self):
@@ -235,7 +245,7 @@ class RefSystem(IRefSystemController):
 
     @classmethod
     def isReferrer(cls):
-        refSystemStats = g_itemsCache.items.stats.refSystem
+        refSystemStats = cls.itemsCache.items.stats.refSystem
         return refSystemStats.get('activeInvitations', 0) > 0 or len(refSystemStats.get('referrals', {})) > 0
 
     def showReferrerIntroWindow(self, invitesCount):
@@ -272,7 +282,7 @@ class RefSystem(IRefSystemController):
         self.__referrers = []
         self.__referrals = []
         self.__xpPoolOfDeletedRals = 0
-        self.__posByXPinTeam = g_itemsCache.items.shop.refSystem['posByXPinTeam']
+        self.__posByXPinTeam = self.itemsCache.items.shop.refSystem['posByXPinTeam']
         storage = self.usersStorage
         userGetter = storage.getUser
         userSetter = storage.addUser
@@ -345,17 +355,18 @@ class RefSystem(IRefSystemController):
         return sorted(result.iteritems(), key=itemgetter(0))
 
     def __onRefStatsUpdated(self, diff):
-        self.__update(g_itemsCache.items.stats.refSystem)
+        self.__update(self.itemsCache.items.stats.refSystem)
 
     def __onEventsUpdated(self):
         self.__updateQuests()
 
     def __onShopUpdated(self):
-        self.__update(g_itemsCache.items.stats.refSystem)
+        self.__update(self.itemsCache.items.stats.refSystem)
         self.__updateQuests()
 
 
 class _RefItem(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, accountDBID, inviteCreationTime, nickName, clanDBID, clanAbbrev, firstBattleTime, xpPool, lastBattleTime, state):
         super(_RefItem, self).__init__()
@@ -385,7 +396,7 @@ class _RefItem(object):
         return self.__clanDBID
 
     def getFullName(self):
-        return g_lobbyContext.getPlayerFullName(self.__nickName, clanAbbrev=self.__clanAbbrev, pDBID=self.__accountDBID)
+        return self.lobbyContext.getPlayerFullName(self.__nickName, clanAbbrev=self.__clanAbbrev, pDBID=self.__accountDBID)
 
     def getFirstBattleTime(self):
         return self.__firstBattleTime

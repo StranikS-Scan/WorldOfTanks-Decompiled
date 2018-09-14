@@ -4,7 +4,6 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE
 from gui.Scaleform.daapi.view.meta.ProfileTechniquePageMeta import ProfileTechniquePageMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.shared.ItemsCache import g_itemsCache
 from helpers.i18n import makeString
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 
@@ -14,7 +13,7 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
         super(ProfileTechniquePage, self)._populate()
         if self._selectedData is not None:
             intVehCD = int(self._selectedData.get('itemCD'))
-            accountDossier = g_itemsCache.items.getAccountDossier(None)
+            accountDossier = self.itemsCache.items.getAccountDossier(None)
             if intVehCD in accountDossier.getRandomStats().getVehicles():
                 self._battlesType = PROFILE_DROPDOWN_KEYS.ALL
             elif intVehCD in accountDossier.getTeam7x7Stats().getVehicles():
@@ -29,6 +28,8 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
                 self._battlesType = PROFILE_DROPDOWN_KEYS.STATICTEAM
             elif intVehCD in accountDossier.getFalloutStats().getVehicles():
                 self._battlesType = PROFILE_DROPDOWN_KEYS.FALLOUT
+            elif intVehCD in accountDossier.getRankedStats().getVehicles():
+                self._battlesType = PROFILE_DROPDOWN_KEYS.RANKED
         self.as_setSelectedVehicleIntCDS(int(self._selectedData.get('itemCD')) if self._selectedData else -1)
         return
 

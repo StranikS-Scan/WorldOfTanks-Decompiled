@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class ClanPersonalInvitesWindowMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def as_setActualInvitesTextS(self, value):
         return self.flashObject.as_setActualInvitesText(value) if self._isDAAPIInited() else None

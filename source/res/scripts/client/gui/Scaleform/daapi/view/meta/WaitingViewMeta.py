@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.View import View
 
 class WaitingViewMeta(View):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends View
-    """
 
     def showS(self, data):
         return self.flashObject.show(data) if self._isDAAPIInited() else None

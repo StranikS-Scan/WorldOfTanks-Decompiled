@@ -72,4 +72,4 @@ def getScaleformConfig(manager):
     from gui.Scaleform.SystemMessagesInterface import SystemMessagesInterface
     messages = SystemMessagesInterface()
     messages.init()
-    manager.bindInstance(ISystemMessages, messages, finalizer='destroy')
+    manager.addInstance(ISystemMessages, messages, finalizer='destroy')

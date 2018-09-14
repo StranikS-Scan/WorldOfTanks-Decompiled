@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/ConfirmModuleDialog.py
 from PlayerEvents import g_playerEvents
-from adisp import process
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.ConfirmItemWindowMeta import ConfirmItemWindowMeta
 from gui.Scaleform.genConsts.CONFIRM_DIALOG_ALIASES import CONFIRM_DIALOG_ALIASES
-from gui.shared import g_itemsCache
 from gui.shared.utils import CLIP_ICON_PATH, EXTRA_MODULE_INFO
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.money import Currency
+from helpers import dependency
 from items import vehicles
+from skeletons.gui.shared import IItemsCache
 
 class ConfirmModuleDialog(ConfirmItemWindowMeta):
     """
     Basic implementation of window which provides operation with modules.
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, meta, handler):
         super(ConfirmModuleDialog, self).__init__()
@@ -51,14 +54,20 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
         Create necessary object which expects flash component and
         pass it through DAAPI
         """
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         module = items.getItemByCD(self.meta.getTypeCompDescr())
         if module is not None:
-            shop = g_itemsCache.items.shop
+            shop = self.itemsCache.items.shop
             actualPrice = self.meta.getActualPrice(module)
             defaultPrice = self.meta.getDefaultPrice(module)
             currency = self.meta.getCurrency(module)
-            isAction = actualPrice.isAllSet() and (shop.isEnabledBuyingGoldShellsForCredits and module.itemTypeID == vehicles._SHELL or shop.isEnabledBuyingGoldEqsForCredits and module.itemTypeID == vehicles._EQUIPMENT)
+            setCurrencies = actualPrice.toSignDict()
+            hasAlternativePrice = len(setCurrencies) > 1
+            if hasAlternativePrice and Currency.CREDITS in setCurrencies:
+                if module.itemTypeID == GUI_ITEM_TYPE.SHELL:
+                    hasAlternativePrice = shop.isEnabledBuyingGoldShellsForCredits
+                elif module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
+                    hasAlternativePrice = shop.isEnabledBuyingGoldEqsForCredits
             icon = self.__getIcon(module)
             extraData = None
             if module.itemTypeID == vehicles._GUN and module.isClipGun():
@@ -75,7 +84,7 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
              'currency': currency,
              'defaultValue': self.meta.getDefaultValue(module),
              'maxAvailableCount': self.meta.getMaxAvailableItemsCount(module),
-             'isActionNow': isAction,
+             'isActionNow': hasAlternativePrice,
              'moduleLabel': module.getGUIEmblemID(),
              'level': module.level,
              'linkage': CONFIRM_DIALOG_ALIASES.MODULE_ICON,
@@ -101,7 +110,7 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
         self.destroy()
 
     def submit(self, count, currency):
-        module = g_itemsCache.items.getItemByCD(self.meta.getTypeCompDescr())
+        module = self.itemsCache.items.getItemByCD(self.meta.getTypeCompDescr())
         self.meta.submit(module, count, currency)
         self._callHandler(True, self.meta.getTypeCompDescr(), count, currency)
         self.destroy()

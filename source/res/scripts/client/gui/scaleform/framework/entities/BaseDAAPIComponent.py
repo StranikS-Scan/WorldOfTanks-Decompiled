@@ -75,8 +75,12 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
             self.__unregisterPythonComponent(alias, res)
         return
 
-    def _invalidate(self):
-        super(BaseDAAPIComponent, self)._invalidate()
+    def _invalidate(self, *args, **kwargs):
+        """
+        Performs self re-initialization, including child re-initialization. Note that all parameters should have
+        default value (typically None) to prevent crashes when args or/and kwargs are missed.
+        """
+        super(BaseDAAPIComponent, self)._invalidate(*args, **kwargs)
         for c in self.__components.itervalues():
             c.validate()
 

@@ -9,7 +9,9 @@ from gui.shared.utils import graphics
 from debug_utils import LOG_DEBUG, LOG_NOTE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.helpers.statistics import IStatisticsCollector
 STATISTICS_VERSION = '0.0.2'
 
 class _STATISTICS_STATE:
@@ -59,21 +61,32 @@ _HANGAR_LOADING_STATES_IDS = [HANGAR_LOADING_STATE.FINISH_LOADING_VEHICLE,
  HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL,
  HANGAR_LOADING_STATE.HANGAR_READY]
 
-class StatisticsCollector:
+class StatisticsCollector(IStatisticsCollector):
     update = property(lambda self: self.__updateFunc)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         self.__state = _STATISTICS_STATE.STOPPED
         self.__hangarLoaded = False
         self.__invalidStats = 0
+        self.__dynEvents = []
         self.reset()
         self.__loadingStates = [0.0] * HANGAR_LOADING_STATE.COUNT
         self.__loadingInitialState = HANGAR_LOADING_STATE.LOGIN
         self.__hangarLoadingTime = 0.0
-        from ConnectionManager import connectionManager
-        connectionManager.onDisconnected += self.__onClientDisconnected
+
+    def init(self):
+        self.connectionMgr.onDisconnected += self.__onClientDisconnected
+        from gui.shared.utils.HangarSpace import g_hangarSpace
+        g_hangarSpace.onSpaceCreate += self.__onHangarSpaceLoaded
+
+    def fini(self):
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.connectionMgr.onDisconnected -= self.__onClientDisconnected
+        from gui.shared.utils.HangarSpace import g_hangarSpace
+        g_hangarSpace.onSpaceCreate -= self.__onHangarSpaceLoaded
 
     def start(self):
         self.stop()
@@ -113,9 +126,6 @@ class StatisticsCollector:
 
     def __updateBattle(self):
         pass
-
-    def subscribeToHangarSpaceCreate(self, event):
-        event += self.__onHangarSpaceLoaded
 
     def getStatistics(self, andStop=True):
         proceed = self.__state == _STATISTICS_STATE.IN_PROGRESS
@@ -186,6 +196,3 @@ class StatisticsCollector:
                 reportHeader += ' (With Tutorial stage) '
             self.__hangarLoadingTime = self.__loadingStates[state] - self.__loadingStates[self.__loadingInitialState]
             LOG_NOTE(reportHeader + ' TOTAL = ' + str(self.__hangarLoadingTime))
-
-
-g_statistics = StatisticsCollector()

@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/post_processing/__init__.py
 import BigWorld
-import Math
 import ResMgr
 import weakref
 import PostProcessing
-import Settings
-from PostProcessing.Effects import *
 from functools import partial
-from debug_utils import *
+from debug_utils import LOG_CODEPOINT_WARNING, LOG_WARNING, LOG_NOTE
+from post_processing import post_effect_controllers
 
 class _Effect:
     __FILE_EXT = '.ppchain'

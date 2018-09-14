@@ -3,12 +3,6 @@
 from messenger.gui.Scaleform.meta.BaseManageContactViewMeta import BaseManageContactViewMeta
 
 class ContactNoteManageViewMeta(BaseManageContactViewMeta):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseManageContactViewMeta
-    """
 
     def sendData(self, data):
         self._printOverrideError('sendData')

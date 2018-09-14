@@ -4,7 +4,6 @@ import BigWorld
 import ArenaType
 from adisp import process
 from gui import SystemMessages, GUI_SETTINGS
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
@@ -26,6 +25,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.events import CoolDownEvent
 from gui.shared.formatters import text_styles
 from gui.sounds.ambients import LobbySubViewEnv
+from helpers import dependency
 from helpers import int2roman, i18n
 from messenger.ext import passCensor
 from messenger.m_constants import PROTO_TYPE
@@ -34,9 +34,11 @@ from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from prebattle_shared import decodeRoster
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_ERRORS, PREBATTLE_TYPE
+from skeletons.gui.lobby_context import ILobbyContext
 
 class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
     __sound_env__ = LobbySubViewEnv
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         super(TrainingRoom, self).__init__()
@@ -292,7 +294,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
             if creator:
                 creatorFullName = creator.getFullName()
                 creatorClan = creator.clanAbbrev
-                creatorRegion = g_lobbyContext.getRegionCode(creator.dbID)
+                creatorRegion = self.lobbyContext.getRegionCode(creator.dbID)
                 creatorIgrType = creator.igrType
             self.as_setInfoS({'isCreator': isCreator,
              'creator': settings[PREBATTLE_SETTING_NAME.CREATOR],
@@ -378,7 +380,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
              'tags': list(user.getTags()) if user else [],
              'isPlayerSpeaking': bool(isPlayerSpeaking(account.dbID)),
              'clanAbbrev': account.clanAbbrev,
-             'region': g_lobbyContext.getRegionCode(account.dbID),
+             'region': self.lobbyContext.getRegionCode(account.dbID),
              'igrType': account.igrType})
 
         if label is not None:

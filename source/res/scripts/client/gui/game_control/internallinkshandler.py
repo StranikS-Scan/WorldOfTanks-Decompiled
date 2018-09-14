@@ -3,15 +3,11 @@
 from adisp import async, process
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
-from gui.game_control import gc_constants
 from gui.game_control.links import URLMarcos
 from gui.shared import g_eventBus
-from gui.shared.events import OpenLinkEvent
 from helpers import dependency
 from skeletons.gui.game_control import IInternalLinksController, IBrowserController
-_LISTENERS = {OpenLinkEvent.MEDKIT_HELP: '_handleVideoHelp',
- OpenLinkEvent.REPAIRKITHELP_HELP: '_handleVideoHelp',
- OpenLinkEvent.FIRE_EXTINGUISHERHELP_HELP: '_handleVideoHelp'}
+_LISTENERS = {}
 
 class InternalLinksHandler(IInternalLinksController):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -66,6 +62,3 @@ class InternalLinksHandler(IInternalLinksController):
         parsedUrl = yield self.getURL(urlName)
         if parsedUrl:
             self._browserID = yield self.browserCtrl.load(parsedUrl, browserID=self._browserID, title=title, browserSize=browserSize, showActionBtn=showActionBtn, showCloseBtn=showCloseBtn)
-
-    def _handleVideoHelp(self, event):
-        self.__openInternalBrowse(event.eventType, event.title, browserSize=gc_constants.BROWSER.VIDEO_SIZE, showActionBtn=False, showCloseBtn=True)

@@ -4,7 +4,7 @@ import time
 import ResMgr
 import struct
 import quest_xml_source
-from items import _xml
+from items import _xml, ItemsPrices
 from items.vehicles import VEHICLE_CLASS_TAGS
 from constants import ITEM_DEFS_PATH, IS_CLIENT, IS_WEB, EVENT_TYPE
 if IS_CLIENT:
@@ -137,7 +137,7 @@ class TileCache(object):
              'nextTileID': nextTileID,
              'chainsCountToUnlockNext': chainsCountToUnlockNext,
              'questsInChain': _xml.readInt(ctx, tsection, 'questsInChain', 1, 100),
-             'price': _xml.readPrice(ctx, tsection, 'price'),
+             'price': ItemsPrices._tuplePrice(_xml.readPrice(ctx, tsection, 'price')),
              'achievements': achievements,
              'seasonID': seasonID,
              'tokens': set(_xml.readString(ctx, tsection, 'tokens').split())}

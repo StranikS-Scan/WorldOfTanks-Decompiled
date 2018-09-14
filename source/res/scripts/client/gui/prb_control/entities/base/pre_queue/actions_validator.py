@@ -14,9 +14,25 @@ class InQueueValidator(BaseActionsValidator):
 
 class PreQueueActionsValidator(ActionsValidatorComposite):
     """
-    Pre queue actions validator base class.
+    Pre queue actions validator base class. It has several parts:
+    - state validation
+    - vehicle validation
     """
 
     def __init__(self, entity):
-        validators = [InQueueValidator(entity), CurrentVehicleActionsValidator(entity)]
+        self._stateValidator = self._createStateValidator(entity)
+        self._vehiclesValidator = self._createVehiclesValidator(entity)
+        validators = [self._stateValidator, self._vehiclesValidator]
         super(PreQueueActionsValidator, self).__init__(entity, validators)
+
+    def _createStateValidator(self, entity):
+        """
+        Part of template method to build state validation part
+        """
+        return InQueueValidator(entity)
+
+    def _createVehiclesValidator(self, entity):
+        """
+        Part of template method to build vehicles validation part
+        """
+        return CurrentVehicleActionsValidator(entity)

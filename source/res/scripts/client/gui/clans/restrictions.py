@@ -4,9 +4,10 @@ import weakref
 from constants import CLAN_MEMBER_FLAGS
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from account_helpers import isOutOfWallet, isClanEnabled
-from gui.shared import g_itemsCache
 from gui.clans.settings import error, success, CLIENT_CLAN_RESTRICTIONS as _CCR
 from gui.clans.settings import isValidPattern
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 MAY_SEE_TREASURY = CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER | CLAN_MEMBER_FLAGS.TREASURER
 
 class ClanMemberPermissions(object):
@@ -57,8 +58,9 @@ class ClanMemberPermissions(object):
     def canSeeClans(self):
         return True
 
-    def isValidAccountType(self):
-        attrs = g_itemsCache.items.stats.attributes
+    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+    def isValidAccountType(self, itemsCache=None):
+        attrs = itemsCache.items.stats.attributes if itemsCache is not None else 0
         return not (isOutOfWallet(attrs) and not isClanEnabled(attrs))
 
     def __checkFlags(self, flags):

@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportIntroView.py
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import events
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME as _VCN
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.events import CSVehicleSelectEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -13,6 +13,7 @@ from gui.Scaleform.daapi.view.meta.CyberSportIntroMeta import CyberSportIntroMet
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
+from skeletons.gui.shared import IItemsCache
 _ACCEPTED_VEH_TYPES = (_VCN.LIGHT_TANK, _VCN.MEDIUM_TANK, _VCN.HEAVY_TANK)
 
 class _IntroViewVO(object):
@@ -50,6 +51,7 @@ class _IntroViewVO(object):
 
 
 class CyberSportIntroView(CyberSportIntroMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(CyberSportIntroView, self).__init__()
@@ -97,7 +99,7 @@ class CyberSportIntroView(CyberSportIntroMeta):
     def __updateAutoSearchVehicle(self, vehsIntCD):
         if len(vehsIntCD):
             vehIntCD = vehsIntCD[0]
-            vehicle = g_itemsCache.items.getItemByCD(vehIntCD)
+            vehicle = self.itemsCache.items.getItemByCD(vehIntCD)
             levelsRange = self.prbEntity.getRosterSettings().getLevelsRange()
             if vehicle.level not in levelsRange:
                 isReadyVehicle = False

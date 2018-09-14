@@ -42,6 +42,13 @@
         <value>	large_gas	</value>
       </constant>
     </constantsGroup>
+    <constantsGroup>
+      <name>	null	</name>
+      <constant>
+        <name>	_fileDescriptor	</name>
+        <value>	null	</value>
+      </constant>
+    </constantsGroup>
   </constants>
   <templates>
     <template>
@@ -329,5 +336,12 @@
         <constantsGroup>	diesel_large	</constantsGroup>
       </selector>
     </diesel_strv>
+    <null>
+      <selector>
+        <type>	template	</type>
+        <name>	Exhaust	</name>
+        <constantsGroup>	null	</constantsGroup>
+      </selector>
+    </null>
   </effects>
 </exhaust_effects.xml>

@@ -14,19 +14,9 @@ class SfChainsProxy(SfLobbyProxy):
          GUI_EFFECT_NAME.SET_CRITERIA: effects_player.SetCriteriaEffect(),
          GUI_EFFECT_NAME.SET_TRIGGER: effects_player.SetTriggerEffect()}
         super(SfChainsProxy, self).__init__(effects_player.EffectsPlayer(effects))
-        self._commands = GUICommandsFactory()
-
-    def fini(self):
-        self._commands = None
-        super(SfChainsProxy, self).fini()
-        return
 
     def getViewSettings(self):
         return settings.CHAINS_VIEW_SETTINGS
 
     def getViewsAliases(self):
         return settings.WINDOW_ALIAS_MAP
-
-    def invokeCommand(self, command):
-        self._commands.invoke(None, command)
-        return

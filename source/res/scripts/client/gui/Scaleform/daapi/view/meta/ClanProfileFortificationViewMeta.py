@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileBaseView import ClanProfileBaseView
 
 class ClanProfileFortificationViewMeta(ClanProfileBaseView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends ClanProfileBaseView
-    """
 
     def as_showBodyDummyS(self, data):
         """

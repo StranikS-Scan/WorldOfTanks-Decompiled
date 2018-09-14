@@ -6,15 +6,16 @@ from adisp import process
 from client_request_lib.exceptions import ResponseCodes
 from account_helpers import getAccountDatabaseID
 from gui.awards.event_dispatcher import showClanJoinAward
+from helpers import dependency
 from messenger.ext import passCensor
 from shared_utils import CONST_CONTAINER
 from debug_utils import LOG_DEBUG
-from gui.shared import g_itemsCache
 from gui.clans import contexts, formatters as clans_fmts
 from gui.clans.restrictions import ClanMemberPermissions, DefaultClanMemberPermissions
 from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLAN_INVITE_STATES, INVITE_LIMITS_LIFE_TIME
 from gui.clans.clan_helpers import ClanCache, CachedValue, isInClanEnterCooldown
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
+from skeletons.gui.shared import IItemsCache
 
 class SYNC_KEYS(CONST_CONTAINER):
     INVITES = 1
@@ -380,11 +381,12 @@ class ClanAccountProfile(object):
 
 
 class MyClanAccountProfile(ClanAccountProfile):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, clansCtrl):
-        stats = g_itemsCache.items.stats
+        stats = self.itemsCache.items.stats
         ClanAccountProfile.__init__(self, clansCtrl, getAccountDatabaseID(), stats.clanDBID, stats.clanInfo)
 
     def resyncBwInfo(self):
-        stats = g_itemsCache.items.stats
+        stats = self.itemsCache.items.stats
         self._resyncBwInfo(stats.clanDBID, stats.clanInfo)

@@ -1,19 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/recruitWindow/RecruitParamsComponent.py
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.RecruitParametersMeta import RecruitParametersMeta
 from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers import dependency
 from items.tankmen import getSkillsConfig
 from helpers.i18n import convert
 from gui import GUI_NATIONS
 import nations
 from gui.Scaleform.locale.MENU import MENU
 import Event
+from skeletons.gui.shared import IItemsCache
 
 class RecruitParamsComponent(RecruitParametersMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(RecruitParamsComponent, self).__init__()
@@ -26,7 +27,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
 
     def setNationsData(self, nationID=None, enabled=True, showEmptyRow=True):
         self.__selectedNation = nationID
-        vehsItems = g_itemsCache.items.getVehicles(self.__getNationsCriteria())
+        vehsItems = self.itemsCache.items.getVehicles(self.__getNationsCriteria())
         data = [self.__getNationEmptyRow()] if showEmptyRow else []
         selectedNationIndex = 0
         counter = 0
@@ -52,7 +53,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
     def changeNation(self, nationID):
         Waiting.show('updating')
         self.__selectedNation = nationID
-        modulesAll = g_itemsCache.items.getVehicles(self.__getClassesCriteria(nationID)).values()
+        modulesAll = self.itemsCache.items.getVehicles(self.__getClassesCriteria(nationID)).values()
         classes = []
         data = [self.__getVehicleClassEmptyRow()]
         modulesAll.sort()
@@ -72,7 +73,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
     def onVehicleClassChanged(self, vehClass):
         Waiting.show('updating')
         self.__selectedVehClass = vehClass
-        modulesAll = g_itemsCache.items.getVehicles(self.__getVehicleTypeCriteria(self.__selectedNation, vehClass)).values()
+        modulesAll = self.itemsCache.items.getVehicles(self.__getVehicleTypeCriteria(self.__selectedNation, vehClass)).values()
         data = [self.__getVehicleEmptyRow()]
         modulesAll.sort()
         selectedIndex = 0
@@ -90,7 +91,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
     def onVehicleChanged(self, vehID):
         Waiting.show('updating')
         self.__selectedVehicle = vehID
-        modulesAll = g_itemsCache.items.getVehicles(self.__getRoleCriteria(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle)).values()
+        modulesAll = self.itemsCache.items.getVehicles(self.__getRoleCriteria(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle)).values()
         roles = []
         data = [self.__getTankmanRoleEmptyRow()]
         modulesAll.sort()

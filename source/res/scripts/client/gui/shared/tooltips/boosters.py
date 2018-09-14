@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/boosters.py
-from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
 from gui.shared.economics import getActionPrc
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.tooltips import TOOLTIP_TYPE
@@ -8,11 +8,13 @@ from gui.shared.tooltips import formatters
 from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from helpers import dependency
 from helpers.i18n import makeString
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared import g_itemsCache
+from skeletons.gui.shared import IItemsCache
 
 class BoosterTooltipData(BlocksTooltipData):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(BoosterTooltipData, self).__init__(context, TOOLTIP_TYPE.BOOSTER)
@@ -56,7 +58,7 @@ class BoosterTooltipData(BlocksTooltipData):
 
     def __getBoosterQuestNames(self, boosterID):
         questsResult = set()
-        quests = events_helpers.getBoosterQuests()
+        quests = old_events_helpers.getBoosterQuests()
         for q in quests.itervalues():
             bonuses = q.getBonuses('goodies')
             for b in bonuses:
@@ -65,7 +67,7 @@ class BoosterTooltipData(BlocksTooltipData):
                     if boosterID == qBooster.boosterID:
                         questsResult.add(q.getUserName())
 
-        for chapter, boosters in events_helpers.getTutorialQuestsBoosters().iteritems():
+        for chapter, boosters in old_events_helpers.getTutorialQuestsBoosters().iteritems():
             for booster, count in boosters:
                 if boosterID == booster.boosterID:
                     questsResult.add(chapter.getTitle())
@@ -74,7 +76,7 @@ class BoosterTooltipData(BlocksTooltipData):
 
     def __getBoosterPrice(self, booster):
         block = []
-        money = g_itemsCache.items.stats.money
+        money = self.itemsCache.items.stats.money
         if booster.buyPrice:
             price = booster.buyPrice
             defPrice = booster.defaultPrice

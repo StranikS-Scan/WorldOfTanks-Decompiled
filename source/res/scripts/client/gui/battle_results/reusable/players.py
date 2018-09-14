@@ -1,15 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/reusable/players.py
 from collections import namedtuple
-from gui.LobbyContext import g_lobbyContext
 from gui.battle_results.components import style
 from gui.battle_results.reusable import shared
+from helpers import dependency
 from shared_utils import findFirst
+from skeletons.gui.lobby_context import ILobbyContext
 _ClanInfo = namedtuple('_ClanInfo', 'clanDBID clanAbbrev')
 
 class PlayerInfo(shared.ItemInfo):
     """"Shared information about each player which took part in a battle."""
     __slots__ = ('__dbID', '__team', '__name', '__prebattleID', '__igrType', '__clanInfo', 'squadIndex', '__weakref__')
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, dbID=0, team=0, name=style.getUnknownPlayerName(), prebattleID=0, igrType=0, clanAbbrev='', clanDBID=0, wasInBattle=True):
         super(PlayerInfo, self).__init__(wasInBattle=wasInBattle)
@@ -65,13 +67,13 @@ class PlayerInfo(shared.ItemInfo):
         """Gets player's full name.
         :return: string containing player's full name.
         """
-        return g_lobbyContext.getPlayerFullName(self.__name, clanAbbrev=self.clanAbbrev, pDBID=self.__dbID)
+        return self.lobbyContext.getPlayerFullName(self.__name, clanAbbrev=self.clanAbbrev, pDBID=self.__dbID)
 
     def getRegionCode(self):
         """Gets player's region code if they are in roaming.
         :return: string containing player's region code.
         """
-        return g_lobbyContext.getRegionCode(self.__dbID)
+        return self.lobbyContext.getRegionCode(self.__dbID)
 
 
 class PlayersInfo(shared.UnpackedInfo):

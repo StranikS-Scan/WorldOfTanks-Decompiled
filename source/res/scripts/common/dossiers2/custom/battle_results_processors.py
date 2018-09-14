@@ -188,6 +188,9 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
             for record in maxValuesChanged:
                 dossierDescr[blockNameMax][record] = maxVehResults[record]
 
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_RANKED):
+        __updateAggregatedValues(dossierDescr.expand('rankedCurrent'), dossierDescr.expand('rankedCurrent'), battleResults, dossierXP, frags8p)
+        __updateAggregatedValues(dossierDescr.expand('rankedCurrentCycle'), dossierDescr.expand('rankedCurrentCycle'), battleResults, dossierXP, frags8p)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAX15X15):
         for record in maxValuesChanged:
             dossierDescr['max15x15'][record] = maxVehResults[record]
@@ -215,6 +218,13 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
 
         for record in maxValuesChanged:
             dossierDescr['maxFortBattles'][record] = maxVehResults[record]
+
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAXRANKED):
+        for record in __updateMaxValues(dossierDescr.expand('maxRankedCurrent'), battleResults, dossierXP):
+            dossierDescr['maxRankedCurrent'][record] = maxVehResults[record]
+
+        for record in maxValuesChanged:
+            dossierDescr['maxRanked'][record] = maxVehResults[record]
 
     for vehTypeCompDescr, (_, vehDossierDescr) in vehDossiers.iteritems():
         __updateAccountDossierCuts(dossierDescr, battleResults, dossierXP, vehTypeCompDescr, vehDossierDescr)
@@ -329,6 +339,7 @@ def __updateDossierCommonPart(dossierType, dossierDescr, results, dossierXP, win
         __updateTotalValues(dossierDescr, results)
     frags8p = 0
     maxValuesChanged = []
+    LOG_DEBUG_DEV('__updateDossierCommonPart', bonusType)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_KILL_LIST):
         frags8p = __processKillList(dossierDescr, results['killList'])
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_15X15):
@@ -357,6 +368,8 @@ def __updateDossierCommonPart(dossierType, dossierDescr, results, dossierXP, win
         __updateAggregatedValues(dossierDescr.expand('fortSorties'), dossierDescr.expand('fortSorties'), results, dossierXP, frags8p)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_FORT_BATTLE):
         __updateAggregatedValues(dossierDescr.expand('fortBattles'), dossierDescr.expand('fortBattles'), results, dossierXP, frags8p, winnerTeam)
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_RANKED):
+        __updateAggregatedValues(dossierDescr.expand('ranked'), dossierDescr.expand('ranked'), results, dossierXP, frags8p)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS, BONUS_CAPS.DOSSIER_ACHIEVEMENTS_FALLOUT):
         for recordDBID in results['achievements']:
             __processArenaAchievement(dossierDescr, recordDBID)
@@ -371,6 +384,8 @@ def __updateDossierCommonPart(dossierType, dossierDescr, results, dossierXP, win
         maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxFortSorties'), results, dossierXP)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAXFORTBATTLE):
         maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxFortBattles'), results, dossierXP)
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAXRANKED):
+        maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxRanked'), results, dossierXP)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_GLOBAL_MAP):
         if dossierDescr.isBlockInLayout('maxGlobalMapCommon'):
             maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxGlobalMapCommon'), results, dossierXP)
@@ -565,6 +580,14 @@ def __updateAccountDossierCuts(dossierDescr, results, dossierXP, vehTypeCompDesc
         battleCut = dossierDescr['fortBattlesCut']
         vehBattles = vehDossierDescr['fortBattles']
         battleCut[vehTypeCompDescr] = (vehBattles['battlesCount'], vehBattles['wins'], vehBattles['xp'])
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_RANKED):
+        cut = dossierDescr['rankedCut']
+        veh = vehDossierDescr['ranked']
+        cut[vehTypeCompDescr] = (veh['battlesCount'], veh['wins'], veh['xp'])
+        currentCut = dossierDescr['rankedCurrentCut']
+        battlesCount, wins, xp = currentCut.get(vehTypeCompDescr, (0, 0, 0))
+        win = 1 if results['winnerTeam'] == results['team'] else 0
+        currentCut[vehTypeCompDescr] = (battlesCount + 1, wins + win, xp + dossierXP)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_RATED7X7):
         rated7x7Cut = dossierDescr['rated7x7Cut']
         vehRated7x7 = vehDossierDescr['rated7x7']

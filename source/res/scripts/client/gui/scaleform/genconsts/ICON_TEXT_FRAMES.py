@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/ICON_TEXT_FRAMES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class ICON_TEXT_FRAMES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     EMPTY = 'empty'
     CREDITS = 'credits'
     GOLD = 'gold'
@@ -22,6 +20,7 @@ class ICON_TEXT_FRAMES(object):
     ARROW_DOWN_DISABLED = 'arrowDownDisabled'
     ELITE_TANK_XP = 'elite_tank_xp'
     FREE_XP = 'freeXp'
+    CRYSTAL = 'crystal'
     TANK_DAILYXPFACTOR = 'tank_dailyXPFactor'
     TANK_UNLOCK_PRICE = 'tank_unlock_price'
     DOUBLE_XP_FACTOR = 'doubleXPFactor'

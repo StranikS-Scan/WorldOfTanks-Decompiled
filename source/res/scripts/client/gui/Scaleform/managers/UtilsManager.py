@@ -56,7 +56,7 @@ class UtilsManager(UtilsManagerMeta):
     def getHtmlIconText(cls, properties):
         template = "<img src='{0}' width='{1}' height='{2}' vspace='{3}' hspace='{4}'/>"
         absoluteUrl = cls.getAbsoluteUrl(properties.imageAlias)
-        return template.format(properties.imageAlias, properties.width, properties.height, properties.vSpace, properties.hSpace)
+        return template.format(absoluteUrl, properties.width, properties.height, properties.vSpace, properties.hSpace)
 
     def getFirstDayOfWeek(self):
         return BigWorld.wg_firstDayOfWeek() + 1

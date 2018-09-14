@@ -6,7 +6,7 @@ from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortDisableDefencePeriodWindowMeta import FortDisableDefencePeriodWindowMeta
-from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as ALIAS, FORTIFICATIONS
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as ALIAS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.formatters import text_styles
 from gui.shared.fortifications.context import DefencePeriodCtx
@@ -69,9 +69,9 @@ class FortDisableDefencePeriodWindow(FortDisableDefencePeriodWindowMeta, FortVie
         return questionBody
 
     def __makeMainData(self):
-        titleText = text_styles.main(i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_TITLE))
-        redText = text_styles.error(i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODYREDTEXT))
-        bodyText = text_styles.main(i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODY, redText=redText))
+        titleText = text_styles.main(i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_TITLE))
+        redText = text_styles.error(i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODYREDTEXT))
+        bodyText = text_styles.main(i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODY, redText=redText))
         self.as_setDataS({'titleText': titleText,
          'bodyText': bodyText})
 

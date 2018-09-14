@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/queries.py
-from debug_utils import LOG_DEBUG
 from helpers import i18n
 from tutorial.control import ContentQuery
 from tutorial.control.functional import FunctionalConditions

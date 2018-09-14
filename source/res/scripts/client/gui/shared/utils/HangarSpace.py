@@ -10,8 +10,9 @@ from gui import g_mouseEventHandlers, InputHandler
 from gui.ClientHangarSpace import ClientHangarSpace
 from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
-from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
+from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.gui.game_control import IGameSessionController, IIGRController
+from skeletons.helpers.statistics import IStatisticsCollector
 
 class HangarVideoCameraController:
     import AvatarInputHandler
@@ -78,6 +79,7 @@ class _HangarSpace(object):
     isPremium = property(lambda self: self.__isSpacePremium if self.__spaceInited else self.__delayedIsPremium)
     gameSession = dependency.descriptor(IGameSessionController)
     igrCtrl = dependency.descriptor(IIGRController)
+    statsCollector = dependency.descriptor(IStatisticsCollector)
 
     def __init__(self):
         self.__space = ClientHangarSpace()
@@ -95,7 +97,6 @@ class _HangarSpace(object):
         self.onObjectSelected = Event.Event()
         self.onObjectUnselected = Event.Event()
         self.onObjectClicked = Event.Event()
-        g_statistics.subscribeToHangarSpaceCreate(self.onSpaceCreate)
         return
 
     @property
@@ -114,7 +115,7 @@ class _HangarSpace(object):
         return self.__space.spaceLoading()
 
     def init(self, isPremium):
-        g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_SPACE)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_SPACE)
         self.__videoCameraController.init()
         self.__spaceDestroyedDuringLoad = False
         if not self.__spaceInited:
@@ -170,7 +171,7 @@ class _HangarSpace(object):
     def updateVehicle(self, vehicle):
         if self.__inited:
             Waiting.show('loadHangarSpaceVehicle', True)
-            g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_VEHICLE)
+            self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_VEHICLE)
             self.__space.recreateVehicle(vehicle.getCustomizedDescriptor(), vehicle.modelState, self.__changeDone)
             self.__lastUpdatedVehicle = vehicle
 
@@ -199,12 +200,12 @@ class _HangarSpace(object):
             self.destroy()
         self.onSpaceCreate()
         Waiting.hide('loadHangarSpace')
-        g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_SPACE)
-        g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_READY, showSummaryNow=True)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_SPACE)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_READY, showSummaryNow=True)
 
     def __changeDone(self):
         Waiting.hide('loadHangarSpaceVehicle')
-        g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_VEHICLE)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_VEHICLE)
 
     def __delayedRefresh(self):
         self.__delayedRefreshCallback = None

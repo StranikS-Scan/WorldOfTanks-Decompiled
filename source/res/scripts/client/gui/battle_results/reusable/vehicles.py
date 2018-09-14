@@ -4,7 +4,8 @@ import weakref
 from collections import defaultdict, namedtuple
 from constants import DEATH_REASON_ALIVE
 from gui.battle_results.reusable import shared
-from gui.shared import g_itemsCache
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
 _VehicleShortInfo = namedtuple('_ShortVehicleInfo', ('intCD', 'team', 'accountDBID', 'deathReason'))
 _VehicleShortInfo.__new__.__defaults__ = (0,
  0,
@@ -38,6 +39,7 @@ class VehiclesInfo(shared.UnpackedInfo):
     """Class contains reusable information about vehicles.
     This information is fetched from battle_results['vehicles']"""
     __slots__ = ('__vehicles', '__vehicleToAccountID', '__accountToVehicleID', '__details')
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicles):
         super(VehiclesInfo, self).__init__()
@@ -45,14 +47,14 @@ class VehiclesInfo(shared.UnpackedInfo):
         self.__vehicleToAccountID = {}
         self.__accountToVehicleID = {}
         self.__details = {}
+        getItemByCD = self.itemsCache.items.getItemByCD
+
+        def _getKey(value):
+            return getItemByCD(value.intCD)
+
         for vehicleID, accountDBID, items in _getVehiclesGenerator(vehicles):
             if not items:
                 self._addUnpackedItemID(vehicleID)
-            getItemByCD = g_itemsCache.items.getItemByCD
-
-            def _getKey(value):
-                return getItemByCD(value.intCD)
-
             self.__vehicles[vehicleID] = sorted(items, key=_getKey)
             for idx, info in enumerate(self.__vehicles[vehicleID]):
                 self.__details[vehicleID, info.intCD] = idx
@@ -114,7 +116,7 @@ class VehiclesInfo(shared.UnpackedInfo):
         else:
             items = []
         info = shared.VehicleSummarizeInfo(vehicleID, player)
-        getItemByCD = g_itemsCache.items.getItemByCD
+        getItemByCD = self.itemsCache.items.getItemByCD
         for idx, item in enumerate(items):
             if idx >= len(result):
                 continue

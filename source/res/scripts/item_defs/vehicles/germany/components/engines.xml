@@ -119,11 +119,13 @@
     <Porsche_16_Cyl_Y2>	132	</Porsche_16_Cyl_Y2>
     <MB517P>	133	</MB517P>
     <MB_881>	134	</MB_881>
+    <Chrysler_361B>	135	</Chrysler_361B>
     <General_Motors_6V53>	136	</General_Motors_6V53>
     <General_Motors_6V53T>	137	</General_Motors_6V53T>
     <Maybach_HL_210_TRM_P30L>	139	</Maybach_HL_210_TRM_P30L>
     <Maybach_HL_120_TRM_L>	140	</Maybach_HL_120_TRM_L>
     <Maybach_HL_157P_A>	141	</Maybach_HL_157P_A>
+    <Maybach_HL_210_TRM_P45M>	142	</Maybach_HL_210_TRM_P45M>
     <Development_Engine>	65535	</Development_Engine>
     <Maybach_HL57TR_bot>	247	</Maybach_HL57TR_bot>
     <Krupp_M301_bot>	248	</Krupp_M301_bot>
@@ -1755,6 +1757,24 @@
       <rpm_min>	700	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </Maybach_HL_210_TRM_P45A>
+    <Maybach_HL_210_TRM_P45M>
+      <userString>	#germany_vehicles:Maybach_HL_210_TRM_P45M	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_210_TRM_P45M_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	850	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </Maybach_HL_210_TRM_P45M>
     <Maybach_HL_230_TRM_P45>
       <userString>	#germany_vehicles:Maybach_HL_230_TRM_P45	</userString>
       <shortUserString>	#germany_vehicles:Maybach_HL_230_TRM_P45_short	</shortUserString>
@@ -2268,6 +2288,23 @@
       <rpm_min>	226	</rpm_min>
       <rpm_max>	2520	</rpm_max>
     </MB_881>
+    <Chrysler_361B>
+      <userString>	#germany_vehicles:Chrysler_361B	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	31800	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	211	</power>
+      <weight>	312	</weight>
+      <maxHealth>	238	</maxHealth>
+      <maxRegenHealth>	119	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	493	</rpm_min>
+      <rpm_max>	2222	</rpm_max>
+    </Chrysler_361B>
     <General_Motors_6V53>
       <userString>	#germany_vehicles:General_Motors_6V53	</userString>
       <tags>	diesel	</tags>

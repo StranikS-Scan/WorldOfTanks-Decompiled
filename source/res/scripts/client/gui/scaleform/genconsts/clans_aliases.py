@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/CLANS_ALIASES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class CLANS_ALIASES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     CLAN_PROFILE_MAIN_WINDOW_PY = 'clanProfileMainWindow'
     CLAN_PROFILE_MAIN_WINDOW_UI = 'clanProfileMainWindow.swf'
     CLAN_PERSONAL_INVITES_WINDOW_PY = 'clanPersonalInvitesWindow'

@@ -2,18 +2,22 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileUtils.py
 import BigWorld
 from debug_utils import LOG_ERROR
-from gui.LobbyContext import g_lobbyContext
-from gui.shared.formatters import text_styles
-from helpers import i18n
-from gui.shared import g_itemsCache
-from gui.shared.gui_items.dossier.stats import _MaxVehicleStatsBlock, _FalloutStatsBlock, _VehiclesStatsBlock
 from gui.Scaleform.locale.PROFILE import PROFILE
+from gui.battle_results.components import style
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items.dossier.stats import _MaxVehicleStatsBlock, _FalloutStatsBlock
+from gui.shared.gui_items.dossier.stats import _VehiclesStatsBlock
+from helpers import dependency
+from helpers import i18n
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 def _emptyField(targetData, isCurrentUser):
     return None
 
 
 class _AbstractField(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, label, tooltip):
         super(_AbstractField, self).__init__()
@@ -163,37 +167,32 @@ def _avgAssignedDmgField(targetData, isCurrentUser):
     return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORTSELF if isCurrentUser else PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORTOTHER, formatedAssignedDmg, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORTSELF if isCurrentUser else PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORTOTHER)
 
 
-class _StunNumberField(_OnlyTechniqueField):
+class _StunFieldMixin(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def isVisible(self, targetData, isCurrentUser):
-        return super(_StunNumberField, self).isVisible(targetData, isCurrentUser) and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+        return super(_StunFieldMixin, self).isVisible(targetData, isCurrentUser) and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+
+
+class _StunNumberField(_StunFieldMixin, _OnlyTechniqueField):
 
     def _buildData(self, targetData, isCurrentUser):
         return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getStunNumber()))
 
 
-class _AvgStunNumberField(_AbstractField):
-
-    def isVisible(self, targetData, isCurrentUser):
-        return super(_AvgStunNumberField, self).isVisible(targetData, isCurrentUser) and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+class _AvgStunNumberField(_StunFieldMixin, _AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
         return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgStunNumber()))
 
 
-class _AssistedStunDmgField(_OnlyTechniqueField):
-
-    def isVisible(self, targetData, isCurrentUser):
-        return super(_AssistedStunDmgField, self).isVisible(targetData, isCurrentUser) and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+class _AssistedStunDmgField(_StunFieldMixin, _OnlyTechniqueField):
 
     def _buildData(self, targetData, isCurrentUser):
         return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getDamageAssistedStun()))
 
 
-class _AvgAssistedStunDmgField(_AbstractField):
-
-    def isVisible(self, targetData, isCurrentUser):
-        return super(_AvgAssistedStunDmgField, self).isVisible(targetData, isCurrentUser) and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+class _AvgAssistedStunDmgField(_StunFieldMixin, _AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
         return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamageAssistedStun()))
@@ -217,11 +216,12 @@ class _AvgDestroyedField(_AbstractField):
         return BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgFrags()))
 
 
-def _maxXPField(targetData, isCurrentUser):
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def _maxXPField(targetData, _, itemsCache=None):
     formatedMaxXP = BigWorld.wg_getIntegralFormat(targetData.getMaxXp())
     maxXpVehicle = None
     if isinstance(targetData, _MaxVehicleStatsBlock):
-        maxXpVehicle = g_itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
+        maxXpVehicle = itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
     return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, formatedMaxXP, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, ProfileUtils.getRecordTooltipDataByVehicle(maxXpVehicle))
 
 
@@ -249,7 +249,7 @@ class _MaxDamageField(_AbstractField):
         return BigWorld.wg_getIntegralFormat(targetData.getMaxDamage()) if targetData.getBattlesCountVer3() > 0 else ProfileUtils.UNAVAILABLE_VALUE
 
     def _buildTooltipData(self, targetData, isCurrentUser):
-        maxDamageVehicle = g_itemsCache.items.getItemByCD(targetData.getMaxDamageVehicle())
+        maxDamageVehicle = self.itemsCache.items.getItemByCD(targetData.getMaxDamageVehicle())
         return ProfileUtils.getRecordTooltipDataByVehicle(maxDamageVehicle)
 
 
@@ -271,7 +271,7 @@ class _MaxDestroyedField(_AbstractField):
         return BigWorld.wg_getIntegralFormat(targetData.getMaxFrags())
 
     def _buildTooltipData(self, targetData, isCurrentUser):
-        maxFragsVehicle = g_itemsCache.items.getItemByCD(targetData.getMaxFragsVehicle())
+        maxFragsVehicle = self.itemsCache.items.getItemByCD(targetData.getMaxFragsVehicle())
         return ProfileUtils.getRecordTooltipDataByVehicle(maxFragsVehicle)
 
 
@@ -382,17 +382,17 @@ class ProfileUtils(object):
     VIEW_TYPE_TABLES = 0
     VIEW_TYPE_CHARTS = 1
     VIEW_TYPE_TABLE = 2
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(ProfileUtils, self).__init__()
 
-    @staticmethod
-    def packProfileDossierInfo(targetData):
+    @classmethod
+    def packProfileDossierInfo(cls, targetData):
         outcome = ProfileUtils.packProfileCommonInfo(targetData)
-        vehicle = g_itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
+        vehicle = cls.itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
         outcome['maxXPByVehicle'] = vehicle.shortUserName if vehicle is not None else ''
-        outcome['marksOfMastery'] = targetData.getMarksOfMastery()[3]
-        outcome['totalUserVehiclesCount'] = len(targetData.getVehicles())
+        outcome['marksOfMasteryText'] = style.makeMarksOfMasteryText(BigWorld.wg_getIntegralFormat(targetData.getMarksOfMastery()[3]), len(targetData.getVehicles()))
         return outcome
 
     @staticmethod
@@ -500,9 +500,9 @@ class ProfileUtils(object):
         battlesToolTipData = (BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), drawsStr)
         return ProfileUtils.packLditItemData(BigWorld.wg_getIntegralFormat(battlesCount), description, tooltip, 'battles40x32.png', ProfileUtils.createToolTipData(battlesToolTipData))
 
-    @staticmethod
-    def getVehicleRecordTooltipData(getValueMethod):
-        return ProfileUtils.getRecordTooltipDataByVehicle(g_itemsCache.items.getItemByCD(getValueMethod()))
+    @classmethod
+    def getVehicleRecordTooltipData(cls, getValueMethod):
+        return ProfileUtils.getRecordTooltipDataByVehicle(cls.itemsCache.items.getItemByCD(getValueMethod()))
 
     @staticmethod
     def getRecordTooltipDataByVehicle(vehicle):

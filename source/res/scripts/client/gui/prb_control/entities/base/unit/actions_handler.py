@@ -117,6 +117,7 @@ class UnitActionsHandler(AbstractActionsHandler):
     def executeFini(self):
         prbType = self._entity.getEntityType()
         g_eventDispatcher.removeUnitFromCarousel(prbType)
+        g_eventDispatcher.loadHangar()
 
     def execute(self):
         pInfo = self._entity.getPlayerInfo()

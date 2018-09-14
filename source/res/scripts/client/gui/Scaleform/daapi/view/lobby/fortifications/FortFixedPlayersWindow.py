@@ -132,7 +132,7 @@ class FortFixedPlayersWindow(FortFixedPlayersWindowMeta, FortViewHelper):
     def __makeRosters(self):
         result = []
         for dbID in self.__fixedPlayers:
-            player = findFirst(lambda m: m.getID() == dbID, g_clanCache.clanMembers)
+            player = findFirst(lambda m, foundID=dbID: m.getID() == foundID, g_clanCache.clanMembers)
             if player is not None:
                 intTotalMining, intWeekMining = self.fortCtrl.getFort().getPlayerContributions(dbID)
                 role = text_styles.standard(i18n.makeString(getClanRoleString(player.getClanRole())))

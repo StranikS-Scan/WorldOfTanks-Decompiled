@@ -451,7 +451,7 @@
       <value>
         <item>	class	  <name>	type	</name>
         </item>
-        <item>	class	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	1409.0	  <name>	weight	</name>
           <type>	float	</type>
@@ -481,7 +481,7 @@
       <value>
         <item>	class	  <name>	type	</name>
         </item>
-        <item>	class	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	1409.0	  <name>	weight	</name>
           <type>	float	</type>
@@ -496,7 +496,7 @@
       <value>
         <item>	class	  <name>	type	</name>
         </item>
-        <item>	class	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	1409.0	  <name>	weight	</name>
           <type>	float	</type>
@@ -616,7 +616,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	special	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	1015.0	  <name>	weight	</name>
           <type>	float	</type>
@@ -631,7 +631,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	special	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	1015.0	  <name>	weight	</name>
           <type>	float	</type>
@@ -2707,6 +2707,21 @@
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	client:honoredRank	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	-1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	ranked	  <name>	mode	</name>
         </item>
       </value>
     </achievement>

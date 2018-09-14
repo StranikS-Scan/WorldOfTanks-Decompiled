@@ -3,7 +3,6 @@
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.ExchangeFreeToTankmanXpWindowMeta import ExchangeFreeToTankmanXpWindowMeta
-from gui.shared import g_itemsCache
 from gui.shared.events import SkillDropEvent
 from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor
 from gui.shared.gui_items.serializers import packTankmanSkill
@@ -14,8 +13,10 @@ from gui.shared.utils import decorators
 from helpers import dependency
 from items.tankmen import MAX_SKILL_LEVEL
 from skeletons.gui.game_control import IWalletController
+from skeletons.gui.shared import IItemsCache
 
 class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
 
     def __init__(self, ctx=None):
@@ -28,7 +29,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
 
     @decorators.process('updatingSkillWindow')
     def doRequest(self):
-        tankman = g_itemsCache.items.getTankman(self.__tankManId)
+        tankman = self.itemsCache.items.getTankman(self.__tankManId)
         xpConverter = TankmanFreeToOwnXpConvertor(tankman, self.__selectedXpForConvert)
         result = yield xpConverter.request()
         if len(result.userMsg):
@@ -36,7 +37,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
         self.onWindowClose()
 
     def calcValueRequest(self, toLevel):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         tankman = items.getTankman(self.__tankManId)
         tankmanDescriptor = tankman.descriptor
         if toLevel == tankmanDescriptor.lastSkillLevel:
@@ -78,12 +79,12 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
          'inventory.8.compDescr': self.__onTankmanChanged})
         self.addListener(SkillDropEvent.SKILL_DROPPED_SUCCESSFULLY, self.__skillDropWindowCloseHandler)
         self.wallet.onWalletStatusChanged += self.__setWalletCallback
-        g_itemsCache.onSyncCompleted += self.__onFreeXpChanged
+        self.itemsCache.onSyncCompleted += self.__onFreeXpChanged
         self.__prepareAndSendInitData()
 
     def _dispose(self):
-        g_itemsCache.onSyncCompleted -= self.__onFreeXpChanged
         self.removeListener(SkillDropEvent.SKILL_DROPPED_SUCCESSFULLY, self.__skillDropWindowCloseHandler)
+        self.itemsCache.onSyncCompleted -= self.__onFreeXpChanged
         self.wallet.onWalletStatusChanged -= self.__setWalletCallback
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(ExchangeFreeToTankmanXpWindow, self)._dispose()
@@ -100,7 +101,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
         return
 
     def __prepareAndSendInitData(self):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         tankman = items.getTankman(self.__tankManId)
         if len(tankman.skills) == 0:
             return

@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/shared/formatters/icons.py
 from gui import makeHtmlString
 from gui.shared.utils.functions import getAbsoluteUrl
-__all__ = ('noSeason', 'swords', 'alert', 'arrow', 'xp', 'credits', 'notAvailable', 'notAvailableRed', 'checkmark', 'info', 'premiumIgrBig', 'premiumIgrSmall', 'freeXP', 'gold', 'nut', 'clock', 'makeImageTag')
+from gui.shared.money import Currency
+__all__ = ('noSeason', 'swords', 'alert', 'arrow', 'xp', 'notAvailable', 'notAvailableRed', 'checkmark', 'info', 'premiumIgrBig', 'premiumIgrSmall', 'freeXP', 'nut', 'clock', 'makeImageTag') + Currency.ALL
 _IMG_TAG_TPL = "<img src='{0}' width='{1}' height='{2}' vspace='{3}' hspace='{4}'/>"
 
 def _getIcon(icon, width=None, height=None, vspace=None, hspace=None):
@@ -30,6 +31,10 @@ def alert(vspace=-4):
     return _getIcon('alert', vspace=vspace)
 
 
+def alertBig(vspace=-6):
+    return _getIcon('alertBig', vspace=vspace)
+
+
 def arrow(vspace=-5):
     return _getIcon('arrowButton', vspace=vspace)
 
@@ -39,7 +44,7 @@ def xp():
 
 
 def credits():
-    return _getIcon('credits')
+    return _getIcon(Currency.CREDITS)
 
 
 def notAvailable():
@@ -75,7 +80,11 @@ def freeXP():
 
 
 def gold():
-    return _getIcon('gold')
+    return _getIcon(Currency.GOLD)
+
+
+def crystal():
+    return _getIcon(Currency.CRYSTAL)
 
 
 def nut():

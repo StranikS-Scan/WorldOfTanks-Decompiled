@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/__init__.py
+import collections
 import weakref
 import itertools
 import types
@@ -68,6 +69,23 @@ def findFirst(function_or_None, sequence, default=None):
 
 def first(sequence, default=None):
     return findFirst(None, sequence, default)
+
+
+def collapseIntervals(sequence):
+    """
+    Collapses intervals in the sequence if they intersect each other.
+    :param sequence: list of pairs
+    :return: result like list of collapsed paris
+    """
+    result = []
+    prevElement = None
+    for periodStart, periodEnd in sorted(sequence):
+        if prevElement is not None and periodStart <= prevElement[1]:
+            prevElement[1] = periodEnd
+        prevElement = [periodStart, periodEnd]
+        result.append(prevElement)
+
+    return result
 
 
 class CONST_CONTAINER(object):
@@ -222,6 +240,16 @@ class AlwaysValidObject(object):
     @classmethod
     def _makeName(cls, parentName, nodeName):
         return '%s/%s' % (parentName, nodeName)
+
+
+def updateDict(sourceDict, diffDict):
+    for k, v in diffDict.iteritems():
+        if isinstance(v, collections.Mapping):
+            r = updateDict(sourceDict.get(k, {}), v)
+            sourceDict[k] = r
+        sourceDict[k] = diffDict[k]
+
+    return sourceDict
 
 
 def isDefaultDict(sourceDict, defaultDict):

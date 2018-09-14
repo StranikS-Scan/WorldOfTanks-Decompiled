@@ -163,7 +163,6 @@ class FortCalendarWindow(FortViewHelper, FortCalendarWindowMeta):
             vacationStart, vacationEnd = fort.getVacationDate()
             if self._isValidTime(vacationStart, self.__selectedDate) or self._isValidTime(vacationEnd, self.__selectedDate):
                 message = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_MESSAGE_VACATION, date=fort.getVacationDateStr())
-            calendar.as_setCalendarMessageS(message)
         return
 
     def _populate(self):

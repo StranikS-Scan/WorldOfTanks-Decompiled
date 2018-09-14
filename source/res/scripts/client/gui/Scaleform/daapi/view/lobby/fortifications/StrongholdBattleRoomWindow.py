@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/StrongholdBattleRoomWindow.py
-import BigWorld
 from UnitBase import UNIT_OP
 from constants import PREBATTLE_TYPE
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
+from helpers import time_utils
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.FortBattleRoomWindowMeta import FortBattleRoomWindowMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
@@ -27,6 +27,8 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import icons, text_styles
 from gui.clans import formatters as clans_fmts
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.daapi.view.lobby.fortifications.StrongholdBattleRoom import StrongholdBattleRoom
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
@@ -34,6 +36,10 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
 
     def __init__(self, ctx=None):
         super(StrongholdBattleRoomWindow, self).__init__()
+        self.__firstShowMainForm = False
+        self.__autosearchTimer = None
+        self.currentState = ''
+        return
 
     @prbPeripheriesHandlerProperty
     def prbPeripheriesHandler(self):
@@ -76,13 +82,17 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
             self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_REMOVED, pInfo)
 
     def onUnitFlagsChanged(self, flags, timeLeft):
+        self.__strongholdUpdate()
         if self.prbEntity.hasLockedState():
             if flags.isInQueue():
                 self.as_enableWndCloseBtnS(False)
                 self.currentState = CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_STATE
             else:
                 LOG_ERROR('View for modal state is not resolved', flags)
-            self.__initState(timeLeft=timeLeft)
+            self.__autosearchTimer = timeLeft
+            self.__initState(timeDirection=-1)
+            self.as_changeAutoSearchMainLabelS(i18n.makeString(TOOLTIPS.STRONGHOLDS_TIMER_WAITINGFORDATA))
+            self.prbEntity.forceTimerEvent()
         else:
             self.__clearState()
 
@@ -166,6 +176,12 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
         if isinstance(viewPy, StrongholdBattleRoom):
             viewPy.setProxy(self)
 
+    def onStrongholdDataChanged(self):
+        self.__strongholdUpdate()
+
+    def onUpdateAll(self):
+        self.__strongholdUpdate()
+
     def _populate(self):
         selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.SORTIE)
         self.addListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -177,7 +193,43 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
     def _dispose(self):
         self.removeListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.RenameWindowEvent.RENAME_WINDOW, self.__handleWindowRename, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self._onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.FORT)
         super(StrongholdBattleRoomWindow, self)._dispose()
+
+    def _onMatchmakingTimerChanged(self, event):
+        if self.__autosearchTimer is not None and self.currentState and self.prbEntity.hasLockedState():
+            data = event.ctx
+            timerState = data['textid']
+            if data['dtime'] > 0 and timerState == TOOLTIPS.STRONGHOLDS_TIMER_SQUADINQUEUE:
+                self.as_changeAutoSearchMainLabelS(i18n.makeString(CYBERSPORT.WINDOW_AUTOSEARCH_SEARCHENEMY_MAINTEXT))
+                self.as_changeAutoSearchCountDownSecondsS(data['dtime'])
+            else:
+                self.as_changeAutoSearchTimeDirectionS(1)
+                _, unit = self.prbEntity.getUnit()
+                startTimer = 0
+                if unit:
+                    timestamp = unit.getModalTimestamp()
+                    if timestamp:
+                        startTimer = max(0, int(time_utils.getCurrentTimestamp() - time_utils.makeLocalServerTime(timestamp)))
+                        LOG_DEBUG('time direction change, timers: ', time_utils.getCurrentTimestamp(), time_utils.makeLocalServerTime(timestamp))
+                self.as_changeAutoSearchCountDownSecondsS(startTimer)
+                LOG_DEBUG('changeAutoSearchCountDownSeconds', startTimer)
+                if data['isSortie'] or data['isFirstBattle']:
+                    self.as_changeAutoSearchMainLabelS(i18n.makeString(TOOLTIPS.STRONGHOLDS_TIMER_SEARCHENEMY))
+                else:
+                    self.as_changeAutoSearchMainLabelS(i18n.makeString(CYBERSPORT.WINDOW_AUTOSEARCH_SEARCHENEMY_MAINTEXT))
+                self.__autosearchTimer = None
+        return
+
+    def __strongholdUpdate(self):
+        allData = self.prbEntity.getStrongholdData()
+        if allData is None:
+            return
+        else:
+            if not self.__firstShowMainForm:
+                self.__firstShowMainForm = True
+                self.addListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self._onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.FORT)
+            return
 
     def __handleUnitWindowHide(self, _):
         self.destroy()
@@ -186,13 +238,13 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
         title = event.ctx['data']
         self.as_setWindowTitleS(title)
 
-    def __initState(self, timeLeft=0, acceptDelta=0):
+    def __initState(self, timeLeft=0, acceptDelta=0, timeDirection=1):
         model = None
         if self.isPlayerInSlot():
             if self.currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_STATE:
-                model = self.__createAutoUpdateModel(self.currentState, timeLeft, '', [])
+                model = self.__createAutoUpdateModel(self.currentState, timeLeft, '', [], timeDirection)
             elif self.currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_ERROR_STATE:
-                model = self.__createAutoUpdateModel(self.currentState, 0, '', [])
+                model = self.__createAutoUpdateModel(self.currentState, 0, '', [], timeDirection)
         if model is not None:
             self.as_changeAutoSearchStateS(model)
         return
@@ -201,15 +253,18 @@ class StrongholdBattleRoomWindow(FortBattleRoomWindowMeta, IStrongholdListener):
         self.currentState = ''
         self.as_enableWndCloseBtnS(True)
         self.as_hideAutoSearchS()
+        self.__autosearchTimer = None
+        return
 
-    def __createAutoUpdateModel(self, state, countDownSeconds, ctxMessage, playersReadiness):
+    def __createAutoUpdateModel(self, state, countDownSeconds, ctxMessage, playersReadiness, timeDirection=1):
         permissions = self.prbEntity.getPermissions(unitIdx=self.prbEntity.getUnitIdx())
         model = {'state': state,
          'countDownSeconds': countDownSeconds,
          'contextMessage': ctxMessage,
          'playersReadiness': playersReadiness,
          'canInvokeAutoSearch': permissions.canInvokeAutoSearch(),
-         'canInvokeBattleQueue': permissions.canStopBattleQueue()}
+         'canInvokeBattleQueue': permissions.canStopBattleQueue(),
+         'timeDirection': timeDirection}
         return model
 
     def __addPlayerNotification(self, key, pInfo):

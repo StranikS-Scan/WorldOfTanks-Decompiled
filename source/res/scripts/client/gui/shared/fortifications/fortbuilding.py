@@ -3,7 +3,7 @@
 from FortifiedRegionBase import BuildingDescr
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.formatters import time_formatters
-from gui.shared.gui_items import HasStrCD
+from gui.shared.gui_items.gui_item import HasStrCD
 from helpers import time_utils, i18n
 
 class FortBuilding(BuildingDescr, HasStrCD):

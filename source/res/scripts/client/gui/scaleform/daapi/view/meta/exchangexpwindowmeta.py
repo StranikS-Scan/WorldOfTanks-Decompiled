@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.exchange.BaseExchangeWindow import BaseExchangeWindow
 
 class ExchangeXpWindowMeta(BaseExchangeWindow):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseExchangeWindow
-    """
 
     def as_vehiclesDataChangedS(self, data):
         """

@@ -7,7 +7,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items import getTypeInfoByName
 from items.vehicles import VEHICLE_CLASS_TAGS
 import nations
-__all__ = ('USE_XML_DUMPING', 'NODE_STATE', 'RequestState', 'SelectedNation', 'UnlockProps', 'makeDefUnlockProps', 'listeners', 'VehicleClassInfo', 'tech_tree_dp', 'dumpers', 'data', 'MAX_PATH_LIMIT', 'RESEARCH_ITEMS', 'TREE_SHARED_REL_FILE_PATH', 'NATION_TREE_REL_FILE_PATH')
+__all__ = ('USE_XML_DUMPING', 'NODE_STATE', 'RequestState', 'SelectedNation', 'UnlockProps', 'makeDefUnlockProps', 'VehicleClassInfo', 'MAX_PATH_LIMIT', 'RESEARCH_ITEMS', 'TREE_SHARED_REL_FILE_PATH', 'NATION_TREE_REL_FILE_PATH')
 TREE_SHARED_REL_FILE_PATH = 'gui/flash/techtree/tree-shared.xml'
 NATION_TREE_REL_FILE_PATH = 'gui/flash/techtree/%s-tree.xml'
 USE_XML_DUMPING = False

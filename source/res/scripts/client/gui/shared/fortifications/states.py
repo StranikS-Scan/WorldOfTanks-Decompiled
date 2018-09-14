@@ -5,9 +5,11 @@ from FortifiedRegionBase import FORT_STATE
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.shared.fortifications import getClientFort, isStartingScriptDone
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
-from gui.LobbyContext import g_lobbyContext
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 
 class _ClientFortState(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, stateID, isInitial=False, isDisabled=False):
         super(_ClientFortState, self).__init__()
@@ -41,7 +43,7 @@ class RoamingState(_ClientFortState):
 
     def update(self, provider):
         result = False
-        serverSettings = g_lobbyContext.getServerSettings()
+        serverSettings = self.lobbyContext.getServerSettings()
         if serverSettings is not None and not serverSettings.roaming.isInRoaming():
             state = DisabledFortState()
             result = state.update(provider)
@@ -58,7 +60,7 @@ class DisabledFortState(_ClientFortState):
 
     def update(self, provider):
         result = False
-        serverSettings = g_lobbyContext.getServerSettings()
+        serverSettings = self.lobbyContext.getServerSettings()
         if serverSettings is not None and serverSettings.isFortsEnabled():
             state = NoClanState()
             result = state.update(provider)

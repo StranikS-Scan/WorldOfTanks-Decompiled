@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.RallyMainWindowWithSearch import RallyMainWindowWithSearch
 
 class FortBattleRoomWindowMeta(RallyMainWindowWithSearch):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends RallyMainWindowWithSearch
-    """
 
     def onBrowseClanBattles(self):
         self._printOverrideError('onBrowseClanBattles')

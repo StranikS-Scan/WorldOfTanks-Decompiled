@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileSummaryView.py
 import BigWorld
 from adisp import process
+from constants import IS_CHINA
 from helpers import i18n
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as _RES
 from gui.clans.items import formatField, isValueAvailable, StrongholdStatisticsData
@@ -85,10 +86,11 @@ class StrongholdDataReceiver(object):
           stats.getStrongholdLevel(),
           True,
           CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_LEVEL_BODY))
+        excludes = ('rageLevel8', 'rageLevel6') if IS_CHINA else ()
         return [ {'local': row[0],
          'value': DUMMY_UNAVAILABLE_DATA if row[1] is None else row[1],
          'timeExpired': True if row[1] is None else not row[2],
-         'tooltip': row[3]} for row in rows ]
+         'tooltip': row[3]} for row in rows if row[0] not in excludes ]
 
     def dispose(self):
         self.__clanDossier = None

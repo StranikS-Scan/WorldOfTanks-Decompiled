@@ -146,7 +146,8 @@ class _ShowInBrowserParser(SectionParser):
         titleKey = section.readString('title_key')
         showRefresh = section.readBool('show_refresh')
         webClientHandler = section.readString('web_client_handler')
-        return proxy_data.ShowInBrowserItem(url, size, title, showRefresh, webClientHandler, titleKey=titleKey)
+        isSolidBorder = section.readBool('is_solid_border')
+        return proxy_data.ShowInBrowserItem(url, size, title, showRefresh, webClientHandler, titleKey=titleKey, isSolidBorder=isSolidBorder)
 
 
 class _ProxyDataItemsParser(ParsersCollection):

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/__init__.py
 from adisp import process
-from CurrentVehicle import g_currentVehicle
 from gui.shared.utils import functions
 
 def vehicleAmmoCheck(func):
@@ -13,6 +12,7 @@ def vehicleAmmoCheck(func):
     Returns:
         wrapped function with ammo check
     """
+    from CurrentVehicle import g_currentVehicle
 
     @process
     def wrapper(*args, **kwargs):

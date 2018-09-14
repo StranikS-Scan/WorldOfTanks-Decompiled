@@ -510,7 +510,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
          'front_names': front_names}
         return self._request_data(callback, url, get_data=get_params)
 
-    def get_stronghold_info(self, callback, clan_id, fields=None):
+    def get_stronghold_info(self, callback, clan_id=None, fields=None):
         """
         return data from WGCCFE backend using `stronghold info API method`_
         
@@ -725,6 +725,20 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/join/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         return self._request_data(callback, url, get_data={}, method='POST')
+
+    def user_season_statistics(self, callback, fields=None):
+        """
+        request RBLB to return account season statistics
+        """
+        url = '/ranked/user_season_statistics/'
+        return self._request_data(callback, url, get_data={}, method='GET')
+
+    def user_ranked_position(self, callback, fields=None):
+        """
+        request RBLB to return account season statistics
+        """
+        url = '/ranked/user_position/'
+        return self._request_data(callback, url, get_data={}, method='GET')
 
     def account_statistics(self, callback, account_id, fields=None):
         """

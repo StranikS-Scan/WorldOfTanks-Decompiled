@@ -7,14 +7,16 @@ from gui import SystemMessages
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
+from gui.prb_control import prbDispatcherProperty
 from gui.shared import event_dispatcher as shared_events
-from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
 from gui.shared.utils import decorators
 from helpers import dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.shared import IItemsCache
 
 class CREW(object):
     PERSONAL_CASE = 'personalCase'
@@ -47,6 +49,7 @@ class VEHICLE(object):
 
 
 class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, cmProxy, ctx=None):
         super(CrewContextMenuHandler, self).__init__(cmProxy, ctx, {CREW.PERSONAL_CASE: 'showPersonalCase',
@@ -57,7 +60,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
 
     @decorators.process('unloading')
     def unloadTankman(self):
-        tankman = g_itemsCache.items.getTankman(self._tankmanID)
+        tankman = self.itemsCache.items.getTankman(self._tankmanID)
         result = yield TankmanUnload(g_currentVehicle.item, tankman.vehicleSlotIdx).request()
         if len(result.userMsg):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
@@ -107,6 +110,7 @@ class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntit
 
 
 class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, cmProxy, ctx=None, handlers=None):
         super(SimpleVehicleCMHandler, self).__init__(cmProxy, ctx, handlers)
@@ -127,7 +131,7 @@ class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         shared_events.showVehicleStats(self.getVehCD())
 
     def sellVehicle(self):
-        vehicle = g_itemsCache.items.getVehicle(self.getVehInvID())
+        vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         if vehicle:
             shared_events.showVehicleSellDialog(self.getVehInvID())
 
@@ -151,6 +155,10 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.BUY: 'buyVehicle',
          VEHICLE.COMPARE: 'compareVehicle'})
 
+    @prbDispatcherProperty
+    def prbDispatcher(self):
+        return None
+
     def getVehCD(self):
         return self.vehCD
 
@@ -158,7 +166,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         return self.vehInvID
 
     def toResearch(self):
-        vehicle = g_itemsCache.items.getVehicle(self.getVehInvID())
+        vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         if vehicle is not None:
             shared_events.showResearchView(vehicle.intCD)
         else:
@@ -176,7 +184,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def _initFlashValues(self, ctx):
         self.vehInvID = int(ctx.inventoryId)
-        vehicle = g_itemsCache.items.getVehicle(self.vehInvID)
+        vehicle = self.itemsCache.items.getVehicle(self.vehInvID)
         self.vehCD = vehicle.intCD if vehicle is not None else None
         return
 
@@ -187,13 +195,13 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def _generateOptions(self, ctx=None):
         options = []
-        vehicle = g_itemsCache.items.getVehicle(self.getVehInvID())
+        vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         vehicleWasInBattle = False
-        accDossier = g_itemsCache.items.getAccountDossier(None)
-        isEventVehicle = vehicle.isOnlyForEventBattles
+        accDossier = self.itemsCache.items.getAccountDossier(None)
         if vehicle is None:
             return options
         else:
+            isEventVehicle = vehicle.isOnlyForEventBattles
             if accDossier:
                 wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
                 if vehicle.intCD in wasInBattleSet:
@@ -201,10 +209,14 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
             if vehicle is not None:
                 options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle}), self._makeSeparator()])
                 self._manageVehCompareOptions(options, vehicle)
-                options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH)))
+                if self.prbDispatcher is not None:
+                    isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
+                else:
+                    isNavigationEnabled = True
+                options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
                 if vehicle.isRented:
                     if not vehicle.isPremiumIGR:
-                        items = g_itemsCache.items
+                        items = self.itemsCache.items
                         enabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
                         label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
                         options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': enabled}))
@@ -223,7 +235,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     @process
     def __favoriteVehicle(self, isFavorite):
-        vehicle = g_itemsCache.items.getVehicle(self.getVehInvID())
+        vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         if vehicle is not None:
             result = yield VehicleFavoriteProcessor(vehicle, bool(isFavorite)).request()
             if not result.success:

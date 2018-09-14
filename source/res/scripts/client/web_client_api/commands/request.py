@@ -8,7 +8,8 @@ _RequestCommandScheme = {'required': (('request_id', basestring),)}
 
 class RequestCommand(_RequestCommand, SchemeValidator):
     """
-    Represents web command for doing request by id.
+    Represents web command for general purpose requests (eg. Token1 and other common data).
+    If there is a need to do some module-specific requests (eg. ClanManagement) then another command should be created.
     """
 
     def __init__(self, *args, **kwargs):

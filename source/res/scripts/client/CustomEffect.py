@@ -4,7 +4,7 @@ import copy
 import Math
 import material_kinds
 from items import _xml
-from debug_utils import *
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.PixieNode import EffectNode
 from helpers import EffectsList
 gTemplates = None

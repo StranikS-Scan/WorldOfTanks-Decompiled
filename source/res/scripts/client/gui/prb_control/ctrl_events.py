@@ -6,7 +6,7 @@ class _PrbCtrlEvents(object):
     """
     Class for gui specific events in prebattle/unit.
     """
-    __slots__ = ('__eManager', 'onLegacyIntroModeJoined', 'onLegacyIntroModeLeft', 'onUnitIntroModeLeft', 'onLegacyInited', 'onUnitIntroModeJoined', 'onUnitBrowserModeLeft', 'onPreQueueJoined', 'onPreQueueLeft', 'onVehicleClientStateChanged')
+    __slots__ = ('__eManager', 'onLegacyIntroModeJoined', 'onLegacyIntroModeLeft', 'onUnitIntroModeLeft', 'onLegacyInited', 'onUnitIntroModeJoined', 'onUnitBrowserModeLeft', 'onPreQueueJoined', 'onPreQueueJoinFailure', 'onPreQueueLeft', 'onVehicleClientStateChanged')
 
     def __init__(self):
         """
@@ -21,6 +21,7 @@ class _PrbCtrlEvents(object):
         self.onUnitIntroModeLeft = Event.Event(self.__eManager)
         self.onUnitBrowserModeLeft = Event.Event(self.__eManager)
         self.onPreQueueJoined = Event.Event(self.__eManager)
+        self.onPreQueueJoinFailure = Event.Event(self.__eManager)
         self.onPreQueueLeft = Event.Event(self.__eManager)
         self.onVehicleClientStateChanged = Event.Event(self.__eManager)
 

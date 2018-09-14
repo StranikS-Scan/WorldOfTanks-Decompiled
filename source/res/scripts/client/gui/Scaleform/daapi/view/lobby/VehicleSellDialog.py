@@ -10,14 +10,13 @@ from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared import g_itemsCache
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.vehicle import VehicleSeller
 from gui.shared.gui_items.vehicle_modules import Shell
-from gui.shared.money import Money
+from gui.shared.money import Money, Currency
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.formatters import packItemActionTooltipData
@@ -26,8 +25,10 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.shared import IItemsCache
 
 class VehicleSellDialog(VehicleSellDialogMeta):
+    itemsCache = dependency.descriptor(IItemsCache)
     restore = dependency.descriptor(IRestoreController)
 
     def __init__(self, ctx=None):
@@ -54,9 +55,9 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def _populate(self):
         super(VehicleSellDialog, self)._populate()
-        g_clientUpdateManager.addCallbacks({'stats.gold': self.onSetGoldHndlr})
-        g_itemsCache.onSyncCompleted += self.__shopResyncHandler
-        items = g_itemsCache.items
+        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.onSetGoldHndlr)
+        self.itemsCache.onSyncCompleted += self.__shopResyncHandler
+        items = self.itemsCache.items
         vehicle = items.getVehicle(self.vehInvID)
         sellPrice = vehicle.sellPrice
         sellForGold = sellPrice.gold > 0
@@ -88,7 +89,6 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         tankmenGoingToBuffer, deletedTankmen = self.restore.getTankmenDeletedBySelling(vehicle)
         deletedCount = len(deletedTankmen)
         if deletedCount > 0:
-            recoveryBufferFull = True
             deletedStr = formatDeletedTankmanStr(deletedTankmen[0])
             maxCount = self.restore.getMaxTankmenBufferLength()
             currCount = len(self.restore.getDismissedTankmen())
@@ -98,7 +98,10 @@ class VehicleSellDialog(VehicleSellDialogMeta):
                 crewTooltip = text_styles.concatStylesToMultiLine(text_styles.middleTitle(_ms(TOOLTIPS.VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_HEADER)), text_styles.main(_ms(TOOLTIPS.DISMISSTANKMANDIALOG_BUFFERISFULLMULTIPLE_BODY, deletedStr=deletedStr, extraCount=deletedCount - 1, maxCount=maxCount, currCount=currCount)))
         else:
             crewTooltip = None
-            recoveryBufferFull = False
+        if vehicle.isCrewLocked:
+            hasCrew = False
+        else:
+            hasCrew = vehicle.hasCrew
         barracksDropDownData = [{'label': _ms(MENU.BARRACKS_BTNUNLOAD)}, {'label': _ms(MENU.BARRACKS_BTNDISSMISS)}]
         sellVehicleData = {'intCD': vehicle.intCD,
          'userName': vehicle.userName,
@@ -113,15 +116,14 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'priceTextColor': priceTextColor,
          'currencyIcon': currencyIcon,
          'action': vehicleAction,
-         'hasCrew': vehicle.hasCrew,
+         'hasCrew': hasCrew,
          'isRented': vehicle.isRented,
          'description': description,
          'levelStr': levelStr,
          'priceLabel': _ms(DIALOGS.VEHICLESELLDIALOG_VEHICLE_EMPTYSELLPRICE),
          'crewLabel': _ms(DIALOGS.VEHICLESELLDIALOG_CREW_LABEL),
          'crewTooltip': crewTooltip,
-         'barracksDropDownData': barracksDropDownData,
-         'crewRecoveryBufferFull': recoveryBufferFull}
+         'barracksDropDownData': barracksDropDownData}
         onVehicleOptionalDevices = []
         for o in vehicle.optDevices:
             if o is not None:
@@ -217,11 +219,11 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def _dispose(self):
         super(VehicleSellDialog, self)._dispose()
-        g_itemsCache.onSyncCompleted -= self.__shopResyncHandler
-        g_clientUpdateManager.removeCallback('stats.gold', self.onSetGoldHndlr)
+        self.itemsCache.onSyncCompleted -= self.__shopResyncHandler
+        g_clientUpdateManager.removeCurrencyCallback(Currency.GOLD, self.onSetGoldHndlr)
 
     def checkControlQuestion(self, dismiss):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         vehicle = items.getVehicle(self.vehInvID)
         checkUsefullTankmen = False
         for tankman in vehicle.crew:
@@ -241,7 +243,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     @decorators.process('sellVehicle')
     def __doSellVehicle(self, vehicle, shells, eqs, optDevs, inventory, isDismissCrew):
-        removalCost = g_itemsCache.items.shop.paidRemovalCost
+        removalCost = self.itemsCache.items.shop.paidRemovalCost
         result = yield VehicleSeller(vehicle, removalCost, shells, eqs, optDevs, inventory, isDismissCrew).request()
         if len(result.userMsg):
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
@@ -257,10 +259,15 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         @param inventory: <list> list of inventory items to sell
         @param isDismissCrew: <bool> is dismiss crew
         """
-        getItem = lambda data: g_itemsCache.items.getItemByCD(int(data['intCD']))
-        getShellItem = lambda data: Shell(int(data['intCD']), int(data['count']), proxy=g_itemsCache.items)
+
+        def getItem(data):
+            return self.itemsCache.items.getItemByCD(int(data['intCD']))
+
+        def getShellItem(data):
+            return Shell(int(data['intCD']), int(data['count']), proxy=self.itemsCache.items)
+
         try:
-            vehicle = g_itemsCache.items.getItemByCD(int(vehicleCD))
+            vehicle = self.itemsCache.items.getItemByCD(int(vehicleCD))
             shells = [ getShellItem(flashObject2Dict(shell)) for shell in shells ]
             eqs = [ getItem(flashObject2Dict(eq)) for eq in eqs ]
             optDevs = [ getItem(flashObject2Dict(dev)) for dev in optDevs ]
@@ -282,7 +289,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         return question
 
     def __shopResyncHandler(self, reason, diff):
-        vehicle = g_itemsCache.items.getVehicle(self.vehInvID)
+        vehicle = self.itemsCache.items.getVehicle(self.vehInvID)
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC or vehicle is not None and vehicle.rentalIsActive:
             self.onWindowClose()
         return

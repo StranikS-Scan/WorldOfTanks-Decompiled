@@ -103,7 +103,7 @@ def onStartup():
         offlineSpace = sys.argv[idx + 1]
         launch(offlineSpace)
         return True
-    except ValueError as IndexError:
+    except (ValueError, IndexError):
         return False
 
 

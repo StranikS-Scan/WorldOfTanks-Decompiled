@@ -7,14 +7,16 @@ Usage:
 
 1. Creates callable configuration:
     def getServices(manager):
-        # creates instance of service and binds specified class to created instance of service.
-        manager.bindInstance(SomeServiceClass, SomeService(), finalizer='fini')
+        # creates instance of service and adds it to manager by specified class.
+        # uses specified class to get access to desired service.
+        manager.addInstance(SomeServiceClass, SomeService(), finalizer='fini')
 
-        # binds specified class to callable object to create service.
+        # adds callable object to create service to manager by specified class.
+        # services will be created at first time when someone get access to desired service.
         manager.bindRuntime(RuntimeServiceClass, createRuntimeService,)
 
         # adds other callable configuration.
-        manager.install(getOtherServices)
+        manager.addConfig(getOtherServices)
 
     Note: Services are removed from the manager in reverse order to their adding.
 
@@ -32,6 +34,7 @@ Usage:
 4. When application is closing, clears all resources of services:
     dependency.clear()
 """
+import functools
 import inspect
 from debug_utils import LOG_DEBUG
 from ids_generators import SequenceIDGenerator
@@ -49,7 +52,7 @@ def configure(config):
     if _g_manager is not None:
         raise DependencyError('Manager of dependencies is already created and configured')
     _g_manager = DependencyManager()
-    _g_manager.install(config)
+    _g_manager.addConfig(config)
     return _g_manager
 
 
@@ -74,11 +77,49 @@ def instance(class_):
 
 
 def descriptor(class_):
-    """Creates descriptor to get desired service in some object.
+    """Creates descriptor to get desired service in some classes.
     :param class_: class of service.
     :return: descriptor to get desired service.
     """
     return _ServiceDescriptor(class_)
+
+
+class replace_none_kwargs(object):
+    """ Decorator to replace named argument if it equals None to required service.
+    Usage:
+    
+        @replace_none_kwargs(service=IService)
+        def foo(value, service1=None):
+            ...
+    """
+
+    def __init__(self, **services):
+        super(replace_none_kwargs, self).__init__()
+        self.__services = {}
+        for name, class_ in services.iteritems():
+            if not inspect.isclass(class_):
+                raise DependencyError('Value is not class, {}'.format(class_))
+            self.__services[name] = class_
+
+    def __call__(self, func):
+        spec = inspect.getargspec(func)
+        for name, class_ in self.__services.iteritems():
+            if name not in spec.args:
+                raise DependencyError('Argument {} is not found in {}'.format(name, func))
+
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            for name, class_ in self.__services.iteritems():
+                if name not in kwargs:
+                    actual = None
+                else:
+                    actual = kwargs[name]
+                if actual is None:
+                    kwargs[name] = instance(class_)
+
+            return func(*args, **kwargs)
+
+        return wrapper
 
 
 class DependencyError(Exception):
@@ -99,52 +140,43 @@ class DependencyManager(object):
         :return: instance of service.
         :exception: DependencyError.
         """
-        if class_ in self.__services:
+        try:
             result = self.__services[class_].value()
-        else:
-            if not callable(class_):
-                raise DependencyError('Runtime service can not be created, {} is not callable'.format(class_))
-            result = class_()
-            LOG_DEBUG('Runtime service is created and added', class_, result)
-            self.__services[class_] = _DependencyItem(order=_orderGen.next(), service=result)
+        except KeyError:
+            raise DependencyError('Service {} is not created'.format(class_))
+
         return result
 
-    def bindInstance(self, class_, obj, finalizer=None):
-        """Binds specified class to instance of service.
+    def addInstance(self, class_, obj, finalizer=None):
+        """Adds instance of service to manager by specified class.
         :param class_: class of service.
         :param obj: instance of service.
         :param finalizer: callable object or string containing name of service method
             that is invoked when service is removed from manager (dependency.clear).
-        :return: instance of manager.
         """
         self._validate(class_)
         self.__services[class_] = _DependencyItem(order=_orderGen.next(), service=obj, finalizer=finalizer)
         LOG_DEBUG('Instance of service is added', class_, obj)
-        return self
 
-    def bindRuntime(self, class_, creator, finalizer=None):
-        """Binds specified class to callable object to create service.
+    def addRuntime(self, class_, creator, finalizer=None):
+        """Adds callable object to create service to manager by specified class.
         This callable object is invoked at first access to service.
         :param class_: class of service.
         :param creator: callable object to create service.
         :param finalizer: callable object or string containing name of service method
             that is invoked when service is removed from manager (dependency.clear).
-        :return: instance of manager.
         """
         self._validate(class_)
         self.__services[class_] = _RuntimeItem(creator, finalizer=finalizer)
         LOG_DEBUG('Factory of service is added', class_)
-        return self
 
-    def install(self, config):
-        """ Install callable configuration to create services.
+    def addConfig(self, config):
+        """ Adds callable configuration to create services.
         :param config: callable configuration.
-        :return: instance of manager.
         """
         if not callable(config):
             raise DependencyError('Config must be callable')
         config(self)
-        return self
 
     def clear(self):
         """Clears dependency manager."""

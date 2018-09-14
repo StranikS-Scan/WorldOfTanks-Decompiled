@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.prb_windows.BasePrebattleListView import BasePrebattleListView
 
 class CompanyListMeta(BasePrebattleListView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BasePrebattleListView
-    """
 
     def createCompany(self):
         self._printOverrideError('createCompany')

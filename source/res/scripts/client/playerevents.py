@@ -1,16 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PlayerEvents.py
 import Event
-from constants import ARENA_PERIOD
-from debug_utils import *
-
-class DeprecatedEvent(Event.Event):
-
-    def __iadd__(self, delegate):
-        LOG_WARNING('Event deprecated')
-        self._Event__delegates.add(delegate)
-        return self
-
+from debug_utils import LOG_WARNING
 
 class _PlayerEvents(object):
 
@@ -25,6 +16,9 @@ class _PlayerEvents(object):
         self.onEnqueuedRandom = Event.Event()
         self.onDequeuedRandom = Event.Event()
         self.onEnqueueRandomFailure = Event.Event()
+        self.onEnqueuedRanked = Event.Event()
+        self.onDequeuedRanked = Event.Event()
+        self.onEnqueueRankedFailure = Event.Event()
         self.onTutorialEnqueued = Event.Event()
         self.onTutorialDequeued = Event.Event()
         self.onTutorialEnqueueFailure = Event.Event()
@@ -43,6 +37,9 @@ class _PlayerEvents(object):
         self.onEnqueuedSandbox = Event.Event()
         self.onDequeuedSandbox = Event.Event()
         self.onEnqueuedSandboxFailure = Event.Event()
+        self.onEnqueuedRanked = Event.Event()
+        self.onDequeuedRanked = Event.Event()
+        self.onEnqueuedRankedFailure = Event.Event()
         self.onPrebattleJoined = Event.Event()
         self.onPrebattleLeft = Event.Event()
         self.onPrebattleJoinFailure = Event.Event()
@@ -56,6 +53,7 @@ class _PlayerEvents(object):
         self.onKickedFromFalloutClassic = Event.Event()
         self.onKickedFromFalloutMultiteam = Event.Event()
         self.onKickedFromSandboxQueue = Event.Event()
+        self.onKickedFromRankedQueue = Event.Event()
         self.onKickedFromPrebattle = Event.Event()
         self.onKickedFromArena = Event.Event()
         self.onQueueInfoReceived = Event.Event()
@@ -93,6 +91,7 @@ class _PlayerEvents(object):
         self.onPQLocksChanged = Event.Event()
         self.onNotification = Event.Event()
         self.onTeamChanged = Event.Event()
+        self.onDisconnected = Event.Event()
         self.onShowDevelopmentInfo = Event.Event()
 
 

@@ -19,8 +19,14 @@ class ShopItemsTab(StoreItemsTab):
     def _getItemPrice(self, item):
         return item.altPrice or item.buyPrice
 
+    def _getItemDefaultPrice(self, item):
+        return item.defaultAltPrice or item.defaultPrice
+
     def _getItemActionData(self, item):
-        return getActionPriceData(item)
+        actionData = None
+        if item.actionPrc != 0:
+            actionData = getActionPriceData(item)
+        return actionData
 
     def _getRequestCriteria(self, invVehicles):
         return REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.HIDDEN
@@ -45,6 +51,33 @@ class ShopItemsTab(StoreItemsTab):
         if 'onVehicle' not in extra:
             requestCriteria |= ~REQ_CRITERIA.CUSTOM(lambda item: item.getInstalledVehicles(invVehicles))
         return requestCriteria
+
+    def _getDiscountCriteria(self):
+        if self._actionsSelected:
+            return REQ_CRITERIA.DISCOUNT_BUY
+        else:
+            return REQ_CRITERIA.EMPTY
+
+    def _isItemOnDiscount(self, item):
+        return item.actionPrc != 0
+
+    def _getComparator(self):
+        """
+         If filter discount percent is selected sort items from high to low discount
+        """
+        if self._actionsSelected:
+
+            def comparator(a, b):
+                creditsActionPrcA, goldActionPrcA = self._getActionAllPercents(a)
+                creditsActionPrcB, goldActionPrcB = self._getActionAllPercents(b)
+                maxPrcA = max(creditsActionPrcA, goldActionPrcA)
+                maxPrcB = max(creditsActionPrcB, goldActionPrcB)
+                return maxPrcB - maxPrcA
+
+            return comparator
+        else:
+            return None
+            return None
 
 
 class ShopModuleTab(ShopItemsTab, StoreModuleTab):
@@ -87,10 +120,7 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
 
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.CUSTOM(lambda item: item.isHidden and not item.isRestorePossible()) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
-        vehicleType = self._filterData['vehicleType']
-        if vehicleType != 'all':
-            vehicleType = vehicleType.lower()
-            requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: item.type.lower() == vehicleType)
+        requestCriteria |= self._getVehicleRiterias(self._filterData['selectedTypes'], self._filterData['selectedLevels'])
         return self._getExtraCriteria(self._filterData['extra'], requestCriteria, invVehicles)
 
     def _getExtraCriteria(self, extra, requestCriteria, invVehicles):
@@ -105,7 +135,7 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
     def _getStatusParams(self, item):
         statusMessage = ''
         money = self._items.stats.money
-        if item.getState()[0] == Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER:
+        if item.getState()[0] == Vehicle.VEHICLE_STATE.RENTAL_IS_OVER:
             statusMessage = '#menu:store/vehicleStates/%s' % item.getState()[0]
             disabled = not self._isPurchaseEnabled(item, money)
         elif BigWorld.player().isLongDisconnectedFromCenter:
@@ -123,16 +153,11 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
             disabled = not self._isPurchaseEnabled(item, money)
         return (statusMessage, disabled)
 
-    def _getComparator(self):
-
-        def comparator(a, b):
-            if a.isRestorePossible() and not b.isRestorePossible():
-                return -1
-            if not a.isRestorePossible() and b.isRestorePossible():
-                return 1
-            return cmp(b.hasLimitedRestore(), a.hasLimitedRestore()) or cmp(a.restoreInfo.getRestoreTimeLeft(), b.restoreInfo.getRestoreTimeLeft()) if a.isRestorePossible() and b.isRestorePossible() else cmp(a, b)
-
-        return comparator
+    def _getDiscountCriteria(self):
+        if self._actionsSelected:
+            return REQ_CRITERIA.VEHICLE.DISCOUNT_RENT_OR_BUY
+        else:
+            return REQ_CRITERIA.EMPTY
 
 
 class ShopRestoreVehicleTab(ShopVehicleTab):
@@ -146,10 +171,7 @@ class ShopRestoreVehicleTab(ShopVehicleTab):
 
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
-        vehicleType = self._filterData['vehicleType']
-        if vehicleType != 'all':
-            vehicleType = vehicleType.lower()
-            requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: item.type.lower() == vehicleType)
+        requestCriteria |= self._getVehicleRiterias(self._filterData['selectedTypes'], self._filterData['selectedLevels'])
         return requestCriteria
 
 
@@ -215,6 +237,11 @@ class ShopArtefactTab(ShopItemsTab, StoreArtefactTab):
 
 
 class ShopOptionalDeviceTab(ShopArtefactTab, StoreOptionalDeviceTab):
+
+    def _getRequestCriteria(self, invVehicles):
+        requestCriteria = super(ShopOptionalDeviceTab, self)._getRequestCriteria(invVehicles)
+        requestCriteria |= REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE
+        return requestCriteria
 
     def _isPurchaseEnabled(self, item, money):
         canBuy, _ = item.mayPurchase(money)

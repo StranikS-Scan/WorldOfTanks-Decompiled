@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/entities.py
 from collections import deque
+from helpers import dependency
 from ids_generators import SequenceIDGenerator
-from gui.LobbyContext import g_lobbyContext
 from gui.shared.utils.decorators import ReprInjector
 from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE, USER_TAG, USER_DEFAULT_NAME_PREFIX, GAME_ONLINE_STATUS, PRIMARY_CHANNEL_ORDER
 from messenger.proto.events import ChannelEvents, MemberEvents
 from messenger.storage import storage_getter
+from skeletons.gui.lobby_context import ILobbyContext
 _g_namesGenerator = None
 
 def _generateUserName():
@@ -271,6 +272,7 @@ class ChannelEntity(ChatEntity, ChannelEvents):
 
 class MemberEntity(ChatEntity, MemberEvents):
     __slots__ = ('_memberID', '_nickName', '_status')
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, memberID, nickName, status):
         super(MemberEntity, self).__init__()
@@ -318,7 +320,7 @@ class MemberEntity(ChatEntity, MemberEvents):
             pDBID = self._memberID
         else:
             pDBID = None
-        return g_lobbyContext.getPlayerFullName(self._nickName, pDBID=pDBID, regionCode=g_lobbyContext.getRegionCode(pDBID))
+        return self.lobbyContext.getPlayerFullName(self._nickName, pDBID=pDBID, regionCode=self.lobbyContext.getRegionCode(pDBID))
 
 
 @ReprInjector.simple('dbID', 'abbrev', 'role')
@@ -350,6 +352,7 @@ class ClanInfo(object):
 
 class UserEntity(ChatEntity):
     __slots__ = ('_databaseID', '_name', '_note', '_tags', '_clanInfo', '_globalRating')
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, databaseID, name=None, tags=None, clanInfo=None, globalRating=-1, note=''):
         super(UserEntity, self).__init__()
@@ -394,7 +397,7 @@ class UserEntity(ChatEntity):
             pDBID = self._databaseID
         else:
             pDBID = None
-        return g_lobbyContext.getPlayerFullName(self.getName(), clanAbbrev=clanAbbrev, pDBID=pDBID)
+        return self.lobbyContext.getPlayerFullName(self.getName(), clanAbbrev=clanAbbrev, pDBID=pDBID)
 
     def getGlobalRating(self):
         return self._globalRating

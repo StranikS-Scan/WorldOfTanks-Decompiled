@@ -4,22 +4,24 @@ import math
 from Event import EventManager, Event
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.framework import ScopeTemplates
-from gui.goodies.goodies_cache import g_goodiesCache
 from gui.shared import events
 from gui.shared.gui_items.processors.goodies import BoosterBuyer
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.decorators import process
-from gui.shared.money import Currency
+from gui.shared.money import Money, Currency
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui import SystemMessages
+from helpers import dependency
+from skeletons.gui.goodies import IGoodiesCache
 MAX_BOOSTERS_FOR_OPERATION = 1000000
 
 class BuyBoosterMeta(I18nConfirmDialogMeta):
+    goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self, boosterID, balance):
         super(BuyBoosterMeta, self).__init__('buyConfirmation', scope=ScopeTemplates.LOBBY_SUB_SCOPE)
-        self.__booster = g_goodiesCache.getBooster(boosterID)
+        self.__booster = self.goodiesCache.getBooster(boosterID)
         self.__balance = balance
         self._eManager = EventManager()
         self.onInvalidate = Event(self._eManager)
@@ -62,11 +64,9 @@ class BuyBoosterMeta(I18nConfirmDialogMeta):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def __onStatsChanged(self, stats):
-        if 'credits' in stats:
-            self.__balance = self.__balance.replace(Currency.CREDITS, stats['credits'])
-            self.onInvalidate()
-        if 'gold' in stats:
-            self.__balance = self.__balance.replace(Currency.GOLD, stats['gold'])
+        newValues = Money.extractMoneyDict(stats)
+        if newValues:
+            self.__balance = self.__balance.replaceAll(newValues)
             self.onInvalidate()
 
     def __getMaxCount(self, currency):

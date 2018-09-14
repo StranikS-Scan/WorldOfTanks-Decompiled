@@ -4,7 +4,7 @@ from Math import Vector3
 from gui.shared import EVENT_BUS_SCOPE
 SCOPE = EVENT_BUS_SCOPE.BATTLE
 MARKER_POSITION_ADJUSTMENT = Vector3(0.0, 12.0, 0.0)
-MARKERS_MANAGER_SWF = 'vehicleMarkersManager.swf'
+MARKERS_MANAGER_SWF = 'battleVehicleMarkersApp.swf'
 MARKERS_COLOR_SCHEME_PREFIX = 'vm_'
 
 class MARKER_SYMBOL_NAME(object):

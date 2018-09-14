@@ -5,7 +5,6 @@ from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface, SystemMessages
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
 from gui.Scaleform.daapi.view.meta.CyberSportMainWindowMeta import CyberSportMainWindowMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
@@ -21,10 +20,13 @@ from gui.prb_control.entities.base.unit.ctx import AutoSearchUnitCtx, JoinUnitCt
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, CREATOR_ROSTER_SLOT_INDEXES, PREBATTLE_ACTION_NAME
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
+from helpers import dependency
 from helpers import i18n
+from skeletons.gui.lobby_context import ILobbyContext
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 class CyberSportMainWindow(CyberSportMainWindowMeta):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         super(CyberSportMainWindow, self).__init__()
@@ -70,17 +72,10 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
             self.__initState(timeLeft=timeLeft)
         else:
             self.__clearState()
-        self.__updateChatAvailability()
 
     def onUnitPlayerStateChanged(self, pInfo):
         if self.prbEntity.getFlags().isInIdle():
             self.__initState()
-
-    def onUnitMembersListChanged(self):
-        self.__updateChatAvailability()
-
-    def onUnitPlayersListChanged(self):
-        self.__updateChatAvailability()
 
     def onUnitErrorReceived(self, errorCode):
         self.as_autoSearchEnableBtnS(True)
@@ -144,8 +139,8 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
 
     def onJoinRally(self, rallyId, slotIndex, peripheryID):
         ctx = JoinUnitCtx(rallyId, self.prbEntity.getEntityType(), slotIndex, waitingID='prebattle/join')
-        if g_lobbyContext.isAnotherPeriphery(peripheryID):
-            if g_lobbyContext.isPeripheryAvailable(peripheryID):
+        if self.lobbyContext.isAnotherPeriphery(peripheryID):
+            if self.lobbyContext.isPeripheryAvailable(peripheryID):
                 self.__requestToReloginAndJoin(peripheryID, ctx)
             else:
                 SystemMessages.pushI18nMessage('#system_messages:periphery/errors/isNotAvailable', type=SystemMessages.SM_TYPE.Error)
@@ -190,7 +185,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
 
     @process
     def __requestToReloginAndJoin(self, peripheryID, ctx):
-        result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'changePeriphery', messageCtx={'host': g_lobbyContext.getPeripheryName(peripheryID)}))
+        result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'changePeriphery', messageCtx={'host': self.lobbyContext.getPeripheryName(peripheryID)}))
         if result:
             self.prbPeripheriesHandler.join(peripheryID, ctx)
 
@@ -242,11 +237,3 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
         chat = self.chat
         if chat and not pInfo.isCurrentPlayer():
             chat.as_addMessageS(messages.getUnitPlayerNotification(key, pInfo))
-
-    def __updateChatAvailability(self):
-        state = self.prbEntity.getFlags()
-        pInfo = self.prbEntity.getPlayerInfo()
-        isJoined = pInfo.isInSlot
-        if self.chat is not None and self.chat.isJoined() is not isJoined:
-            self.chat.as_setJoinedS(isJoined)
-        return

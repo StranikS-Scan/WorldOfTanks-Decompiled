@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/LightFx/LightManager.py
 import time
-from debug_utils import *
 import BigWorld
 import LightEffect
 from LightEffectsCache import LightEffectsCache
 from Math import Vector4
 import gui.SystemMessages
+from debug_utils import LOG_DEBUG
+from helpers import dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.ext.player_helpers import isCurrentPlayer
+from skeletons.connection_mgr import IConnectionManager
 g_instance = None
 
 class LightManager:
@@ -163,18 +165,17 @@ class GameLights:
         g_instance.startLightEffect('System Message')
 
 
-from LightFx.LightManager import GameLights
 from PlayerEvents import g_playerEvents
-from ConnectionManager import connectionManager as g_connectionManager
 from gui.prb_control.dispatcher import g_prbLoader
 from messenger.proto.events import g_messengerEvents
 _chatActionsHandler = None
 
 class _ChatActionsHandler:
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         g_playerEvents.onAccountBecomePlayer += self.__subscribe
-        g_connectionManager.onDisconnected += self.__onDisconnected
+        self.connectionMgr.onDisconnected += self.__onDisconnected
 
     def __subscribe(self):
         invitesManager = g_prbLoader.getInvitesManager()

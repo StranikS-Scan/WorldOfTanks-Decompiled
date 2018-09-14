@@ -20,7 +20,7 @@
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/Vickers_MkE_Type_BT26_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -61,7 +61,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.205377 0.668865 -0.007865	</turret>
+      <turret>	-0.215805 0.519889 0.020894	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Hull.model	</collisionModelServer>
@@ -69,15 +69,15 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.52387 0.368338 1.57149	</rayStart>
-        <rayEnd>	-0.523866 -0.0249602 1.49858	</rayEnd>
+        <rayStart>	-0.523472 0.131781 1.52695	</rayStart>
+        <rayEnd>	-0.523465 -0.0651508 1.49205	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	0.306822 0.366426 1.58182	</rayStart>
-        <rayEnd>	0.306823 -0.0268712 1.50891	</rayEnd>
+        <rayStart>	0.3022 0.228286 1.55549	</rayStart>
+        <rayEnd>	0.3022 -0.165574 1.48568	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.64	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -85,7 +85,7 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/Vickers_MkE_Type_BT26_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	0.895 0.7 0.000000 0.000000	</tiling>
+      <tiling>	4 2 0.000000 0.000000	</tiling>
     </camouflage>
   </hull>
   <chassis>
@@ -93,7 +93,7 @@
       <userString>	#china_vehicles:Chassis_Ch07_Vickers_MkE_Type_BT26	</userString>
       <tags></tags>
       <level>	1	</level>
-      <price>	340.0	</price>
+      <price>	340	</price>
       <unlocks>
         <chassis>	Chassis_Ch07_Vickers_MkE_Type_BT26_2	  <cost>	105	</cost>
         </chassis>
@@ -131,15 +131,16 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.23	</textureScale>
+        <textureScale>	-4.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.347794	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -150,9 +151,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.322874	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -163,9 +165,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.347794	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -176,9 +179,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.322874	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -195,12 +199,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.840639 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.989424 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.02531 1.38191	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.01858 1.3705	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -213,6 +217,141 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.04	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.04	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/track/segment.model	</segmentModelRight>
+        <left>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/track/left.track	</left>
+        <right>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/track/right.track	</right>
+        <segmentLength>	0.086	</segmentLength>
+        <segmentOffset>	0.026	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0034	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.089	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.089	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.089	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.089	</offset>
+        </node>
+      </trackNodes>
     </Chassis_Ch07_Vickers_MkE_Type_BT26>
     <Chassis_Ch07_Vickers_MkE_Type_BT26_2>
       <userString>	#china_vehicles:Chassis_Ch07_Vickers_MkE_Type_BT26_2	</userString>
@@ -252,15 +391,16 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.23	</textureScale>
+        <textureScale>	-4.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.347794	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -271,9 +411,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.322874	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -284,9 +425,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.347794	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -297,9 +439,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.322874	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -316,12 +459,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.840639 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.989424 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.02531 1.38191	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.01858 1.3705	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -334,6 +477,141 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.04	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.04	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/track/segment.model	</segmentModelRight>
+        <left>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/track/left.track	</left>
+        <right>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/track/right.track	</right>
+        <segmentLength>	0.086	</segmentLength>
+        <segmentOffset>	0.026	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0034	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.089	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.089	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.089	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.089	</offset>
+        </node>
+      </trackNodes>
     </Chassis_Ch07_Vickers_MkE_Type_BT26_2>
   </chassis>
   <turrets0>
@@ -408,6 +686,9 @@
             <collisionModelServer>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.7 1.2 1.7 2.7	</tiling>
+          </camouflage>
         </_47mm_QFSA>
       </guns>
       <models>
@@ -419,7 +700,7 @@
         <collisionModelServer>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.205377 0.308224 0.41096	</gunPosition>
+      <gunPosition>	-0.000998 0.321978 0.449786	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	0.775916 0.392914 -0.0491512	</rayStart>
@@ -434,14 +715,14 @@
           <rayEnd>	-0.293601 0.316326 -0.256774	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.54	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.006 1.000 0.000 0.486 0.359 0.599 0.500 0.500 0.500 0.134 0.500 0.149 0.500 0.000	</physicsShape>
+      <physicsShape>	1.000 0.006 1.000 0.000 0.501 0.363 0.599 0.500 0.500 0.500 0.134 0.500 0.149 0.500 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	1 0.835 0.000000 0.000000	</tiling>
+        <tiling>	1.2 1.2 2.2 3	</tiling>
       </camouflage>
     </Turret_1_Ch07_Vickers_MkE_Type_BT26>
     <Turret_2_Ch07_Vickers_MkE_Type_BT26>
@@ -519,6 +800,9 @@
             <collisionModelServer>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.5 1.2 1.7 2.7	</tiling>
+          </camouflage>
         </_47mm_QFSA>
         <_45mm_20K>	shared	  <maxAmmo>	136	</maxAmmo>
           <pitchLimits>
@@ -555,7 +839,7 @@
             <collisionModelClient>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.76 0.76 0.000000 0.000000	</tiling>
+            <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
           </camouflage>
         </_45mm_20K>
         <_40mm_Pom_Pom>	shared	  <maxAmmo>	160	</maxAmmo>
@@ -597,8 +881,9 @@
             <collisionModelClient>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_20_45	</reloadEffect>
+          <effects>	shot_small	</effects>
           <camouflage>
-            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+            <tiling>	1.3 1.2 1.3 1.6	</tiling>
           </camouflage>
         </_40mm_Pom_Pom>
       </guns>
@@ -611,7 +896,7 @@
         <collisionModelServer>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.205377 0.353496 0.580065	</gunPosition>
+      <gunPosition>	0.000545 0.339035 0.628132	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	0.661891 0.413922 -0.700386	</rayStart>
@@ -622,16 +907,19 @@
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	-0.656389 0.415693 -0.705809	</rayStart>
-          <rayEnd>	-0.271659 0.415693 -0.596342	</rayEnd>
+          <rayStart>	-0.518529 0.463612 -0.682809	</rayStart>
+          <rayEnd>	-0.131316 0.408006 -0.599296	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.54	</size>
+          <size>	0.394	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.936 -0.064 1.000 0.000 0.404 0.255 0.878 0.633 0.415 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	0.956 -0.064 1.000 0.000 0.478 0.340 0.878 0.633 0.415 0.500 0.127 0.500 0.107 0.666 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.2 1.2 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_2_Ch07_Vickers_MkE_Type_BT26>
   </turrets0>
   <engines>

@@ -4,20 +4,18 @@ import os
 import time
 import base64
 import urllib2
-import cPickle
-import BigWorld
 import binascii
 import threading
 import BigWorld
-from debug_utils import *
+from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from functools import partial
 from helpers import getFullClientVersion
 from Queue import Queue
 import shelve as provider
 import random
-_MIN_LIFE_TIME = 15 * 60
-_MAX_LIFE_TIME = 24 * 60 * 60
-_LIFE_TIME_IN_MEMORY = 20 * 60
+_MIN_LIFE_TIME = 900
+_MAX_LIFE_TIME = 86400
+_LIFE_TIME_IN_MEMORY = 1200
 _CACHE_VERSION = 2
 _CLIENT_VERSION = getFullClientVersion()
 
@@ -135,7 +133,7 @@ class NotModifiedHandler(urllib2.BaseHandler):
         return addinfourl
 
 
-class CFC_OP_TYPE():
+class CFC_OP_TYPE:
     DOWNLOAD = 1
     READ = 2
     WRITE = 3
@@ -200,6 +198,10 @@ class WorkerThread(threading.Thread):
                 last_modified = expires = None
                 req = urllib2.Request(url)
                 req.add_header('User-Agent', _CLIENT_VERSION)
+                headers = params.get('headers') or {}
+                for name, value in headers.iteritems():
+                    req.add_header(name, value)
+
                 if modified_time and isinstance(modified_time, str):
                     req.add_header('If-Modified-Since', modified_time)
                     opener = urllib2.build_opener(NotModifiedHandler())
@@ -281,7 +283,7 @@ class WorkerThread(threading.Thread):
         return
 
 
-class ThreadPool():
+class ThreadPool:
 
     def __init__(self, num=8):
         num = max(2, num)
@@ -358,7 +360,7 @@ class CustomFilesCache(object):
     def __startTimer(self):
         self.__timer = BigWorld.callback(60, self.__idle)
 
-    def get(self, url, callback, showImmediately=False):
+    def get(self, url, callback, showImmediately=False, headers=None):
         if callback is None:
             return
         else:
@@ -367,10 +369,10 @@ class CustomFilesCache(object):
                 startDownload = False
             self.__processedCache.setdefault(url, []).append(callback)
             if startDownload:
-                self.__get(url, showImmediately, False)
+                self.__get(url, showImmediately, False, headers)
             return
 
-    def __get(self, url, showImmediately, checkedInCache):
+    def __get(self, url, showImmediately, checkedInCache, headers=None):
         try:
             ctime = getSafeDstUTCTime()
             hash = base64.b32encode(url)
@@ -397,13 +399,13 @@ class CustomFilesCache(object):
                             LOG_DEBUG('postTask, Do not release callbacks. Sends file to requester.', url, last_modified, data[0])
                             self.__postTask(url, file, False)
                         LOG_DEBUG('readRemoteFile, there is file in cache, check last_modified field.', url, last_modified, data[0])
-                        self.__readRemoteFile(url, last_modified, showImmediately)
+                        self.__readRemoteFile(url, last_modified, showImmediately, headers)
             elif checkedInCache:
                 LOG_DEBUG('readRemoteFile, there is no file in cache.', url)
-                self.__readRemoteFile(url, None, False)
+                self.__readRemoteFile(url, None, False, headers)
             else:
                 LOG_DEBUG('checkFile. Checking file in cache.', url, showImmediately)
-                self.__checkFile(url, showImmediately)
+                self.__checkFile(url, showImmediately, headers)
         finally:
             self.__mutex.release()
 
@@ -459,14 +461,14 @@ class CustomFilesCache(object):
         self.__get(url, showImmediately, True)
         return
 
-    def __checkFile(self, url, showImmediately):
+    def __checkFile(self, url, showImmediately, headers=None):
         task = {'opType': CFC_OP_TYPE.CHECK,
          'db': self.__db,
          'name': base64.b32encode(url),
-         'callback': partial(self.__onCheckFile, url, showImmediately)}
+         'callback': partial(self.__onCheckFile, url, showImmediately, headers)}
         self.__worker.add_task(task)
 
-    def __onCheckFile(self, url, showImmediately, res, d1, d2):
+    def __onCheckFile(self, url, showImmediately, headers, res, d1, d2):
         if res is None:
             self.__postTask(url, None, True)
             return
@@ -479,13 +481,14 @@ class CustomFilesCache(object):
                 finally:
                     self.__mutex.release()
 
-            self.__get(url, showImmediately, True)
+            self.__get(url, showImmediately, True, headers)
             return
 
-    def __readRemoteFile(self, url, modified_time, showImmediately):
+    def __readRemoteFile(self, url, modified_time, showImmediately, headers):
         task = {'opType': CFC_OP_TYPE.DOWNLOAD,
          'url': url,
          'modified_time': modified_time,
+         'headers': headers,
          'callback': partial(self.__onReadRemoteFile, url, showImmediately)}
         self.__worker.add_task(task)
 

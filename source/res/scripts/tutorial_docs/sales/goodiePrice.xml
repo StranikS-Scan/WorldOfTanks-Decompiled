@@ -1,0 +1,26 @@
+<goodiePrice.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	DefaultScene	</initial-scene>
+  <scenes>
+    <scene>	DefaultScene	  <post-effects>
+        <clear-scene></clear-scene>
+        <load-view>	BoostersWindow	</load-view>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <view-data>	BoostersWindow	  <alias>	boostersWindow	</alias>
+      <scope>	1	</scope>
+      <context>
+        <tabID>
+          <asInt>	2	</asInt>
+        </tabID>
+      </context>
+    </view-data>
+  </has-id>
+  <triggers></triggers>
+  <vars></vars>
+</goodiePrice.xml>

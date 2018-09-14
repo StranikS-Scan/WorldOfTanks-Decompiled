@@ -4,12 +4,12 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, icons
+from gui.shared.formatters.servers import formatPingStatus
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from predefined_hosts import HOST_AVAILABILITY, PING_STATUSES, g_preDefinedHosts
 from predefined_hosts import AUTO_LOGIN_QUERY_URL
 from skeletons.account_helpers.settings_core import ISettingsCore
-_UNAVAILABLE_DATA_PLACEHOLDER = '--'
 _PING_MAX_VALUE = 999
 
 class _INDICATOR_STATUSES(object):
@@ -29,7 +29,6 @@ class ServersDataProvider(SortableDAAPIDataProvider):
     def __init__(self):
         super(ServersDataProvider, self).__init__()
         self._list = []
-        self._listMapping = {}
         self.__mapping = {}
         self.__selectedID = None
         self.__isColorBlind = self.settingsCore.getSetting('isColorBlind')
@@ -57,6 +56,9 @@ class ServersDataProvider(SortableDAAPIDataProvider):
     def getSelectedIdx(self):
         return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1
 
+    def getSelectedID(self):
+        return self.__selectedID
+
     def setSelectedID(self, sid):
         self.__selectedID = sid
 
@@ -74,7 +76,9 @@ class ServersDataProvider(SortableDAAPIDataProvider):
         self.clear()
         if cache:
             for index, item in enumerate(cache):
-                self._list.append(self._makeVO(index, item))
+                vo = self._makeVO(index, item)
+                self._list.append(vo)
+                self.__mapping[vo['id']] = index
 
     def rebuildList(self, cache):
         self.buildList(cache)
@@ -101,19 +105,14 @@ class ServersDataProvider(SortableDAAPIDataProvider):
         csisStatus = item['csisStatus']
         serverName = item['label']
         pingIndicatorState = self.__getUpdatedPingStatus(pingStatus, item)
-        enabled = csisStatus != HOST_AVAILABILITY.NOT_AVAILABLE
-        strVal = _UNAVAILABLE_DATA_PLACEHOLDER if pingIndicatorState == PING_STATUSES.UNDEFINED else str(pingValue)
-        if pingIndicatorState == PING_STATUSES.LOW:
-            pingValueStr = text_styles.goodPing(strVal)
-        else:
-            pingValueStr = text_styles.standartPing(strVal)
+        enabled = item.get('enabled', csisStatus != HOST_AVAILABILITY.NOT_AVAILABLE)
+        pingValueStr = formatPingStatus(csisStatus, self.__isColorBlind, False, pingStatus, pingValue)
         vo = {'id': item.get('id', 0),
          'data': hostName,
          'csisStatus': csisStatus,
          'label': serverName,
          'pingState': pingIndicatorState,
          'pingValue': pingValueStr,
-         'colorBlind': self.__isColorBlind,
          'enabled': enabled}
         if csisStatus == HOST_AVAILABILITY.NOT_RECOMMENDED:
             vo['tooltip'] = _ms(TOOLTIPS.SERVER_NOTRECOMENDED, icon=icons.serverAlert(), server=serverName)
@@ -130,6 +129,9 @@ class ServersDataProvider(SortableDAAPIDataProvider):
             self.__isColorBlind = diff['isColorBlind']
             for item in self._list:
                 item['colorBlind'] = self.__isColorBlind
+                pingValue, pingStatus = g_preDefinedHosts.getHostPingData(item['data'])
+                pingValueStr = formatPingStatus(item['csisStatus'], self.__isColorBlind, False, pingStatus, pingValue)
+                item['pingValue'] = pingValueStr
 
             self.refresh()
 

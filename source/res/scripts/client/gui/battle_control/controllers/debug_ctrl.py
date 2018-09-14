@@ -5,7 +5,8 @@ import BattleReplay
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import IViewComponentsController
 from gui.shared.utils.TimeInterval import TimeInterval
-from helpers.statistics import g_statistics
+from helpers import dependency
+from skeletons.helpers.statistics import IStatisticsCollector
 _UPDATE_INTERVAL = 0.2
 _LATENCY_UNAVAILABLE = (0, 0, 0, 0)
 
@@ -22,6 +23,7 @@ class DebugController(IViewComponentsController):
     In order to collect lagging info from near vehicles, these vehicle's ids
     should be provided from outside using special methods.
     """
+    statsCollector = dependency.descriptor(IStatisticsCollector)
 
     def __init__(self):
         super(DebugController, self).__init__()
@@ -62,7 +64,7 @@ class DebugController(IViewComponentsController):
             isLaggingNow = BigWorld.statLagDetected()
             ping = BigWorld.statPing()
             fps = BigWorld.getFPS()[1]
-            g_statistics.update()
+            self.statsCollector.update()
             if replayCtrl.isRecording:
                 replayCtrl.setFpsPingLag(fps, ping, isLaggingNow)
         try:

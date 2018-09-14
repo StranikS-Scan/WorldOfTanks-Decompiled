@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/battleground/StunAreaManager.py
 from collections import namedtuple
 from functools import partial
-from uuid import uuid4
 import BigWorld
 import BattleReplay
 import Math
@@ -91,27 +90,27 @@ class StunAreaManager(object):
 
     def __addStunAreaImpl(self, areaID, position):
         if areaID in self.__stunAreas:
-            return
-        else:
-            areas = []
-            offset = self.__stunAreaParams['radius'] / self.__stunAreaParams['areasNum']
-            for i in xrange(0, self.__stunAreaParams['areasNum']):
-                areaDiameter = 2.0 * (self.__stunAreaParams['radius'] - i * offset)
-                adaptedAreaDesc = _EquipmentAdapter(areaDiameter, areaDiameter, self.__stunAreaParams['visual'], self.__stunAreaParams['color'], None)
-                area = CombatEquipmentManager.createEquipmentSelectedArea(position, _DIR_UP, adaptedAreaDesc)
-                if area is not None:
-                    area.setGUIVisible(self.__isGUIVisible)
-                    areas.append(area)
+            self.__callbackDelayer.stopCallback(self.__removeArea)
+            self.__removeArea(areaID)
+        areas = []
+        offset = self.__stunAreaParams['radius'] / self.__stunAreaParams['areasNum']
+        for i in xrange(0, self.__stunAreaParams['areasNum']):
+            areaDiameter = 2.0 * (self.__stunAreaParams['radius'] - i * offset)
+            adaptedAreaDesc = _EquipmentAdapter(areaDiameter, areaDiameter, self.__stunAreaParams['visual'], self.__stunAreaParams['color'], None)
+            area = CombatEquipmentManager.createEquipmentSelectedArea(position, _DIR_UP, adaptedAreaDesc)
+            if area is not None:
+                area.setGUIVisible(self.__isGUIVisible)
+                areas.append(area)
 
-            self.__stunAreas[areaID] = areas
-            if len(areas) > 0:
-                areas[0].addLine(position, self.__stunAreaParams['lineColor'], self.__stunAreaParams['lineWidth'], self.__stunAreaParams['lineHeight'])
-            ctrl = self.sessionProvider.shared.feedback
-            if ctrl is not None:
-                position.y += self.__stunAreaParams['lineHeight'] * 1.1
-                ctrl.onStaticMarkerAdded(areaID, position, STUN_AREA_STATIC_MARKER)
-            self.__callbackDelayer.delayCallback(self.__stunAreaParams['lifetime'], partial(self.__removeArea, areaID))
-            return
+        self.__stunAreas[areaID] = areas
+        if len(areas) > 0:
+            areas[0].addLine(position, self.__stunAreaParams['lineColor'], self.__stunAreaParams['lineWidth'], self.__stunAreaParams['lineHeight'])
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            position.y += self.__stunAreaParams['lineHeight'] * 1.1
+            ctrl.onStaticMarkerAdded(areaID, position, STUN_AREA_STATIC_MARKER)
+        self.__callbackDelayer.delayCallback(self.__stunAreaParams['lifetime'], self.__removeArea, areaID)
+        return
 
     def __removeArea(self, areaID):
         if areaID in self.__stunAreas:

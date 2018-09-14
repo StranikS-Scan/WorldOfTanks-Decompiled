@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyRoomView import BaseRallyRoomView
 
 class FortRoomMeta(BaseRallyRoomView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseRallyRoomView
-    """
 
     def showChangeDivisionWindow(self):
         self._printOverrideError('showChangeDivisionWindow')

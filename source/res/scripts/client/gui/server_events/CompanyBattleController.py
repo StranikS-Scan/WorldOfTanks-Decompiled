@@ -6,9 +6,11 @@ from gui.shared.utils.scheduled_notifications import Notifiable, AcyclicNotifier
 from gui.shared import g_eventBus
 from gui.shared.events import GUICommonEvent
 from PlayerEvents import g_playerEvents
-from ConnectionManager import connectionManager as g_connectionManager
+from helpers import dependency
+from skeletons.connection_mgr import IConnectionManager
 
 class CompanyBattleController(Notifiable):
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, eventsCache):
         self.__eventsCache = weakref.proxy(eventsCache)
@@ -20,7 +22,7 @@ class CompanyBattleController(Notifiable):
     def start(self):
         g_eventBus.addListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
         g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
-        g_connectionManager.onDisconnected += self.__onDisconnected
+        self.connectionMgr.onDisconnected += self.__onDisconnected
         self.setNotificators()
 
     def stop(self):
@@ -28,7 +30,7 @@ class CompanyBattleController(Notifiable):
         self.clearNotification()
         g_eventBus.removeListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
         g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
-        g_connectionManager.onDisconnected -= self.__onDisconnected
+        self.connectionMgr.onDisconnected -= self.__onDisconnected
 
     def setNotificators(self):
         battle = self.__eventsCache.getCompanyBattles()

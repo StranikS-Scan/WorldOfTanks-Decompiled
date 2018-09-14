@@ -87,22 +87,10 @@ UNDAMAGED_SKELETON = VehiclePartsTuple(chassis=[('Tank', ''),
  (TankNodeNames.TRACK_RIGHT_UP_REAR, '')], turret=[('HP_gunJoint', '')], gun=[(TankNodeNames.GUN_INCLINATION, ''), (TankNodeNames.GUN_RECOIL, TankNodeNames.GUN_INCLINATION), ('HP_gunFire', TankNodeNames.GUN_RECOIL)])
 CRASHED_SKELETON = VehiclePartsTuple(chassis=[('Tank', ''), ('V', 'Tank'), ('HP_gui', '')], hull=[('HP_Fire_1', '')], turret=[('HP_gunJoint', '')], gun=[])
 
-def getUndamagedSkeleton(vehicleDesc):
-    exhaustNodes = getExhaustNodesFromDesc(vehicleDesc)
-    exhaustNodes = [ (x, '') for x in exhaustNodes ]
-    turretJointNode = (vehicleDesc.hull['turretHardPoints'][0], '')
-    result = VehiclePartsTuple(chassis=UNDAMAGED_SKELETON.chassis, hull=UNDAMAGED_SKELETON.hull + exhaustNodes + [turretJointNode], turret=UNDAMAGED_SKELETON.turret, gun=UNDAMAGED_SKELETON.gun)
-    return result
-
-
 def getCrashedSkeleton(vehicleDesc):
     turretJointNode = (vehicleDesc.hull['turretHardPoints'][0], '')
     result = VehiclePartsTuple(chassis=CRASHED_SKELETON.chassis, hull=CRASHED_SKELETON.hull + [turretJointNode], turret=CRASHED_SKELETON.turret, gun=CRASHED_SKELETON.gun)
     return result
-
-
-def getSkeleton(vehicleDesc, modelStateName):
-    return getUndamagedSkeleton(vehicleDesc) if modelStateName == 'undamaged' else getCrashedSkeleton(vehicleDesc)
 
 
 def getPartModelsFromDesc(vehicleDesc, modelStateName):

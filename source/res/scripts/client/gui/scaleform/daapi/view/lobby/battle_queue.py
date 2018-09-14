@@ -8,7 +8,6 @@ from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BattleQueueMeta import BattleQueueMeta
@@ -21,7 +20,9 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.sounds.ambients import BattleQueueEnv
+from helpers import dependency
 from helpers.i18n import makeString
+from skeletons.gui.lobby_context import ILobbyContext
 TYPES_ORDERED = (('heavyTank', '#item_types:vehicle/tags/heavy_tank/name'),
  ('mediumTank', '#item_types:vehicle/tags/medium_tank/name'),
  ('lightTank', '#item_types:vehicle/tags/light_tank/name'),
@@ -33,9 +34,10 @@ DIVISIONS_ORDERED = (constants.PREBATTLE_COMPANY_DIVISION.JUNIOR,
  constants.PREBATTLE_COMPANY_DIVISION.ABSOLUTE)
 _LONG_WAITING_LEVELS = (9, 10)
 
-def _needShowLongWaitingWarning():
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def _needShowLongWaitingWarning(lobbyContext=None):
     vehicle = g_currentVehicle.item
-    return g_lobbyContext.getServerSettings().isTemplateMatchmakerEnabled() and vehicle.type == VEHICLE_CLASS_NAME.SPG and vehicle.level in _LONG_WAITING_LEVELS
+    return lobbyContext is not None and lobbyContext.getServerSettings().isTemplateMatchmakerEnabled() and vehicle.type == VEHICLE_CLASS_NAME.SPG and vehicle.level in _LONG_WAITING_LEVELS
 
 
 class _QueueProvider(object):
@@ -90,6 +92,11 @@ class _QueueProvider(object):
 
 class _RandomQueueProvider(_QueueProvider):
 
+    def __init__(self, proxy, qType=constants.QUEUE_TYPE.UNKNOWN):
+        super(_RandomQueueProvider, self).__init__(proxy, qType)
+        self._needAdditionalInfo = None
+        return
+
     def processQueueInfo(self, qInfo):
         info = dict(qInfo)
         if 'classes' in info:
@@ -115,8 +122,9 @@ class _RandomQueueProvider(_QueueProvider):
         """
         If need show long waiting warning for random battles return True, otherwise - False.
         """
-        needInfo = _needShowLongWaitingWarning()
-        self.needAdditionalInfo = lambda : needInfo
+        if self._needAdditionalInfo is None:
+            self._needAdditionalInfo = _needShowLongWaitingWarning()
+        return self._needAdditionalInfo
 
     def additionalInfo(self):
         return text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
@@ -168,11 +176,16 @@ class _EventQueueProvider(_RandomQueueProvider):
     pass
 
 
+class _RankedQueueProvider(_RandomQueueProvider):
+    pass
+
+
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
  constants.QUEUE_TYPE.COMPANIES: _CompanyQueueProvider,
  constants.QUEUE_TYPE.FALLOUT_MULTITEAM: _FalloutQueueProvider,
  constants.QUEUE_TYPE.FALLOUT_CLASSIC: _FalloutQueueProvider,
- constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider}
+ constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,
+ constants.QUEUE_TYPE.RANKED: _RankedQueueProvider}
 
 def _providerFactory(proxy, qType):
     return _PROVIDER_BY_QUEUE_TYPE.get(qType, _QueueProvider)(proxy, qType)

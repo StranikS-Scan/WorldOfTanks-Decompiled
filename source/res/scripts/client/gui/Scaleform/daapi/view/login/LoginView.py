@@ -10,7 +10,7 @@ import ResMgr
 import ScaleformFileLoader
 import Settings
 import constants
-from ConnectionManager import connectionManager, LOGIN_STATUS
+from connection_mgr import LOGIN_STATUS
 from PlayerEvents import g_playerEvents
 from adisp import process
 from external_strings_utils import _LOGIN_NAME_MIN_LENGTH
@@ -31,11 +31,13 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent
 from helpers import getFullClientVersion, dependency
 from helpers.i18n import makeString as _ms
-from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
+from helpers.statistics import HANGAR_LOADING_STATE
 from helpers.time_utils import makeLocalServerTime
 from predefined_hosts import AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_ENABLED, g_preDefinedHosts
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.login_manager import ILoginManager
+from skeletons.helpers.statistics import IStatisticsCollector
 
 class INVALID_FIELDS:
     ALL_VALID = 0
@@ -171,6 +173,9 @@ class BackgroundMode(object):
 
 class LoginView(LoginPageMeta):
     loginManager = dependency.descriptor(ILoginManager)
+    connectionMgr = dependency.descriptor(IConnectionManager)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    statsCollector = dependency.descriptor(IStatisticsCollector)
 
     def __init__(self, ctx=None):
         LoginPageMeta.__init__(self, ctx=ctx)
@@ -195,7 +200,7 @@ class LoginView(LoginPageMeta):
         self._rememberUser = rememberUser
 
     def onLogin(self, userName, password, serverName, isSocialToken2Login):
-        g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.LOGIN, True)
+        self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.LOGIN, True)
         self._autoSearchVisited = serverName == AUTO_LOGIN_QUERY_URL
         self.__customLoginStatus = None
         result = self.__validateCredentials(userName.lower().strip(), password.strip(), bool(self.loginManager.getPreference('token2')))
@@ -215,14 +220,12 @@ class LoginView(LoginPageMeta):
     def isPwdInvalid(self, password):
         isInvalid = False
         if not constants.IS_DEVELOPMENT and not self.loginManager.getPreference('token2'):
-            from external_strings_utils import isPasswordValid
             isInvalid = not isPasswordValid(password)
         return isInvalid
 
     def isLoginInvalid(self, login):
         isInvalid = False
         if not constants.IS_DEVELOPMENT and not self.loginManager.getPreference('token2'):
-            from external_strings_utils import isAccountLoginValid
             isInvalid = not isAccountLoginValid(login)
         return isInvalid
 
@@ -268,9 +271,9 @@ class LoginView(LoginPageMeta):
         self._serversDP.setFlashObject(self.as_getServersDPS())
         self.as_enableS(True)
         self._servers.onServersStatusChanged += self.__updateServersList
-        connectionManager.onRejected += self._onLoginRejected
-        connectionManager.onKickWhileLoginReceived += self._onKickedWhileLogin
-        connectionManager.onQueued += self._onHandleQueue
+        self.connectionMgr.onRejected += self._onLoginRejected
+        self.connectionMgr.onKickWhileLoginReceived += self._onKickedWhileLogin
+        self.connectionMgr.onQueued += self._onHandleQueue
         g_playerEvents.onAccountShowGUI += self._clearLoginView
         self.as_setVersionS(getFullClientVersion())
         self.as_setCopyrightS(_ms(MENU.COPY), _ms(MENU.LEGAL))
@@ -278,8 +281,7 @@ class LoginView(LoginPageMeta):
         self.__backgroundMode.show()
         if self.__capsLockCallbackID is None:
             self.__capsLockCallbackID = BigWorld.callback(0.1, self.__checkUserInputState)
-        sessionProvider = dependency.instance(IBattleSessionProvider)
-        sessionProvider.getCtx().lastArenaUniqueID = None
+        self.sessionProvider.getCtx().lastArenaUniqueID = None
         self._setData()
         self._showForm()
         return
@@ -290,9 +292,9 @@ class LoginView(LoginPageMeta):
         if self.__capsLockCallbackID is not None:
             BigWorld.cancelCallback(self.__capsLockCallbackID)
             self.__capsLockCallbackID = None
-        connectionManager.onRejected -= self._onLoginRejected
-        connectionManager.onKickWhileLoginReceived -= self._onKickedWhileLogin
-        connectionManager.onQueued -= self._onHandleQueue
+        self.connectionMgr.onRejected -= self._onLoginRejected
+        self.connectionMgr.onKickWhileLoginReceived -= self._onKickedWhileLogin
+        self.connectionMgr.onQueued -= self._onHandleQueue
         self._servers.onServersStatusChanged -= self.__updateServersList
         g_playerEvents.onAccountShowGUI -= self._clearLoginView
         self._serversDP.fini()
@@ -330,14 +332,14 @@ class LoginView(LoginPageMeta):
             if not self.__loginRetryDialogShown:
                 self.__showLoginRetryDialog({'waitingOpen': WAITING.titles(self.__customLoginStatus),
                  'waitingClose': WAITING.BUTTONS_CEASE,
-                 'message': _ms(WAITING.message(self.__customLoginStatus), connectionManager.serverUserName)})
+                 'message': _ms(WAITING.message(self.__customLoginStatus), self.connectionMgr.serverUserName)})
         elif peripheryID == -2:
             self.__customLoginStatus = 'centerRestart'
         elif peripheryID == -3:
             self.__customLoginStatus = 'versionMismatch'
 
     def _onHandleQueue(self, queueNumber):
-        serverName = connectionManager.serverUserName
+        serverName = self.connectionMgr.serverUserName
         showAutoSearchBtn = AUTO_LOGIN_QUERY_ENABLED and not self._autoSearchVisited
         cancelBtnLbl = WAITING.BUTTONS_CANCEL if showAutoSearchBtn else WAITING.BUTTONS_EXITQUEUE
         message = _ms(WAITING.MESSAGE_QUEUE, serverName, queueNumber)
@@ -416,7 +418,7 @@ class LoginView(LoginPageMeta):
         if not self.__loginRetryDialogShown:
             self.__showLoginRetryDialog({'waitingOpen': WAITING.TITLES_QUEUE,
              'waitingClose': WAITING.BUTTONS_EXITQUEUE,
-             'message': _ms(WAITING.MESSAGE_AUTOLOGIN, connectionManager.serverUserName)})
+             'message': _ms(WAITING.MESSAGE_AUTOLOGIN, self.connectionMgr.serverUserName)})
 
     def __loginRejectedWithCustomState(self):
         self.as_setErrorMessageS(_ms('#menu:login/status/' + self.__customLoginStatus), INVALID_FIELDS.ALL_VALID)
@@ -429,7 +431,7 @@ class LoginView(LoginPageMeta):
         self.__loginRetryDialogShown = True
 
     def __closeLoginRetryDialog(self, event=None):
-        connectionManager.stopRetryConnection()
+        self.connectionMgr.stopRetryConnection()
         self.fireEvent(LoginEvent(LoginEventEx.CANCEL_LGN_QUEUE, View.alias))
         self.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__closeLoginRetryDialog, EVENT_BUS_SCOPE.LOBBY)
         self.__loginRetryDialogShown = False

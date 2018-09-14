@@ -97,6 +97,7 @@ class ClientArena(object):
     periodAdditionalInfo = property(lambda self: self.__periodInfo[3])
     viewPoints = property(lambda self: self.__viewPoints)
     hasFogOfWarHiddenVehicles = property(lambda self: self.__hasFogOfWarHiddenVehicles)
+    hasObservers = property(lambda self: any(('observer' in v['vehicleType'].type.tags for v in self.__vehicles.itervalues())))
 
     def destroy(self):
         self.__eventManager.clear()
@@ -146,6 +147,7 @@ class ClientArena(object):
 
     def __onVehicleListUpdate(self, argStr):
         list = cPickle.loads(zlib.decompress(argStr))
+        LOG_DEBUG_DEV('__onVehicleListUpdate', list)
         vehicles = self.__vehicles
         vehicles.clear()
         for infoAsTuple in list:
@@ -303,7 +305,9 @@ class ClientArena(object):
          'forbidInBattleInvitations': bool(info[12]),
          'events': info[13],
          'igrType': info[14],
-         'potapovQuestIDs': info[15]}
+         'potapovQuestIDs': info[15],
+         'crewGroup': info[16],
+         'ranked': info[17]}
         return (info[0], infoAsDict)
 
     def __vehicleStatisticsAsDict(self, stats):

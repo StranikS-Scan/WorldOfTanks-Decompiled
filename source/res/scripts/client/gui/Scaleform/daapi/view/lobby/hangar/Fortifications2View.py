@@ -30,7 +30,7 @@ class Fortifications2View(LobbySubView, Fortifications2ViewMeta):
 
     def onFocusChange(self, hasFocus):
         self.__hasFocus = hasFocus
-        self.__updateSkipEscape()
+        self.__updateKeyHandlers()
 
     def viewSize(self, width, height):
         self.__loadBrowser(width, height)
@@ -53,8 +53,9 @@ class Fortifications2View(LobbySubView, Fortifications2ViewMeta):
             self.__browserId = yield self.browserCtrl.load(url=strongholdsTabUrl, useBrowserWindow=False, browserSize=(width, height), showBrowserCallback=self.__showBrowser)
             self.__browser = self.browserCtrl.getBrowser(self.__browserId)
             if self.__browser:
-                self.__browser.ignoreKeyEvents = True
-            self.__updateSkipEscape()
+                self.__browser.allowRightClick = True
+                self.__browser.useSpecialKeys = False
+            self.__updateKeyHandlers()
         else:
             LOG_ERROR('Setting "StrongholdsTabUrl" missing!')
         return
@@ -70,9 +71,10 @@ class Fortifications2View(LobbySubView, Fortifications2ViewMeta):
     def __close(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def __updateSkipEscape(self):
+    def __updateKeyHandlers(self):
         if self.__browser is not None:
             self.__browser.skipEscape = not self.__hasFocus
+            self.__browser.ignoreKeyEvents = not self.__hasFocus
         return
 
     def __onError(self):

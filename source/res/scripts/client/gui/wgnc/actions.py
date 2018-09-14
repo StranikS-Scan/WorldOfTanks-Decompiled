@@ -65,15 +65,16 @@ class _OpenBrowser(_Action):
 
 @ReprInjector.withParent()
 class OpenInternalBrowser(_OpenBrowser, WebHandlersContainer):
-    __slots__ = ('_browserID', '_size', '_showRefresh', '_webHandlerName')
+    __slots__ = ('_browserID', '_size', '_showRefresh', '_webHandlerName', '_isSolidBorder')
     browserCtrl = dependency.descriptor(IBrowserController)
 
-    def __init__(self, name, url, size=None, showRefresh=True, webHandlerName=None):
+    def __init__(self, name, url, size=None, showRefresh=True, webHandlerName=None, isSolidBorder=False):
         super(OpenInternalBrowser, self).__init__(name, url)
         self._browserID = None
         self._size = size
         self._showRefresh = showRefresh
         self._webHandlerName = webHandlerName
+        self._isSolidBorder = isSolidBorder
         return
 
     def invoke(self, _, actor=None):
@@ -86,7 +87,7 @@ class OpenInternalBrowser(_OpenBrowser, WebHandlersContainer):
 
     @process
     def _doInvoke(self, title):
-        self._browserID = yield self.browserCtrl.load(self._url, browserID=self._browserID, title=title, browserSize=self._size, showActionBtn=self._showRefresh, handlers=self.getWebHandler(self._webHandlerName))
+        self._browserID = yield self.browserCtrl.load(self._url, browserID=self._browserID, title=title, browserSize=self._size, showActionBtn=self._showRefresh, handlers=self.getWebHandler(self._webHandlerName), isSolidBorder=self._isSolidBorder)
 
 
 @ReprInjector.withParent()

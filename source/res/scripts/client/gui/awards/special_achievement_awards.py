@@ -6,13 +6,15 @@ from adisp import process
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.goodies.goodie_items import _BOOSTER_DESCRIPTION_LOCALE
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward
+from helpers import dependency
 from helpers import i18n
+from skeletons.gui.shared import IItemsCache
 
 class ResearchAward(ExplosionBackAward):
 
@@ -241,6 +243,7 @@ class ClanJoinAward(AwardAbstract):
 
 
 class TelecomAward(AwardAbstract):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicleDesrs, hasCrew, hasBrotherhood):
         super(TelecomAward, self).__init__()
@@ -250,7 +253,7 @@ class TelecomAward(AwardAbstract):
 
     def __getVehicleDetails(self, vehicleCD):
         details = {}
-        item = g_itemsCache.items.getItemByCD(vehicleCD)
+        item = self.itemsCache.items.getItemByCD(vehicleCD)
         details['type'] = item.typeUserName
         details['nation'] = i18n.makeString(MENU.nations(item.nationName))
         details['vehicle'] = item.userName
@@ -297,7 +300,7 @@ class TelecomAward(AwardAbstract):
 
     def handleBodyButton(self):
         from CurrentVehicle import g_currentVehicle
-        item = g_itemsCache.items.getItemByCD(self.__vehicleDesrs[0])
+        item = self.itemsCache.items.getItemByCD(self.__vehicleDesrs[0])
         if hasattr(item, 'invID'):
             g_currentVehicle.selectVehicle(item.invID)
         shared_events.showHangar()

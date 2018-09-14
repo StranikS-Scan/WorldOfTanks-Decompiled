@@ -3,8 +3,11 @@
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers import gEffectsDisabled
 from debug_utils import LOG_DEBUG
+from functools import partial
+from math import fabs
 import SoundGroups
 import BigWorld
+BARREL_DEBUG_ENABLED = False
 
 def _createReloadEffectDesc(type, dataSection):
     if len(dataSection.values()) == 0:
@@ -86,24 +89,33 @@ class SimpleReload(CallbackDelayer):
                 self._sound.stop()
             time = shellReloadTime - self._desc.duration
             if time > 0.0:
-                self.delayCallback(time, self._startEvent)
+                self.delayCallback(time, self.__playSound)
             return
 
     def stop(self):
         if self._sound is not None:
             self._sound.stop()
             self._sound = None
-        self.stopCallback(self._startEvent)
+        self.stopCallback(self.__playSound)
         return
 
-    def _startEvent(self):
+    def __playSound(self):
         if self._sound is not None:
             self._sound.stop()
+            import BattleReplay
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+                return
             self._sound.play()
         return
 
+    def _playByName(self, soundName):
+        import BattleReplay
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+            return
+        SoundGroups.g_instance.playSound2D(soundName)
 
-BARREL_DEBUG_ENABLED = False
 
 class BarrelReload(SimpleReload):
 
@@ -124,28 +136,28 @@ class BarrelReload(SimpleReload):
             self.stopCallback(self._startLoopEvent)
             self.stopCallback(self._loopOneShoot)
             time = shellReloadTime - self._desc.duration
-            self.delayCallback(time, self._startLoopEvent)
+            self.delayCallback(time, partial(self._startLoopEvent, BigWorld.time() + time))
             if reloadShellCount != 0:
                 self.__shellDt = self._desc.duration / reloadShellCount
             else:
                 self.__shellDt = self._desc.duration
             self.__reloadCount = reloadShellCount
             if reloadStart:
-                SoundGroups.g_instance.playSound2D(self._desc.stopLoop)
-                SoundGroups.g_instance.playSound2D(self._desc.startLong)
+                self._playByName(self._desc.stopLoop)
+                self._playByName(self._desc.startLong)
                 if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! Play Long  = {0}'.format(self._desc.startLong))
+                    LOG_DEBUG('!!! Play Long  = {0} {1}'.format(BigWorld.time(), self._desc.startLong))
             if alert:
                 if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! Play Ammo Low  = {0}'.format(self._desc.ammoLow))
-                SoundGroups.g_instance.playSound2D(self._desc.ammoLow)
+                    LOG_DEBUG('!!! Play Ammo Low  = {0} {1}'.format(BigWorld.time(), self._desc.ammoLow))
+                self._playByName(self._desc.ammoLow)
         else:
             if shellCount == 1:
                 if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! Play Alert  = {0}'.format(self._desc.lastShellAlert))
-                SoundGroups.g_instance.playSound2D(self._desc.lastShellAlert)
+                    LOG_DEBUG('!!! Play Alert  = {0} {1}'.format(BigWorld.time(), self._desc.lastShellAlert))
+                self._playByName(self._desc.lastShellAlert)
             time = shellReloadTime - self._desc.shellDuration
-            self.delayCallback(time, self._startOneShoot)
+            self.delayCallback(time, partial(self._startOneShoot, BigWorld.time() + time))
 
     def stop(self):
         if BARREL_DEBUG_ENABLED:
@@ -153,7 +165,8 @@ class BarrelReload(SimpleReload):
         self.__reloadCount = 0
         self.stopCallback(self._startLoopEvent)
         self.stopCallback(self._loopOneShoot)
-        SoundGroups.g_instance.playSound2D(self._desc.stopLoop)
+        self.stopCallback(self._startOneShoot)
+        self._playByName(self._desc.stopLoop)
 
     def __getShellDt(self):
         if self.__reloadCount > 1:
@@ -165,18 +178,20 @@ class BarrelReload(SimpleReload):
         dt = dt if dt > 0.0 else 0.0
         return dt
 
-    def _startLoopEvent(self):
-        if BARREL_DEBUG_ENABLED:
-            LOG_DEBUG('!!! {0} Start Loop = {1}'.format(BigWorld.time(), self._desc.startLoop))
-            LOG_DEBUG('!!!Shell DT = {0}'.format(self.__shellDt))
-        SoundGroups.g_instance.playSound2D(self._desc.startLoop)
-        self._startLoopT = BigWorld.time()
-        self.delayCallback(self.__getShellDt() - self._desc.shellDt, self._loopOneShoot)
+    def _startLoopEvent(self, invokeTime):
+        if fabs(invokeTime - BigWorld.time()) < 0.1:
+            if BARREL_DEBUG_ENABLED:
+                LOG_DEBUG('!!! {0} Start Loop = {1}'.format(BigWorld.time(), self._desc.startLoop))
+                LOG_DEBUG('!!!Shell DT = {0}'.format(self.__shellDt))
+            self._playByName(self._desc.startLoop)
+            self._startLoopT = BigWorld.time()
+            self.delayCallback(self.__getShellDt() - self._desc.shellDt, self._loopOneShoot)
 
-    def _startOneShoot(self):
-        if BARREL_DEBUG_ENABLED:
-            LOG_DEBUG('!!!{0} Play One Shoot = {1}'.format(BigWorld.time(), self._desc.soundEvent))
-        SoundGroups.g_instance.playSound2D(self._desc.soundEvent)
+    def _startOneShoot(self, invokeTime):
+        if fabs(invokeTime - BigWorld.time()) < 0.1:
+            if BARREL_DEBUG_ENABLED:
+                LOG_DEBUG('!!!{0} Play One Shoot = {1}'.format(BigWorld.time(), self._desc.soundEvent))
+            self._playByName(self._desc.soundEvent)
 
     def _loopOneShoot(self):
         if self.__reloadCount > 0:
@@ -184,14 +199,14 @@ class BarrelReload(SimpleReload):
             if self.__reloadCount == 0:
                 if BARREL_DEBUG_ENABLED:
                     LOG_DEBUG('!!! {0} Play In Loop One Shoot Last= {1}'.format(BigWorld.time() - self._startLoopT, self._desc.loopShellLast))
-                SoundGroups.g_instance.playSound2D(self._desc.loopShellLast)
+                self._playByName(self._desc.loopShellLast)
                 return self.__getShellDt()
             else:
                 if BARREL_DEBUG_ENABLED:
                     LOG_DEBUG('!!! {0}Play In Loop One Shoot = {1}'.format(BigWorld.time() - self._startLoopT, self._desc.loopShell))
-                SoundGroups.g_instance.playSound2D(self._desc.loopShell)
+                self._playByName(self._desc.loopShell)
                 return self.__getShellDt()
         if BARREL_DEBUG_ENABLED:
             LOG_DEBUG('!!!{0} Stop Loop = {1}'.format(BigWorld.time() - self._startLoopT, self._desc.stopLoop))
-        SoundGroups.g_instance.playSound2D(self._desc.stopLoop)
+        self._playByName(self._desc.stopLoop)
         return None

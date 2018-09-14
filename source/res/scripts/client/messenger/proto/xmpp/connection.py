@@ -3,10 +3,10 @@
 import random
 import BigWorld
 from constants import TOKEN_TYPE
-from ConnectionManager import connectionManager
 from adisp import process
 from gui.shared.utils import backoff, getPlayerDatabaseID
 from gui.shared.utils.requesters import TokenRequester, TokenResponse
+from helpers import dependency
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto.events import g_messengerEvents
@@ -14,6 +14,7 @@ from messenger.proto.xmpp.gloox_constants import DISCONNECT_REASON, CONNECTION_I
 from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 from messenger.proto.xmpp.logger import sendEventToServer, XMPP_EVENT_LOG
+from skeletons.connection_mgr import IConnectionManager
 _BACK_OFF_MIN_DELAY = 10
 _BACK_OFF_MAX_DELAY = 5120
 _BACK_OFF_MODIFIER = 10
@@ -112,6 +113,7 @@ class ChatTokenResponse(TokenResponse):
 
 
 class ConnectionHandler(ClientEventsHandler):
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         super(ConnectionHandler, self).__init__()
@@ -146,7 +148,7 @@ class ConnectionHandler(ClientEventsHandler):
         g_settings.server.XMPP.clear()
 
     def isInGameServer(self):
-        return connectionManager.isConnected()
+        return self.connectionMgr.isConnected()
 
     def registerHandlers(self):
         client = self.client()

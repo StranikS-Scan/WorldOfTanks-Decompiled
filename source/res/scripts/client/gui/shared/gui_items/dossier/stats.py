@@ -3,6 +3,7 @@
 import itertools
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple, defaultdict
+from helpers import dependency
 import nations
 import constants
 from items import vehicles
@@ -11,6 +12,7 @@ from dossiers2.ui.achievements import ACHIEVEMENT_MODE, ACHIEVEMENT_SECTION, ACH
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from gui.shared.gui_items.dossier.factories import getAchievementFactory, _SequenceAchieveFactory
 from gui.shared.gui_items.dossier.achievements import MarkOfMasteryAchievement
+from skeletons.gui.shared import IItemsCache
 _BATTLE_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.BATTLE]
 _EPIC_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.EPIC]
 _ACTION_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.ACTION]
@@ -19,6 +21,7 @@ _SIGNIFICANT_ACHIEVEMENTS_PER_SECTION = 3
 _TOP_ACHIEVEMENTS = 9
 _7X7_AVAILABLE_RANGE = range(6, 9)
 _FALLOUT_AVAILABLE_RANGE = range(8, constants.MAX_VEHICLE_LEVEL + 1)
+_RANKED_AVAILABLE_RANGE = (constants.MAX_VEHICLE_LEVEL,)
 
 def _nearestComparator(x, y):
     if x.getLevelUpValue() == 1 or y.getLevelUpValue() == 1:
@@ -530,6 +533,156 @@ class _AchievementsBlock(_StatsBlockAbstract):
 
     def __isAchieveValid(self, block, name):
         return (block, name) in self.__acceptableAchieves or makeAchievesStorageName(block) in self.__acceptableAchieves and name in self.__dossier.getBlock(block)
+
+
+class _RankedCurrentSeasonStatsBlock(_StatsBlock):
+    """ NOTE: This section contains information about current ranked season.
+    """
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def getLadderPts(self):
+        return self._stats.get('seasonLadderPts', 0)
+
+    def getStepsCount(self):
+        return self._stats.get('seasonStepsCount', 0)
+
+    def hasAchievedRank(self):
+        rank, _ = self._stats.get('accRank', (0, 0))
+        return rank > 0
+
+    def _getStatsBlock(self, dossier):
+        if dossier.isCurrentUser():
+            rankedRequester = self.itemsCache.items.ranked
+            return {'seasonLadderPts': rankedRequester.seasonLadderPts,
+             'seasonStepsCount': rankedRequester.seasonStepsCount,
+             'accRank': rankedRequester.accRank}
+        return dossier.getRankedCurrentSeason()
+
+
+class _RankedSeasonsStatsBlock(_StatsBlock):
+    """ NOTE: This section contains information about previous seasons. There is NO INFORMATION ABOUT CURRENT SEASON!!!
+    """
+
+    def _getStatsBlock(self, dossier):
+        return dossier.getDossierDescr()['rankedSeasons']
+
+
+class _StoredRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
+    """ NOTE: This section contains information about previous seasons. There is NO INFORMATION ABOUT CURRENT SEASON!!!
+    Data section format: { (seasonID, cycleID or 0): (rank, step, vehRankCount, ladderPts, allStepsCount) }
+    """
+    _RANK_IDX = 0
+    _STEPS_COUNT_IDX = 4
+    _LADDER_PTS_IDX = 3
+
+    def getPrevSeasonLadderPts(self):
+        """
+        Provides ladderPoint count ONLY for ONE previous SEASON!
+        :return: (int) ladderPts for previous season
+        """
+        prevSeasonData = self.__getPreviousSeasonData()
+        return prevSeasonData[self._LADDER_PTS_IDX] if prevSeasonData else 0
+
+    def getPrevSeasonsLadderPts(self):
+        """
+        Provides ladderPoint count for ALL previous SEASONS!
+        :return: (int) ladderPts for all previous seasons
+        """
+        return self.__getTotalStatistics(self._LADDER_PTS_IDX)
+
+    def getPrevSeasonStepsCount(self):
+        """
+        Provides seasonSteps count for ONE previous SEASON!
+        :return: (int) seasonSteps for previous season
+        """
+        prevSeasonData = self.__getPreviousSeasonData()
+        return prevSeasonData[self._STEPS_COUNT_IDX] if prevSeasonData else 0
+
+    def getPrevSeasonsStepsCount(self):
+        """
+        Provides seasonSteps count for ALL previous SEASONS!
+        :return: (int) seasonSteps for all previous seasons
+        """
+        return self.__getTotalStatistics(self._STEPS_COUNT_IDX)
+
+    def hadAchievedRank(self):
+        """
+        It determines if user received any rank in previous seasons or cycles
+        :return:
+        """
+        statsIdx = self._RANK_IDX
+        for stats in self._stats.itervalues():
+            if stats[statsIdx] > 0:
+                return True
+
+        return False
+
+    def __getTotalStatistics(self, statsIdx):
+        """
+        Total statistics by all finished seasons
+        :param statsIdx: index of required data
+        :return: int
+        """
+        total = 0
+        for (seasonID, cycleID), stats in self._stats.iteritems():
+            if len(stats) > statsIdx:
+                if cycleID == 0:
+                    total += stats[statsIdx]
+            LOG_ERROR('Incorrect data format:', stats)
+
+        return total
+
+    def __getPreviousSeasonData(self):
+        prevSeasonID = 0
+        for seasonID, cycleID in self._stats.iterkeys():
+            if seasonID > prevSeasonID and cycleID == 0:
+                prevSeasonID = seasonID
+
+        return self._stats.get((prevSeasonID, 0))
+
+
+class _StoredVehRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
+    """ NOTE: This section contains information about previous seasons for particular vehicle.
+    There is NO INFORMATION ABOUT CURRENT SEASON!!!
+    Data section format: { (seasonID, cycleID or 0): (rank, step) }
+    """
+
+    def getTotalRanksCount(self):
+        sumPoints = 0
+        for (seasonID, cycleID), (rank, step) in self._stats.iteritems():
+            if cycleID > 0:
+                sumPoints += rank
+
+        return sumPoints
+
+
+class _TotalVehRankedSeasonsStatsBlock(_StoredVehRankedSeasonsStatsBlock):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, dossier):
+        super(_StoredVehRankedSeasonsStatsBlock, self).__init__(dossier)
+        self._vehIntCD = dossier.getCompactDescriptor()
+
+    def getTotalRanksCount(self):
+        storedCount = super(_TotalVehRankedSeasonsStatsBlock, self).getTotalRanksCount()
+        currentRankCount, _ = self.itemsCache.items.ranked.vehRanks.get(self._vehIntCD, (0, 0))
+        return storedCount + currentRankCount
+
+
+class _VehRankedCurrentSeasonStatsBlock(_StatsBlock):
+    """ NOTE: This section contains information about current ranked season for vehicles.
+    """
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def _getStatsBlock(self, dossier):
+        if dossier.isCurrentUser():
+            vehIntCD = dossier.getCompactDescriptor()
+            return {'vehRanks': self.itemsCache.items.ranked.vehRanks.get(vehIntCD, (0, 0))}
+        return dossier.getRankedCurrentSeason()
+
+    def getRanksCount(self):
+        rank, _ = self._stats.get('vehRanks', (0, 0))
+        return rank
 
 
 class GlobalStatsBlock(_StatsBlock):
@@ -1320,7 +1473,8 @@ class AccountDossierStats(_DossierStats):
          self.getFortBattlesStats(),
          self.getFortSortiesStats(),
          self.getRated7x7Stats(),
-         self.getFalloutStats()))
+         self.getFalloutStats(),
+         self.getRankedStats()))
 
     def getRandomStats(self):
         return AccountRandomStatsBlock(self._getDossierItem())
@@ -1376,6 +1530,15 @@ class AccountDossierStats(_DossierStats):
     def getFalloutStats(self):
         return AccountFalloutStatsBlock(self._getDossierItem())
 
+    def getRankedStats(self):
+        return TotalAccountRankedStatsBlock(self._getDossierItem())
+
+    def getCurrentSeasonRankedStats(self):
+        return CurrentSeasonRankedStatsBlock(self._getDossierItem())
+
+    def getPreviousSeasonRankedStats(self):
+        return PreviousSeasonRankedStatsBlock(self._getDossierItem())
+
 
 class VehicleDossierStats(_DossierStats):
 
@@ -1390,7 +1553,8 @@ class VehicleDossierStats(_DossierStats):
          self.getHistoricalStats(),
          self.getFortBattlesStats(),
          self.getFortSortiesStats(),
-         self.getFalloutStats()))
+         self.getFalloutStats(),
+         self.getRankedStats()))
 
     def getRandomStats(self):
         return RandomStatsBlock(self._getDossierItem())
@@ -1421,6 +1585,9 @@ class VehicleDossierStats(_DossierStats):
 
     def getFalloutStats(self):
         return FalloutStatsBlock(self._getDossierItem())
+
+    def getRankedStats(self):
+        return VehRankedStatsBlock(self._getDossierItem())
 
 
 class TankmanDossierStats(_DossierStats):
@@ -1571,3 +1738,159 @@ class AccountFalloutStatsBlock(FalloutStatsBlock, _VehiclesStatsBlock, _MaxAvata
 
     def _packVehicle(self, battlesCount=0, wins=0, xp=0, winPoints=0):
         return self.FalloutVehiclesDossiersCut(battlesCount, wins, winPoints, xp)
+
+
+class RankedStatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock, _AchievementsBlock):
+
+    def __init__(self, dossier, blockName, maxBlockName):
+        self.__blockName = blockName
+        self.__maxBlockName = maxBlockName
+        _BattleStatsBlock.__init__(self, dossier)
+        _Battle2StatsBlock.__init__(self, dossier)
+        _MaxStatsBlock.__init__(self, dossier)
+        _AchievementsBlock.__init__(self, dossier)
+        self._rankedSeasons = self._getPrevSeasonsBlock(dossier)
+        self._rankedCurrentSeason = self._getCurrentSeasonBlock(dossier)
+
+    def getBattlesCountVer2(self):
+        return self.getBattlesCount()
+
+    def getBattlesCountVer3(self):
+        return self.getBattlesCount()
+
+    def _getPrevSeasonsBlock(self, dossier):
+        raise NotImplementedError
+
+    def _getCurrentSeasonBlock(self, dossier):
+        raise NotImplementedError
+
+    def _getStatsBlock(self, dossier):
+        return dossier.getDossierDescr()[self.__blockName]
+
+    def _getStats2Block(self, dossier):
+        return dossier.getDossierDescr()[self.__blockName]
+
+    def _getStatsMaxBlock(self, dossier):
+        return dossier.getDossierDescr()[self.__maxBlockName]
+
+    def _getAcceptableAchieves(self):
+        return layouts.getAchievementsByMode(ACHIEVEMENT_MODE.RANKED)
+
+
+class AccountRankedStatsBlock(RankedStatsBlock, _VehiclesStatsBlock):
+    _RankedVehiclesDossiersCut = namedtuple('VehiclesDossiersCut', ','.join(['battlesCount',
+     'wins',
+     'markOfMastery',
+     'xp']))
+
+    class RankedVehiclesDossiersCut(_RankedVehiclesDossiersCut):
+
+        def __mul__(self, other):
+            self.battlesCount += other.battlesCount
+            self.wins += other.wins
+            self.xp += other.xp
+            self.markOfMastery = -1
+
+        def __imul__(self, other):
+            return self + other
+
+    def __init__(self, dossier, blockName, maxBlockName):
+        super(AccountRankedStatsBlock, self).__init__(dossier, blockName, maxBlockName)
+        _VehiclesStatsBlock.__init__(self, dossier)
+
+    def getLadderPts(self):
+        raise NotImplementedError
+
+    def getStepsCount(self):
+        raise NotImplementedError
+
+    def hasAchievedRank(self):
+        raise NotImplementedError
+
+    def getStepsEfficiency(self):
+        return self._getAvgValue(self.getBattlesCount, self.getStepsCount)
+
+    def getMarksOfMastery(self):
+        pass
+
+    def _packVehicle(self, battlesCount=0, wins=0, xp=0):
+        return self.RankedVehiclesDossiersCut(battlesCount, wins, -1, xp)
+
+    def _getPrevSeasonsBlock(self, dossier):
+        return _StoredRankedSeasonsStatsBlock(dossier)
+
+    def _getCurrentSeasonBlock(self, dossier):
+        return _RankedCurrentSeasonStatsBlock(dossier)
+
+
+class CurrentSeasonRankedStatsBlock(AccountRankedStatsBlock):
+
+    def __init__(self, dossier):
+        super(CurrentSeasonRankedStatsBlock, self).__init__(dossier, 'rankedCurrent', 'maxRankedCurrent')
+
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getDossierDescr()['rankedCurrentCut']
+
+    def getLadderPts(self):
+        return self._rankedCurrentSeason.getLadderPts()
+
+    def getStepsCount(self):
+        return self._rankedCurrentSeason.getStepsCount()
+
+    def hasAchievedRank(self):
+        return self._rankedCurrentSeason.hasAchievedRank()
+
+
+class PreviousSeasonRankedStatsBlock(AccountRankedStatsBlock):
+
+    def __init__(self, dossier):
+        super(PreviousSeasonRankedStatsBlock, self).__init__(dossier, 'rankedPrevious', 'maxRankedPrevious')
+
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getDossierDescr()['rankedPreviousCut']
+
+    def getLadderPts(self):
+        return self._rankedSeasons.getPrevSeasonLadderPts()
+
+    def getStepsCount(self):
+        return self._rankedSeasons.getPrevSeasonStepsCount()
+
+    def hasAchievedRank(self):
+        return self._rankedSeasons.hadAchievedRank()
+
+
+class TotalAccountRankedStatsBlock(AccountRankedStatsBlock, _VehiclesStatsBlock):
+
+    def __init__(self, dossier):
+        super(TotalAccountRankedStatsBlock, self).__init__(dossier, 'ranked', 'maxRanked')
+
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getDossierDescr()['rankedCut']
+
+    def getLadderPts(self):
+        return self._rankedSeasons.getPrevSeasonsLadderPts() + self._rankedCurrentSeason.getLadderPts()
+
+    def getStepsCount(self):
+        return self._rankedSeasons.getPrevSeasonsStepsCount() + self._rankedCurrentSeason.getStepsCount()
+
+    def hasAchievedRank(self):
+        """
+        It determines if user achieved any rank in any season or cycle
+        :return: bool
+        """
+        return self._rankedSeasons.hadAchievedRank() or self._rankedCurrentSeason.hasAchievedRank()
+
+
+class VehRankedStatsBlock(RankedStatsBlock):
+
+    def __init__(self, dossier):
+        super(VehRankedStatsBlock, self).__init__(dossier, 'ranked', 'maxRanked')
+
+    def getTotalRanksCount(self):
+        return self._rankedSeasons.getTotalRanksCount()
+
+    def _getPrevSeasonsBlock(self, dossier):
+        return _TotalVehRankedSeasonsStatsBlock(dossier)
+
+    def _getCurrentSeasonBlock(self, dossier):
+        return _VehRankedCurrentSeasonStatsBlock(dossier)

@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyView import BaseRallyView
 
 class BaseRallyListViewMeta(BaseRallyView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseRallyView
-    """
 
     def getRallyDetails(self, index):
         self._printOverrideError('getRallyDetails')

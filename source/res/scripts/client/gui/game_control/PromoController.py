@@ -8,7 +8,6 @@ from account_shared import getClientMainVersion
 from adisp import async, process
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control import gc_constants
@@ -17,11 +16,13 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from helpers import i18n, isPlayerAccount, dependency
 from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController
+from skeletons.gui.lobby_context import ILobbyContext
 
 class PromoController(IPromoController):
     PROMO_AUTO_VIEWS_TEST_VALUE = 5
     browserCtrl = dependency.descriptor(IBrowserController)
     eventsNotification = dependency.descriptor(IEventsNotificationsController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(PromoController, self).__init__()
@@ -154,4 +155,4 @@ class PromoController(IPromoController):
 
     @classmethod
     def isPromoAutoViewsEnabled(cls):
-        return getAccountDatabaseID() % cls.PROMO_AUTO_VIEWS_TEST_VALUE != 0 and g_lobbyContext.getServerSettings().isPromoAutoViewsEnabled()
+        return getAccountDatabaseID() % cls.PROMO_AUTO_VIEWS_TEST_VALUE != 0 and cls.lobbyContext.getServerSettings().isPromoAutoViewsEnabled()

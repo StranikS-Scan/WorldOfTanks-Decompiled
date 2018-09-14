@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ingame_menu.py
 import constants
 import BattleReplay
-from ConnectionManager import connectionManager
 from adisp import process
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import makeHtmlString
@@ -13,13 +12,17 @@ from gui.Scaleform.daapi.view.dialogs.deserter_meta import IngameDeserterDialogM
 from gui.Scaleform.daapi.view.meta.IngameMenuMeta import IngameMenuMeta
 from gui.Scaleform.genConsts.GLOBAL_VARS_MGR_CONSTS import GLOBAL_VARS_MGR_CONSTS
 from gui.Scaleform.genConsts.INTERFACE_STATES import INTERFACE_STATES
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control import event_dispatcher as battle_event_dispatcher
 from gui.shared import event_dispatcher as shared_event_dispatcher
 from gui.shared import events
+from gui.shared.formatters import text_styles
+from gui.shared.formatters.icons import makeImageTag
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IServerStatsController
 from gui.Scaleform.locale.MENU import MENU
@@ -27,6 +30,7 @@ from gui.Scaleform.locale.MENU import MENU
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     serverStats = dependency.descriptor(IServerStatsController)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def onWindowClose(self):
         self.destroy()
@@ -82,8 +86,8 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
             state = INTERFACE_STATES.HIDE_ALL_SERVER_INFO
         else:
             tooltipBody = i18n.makeString(TOOLTIPS.HEADER_INFO_PLAYERS_ONLINE_FULL_BODY)
-            tooltipFullData = makeTooltip(TOOLTIPS.HEADER_INFO_PLAYERS_ONLINE_FULL_HEADER, tooltipBody % {'servername': connectionManager.serverUserName})
-            serverName = makeHtmlString('html_templates:lobby/serverStats', 'serverName', {'name': connectionManager.serverUserName})
+            tooltipFullData = makeTooltip(TOOLTIPS.HEADER_INFO_PLAYERS_ONLINE_FULL_HEADER, tooltipBody % {'servername': self.connectionMgr.serverUserName})
+            serverName = makeHtmlString('html_templates:lobby/serverStats', 'serverName', {'name': self.connectionMgr.serverUserName})
             if constants.IS_SHOW_SERVER_STATS:
                 state = INTERFACE_STATES.SHOW_ALL
             else:
@@ -95,7 +99,6 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
             self.as_setServerStatsS(*self.serverStats.getFormattedStats())
 
     def __setMenuButtonsLabels(self):
-        quitLabel = ''
         if self.app.varsManager.isTutorialRunning(GLOBAL_VARS_MGR_CONSTS.BATTLE):
             quitLabel = MENU.LOBBY_MENU_BUTTONS_REFUSE_TRAINING
         elif BattleReplay.isPlaying():

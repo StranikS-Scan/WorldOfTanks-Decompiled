@@ -167,7 +167,7 @@ class SettingsCore(ISettingsCore):
          (CONTROLS.MOUSE_ARCADE_SENS, options.MouseSensitivitySetting('arcade')),
          (CONTROLS.MOUSE_SNIPER_SENS, options.MouseSensitivitySetting('sniper')),
          (CONTROLS.MOUSE_STRATEGIC_SENS, options.MouseSensitivitySetting('strategic')),
-         (CONTROLS.MOUSE_ASSIST_AIM_SENS, options.MouseSensitivitySetting('arty')),
+         (CONTROLS.MOUSE_ASSIST_AIM_SENS, options.MouseSensitivitySetting('arty', masterSwitch='spgAlternativeAimingCameraEnabled')),
          (CONTROLS.MOUSE_HORZ_INVERSION, options.MouseInversionSetting(CONTROLS.MOUSE_HORZ_INVERSION, 'horzInvert', storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.MOUSE_VERT_INVERSION, options.MouseInversionSetting(CONTROLS.MOUSE_VERT_INVERSION, 'vertInvert', storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.BACK_DRAFT_INVERSION, options.BackDraftInversionSetting(storage=CONTROLS_SETTINGS_STORAGE)),

@@ -1,30 +1,34 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
-import AccountCommands
 import BigWorld
+import AccountCommands
 from AccountCommands import VEHICLE_SETTINGS_FLAG
+from items import EQUIPMENT_TYPES
 from account_shared import LayoutIterator
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
-from gui.shared import g_itemsCache
-from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
+from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles
+from gui.shared.formatters import icons
 from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins, makeSuccess
+from gui.shared.gui_items.vehicle_layout import ShellVehicleLayout
 from gui.shared.money import Money, ZERO_MONEY, Currency
 from helpers import time_utils, dependency
 from helpers.i18n import makeString
 from shared_utils import findFirst
 from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 
 def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
     if crewType != -1:
         tankmenCount = len(vehicle.crew)
-        tankmanCost = g_itemsCache.items.shop.tankmanCostWithGoodyDiscount[crewType]
-        result += Money(tankmanCost['credits'] * tankmenCount, tankmanCost['gold'] * tankmenCount)
+        itemsCache = dependency.instance(IItemsCache)
+        tankmanCost = itemsCache.items.shop.tankmanCostWithGoodyDiscount[crewType]
+        result += Money(tankmanCost[Currency.CREDITS] * tankmenCount, tankmanCost[Currency.GOLD] * tankmenCount)
     if buyShells:
         for shell in vehicle.gun.defaultAmmo:
             result += shell.buyPrice * shell.defaultCount
@@ -330,7 +334,7 @@ class VehicleTradeInProcessor(VehicleBuyer):
 class VehicleSlotBuyer(Processor):
 
     def __init__(self, showConfirm=True, showWarning=True):
-        self.__hasDiscounts = bool(g_itemsCache.items.shop.personalSlotDiscounts)
+        self.__hasDiscounts = bool(self.itemsCache.items.shop.personalSlotDiscounts)
         self.__frozenSlotPrice = None
         slotCost = self.__getSlotPrice()
         if self.__hasDiscounts and not slotCost:
@@ -361,7 +365,7 @@ class VehicleSlotBuyer(Processor):
         if self.__frozenSlotPrice is not None:
             return self.__frozenSlotPrice
         else:
-            price = g_itemsCache.items.shop.getVehicleSlotsPrice(g_itemsCache.items.stats.vehicleSlots)
+            price = self.itemsCache.items.shop.getVehicleSlotsPrice(self.itemsCache.items.stats.vehicleSlots)
             if self.__hasDiscounts:
                 self.__frozenSlotPrice = Money(gold=price)
             return Money(gold=price)
@@ -369,6 +373,7 @@ class VehicleSlotBuyer(Processor):
 
 class VehicleSeller(ItemProcessor):
     restore = dependency.descriptor(IRestoreController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, vehicle, dismantlingGoldCost, shells=[], eqs=[], optDevs=[], inventory=[], isCrewDismiss=False):
         self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory, dismantlingGoldCost)
@@ -412,8 +417,8 @@ class VehicleSeller(ItemProcessor):
 
     def _successHandler(self, code, ctx=None):
         restoreInfo = ''
-        if self.vehicle.isPremium and not self.vehicle.isUnique and not self.vehicle.isUnrecoverable and g_lobbyContext.getServerSettings().isVehicleRestoreEnabled() and not self.vehicle.sellForGold:
-            timeKey, formattedTime = getTimeLeftInfo(g_itemsCache.items.shop.vehiclesRestoreConfig.restoreDuration)
+        if self.vehicle.isPremium and not self.vehicle.isUnique and not self.vehicle.isUnrecoverable and self.lobbyContext.getServerSettings().isVehicleRestoreEnabled() and not self.vehicle.sellForGold:
+            timeKey, formattedTime = getTimeLeftInfo(self.itemsCache.items.shop.vehiclesRestoreConfig.restoreDuration)
             restoreInfo = makeString('#system_messages:vehicle/restoreDuration/%s' % timeKey, time=formattedTime)
         if self.isDismantlingForGold:
             localKey = 'vehicle_sell/success_dismantling'
@@ -533,6 +538,12 @@ class VehicleAutoEquipProcessor(VehicleSettingsProcessor):
         super(VehicleAutoEquipProcessor, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.AUTO_EQUIP, value)
 
 
+class VehicleAutoBattleBoosterEquipProcessor(VehicleSettingsProcessor):
+
+    def __init__(self, vehicle, value):
+        super(VehicleAutoBattleBoosterEquipProcessor, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER, value)
+
+
 class VehicleLayoutProcessor(Processor):
     """
     Apply equipments and shells layout
@@ -542,23 +553,32 @@ class VehicleLayoutProcessor(Processor):
         """
         Ctor.
         
-        @param vehicle: vehicle
-        @param shellsLayout: shells
-        @param eqsLayout: equipments
+        @param vehicle: gui_item.vehicle.Vehicle
+        @param shellsLayout: instance of ShellVehicleLayout
+        @param eqsLayout: instance of EquipmentVehicleLayout
         """
         super(VehicleLayoutProcessor, self).__init__()
         self.vehicle = vehicle
         self.shellsLayout = shellsLayout
         self.eqsLayout = eqsLayout
+        self._setupPlugins()
+
+    def _setupPlugins(self):
         shellsPrice = self.getShellsLayoutPrice()
         eqsPrice = self.getEqsLayoutPrice()
         isWalletValidatorEnabled = bool(shellsPrice.gold or eqsPrice.gold)
-        self.addPlugins((plugins.VehicleLockValidator(vehicle), plugins.WalletValidator(isWalletValidatorEnabled), plugins.VehicleLayoutValidator(shellsPrice, eqsPrice)))
+        self.addPlugins((plugins.VehicleLockValidator(self.vehicle), plugins.WalletValidator(isWalletValidatorEnabled), plugins.VehicleLayoutValidator(shellsPrice, eqsPrice)))
 
     def _request(self, callback):
-        BigWorld.player().inventory.setAndFillLayouts(self.vehicle.invID, self.shellsLayout, self.eqsLayout, lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
+        shellsRaw = self.shellsLayout.getRawLayout() if self.shellsLayout else None
+        eqsRaw = self.eqsLayout.getRawLayout() if self.eqsLayout else None
+        BigWorld.player().inventory.setAndFillLayouts(self.vehicle.invID, shellsRaw, eqsRaw, self._getEquipmentType(), lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
+        return
 
-    def __getSysMsgType(self, price):
+    def _getEquipmentType(self):
+        return EQUIPMENT_TYPES.regular
+
+    def _getSysMsgType(self, price):
         return CURRENCY_TO_SM_TYPE.get(price.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def _successHandler(self, code, ctx=None):
@@ -567,16 +587,16 @@ class VehicleLayoutProcessor(Processor):
             totalPrice = ZERO_MONEY
             for shellCompDescr, price, count in ctx.get('shells', []):
                 price = Money(*price)
-                shell = g_itemsCache.items.getItemByCD(shellCompDescr)
-                additionalMessages.append(makeI18nSuccess('shell_buy/success', name=shell.userName, count=count, money=formatPrice(price), type=self.__getSysMsgType(price)))
+                shell = self.itemsCache.items.getItemByCD(shellCompDescr)
+                additionalMessages.append(makeI18nSuccess('shell_buy/success', name=shell.userName, count=count, money=formatPrice(price), type=self._getSysMsgType(price)))
                 totalPrice += price
 
-            additionalMessages.append(makeI18nSuccess('layout_apply/success_money_spent', money=formatPrice(totalPrice), type=self.__getSysMsgType(totalPrice)))
+            additionalMessages.append(makeI18nSuccess('layout_apply/success_money_spent', money=formatPrice(totalPrice), type=self._getSysMsgType(totalPrice)))
         if len(ctx.get('eqs', [])):
             for eqCompDescr, price, count in ctx.get('eqs', []):
                 price = Money(*price)
-                equipment = g_itemsCache.items.getItemByCD(eqCompDescr)
-                additionalMessages.append(makeI18nSuccess('artefact_buy/success', kind=equipment.userType, name=equipment.userName, count=count, money=formatPrice(price), type=self.__getSysMsgType(price)))
+                equipment = self.itemsCache.items.getItemByCD(eqCompDescr)
+                additionalMessages.append(makeI18nSuccess('artefact_buy/success', kind=equipment.userType, name=equipment.userName, count=count, money=formatPrice(price), type=self._getSysMsgType(price)))
 
         return makeSuccess(auxData=additionalMessages)
 
@@ -595,17 +615,17 @@ class VehicleLayoutProcessor(Processor):
             return ZERO_MONEY
         else:
             price = ZERO_MONEY
-            for shellCompDescr, count, isBoughtForCredits in LayoutIterator(self.shellsLayout):
+            for shellCompDescr, count, isBoughtForCredits in LayoutIterator(self.shellsLayout.getRawLayout()):
                 if not shellCompDescr or not count:
                     continue
-                shell = g_itemsCache.items.getItemByCD(int(shellCompDescr))
-                vehShell = findFirst(lambda s: s.intCD == shellCompDescr, self.vehicle.shells)
+                shell = self.itemsCache.items.getItemByCD(int(shellCompDescr))
+                vehShell = findFirst(lambda s, intCD=shellCompDescr: s.intCD == intCD, self.vehicle.shells)
                 vehCount = vehShell.count if vehShell is not None else 0
                 buyCount = count - shell.inventoryCount - vehCount
                 if buyCount:
                     buyPrice = buyCount * shell.buyPrice
                     if isBoughtForCredits:
-                        buyPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, g_itemsCache.items.shop.exchangeRateForShellsAndEqs)
+                        buyPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, self.itemsCache.items.shop.exchangeRateForShellsAndEqs)
                     price += buyPrice
 
             return price
@@ -618,20 +638,67 @@ class VehicleLayoutProcessor(Processor):
             return ZERO_MONEY
         else:
             price = ZERO_MONEY
-            for idx, (eqCompDescr, count, isBoughtForCredits) in enumerate(LayoutIterator(self.eqsLayout)):
+            regularEqsLayout = self.eqsLayout.getRegularRawLayout()
+            for idx, (eqCompDescr, count, isBoughtForCredits) in enumerate(LayoutIterator(regularEqsLayout)):
                 if not eqCompDescr or not count:
                     continue
-                equipment = g_itemsCache.items.getItemByCD(int(eqCompDescr))
+                equipment = self.itemsCache.items.getItemByCD(int(eqCompDescr))
                 vehEquipment = self.vehicle.eqs[idx]
                 vehCount = 1 if vehEquipment is not None else 0
                 buyCount = count - equipment.inventoryCount - vehCount
                 if buyCount:
                     buyPrice = buyCount * equipment.buyPrice
                     if isBoughtForCredits:
-                        buyPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, g_itemsCache.items.shop.exchangeRateForShellsAndEqs)
+                        buyPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, self.itemsCache.items.shop.exchangeRateForShellsAndEqs)
                     price += buyPrice
 
             return price
+
+
+class VehicleBattleBoosterLayoutProcessor(VehicleLayoutProcessor):
+
+    def __init__(self, vehicle, battleBooster, eqsLayout):
+        """
+        Ctor.
+        
+        @param vehicle: gui_item.vehicle.Vehicle
+        @param battleBooster: instance of gui_items.artefacts.BattleBooster
+        @param eqsLayout: instance of EquipmentVehicleLayout
+        """
+        self.battleBooster = battleBooster
+        super(VehicleBattleBoosterLayoutProcessor, self).__init__(vehicle, None, eqsLayout)
+        return
+
+    def _setupPlugins(self):
+        if self.battleBooster:
+            self.addPlugin(plugins.BattleBoosterConfirmator('confirmBattleBoosterInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster))
+
+    def _getEquipmentType(self):
+        return EQUIPMENT_TYPES.battleBoosters
+
+
+class BuyAndInstallBattleBoosterProcessor(VehicleBattleBoosterLayoutProcessor):
+
+    def __init__(self, vehicle, battleBooster, eqsLayout, count):
+        self.count = count
+        super(BuyAndInstallBattleBoosterProcessor, self).__init__(vehicle, battleBooster, eqsLayout)
+
+    def _setupPlugins(self):
+        itemPrice = self.battleBooster.altPrice or self.battleBooster.buyPrice
+        self.addPlugins((plugins.MoneyValidator(itemPrice * self.count), plugins.BattleBoosterConfirmator('confirmBattleBoosterBuyAndInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster)))
+
+    def _request(self, callback):
+        BigWorld.player().shop.buy(self.battleBooster.itemTypeID, self.battleBooster.nationID, self.battleBooster.intCD, self.count, 0, lambda code: self._buyResponse(code, callback))
+
+    def _buyResponse(self, code, callback):
+        LOG_DEBUG('Server response on buy battle booster', code)
+        if code < 0:
+            return callback(self._errorHandler(code))
+        price = self.battleBooster.altPrice or self.battleBooster.buyPrice
+        price *= self.count
+        message = makeI18nSuccess('battleBooster_buy/success', kind=self.battleBooster.userType, name=self.battleBooster.userName, count=self.count, money=formatPrice(price), type=self._getSysMsgType(price))
+        SystemMessages.pushI18nMessage(message.userMsg, type=message.sysMsgType)
+        super(BuyAndInstallBattleBoosterProcessor, self)._request(callback)
 
 
 class VehicleRepairer(ItemProcessor):
@@ -644,7 +711,7 @@ class VehicleRepairer(ItemProcessor):
         BigWorld.player().inventory.repair(self.item.invID, lambda code: self._response(code, callback))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        needed = Money(credits=self._repairCost.credits - g_itemsCache.items.stats.credits)
+        needed = Money(credits=self._repairCost.credits - self.itemsCache.items.stats.credits)
         return makeI18nError('vehicle_repair/%s' % errStr, defaultSysMsgKey='vehicle_repair/server_error', vehName=self.item.userName, needed=formatPrice(needed))
 
     def _successHandler(self, code, ctx=None):
@@ -662,7 +729,8 @@ def tryToLoadDefaultShellsLayout(vehicle, callback=None):
             break
         defaultLayout.extend(shell.defaultLayoutValue)
     else:
-        result = yield VehicleLayoutProcessor(vehicle, defaultLayout).request()
+        shellsLayout = ShellVehicleLayout(vehicle, defaultLayout)
+        result = yield VehicleLayoutProcessor(vehicle, shellsLayout).request()
         if result and result.auxData:
             for m in result.auxData:
                 SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
@@ -678,15 +746,20 @@ def tryToLoadDefaultShellsLayout(vehicle, callback=None):
     return
 
 
-def _getUniqueVehicleSellConfirmator(vehicle):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def _getUniqueVehicleSellConfirmator(vehicle, lobbyContext=None):
     """
     return confirmation plugin for unique vehicle
     :param vehicle: <Vehicle>
     :return: <MessageConfirmator>
     """
-    if g_lobbyContext.getServerSettings().isVehicleRestoreEnabled():
+    if lobbyContext is not None and lobbyContext.getServerSettings().isVehicleRestoreEnabled():
         if not vehicle.sellForGold and not vehicle.isUnrecoverable:
             if vehicle.isRecentlyRestored():
                 return plugins.MessageConfirmator('vehicleSell/restoreCooldown', ctx={'cooldown': formatTime(vehicle.restoreInfo.getRestoreCooldownTimeLeft(), time_utils.ONE_DAY)}, isEnabled=vehicle.isUnique)
-            return vehicle.isPurchased and plugins.MessageConfirmator('vehicleSell/restoreUnlimited', isEnabled=vehicle.isUnique)
-    return plugins.MessageConfirmator('vehicleSell/unique', isEnabled=vehicle.isUnique)
+            if vehicle.isPurchased:
+                return plugins.MessageConfirmator('vehicleSell/restoreUnlimited', isEnabled=vehicle.isUnique)
+        dialogI18n = vehicle.isCrewLocked and 'vehicleSell/unique/crewLocked'
+    else:
+        dialogI18n = 'vehicleSell/unique'
+    return plugins.MessageConfirmator(dialogI18n, isEnabled=vehicle.isUnique)

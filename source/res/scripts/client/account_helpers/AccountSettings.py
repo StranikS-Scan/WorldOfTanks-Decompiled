@@ -430,7 +430,7 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 31
+    version = 32
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -785,7 +785,7 @@ class AccountSettings(object):
                             defaults = DEFAULT_VALUES[KEY_FILTERS][filterName]
                             accFilters.write(filterName, base64.b64encode(pickle.dumps(defaults)))
 
-            if currVersion < 31:
+            if currVersion < 32:
                 for _, section in _filterAccountSection(ads):
                     accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
                     accSettings.deleteSection(NEW_SETTINGS_COUNTER)

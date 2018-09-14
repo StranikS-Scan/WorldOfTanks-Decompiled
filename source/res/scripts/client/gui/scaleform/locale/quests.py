@@ -169,6 +169,7 @@ class QUESTS(object):
     DETAILS_HEADER_COMPLETION_SINGLE_GROUPBYCLASS = '#quests:details/header/completion/single/groupByClass'
     DETAILS_HEADER_COMETOEND = '#quests:details/header/comeToEnd'
     DETAILS_HEADER_COMETOENDINMINUTES = '#quests:details/header/comeToEndInMinutes'
+    DETAILS_HEADER_COMETOENDINMINUTES_SEPARATED = '#quests:details/header/comeToEndInMinutes/separated'
     DETAILS_TASKS_SUBTASK = '#quests:details/tasks/subTask'
     DETAILS_TASKS_NEXTTASK = '#quests:details/tasks/nextTask'
     DETAILS_TASKS_STRATEGIC = '#quests:details/tasks/strategic'
@@ -268,8 +269,12 @@ class QUESTS(object):
     DETAILS_CONDITIONS_ALIVE_TITLE = '#quests:details/conditions/alive/title'
     DETAILS_CONDITIONS_ACHIEVEMENTS_TITLE = '#quests:details/conditions/achievements/title'
     DETAILS_CONDITIONS_CLANKILLS_TITLE = '#quests:details/conditions/clanKills/title'
-    DETAILS_CONDITIONS_KILL_VEHICLES_TITLE = '#quests:details/conditions/kill_vehicles/title'
-    DETAILS_CONDITIONS_DAMAGE_TITLE = '#quests:details/conditions/damage/title'
+    DETAILS_CONDITIONS_VEHICLESKILLS_TITLE = '#quests:details/conditions/vehiclesKills/title'
+    DETAILS_CONDITIONS_VEHICLESKILLS_TITLE_NOT = '#quests:details/conditions/vehiclesKills/title/not'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_TITLE = '#quests:details/conditions/vehicleDamage/title'
+    DETAILS_CONDITIONS_VEHICLEDAMAGE_TITLE_NOT = '#quests:details/conditions/vehicleDamage/title/not'
+    DETAILS_CONDITIONS_VEHICLESTUN_TITLE = '#quests:details/conditions/vehicleStun/title'
+    DETAILS_CONDITIONS_VEHICLESTUN_TITLE_NOT = '#quests:details/conditions/vehicleStun/title/not'
     DETAILS_CONDITIONS_PLAYBATTLE_TITLE = '#quests:details/conditions/playBattle/title'
     DETAILS_CONDITIONS_TOP_TITLE = '#quests:details/conditions/top/title'
     DETAILS_CONDITIONS_ALTERNATIVE = '#quests:details/conditions/alternative'
@@ -294,11 +299,9 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CLANMEMBERSHIP_ANY_FORMATION = '#quests:details/conditions/clanMembership/any/formation'
     DETAILS_CONDITIONS_CLANMEMBERSHIP_ANY_SQUAD = '#quests:details/conditions/clanMembership/any/squad'
     DETAILS_CONDITIONS_CLANMEMBERSHIP_ANY_TEAM7X7 = '#quests:details/conditions/clanMembership/any/team7x7'
-    DETAILS_CONDITIONS_CLANMEMBERSHIP_ANY_COMPANY = '#quests:details/conditions/clanMembership/any/company'
     DETAILS_CONDITIONS_CLANMEMBERSHIP_SAME_FORMATION = '#quests:details/conditions/clanMembership/same/formation'
     DETAILS_CONDITIONS_CLANMEMBERSHIP_SAME_SQUAD = '#quests:details/conditions/clanMembership/same/squad'
     DETAILS_CONDITIONS_CLANMEMBERSHIP_SAME_TEAM7X7 = '#quests:details/conditions/clanMembership/same/team7x7'
-    DETAILS_CONDITIONS_CLANMEMBERSHIP_SAME_COMPANY = '#quests:details/conditions/clanMembership/same/company'
     DETAILS_CONDITIONS_FORMATION_CLAN = '#quests:details/conditions/formation/clan'
     DETAILS_CONDITIONS_HISTORICALBATTLES = '#quests:details/conditions/historicalBattles'
     DETAILS_CONDITIONS_BATTLES = '#quests:details/conditions/battles'
@@ -339,10 +342,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_RESULTS_SQUAD_ALIVE_NOT = '#quests:details/conditions/results/squad/alive/not'
     DETAILS_CONDITIONS_RESULTS_SQUAD_SIMPLE = '#quests:details/conditions/results/squad/simple'
     DETAILS_CONDITIONS_RESULTS_SQUAD_AVG = '#quests:details/conditions/results/squad/avg'
-    DETAILS_CONDITIONS_RESULTS_COMPANY_ALIVE = '#quests:details/conditions/results/company/alive'
-    DETAILS_CONDITIONS_RESULTS_COMPANY_ALIVE_NOT = '#quests:details/conditions/results/company/alive/not'
-    DETAILS_CONDITIONS_RESULTS_COMPANY_SIMPLE = '#quests:details/conditions/results/company/simple'
-    DETAILS_CONDITIONS_RESULTS_COMPANY_AVG = '#quests:details/conditions/results/company/avg'
     DETAILS_CONDITIONS_RESULTS_TEAM7X7_ALIVE = '#quests:details/conditions/results/team7x7/alive'
     DETAILS_CONDITIONS_RESULTS_TEAM7X7_ALIVE_NOT = '#quests:details/conditions/results/team7x7/alive/not'
     DETAILS_CONDITIONS_RESULTS_TEAM7X7_SIMPLE = '#quests:details/conditions/results/team7x7/simple'
@@ -350,7 +349,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_SINGLE = '#quests:details/conditions/cumulative/single'
     DETAILS_CONDITIONS_CUMULATIVE_FORMATION = '#quests:details/conditions/cumulative/formation'
     DETAILS_CONDITIONS_CUMULATIVE_SQUAD = '#quests:details/conditions/cumulative/squad'
-    DETAILS_CONDITIONS_CUMULATIVE_COMPANY = '#quests:details/conditions/cumulative/company'
     DETAILS_CONDITIONS_CUMULATIVE_TEAM7X7 = '#quests:details/conditions/cumulative/team7x7'
     DETAILS_CONDITIONS_VEHICLESKILLS = '#quests:details/conditions/vehiclesKills'
     DETAILS_CONDITIONS_VEHICLESKILLS_NOT = '#quests:details/conditions/vehiclesKills/not'
@@ -388,6 +386,40 @@ class QUESTS(object):
     DETAILS_CONDITIONS_VEHICLEDAMAGE_TYPE_LEVEL_NOT = '#quests:details/conditions/vehicleDamage/type_level/not'
     DETAILS_CONDITIONS_VEHICLEDAMAGE_NATION_TYPE_LEVEL = '#quests:details/conditions/vehicleDamage/nation_type_level'
     DETAILS_CONDITIONS_VEHICLEDAMAGE_NATION_TYPE_LEVEL_NOT = '#quests:details/conditions/vehicleDamage/nation_type_level/not'
+    DETAILS_CONDITIONS_VEHICLESTUN = '#quests:details/conditions/vehicleStun'
+    DETAILS_CONDITIONS_VEHICLESTUN_NOT = '#quests:details/conditions/vehicleStun/not'
+    DETAILS_CONDITIONS_VEHICLESTUN_ALL = '#quests:details/conditions/vehicleStun/all'
+    DETAILS_CONDITIONS_VEHICLESTUN_NATION = '#quests:details/conditions/vehicleStun/nation'
+    DETAILS_CONDITIONS_VEHICLESTUN_NATION_NOT = '#quests:details/conditions/vehicleStun/nation/not'
+    DETAILS_CONDITIONS_VEHICLESTUN_TYPE = '#quests:details/conditions/vehicleStun/type'
+    DETAILS_CONDITIONS_VEHICLESTUN_TYPE_NOT = '#quests:details/conditions/vehicleStun/type/not'
+    DETAILS_CONDITIONS_VEHICLESTUN_LEVEL = '#quests:details/conditions/vehicleStun/level'
+    DETAILS_CONDITIONS_VEHICLESTUN_LEVEL_NOT = '#quests:details/conditions/vehicleStun/level/not'
+    DETAILS_CONDITIONS_VEHICLESTUN_NATION_TYPE = '#quests:details/conditions/vehicleStun/nation_type'
+    DETAILS_CONDITIONS_VEHICLESTUN_NATION_TYPE_NOT = '#quests:details/conditions/vehicleStun/nation_type/not'
+    DETAILS_CONDITIONS_VEHICLESTUN_NATION_LEVEL = '#quests:details/conditions/vehicleStun/nation_level'
+    DETAILS_CONDITIONS_VEHICLESTUN_NATION_LEVEL_NOT = '#quests:details/conditions/vehicleStun/nation_level/not'
+    DETAILS_CONDITIONS_VEHICLESTUN_TYPE_LEVEL = '#quests:details/conditions/vehicleStun/type_level'
+    DETAILS_CONDITIONS_VEHICLESTUN_TYPE_LEVEL_NOT = '#quests:details/conditions/vehicleStun/type_level/not'
+    DETAILS_CONDITIONS_VEHICLESTUN_NATION_TYPE_LEVEL = '#quests:details/conditions/vehicleStun/nation_type_level'
+    DETAILS_CONDITIONS_VEHICLESTUN_NATION_TYPE_LEVEL_NOT = '#quests:details/conditions/vehicleStun/nation_type_level/not'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT = '#quests:details/conditions/vehicleStunEventCount'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_NOT = '#quests:details/conditions/vehicleStunEventCount/not'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_ALL = '#quests:details/conditions/vehicleStunEventCount/all'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_NATION = '#quests:details/conditions/vehicleStunEventCount/nation'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_NATION_NOT = '#quests:details/conditions/vehicleStunEventCount/nation/not'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_TYPE = '#quests:details/conditions/vehicleStunEventCount/type'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_TYPE_NOT = '#quests:details/conditions/vehicleStunEventCount/type/not'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_LEVEL = '#quests:details/conditions/vehicleStunEventCount/level'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_LEVEL_NOT = '#quests:details/conditions/vehicleStunEventCount/level/not'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_NATION_TYPE = '#quests:details/conditions/vehicleStunEventCount/nation_type'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_NATION_TYPE_NOT = '#quests:details/conditions/vehicleStunEventCount/nation_type/not'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_NATION_LEVEL = '#quests:details/conditions/vehicleStunEventCount/nation_level'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_NATION_LEVEL_NOT = '#quests:details/conditions/vehicleStunEventCount/nation_level/not'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_TYPE_LEVEL = '#quests:details/conditions/vehicleStunEventCount/type_level'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_TYPE_LEVEL_NOT = '#quests:details/conditions/vehicleStunEventCount/type_level/not'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_NATION_TYPE_LEVEL = '#quests:details/conditions/vehicleStunEventCount/nation_type_level'
+    DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_NATION_TYPE_LEVEL_NOT = '#quests:details/conditions/vehicleStunEventCount/nation_type_level/not'
     DETAILS_CONDITIONS_GROUPBY_NATION = '#quests:details/conditions/groupBy/nation'
     DETAILS_CONDITIONS_GROUPBY_CLASS = '#quests:details/conditions/groupBy/class'
     DETAILS_CONDITIONS_GROUPBY_LEVEL = '#quests:details/conditions/groupBy/level'
@@ -442,16 +474,20 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_MARKOFMASTERY4 = '#quests:details/conditions/cumulative/markOfMastery4'
     DETAILS_CONDITIONS_CUMULATIVE_INNERMODULECRITCOUNT = '#quests:details/conditions/cumulative/innerModuleCritCount'
     DETAILS_CONDITIONS_CUMULATIVE_CRITSCOUNT = '#quests:details/conditions/cumulative/critsCount'
+    DETAILS_CONDITIONS_CUMULATIVE_STUNNUM = '#quests:details/conditions/cumulative/stunNum'
     DETAILS_CONDITIONS_CUMULATIVE_SNIPERDAMAGEDEALT = '#quests:details/conditions/cumulative/sniperDamageDealt'
     DETAILS_CONDITIONS_CUMULATIVE_MILEAGE = '#quests:details/conditions/cumulative/mileage'
     DETAILS_CONDITIONS_CUMULATIVE_LIFETIME = '#quests:details/conditions/cumulative/lifeTime'
     DETAILS_CONDITIONS_CUMULATIVE_INNERMODULEDESTRCOUNT = '#quests:details/conditions/cumulative/innerModuleDestrCount'
     DETAILS_CONDITIONS_CUMULATIVE_KILLSASSISTEDRADIO = '#quests:details/conditions/cumulative/killsAssistedRadio'
     DETAILS_CONDITIONS_CUMULATIVE_KILLSASSISTEDTRACK = '#quests:details/conditions/cumulative/killsAssistedTrack'
+    DETAILS_CONDITIONS_CUMULATIVE_KILLSASSISTEDSTUN = '#quests:details/conditions/cumulative/killsAssistedStun'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDVEHICLECNTASSISTEDRADIO = '#quests:details/conditions/cumulative/damagedVehicleCntAssistedRadio'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDVEHICLECNTASSISTEDTRACK = '#quests:details/conditions/cumulative/damagedVehicleCntAssistedTrack'
+    DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDVEHICLECNTASSISTEDSTUN = '#quests:details/conditions/cumulative/damagedVehicleCntAssistedStun'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEASSISTEDRADIOWHILEINVISIBLE = '#quests:details/conditions/cumulative/damageAssistedRadioWhileInvisible'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEASSISTEDTRACKWHILEINVISIBLE = '#quests:details/conditions/cumulative/damageAssistedTrackWhileInvisible'
+    DETAILS_CONDITIONS_CUMULATIVE_DAMAGEASSISTEDSTUNWHILEINVISIBLE = '#quests:details/conditions/cumulative/damageAssistedStunWhileInvisible'
     DETAILS_CONDITIONS_CUMULATIVE_FORTRESOURCE = '#quests:details/conditions/cumulative/fortResource'
     DETAILS_CONDITIONS_CUMULATIVE_PERCENTFROMTOTALTEAMDAMAGE = '#quests:details/conditions/cumulative/percentFromTotalTeamDamage'
     DETAILS_CONDITIONS_CUMULATIVE_KILLEDANDDAMAGEDBYALLSQUADMATES = '#quests:details/conditions/cumulative/killedAndDamagedByAllSquadmates'
@@ -460,9 +496,9 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_INBATTLEMAXPIERCINGSERIES = '#quests:details/conditions/cumulative/inBattleMaxPiercingSeries'
     DETAILS_CONDITIONS_CUMULATIVE_INBATTLEMAXSNIPERSERIES = '#quests:details/conditions/cumulative/inBattleMaxSniperSeries'
     DETAILS_CONDITIONS_CUMULATIVE_SPOTTEDANDDAMAGEDSPG = '#quests:details/conditions/cumulative/spottedAndDamagedSPG'
-    DETAILS_CONDITIONS_CLUBS_GETDIVISION = '#quests:details/conditions/clubs/getDivision'
-    DETAILS_CONDITIONS_CLUBS_BATTLES = '#quests:details/conditions/clubs/battles'
-    DETAILS_CONDITIONS_CLUBS_HASCLUB = '#quests:details/conditions/clubs/hasClub'
+    DETAILS_CONDITIONS_CUMULATIVE_DAMAGEASSISTEDSTUN = '#quests:details/conditions/cumulative/damageAssistedStun'
+    DETAILS_CONDITIONS_CUMULATIVE_STUNDURATION = '#quests:details/conditions/cumulative/stunDuration'
+    DETAILS_CONDITIONS_CUMULATIVE_STUNNED = '#quests:details/conditions/cumulative/stunned'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -573,27 +609,6 @@ class QUESTS(object):
     DETAILS_DOSSIER_RANDOM_DAMAGEASSISTEDRADIO = '#quests:details/dossier/random/damageAssistedRadio'
     DETAILS_DOSSIER_RANDOM_SHOTS = '#quests:details/dossier/random/shots'
     DETAILS_DOSSIER_RANDOM_EXPLOSIONHITSRECEIVED = '#quests:details/dossier/random/explosionHitsReceived'
-    DETAILS_DOSSIER_COMPANY_XP = '#quests:details/dossier/company/xp'
-    DETAILS_DOSSIER_COMPANY_BATTLESCOUNT = '#quests:details/dossier/company/battlesCount'
-    DETAILS_DOSSIER_COMPANY_WINS = '#quests:details/dossier/company/wins'
-    DETAILS_DOSSIER_COMPANY_LOSSES = '#quests:details/dossier/company/losses'
-    DETAILS_DOSSIER_COMPANY_SURVIVEDBATTLES = '#quests:details/dossier/company/survivedBattles'
-    DETAILS_DOSSIER_COMPANY_FRAGS = '#quests:details/dossier/company/frags'
-    DETAILS_DOSSIER_COMPANY_DIRECTHITS = '#quests:details/dossier/company/directHits'
-    DETAILS_DOSSIER_COMPANY_SPOTTED = '#quests:details/dossier/company/spotted'
-    DETAILS_DOSSIER_COMPANY_DAMAGEDEALT = '#quests:details/dossier/company/damageDealt'
-    DETAILS_DOSSIER_COMPANY_MAXDAMAGE = '#quests:details/dossier/company/maxDamage'
-    DETAILS_DOSSIER_COMPANY_DAMAGERECEIVED = '#quests:details/dossier/company/damageReceived'
-    DETAILS_DOSSIER_COMPANY_CAPTUREPOINTS = '#quests:details/dossier/company/capturePoints'
-    DETAILS_DOSSIER_COMPANY_DROPPEDCAPTUREPOINTS = '#quests:details/dossier/company/droppedCapturePoints'
-    DETAILS_DOSSIER_COMPANY_PIERCINGS = '#quests:details/dossier/company/piercings'
-    DETAILS_DOSSIER_COMPANY_NODAMAGEDIRECTHITSRECEIVED = '#quests:details/dossier/company/noDamageDirectHitsReceived'
-    DETAILS_DOSSIER_COMPANY_PIERCINGSRECEIVED = '#quests:details/dossier/company/piercingsReceived'
-    DETAILS_DOSSIER_COMPANY_POTENTIALDAMAGERECEIVED = '#quests:details/dossier/company/potentialDamageReceived'
-    DETAILS_DOSSIER_COMPANY_DAMAGEBLOCKEDBYARMOR = '#quests:details/dossier/company/damageBlockedByArmor'
-    DETAILS_DOSSIER_COMPANY_ORIGINALXP = '#quests:details/dossier/company/originalXP'
-    DETAILS_DOSSIER_COMPANY_DAMAGEASSISTEDTRACK = '#quests:details/dossier/company/damageAssistedTrack'
-    DETAILS_DOSSIER_COMPANY_DAMAGEASSISTEDRADIO = '#quests:details/dossier/company/damageAssistedRadio'
     DETAILS_DOSSIER_CLAN_XP = '#quests:details/dossier/clan/xp'
     DETAILS_DOSSIER_CLAN_BATTLESCOUNT = '#quests:details/dossier/clan/battlesCount'
     DETAILS_DOSSIER_CLAN_WINS = '#quests:details/dossier/clan/wins'
@@ -856,6 +871,7 @@ class QUESTS(object):
     MISSIONS_FILTER_POPOVER_DEFAULTBUTTON_BODY = '#quests:missions/filter/popover/defaultButton/body'
     MISSIONS_NOTASKS_DUMMY_TEXT = '#quests:missions/noTasks/dummy/text'
     MISSIONS_NOTASKSBODY_DUMMY_TEXT = '#quests:missions/noTasksBody/dummy/text'
+    MISSIONS_NOTASKSMARATHON_DUMMY_TEXT = '#quests:missions/noTasksMarathon/dummy/text'
     MISSIONS_NOTASKSBODY_DUMMY_BTNLABEL = '#quests:missions/noTasksBody/dummy/btnLabel'
     MISSIONDETAILS_VEHICLE_CONDITIONS_HEADER = '#quests:missionDetails/vehicle/conditions/header'
     MISSIONDETAILS_VEHICLE_CONDITIONS_NATIONS = '#quests:missionDetails/vehicle/conditions/nations'
@@ -1192,12 +1208,6 @@ class QUESTS(object):
     ACTION_SHORT_MUL_VEHRENTPRICE_ONE = '#quests:action/short/mul_VehRentPrice/one'
     ACTION_FULL_MUL_VEHRENTPRICE = '#quests:action/full/mul_VehRentPrice'
     ACTION_BUTTON_MUL_VEHRENTPRICE = '#quests:action/button/mul_VehRentPrice'
-    ACTION_AUTO_SET_VEHRENTPRICE = '#quests:action/auto/set_VehRentPrice'
-    ACTION_FULL_SET_VEHRENTPRICE = '#quests:action/full/set_VehRentPrice'
-    ACTION_SHORT_SET_VEHRENTPRICE_MORE = '#quests:action/short/set_VehRentPrice/more'
-    ACTION_SHORT_SET_VEHRENTPRICE_TWO = '#quests:action/short/set_VehRentPrice/two'
-    ACTION_SHORT_SET_VEHRENTPRICE_ONE = '#quests:action/short/set_VehRentPrice/one'
-    ACTION_BUTTON_SET_VEHRENTPRICE = '#quests:action/button/set_VehRentPrice'
     ACTION_AUTO_CLANCREATIONCOST = '#quests:action/auto/clanCreationCost'
     ACTION_FULL_CLANCREATIONCOST = '#quests:action/full/clanCreationCost'
     ACTION_HERO_FULL_CLANCREATIONCOST = '#quests:action/hero/full/clanCreationCost'
@@ -1565,12 +1575,6 @@ class QUESTS(object):
      ACTION_SHORT_MUL_VEHRENTPRICE_ONE,
      ACTION_FULL_MUL_VEHRENTPRICE,
      ACTION_BUTTON_MUL_VEHRENTPRICE,
-     ACTION_AUTO_SET_VEHRENTPRICE,
-     ACTION_FULL_SET_VEHRENTPRICE,
-     ACTION_SHORT_SET_VEHRENTPRICE_MORE,
-     ACTION_SHORT_SET_VEHRENTPRICE_TWO,
-     ACTION_SHORT_SET_VEHRENTPRICE_ONE,
-     ACTION_BUTTON_SET_VEHRENTPRICE,
      ACTION_AUTO_CLANCREATIONCOST,
      ACTION_FULL_CLANCREATIONCOST,
      ACTION_HERO_FULL_CLANCREATIONCOST,
@@ -1701,27 +1705,6 @@ class QUESTS(object):
      DETAILS_DOSSIER_RANDOM_DAMAGEASSISTEDRADIO,
      DETAILS_DOSSIER_RANDOM_SHOTS,
      DETAILS_DOSSIER_RANDOM_EXPLOSIONHITSRECEIVED,
-     DETAILS_DOSSIER_COMPANY_XP,
-     DETAILS_DOSSIER_COMPANY_BATTLESCOUNT,
-     DETAILS_DOSSIER_COMPANY_WINS,
-     DETAILS_DOSSIER_COMPANY_LOSSES,
-     DETAILS_DOSSIER_COMPANY_SURVIVEDBATTLES,
-     DETAILS_DOSSIER_COMPANY_FRAGS,
-     DETAILS_DOSSIER_COMPANY_DIRECTHITS,
-     DETAILS_DOSSIER_COMPANY_SPOTTED,
-     DETAILS_DOSSIER_COMPANY_DAMAGEDEALT,
-     DETAILS_DOSSIER_COMPANY_MAXDAMAGE,
-     DETAILS_DOSSIER_COMPANY_DAMAGERECEIVED,
-     DETAILS_DOSSIER_COMPANY_CAPTUREPOINTS,
-     DETAILS_DOSSIER_COMPANY_DROPPEDCAPTUREPOINTS,
-     DETAILS_DOSSIER_COMPANY_PIERCINGS,
-     DETAILS_DOSSIER_COMPANY_NODAMAGEDIRECTHITSRECEIVED,
-     DETAILS_DOSSIER_COMPANY_PIERCINGSRECEIVED,
-     DETAILS_DOSSIER_COMPANY_POTENTIALDAMAGERECEIVED,
-     DETAILS_DOSSIER_COMPANY_DAMAGEBLOCKEDBYARMOR,
-     DETAILS_DOSSIER_COMPANY_ORIGINALXP,
-     DETAILS_DOSSIER_COMPANY_DAMAGEASSISTEDTRACK,
-     DETAILS_DOSSIER_COMPANY_DAMAGEASSISTEDRADIO,
      DETAILS_DOSSIER_CLAN_XP,
      DETAILS_DOSSIER_CLAN_BATTLESCOUNT,
      DETAILS_DOSSIER_CLAN_WINS,

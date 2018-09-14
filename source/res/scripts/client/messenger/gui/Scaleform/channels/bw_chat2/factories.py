@@ -35,8 +35,6 @@ class LobbyControllersFactory(IControllerFactory):
                     controller = lobby_controllers.TrainingChannelController(channel)
                 else:
                     controller = lobby_controllers.UnitChannelController(channel)
-        elif chatType == CHAT_TYPE.CLUB:
-            controller = lobby_controllers.ClubChannelController(channel)
         return controller
 
 

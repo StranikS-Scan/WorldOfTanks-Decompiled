@@ -3,10 +3,8 @@
 import weakref
 from collections import defaultdict
 import MusicControllerWWISE as _MC
-from ClientFortifiedRegion import BUILDING_UPDATE_REASON as _BUR
 from Event import Event
-from constants import FORT_BUILDING_TYPE as FBT, ARENA_PERIOD as _PERIOD
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
+from constants import ARENA_PERIOD as _PERIOD
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -16,7 +14,6 @@ from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController
 from gui.battle_control.battle_constants import WinStatus
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.fortifications.settings import CLIENT_FORT_STATE as _CFS
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiable
 from gui.sounds import filters as snd_filters
 from gui.sounds.sound_constants import SoundFilters, PLAYING_SOUND_CHECK_PERIOD
@@ -317,13 +314,19 @@ class BattleSpaceEnv(SoundEnv, IArenaPeriodController):
 
     def _updateBattleAmbient(self, period):
         if period in (_PERIOD.BATTLE,):
-            SOUND_DEBUG('Change battle music event in the battle period')
-            self._music = SoundEvent(_MC.MUSIC_EVENT_COMBAT)
-            self._onChanged()
+            self._setBattleAmbient()
         elif period in (_PERIOD.AFTERBATTLE,):
-            SOUND_DEBUG('Stop battle ambient sounds in the afterbattle period')
-            self._music = NoMusic()
-            self._onChanged()
+            self._setAfterBattleAmbient()
+
+    def _setBattleAmbient(self):
+        SOUND_DEBUG('Change battle music event in the battle period')
+        self._music = SoundEvent(_MC.MUSIC_EVENT_COMBAT)
+        self._onChanged()
+
+    def _setAfterBattleAmbient(self):
+        SOUND_DEBUG('Stop battle ambient sounds in the afterbattle period')
+        self._music = NoMusic()
+        self._onChanged()
 
 
 class LobbySubViewEnv(SoundEnv):
@@ -361,10 +364,10 @@ class StrongholdEnv(SoundEnv):
 
     def start(self):
         super(StrongholdEnv, self).start()
-        g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE, self.__onError, scope=EVENT_BUS_SCOPE.FORT)
+        g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE, self.__onError, scope=EVENT_BUS_SCOPE.STRONGHOLD)
 
     def stop(self):
-        g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE, self.__onError, scope=EVENT_BUS_SCOPE.FORT)
+        g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE, self.__onError, scope=EVENT_BUS_SCOPE.STRONGHOLD)
         if self._soundsCtrl is not None:
             self._soundsCtrl.system.sendGlobalEvent('fa_music_global_unmute')
         super(StrongholdEnv, self).stop()
@@ -372,54 +375,6 @@ class StrongholdEnv(SoundEnv):
 
     def __onError(self, event):
         self.getAmbientEvent().stop()
-
-
-class FortEnv(SoundEnv, FortViewHelper):
-    """This environment plays fort specific ambient and changes playing
-    parameters on runtime according to the fortification events.
-    """
-
-    def __init__(self, soundsCtrl):
-        self.filter = weakref.proxy(snd_filters.get(SoundFilters.FORT_FILTER))
-        super(FortEnv, self).__init__(soundsCtrl, 'fort', ambient=SoundEvent(_MC.AMBIENT_EVENT_NONE, {self.filter.getDefencePeriodField(): 0,
-         self.filter.getBuildNumberField(): 0,
-         self.filter.getTransportModeField(): 0}), filters=(SoundFilters.FORT_FILTER, SoundFilters.FILTERED_HANGAR))
-
-    def start(self):
-        super(FortEnv, self).start()
-        g_eventBus.addListener(events.FortEvent.IS_IN_TRANSPORTING_MODE, self.__onTransportingModeChanged, scope=EVENT_BUS_SCOPE.FORT)
-        self.startFortListening()
-
-    def stop(self):
-        g_eventBus.removeListener(events.FortEvent.IS_IN_TRANSPORTING_MODE, self.__onTransportingModeChanged, scope=EVENT_BUS_SCOPE.FORT)
-        self.stopFortListening()
-        if self._soundsCtrl is not None:
-            self._soundsCtrl.system.sendGlobalEvent('fa_music_global_unmute')
-        super(FortEnv, self).stop()
-        return
-
-    def onClientStateChanged(self, state):
-        if state.getStateID() in (_CFS.WIZARD, _CFS.HAS_FORT):
-            self._updateBuildsNumber()
-
-    def onBuildingChanged(self, buildingTypeID, reason, ctx=None):
-        if reason in (_BUR.UPDATED, _BUR.COMPLETED, _BUR.DELETED):
-            self._updateBuildsNumber()
-
-    def onDefenceHourStateChanged(self):
-        fort = self.fortCtrl.getFort()
-        if fort is not None:
-            self._setAmbientParam(self.filter.getDefencePeriodField(), fort.isOnDefenceHour())
-        return
-
-    def _updateBuildsNumber(self):
-        fort = self.fortCtrl.getFort()
-        if fort is not None:
-            self._setAmbientParam(self.filter.getBuildNumberField(), len(fort.getBuildingsCompleted(FBT.MILITARY_BASE)))
-        return
-
-    def __onTransportingModeChanged(self, event):
-        self._setAmbientParam(self.filter.getTransportModeField(), event.ctx.get('isInTransportingMode', False))
 
 
 class BattleResultsEnv(SoundEnv):
@@ -529,6 +484,14 @@ class GuiAmbientsCtrl(object):
             _MC.g_musicController.stop()
         return
 
+    def setEnvForSpace(self, spaceID, newEnv):
+        if spaceID not in self._spaces:
+            SOUND_DEBUG('Wrong spaceID - ', spaceID)
+            return None
+        else:
+            oldEnv, self._spaces[spaceID] = self._spaces[spaceID], newEnv
+            return oldEnv
+
     @sf_lobby
     def app(self):
         return None
@@ -591,7 +554,7 @@ class GuiAmbientsCtrl(object):
         delayed for a significant amount of time.
         """
         SOUND_DEBUG('Leaving GUI space', spaceID, spaceID in self._spaces)
-        if self.app is not None and spaceID in self._spaces:
+        if self.app is not None and self.app.containerManager is not None and spaceID in self._spaces:
             customViews = []
             for vt in (ViewTypes.TOP_WINDOW, ViewTypes.WINDOW, ViewTypes.LOBBY_SUB):
                 container = self.app.containerManager.getContainer(vt)

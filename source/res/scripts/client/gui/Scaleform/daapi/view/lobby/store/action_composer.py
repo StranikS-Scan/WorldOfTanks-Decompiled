@@ -137,6 +137,25 @@ class EquipmentActionsCollection(SimpleMixCollection):
     _localizationKey = 'equipment'
 
 
+class PremiumActionsCollection(SimpleMixCollection):
+    _localizationKey = 'premiumPacket'
+    _groupMarkers = ('1Cost', '3Cost', '7Cost', '30Cost', '180Cost', '360Cost')
+
+    def compose(self):
+        """
+        Logic of composition is boiled down to following:
+         - find better action in each group (currently it's different currencies) and show them;
+         - if better actions has same amount of discount and finish date - join them and show as one;
+         - if we have action with worse discount, but later date - don't show it now, it'll be displayed when
+           current action finishes;
+        """
+        actionsGroups = self._separateActions()
+        if len(self._actions) == 1 or len(actionsGroups) == 1:
+            return [self._findBetter(self._actions)]
+        else:
+            return map(self._findBetter, actionsGroups.values())
+
+
 class CompositionRule(object):
     """
     This class family allows to specify WHICH ActionInfo objects can be compiled together in one display card.
@@ -201,6 +220,11 @@ class EquipmentRule(CompositionRule):
     _applicableParamsNames = ('equipment/creditsPriceMultiplier', 'equipment/goldPriceMultiplier')
 
 
+class PremiumRule(CompositionRule):
+    collectionClass = PremiumActionsCollection
+    _applicableParamsNames = ('premiumPacket1Cost', 'premiumPacket3Cost', 'premiumPacket7Cost', 'premiumPacket30Cost', 'premiumPacket180Cost', 'premiumPacket360Cost')
+
+
 class ActionComposer(object):
     __compositionRules = (ChangePassportRule,
      CamouflagesRule,
@@ -209,7 +233,8 @@ class ActionComposer(object):
      TankmenRule,
      DropSkillsRule,
      ShellsRule,
-     EquipmentRule)
+     EquipmentRule,
+     PremiumRule)
 
     def __init__(self):
         self.__collections = {}

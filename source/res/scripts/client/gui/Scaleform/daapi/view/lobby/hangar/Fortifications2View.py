@@ -10,7 +10,7 @@ from gui.sounds.ambients import StrongholdEnv
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.Fortifications2ViewMeta import Fortifications2ViewMeta
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.strongholds import createStrongholdsWebHandlers
+from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
 from skeletons.gui.game_control import IBrowserController
 
 class Fortifications2View(LobbySubView, Fortifications2ViewMeta):
@@ -62,11 +62,11 @@ class Fortifications2View(LobbySubView, Fortifications2ViewMeta):
 
     def _populate(self):
         super(Fortifications2View, self)._populate()
-        self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_ACTIVATED), scope=EVENT_BUS_SCOPE.FORT)
+        self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_ACTIVATED), scope=EVENT_BUS_SCOPE.STRONGHOLD)
 
     def _dispose(self):
         super(Fortifications2View, self)._dispose()
-        self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_DEACTIVATED), scope=EVENT_BUS_SCOPE.FORT)
+        self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_DEACTIVATED), scope=EVENT_BUS_SCOPE.STRONGHOLD)
 
     def __close(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -78,7 +78,7 @@ class Fortifications2View(LobbySubView, Fortifications2ViewMeta):
         return
 
     def __onError(self):
-        self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE), scope=EVENT_BUS_SCOPE.FORT)
+        self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE), scope=EVENT_BUS_SCOPE.STRONGHOLD)
 
     def __showBrowser(self):
         BigWorld.callback(0.01, self.as_loadBrowserS)

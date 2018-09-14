@@ -19,17 +19,32 @@ class IngameMenuMeta(AbstractWindowView):
     def onCounterNeedUpdate(self):
         self._printOverrideError('onCounterNeedUpdate')
 
+    def bootcampClick(self):
+        self._printOverrideError('bootcampClick')
+
     def as_setServerSettingS(self, serverName, tooltipFullData, serverState):
         return self.flashObject.as_setServerSetting(serverName, tooltipFullData, serverState) if self._isDAAPIInited() else None
 
     def as_setServerStatsS(self, stats, tooltipType):
         return self.flashObject.as_setServerStats(stats, tooltipType) if self._isDAAPIInited() else None
 
-    def as_setSettingsBtnCounterS(self, value):
-        return self.flashObject.as_setSettingsBtnCounter(value) if self._isDAAPIInited() else None
+    def as_setCounterS(self, counters):
+        """
+        :param counters: Represented by Vector.<CountersVo> (AS)
+        """
+        return self.flashObject.as_setCounter(counters) if self._isDAAPIInited() else None
 
-    def as_removeSettingsBtnCounterS(self):
-        return self.flashObject.as_removeSettingsBtnCounter() if self._isDAAPIInited() else None
+    def as_removeCounterS(self, counters):
+        """
+        :param counters: Represented by Vector.<String> (AS)
+        """
+        return self.flashObject.as_removeCounter(counters) if self._isDAAPIInited() else None
 
-    def as_setMenuButtonsLabelsS(self, helpLabel, settingsLabel, cancelLabel, quitLabel):
-        return self.flashObject.as_setMenuButtonsLabels(helpLabel, settingsLabel, cancelLabel, quitLabel) if self._isDAAPIInited() else None
+    def as_setMenuButtonsLabelsS(self, helpLabel, settingsLabel, cancelLabel, quitLabel, bootcampLabel, bootcampIcon):
+        return self.flashObject.as_setMenuButtonsLabels(helpLabel, settingsLabel, cancelLabel, quitLabel, bootcampLabel, bootcampIcon) if self._isDAAPIInited() else None
+
+    def as_showQuitButtonS(self, value):
+        return self.flashObject.as_showQuitButton(value) if self._isDAAPIInited() else None
+
+    def as_showBootcampButtonS(self, value):
+        return self.flashObject.as_showBootcampButton(value) if self._isDAAPIInited() else None

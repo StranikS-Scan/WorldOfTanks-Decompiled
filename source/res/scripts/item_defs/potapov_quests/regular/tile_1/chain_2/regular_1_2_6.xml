@@ -8,7 +8,7 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <classes>	heavyTank	</classes>
+              <classes>	heavyTank mediumTank	</classes>
               <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
           </and>
@@ -31,7 +31,7 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <classes>	heavyTank	</classes>
+              <classes>	heavyTank mediumTank	</classes>
               <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
             <isAlive></isAlive>

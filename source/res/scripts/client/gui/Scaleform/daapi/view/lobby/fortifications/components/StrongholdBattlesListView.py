@@ -12,7 +12,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyListView import BaseRallyListView
-from gui.Scaleform.daapi.view.lobby.strongholds import createStrongholdsWebHandlers
+from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 
 class StrongholdBattlesListView(BaseRallyListView):
@@ -22,6 +22,7 @@ class StrongholdBattlesListView(BaseRallyListView):
         super(StrongholdBattlesListView, self).__init__()
         self.childBrowsers = []
         self.__browserId = 0
+        self.__browserCreated = False
 
     def addChildBrowserAlias(self, browserAlias):
         self.childBrowsers.append(browserAlias)
@@ -41,6 +42,8 @@ class StrongholdBattlesListView(BaseRallyListView):
                 if browserWindow is not None:
                     browserWindow.destroy()
 
+        if not self.__browserCreated:
+            self.browserCtrl.delBrowser(self.__browserId)
         super(StrongholdBattlesListView, self)._dispose()
         return
 
@@ -48,6 +51,7 @@ class StrongholdBattlesListView(BaseRallyListView):
         super(StrongholdBattlesListView, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VIEW_ALIAS.BROWSER:
             viewPy.init(self.__browserId, createStrongholdsWebHandlers(onBrowserOpen=self.addChildBrowserAlias))
+            self.__browserCreated = True
 
     @process
     def __loadBrowser(self, width, height):

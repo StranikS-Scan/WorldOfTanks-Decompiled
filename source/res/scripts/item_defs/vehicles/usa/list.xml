@@ -49,7 +49,7 @@
     <description>	#usa_vehicles:M4A3E8_Sherman_descr	</description>
     <shortUserString>	#usa_vehicles:M4A3E8_Sherman_short	</shortUserString>
     <price>	930500	</price>
-    <tags>	mediumTank improvedVentilation_class2_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD	</tags>
     <level>	6	</level>
   </A06_M4A3E8_Sherman>
   <A07_T20>
@@ -230,7 +230,7 @@
     <description>	#usa_vehicles:M36_Slagger_descr	</description>
     <shortUserString>	#usa_vehicles:M36_Slagger_short	</shortUserString>
     <price>	884200	</price>
-    <tags>	AT-SPG mediumAT-SPG mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user	</tags>
+    <tags>	AT-SPG mediumAT-SPG mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD	</tags>
     <level>	6	</level>
   </A31_M36_Slagger>
   <A37_M40M43>
@@ -677,7 +677,7 @@
     <shortUserString>	#usa_vehicles:M4A3E8_Sherman_short	</shortUserString>
     <price>	930500	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank improvedVentilation_class2_user secret aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user unrecoverable	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user secret aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user unrecoverable HD	</tags>
     <level>	1	</level>
   </A06_M4A3E8_Sherman_training>
   <A93_T7_Combat_Car>
@@ -941,4 +941,43 @@
     <tags>	mediumTank improvedVentilation_class2_user mediumCaliberTankRammer_user secret HD unrecoverable	</tags>
     <level>	2	</level>
   </A24_T2_med_bot>
+  <A03_M3_Stuart_bootcamp>
+    <id>	162	</id>
+    <userString>	#usa_vehicles:M3_Stuart	</userString>
+    <description>	#usa_vehicles:M3_Stuart_descr	</description>
+    <price>	37500	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank wetCombatPack_class1_user enhancedVertical_springs_user HD secret	</tags>
+    <level>	2	</level>
+  </A03_M3_Stuart_bootcamp>
+  <A22_M5_Stuart_bootcamp>
+    <id>	163	</id>
+    <userString>	#usa_vehicles:M5_Stuart	</userString>
+    <description>	#usa_vehicles:M5_Stuart_descr	</description>
+    <shortUserString>	#usa_vehicles:M5_Stuart_short	</shortUserString>
+    <price>	143000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank wetCombatPack_class1_user enhancedVertical_springs_class2_user HD secret	</tags>
+    <level>	2	</level>
+  </A22_M5_Stuart_bootcamp>
+  <A25_M2_med_bootcamp>
+    <id>	164	</id>
+    <userString>	#usa_vehicles:M2_med	</userString>
+    <description>	#usa_vehicles:M2_med_descr	</description>
+    <shortUserString>	#usa_vehicles:M2_med_short	</shortUserString>
+    <price>	31000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD secret	</tags>
+    <level>	2	</level>
+  </A25_M2_med_bootcamp>
+  <A36_Sherman_Jumbo_bootcamp>
+    <id>	165	</id>
+    <userString>	#usa_vehicles:Sherman_Jumbo	</userString>
+    <description>	#usa_vehicles:Sherman_Jumbo_descr	</description>
+    <shortUserString>	#usa_vehicles:Sherman_Jumbo_short	</shortUserString>
+    <price>	975000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD secret	</tags>
+    <level>	2	</level>
+  </A36_Sherman_Jumbo_bootcamp>
 </list.xml>

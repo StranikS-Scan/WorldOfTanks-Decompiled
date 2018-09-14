@@ -5,6 +5,7 @@ from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTL
 from gui.prb_control.settings import makePrebattleSettings, VEHICLE_MAX_LEVEL
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 
 def isInRandomQueue():
@@ -13,6 +14,10 @@ def isInRandomQueue():
 
 def isInTutorialQueue():
     return getattr(BigWorld.player(), 'isInTutorialQueue', False)
+
+
+def isInBootcampQueue():
+    return getattr(BigWorld.player(), 'isInBootcampQueue', False)
 
 
 def isInEventBattlesQueue():
@@ -35,6 +40,11 @@ def isInRankedQueue():
     return getattr(BigWorld.player(), 'isInRankedQueue', False)
 
 
+@dependency.replace_none_kwargs(bootcampController=IBootcampController)
+def isInBootcampAccount(bootcampController=None):
+    return bootcampController is not None and bootcampController.isInBootcampAccount()
+
+
 def getQueueType():
     queueType = 0
     if isInRandomQueue():
@@ -47,6 +57,8 @@ def getQueueType():
         queueType = QUEUE_TYPE.FALLOUT_MULTITEAM
     elif isInTutorialQueue():
         queueType = QUEUE_TYPE.TUTORIAL
+    elif isInBootcampQueue():
+        queueType = QUEUE_TYPE.BOOTCAMP
     elif isInSandboxQueue():
         queueType = QUEUE_TYPE.SANDBOX
     return queueType
@@ -129,7 +141,6 @@ def getPrebattleTypeName(prbType=None):
 
 _ARENA_GUI_TYPE_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: ARENA_GUI_TYPE.RANDOM,
  PREBATTLE_TYPE.TRAINING: ARENA_GUI_TYPE.TRAINING,
- PREBATTLE_TYPE.COMPANY: ARENA_GUI_TYPE.COMPANY,
  PREBATTLE_TYPE.EVENT: ARENA_GUI_TYPE.EVENT_BATTLES}
 _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
  QUEUE_TYPE.EVENT_BATTLES: ARENA_GUI_TYPE.EVENT_BATTLES,
@@ -225,10 +236,6 @@ def areSpecBattlesHidden():
     return not getattr(BigWorld.player(), 'prebattleAutoInvites', None)
 
 
-def isCompany(settings=None):
-    return getPrebattleType(settings=settings) == PREBATTLE_TYPE.COMPANY
-
-
 def isTraining(settings=None):
     return getPrebattleType(settings=settings) == PREBATTLE_TYPE.TRAINING
 
@@ -250,10 +257,6 @@ def getUnitMgrID():
     return getattr(getClientUnitMgr(), 'id', None)
 
 
-def getUnitIdx():
-    return getattr(getClientUnitMgr(), 'unitIdx', 0)
-
-
 def getBattleID():
     return getattr(getClientUnitMgr(), 'battleID', 0)
 
@@ -262,7 +265,7 @@ def getClientUnitBrowser():
     return getattr(BigWorld.player(), 'unitBrowser', None)
 
 
-def getUnit(unitIdx, safe=False):
+def getUnit(safe=False):
     unitMgr = getClientUnitMgr()
     if not unitMgr:
         if not safe:
@@ -271,8 +274,8 @@ def getUnit(unitIdx, safe=False):
     else:
         unit = None
         try:
-            unit = unitMgr.units[unitIdx]
-        except KeyError:
+            unit = unitMgr.unit
+        except AttributeError:
             if not safe:
                 raise ValueError('Unit not found')
 
@@ -280,7 +283,7 @@ def getUnit(unitIdx, safe=False):
 
 
 def hasModalEntity():
-    return getClientPrebattle() or getUnitIdx()
+    return getClientPrebattle() or getUnit()
 
 
 def getTrainingBattleRoundLimits(accountAttrs):

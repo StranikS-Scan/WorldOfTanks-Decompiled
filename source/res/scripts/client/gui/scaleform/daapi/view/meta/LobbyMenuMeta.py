@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/LobbyMenuMeta.py
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.framework.entities.View import View
 
-class LobbyMenuMeta(AbstractWindowView):
+class LobbyMenuMeta(View):
 
     def settingsClick(self):
         self._printOverrideError('settingsClick')
@@ -25,14 +25,35 @@ class LobbyMenuMeta(AbstractWindowView):
     def onCounterNeedUpdate(self):
         self._printOverrideError('onCounterNeedUpdate')
 
+    def bootcampClick(self):
+        self._printOverrideError('bootcampClick')
+
+    def onEscapePress(self):
+        self._printOverrideError('onEscapePress')
+
     def as_setVersionMessageS(self, data):
         """
         :param data: Represented by VersionMessageVO (AS)
         """
         return self.flashObject.as_setVersionMessage(data) if self._isDAAPIInited() else None
 
-    def as_setSettingsBtnCounterS(self, value):
-        return self.flashObject.as_setSettingsBtnCounter(value) if self._isDAAPIInited() else None
+    def as_setCounterS(self, counters):
+        """
+        :param counters: Represented by Vector.<CountersVo> (AS)
+        """
+        return self.flashObject.as_setCounter(counters) if self._isDAAPIInited() else None
 
-    def as_removeSettingsBtnCounterS(self):
-        return self.flashObject.as_removeSettingsBtnCounter() if self._isDAAPIInited() else None
+    def as_removeCounterS(self, counters):
+        """
+        :param counters: Represented by Vector.<String> (AS)
+        """
+        return self.flashObject.as_removeCounter(counters) if self._isDAAPIInited() else None
+
+    def as_setBootcampButtonLabelS(self, label, icon):
+        return self.flashObject.as_setBootcampButtonLabel(label, icon) if self._isDAAPIInited() else None
+
+    def as_showBootcampButtonS(self, value):
+        return self.flashObject.as_showBootcampButton(value) if self._isDAAPIInited() else None
+
+    def as_setMenuStateS(self, state):
+        return self.flashObject.as_setMenuState(state) if self._isDAAPIInited() else None

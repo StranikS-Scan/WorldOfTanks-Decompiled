@@ -166,6 +166,7 @@ class MusicController(object):
         self.__sndEventMusic = None
         self.__soundEvents = {MUSIC_EVENT_NONE: None,
          AMBIENT_EVENT_NONE: None}
+        self._skipArenaChanges = False
         self.init()
         return
 
@@ -265,6 +266,8 @@ class MusicController(object):
         return soundEvent
 
     def __onArenaStateChanged(self, *args):
+        if self._skipArenaChanges:
+            return
         arena = BigWorld.player().arena
         period = arena.period
         if (period == ARENA_PERIOD.PREBATTLE or period == ARENA_PERIOD.BATTLE) and self.__isOnArena:
@@ -462,3 +465,11 @@ class MusicController(object):
             self.__overriddenEvents[eventId][index] = None
 
         return
+
+    @property
+    def skipArenaChanges(self):
+        return self._skipArenaChanges
+
+    @skipArenaChanges.setter
+    def skipArenaChanges(self, skipArenaChanges):
+        self._skipArenaChanges = skipArenaChanges

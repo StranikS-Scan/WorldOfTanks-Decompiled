@@ -8,7 +8,7 @@ import BigWorld
 import CommandMapping
 import Settings
 import Event
-from constants import FORT_BUILDING_TYPE as _FBT, VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
+from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -45,8 +45,6 @@ NEW_SETTINGS_COUNTER = 'newSettingsCounter'
 PROFILE_TECHNIQUE = 'profileTechnique'
 TRAJECTORY_VIEW_HINT_COUNTER = 'trajectoryViewHintCounter'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
-LAST_CLUB_OPENED_FOR_APPS = 'lastClubOpenedForApps'
-SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -125,6 +123,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'japan': False,
                                    'czech': False,
                                    'sweden': False,
+                                   'poland': False,
                                    'lightTank': False,
                                    'mediumTank': False,
                                    'heavyTank': False,
@@ -157,6 +156,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'japan': False,
                                           'czech': False,
                                           'sweden': False,
+                                          'poland': False,
                                           'lightTank': False,
                                           'mediumTank': False,
                                           'heavyTank': False,
@@ -190,6 +190,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                            'japan': False,
                                            'czech': False,
                                            'sweden': False,
+                                           'poland': False,
                                            'lightTank': False,
                                            'mediumTank': False,
                                            'heavyTank': False,
@@ -256,8 +257,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         'victoryAward': -1,
                         'battlesCountAward': -1,
                         'pveBattlesCountAward': -1},
-               LAST_CLUB_OPENED_FOR_APPS: 0,
-               SHOW_INVITE_COMMAND_BTN_ANIMATION: True,
                PROFILE_TECHNIQUE: {'selectedColumn': 4,
                                    'selectedColumnSorting': 'descending',
                                    'isInHangarSelected': False},
@@ -266,35 +265,23 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': []},
-                'fortSettings': {'clanDBID': 0,
-                                 'battleConsumesIntroShown': False,
-                                 'visitedBuildings': {_FBT.MILITARY_BASE,
-                                                      _FBT.FINANCIAL_DEPT,
-                                                      _FBT.TANKODROME,
-                                                      _FBT.TRAINING_DEPT,
-                                                      _FBT.MILITARY_ACADEMY,
-                                                      _FBT.TRANSPORT_DEPT,
-                                                      _FBT.INTENDANT_SERVICE,
-                                                      _FBT.TROPHY_BRIGADE,
-                                                      _FBT.OFFICE,
-                                                      _FBT.MILITARY_SHOP}},
                 'vehicleSellDialog': {'isOpened': False},
                 KNOWN_SELECTOR_BATTLES: set(),
                 'tankmanDropSkillIdx': 0,
                 'cursor': False,
-                'arcade': {'mixing': {'alpha': 90,
-                                      'type': 0},
-                           'gunTag': {'alpha': 90,
-                                      'type': 0},
-                           'centralTag': {'alpha': 90,
-                                          'type': 0},
-                           'net': {'alpha': 90,
+                'arcade': {'mixing': {'alpha': 100,
+                                      'type': 3},
+                           'gunTag': {'alpha': 100,
+                                      'type': 9},
+                           'centralTag': {'alpha': 100,
+                                          'type': 8},
+                           'net': {'alpha': 100,
                                    'type': 0},
-                           'reloader': {'alpha': 90,
+                           'reloader': {'alpha': 100,
                                         'type': 0},
-                           'condition': {'alpha': 90,
+                           'condition': {'alpha': 100,
                                          'type': 0},
-                           'cassette': {'alpha': 90,
+                           'cassette': {'alpha': 100,
                                         'type': 0},
                            'reloaderTimer': {'alpha': 100,
                                              'type': 0},
@@ -368,7 +355,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'useServerAim': False,
                 'showVehiclesCounter': True,
                 'minimapAlpha': 0,
-                'minimapSize': 0,
+                'minimapSize': 1,
                 'minimapRespawnSize': 0,
                 'minimapViewRange': True,
                 'minimapMaxViewRange': True,
@@ -421,7 +408,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
                 'siegeModeHintCounter': 10,
-                NEW_SETTINGS_COUNTER: {'SoundSettingsDropDown': True},
+                NEW_SETTINGS_COUNTER: {'FeedbackSettings': {'feedbackDamageLog': {'damageLogAssistStun': True},
+                                                            'feedbackBattleEvents': {'battleEventsEnemyAssistStun': True}}},
                 TRAJECTORY_VIEW_HINT_COUNTER: 10,
                 SHOW_OPT_DEVICE_HINT: True,
                 SHOW_CRYSTAL_HEADER_BAND: True}}
@@ -758,6 +746,12 @@ class AccountSettings(object):
                                 settingsSection.write('players_panel', _pack(panelSettings))
 
             if currVersion < 28:
+                for key, section in _filterAccountSection(ads):
+                    filters = AccountSettings.__readSection(section, KEY_FILTERS)
+                    filters.deleteSection('lastClubOpenedForApps')
+                    filters.deleteSection('showInviteCommandBtnAnimation')
+
+            if currVersion < 29:
                 getSection = AccountSettings.__readSection
                 cmSection = getSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
                 cmdItems = cmSection.items()[:]

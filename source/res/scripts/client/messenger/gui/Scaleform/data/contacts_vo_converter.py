@@ -37,13 +37,6 @@ def makeClanFullName(clanAbbrev):
     return formatted
 
 
-def makeClubFullName(clubName):
-    formatted = ''
-    if clubName:
-        formatted = '{0} {1}'.format(i18n.makeString(I18N_MESSENGER.DIALOGS_CONTACTS_TREE_CLUB), clubName)
-    return formatted
-
-
 def makeContactStatusDescription(isOnline, tags, clientInfo=None):
     name, description = ('', '')
     if isOnline:
@@ -137,8 +130,6 @@ class ContactConverter(object):
         elif {USER_TAG.FRIEND, USER_TAG.SUB_TO}.issubset(tags):
             colors = cls._getColors('friend')
         elif {USER_TAG.CLAN_MEMBER, USER_TAG.OTHER_CLAN_MEMBER}.issubset(tags):
-            colors = cls._getColors('clanMember')
-        elif USER_TAG.CLUB_MEMBER in tags:
             colors = cls._getColors('clanMember')
         else:
             colors = cls._getColors('others')
@@ -489,21 +480,6 @@ class ClanConverter(GroupConverter):
 
     def setClanAbbrev(self, clanAbbrev):
         self._name = makeClanFullName(clanAbbrev)
-
-
-class ClubConverter(GroupConverter):
-
-    def __init__(self, parentCategory, clubName='', condition=None):
-        super(ClubConverter, self).__init__(makeClubFullName(clubName), parentCategory, condition)
-
-    def isEmpty(self):
-        return not self._name or self._condition.empty()
-
-    def getGuiID(self):
-        return CONTACTS_ALIASES.CLUB_GROUP_RESERVED_ID
-
-    def setClubName(self, clubName):
-        self._name = makeClubFullName(clubName)
 
 
 class IgnoredConverter(GroupConverter):

@@ -95,7 +95,6 @@ class OpenPromoBrowser(OpenInternalBrowser):
     __slots__ = ()
     promoCtrl = dependency.descriptor(IPromoController)
 
-    @process
     def _doInvoke(self, title):
         self.promoCtrl.showPromo(self._url, title)
 

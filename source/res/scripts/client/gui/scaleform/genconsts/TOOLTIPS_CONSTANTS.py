@@ -211,3 +211,4 @@ class TOOLTIPS_CONSTANTS(object):
     TANKMAN_SKILL_EXTENDED_UI = 'ToolTipInblocksDefaultUI'
     MISSIONS_TOKEN = 'missionsToken'
     MISSIONS_TOKEN_UI = 'ToolTipInblocksDefaultUI'
+    BOOTCAMP_AWARD_MEDAL = 'BSTooltipMedalContainer'

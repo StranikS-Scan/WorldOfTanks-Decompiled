@@ -38,10 +38,14 @@ class ServiceChannelManager(ChatActionsListener):
         BigWorld.player().requestLastSysMessages()
 
     def onReceiveSysMessage(self, chatAction):
+        if self.isBootcampRunning():
+            return
         message = ServiceChannelMessage.fromChatAction(chatAction)
         self.__addServerMessage(message)
 
     def onReceivePersonalSysMessage(self, chatAction):
+        if self.isBootcampRunning():
+            return
         message = ServiceChannelMessage.fromChatAction(chatAction, personal=True)
         self.__addServerMessage(message)
 
@@ -74,6 +78,8 @@ class ServiceChannelManager(ChatActionsListener):
 
     def handleUnreadMessages(self):
         if not self.__unreadMessagesCount:
+            return
+        if self.isBootcampRunning():
             return
         unread = list(self.__messages)[-self.__unreadMessagesCount:]
         serviceChannel = g_messengerEvents.serviceChannel
@@ -137,3 +143,10 @@ class ServiceChannelManager(ChatActionsListener):
         elif IS_DEVELOPMENT:
             LOG_WARNING('Formatter not found:', msgType, message)
         return clientID
+
+    def isBootcampRunning(self):
+        from bootcamp.Bootcamp import g_bootcamp
+        if g_bootcamp.isRunning():
+            self.clear()
+            return True
+        return False

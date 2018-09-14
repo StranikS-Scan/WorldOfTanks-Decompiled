@@ -17,6 +17,7 @@ from shared_utils import first
 from skeletons.gui.game_control import IRankedBattlesController
 from gui.shared.formatters.icons import makeImageTag
 FINAL_TAB = 'final'
+_FINAL_CURRENT_TAB = 'final_current'
 
 class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
     __background_alpha__ = 1
@@ -83,14 +84,17 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
 
     def __getHeaderTab(self, cycleID, status, points, cycle=None):
         result = ''
-        if status == CYCLE_STATUS.CURRENT:
-            result = RANKED_BATTLES.RANKEDBATTLEHEADER_POINTS_CURRENT
+        titleFormatter = text_styles.main
+        if status == CYCLE_STATUS.CURRENT or status == _FINAL_CURRENT_TAB:
+            result = text_styles.stats(RANKED_BATTLES.RANKEDBATTLEHEADER_POINTS_CURRENT)
+            titleFormatter = text_styles.neutral
         elif not status == CYCLE_STATUS.FUTURE:
-            result = _ms(RANKED_BATTLES.RANKEDBATTLEHEADER_POINTS + status, points=points)
+            result = text_styles.main(_ms(RANKED_BATTLES.RANKEDBATTLEHEADER_POINTS + status, points=points))
         if status == FINAL_TAB:
-            title = RANKED_BATTLES.RANKEDBATTLEHEADER_FINAL
+            titleStr = RANKED_BATTLES.RANKEDBATTLEHEADER_FINAL
         else:
-            title = _ms(RANKED_BATTLES.RANKEDBATTLEHEADER_CYCLE, cycle=cycle.ordinalNumber)
+            titleStr = _ms(RANKED_BATTLES.RANKEDBATTLEHEADER_CYCLE, cycle=cycle.ordinalNumber)
+        title = titleFormatter(titleStr)
         return {'title': title,
          'id': str(cycleID),
          'tooltip': self.__makeHeaderTooltip(status, cycle, points),
@@ -286,10 +290,10 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
         bonusesDict = {}
         for quest in quests:
             for bonus in quest.getBonuses():
-                for awardVO in bonus.getRankedAwardVOs(iconSize='big', withCounts=True):
-                    imgSource = awardVO['imgSource']
-                    if imgSource in bonusesDict:
-                        bonusesDict[imgSource]['count'] += awardVO['count']
-                    bonusesDict[imgSource] = awardVO
+                for awardVO in bonus.getRankedAwardVOs(iconSize='big', withCounts=True, withKey=True):
+                    itemKey = awardVO.pop('itemKey')
+                    if itemKey in bonusesDict:
+                        bonusesDict[itemKey]['count'] += awardVO['count']
+                    bonusesDict[itemKey] = awardVO
 
         return bonusesDict

@@ -23,7 +23,10 @@ class SandboxStorage(LocalStorage):
         self._isSelected = False
 
     def swap(self):
-        if AccountSettings.getSettings(DEFAULT_QUEUE) == QUEUE_TYPE.SANDBOX:
+        defaultQueue = AccountSettings.getSettings(DEFAULT_QUEUE)
+        if self.lobbyContext.getServerSettings().isBootcampEnabled():
+            defaultQueue = QUEUE_TYPE.RANDOMS
+        if defaultQueue == QUEUE_TYPE.SANDBOX:
             isSelected = True
             dossier = self.itemsCache.items.getAccountDossier()
             criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(3, 10)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE

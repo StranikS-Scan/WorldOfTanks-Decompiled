@@ -164,10 +164,6 @@ class IWalletController(IGameController):
     def useFreeXP(self):
         raise NotImplementedError
 
-    @property
-    def useCrystal(self):
-        raise NotImplementedError
-
 
 class INotifyController(IGameController):
     pass
@@ -306,7 +302,7 @@ class IPromoController(IGameController):
     def isPatchChanged(self):
         raise NotImplementedError
 
-    def showPromo(self, url, title):
+    def showPromo(self, url, title, handlers=None):
         raise NotImplementedError
 
 
@@ -539,6 +535,7 @@ class IQuestsController(IGameController):
 
 class IRankedBattlesController(IGameController):
     onUpdated = None
+    onPrimeTimeStatusUpdated = None
 
     def isEnabled(self):
         raise NotImplementedError
@@ -651,6 +648,9 @@ class IRankedBattlesController(IGameController):
     def setAwardWindowShown(rankID):
         raise NotImplementedError
 
+    def wasAwardWindowShown(self):
+        raise NotImplementedError
+
     def getRankChangeStatus(self, changeInfo):
         raise NotImplementedError
 
@@ -674,3 +674,43 @@ class IRankedBattlesController(IGameController):
         returns reward for max rank achieved in current season for given cycle ID
         """
         raise NotImplemented
+
+
+class IBootcampController(IGameController):
+
+    def isInBootcamp(self):
+        raise NotImplementedError
+
+    def startBootcamp(self, inBattle):
+        raise NotImplementedError
+
+    def stopBootcamp(self, inBattle):
+        raise NotImplementedError
+
+    @property
+    def replayCtrl(self):
+        raise NotImplementedError
+
+    def hasFinishedBootcampBefore(self):
+        raise NotImplementedError
+
+    def runCount(self):
+        raise NotImplementedError
+
+    def needAwarding(self):
+        raise NotImplementedError
+
+    def setAutomaticStart(self, enable):
+        raise NotImplementedError
+
+    def isInBootcampAccount(self):
+        raise NotImplementedError
+
+    def showActionWaitWindow(self):
+        raise NotImplementedError
+
+    def hideActionWaitWindow(self):
+        raise NotImplementedError
+
+    def getLessonNum(self):
+        raise NotImplementedError

@@ -74,6 +74,7 @@ BONUS_ICONS = {'16x16': {'main_skill': '../maps/icons/library/qualifiers/16x16/{
  '42x42': {'main_skill': '../maps/icons/library/qualifiers/42x42/{0}.png',
            'camouflage': '../maps/icons/library/qualifiers/42x42/camouflage.png'}}
 EMBLEM_IGR_GROUP_NAME = 'group5'
+OTHER_GROUP_NAME = 'group3'
 
 def getBonusIcon16x16(qualifierType):
     if qualifierType == QUALIFIER_TYPE.CAMOUFLAGE:

@@ -105,6 +105,15 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__zoom = self.__cfg['zoom']
         else:
             self.__cfg['zoom'] = self.__zoom = self.__cfg['zooms'][0]
+        from constants import IS_BOOTCAMP_ENABLED
+        if IS_BOOTCAMP_ENABLED:
+            from bootcamp.Bootcamp import g_bootcamp
+            if not g_bootcamp.isSniperModeUsed():
+                zooms = self.__cfg['zooms']
+                if not self.__cfg['increasedZoom']:
+                    zooms = zooms[:3]
+                zoomIndex = -1 if not saveZoom else 1
+                self.__zoom = zooms[zoomIndex]
         self.__applyZoom(self.__zoom)
         self.__setupCamera(targetPos)
         vehicle = player.getVehicleAttached()

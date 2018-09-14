@@ -14,7 +14,7 @@ from messenger.gui.interfaces import IChannelController, IBattleChannelView
 class LobbyLayout(IChannelController):
 
     def __init__(self, channel, mBuilder=None):
-        self._view = None
+        self._views = []
         self._mBuilder = mBuilder or LobbyMessageBuilder()
         self._membersDP = None
         self._channel = channel
@@ -38,20 +38,16 @@ class LobbyLayout(IChannelController):
         self._activated = False
 
     def setView(self, view):
-        if self._view:
-            LOG_ERROR('View is defined', self._view)
-        elif isinstance(view, ChannelComponent):
-            self._view = view
-            self._view.onModuleDispose += self._onModuleDispose
-            self._view.setController(self)
-        else:
-            LOG_ERROR('View must be extends ChannelComponent', view)
+        self._views.append(view)
+        view.onModuleDispose += self._onModuleDispose
+        view.setController(self)
 
     def removeView(self):
-        if self._view is not None:
-            self._view.removeController()
-            self._view.onModuleDispose -= self._onModuleDispose
-            self._view = None
+        for view in self._views:
+            view.removeController()
+            view.onModuleDispose -= self._onModuleDispose
+            view = None
+
         return
 
     def clear(self):
@@ -102,15 +98,19 @@ class LobbyLayout(IChannelController):
     def addMessage(self, message, doFormatting=True):
         text = self._format(message, doFormatting)
         if self._activated:
-            if self._view:
-                self._view.as_addMessageS(text)
+            for view in self._views:
+                view.as_addMessageS(text)
+
         self._channel.addMessage(text)
         return self._activated
 
     def addCommand(self, command):
         text = command.getCommandText()
-        if self._activated and self._view:
-            self._view.as_addMessageS(text)
+        if self._activated:
+            for view in self._views:
+                view.addCommand(command)
+                view.as_addMessageS(text)
+
         return text
 
     def fireInitEvent(self):
@@ -123,11 +123,10 @@ class LobbyLayout(IChannelController):
             self._fireDestroyEvent()
             self._isNotifyDestroy = True
 
-    def _onModuleDispose(self, _):
-        self._view.removeController()
-        self._view.onModuleDispose -= self._onModuleDispose
-        self._view = None
-        return
+    def _onModuleDispose(self, view):
+        view.removeController()
+        view.onModuleDispose -= self._onModuleDispose
+        self._views.remove(view)
 
     def _refreshMembersDP(self):
         if self._membersDP:

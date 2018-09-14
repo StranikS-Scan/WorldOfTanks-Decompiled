@@ -229,7 +229,12 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, IGlobalListener, No
                         totalProgress = (currentCompletedStep + 1) * oneStepWeight
                     xpForNextStep = nextStepXP - currentCompletedStepXP
                     xpFromPrevStep = currentXP - currentCompletedStepXP
-                    stepProgress = float(xpFromPrevStep) / xpForNextStep if xpFromPrevStep else 0.0
+                    if xpForNextStep <= 0:
+                        stepProgress = 1.0
+                    elif xpFromPrevStep <= 0:
+                        stepProgress = 0.0
+                    else:
+                        stepProgress = float(xpFromPrevStep) / xpForNextStep
                     totalStepProgress = stepProgress * oneStepWeight
                     progress = totalProgress + totalStepProgress
             else:

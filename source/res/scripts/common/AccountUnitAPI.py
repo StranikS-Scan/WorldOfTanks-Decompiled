@@ -165,12 +165,6 @@ class UnitClientAPI(object):
     def setArenaType(self, arenaTypeID):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_ARENA_TYPE, arenaTypeID)
 
-    def setRatedBattle(self, isRatedBattle=True):
-        return self._doUnitCmd(CLIENT_UNIT_CMD.SET_RATED_BATTLE, int(isRatedBattle))
-
-    def changeSortieDivision(self, division):
-        return self._doUnitCmd(CLIENT_UNIT_CMD.CHANGE_SORTIE_DIVISION, division)
-
     def setVehicleList(self, vehicleList):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_VEHICLE_LIST, 0, 0, ','.join(map(str, vehicleList)))
 

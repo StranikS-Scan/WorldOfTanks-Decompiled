@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_constants.py
 from shared_utils import CONST_CONTAINER
-from collections import namedtuple
 VERSION = 'VERSION'
 
 class GRAPHICS(CONST_CONTAINER):
@@ -194,10 +193,10 @@ class DAMAGE_LOG(CONST_CONTAINER):
     TOTAL_DAMAGE = 'damageLogTotalDamage'
     BLOCKED_DAMAGE = 'damageLogBlockedDamage'
     ASSIST_DAMAGE = 'damageLogAssistDamage'
+    ASSIST_STUN = 'damageLogAssistStun'
     SHOW_DETAILS = 'damageLogShowDetails'
     SHOW_EVENT_TYPES = 'damageLogShowEventTypes'
     EVENT_POSITIONS = 'damageLogEventsPosition'
-    ASSIST_STUN = 'damageLogAssistStun'
 
 
 class BATTLE_EVENTS(CONST_CONTAINER):
@@ -218,6 +217,7 @@ class BATTLE_EVENTS(CONST_CONTAINER):
     ENEMY_WORLD_COLLISION = 'battleEventsEnemyWorldCollision'
     RECEIVED_DAMAGE = 'battleEventsReceivedDamage'
     RECEIVED_CRITS = 'battleEventsReceivedCrits'
+    ENEMY_ASSIST_STUN = 'battleEventsEnemyAssistStun'
 
 
 class CONTACTS(CONST_CONTAINER):

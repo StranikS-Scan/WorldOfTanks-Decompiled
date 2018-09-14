@@ -67,4 +67,4 @@ class StrongholdPermissions(UnitPermissions):
         return not self._isLegionary
 
     def canKick(self):
-        return self.isCommander(self._roles) and not self._isLegionary and not self._isFreezed
+        return self.isCommander(self._roles) and not self._isLegionary

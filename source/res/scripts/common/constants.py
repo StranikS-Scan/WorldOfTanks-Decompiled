@@ -18,7 +18,7 @@ else:
     IS_BASEAPP = BigWorld.component in ('base', 'service')
     IS_WEB = False
 
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -39,7 +39,6 @@ elif CURRENT_REALM == 'ASIA':
 elif CURRENT_REALM == 'CN':
     DEFAULT_LANGUAGE = 'cn'
     AUTH_REALM = 'CN'
-    IS_RENTALS_ENABLED = True
 elif CURRENT_REALM == 'KR':
     DEFAULT_LANGUAGE = 'ko'
     AUTH_REALM = 'KR'
@@ -55,6 +54,7 @@ assert sum([IS_CHINA, IS_KOREA, IS_SINGAPORE]) <= 1
 IS_SHOW_SERVER_STATS = not IS_CHINA
 IS_CAT_LOADED = False
 IS_TUTORIAL_ENABLED = True
+IS_BOOTCAMP_ENABLED = True
 LEAKS_DETECTOR_MAX_EXECUTION_TIME = 2.0
 IS_IGR_ENABLED = IS_KOREA or IS_CHINA
 SERVER_TICK_LENGTH = 0.1
@@ -96,21 +96,17 @@ class DOSSIER_TYPE:
     CLAN = 64
 
 
-ARENA_GAMEPLAY_NAMES = ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'fallout', 'fallout2', 'fallout3', 'fallout4', 'fallout5', 'fallout6', 'sandbox')
+ARENA_GAMEPLAY_NAMES = ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'fallout', 'fallout2', 'fallout3', 'fallout4', 'fallout5', 'fallout6', 'sandbox', 'bootcamp')
 ARENA_GAMEPLAY_IDS = dict(((value, index) for index, value in enumerate(ARENA_GAMEPLAY_NAMES)))
 
 class ARENA_GUI_TYPE:
     UNKNOWN = 0
     RANDOM = 1
     TRAINING = 2
-    COMPANY = 3
     TUTORIAL = 4
     CYBERSPORT = 5
     FALLOUT = 6
     EVENT_BATTLES = 7
-    SORTIE = 8
-    FORT_BATTLE = 9
-    RATED_CYBERSPORT = 10
     RATED_SANDBOX = 11
     SANDBOX = 12
     FALLOUT_CLASSIC = 13
@@ -118,24 +114,22 @@ class ARENA_GUI_TYPE:
     SORTIE_2 = 15
     FORT_BATTLE_2 = 16
     RANKED = 17
+    BOOTCAMP = 18
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
-     COMPANY,
      TUTORIAL,
      CYBERSPORT,
      FALLOUT,
      EVENT_BATTLES,
-     SORTIE,
-     FORT_BATTLE,
-     RATED_CYBERSPORT,
      RATED_SANDBOX,
      SANDBOX,
      FALLOUT_CLASSIC,
      FALLOUT_MULTITEAM,
      SORTIE_2,
      FORT_BATTLE_2,
-     RANKED)
+     RANKED,
+     BOOTCAMP)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
 
@@ -144,17 +138,14 @@ class ARENA_GUI_TYPE_LABEL:
     LABELS = {ARENA_GUI_TYPE.UNKNOWN: 'special',
      ARENA_GUI_TYPE.RANDOM: 'random',
      ARENA_GUI_TYPE.TRAINING: 'training',
-     ARENA_GUI_TYPE.COMPANY: 'team',
      ARENA_GUI_TYPE.TUTORIAL: 'tutorial',
      ARENA_GUI_TYPE.CYBERSPORT: 'team7x7',
      ARENA_GUI_TYPE.EVENT_BATTLES: 'event',
-     ARENA_GUI_TYPE.SORTIE: 'fortifications',
-     ARENA_GUI_TYPE.FORT_BATTLE: 'fortifications',
-     ARENA_GUI_TYPE.RATED_CYBERSPORT: 'team7x7',
      ARENA_GUI_TYPE.RATED_SANDBOX: 'ratedsandbox',
      ARENA_GUI_TYPE.SANDBOX: 'sandbox',
      ARENA_GUI_TYPE.FALLOUT_CLASSIC: 'fallout_classic',
      ARENA_GUI_TYPE.FALLOUT_MULTITEAM: 'fallout_multiteam',
+     ARENA_GUI_TYPE.BOOTCAMP: 'bootcamp',
      ARENA_GUI_TYPE.SORTIE_2: 'fortifications',
      ARENA_GUI_TYPE.FORT_BATTLE_2: 'fortifications',
      ARENA_GUI_TYPE.RANKED: 'ranked'}
@@ -164,15 +155,11 @@ class ARENA_BONUS_TYPE:
     UNKNOWN = 0
     REGULAR = 1
     TRAINING = 2
-    COMPANY = 3
     TOURNAMENT = 4
     CLAN = 5
     TUTORIAL = 6
     CYBERSPORT = 7
     EVENT_BATTLES = 9
-    SORTIE = 10
-    FORT_BATTLE = 11
-    RATED_CYBERSPORT = 12
     GLOBAL_MAP = 13
     TOURNAMENT_REGULAR = 14
     TOURNAMENT_CLAN = 15
@@ -183,18 +170,15 @@ class ARENA_BONUS_TYPE:
     SORTIE_2 = 20
     FORT_BATTLE_2 = 21
     RANKED = 22
+    BOOTCAMP = 23
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
-     COMPANY,
      TOURNAMENT,
      CLAN,
      TUTORIAL,
      CYBERSPORT,
      EVENT_BATTLES,
-     SORTIE,
-     FORT_BATTLE,
-     RATED_CYBERSPORT,
      GLOBAL_MAP,
      TOURNAMENT_REGULAR,
      TOURNAMENT_CLAN,
@@ -202,14 +186,13 @@ class ARENA_BONUS_TYPE:
      SANDBOX,
      FALLOUT_CLASSIC,
      FALLOUT_MULTITEAM,
+     BOOTCAMP,
      SORTIE_2,
      FORT_BATTLE_2,
      RANKED)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
-    EXTERNAL_RANGE = (SORTIE,
-     FORT_BATTLE,
-     SORTIE_2,
+    EXTERNAL_RANGE = (SORTIE_2,
      FORT_BATTLE_2,
      GLOBAL_MAP,
      TOURNAMENT,
@@ -320,6 +303,8 @@ class FINISH_REASON:
     TECHNICAL = 5
     WIN_POINTS_CAP = 6
     WIN_POINTS = 7
+    ALLY_KILLED = 8
+    OWN_VEHICLE_DESTROYED = 9
 
 
 class ARENA_EXT_MSG:
@@ -342,13 +327,10 @@ class PREBATTLE_TYPE:
     TOURNAMENT = 4
     CLAN = 5
     UNIT = 6
-    SORTIE = 7
-    FORT_BATTLE = 8
     CLUBS = 9
     FALLOUT = 10
     EVENT = 11
     EXTERNAL = 12
-    FORT_COMMON = 13
     E_SPORT_COMMON = 14
     RANGE = (SQUAD,
      TRAINING,
@@ -356,45 +338,28 @@ class PREBATTLE_TYPE:
      TOURNAMENT,
      CLAN,
      UNIT,
-     SORTIE,
-     FORT_BATTLE,
      CLUBS,
      FALLOUT,
      EVENT,
      EXTERNAL,
-     FORT_COMMON,
      E_SPORT_COMMON)
-    LEGACY_PREBATTLES = (TRAINING,
-     COMPANY,
-     TOURNAMENT,
-     CLAN)
+    LEGACY_PREBATTLES = (TRAINING, TOURNAMENT, CLAN)
     SQUAD_PREBATTLES = (SQUAD, FALLOUT, EVENT)
     UNIT_MGR_PREBATTLES = (UNIT,
-     SORTIE,
-     FORT_BATTLE,
      SQUAD,
-     CLUBS,
      CLAN,
      FALLOUT,
      EVENT,
      EXTERNAL,
-     FORT_COMMON,
      E_SPORT_COMMON)
     CREATE_FROM_CLIENT = (UNIT,
      SQUAD,
      FALLOUT,
      EVENT)
     CREATE_FROM_WEB = (UNIT, SQUAD, EXTERNAL)
-    CREATE_EX_FROM_SERVER = (SQUAD,
-     CLAN,
-     CLUBS,
-     SORTIE,
-     FORT_BATTLE)
-    CREATE_EX_FROM_WEB = (SQUAD,
-     CLAN,
-     CLUBS,
-     SORTIE,
-     FORT_BATTLE)
+    CREATE_EX_FROM_SERVER = (SQUAD, CLAN)
+    CREATE_EX_FROM_WEB = (SQUAD, CLAN)
+    REMOVED = (COMPANY, CLUBS)
 
 
 PREBATTLE_TYPE_NAMES = dict([ (v, k) for k, v in PREBATTLE_TYPE.__dict__.iteritems() if not k.startswith('_') ])
@@ -408,8 +373,7 @@ class ASSEMBLED_PREBATTLE_TYPE:
 class PREBATTLE_START_TYPE:
     DIRECT = 1
     SQUAD = 2
-    COMPANY = 3
-    RANGE = (DIRECT, SQUAD, COMPANY)
+    RANGE = (DIRECT, SQUAD)
 
 
 class PREBATTLE_ROLE:
@@ -433,8 +397,6 @@ class PREBATTLE_ROLE:
     TRAINING_CREATOR = TRAINING_DEFAULT | TEAM_READY_1 | TEAM_READY_2 | ASSIGNMENT_1 | ASSIGNMENT_2 | ASSIGNMENT_1_2 | KICK_1 | KICK_2 | CHANGE_ARENA | CHANGE_COMMENT | OPEN_CLOSE | INVITE | CHANGE_ARENA_VOIP
     SQUAD_DEFAULT = SEE_1
     SQUAD_CREATOR = SQUAD_DEFAULT | TEAM_READY_1 | KICK_1 | INVITE | CHANGE_GAMEPLAYSMASK
-    COMPANY_DEFAULT = SEE_1
-    COMPANY_CREATOR = COMPANY_DEFAULT | TEAM_READY_1 | ASSIGNMENT_1 | KICK_1 | CHANGE_COMMENT | OPEN_CLOSE | INVITE | CHANGE_DIVISION
 
 
 class PREBATTLE_STATE:
@@ -502,23 +464,9 @@ class PREBATTLE_CACHE_KEY:
     ROUND_LENGTH = 12
     CREATOR_CLAN_DB_ID = 14
     CREATOR_CLAN_ABBREV = 15
-    DIVISION = 16
     CREATOR_IGR_TYPE = 17
     CREATOR_DB_ID = 18
 
-
-class PREBATTLE_COMPANY_DIVISION:
-    JUNIOR = 1
-    MIDDLE = 2
-    CHAMPION = 3
-    ABSOLUTE = 4
-    RANGE = (JUNIOR,
-     MIDDLE,
-     CHAMPION,
-     ABSOLUTE)
-
-
-PREBATTLE_COMPANY_DIVISION_NAMES = dict([ (v, k) for k, v in PREBATTLE_COMPANY_DIVISION.__dict__.iteritems() if not k.startswith('_') and k != 'RANGE' ])
 
 class PREBATTLE_INVITE_STATE:
     ACTIVE = 1
@@ -710,6 +658,7 @@ class DEVELOPMENT_INFO:
     VEHICLE_ATTRS = 5
     NAVIGATION_RESULT = 6
     NAVIGATION_PATH = 7
+    EXPLOSION_RAY = 8
     ENABLE_SENDING_VEH_ATTRS_TO_CLIENT = False
 
 
@@ -745,7 +694,9 @@ class SPECIAL_VEHICLE_HEALTH:
 class AOI:
     ENABLE_MANUAL_RULES = True
     VEHICLE_CIRCULAR_AOI_RADIUS = 565.0
-    CIRCULAR_AOI_HYSTERESIS_MARGIN = 5.0
+    CIRCULAR_AOI_MARGIN = 5.0
+    VEHICLE_CIRCULAR_AOI_RADIUS_HYSTERESIS_MARGIN = VEHICLE_CIRCULAR_AOI_RADIUS + CIRCULAR_AOI_MARGIN
+    UPDATE_INTERVAL = 1
 
 
 class ATTACK_REASON(object):
@@ -757,6 +708,7 @@ class ATTACK_REASON(object):
     DROWNING = 'drowning'
     GAS_ATTACK = 'gas_attack'
     OVERTURN = 'overturn'
+    MANUAL = 'manual'
 
     @classmethod
     def getIndex(cls, attackReason):
@@ -770,7 +722,8 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.DEATH_ZONE,
  ATTACK_REASON.DROWNING,
  ATTACK_REASON.GAS_ATTACK,
- ATTACK_REASON.OVERTURN)
+ ATTACK_REASON.OVERTURN,
+ ATTACK_REASON.MANUAL)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
 DEATH_REASON_ALIVE = -1
 
@@ -826,22 +779,18 @@ class EVENT_TYPE:
     ACTION = 1
     BATTLE_QUEST = 2
     TOKEN_QUEST = 3
-    FORT_QUEST = 5
     PERSONAL_QUEST = 6
     REF_SYSTEM_QUEST = 7
     POTAPOV_QUEST = 8
     GROUP = 9
-    CLUBS_QUEST = 10
     TUTORIAL = 11
     MOTIVE_QUEST = 12
     RANKED_QUEST = 13
     NAME_TO_TYPE = {'battleQuest': BATTLE_QUEST,
      'tokenQuest': TOKEN_QUEST,
-     'fortQuest': FORT_QUEST,
      'personalQuest': PERSONAL_QUEST,
      'refSystemQuest': REF_SYSTEM_QUEST,
      'potapovQuest': POTAPOV_QUEST,
-     'clubsQuest': CLUBS_QUEST,
      'group': GROUP,
      'tutorial': TUTORIAL,
      'motiveQuest': MOTIVE_QUEST,
@@ -849,19 +798,15 @@ class EVENT_TYPE:
     TYPE_TO_NAME = dict(zip(NAME_TO_TYPE.values(), NAME_TO_TYPE.keys()))
     QUEST_RANGE = (BATTLE_QUEST,
      TOKEN_QUEST,
-     FORT_QUEST,
      PERSONAL_QUEST,
      REF_SYSTEM_QUEST,
      POTAPOV_QUEST,
-     CLUBS_QUEST,
      GROUP,
      MOTIVE_QUEST,
      RANKED_QUEST)
     LIKE_BATTLE_QUESTS = (BATTLE_QUEST,
-     FORT_QUEST,
      PERSONAL_QUEST,
      POTAPOV_QUEST,
-     CLUBS_QUEST,
      MOTIVE_QUEST,
      RANKED_QUEST)
     LIKE_TOKEN_QUESTS = (TOKEN_QUEST, REF_SYSTEM_QUEST)
@@ -869,8 +814,8 @@ class EVENT_TYPE:
      REF_SYSTEM_QUEST,
      POTAPOV_QUEST,
      RANKED_QUEST)
-    QUEST_WITH_DYNAMIC_CLIENT_DATA = (FORT_QUEST, PERSONAL_QUEST)
-    SHARED_QUESTS = (POTAPOV_QUEST, CLUBS_QUEST, MOTIVE_QUEST)
+    QUEST_WITH_DYNAMIC_CLIENT_DATA = (PERSONAL_QUEST,)
+    SHARED_QUESTS = (POTAPOV_QUEST, MOTIVE_QUEST)
     QUESTS_WITH_SHOP_BUTTON = (BATTLE_QUEST, TOKEN_QUEST, PERSONAL_QUEST)
 
 
@@ -930,14 +875,12 @@ class QUEUE_TYPE:
     EVENT_BATTLES = 7
     UNIT_ASSEMBLER = 8
     TUTORIAL = 9
-    SORTIE = 10
-    FORT_BATTLE = 11
-    CLUBS = 12
     SPEC_BATTLE = 13
     FALLOUT_CLASSIC = 14
     FALLOUT_MULTITEAM = 15
     EXTERNAL_UNITS = 16
     RANKED = 17
+    BOOTCAMP = 18
     FALLOUT = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     ALL = (RANDOMS,
      COMPANIES,
@@ -947,15 +890,14 @@ class QUEUE_TYPE:
      EVENT_BATTLES,
      UNIT_ASSEMBLER,
      TUTORIAL,
-     SORTIE,
-     CLUBS,
-     FORT_BATTLE,
      SPEC_BATTLE,
      FALLOUT,
      FALLOUT_CLASSIC,
      FALLOUT_MULTITEAM,
      EXTERNAL_UNITS,
-     RANKED)
+     RANKED,
+     BOOTCAMP)
+    REMOVED = (COMPANIES,)
 
 
 class UNIT_ASSEMBLER_FLAG:
@@ -970,8 +912,7 @@ class UNIT_ASSEMBLER_FLAG:
 
     @staticmethod
     def isFlagSet(flag):
-        flags = BigWorld.baseAppData.get('unitAssemblerFlags', 0)
-        return bool(flags & flag)
+        return bool(BigWorld.baseAppData.get('unitAssemblerFlags', 0) & flag)
 
 
 QUEUE_TYPE_NAMES = dict([ (v, k) for k, v in QUEUE_TYPE.__dict__.iteritems() if not k.startswith('_') ])
@@ -1089,17 +1030,8 @@ class REQUEST_COOLDOWN:
     UNIT_CHANGE_FLAGS = 4.0
     UNIT_SET_READY = 2.0
     UNIT_BROWSER_REFRESH = 4.0
-    CALL_FORT_METHOD = 0.5
-    SUBSCRIBE = 0.5
-    GET_ENEMY_CLAN_CARD = 0.5
-    GET_FORT_SORTIE_DATA = 1.0
-    ADD_DEL_BUILDING = 3.0
-    FORT_KEEPALIVE = 60.0
     CLIENT_LOG_UX_DATA_COOLDOWN = 2.0
-    REQUEST_FORT_PUBLIC_INFO = 10.0
     CLIENT_LOG_XMPP_DATA_COOLDOWN = 10.0
-    CLUBS_ANY_CMD_COOLDOWN = 1.0
-    CLUBS_LONG_COOLDOWN = 5.0
     CALL_GM_METHOD = 0.5
     GM_KEEP_ALIVE = 60.0
     SEND_INVITATION_COOLDOWN = 1.0
@@ -1196,10 +1128,6 @@ class SYS_MESSAGE_FORT_EVENT:
 
 
 SYS_MESSAGE_FORT_EVENT_NAMES = dict([ (v, k) for k, v in SYS_MESSAGE_FORT_EVENT.__dict__.iteritems() if not k.startswith('_') ])
-MAX_FORTIFICATION_LEVEL = 10
-FORT_MAX_LEVEL_RANGE = 1
-FORT_MIN_ATTACK_LEVEL = 5
-FORT_MAX_ATTACK_LEVEL = MAX_FORTIFICATION_LEVEL
 
 class FORT_BUILDING_TYPE:
     MILITARY_BASE = 1
@@ -1301,7 +1229,8 @@ class USER_SERVER_SETTINGS:
     VERSION = 0
     HIDE_MARKS_ON_GUN = 500
     GAME_EXTENDED = 59
-    _ALL = (HIDE_MARKS_ON_GUN,)
+    EULA_VERSION = 54
+    _ALL = (HIDE_MARKS_ON_GUN, EULA_VERSION)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -1361,8 +1290,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  50: 'Dead marker setting',
  51: 'Ally marker setting',
  52: 'GuiStartBehavior',
- 53: 'Feedback section settings',
- 54: 'EULAVersion',
+ 53: '[Free]',
+ USER_SERVER_SETTINGS.EULA_VERSION: 'EULAVersion',
  55: 'Gameplay settings',
  56: '[Free]',
  57: 'Users storage revision',
@@ -1389,6 +1318,9 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  79: 'PRMP encyclopedia recommendations 5-6',
  80: 'Ranked carousel filter',
  81: 'Ranked carousel filter',
+ 82: 'feedback damage indicator',
+ 83: 'feedback damage log',
+ 84: 'feedback battle events',
  USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun'}
 
 class WG_GAMES:
@@ -1467,29 +1399,6 @@ class WIN_XP_FACTOR_MODE:
 
 OBSERVER_VEH_INVENTORY_ID = -5000
 
-class FORT_SCOUTING_DATA_FILTER:
-    DEFAULT = 1
-    RECENT = 2
-    ELECT = 3
-    FILTER = 4
-    RANGE = (DEFAULT,
-     RECENT,
-     ELECT,
-     FILTER)
-
-
-class FORT_SCOUTING_DATA_ERROR:
-    DONE = 0
-    COOLDOWN = 1
-    INVALID_NAME = 2
-    DB_ERORR = 3
-    NOT_IN_CLAN = 4
-    INVALID_PARAMS = 5
-    DISCONNECTED_FROM_CENTER = 6
-
-
-FORT_FAVORITES_LIMIT = 100
-
 class PREBATTLE_INVITE_STATUS:
     OK = 0
     WRONG_CLAN = 1
@@ -1499,45 +1408,6 @@ class PREBATTLE_INVITE_STATUS:
 PREBATTLE_INVITE_STATUS_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATUS.__dict__.iteritems() if not k.startswith('_') ])
 FAIRPLAY_VIOLATIONS_NAMES = ('deserter', 'suicide', 'afk')
 FAIRPLAY_VIOLATIONS_MASKS = dict([ (name, 1 << index) for index, name in enumerate(FAIRPLAY_VIOLATIONS_NAMES) ])
-
-class FORT_BATTLE_RESULT:
-    WIN = 1
-    DRAW = 0
-    LOSS = -1
-
-
-class FORT_COMBAT_RESULT:
-    WIN = 1
-    DRAW = 0
-    LOSS = -1
-    TECH_WIN = 10
-    TECH_DRAW = -20
-    TECH_LOSS = -10
-
-    @staticmethod
-    def invert(value):
-        if value in (FORT_COMBAT_RESULT.WIN,
-         FORT_COMBAT_RESULT.LOSS,
-         FORT_COMBAT_RESULT.TECH_WIN,
-         FORT_COMBAT_RESULT.TECH_LOSS):
-            return -value
-        else:
-            return value
-
-    @staticmethod
-    def invertCombatList(_list):
-        return map(lambda combat: (FORT_COMBAT_RESULT.invert(combat[0]),) + combat[1:], _list)
-
-
-class FORT_BUILDING_STATUS:
-    READY_FOR_BATTLE = 0
-    LOW_LEVEL = 1
-    DESTROYED = 2
-
-
-FORT_SCHEDULER_ROWS_PER_QUERY = 200
-FORT_SCHEDULER_DB_PAGE_SIZE = CURRENT_REALM != 'CT' and 5000 or 5000000
-FORT_QUEST_SUFFIX = 'stronghold'
 
 class REF_SYSTEM_FLAG:
     REFERRAL_NEW_PLAYER = 1
@@ -1579,8 +1449,6 @@ class EVENT_CLIENT_DATA:
     NOTIFICATIONS_REV = 10
     PERSONAL_QUEST = 11
     PERSONAL_QUEST_REV = 12
-    FORT_QUEST = 13
-    FORT_QUEST_REV = 14
     FALLOUT = 15
     FALLOUT_REV = 16
     SQUAD_BONUSES = 17
@@ -1789,6 +1657,158 @@ SHELL_TYPES_LIST = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_HE,
  SHELL_TYPES.ARMOR_PIERCING_CR)
+
+class BOOTCAMP_BATTLE_ACTION:
+    PLAYER_MOVE = 0
+    PLAYER_SHOOT = 1
+    PLAYER_SPOTTED = 2
+    PLAYER_HIT_VEHICLE = 3
+    PLAYER_OBSERVED_ACTION = 4
+    SET_SCENERY_CONSTANT = 5
+
+
+class HINT_TYPE:
+    HINT_MOVE = 0
+    HINT_MOVE_TURRET = 1
+    HINT_SHOOT = 2
+    HINT_ADVANCED_SNIPER = 3
+    HINT_AIM = 4
+    HINT_SNIPER = 5
+    HINT_WEAK_POINTS = 6
+    HINT_MESSAGE_AVOID = 7
+    HINT_MESSAGE_PLAYER_SPOTTED = 8
+    HINT_SECTOR_CLEAR = 9
+    HINT_START_NARRATIVE = 10
+    HINT_MESSAGE_CAPTURE_THE_BASE = 11
+    HINT_MESSAGE_RESET_PROGRESS = 12
+    HINT_REPAIR_TRACK = 13
+    HINT_HEAL_CREW = 14
+    HINT_USE_EXTINGUISHER = 15
+    HINT_SHOOT_ALLY = 16
+    HINT_PLAYER_DETECT_ENEMIES = 17
+    HINT_EXIT_GAME_AREA = 18
+    HINT_MESSAGE_ENEMY_CAN_HIDE = 19
+    HINT_MESSAGE_SNEAK = 20
+    HINT_SNIPER_ON_DISTANCE = 21
+    HINT_ROTATE_LOBBY = 22
+    HINT_TARGET_LOCK = 23
+    HINT_WAIT_RELOAD = 24
+    HINT_NO_MOVE = 25
+    HINT_NO_MOVE_TURRET = 26
+    HINT_SHOT_WHILE_MOVING = 27
+    HINT_MOVE_TO_MARKER = 28
+    HINT_SECONDARY_SNIPER = 29
+    HINT_USELESS_CONSUMABLE = 30
+    HINT_LOW_HP = 31
+    HINT_UNLOCK_TARGET = 32
+    HINT_B3_YOU_ARE_DETECTED = 33
+    HINT_B3_FALL_BACK = 34
+    HINT_B3_FOLIAGE = 35
+    HINT_B3_DO_CAPTURE = 36
+    HINT_B3_CAPTURE_IN_PROGRESS = 37
+    HINT_B3_ENEMIES_HIDDEN = 38
+    HINT_B3_CAPTURE_RESET = 39
+    HINT_B3_FOLIAGE2 = 40
+    HINT_B3_FLANK = 41
+    HINT_B3_CAPTURE_TOGETHER = 42
+    HINT_SNIPER_LEVEL0 = 43
+    HINT_CUSTOM = 44
+    HINTS_B3_CAPTURE = (HINT_B3_DO_CAPTURE,
+     HINT_B3_CAPTURE_IN_PROGRESS,
+     HINT_B3_CAPTURE_RESET,
+     HINT_B3_CAPTURE_TOGETHER)
+    HINTS_B3_DETECTED = (HINT_B3_YOU_ARE_DETECTED,)
+    HINTS_ON_DETECT = (HINT_MESSAGE_AVOID,
+     HINT_MESSAGE_SNEAK,
+     HINT_MESSAGE_ENEMY_CAN_HIDE,
+     HINT_MESSAGE_RESET_PROGRESS)
+    BATTLE_HINTS = (HINT_MOVE,
+     HINT_MOVE_TURRET,
+     HINT_SHOOT,
+     HINT_SNIPER,
+     HINT_SNIPER_LEVEL0,
+     HINT_ADVANCED_SNIPER,
+     HINT_MESSAGE_AVOID,
+     HINT_MESSAGE_PLAYER_SPOTTED,
+     HINT_MESSAGE_SNEAK,
+     HINT_MESSAGE_ENEMY_CAN_HIDE,
+     HINT_MESSAGE_CAPTURE_THE_BASE,
+     HINT_MESSAGE_RESET_PROGRESS,
+     HINT_WEAK_POINTS,
+     HINT_SHOOT_ALLY,
+     HINT_REPAIR_TRACK,
+     HINT_USE_EXTINGUISHER,
+     HINT_HEAL_CREW,
+     HINT_AIM,
+     HINT_EXIT_GAME_AREA,
+     HINT_START_NARRATIVE,
+     HINT_SECTOR_CLEAR,
+     HINT_PLAYER_DETECT_ENEMIES,
+     HINT_SNIPER_ON_DISTANCE,
+     HINT_TARGET_LOCK,
+     HINT_WAIT_RELOAD,
+     HINT_NO_MOVE,
+     HINT_NO_MOVE_TURRET,
+     HINT_SHOT_WHILE_MOVING,
+     HINT_MOVE_TO_MARKER,
+     HINT_SECONDARY_SNIPER,
+     HINT_USELESS_CONSUMABLE,
+     HINT_CUSTOM,
+     HINT_LOW_HP,
+     HINT_UNLOCK_TARGET,
+     HINT_B3_YOU_ARE_DETECTED,
+     HINT_B3_FALL_BACK,
+     HINT_B3_FOLIAGE,
+     HINT_B3_DO_CAPTURE,
+     HINT_B3_CAPTURE_IN_PROGRESS,
+     HINT_B3_ENEMIES_HIDDEN,
+     HINT_B3_CAPTURE_RESET,
+     HINT_B3_FOLIAGE2,
+     HINT_B3_FLANK,
+     HINT_B3_CAPTURE_TOGETHER)
+    LOBBY_HINTS = (HINT_ROTATE_LOBBY,)
+    HINTS_ON_START = (HINT_START_NARRATIVE,)
+    SECONDARY_HINTS = (HINT_WAIT_RELOAD,
+     HINT_SHOOT_ALLY,
+     HINT_EXIT_GAME_AREA,
+     HINT_AIM,
+     HINT_SECONDARY_SNIPER,
+     HINT_NO_MOVE,
+     HINT_NO_MOVE_TURRET,
+     HINT_SHOT_WHILE_MOVING,
+     HINT_MOVE_TO_MARKER,
+     HINT_USELESS_CONSUMABLE,
+     HINT_LOW_HP,
+     HINT_UNLOCK_TARGET)
+
+
+HINT_NAMES = ('hintMove', 'hintMoveTurret', 'hintShoot', 'hintAdvancedSniper', 'hintAim', 'hintSniper', 'hintWeakPoints', 'hintMessageAvoid', 'hintPlayerSpotted', 'hintSectorClear', 'hintStartNarrative', 'hintCaptureTheBase', 'hintResetProgress', 'hintRepairTrack', 'hintHealCrew', 'hintUseExtinguisher', 'hintAllyShoot', 'hintPlayerDetectEnemies', 'hintExitGameArea', 'hintEnemyCanHide', 'hintSneak', 'hintSniperOnDistance', 'hintRotateLobby', 'hintTargetLock', 'hintWaitReload', 'hintNoMove', 'hintNoMoveTurret', 'hintShootWhileMoving', 'hintMoveToMarker', 'hintSecondarySniper', 'hintUselessConsumable', 'hintLowHP', 'hintTargetUnLock', 'hintB3PlayerDetected', 'hintB3FallBack', 'hintB3Foliage', 'hintB3DoCapture', 'hintB3CaptureInProgress', 'hintB3EnemiesHidden', 'hintB3CaptureReset', 'hintB3Foliage2', 'hintB3Flank', 'hintB3CaptureTogether', 'hintSniperLevel0')
+
+class BOOTCAMP_START_TYPE:
+    AUTOMATICALLY = 0
+    PLAYER_CHOICE = 1
+    PLAYER_MANUAL = 2
+
+
+class PLAYER_COHORT_TYPE:
+    UNDEFINED = 0
+    NEW_PLAYER = 1
+    NEW_PAYING_PLAYER = 2
+    WG_PLAYER = 3
+    WG_PAYING_PLAYER = 4
+    WOT_REFERRALS = 5
+    WOT_PAYING_REFERRALS = 6
+    WOT_PLAYER = 7
+
+
+class BOOTCAMP_BATTLE_RESULT_MESSAGE:
+    DRAW = 0
+    VICTORY = 1
+    DEFEAT = 2
+
+
+BOOTCAMP_MESSAGES_NAMES = ('msgTankGarageI', 'msgTankGarageII', 'msgTankGarageIII', 'msgTankGarageIV', 'msgTankGarageV', 'msgTank1', 'msgCredits', 'msgTankExperience', 'msgUnlockModule', 'msgTankCrew', 'msgSkillsPerks', 'msgUnlockNewVehicle', 'msgTank2', 'msgConsumables', 'msgEquipment', 'msgGold', 'msgPremium', 'msgMissionAccomplished', 'msgBootcampGraduate')
+BATTLE_RESULT_WAITING_TIMEOUT = 0.1
 SHELL_TYPES_INDICES = dict(((value, index) for index, value in enumerate(SHELL_TYPES_LIST)))
 
 class HIT_INDIRECTION:

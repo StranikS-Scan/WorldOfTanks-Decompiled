@@ -83,7 +83,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__camDist = 0.0
         self.__desiredCamDist = 0.0
         self.__aimingSystem = None
-        self.__prevTime = BigWorld.time()
+        self.__prevTime = 0.0
         self.__dxdydz = Vector3(0.0, 0.0, 0.0)
         self.__autoUpdatePosition = False
         self.__needReset = 0
@@ -125,7 +125,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__prevTime = 0.0
         self.__aimingSystem.enable(targetPos)
         self.__positionHysteresis.update(Vector3(0.0, 0.0, 0.0))
-        self.__timeHysteresis.update(BigWorld.time())
+        self.__timeHysteresis.update(BigWorld.timeExact())
         camTarget = MatrixProduct()
         self.__cam.target = camTarget
         self.__cam.source = self.__sourceMatrix
@@ -136,6 +136,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__rotation = 0.0
         self.__cameraUpdate()
         self.delayCallback(0.0, self.__cameraUpdate)
+        self.__needReset = 1
 
     def disable(self):
         if self.__aimingSystem is not None:
@@ -262,7 +263,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         BigWorld.wg_trajectory_drawer().setParams(shotDescr['maxDistance'], Vector3(0, -shotDescr['gravity'], 0), self.__aimOffset)
 
     def __updateTime(self):
-        curTime = BigWorld.time()
+        curTime = BigWorld.timeExact()
         deltaTime = curTime - self.__prevTime
         self.__prevTime = curTime
         return deltaTime
@@ -384,7 +385,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         bcfg['interpolationSpeed'] = readFloat(dataSec, 'interpolationSpeed', 0.0, 10.0, 5.0)
         bcfg['highPitchThreshold'] = readFloat(dataSec, 'highPitchThreshold', 0.1, 10.0, 3.0)
         bcfg['hTimeThreshold'] = readFloat(dataSec, 'hysteresis/timeThreshold', 0.0, 10.0, 0.5)
-        bcfg['hPositionThreshold'] = readFloat(dataSec, 'hysteresis/positionThresholdSq', 0.0, 50.0, 7.0)
+        bcfg['hPositionThreshold'] = readFloat(dataSec, 'hysteresis/positionThreshold', 0.0, 100.0, 7.0)
         ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
         if ds is not None:
             ds = ds['artyMode/camera']

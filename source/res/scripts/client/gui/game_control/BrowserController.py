@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/BrowserController.py
 import BigWorld
 import Event
+import constants
 from WebBrowser import WebBrowser, LOG_BROWSER
 from adisp import async, process
 from debug_utils import LOG_WARNING
@@ -76,6 +77,10 @@ class BrowserController(IBrowserController):
     @async
     @process
     def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False, useBrowserWindow=True, isModal=False, showCreateWaiting=False, handlers=None, showBrowserCallback=None, isSolidBorder=False):
+        if constants.IS_BOOTCAMP_ENABLED:
+            from bootcamp.Bootcamp import g_bootcamp
+            if g_bootcamp.isRunning():
+                return
         if showCreateWaiting:
             Waiting.show('browser/init')
         url = yield self.__urlMacros.parse(url or GUI_SETTINGS.browser.url)

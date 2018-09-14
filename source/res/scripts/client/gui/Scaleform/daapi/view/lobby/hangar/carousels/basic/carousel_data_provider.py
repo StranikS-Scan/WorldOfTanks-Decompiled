@@ -8,6 +8,7 @@ from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils.requesters import REQ_CRITERIA
+from bootcamp.Bootcamp import g_bootcamp
 
 class _SUPPLY_ITEMS(object):
     BUY_TANK = 0
@@ -93,3 +94,32 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         :return: list of supply items indices
         """
         return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]
+
+
+class BCCarouselDataProvider(CarouselDataProvider):
+
+    def __init__(self, carouselFilter, itemsCache, currentVehicle):
+        super(BCCarouselDataProvider, self).__init__(carouselFilter, itemsCache, currentVehicle)
+
+    @property
+    def collection(self):
+        return self._vehicleItems
+
+    def updateSupplies(self):
+        """ Update the supply slots: 'buy tank' and 'buy slot'.
+        """
+        pass
+
+    def _buildVehicleItems(self):
+        super(BCCarouselDataProvider, self)._buildVehicleItems()
+        for vehicleItem in self._vehicleItems:
+            vehicleItem['infoText'] = ''
+            vehicleItem['smallInfoText'] = ''
+            vehicleItem['tankType'] = vehicleItem['tankType'].replace('_elite', '')
+
+    def setShowStats(self, showVehicleStats):
+        pass
+
+    def selectVehicle(self, idx):
+        self._selectedIdx = idx
+        self._currentVehicle.selectVehicle(self._vehicles[idx].invID)

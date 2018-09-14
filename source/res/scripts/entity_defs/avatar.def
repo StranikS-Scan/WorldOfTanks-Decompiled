@@ -203,6 +203,10 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
     </onSwitchViewpoint>
+    <onBootcampEvent>
+      <Arg>	ARRAY	  <of>	UINT64	</of>
+      </Arg>
+    </onBootcampEvent>
     <updateVehicleOptionalDeviceStatus>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
@@ -536,6 +540,11 @@
     </updateOwnVehicleAuxPhysicsDataAndGear>
   </CellMethods>
   <BaseMethods>
+    <kickSelf>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </kickSelf>
     <chooseVehicleForRespawn>
       <Exposed></Exposed>
       <Arg>	UINT16	</Arg>

@@ -7,7 +7,7 @@ import struct
 import itertools
 import copy
 import BigWorld
-import ResMgr
+from realm_utils import ResMgr
 from Math import Vector2, Vector3
 import math
 import nations
@@ -140,8 +140,6 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'stunResistanceEffect': 0.0,
  'stunResistanceDuration': 0.0}
 _g_prices = None
-g_list = None
-g_cache = None
 
 def init(preloadEverything, pricesToCollect):
     global g_cache
@@ -1646,6 +1644,8 @@ class VehicleList(object):
             else:
                 from server_constants import SELL_PRICE_FACTOR
         for vname, vsection in section.items():
+            if 'xmlns:xmlref' == vname or 0 == len(vsection):
+                continue
             ctx = (None, xmlPath + '/' + vname)
             if vname in ids:
                 _xml.raiseWrongXml(ctx, '', 'vehicle type name is not unique')
@@ -1840,6 +1840,20 @@ def getUniformAmmoForGun(gunDescr):
     shots = len(gunDescr['shots'])
     defaultPortion = 1.0 / shots if shots else 1.0
     return _getAmmoForGun(gunDescr, defaultPortion)
+
+
+def getSpecificAmmoForGun(gunDescr, ammoProperties):
+    ammo = []
+    maxCount = gunDescr['maxAmmo']
+    for shot in gunDescr['shots']:
+        shellKind = shot['shell']['kind']
+        percentage = ammoProperties.get(shellKind, None)
+        if percentage is not None:
+            ammo.append(shot['shell']['compactDescr'])
+            ammo.append(int(percentage * maxCount))
+            ammoProperties.pop(shellKind)
+
+    return ammo
 
 
 def _getAmmoForGun(gunDescr, defaultPortion=None):
@@ -2071,7 +2085,7 @@ def _readHull(xmlCtx, section):
          'sensitivityToImpulse': _xml.readNonNegativeFloat(xmlCtx, section, 'swinging/sensitivityToImpulse'),
          'pitchParams': _xml.readTupleOfFloats(xmlCtx, section, 'swinging/pitchParams', 6),
          'rollParams': _xml.readTupleOfFloats(xmlCtx, section, 'swinging/rollParams', 7)}
-        res['customEffects'] = [ExhaustEffectDescriptor(section, xmlCtx, CustomEffectsDescriptor.getDescriptor(section, g_cache._customEffects['exhaust'], xmlCtx, 'exhaust/pixie'), 'exhaust/nodes')]
+        res['customEffects'] = [__readExhaustEffect(xmlCtx, section)]
         res['AODecals'] = _readAODecals(xmlCtx, section, 'AODecals')
         if section.has_key('camouflage'):
             res['camouflageTiling'], res['camouflageExclusionMask'] = _readCamouflageTilingAndMask(xmlCtx, section, 'camouflage', (None, None))
@@ -2082,6 +2096,18 @@ def _readHull(xmlCtx, section):
     if IS_CLIENT or IS_WEB or IS_CELLAPP:
         res['primaryArmor'] = _readPrimaryArmor(xmlCtx, section, 'primaryArmor', res['materials'])
     return res
+
+
+def __readExhaustEffect(xmlCtx, section):
+    effectDescriptors = {}
+    effectDescriptors['default'] = CustomEffectsDescriptor.getDescriptor(section, g_cache._customEffects['exhaust'], xmlCtx, 'exhaust/pixie')
+    tagsSection = _xml.getSubsection(xmlCtx, section, 'exhaust/tags', False)
+    if tagsSection:
+        for key in tagsSection.keys():
+            effectDescriptors[key] = CustomEffectsDescriptor.getDescriptor(tagsSection, g_cache._customEffects['exhaust'], xmlCtx, key)
+
+    effect = ExhaustEffectDescriptor(section, xmlCtx, effectDescriptors, 'exhaust/nodes')
+    return effect
 
 
 _defFakeTurrets = {'lobby': (),
@@ -3121,7 +3147,7 @@ def _readShells(xmlPath, nationID):
     descrs = {}
     ids = {}
     for name, subsection in section.items():
-        if name == 'icons':
+        if name in ('icons', 'xmlns:xmlref'):
             continue
         xmlCtx = (None, xmlPath + '/' + name)
         name = intern(name)
@@ -3448,7 +3474,7 @@ def _readUnlocks(xmlCtx, section, subsectionName, unlocksDescrs, *requiredItems)
         return []
     else:
         s = section[subsectionName]
-        if s is None:
+        if s is None or 0 == len(s):
             return []
         idxs = []
         for s in s.values():
@@ -3509,12 +3535,16 @@ def _readEffectGroups(xmlPath, withSubgroups=False):
     xmlCtx = (None, xmlPath)
     if not withSubgroups:
         for sname, subsection in section.items():
+            if sname in ('xmlns:xmlref',):
+                continue
             sname = intern(sname)
             ctx = (xmlCtx, sname)
             res[sname] = __readEffectsTimeLine(ctx, subsection)
 
     else:
         for sname, subsection in section.items():
+            if sname in ('xmlns:xmlref',):
+                continue
             sname = intern(sname)
             res[sname] = []
             for subgroupName, subgroupSection in subsection.items():
@@ -3558,6 +3588,8 @@ def _readRecoilEffectGroups(xmlPath):
         _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
     xmlCtx = (None, xmlPath)
     for sname, subsection in section.items():
+        if sname in ('xmlns:xmlref',):
+            continue
         sname = intern(sname)
         ctx = (xmlCtx, sname)
         res[sname] = (_xml.readNonNegativeFloat(ctx, subsection, 'backoffTime'), _xml.readNonNegativeFloat(ctx, subsection, 'returnTime'))
@@ -3580,6 +3612,8 @@ def _readReloadEffectGroups(xmlPath):
         _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
     xmlCtx = (None, xmlPath)
     for sname, subsection in section.items():
+        if sname in ('xmlns:xmlref',):
+            continue
         sname = intern(sname)
         ctx = (xmlCtx, sname)
         res[sname] = __readReloadEffect(ctx, subsection)
@@ -3656,6 +3690,8 @@ def _readShotEffectGroups(xmlPath):
         _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
     xmlCtx = (None, xmlPath)
     for sname, subsection in section.items():
+        if sname in ('xmlns:xmlref',):
+            continue
         sname = intern(sname)
         ctx = (xmlCtx, sname)
         index = len(res[1])
@@ -3760,7 +3796,7 @@ def _readDamageStickers(xmlPath):
     descrs = []
     for sname, subsection in section.items():
         sname = intern(sname)
-        if sname == 'texture':
+        if sname in ('texture', 'xmlns:xmlref'):
             continue
         if ids.has_key(sname):
             _xml.raiseWrongXml(xmlCtx, sname, 'sticker name is not unique')
@@ -3954,6 +3990,8 @@ def _readArtefacts(xmlPath):
     idsByNames = {}
     for name, subsection in section.items():
         ctx = (xmlCtx, name)
+        if name in ('xmlns:xmlref',):
+            continue
         name = intern(name)
         if name in idsByNames:
             _xml.raiseWrongXml(xmlCtx, name, 'name is not unique')
@@ -4211,6 +4249,8 @@ def _readHorns(xmlPath):
         pricesDest = pricesDest['hornPrices']
     for name, subsection in section.items():
         ctx = (xmlCtx, name)
+        if name in ('xmlns:xmlref',):
+            continue
         id = _xml.readInt(ctx, subsection, 'id', 1, 255)
         if id in descrs:
             _xml.raiseWrongXml(ctx, 'id', 'horn ID is not unique')

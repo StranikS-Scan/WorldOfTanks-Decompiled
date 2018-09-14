@@ -517,6 +517,7 @@ class ClientHangarSpace():
         mat = Math.Matrix()
         mat.setTranslate(_CFG['cam_start_target_pos'])
         self.__cam.target = mat
+        self.__cam.wg_applyParams()
         BigWorld.camera(self.__cam)
 
     def __waitLoadingSpace(self):
@@ -824,7 +825,9 @@ class _VehicleAppearance(ComponentSystem):
         self.__vDesc.playerInscriptions = initialInscriptions
 
     def __onClanDBIDRetrieved(self, _, clanID):
-        self.__vehicleStickers.setClanID(clanID)
+        if self.__vehicleStickers is not None:
+            self.__vehicleStickers.setClanID(clanID)
+        return
 
     def __setupModel(self, buildIdx):
         model = self.__assembleModel()
@@ -987,7 +990,7 @@ class _ClientHangarSpacePathOverride():
         from gui.shared.utils.HangarSpace import g_hangarSpace
         g_hangarSpace.refreshSpace(isPremium, True)
 
-    def setPath(self, path, isPremium=None):
+    def setPath(self, path, isPremium=None, reload=True):
         if path is not None and not path.startswith('spaces/'):
             path = 'spaces/' + path
         from gui.shared.utils.HangarSpace import g_hangarSpace
@@ -998,7 +1001,8 @@ class _ClientHangarSpacePathOverride():
         elif _EVENT_HANGAR_PATHS.has_key(isPremium):
             del _EVENT_HANGAR_PATHS[isPremium]
         readHangarSettings('igrPremHangarPath' + ('CN' if constants.IS_CHINA else ''))
-        g_hangarSpace.refreshSpace(g_hangarSpace.isPremium, True)
+        if reload:
+            g_hangarSpace.refreshSpace(g_hangarSpace.isPremium, True)
         return
 
     def __onDisconnected(self):

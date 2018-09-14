@@ -15,6 +15,7 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared import getDialogReplaceElements
+from CurrentVehicle import g_currentVehicle
 from gui.customization import g_customizationController
 from gui.customization.shared import formatPriceCredits, formatPriceGold, getSalePriceString, DURATION
 from skeletons.gui.shared import IItemsCache
@@ -130,20 +131,23 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         notEnoughGoldTooltip = notEnoughCreditsTooltip = ''
         enoughGold = self.itemsCache.items.stats.gold >= priceGold
         enoughCredits = self.itemsCache.items.stats.credits >= priceCredits
-        canBuy = bool(priceGold or priceCredits) and enoughGold and enoughCredits
+        state = g_currentVehicle.getViewState()
+        canBuy = bool(priceGold or priceCredits) and enoughGold and enoughCredits and state.isCustomizationEnabled()
         if not enoughGold:
             diff = text_styles.gold(priceGold - self.itemsCache.items.stats.gold)
             notEnoughGoldTooltip = makeTooltip(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER), _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_BODY, count='{0}{1}'.format(diff, icons.gold())))
         if not enoughCredits:
             diff = text_styles.credits(priceCredits - self.itemsCache.items.stats.credits)
             notEnoughCreditsTooltip = makeTooltip(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER), _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTENOUGHRESOURCES_BODY, count='{0}{1}'.format(diff, icons.credits())))
+        inFormationAlert = text_styles.concatStylesWithSpace(icons.markerBlocked(), text_styles.error(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_FORMATION_ALERT)) if not state.isCustomizationEnabled() else ''
         self.as_setTotalDataS({'credits': formatPriceCredits(priceCredits),
          'gold': formatPriceGold(priceGold),
          'totalLabel': text_styles.highTitle(_ms(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_TOTALCOST, selected=len(self.__searchDP.selectedItems), total=len(self.__searchDP.items))),
          'enoughGold': enoughGold,
          'enoughCredits': enoughCredits,
          'notEnoughGoldTooltip': notEnoughGoldTooltip,
-         'notEnoughCreditsTooltip': notEnoughCreditsTooltip})
+         'notEnoughCreditsTooltip': notEnoughCreditsTooltip,
+         'inFormationAlert': inFormationAlert})
         self.as_setBuyBtnEnabledS(canBuy)
 
     @process

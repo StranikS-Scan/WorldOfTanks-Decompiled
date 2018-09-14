@@ -7,14 +7,13 @@ from debug_utils import LOG_WARNING
 from messenger.storage import SimpleCachedStorage
 
 class PlayerCtxStorage(SimpleCachedStorage):
-    __slots__ = ('__accAttrs', '__clanInfo', '__banInfo', '__cachedItems', '__eManager', '__clubName', '__denunciations', 'onAccountAttrsChanged', 'onClanInfoChanged')
+    __slots__ = ('__accAttrs', '__clanInfo', '__banInfo', '__cachedItems', '__eManager', '__denunciations', 'onAccountAttrsChanged', 'onClanInfoChanged')
 
     def __init__(self):
         super(PlayerCtxStorage, self).__init__()
         self.__accAttrs = 0
         self.__clanInfo = None
         self.__banInfo = None
-        self.__clubName = ''
         self.__cachedItems = {'lastVoipUri': ''}
         self.__denunciations = set()
         self.__eManager = Event.EventManager()
@@ -28,7 +27,6 @@ class PlayerCtxStorage(SimpleCachedStorage):
     def clear(self):
         self.__accAttrs = 0
         self.__clanInfo = None
-        self.__clubName = ''
         self.__eManager.clear()
         self.__denunciations.clear()
         return
@@ -52,12 +50,6 @@ class PlayerCtxStorage(SimpleCachedStorage):
     def setClanInfo(self, clanInfo):
         self.__clanInfo = clanInfo
         self.onClanInfoChanged()
-
-    def setMyClubName(self, clubName):
-        self.__clubName = clubName
-
-    def getMyClubName(self):
-        return self.__clubName
 
     def setAccountAttrs(self, accAttrs):
         if self.__accAttrs ^ accAttrs:

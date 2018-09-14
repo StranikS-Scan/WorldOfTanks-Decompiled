@@ -11,6 +11,7 @@ class QuestsPostBattleConditionsFormatter(QuestsBattleConditionsFormatter):
     def __init__(self):
         super(QuestsPostBattleConditionsFormatter, self).__init__({'vehicleKills': _VehiclesKillFormatter(),
          'vehicleDamage': _VehiclesDamageFormatter(),
+         'vehicleStun': _VehiclesStunFormatter(),
          'win': _WinFormatter(),
          'isAlive': _SurviveFormatter(),
          'achievements': _AchievementsFormatter(),
@@ -95,12 +96,23 @@ class _AchievementsFormatter(ConditionFormatter):
 class _VehiclesKillFormatter(_VehicleTableFormatter):
 
     @classmethod
-    def _getLabelKey(cls):
+    def _getLabelKey(cls, condition=None):
         return QUESTS.DETAILS_CONDITIONS_VEHICLESKILLS
 
 
 class _VehiclesDamageFormatter(_VehicleTableFormatter):
 
     @classmethod
-    def _getLabelKey(cls):
+    def _getLabelKey(cls, condition=None):
         return QUESTS.DETAILS_CONDITIONS_VEHICLEDAMAGE
+
+
+class _VehiclesStunFormatter(_VehicleTableFormatter):
+
+    @classmethod
+    def _getLabelKey(cls, condition=None):
+        if condition.getEventCount():
+            key = QUESTS.DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT
+        else:
+            key = QUESTS.DETAILS_CONDITIONS_VEHICLESTUN
+        return key

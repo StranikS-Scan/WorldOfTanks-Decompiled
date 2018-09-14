@@ -146,7 +146,7 @@ class BattleStartReqs(context.StartReqs):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def isEnabled(self):
-        return self.sessionProvider.arenaVisitor.gui.isTutorialBattle()
+        return self.sessionProvider.arenaVisitor.gui.isTutorialBattle() and super(BattleStartReqs, self).isEnabled()
 
     def prepare(self, ctx):
         clientCtx = BattleClientCtx.fetch()

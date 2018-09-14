@@ -34,6 +34,7 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         self.targetCaps = [1]
         self.__isBeingPulledCallback = None
         self.__hitEffects = None
+        self.__vehicleStickers = None
         return
 
     def reload(self):
@@ -74,7 +75,20 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         self.__isBeingPulledCallback.delayCallback(self.__checkIsBeingPulled(), self.__checkIsBeingPulled)
         DetachedTurret.allTurrets.append(self)
         ProjectileAwareEntities.addEntity(self)
+        BigWorld.callback(0.0, self.__createAndAttachStickers)
         return
+
+    def __createAndAttachStickers(self):
+        if self.__vehicleStickers is not None:
+            return
+        else:
+            from VehicleStickers import VehicleStickers
+            vehicle = BigWorld.entity(self.vehicleID)
+            if vehicle is not None:
+                self.__vehicleStickers = VehicleStickers(self.__vehDescr, vehicle.publicInfo['marksOnGun'])
+                self.__vehicleStickers.alpha = vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha']
+                self.__vehicleStickers.attach(self.model, True, False, True)
+            return
 
     def onLeaveWorld(self):
         ComponentSystem.destroy(self)
@@ -84,6 +98,9 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         self.__detachConfirmationTimer = None
         self.__isBeingPulledCallback.destroy()
         self.__isBeingPulledCallback = None
+        if self.__vehicleStickers is not None:
+            self.__vehicleStickers.detach()
+            self.__vehicleStickers = None
         return
 
     def onStaticCollision(self, energy, point, normal):
@@ -140,6 +157,7 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
 
     def changeAppearanceVisibility(self, isVisible):
         self.model.visible = isVisible
+        self.__createAndAttachStickers()
 
     def __checkIsBeingPulled(self):
         if self.__detachmentEffects is not None:

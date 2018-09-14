@@ -5,7 +5,7 @@ import math
 import BigWorld
 from Math import Vector3, Vector2, Matrix
 from debug_utils import *
-from constants import IS_DEVELOPMENT, IS_CLIENT
+from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT
 
 class ModelHitTester(object):
     bbox = None
@@ -24,7 +24,7 @@ class ModelHitTester(object):
         self.__bspModelUp = None
         self.__bspModelNameUp = None
         if dataSection is not None:
-            modelTag = 'collisionModelClient' if IS_CLIENT else 'collisionModelServer'
+            modelTag = 'collisionModelClient' if IS_CLIENT or IS_BOT else 'collisionModelServer'
             self.__bspModelName = dataSection.readString(modelTag)
             if not self.__bspModelName:
                 raise Exception('<%s> is missing or wrong' % modelTag)
@@ -136,3 +136,4 @@ def segmentMayHitVehicle(vehicleDescr, segmentStart, segmentEnd, vehicleCenter):
 
 
 SegmentCollisionResult = namedtuple('SegmentCollisionResult', ('dist', 'hitAngleCos', 'armor'))
+SegmentCollisionResultExt = namedtuple('SegmentCollisionResultExt', ('dist', 'hitAngleCos', 'matInfo', 'compName'))

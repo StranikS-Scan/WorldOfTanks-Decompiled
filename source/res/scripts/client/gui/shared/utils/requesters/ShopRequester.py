@@ -12,6 +12,7 @@ from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData, getPriceTupleWithDiscount
 from gui.shared.money import Money, ZERO_MONEY, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+from items.item_price import getNextSlotPrice, getNextBerthPackPrice
 from skeletons.gui.shared.utils.requesters import IShopCommonStats, IShopRequester
 _VehiclesRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'restoreDuration restoreCooldown restorePriceModif')
 _TankmenRestoreConfig = namedtuple('_TankmenRestoreConfig', 'freeDuration billableDuration cost limit')
@@ -202,8 +203,7 @@ class ShopCommonStats(IShopCommonStats):
         @param currentSlotsCount: current vehicle slots count
         @return: new vehicle slot price
         """
-        player = BigWorld.player()
-        return player.shop.getNextSlotPrice(currentSlotsCount, self.slotsPrices)
+        return getNextSlotPrice(currentSlotsCount, self.slotsPrices)
 
     @property
     def dropSkillsCost(self):
@@ -236,7 +236,7 @@ class ShopCommonStats(IShopCommonStats):
         @return: (new berths pack price, pack berths count)
         """
         prices = self.berthsPrices
-        goldCost = BigWorld.player().shop.getNextBerthPackPrice(berthsCount, prices)
+        goldCost = getNextBerthPackPrice(berthsCount, prices)
         return (Money(gold=goldCost), prices[1])
 
     @property
@@ -525,6 +525,13 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
     def isXPConversionActionActive(self):
         goody = self.bestGoody(self.personalXPExchangeDiscounts)
         return self.freeXPConversion[0] > self.defaults.freeXPConversion[0] or goody is not None
+
+    @property
+    def isCreditsConversionActionActive(self):
+        """
+        @return: if rate of gold for credits exchanging not standard return True
+        """
+        return self.exchangeRate != self.defaults.exchangeRate
 
     @property
     def personalPremiumPacketsDiscounts(self):

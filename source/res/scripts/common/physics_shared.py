@@ -505,7 +505,7 @@ def configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityF
     hullAimingPitchCfg['pitchMax'] = -hullAimingParamsPitch['wheelsCorrectionAngles']['pitchMin']
     withHullAiming = hullAimingParams['yaw']['isAvailable'] or hullAimingParamsPitch['isAvailable']
     cfg['enableSabilization'] = not withHullAiming
-    if not IS_CELLAPP:
+    if not IS_CELLAPP and hasattr(cfg, 'stiffness0'):
         cfg['stiffness0'] *= 2.5
         cfg['damping'] *= 2
     if not physics.configure(cfg):

@@ -45,7 +45,8 @@ class LoginPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.LOGIN, self.loadViewByCtxEvent),
          (LoginEventEx.SET_LOGIN_QUEUE, self.__showLoginQueue),
          (LoginEventEx.SET_AUTO_LOGIN, self.__showLoginQueue),
-         (LoginCreateEvent.CREATE_ACC, self.__createAccount))
+         (LoginCreateEvent.CREATE_ACC, self.__createAccount),
+         (VIEW_ALIAS.BOOTCAMP_LOGIN_QUEUE, self.__showBootcampLoginQueue))
         super(LoginPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
     def __showLoginQueue(self, event):
@@ -53,3 +54,6 @@ class LoginPackageBusinessHandler(PackageBusinessHandler):
 
     def __createAccount(self, event):
         self.loadViewWithGenName(VIEW_ALIAS.LOGIN_CREATE_AN_ACC, event.title, event.message, event.submit)
+
+    def __showBootcampLoginQueue(self, event):
+        self.loadViewWithGenName(VIEW_ALIAS.BOOTCAMP_LOGIN_QUEUE, event.title, event.message, event.cancelLabel, False)

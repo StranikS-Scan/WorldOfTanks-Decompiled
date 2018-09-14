@@ -24,7 +24,7 @@ class ShopItemsTab(StoreItemsTab):
 
     def _getItemActionData(self, item):
         actionData = None
-        if item.actionPrc != 0:
+        if self._isItemOnDiscount(item):
             actionData = getActionPriceData(item)
         return actionData
 
@@ -158,6 +158,9 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
             return REQ_CRITERIA.VEHICLE.DISCOUNT_RENT_OR_BUY
         else:
             return REQ_CRITERIA.EMPTY
+
+    def _isItemOnDiscount(self, item):
+        return False if item.isRestorePossible() else super(ShopVehicleTab, self)._isItemOnDiscount(item)
 
 
 class ShopRestoreVehicleTab(ShopVehicleTab):

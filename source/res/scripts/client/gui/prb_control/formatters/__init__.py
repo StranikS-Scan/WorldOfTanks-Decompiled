@@ -3,7 +3,6 @@
 import time
 import BigWorld
 from datetime import datetime
-from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
 from gui.prb_control import prb_getters
 from helpers import html, i18n
@@ -78,16 +77,6 @@ def getPrebattleStartTimeString(startTime):
 def getBattleSessionStartTimeString(startTime):
     startTimeString = getPrebattleStartTimeString(startTime)
     return '%s %s' % (i18n.makeString(PREBATTLE.TITLE_BATTLESESSION_STARTTIME), startTimeString)
-
-
-def getCompanyDivisionString(divisionName):
-    if divisionName is None:
-        divisionName = 'NA'
-    return i18n.makeString('#prebattle:labels/company/division/{0:>s}'.format(divisionName))
-
-
-def getCompanyName():
-    return '{0:>s} {1:>s}'.format(i18n.makeString(CHAT.CHANNELS_TEAM), prb_getters.getCreatorFullName())
 
 
 def getStartTimeLeft(startTime):

@@ -34,7 +34,7 @@ class SettingsWindowMeta(AbstractWindowView):
     def onTabSelected(self, tabId):
         self._printOverrideError('onTabSelected')
 
-    def onCounterTargetVisited(self, itemName):
+    def onCounterTargetVisited(self, viewId, subViewId, controlId):
         self._printOverrideError('onCounterTargetVisited')
 
     def autodetectAcousticType(self):
@@ -73,11 +73,11 @@ class SettingsWindowMeta(AbstractWindowView):
     def as_isPresetAppliedS(self):
         return self.flashObject.as_isPresetApplied() if self._isDAAPIInited() else None
 
-    def as_setCountersDataS(self, tabsList):
+    def as_setCountersDataS(self, countersData):
         """
-        :param tabsList: Represented by Array (AS)
+        :param countersData: Represented by Vector.<SettingsNewCountersVo> (AS)
         """
-        return self.flashObject.as_setCountersData(tabsList) if self._isDAAPIInited() else None
+        return self.flashObject.as_setCountersData(countersData) if self._isDAAPIInited() else None
 
     def as_onSoundSpeakersPresetApplyS(self, isApply):
         return self.flashObject.as_onSoundSpeakersPresetApply(isApply) if self._isDAAPIInited() else None

@@ -146,7 +146,6 @@ class XMPP_MUC_CHANNEL_TYPE(object):
     STANDARD = 1
     USERS = 2
     CLANS = 3
-    COMPANY = 4
 
 
 class XMPP_MUC_USER_TYPE(object):

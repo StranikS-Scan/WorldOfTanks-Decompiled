@@ -9,12 +9,12 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
 from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
+from gui.shared.events import BootcampEvent
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.functions import getViewName
@@ -44,11 +44,12 @@ class _LobbySubViewsCtrl(object):
      VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR,
      VIEW_ALIAS.LOBBY_RESEARCH,
      VIEW_ALIAS.LOBBY_TECHTREE,
-     FORTIFICATION_ALIASES.FORTIFICATIONS_VIEW_ALIAS,
      VIEW_ALIAS.BATTLE_QUEUE,
      VIEW_ALIAS.LOBBY_ACADEMY,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
-     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW)
+     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW,
+     VIEW_ALIAS.BOOTCAMP_LOBBY_RESEARCH,
+     VIEW_ALIAS.BOOTCAMP_LOBBY_TECHTREE)
 
     def __init__(self):
         super(_LobbySubViewsCtrl, self).__init__()
@@ -130,6 +131,8 @@ class LobbyView(LobbyPageMeta):
         super(LobbyView, self).__init__(ctx)
         self.__currIgrType = constants.IGR_TYPE.NONE
         self.__subViesCtrl = _LobbySubViewsCtrl()
+        self._entityEnqueueCancelCallback = None
+        return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
@@ -142,7 +145,9 @@ class LobbyView(LobbyPageMeta):
         self.addListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
-        g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
+        g_playerEvents.onVehicleBecomeElite += self._onVehicleBecomeElite
+        g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
+        g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         self.__subViesCtrl.start(self.app.loaderManager)
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         battlesCount = self.itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
@@ -157,11 +162,17 @@ class LobbyView(LobbyPageMeta):
     def _dispose(self):
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.__subViesCtrl.stop()
-        g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
+        g_playerEvents.onVehicleBecomeElite -= self._onVehicleBecomeElite
+        g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
+        g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer
+        if self._entityEnqueueCancelCallback:
+            self._entityEnqueueCancelCallback = None
+            g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         View._dispose(self)
+        return
 
     def __showHelpLayout(self, _):
         self.as_showHelpLayoutS()
@@ -174,9 +185,26 @@ class LobbyView(LobbyPageMeta):
             return
         SystemMessages.pushMessage(i18n.makeString('#menu:screenshot/save') % {'path': event.ctx['path']}, SystemMessages.SM_TYPE.Information)
 
-    def __onVehicleBecomeElite(self, vehTypeCompDescr):
+    def _onVehicleBecomeElite(self, vehTypeCompDescr):
         if not isPopupsWindowsOpenDisabled():
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.ELITE_WINDOW, getViewName(VIEW_ALIAS.ELITE_WINDOW, vehTypeCompDescr), {'vehTypeCompDescr': vehTypeCompDescr}), EVENT_BUS_SCOPE.LOBBY)
+
+    def _onEntityCheckoutEnqueued(self, cancelCallback):
+        g_eventBus.addListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(BootcampEvent(BootcampEvent.QUEUE_DIALOG_SHOW), EVENT_BUS_SCOPE.LOBBY)
+        self._entityEnqueueCancelCallback = cancelCallback
+
+    def _onEntityCheckoutCanceled(self, _):
+        g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+        if self._entityEnqueueCancelCallback:
+            self._entityEnqueueCancelCallback()
+        self._entityEnqueueCancelCallback = None
+        return
+
+    def _onAccountBecomeNonPlayer(self):
+        self._entityEnqueueCancelCallback = None
+        g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+        return
 
     def moveSpace(self, dx, dy, dz):
         if g_hangarSpace.space:

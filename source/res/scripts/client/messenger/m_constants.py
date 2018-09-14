@@ -37,15 +37,9 @@ class MESSENGER_COMMAND_TYPE(object):
 
 class LAZY_CHANNEL(object):
     COMMON = '#chat:channels/common'
-    COMPANIES = '#chat:channels/company'
     SPECIAL_BATTLES = '#chat:channels/special_battles'
     XMPP_COMMON = '#chat:channels/xmpp_common'
-    XMPP_COMPANIES = '#chat:channels/xmpp_company'
-    ALL = (COMMON,
-     COMPANIES,
-     SPECIAL_BATTLES,
-     XMPP_COMMON,
-     XMPP_COMPANIES)
+    ALL = (COMMON, SPECIAL_BATTLES, XMPP_COMMON)
 
 
 class BATTLE_CHANNEL(object):
@@ -78,7 +72,6 @@ class USER_TAG(object):
     CURRENT = 'himself'
     CLAN_MEMBER = 'ownClanMember'
     OTHER_CLAN_MEMBER = 'otherClanMember'
-    CLUB_MEMBER = 'clubMember'
     REFERRER = 'referrer'
     REFERRAL = 'referral'
     IGR_BASE = 'igr/base'
@@ -98,7 +91,6 @@ class USER_TAG(object):
     PRESENCE_DND = 'presence/dnd'
     BAN_CHAT = 'ban/chat'
     _SHARED_TAGS = {CLAN_MEMBER,
-     CLUB_MEMBER,
      REFERRER,
      REFERRAL,
      SEARCH,
@@ -158,9 +150,8 @@ CLIENT_ACTION_NAMES = {v:k for k, v in CLIENT_ACTION_ID.__dict__.iteritems() if 
 class GAME_ONLINE_STATUS(object):
     UNDEFINED = 0
     IN_CLAN_CHAT = 1
-    IN_CLUB_CHAT = 2
-    IN_SEARCH = 4
-    ONLINE = IN_CLAN_CHAT | IN_CLUB_CHAT
+    IN_SEARCH = 2
+    ONLINE = IN_CLAN_CHAT
 
     @classmethod
     def addBit(cls, status, bit):
@@ -186,9 +177,8 @@ class GAME_ONLINE_STATUS(object):
 class PRIMARY_CHANNEL_ORDER(object):
     LAZY = 1
     CLAN = 2
-    CLUB = 3
-    SYSTEM = 4
-    OTHER = 5
+    SYSTEM = 3
+    OTHER = 4
 
 
 class SCH_CLIENT_MSG_TYPE(object):

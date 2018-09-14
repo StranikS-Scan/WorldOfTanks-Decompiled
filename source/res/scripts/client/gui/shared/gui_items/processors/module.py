@@ -224,7 +224,7 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
     Root modules installer.
     """
 
-    def __init__(self, vehicle, item, itemType, slotIdx, install=True, conflictedEqs=None, plugs=tuple()):
+    def __init__(self, vehicle, item, itemType, slotIdx, install=True, conflictedEqs=None, plugs=tuple(), skipConfirm=False):
         """
         Ctor.
         
@@ -242,7 +242,7 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         VehicleItemProcessor.__init__(self, vehicle=vehicle, module=item, allowableTypes=itemType)
         addPlugins = []
         if install:
-            addPlugins += (plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs)))
+            addPlugins += (plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         else:
             addPlugins += (plugins.CompatibilityRemoveValidator(vehicle, item),)
         self.install = install
@@ -262,7 +262,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
     Vehicle opt devices installer.
     """
 
-    def __init__(self, vehicle, item, slotIdx, install=True, isUseGold=False, conflictedEqs=None):
+    def __init__(self, vehicle, item, slotIdx, install=True, isUseGold=False, conflictedEqs=None, skipConfirm=False):
         """
         Ctor.
         
@@ -272,7 +272,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         @param install: true if device is being installed, false if being demounted
         @param conflictedEqs: conflicted items
         """
-        super(OptDeviceInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.OPTIONALDEVICE,), slotIdx, install, conflictedEqs)
+        super(OptDeviceInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.OPTIONALDEVICE,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
         self.cost = self.itemsCache.items.shop.paidRemovalCost
         defaultCost = self.itemsCache.items.shop.defaults.paidRemovalCost
         action = None
@@ -280,11 +280,11 @@ class OptDeviceInstaller(ModuleInstallProcessor):
             action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, Money(gold=self.cost), Money(gold=defaultCost))
         addPlugins = []
         if install:
-            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable),)
+            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm),)
         else:
             addPlugins += (plugins.DemountDeviceConfirmator('removeConfirmationNotRemovableGold', ctx={'name': item.userName,
               'price': self.cost,
-              'action': action}, isEnabled=not item.isRemovable and isUseGold), plugins.DestroyDeviceConfirmator('removeConfirmationNotRemovable', itemName=item.userName, isEnabled=not item.isRemovable and not isUseGold))
+              'action': action}, isEnabled=not item.isRemovable and isUseGold and not skipConfirm), plugins.DestroyDeviceConfirmator('removeConfirmationNotRemovable', itemName=item.userName, isEnabled=not item.isRemovable and not isUseGold and not skipConfirm))
         self.addPlugins(addPlugins)
         self.useGold = isUseGold
         return
@@ -309,7 +309,7 @@ class EquipmentInstaller(ModuleInstallProcessor):
     Vehicle equipment installer.
     """
 
-    def __init__(self, vehicle, item, slotIdx, install=True, conflictedEqs=None):
+    def __init__(self, vehicle, item, slotIdx, install=True, conflictedEqs=None, skipConfirm=False):
         """
         Ctor.
         
@@ -319,7 +319,7 @@ class EquipmentInstaller(ModuleInstallProcessor):
         @param install: flag to designated process
         @param conflictedEqs: conflicted items
         """
-        super(EquipmentInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.EQUIPMENT,), slotIdx, install, conflictedEqs)
+        super(EquipmentInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.EQUIPMENT,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
 
     def _successHandler(self, code, ctx=None):
         item = self.item if self.install else None
@@ -341,7 +341,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
     Vehicle other modules installer.
     """
 
-    def __init__(self, vehicle, item, itemType, install=True, conflictedEqs=None, plugs=tuple()):
+    def __init__(self, vehicle, item, itemType, install=True, conflictedEqs=None, plugs=tuple(), skipConfirm=False):
         """
         Ctor.
         
@@ -357,7 +357,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         ModuleProcessor.__init__(self, item=item, opType=opType, plugs=plugs)
         VehicleItemProcessor.__init__(self, vehicle=vehicle, module=item, allowableTypes=itemType)
         if install:
-            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs)))
+            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         self.install = install
 
     def _getMsgCtx(self):
@@ -382,7 +382,7 @@ class TurretInstaller(CommonModuleInstallProcessor):
     Vehicle turret installer.
     """
 
-    def __init__(self, vehicle, item, conflictedEqs=None):
+    def __init__(self, vehicle, item, conflictedEqs=None, skipConfirm=False):
         """
         Ctor.
         
@@ -390,7 +390,7 @@ class TurretInstaller(CommonModuleInstallProcessor):
         @param item: equipment to install
         @param conflictedEqs: conflicted items
         """
-        super(TurretInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.TURRET,), True, conflictedEqs)
+        super(TurretInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.TURRET,), True, conflictedEqs, skipConfirm=skipConfirm)
         self.gunCD = 0
         mayInstallCurrent = item.mayInstall(vehicle, gunCD=self.gunCD)
         if not mayInstallCurrent[0]:
@@ -440,7 +440,7 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
     Vehicle rest modules installer: sheels, fuel tanks, etc.
     """
 
-    def __init__(self, vehicle, item, conflictedEqs=None):
+    def __init__(self, vehicle, item, conflictedEqs=None, skipConfirm=False):
         """
         Ctor.
         
@@ -453,7 +453,7 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
          GUI_ITEM_TYPE.ENGINE,
          GUI_ITEM_TYPE.FUEL_TANK,
          GUI_ITEM_TYPE.RADIO,
-         GUI_ITEM_TYPE.SHELL), True, conflictedEqs)
+         GUI_ITEM_TYPE.SHELL), True, conflictedEqs, skipConfirm=skipConfirm)
         self.addPlugin(plugins.CompatibilityInstallValidator(vehicle, item, 0))
 
     def _request(self, callback):
@@ -480,7 +480,7 @@ class PreviewVehicleModuleInstaller(OtherModuleInstaller):
 
 class BuyAndInstallItemProcessor(ModuleBuyer):
 
-    def __init__(self, vehicle, item, slotIdx, gunCompDescr, conflictedEqs=None):
+    def __init__(self, vehicle, item, slotIdx, gunCompDescr, conflictedEqs=None, skipConfirm=False):
         self.__vehInvID = vehicle.inventoryID
         self.__slotIdx = int(slotIdx)
         self.__gunCompDescr = gunCompDescr
@@ -498,17 +498,17 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
               'typeString': self.item.userType,
               'conflictedEqs': conflictMsg,
               'currencyIcon': _getIconHtmlTagForCurrency(self._currency),
-              'value': _formatCurrencyValue(self._currency, self._getOpPrice().get(self._currency))})])
+              'value': _formatCurrencyValue(self._currency, self._getOpPrice().get(self._currency))}, isEnabled=not skipConfirm)])
             if item.itemTypeID == GUI_ITEM_TYPE.TURRET:
                 self.addPlugin(plugins.TurretCompatibilityInstallValidator(vehicle, item, self.__gunCompDescr))
             elif item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable))
-            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs)))
+                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm))
+            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         else:
             self.addPlugins([plugins.ModuleBuyerConfirmator('confirmBuyNotInstall', ctx={'userString': item.userName,
               'typeString': self.item.userType,
               Currency.CREDITS: BigWorld.wg_getIntegralFormat(self._getOpPrice().credits),
-              'reason': self.__makeInstallReasonMsg(installReason)})])
+              'reason': self.__makeInstallReasonMsg(installReason)}, isEnabled=not skipConfirm)])
 
     def _getItemCurrencyAndPrice(self, currency):
         """
@@ -577,18 +577,18 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
             super(BuyAndInstallItemProcessor, self)._request(callback)
 
 
-def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, isUseGold=False, conflictedEqs=None):
+def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, isUseGold=False, conflictedEqs=None, skipConfirm=False):
     """
     Select proper installer by type
     """
     if newComponentItem.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
-        return EquipmentInstaller(vehicle, newComponentItem, slotIdx, install, conflictedEqs)
+        return EquipmentInstaller(vehicle, newComponentItem, slotIdx, install, conflictedEqs, skipConfirm)
     elif newComponentItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-        return OptDeviceInstaller(vehicle, newComponentItem, slotIdx, install, isUseGold, conflictedEqs)
+        return OptDeviceInstaller(vehicle, newComponentItem, slotIdx, install, isUseGold, conflictedEqs, skipConfirm)
     elif newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET:
-        return TurretInstaller(vehicle, newComponentItem, conflictedEqs)
+        return TurretInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
     else:
-        return OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs)
+        return OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
 
 
 def getPreviewInstallerProcessor(vehicle, newComponentItem, conflictedEqs=None):

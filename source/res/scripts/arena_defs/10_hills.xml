@@ -91,6 +91,21 @@
         </level>
       </battleScenarios>
     </sandbox>
+    <bootcamp>
+      <wwmusic>	bc_music_mission_05	</wwmusic>
+      <teamBasePositions>
+        <team1>
+          <position1>	175.783722 -305.848389	</position1>
+        </team1>
+        <team2>
+          <position1>	-236.649109 329.674500	</position1>
+        </team2>
+      </teamBasePositions>
+      <maxPlayersInTeam>	1	</maxPlayersInTeam>
+      <runDelay>	10	</runDelay>
+    </bootcamp>
   </gameplayTypes>
   <waypoints>	spaces/10_hills/paths.xml	</waypoints>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
 </10_hills.xml>

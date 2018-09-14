@@ -154,6 +154,8 @@ class LoginState(IGlobalState):
             return LobbyState()
         elif spaceID == _SPACE_ID.BATTLE_LOADING:
             return BattleLoadingState(ctx.arenaGuiType)
+        elif spaceID == _SPACE_ID.WAITING:
+            return WaitingState()
         else:
             LOG_ERROR('State can not be switched', self, ctx)
             return None
@@ -234,7 +236,12 @@ class LobbyState(ConnectionState):
 
     def _getNextState(self, ctx):
         newState = None
-        return BattleLoadingState(ctx.arenaGuiType) if ctx.guiSpaceID == _SPACE_ID.BATTLE_LOADING else newState
+        if ctx.guiSpaceID == _SPACE_ID.BATTLE_LOADING:
+            return BattleLoadingState(ctx.arenaGuiType)
+        else:
+            if ctx.guiSpaceID == _SPACE_ID.WAITING:
+                newState = WaitingState()
+            return newState
 
 
 class _ArenaState(ConnectionState):

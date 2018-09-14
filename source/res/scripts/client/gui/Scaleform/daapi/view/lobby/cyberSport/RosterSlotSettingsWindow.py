@@ -123,7 +123,7 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
 
     def __makeInitialSlotData(self, currentSlotSetting):
         if currentSlotSetting is None:
-            return (makeFiltersVO([], [], self.__convertLevelsRange(self._levelsRange)), RANGE_SELECTOR_TAB_ID)
+            return (None, None)
         elif currentSlotSetting.selectedVehicle > 0:
             vehicle = self.itemsCache.items.getItemByCD(int(currentSlotSetting.selectedVehicle))
             return (makeVehicleVO(vehicle, self.__convertLevelsRange(self._levelsRange), self.__vehicleTypes), VEHICLE_SELECTOR_TAB_ID)

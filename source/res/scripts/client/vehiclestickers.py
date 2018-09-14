@@ -14,6 +14,7 @@ import BattleReplay
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import stricted_loading
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames, TankNodeNames
+from vehicle_systems.tankStructure import DetachedTurretPartIndexes, DetachedTurretPartNames
 TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
 
 class StickerAttributes():
@@ -281,9 +282,9 @@ class VehicleStickers(object):
     def getCurrentInsigniaRank(self):
         return self.__currentInsigniaRank
 
-    def attach(self, compoundModel, isDamaged, showDamageStickers):
+    def attach(self, compoundModel, isDamaged, showDamageStickers, isDetachedTurret=False):
         for componentName, attachNodeName in VehicleStickers.COMPONENT_NAMES:
-            idx = TankPartNames.getIdx(componentName)
+            idx = DetachedTurretPartNames.getIdx(componentName) if isDetachedTurret else TankPartNames.getIdx(componentName)
             node = compoundModel.node(attachNodeName)
             if node is None:
                 continue
@@ -301,13 +302,13 @@ class VehicleStickers(object):
         if isDamaged:
             gunNode = compoundModel.node(TankPartNames.GUN)
         elif self.__animateGunInsignia:
-            gunNode = compoundModel.node(TankNodeNames.GUN_INCLINATION) if isDamaged else compoundModel.node(VehicleStickers.__INSIGNIA_NODE_NAME)
+            gunNode = compoundModel.node(VehicleStickers.__INSIGNIA_NODE_NAME)
         else:
             gunNode = compoundModel.node(TankNodeNames.GUN_INCLINATION)
         if gunNode is None:
             return
         else:
-            gunGeometry = compoundModel.getPartGeometryLink(TankPartIndexes.GUN)
+            gunGeometry = compoundModel.getPartGeometryLink(DetachedTurretPartIndexes.GUN) if isDetachedTurret else compoundModel.getPartGeometryLink(TankPartIndexes.GUN)
             if isDamaged:
                 toPartRoot = mathUtils.createIdentityMatrix()
             else:

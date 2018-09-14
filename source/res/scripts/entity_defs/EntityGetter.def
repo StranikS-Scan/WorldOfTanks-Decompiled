@@ -1,0 +1,27 @@
+<EntityGetter.def>
+  <Properties>
+    <entityDBID>
+      <Type>	DB_ID	</Type>
+      <Flags>	BASE	</Flags>
+    </entityDBID>
+    <entityType>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+    </entityType>
+    <priority>
+      <Type>	UINT8	</Type>
+      <Flags>	BASE	</Flags>
+    </priority>
+    <owner>
+      <Type>	MAILBOX	</Type>
+      <Flags>	BASE	</Flags>
+    </owner>
+  </Properties>
+  <BaseMethods>
+    <checkout></checkout>
+    <processCheckout></processCheckout>
+    <onEnqueued>
+      <Arg>	UINT64	</Arg>
+    </onEnqueued>
+  </BaseMethods>
+</EntityGetter.def>

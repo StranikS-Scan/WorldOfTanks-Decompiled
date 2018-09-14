@@ -116,7 +116,7 @@ class SquadChannelController(_ChannelController):
         super(SquadChannelController, self).__init__(channel, chat_message.SquadMessageBuilder(), True)
 
     def isEnabled(self):
-        return True
+        return self.proto.unitChat.isInited()
 
     def setView(self, view):
         super(SquadChannelController, self).setView(view)

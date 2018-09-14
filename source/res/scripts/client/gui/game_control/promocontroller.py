@@ -1,12 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/PromoController.py
-import Settings
-import constants
 from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings, PROMO, LAST_PROMO_PATCH_VERSION
 from account_shared import getClientMainVersion
 from adisp import async, process
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -15,6 +13,7 @@ from gui.game_control.links import URLMarcos
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from helpers import i18n, isPlayerAccount, dependency
+from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController
 from skeletons.gui.lobby_context import ILobbyContext
 
@@ -24,6 +23,9 @@ class PromoController(IPromoController):
     eventsNotification = dependency.descriptor(IEventsNotificationsController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
+    class GUI_EVENTS(CONST_CONTAINER):
+        CLOSE_GUI_EVENT = 'close_window'
+
     def __init__(self):
         super(PromoController, self).__init__()
         self.__currentVersionPromoUrl = None
@@ -31,6 +33,7 @@ class PromoController(IPromoController):
         self.__currentVersionBrowserShown = False
         self.__promoShown = set()
         self.__availablePromo = set()
+        self.__actionsHandlers = None
         self.__urlMacros = URLMarcos()
         self._isPromoShown = False
         return
@@ -39,6 +42,7 @@ class PromoController(IPromoController):
         self._stop()
         self.__urlMacros.clear()
         self.__urlMacros = None
+        self.__actionsHandlers = None
         super(PromoController, self).fini()
         return
 
@@ -70,9 +74,24 @@ class PromoController(IPromoController):
         self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, promoTitle, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
 
     @process
-    def showPromo(self, url, title):
+    def showPromo(self, url, title, handlers=None):
         promoUrl = yield self.__urlMacros.parse(url)
         self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, title, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
+        self.__actionsHandlers = handlers
+        if handlers:
+            webBrowser = self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
+            if webBrowser is not None:
+                for evtName in handlers.iterkeys():
+                    if evtName == self.GUI_EVENTS.CLOSE_GUI_EVENT:
+                        webBrowser.onUserRequestToClose += self.__onUserRequestToClose
+                    LOG_WARNING('Unsupported gui event = "{}"'.format(evtName))
+
+            else:
+                LOG_WARNING('Browser with id = "{}" has not been found'.format(self.__currentVersionBrowserID))
+        return
+
+    def getCurrentVersionBrowserID(self):
+        return self.__currentVersionBrowserID
 
     def isPatchPromoAvailable(self):
         return self.__currentVersionPromoUrl is not None and GUI_SETTINGS.isPatchPromoEnabled
@@ -86,6 +105,9 @@ class PromoController(IPromoController):
         self.__currentVersionBrowserID = None
         self.__currentVersionBrowserShown = False
         self.browserCtrl.onBrowserDeleted -= self.__onBrowserDeleted
+        webBrowser = self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
+        if webBrowser is not None:
+            webBrowser.onUserRequestToClose -= self.__onUserRequestToClose
         self.eventsNotification.onEventNotificationsChanged -= self.__onEventNotification
         return
 
@@ -131,6 +153,9 @@ class PromoController(IPromoController):
             return item.eventType == gc_constants.PROMO.TEMPLATE.ACTION
 
         return self.eventsNotification.getEventsNotifications(filterFunc)
+
+    def __onUserRequestToClose(self):
+        self.__actionsHandlers[self.GUI_EVENTS.CLOSE_GUI_EVENT]()
 
     def __savePromoShown(self):
         AccountSettings.setFilter(PROMO, self.__promoShown)

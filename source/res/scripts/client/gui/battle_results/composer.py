@@ -53,18 +53,6 @@ class RegularStatsComposer(StatsComposer):
         super(RegularStatsComposer, self).__init__(reusable, templates.REGULAR_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.REGULAR_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
 
 
-class SortieStatsComposer(StatsComposer):
-
-    def __init__(self, reusable):
-        super(SortieStatsComposer, self).__init__(reusable, templates.SORTIE_BATTLE_COMMON_STATS_BLOCK.clone(), templates.SORTIE_PERSONAL_STATS_BLOCK.clone(), templates.SORTIE_TEAMS_STATS_BLOCK.clone(), templates.CLAN_TEXT_STATS_BLOCK.clone())
-
-
-class FortBattleStatsComposer(StatsComposer):
-
-    def __init__(self, reusable):
-        super(FortBattleStatsComposer, self).__init__(reusable, templates.FORT_BATTLE_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.REGULAR_TEAMS_STATS_BLOCK.clone(), templates.CLAN_TEXT_STATS_BLOCK.clone())
-
-
 class FalloutStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
@@ -128,11 +116,7 @@ def createComposer(reusable):
     :return: instance of composer.
     """
     bonusType = reusable.common.arenaBonusType
-    if bonusType == ARENA_BONUS_TYPE.SORTIE:
-        composer = SortieStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.FORT_BATTLE:
-        composer = FortBattleStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
+    if bonusType == ARENA_BONUS_TYPE.CYBERSPORT:
         composer = CyberSportStatsComposer(reusable)
     elif bonusType in ARENA_BONUS_TYPE.FALLOUT_RANGE:
         composer = FalloutStatsComposer(reusable)

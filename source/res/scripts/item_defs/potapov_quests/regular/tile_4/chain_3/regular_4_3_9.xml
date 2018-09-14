@@ -9,9 +9,12 @@
           <and>
             <vehicleDamage>
               <classes>	heavyTank	</classes>
-              <lvlDiff>	1	</lvlDiff>
               <greaterOrEqual>	2000	</greaterOrEqual>
             </vehicleDamage>
+            <vehicleKills>
+              <classes>	heavyTank	</classes>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleKills>
           </and>
         </postBattle>
       </conditions>
@@ -33,9 +36,12 @@
           <and>
             <vehicleDamage>
               <classes>	heavyTank	</classes>
-              <lvlDiff>	1	</lvlDiff>
               <greaterOrEqual>	2000	</greaterOrEqual>
             </vehicleDamage>
+            <vehicleKills>
+              <classes>	heavyTank	</classes>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleKills>
             <isAlive></isAlive>
             <win></win>
           </and>

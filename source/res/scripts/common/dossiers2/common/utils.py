@@ -16,10 +16,6 @@ def printTankmanDossier(tankmanDossierDescr):
     printDossierFromDescr(tankmanDossierDescr, dossiers2.getTankmanDossierDescr, __DOSSIER_CONSOLE_OUTPUT_FORMAT)
 
 
-def printFortifiedRegionsDossier(fortifiedRegionsDossierDescr):
-    printDossierFromDescr(fortifiedRegionsDossierDescr, dossiers2.getFortifiedRegionsDossierDescr, __DOSSIER_CONSOLE_OUTPUT_FORMAT)
-
-
 def printRated7x7Dossier(rated7x7DossierDescr):
     printDossierFromDescr(rated7x7DossierDescr, dossiers2.getRated7x7DossierDescr, __DOSSIER_CONSOLE_OUTPUT_FORMAT)
 

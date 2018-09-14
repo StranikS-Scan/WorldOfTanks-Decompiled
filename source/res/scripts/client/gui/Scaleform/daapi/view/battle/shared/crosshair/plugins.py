@@ -572,7 +572,7 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
 
 class ShotResultIndicatorPlugin(CrosshairPlugin):
     """ Plugin to show shot result (good pierced, ...) if desired setting is on."""
-    __slots__ = ('__isEnabled', '__playerTeam', '__cache', '__colors', '__mapping')
+    __slots__ = ('__isEnabled', '__playerTeam', '__cache', '__colors', '__mapping', '__shotResultResolver')
 
     def __init__(self, parentObj):
         super(ShotResultIndicatorPlugin, self).__init__(parentObj)
@@ -581,6 +581,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         self.__playerTeam = 0
         self.__cache = defaultdict(str)
         self.__colors = None
+        self.__shotResultResolver = gun_marker_ctrl.createShotResultResolver()
         return
 
     def start(self):
@@ -620,8 +621,8 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
                 value = settings['gunTagType'] in _VIEW_CONSTANTS.GUN_TAG_SHOT_RESULT_TYPES
                 self.__mapping[_SETTINGS_KEY_TO_VIEW_ID[key]] = value
 
-    def __updateColor(self, markerType, position, collision):
-        result = gun_marker_ctrl.getShotResult(position, collision, excludeTeam=self.__playerTeam)
+    def __updateColor(self, markerType, position, collision, dir):
+        result = self.__shotResultResolver.getShotResult(position, collision, dir, excludeTeam=self.__playerTeam)
         if result in self.__colors:
             color = self.__colors[result]
             if self.__cache[markerType] != result and self._parentObj.setGunMarkerColor(markerType, color):
@@ -638,9 +639,9 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         else:
             self.__cache.clear()
 
-    def __onGunMarkerStateChanged(self, markerType, position, _, collision):
+    def __onGunMarkerStateChanged(self, markerType, position, dir, collision):
         if self.__isEnabled:
-            self.__updateColor(markerType, position, collision)
+            self.__updateColor(markerType, position, collision, dir)
 
     def __onCrosshairViewChanged(self, viewID):
         self.__setEnabled(viewID)

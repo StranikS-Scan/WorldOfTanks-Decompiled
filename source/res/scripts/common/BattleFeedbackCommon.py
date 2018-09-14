@@ -17,6 +17,7 @@ class BATTLE_EVENT_TYPE:
     RECEIVED_CRIT = 9
     RECEIVED_DAMAGE = 10
     STUN_ASSIST = 11
+    TARGET_VISIBILITY = 12
     HIDE_IF_TARGET_INVISIBLE = (CRIT, DAMAGE)
     DAMAGE_EVENTS = frozenset([RADIO_ASSIST,
      TRACK_ASSIST,
@@ -27,6 +28,7 @@ class BATTLE_EVENT_TYPE:
     CRITS_EVENTS = frozenset([CRIT, RECEIVED_CRIT])
     TARGET_EVENTS = frozenset([SPOTTED, KILL])
     POINTS_EVENTS = frozenset([BASE_CAPTURE_POINTS, BASE_CAPTURE_DROPPED])
+    VISIBILITY_EVENTS = frozenset([TARGET_VISIBILITY])
     ALL = frozenset([SPOTTED,
      RADIO_ASSIST,
      TRACK_ASSIST,
@@ -38,8 +40,9 @@ class BATTLE_EVENT_TYPE:
      DAMAGE,
      KILL,
      RECEIVED_CRIT,
-     RECEIVED_DAMAGE])
-    assert ALL == DAMAGE_EVENTS | CRITS_EVENTS | TARGET_EVENTS | POINTS_EVENTS
+     RECEIVED_DAMAGE,
+     TARGET_VISIBILITY])
+    assert ALL == DAMAGE_EVENTS | CRITS_EVENTS | TARGET_EVENTS | POINTS_EVENTS | VISIBILITY_EVENTS
 
     @staticmethod
     def packDamage(damage, attackReasonID, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False):
@@ -96,3 +99,24 @@ class BATTLE_EVENT_TYPE:
          packedCrits >> 8 & 255,
          packedCrits >> 1 & 127,
          packedCrits & 1)
+
+    @staticmethod
+    def packVisibility(isVisible, isDirect):
+        """
+        Pack information about crits into 32 bits.
+        [        2     |      1       ]
+        [ is direct    | is visible   ]
+        
+        @param isVisible: visible or invisible
+        @param isDirect: direct or indirect visibility
+        """
+        return (1 if isVisible else 0) | (2 if isDirect else 0)
+
+    @staticmethod
+    def unpackVisibility(packedVisibility):
+        """
+        Unpack visibility information that has been packed with packVisibility.
+        @param packedVisibility: packed visibility information.
+        @return: tuple(isVisible, isDirect)
+        """
+        return (packedVisibility & 1, packedVisibility & 2)

@@ -213,10 +213,7 @@ class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, targetData, accountDossier, isCurrentUser):
-        self.__fortMiscTargetData = accountDossier.getFortMiscStats()
-        self.__totalSortiesLoot = self.__fortMiscTargetData.getLootInSorties()
         self.__fortBattlesTargetData = accountDossier.getFortBattlesStats()
-        self.__avgFortSortiesLoot = _getFortAvgLoot(targetData, self.__totalSortiesLoot)
         super(ProfileFortStatisticsVO, self).__init__(targetData, accountDossier, isCurrentUser)
 
     def _getHeaderText(self, data):

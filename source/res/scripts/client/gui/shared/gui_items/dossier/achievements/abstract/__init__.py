@@ -4,6 +4,7 @@ from helpers import dependency
 from mixins import Deprecated
 from mixins import Quest
 from mixins import HasVehiclesList as _HasVehiclesList
+from mixins import NoProgressBar
 from ClassProgressAchievement import ClassProgressAchievement
 from HistoricalAchievement import HistoricalAchievement
 from NationSpecificAchievement import NationSpecificAchievement
@@ -18,6 +19,10 @@ class DeprecatedAchievement(Deprecated, RegularAchievement):
 
 
 class QuestAchievement(Quest, RegularAchievement):
+    pass
+
+
+class DeprecatedClassAchievement(Deprecated, NoProgressBar, ClassProgressAchievement):
     pass
 
 

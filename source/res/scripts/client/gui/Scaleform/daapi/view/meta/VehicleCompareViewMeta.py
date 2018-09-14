@@ -7,7 +7,7 @@ class VehicleCompareViewMeta(VehicleCompareCommonViewMeta):
     def onBackClick(self):
         self._printOverrideError('onBackClick')
 
-    def onGoToPreviewClick(self, vehicleID):
+    def onGoToPreviewClick(self, index):
         self._printOverrideError('onGoToPreviewClick')
 
     def onGoToHangarClick(self, vehicleID):

@@ -182,17 +182,6 @@ def makeFreeXpLabel(value, canBeFaded=False):
     return makeHtmlString('html_templates:lobby/battle_results', template, {'value': BigWorld.wg_getIntegralFormat(int(value))})
 
 
-def makeResourceLabel(value, canBeFaded=False):
-    formatted = BigWorld.wg_getIntegralFormat(int(value))
-    if formatted < 0:
-        formatted = markValueAsError(formatted)
-    if canBeFaded and not value:
-        template = 'resource_small_inactive_label'
-    else:
-        template = 'resource_small_label'
-    return makeHtmlString('html_templates:lobby/battle_results', template, {'value': formatted})
-
-
 def makePercentLabel(value):
     formatted = BigWorld.wg_getGoldFormat(int(value))
     template = 'percent'
@@ -240,14 +229,6 @@ def makeStatValue(field, value):
 def makeTimeStatsVO(field, value):
     return {'label': i18n.makeString(_TIME_STATS_KEY_FORMAT.format(field)),
      'value': value}
-
-
-def makeTotalFortResourcesItem(totalFortResource):
-    return makeHtmlString('html_templates:lobby/battle_results', 'teamResourceTotal', {'resourceValue': totalFortResource})
-
-
-def makeTotalInfluencePointsItem(totalInfluencePoints):
-    return makeHtmlString('html_templates:lobby/battle_results', 'teamInfluenceTotal', {'resourceValue': totalInfluencePoints})
 
 
 def makeRankIcon(rank):

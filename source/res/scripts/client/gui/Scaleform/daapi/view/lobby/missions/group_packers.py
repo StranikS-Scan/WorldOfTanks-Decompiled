@@ -5,6 +5,7 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from Event import EventManager, Event
 from constants import EVENT_TYPE
+from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import MarathonAwardComposer
 from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.tokens import TokensMarathonFormatter
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
@@ -184,7 +185,8 @@ class GroupedEventsBlocksFinder(_EventsBlockBuilder):
             cachedGroups.pop(gID).clear()
 
         for gID in invalidGroupsIds:
-            cachedGroups[gID].invalidate()
+            cachedGroups[gID].clear()
+            cachedGroups[gID] = self._createGroupedEventsBlock(newEventsGroups[gID])
 
         for gID in newGroupsIds:
             cachedGroups[gID] = self._createGroupedEventsBlock(newEventsGroups[gID])
@@ -309,7 +311,8 @@ class _EventsBlockInfo(object):
                        'btnVisible': True,
                        'btnLabel': QUESTS.MISSIONS_NOTASKSBODY_DUMMY_BTNLABEL,
                        'btnTooltip': '',
-                       'btnEvent': 'ResetFilterEvent'}}
+                       'btnEvent': 'ResetFilterEvent',
+                       'btnLinkage': BUTTON_LINKAGES.BUTTON_BLACK}}
         else:
             return {'missions': cardsList}
 

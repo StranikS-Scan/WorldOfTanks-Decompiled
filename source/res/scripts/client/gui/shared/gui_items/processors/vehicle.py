@@ -3,6 +3,7 @@
 import BigWorld
 import AccountCommands
 from AccountCommands import VEHICLE_SETTINGS_FLAG
+from bootcamp.Bootcamp import g_bootcamp
 from items import EQUIPMENT_TYPES
 from account_shared import LayoutIterator
 from adisp import process, async
@@ -393,7 +394,7 @@ class VehicleSeller(ItemProcessor):
         super(VehicleSeller, self).__init__(vehicle, (plugins.VehicleValidator(vehicle, False, prop={'isBroken': True,
           'isLocked': True}),
          plugins.VehicleSellValidator(vehicle),
-         plugins.MoneyValidator(self.spendMoney),
+         plugins.MoneyValidator(self.spendMoney - self.gainMoney),
          plugins.VehicleSellsLeftValidator(vehicle, not (vehicle.isRented and vehicle.rentalIsOver)),
          plugins.BarracksSlotsValidator(barracksBerthsNeeded, isEnabled=not isCrewDismiss),
          plugins.BufferOverflowConfirmator(bufferOverflowCtx, isEnabled=isBufferOverflowed),
@@ -549,7 +550,7 @@ class VehicleLayoutProcessor(Processor):
     Apply equipments and shells layout
     """
 
-    def __init__(self, vehicle, shellsLayout=None, eqsLayout=None):
+    def __init__(self, vehicle, shellsLayout=None, eqsLayout=None, skipConfirm=False):
         """
         Ctor.
         
@@ -561,9 +562,9 @@ class VehicleLayoutProcessor(Processor):
         self.vehicle = vehicle
         self.shellsLayout = shellsLayout
         self.eqsLayout = eqsLayout
-        self._setupPlugins()
+        self._setupPlugins(skipConfirm)
 
-    def _setupPlugins(self):
+    def _setupPlugins(self, skipConfirm):
         shellsPrice = self.getShellsLayoutPrice()
         eqsPrice = self.getEqsLayoutPrice()
         isWalletValidatorEnabled = bool(shellsPrice.gold or eqsPrice.gold)
@@ -615,6 +616,8 @@ class VehicleLayoutProcessor(Processor):
             return ZERO_MONEY
         else:
             price = ZERO_MONEY
+            if g_bootcamp.isRunning():
+                return price
             for shellCompDescr, count, isBoughtForCredits in LayoutIterator(self.shellsLayout.getRawLayout()):
                 if not shellCompDescr or not count:
                     continue
@@ -657,7 +660,7 @@ class VehicleLayoutProcessor(Processor):
 
 class VehicleBattleBoosterLayoutProcessor(VehicleLayoutProcessor):
 
-    def __init__(self, vehicle, battleBooster, eqsLayout):
+    def __init__(self, vehicle, battleBooster, eqsLayout, skipConfirm=False):
         """
         Ctor.
         
@@ -666,12 +669,12 @@ class VehicleBattleBoosterLayoutProcessor(VehicleLayoutProcessor):
         @param eqsLayout: instance of EquipmentVehicleLayout
         """
         self.battleBooster = battleBooster
-        super(VehicleBattleBoosterLayoutProcessor, self).__init__(vehicle, None, eqsLayout)
+        super(VehicleBattleBoosterLayoutProcessor, self).__init__(vehicle, None, eqsLayout, skipConfirm)
         return
 
-    def _setupPlugins(self):
+    def _setupPlugins(self, skipConfirm):
         if self.battleBooster:
-            self.addPlugin(plugins.BattleBoosterConfirmator('confirmBattleBoosterInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster))
+            self.addPlugin(plugins.BattleBoosterConfirmator('confirmBattleBoosterInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster, isEnabled=not skipConfirm))
 
     def _getEquipmentType(self):
         return EQUIPMENT_TYPES.battleBoosters
@@ -679,13 +682,13 @@ class VehicleBattleBoosterLayoutProcessor(VehicleLayoutProcessor):
 
 class BuyAndInstallBattleBoosterProcessor(VehicleBattleBoosterLayoutProcessor):
 
-    def __init__(self, vehicle, battleBooster, eqsLayout, count):
+    def __init__(self, vehicle, battleBooster, eqsLayout, count, skipConfirm=False):
         self.count = count
-        super(BuyAndInstallBattleBoosterProcessor, self).__init__(vehicle, battleBooster, eqsLayout)
+        super(BuyAndInstallBattleBoosterProcessor, self).__init__(vehicle, battleBooster, eqsLayout, skipConfirm)
 
-    def _setupPlugins(self):
+    def _setupPlugins(self, skipConfirm):
         itemPrice = self.battleBooster.altPrice or self.battleBooster.buyPrice
-        self.addPlugins((plugins.MoneyValidator(itemPrice * self.count), plugins.BattleBoosterConfirmator('confirmBattleBoosterBuyAndInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster)))
+        self.addPlugins((plugins.MoneyValidator(itemPrice * self.count), plugins.BattleBoosterConfirmator('confirmBattleBoosterBuyAndInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster, isEnabled=not skipConfirm)))
 
     def _request(self, callback):
         BigWorld.player().shop.buy(self.battleBooster.itemTypeID, self.battleBooster.nationID, self.battleBooster.intCD, self.count, 0, lambda code: self._buyResponse(code, callback))

@@ -1,0 +1,321 @@
+<message_actions.xml>
+  <action>
+    <name>	msgTank1	</name>
+    <nations>	True	</nations>
+    <nation>
+      <nation_id>	usa	</nation_id>
+      <icon>	../maps/icons/bootcamp/lines/bcAwardOptions.png	</icon>
+      <preset>	BLUE	</preset>
+      <label>	#bootcamp:MESSAGE_VEHICLE_AWARDED_LABEL	</label>
+      <text>	#bootcamp:MESSAGE_VEHICLE_AWARDED_TEXT	</text>
+      <bottom_renderer>	3	</bottom_renderer>
+      <bottom>
+        <data>
+          <icon>	../maps/icons/bootcamp/rewards/bcT2_med.png	</icon>
+          <label>	#bootcamp:AWARD_OPTIONS	</label>
+        </data>
+      </bottom>
+    </nation>
+    <nation>
+      <nation_id>	germany	</nation_id>
+      <icon>	../maps/icons/bootcamp/lines/bcAwardOptions.png	</icon>
+      <preset>	BLUE	</preset>
+      <label>	#bootcamp:MESSAGE_VEHICLE_AWARDED_LABEL	</label>
+      <text>	#bootcamp:MESSAGE_VEHICLE_AWARDED_TEXT	</text>
+      <bottom_renderer>	3	</bottom_renderer>
+      <bottom>
+        <data>
+          <icon>	../maps/icons/bootcamp/rewards/bcAwardOptions.png	</icon>
+          <label>	#bootcamp:AWARD_OPTIONS	</label>
+        </data>
+      </bottom>
+    </nation>
+    <nation>
+      <nation_id>	ussr	</nation_id>
+      <icon>	../maps/icons/bootcamp/lines/bcAwardOptions.png	</icon>
+      <preset>	BLUE	</preset>
+      <label>	#bootcamp:MESSAGE_VEHICLE_AWARDED_LABEL	</label>
+      <text>	#bootcamp:MESSAGE_VEHICLE_AWARDED_TEXT	</text>
+      <bottom_renderer>	3	</bottom_renderer>
+      <bottom>
+        <data>
+          <icon>	../maps/icons/bootcamp/rewards/bcAwardOptions.png	</icon>
+          <label>	#bootcamp:AWARD_OPTIONS	</label>
+        </data>
+      </bottom>
+    </nation>
+    <save>	True	</save>
+    <next_hint>	showElementsLessonI	</next_hint>
+  </action>
+  <action>
+    <name>	msgIntro_LessonII	</name>
+    <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
+    <preset>	INTRO	</preset>
+    <label>	#bootcamp:MESSAGE_INTRO_LESSON_II_LABEL	</label>
+    <next_hint>	msgCredits	</next_hint>
+  </action>
+  <action>
+    <name>	msgCredits	</name>
+    <icon>	../maps/icons/bootcamp/lines/bcCredits.png	</icon>
+    <preset>	BLUE	</preset>
+    <label>	#bootcamp:MESSAGE_CREDITS_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_CREDITS_TEXT	</text>
+    <bottom_renderer>	0	</bottom_renderer>
+    <bottom>
+      <data>
+        <icon>	../maps/icons/bootcamp/rewards/bcCredits.png	</icon>
+        <label>	{0}	</label>
+        <label_format>	getCredits	</label_format>
+        <labelTooltip>	#bootcamp:MESSAGE_CREDITS_LABEL	</labelTooltip>
+        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcCredits.png	</iconTooltip>
+        <description>	#bootcamp:MESSAGE_CREDITS_TEXT	</description>
+      </data>
+    </bottom>
+    <next_hint>	msgTankExperience	</next_hint>
+  </action>
+  <action>
+    <name>	msgTankExperience	</name>
+    <icon>	../maps/icons/bootcamp/lines/bcExp.png	</icon>
+    <preset>	BLUE	</preset>
+    <label>	#bootcamp:MESSAGE_EXPERIENCE_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_EXPERIENCE_TEXT	</text>
+    <bottom_renderer>	0	</bottom_renderer>
+    <bottom>
+      <data>
+        <icon>	../maps/icons/bootcamp/rewards/bcExp.png	</icon>
+        <label>	{0}	</label>
+        <label_format>	getExperience	</label_format>
+        <labelTooltip>	#bootcamp:MESSAGE_EXPERIENCE_LABEL	</labelTooltip>
+        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcExp.png	</iconTooltip>
+        <description>	#bootcamp:MESSAGE_EXPERIENCE_TEXT	</description>
+      </data>
+    </bottom>
+    <next_hint>	callbackDisableResearchButton	</next_hint>
+  </action>
+  <action>
+    <name>	msgUnlockModule	</name>
+    <nations>	True	</nations>
+    <nation>
+      <nation_id>	usa	</nation_id>
+      <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
+      <preset>	BLUE	</preset>
+      <label>	#bootcamp:MESSAGE_UNLOCK_MODULE_LABEL	</label>
+      <text>	#bootcamp:MESSAGE_UNLOCK_MODULE_TEXT	</text>
+    </nation>
+    <nation>
+      <nation_id>	germany	</nation_id>
+      <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
+      <preset>	BLUE	</preset>
+      <label>	#bootcamp:MESSAGE_UNLOCK_MODULE_LABEL	</label>
+      <text>	#bootcamp:MESSAGE_UNLOCK_MODULE_TEXT	</text>
+    </nation>
+    <nation>
+      <nation_id>	ussr	</nation_id>
+      <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
+      <preset>	BLUE	</preset>
+      <label>	#bootcamp:MESSAGE_UNLOCK_MODULE_LABEL	</label>
+      <text>	#bootcamp:MESSAGE_UNLOCK_MODULE_TEXT	</text>
+    </nation>
+    <next_hint>	highlightButton_BuyNode_LessonII	</next_hint>
+  </action>
+  <action>
+    <name>	msgNewModule	</name>
+    <icon>	../maps/icons/bootcamp/lines/bcEngine.png	</icon>
+    <preset>	GOLD	</preset>
+    <label>	#bootcamp:MESSAGE_NEW_MODULE_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_NEW_MODULE_TEXT	</text>
+    <next_hint>	highlightButton_Hangar_LessonII	</next_hint>
+  </action>
+  <action>
+    <name>	msgIntro_LessonIII	</name>
+    <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
+    <preset>	INTRO	</preset>
+    <label>	#bootcamp:MESSAGE_INTRO_LESSON_III_LABEL	</label>
+    <next_hint>	showElementsLessonIII_Step1	</next_hint>
+  </action>
+  <action>
+    <name>	msgUnlockNewVehicle	</name>
+    <icon>	../maps/icons/bootcamp/lines/bcUnlock.png	</icon>
+    <preset>	BLUE	</preset>
+    <label>	#bootcamp:MESSAGE_UNLOCK_VEHICLE_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_UNLOCK_VEHICLE_TEXT	</text>
+    <next_hint>	callbackEnableVehiclePreviewBuyButton	</next_hint>
+  </action>
+  <action>
+    <name>	msgTank2	</name>
+    <nations>	True	</nations>
+    <save>	True	</save>
+    <nation>
+      <nation_id>	usa	</nation_id>
+      <icon>	../maps/icons/bootcamp/lines/bcM2.png	</icon>
+      <preset>	GOLD	</preset>
+      <label>	M2 Medium Tank	</label>
+      <text>	#bootcamp:MESSAGE_SECOND_VEHICLE_TEXT_NATION_0	</text>
+    </nation>
+    <nation>
+      <nation_id>	germany	</nation_id>
+      <icon>	../maps/icons/bootcamp/lines/bcPz38t.png	</icon>
+      <preset>	GOLD	</preset>
+      <label>	Pz.Kpfw. 38 (t)	</label>
+      <text>	#bootcamp:MESSAGE_SECOND_VEHICLE_TEXT_NATION_1	</text>
+    </nation>
+    <nation>
+      <nation_id>	ussr	</nation_id>
+      <icon>	../maps/icons/bootcamp/lines/bcT46.png	</icon>
+      <preset>	GOLD	</preset>
+      <label>	Т-46	</label>
+      <text>	#bootcamp:MESSAGE_SECOND_VEHICLE_TEXT_NATION_2	</text>
+    </nation>
+    <next_hint>	msgIntro_Crew_LessonIII	</next_hint>
+  </action>
+  <action>
+    <name>	msgIntro_Crew_LessonIII	</name>
+    <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
+    <preset>	INTRO	</preset>
+    <label>	#bootcamp:MESSAGE_INTRO_LESSON_III_CREW_LABEL	</label>
+    <next_hint>	showElementsLessonIII_Step2	</next_hint>
+  </action>
+  <action>
+    <name>	msgSkillsPerks	</name>
+    <icon>	../maps/icons/bootcamp/lines/bcSkills.png	</icon>
+    <preset>	BLUE	</preset>
+    <label>	#bootcamp:MESSAGE_SKILLS_AND_PERKS_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_SKILLS_AND_PERKS_TEXT	</text>
+    <next_hint>	highlightButton_SkillSlot_LessonIII	</next_hint>
+  </action>
+  <action>
+    <name>	msgIntro_LessonIV	</name>
+    <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
+    <preset>	INTRO	</preset>
+    <label>	#bootcamp:MESSAGE_INTRO_LESSON_IV_LABEL	</label>
+    <next_hint>	showElementsLessonIV_Step1	</next_hint>
+  </action>
+  <action>
+    <name>	msgConsumables	</name>
+    <show_condition>
+      <view>	bootcampTechnicalMaintenance	</view>
+      <name>	hasConsumables_LessonIV	</name>
+      <result>	False	</result>
+    </show_condition>
+    <icon>	../maps/icons/bootcamp/lines/bcConsum.png	</icon>
+    <preset>	BLUE	</preset>
+    <label>	#bootcamp:MESSAGE_CONSUMABLES_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_CONSUMABLES_TEXT	</text>
+    <bottom_renderer>	0	</bottom_renderer>
+    <bottom>
+      <data>
+        <icon>	../maps/icons/bootcamp/rewards/bclargeRepairkit.png	</icon>
+        <labelTooltip>	#bootcamp:MESSAGE_REPAIR_KIT_LABEL	</labelTooltip>
+        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcRemBig.png	</iconTooltip>
+        <description>	#artefacts:largeRepairkit/onUse	</description>
+        <label>	{0}	</label>
+        <label_format>	getRepairKits	</label_format>
+      </data>
+      <data>
+        <icon>	../maps/icons/bootcamp/rewards/bclargeMedkit.png	</icon>
+        <labelTooltip>	#bootcamp:MESSAGE_FIRST_AID_KIT_LABEL	</labelTooltip>
+        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcMedBig.png	</iconTooltip>
+        <description>	#artefacts:largeMedkit/onUse	</description>
+        <label>	{0}	</label>
+        <label_format>	getFirstAid	</label_format>
+      </data>
+      <data>
+        <icon>	../maps/icons/bootcamp/rewards/bchandExtinguishers.png	</icon>
+        <labelTooltip>	#bootcamp:MESSAGE_FIRE_EXTINGUISHER_LABEL	</labelTooltip>
+        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcFireEx.png	</iconTooltip>
+        <description>	#artefacts:handExtinguishers/onUse	</description>
+        <label>	{0}	</label>
+        <label_format>	getFireExtinguisher	</label_format>
+      </data>
+    </bottom>
+    <next_hint>	highlightButton_Consumables_Select_LessonIV	</next_hint>
+  </action>
+  <action>
+    <name>	msgEquipment	</name>
+    <show_condition>
+      <view>	bootcampFittingSelectPopoverMessage	</view>
+      <name>	hasEquipments_LessonIV	</name>
+      <result>	False	</result>
+    </show_condition>
+    <icon>	../maps/icons/bootcamp/lines/bcEquipment.png	</icon>
+    <preset>	BLUE	</preset>
+    <label>	#bootcamp:MESSAGE_EQUIPMENT_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_EQUIPMENT_TEXT	</text>
+    <bottom_renderer>	0	</bottom_renderer>
+    <bottom>
+      <data>
+        <icon>	../maps/icons/bootcamp/rewards/bctoolbox.png	</icon>
+        <labelTooltip>	#bootcamp:MESSAGE_BONUS_EQUIPMENT_LABEL	</labelTooltip>
+        <description>	#bootcamp:MESSAGE_BONUS_EQUIPMENT_TEXT	</description>
+        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcTools.png	</iconTooltip>
+        <label>	1	</label>
+      </data>
+    </bottom>
+    <next_hint>	highlightButton_Equipment_SelectNet_LessonIV	</next_hint>
+  </action>
+  <action>
+    <name>	msgIntro_LessonV	</name>
+    <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
+    <preset>	INTRO	</preset>
+    <label>	#bootcamp:MESSAGE_INTRO_LESSON_V_LABEL	</label>
+    <next_hint>	msgGold	</next_hint>
+    <only_first_bootcamp>	False	</only_first_bootcamp>
+  </action>
+  <action>
+    <name>	msgGold	</name>
+    <icon>	../maps/icons/bootcamp/lines/bcGold.png	</icon>
+    <preset>	BLUE	</preset>
+    <label>	#bootcamp:MESSAGE_GOLD_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_GOLD_TEXT	</text>
+    <only_first_bootcamp>	False	</only_first_bootcamp>
+    <next_hint>	msgPremium	</next_hint>
+  </action>
+  <action>
+    <name>	msgPremium	</name>
+    <icon>	../maps/icons/bootcamp/lines/bcPremium.png	</icon>
+    <preset>	BLUE	</preset>
+    <label>	#bootcamp:MESSAGE_PREMIUM_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_PREMIUM_TEXT	</text>
+    <only_first_bootcamp>	False	</only_first_bootcamp>
+    <next_hint>	msgMissionAccomplished	</next_hint>
+  </action>
+  <action>
+    <name>	msgMissionAccomplished	</name>
+    <icon>	../maps/icons/bootcamp/lines/bcMission.png	</icon>
+    <preset>	ORANGE	</preset>
+    <label>	#bootcamp:MESSAGE_MISSION_ACCOMPLISHED_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_MISSION_ACCOMPLISHED_TEXT	</text>
+    <bottom_renderer>	0	</bottom_renderer>
+    <bottom>
+      <data>
+        <icon>	../maps/icons/bootcamp/rewards/bcGold.png	</icon>
+        <labelTooltip>	#bootcamp:MESSAGE_GOLD_LABEL	</labelTooltip>
+        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcGold.png	</iconTooltip>
+        <description>	#bootcamp:MESSAGE_GOLD_TEXT	</description>
+        <label>	{}	</label>
+        <label_format>	getGold	</label_format>
+      </data>
+      <data>
+        <icon>	../maps/icons/bootcamp/rewards/bcPremium3d.png	</icon>
+        <labelTooltip>	#bootcamp:MESSAGE_PREMIUM_LABEL	</labelTooltip>
+        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcPremium3d.png	</iconTooltip>
+        <description>	#bootcamp:MESSAGE_PREMIUM_TEXT	</description>
+        <label>	{0}	</label>
+        <label_format>	getPremiumHours	</label_format>
+      </data>
+    </bottom>
+    <save>	True	</save>
+    <only_first_bootcamp_bottom>	True	</only_first_bootcamp_bottom>
+    <next_hint>	callbackFinalVideo	</next_hint>
+  </action>
+  <action>
+    <name>	msgBootcampGraduate	</name>
+    <icon>	../maps/icons/bootcamp/lines/bcFinishBC.png	</icon>
+    <preset>	FINISH	</preset>
+    <label>	#bootcamp:MESSAGE_BOOTCAMP_GRADUATE_LABEL	</label>
+    <text>	#bootcamp:MESSAGE_BOOTCAMP_GRADUATE_TEXT	</text>
+    <background>	../maps/bootcamp/message/bgFinishBC.png	</background>
+    <save>	True	</save>
+    <next_hint>	callbackOnBootcampFinished	</next_hint>
+  </action>
+</message_actions.xml>

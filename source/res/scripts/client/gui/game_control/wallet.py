@@ -32,7 +32,6 @@ class WalletController(IWalletController):
         self.__currentCallbackId = None
         self.__useGold = False
         self.__useFreeXP = False
-        self.__useCrystal = False
         self.__weaver = None
         return
 
@@ -49,7 +48,6 @@ class WalletController(IWalletController):
         wallet = BigWorld.player().serverSettings['wallet']
         self.__useGold = bool(wallet[0])
         self.__useFreeXP = bool(wallet[1])
-        self.__useCrystal = True
         if self.__useFreeXP:
             self.__checkFreeXPConditions()
         if self.itemsCache.items.stats.mayConsumeWalletResources:
@@ -73,7 +71,7 @@ class WalletController(IWalletController):
         return {'gold': self.__currentStatus if self.__useGold else self.STATUS.AVAILABLE,
          'freeXP': self.__currentStatus if self.__useFreeXP else self.STATUS.AVAILABLE,
          'credits': self.__currentStatus if constants.IS_SINGAPORE else self.STATUS.AVAILABLE,
-         'crystal': self.__currentStatus if self.__useCrystal else self.STATUS.AVAILABLE}
+         'crystal': self.STATUS.AVAILABLE}
 
     @property
     def isSyncing(self):
@@ -94,10 +92,6 @@ class WalletController(IWalletController):
     @property
     def useFreeXP(self):
         return self.__useFreeXP
-
-    @property
-    def useCrystal(self):
-        return self.__useCrystal
 
     def cleanWeave(self, obj):
         if self.__weaver:
@@ -121,8 +115,6 @@ class WalletController(IWalletController):
                 message += '_gold'
             elif not self.__useGold:
                 message += '_freexp'
-            elif not self.__useCrystal:
-                message += '_crystal'
             SystemMessages.pushI18nMessage(message, type=SM_TYPE.Warning)
         return
 
@@ -147,8 +139,6 @@ class WalletController(IWalletController):
                         message += '_gold'
                     elif not self.__useGold:
                         message += '_freexp'
-                    elif not self.__useCrystal:
-                        message += '_crystal'
                     SystemMessages.pushI18nMessage(message, type=SM_TYPE.Information)
             elif self.isSyncing and self.__currentCallbackId is None:
                 self.__currentCallbackId = BigWorld.callback(30, self.__processCallback)

@@ -7,10 +7,7 @@ from constants import ARENA_BONUS_TYPE
 __all__ = ('STATS_REGULAR_SORTING', 'STATS_SORTIE_SORTING', 'writeStatsSorting', 'readStatsSorting')
 
 def writeStatsSorting(bonusType, iconType, sortDirection):
-    if bonusType != ARENA_BONUS_TYPE.SORTIE:
-        key = STATS_REGULAR_SORTING
-    else:
-        key = STATS_SORTIE_SORTING
+    key = STATS_REGULAR_SORTING
     value = {'iconType': iconType,
      'sortDirection': sortDirection}
     AccountSettings.setSettings(key, value)

@@ -37,6 +37,9 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     TUTORIAL = 'TUTORIAL'
     ONCE_ONLY_HINTS = 'ONCE_ONLY_HINTS'
     FEEDBACK = 'FEEDBACK'
+    DAMAGE_INDICATOR = 'FEEDBACK_DAMAGE_INDICATOR'
+    DAMAGE_LOG = 'FEEDBACK_DAMAGE_LOG'
+    BATTLE_EVENTS = 'FEEDBACK_BATTLE_EVENTS'
     ENCYCLOPEDIA_RECOMMENDATIONS_1 = 'ENCYCLOPEDIA_RECOMMENDATIONS_1'
     ENCYCLOPEDIA_RECOMMENDATIONS_2 = 'ENCYCLOPEDIA_RECOMMENDATIONS_2'
     ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
@@ -125,6 +128,7 @@ class ServerSettingsManager(object):
                                            'japan': 6,
                                            'czech': 7,
                                            'sweden': 8,
+                                           'poland': 9,
                                            'lightTank': 15,
                                            'mediumTank': 16,
                                            'heavyTank': 17,
@@ -156,6 +160,7 @@ class ServerSettingsManager(object):
                                                   'japan': 6,
                                                   'czech': 7,
                                                   'sweden': 8,
+                                                  'poland': 9,
                                                   'lightTank': 15,
                                                   'mediumTank': 16,
                                                   'heavyTank': 17,
@@ -188,6 +193,7 @@ class ServerSettingsManager(object):
                                                    'japan': 6,
                                                    'czech': 7,
                                                    'sweden': 8,
+                                                   'poland': 9,
                                                    'lightTank': 15,
                                                    'mediumTank': 16,
                                                    'heavyTank': 17,
@@ -235,34 +241,36 @@ class ServerSettingsManager(object):
                                          'CustomizationSlotsHint': 1,
                                          'ShopTradeInHint': 2,
                                          'VehCompareConfigHint': 3}, offsets={}),
-     SETTINGS_SECTIONS.FEEDBACK: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
-                                  DAMAGE_INDICATOR.PRESETS: 1,
-                                  DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
-                                  DAMAGE_INDICATOR.VEHICLE_INFO: 3,
-                                  DAMAGE_INDICATOR.ANIMATION: 4,
-                                  DAMAGE_LOG.TOTAL_DAMAGE: 5,
-                                  DAMAGE_LOG.BLOCKED_DAMAGE: 6,
-                                  DAMAGE_LOG.ASSIST_DAMAGE: 7,
-                                  BATTLE_EVENTS.SHOW_IN_BATTLE: 10,
-                                  BATTLE_EVENTS.ENEMY_HP_DAMAGE: 11,
-                                  BATTLE_EVENTS.ENEMY_BURNING: 12,
-                                  BATTLE_EVENTS.ENEMY_RAM_ATTACK: 13,
-                                  BATTLE_EVENTS.BLOCKED_DAMAGE: 14,
-                                  BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE: 15,
-                                  BATTLE_EVENTS.ENEMY_TRACK_DAMAGE: 16,
-                                  BATTLE_EVENTS.ENEMY_DETECTION: 17,
-                                  BATTLE_EVENTS.ENEMY_KILL: 18,
-                                  BATTLE_EVENTS.BASE_CAPTURE_DROP: 19,
-                                  BATTLE_EVENTS.BASE_CAPTURE: 20,
-                                  BATTLE_EVENTS.ENEMY_CRITICAL_HIT: 21,
-                                  BATTLE_EVENTS.EVENT_NAME: 22,
-                                  BATTLE_EVENTS.VEHICLE_INFO: 23,
-                                  BATTLE_EVENTS.ENEMY_WORLD_COLLISION: 24,
-                                  DAMAGE_INDICATOR.DYNAMIC_INDICATOR: 25,
-                                  BATTLE_EVENTS.RECEIVED_DAMAGE: 26,
-                                  BATTLE_EVENTS.RECEIVED_CRITS: 27}, offsets={DAMAGE_LOG.SHOW_DETAILS: Offset(8, 768),
-                                  DAMAGE_LOG.SHOW_EVENT_TYPES: Offset(28, 805306368),
-                                  DAMAGE_LOG.EVENT_POSITIONS: Offset(30, 3221225472L)}),
+     SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
+                                          DAMAGE_INDICATOR.PRESETS: 1,
+                                          DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
+                                          DAMAGE_INDICATOR.VEHICLE_INFO: 3,
+                                          DAMAGE_INDICATOR.ANIMATION: 4,
+                                          DAMAGE_INDICATOR.DYNAMIC_INDICATOR: 5}, offsets={}),
+     SETTINGS_SECTIONS.DAMAGE_LOG: Section(masks={DAMAGE_LOG.TOTAL_DAMAGE: 0,
+                                    DAMAGE_LOG.BLOCKED_DAMAGE: 1,
+                                    DAMAGE_LOG.ASSIST_DAMAGE: 2,
+                                    DAMAGE_LOG.ASSIST_STUN: 3}, offsets={DAMAGE_LOG.SHOW_DETAILS: Offset(4, 48),
+                                    DAMAGE_LOG.SHOW_EVENT_TYPES: Offset(6, 192),
+                                    DAMAGE_LOG.EVENT_POSITIONS: Offset(8, 768)}),
+     SETTINGS_SECTIONS.BATTLE_EVENTS: Section(masks={BATTLE_EVENTS.SHOW_IN_BATTLE: 0,
+                                       BATTLE_EVENTS.ENEMY_HP_DAMAGE: 1,
+                                       BATTLE_EVENTS.ENEMY_BURNING: 2,
+                                       BATTLE_EVENTS.ENEMY_RAM_ATTACK: 3,
+                                       BATTLE_EVENTS.BLOCKED_DAMAGE: 4,
+                                       BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE: 5,
+                                       BATTLE_EVENTS.ENEMY_TRACK_DAMAGE: 6,
+                                       BATTLE_EVENTS.ENEMY_DETECTION: 7,
+                                       BATTLE_EVENTS.ENEMY_KILL: 8,
+                                       BATTLE_EVENTS.BASE_CAPTURE_DROP: 9,
+                                       BATTLE_EVENTS.BASE_CAPTURE: 10,
+                                       BATTLE_EVENTS.ENEMY_CRITICAL_HIT: 11,
+                                       BATTLE_EVENTS.EVENT_NAME: 12,
+                                       BATTLE_EVENTS.VEHICLE_INFO: 13,
+                                       BATTLE_EVENTS.ENEMY_WORLD_COLLISION: 14,
+                                       BATTLE_EVENTS.RECEIVED_DAMAGE: 15,
+                                       BATTLE_EVENTS.RECEIVED_CRITS: 16,
+                                       BATTLE_EVENTS.ENEMY_ASSIST_STUN: 17}, offsets={}),
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1: Section(masks={'hasNew': 15}, offsets={'item_1': Offset(0, 36863),
                                                         'item_2': Offset(16, 2415853568L)}),
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2: Section(masks={}, offsets={'item_3': Offset(0, 36863),
@@ -505,7 +513,9 @@ class ServerSettingsManager(object):
          'marksOnGun': {},
          'fallout': {},
          'carousel_filter': {},
-         'feedbackData': {},
+         'feedbackDamageIndicator': {},
+         'feedbackDamageLog': {},
+         'feedbackBattleEvents': {},
          'onceOnlyHints': {},
          'clear': {}}
         yield migrateToVersion(currentVersion, self._core, data)
@@ -550,9 +560,15 @@ class ServerSettingsManager(object):
         carousel_filter = data.get('carousel_filter', {})
         if carousel_filter:
             settings[SETTINGS_SECTIONS.CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, carousel_filter)
-        feedbackData = data.get('feedbackData', {})
-        if feedbackData:
-            settings[SETTINGS_SECTIONS.FEEDBACK] = self._buildSectionSettings(SETTINGS_SECTIONS.FEEDBACK, feedbackData)
+        feedbackDamageIndicator = data.get('feedbackDamageIndicator', {})
+        if feedbackDamageIndicator:
+            settings[SETTINGS_SECTIONS.DAMAGE_INDICATOR] = self._buildSectionSettings(SETTINGS_SECTIONS.DAMAGE_INDICATOR, feedbackDamageIndicator)
+        feedbackDamageLog = data.get('feedbackDamageLog', {})
+        if feedbackDamageLog:
+            settings[SETTINGS_SECTIONS.DAMAGE_LOG] = self._buildSectionSettings(SETTINGS_SECTIONS.DAMAGE_LOG, feedbackDamageLog)
+        feedbackBattleEvents = data.get('feedbackBattleEvents', {})
+        if feedbackBattleEvents:
+            settings[SETTINGS_SECTIONS.BATTLE_EVENTS] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_EVENTS, feedbackBattleEvents)
         onceOnlyHints = data.get('onceOnlyHints', {})
         clearOnceOnlyHints = clear.get('onceOnlyHints', 0)
         if onceOnlyHints or clearOnceOnlyHints:

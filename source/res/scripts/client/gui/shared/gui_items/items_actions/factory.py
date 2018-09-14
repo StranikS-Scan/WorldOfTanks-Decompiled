@@ -21,8 +21,11 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  SET_VEHICLE_LAYOUT: actions.SetVehicleLayoutAction,
  BUY_AND_INSTALL_ITEM_VEHICLE_LAYOUT: actions.BuyAndInstallItemVehicleLayout}
 
-def doAction(actionType, *args):
+def doAction(actionType, *args, **kwargs):
     if actionType in _ACTION_MAP:
-        _ACTION_MAP[actionType](*args).doAction()
+        skipConfirm = kwargs.get('skipConfirm', False)
+        action = _ACTION_MAP[actionType](*args)
+        action.skipConfirm = skipConfirm
+        action.doAction()
     else:
-        LOG_ERROR('Action typeis not found', actionType)
+        LOG_ERROR('Action type is not found', actionType)

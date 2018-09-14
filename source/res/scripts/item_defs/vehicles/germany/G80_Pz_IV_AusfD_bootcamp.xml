@@ -1,0 +1,393 @@
+<G80_Pz_IV_AusfD_bootcamp.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	42	</forward>
+    <backward>	18	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.195	</moving>
+    <still>	0.26	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.39	</firePenalty>
+  </invisibility>
+  <repairCost>	4.50	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G80_Pz_IV_AusfD/Pz_IV_AusfD_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	30	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	20	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	20	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	11	</armor_8>
+      <armor_9>	10	</armor_9>
+      <armor_10>	8	</armor_10>
+      <armor_11>	14.5	</armor_11>
+      <armor_12>	30	</armor_12>
+      <armor_13>	30	</armor_13>
+      <armor_14>	0	</armor_14>
+      <armor_15>	30	</armor_15>
+      <armor_16>	10	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	9320	</weight>
+    <maxHealth>	248	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G80_Pz_IV_AusfD/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.34 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.34 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.74	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.047921 0.7347 -0.175446	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.795824 0.4762 1.84978	</rayStart>
+        <rayEnd>	-0.795824 0.4762 1.64978	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.44117 0.520025 -0.0315464	</rayStart>
+        <rayEnd>	-1.04117 0.520025 -0.0315464	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G80_Pz_IV_AusfD/Pz_IV_AusfD_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_Pz_IV_AusfD_bootcamp>
+      <userString>	#germany_vehicles:Chassis_Pz_IV_AusfD	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	7000	</weight>
+      <maxLoad>	20500	</maxLoad>
+      <terrainResistance>	1.1 1.5 2.5	</terrainResistance>
+      <brakeForce>	20000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	35	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.32	</vehicleMovement>
+        <vehicleRotation>	0.32	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G80_Pz_IV_AusfD/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.42	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.86	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.39746	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.13477	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.339355	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.249499	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.39746	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.13477	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.339355	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.249499	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.968848 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.20923 1.76242	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.078360 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.453270 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.697190	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Pz_IV_AusfD_bootcamp>
+  </chassis>
+  <turrets0>
+    <Turret_1_Pz_IV_AusfD_bootcamp>
+      <userString>	#germany_vehicles:Turret_1_Pz_IV_AusfD	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2200	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	30	</armor_1>
+        <armor_2>	30	</armor_2>
+        <armor_3>	14.5	</armor_3>
+        <armor_4>	14.5	</armor_4>
+        <armor_5>	14.5	</armor_5>
+        <armor_6>	30	</armor_6>
+        <armor_7>	30	</armor_7>
+        <armor_8>	14.5	</armor_8>
+        <armor_9>	14.5	</armor_9>
+        <armor_10>	10	</armor_10>
+        <armor_11>	30	</armor_11>
+        <armor_12>	10	</armor_12>
+        <armor_13>	0	</armor_13>
+        <armor_14>	10	</armor_14>
+        <armor_15>	14.5	</armor_15>
+        <armor_16>	8	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1800	</weight>
+      <maxHealth>	62	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_50mm_KwK_38_L42_bootcamp>	shared	  <maxAmmo>	110	</maxAmmo>
+          <armor>
+            <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	14.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
+          <effects>	shot_medium	</effects>
+          <models>
+            <undamaged>	vehicles/german/G80_Pz_IV_AusfD/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </_50mm_KwK_38_L42_bootcamp>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G80_Pz_IV_AusfD/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G80_Pz_IV_AusfD/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.036318 0.273505 0.798213	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.02298 0.432471 0.681424	</rayStart>
+          <rayEnd>	-0.663714 0.257622 0.662503	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.02298 0.432471 0.681424	</rayStart>
+          <rayEnd>	0.663714 0.257622 0.662503	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.451 0.109 0.758 0.529 0.258 0.500 0.297 0.500 0.148 0.887 0.154	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_Pz_IV_AusfD_bootcamp>
+  </turrets0>
+  <engines>
+    <Maybach_HL_120_TR_bootcamp>	shared	</Maybach_HL_120_TR_bootcamp>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <FuG2_bootcamp>	shared	</FuG2_bootcamp>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_120_TR_bootcamp>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Maybach_HL_120_TR_bootcamp>
+      </engines>
+      <chassis>
+        <Chassis_Pz_IV_AusfD_bootcamp>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Pz_IV_AusfD_bootcamp>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <armour>	0.80569684	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</G80_Pz_IV_AusfD_bootcamp.xml>

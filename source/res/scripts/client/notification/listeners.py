@@ -12,13 +12,11 @@ from gui.clans.contexts import GetClanInfoCtx
 from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared.notifications import MsgCustomEvents
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
-from helpers import dependency
-from helpers import time_utils
+from helpers import time_utils, i18n
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
@@ -26,7 +24,6 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
-from skeletons.gui.lobby_context import ILobbyContext
 
 class _NotificationListener(object):
 
@@ -82,72 +79,6 @@ class ServiceChannelListener(_NotificationListener):
         model = self._model()
         if model:
             model.addNotification(MessageDecorator(clientID, formatted, settings))
-
-
-class FortServiceChannelListener(_NotificationListener):
-    lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self):
-        super(FortServiceChannelListener, self).__init__()
-        self.__fortInvitesData = {}
-
-    @proto_getter(PROTO_TYPE.BW)
-    def proto(self):
-        return None
-
-    def start(self, model):
-        result = super(FortServiceChannelListener, self).start(model)
-        if result:
-            g_messengerEvents.serviceChannel.onCustomMessageDataReceived += self.__onMsgReceived
-            self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
-        return result
-
-    def stop(self):
-        self.__fortInvitesData = None
-        g_messengerEvents.serviceChannel.onCustomMessageDataReceived -= self.__onMsgReceived
-        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
-        super(FortServiceChannelListener, self).stop()
-        return
-
-    def __onMsgReceived(self, clientID, eventData):
-        eType, battleID = eventData
-        if eType == MsgCustomEvents.FORT_BATTLE_INVITE:
-            self.__fortInvitesData[battleID] = clientID
-        elif eType == MsgCustomEvents.FORT_BATTLE_FINISHED:
-            model = self._model()
-            if model:
-                storedClientID = self.__fortInvitesData.get(battleID, None)
-                if storedClientID:
-                    _, formatted, settings = self.proto.serviceChannel.getMessage(storedClientID)
-                    if formatted and settings:
-                        if formatted['savedData']['battleFinishTime'] - time_utils.getCurrentTimestamp() < 0:
-                            buttonsStates = {}
-                            buttonsLayout = formatted.get('buttonsLayout', [])
-                            for layout in buttonsLayout:
-                                buttonsStates[layout['type']] = NOTIFICATION_BUTTON_STATE.VISIBLE
-
-                            formatted['buttonsStates'] = buttonsStates
-                            model.updateNotification(NOTIFICATION_TYPE.MESSAGE, storedClientID, formatted, False)
-                            del self.__fortInvitesData[battleID]
-        return
-
-    def __onServerSettingChanged(self, diff):
-        if 'isFortsEnabled' in diff and not diff['isFortsEnabled']:
-            model = self._model()
-            if model:
-                battleIDs = self.__fortInvitesData.keys()
-                for battleID in battleIDs:
-                    storedClientID = self.__fortInvitesData[battleID]
-                    _, formatted, settings = self.proto.serviceChannel.getMessage(storedClientID)
-                    if formatted and settings:
-                        buttonsStates = {}
-                        buttonsLayout = formatted.get('buttonsLayout', [])
-                        for layout in buttonsLayout:
-                            buttonsStates[layout['type']] = NOTIFICATION_BUTTON_STATE.VISIBLE
-
-                        formatted['buttonsStates'] = buttonsStates
-                        model.updateNotification(NOTIFICATION_TYPE.MESSAGE, storedClientID, formatted, False)
-                        del self.__fortInvitesData[battleID]
 
 
 class PrbInvitesListener(_NotificationListener, IGlobalListener):
@@ -549,7 +480,7 @@ class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
         if not userName:
             self.__userNamePendingNotifications[userDatabaseID].add(appId)
             self.syncUsersInfo()
-            userName = CLANS.CLANINVITE_NOTIFICATION_USERNAMEERROR
+            userName = i18n.makeString(CLANS.CLANINVITE_NOTIFICATION_USERNAMEERROR)
         notification = clazz(userName=userName, *args)
         notificationType = notification.getType()
         if notificationType not in self._TYPES_EXPECTED_USERS_NAMES:
@@ -757,7 +688,6 @@ class NotificationsListeners(_NotificationListener):
     def __init__(self):
         super(NotificationsListeners, self).__init__()
         self.__listeners = (ServiceChannelListener(),
-         FortServiceChannelListener(),
          PrbInvitesListener(),
          FriendshipRqsListener(),
          _WGNCListenersContainer(),

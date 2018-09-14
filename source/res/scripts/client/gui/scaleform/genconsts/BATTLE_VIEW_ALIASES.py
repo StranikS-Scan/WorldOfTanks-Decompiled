@@ -46,3 +46,7 @@ class BATTLE_VIEW_ALIASES(object):
     MARKERS_2D = 'markers2D'
     HIT_DIRECTION = 'hitDirection'
     SIEGE_MODE_INDICATOR = 'siegeModeIndicator'
+    BOOTCAMP_CONSUMABLES_PANEL = 'bootcampConsumablesPanel'
+    BOOTCAMP_RIBBONS_PANEL = 'bootcampRibbonsPanel'
+    BOOTCAMP_SECONDARY_HINT = 'bootcampSecondaryHint'
+    BOOTCAMP_BATTLE_TOP_HINT = 'bootcampBattleTopHint'

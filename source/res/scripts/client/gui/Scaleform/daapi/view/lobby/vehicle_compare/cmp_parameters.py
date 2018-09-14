@@ -353,8 +353,9 @@ class VehCompareBasketParamsCache(object):
             paramsVehData = self.__cache[index]
             paramsVehData.setIsInInventory(basketVehData.isInInventory())
             paramsVehData.setConfigurationType(basketVehData.getConfigurationType())
-            isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setCrewData(*basketVehData.getCrewData())
-            isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setVehicleData(basketVehData.getVehicleStrCD(), basketVehData.getEquipment(), basketVehData.hasCamouflage(), basketVehData.getSelectedShellIndex())
+            crewChanged = paramsVehData.setCrewData(*basketVehData.getCrewData())
+            vehicleChanged = paramsVehData.setVehicleData(basketVehData.getVehicleStrCD(), basketVehData.getEquipment(), basketVehData.hasCamouflage(), basketVehData.getSelectedShellIndex())
+            isBestScoreInvalid = isBestScoreInvalid or vehicleChanged or crewChanged
 
         if self.__cache:
             bestParams = _reCalcBestParameters(self.__cache) if isBestScoreInvalid else None

@@ -26,11 +26,12 @@ from skeletons.gui.shared import IItemsCache
 class TechnicalMaintenance(TechnicalMaintenanceMeta):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, _=None):
+    def __init__(self, _=None, skipConfirm=False):
         super(TechnicalMaintenance, self).__init__()
         self.__currentVehicleId = None
         self.__isConfirmDialogShown = False
         self.__layout = {}
+        self._skipConfirm = skipConfirm
         return
 
     def onCancelClick(self):
@@ -292,7 +293,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
 
     def __setVehicleLayouts(self, vehicle, shellsLayout=list(), eqsLayout=list()):
         LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
-        ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, vehicle, shellsLayout, eqsLayout)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, vehicle, shellsLayout, eqsLayout, skipConfirm=self._skipConfirm)
         self.destroy()
 
     def __seveCurrentLayout(self, **kwargs):

@@ -11,11 +11,6 @@ from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEnt
 from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntryPoint, PublicEntryPoint
 from gui.prb_control.entities.event.squad.entity import EventBattleSquadEntity, EventBattleSquadEntryPoint
 from gui.prb_control.entities.fallout.squad.entity import FalloutSquadEntity, FalloutSquadEntryPoint
-from gui.prb_control.entities.fort.unit.fort_battle.entity import FortBattleBrowserEntity, FortBattleEntity
-from gui.prb_control.entities.fort.unit.fort_battle.entity import FortBattleBrowserEntryPoint, FortBattleEntryPoint
-from gui.prb_control.entities.fort.unit.entity import FortIntroEntity, FortIntroEntryPoint
-from gui.prb_control.entities.fort.unit.sortie.entity import SortieBrowserEntity, SortieEntity
-from gui.prb_control.entities.fort.unit.sortie.entity import SortieBrowserEntryPoint, SortieEntryPoint
 from gui.prb_control.entities.stronghold.unit.entity import StrongholdEntity, StrongholdEntryPoint, StrongholdBrowserEntryPoint, StrongholdBrowserEntity
 from gui.prb_control.entities.random.squad.entity import RandomSquadEntity, RandomSquadEntryPoint
 from gui.prb_control.items import PlayerDecorator, FunctionalState
@@ -26,29 +21,19 @@ _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.SQUAD: RandomSquadEntryPoint
  PREBATTLE_ACTION_NAME.EVENT_SQUAD: EventBattleSquadEntryPoint,
  PREBATTLE_ACTION_NAME.E_SPORT: ESportIntroEntry,
  PREBATTLE_ACTION_NAME.PUBLICS_LIST: PublicBrowserEntryPoint,
- PREBATTLE_ACTION_NAME.FORT: FortIntroEntryPoint,
- PREBATTLE_ACTION_NAME.SORTIES_LIST: SortieBrowserEntryPoint,
- PREBATTLE_ACTION_NAME.FORT_BATTLES_LIST: FortBattleBrowserEntryPoint,
  PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST: StrongholdBrowserEntryPoint}
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntryPoint,
  PREBATTLE_TYPE.EVENT: EventBattleSquadEntryPoint,
  PREBATTLE_TYPE.FALLOUT: FalloutSquadEntryPoint,
  PREBATTLE_TYPE.UNIT: PublicEntryPoint,
- PREBATTLE_TYPE.SORTIE: SortieEntryPoint,
- PREBATTLE_TYPE.FORT_BATTLE: FortBattleEntryPoint,
  PREBATTLE_TYPE.EXTERNAL: StrongholdEntryPoint}
-_SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity,
- PREBATTLE_TYPE.FORT_COMMON: FortIntroEntity}
+_SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity}
 _SUPPORTED_BROWSER_BY_TYPE = {PREBATTLE_TYPE.UNIT: PublicBrowserEntity,
- PREBATTLE_TYPE.SORTIE: SortieBrowserEntity,
- PREBATTLE_TYPE.FORT_BATTLE: FortBattleBrowserEntity,
  PREBATTLE_TYPE.EXTERNAL: StrongholdBrowserEntity}
 _SUPPORTED_UNIT_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntity,
  PREBATTLE_TYPE.EVENT: EventBattleSquadEntity,
  PREBATTLE_TYPE.FALLOUT: FalloutSquadEntity,
  PREBATTLE_TYPE.UNIT: PublicEntity,
- PREBATTLE_TYPE.SORTIE: SortieEntity,
- PREBATTLE_TYPE.FORT_BATTLE: FortBattleEntity,
  PREBATTLE_TYPE.EXTERNAL: StrongholdEntity}
 
 class UnitFactory(ControlFactory):
@@ -70,7 +55,7 @@ class UnitFactory(ControlFactory):
         return created
 
     def createPlayerInfo(self, entity):
-        info = entity.getPlayerInfo(unitIdx=entity.getUnitIdx())
+        info = entity.getPlayerInfo(unitMgrID=entity.getID())
         return PlayerDecorator(info.isCommander(), info.isReady)
 
     def createStateEntity(self, entity):
@@ -92,12 +77,12 @@ class UnitFactory(ControlFactory):
         if unitMrg is None:
             return
         else:
-            if unitMrg.id and unitMrg.unitIdx:
-                entity = prb_getters.getUnit(unitMrg.unitIdx, safe=True)
-                if entity:
+            if unitMrg.id:
+                entity = prb_getters.getUnit(safe=True)
+                if entity is not None:
                     return self._createEntityByType(entity.getPrebattleType(), _SUPPORTED_UNIT_BY_TYPE)
                 else:
-                    LOG_ERROR('Unit is not found in unit manager', unitMrg.unitIdx, unitMrg.units)
+                    LOG_ERROR('Unit is not found in unit manager', unitMrg.id, unitMrg.unit)
                     unitMrg.leave()
                     return
             return self.__createByPrbType(ctx)

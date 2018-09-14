@@ -55,11 +55,13 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
     def onRevertVehicle(self, index):
         self.comparisonBasket.revertVehicleByIdx(int(index))
 
-    def onGoToPreviewClick(self, vehicleID):
-        intVehicleID = int(vehicleID)
-        vehicle = self.itemsCache.items.getItemByCD(intVehicleID)
+    def onGoToPreviewClick(self, slotID):
+        cmpVehicle = self.comparisonBasket.getVehicleAt(int(slotID))
+        vehicleStrCD = cmpVehicle.getVehicleStrCD()
+        vehicleIntCD = cmpVehicle.getVehicleCD()
+        vehicle = self.itemsCache.items.getItemByCD(vehicleIntCD)
         if vehicle.isPreviewAllowed():
-            showVehiclePreview(intVehicleID, VIEW_ALIAS.VEHICLE_COMPARE)
+            showVehiclePreview(vehicleIntCD, VIEW_ALIAS.VEHICLE_COMPARE, vehStrCD=vehicleStrCD)
         else:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.VEHICLECOMPARE_PREVIEWNOTALLOWED, vehicle=vehicle.userName, type=SystemMessages.SM_TYPE.Error)
 

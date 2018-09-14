@@ -157,10 +157,6 @@ class CYBERSPORT(object):
     WINDOW_UNITLISTVIEW_RENDERER_PREVIOUS = '#cyberSport:window/unitListView/renderer/previous'
     WINDOW_UNITLISTVIEW_RENDERER_NEXT = '#cyberSport:window/unitListView/renderer/next'
     WINDOW_UNITLISTVIEW_NOUNITSELECTED = '#cyberSport:window/unitListView/noUnitSelected'
-    WINDOW_CLUBSLISTVIEW_TITLE = '#cyberSport:window/clubsListView/title'
-    WINDOW_CLUBSLISTVIEW_CREATE_BTN = '#cyberSport:window/clubsListView/create/btn'
-    WINDOW_CLUBSLISTVIEW_FOUNDTEAMS = '#cyberSport:window/clubsListView/foundTeams'
-    WINDOW_CLUBSLISTVIEW_FOUNDTEAMSDESCRIPTION = '#cyberSport:window/clubsListView/foundTeamsDescription'
     WINDOW_UNIT_UNITLISTVIEW_PAGINATIONUP = '#cyberSport:window/unit/unitListView/paginationUp'
     WINDOW_UNIT_UNITLISTVIEW_PAGINATIONDOWN = '#cyberSport:window/unit/unitListView/paginationDown'
     WINDOW_UNIT_UNITLISTVIEW_COMMANDER = '#cyberSport:window/unit/unitListView/commander'
@@ -230,17 +226,7 @@ class CYBERSPORT(object):
     RESPAWN_FIGHT_LABEL = '#cyberSport:respawn/fight/label'
     RESPAWN_FIGHT_STATUS_COMMANDER = '#cyberSport:respawn/fight/status/commander'
     RESPAWN_FIGHT_STATUS_PRIVATE = '#cyberSport:respawn/fight/status/private'
-    CLUBS_ROLES_OWNER = '#cyberSport:clubs/roles/owner'
-    CLUBS_ROLES_OFFICER = '#cyberSport:clubs/roles/officer'
-    CLUBS_ROLES_PRIVATE = '#cyberSport:clubs/roles/private'
-    CLUBS_SEASONS_STATE_ACTIVE = '#cyberSport:clubs/seasons/state/ACTIVE'
-    CLUBS_SEASONS_STATE_SUSPENDED = '#cyberSport:clubs/seasons/state/SUSPENDED'
-    CLUBS_SEASONS_STATE_INACTIVE = '#cyberSport:clubs/seasons/state/INACTIVE'
-    CLUBS_SEASONS_STATE_UNKNOWN = '#cyberSport:clubs/seasons/state/UNKNOWN'
-    CLUBS_SEASONS_NAME = '#cyberSport:clubs/seasons/name'
-    LADDERREGULATIONS_INFO = '#cyberSport:ladderRegulations/info'
     SQUADWINDOW_WAITINGFORBATTLE = '#cyberSport:squadWindow/waitingForBattle'
-    CLUBS_LEAGUE_LABEL = '#cyberSport:clubs/league/label'
     WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_ENUM = (WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_UNRESOLVED,
      WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_6,
      WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_7,

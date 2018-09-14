@@ -58,6 +58,7 @@ class SquadEntity(UnitEntity):
     def rejoin(self):
         super(SquadEntity, self).rejoin()
         self.unit_onUnitRosterChanged()
+        self._actionsHandler.setUnitChanged()
 
     def invalidateVehicleStates(self, vehicles=None):
         """

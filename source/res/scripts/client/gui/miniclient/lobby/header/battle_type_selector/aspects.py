@@ -5,34 +5,24 @@ from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import text_styles, icons
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
-from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import _DisabledSelectorItem, _RankedItem
+from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import _DisabledSelectorItem
 
 class _BattleTypeDisable(aop.Aspect):
 
-    def __init__(self, battleTypeAttributes, disabledSelectorClazz=_DisabledSelectorItem):
+    def __init__(self, battleTypeAttributes):
         self._battleTypeAttributes = battleTypeAttributes
-        self._disabledSelectorClazz = disabledSelectorClazz
         aop.Aspect.__init__(self)
 
     def atCall(self, cd):
         cd.avoid()
         items = cd.args[0]
-        items.append(self._disabledSelectorClazz(*self._battleTypeAttributes))
-
-
-class _DisabledRankedItem(_RankedItem):
-
-    def update(self, state):
-        pass
-
-    def select(self):
-        pass
+        items.append(_DisabledSelectorItem(*self._battleTypeAttributes))
 
 
 class RankedBattle(_BattleTypeDisable):
 
     def __init__(self):
-        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED, PREBATTLE_ACTION_NAME.RANKED, 1), disabledSelectorClazz=_DisabledRankedItem)
+        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED, PREBATTLE_ACTION_NAME.RANKED, 1))
 
 
 class CommandBattle(_BattleTypeDisable):
@@ -48,7 +38,7 @@ class SortieBattle(_BattleTypeDisable):
 
     def __init__(self):
         _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_STRONGHOLDS,
-         PREBATTLE_ACTION_NAME.FORT2,
+         PREBATTLE_ACTION_NAME.STRONGHOLD,
          5,
          SELECTOR_BATTLE_TYPES.SORTIE))
 
@@ -63,12 +53,6 @@ class SpecialBattle(_BattleTypeDisable):
 
     def __init__(self):
         _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 6))
-
-
-class CompanyBattle(_BattleTypeDisable):
-
-    def __init__(self):
-        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANIES_LIST, 4))
 
 
 class FalloutBattle(_BattleTypeDisable):

@@ -22,23 +22,27 @@
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/american/A06_M4A3E8_Sherman/M4A3_Sherman_CM.DDS	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
       <armor_1>	63.5	</armor_1>
-      <armor_2>	101	</armor_2>
-      <armor_3>	38	</armor_3>
-      <armor_4>	38	</armor_4>
-      <armor_5>	38	</armor_5>
+      <armor_2>	50.8	</armor_2>
+      <armor_3>	38.1	</armor_3>
+      <armor_4>	25.4	</armor_4>
+      <armor_5>	34.9	</armor_5>
       <armor_6>	12.7	</armor_6>
-      <armor_7>	19.5	</armor_7>
+      <armor_7>	19.1	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	19.5	</armor_9>
-      <armor_10>	12.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      <armor_10>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_10>
+      <armor_11>	76.2	</armor_11>
+      <armor_12>	63.5	</armor_12>
+      <armor_13>	9.5	</armor_13>
+      <armor_15>	50.8	</armor_15>
+      <armor_16>	108	</armor_16>
     </armor>
-    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
     <weight>	14600	</weight>
     <maxHealth>	576	</maxHealth>
     <ammoBayHealth>
@@ -58,11 +62,11 @@
       <sensitivityToImpulse>	0.58	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_medium	</pixie>
+      <pixie>	gas_large	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.018056 1.01692 -0.08262	</turret>
+      <turret>	0.0041 0.871728 -0.17627	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Hull.model	</collisionModelServer>
@@ -70,35 +74,38 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.0143232 0.410156 2.66341	</rayStart>
-        <rayEnd>	-0.0143232 -0.0980835 2.34452	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <rayStart>	0.00575137 0.33174 2.54555	</rayStart>
+        <rayEnd>	0.00575137 -0.157727 2.19853	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.34	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	1.53322 0.779061 0.950457	</rayStart>
-        <rayEnd>	0.933222 0.779061 0.950457	</rayEnd>
+        <rayStart>	-1.51564 0.613317 0.95234	</rayStart>
+        <rayEnd>	-1.11564 0.613317 0.95234	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.8	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	-1.53322 0.779061 0.950457	</rayStart>
-        <rayEnd>	-0.933222 0.779061 0.950457	</rayEnd>
+        <rayStart>	1.61564 0.613317 0.95234	</rayStart>
+        <rayEnd>	1.01564 0.613317 0.95234	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A06_M4A3E8_Sherman/M4A3_Sherman_HangarShadowMap.dds	</hangarShadowTexture>
+    <hangarShadowTexture>	vehicles/american/A06_M4A3E8_Sherman/M4A3E8_Sherman_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <NVSS_T66>
       <userString>	#usa_vehicles:NVSS_T66	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	9600.0	</price>
+      <price>	9600	</price>
       <unlocks>
         <chassis>	NVSS_T80	  <cost>	5145	</cost>
         </chassis>
@@ -130,13 +137,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_01	</textureSet>
-        <size>	0.54 0.62	</size>
+        <size>	0.54 0.6	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.6	</textureScale>
+        <textureScale>	-2.15	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -159,34 +166,35 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.344508	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L1	</name>
           <radius>	0.126247	</radius>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L2	</name>
           <radius>	0.165303	</radius>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L3	</name>
           <radius>	0.126247	</radius>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.165303	</radius>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.126247	</radius>
         </wheel>
@@ -195,40 +203,42 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L6	</name>
           <radius>	0.289788	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.344508	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R1	</name>
           <radius>	0.126247	</radius>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R2	</name>
           <radius>	0.165303	</radius>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R3	</name>
           <radius>	0.126247	</radius>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.165303	</radius>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.126247	</radius>
         </wheel>
@@ -237,21 +247,22 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R6	</name>
           <radius>	0.289788	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
       </wheels>
       <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.818455 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.00125 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/american/A06_M4A3E8_Sherman/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.10719 1.88969	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.14959 1.92164	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -264,12 +275,156 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A06_M4A3E8_Sherman/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A06_M4A3E8_Sherman/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A06_M4A3E8_Sherman/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A06_M4A3E8_Sherman/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/american/A06_M4A3E8_Sherman/track/left.track	</left>
+        <right>	vehicles/american/A06_M4A3E8_Sherman/track/right.track	</right>
+        <segmentLength>	0.145	</segmentLength>
+        <segmentOffset>	0.142	</segmentOffset>
+        <segment2Offset>	0.078	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0006	</trackThickness>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1200	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+      </trackNodes>
     </NVSS_T66>
     <NVSS_T80>
       <userString>	#usa_vehicles:NVSS_T80	</userString>
       <tags></tags>
       <level>	6	</level>
-      <price>	16300.0	</price>
+      <price>	16300	</price>
       <unlocks>
         <vehicle>	A31_M36_Slagger	  <cost>	51900	</cost>
         </vehicle>
@@ -301,13 +456,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_01	</textureSet>
-        <size>	0.54 0.62	</size>
+        <size>	0.54 0.6	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.6	</textureScale>
+        <textureScale>	-2.15	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -330,34 +485,35 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.344508	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L1	</name>
           <radius>	0.126247	</radius>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L2	</name>
           <radius>	0.165303	</radius>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L3	</name>
           <radius>	0.126247	</radius>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.165303	</radius>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.126247	</radius>
         </wheel>
@@ -366,40 +522,42 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L6	</name>
           <radius>	0.289788	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.344508	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R1	</name>
           <radius>	0.126247	</radius>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R2	</name>
           <radius>	0.165303	</radius>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R3	</name>
           <radius>	0.126247	</radius>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.165303	</radius>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.126247	</radius>
         </wheel>
@@ -408,21 +566,22 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R6	</name>
           <radius>	0.289788	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
       </wheels>
       <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.818455 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.00125 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/american/A06_M4A3E8_Sherman/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.10719 1.88969	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.14959 1.92164	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -435,6 +594,150 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A06_M4A3E8_Sherman/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A06_M4A3E8_Sherman/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A06_M4A3E8_Sherman/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A06_M4A3E8_Sherman/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/american/A06_M4A3E8_Sherman/track/left.track	</left>
+        <right>	vehicles/american/A06_M4A3E8_Sherman/track/right.track	</right>
+        <segmentLength>	0.145	</segmentLength>
+        <segmentOffset>	0.142	</segmentOffset>
+        <segment2Offset>	0.078	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0006	</trackThickness>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1200	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+      </trackNodes>
     </NVSS_T80>
   </chassis>
   <turrets0>
@@ -448,10 +751,12 @@
         <armor_2>	63.5	</armor_2>
         <armor_3>	63.5	</armor_3>
         <armor_4>	63.5	</armor_4>
-        <armor_5>	63.5	</armor_5>
-        <armor_6>	19.5	</armor_6>
-        <armor_7>	25.4	</armor_7>
+        <armor_5>	38.1	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_7>	19.1	</armor_7>
         <armor_8>	0	</armor_8>
+        <armor_11>	44.5	</armor_11>
+        <armor_12>	25.4	</armor_12>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4800	</weight>
@@ -481,12 +786,18 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_3>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
@@ -504,16 +815,16 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0176292 0.0108047 1.06715	</rayStart>
-              <rayEnd>	-0.212921 -0.0969671 1.05909	</rayEnd>
-              <rayUp>	0.069 0.062 0.000000	</rayUp>
+              <rayStart>	0.000047 0.0151273 1.17496	</rayStart>
+              <rayEnd>	-0.0545112 -0.00668975 1.17062	</rayEnd>
+              <rayUp>	0.076 0.069 5	</rayUp>
               <size>	0.45	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.88 0.88 0.21 0.000000	</tiling>
+            <tiling>	0.4 0.4 0.21 0.000000	</tiling>
           </camouflage>
         </_75mm_Gun_M3_L37>
         <_76mm_Gun_M1A1>	shared	  <maxAmmo>	71	</maxAmmo>
@@ -526,12 +837,18 @@
             </turret>
           </unlocks>
           <armor>
-            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_3>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
@@ -549,16 +866,16 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.00799498 0.0110234 1.74706	</rayStart>
+              <rayStart>	-0.000001 0.0152617 1.74706	</rayStart>
               <rayEnd>	-0.23454 -0.0961975 1.74061	</rayEnd>
-              <rayUp>	0.072 0.068 0.000000	</rayUp>
+              <rayUp>	0.074 0.069 5	</rayUp>
               <size>	0.45	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.79 0.79 0.17 0.000000	</tiling>
+            <tiling>	0.4 0.4 0.17 0.000000	</tiling>
           </camouflage>
         </_76mm_Gun_M1A1>
         <_105mm_SPH_M4_L23>	shared	  <pitchLimits>
@@ -566,38 +883,44 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_3>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_06.model	</exploded>
+            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A06_M4A3E8_Sherman/collision_client/Gun_06.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A06_M4A3E8_Sherman/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0145072 0.01174 0.850659	</rayStart>
+              <rayStart>	-0.000551142 0.0154162 0.850659	</rayStart>
               <rayEnd>	-0.206673 -0.108747 0.838328	</rayEnd>
-              <rayUp>	0.095 0.084 1	</rayUp>
+              <rayUp>	0.084 0.076 5	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.85 0.85 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_SPH_M4_L23>
       </guns>
@@ -610,29 +933,28 @@
         <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/american/A06_M4A3E8_Sherman/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.373119 0.875236	</gunPosition>
+      <gunPosition>	-0.0041 0.451135 0.873169	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.20633 0.368057 0.239622	</rayStart>
-          <rayEnd>	-0.606331 0.368057 0.241	</rayEnd>
+          <rayStart>	-1.13908 0.51688 0.272121	</rayStart>
+          <rayEnd>	-0.761217 0.453524 0.157214	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.34	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	1.20633 0.368057 0.239622	</rayStart>
-          <rayEnd>	0.606331 0.368057 0.241	</rayEnd>
+          <rayStart>	1.23355 0.532719 0.300847	</rayStart>
+          <rayEnd>	0.666754 0.437685 0.128489	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.34	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.976 -0.053 1.000 0.000 0.705 0.000 0.713 0.590 0.456 0.500 0.082 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	0.992 -0.106 1.053 0.000 0.747 0.045 0.713 0.590 0.456 0.500 0.082 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	1.06 1.06 0.09 0.000000	</tiling>
+        <tiling>	0.4 0.4 0.09 0.000000	</tiling>
       </camouflage>
     </D51074>
     <D51080>
@@ -647,14 +969,16 @@
         </vehicle>
       </unlocks>
       <armor>
-        <armor_1>	76.2	</armor_1>
-        <armor_2>	76.2	</armor_2>
-        <armor_3>	51	</armor_3>
-        <armor_4>	51	</armor_4>
-        <armor_5>	51	</armor_5>
-        <armor_6>	19.5	</armor_6>
-        <armor_7>	25.4	</armor_7>
+        <armor_1>	63.5	</armor_1>
+        <armor_2>	63.5	</armor_2>
+        <armor_3>	63.5	</armor_3>
+        <armor_4>	63.5	</armor_4>
+        <armor_5>	38.1	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_7>	19.1	</armor_7>
         <armor_8>	0	</armor_8>
+        <armor_11>	44.5	</armor_11>
+        <armor_12>	25.4	</armor_12>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4800	</weight>
@@ -683,12 +1007,18 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_3>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
@@ -696,26 +1026,26 @@
           <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A06_M4A3E8_Sherman/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A06_M4A3E8_Sherman/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0176292 0.0108047 0.999302	</rayStart>
-              <rayEnd>	-0.199426 -0.117257 0.991599	</rayEnd>
-              <rayUp>	0.07 0.064 0.000000	</rayUp>
+              <rayStart>	-0.000047 0.00702986 1.14991	</rayStart>
+              <rayEnd>	-0.0350715 -0.0356585 1.14561	</rayEnd>
+              <rayUp>	0.0764 0.07 5	</rayUp>
               <size>	0.45	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.85 0.85 0.000000 0.000000	</tiling>
+            <tiling>	0.3 0.3 0.000000 0.000000	</tiling>
           </camouflage>
         </_75mm_Gun_M3_L37>
         <_76mm_Gun_M1A1>	shared	  <maxAmmo>	71	</maxAmmo>
@@ -729,58 +1059,24 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_3>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	4.2	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A06_M4A3E8_Sherman/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.0172056 0.0110234 1.69898	</rayStart>
-              <rayEnd>	-0.199642 -0.0817589 1.69282	</rayEnd>
-              <rayUp>	0.072 0.068 0.000000	</rayUp>
-              <size>	0.45	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_76mm_Gun_M1A1>
-        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	71	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 12 1 12	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <reloadTime>	3.3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_05.model	</destroyed>
@@ -792,16 +1088,62 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0171851 0.0110266 1.66712	</rayStart>
-              <rayEnd>	-0.20178 -0.0781575 1.66051	</rayEnd>
-              <rayUp>	0.072 0.068 0.000000	</rayUp>
+              <rayStart>	-0.000001 0.00716409 1.69898	</rayStart>
+              <rayEnd>	-0.199642 -0.0817589 1.69282	</rayEnd>
+              <rayUp>	0.074 0.07 5	</rayUp>
               <size>	0.45	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
+            <tiling>	0.3 0.3 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Gun_M1A1>
+        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	71	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 12 1 12	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	20	</gun>
+          </armor>
+          <reloadTime>	3.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/american/A06_M4A3E8_Sherman/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/american/A06_M4A3E8_Sherman/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A06_M4A3E8_Sherman/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000002 0.00814673 1.66712	</rayStart>
+              <rayEnd>	-0.20178 -0.0781575 1.66051	</rayEnd>
+              <rayUp>	0.075 0.071 5	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </_76mm_Gun_M1A2>
         <_105mm_SPH_M4_L23>	shared	  <pitchLimits>
@@ -814,12 +1156,18 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_3>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
@@ -836,9 +1184,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0143458 0.0116828 0.862992	</rayStart>
+              <rayStart>	-0.000551067 0.00731892 0.862992	</rayStart>
               <rayEnd>	-0.18831 -0.088513 0.85121	</rayEnd>
-              <rayUp>	0.095 0.085 1	</rayUp>
+              <rayUp>	0.083 0.076 5	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -858,29 +1206,29 @@
         <collisionModelServer>	vehicles/american/A06_M4A3E8_Sherman/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/american/A06_M4A3E8_Sherman/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.373119 0.890862	</gunPosition>
+      <gunPosition>	-0.0041 0.451452 0.982136	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.21819 0.383709 0.187679	</rayStart>
-          <rayEnd>	-0.624871 0.353046 0.103788	</rayEnd>
+          <rayStart>	-1.1601 0.521548 0.16933	</rayStart>
+          <rayEnd>	-0.768529 0.456561 0.119808	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.34	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	1.21819 0.383709 0.187679	</rayStart>
-          <rayEnd>	0.624871 0.353046 0.103788	</rayEnd>
+          <rayStart>	1.1601 0.521548 0.16933	</rayStart>
+          <rayEnd>	0.768529 0.456561 0.119808	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.34	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.951 -0.012 1.000 0.000 0.678 0.000 0.686 0.555 0.467 0.500 0.098 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	1.053 0.000 1.075 0.006 0.741 0.072 0.686 0.555 0.467 0.500 0.098 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	0.97 0.97 0.32 0.000000	</tiling>
+        <tiling>	0.6 0.6 2.9 2.7	</tiling>
       </camouflage>
     </D51080>
   </turrets0>

@@ -16,7 +16,7 @@ from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_PURCHASE_CODE
-from gui.shared.gui_items import BATTLE_BOOSTER_SLOT_IDX, DEFAULT_EQUIPMENT_LAYOUT
+from gui.shared.gui_items import BATTLE_BOOSTER_SLOT_IDX, DEFAULT_EQUIPMENT_LAYOUT, REGULAR_EQUIPMENT_LAYOUT_SIZE
 from gui.shared.gui_items.gui_item import HasStrCD
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
@@ -63,8 +63,8 @@ VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED = dict(((n, i) for i, n in enumerate(
 VEHICLE_BATTLE_TYPES_ORDER = (VEHICLE_CLASS_NAME.HEAVY_TANK,
  VEHICLE_CLASS_NAME.MEDIUM_TANK,
  VEHICLE_CLASS_NAME.AT_SPG,
- VEHICLE_CLASS_NAME.SPG,
- VEHICLE_CLASS_NAME.LIGHT_TANK)
+ VEHICLE_CLASS_NAME.LIGHT_TANK,
+ VEHICLE_CLASS_NAME.SPG)
 VEHICLE_BATTLE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(VEHICLE_BATTLE_TYPES_ORDER)))
 
 class VEHICLE_TAGS(CONST_CONTAINER):
@@ -379,6 +379,8 @@ class Vehicle(FittingItem, HasStrCD):
                 intCD = abs(layoutList[i])
                 result.append(cls.itemsFactory.createEquipment(intCD, proxy, layoutList[i] < 0) if intCD != 0 else None)
 
+        if result:
+            result += [None] * (REGULAR_EQUIPMENT_LAYOUT_SIZE - len(result))
         return result
 
     @classmethod

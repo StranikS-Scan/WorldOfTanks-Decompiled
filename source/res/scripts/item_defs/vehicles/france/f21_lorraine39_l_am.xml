@@ -21,7 +21,7 @@
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/french/F21_Lorraine39_L_AM/Lorraine39_L_AM_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -39,8 +39,6 @@
       <armor_8>	5	</armor_8>
       <armor_9>	5	</armor_9>
       <armor_10>	5	</armor_10>
-      <armor_11>	5	</armor_11>
-      <armor_12>	0	</armor_12>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2879	</weight>
@@ -66,7 +64,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.464968 -0.729433	</turret>
+      <turret>	0.000000 0.444947 -0.861004	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Hull.model	</collisionModelServer>
@@ -74,43 +72,45 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.305283 0.628525 1.27269	</rayStart>
-        <rayEnd>	-0.305283 0.345877 0.989655	</rayEnd>
+        <rayStart>	-0.223222 0.798438 1.08195	</rayStart>
+        <rayEnd>	-0.223222 0.517906 0.796818	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.2	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	0.0975895 0.711248 1.19008	</rayStart>
-        <rayEnd>	0.0975895 0.428599 0.907045	</rayEnd>
-        <rayUp>	0.309762 -0.0506028 -0.949467	</rayUp>
-        <size>	0.6	</size>
+        <rayStart>	-0.000836372 0.532102 1.34665	</rayStart>
+        <rayEnd>	-0.000836372 0.251452 1.06163	</rayEnd>
+        <rayUp>	0.228428 -0.0272374 -0.97318	</rayUp>
+        <size>	0.481	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
       <player>
-        <rayStart>	-0.985 0.488821 -0.514466	</rayStart>
-        <rayEnd>	-0.585 0.488821 -0.514466	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.24	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-      </player>
-      <player>
-        <rayStart>	0.985 0.488821 -0.514466	</rayStart>
-        <rayEnd>	0.585 0.488821 -0.514466	</rayEnd>
+        <rayStart>	-0.984753 0.489051 -0.509361	</rayStart>
+        <rayEnd>	-0.584753 0.489051 -0.509361	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
-        <isMirrored>	true	</isMirrored>
       </player>
       <inscription>
-        <rayStart>	0.985002 0.46617 -1.35056	</rayStart>
-        <rayEnd>	0.584998 0.46617 -1.35056	</rayEnd>
+        <rayStart>	0.984858 0.451861 -1.34621	</rayStart>
+        <rayEnd>	0.584855 0.451861 -1.34621	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.7	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
+      <player>
+        <rayStart>	0.984753 0.489051 -0.509361	</rayStart>
+        <rayEnd>	0.584753 0.489051 -0.509361	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F21_Lorraine39_L_AM/Lorraine39_L_AM_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2 2 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Lorraine39_L_AM>
@@ -155,40 +155,30 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.6	</textureScale>
+        <textureScale>	-3.95	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.206947	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R1	</name>
-          <radius>	0.055775	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	WD_R	</template>
           <radius>	0.0814098	</radius>
-          <startIndex>	2	</startIndex>
-          <count>	2	</count>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R4	</name>
-          <radius>	0.0557752	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.183064	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -199,34 +189,24 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.206947	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L1	</name>
-          <radius>	0.055775	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
           <radius>	0.0814098	</radius>
-          <startIndex>	2	</startIndex>
-          <count>	2	</count>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L4	</name>
-          <radius>	0.0557752	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.183064	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -243,12 +223,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.626632 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.682624 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.625279 1.22156	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.646814 1.30963	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -261,6 +241,127 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F21_Lorraine39_L_AM/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F21_Lorraine39_L_AM/track/segment1.model	</segmentModelRight>
+        <left>	vehicles/french/F21_Lorraine39_L_AM/track/left.track	</left>
+        <right>	vehicles/french/F21_Lorraine39_L_AM/track/right.track	</right>
+        <segmentLength>	0.068	</segmentLength>
+        <segmentOffset>	0.201	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0089	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+      </trackNodes>
     </Chassis_Lorraine39_L_AM>
     <Chassis_Lorraine39_L_AM_2>
       <userString>	#france_vehicles:Chassis_Lorraine39_L_AM_2	</userString>
@@ -300,40 +401,30 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.6	</textureScale>
+        <textureScale>	-3.95	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.206947	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R1	</name>
-          <radius>	0.055775	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	WD_R	</template>
           <radius>	0.0814098	</radius>
-          <startIndex>	2	</startIndex>
-          <count>	2	</count>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R4	</name>
-          <radius>	0.0557752	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.183064	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -344,34 +435,24 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.206947	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L1	</name>
-          <radius>	0.055775	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
           <radius>	0.0814098	</radius>
-          <startIndex>	2	</startIndex>
-          <count>	2	</count>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L4	</name>
-          <radius>	0.0557752	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.183064	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -388,12 +469,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.626632 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.682624 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.625279 1.22156	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.646814 1.30963	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -406,6 +487,127 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F21_Lorraine39_L_AM/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F21_Lorraine39_L_AM/track/segment1.model	</segmentModelRight>
+        <left>	vehicles/french/F21_Lorraine39_L_AM/track/left.track	</left>
+        <right>	vehicles/french/F21_Lorraine39_L_AM/track/right.track	</right>
+        <segmentLength>	0.068	</segmentLength>
+        <segmentOffset>	0.201	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.019	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.047	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+      </trackNodes>
     </Chassis_Lorraine39_L_AM_2>
   </chassis>
   <turrets0>
@@ -419,12 +621,6 @@
       <armor>
         <armor_1>	9	</armor_1>
         <armor_2>	9	</armor_2>
-        <armor_3>	0	</armor_3>
-        <armor_4>	0	</armor_4>
-        <armor_5>	0	</armor_5>
-        <armor_6>	0	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
       <maxHealth>	24	</maxHealth>
@@ -446,8 +642,7 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	15	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
-            </armor_1>
+            <armor_1>	15	</armor_1>
             <armor_2>	0	</armor_2>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
@@ -475,17 +670,13 @@
             <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <camouflage>
-            <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
-          </camouflage>
         </Canon_de_105_court_mle_1935B>
         <Canon_de_105_court_mle_1934S>	shared	  <unlocks>
             <vehicle>	F66_AMX_Ob_Am105	  <cost>	3100	</cost>
             </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	15	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
-            </armor_1>
+            <armor_1>	15	</armor_1>
             <armor_2>	0	</armor_2>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
@@ -513,9 +704,6 @@
             <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <camouflage>
-            <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
-          </camouflage>
         </Canon_de_105_court_mle_1934S>
       </guns>
       <models>
@@ -527,11 +715,14 @@
         <collisionModelServer>	vehicles/french/F21_Lorraine39_L_AM/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F21_Lorraine39_L_AM/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.0159 0.6754 -0.2376	</gunPosition>
+      <gunPosition>	0.000000 0.678329 -0.227076	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.825 0.068 0.966 0.000 0.802 -0.136 0.500 0.150 0.500 0.500 0.000 0.500 0.000 0.100 0.517	</physicsShape>
+      <physicsShape>	1.067 0.068 0.966 0.000 1.418 0.159 0.500 0.150 0.500 0.500 0.000 0.500 0.000 0.100 0.802	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_1_Lorraine39_L_AM>
   </turrets0>
   <engines>

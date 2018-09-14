@@ -315,6 +315,11 @@ class StoreItemsTab(object):
         :param item:
         :return: tuple
         """
+        if item.isRentable and item.isRentAvailable:
+            minRentPricePackage = item.getRentPackage()
+            if minRentPricePackage:
+                actionPrc = item.getRentPackageActionPrc(minRentPricePackage['days'])
+                return (0, actionPrc)
         price = self._getItemPrice(item)
         defPrice = self._getItemDefaultPrice(item)
         creditsActionPrc = abs(getActionPrc(price.credits, defPrice.credits))
@@ -404,7 +409,7 @@ class StoreVehicleTab(StoreItemsTab):
                 timeKey, formattedTime = getTimeLeftInfo(restoreLeftTime)
                 msg = i18n.makeString('#menu:vehicle/restoreLeft/%s' % timeKey, time=formattedTime)
                 if restoreLeftTime < time_utils.ONE_DAY:
-                    return icons.alert() + text_styles.alert(msg)
+                    return '{} {}'.format(icons.alert(), text_styles.alert(msg))
                 return text_styles.stats(msg)
             if item.hasRestoreCooldown():
                 timeKey, formattedTime = getTimeLeftInfo(item.restoreInfo.getRestoreCooldownTimeLeft())

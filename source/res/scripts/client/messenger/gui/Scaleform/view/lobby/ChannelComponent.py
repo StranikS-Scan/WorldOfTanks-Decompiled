@@ -73,3 +73,9 @@ class ChannelComponent(ChannelComponentMeta):
 
     def setLastUnsentMessage(self, message):
         LOG_DEBUG('ChannelComponent setLastUnsentMessage ', message, self)
+
+    def addMessage(self, message):
+        self.as_addMessageS(message)
+
+    def addCommand(self, cmd):
+        pass

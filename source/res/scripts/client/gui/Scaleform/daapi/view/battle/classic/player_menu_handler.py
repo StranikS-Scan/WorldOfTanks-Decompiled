@@ -179,7 +179,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
             contact = self.usersStorage.getUser(self.__userInfo.databaseID)
             isIgnored = contact is not None and contact.isIgnored()
             status = self.__vInfo.invitationDeliveryStatus
-            if status & _D_STATUS.FORBIDDEN_BY_RECEIVER > 0 or status & _D_STATUS.SENT_TO > 0 and not status & _D_STATUS.SENT_INACTIVE or status & _D_STATUS.SPG_IS_FORBIDDEN:
+            if status & _D_STATUS.FORBIDDEN_BY_RECEIVER > 0 or status & _D_STATUS.SENT_TO > 0 and not status & _D_STATUS.SENT_INACTIVE:
                 optionID = DYN_SQUAD_OPTION_ID.SENT_INVITATION
                 isEnabled = False
             elif status & _D_STATUS.RECEIVED_FROM > 0 and not status & _D_STATUS.RECEIVED_INACTIVE:

@@ -8,15 +8,19 @@ import BigWorld
 import Event
 import AccountCommands
 import ClientPrebattle
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientClubs, ClientGoodies, vehicle_rotation, client_recycle_bin
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_recycle_bin
 from account_helpers import ClientRanked
-from account_helpers import ClientInvitations
+from account_helpers import ClientInvitations, vehicle_rotation
 from PlayerEvents import g_playerEvents as events
 from account_helpers.settings_core import IntUserSettings
+from account_helpers.settings_core import ISettingsCore
+from adisp import process
+from bootcamp.BootcampPreferences import BootcampPreferences
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA
-from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_COMPANY_DIVISION, PREBATTLE_TYPE
+from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_WARNING
 from helpers import dependency
+from gui.Scaleform.Waiting import Waiting
 from messenger import MessengerEntry
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
@@ -27,11 +31,11 @@ from ChatManager import chatManager
 from account_shared import NotificationItem, readClientServerVersion
 from OfflineMapCreator import g_offlineMapCreator
 from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
-from ClientFortMgr import ClientFortMgr
 from gui.wgnc import g_wgncProvider
 from gui.shared.ClanCache import g_clanCache
 from ClientSelectableObject import ClientSelectableObject
 from ClientGlobalMap import ClientGlobalMap
+from bootcamp.Bootcamp import g_bootcamp
 StreamData = namedtuple('StreamData', ['data',
  'isCorrupted',
  'origPacketLen',
@@ -57,8 +61,12 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.lastStreamData = StreamData()
         if g_offlineMapCreator.Active():
             self.name = 'offline_account'
+        className = self.__class__.__name__
+        if g_accountRepository is not None and g_accountRepository.className != className:
+            self.connectionMgr.onDisconnected -= _delAccountRepository
+            _delAccountRepository()
         if g_accountRepository is None:
-            g_accountRepository = _AccountRepository(self.name, self.initialServerSettings)
+            g_accountRepository = _AccountRepository(self.name, className, self.initialServerSettings)
             self.connectionMgr.onDisconnected += _delAccountRepository
         self.contactInfo = g_accountRepository.contactInfo
         self.syncData = g_accountRepository.syncData
@@ -71,9 +79,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battleResultsCache = g_accountRepository.battleResultsCache
         self.intUserSettings = g_accountRepository.intUserSettings
         self.prebattleInvitations = g_accountRepository.prebattleInvitations
-        self.fort = g_accountRepository.fort
         self.gMap = g_accountRepository.gMap
-        self.clubs = g_accountRepository.clubs
         self.goodies = g_accountRepository.goodies
         self.vehicleRotation = g_accountRepository.vehicleRotation
         self.recycleBin = g_accountRepository.recycleBin
@@ -88,9 +94,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battleResultsCache.setAccount(self)
         self.intUserSettings.setProxy(self, self.syncData)
         self.prebattleInvitations.setProxy(self)
-        self.fort._setAccount(self)
         self.gMap.setAccount(self)
-        self.clubs.setAccount(self)
         self.goodies.setAccount(self)
         self.vehicleRotation.setAccount(self)
         self.recycleBin.setAccount(self)
@@ -99,7 +103,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.prebattle = None
         self.unitBrowser = ClientUnitBrowser(self)
         self.unitMgr = ClientUnitMgr(self)
-        self.clubs.onUnitMgrCreated(self.unitMgr)
         self.prebattleAutoInvites = g_accountRepository.prebattleAutoInvites
         self.globalRating = 0
         self.prebattleInvites = g_accountRepository.prebattleInvites
@@ -109,6 +112,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.potapovQuestsLock = g_accountRepository.potapovQuestsLock
         self.isInRandomQueue = False
         self.isInTutorialQueue = False
+        self.isInBootcampQueue = False
         self.isInUnitAssembler = False
         self.isInEventBattles = False
         self.isInSandboxQueue = False
@@ -133,7 +137,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battleResultsCache.onAccountBecomePlayer()
         self.intUserSettings.onProxyBecomePlayer()
         self.prebattleInvitations.onProxyBecomePlayer()
-        self.clubs.onAccountBecomePlayer()
         self.goodies.onAccountBecomePlayer()
         self.vehicleRotation.onAccountBecomePlayer()
         self.recycleBin.onAccountBecomePlayer()
@@ -159,7 +162,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battleResultsCache.onAccountBecomeNonPlayer()
         self.intUserSettings.onProxyBecomeNonPlayer()
         self.prebattleInvitations.onProxyBecomeNonPlayer()
-        self.clubs.onAccountBecomeNonPlayer()
         self.goodies.onAccountBecomeNonPlayer()
         self.vehicleRotation.onAccountBecomeNonPlayer()
         self.recycleBin.onAccountBecomeNonPlayer()
@@ -174,12 +176,12 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battleResultsCache.setAccount(None)
         self.intUserSettings.setProxy(None, None)
         self.prebattleInvitations.setProxy(None)
-        self.clubs.setAccount(None)
         self.goodies.setAccount(None)
         self.vehicleRotation.setAccount(None)
         self.recycleBin.setAccount(None)
         self.ranked.setAccount(None)
-        self.fort.clear()
+        self.unitMgr.clear()
+        self.unitBrowser.clear()
         events.onAccountBecomeNonPlayer()
         del self.inputHandler
         return
@@ -251,6 +253,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueuedRandom()
         elif queueType == QUEUE_TYPE.TUTORIAL:
             pass
+        elif queueType == QUEUE_TYPE.BOOTCAMP:
+            pass
         elif queueType == QUEUE_TYPE.UNIT_ASSEMBLER:
             self.isInUnitAssembler = True
             events.onEnqueuedUnitAssembler()
@@ -276,6 +280,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             events.onEnqueueRandomFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.TUTORIAL:
             events.onTutorialEnqueueFailure(errorCode, errorStr)
+        elif queueType == QUEUE_TYPE.BOOTCAMP:
+            events.onBootcampEnqueueFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.UNIT_ASSEMBLER:
             events.onEnqueueUnitAssemblerFailure(errorCode, errorStr)
         elif queueType == QUEUE_TYPE.EVENT_BATTLES:
@@ -315,6 +321,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.RANKED:
             self.isInRankedQueue = False
             events.onDequeuedRanked()
+        elif queueType == QUEUE_TYPE.BOOTCAMP:
+            self.isInBootcampQueue = False
+            events.onBootcampDequeued()
 
     def onTutorialEnqueued(self, number, queueLen, avgWaitingTime):
         LOG_DEBUG('onTutorialEnqueued', number, queueLen, avgWaitingTime)
@@ -383,10 +392,13 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.TUTORIAL:
             self.isInTutorialQueue = False
             events.onKickedFromTutorialQueue()
+        elif queueType == QUEUE_TYPE.BOOTCAMP:
+            self.isInBootcampQueue = False
+            events.onKickedFromBootcampQueue()
         elif queueType == QUEUE_TYPE.UNIT_ASSEMBLER:
             self.isInUnitAssembler = False
             events.onKickedFromUnitAssembler()
-        elif queueType in (QUEUE_TYPE.UNITS, QUEUE_TYPE.SORTIE):
+        elif queueType == QUEUE_TYPE.UNITS:
             events.onKickedFromUnitsQueue()
         elif queueType == QUEUE_TYPE.EVENT_BATTLES:
             self.isInEventBattles = False
@@ -403,6 +415,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         elif queueType == QUEUE_TYPE.RANKED:
             self.isInRankedQueue = False
             events.onKickedFromRankedQueue()
+        elif queueType == QUEUE_TYPE.BOOTCAMP:
+            self.isInBootcampQueue = False
+            events.onKickedFromBootcampQueue()
 
     def onArenaCreated(self):
         LOG_DEBUG('onArenaCreated')
@@ -420,6 +435,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInFalloutClassic = False
         self.isInFalloutMultiteam = False
         self.isInSandboxQueue = False
+        self.isInBootcampQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -440,12 +456,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def onUnitUpdate(self, *args):
         self.unitMgr.onUnitUpdate(*args)
-
-    def onFortUpdate(self, *args):
-        self.fort.onFortUpdate(*args)
-
-    def onFortReply(self, *args):
-        self.fort.onFortReply(*args)
 
     def onGlobalMapUpdate(self, *args):
         self.gMap.onGlobalMapUpdate(*args)
@@ -475,6 +485,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         LOG_DEBUG('onKickedFromArena', reasonCode)
         self.isInRandomQueue = False
         self.isInTutorialQueue = False
+        self.isInBootcampQueue = False
         self.isInEventBattles = False
         self.isInFalloutClassic = False
         self.isInFalloutMultiteam = False
@@ -502,12 +513,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def onClanInfoReceived(self, clanDBID, clanName, clanAbbrev, clanMotto, clanDescription):
         LOG_DEBUG('onClanInfoReceived', clanDBID, clanName, clanAbbrev, clanMotto, clanDescription)
         g_clanCache.onClanInfoReceived(clanDBID, clanName, clanAbbrev, clanMotto, clanDescription)
-
-    def receiveClubUpdate(self, clubDBID, clubData, unitData):
-        self.clubs.onClubUpdated(clubDBID, clubData, unitData)
-
-    def receiveClubNotification(self, notification):
-        self.clubs.onClubNotification(notification)
 
     def receiveNotification(self, notification):
         LOG_DEBUG('receiveNotification', notification)
@@ -537,6 +542,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             if self.isLongDisconnectedFromCenter != isLongDisconnectedFromCenter:
                 self.isLongDisconnectedFromCenter = isLongDisconnectedFromCenter
                 events.onCenterIsLongDisconnected(isLongDisconnectedFromCenter)
+        g_bootcamp.setBootcampParams({'completed': ctx.get('bootcampCompletedCount', 0),
+         'runCount': ctx.get('bootcampRunCount', 0),
+         'needAwarding': ctx.get('bootcampNeedAwarding', False)})
         events.isPlayerEntityChanging = False
         events.onAccountShowGUI(ctx)
 
@@ -580,14 +588,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.prebattle.update(updateType, argStr)
         return
 
-    def requestFortPublicInfo(self, requestID, filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourTo, nextOwnStartDefHourFrom, nextOwnStartDefHourTo, defHourChangeDay, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, firstDefaultQuery, electedClanDBIDs):
-        self.base.accountFortConnector_requestFortPublicInfo(requestID, filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourTo, nextOwnStartDefHourFrom, nextOwnStartDefHourTo, defHourChangeDay, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, firstDefaultQuery, electedClanDBIDs)
-
-    def responseFortPublicInfo(self, requestID, errorID, resultSet):
-        if errorID > 0:
-            LOG_DEBUG('fort public info error', requestID, errorID, resultSet)
-        self.fort.onResponseFortPublicInfo(requestID, errorID, cPickle.loads(resultSet))
-
     def update(self, diff):
         self._update(True, cPickle.loads(diff))
 
@@ -609,10 +609,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def requestPrebattlesByName(self, type, idle, creatorMask):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt2Str(AccountCommands.REQUEST_ID_PREBATTLES, AccountCommands.CMD_REQ_PREBATTLES_BY_CREATOR, type, int(idle), creatorMask)
-
-    def requestPrebattlesByDivision(self, idle, division):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_PREBATTLES, AccountCommands.CMD_REQ_PREBATTLES_BY_DIVISION, int(idle), division, 0)
 
     def requestPrebattleRoster(self, prebattleID):
         if not events.isPlayerEntityChanging:
@@ -674,6 +670,27 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueTutorial(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_TUTORIAL, 0, 0, 0)
+
+    def startBootcampCmd(self):
+        if events.isPlayerEntityChanging:
+            return
+        if g_bootcamp.isRunning():
+            return
+        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_REQUEST_BOOTCAMP_START, 0, 0, 0)
+
+    def quitBootcampCmd(self):
+        if events.isPlayerEntityChanging:
+            return
+        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_REQUEST_BOOTCAMP_QUIT, 0, 0, 0)
+
+    def enqueueBootcamp(self, lessonId):
+        if events.isPlayerEntityChanging:
+            return
+        self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_BOOTCAMP, lessonId, 0, 0)
+
+    def dequeueBootcamp(self):
+        if not events.isPlayerEntityChanging:
+            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BOOTCAMP, 0, 0, 0)
 
     def enqueueSandbox(self, vehInvID):
         if events.isPlayerEntityChanging:
@@ -738,11 +755,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if events.isPlayerEntityChanging:
             return
         self.base.accountPrebattle_createTraining(arenaTypeID, roundLength, isOpened, comment)
-
-    def prb_createCompany(self, isOpened, comment, division=PREBATTLE_COMPANY_DIVISION.ABSOLUTE):
-        if events.isPlayerEntityChanging:
-            return
-        self.base.accountPrebattle_createCompany(isOpened, comment, division)
 
     def prb_createDev(self, arenaTypeID, roundLength, comment, bonusType=ARENA_BONUS_TYPE.REGULAR):
         if events.isPlayerEntityChanging:
@@ -842,11 +854,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if events.isPlayerEntityChanging:
             return
         self._doCmdInt3(AccountCommands.CMD_PRB_KICK, playerID, 0, 0, lambda requestID, resultID, errorStr: callback(resultID))
-
-    def prb_changeDivision(self, division, callback):
-        if events.isPlayerEntityChanging:
-            return
-        self._doCmdInt3(AccountCommands.CMD_PRB_CH_DIVISION, division, 0, 0, lambda requestID, resultID, errorStr: callback(resultID))
 
     def prb_changeGameplaysMask(self, gameplaysMask, callback):
         if events.isPlayerEntityChanging:
@@ -969,7 +976,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.stats.synchronize(isFullSync, diff)
             self.questProgress.synchronize(isFullSync, diff)
             self.intUserSettings.synchronize(isFullSync, diff)
-            self.clubs.synchronize(isFullSync, diff)
             self.goodies.synchronize(isFullSync, diff)
             self.vehicleRotation.synchronize(isFullSync, diff)
             self.recycleBin.synchronize(isFullSync, diff)
@@ -983,12 +989,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.__synchronizeCacheDict(self.potapovQuestsLock, diff.get('cache', None), 'potapovQuestIDs', 'replace', events.onPQLocksChanged)
             self.__synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             cacheDiff = diff.get('cache', {})
-            clanFortState = cacheDiff.get('clanFortState', None)
-            if clanFortState is not None:
-                self.fort.onFortStateDiff(clanFortState)
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
                 for vehTypeCompDescr in diff.get('stats', {}).get('eliteVehicles', ()):
+                    if g_bootcamp.isRunning():
+                        continue
                     events.onVehicleBecomeElite(vehTypeCompDescr)
 
                 for vehInvID, lockReason in diff.get('cache', {}).get('vehsLock', {}).iteritems():
@@ -1139,6 +1144,17 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
                     LOG_WARNING('__synchronizeCacheDict: bad diff=%r for key=%r' % (serverSettingsDiff, key))
             return
 
+    def onEntityCheckOutEnqueued(self, queueNumber):
+        Waiting.hide('login')
+        events.onEntityCheckOutEnqueued(lambda : self.base.cancelEntityCheckOut())
+
+    @process
+    def onBootcampAccountMigrationComplete(self):
+        events.onBootcampAccountMigrationComplete()
+        settingsCore = dependency.instance(ISettingsCore)
+        yield settingsCore.serverSettings.settingsCache.update()
+        settingsCore.serverSettings.applySettings()
+
 
 Account = PlayerAccount
 
@@ -1153,7 +1169,8 @@ class AccountInputHandler():
 
 class _AccountRepository(object):
 
-    def __init__(self, name, initialServerSettings):
+    def __init__(self, name, className, initialServerSettings):
+        self.className = className
         self.contactInfo = ContactInfo()
         self.serverSettings = copy.copy(initialServerSettings)
         self.syncData = AccountSyncData.AccountSyncData()
@@ -1172,12 +1189,10 @@ class _AccountRepository(object):
         self.eventNotifications = []
         self.intUserSettings = IntUserSettings.IntUserSettings()
         self.prebattleInvitations = ClientInvitations.ClientInvitations(events)
-        self.clubs = ClientClubs.ClientClubs(self.syncData)
         self.goodies = ClientGoodies.ClientGoodies(self.syncData)
         self.vehicleRotation = vehicle_rotation.VehicleRotation(self.syncData)
         self.recycleBin = client_recycle_bin.ClientRecycleBin(self.syncData)
         self.ranked = ClientRanked.ClientRanked(self.syncData)
-        self.fort = ClientFortMgr()
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

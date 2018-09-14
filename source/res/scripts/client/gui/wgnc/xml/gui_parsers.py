@@ -29,6 +29,36 @@ class _ButtonsParser(SectionParser):
         return result
 
 
+class _GUIActionsParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        """
+        Parses section "handlers".
+        Where gui_event - event from action received from GUI,
+        action - The names of callbacks sequence that have to be invoked on server
+        :param section:
+        :return: [(gui_event, actions), ...]
+        """
+        result = []
+        for name, sub in section.items():
+            if name != 'handler':
+                continue
+            gui_event = sub.readString('gui_event')
+            if not gui_event:
+                LOG_WARNING('Handler section is not valid, gui_event is empty', sub.asBinary)
+                continue
+            actions = sub.readString('actions')
+            if not actions:
+                LOG_WARNING('Handler section is not valid, actions is empty', sub.asBinary)
+                continue
+            result.append((gui_event, actions))
+
+        return result
+
+
 class _PopUpParser(SectionParser):
 
     def getTagName(self):
@@ -118,6 +148,20 @@ class _PollParser(_WindowParser):
         pass
 
 
+class _BrowserParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        sub = _GUIActionsParser()
+        if sub.getTagName() in section.keys():
+            handlers = sub.parse(section[sub.getTagName()])
+        else:
+            handlers = None
+        return gui_items.BrowserItem(name=self._readString('name', section), body=self._readString('href', section), handlers=handlers, hidden=section.readBool('hidden', True), topic=section.readString('topic', ''))
+
+
 class _GUIItemsParser(ParsersCollection):
 
     def getTagName(self):
@@ -134,10 +178,20 @@ class _GUIItemsParser(ParsersCollection):
 class GUIItemsParser_v2(_GUIItemsParser):
 
     def __init__(self):
+        """
+        Class contains GUI items that are supported in WGNC v2.0.
+        The list of supported items:
+        - popup;
+        - window;
+        - referrer.
+        - browser.
+        Another actions are ignored.
+        """
         super(GUIItemsParser_v2, self).__init__((_PopUpParser(),
          _WindowParser(),
          _ReferrerParser(),
          _ReferrerParser(),
          _FenixParser(),
          _RecruitParser(),
-         _PollParser()))
+         _PollParser(),
+         _BrowserParser()))

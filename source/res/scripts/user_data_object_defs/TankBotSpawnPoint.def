@@ -1,0 +1,53 @@
+<TankBotSpawnPoint.def>
+  <Domain>	BASE	</Domain>
+  <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+    </team>
+    <vehicle>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </vehicle>
+    <botName>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </botName>
+    <pathID>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </pathID>
+    <goal>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </goal>
+    <data>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </data>
+    <ammo>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </ammo>
+    <health>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </health>
+    <radio>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </radio>
+    <circularVision>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </circularVision>
+    <ammoCount>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </ammoCount>
+    <rotationSpeed>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </rotationSpeed>
+  </Properties>
+</TankBotSpawnPoint.def>

@@ -17,8 +17,7 @@ from skeletons.gui.game_control import IIGRController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.QUESTS import QUESTS
-_AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.COMPANY: 'company',
- constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
+_AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
 _RELATIONS_SCHEME = formatters.RELATIONS_SCHEME
 _ET = constants.EVENT_TYPE
@@ -42,7 +41,7 @@ class GROUP_TYPE(CONST_CONTAINER):
     AND = 'and'
 
 
-_SORT_ORDER = ('igrType', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'clanKills', 'cumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative')
+_SORT_ORDER = ('igrType', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'vehicleStun', 'clanKills', 'cumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative', 'vehicleStunCumulative')
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
@@ -1188,7 +1187,51 @@ class VehicleDamageCumulative(_Cumulativable, VehicleDamage):
         return self._bonus
 
     def __repr__(self):
-        return 'VehicleKills<key=%s; %s=%d; total=%d>' % (self._getKey(),
+        return 'VehicleDamage<key=%s; %s=%d; total=%d>' % (self._getKey(),
+         self._relation,
+         self._relationValue,
+         self.getTotalValue())
+
+
+class VehicleStun(_VehsListCondition):
+
+    def __init__(self, path, data):
+        super(VehicleStun, self).__init__('vehicleStun', dict(data), path)
+
+    def getVehiclesData(self):
+        return _prepareVehData(self._getVehiclesList(self._data))
+
+    def getEventCount(self):
+        return _getNodeValue(self._data, 'eventCount', default=False)
+
+    def _getLabelKey(self):
+        key = 'vehicleStunEventCount' if self.getEventCount() else 'vehicleStun'
+        return '#quests:details/conditions/%s' % key
+
+    def __repr__(self):
+        return 'VehicleStun<%s=%d>' % (self._relation, self._relationValue)
+
+
+class VehicleStunCumulative(_Cumulativable, VehicleStun):
+
+    def __init__(self, path, data, bonusCond):
+        super(VehicleStun, self).__init__('vehicleStunCumulative', dict(data), path)
+        self._bonus = weakref.proxy(bonusCond)
+
+    def getUserString(self, battleTypeName=''):
+        return i18n.makeString(self._getLabelKey())
+
+    def _getKey(self):
+        return 'vehicleStunEventCount' if self.getEventCount() else 'vehicleStun'
+
+    def getTotalValue(self):
+        return self._relationValue
+
+    def getBonusData(self):
+        return self._bonus
+
+    def __repr__(self):
+        return 'VehicleStun<key=%s; %s=%d; total=%d>' % (self._getKey(),
          self._relation,
          self._relationValue,
          self.getTotalValue())

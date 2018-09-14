@@ -16,6 +16,7 @@ from helpers import dependency
 from helpers import i18n
 from gui.shared.utils import decorators
 from gui import SystemMessages
+from items import tankmen
 from skeletons.gui.shared import IItemsCache
 OPERATION_RETRAIN = 'retrain'
 OPERATION_RETURN = 'return'
@@ -45,7 +46,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         crew = vehicle.crew
         if self.__isNoCrew(crew):
             return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'noCrew')
-        return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'alreadyRetrained') if self.__isHasNotNative(crew) is not True else self.__getInitCrewOperationObject(OPERATION_RETRAIN)
+        return self.__getInitCrewOperationObject(OPERATION_RETRAIN, 'alreadyRetrained') if self.__isTopCrew(crew) else self.__getInitCrewOperationObject(OPERATION_RETRAIN)
 
     def __getReturnOperationData(self, vehicle):
         crew = vehicle.crew
@@ -101,24 +102,20 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         else:
             return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP) if self.__isNotEnoughSpaceInBarrack(crew) else self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK)
 
-    def __isHasNotNative(self, crew):
+    def __isTopCrew(self, crew):
         for slotIdx, tman in crew:
             if tman is not None:
-                if tman.vehicleNativeDescr.type.compactDescr != tman.vehicleDescr.type.compactDescr:
-                    return True
-                if tman.realRoleLevel[0] < 100:
-                    return True
+                if tman.efficiencyRoleLevel < tankmen.MAX_SKILL_LEVEL:
+                    return False
 
-        return False
+        return True
 
     def __isNoCrew(self, crew):
-        noCrew = True
         for slotIdx, tman in crew:
             if tman is not None:
-                noCrew = False
-                break
+                return False
 
-        return noCrew
+        return True
 
     def __isNotEnoughSpaceInBarrack(self, crew):
         berthsNeeded = len(filter(lambda (role, t): t is not None, crew))

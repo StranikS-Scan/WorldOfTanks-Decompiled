@@ -145,6 +145,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_EXCHANGE_DIALOG = 'showExchangeDialog'
     SHOW_CHECK_BOX_DIALOG = 'showCheckBoxDialog'
     SHOW_DESERTER_DLG = 'showDeserterDialog'
+    SHOW_EXECUTION_CHOOSER_DIALOG = 'showExecutionChooserDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())
@@ -186,6 +187,17 @@ class LoginEventEx(LoginEvent):
         self.showAutoLoginBtn = showAutoLoginBtn
 
 
+class BCLoginEvent(SharedEvent):
+    CLOSE_WINDOW = 'closeBCLoginQueue'
+    CANCEL_WAITING = 'cancelWaitingBCLoginQueue'
+
+    def __init__(self, eventType, title=None, message=None, cancelLabel=None):
+        super(BCLoginEvent, self).__init__(eventType=eventType)
+        self.title = title
+        self.message = message
+        self.cancelLabel = cancelLabel
+
+
 class RenameWindowEvent(HasCtxEvent):
     RENAME_WINDOW = 'renameWindow'
 
@@ -194,7 +206,6 @@ class RenameWindowEvent(HasCtxEvent):
 
 
 class HideWindowEvent(HasCtxEvent):
-    HIDE_COMPANY_WINDOW = 'hideCompanyWindow'
     HIDE_BATTLE_RESULT_WINDOW = 'hideBattleResultsWindow'
     HIDE_BATTLE_SESSION_WINDOW = 'hideBattleSessionWindow'
     HIDE_UNIT_WINDOW = 'hideUnitWindow'
@@ -317,6 +328,30 @@ class TutorialEvent(SharedEvent):
          'isAfterBattle': self.isAfterBattle}
 
 
+class BootcampEvent(SharedEvent):
+    HINT_SHOW = 'HintShow'
+    HINT_HIDE = 'HintHide'
+    HINT_COMPLETE = 'HintComplete'
+    HINT_CLOSE = 'HintClose'
+    SHOW_SECONDARY_HINT = 'ShowSecondaryHint'
+    HIDE_SECONDARY_HINT = 'HideSecondaryHint'
+    SET_VISIBLE_ELEMENTS = 'SetVisibleElements'
+    SHOW_NEW_ELEMENTS = 'showNewElements'
+    ADD_HIGHLIGHT = 'ShowHighlight'
+    REMOVE_HIGHLIGHT = 'RemoveHighlight'
+    REMOVE_ALL_HIGHLIGHTS = 'RemoveAllHighlights'
+    SET_BATTLE_SELECTOR = 'SetBattleSelector'
+    CLOSE_PREBATTLE = 'ClosePrebattle'
+    QUEUE_DIALOG_SHOW = 'QueueDialogShow'
+    QUEUE_DIALOG_CLOSE = 'QueueDialogClose'
+    QUEUE_DIALOG_CANCEL = 'QueueDialogCancel'
+
+    def __init__(self, eventType, eventId=0, eventArg=0):
+        super(BootcampEvent, self).__init__(eventType)
+        self.eventId = eventId
+        self.eventArg = eventArg
+
+
 class MessengerEvent(HasCtxEvent):
     PRB_CHANNEL_CTRL_INITED = 'prbChannelCtrlInited'
     PRB_CHANNEL_CTRL_DESTROYED = 'prbChannelCtrlDestroyed'
@@ -398,37 +433,6 @@ class CSRosterSlotSettingsWindow(HasCtxEvent):
 
     def __init__(self, eventType=None, ctx=None):
         super(CSRosterSlotSettingsWindow, self).__init__(eventType, ctx)
-
-
-class FortEvent(HasCtxEvent):
-    REQUEST_TIMEOUT = 'requestTimeout'
-    VIEW_LOADED = 'viewLoaded'
-    SWITCH_TO_MODE = 'switchToMode'
-    ON_INTEL_FILTER_APPLY = 'onIntelFilterApplied'
-    ON_INTEL_FILTER_RESET = 'onIntelFilterReset'
-    ON_INTEL_FILTER_DO_REQUEST = 'onIntelFilterDoRequest'
-    TRANSPORTATION_STEP = 'transportationStep'
-    CHOICE_DIVISION = 'testChoiceDivision'
-    REQUEST_TRANSPORTATION = 'requestTransportation'
-    IS_IN_TRANSPORTING_MODE = 'isInTransportingMode'
-    SHOW_DISABLED_POPUP = 'showPopupDlgIfDisabled'
-
-    class TRANSPORTATION_STEPS(CONST_CONTAINER):
-        NONE = 0
-        FIRST_STEP = 1
-        NEXT_STEP = 2
-        CONFIRMED = 3
-
-    def __init__(self, eventType=None, ctx=None):
-        super(FortEvent, self).__init__(eventType, ctx)
-
-
-class FortOrderEvent(HasCtxEvent):
-    USE_ORDER = 'useOrder'
-    CREATE_ORDER = 'createOrder'
-
-    def __init__(self, eventType=None, ctx=None):
-        super(FortOrderEvent, self).__init__(eventType, ctx)
 
 
 class StrongholdEvent(HasCtxEvent):

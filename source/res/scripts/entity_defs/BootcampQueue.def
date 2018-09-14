@@ -1,0 +1,26 @@
+<BootcampQueue.def>
+  <Properties></Properties>
+  <BaseMethods>
+    <enqueue>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </enqueue>
+    <dequeue>
+      <Arg>	OBJECT_ID	</Arg>
+    </dequeue>
+    <onArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+    </onArenaCreated>
+    <addActiveArena>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT16	</Arg>
+    </addActiveArena>
+    <removeArena>
+      <Arg>	OBJECT_ID	</Arg>
+    </removeArena>
+  </BaseMethods>
+</BootcampQueue.def>

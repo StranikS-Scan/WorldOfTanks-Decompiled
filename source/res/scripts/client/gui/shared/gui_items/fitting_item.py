@@ -313,6 +313,23 @@ class FittingItem(GUIItem, HasIntCD):
                 return Currency.CREDITS
         return self.buyPrice.getCurrency(byWeight=True)
 
+    def getBuyPrice(self):
+        """
+        Returns the buy price in consideration of item's alternative price and player's preferences (
+        isBoughtForCredits property). Be aware that for some items (shells and equipments right now) buying for
+        alternative price (for credits for example) might be disabled on the server side. This method doesn't check it
+        and always returns price as if the switch is off.
+        
+        :return: Money
+        """
+        if self.altPrice is not None:
+            currency = self.altPrice.getCurrency(byWeight=True)
+            if currency != Currency.CREDITS and self.isBoughtForCredits:
+                currency = Currency.CREDITS
+            return Money.makeFrom(currency, self.altPrice.get(currency))
+        else:
+            return self.buyPrice
+
     def getSellPriceCurrency(self):
         """
         Returns the currency of the sell price.

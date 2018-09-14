@@ -7,9 +7,8 @@ import account_helpers
 from ClientUnit import ClientUnit
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
-from UnitBase import SORTIE_DIVISION
 from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE
-from constants import PREBATTLE_TYPE, REQUEST_COOLDOWN
+from constants import PREBATTLE_TYPE, REQUEST_COOLDOWN, VEHICLE_CLASS_INDICES
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from gui.prb_control import prb_getters, settings
@@ -63,7 +62,7 @@ class BaseUnitEntity(BasePrbEntity):
     def getCtrlType(self):
         return CTRL_ENTITY_TYPE.UNIT
 
-    def getPermissions(self, dbID=None, unitIdx=None):
+    def getPermissions(self, dbID=None, unitMgrID=None):
         return IUnitPermissions()
 
     def initEvents(self, listener):
@@ -72,37 +71,31 @@ class BaseUnitEntity(BasePrbEntity):
         """
         pass
 
-    def getUnitIdx(self):
-        """
-        Returns index of current unit.
-        """
-        pass
-
-    def getUnit(self, unitIdx=None, safe=False):
+    def getUnit(self, unitMgrID=None, safe=False):
         """
         Getter for unit data by unit index in unit manager.
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID or None.
             safe: should it be safe getter
         
         Returns:
-            unit index and client unit object
+            unit manager ID and client unit object
         """
         return (0, None)
 
-    def getExtra(self, unitIdx=None):
+    def getExtra(self, unitMgrID=None):
         """
         Getter for unit extra data by unit index in unit manager.
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         return None
 
-    def getUnitFullData(self, unitIdx=None):
+    def getUnitFullData(self, unitMgrID=None):
         """
         Gets unit full data that required to gui.
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         return unit_items.UnitFullData()
 
@@ -112,85 +105,85 @@ class BaseUnitEntity(BasePrbEntity):
         """
         return unit_items.UnitRosterSettings()
 
-    def getPlayerInfo(self, dbID=None, unitIdx=None):
+    def getPlayerInfo(self, dbID=None, unitMgrID=None):
         """
         Getter for player's info object
         Args:
             dbID: player's database ID
-            unitIdx: unit index in which player is
+            unitMgrID: unit manager ID in which player is
         """
         return unit_items.PlayerUnitInfo(-1L, 0, None)
 
-    def getReadyStates(self, unitIdx=None):
+    def getReadyStates(self, unitMgrID=None):
         """
         Returns list of player's ready states by slots. None for no player.
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         return []
 
-    def getSlotState(self, slotIdx, unitIdx=None):
+    def getSlotState(self, slotIdx, unitMgrID=None):
         """
         Getter for slot state info
         Args:
             slotIdx: slot index
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         return unit_items.SlotState()
 
-    def getSlotsIterator(self, unitIdx, unit):
+    def getSlotsIterator(self, unitMgrID, unit):
         """
         Returns slots iterator for given unit
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
             unit: client unit instance
         """
         return (unit_items.SlotInfo(-1, self.getSlotState(-1)),)
 
-    def getPlayers(self, unitIdx=None):
+    def getPlayers(self, unitMgrID=None):
         """
         Returns all players that are in unit.
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         
         Returns:
             dictionary with players info to databases IDs mapping
         """
         return {}
 
-    def getCandidates(self, unitIdx=None):
+    def getCandidates(self, unitMgrID=None):
         """
         Returns all candidates to unit.
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         
         Returns:
             dictionary with players info to databases IDs mapping
         """
         return {}
 
-    def getRosterType(self, unitIdx=None):
+    def getRosterType(self, unitMgrID=None):
         """
         Getter for unit roster type
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         return None
 
-    def getRoster(self, unitIdx=None):
+    def getRoster(self, unitMgrID=None):
         """
         Getter for unit roster
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         return None
 
-    def getVehiclesInfo(self, dbID=None, unitIdx=None):
+    def getVehiclesInfo(self, dbID=None, unitMgrID=None):
         """
         Gets vehicles info for some player
         Args:
             dbID: player database ID
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         return (unit_items.VehicleInfo(),)
 
@@ -205,35 +198,35 @@ class BaseUnitEntity(BasePrbEntity):
         """
         return None
 
-    def getFlags(self, unitIdx=None):
+    def getFlags(self, unitMgrID=None):
         """
         Getter for unit flags
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         return unit_items.UnitFlags(0)
 
-    def getStats(self, unitIdx=None):
+    def getStats(self, unitMgrID=None):
         """
         Getter for unit stats
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         return unit_items.UnitStats()
 
-    def getComment(self, unitIdx=None):
+    def getComment(self, unitMgrID=None):
         """
         Returns unit's comments
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         pass
 
-    def getCensoredComment(self, unitIdx=None):
+    def getCensoredComment(self, unitMgrID=None):
         """
         Returns unit's censored comments
         Args:
-            unitIdx: unit index
+            unitMgrID: unit index
         """
         pass
 
@@ -421,16 +414,16 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
             if callback:
                 callback(False)
 
-    def getUnitFullData(self, unitIdx=None):
-        unitIdx, unit = self.getUnit(unitIdx=unitIdx)
+    def getUnitFullData(self, unitMgrID=None):
+        unitMgrID, unit = self.getUnit(unitMgrID=unitMgrID)
         dbID = account_helpers.getAccountDatabaseID()
-        pInfo = self._buildPlayerInfo(unitIdx, unit, dbID, unit.getPlayerSlotIdx(dbID), unit.getPlayer(dbID))
+        pInfo = self._buildPlayerInfo(unitMgrID, unit, dbID, unit.getPlayerSlotIdx(dbID), unit.getPlayer(dbID))
         unitState = self._buildFlags(unit)
-        unitStats = self._buildStats(unitIdx, unit)
-        slotsIter = self.getSlotsIterator(unitIdx, unit)
+        unitStats = self._buildStats(unitMgrID, unit)
+        slotsIter = self.getSlotsIterator(unitMgrID, unit)
         return unit_items.UnitFullData(unit, unitState, unitStats, pInfo, slotsIter)
 
-    def getSlotsIterator(self, unitIdx, unit):
+    def getSlotsIterator(self, unitMgrID, unit):
         players = unit.getPlayers()
         members = unit.getMembers()
         vehicles = unit.getVehicles()
@@ -447,17 +440,17 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
             if not state.isFree and slotIdx in members:
                 dbID = members[slotIdx].get('accountDBID', -1L)
                 if dbID in players:
-                    player = self._buildPlayerInfo(unitIdx, unit, dbID, slotIdx=slotIdx, data=players[dbID])
+                    player = self._buildPlayerInfo(unitMgrID, unit, dbID, slotIdx=slotIdx, data=players[dbID])
                 if dbID in vehicles and vehicles[dbID]:
                     vehicle = vehicles[dbID][0]
             yield unit_items.SlotInfo(slotIdx, state, player, vehicle)
 
         return
 
-    def isCommander(self, dbID=None, unitIdx=None):
+    def isCommander(self, dbID=None, unitMgrID=None):
         if dbID is None:
             dbID = account_helpers.getAccountDatabaseID()
-        _, unit = self.getUnit(unitIdx=unitIdx)
+        _, unit = self.getUnit(unitMgrID=unitMgrID)
         return UnitPermissions.isCommander(unit.getPlayers().get(dbID, {}).get('role', 0))
 
     def isParentControlActivated(self, callback=None):
@@ -476,11 +469,11 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
     def _createRosterSettings(self):
         return unit_items.UnitRosterSettings()
 
-    def _buildPlayerInfo(self, unitIdx, unit, dbID, slotIdx=-1, data=None):
+    def _buildPlayerInfo(self, unitMgrID, unit, dbID, slotIdx=-1, data=None):
         """
         Builds player info based on unit data
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
             unit: client unit object
             dbID: player database ID
             slotIdx: slot index
@@ -494,13 +487,13 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
         else:
             isReady = False
             isInSlot = False
-        return unit_items.PlayerUnitInfo(dbID, unitIdx, unit, isReady=isReady, isInSlot=isInSlot, slotIdx=slotIdx, **data)
+        return unit_items.PlayerUnitInfo(dbID, unitMgrID, unit, isReady=isReady, isInSlot=isInSlot, slotIdx=slotIdx, **data)
 
-    def _buildStats(self, unitIdx, unit):
+    def _buildStats(self, unitMgrID, unit):
         """
         Builds unit stats
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
             unit: client unit object
         """
         readyCount = 0
@@ -511,7 +504,7 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
         isReadyInSlot = unit.isPlayerReadyInSlot
         isSlotFree = unit.isSlotFree
         isSlotClosed = unit.isSlotClosed
-        isCreator = self.isCommander(unitIdx=unitIdx)
+        isCreator = self.isCommander(unitMgrID=unitMgrID)
         for slotIdx in self._rosterSettings.getAllSlotsRange():
             if isCreator and slotIdx == settings.CREATOR_SLOT_INDEX:
                 readyCount += 1
@@ -572,23 +565,23 @@ class _UnitIntroEntity(_UnitEntity):
         if callback:
             callback(True)
 
-    def getUnit(self, unitIdx=None, safe=False):
-        if unitIdx is None and not safe:
+    def getUnit(self, unitMgrID=None, safe=False):
+        if unitMgrID is None and not safe:
             LOG_ERROR('Unit index is not defined')
             return (None, None)
         else:
-            return self._getUnit(unitIdx)
+            return self._getUnit(unitMgrID)
 
     def getConfirmDialogMeta(self, ctx):
         return rally_dialog_meta.createUnitIntroLeaveMeta(ctx, self._prbType, self.canSwitch(ctx))
 
-    def getPermissions(self, dbID=None, unitIdx=None):
+    def getPermissions(self, dbID=None, unitMgrID=None):
         return UnitIntroPermissions(self.hasLockedState())
 
-    def getPlayerInfo(self, dbID=None, unitIdx=None):
+    def getPlayerInfo(self, dbID=None, unitMgrID=None):
         if dbID is None:
             dbID = account_helpers.getAccountDatabaseID()
-        return unit_items.PlayerUnitInfo(dbID, unitIdx, None)
+        return unit_items.PlayerUnitInfo(dbID, unitMgrID, None)
 
     def isPlayerJoined(self, ctx):
         return ctx.getCtrlType() is CTRL_ENTITY_TYPE.UNIT and ctx.hasFlags(self.getFunctionalFlags())
@@ -602,12 +595,12 @@ class _UnitIntroEntity(_UnitEntity):
     def _createActionsValidator(self):
         return NotSupportedActionsValidator()
 
-    def _getUnit(self, unitIdx=None):
+    def _getUnit(self, unitMgrID=None):
         """
         Inner part that incapsulates real part of unit getting
         in intro mode
         Args:
-            unitIdx: unit index
+            unitMgrID: unit manager ID
         """
         return (0, None)
 
@@ -772,13 +765,10 @@ class UnitEntity(_UnitEntity):
     def getID(self):
         return prb_getters.getUnitMgrID()
 
-    def getUnitIdx(self):
-        return prb_getters.getUnitIdx()
-
-    def getUnit(self, unitIdx=None, safe=False):
-        if unitIdx is None:
-            unitIdx = self.getUnitIdx()
-        return (unitIdx, prb_getters.getUnit(unitIdx, safe=True))
+    def getUnit(self, unitMgrID=None, safe=False):
+        if unitMgrID is None:
+            unitMgrID = self.getID()
+        return (unitMgrID, prb_getters.getUnit(safe=True))
 
     def hasLockedState(self):
         pInfo = self.getPlayerInfo()
@@ -789,11 +779,11 @@ class UnitEntity(_UnitEntity):
         result = self._actionsValidator.getLevelsValidator().canPlayerDoAction(ignoreEnable=True)
         return result or super(UnitEntity, self).validateLevels()
 
-    def getPermissions(self, dbID=None, unitIdx=None):
+    def getPermissions(self, dbID=None, unitMgrID=None):
         pDbID = account_helpers.getAccountDatabaseID()
         if dbID is None:
             dbID = pDbID
-        _, unit = self.getUnit(unitIdx=unitIdx)
+        _, unit = self.getUnit(unitMgrID=unitMgrID)
         isPlayerReady = False
         roles = 0
         players = unit.getPlayers()
@@ -804,9 +794,9 @@ class UnitEntity(_UnitEntity):
                 isPlayerReady = unit.isPlayerReadyInSlot(inSlots[dbID])
         return self._buildPermissions(roles, unit._flags, pDbID == dbID, isPlayerReady)
 
-    def getReadyStates(self, unitIdx=None):
+    def getReadyStates(self, unitMgrID=None):
         result = []
-        _, unit = self.getUnit(unitIdx=unitIdx)
+        _, unit = self.getUnit(unitMgrID=unitMgrID)
         isSlotClosed = unit.isSlotClosed
         isPlayerReady = unit.isPlayerReadyInSlot
         for slotIdx in self._rosterSettings.getAllSlotsRange():
@@ -815,24 +805,24 @@ class UnitEntity(_UnitEntity):
 
         return result
 
-    def getPlayerInfo(self, dbID=None, unitIdx=None):
+    def getPlayerInfo(self, dbID=None, unitMgrID=None):
         if dbID is None:
             dbID = account_helpers.getAccountDatabaseID()
-        unitIdx, unit = self.getUnit(unitIdx=unitIdx)
-        return self._buildPlayerInfo(unitIdx, unit, dbID, unit.getPlayerSlotIdx(dbID), unit.getPlayer(dbID))
+        unitMgrID, unit = self.getUnit(unitMgrID=unitMgrID)
+        return self._buildPlayerInfo(unitMgrID, unit, dbID, unit.getPlayerSlotIdx(dbID), unit.getPlayer(dbID))
 
-    def getPlayers(self, unitIdx=None):
-        unitIdx, unit = self.getUnit(unitIdx=unitIdx)
+    def getPlayers(self, unitMgrID=None):
+        unitMgrID, unit = self.getUnit(unitMgrID=unitMgrID)
         result = {}
         slotGetter = unit.getPlayerSlotIdx
         players = unit.getPlayers()
         for dbID, data in players.iteritems():
-            result[dbID] = self._buildPlayerInfo(unitIdx, unit, dbID, slotGetter(dbID), data)
+            result[dbID] = self._buildPlayerInfo(unitMgrID, unit, dbID, slotGetter(dbID), data)
 
         return result
 
-    def getCandidates(self, unitIdx=None):
-        unitIdx, unit = self.getUnit(unitIdx=unitIdx)
+    def getCandidates(self, unitMgrID=None):
+        unitMgrID, unit = self.getUnit(unitMgrID=unitMgrID)
         players = unit.getPlayers()
         memberIDs = set((value['accountDBID'] for value in unit.getMembers().itervalues()))
         dbIDs = set(players.keys()).difference(memberIDs)
@@ -840,51 +830,51 @@ class UnitEntity(_UnitEntity):
         for dbID, data in players.iteritems():
             if dbID not in dbIDs:
                 continue
-            result[dbID] = unit_items.PlayerUnitInfo(dbID, unitIdx, unit, **data)
+            result[dbID] = unit_items.PlayerUnitInfo(dbID, unitMgrID, unit, **data)
 
         return result
 
-    def getRosterType(self, unitIdx=None):
-        unitIdx, unit = self.getUnit(unitIdx=unitIdx, safe=True)
+    def getRosterType(self, unitMgrID=None):
+        _, unit = self.getUnit(unitMgrID=unitMgrID, safe=True)
         return unit.getRosterType()
 
-    def getRoster(self, unitIdx=None):
-        unitIdx, unit = self.getUnit(unitIdx=unitIdx, safe=True)
+    def getRoster(self, unitMgrID=None):
+        _, unit = self.getUnit(unitMgrID=unitMgrID, safe=True)
         return unit.getRoster()
 
-    def getVehiclesInfo(self, dbID=None, unitIdx=None):
+    def getVehiclesInfo(self, dbID=None, unitMgrID=None):
         if dbID is None:
             dbID = account_helpers.getAccountDatabaseID()
-        _, unit = self.getUnit(unitIdx=unitIdx)
+        _, unit = self.getUnit(unitMgrID=unitMgrID)
         vehicles = unit.getVehicles()
-        return map(lambda vehicle: unit_items.VehicleInfo(**vehicle._asdict()), vehicles[dbID]) if dbID in vehicles else super(UnitEntity, self).getVehiclesInfo(dbID, unitIdx)
+        return map(lambda vehicle: unit_items.VehicleInfo(**vehicle._asdict()), vehicles[dbID]) if dbID in vehicles else super(UnitEntity, self).getVehiclesInfo(dbID, unitMgrID)
 
-    def getSlotState(self, slotIdx, unitIdx=None):
-        _, unit = self.getUnit(unitIdx=unitIdx)
+    def getSlotState(self, slotIdx, unitMgrID=None):
+        _, unit = self.getUnit(unitMgrID=unitMgrID)
         return unit_items.SlotState(unit.isSlotClosed(slotIdx), unit.isSlotFree(slotIdx))
 
-    def getFlags(self, unitIdx=None):
-        _, unit = self.getUnit(unitIdx=unitIdx, safe=True)
+    def getFlags(self, unitMgrID=None):
+        _, unit = self.getUnit(unitMgrID=unitMgrID, safe=True)
         return self._buildFlags(unit)
 
-    def getStats(self, unitIdx=None):
-        _, unit = self.getUnit(unitIdx=unitIdx)
-        return self._buildStats(unitIdx, unit)
+    def getStats(self, unitMgrID=None):
+        _, unit = self.getUnit(unitMgrID=unitMgrID)
+        return self._buildStats(unitMgrID, unit)
 
-    def getComment(self, unitIdx=None):
-        _, unit = self.getUnit(unitIdx=unitIdx)
+    def getComment(self, unitMgrID=None):
+        _, unit = self.getUnit(unitMgrID=unitMgrID)
         return unit.getComment()
 
-    def getCensoredComment(self, unitIdx=None):
-        _, unit = self.getUnit(unitIdx=unitIdx)
-        pInfo = self.getPlayerInfo(unitIdx=unitIdx)
+    def getCensoredComment(self, unitMgrID=None):
+        _, unit = self.getUnit(unitMgrID=unitMgrID)
+        pInfo = self.getPlayerInfo(unitMgrID=unitMgrID)
         if not pInfo.isCommander():
             return passCensor(unit.getComment())
         else:
             return unit.getComment()
 
-    def getExtra(self, unitIdx=None):
-        _, unit = self.getUnit(unitIdx=unitIdx)
+    def getExtra(self, unitMgrID=None):
+        _, unit = self.getUnit(unitMgrID=unitMgrID)
         return unit.getExtra()
 
     def resetPlayerState(self):
@@ -1229,11 +1219,6 @@ class UnitEntity(_UnitEntity):
             return
         _, unit = self.getUnit()
         flags = self.getFlags()
-        if unit.isSortie():
-            LOG_ERROR('Auto search is not enabled in sortie')
-            if callback:
-                callback(False)
-            return
         if ctx.isRequestToStart():
             if self.isParentControlActivated(callback=callback):
                 return
@@ -1350,11 +1335,6 @@ class UnitEntity(_UnitEntity):
             ctx: change division request context
             callback: operation callback
         """
-        if ctx.getDivisionID() not in SORTIE_DIVISION._ORDER:
-            LOG_ERROR('Incorrect value of division', ctx.getDivisionID())
-            if callback:
-                callback(False)
-            return
         if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_DIVISION, coolDown=ctx.getCooldown()):
             return
         pPermissions = self.getPermissions()
@@ -1432,7 +1412,7 @@ class UnitEntity(_UnitEntity):
             prevFlags: previous flags
             nextFlags: new flags
         """
-        unitIdx, unit = self.getUnit()
+        unitMgrID, unit = self.getUnit()
         isReady = unit.arePlayersReady(ignored=[settings.CREATOR_SLOT_INDEX])
         flags = unit_items.UnitFlags(nextFlags, prevFlags, isReady)
         if flags.isInIdle():
@@ -1447,7 +1427,7 @@ class UnitEntity(_UnitEntity):
             self.resetPlayerState()
         self._invokeListeners('onUnitFlagsChanged', flags, timeLeftInIdle)
         if not flags.isOnlyRosterWaitChanged():
-            self._actionsHandler.setUnitChanged(flags)
+            self._actionsHandler.setUnitChanged()
         members = unit.getMembers()
         diff = []
         for slotIdx in self._rosterSettings.getAllSlotsRange():
@@ -1455,7 +1435,7 @@ class UnitEntity(_UnitEntity):
                 if slotIdx not in members:
                     continue
                 dbID = members[slotIdx]['accountDBID']
-                pInfo = self.getPlayerInfo(dbID=dbID, unitIdx=unitIdx)
+                pInfo = self.getPlayerInfo(dbID=dbID, unitMgrID=unitMgrID)
                 diff.append(pInfo)
 
         for listener in self.getListenersIterator():
@@ -1474,10 +1454,14 @@ class UnitEntity(_UnitEntity):
         """
         if vehTypeCD:
             _, nationID, itemID = core_vehicles.parseIntCompactDescr(vehTypeCD)
-            vehLevel = core_vehicles.g_cache.vehicle(nationID, itemID).level
+            vehicleTypeDescr = core_vehicles.g_cache.vehicle(nationID, itemID)
+            vehLevel = vehicleTypeDescr.level
+            vehicleType = set(core_vehicles.VEHICLE_CLASS_TAGS & vehicleTypeDescr.tags).pop()
+            vehClassIdx = VEHICLE_CLASS_INDICES[vehicleType]
         else:
             vehLevel = 0
-        vInfo = unit_items.VehicleInfo(vehInvID, vehTypeCD, vehLevel)
+            vehClassIdx = 0
+        vInfo = unit_items.VehicleInfo(vehInvID, vehTypeCD, vehLevel, vehClassIdx)
         LOG_DEBUG('onUnitVehicleChanged', dbID, vInfo)
         if dbID == account_helpers.getAccountDatabaseID() and not vInfo.isEmpty():
             vehicle = self.itemsCache.items.getItemByCD(vInfo.vehTypeCD)
@@ -1498,10 +1482,14 @@ class UnitEntity(_UnitEntity):
         for vehInvID, vehTypeCD in vehicles:
             if vehTypeCD:
                 _, nationID, itemID = core_vehicles.parseIntCompactDescr(vehTypeCD)
-                vehLevel = core_vehicles.g_cache.vehicle(nationID, itemID).level
+                vehicleTypeDescr = core_vehicles.g_cache.vehicle(nationID, itemID)
+                vehLevel = vehicleTypeDescr.level
+                vehicleType = set(core_vehicles.VEHICLE_CLASS_TAGS & vehicleTypeDescr.tags).pop()
+                vehClassIdx = VEHICLE_CLASS_INDICES[vehicleType]
             else:
                 vehLevel = 0
-            vInfo = unit_items.VehicleInfo(vehInvID, vehTypeCD, vehLevel)
+                vehClassIdx = 0
+            vInfo = unit_items.VehicleInfo(vehInvID, vehTypeCD, vehLevel, vehClassIdx)
             if dbID == account_helpers.getAccountDatabaseID() and not vInfo.isEmpty():
                 vehicle = self.itemsCache.items.getItemByCD(vInfo.vehTypeCD)
                 if vehicle is not None:
@@ -1520,7 +1508,7 @@ class UnitEntity(_UnitEntity):
             prevMask: previous ready mask
             nextMask: new ready mask
         """
-        unitIdx, unit = self.getUnit()
+        unitMgrID, unit = self.getUnit()
         isReadyInSlot = unit.isPlayerReadyInSlot
         members = unit.getMembers()
         players = unit.getPlayers()
@@ -1533,7 +1521,7 @@ class UnitEntity(_UnitEntity):
                     continue
                 dbID = members[slotIdx]['accountDBID']
                 data = players.get(dbID, {})
-                pInfo = unit_items.PlayerUnitInfo(dbID, unitIdx, unit, isReady=nextValue, isInSlot=True, slotIdx=slotIdx, **data)
+                pInfo = unit_items.PlayerUnitInfo(dbID, unitMgrID, unit, isReady=nextValue, isInSlot=True, slotIdx=slotIdx, **data)
                 diff.append(pInfo)
 
         LOG_DEBUG('onUnitPlayerStateChanged', diff)
@@ -1563,9 +1551,12 @@ class UnitEntity(_UnitEntity):
             if isOnlineChanged:
                 listener.onUnitPlayerOnlineStatusChanged(pInfo)
             if isCreatorChanged:
-                if pInfo.isCurrentPlayer():
-                    self._showLeadershipNotification = True
-                listener.onUnitPlayerBecomeCreator(pInfo)
+                if pInfo.isCommander():
+                    if pInfo.isCurrentPlayer():
+                        self._showLeadershipNotification = True
+                    listener.onUnitPlayerBecomeCreator(pInfo)
+                else:
+                    listener.onUnitPlayerNoLongerCreator(pInfo)
             if inArenaChanged:
                 listener.onUnitPlayerEnterOrLeaveArena(pInfo)
             if not g_playerEvents.isPlayerEntityChanging:
@@ -1580,8 +1571,8 @@ class UnitEntity(_UnitEntity):
             playerID: player database ID
             playerData: player added data
         """
-        unitIdx, unit = self.getUnit()
-        pInfo = self._buildPlayerInfo(unitIdx, unit, playerID, unit.getPlayerSlotIdx(playerID), playerData)
+        unitMgrID, unit = self.getUnit()
+        pInfo = self._buildPlayerInfo(unitMgrID, unit, playerID, unit.getPlayerSlotIdx(playerID), playerData)
         self._invokeListeners('onUnitPlayerAdded', pInfo)
 
     def unit_onUnitPlayerInfoChanged(self, playerID, playerData):
@@ -1591,8 +1582,8 @@ class UnitEntity(_UnitEntity):
             playerID: player database ID
             playerData: player changed data
         """
-        unitIdx, unit = self.getUnit()
-        pInfo = self._buildPlayerInfo(unitIdx, unit, playerID, unit.getPlayerSlotIdx(playerID), playerData)
+        unitMgrID, unit = self.getUnit()
+        pInfo = self._buildPlayerInfo(unitMgrID, unit, playerID, unit.getPlayerSlotIdx(playerID), playerData)
         self._invokeListeners('onUnitPlayerInfoChanged', pInfo)
         self._actionsHandler.setPlayerInfoChanged()
 
@@ -1603,8 +1594,8 @@ class UnitEntity(_UnitEntity):
             playerID: player database ID
             playerData: player data
         """
-        unitIdx, unit = self.getUnit()
-        pInfo = self._buildPlayerInfo(unitIdx, unit, playerID, -1, playerData)
+        unitMgrID, unit = self.getUnit()
+        pInfo = self._buildPlayerInfo(unitMgrID, unit, playerID, -1, playerData)
         self._invokeListeners('onUnitPlayerRemoved', pInfo)
 
     def unit_onUnitSettingChanged(self, opCode, value):
@@ -1646,8 +1637,8 @@ class UnitEntity(_UnitEntity):
         Args:
             playerID: player database ID
         """
-        unitIdx, unit = self.getUnit()
-        pInfo = self._buildPlayerInfo(unitIdx, unit, playerID, unit.getPlayerSlotIdx(playerID), unit.getPlayer(playerID))
+        unitMgrID, unit = self.getUnit()
+        pInfo = self._buildPlayerInfo(unitMgrID, unit, playerID, unit.getPlayerSlotIdx(playerID), unit.getPlayer(playerID))
         self._invokeListeners('onUnitPlayerVehDictChanged', pInfo)
 
     def unit_onUnitExtraChanged(self, extras):
@@ -1740,7 +1731,7 @@ class UnitEntity(_UnitEntity):
         """
         Adds client unit subscriptions
         """
-        unit = prb_getters.getUnit(self.getUnitIdx())
+        unit = prb_getters.getUnit()
         unit.onUnitFlagsChanged += self.unit_onUnitFlagsChanged
         unit.onUnitReadyMaskChanged += self.unit_onUnitReadyMaskChanged
         unit.onUnitVehicleChanged += self.unit_onUnitVehicleChanged
@@ -1760,7 +1751,7 @@ class UnitEntity(_UnitEntity):
         """
         Removes client unit subscriptions
         """
-        unit = prb_getters.getUnit(self.getUnitIdx(), safe=True)
+        unit = prb_getters.getUnit(safe=True)
         if unit:
             unit.onUnitFlagsChanged -= self.unit_onUnitFlagsChanged
             unit.onUnitReadyMaskChanged -= self.unit_onUnitReadyMaskChanged

@@ -7,10 +7,8 @@ from gui.shared import actions
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from helpers import dependency
 from helpers import time_utils
-from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.server_events import IEventsCache
 
 class SwitchPeripheryCtx(object):
 
@@ -44,33 +42,6 @@ class SwitchPeripheryCtx(object):
 
     def _getAllowedPeripherieIDs(self):
         raise NotImplementedError
-
-
-class SwitchPeripheryCompanyCtx(SwitchPeripheryCtx):
-    eventsCache = dependency.descriptor(IEventsCache)
-
-    def getHeader(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_COMPANY_HEADER
-
-    def getDescription(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_COMPANY_DESCRIPTION
-
-    def getSelectServerLabel(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_COMPANY_SELECTSERVERLABEL
-
-    def getApplySwitchLabel(self):
-        return PREBATTLE.SWITCHPERIPHERYWINDOW_COMPANY_APPLYSWITCHLABEL
-
-    def getExtraChainSteps(self):
-
-        def onLobbyInit():
-            actions.SelectPrb(PrbAction(PREBATTLE_ACTION_NAME.COMPANIES_LIST)).invoke()
-
-        return [actions.OnLobbyInitedAction(onInited=onLobbyInit)]
-
-    def _getForbiddenPeripherieIDs(self):
-        validPeripheryIDs = set((host.peripheryID for host in g_preDefinedHosts.hosts() if host.peripheryID != 0))
-        return validPeripheryIDs - self.eventsCache.getCompanyBattles().peripheryIDs
 
 
 class SwitchPeripheryFortCtx(SwitchPeripheryCtx):

@@ -167,10 +167,13 @@ class SettingsWindow(SettingsWindowMeta):
         else:
             LOG_WARNING("Unknown settings window's page id", tabId)
 
-    def onCounterTargetVisited(self, tabName):
+    def onCounterTargetVisited(self, tabName, subTabName, controlId):
         """Notify that user visited tab
         """
-        invalidateSettings(tabName)
+        isSettingsChanged = invalidateSettings(tabName, subTabName, controlId)
+        if isSettingsChanged:
+            newSettings = getNewSettings()
+            self.as_setCountersDataS(newSettings)
 
     def onSettingsChange(self, settingName, settingValue):
         settingValue = flashObject2Dict(settingValue)

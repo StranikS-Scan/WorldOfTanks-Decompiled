@@ -315,6 +315,11 @@ class ListDossierBlockDescr(object):
         self.__isExpanded = True
         _callEventHandlers(eventsEnabled=self.eventsEnabled, handlers=self.__eventsHandlers.get('_remove_', []), dossierDescr=self.__dossierDescrRef(), dossierBlockDescr=self, args=(value,))
 
+    def clear(self):
+        self.__list[:] = []
+        self.__isExpanded = True
+        _callEventHandlers(eventsEnabled=self.eventsEnabled, handlers=self.__eventsHandlers.get('_clear_', []), dossierDescr=self.__dossierDescrRef(), dossierBlockDescr=self, args=())
+
     def count(self, value):
         return self.__list.count(value)
 

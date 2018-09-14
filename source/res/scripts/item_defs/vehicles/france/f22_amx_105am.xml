@@ -21,7 +21,7 @@
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/french/F22_AMX_105AM/AMX_105AM_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -37,10 +37,9 @@
       <armor_6>	15	</armor_6>
       <armor_7>	10	</armor_7>
       <armor_8>	10	</armor_8>
-      <armor_9>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_9>
       <armor_10>	0	</armor_10>
-      <armor_11>	15	</armor_11>
+      <armor_15>	45	</armor_15>
+      <armor_16>	20	</armor_16>
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	10830	</weight>
@@ -62,11 +61,14 @@
       <sensitivityToImpulse>	0.68	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_small	</pixie>
+      <pixie>	gas_medium	</pixie>
       <nodes>	HP_Track_Exhaus_1	</nodes>
+      <tags>
+        <diesel>	diesel_medium	</diesel>
+      </tags>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.369355 -0.245761	</turret>
+      <turret>	0.000000 0.302878 -0.121139	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/french/F22_AMX_105AM/collision/Hull.model	</collisionModelServer>
@@ -74,43 +76,45 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.550438 0.449915 1.18576	</rayStart>
-        <rayEnd>	0.550438 0.302162 1.12437	</rayEnd>
+        <rayStart>	0.611732 0.122916 1.98352	</rayStart>
+        <rayEnd>	0.611733 -0.0251588 1.92291	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.26	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <player>
-        <rayStart>	-1.44998 0.7429 -1.27229	</rayStart>
-        <rayEnd>	-1.04998 0.7429 -1.27229	</rayEnd>
+        <rayStart>	-1.355 0.679245 -1.22487	</rayStart>
+        <rayEnd>	-1.155 0.679244 -1.22487	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.26	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </player>
       <inscription>
-        <rayStart>	1.44998 0.739219 -1.76082	</rayStart>
-        <rayEnd>	1.04998 0.739219 -1.76082	</rayEnd>
+        <rayStart>	1.355 0.658553 -1.81309	</rayStart>
+        <rayEnd>	1.155 0.658553 -1.81309	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.8	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <size>	0.722	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	-1.44998 0.737405 -1.87973	</rayStart>
-        <rayEnd>	-1.04998 0.737405 -1.87973	</rayEnd>
+        <rayStart>	-1.355 0.658553 -1.81309	</rayStart>
+        <rayEnd>	-1.155 0.658553 -1.81309	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.8	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <size>	0.722	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
       <player>
-        <rayStart>	1.44998 0.734201 -0.719083	</rayStart>
-        <rayEnd>	1.04998 0.734201 -0.719082	</rayEnd>
+        <rayStart>	1.355 0.679245 -1.22487	</rayStart>
+        <rayEnd>	1.155 0.679244 -1.22487	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.26	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
-        <isMirrored>	true	</isMirrored>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </player>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F22_AMX_105AM/AMX_105AM_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.8 1.8 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_AMX_105AM>
@@ -155,15 +159,16 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1	</textureScale>
+        <textureScale>	-2.7	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.341248	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -174,9 +179,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.2918	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -190,6 +196,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.341248	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -203,6 +210,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.2918	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -215,16 +223,16 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.83523 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.877931 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F22_AMX_105AM/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F22_AMX_105AM/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.05059 1.36694	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.07931 1.43716	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -237,6 +245,127 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F22_AMX_105AM/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F22_AMX_105AM/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F22_AMX_105AM/track/left.track	</left>
+        <right>	vehicles/french/F22_AMX_105AM/track/right.track	</right>
+        <segmentLength>	0.12	</segmentLength>
+        <segmentOffset>	0.192	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0029	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+      </trackNodes>
     </Chassis_AMX_105AM>
     <Chassis_AMX_105AM_2>
       <userString>	#france_vehicles:Chassis_AMX_105AM_2	</userString>
@@ -276,7 +405,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1	</textureScale>
+        <textureScale>	-2.7	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -285,6 +414,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.341248	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -298,6 +428,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.2918	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -311,6 +442,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.341248	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -324,6 +456,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.2918	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -336,16 +469,16 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.83523 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.877931 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F22_AMX_105AM/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F22_AMX_105AM/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.05059 1.36694	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.07931 1.43716	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -358,6 +491,127 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F22_AMX_105AM/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F22_AMX_105AM/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F22_AMX_105AM/track/left.track	</left>
+        <right>	vehicles/french/F22_AMX_105AM/track/right.track	</right>
+        <segmentLength>	0.12	</segmentLength>
+        <segmentOffset>	0.192	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0029	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+      </trackNodes>
     </Chassis_AMX_105AM_2>
   </chassis>
   <turrets0>
@@ -371,12 +625,6 @@
       <armor>
         <armor_1>	10	</armor_1>
         <armor_2>	10	</armor_2>
-        <armor_3>	0	</armor_3>
-        <armor_4>	0	</armor_4>
-        <armor_5>	0	</armor_5>
-        <armor_6>	0	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	0	</armor_8>
       </armor>
       <weight>	170	</weight>
       <maxHealth>	44	</maxHealth>
@@ -399,8 +647,8 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	20	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
-            </armor_1>
+            <armor_1>	20	</armor_1>
+            <armor_2>	0	</armor_2>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
@@ -429,14 +677,17 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.000000 -0.00489255 0.875032	</rayStart>
-              <rayEnd>	0.104962 -0.076398 0.868659	</rayEnd>
-              <rayUp>	0.097 0.091 1	</rayUp>
+              <rayStart>	-0.000000 0.0619679 1.08856	</rayStart>
+              <rayEnd>	-0.0129913 0.0622913 1.08856	</rayEnd>
+              <rayUp>	0.081 0.08 5	</rayUp>
               <size>	0.372	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
+          </camouflage>
         </Canon_de_105_court_mle_1934S>
         <Canon_de_105_mle_1930_Schneider_AM>	shared	  <maxAmmo>	34	</maxAmmo>
           <unlocks>
@@ -444,8 +695,8 @@
             </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	20	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
-            </armor_1>
+            <armor_1>	20	</armor_1>
+            <armor_2>	0	</armor_2>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
@@ -464,26 +715,27 @@
             <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/french/F22_AMX_105AM/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/french/F22_AMX_105AM/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/french/F22_AMX_105AM/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/french/F22_AMX_105AM/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F22_AMX_105AM/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F22_AMX_105AM/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F22_AMX_105AM/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F22_AMX_105AM/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F22_AMX_105AM/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F22_AMX_105AM/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.000000 0.0644481 1.79395	</rayStart>
+              <rayStart>	-0.000000 0.010341 1.79395	</rayStart>
               <rayEnd>	0.00720513 0.0425736 1.7933	</rayEnd>
-              <rayUp>	0.069 0.069 0.000000	</rayUp>
+              <rayUp>	0.07 0.07 5	</rayUp>
               <size>	0.372	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_mainext_mb	</effects>
           <camouflage>
-            <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
+            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>
         </Canon_de_105_mle_1930_Schneider_AM>
       </guns>
@@ -496,11 +748,14 @@
         <collisionModelServer>	vehicles/french/F22_AMX_105AM/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F22_AMX_105AM/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.680256 -0.171494	</gunPosition>
+      <gunPosition>	0.000000 0.612291 -0.339661	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.808 -0.113 0.500 0.100 0.500 0.500 0.000 0.500 0.600 0.100 0.500	</physicsShape>
+      <physicsShape>	1.090 0.110 1.000 0.000 1.055 0.015 0.500 0.100 0.500 0.500 0.000 0.500 0.600 0.100 0.500	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.2 0.2 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_1_AMX_105AM>
   </turrets0>
   <engines>
@@ -609,7 +864,7 @@
   </clientAdjustmentFactors>
   <effects>
     <collision></collision>
-    <damagedStateGroup>	small	</damagedStateGroup>
+    <damagedStateGroup>	medium	</damagedStateGroup>
   </effects>
   <emblems>
     <default>	french_rose	</default>

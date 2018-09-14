@@ -26,7 +26,7 @@ def UnitsUpdateIterator(requester, data):
 
 
 class UnitsListItem(object):
-    __slots__ = ('cfdUnitID', 'unitMgrID', 'creator', 'rating', 'playersCount', 'commandSize', 'vehicles', 'flags', 'isRosterSet', 'peripheryID', 'description', 'isClub', 'extra')
+    __slots__ = ('cfdUnitID', 'unitMgrID', 'creator', 'rating', 'playersCount', 'commandSize', 'vehicles', 'flags', 'isRosterSet', 'peripheryID', 'description', 'extra')
 
     def __init__(self, cfdUnitID, unitMgrID=0, cmdrRating=0, peripheryID=0, unit=None, **kwargs):
         super(UnitsListItem, self).__init__()

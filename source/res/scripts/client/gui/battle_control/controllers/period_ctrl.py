@@ -126,6 +126,8 @@ class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
             self._switcherUI.setLargeMode()
             self._switcherState = 0
         if self._cdState in COUNTDOWN_STATE.VISIBLE:
+            if self._arenaVisitor is not None:
+                self._preBattleTimerUI.showStateMessage = self._arenaVisitor.showTimerStateMessage()
             self._preBattleTimerUI.setCountdown(self._cdState, self._countdown)
             self._battleTimerUI.setState(self._cdState)
             if self._battleCtx is not None:

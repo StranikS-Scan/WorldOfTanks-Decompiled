@@ -59,6 +59,10 @@ class VehicleDescrCrew(object):
         return
 
     @property
+    def skills(self):
+        return self._skills
+
+    @property
     def camouflageFactor(self):
         if self._factorsDirty:
             self._buildFactors()

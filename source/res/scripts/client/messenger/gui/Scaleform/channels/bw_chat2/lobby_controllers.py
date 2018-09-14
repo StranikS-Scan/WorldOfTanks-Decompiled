@@ -39,6 +39,9 @@ class UnitChannelController(LobbyLayout):
     def _getChat(self):
         return self.proto.unitChat
 
+    def sendCommand(self, command):
+        self._getChat().send(command)
+
     def _broadcast(self, message):
         self._getChat().broadcast(message)
 
@@ -132,21 +135,4 @@ class TrainingChannelController(LobbyChannelController, ILegacyListener):
         members.extend(map(__convert, rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2]))
         members.extend(map(__convert, rosters[PREBATTLE_ROSTER.UNASSIGNED]))
         self._channel.addMembers(members)
-        self._refreshMembersDP()
-
-
-class ClubChannelController(LobbyChannelController):
-
-    def _getChat(self):
-        return self.proto.clubChat
-
-    def _addListeners(self):
-        super(ClubChannelController, self)._addListeners()
-        self._channel.onMembersListChanged += self._onMembersListChanged
-
-    def _removeListeners(self):
-        super(ClubChannelController, self)._removeListeners()
-        self._channel.onMembersListChanged -= self._onMembersListChanged
-
-    def _onMembersListChanged(self):
         self._refreshMembersDP()

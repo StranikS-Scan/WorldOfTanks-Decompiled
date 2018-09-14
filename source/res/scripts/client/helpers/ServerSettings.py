@@ -348,38 +348,31 @@ class ServerSettings(object):
     def isBuyPotapovQuestSlotEnabled(self):
         return self.__getGlobalSetting('isBuyPotapovQuestSlotEnabled', False)
 
-    def isFortsEnabled(self):
-        return self.__getGlobalSetting('isFortsEnabled', True)
-
     def isStrongholdsEnabled(self):
-        return self.__getGlobalSetting('isStrongholdsEnabled', True)
+        settings = self.__getGlobalSetting('strongholdSettings', {'isStrongholdsEnabled': False})
+        return settings.get('isStrongholdsEnabled', False)
 
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)
 
     def isTutorialEnabled(self):
-        return self.__getGlobalSetting('isTutorialEnabled', IS_TUTORIAL_ENABLED)
+        return self.__getGlobalSetting('isTutorialEnabled', IS_TUTORIAL_ENABLED) and not self.isBootcampEnabled()
 
     def isSandboxEnabled(self):
         return self.__getGlobalSetting('isSandboxEnabled', False)
 
+    def isBootcampEnabled(self):
+        return self.__getGlobalSetting('isBootcampEnabled', False)
+
     def isPromoAutoViewsEnabled(self):
+        if self.isBootcampEnabled():
+            from bootcamp.Bootcamp import g_bootcamp
+            if g_bootcamp.isRunning():
+                return False
         return True
 
-    def getForbiddenFortDefenseHours(self):
-        return self.__getGlobalSetting('forbiddenFortDefenseHours', tuple())
-
-    def getForbiddenSortieHours(self):
-        return self.__getGlobalSetting('forbiddenSortieHours', tuple())
-
-    def getForbiddenSortiePeripheryIDs(self):
-        return self.__getGlobalSetting('forbiddenSortiePeripheryIDs', tuple())
-
-    def getForbiddenRatedBattles(self):
-        return self.__getGlobalSetting('forbiddenRatedBattles', {})
-
-    def isSPGForbiddenInSquads(self):
-        return self.__getGlobalSetting('forbidSPGinSquads', False)
+    def getMaxSPGinSquads(self):
+        return self.__getGlobalSetting('maxSPGinSquads', 0)
 
     def getRandomMapsForDemonstrator(self):
         return self.__getGlobalSetting('randomMapsForDemonstrator', {})

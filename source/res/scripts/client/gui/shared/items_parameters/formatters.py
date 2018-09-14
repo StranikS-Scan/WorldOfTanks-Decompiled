@@ -326,6 +326,8 @@ _ICON_LIB_PATH = '../maps/icons/vehParams/tooltips'
 def getBonusIcon(bonusId):
     if bonusId.find('Rammer') >= 0:
         iconStr = 'rammer'
+    elif bonusId.find('enhanced') >= 0 and bonusId != 'enhancedAimDrives':
+        iconStr = 'enhancedSuspension'
     else:
         iconStr = bonusId.split('_class')[0]
     return _ICON_LIB_PATH + '/bonuses/%s.png' % iconStr

@@ -5,6 +5,7 @@ import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgnc.errors import ParseError, ValidationError
+from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.xml import fromString
 
 @ReprInjector.simple('notID', 'ttl', 'actions', 'items', 'order', 'marked', 'client')
@@ -101,6 +102,7 @@ class _WGNCProvider(object):
         self.__pending = []
 
     def clear(self):
+        g_wgncEvents.onItemActionFired -= self.__onItemActionFired
         while self.__nots:
             _, item = self.__nots.popitem()
             item.clear()
@@ -112,6 +114,10 @@ class _WGNCProvider(object):
         if self.__isEnabled == value:
             return
         self.__isEnabled = value
+        if self.__isEnabled:
+            g_wgncEvents.onItemActionFired += self.__onItemActionFired
+        else:
+            g_wgncEvents.onItemActionFired -= self.__onItemActionFired
         if self.__isEnabled:
             while self.__pending:
                 self.fromXmlString(self.__pending.pop(0))
@@ -186,6 +192,9 @@ class _WGNCProvider(object):
             LOG_ERROR('Notification is not found', notID)
             return False
         return self.__nots[notID].invoke(actionsNames, actorName)
+
+    def __onItemActionFired(self, notID, actionNames, actorName):
+        self.doAction(notID, actionNames, actorName)
 
 
 g_instance = _WGNCProvider()

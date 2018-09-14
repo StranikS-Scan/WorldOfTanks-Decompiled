@@ -8,6 +8,7 @@ from debug_utils import LOG_WARNING
 
 class READABLE_KEY_NAMES(object):
     KEY_NONE = '#readable_key_names:KEY_NONE'
+    KEY_NONE_ALT = '#readable_key_names:KEY_NONE_ALT'
     KEY_ESCAPE = '#readable_key_names:KEY_ESCAPE'
     KEY_1 = '#readable_key_names:KEY_1'
     KEY_2 = '#readable_key_names:KEY_2'
@@ -194,6 +195,7 @@ class READABLE_KEY_NAMES(object):
     KEY_LCDKB_MENU = '#readable_key_names:KEY_LCDKB_MENU'
     KEY_IME_CHAR = '#readable_key_names:KEY_IME_CHAR'
     KEY_ENUM = (KEY_NONE,
+     KEY_NONE_ALT,
      KEY_ESCAPE,
      KEY_1,
      KEY_2,

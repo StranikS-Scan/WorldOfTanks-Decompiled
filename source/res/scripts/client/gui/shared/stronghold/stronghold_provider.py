@@ -33,17 +33,17 @@ class ClientStrongholdProvider(IGlobalListener):
     def start(self):
         self.startGlobalListening()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
-        g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_ACTIVATED, self.__onStrongholdsActivate, EVENT_BUS_SCOPE.FORT)
-        g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_DEACTIVATED, self.__onStrongholdsDeactivate, EVENT_BUS_SCOPE.FORT)
-        from gui.Scaleform.daapi.view.lobby.strongholds import createStrongholdsWebHandlers
+        g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_ACTIVATED, self.__onStrongholdsActivate, EVENT_BUS_SCOPE.STRONGHOLD)
+        g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_DEACTIVATED, self.__onStrongholdsDeactivate, EVENT_BUS_SCOPE.STRONGHOLD)
+        from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
         ShowInBrowserItem.addWebHandler('stronghold', createStrongholdsWebHandlers(True))
         OpenInternalBrowser.addWebHandler('stronghold', createStrongholdsWebHandlers(True))
 
     def stop(self):
         self.stopGlobalListening()
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
-        g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_ACTIVATED, self.__onStrongholdsActivate, EVENT_BUS_SCOPE.FORT)
-        g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_DEACTIVATED, self.__onStrongholdsDeactivate, EVENT_BUS_SCOPE.FORT)
+        g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_ACTIVATED, self.__onStrongholdsActivate, EVENT_BUS_SCOPE.STRONGHOLD)
+        g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_DEACTIVATED, self.__onStrongholdsDeactivate, EVENT_BUS_SCOPE.STRONGHOLD)
         ShowInBrowserItem.removeWebHandler('stronghold')
         OpenInternalBrowser.removeWebHandler('stronghold')
 
@@ -56,8 +56,8 @@ class ClientStrongholdProvider(IGlobalListener):
         If true - leave from Strongholds Tab(if active) and
         if unit not created - close battle room window and show info popup
         """
-        if 'isStrongholdsEnabled' in diff:
-            enabled = diff['isStrongholdsEnabled']
+        if 'strongholdSettings' in diff and 'isStrongholdsEnabled' in diff['strongholdSettings']:
+            enabled = diff['strongholdSettings']['isStrongholdsEnabled']
             if not enabled:
                 if self.__tabActive or self.__entityActive:
                     if self.__tabActive:
@@ -77,7 +77,7 @@ class ClientStrongholdProvider(IGlobalListener):
         """
         entity = self.prbEntity
         flags = entity.getFunctionalFlags()
-        entityActive = flags & FUNCTIONAL_FLAG.FORT2 > 0
+        entityActive = flags & FUNCTIONAL_FLAG.STRONGHOLD > 0
         unitActive = flags & FUNCTIONAL_FLAG.UNIT > 0 and entityActive
         switched = unitActive is not self.__unitActive
         if switched:

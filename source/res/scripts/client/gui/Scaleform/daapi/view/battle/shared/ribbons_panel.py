@@ -41,7 +41,8 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
                                  _BET.RECEIVED_BURN,
                                  _BET.RECEIVED_RAM,
                                  _BET.RECEIVED_WORLD_COLLISION),
- BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,)}
+ BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,),
+ BATTLE_EVENTS.ENEMY_ASSIST_STUN: (_BET.STUN,)}
 
 def _getVehicleData(arenaDP, vehArenaID):
     vTypeInfoVO = arenaDP.getVehicleInfo(vehArenaID).vehicleType
@@ -219,6 +220,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         super(BattleRibbonsPanel, self)._dispose()
         return
 
+    def _shouldShowRibbon(self, ribbon):
+        return self.__checkUserPreferences(ribbon)
+
     def __playSound(self, eventName):
         if not self.__isVisible or not _RIBBON_SOUNDS_ENABLED:
             return
@@ -245,7 +249,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.__invalidateRibbon(ribbon, self._updateRibbon)
 
     def __invalidateRibbon(self, ribbon, method):
-        if self.__checkUserPreferences(ribbon):
+        if self._shouldShowRibbon(ribbon):
             if ribbon.getType() in _RIBBONS_FMTS:
                 updater = _RIBBONS_FMTS[ribbon.getType()]
                 updater(ribbon, self.__arenaDP, method)

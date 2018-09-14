@@ -106,7 +106,7 @@ class CrashedTrackController:
                 self.__model = None
                 self.__fashion = None
             self.__setupTracksHiding()
-            if self.__flags != 0 and self.__triggerEvents:
+            if self.__flags == 0 and self.__triggerEvents:
                 TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.PLAYER_VEHICLE_TRACKS_DAMAGED)
             return
 

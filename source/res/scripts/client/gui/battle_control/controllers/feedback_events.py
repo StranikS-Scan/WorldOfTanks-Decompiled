@@ -16,6 +16,10 @@ def _unpackInteger(packedData):
     return packedData
 
 
+def _unpackVisibility(packedData):
+    return _VisibilityExtra(*_BET.unpackVisibility(packedData))
+
+
 _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
  _BET.DAMAGE: _FET.PLAYER_DAMAGED_HP_ENEMY,
  _BET.CRIT: _FET.PLAYER_DAMAGED_DEVICE_ENEMY,
@@ -27,7 +31,8 @@ _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
  _BET.BASE_CAPTURE_DROPPED: _FET.PLAYER_DROPPED_CAPTURE,
  _BET.TANKING: _FET.PLAYER_USED_ARMOR,
  _BET.RECEIVED_DAMAGE: _FET.ENEMY_DAMAGED_HP_PLAYER,
- _BET.RECEIVED_CRIT: _FET.ENEMY_DAMAGED_DEVICE_PLAYER}
+ _BET.RECEIVED_CRIT: _FET.ENEMY_DAMAGED_DEVICE_PLAYER,
+ _BET.TARGET_VISIBILITY: _FET.VEHICLE_VISIBILITY_CHANGED}
 _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackDamage,
  _FET.PLAYER_ASSIST_TO_KILL_ENEMY: _unpackDamage,
  _FET.PLAYER_CAPTURED_BASE: _unpackInteger,
@@ -36,7 +41,8 @@ _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackD
  _FET.PLAYER_DAMAGED_DEVICE_ENEMY: _unpackCrits,
  _FET.ENEMY_DAMAGED_HP_PLAYER: _unpackDamage,
  _FET.ENEMY_DAMAGED_DEVICE_PLAYER: _unpackCrits,
- _FET.PLAYER_ASSIST_TO_STUN_ENEMY: _unpackDamage}
+ _FET.PLAYER_ASSIST_TO_STUN_ENEMY: _unpackDamage,
+ _FET.VEHICLE_VISIBILITY_CHANGED: _unpackVisibility}
 
 def _getShellType(shellTypeID):
     """
@@ -95,6 +101,21 @@ class _DamageExtra(object):
 
     def isAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__attackReasonID] == attackReason
+
+
+class _VisibilityExtra(object):
+    __slots__ = ('__isVisible', '__isDirect')
+
+    def __init__(self, isVisible, isDirect):
+        super(_VisibilityExtra, self).__init__()
+        self.__isVisible = isVisible
+        self.__isDirect = isDirect
+
+    def isVisible(self):
+        return self.__isVisible
+
+    def isDirect(self):
+        return self.__isDirect
 
 
 class _CritsExtra(object):

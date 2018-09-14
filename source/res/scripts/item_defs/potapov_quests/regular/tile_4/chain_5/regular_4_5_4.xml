@@ -6,12 +6,10 @@
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
-          <vehicleDamage>
+          <vehicleStun>
             <classes>	heavyTank AT-SPG	</classes>
-            <whenStunCaused></whenStunCaused>
-            <stunDuration></stunDuration>
             <greaterOrEqual>	120	</greaterOrEqual>
-          </vehicleDamage>
+          </vehicleStun>
         </postBattle>
       </conditions>
       <bonus>
@@ -25,11 +23,10 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
+            <vehicleStun>
               <classes>	heavyTank AT-SPG	</classes>
-              <stunDuration></stunDuration>
               <greaterOrEqual>	120	</greaterOrEqual>
-            </vehicleDamage>
+            </vehicleStun>
             <isAlive></isAlive>
             <win></win>
           </and>

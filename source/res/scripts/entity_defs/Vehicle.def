@@ -92,6 +92,10 @@
       <Type>	FLOAT32	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
     </invisibility>
+    <radioDistance>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </radioDistance>
     <circularVisionRadius>
       <Type>	FLOAT32	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
@@ -194,6 +198,7 @@
     <bbox></bbox>
     <mover></mover>
     <directVisibility></directVisibility>
+    <bootcampTuner></bootcampTuner>
   </TempProperties>
   <ClientMethods>
     <onHealthChanged>

@@ -70,6 +70,9 @@ class IInventoryRequester(IRequester):
     def getIgrCustomizationsLayout(self):
         raise NotImplementedError
 
+    def getFreeSlots(self, vehiclesSlots):
+        raise NotImplementedError
+
 
 class IStatsRequester(IRequester):
     """Class provides access to player's statistics (money, xp, etc.)."""
@@ -673,6 +676,13 @@ class IShopRequester(IShopCommonStats, IRequester):
     def isXPConversionActionActive(self):
         """freeXPConversion is not price, but count of XP for one gold
         so during action we have higher rate, not lower price"""
+        raise NotImplementedError
+
+    @property
+    def isCreditsConversionActionActive(self):
+        """
+        @return: if rate of gold for credits exchanging not standard return True
+        """
         raise NotImplementedError
 
     @property

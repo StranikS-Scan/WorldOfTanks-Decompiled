@@ -7,7 +7,6 @@ from dossiers2.custom.dependencies import ACHIEVEMENTRATED7X7_DEPENDENCIES
 from dossiers2.custom.dependencies import HISTORICAL_ACHIEVEMENTS_DEPENDENCIES
 from dossiers2.custom.dependencies import FALLOUT_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import FORT_ACHIEVEMENTS_DEPENDENCIES
-from dossiers2.custom.dependencies import FORT_MISC_DEPENDENCIES
 from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import RANKED_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import RANKED_BADGES_DEPENDENCIES
@@ -18,13 +17,6 @@ TOTAL_BLOCK_LAYOUT = ['creationTime',
  'treesCut',
  'mileage']
 _totalBlockBuilder = StaticSizeBlockBuilder('total', TOTAL_BLOCK_LAYOUT, {}, [])
-FORT_SORTIE_BLOCK_LAYOUT = FORT_BLOCK_LAYOUT_BASE + ['middleBattlesCount',
- 'championBattlesCount',
- 'absoluteBattlesCount',
- 'middleWins',
- 'championWins',
- 'absoluteWins',
- 'fortResource'] + ['battlesOnStunningVehicles', 'stunNum', 'damageAssistedStun']
 _a15x15BlockBuilder = StaticSizeBlockBuilder('a15x15', A15X15_BLOCK_LAYOUT, A15X15_STATS_DEPENDENCIES, [])
 _a15x15_2BlockBuilder = StaticSizeBlockBuilder('a15x15_2', A15X15_2_BLOCK_LAYOUT, {}, [])
 _clanBlockBuilder = StaticSizeBlockBuilder('clan', CLAN_BLOCK_LAYOUT, CLAN_STATS_DEPENDENCIES, [])
@@ -35,7 +27,7 @@ _a7x7BlockBuilder = StaticSizeBlockBuilder('a7x7', A7X7_BLOCK_LAYOUT, A7X7_STATS
 _rated7x7BlockBuilder = StaticSizeBlockBuilder('rated7x7', RATED_7X7_BLOCK_LAYOUT, {}, [])
 _historicalBlockBuilder = StaticSizeBlockBuilder('historical', HISTORICAL_BLOCK_LAYOUT, HISTORICAL_STATS_DEPENDENCIES, [])
 _fortBattlesInClanBlockBuilder = StaticSizeBlockBuilder('fortBattlesInClan', FORT_BLOCK_LAYOUT, {}, [])
-_fortSortiesInClanBlockBuilder = StaticSizeBlockBuilder('fortSortiesInClan', FORT_SORTIE_BLOCK_LAYOUT, {}, [])
+_fortSortiesInClanBlockBuilder = StaticSizeBlockBuilder('fortSortiesInClan', FORT_BLOCK_LAYOUT, {}, [])
 _fortBattlesBlockBuilder = StaticSizeBlockBuilder('fortBattles', FORT_BLOCK_LAYOUT, FORT_BATTLES_STATS_DEPENDENCIES, [])
 _fortSortiesBlockBuilder = StaticSizeBlockBuilder('fortSorties', FORT_BLOCK_LAYOUT, FORT_SORTIES_STATS_DEPENDENCIES, [])
 _globalMapMiddleBlockBuilder = StaticSizeBlockBuilder('globalMapMiddle', GLOBAL_MAP_BLOCK_LAYOUT, GLOBAL_MAP_STATS_DEPENDENCIES, [])
@@ -388,7 +380,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'markIBaseProtector',
  'xmasTreeBronze',
  'xmasTreeSilver',
- 'xmasTreeGold']
+ 'xmasTreeGold',
+ 'rankedBattlesPioneer']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -415,23 +408,16 @@ _singleAchievementsPopUps = ['titleSniper',
  'markIBaseProtector',
  'xmasTreeBronze',
  'xmasTreeSilver',
- 'xmasTreeGold']
+ 'xmasTreeGold',
+ 'rankedBattlesPioneer']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
  'crusher',
  'counterblow',
  'kampfer',
- 'soldierOfFortune',
- 'wins',
- 'capturedBasesInAttack',
- 'capturedBasesInDefence']
-_fortPersonalAchievementsPopUps = ['conqueror',
- 'fireAndSword',
- 'crusher',
- 'counterblow',
- 'kampfer',
  'soldierOfFortune']
+_fortPersonalAchievementsPopUps = ['soldierOfFortune']
 _fortPersonalAchievementsBlockBuilder = StaticSizeBlockBuilder('fortAchievements', FORT_ACHIEVEMENTS_BLOCK_LAYOUT, FORT_ACHIEVEMENTS_DEPENDENCIES, _fortPersonalAchievementsPopUps)
 CLAN_ACHIEVEMENTS_BLOCK_LAYOUT = ['medalRotmistrov']
 _clanAchievementsPopUps = ['medalRotmistrov']
@@ -482,17 +468,6 @@ _uniqueAchievementPopUps = ['histBattle1_battlefield',
  'histBattle6_battlefield',
  'histBattle6_historyLessons']
 _uniqueAchievementBlockBuilder = BinarySetDossierBlockBuilder('uniqueAchievements', UNIQUE_ACHIEVEMENT_VALUES, {}, _uniqueAchievementPopUps)
-FORT_MISC_LAYOUT = ['fortResourceInBattles',
- 'maxFortResourceInBattles',
- 'fortResourceInSorties',
- 'maxFortResourceInSorties',
- 'defenceHours',
- 'successfulDefenceHours',
- 'attackNumber',
- 'enemyBasePlunderNumber',
- 'enemyBasePlunderNumberInAttack']
-_fortMiscBlockBuilder = StaticSizeBlockBuilder('fortMisc', FORT_MISC_LAYOUT, FORT_MISC_DEPENDENCIES, [])
-_fortMiscInClanBlockBuilder = StaticSizeBlockBuilder('fortMiscInClan', FORT_MISC_LAYOUT, {}, [])
 FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT = ['shoulderToShoulder',
  'aloneInTheField',
  'fallenFlags',
@@ -548,8 +523,6 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _maxFortBattlesInClanBlockBuilder,
  _fortSortiesInClanBlockBuilder,
  _maxFortSortiesInClanBlockBuilder,
- _fortMiscBlockBuilder,
- _fortMiscInClanBlockBuilder,
  _fortPersonalAchievementsBlockBuilder,
  _singleAchievementsBlockBuilder,
  _clanAchievementsBlockBuilder,

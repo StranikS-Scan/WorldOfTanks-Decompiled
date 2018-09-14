@@ -55,5 +55,25 @@
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <bootcamp>
+      <wwmusic>	bc_music_mission_04	</wwmusic>
+      <teamBasePositions>
+        <team1>
+          <position1>	-66.399994 306.100006	</position1>
+        </team1>
+        <team2>
+          <position1>	-82.900002 -290.899994	</position1>
+        </team2>
+      </teamBasePositions>
+      <boundingBox>
+        <bottomLeft>	-200.000000 -400.000000	</bottomLeft>
+        <upperRight>	350.000000 400.000000	</upperRight>
+      </boundingBox>
+      <maxPlayersInTeam>	1	</maxPlayersInTeam>
+      <minimap>	spaces/08_ruinberg/mmap_bootcamp.dds	</minimap>
+      <runDelay>	10	</runDelay>
+    </bootcamp>
   </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
 </08_ruinberg.xml>

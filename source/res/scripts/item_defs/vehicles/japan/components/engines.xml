@@ -35,6 +35,8 @@
     <_Mitsubishi_12HM20WT_IGR>	60001	</_Mitsubishi_12HM20WT_IGR>
     <_Type98_V12_IGR>	60002	</_Type98_V12_IGR>
     <_Mitsubishi_10ZF21WT_IGR>	60003	</_Mitsubishi_10ZF21WT_IGR>
+    <_Type100_V6_Kuurei_bootcamp>	64001	</_Type100_V6_Kuurei_bootcamp>
+    <BMW_IV_Kai_bootcamp>	64002	</BMW_IV_Kai_bootcamp>
   </ids>
   <shared>
     <_Type100_A_1>
@@ -218,6 +220,23 @@
       <rpm_min>	468	</rpm_min>
       <rpm_max>	2300	</rpm_max>
     </BMW_IV_Kai>
+    <BMW_IV_Kai_bootcamp>
+      <userString>	#japan_vehicles:BMW_IV_Kai	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	7800	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	250	</power>
+      <weight>	290	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	468	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </BMW_IV_Kai_bootcamp>
     <BMW_IV_Kai_Ni>
       <userString>	#japan_vehicles:BMW_IV_Kai_Ni	</userString>
       <tags>	gasoline	</tags>
@@ -298,6 +317,23 @@
       <rpm_min>	342	</rpm_min>
       <rpm_max>	2015	</rpm_max>
     </_Type100_V6_Kuurei>
+    <_Type100_V6_Kuurei_bootcamp>
+      <userString>	#japan_vehicles:_Type100_V6_Kuurei	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	2750	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	130	</power>
+      <weight>	630	</weight>
+      <maxHealth>	66	</maxHealth>
+      <maxRegenHealth>	33	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	342	</rpm_min>
+      <rpm_max>	2015	</rpm_max>
+    </_Type100_V6_Kuurei_bootcamp>
     <_Type100_V6_Kakyuu>
       <userString>	#japan_vehicles:_Type100_V6_Kakyuu	</userString>
       <tags>	diesel	</tags>

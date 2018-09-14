@@ -1,0 +1,465 @@
+<customization.xml>
+  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <armorColor>	15 36 36 0	</armorColor>
+  <inscriptions>
+    <poland>
+      <userString>	#vehicle_customization:inscription/historical	</userString>
+      <priceFactor>	1.0	</priceFactor>
+      <inscriptions>
+        <inscription>
+          <id>	1	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_01.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/janka	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	2	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_02.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/bijwrogajegowlasnabronia	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	3	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_03.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/chwalazdobywcomberlina	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	4	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_04.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/hanus	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_05.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/chwat	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	6	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_06.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/kubus	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	7	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_07.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/magda	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	9	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_09.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/pudel	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	10	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_10.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/stacha	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	11	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_11.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/starowka	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	12	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_12.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/szarywilk	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	13	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_13.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/tadeusz	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	14	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_14.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/trup	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	15	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/poland/inscription_15.dds	</texName>
+          <userString>	#vehicle_customization:inscription/poland/wasrodacy	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </poland>
+  </inscriptions>
+  <insigniaOnGun>
+    <insignia>
+      <id>	1	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_poland_1.dds	</texName>
+    </insignia>
+    <insignia>
+      <id>	2	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_poland_2.dds	</texName>
+    </insignia>
+    <insignia>
+      <id>	3	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_poland_3.dds	</texName>
+    </insignia>
+  </insigniaOnGun>
+  <camouflageGroups>
+    <winter>
+      <userString>	#vehicle_customization:camouflage/winter	</userString>
+    </winter>
+    <summer>
+      <userString>	#vehicle_customization:camouflage/summer	</userString>
+    </summer>
+    <desert>
+      <userString>	#vehicle_customization:camouflage/desert	</userString>
+    </desert>
+    <IGRwinter>
+      <userString>	#vehicle_customization:camouflage/winter	</userString>
+      <igrType>	2	</igrType>
+    </IGRwinter>
+    <IGRsummer>
+      <userString>	#vehicle_customization:camouflage/summer	</userString>
+      <igrType>	2	</igrType>
+    </IGRsummer>
+    <IGRdesert>
+      <userString>	#vehicle_customization:camouflage/desert	</userString>
+      <igrType>	2	</igrType>
+    </IGRdesert>
+  </camouflageGroups>
+  <camouflages>
+    <PL_desert_01>
+      <texture>	vehicles/poland/Camouflage/PL_desert_01.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/poland/PL_desert_01	</description>
+      <id>	141	</id>
+      <kind>	desert	</kind>
+      <group>	desert	</group>
+      <colors>
+        <c0>	255 255 255 0	</c0>
+        <c1>	73 49 29 0	</c1>
+        <c2>	234 208 171 255	</c2>
+        <c3>	136 140 86 255	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+    </PL_desert_01>
+    <PL_winter_01>
+      <texture>	vehicles/poland/Camouflage/PL_winter_01.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/poland/PL_winter_01	</description>
+      <id>	144	</id>
+      <kind>	winter	</kind>
+      <group>	winter	</group>
+      <colors>
+        <c0>	255 255 255 0	</c0>
+        <c1>	73 49 29 0	</c1>
+        <c2>	255 255 255 0	</c2>
+        <c3>	224 224 224 255	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+    </PL_winter_01>
+    <PL_summer_02>
+      <texture>	vehicles/poland/Camouflage/PL_summer_02.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/poland/PL_summer_02	</description>
+      <id>	142	</id>
+      <kind>	summer	</kind>
+      <group>	summer	</group>
+      <colors>
+        <c0>	255 255 255 0	</c0>
+        <c1>	73 49 29 0	</c1>
+        <c2>	106 111 83 255	</c2>
+        <c3>	58 64 53 255	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+    </PL_summer_02>
+    <IGR_Winter>
+      <texture>	vehicles/german/Camouflage/IGR_Winter.dds	</texture>
+      <priceFactor>	0.0	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Winter	</description>
+      <id>	143	</id>
+      <kind>	winter	</kind>
+      <group>	IGRwinter	</group>
+      <colors>
+        <c0>	83 83 83 199	</c0>
+        <c1>	0 0 0 223	</c1>
+        <c2>	177 177 177 223	</c2>
+        <c3>	255 255 255 230	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	false	</notInShop>
+    </IGR_Winter>
+    <IGR_Summer>
+      <texture>	vehicles/german/Camouflage/IGR_Summer.dds	</texture>
+      <priceFactor>	0.0	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Summer	</description>
+      <id>	158	</id>
+      <kind>	summer	</kind>
+      <group>	IGRsummer	</group>
+      <colors>
+        <c0>	157 108 34 178	</c0>
+        <c1>	226 210 154 173	</c1>
+        <c2>	0 0 0 223	</c2>
+        <c3>	61 86 35 174	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	false	</notInShop>
+    </IGR_Summer>
+    <IGR_Desert>
+      <texture>	vehicles/german/Camouflage/IGR_Desert.dds	</texture>
+      <priceFactor>	0.0	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Desert	</description>
+      <id>	145	</id>
+      <kind>	desert	</kind>
+      <group>	IGRdesert	</group>
+      <colors>
+        <c0>	196 126 34 219	</c0>
+        <c1>	232 210 145 223	</c1>
+        <c2>	0 0 0 223	</c2>
+        <c3>	113 89 57 235	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	false	</notInShop>
+    </IGR_Desert>
+    <IGR_K_Winter>
+      <texture>	vehicles/chinese/Camouflage/IGR_K_Winter.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_K_Winter	</description>
+      <id>	146	</id>
+      <kind>	winter	</kind>
+      <group>	IGRwinter	</group>
+      <colors>
+        <c0>	32 35 43 219	</c0>
+        <c1>	101 74 50 209	</c1>
+        <c2>	164 164 164 142	</c2>
+        <c3>	255 255 255 146	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	false	</notInShop>
+    </IGR_K_Winter>
+    <IGR_K_Desert>
+      <texture>	vehicles/chinese/Camouflage/IGR_K_Desert.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_K_Desert	</description>
+      <id>	147	</id>
+      <kind>	desert	</kind>
+      <group>	IGRdesert	</group>
+      <colors>
+        <c0>	138 90 68 219	</c0>
+        <c1>	203 135 67 223	</c1>
+        <c2>	202 169 123 223	</c2>
+        <c3>	112 67 46 0	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	false	</notInShop>
+    </IGR_K_Desert>
+    <IGR_Ch_Winter>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Winter.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Winter	</description>
+      <id>	148	</id>
+      <kind>	winter	</kind>
+      <group>	IGRwinter	</group>
+      <colors>
+        <c0>	43 33 23 199	</c0>
+        <c1>	101 74 50 223	</c1>
+        <c2>	181 153 89 223	</c2>
+        <c3>	221 201 153 230	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	false	</notInShop>
+    </IGR_Ch_Winter>
+    <IGR_Ch_Summer>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Summer.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Summer	</description>
+      <id>	149	</id>
+      <kind>	summer	</kind>
+      <group>	IGRsummer	</group>
+      <colors>
+        <c0>	52 78 41 178	</c0>
+        <c1>	108 72 19 173	</c1>
+        <c2>	39 40 30 223	</c2>
+        <c3>	207 196 150 174	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	false	</notInShop>
+    </IGR_Ch_Summer>
+    <IGR_Ch_Desert>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Desert.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Desert	</description>
+      <id>	150	</id>
+      <kind>	desert	</kind>
+      <group>	IGRdesert	</group>
+      <colors>
+        <c0>	33 27 22 219	</c0>
+        <c1>	153 116 60 223	</c1>
+        <c2>	198 166 117 223	</c2>
+        <c3>	112 67 46 235	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	false	</notInShop>
+    </IGR_Ch_Desert>
+    <Clan_camuflage_01>
+      <texture>	vehicles/german/Camouflage/Clan_camuflage_01.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_01	</description>
+      <id>	151	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <colors>
+        <c0>	100 13 0 174	</c0>
+        <c1>	201 136 48 113	</c1>
+        <c2>	21 30 15 210	</c2>
+        <c3>	186 147 12 0	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	true	</notInShop>
+    </Clan_camuflage_01>
+    <Clan_camuflage_02>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_02	</description>
+      <id>	152	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <colors>
+        <c0>	36 70 21 117	</c0>
+        <c1>	255 255 255 146	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	true	</notInShop>
+    </Clan_camuflage_02>
+    <Clan_camuflage_03>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_03	</description>
+      <id>	153	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <colors>
+        <c0>	109 119 77 174	</c0>
+        <c1>	0 13 0 164	</c1>
+        <c2>	21 30 15 0	</c2>
+        <c3>	186 147 12 0	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	true	</notInShop>
+    </Clan_camuflage_03>
+    <Clan_camuflage_04>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04	</description>
+      <id>	154	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <colors>
+        <c0>	60 99 1 174	</c0>
+        <c1>	164 217 38 116	</c1>
+        <c2>	4 21 5 210	</c2>
+        <c3>	201 192 133 153	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	true	</notInShop>
+    </Clan_camuflage_04>
+    <Cracked_ice>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Cracked_ice	</description>
+      <id>	155	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <colors>
+        <c0>	255 255 255 225	</c0>
+        <c1>	21 26 30 0	</c1>
+        <c2>	235 253 254 0	</c2>
+        <c3>	226 233 241 0	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	true	</notInShop>
+    </Cracked_ice>
+    <Desert_camou>
+      <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Desert_camou	</description>
+      <id>	156	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	164 126 74 255	</c0>
+        <c1>	85 21 22 0	</c1>
+        <c2>	207 175 128 0	</c2>
+        <c3>	241 139 48 0	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	true	</notInShop>
+    </Desert_camou>
+    <summer_camo>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/summer_camo	</description>
+      <id>	157	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <colors>
+        <c0>	111 81 36 255	</c0>
+        <c1>	50 54 31 255	</c1>
+        <c2>	4 21 5 0	</c2>
+        <c3>	201 192 133 0	</c3>
+      </colors>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+      <notInShop>	true	</notInShop>
+    </summer_camo>
+  </camouflages>
+</customization.xml>

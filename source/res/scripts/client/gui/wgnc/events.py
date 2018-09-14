@@ -3,7 +3,7 @@
 import Event
 
 class _WGNCEvents(object):
-    __slots__ = ('__eManager', 'onItemShowByDefault', 'onItemShowByAction', 'onItemUpdatedByAction', 'onProxyDataItemShowByDefault')
+    __slots__ = ('__eManager', 'onItemShowByDefault', 'onItemShowByAction', 'onItemUpdatedByAction', 'onProxyDataItemShowByDefault', 'onItemActionFired')
 
     def __init__(self):
         super(_WGNCEvents, self).__init__()
@@ -12,6 +12,7 @@ class _WGNCEvents(object):
         self.onItemShowByAction = Event.Event(self.__eManager)
         self.onItemUpdatedByAction = Event.Event(self.__eManager)
         self.onProxyDataItemShowByDefault = Event.Event(self.__eManager)
+        self.onItemActionFired = Event.Event(self.__eManager)
 
     def clear(self):
         self.__eManager.clear()

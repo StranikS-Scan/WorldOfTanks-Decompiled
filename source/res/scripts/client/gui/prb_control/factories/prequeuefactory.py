@@ -13,6 +13,7 @@ from gui.prb_control.entities.fallout.pre_queue.entity import NoFalloutEntryPoin
 from gui.prb_control.entities.fallout.pre_queue.entity import falloutQueueTypeFactory
 from gui.prb_control.entities.random.pre_queue.entity import RandomEntity, RandomEntryPoint
 from gui.prb_control.entities.sandbox.pre_queue.entity import SandboxEntity, SandboxEntryPoint
+from gui.prb_control.entities.bootcamp.pre_queue.entity import BootcampEntity, BootcampEntryPoint
 from gui.prb_control.entities.tutorial.pre_queue.entity import TutorialEntity, TutorialEntryPoint
 from gui.prb_control.entities.ranked.pre_queue.entity import RankedEntity, RankedEntryPoint, RankedForcedEntryPoint
 from gui.prb_control.items import FunctionalState
@@ -25,7 +26,8 @@ _SUPPORTED_QUEUES = {QUEUE_TYPE.RANDOMS: RandomEntity,
  QUEUE_TYPE.FALLOUT_MULTITEAM: FalloutMultiTeamEntity,
  QUEUE_TYPE.TUTORIAL: TutorialEntity,
  QUEUE_TYPE.SANDBOX: SandboxEntity,
- QUEUE_TYPE.RANKED: RankedEntity}
+ QUEUE_TYPE.RANKED: RankedEntity,
+ QUEUE_TYPE.BOOTCAMP: BootcampEntity}
 _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM: RandomEntryPoint,
  PREBATTLE_ACTION_NAME.FALLOUT: NoFalloutEntryPoint,
  PREBATTLE_ACTION_NAME.FALLOUT_CLASSIC: FalloutClassicEntryPoint,
@@ -33,7 +35,8 @@ _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM: RandomEntryPoint,
  PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL: TutorialEntryPoint,
  PREBATTLE_ACTION_NAME.SANDBOX: SandboxEntryPoint,
  PREBATTLE_ACTION_NAME.RANKED: RankedEntryPoint,
- PREBATTLE_ACTION_NAME.RANKED_FORCED: RankedForcedEntryPoint}
+ PREBATTLE_ACTION_NAME.RANKED_FORCED: RankedForcedEntryPoint,
+ PREBATTLE_ACTION_NAME.BOOTCAMP: BootcampEntryPoint}
 
 class PreQueueFactory(ControlFactory):
     """
@@ -129,13 +132,16 @@ class PreQueueFactory(ControlFactory):
         Returns:
             new prebattle prequeue entity
         """
-        created = self.__createDefaultByStorage(ctx)
-        if created is None:
-            if ctx.hasFlags(_FLAG.FALLOUT):
-                created = NoFalloutEntity()
-            else:
-                created = RandomEntity()
-        return created
+        if gui.prb_control.prb_getters.isInBootcampAccount():
+            return BootcampEntity()
+        else:
+            created = self.__createDefaultByStorage(ctx)
+            if created is None:
+                if ctx.hasFlags(_FLAG.FALLOUT):
+                    created = NoFalloutEntity()
+                else:
+                    created = RandomEntity()
+            return created
 
     def __createDefaultByStorage(self, ctx):
         """

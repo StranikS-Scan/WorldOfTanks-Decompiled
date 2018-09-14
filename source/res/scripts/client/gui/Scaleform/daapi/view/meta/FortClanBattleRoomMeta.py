@@ -25,6 +25,9 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
     def as_updateReadyStatusS(self, mineValue, enemyValue):
         return self.flashObject.as_updateReadyStatus(mineValue, enemyValue) if self._isDAAPIInited() else None
 
+    def as_updateReadyDirectionsS(self, value):
+        return self.flashObject.as_updateReadyDirections(value) if self._isDAAPIInited() else None
+
     def as_setConfigureButtonStateS(self, data):
         """
         :param data: Represented by ActionButtonVO (AS)
@@ -36,12 +39,6 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
         :param data: Represented by ClanBattleTimerVO (AS)
         """
         return self.flashObject.as_setTimerDelta(data) if self._isDAAPIInited() else None
-
-    def as_updateDirectionsS(self, data):
-        """
-        :param data: Represented by ConnectedDirectionsVO (AS)
-        """
-        return self.flashObject.as_updateDirections(data) if self._isDAAPIInited() else None
 
     def as_setDirectionS(self, value, animationNotAvailable):
         return self.flashObject.as_setDirection(value, animationNotAvailable) if self._isDAAPIInited() else None

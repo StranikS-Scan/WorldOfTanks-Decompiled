@@ -144,6 +144,14 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         self._isActive = False
         return FUNCTIONAL_FLAG.UNDEFINED
 
+    def invalidate(self):
+        """
+        Hangar was reloaded, but the entity and state of PRB hasn't changed.
+        Example: user clicks on Shop, Research or other tab - after that returns in Hangar.
+        Override in child to catch this event.
+        """
+        pass
+
     def restore(self):
         """
         Prebattle entity restoration. Is called when some entity was restored
@@ -256,7 +264,7 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
 
     def getID(self):
         """
-        Gets prebattle ID/unit index. The 0 means prebattle/unit is not defined.
+        Gets prebattle ID/unit manager ID. The 0 means prebattle/unit is not defined.
         """
         pass
 

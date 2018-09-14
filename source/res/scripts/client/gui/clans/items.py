@@ -25,10 +25,6 @@ def _getEfficiency(dividend, delimiter):
     return float(dividend) / delimiter
 
 
-def _getTextLevel(level):
-    return int2roman(max(level, 1))
-
-
 _defDateTime = datetime.fromtimestamp(0)
 
 def formatField(getter, dummy=None, formatter=None):
@@ -647,7 +643,7 @@ class StrongholdStatisticsData(_StrongholdStatisticsData, FieldsCheckerMixin):
     def getFortBattlesIn28Days(self):
         return self.fort_battles_in_28_days
 
-    @simpleFormatter(_getTextLevel)
+    @simpleFormatter(int2roman)
     def getStrongholdLevel(self):
         return self.stronghold_level
 

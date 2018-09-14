@@ -50,14 +50,6 @@ class GainXPInBattleItem(_GainResourceInBattleItem):
         super(GainXPInBattleItem, self).__init__(((True, 'xpToShow'),), 'getXPRecords', field, *path)
 
 
-class GainFortResourceInBattleItem(base.StatsItem):
-    __slots__ = ()
-
-    def _convert(self, value, reusable):
-        records = reusable.personal.getFortResourceRecords()
-        return BigWorld.wg_getIntegralFormat(records.getRecord('originalFortResource'))
-
-
 class BaseCreditsBlock(base.StatsBlock):
     __slots__ = ()
 
@@ -124,41 +116,6 @@ class PremiumXPBlock(base.StatsBlock):
                 value = xp
             value = style.makeXpLabel(value, canBeFaded=canBeFaded, isDiff=isDiffShow)
             self.addNextComponent(base.DirectStatsItem('', value))
-
-
-class _FortResourcesBlock(base.StatsBlock):
-    __slots__ = ('__invert',)
-
-    def __init__(self, invert, meta=None, field='', *path):
-        super(_FortResourcesBlock, self).__init__(meta, field, *path)
-        self.__invert = invert
-
-    def setRecord(self, result, reusable):
-        clanDBID = reusable.getPlayerInfo().clanDBID
-        if self.__invert:
-            canBeFaded = not reusable.isPostBattlePremium
-        else:
-            canBeFaded = reusable.isPostBattlePremium
-        for records in reusable.personal.getFortResourceRecords():
-            if clanDBID:
-                value = style.makeResourceLabel(records.getRecord('originalFortResource'), canBeFaded=canBeFaded)
-            else:
-                value = '-'
-            self.addNextComponent(base.DirectStatsItem('', value))
-
-
-class BaseFortResourcesBlock(_FortResourcesBlock):
-    __slots__ = ()
-
-    def __init__(self, meta=None, field='', *path):
-        super(BaseFortResourcesBlock, self).__init__(True, meta, field, *path)
-
-
-class PremiumFortResourcesBlock(_FortResourcesBlock):
-    __slots__ = ()
-
-    def __init__(self, meta=None, field='', *path):
-        super(PremiumFortResourcesBlock, self).__init__(False, meta, field, *path)
 
 
 class _EconomicsDetailsBlock(base.StatsBlock):
@@ -474,26 +431,6 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
          'column2': style.makeFreeXpLabel(baseFreeXP.getRecord('freeXP'), canBeFaded=baseCanBeFaded),
          'column4': style.makeFreeXpLabel(premiumFreeXP.getRecord('freeXP'), canBeFaded=premiumCanBeFaded)}
         self._addStatsRow('total', htmlKey='lightText', **columns)
-
-
-class FortResourceDetailsBlock(_EconomicsDetailsBlock):
-    __slots__ = ('isPremium',)
-
-    def setRecord(self, result, reusable):
-        records = reusable.personal.getFortResourceRecords()
-        self.isPremium = reusable.isPostBattlePremium
-        self.__addResource('base', records, 'originalFortResource')
-        value = records.getRecord('orderFortResourceFactor100')
-        if value:
-            self.__addResource('heavyTrucks', records, 'orderFortResourceFactor100')
-            self._addEmptyRow()
-        self.__addResource('total', records, 'fortResource')
-
-    def __addResource(self, label, records, record):
-        value = records.getRecord(record)
-        columns = {'column2': style.makeResourceLabel(value, canBeFaded=not self.isPremium),
-         'column4': style.makeResourceLabel(value, canBeFaded=self.isPremium)}
-        self._addStatsRow(label, **columns)
 
 
 class _TotalEconomicsDetailsBlock(base.StatsBlock):

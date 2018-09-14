@@ -1,17 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/context.py
 from abc import ABCMeta, abstractmethod
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from tutorial.control import TutorialProxyHolder
 from tutorial.logger import LOG_MEMORY, LOG_ERROR
 __all__ = ('StartReqs', 'BonusesRequester', 'SoundPlayer', 'GlobalStorage')
 
 class StartReqs(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __del__(self):
         LOG_MEMORY('StartReqs deleted: {0:>s}'.format(self))
 
     def isEnabled(self):
-        raise NotImplementedError
+        return self.lobbyContext.getServerSettings().isTutorialEnabled()
 
     def prepare(self, ctx):
         raise NotImplementedError

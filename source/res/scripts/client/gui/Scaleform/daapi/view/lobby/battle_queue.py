@@ -28,10 +28,6 @@ TYPES_ORDERED = (('heavyTank', '#item_types:vehicle/tags/heavy_tank/name'),
  ('lightTank', '#item_types:vehicle/tags/light_tank/name'),
  ('AT-SPG', '#item_types:vehicle/tags/at-spg/name'),
  ('SPG', '#item_types:vehicle/tags/spg/name'))
-DIVISIONS_ORDERED = (constants.PREBATTLE_COMPANY_DIVISION.JUNIOR,
- constants.PREBATTLE_COMPANY_DIVISION.MIDDLE,
- constants.PREBATTLE_COMPANY_DIVISION.CHAMPION,
- constants.PREBATTLE_COMPANY_DIVISION.ABSOLUTE)
 _LONG_WAITING_LEVELS = (9, 10)
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
@@ -130,27 +126,6 @@ class _RandomQueueProvider(_QueueProvider):
         return text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
 
 
-class _CompanyQueueProvider(_QueueProvider):
-
-    def processQueueInfo(self, qInfo):
-        info = dict(qInfo)
-        vDivisions = info['divisions']
-        data = {'title': '#menu:prebattle/typesCompaniesTitle',
-         'data': list()}
-        self._proxy.flashObject.as_setPlayers(makeHtmlString('html_templates:lobby/queue/playersLabel', 'teams', {'count': sum(vDivisions)}))
-        vDivisions = info['divisions']
-        if vDivisions is not None:
-            vClassesLen = len(vDivisions)
-            for vDivision in DIVISIONS_ORDERED:
-                divisionLbl = constants.PREBATTLE_COMPANY_DIVISION_NAMES[vDivision]
-                data['data'].append({'type': '#menu:prebattle/CompaniesTitle/%s' % divisionLbl,
-                 'count': vDivisions[vDivision] if vDivision < vClassesLen else 0})
-
-            self._proxy.as_setListByTypeS(data)
-        self._proxy.as_showStartS(constants.IS_DEVELOPMENT)
-        return
-
-
 class _FalloutQueueProvider(_QueueProvider):
 
     def processQueueInfo(self, qInfo):
@@ -181,7 +156,6 @@ class _RankedQueueProvider(_RandomQueueProvider):
 
 
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
- constants.QUEUE_TYPE.COMPANIES: _CompanyQueueProvider,
  constants.QUEUE_TYPE.FALLOUT_MULTITEAM: _FalloutQueueProvider,
  constants.QUEUE_TYPE.FALLOUT_CLASSIC: _FalloutQueueProvider,
  constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,

@@ -16,13 +16,13 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 class PlayerUnitInfo(object):
-    __slots__ = ('dbID', 'unitIdx', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType')
+    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, dbID, unitIdx, unit, nickName='', rating=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, clanDBID=None, **kwargs):
+    def __init__(self, dbID, unitMgrID, unit, nickName='', rating=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, clanDBID=None, **kwargs):
         self.dbID = dbID
-        self.unitIdx = unitIdx
+        self.unitMgrID = unitMgrID
         if unit is not None:
             self.unit = weakref.proxy(unit)
         else:
@@ -42,7 +42,7 @@ class PlayerUnitInfo(object):
         return
 
     def __repr__(self):
-        return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitIdx = {2:n} rating = {3:n}, isCommander = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}, igrType = {9:n})'.format(self.dbID, self.getFullName(), self.unitIdx, self.rating, self.isCommander(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType)
+        return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitMgrID = {2:n} rating = {3:n}, isCommander = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}, igrType = {9:n})'.format(self.dbID, self.getFullName(), self.unitMgrID, self.rating, self.isCommander(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType)
 
     def getFullName(self):
         return self.lobbyContext.getPlayerFullName(self.name, clanAbbrev=self.clanAbbrev, pDBID=self.dbID)
@@ -128,17 +128,18 @@ class PlayerUnitInfo(object):
 
 
 class VehicleInfo(object):
-    __slots__ = ('vehInvID', 'vehTypeCD', 'vehLevel')
+    __slots__ = ('vehInvID', 'vehTypeCD', 'vehLevel', 'vehClassIdx')
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, vehInvID=0, vehTypeCompDescr=0, vehLevel=0, **kwargs):
+    def __init__(self, vehInvID=0, vehTypeCompDescr=0, vehLevel=0, vehClassIdx=0, **kwargs):
         super(VehicleInfo, self).__init__()
         self.vehInvID = vehInvID
         self.vehTypeCD = vehTypeCompDescr
         self.vehLevel = vehLevel
+        self.vehClassIdx = vehClassIdx
 
     def __repr__(self):
-        return 'VehicleInfo(vehInvID = {0:n}, vehTypeCD = {1:n}, vehLevel = {2:n})'.format(self.vehInvID, self.vehTypeCD, self.vehLevel)
+        return 'VehicleInfo(vehInvID = {0:n}, vehTypeCD = {1:n}, vehLevel = {2:n}, vehClassIdx = {3})'.format(self.vehInvID, self.vehTypeCD, self.vehLevel, self.vehClassIdx)
 
     def isEmpty(self):
         return not self.vehInvID
@@ -200,8 +201,14 @@ class UnitFlags(object):
     def isLocked(self):
         return self.__flags & UNIT_FLAGS.LOCKED > 0
 
+    def isExternalLocked(self):
+        return self.__flags & UNIT_FLAGS.IS_EXTERNAL_LOCK > 0
+
     def isLockedStateChanged(self):
         return self.__flagsDiff & UNIT_FLAGS.LOCKED > 0
+
+    def isExternalLockedStateChanged(self):
+        return self.__flagsDiff & UNIT_FLAGS.IS_EXTERNAL_LOCK > 0
 
     def isOpened(self):
         return self.__flags & UNIT_FLAGS.INVITE_ONLY == 0
@@ -232,6 +239,9 @@ class UnitFlags(object):
 
     def isInArena(self):
         return self.__flags & UNIT_FLAGS.IN_ARENA > 0
+
+    def isInArenaChanged(self):
+        return self.__flagsDiff & UNIT_FLAGS.IN_ARENA > 0
 
     def isFreezed(self):
         return self.isLocked() or self.isInSearch() or self.isInQueue() or self.isInArena()
@@ -361,15 +371,9 @@ class PredefinedRosterSettings(UnitRosterSettings):
         maxLegionariesCount = clazz.MAX_LEGIONARIES_COUNT
         super(PredefinedRosterSettings, self).__init__(minLevel, maxLevel, maxSlots, maxClosedSlots, maxEmptySlots, minTotalLevel, maxTotalLevel, maxLegionariesCount)
 
-    def getDisabledSlotsRange(self):
-        return xrange(self._maxSlots, self.TOTAL_SLOTS) if self._rosterTypeID in _SUPPORTED_ROSTER_SETTINGS[PREBATTLE_TYPE.SORTIE] else super(PredefinedRosterSettings, self).getDisabledSlotsRange()
-
 
 _SUPPORTED_ROSTER_SETTINGS = {PREBATTLE_TYPE.UNIT: (ROSTER_TYPE.UNIT_ROSTER,),
- PREBATTLE_TYPE.SORTIE: (ROSTER_TYPE.SORTIE_ROSTER_6, ROSTER_TYPE.SORTIE_ROSTER_8, ROSTER_TYPE.SORTIE_ROSTER_10),
- PREBATTLE_TYPE.EXTERNAL: (ROSTER_TYPE.SORTIE_ROSTER_6, ROSTER_TYPE.SORTIE_ROSTER_8, ROSTER_TYPE.SORTIE_ROSTER_10),
- PREBATTLE_TYPE.FORT_BATTLE: (ROSTER_TYPE.FORT_ROSTER_10,),
- PREBATTLE_TYPE.FORT_COMMON: (ROSTER_TYPE.SORTIE_ROSTER_6,),
+ PREBATTLE_TYPE.EXTERNAL: (ROSTER_TYPE.EXTERNAL_ROSTER,),
  PREBATTLE_TYPE.E_SPORT_COMMON: (ROSTER_TYPE.UNIT_ROSTER,)}
 
 class SupportedRosterSettings(object):

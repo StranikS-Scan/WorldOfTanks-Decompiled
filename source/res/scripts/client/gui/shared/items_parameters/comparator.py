@@ -30,11 +30,14 @@ PARAMS_STATES = (PARAM_STATE.WORSE, PARAM_STATE.NORMAL, PARAM_STATE.BETTER)
 DEFAULT_AVG_VALUE = (sys.maxint, -1)
 
 def getParamExtendedData(paramName, value, otherValue, penalties=None):
-    possibleBonuses, bonuses, penalties = penalties if penalties is not None else ([], [], [])
+    possibleBonuses, bonuses, inactive, penalties = penalties if penalties is not None else ([],
+     [],
+     [],
+     [])
     if paramName not in NEGATIVE_PARAMS:
         if otherValue is None or otherValue == DEFAULT_AVG_VALUE:
             otherValue = value
-    return _ParameterInfo(paramName, value, rateParameterState(paramName, value, otherValue), possibleBonuses, bonuses, penalties)
+    return _ParameterInfo(paramName, value, rateParameterState(paramName, value, otherValue), possibleBonuses, inactive, bonuses, penalties)
 
 
 class ItemsComparator(object):
@@ -62,7 +65,10 @@ class ItemsComparator(object):
         return getParamExtendedData(paramName, self._currentParams.get(paramName), self._otherParams.get(paramName), self._getPenaltiesAndBonuses(paramName))
 
     def _getPenaltiesAndBonuses(self, _):
-        return ([], [], [])
+        return ([],
+         [],
+         {},
+         [])
 
 
 class VehiclesComparator(ItemsComparator):
@@ -81,9 +87,12 @@ class VehiclesComparator(ItemsComparator):
         """
         penalties = self.__penalties.get(paramName, [])
         allPossibleParamBonuses = self.__getPossibleParamBonuses(paramName)
-        currentParamBonuses = self.__getCurrentParamBonuses(paramName, allPossibleParamBonuses)
+        currentParamBonuses, inactive = self.__getCurrentParamBonuses(paramName, allPossibleParamBonuses)
         possibleBonuses = allPossibleParamBonuses - currentParamBonuses
-        return (possibleBonuses, currentParamBonuses, penalties)
+        return (possibleBonuses,
+         currentParamBonuses,
+         inactive,
+         penalties)
 
     def __getPossibleParamBonuses(self, paramName):
         """
@@ -106,7 +115,7 @@ class VehiclesComparator(ItemsComparator):
         if paramName in CONDITIONAL_BONUSES:
             return self.__getConditionalBonuses(paramName, possibleBonuses)
         else:
-            return possibleBonuses.intersection(self.__bonuses)
+            return (possibleBonuses.intersection(self.__bonuses), {})
 
     def __getConditionalBonuses(self, paramName, possibleBonuses):
         """
@@ -115,21 +124,24 @@ class VehiclesComparator(ItemsComparator):
         but on camouflage skill may affect brotherhood skill,
         that is why brotherhood skill do not increase invisibilityMovingFactor without camouflage skill
         """
-        currentBonuses = set()
+        currentBonuses, affectedBonuses = set(), {}
         condition, affected = CONDITIONAL_BONUSES[paramName]
         bonuses = possibleBonuses.intersection(self.__bonuses)
         for bonus in bonuses:
-            if bonus not in affected or bonus in affected and condition in bonuses:
+            isAffected = bonus in affected
+            if not isAffected or isAffected and condition in bonuses:
                 currentBonuses.add(bonus)
+            if isAffected:
+                affectedBonuses[bonus] = condition
 
-        return currentBonuses
+        return (currentBonuses, affectedBonuses)
 
 
-class _ParameterInfo(collections.namedtuple('_ParamInfo', 'name, value, state, possibleBonuses, bonuses, penalties')):
+class _ParameterInfo(collections.namedtuple('_ParamInfo', ('name', 'value', 'state', 'possibleBonuses', 'inactiveBonuses', 'bonuses', 'penalties'))):
 
     def getParamDiff(self):
         if isinstance(self.value, (tuple, list)):
-            diff = map(lambda (_, diff): diff, self.state)
+            diff = map(lambda (_, d): d, self.state)
             if any(diff):
                 return diff
         else:

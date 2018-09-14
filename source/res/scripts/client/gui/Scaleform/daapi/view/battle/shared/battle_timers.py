@@ -7,6 +7,7 @@ from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IBootcampController
 from BattleReplay import g_replayCtrl
 
 class _WWISE_EVENTS:
@@ -26,19 +27,22 @@ class PreBattleTimer(PrebattleTimerMeta):
 
     def __init__(self):
         super(PreBattleTimer, self).__init__()
+        self.showStateMessage = True
 
     def setWinConditionText(self, text):
         self.as_setWinConditionTextS(text)
 
     def setCountdown(self, state, timeLeft):
-        self.as_setMessageS(_STATE_TO_MESSAGE[state])
+        if self.showStateMessage:
+            self.as_setMessageS(_STATE_TO_MESSAGE[state])
         if state == COUNTDOWN_STATE.WAIT:
             self.as_hideTimerS()
         else:
             self.as_setTimerS(timeLeft)
 
     def hideCountdown(self, state, speed):
-        self.as_setMessageS(_STATE_TO_MESSAGE[state])
+        if self.showStateMessage:
+            self.as_setMessageS(_STATE_TO_MESSAGE[state])
         self.as_hideAllS(speed)
 
 

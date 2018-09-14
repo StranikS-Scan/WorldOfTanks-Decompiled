@@ -226,16 +226,10 @@ class QuestsProgressBlock(base.StatsBlock):
             return
         else:
 
-            def _isFortQuest(q):
-                return q.getType() == EVENT_TYPE.FORT_QUEST
-
             def _sortCommonQuestsFunc(aData, bData):
                 aQuest, aCurProg, aPrevProg, _, _ = aData
                 bQuest, bCurProg, bPrevProg, _, _ = bData
                 res = cmp(aQuest.isCompleted(aCurProg), bQuest.isCompleted(bCurProg))
-                if res:
-                    return -res
-                res = cmp(_isFortQuest(aQuest), _isFortQuest(bQuest))
                 if res:
                     return -res
                 if aQuest.isCompleted() and bQuest.isCompleted(bCurProg):

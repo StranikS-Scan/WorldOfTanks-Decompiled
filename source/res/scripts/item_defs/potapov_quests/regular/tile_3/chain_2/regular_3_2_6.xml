@@ -8,9 +8,8 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <classes>	heavyTank	</classes>
-              <lvlDiff>	1	</lvlDiff>
-              <greaterOrEqual>	2	</greaterOrEqual>
+              <classes>	heavyTank mediumTank	</classes>
+              <greaterOrEqual>	3	</greaterOrEqual>
             </vehicleKills>
           </and>
         </postBattle>
@@ -31,15 +30,14 @@
       <conditions>
         <postBattle>
           <and>
+            <vehicleKills>
+              <classes>	heavyTank mediumTank	</classes>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
             <results>
               <key>	damageDealt	</key>
               <greaterOrEqual>	2000	</greaterOrEqual>
             </results>
-            <vehicleKills>
-              <classes>	heavyTank	</classes>
-              <lvlDiff>	1	</lvlDiff>
-              <greaterOrEqual>	2	</greaterOrEqual>
-            </vehicleKills>
           </and>
         </postBattle>
       </conditions>

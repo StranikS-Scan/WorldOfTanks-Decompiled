@@ -3,7 +3,7 @@
 import weakref
 import BigWorld
 import functools
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.battle_control.arena_info.interfaces import IViewPointsController
 from gui.battle_control.arena_info.vos_collections import VehicleInfoSortKey, VehiclesItemsCollection
 from gui.battle_control.arena_info.vos_collections import AllyItemsCollection, SquadmanVehicleInfoSortKey
@@ -70,9 +70,7 @@ class ViewPointsController(IViewPointsController):
             sortKey = functools.partial(SquadmanVehicleInfoSortKey, prebattleID)
         else:
             sortKey = VehicleInfoSortKey
-        canSwitchToHimself = True
         if self.__arenaDP.isPlayerObserver():
-            canSwitchToHimself = False
             vehiclesCollection = VehiclesItemsCollection(sortKey=sortKey)
         else:
             vehiclesCollection = AllyItemsCollection(sortKey=sortKey)
@@ -92,11 +90,8 @@ class ViewPointsController(IViewPointsController):
                 switchToNext = True
         if self.__doSwitch(switchToNext, items, currentItem):
             return True
-        elif canSwitchToHimself:
-            return self.__doSelect(False, playerVehicleID)
         else:
-            return self.__doSwitch(True, items, currentItem)
-            return
+            return True if self.__doSelect(False, playerVehicleID) else self.__doSwitch(True, items, currentItem)
 
     def __doSwitch(self, switchToNext, items, currentItem):
         """
@@ -122,16 +117,28 @@ class ViewPointsController(IViewPointsController):
         :param vehOrPointId: item ID
         """
         if isViewpoint:
+            if vehOrPointId == self.__currentViewPointID:
+                LOG_DEBUG('Skip switch to current view point!')
+                return True
             self.__currentViewPointID = vehOrPointId
             self.__currentVehicleID = None
+            BigWorld.player().positionControl.switchViewpoint(True, vehOrPointId)
+            return True
+        elif vehOrPointId == self.__currentVehicleID:
+            LOG_DEBUG('Skip switch to current vehicle!')
+            return True
         else:
-            if vehOrPointId == self.__currentVehicleID:
-                LOG_DEBUG('Skip switch to current vehicle!')
-                return True
-            if vehOrPointId != self.__arenaDP.getPlayerVehicleID() and not self.__arenaDP.getVehicleInfo(vehOrPointId).isAlive():
+            vehicleInfo = self.__arenaDP.getVehicleInfo(vehOrPointId)
+            if vehicleInfo.isObserver():
+                LOG_DEBUG('Skip switch to observer vehicle!')
+                return False
+            elif vehOrPointId != self.__arenaDP.getPlayerVehicleID() and not vehicleInfo.isAlive():
                 LOG_DEBUG('Skip switch to dead vehicle!')
+                return False
+            elif not self.__arenaDP.isAllyTeam(vehicleInfo.team) and not self.__arenaDP.isPlayerObserver():
+                LOG_DEBUG('Skip switch to enemy vehicle!')
                 return False
             self.__currentViewPointID = None
             self.__currentVehicleID = vehOrPointId
-        BigWorld.player().positionControl.switchViewpoint(isViewpoint, vehOrPointId)
-        return True
+            BigWorld.player().positionControl.switchViewpoint(False, vehOrPointId)
+            return True

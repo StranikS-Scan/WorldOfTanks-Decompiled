@@ -66,5 +66,25 @@
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <bootcamp>
+      <wwmusic>	bc_music_mission_03	</wwmusic>
+      <boundingBox>
+        <bottomLeft>	-350.000000 -500.000000	</bottomLeft>
+        <upperRight>	100.000000 500.000000	</upperRight>
+      </boundingBox>
+      <teamBasePositions>
+        <team1>
+          <position1>	-127.46 -332.09	</position1>
+        </team1>
+        <team2>
+          <position1>	-150.20 345.33	</position1>
+        </team2>
+      </teamBasePositions>
+      <maxPlayersInTeam>	1	</maxPlayersInTeam>
+      <runDelay>	7	</runDelay>
+      <minimap>	spaces/05_prohorovka/mmap_bootcamp.dds	</minimap>
+    </bootcamp>
   </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
 </05_prohorovka.xml>

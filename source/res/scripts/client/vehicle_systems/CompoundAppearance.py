@@ -443,7 +443,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__crashedTracksCtrl.setVisible(visibilityMask)
         return
 
-    def onVehicleHealthChanged(self):
+    def onVehicleHealthChanged(self, showEffects=True):
         vehicle = self.__vehicle
         if not vehicle.isAlive() and vehicle.health > 0:
             self.changeEngineMode((0, 0))
@@ -452,7 +452,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         isUnderWater = self.waterSensor.isUnderWater
         currentState.update(vehicle.health, vehicle.isCrewActive, isUnderWater)
         if previousState != currentState.state:
-            if currentState.effect is not None:
+            if currentState.effect is not None and showEffects:
                 self.__playEffect(currentState.effect)
             if vehicle.health <= 0:
                 BigWorld.player().inputHandler.onVehicleDeath(vehicle, currentState.state == 'ammoBayExplosion')

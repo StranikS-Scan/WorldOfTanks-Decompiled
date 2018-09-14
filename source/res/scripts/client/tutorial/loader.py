@@ -4,6 +4,8 @@ import weakref
 import BigWorld
 import account_helpers
 from constants import IS_TUTORIAL_ENABLED
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from tutorial import core
 from tutorial import settings as _settings
 from tutorial import cache as _cache
@@ -41,6 +43,7 @@ class RunCtx(object):
 
 
 class TutorialLoader(object):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(TutorialLoader, self).__init__()

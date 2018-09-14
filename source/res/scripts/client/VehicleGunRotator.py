@@ -210,6 +210,9 @@ class VehicleGunRotator(object):
         grav = Math.Vector3(0.0, -descr.shot['gravity'], 0.0)
         return (pos, vel, grav)
 
+    def getCurShotPosition(self):
+        return self.__getShotPosition(self.__turretYaw, self.__gunPitch)
+
     def __set_clientMode(self, value):
         if self.__clientMode == value:
             return
@@ -310,7 +313,7 @@ class VehicleGunRotator(object):
         if self.__prevSentShotPoint is None:
             return
         else:
-            shotStartPos, _ = self.__getCurShotPosition()
+            shotStartPos, _ = self.getCurShotPosition()
             markerDelta = self.__markerInfo[0] - shotStartPos
             shotPointDelta = self.__prevSentShotPoint - shotStartPos
             sine = (markerDelta * shotPointDelta).length
@@ -401,7 +404,7 @@ class VehicleGunRotator(object):
         if self.__avatar.getVehicleAttached() is None:
             return
         else:
-            shotPos, shotVec = self.__getCurShotPosition()
+            shotPos, shotVec = self.getCurShotPosition()
             markerPos, markerDir, markerSize, idealMarkerSize, collData = self.__getGunMarkerPosition(shotPos, shotVec, self.__dispersionAngles)
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording and not replayCtrl.isServerAim:
@@ -558,9 +561,6 @@ class VehicleGunRotator(object):
         vector = gunWorldMatrix.applyVector(Math.Vector3(0, 0, shotSpeed))
         return (position, vector)
 
-    def __getCurShotPosition(self):
-        return self.__getShotPosition(self.__turretYaw, self.__gunPitch)
-
     def getAttachedVehicleID(self):
         return self.__avatar.playerVehicleID
 
@@ -664,7 +664,7 @@ class VehicleGunRotator(object):
     def getAvatarOwnVehicleStabilisedMatrix(self):
         avatar = self.__avatar
         vehicleMatrix = Math.Matrix(avatar.getOwnVehicleStabilisedMatrix())
-        if self.__getTurretStaticYaw() is not None:
+        if self.__getTurretStaticYaw() is not None and avatar.vehicle is not None:
             vehicleMatrix = Math.Matrix(avatar.vehicle.filter.interpolateStabilisedMatrix(BigWorld.time()))
         return vehicleMatrix
 

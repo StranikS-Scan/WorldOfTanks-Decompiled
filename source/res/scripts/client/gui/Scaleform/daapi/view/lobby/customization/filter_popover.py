@@ -5,7 +5,7 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.CustomizationFiltersPopoverMeta import CustomizationFiltersPopoverMeta
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization import g_customizationController
-from gui.customization.shared import CUSTOMIZATION_TYPE, getBonusIcon16x16, FILTER_TYPE, QUALIFIER_TYPE_INDEX, PURCHASE_TYPE, DEFAULT_GROUP_VALUE, EMBLEM_IGR_GROUP_NAME
+from gui.customization.shared import CUSTOMIZATION_TYPE, getBonusIcon16x16, FILTER_TYPE, QUALIFIER_TYPE_INDEX, PURCHASE_TYPE, DEFAULT_GROUP_VALUE, EMBLEM_IGR_GROUP_NAME, OTHER_GROUP_NAME
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
@@ -18,6 +18,14 @@ _BONUS_TOOLTIPS = (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_BONUS_ENTIRECREW,
  VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_BONUS_RADIOMAN,
  VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_BONUS_LOADER)
 _PURCHASE_TYPE_LABELS = (VEHICLE_CUSTOMIZATION.FILTER_POPOVER_WAYSTOBUY_BUY, VEHICLE_CUSTOMIZATION.FILTER_POPOVER_WAYSTOBUY_MISSIONS, icons.premiumIgrSmall())
+GROUP_NAMES_FILTER_ORDER = (DEFAULT_GROUP_VALUE,
+ 'group9',
+ 'group1',
+ 'group2',
+ 'group4')
+GROUP_NAMES_FILTER_ORDER_INDICES = dict(((n, i) for i, n in enumerate(GROUP_NAMES_FILTER_ORDER)))
+UNKNOWN_GROUP_NAMES_FILTER_ORDER = 100
+OTHER_GROUP_NAMES_FILTER_ORDER = 101
 
 def _getPurchaseTypeVO():
     result = []
@@ -84,9 +92,12 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         self.__filter = g_customizationController.filter
         self.__groupsMap = [[('all_groups', VEHICLE_CUSTOMIZATION.FILTER_POPOVER_GROUPS_ALL)], [('all_groups', VEHICLE_CUSTOMIZATION.FILTER_POPOVER_GROUPS_ALL)], [('all_groups', VEHICLE_CUSTOMIZATION.FILTER_POPOVER_GROUPS_ALL)]]
         for cType in CUSTOMIZATION_TYPE.ALL:
+            group = self.__groupsMap[cType]
             for groupName, userName in self.__filter.availableGroupNames[cType]:
                 if groupName != EMBLEM_IGR_GROUP_NAME and groupName != 'IGR':
-                    self.__groupsMap[cType].append((groupName, userName))
+                    group.append((groupName, userName))
+
+            group.sort(key=lambda (grType, _): (GROUP_NAMES_FILTER_ORDER_INDICES[grType] if grType in GROUP_NAMES_FILTER_ORDER else OTHER_GROUP_NAMES_FILTER_ORDER if grType == OTHER_GROUP_NAME else UNKNOWN_GROUP_NAMES_FILTER_ORDER))
 
         self.as_setInitDataS(self.__createInitialVO())
         self.as_enableDefBtnS(not self.__filter.isDefaultFilterSet())

@@ -91,6 +91,15 @@ class IUnitListener(IUnitIntroListener):
         """
         pass
 
+    def onUnitPlayerNoLongerCreator(self, pInfo):
+        """
+        Establishes a listener to respond when UnitEntity receives
+        that player lost his creator status.
+        Args:
+            pInfo: player's info that was changed
+        """
+        pass
+
     def onUnitPlayerEnterOrLeaveArena(self, pInfo):
         """
         Establishes a listener to respond when UnitEntity receives
@@ -210,24 +219,33 @@ class IUnitListener(IUnitIntroListener):
 
 class IStrongholdListener(IPrbListener):
 
-    def onBattleStatusChanged(self, data):
-        pass
-
-    def onOnConsumableChanged(self, data):
-        pass
-
-    def onStrongholdRequestTextMessage(self, textType, textString):
+    def onUpdateHeader(self, header, isFirstBattle, isUnitFreezed):
         """
-        Establishes a listener to respond when if response contains text
-        Args:
-            textType: SM_TYPE (Error, Warning or Information)
-            textString: received text
+        Establishes a listener to update header
         """
         pass
 
-    def onStrongholdMaintenance(self):
+    def onUpdateTimer(self, timer):
         """
-        Establishes a listener to respond if maintenance state
+        Establishes a listener to update timer
+        """
+        pass
+
+    def onUpdateState(self, state):
+        """
+        Establishes a listener to update state
+        """
+        pass
+
+    def onUpdateReserve(self, reserve, reserveOrder):
+        """
+        Establishes a listener to update reserve
+        """
+        pass
+
+    def onStrongholdDataChanged(self, header, isFirstBattle, reserve, reserveOrder):
+        """
+        Establishes a listener to respond if stronghold data was changed
         """
         pass
 
@@ -237,129 +255,23 @@ class IStrongholdListener(IPrbListener):
         """
         pass
 
-    def onStrongholdDataChanged(self):
+    def onStrongholdMaintenance(self, state):
         """
-        Establishes a listener to respond if stronghold data was changed
-        """
-        pass
-
-    def onAvailableReservesChanged(self, selectedReservesIdx, reserveOrder):
-        """
+        Establishes a listener to respond if maintenance state
         Args:
-            selectedReservesIdx: reserves that selected for prebattle
-            reserveOrder: enemy clan
+            state: show or hide maintenance window
         """
-        pass
-
-    def onBattleSeriesStatusChanged(self, currentBattle, enemyClan, battleIdx, clan):
-        """
-        Args:
-            currentBattle: current battle state and data
-            enemyClan: enemy clan
-            battleIdx: battle state index
-            clan: player clan
-        """
-        pass
-
-    def onDirectionChanged(self, isSortie, direction, resourceMultiplier):
-        """
-        Args:
-            isSortie: is battle mod is sortie
-            direction: current battle direction
-            resourceMultiplier: multiplier for resource
-        """
-        pass
-
-    def onSelectedReservesChanged(self, selectedReservesIdx, reserveOrder):
-        """
-        Args:
-            selectedReservesIdx: reserves that selected for prebattle
-            reserveOrder: order for reserves
-        """
-        pass
-
-    def onRequisitionBonusPercentChanged(self):
-        pass
-
-    def onIndustrialResourceMultiplierChanged(self, isSortie, direction, resourceMultiplier):
-        """
-        Args:
-            isSortie: is battle mod is sortie
-            direction: current battle direction
-            resourceMultiplier: multiplier for resource
-        """
-        pass
-
-    def onBattleDurationChanged(self, currentBattle, enemyClan, battleIdx, clan):
-        """
-        Args:
-            currentBattle: current battle state and data
-            enemyClan: enemy clan
-            battleIdx: battle state index
-            clan: player clan
-        """
-        pass
-
-    def onTimeToReadyChanged(self):
-        pass
-
-    def onClanChanged(self):
-        pass
-
-    def onEnemyClanChanged(self, currentBattle, enemyClan, battleIdx, clan):
-        """
-        Args:
-            currentBattle: current battle state and data
-            enemyClan: enemy clan
-            battleIdx: battle state index
-            clan: player clan
-        """
-        pass
-
-    def onLevelChanged(self):
-        pass
-
-    def onPlayersCountChanged(self, maxPlayerCount, maxLegCount):
-        """
-        Args:
-            maxPlayerCount: max player count in prebattle
-            maxLegCount: max legionary count in prebattle
-        """
-        pass
-
-    def onMaxLegionariesCountChanged(self, maxPlayerCount, maxLegCount):
-        pass
-
-    def onPermissionsChanged(self, selectedReservesIdx, reserveOrder):
-        """
-        Args:
-            selectedReservesIdx: reserves that selected for prebattle
-            reserveOrder: order for reserves
-        """
-        pass
-
-    def onPublicStateChanged(self, isOpened):
-        """
-        Args:
-            isOpened: is room opened for other player in search
-        """
-        pass
-
-    def onTypeChanged(self, isSortie, direction, resourceMultiplier):
-        """
-        Args:
-            isSortie: is battle mod is sortie
-            direction: current battle direction
-            resourceMultiplier: multiplier for resource
-        """
-        pass
-
-    def onUpdateAll(self):
         pass
 
     def onCommanderIsReady(self, isReady):
         """
         Args:
             isReady: is Commander in ready state
+        """
+        pass
+
+    def onStrongholdDoBattleQueue(self, isFirstBattle, readyButtonEnabled, reserveOrder):
+        """
+        Establishes a listener to react on doBattleQueue
         """
         pass

@@ -8,6 +8,8 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET, BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 import feedback_events
+import TriggersManager
+FEEDBACK_TO_TRIGGER_ID = {_FET.VEHICLE_VISIBILITY_CHANGED: TriggersManager.TRIGGER_TYPE.PLAYER_DETECT_ENEMY}
 _CELL_BLINKING_DURATION = 3.0
 
 class _DamagedDevicesExtraFetcher(object):
@@ -149,10 +151,16 @@ class BattleFeedbackAdaptor(IBattleController):
         feedbackEvents = []
         for data in events:
             feedbackEvent = feedback_events.PlayerFeedbackEvent.fromDict(data)
-            if feedbackEvent.getType() == _FET.PLAYER_KILLED_ENEMY:
+            feedbackType = feedbackEvent.getType()
+            if feedbackType == _FET.PLAYER_KILLED_ENEMY:
                 vo = self.__arenaDP.getVehicleInfo(feedbackEvent.getTargetID())
                 if self.__arenaDP.isEnemyTeam(vo.team):
                     feedbackEvents.append(feedbackEvent)
+            if feedbackType == _FET.VEHICLE_VISIBILITY_CHANGED:
+                extraVis = feedbackEvent.getExtra()
+                targetId = feedbackEvent.getTargetID()
+                triggerId = TriggersManager.TRIGGER_TYPE.PLAYER_DETECT_ENEMY
+                TriggersManager.g_manager.activateTrigger(triggerId, targetId=targetId, isVisible=extraVis.isVisible(), isDirect=extraVis.isDirect)
             feedbackEvents.append(feedbackEvent)
 
         if feedbackEvents:

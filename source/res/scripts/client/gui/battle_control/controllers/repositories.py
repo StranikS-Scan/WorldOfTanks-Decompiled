@@ -13,6 +13,7 @@ from gui.battle_control.controllers import drr_scale_ctrl
 from gui.battle_control.controllers import dyn_squad_functional
 from gui.battle_control.controllers import feedback_adaptor
 from gui.battle_control.controllers import finish_sound_ctrl
+from gui.battle_control.controllers import bootcamp_finish_sound_ctrl
 from gui.battle_control.controllers import flag_nots_ctrl
 from gui.battle_control.controllers import gas_attack_ctrl
 from gui.battle_control.controllers import hit_direction_ctrl
@@ -26,6 +27,7 @@ from gui.battle_control.controllers import personal_efficiency_ctrl
 from gui.battle_control.controllers import interfaces
 from gui.battle_control.controllers import tmp_ignore_list_ctrl
 from gui.battle_control.controllers import view_points_ctrl
+from gui.battle_control.controllers import bootcamp_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 
 class BattleSessionSetup(object):
@@ -299,6 +301,7 @@ class SharedControllersRepository(_ControllersRepository):
         tmpIgnoreListCtrl = tmp_ignore_list_ctrl.createTmpIgnoreListCtrl(setup)
         if tmpIgnoreListCtrl is not None:
             repository.addController(tmpIgnoreListCtrl)
+        repository.addArenaController(bootcamp_ctrl.BootcampController(), setup)
         repository.addArenaController(view_points_ctrl.ViewPointsController(setup), setup)
         repository.addArenaController(arena_load_ctrl.ArenaLoadController(), setup)
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
@@ -335,7 +338,11 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
         if not setup.isReplayPlaying:
-            repository.addArenaController(finish_sound_ctrl.FinishSoundController(), setup)
+            if setup.arenaVisitor.gui.isBootcampBattle():
+                controller = bootcamp_finish_sound_ctrl.BootcampFinishSoundController()
+            else:
+                controller = finish_sound_ctrl.FinishSoundController()
+            repository.addArenaController(controller, setup)
         return repository
 
 

@@ -104,6 +104,7 @@ class WebBrowser(object):
         self.onTitleChange = Event(self.__eventMgr)
         self.onFailedCreation = Event(self.__eventMgr)
         self.onCanCreateNewBrowser = Event(self.__eventMgr)
+        self.onUserRequestToClose = Event(self.__eventMgr)
         LOG_BROWSER('INIT ', self.__baseUrl, texName, size, self.__browserID)
         return
 
@@ -499,7 +500,7 @@ class WebBrowser(object):
             secondtest = self.__browser.url[:-1]
             if secondtest.endswith(title):
                 return False
-        return False if self.__baseUrl == title else True
+        return False if self.__baseUrl == title or self.__baseUrl.endswith(title) else True
 
     def __onTitleChange(self, title):
         if self.__isValidTitle(title):

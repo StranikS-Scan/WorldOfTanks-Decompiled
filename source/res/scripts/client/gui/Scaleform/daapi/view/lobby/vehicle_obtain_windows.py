@@ -8,9 +8,11 @@ from gui.DialogsInterface import showI18nConfirmDialog
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.VehicleBuyWindowMeta import VehicleBuyWindowMeta
+from gui.Scaleform.genConsts.VEHICLE_BUY_WINDOW_ALIASES import VEHICLE_BUY_WINDOW_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.events import VehicleBuyEvent
 from gui.shared.formatters import text_styles, moneyWithIcon
 from gui.shared.formatters.text_styles import neutral
@@ -21,6 +23,7 @@ from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.formatters import packItemActionTooltipData, packItemRentActionTooltipData
 from gui.shared.utils import decorators
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, time_utils, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IRentalsController, ITradeInController, IRestoreController
@@ -96,7 +99,11 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
          'tradeInCancelBtnLabel': i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TRADEIN_CANCELBTN)}
 
     def _getContentFields(self, vehicle):
-        return {'priceLabel': i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_PRICELABEL, vehiclename=vehicle.shortUserName),
+        slotCheckboxTooltip = None
+        if self.itemsCache.items.inventory.getFreeSlots(self.itemsCache.items.stats.vehicleSlots) <= 0:
+            slotCheckboxTooltip = makeTooltip(TOOLTIPS.CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_HEADER, TOOLTIPS.CONTENTBUYVIEW_SLOTCHECKBOX_NOTENOUGHSLOTS_BODY)
+        return {'slotCheckboxTooltip': slotCheckboxTooltip,
+         'priceLabel': i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_PRICELABEL, vehiclename=vehicle.shortUserName),
          'crewCheckbox': i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_TANKMENCHECKBOX),
          'warningMsg': i18n.makeString(DIALOGS.BUYVEHICLEWINDOW_WARNING) if constants.IS_KOREA else None}
 
@@ -136,11 +143,18 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
             initData = {'headerData': self._getOptainHeaderData(self.vehicle),
              'isTradeIn': isTradeIn,
              'contentData': self._getByuContentData(self.vehicle, stats, isTradeIn)}
+            initData.update(self._getContentLinkageFields())
             initData.update(self._getGuiFields(self.vehicle))
             if isTradeIn:
                 initData.update(self.__getTradeInGuiFields(self.vehicle))
             self.as_setInitDataS(initData)
         return
+
+    def _getContentLinkageFields(self):
+        tradeInUI = VEHICLE_BUY_WINDOW_ALIASES.CONTENT_BUY_TRADE_IN_CONTAINER_VIEW_UI
+        buyUI = VEHICLE_BUY_WINDOW_ALIASES.CONTENT_BUY_VIEW_UI
+        return {'contentLinkage': tradeInUI if self._isTradeIn() else buyUI,
+         'isContentDAAPI': False}
 
     def _getOptainHeaderData(self, vehicle):
         from helpers import int2roman
@@ -272,6 +286,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
     @decorators.process('buyItem')
     def __requestForMoneyObtain(self, data):
         isTradeIn = data.tradeOff != -1
+        result = None
         if isTradeIn:
             tradeOffVehicle = self.itemsCache.items.getItemByCD(int(data.tradeOff))
             confirmationType = 'tradeInConfirmation'
@@ -313,7 +328,9 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
                 result = yield self._getObtainVehicleProcessor(self.vehicle, data).request()
             if len(result.userMsg):
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-        self.onWindowClose()
+        if result and result.success:
+            self.onWindowClose()
+        return
 
     def __setGoldCallBack(self, gold):
         self.as_setGoldS(gold)

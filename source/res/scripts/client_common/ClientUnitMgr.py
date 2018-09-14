@@ -19,19 +19,21 @@ class ClientUnitMgr(UnitClientAPI):
         self.onUnitErrorReceived = Event.Event(self.__eManager)
         self.onUnitResponseReceived = Event.Event(self.__eManager)
         self.id = 0
-        self.unitIdx = 0
         self.battleID = None
         self.__account = account
         self.__requestID = 0
-        self.units = {}
+        self.__unit = None
         return
 
-    def destroy(self):
+    @property
+    def unit(self):
+        return self.__unit
+
+    def clear(self):
         self.battleID = None
         self.__account = None
         self.__eManager.clear()
-        self._clearUnits()
-        self.unitIdx = 0
+        self._clearUnit()
         return
 
     def __getNextRequestID(self):
@@ -40,30 +42,23 @@ class ClientUnitMgr(UnitClientAPI):
 
     def onUnitUpdate(self, unitMgrID, packedUnit, packedOps):
         LOG_DEBUG('onUnitUpdate: unitMgrID=%s, packedUnit=%r, packedOps=%r' % (unitMgrID, packedUnit, packedOps))
-        if not unitMgrID:
-            unitIdx = 0
-        else:
-            unitIdx = 1
         if self.id != unitMgrID:
             prevMgrID = self.id
-            prevUnitIdx = self.unitIdx
             self.id = unitMgrID
-            self.unitIdx = unitIdx
             self.battleID = None
-            self._clearUnits()
+            self._clearUnit()
             if not self.id and prevMgrID:
-                self.onUnitLeft(prevMgrID, prevUnitIdx)
+                self.onUnitLeft(prevMgrID)
         if packedUnit:
             unit = ClientUnit(packedUnit=packedUnit)
-            if unitIdx in self.units:
-                self.units[unitIdx].destroy()
-            self.units[unitIdx] = unit
+            self._clearUnit()
+            self.__unit = unit
             if 'battleID' in unit._extras:
                 self.battleID = unit._extras['battleID']
-            self.onUnitJoined(self.id, self.unitIdx, unit.getPrebattleType())
+            self.onUnitJoined(self.id, unit.getPrebattleType())
         if packedOps:
-            unit = self.units.get(unitIdx)
-            if unit:
+            unit = self.__unit
+            if unit is not None:
                 unit.lock()
                 unit.unpackOps(packedOps)
                 unit.unlock()
@@ -72,10 +67,9 @@ class ClientUnitMgr(UnitClientAPI):
 
     def onUnitError(self, requestID, unitMgrID, errorCode, errorString):
         LOG_DEBUG('onUnitError: unitMgr=%s, errorCode=%s, errorString=%r' % (unitMgrID, errorCode, errorString))
-        unitIdx = 1
         if errorCode == UNIT_ERROR.UNIT_RESTORED:
             self._restore()
-        self.onUnitErrorReceived(requestID, unitMgrID, unitIdx, errorCode, errorString)
+        self.onUnitErrorReceived(requestID, unitMgrID, errorCode, errorString)
 
     def onUnitCallOk(self, requestID):
         LOG_DEBUG('onUnitCallOk: requestID=%s OK' % requestID)
@@ -117,22 +111,21 @@ class ClientUnitMgr(UnitClientAPI):
     def doCustomUnitCmd(self, cmd, unitMgrID=0, uint64Arg=0, int32Arg=0, strArg=''):
         return self._doUnitCmd(cmd, uint64Arg, int32Arg, strArg, unitMgrID)
 
-    def _clearUnits(self):
-        while len(self.units):
-            _, unit = self.units.popitem()
-            unit.destroy()
+    def _clearUnit(self):
+        if self.__unit is not None:
+            self.__unit.destroy()
+            self.__unit = None
+        return
 
     def _restore(self):
         prevMgrID = self.id
-        prevUnitIdx = self.unitIdx
         if prevMgrID:
-            self.onUnitRestored(prevMgrID, prevUnitIdx)
+            self.onUnitRestored(prevMgrID)
         self.id = 0
-        self.unitIdx = 0
         self.battleID = None
-        self._clearUnits()
+        self._clearUnit()
         if prevMgrID:
-            self.onUnitLeft(prevMgrID, prevUnitIdx)
+            self.onUnitLeft(prevMgrID)
         return
 
 
@@ -149,7 +142,7 @@ class ClientUnitBrowser(object):
         self._acceptUnitMgrID = 0
         self._acceptDeadlineUTC = 0
 
-    def destroy(self):
+    def clear(self):
         self.__account = None
         self.__eManager.clear()
         self.results.clear()

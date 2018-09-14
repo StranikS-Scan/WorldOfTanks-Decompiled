@@ -417,7 +417,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     def stop(self):
         self.__isStarted = False
         import SoundGroups
-        SoundGroups.g_instance.changePlayMode(1)
+        SoundGroups.g_instance.changePlayMode(0)
         aih_global_binding.clear()
         for control in self.__ctrls.itervalues():
             control.destroy()

@@ -4,7 +4,6 @@ import time
 import types
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from FortifiedRegionBase import FORT_ERROR
 from PlayerEvents import g_playerEvents
 from adisp import async, process
 from constants import IGR_TYPE
@@ -29,7 +28,6 @@ from gui.prb_control.settings import PREBATTLE_RESTRICTION, FUNCTIONAL_FLAG
 from gui.prb_control.settings import REQUEST_TYPE as _RQ_TYPE
 from gui.prb_control.storages import PrbStorageDecorator
 from gui.shared import actions
-from gui.shared.fortifications import getClientFortMgr
 from gui.shared.utils.listeners_collection import ListenersCollection
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController, IRentalsController
@@ -388,7 +386,9 @@ class _PreBattleDispatcher(ListenersCollection):
             elif self.__entity.canKeepMode():
                 flags = self.__entity.getModeFlags()
             ctx = factory.createLeaveCtx(flags, entityType=self.__entity.getEntityType())
-            yield self.leave(ctx)
+            result = yield self.leave(ctx)
+            if callback is not None:
+                callback(result)
             return
 
     def getGUIPermissions(self):
@@ -414,15 +414,6 @@ class _PreBattleDispatcher(ListenersCollection):
             initialization result as flags
         """
         return self.__setEntity(CreatePrbEntityCtx(self.__prevEntity.getCtrlType(), self.__prevEntity.getEntityType(), flags=self.__prevEntity.getFunctionalFlags()))
-
-    def ec_onCompanyStateChanged(self, state):
-        """
-        Events cache companies state subscriber. Updates UI on changed.
-        Args:
-            state: is companies currently enabled
-        """
-        if not self.__entity.hasLockedState():
-            g_eventDispatcher.updateUI()
 
     def pe_onArenaCreated(self):
         """
@@ -578,13 +569,12 @@ class _PreBattleDispatcher(ListenersCollection):
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             self.__setDefault()
 
-    def unitMgr_onUnitJoined(self, unitMgrID, unitIdx, prbType):
+    def unitMgr_onUnitJoined(self, unitMgrID, prbType):
         """
         Unit manager event listener for unit join. Sets unit entity if we're not already
         joined to it.
         Args:
             unitMgrID: unit manager identifier
-            unitIdx: unit index
             prbType: unit prebattle type
         """
         entity = self.__entity
@@ -594,13 +584,12 @@ class _PreBattleDispatcher(ListenersCollection):
         else:
             self.__setUnit(flags=self.__requestCtx.getFlags(), prbType=self.__requestCtx.getEntityType())
 
-    def unitMgr_onUnitLeft(self, unitMgrID, unitIdx):
+    def unitMgr_onUnitLeft(self, unitMgrID):
         """
         Unit manager listener for unit left. Tries to keep current mode or
         just unsets current entity.
         Args:
             unitMgrID: unit manager identifier
-            unitIdx: unit index
         """
         flags = self.__requestCtx.getFlags()
         if flags & FUNCTIONAL_FLAG.SWITCH == 0:
@@ -615,22 +604,20 @@ class _PreBattleDispatcher(ListenersCollection):
         else:
             self.__unsetEntity(self.__requestCtx)
 
-    def unitMgr_onUnitRestored(self, unitMgrID, unitIdx):
+    def unitMgr_onUnitRestored(self, unitMgrID):
         """
         Unit manager event listener for unit restoration.
         Args:
             unitMgrID: unit manager identifier
-            unitIdx: unit index
         """
         self.__entity.restore()
 
-    def unitMgr_onUnitErrorReceived(self, requestID, unitMgrID, unitIdx, errorCode, errorString):
+    def unitMgr_onUnitErrorReceived(self, requestID, unitMgrID, errorCode, errorString):
         """
         Unit manager event listener for unit request error. Pushes system message.
         Args:
             requestID: request identifier
             unitMgrID: unit manager identifier
-            unitIdx: unit index
             errorCode: request error code
             errorString: request error message
         """
@@ -652,6 +639,7 @@ class _PreBattleDispatcher(ListenersCollection):
         if errorCode not in IGNORED_UNIT_BROWSER_ERRORS:
             msgType, msgBody = messages.getUnitBrowserMessage(errorCode, errorString)
             SystemMessages.pushMessage(msgBody, type=msgType)
+            self.__unsetEntity()
             self.__setDefault()
 
     def ctrl_onPreQueueJoined(self, queueType):
@@ -718,19 +706,6 @@ class _PreBattleDispatcher(ListenersCollection):
             if g_currentVehicle.isPremiumIGR() and g_currentVehicle.isInPrebattle():
                 self.__entity.resetPlayerState()
 
-    def forMgr_onFortStateChanged(self):
-        """
-        Fort manager event listener for fort state update. Just refreshes UI.
-        """
-        g_eventDispatcher.updateUI()
-
-    def fortMgr_onFortResponseReceived(self, requestID, resultCode, resultString):
-        """
-        Fort manager event listener for fort response. Resets current entity to default on error.
-        """
-        if resultCode not in (FORT_ERROR.OK,):
-            self.__setDefault()
-
     def __startListening(self):
         """
         Subscribes to player and system events.
@@ -762,12 +737,6 @@ class _PreBattleDispatcher(ListenersCollection):
             unitBrowser.onErrorReceived += self.unitBrowser_onErrorReceived
         else:
             LOG_ERROR('Unit browser is not defined')
-        fortMgr = getClientFortMgr()
-        if fortMgr:
-            fortMgr.onFortStateChanged += self.forMgr_onFortStateChanged
-            fortMgr.onFortResponseReceived += self.fortMgr_onFortResponseReceived
-        else:
-            LOG_ERROR('Fort manager is not defined')
         g_prbCtrlEvents.onLegacyIntroModeJoined += self.ctrl_onLegacyIntroModeJoined
         g_prbCtrlEvents.onLegacyIntroModeLeft += self.ctrl_onLegacyIntroModeLeft
         g_prbCtrlEvents.onLegacyInited += self.ctrl_onLegacyInited
@@ -777,14 +746,12 @@ class _PreBattleDispatcher(ListenersCollection):
         g_prbCtrlEvents.onPreQueueJoined += self.ctrl_onPreQueueJoined
         g_prbCtrlEvents.onPreQueueJoinFailure += self.ctrl_onPreQueueJoinFailure
         g_prbCtrlEvents.onPreQueueLeft += self.ctrl_onPreQueueLeft
-        self.eventsCache.companies.onCompanyStateChanged += self.ec_onCompanyStateChanged
         return
 
     def __stopListening(self):
         """
         Unsubscribe from player and system events.
         """
-        self.eventsCache.companies.onCompanyStateChanged -= self.ec_onCompanyStateChanged
         g_playerEvents.onPrebattleJoined -= self.pe_onPrebattleJoined
         g_playerEvents.onPrebattleJoinFailure -= self.pe_onPrebattleJoinFailure
         g_playerEvents.onPrebattleLeft -= self.pe_onPrebattleLeft
@@ -806,10 +773,6 @@ class _PreBattleDispatcher(ListenersCollection):
         unitBrowser = prb_getters.getClientUnitBrowser()
         if unitBrowser:
             unitBrowser.onErrorReceived -= self.unitBrowser_onErrorReceived
-        fortMgr = getClientFortMgr()
-        if fortMgr:
-            fortMgr.onFortResponseReceived -= self.fortMgr_onFortResponseReceived
-            fortMgr.onFortStateChanged -= self.forMgr_onFortStateChanged
         g_prbCtrlEvents.clear()
 
     def __clear(self, woEvents=False):
@@ -919,7 +882,7 @@ class _PreBattleDispatcher(ListenersCollection):
             ctx: set entity context
         
         Returns:
-            initialization result as flags
+            integer containing initialization result as flags
         """
         created = self.__factories.createEntity(ctx)
         if created is not None:
@@ -1096,6 +1059,7 @@ class _PrbControlLoader(object):
         if self.__storage is None:
             self.__storage = PrbStorageDecorator()
             self.__storage.init()
+        g_playerEvents.onBootcampShowGUI += self.pe_onBootcampShowGUI
         return
 
     def fini(self):
@@ -1116,6 +1080,7 @@ class _PrbControlLoader(object):
         if self.__storage is not None:
             self.__storage.fini()
             self.__storage = None
+        g_playerEvents.onBootcampShowGUI -= self.pe_onBootcampShowGUI
         return
 
     def getDispatcher(self):
@@ -1241,6 +1206,11 @@ class _PrbControlLoader(object):
             self.__prbDispatcher.stop()
             self.__prbDispatcher = None
         return
+
+    def pe_onBootcampShowGUI(self, prbEnable):
+        self.onAccountShowGUI({})
+        if prbEnable:
+            self.setEnabled(True)
 
 
 g_prbLoader = _PrbControlLoader()

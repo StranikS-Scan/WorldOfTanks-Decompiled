@@ -162,7 +162,9 @@ class NotifyController(INotifyController):
 
     def __readSettings(self):
         try:
-            self.__settings = self.__settings._replace(**cPickle.loads(base64.b64decode(Settings.g_instance.userPrefs[Settings.KEY_GUI_NOTIFY_INFO].readString(''))))
+            userPrefs = Settings.g_instance.userPrefs
+            if userPrefs.has_key(Settings.KEY_GUI_NOTIFY_INFO):
+                self.__settings = self.__settings._replace(**cPickle.loads(base64.b64decode(userPrefs.readString(Settings.KEY_GUI_NOTIFY_INFO))))
         except Exception as msg:
             LOG_DEBUG('There is error while reading gui notifying settings', msg)
 

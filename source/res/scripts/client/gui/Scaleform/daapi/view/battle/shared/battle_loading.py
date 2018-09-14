@@ -59,7 +59,6 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     def invalidateArenaInfo(self):
         arenaDP = self._battleCtx.getArenaDP()
         self._setTipsInfo()
-        self.__addPlayerData(arenaDP)
 
     def arenaLoadCompleted(self):
         if not BattleReplay.isPlaying():
@@ -109,10 +108,6 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     def _addArenaTypeData(self):
         self.as_setMapIconS(SMALL_MAP_IMAGE_SF_PATH % self._arenaVisitor.type.getGeometryName())
         BigWorld.wg_setGUIBackground(self._battleCtx.getArenaScreenIcon())
-
-    def __addPlayerData(self, arenaDP):
-        vInfoVO = arenaDP.getVehicleInfo()
-        self.as_setPlayerDataS(vInfoVO.vehicleID, vInfoVO.getSquadID())
 
     def __makeVisualTipVO(self, arenaDP, tip=None):
         setting = self.settingsCore.options.getSetting(settings_constants.GAME.BATTLE_LOADING_INFO)

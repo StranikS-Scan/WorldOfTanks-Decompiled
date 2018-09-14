@@ -7,10 +7,9 @@ from collections import namedtuple
 from items import vehicles
 from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE
 from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, reprBitMaskFromDict
-from unit_roster_config import SortieRoster6, SortieRoster8, SortieRoster10, FortRoster8, FortRoster10, ClubRoster, SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
-from unit_helpers.ExtrasHandler import ClubExtrasHandler, SortieExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
@@ -33,7 +32,7 @@ class UNIT_FLAGS:
     SORTIES_FORBIDDEN = 64
     RATED_BATTLE_FORBIDDEN = 128
     IN_PRE_ARENA = 256
-    IS_WGSH_TEST = 512
+    IS_EXTERNAL_LOCK = 512
     IS_DYNAMIC = 1024
     DEFAULT = 0
     PRE_QUEUE = 0
@@ -47,8 +46,7 @@ UNIT_STATE_NAMES = buildNamesDict(UNIT_FLAGS)
 
 class UNIT_BROWSER_TYPE:
     NOT_RATED_UNITS = 1
-    RATED_CLUBS = 2
-    ALL = NOT_RATED_UNITS | RATED_CLUBS
+    ALL = NOT_RATED_UNITS
 
 
 UNIT_BROWSER_TYPE_NAMES = buildNamesDict(UNIT_BROWSER_TYPE)
@@ -132,7 +130,6 @@ class UNIT_ERROR:
     BAD_DIVISION = 64
     CANT_CHANGE_DIVISION = 65
     CANNOT_LEAD = 66
-    CLUB_CHECKOUT_FAIL = 67
     WRONG_UNITMGR = 68
     LEGIONARIES_FORBIDDEN = 69
     PREV_RATED_BATTLE_IN_PROGRESS = 70
@@ -140,7 +137,6 @@ class UNIT_ERROR:
     BAD_PARAMS = 72
     PLAYER_READY = 73
     SORTIES_FORBIDDEN = 74
-    RATED_BATTLE_FORBIDDEN = 75
     KICKED_PLAYER_AFTER_BATTLE = 76
     SPEC_BATTLE_END = 77
     BAD_VEHICLE_TYPE = 78
@@ -197,7 +193,6 @@ class UNIT_OP:
     CHANGE_ROLE = 14
     MODAL_TIMESTAMP = 15
     GIVE_LEADERSHIP = 16
-    CHANGE_DIVISION = 17
     EXTRAS_UPDATE = 18
     EXTRAS_RESET = 19
     GAMEPLAYS_MASK = 20
@@ -268,7 +263,6 @@ class UNIT_NOTIFY_CMD:
     SET_MEMBER_READY = 5
     KICK_ALL = 6
     EXTRAS_UPDATED = 7
-    SORTIE_DIVISION_CHANGE = 9
     FALLOUT_TYPE_CHANGE = 10
     AUTO_ASSEMBLED_MEMBER_ADDED = 11
     APPROVED_VEHICLE_LIST = 12
@@ -297,8 +291,6 @@ class CLIENT_UNIT_CMD:
     SET_UNIT_COMMENT = 17
     SET_UNIT_DEV_MODE = 18
     GIVE_LEADERSHIP = 19
-    CHANGE_SORTIE_DIVISION = 20
-    SET_RATED_BATTLE = 21
     SET_GAMEPLAYS_MASK = 22
     SET_VEHICLE_LIST = 23
     CHANGE_FALLOUT_TYPE = 24
@@ -315,14 +307,6 @@ class UNIT_NOTIFY_ID:
 
 class UNIT_MGR_FLAGS:
     DEFAULT = 0
-    SORTIE = 1
-    SORTIE_DIVISION_6 = 2
-    SORTIE_DIVISION_8 = 4
-    SORTIE_DIVISION_FLAG_MASK = SORTIE | SORTIE_DIVISION_8 | SORTIE_DIVISION_6
-    FORT_BATTLE = 8
-    FORT_BATTLE_DIVISION_8 = 16
-    FORT_BATTLE_DIVISION_FLAG_MASK = FORT_BATTLE | FORT_BATTLE_DIVISION_8
-    CLUBS = 32
     SQUAD = 64
     SPEC_BATTLE = 128
     FALLOUT_CLASSIC = 256
@@ -332,13 +316,7 @@ class UNIT_MGR_FLAGS:
 
 
 def _prebattleTypeFromFlags(flags):
-    if flags & UNIT_MGR_FLAGS.SORTIE:
-        return PREBATTLE_TYPE.SORTIE
-    elif flags & UNIT_MGR_FLAGS.FORT_BATTLE:
-        return PREBATTLE_TYPE.FORT_BATTLE
-    elif flags & UNIT_MGR_FLAGS.CLUBS:
-        return PREBATTLE_TYPE.CLUBS
-    elif flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
+    if flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
         return PREBATTLE_TYPE.FALLOUT
     elif flags & UNIT_MGR_FLAGS.EVENT:
         return PREBATTLE_TYPE.EVENT
@@ -353,13 +331,7 @@ def _prebattleTypeFromFlags(flags):
 
 
 def _entityNameFromFlags(flags):
-    if flags & UNIT_MGR_FLAGS.CLUBS:
-        return 'ClubUnitMgr'
-    elif flags & UNIT_MGR_FLAGS.SORTIE:
-        return 'ClanUnitMgr'
-    elif flags & UNIT_MGR_FLAGS.FORT_BATTLE:
-        return 'ClanUnitMgr'
-    elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
+    if flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
         return 'SpecUnitMgr'
     elif flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
         return 'FalloutUnitMgr'
@@ -375,66 +347,25 @@ def _entityNameFromFlags(flags):
 
 class ROSTER_TYPE:
     UNIT_ROSTER = 0
-    SORTIE_ROSTER_6 = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_6
-    SORTIE_ROSTER_8 = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8
-    SORTIE_ROSTER_10 = UNIT_MGR_FLAGS.SORTIE
-    FORT_ROSTER_8 = UNIT_MGR_FLAGS.FORT_BATTLE | UNIT_MGR_FLAGS.FORT_BATTLE_DIVISION_8
-    FORT_ROSTER_10 = UNIT_MGR_FLAGS.FORT_BATTLE
-    CLUB_ROSTER_10 = UNIT_MGR_FLAGS.CLUBS
     FALLOUT_CLASSIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.FALLOUT_CLASSIC
     FALLOUT_MULTITEAM_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM
     SQUAD_ROSTER = UNIT_MGR_FLAGS.SQUAD
     SPEC_ROSTER = UNIT_MGR_FLAGS.SPEC_BATTLE
     EVENT_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EVENT
     EXTERNAL_ROSTER = UNIT_MGR_FLAGS.EXTERNAL
-    _MASK = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8 | UNIT_MGR_FLAGS.SORTIE_DIVISION_6 | UNIT_MGR_FLAGS.FORT_BATTLE | UNIT_MGR_FLAGS.FORT_BATTLE_DIVISION_8 | CLUB_ROSTER_10 | SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | UNIT_MGR_FLAGS.EXTERNAL
+    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | UNIT_MGR_FLAGS.EXTERNAL
 
 
 class EXTRAS_HANDLER_TYPE:
     EMPTY = 0
-    FORT_BATTLE = 1
-    CLUBS = 2
-    SORTIE = 3
     SQUAD = 4
     SPEC_BATTLE = 5
     EXTERNAL = 6
 
 
-class SORTIE_DIVISION(object):
-    MIDDLE = 6
-    CHAMPION = 8
-    ABSOLUTE = 10
-    _ORDER = (MIDDLE, CHAMPION, ABSOLUTE)
-
-
-SORTIE_DIVISION_NAMES = dict([ (v, k) for k, v in SORTIE_DIVISION.__dict__.iteritems() if not k.startswith('_') ])
-SORTIE_DIVISION_NAME_TO_LEVEL = dict([ (v, k) for k, v in SORTIE_DIVISION_NAMES.iteritems() ])
-SORTIE_DIVISION_LEVEL_TO_FLAGS = {SORTIE_DIVISION.MIDDLE: ROSTER_TYPE.SORTIE_ROSTER_6,
- SORTIE_DIVISION.CHAMPION: ROSTER_TYPE.SORTIE_ROSTER_8,
- SORTIE_DIVISION.ABSOLUTE: ROSTER_TYPE.SORTIE_ROSTER_10}
-SORTIE_DIVISION_NAME_TO_FLAGS = dict([ (v, SORTIE_DIVISION_LEVEL_TO_FLAGS[k]) for k, v in SORTIE_DIVISION_NAMES.iteritems() ])
-SORTIE_DIVISION_FLAGS_TO_NAME = dict([ (flags, name) for name, flags in SORTIE_DIVISION_NAME_TO_FLAGS.iteritems() ])
-
-class FORT_BATTLE_DIVISION(object):
-    CHAMPION = 8
-    ABSOLUTE = 10
-    _ORDER = (CHAMPION, ABSOLUTE)
-
-
-FORT_BATTLE_DIVISION_NAMES = dict([ (v, k) for k, v in FORT_BATTLE_DIVISION.__dict__.iteritems() if not k.startswith('_') ])
-FORT_BATTLE_DIVISION_LEVEL_TO_FLAGS = {FORT_BATTLE_DIVISION.CHAMPION: ROSTER_TYPE.FORT_ROSTER_8,
- FORT_BATTLE_DIVISION.ABSOLUTE: ROSTER_TYPE.FORT_ROSTER_10}
-FORT_BATTLE_DIVISION_NAME_TO_FLAGS = dict([ (v, FORT_BATTLE_DIVISION_LEVEL_TO_FLAGS[k]) for k, v in FORT_BATTLE_DIVISION_NAMES.iteritems() ])
-FORT_BATTLE_DIVISION_FLAGS_TO_NAME = dict([ (flags, name) for name, flags in FORT_BATTLE_DIVISION_NAME_TO_FLAGS.iteritems() ])
 FALLOUT_QUEUE_TYPE_TO_ROSTER = {QUEUE_TYPE.FALLOUT_CLASSIC: ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER,
  QUEUE_TYPE.FALLOUT_MULTITEAM: ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER}
 ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
- ROSTER_TYPE.SORTIE_ROSTER_6: SortieRoster6,
- ROSTER_TYPE.SORTIE_ROSTER_8: SortieRoster8,
- ROSTER_TYPE.SORTIE_ROSTER_10: SortieRoster10,
- ROSTER_TYPE.FORT_ROSTER_8: FortRoster8,
- ROSTER_TYPE.FORT_ROSTER_10: FortRoster10,
- ROSTER_TYPE.CLUB_ROSTER_10: ClubRoster,
  ROSTER_TYPE.SQUAD_ROSTER: SquadRoster,
  ROSTER_TYPE.SPEC_ROSTER: SpecRoster,
  ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER: FalloutClassicRoster,
@@ -442,9 +373,6 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.EVENT_ROSTER: EventRoster,
  ROSTER_TYPE.EXTERNAL_ROSTER: SpecRoster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
- EXTRAS_HANDLER_TYPE.FORT_BATTLE: ClanBattleExtrasHandler,
- EXTRAS_HANDLER_TYPE.CLUBS: ClubExtrasHandler,
- EXTRAS_HANDLER_TYPE.SORTIE: SortieExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
  EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler,
  EXTRAS_HANDLER_TYPE.EXTERNAL: ExternalExtrasHandler}
@@ -469,7 +397,6 @@ class UnitBase(OpsUnpacker):
      UNIT_OP.CHANGE_ROLE: ('qH', '_changePlayerRole'),
      UNIT_OP.MODAL_TIMESTAMP: ('i', '_setModalTimestamp'),
      UNIT_OP.GIVE_LEADERSHIP: ('Q', '_giveLeadership'),
-     UNIT_OP.CHANGE_DIVISION: ('i', '_changeSortieDivision'),
      UNIT_OP.EXTRAS_UPDATE: ('',
                              'updateUnitExtras',
                              'S',
@@ -810,9 +737,6 @@ class UnitBase(OpsUnpacker):
     def isSortiesForbidden(self):
         return bool(self._flags & UNIT_FLAGS.SORTIES_FORBIDDEN)
 
-    def isRatedBattleForbidden(self):
-        return bool(self._flags & UNIT_FLAGS.RATED_BATTLE_FORBIDDEN)
-
     def isDynamic(self):
         return bool(self._flags & UNIT_FLAGS.IS_DYNAMIC)
 
@@ -820,7 +744,7 @@ class UnitBase(OpsUnpacker):
         return bool(self._rosterTypeID & UNIT_MGR_FLAGS.SQUAD)
 
     def shouldPublish(self):
-        return not (self.isInviteOnly() or self.isSortiesForbidden() or self.isRatedBattleForbidden())
+        return not (self.isInviteOnly() or self.isSortiesForbidden())
 
     def __repr__(self):
         repr = 'Unit(\n  _members len=%s {' % len(self._members)
@@ -1127,37 +1051,6 @@ class UnitBase(OpsUnpacker):
             for indx in xrange(prevMax, newMax):
                 self._freeSlots.add(indx)
 
-    def _getSortieRosterType(self, division):
-        prevRosterTypeID = self._rosterTypeID
-        newRosterTypeID = SORTIE_DIVISION_LEVEL_TO_FLAGS.get(division, None)
-        if newRosterTypeID is None:
-            LOG_DEBUG_DEV('Wrong division={}.', division)
-            return
-        elif newRosterTypeID == prevRosterTypeID:
-            LOG_DEBUG_DEV('Division has not changed.')
-            return
-        RosterType = ROSTER_TYPE_TO_CLASS.get(newRosterTypeID, None)
-        if RosterType is None:
-            LOG_DEBUG_DEV('Wrong RosterTypeID={}', newRosterTypeID)
-            return
-        else:
-            return (newRosterTypeID, RosterType)
-
-    def _changeSortieDivision(self, division):
-        prevRosterTypeID = self._rosterTypeID
-        prevRoster = self._roster
-        LOG_DEBUG_DEV('Previous roster type: {0} : {1}', prevRosterTypeID, prevRoster.__class__)
-        res = self._getSortieRosterType(division)
-        if res is None:
-            return False
-        else:
-            self._rosterTypeID, RosterType = res
-            self._roster = RosterType()
-            LOG_DEBUG_DEV('New roster type: {0} : {1}', self._rosterTypeID, self._roster.__class__)
-            self._refreshFreeSlots(prevRoster.MAX_SLOTS, self._roster.MAX_SLOTS)
-            self.storeOp(UNIT_OP.CHANGE_DIVISION, division)
-            return True
-
     def _getFalloutRosterType(self, queueType):
         prevRosterTypeID = self._rosterTypeID
         newRosterTypeID = FALLOUT_QUEUE_TYPE_TO_ROSTER.get(queueType, None)
@@ -1191,9 +1084,6 @@ class UnitBase(OpsUnpacker):
 
     def _getLeaderDBID(self):
         return self._members.get(LEADER_SLOT, {}).get('accountDBID', 0)
-
-    def isRatedBattle(self):
-        return bool(self._extras.get('isRatedBattle'))
 
     def isMultiVehicle(self):
         return self._roster.MAX_VEHICLES > 1

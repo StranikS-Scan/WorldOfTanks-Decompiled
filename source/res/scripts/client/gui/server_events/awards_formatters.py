@@ -307,12 +307,18 @@ class VehiclesBonusFormatter(SimpleBonusFormatter):
 
             tmanRoleLevel = bonus.getTmanRoleLevel(vehInfo)
             rentDays = bonus.getRentDays(vehInfo)
+            rentBattles = bonus.getRentBattles(vehInfo)
+            rentWins = bonus.getRentWins(vehInfo)
             if rentDays:
                 rentExpiryTime = time_utils.getCurrentTimestamp()
                 rentExpiryTime += rentDays * time_utils.ONE_DAY
             else:
                 rentExpiryTime = 0
-            result.append(PreformattedBonus(userName=self._getUserName(vehicle), images=self._getImages(rentDays), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_VEHICLE, specialArgs=[vehicle.intCD, tmanRoleLevel, rentExpiryTime], isCompensation=self._isCompensation(bonus)))
+            result.append(PreformattedBonus(userName=self._getUserName(vehicle), images=self._getImages(rentDays or rentBattles or rentWins), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_VEHICLE, specialArgs=[vehicle.intCD,
+             tmanRoleLevel,
+             rentExpiryTime,
+             rentBattles,
+             rentWins], isCompensation=self._isCompensation(bonus)))
 
         return result
 
@@ -320,10 +326,10 @@ class VehiclesBonusFormatter(SimpleBonusFormatter):
         return vehicle.userName
 
     @classmethod
-    def _getImages(cls, rentDays):
+    def _getImages(cls, rent):
         result = {}
         for size in AWARDS_SIZES.ALL():
-            if rentDays:
+            if rent:
                 image = RES_ICONS.getRentVehicleAwardIcon(size)
             else:
                 image = RES_ICONS.getVehicleAwardIcon(size)

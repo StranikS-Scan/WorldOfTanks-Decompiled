@@ -144,7 +144,8 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
             rankLeftVO = self._buildRankVO(nextRank)
             return self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, steps=steps, countText=countText)
         else:
-            if currentRank.isNewForPlayer():
+            skipNewRankCheck = currentRankID == 1 and self.rankedController.wasAwardWindowShown() and not self._isHuge()
+            if currentRank.isNewForPlayer() and not skipNewRankCheck:
                 if lastRank.isAcquired():
                     self._addSoundEvent(RANKEDBATTLES_ALIASES.RANK_RECEIVE_STATE, currentRank)
                     if currentRankID == 1 and not self._isHuge():

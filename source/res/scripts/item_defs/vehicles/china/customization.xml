@@ -5,6 +5,7 @@
   <xmlns:france>	france	</xmlns:france>
   <xmlns:uk>	uk	</xmlns:uk>
   <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:poland>	poland	</xmlns:poland>
   <xmlns:china>	china	</xmlns:china>
   <xmlns:japan>	japan	</xmlns:japan>
   <xmlns:sweden>	sweden	</xmlns:sweden>
@@ -267,6 +268,7 @@
         <Ch21_T34>	5.7 5.7 0.57 0.4	</Ch21_T34>
         <Ch14_T34_3>	4.8 4.5 0.78 0.68	</Ch14_T34_3>
         <Ch22_113>	3 3 0.4 2.6	</Ch22_113>
+        <Ch22_113P>	3 3 0.4 2.6	</Ch22_113P>
         <Ch23_112>	4 4 0.5 0.21	</Ch23_112>
         <Ch24_Type64>	4 4 0.83 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	4.5 4.5 0.36 0.000000	</Ch17_WZ131_1_WZ132_IGR>
@@ -279,8 +281,18 @@
         <Ch29_Type_62C_prot>	0.5 0.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.8 1.8 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4.8 4.8 1.5 1.5	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	8.1 8.1 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	3.3 3.3 0.3 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.8 3.8 5.5 7.8	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.4 3.4 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3.3 3.3 3.7 2.6	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.8 1.8 1 0.5	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.3 1.3 0.8 0.9	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1.2 1.2 0.4 1.2	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	6.5 6.5 0.8 2.3	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.7 2.7 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_01>
     <china_historical_02>
       <texture>	vehicles/chinese/Camouflage/china_historical_02.dds	</texture>
@@ -318,6 +330,7 @@
         <Ch21_T34>	3.7 3.7 0.12 0.000000	</Ch21_T34>
         <Ch14_T34_3>	5.5 5.7 0.5 0.37	</Ch14_T34_3>
         <Ch22_113>	2.7 2.7 0.41 0.000000	</Ch22_113>
+        <Ch22_113P>	2.7 2.7 0.41 0.000000	</Ch22_113P>
         <Ch23_112>	3.2 3.2 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	4.5 4.5 0.000000 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.07 0.000000	</Ch17_WZ131_1_WZ132_IGR>
@@ -330,8 +343,18 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.5 1.5 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	7 7 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6 6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.5 2.5 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.2 3.2 0.000000 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.2 3.2 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3.2 3.2 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.3 1.3 0.1 0.5	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.5 1.5 1 1	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1.1 1.1 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	6.8 6.8 0.4 0.2	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.4 2.4 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_02>
     <china_historical_03>
       <texture>	vehicles/chinese/Camouflage/china_historical_03.dds	</texture>
@@ -369,6 +392,7 @@
         <Ch21_T34>	3.5 1.8 0.28 0.33	</Ch21_T34>
         <Ch14_T34_3>	4.1 4.3 0.77 0.000000	</Ch14_T34_3>
         <Ch22_113>	2.4 2.4 4.3 0.000000	</Ch22_113>
+        <Ch22_113P>	2.4 2.4 4.3 0.000000	</Ch22_113P>
         <Ch23_112>	3.3 3.3 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	4 4 0.000000 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	4.5 4.5 0.09 0.000000	</Ch17_WZ131_1_WZ132_IGR>
@@ -380,8 +404,18 @@
         <Ch28_WZ_132A>	1 1 0.000000 0.000000	</Ch28_WZ_132A>
         <Ch39_WZ120_1G_FT>	1.5 1.5 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4.8 4.8 1.9 2.5	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	8.2 8.2 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.2 2.2 0.4 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.6 2.6 4.2 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	1.8 1.8 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.7 2.7 5.9 1.1	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.3 1.3 1.7 0.000000	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.2 1.2 0.5 0.1	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1 1 1.6 0.9	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	6 6 1.1 1.1	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.4 2.9 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_03>
     <china_historical_04>
       <texture>	vehicles/chinese/Camouflage/china_historical_04.dds	</texture>
@@ -419,6 +453,7 @@
         <Ch21_T34>	3.8 3.8 0.05 0.1	</Ch21_T34>
         <Ch14_T34_3>	3 3.2 0.07 0.36	</Ch14_T34_3>
         <Ch22_113>	2.4 2.4 0.46 0.000000	</Ch22_113>
+        <Ch22_113P>	2.4 2.4 0.46 0.000000	</Ch22_113P>
         <Ch23_112>	3.1 3.1 0.42 0.000000	</Ch23_112>
         <Ch24_Type64>	4 4 0.6 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3 3 0.12 0.12	</Ch17_WZ131_1_WZ132_IGR>
@@ -430,8 +465,18 @@
         <Ch28_WZ_132A>	1.3 1.3 0.000000 0.000000	</Ch28_WZ_132A>
         <Ch29_Type_62C_prot>	0.7 0.7 1.8 3	</Ch29_Type_62C_prot>
         <Ch40_WZ120G_FT>	7 7 4.6 4.5	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	5.5 5.5 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.6 2.6 0.9 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	1.6 1.6 5 5.4	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3.2 3.2 1.7 2.8	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 1.3 0.6	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.5 1.5 0.5 0.000000	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1.1 1.1 0.9 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.7 5.7 1.5 3.8	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_04>
     <china_historical_05>
       <texture>	vehicles/chinese/Camouflage/china_historical_05.dds	</texture>
@@ -469,6 +514,7 @@
         <Ch21_T34>	5.4 4.9 0.34 0.16	</Ch21_T34>
         <Ch14_T34_3>	5.1 5 0.6 0.49	</Ch14_T34_3>
         <Ch22_113>	4.6 4.6 1.3 0.000000	</Ch22_113>
+        <Ch22_113P>	4.6 4.6 1.3 0.000000	</Ch22_113P>
         <Ch23_112>	5.2 5.2 0.52 0.000000	</Ch23_112>
         <Ch24_Type64>	5 5 0.000000 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	6 6 0.16 0.33	</Ch17_WZ131_1_WZ132_IGR>
@@ -481,8 +527,18 @@
         <Ch29_Type_62C_prot>	1.1 1.1 4 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	2.2 2.2 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	8.5 8.5 3.3 2	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	5.2 5.2 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	3.3 3.3 1.6 0.3	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.5 3.5 4.9 4.7	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	4.9 4.9 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	2.3 2.3 0.3 0.000000	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	2 2 4.8 1.8	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1.3 1.3 1.9 0.8	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	8.9 8.9 0.000000 0.000000	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	3.9 3.9 0.8 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_05>
     <china_historical_06>
       <texture>	vehicles/chinese/Camouflage/china_historical_06.dds	</texture>
@@ -520,6 +576,7 @@
         <Ch21_T34>	3.4 3.7 0.5 0.22	</Ch21_T34>
         <Ch14_T34_3>	3.6 3.7 0.34 0.21	</Ch14_T34_3>
         <Ch22_113>	2.8 2.8 0.7 0.35	</Ch22_113>
+        <Ch22_113P>	2.8 2.8 0.7 0.35	</Ch22_113P>
         <Ch23_112>	3 3 0.06 0.000000	</Ch23_112>
         <Ch24_Type64>	2.5 2.5 0.000000 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	4.5 4.5 0.06 0.13	</Ch17_WZ131_1_WZ132_IGR>
@@ -532,8 +589,18 @@
         <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.1 1.1 0.000000 0.4	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	7.5 7.5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	5.6 5.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.8 1.8 0.2 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	1.9 1.9 6.3 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.5 2.5 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3.4 3.4 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.1 1.1 0.6 0.5	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.8 1.8 0.8 0.6	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.8 0.8 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	7.8 7.8 0.4 0.5	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.1 2.1 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_06>
     <china_historical_07>
       <texture>	vehicles/chinese/Camouflage/china_historical_07.dds	</texture>
@@ -571,6 +638,7 @@
         <Ch21_T34>	3.7 3.8 0.36 0.26	</Ch21_T34>
         <Ch14_T34_3>	4.8 4.4 0.31 0.48	</Ch14_T34_3>
         <Ch22_113>	2.5 2.5 0.25 0.25	</Ch22_113>
+        <Ch22_113P>	2.5 2.5 0.25 0.25	</Ch22_113P>
         <Ch23_112>	2.2 2.2 0.3 0.6	</Ch23_112>
         <Ch24_Type64>	3.5 3.5 5.6 5.9	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.2 0.13	</Ch17_WZ131_1_WZ132_IGR>
@@ -583,8 +651,18 @@
         <Ch29_Type_62C_prot>	0.8 0.8 3.4 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.5 1.5 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	6.2 6.2 2.7 1.4	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	5.3 5.3 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.4 2.4 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.5 3.5 0.000000 0.7	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.4 3.4 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.1 2.1 0.000000 0.9	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.5 1.5 0.9 0.7	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.3 1.3 1.1 0.9	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1.2 1.2 0.2 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	7 7 2.6 1.3	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_07>
     <china_historical_08>
       <texture>	vehicles/chinese/Camouflage/china_historical_08.dds	</texture>
@@ -622,6 +700,7 @@
         <Ch21_T34>	3.5 3.9 0.24 0.12	</Ch21_T34>
         <Ch14_T34_3>	4.8 4.4 0.21 0.24	</Ch14_T34_3>
         <Ch22_113>	2.9 2.9 0.2 0.48	</Ch22_113>
+        <Ch22_113P>	2.9 2.9 0.2 0.48	</Ch22_113P>
         <Ch23_112>	2.2 2.2 0.71 0.06	</Ch23_112>
         <Ch24_Type64>	4 4 0.000000 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.2 0.2	</Ch17_WZ131_1_WZ132_IGR>
@@ -634,8 +713,18 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.6 1.6 0.7 0.4	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	6 6 1.2 2.9	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	5.9 5.9 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.5 2.5 0.1 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.6 3.6 2.4 8.4	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3.1 3.1 7.1 5.4	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.6 1.6 0.7 0.5	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.7 1.7 1.4 0.3	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1 1 4.5 7.9	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.3 5.3 0.3 2.5	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.3 2.3 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_08>
     <china_historical_09>
       <texture>	vehicles/chinese/Camouflage/china_historical_09.dds	</texture>
@@ -673,6 +762,7 @@
         <Ch21_T34>	5.1 5.1 0.59 0.38	</Ch21_T34>
         <Ch14_T34_3>	4.8 4.4 0.6 0.35	</Ch14_T34_3>
         <Ch22_113>	2.8 2.8 0.54 0.71	</Ch22_113>
+        <Ch22_113P>	2.8 2.8 0.54 0.71	</Ch22_113P>
         <Ch23_112>	3.2 3.2 0.69 0.26	</Ch23_112>
         <Ch24_Type64>	2.5 2.5 0.18 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	4 4 0.000000 6	</Ch17_WZ131_1_WZ132_IGR>
@@ -685,8 +775,18 @@
         <Ch29_Type_62C_prot>	2 2 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	2.1 2.1 3.2 1.1	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	7.5 7.5 1.7 0.6	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	7.4 7.4 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	4 4 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.4 3.4 1.8 0.9	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	4.3 4.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.7 2.7 0.5 0.8	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	2.2 2.2 1.6 1.3	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.2 1.2 0.7 0.6	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1 1 3.3 6.5	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5 5 1.9 0.7	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.8 2.8 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_09>
     <china_historical_10>
       <texture>	vehicles/chinese/Camouflage/china_historical_10.dds	</texture>
@@ -724,6 +824,7 @@
         <Ch21_T34>	4.8 5.7 0.81 0.13	</Ch21_T34>
         <Ch14_T34_3>	5.3 4.7 0.15 0.45	</Ch14_T34_3>
         <Ch22_113>	2 2 0.6 0.33	</Ch22_113>
+        <Ch22_113P>	2 2 0.6 0.33	</Ch22_113P>
         <Ch23_112>	2.4 2.4 0.86 0.000000	</Ch23_112>
         <Ch24_Type64>	3.5 3.5 0.24 3.8	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3 3 0.2 0.000000	</Ch17_WZ131_1_WZ132_IGR>
@@ -736,8 +837,18 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.6 1.6 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	7 7 0.8 0.1	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.1 6.1 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	3.2 3.2 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.2 3.2 0.8 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.5 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.9 2.9 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.8 1.8 1.2 1.9	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.5 0.2	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1 1 0.7 5	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	6.2 6.2 1.1 2.4	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.7 2.7 1 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_10>
     <china_historical_11>
       <texture>	vehicles/chinese/Camouflage/china_historical_11.dds	</texture>
@@ -775,6 +886,7 @@
         <Ch21_T34>	5 3.4 0.19 0.18	</Ch21_T34>
         <Ch14_T34_3>	6.5 6.8 0.62 0.33	</Ch14_T34_3>
         <Ch22_113>	3.2 3.2 0.22 0.37	</Ch22_113>
+        <Ch22_113P>	3.2 3.2 0.22 0.37	</Ch22_113P>
         <Ch23_112>	4.4 4.4 0.83 0.9	</Ch23_112>
         <Ch24_Type64>	4.7 4.7 6.5 1.8	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	6 6 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
@@ -787,8 +899,18 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.9 1.9 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	5.8 5.8 0.2 0.7	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	9.3 9.3 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.6 2.6 0.000000 0.2	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.3 3.3 2.5 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	4.7 4.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	5.1 5.1 0.000000 0.1	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	2 2 0.5 0.3	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.4 1.4 0.9 0.5	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1.1 1.1 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.2 5.2 0.5 1.5	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	3 3 0.000000 0.6	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_11>
     <china_historical_12>
       <texture>	vehicles/chinese/Camouflage/china_historical_12.dds	</texture>
@@ -826,6 +948,7 @@
         <Ch21_T34>	3.9 4.1 0.34 0.12	</Ch21_T34>
         <Ch14_T34_3>	4.8 4.4 0.63 0.71	</Ch14_T34_3>
         <Ch22_113>	2.7 2.7 0.6 0.43	</Ch22_113>
+        <Ch22_113P>	2.7 2.7 0.6 0.43	</Ch22_113P>
         <Ch23_112>	3.1 3.1 0.14 0.22	</Ch23_112>
         <Ch24_Type64>	4 4 3.2 8.9	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 3.4 3.6	</Ch17_WZ131_1_WZ132_IGR>
@@ -838,8 +961,18 @@
         <Ch29_Type_62C_prot>	1 1 0.5 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1 1 2.2 1.4	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	5.6 5.6 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.1 6.1 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.8 2.8 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	1.5 1.5 0.000000 7.6	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.9 2.9 0.4 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 1.6 1	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.000000 1	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1 1 3 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.6 5.6 3.5 5.5	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.6 2.6 3.4 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_12>
     <china_historical_13>
       <texture>	vehicles/chinese/Camouflage/china_historical_13.dds	</texture>
@@ -877,6 +1010,7 @@
         <Ch21_T34>	4.8 4.8 0.16 0.1	</Ch21_T34>
         <Ch14_T34_3>	4.8 4.4 0.73 0.33	</Ch14_T34_3>
         <Ch22_113>	3.5 3.5 0.7 0.25	</Ch22_113>
+        <Ch22_113P>	3.5 3.5 0.7 0.25	</Ch22_113P>
         <Ch23_112>	3.5 3.5 0.43 0.000000	</Ch23_112>
         <Ch24_Type64>	3.5 3.5 0.4 0.43	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	4 4 3.8 5.5	</Ch17_WZ131_1_WZ132_IGR>
@@ -889,8 +1023,18 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1 1 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	5.7 5.7 2.3 2.8	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.1 6.1 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.6 1.6 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	1.6 1.6 6.2 5.3	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3.8 3.8 0.000000 2.5	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 0.2 0.7	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1 1 0.5 0.000000	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1 1 0.6 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	4.2 4.2 0.8 1	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.7 2.7 0.5 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_13>
     <china_historical_14>
       <texture>	vehicles/chinese/Camouflage/china_historical_14.dds	</texture>
@@ -928,6 +1072,7 @@
         <Ch21_T34>	5 5 0.64 0.58	</Ch21_T34>
         <Ch14_T34_3>	5.8 5.4 0.77 0.57	</Ch14_T34_3>
         <Ch22_113>	4.3 4.3 0.28 0.34	</Ch22_113>
+        <Ch22_113P>	4.3 4.3 0.28 0.34	</Ch22_113P>
         <Ch23_112>	6 6 0.33 0.3	</Ch23_112>
         <Ch24_Type64>	4 4 0.7 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	5 5 5.1 7.1	</Ch17_WZ131_1_WZ132_IGR>
@@ -940,8 +1085,18 @@
         <Ch29_Type_62C_prot>	1.3 1.3 4.7 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.8 1.8 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	8 8 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	9.2 9.2 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.9 2.9 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.5 2.5 6.2 4.3	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	6 6 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	5.2 5.2 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	2 2 0.2 0.8	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.3 1.3 0.9 0.5	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1.2 1.2 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	7 7 0.7 1.1	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_14>
     <china_historical_winter>
       <texture>	vehicles/chinese/Camouflage/china_historical_winter.dds	</texture>
@@ -979,6 +1134,7 @@
         <Ch21_T34>	3.9 4 0.000000 0.000000	</Ch21_T34>
         <Ch14_T34_3>	3.9 4 0.000000 0.000000	</Ch14_T34_3>
         <Ch22_113>	1.6 1.6 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	1.6 1.6 0.000000 0.000000	</Ch22_113P>
         <Ch23_112>	3.4 3.5 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	5 5 0.000000 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	4.3 4.3 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
@@ -987,8 +1143,15 @@
         <Ch26_59_Patton>	4.7 4.7 0.000000 0.000000	</Ch26_59_Patton>
         <Ch29_Type_62C_prot>	4.4 4.4 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch40_WZ120G_FT>	8 8 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	3 3 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.5 1.5 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.8 3.8 0.000000 0.000000	</Ch32_SU-76G_FT>
+        <Ch36_WZ111_1G_FT>	3 3 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1 1 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	2.3 2.3 3 6.4	</Ch33_60G_FT>
+        <Ch37_WZ111G_FT>	4.5 4.5 0.000000 0.000000	</Ch37_WZ111G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_winter>
     <china_historical_winter_2>
       <texture>	vehicles/chinese/Camouflage/china_historical_winter_2.dds	</texture>
@@ -1025,6 +1188,7 @@
         <Ch15_59_16>	2.6 2.6 0.54 1.4	</Ch15_59_16>
         <Ch14_T34_3>	4.8 4.5 0.26 0.1	</Ch14_T34_3>
         <Ch22_113>	2.5 2.5 0.87 0.78	</Ch22_113>
+        <Ch22_113P>	2.5 2.5 0.87 0.78	</Ch22_113P>
         <Ch20_Type58>	5.2 5.2 0.68 0.78	</Ch20_Type58>
         <Ch04_T34_1_training>	3.3 3.2 0.3 0.21	</Ch04_T34_1_training>
         <Ch23_112>	3.7 3.7 0.000000 0.000000	</Ch23_112>
@@ -1039,8 +1203,18 @@
         <Ch29_Type_62C_prot>	0.8 0.8 0.3 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.6 1.6 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	6.4 6.4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	8.1 8.1 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.5 2.5 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.3 3.3 0.3 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3.3 3.3 2.1 2.5	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.8 1.8 0.3 1.7	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.7 1.7 2.9 1.5	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1 1 0.6 0.3	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	7.1 7.1 0.6 0.4	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.1 2.1 0.000000 0.7	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_winter_2>
     <china_historical_desert>
       <texture>	vehicles/chinese/Camouflage/china_historical_desert.dds	</texture>
@@ -1078,6 +1252,7 @@
         <Ch21_T34>	3.1 3.1 0.18 0.1	</Ch21_T34>
         <Ch14_T34_3>	5 4.4 0.63 0.33	</Ch14_T34_3>
         <Ch22_113>	2 2 0.7 0.000000	</Ch22_113>
+        <Ch22_113P>	2 2 0.7 0.000000	</Ch22_113P>
         <Ch23_112>	2.1 2.1 0.000000 0.3	</Ch23_112>
         <Ch24_Type64>	3 3 0.000000 2.8	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3 3 0.2 0.000000	</Ch17_WZ131_1_WZ132_IGR>
@@ -1090,8 +1265,18 @@
         <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.4 1.4 1.3 1.1	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	3.6 3.6 0.5 0.5	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.4 6.4 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.1 2.1 0.000000 0.7	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.8 2.8 1.3 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.5 2.5 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3.2 3.2 0.000000 4.5	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.8 1.8 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.1 0.6	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.9 0.9 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	3.6 3.6 2.2 1.8	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.1 2.1 0.5 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </china_historical_desert>
     <china_victim_yellow>
       <texture>	vehicles/chinese/Camouflage/china_gold.dds	</texture>
@@ -1099,7 +1284,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description></description>
       <id>	46	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
@@ -1129,6 +1314,7 @@
         <Ch20_Type58>	3.8 3.8 0.24 0.1	</Ch20_Type58>
         <Ch21_T34>	4.6 4.5 0.8 0.6	</Ch21_T34>
         <Ch22_113>	3.2 3.2 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	3.2 3.2 0.000000 0.000000	</Ch22_113P>
         <Ch23_112>	3.4 3.4 1.1 0.7	</Ch23_112>
         <Ch24_Type64>	3.5 3.5 3.5 3.4	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132_IGR>
@@ -1141,6 +1327,15 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.4 1.4 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.6 6.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2 2 0.2 0.1	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.9 2.9 0.8 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	4 4 0.000000 1.2	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.4 1.4 1 0.1	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.6 1.6 0.7 0.3	</Ch33_60G_FT>
+        <Ch37_WZ111G_FT>	4.4 4.4 0.8 0.1	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	true	</notInShop>
     </china_victim_yellow>
@@ -1150,7 +1345,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description></description>
       <id>	47	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
@@ -1180,6 +1375,7 @@
         <Ch20_Type58>	4.8 4.8 0.18 0.32	</Ch20_Type58>
         <Ch21_T34>	4.9 5.1 0.15 0.07	</Ch21_T34>
         <Ch22_113>	2.9 2.9 0.1 0.22	</Ch22_113>
+        <Ch22_113P>	2.9 2.9 0.1 0.22	</Ch22_113P>
         <Ch23_112>	3.4 3.4 1.1 0.7	</Ch23_112>
         <Ch24_Type64>	3.5 3.5 3.5 3.4	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132_IGR>
@@ -1192,6 +1388,15 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.4 1.4 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4 4 0.5 0.5	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.6 6.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.3 2.3 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.9 2.9 0.8 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	4 4 0.000000 1.2	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.4 1.4 1 0.1	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.2 1.2 0.3 0.2	</Ch33_60G_FT>
+        <Ch37_WZ111G_FT>	4.4 4.4 0.8 0.1	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	true	</notInShop>
     </china_victim_red>
@@ -1201,7 +1406,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description></description>
       <id>	48	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
@@ -1231,6 +1436,7 @@
         <Ch20_Type58>	3 3 0.52 0.52	</Ch20_Type58>
         <Ch21_T34>	5.1 5.2 0.46 0.22	</Ch21_T34>
         <Ch22_113>	3.4 3.4 0.28 0.07	</Ch22_113>
+        <Ch22_113P>	3.4 3.4 0.28 0.07	</Ch22_113P>
         <Ch23_112>	3.4 3.4 1.1 0.7	</Ch23_112>
         <Ch24_Type64>	3.5 3.5 3.5 3.4	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132_IGR>
@@ -1243,6 +1449,15 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.4 1.4 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4 4 2.5 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.6 6.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.6 1.6 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.9 2.9 0.8 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	4 4 0.000000 1.2	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.4 1.4 1 0.1	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.4 1.4 0.3 0.000000	</Ch33_60G_FT>
+        <Ch37_WZ111G_FT>	4.4 4.4 0.8 0.1	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	true	</notInShop>
     </china_victim_black>
@@ -1252,7 +1467,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description></description>
       <id>	49	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
@@ -1282,6 +1497,7 @@
         <Ch20_Type58>	4.6 4.6 0.000000 0.000000	</Ch20_Type58>
         <Ch21_T34>	5.2 6.1 0.69 0.13	</Ch21_T34>
         <Ch22_113>	3 3 0.21 0.21	</Ch22_113>
+        <Ch22_113P>	3 3 0.21 0.21	</Ch22_113P>
         <Ch23_112>	3.4 3.4 1.1 0.7	</Ch23_112>
         <Ch24_Type64>	3.5 3.5 3.5 3.4	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.49 5.6	</Ch17_WZ131_1_WZ132_IGR>
@@ -1294,6 +1510,14 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.4 1.4 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.6 6.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.4 2.4 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.9 2.9 0.8 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.6 3.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch38_WZ113G_FT>	1.4 1.4 1 0.1	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.6 1.6 0.4 0.3	</Ch33_60G_FT>
+        <Ch37_WZ111G_FT>	4.4 4.4 0.8 0.1	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	true	</notInShop>
     </china_victim_silver>
@@ -1305,7 +1529,7 @@
       <id>	64	</id>
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <colors>
         <c0>	75 75 75 185	</c0>
         <c1>	0 0 0 188	</c1>
@@ -1333,6 +1557,7 @@
         <Ch20_Type58>	3.2 3.4 0.000000 0.000000	</Ch20_Type58>
         <Ch21_T34>	2.5 2.6 0.05 0.14	</Ch21_T34>
         <Ch22_113>	2.2 2.2 0.09 0.15	</Ch22_113>
+        <Ch22_113P>	2.2 2.2 0.09 0.15	</Ch22_113P>
         <Ch24_Type64>	2.5 2.5 0.38 6	</Ch24_Type64>
         <Ch14_T34_3>	4.8 4.4 0.6 0.33	</Ch14_T34_3>
         <Ch23_112>	2.7 2.7 0.6 0.9	</Ch23_112>
@@ -1346,6 +1571,16 @@
         <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1 1 3.4 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	5.8 5.8 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.5 1.5 0.4 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	1.9 1.9 3 2.1	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.6 2.6 1.2 0.6	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.3 1.3 4.2 2.9	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.3 0.5	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.4 0.4 3 1	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.7 5.7 1 0.2	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.1 2.1 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	false	</notInShop>
     </IGR_Winter>
@@ -1357,7 +1592,7 @@
       <id>	65	</id>
       <kind>	summer	</kind>
       <group>	IGRsummer	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <colors>
         <c0>	61 86 35 206	</c0>
         <c1>	226 210 154 202	</c1>
@@ -1385,6 +1620,7 @@
         <Ch20_Type58>	3.1 3.2 0.000000 0.000000	</Ch20_Type58>
         <Ch21_T34>	2.5 2.5 0.06 0.000000	</Ch21_T34>
         <Ch22_113>	2.2 2.2 0.4 0.6	</Ch22_113>
+        <Ch22_113P>	2.2 2.2 0.4 0.6	</Ch22_113P>
         <Ch23_112>	2.8 2.8 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	2.7 2.7 0.000000 6.5	</Ch24_Type64>
         <Ch14_T34_3>	4.6 4.4 0.62 0.33	</Ch14_T34_3>
@@ -1398,6 +1634,16 @@
         <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.1 1.1 1.4 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4.1 4.1 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.9 6.9 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2 2 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	1.6 1.6 2.5 9.3	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.3 3.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3.4 3.4 1.1 3	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.3 1.3 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1 1 0.5 0.4	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.8 0.8 0.000000 1.5	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	4.6 4.6 1 0.9	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	false	</notInShop>
     </IGR_Summer>
@@ -1409,7 +1655,7 @@
       <id>	66	</id>
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <colors>
         <c0>	196 126 34 225	</c0>
         <c1>	226 210 154 221	</c1>
@@ -1437,6 +1683,7 @@
         <Ch20_Type58>	2 2.1 0.1 0.13	</Ch20_Type58>
         <Ch21_T34>	2.3 2.5 0.24 0.000000	</Ch21_T34>
         <Ch22_113>	2 2 0.38 0.56	</Ch22_113>
+        <Ch22_113P>	2 2 0.38 0.56	</Ch22_113P>
         <Ch23_112>	2.2 2.2 0.56 0.02	</Ch23_112>
         <Ch24_Type64>	2 2 0.000000 0.000000	</Ch24_Type64>
         <Ch05_T34_2>	3 3 0.000000 0.000000	</Ch05_T34_2>
@@ -1450,6 +1697,15 @@
         <Ch29_Type_62C_prot>	0.5 0.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1 1 2.5 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4.5 4.5 2 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	4.7 4.7 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.9 1.9 0.4 0.4	</Ch34_WZ131G_FT>
+        <Ch41_WZ_111_5A>	2.4 2.4 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.6 2.6 0.000000 0.5	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 0.1 0.3	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.4 0.3	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.5 0.5 0.4 0.5	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.4 5.4 0.3 0.6	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	false	</notInShop>
     </IGR_Desert>
@@ -1461,7 +1717,7 @@
       <id>	71	</id>
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <colors>
         <c0>	32 35 43 217	</c0>
         <c1>	101 74 50 165	</c1>
@@ -1490,6 +1746,7 @@
         <Ch20_Type58>	5 5 0.000000 0.000000	</Ch20_Type58>
         <Ch21_T34>	5 5 0.000000 0.000000	</Ch21_T34>
         <Ch22_113>	3.1 3.1 0.32 0.000000	</Ch22_113>
+        <Ch22_113P>	3.1 3.1 0.32 0.000000	</Ch22_113P>
         <Ch23_112>	3.7 3.7 1.4 1.4	</Ch23_112>
         <Ch24_Type64>	3 3 3.6 4.6	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	5 5 7.2 6.7	</Ch17_WZ131_1_WZ132_IGR>
@@ -1502,6 +1759,16 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.9 1.9 2.2 1.1	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	3.9 3.9 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	7.7 7.7 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	3 3 0.4 0.5	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3.6 3.6 0.9 1.2	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.1 3.1 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3.7 3.7 0.000000 9.2	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.9 1.9 0.4 0.3	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.6 1.6 0.5 0.7	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.8 0.8 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.5 5.5 0.5 0.9	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.3 2.3 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	false	</notInShop>
     </IGR_K_Winter>
@@ -1513,7 +1780,7 @@
       <id>	73	</id>
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <colors>
         <c0>	138 90 68 222	</c0>
         <c1>	203 135 67 167	</c1>
@@ -1540,6 +1807,7 @@
         <Ch20_Type58>	5 5 0.000000 0.000000	</Ch20_Type58>
         <Ch21_T34>	5 5 0.000000 0.000000	</Ch21_T34>
         <Ch22_113>	2.4 2.4 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	2.4 2.4 0.000000 0.000000	</Ch22_113P>
         <Ch23_112>	3.9 3.9 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	2 2 0.000000 2.8	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.000000 0.000000	</Ch17_WZ131_1_WZ132_IGR>
@@ -1553,6 +1821,15 @@
         <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.5 1.5 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	5 5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.6 6.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2 2 0.5 0.000000	</Ch34_WZ131G_FT>
+        <Ch41_WZ_111_5A>	2.7 2.7 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	4.7 4.7 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.6 1.6 0.000000 3.8	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.3 0.2	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.6 0.6 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.1 5.1 0.000000 0.3	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.3 2.3 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	false	</notInShop>
     </IGR_K_Desert>
@@ -1564,7 +1841,7 @@
       <id>	68	</id>
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <colors>
         <c0>	43 33 23 178	</c0>
         <c1>	101 74 50 188	</c1>
@@ -1593,6 +1870,7 @@
         <Ch20_Type58>	2.8 2.6 0.5 0.28	</Ch20_Type58>
         <Ch21_T34>	2.5 2.6 0.28 0.000000	</Ch21_T34>
         <Ch22_113>	2.6 2.6 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	2.6 2.6 0.000000 0.000000	</Ch22_113P>
         <Ch23_112>	2.8 2.8 0.34 0.26	</Ch23_112>
         <Ch24_Type64>	2.5 2.5 0.000000 0.000000	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	4 4 0.000000 6.5	</Ch17_WZ131_1_WZ132_IGR>
@@ -1605,6 +1883,16 @@
         <Ch29_Type_62C_prot>	1 1 1 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.4 1.4 3.3 1.8	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	3.5 3.5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	5 5 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.4 2.4 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.5 2.5 1.4 1.4	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.6 2.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	4.1 4.1 0.000000 0.5	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.5 1.5 0.5 0.5	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.3 1.3 0.2 0.4	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.5 0.5 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.8 5.8 0.000000 0.9	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.2 2.2 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	false	</notInShop>
     </IGR_Ch_Winter>
@@ -1616,7 +1904,7 @@
       <id>	69	</id>
       <kind>	summer	</kind>
       <group>	IGRsummer	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <colors>
         <c0>	52 78 41 133	</c0>
         <c1>	108 72 19 203	</c1>
@@ -1644,6 +1932,7 @@
         <Ch20_Type58>	3.3 3.3 0.29 0.04	</Ch20_Type58>
         <Ch21_T34>	3.4 3.5 0.38 0.000000	</Ch21_T34>
         <Ch22_113>	2.7 2.7 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	2.7 2.7 0.000000 0.000000	</Ch22_113P>
         <Ch23_112>	2.9 2.9 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	2.5 2.5 0.000000 0.000000	</Ch24_Type64>
         <Ch15_59_16>	2.2 2.2 0.000000 0.000000	</Ch15_59_16>
@@ -1657,6 +1946,16 @@
         <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.2 1.2 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	2.7 2.7 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	5.2 5.2 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.1 2.1 0.4 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	1.5 1.5 1.6 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.8 2.8 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 1 0.6	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.2 1.2 0.2 0.7	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.7 0.7 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	4.5 4.5 0.000000 0.3	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.1 2.1 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	false	</notInShop>
     </IGR_Ch_Summer>
@@ -1668,7 +1967,7 @@
       <id>	70	</id>
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
-      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	china:Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <colors>
         <c0>	100 13 0 174	</c0>
         <c1>	201 136 48 113	</c1>
@@ -1695,6 +1994,7 @@
         <Ch20_Type58>	3.4 3.4 0.000000 0.000000	</Ch20_Type58>
         <Ch21_T34>	3.5 3.6 0.000000 0.000000	</Ch21_T34>
         <Ch22_113>	2 2 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	2 2 0.000000 0.000000	</Ch22_113P>
         <Ch23_112>	2.5 2.5 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	2.5 2.5 0.000000 0.000000	</Ch24_Type64>
         <Ch15_59_16>	1.7 1.7 0.000000 0.000000	</Ch15_59_16>
@@ -1708,6 +2008,15 @@
         <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1 1 2.5 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6.7 6.7 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.8 1.8 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch41_WZ_111_5A>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	3 3 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.1 1.1 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.5 0.1	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.5 0.5 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5 5 0.000000 0.000000	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	1.9 1.9 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
       <notInShop>	false	</notInShop>
     </IGR_Ch_Desert>
@@ -1717,7 +2026,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01	</description>
       <id>	74	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
@@ -1750,6 +2059,7 @@
         <Ch20_Type58>	3.9 3.9 0.000000 0.46	</Ch20_Type58>
         <Ch21_T34>	4.7 4.7 0.34 0.35	</Ch21_T34>
         <Ch22_113>	2.3 2.3 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	2.3 2.3 0.000000 0.000000	</Ch22_113P>
         <Ch23_112>	2.8 2.8 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	4 4 0.5 0.32	</Ch24_Type64>
         <Ch17_WZ131_1_WZ132_IGR>	3.5 3.5 0.000000 4.8	</Ch17_WZ131_1_WZ132_IGR>
@@ -1762,6 +2072,16 @@
         <Ch29_Type_62C_prot>	1.5 1.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.2 1.2 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	6.5 6.5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	4.9 4.9 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.9 1.9 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.5 2.5 5.1 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	3.3 3.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.2 2.2 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 3.6 0.1	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.5 1.5 3 1	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	1 1 2.4 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.2 5.2 1.1 0.6	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
     </Clan_camuflage_01>
     <Clan_camuflage_02>
@@ -1770,7 +2090,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02	</description>
       <id>	113	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <group>	winter	</group>
       <kind>	winter	</kind>
       <colors>
@@ -1803,6 +2123,7 @@
         <Ch20_Type58>	2.8 2.8 0.32 0.08	</Ch20_Type58>
         <Ch21_T34>	2.9 2.9 0.000000 0.000000	</Ch21_T34>
         <Ch22_113>	1.3 1.3 0.4 0.5	</Ch22_113>
+        <Ch22_113P>	1.3 1.3 0.4 0.5	</Ch22_113P>
         <Ch23_112>	2 2 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	2 2 0.000000 0.000000	</Ch24_Type64>
         <Ch11_110_IGR>	3.7 3.7 0.000000 0.000000	</Ch11_110_IGR>
@@ -1815,6 +2136,16 @@
         <Ch29_Type_62C_prot>	0.7 0.7 0.000000 0.9	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1 1 0.7 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	3.5 3.5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	4.6 4.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.7 1.7 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.2 2.2 0.000000 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	1.3 1.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	1.9 1.9 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.2 1.2 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.2 1.2 0.2 0.4	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.6 0.6 0.8 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	3.5 3.5 0.000000 0.000000	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	1.3 1.3 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
     </Clan_camuflage_02>
     <Clan_camuflage_03>
@@ -1823,7 +2154,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03	</description>
       <id>	114	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
@@ -1856,6 +2187,7 @@
         <Ch20_Type58>	2.2 2.2 0.11 0.58	</Ch20_Type58>
         <Ch21_T34>	2.3 2.3 0.81 0.52	</Ch21_T34>
         <Ch22_113>	1.5 1.5 0.6 0.000000	</Ch22_113>
+        <Ch22_113P>	1.5 1.5 0.6 0.000000	</Ch22_113P>
         <Ch23_112>	1.5 1.5 0.74 0.27	</Ch23_112>
         <Ch24_Type64>	2 2 0.32 0.64	</Ch24_Type64>
         <Ch11_110_IGR>	2.9 2.9 0.13 0.000000	</Ch11_110_IGR>
@@ -1868,6 +2200,16 @@
         <Ch29_Type_62C_prot>	0.5 0.5 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1 1 0.4 0.5	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	5 5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	3.6 3.6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.4 1.4 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	1.7 1.7 3.3 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	1.6 1.6 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.3 2.3 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1 1 0.3 0.2	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	0.8 0.8 6.8 8.9	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.5 0.5 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	5.7 5.7 0.000000 0.8	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	1.9 1.9 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
     </Clan_camuflage_03>
     <Clan_camuflage_04>
@@ -1876,7 +2218,7 @@
       <invisibilityFactor>	1.0	</invisibilityFactor>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04	</description>
       <id>	115	</id>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
@@ -1909,6 +2251,7 @@
         <Ch20_Type58>	3.4 3.4 0.29 0.000000	</Ch20_Type58>
         <Ch21_T34>	2.7 2.7 0.86 0.000000	</Ch21_T34>
         <Ch22_113>	1.4 1.4 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	1.4 1.4 0.000000 0.000000	</Ch22_113P>
         <Ch23_112>	2.1 2.1 1.7 1.4	</Ch23_112>
         <Ch24_Type64>	2 2 0.000000 0.000000	</Ch24_Type64>
         <Ch11_110_IGR>	3 2.9 0.49 0.23	</Ch11_110_IGR>
@@ -1921,6 +2264,15 @@
         <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1 1 0.9 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	3 3 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	4.9 4.9 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.8 1.8 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	1.6 1.6 0.000000 0.000000	</Ch32_SU-76G_FT>
+        <Ch36_WZ111_1G_FT>	2.5 2.5 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1 1 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	0.8 0.8 5.1 1.8	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.5 0.5 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	4.1 4.1 0.7 0.9	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	1.8 1.8 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
     </Clan_camuflage_04>
     <summer_camo>
@@ -1960,6 +2312,7 @@
         <Ch20_Type58>	3 3 0.32 0.22	</Ch20_Type58>
         <Ch21_T34>	2.5 2.5 0.42 0.000000	</Ch21_T34>
         <Ch22_113>	1.6 1.6 0.5 0.000000	</Ch22_113>
+        <Ch22_113P>	1.6 1.6 0.5 0.000000	</Ch22_113P>
         <Ch23_112>	1.8 1.8 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	2.3 2.3 0.000000 0.000000	</Ch24_Type64>
         <Ch25_121_mod_1971B>	4.5 4.5 0.24 0.000000	</Ch25_121_mod_1971B>
@@ -1973,8 +2326,18 @@
         <Ch29_Type_62C_prot>	1 1 0.000000 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1 1 2.1 2.4	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	3.8 3.8 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.5 1.5 0.000000 0.3	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2.1 2.1 2.9 0.4	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	1.5 1.5 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.1 2.1 0.000000 0.5	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1 1 0.000000 0.000000	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.1 1.1 0.000000 9.2	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.6 0.6 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	4 4 0.5 0.3	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2 2 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </summer_camo>
     <Cracked_ice>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
@@ -2018,6 +2381,7 @@
         <Ch20_Type58>	4.2 4.2 0.42 0.000000	</Ch20_Type58>
         <Ch21_T34>	3.4 3.4 0.12 0.000000	</Ch21_T34>
         <Ch22_113>	1.3 1.3 0.000000 0.000000	</Ch22_113>
+        <Ch22_113P>	1.3 1.3 0.000000 0.000000	</Ch22_113P>
         <Ch23_112>	1.8 1.8 0.000000 0.000000	</Ch23_112>
         <Ch24_Type64>	2.5 2.5 0.26 3.6	</Ch24_Type64>
         <Ch25_121_mod_1971B>	5.2 5.2 0.22 0.42	</Ch25_121_mod_1971B>
@@ -2027,8 +2391,18 @@
         <Ch29_Type_62C_prot>	1 1 0.5 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1 1 0.5 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	4 4 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	4.9 4.9 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	1.9 1.9 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	2 2 3.4 0.000000	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	1.7 1.7 0.4 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	1.9 1.9 0.000000 0.000000	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.3 1.3 0.000000 0.6	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.4 1.4 0.5 0.6	</Ch33_60G_FT>
+        <Ch31_M3G_FT>	0.6 0.6 0.000000 0.000000	</Ch31_M3G_FT>
+        <Ch37_WZ111G_FT>	4.5 4.5 0.1 0.3	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2 2 0.000000 0.3	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </Cracked_ice>
     <Desert_camou>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
@@ -2071,6 +2445,7 @@
         <Ch20_Type58>	7.2 7.2 0.9 0.000000	</Ch20_Type58>
         <Ch21_T34>	4.8 4.8 0.26 0.9	</Ch21_T34>
         <Ch22_113>	2.5 2.5 1 0.42	</Ch22_113>
+        <Ch22_113P>	2.5 2.5 1 0.42	</Ch22_113P>
         <Ch23_112>	2.5 2.5 0.9 0.32	</Ch23_112>
         <Ch24_Type64>	3.5 3.5 0.000000 2.5	</Ch24_Type64>
         <Ch25_121_mod_1971B>	8.2 8.2 0.8 0.68	</Ch25_121_mod_1971B>
@@ -2081,8 +2456,17 @@
         <Ch29_Type_62C_prot>	1 1 1.5 0.000000	</Ch29_Type_62C_prot>
         <Ch39_WZ120_1G_FT>	1.6 1.6 0.000000 0.000000	</Ch39_WZ120_1G_FT>
         <Ch40_WZ120G_FT>	6.5 6.5 0.000000 0.000000	</Ch40_WZ120G_FT>
+        <Ch30_T-26G_FT>	6 6 0.000000 0.000000	</Ch30_T-26G_FT>
+        <Ch34_WZ131G_FT>	2.5 2.5 0.000000 0.000000	</Ch34_WZ131G_FT>
+        <Ch32_SU-76G_FT>	3 3 2 0.9	</Ch32_SU-76G_FT>
+        <Ch41_WZ_111_5A>	2.3 2.3 0.000000 0.000000	</Ch41_WZ_111_5A>
+        <Ch36_WZ111_1G_FT>	2.6 2.6 0.000000 3.6	</Ch36_WZ111_1G_FT>
+        <Ch38_WZ113G_FT>	1.9 1.9 0.8 0.4	</Ch38_WZ113G_FT>
+        <Ch33_60G_FT>	1.5 1.5 0.000000 0.000000	</Ch33_60G_FT>
+        <Ch37_WZ111G_FT>	7.3 7.3 0.000000 0.000000	</Ch37_WZ111G_FT>
+        <Ch35_T-34-2G_FT>	2.5 2.5 0.000000 0.000000	</Ch35_T-34-2G_FT>
       </tiling>
-      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A	</deny>
+      <deny>	Ch01_Type59_Gold Ch03_WZ_111_A Ch22_113_Beijing_Opera	</deny>
     </Desert_camou>
   </camouflages>
 </customization.xml>

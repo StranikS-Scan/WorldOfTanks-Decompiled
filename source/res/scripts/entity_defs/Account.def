@@ -8,7 +8,6 @@
     <Interface>	ClientCommandsPort	</Interface>
     <Interface>	AccountAdmin	</Interface>
     <Interface>	AccountClan	</Interface>
-    <Interface>	AccountClubs	</Interface>
     <Interface>	AccountAuthTokenProvider	</Interface>
     <Interface>	AccountAuthTokenProviderClient	</Interface>
     <Interface>	BattleResultProcessor	</Interface>
@@ -20,7 +19,6 @@
     <Interface>	RefSystem	</Interface>
     <Interface>	AccountIGRProcessing	</Interface>
     <Interface>	SessionTracker	</Interface>
-    <Interface>	AccountFortConnector	</Interface>
     <Interface>	AccountGlobalMapConnector	</Interface>
     <Interface>	AccountSysMessenger	</Interface>
     <Interface>	AccountUnit	</Interface>
@@ -31,11 +29,11 @@
     <Interface>	AccountDebugger	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_91900>
+    <requiredVersion_91910>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_0.9.19_2	</Default>
-    </requiredVersion_91900>
+      <Default>	ct_9.19.1_4	</Default>
+    </requiredVersion_91910>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -234,6 +232,7 @@
     </onCenterIsLongDisconnected>
     <showGUI>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
     </showGUI>
     <receiveActiveArenas>
       <Arg>	ARRAY	  <of>	PUBLIC_ARENA_INFO	</of>
@@ -251,13 +250,6 @@
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
       </VariableLengthHeaderSize>
     </updatePrebattle>
-    <responseFortPublicInfo>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT8	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
-      </VariableLengthHeaderSize>
-    </responseFortPublicInfo>
     <update>
       <Arg>	STRING	</Arg>
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
@@ -297,17 +289,6 @@
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
       </VariableLengthHeaderSize>
     </onUnitBrowserResultsUpdate>
-    <onFortReply>
-      <Arg>	UINT64	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	STRING	</Arg>
-    </onFortReply>
-    <onFortUpdate>
-      <Arg>	STRING	</Arg>
-      <Arg>	STRING	</Arg>
-      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
-      </VariableLengthHeaderSize>
-    </onFortUpdate>
     <onGlobalMapUpdate>
       <Arg>	STRING	</Arg>
       <Arg>	STRING	</Arg>
@@ -339,6 +320,10 @@
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
       </VariableLengthHeaderSize>
     </receiveNotification>
+    <onEntityCheckOutEnqueued>
+      <Arg>	UINT64	</Arg>
+    </onEntityCheckOutEnqueued>
+    <onBootcampAccountMigrationComplete></onBootcampAccountMigrationComplete>
   </ClientMethods>
   <BaseMethods>
     <onEnqueued>
@@ -368,6 +353,13 @@
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
     </onTutorialCreated>
+    <onBootcampCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+    </onBootcampCreated>
     <onKickedFromQueue>
       <Arg>	UINT8	</Arg>
     </onKickedFromQueue>
@@ -415,6 +407,7 @@
       <Arg>	BOOL	</Arg>
       <Arg>	UINT32	</Arg>
     </kickSelf>
+    <isNewbie></isNewbie>
     <destroyIfNoKeepers></destroyIfNoKeepers>
     <destroySelfForPeriphery>
       <Arg>	INT32	</Arg>
@@ -471,5 +464,21 @@
       <Arg>	STRING	</Arg>
       <Arg>	UINT8	</Arg>
     </sendExternalNotificationReply>
+    <setAction>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <ReturnValues></ReturnValues>
+    </setAction>
+    <onClientDeath></onClientDeath>
+    <onEntityCheckedOut>
+      <Arg>	MAILBOX	</Arg>
+    </onEntityCheckedOut>
+    <giveClientTo>
+      <Arg>	MAILBOX	</Arg>
+    </giveClientTo>
+    <cancelEntityCheckOut>
+      <Exposed></Exposed>
+    </cancelEntityCheckOut>
+    <onBootcampAccountDestroyed></onBootcampAccountDestroyed>
   </BaseMethods>
 </Account.def>

@@ -12,12 +12,14 @@ from messenger.proto.bw_chat2 import admin_chat_cmd
 from messenger.proto.bw_chat2 import entities, limits, wrappers, errors
 from messenger.proto.bw_chat2 import provider
 from messenger.proto.bw_chat2.battle_chat_cmd import BattleCommandFactory
+from messenger.proto.bw_chat2.unit_chat_cmd import UnitCommandFactory
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IBattleCommandFactory
 from messenger.storage import storage_getter
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS
+from messenger_common_chat2 import UNIT_CHAT_COMMANDS
 from skeletons.gui.battle_session import IBattleSessionProvider
 _ActionsCollection = namedtuple('_ActionsCollection', 'initID deInitID onBroadcastID broadcastID')
 
@@ -222,7 +224,22 @@ class UnitChatHandler(_EntityChatHandler):
         super(UnitChatHandler, self).__init__(provider, adminChat, _ActionsCollection(_ACTIONS.INIT_UNIT_CHAT, _ACTIONS.DEINIT_UNIT_CHAT, _ACTIONS.ON_UNIT_MESSAGE_BROADCAST, _ACTIONS.BROADCAST_UNIT_MESSAGE), wrappers.UnitDataFactory(), limits.UnitLimits())
         self.__channel = None
         self.__history = None
+        self.__factory = UnitCommandFactory()
         return
+
+    def registerHandlers(self):
+        register = self.provider().registerHandler
+        for command in UNIT_CHAT_COMMANDS:
+            register(command.id, self.__onCommandReceived)
+
+        super(UnitChatHandler, self).registerHandlers()
+
+    def unregisterHandlers(self):
+        unregister = self.provider().unregisterHandler
+        for command in UNIT_CHAT_COMMANDS:
+            unregister(command.id, self.__onCommandReceived)
+
+        super(UnitChatHandler, self).unregisterHandlers()
 
     def getUnitChannel(self):
         return self.__channel
@@ -240,6 +257,21 @@ class UnitChatHandler(_EntityChatHandler):
     def clear(self):
         self.__doRemoveChannel()
         super(UnitChatHandler, self).clear()
+
+    def send(self, decorator):
+        command = decorator.getCommand()
+        if command:
+            provider = self.provider()
+            success, reqID = provider.doAction(command.id, decorator.getProtoData(), True, True)
+            if success:
+                if reqID:
+                    self.pushRq(reqID, command)
+                provider.setActionCoolDown(command.id, command.cooldownPeriod)
+        else:
+            LOG_ERROR('Unit command not found', decorator)
+
+    def createByMapPos(self, x, y):
+        return self.__factory.createByMapPos(x, y)
 
     def _doInit(self, args):
         if 'int32Arg1' in args:
@@ -276,6 +308,14 @@ class UnitChatHandler(_EntityChatHandler):
 
     def __doRemoveChannel(self):
         self.__channel = self._removeChannel(self.__channel)
+
+    def __onCommandReceived(self, ids, args):
+        if not self.__channel:
+            return
+        actionID, _ = ids
+        cmd = self.__factory.createByAction(actionID, args)
+        cmd.setClientID(self.__channel.getClientID())
+        g_messengerEvents.channels.onCommandReceived(cmd)
 
 
 class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFactory):

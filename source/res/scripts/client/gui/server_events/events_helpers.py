@@ -19,7 +19,7 @@ class EventInfoModel(object):
     def __init__(self, event):
         self.event = event
 
-    def getTimerMsg(self):
+    def getTimerMsg(self, key=None):
         startTimeLeft = self.event.getStartTimeLeft()
         if startTimeLeft > 0:
             if startTimeLeft > START_TIME_LIMIT:
@@ -104,9 +104,9 @@ class QuestInfoModel(EventInfoModel):
         timeLeft = self.event.getFinishTimeLeft()
         return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOENDINMINUTES, minutes=getMinutesRoundByTime(timeLeft)) if timeLeft <= time_utils.THREE_QUARTER_HOUR else super(QuestInfoModel, self)._getActiveDateTimeString()
 
-    def getTimerMsg(self):
+    def getTimerMsg(self, key='comeToEndInMinutes'):
         timeLeft = self.event.getFinishTimeLeft()
-        return makeHtmlString('html_templates:lobby/quests', 'comeToEndInMinutes', {'minutes': getMinutesRoundByTime(timeLeft)}) if timeLeft <= time_utils.THREE_QUARTER_HOUR else super(QuestInfoModel, self).getTimerMsg()
+        return makeHtmlString('html_templates:lobby/quests/', key, {'minutes': getMinutesRoundByTime(timeLeft)}) if timeLeft <= time_utils.THREE_QUARTER_HOUR else super(QuestInfoModel, self).getTimerMsg()
 
     def _getDailyResetStatus(self, resetLabelKey, labeFormatter):
         if self.event.bonusCond.isDaily():

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/gun_marker_ctrl.py
 import math
+from collections import namedtuple
 import BattleReplay
 import BigWorld
 import GUI
@@ -13,10 +14,12 @@ from debug_utils import LOG_UNEXPECTED
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.lobby_context import ILobbyContext
 _MARKER_TYPE = aih_constants.GUN_MARKER_TYPE
 _MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _SHOT_RESULT = aih_constants.SHOT_RESULT
 _BINDING_ID = aih_global_binding.BINDING_ID
+_IS_EXTENDED_GUN_MARKER_ENABLED = True
 
 def useServerGunMarker():
     """ Is server's gun marker used.
@@ -66,46 +69,221 @@ def createArtyHit(artyEquipmentUDO, areaRadius):
     return _ArtyHitMarkerController(_MARKER_TYPE.CLIENT, factory.getClientSPGProvider(), artyEquipmentUDO, areaRadius, interval=0.0 if BattleReplay.g_replayCtrl.isPlaying else 0.1)
 
 
-def getShotResult(hitPoint, collision, excludeTeam=0):
-    """ Gets shot result by present state of gun marker.
-    :param hitPoint: Vector3 containing shot position.
-    :param collision: instance of EntityCollisionData.
-    :param excludeTeam: integer containing number of team that is excluded from result.
-    :return: one of SHOT_RESULT.*.
-    """
-    if collision is None:
-        return _SHOT_RESULT.UNDEFINED
-    else:
-        entity = collision.entity
-        if entity.health <= 0 or entity.publicInfo['team'] == excludeTeam:
+if _IS_EXTENDED_GUN_MARKER_ENABLED:
+
+    def createShotResultResolver():
+        return _CrosshairShotResults
+
+
+else:
+
+    def createShotResultResolver():
+        return _StandardShotResult
+
+
+class _StandardShotResult(object):
+
+    @classmethod
+    def getShotResult(cls, hitPoint, collision, _, excludeTeam=0):
+        """ Gets shot result by present state of gun marker.
+        :param hitPoint: Vector3 containing shot position.
+        :param collision: instance of EntityCollisionData.
+        :param excludeTeam: integer containing number of team that is excluded from result.
+        :return: one of SHOT_RESULT.*.
+        """
+        if collision is None:
             return _SHOT_RESULT.UNDEFINED
-        player = BigWorld.player()
-        if player is None:
-            return _SHOT_RESULT.UNDEFINED
-        vDesc = player.getVehicleDescriptor()
-        ppDesc = vDesc.shot['piercingPower']
-        maxDist = vDesc.shot['maxDistance']
-        dist = (hitPoint - player.getOwnVehiclePosition()).length
-        if dist <= 100.0:
-            piercingPower = ppDesc[0]
-        elif maxDist > dist:
-            p100, p500 = ppDesc
-            piercingPower = p100 + (p500 - p100) * (dist - 100.0) / 400.0
-            if piercingPower < 0.0:
+        else:
+            entity = collision.entity
+            if entity.health <= 0 or entity.publicInfo['team'] == excludeTeam:
+                return _SHOT_RESULT.UNDEFINED
+            player = BigWorld.player()
+            if player is None:
+                return _SHOT_RESULT.UNDEFINED
+            vDesc = player.getVehicleDescriptor()
+            ppDesc = vDesc.shot['piercingPower']
+            maxDist = vDesc.shot['maxDistance']
+            dist = (hitPoint - player.getOwnVehiclePosition()).length
+            if dist <= 100.0:
+                piercingPower = ppDesc[0]
+            elif maxDist > dist:
+                p100, p500 = ppDesc
+                piercingPower = p100 + (p500 - p100) * (dist - 100.0) / 400.0
+                if piercingPower < 0.0:
+                    piercingPower = 0.0
+            else:
                 piercingPower = 0.0
+            piercingPercent = 1000.0
+            if piercingPower > 0.0:
+                armor = collision.armor
+                piercingPercent = 100.0 + (armor - piercingPower) / piercingPower * 100.0
+            if piercingPercent >= 150:
+                result = _SHOT_RESULT.NOT_PIERCED
+            elif 90 < piercingPercent < 150:
+                result = _SHOT_RESULT.LITTLE_PIERCED
+            else:
+                result = _SHOT_RESULT.GREAT_PIERCED
+            return result
+
+
+class _CrosshairShotResults(object):
+    _PP_RANDOM_ADJUSTMENT_MAX = 0.5
+    _PP_RANDOM_ADJUSTMENT_MIN = 0.5
+    _MAX_HIT_ANGLE_BOUND = math.pi / 2.0 - 1e-05
+    _CRIT_ONLY_SHOT_RESULT = _SHOT_RESULT.NOT_PIERCED
+    shellExtraData = namedtuple('shellExtraData', ('normAngle', 'ricochetAngle', 'mayRicochet', 'checkCaliberForRicochet', 'jetLossPPByDist'))
+    _SHELL_EXTRA_DATA = {constants.SHELL_TYPES.ARMOR_PIERCING: shellExtraData(math.radians(5.0), math.cos(math.radians(70.0)), True, True, 0.0),
+     constants.SHELL_TYPES.ARMOR_PIERCING_CR: shellExtraData(math.radians(2.0), math.cos(math.radians(70.0)), True, True, 0.0),
+     constants.SHELL_TYPES.ARMOR_PIERCING_HE: shellExtraData(0.0, 0.0, False, False, 0.0),
+     constants.SHELL_TYPES.HOLLOW_CHARGE: shellExtraData(0.0, math.cos(math.radians(85.0)), True, False, 0.5),
+     constants.SHELL_TYPES.HIGH_EXPLOSIVE: shellExtraData(0.0, 0.0, False, False, 0.0)}
+    _VEHICLE_TRACE_BACKWARD_LENGTH = 0.1
+    _VEHICLE_TRACE_FORWARD_LENGTH = 20.0
+
+    @classmethod
+    def _computePiercingPowerAtDist(cls, ppDesc, dist, maxDist):
+        if constants.IS_BOOTCAMP_ENABLED:
+            from bootcamp.Bootcamp import g_bootcamp
+            if g_bootcamp.isRunning():
+                bootcampPP = g_bootcamp.getPredefinedPiercingPower()
+                if bootcampPP:
+                    return bootcampPP
+        p100, p500 = ppDesc
+        if dist <= 100.0:
+            return p100
+        return max(0.0, p100 + (p500 - p100) * (dist - 100.0) / 400.0) if dist < maxDist else 0.0
+
+    @classmethod
+    def _computePiercingPowerRandomization(cls, shell):
+        if constants.IS_BOOTCAMP_ENABLED:
+            from bootcamp.Bootcamp import g_bootcamp
+            if g_bootcamp.isRunning():
+                if g_bootcamp.getPredefinedPiercingPower():
+                    return (100.0, 100.0)
+        piercingPowerRandomization = shell['piercingPowerRandomization']
+        minPP = 100.0 * (1.0 - piercingPowerRandomization * cls._PP_RANDOM_ADJUSTMENT_MIN)
+        maxPP = 100.0 * (1.0 + piercingPowerRandomization * cls._PP_RANDOM_ADJUSTMENT_MAX)
+        return (minPP, maxPP)
+
+    @classmethod
+    def _shouldRicochet(cls, shellKind, hitAngleCos, matInfo, caliber):
+        if not matInfo.mayRicochet:
+            return False
+        shellExtraData = cls._SHELL_EXTRA_DATA[shellKind]
+        if not shellExtraData.mayRicochet:
+            return False
+        if hitAngleCos <= shellExtraData.ricochetAngle:
+            if not matInfo.checkCaliberForRichet:
+                return True
+            if not shellExtraData.checkCaliberForRicochet:
+                return True
+            armor = matInfo.armor
+            if armor * 3 >= caliber:
+                return True
+        return False
+
+    @classmethod
+    def _computePenetrationArmor(cls, shellKind, hitAngleCos, matInfo, caliber):
+        armor = matInfo.armor
+        if not matInfo.useHitAngle:
+            return armor
+        normalizationAngle = cls._SHELL_EXTRA_DATA[shellKind].normAngle
+        if normalizationAngle > 0.0 and hitAngleCos < 1.0:
+            if matInfo.checkCaliberForHitAngleNorm:
+                if caliber > armor * 2 > 0:
+                    normalizationAngle *= 1.4 * caliber / (armor * 2)
+            hitAngle = math.acos(hitAngleCos) - normalizationAngle
+            if hitAngle < 0.0:
+                hitAngleCos = 1.0
+            else:
+                if hitAngle > cls._MAX_HIT_ANGLE_BOUND:
+                    hitAngle = cls._MAX_HIT_ANGLE_BOUND
+                hitAngleCos = math.cos(hitAngle)
+        if hitAngleCos < 1e-05:
+            hitAngleCos = 1e-05
+        return armor / hitAngleCos
+
+    @classmethod
+    def _getAllCollisionDetails(cls, hitPoint, dir, entity):
+        startPoint = hitPoint - dir * cls._VEHICLE_TRACE_BACKWARD_LENGTH
+        endPoint = hitPoint + dir * cls._VEHICLE_TRACE_FORWARD_LENGTH
+        return entity.collideSegmentExt(startPoint, endPoint)
+
+    @classmethod
+    def getShotResult(cls, hitPoint, collision, dir, excludeTeam=0):
+        """ Gets shot result by present state of gun marker.
+        :param hitPoint: Vector3 containing shot position.
+        :param collision: instance of EntityCollisionData.
+        :param excludeTeam: integer containing number of team that is excluded from result.
+        :return: one of SHOT_RESULT.*.
+        """
+        if collision is None:
+            return _SHOT_RESULT.UNDEFINED
         else:
-            piercingPower = 0.0
-        piercingPercent = 1000.0
-        if piercingPower > 0.0:
-            armor = collision.armor
-            piercingPercent = 100.0 + (armor - piercingPower) / piercingPower * 100.0
-        if piercingPercent >= 150:
+            entity = collision.entity
+            if entity.__class__.__name__ != 'Vehicle':
+                return _SHOT_RESULT.UNDEFINED
+            if entity.health <= 0 or entity.publicInfo['team'] == excludeTeam:
+                return _SHOT_RESULT.UNDEFINED
+            player = BigWorld.player()
+            if player is None:
+                return _SHOT_RESULT.UNDEFINED
+            vDesc = player.getVehicleDescriptor()
+            shell = vDesc.shot['shell']
+            caliber = shell['caliber']
+            shellKind = shell['kind']
+            ppDesc = vDesc.shot['piercingPower']
+            maxDist = vDesc.shot['maxDistance']
+            dist = (hitPoint - player.getOwnVehiclePosition()).length
+            piercingPower = cls._computePiercingPowerAtDist(ppDesc, dist, maxDist)
+            fullPiercingPower = piercingPower
+            minPP, maxPP = cls._computePiercingPowerRandomization(shell)
             result = _SHOT_RESULT.NOT_PIERCED
-        elif 90 < piercingPercent < 150:
-            result = _SHOT_RESULT.LITTLE_PIERCED
-        else:
-            result = _SHOT_RESULT.GREAT_PIERCED
-        return result
+            isJet = False
+            jetStartDist = None
+            ignoredMaterials = set()
+            collisionsDetails = cls._getAllCollisionDetails(hitPoint, dir, entity)
+            if collisionsDetails is None:
+                return _SHOT_RESULT.UNDEFINED
+            for cDetails in collisionsDetails:
+                if isJet:
+                    jetDist = cDetails.dist - jetStartDist
+                    if jetDist > 0.0:
+                        piercingPower *= 1.0 - jetDist * cls._SHELL_EXTRA_DATA[shellKind].jetLossPPByDist
+                if cDetails.matInfo is None:
+                    result = cls._CRIT_ONLY_SHOT_RESULT
+                else:
+                    matInfo = cDetails.matInfo
+                    if (cDetails.compName, matInfo.kind) in ignoredMaterials:
+                        continue
+                    hitAngleCos = cDetails.hitAngleCos if matInfo.useHitAngle else 1.0
+                    if not isJet and cls._shouldRicochet(shellKind, hitAngleCos, matInfo, caliber):
+                        break
+                    piercingPercent = 1000.0
+                    if piercingPower > 0.0:
+                        penetrationArmor = cls._computePenetrationArmor(shellKind, hitAngleCos, matInfo, caliber)
+                        piercingPercent = 100.0 + (penetrationArmor - piercingPower) / fullPiercingPower * 100.0
+                        piercingPower -= penetrationArmor
+                    if matInfo.vehicleDamageFactor:
+                        if minPP < piercingPercent < maxPP:
+                            result = _SHOT_RESULT.LITTLE_PIERCED
+                        elif piercingPercent <= minPP:
+                            result = _SHOT_RESULT.GREAT_PIERCED
+                        break
+                    elif matInfo.extra:
+                        if piercingPercent <= maxPP:
+                            result = cls._CRIT_ONLY_SHOT_RESULT
+                    if matInfo.collideOnceOnly:
+                        ignoredMaterials.add((cDetails.compName, matInfo.kind))
+                if piercingPower <= 0.0:
+                    break
+                if cls._SHELL_EXTRA_DATA[shellKind].jetLossPPByDist > 0.0:
+                    isJet = True
+                    mInfo = cDetails.matInfo
+                    armor = mInfo.armor if mInfo is not None else 0.0
+                    jetStartDist = cDetails.dist + armor * 0.001
+
+            return result
 
 
 def _setupGunMarkerSizeLimits(dataProvider, scale=None):
@@ -320,11 +498,11 @@ class _GunMarkersDecorator(IGunMarkerController):
 
     def update(self, markerType, position, dir, size, relaxTime, collData):
         if markerType == _MARKER_TYPE.CLIENT:
-            self.__clientState = (position, relaxTime, collData)
+            self.__clientState = (position, dir, collData)
             if self.__gunMarkersFlags & _MARKER_FLAG.CLIENT_MODE_ENABLED:
                 self.__clientMarker.update(markerType, position, dir, size, relaxTime, collData)
         elif markerType == _MARKER_TYPE.SERVER:
-            self.__serverState = (position, relaxTime, collData)
+            self.__serverState = (position, dir, collData)
             if self.__gunMarkersFlags & _MARKER_FLAG.SERVER_MODE_ENABLED:
                 self.__serverMarker.update(markerType, position, dir, size, relaxTime, collData)
         else:

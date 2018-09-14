@@ -56,20 +56,25 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
     tradeIn = dependency.descriptor(ITradeInController)
     restores = dependency.descriptor(IRestoreController)
 
-    def __init__(self, ctx=None):
+    def __init__(self, ctx=None, skipConfirm=False):
         super(VehiclePreview, self).__init__(ctx)
         self._actionType = None
+        self._showVehInfoPanel = True
+        self._showHeaderCloseBtn = True
         self.__vehicleCD = ctx.get('itemCD')
+        self.__vehicleStrCD = ctx.get('vehicleStrCD')
         self.__backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
+        self._skipConfirm = skipConfirm
+        self._disableBuyButton = False
         return
 
     def _populate(self):
-        g_currentPreviewVehicle.selectVehicle(self.__vehicleCD)
+        g_currentPreviewVehicle.selectVehicle(self.__vehicleCD, self.__vehicleStrCD)
         super(VehiclePreview, self)._populate()
-        g_clientUpdateManager.addMoneyCallback(self.__updateBtnState)
-        g_clientUpdateManager.addCallbacks({'stats.freeXP': self.__updateBtnState})
+        g_clientUpdateManager.addMoneyCallback(self._updateBtnState)
+        g_clientUpdateManager.addCallbacks({'stats.freeXP': self._updateBtnState})
         g_currentPreviewVehicle.onComponentInstalled += self.__updateStatus
-        g_currentPreviewVehicle.onVehicleUnlocked += self.__updateBtnState
+        g_currentPreviewVehicle.onVehicleUnlocked += self._updateBtnState
         g_currentPreviewVehicle.onVehicleInventoryChanged += self.__onInventoryChanged
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
         self.comparisonBasket.onChange += self.__onCompareBasketChanged
@@ -85,7 +90,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         super(VehiclePreview, self)._dispose()
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentPreviewVehicle.onComponentInstalled -= self.__updateStatus
-        g_currentPreviewVehicle.onVehicleUnlocked -= self.__updateBtnState
+        g_currentPreviewVehicle.onVehicleUnlocked -= self._updateBtnState
         g_currentPreviewVehicle.onVehicleInventoryChanged -= self.__onInventoryChanged
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
         self.comparisonBasket.onChange -= self.__onCompareBasketChanged
@@ -109,9 +114,9 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
     def onBuyOrResearchClick(self):
         if self._actionType == ItemsActionsFactory.UNLOCK_ITEM:
             unlockProps = g_techTreeDP.getUnlockProps(self.__vehicleCD)
-            ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self.__vehicleCD, unlockProps.parentID, unlockProps.unlockIdx, unlockProps.xpCost)
+            ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self.__vehicleCD, unlockProps.parentID, unlockProps.unlockIdx, unlockProps.xpCost, skipConfirm=self._skipConfirm)
         else:
-            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.__vehicleCD)
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.__vehicleCD, skipConfirm=self._skipConfirm)
 
     def onCompareClick(self):
         """
@@ -119,11 +124,26 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         """
         self.comparisonBasket.addVehicle(self.__vehicleCD, initParameters={'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
 
+    def _updateBtnState(self, *args):
+        if g_currentPreviewVehicle.isPresent():
+            btnData = self.__getBtnData()
+            isAction = btnData.isAction
+            self._actionType = btnData.actionType
+            self.as_updateBuyButtonS({'enabled': btnData.enabled,
+             'label': btnData.label,
+             'tooltip': btnData.tooltip})
+            self.as_updatePriceS({'value': btnData.price,
+             'icon': btnData.currencyIcon,
+             'showAction': isAction,
+             'actionTooltipType': TOOLTIPS_CONSTANTS.ACTION_PRICE if isAction else None,
+             'actionData': btnData.action})
+        return
+
     def __fullUpdate(self):
         selectedTabInd = AccountSettings.getSettings(PREVIEW_INFO_PANEL_IDX)
         self.__updateHeaderData()
         self.as_updateInfoDataS(self.__getInfoData(selectedTabInd))
-        self.__updateBtnState()
+        self._updateBtnState()
         self.__updateStatus()
 
     def __onVehicleChanged(self, *args):
@@ -135,7 +155,8 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         vehicle = g_currentPreviewVehicle.item
         data = {'info': text_styles.main(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY),
          'infoTooltip': TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO,
-         'vehCompareData': self.__getVehCompareData(vehicle)}
+         'vehCompareData': self.__getVehCompareData(vehicle),
+         'isVisible': self._showVehInfoPanel}
         return data
 
     def __getVehCompareData(self, vehicle):
@@ -160,7 +181,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
     def __onRestoreChanged(self, vehicles):
         if g_currentPreviewVehicle.isPresent():
             if self.__vehicleCD in vehicles:
-                self.__updateBtnState()
+                self._updateBtnState()
 
     def __updateStatus(self):
         if g_currentPreviewVehicle.hasModulesToSelect():
@@ -170,21 +191,6 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
             else:
                 text = text_styles.main(VEHICLE_PREVIEW.MODULESPANEL_LABEL)
             self.as_updateVehicleStatusS(text)
-
-    def __updateBtnState(self, *args):
-        if g_currentPreviewVehicle.isPresent():
-            btnData = self.__getBtnData()
-            isAction = btnData.isAction
-            self._actionType = btnData.actionType
-            self.as_updateBuyButtonS({'enabled': btnData.enabled,
-             'label': btnData.label,
-             'tooltip': btnData.tooltip})
-            self.as_updatePriceS({'value': btnData.price,
-             'icon': btnData.currencyIcon,
-             'showAction': isAction,
-             'actionTooltipType': TOOLTIPS_CONSTANTS.ACTION_PRICE if isAction else None,
-             'actionData': btnData.action})
-        return
 
     def __updateHeaderData(self):
         self.as_setStaticDataS(self.__getStaticData())
@@ -213,6 +219,8 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
                 formatter = text_styles.creditsTextBig if mayObtainForMoney else text_styles.errCurrencyTextBig
                 if not mayObtainForMoney:
                     tooltip = _buildBuyButtonTooltip('notEnoughCredits')
+            if self._disableBuyButton:
+                mayObtainForMoney = False
             return _ButtonState(mayObtainForMoney, formatter(BigWorld.wg_getIntegralFormat(price.get(currency))), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESTORE if vehicle.isRestorePossible() else VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY, action is not None, currencyIcon, ItemsActionsFactory.BUY_VEHICLE, action, tooltip)
         else:
             nodeCD = vehicle.intCD
@@ -245,7 +253,8 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
          'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': self.__getBackBtnLabel(),
          'titleText': text_styles.promoTitle(VEHICLE_PREVIEW.HEADER_TITLE),
-         'isPremiumIGR': vehicle.isPremiumIGR}
+         'isPremiumIGR': vehicle.isPremiumIGR,
+         'showCloseBtn': self._showHeaderCloseBtn}
 
     def __getBackBtnLabel(self):
         key = _BACK_BTN_LABELS.get(self.__backAlias, 'hangar')

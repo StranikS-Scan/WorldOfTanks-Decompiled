@@ -16,7 +16,6 @@ from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.formatters import text_styles
 from helpers.i18n import makeString
 from items import vehicles
@@ -161,11 +160,15 @@ class AwardContext(ShopContext):
         super(AwardContext, self).__init__(fieldsToExclude)
         self._tmanRoleLevel = None
         self._rentExpiryTime = None
+        self._rentBattlesLeft = None
+        self._rentWinsLeft = None
         return
 
-    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None):
+    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None):
         self._tmanRoleLevel = tmanCrewLevel
         self._rentExpiryTime = rentExpiryTime
+        self._rentBattlesLeft = rentBattles
+        self._rentWinsLeft = rentWins
         return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatsConfiguration(self, item):
@@ -191,7 +194,9 @@ class AwardContext(ShopContext):
 
     def getParams(self):
         return {'tmanRoleLevel': self._tmanRoleLevel,
-         'rentExpiryTime': self._rentExpiryTime}
+         'rentExpiryTime': self._rentExpiryTime,
+         'rentBattlesLeft': self._rentBattlesLeft,
+         'rentWinsLeft': self._rentWinsLeft}
 
 
 class RankedRankContext(ToolTipContext):
@@ -651,14 +656,6 @@ class ContactContext(ToolTipContext):
         super(ContactContext, self).__init__(TOOLTIP_COMPONENT.CONTACT, fieldsToExclude)
 
 
-class FortOrderContext(FortificationContext):
-    """ Fortification class for tool tip context
-    """
-
-    def buildItem(self, fortOrderTypeID, level):
-        return FortOrder(int(fortOrderTypeID), level=int(level))
-
-
 class BattleConsumableContext(FortificationContext):
     """ Context for all battle consumables.
     """
@@ -674,12 +671,6 @@ class HangarTutorialContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude=None):
         super(HangarTutorialContext, self).__init__(TOOLTIP_COMPONENT.HANGAR_TUTORIAL, fieldsToExclude)
-
-
-class FortSortieLimitContext(FortificationContext):
-    """ Fortifications sorties limit class for tool tip context
-    """
-    pass
 
 
 class FortPopoverDefResProgressContext(FortificationContext):

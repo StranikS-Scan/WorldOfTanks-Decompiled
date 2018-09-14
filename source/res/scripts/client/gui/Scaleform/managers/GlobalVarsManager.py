@@ -7,6 +7,7 @@ from helpers import getClientOverride, dependency
 from skeletons.gui.game_control import IWalletController, ITradeInController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from bootcamp.Bootcamp import g_bootcamp
 
 class GlobalVarsManager(GlobalVarsMgrMeta):
     _isLoginLoadInfoRequested = False
@@ -36,7 +37,7 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
     def isTutorialRunning(self, tutorialID):
         try:
             from tutorial.loader import isTutorialRunning
-        except ImportError:
+        except:
 
             def isTutorialRunning(_):
                 return False
@@ -54,9 +55,6 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
 
     def isInRoaming(self):
         return self.lobbyContext.getServerSettings().roaming.isInRoaming()
-
-    def isFortificationAvailable(self):
-        return self.lobbyContext.getServerSettings().isFortsEnabled()
 
     def isWalletAvailable(self):
         if self.wallet:
@@ -88,3 +86,6 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
 
     def isTradeInEnabled(self):
         return self.tradeIn.isEnabled()
+
+    def isBootcampFinished(self):
+        return g_bootcamp.isFinished()

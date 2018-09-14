@@ -43,3 +43,4 @@ class RES_LOGIN(object):
     MAPS_LOGIN_BACK_5_WITHOUT_SPARKS = '../maps/login/back_5_without_sparks.png'
     MAPS_LOGIN_BACK_8_WITHOUT_SPARKS = '../maps/login/back_8_without_sparks.png'
     MAPS_LOGIN_LOGIN_BG = '../maps/login/__login_bg.png'
+    MAPS_LOGIN_LOGIN_LOGO = '../maps/login/__login_logo.png'

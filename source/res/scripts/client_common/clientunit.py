@@ -5,52 +5,12 @@ from collections import namedtuple
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG_DEV, LOG_CURRENT_EXCEPTION
 import Event
-import fortified_regions
 from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, UNIT_FLAGS, LEADER_SLOT
 from shared_utils import makeTupleByDict
 PLAYER_ID_CHR = '<q'
 VEH_LEN_CHR = '<H'
 VEH_LEN_SIZE = struct.calcsize(VEH_LEN_CHR)
-
-class _ClubExtra(namedtuple('_ClubExtra', ('mapID', 'clubDBID', 'clubName', 'clubEmblemIDs', 'divisionID', 'isBaseDefence', 'accDBIDtoRole', 'accDBIDtoClubTimestamp', 'isRatedBattle', 'isEnemyReady', 'startTime'))):
-
-    def getClubDbID(self):
-        return self.clubDBID
-
-    def getEmblem64x64(self):
-        try:
-            return self.clubEmblemIDs[2]
-        except:
-            pass
-
-        return None
-
-
-class _SortieExtra(namedtuple('_SortieExtra', ('clanEquipments', 'lastEquipRev'))):
-
-    def getConsumables(self):
-        result = {}
-        if self.clanEquipments:
-            for eqIntCD, slotIdx in self.clanEquipments[1]:
-                result[slotIdx] = fortified_regions.g_cache.equipmentToOrder[eqIntCD]
-
-        return result
-
-
-class _FortBattleExtra(namedtuple('_FortBattleExtra', ('clanEquipments', 'lastEquipRev', 'canUseEquipments'))):
-
-    def getConsumables(self):
-        result = {}
-        if self.clanEquipments:
-            for eqIntCD, slotIdx in self.clanEquipments[1]:
-                result[slotIdx] = fortified_regions.g_cache.equipmentToOrder[eqIntCD]
-
-        return result
-
-
-_EXTRA_BY_PRB_TYPE = {PREBATTLE_TYPE.CLUBS: _ClubExtra,
- PREBATTLE_TYPE.SORTIE: _SortieExtra,
- PREBATTLE_TYPE.FORT_BATTLE: _FortBattleExtra}
+_EXTRA_BY_PRB_TYPE = {}
 
 class ClientUnit(UnitBase):
 
@@ -194,9 +154,6 @@ class ClientUnit(UnitBase):
 
         return result
 
-    def isSortie(self):
-        return self._prebattleTypeID == PREBATTLE_TYPE.SORTIE
-
     def isSquad(self):
         return self._prebattleTypeID == PREBATTLE_TYPE.SQUAD
 
@@ -208,15 +165,6 @@ class ClientUnit(UnitBase):
 
     def isPrebattlesSquad(self):
         return self._prebattleTypeID in PREBATTLE_TYPE.SQUAD_PREBATTLES
-
-    def isFortBattle(self):
-        return self._prebattleTypeID == PREBATTLE_TYPE.FORT_BATTLE
-
-    def isClub(self):
-        return self._prebattleTypeID == PREBATTLE_TYPE.CLUBS
-
-    def isRated(self):
-        return self.isClub() and self.getExtra().isRatedBattle
 
     def getRosterTypeID(self):
         return self._rosterTypeID
@@ -300,9 +248,12 @@ class ClientUnit(UnitBase):
         if accountDBID in self._players:
             prevRoleFlags = self._players[accountDBID]['role']
         UnitBase._changePlayerRole(self, accountDBID, roleFlags)
+        prev_creatorDBID = self._creatorDBID
         if roleFlags & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR and self._playerSlots.get(accountDBID) == LEADER_SLOT:
             self._creatorDBID = accountDBID
         self.onUnitPlayerRoleChanged(accountDBID, prevRoleFlags, roleFlags)
+        if prev_creatorDBID != self._creatorDBID:
+            self.onUnitPlayerRoleChanged(prev_creatorDBID, prevRoleFlags, roleFlags)
 
     def setComment(self, strComment):
         UnitBase.setComment(self, strComment)
@@ -330,15 +281,11 @@ class ClientUnit(UnitBase):
         prevRoleFlags = self._players[memberDBID]['role']
         UnitBase._giveLeadership(self, memberDBID)
         newRoleFlags = self._players[memberDBID]['role']
+        prev_creatorDBID = self._creatorDBID
         self._creatorDBID = memberDBID
         self.onUnitMembersListChanged()
         self.onUnitPlayerRoleChanged(memberDBID, prevRoleFlags, newRoleFlags)
-
-    def _changeSortieDivision(self, division):
-        UnitBase._changeSortieDivision(self, division)
-        self.onUnitRosterChanged()
-        self.onUnitMembersListChanged()
-        self.onUnitSettingChanged(UNIT_OP.CHANGE_DIVISION, division)
+        self.onUnitPlayerRoleChanged(prev_creatorDBID, prevRoleFlags, newRoleFlags)
 
     def _changeFalloutQueueType(self, queueType):
         UnitBase._changeFalloutQueueType(self, queueType)

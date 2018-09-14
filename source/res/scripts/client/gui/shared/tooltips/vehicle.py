@@ -199,12 +199,10 @@ class VehicleAvgParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
         return blocks
 
 
-def _packBonusName(bnsType, bnsId, enabled=True, hasFemales=False):
+def _packBonusName(bnsType, bnsId, enabled=True, inactive=False):
     itemStr = None
     textStyle = text_styles.main if enabled else text_styles.standard
-    if bnsType == _EQUIPMENT:
-        itemStr = textStyle(_ms('#artefacts:%s/name' % bnsId))
-    elif bnsType == _OPTION_DEVICE:
+    if bnsType in (_EQUIPMENT, _OPTION_DEVICE):
         itemStr = textStyle(_ms('#artefacts:%s/name' % bnsId))
     elif bnsType == _SKILL_BONUS_TYPE:
         itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_SKILL_TEMPLATE, name=_ms(ITEM_TYPES.tankman_skills(bnsId)), type=text_styles.standard(_ms(TOOLTIPS.VEHICLEPARAMS_SKILL_NAME))))
@@ -212,7 +210,11 @@ def _packBonusName(bnsType, bnsId, enabled=True, hasFemales=False):
         itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_ROLE_TEMPLATE, name=_ms(TOOLTIPS.vehicleparams_bonus_tankmanlevel(bnsId))))
     elif bnsType == _EXTRA_BONUS_TYPE:
         itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_ROLE_TEMPLATE, name=_ms(TOOLTIPS.vehicleparams_bonus_extra(bnsId))))
-    if not enabled:
+    if inactive:
+        itemStr += _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_ISINACTIVE)
+        icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_RED, 16, 16, 0, 2)
+        itemStr = param_formatter.packSituationalIcon(itemStr, icon)
+    elif not enabled:
         itemStr += _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_NOTINSTALLED)
     return textStyle(itemStr)
 
@@ -235,8 +237,10 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
         self._packListBlock(blocks, bonuses, text_styles.warning(_ms(TOOLTIPS.VEHICLEPARAMS_BONUSES_TITLE)))
         penalties = self._getPenalties()
         self._packListBlock(blocks, penalties, text_styles.critical(_ms(TOOLTIPS.VEHICLEPARAMS_PENALTIES_TITLE)))
+        if self._extendedData.inactiveBonuses:
+            blocks.append(formatters.packBuildUpBlockData(self._getFootNoteBlock('inactive'), padding=0))
         if hasSituational:
-            blocks.append(formatters.packBuildUpBlockData(self._getFootNoteBlock(), padding=0))
+            blocks.append(formatters.packBuildUpBlockData(self._getFootNoteBlock('optional'), padding=0))
         return blocks
 
     def _packListBlock(self, blocks, listBlock, title):
@@ -246,14 +250,21 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
             blockPadding = formatters.packPadding(left=5, top=15, bottom=5)
             blocks.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(title, padding=titlePadding), formatters.packBuildUpBlockData(listBlock, padding=listPadding)], padding=blockPadding))
 
-    def _getFootNoteBlock(self):
-        return [formatters.packImageTextBlockData(title='', desc=text_styles.standard(TOOLTIPS.VEHICLEPARAMS_BONUS_SITUATIONAL), img=RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL, imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=20))]
+    def _getFootNoteBlock(self, noteType):
+        if noteType == 'optional':
+            desc = text_styles.standard(TOOLTIPS.VEHICLEPARAMS_BONUS_SITUATIONAL)
+            img = RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL
+        else:
+            conditionsToActivate = set(self._extendedData.inactiveBonuses.values())
+            conditionsToActivate = map(lambda (bnsID, _): _ms(ITEM_TYPES.tankman_skills(bnsID)), conditionsToActivate)
+            desc = text_styles.standard(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_INACTIVEDESCRIPTION, skillName=', '.join(conditionsToActivate)))
+            img = RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_RED
+        return [formatters.packImageTextBlockData(title='', desc=desc, img=img, imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=20))]
 
     def _getBonuses(self):
         result = []
-        bonuses = sorted(self._extendedData.bonuses, _bonusCmp)
+        bonuses = sorted(self._extendedData.bonuses, cmp=_bonusCmp)
         item = self.context.buildItem()
-        hasFemales = any(map(lambda tankman: tankman[1] and tankman[1].isFemale, item.crew))
         bonusExtractor = bonus_helper.BonusExtractor(item, bonuses, self.__paramName)
         hasSituational = False
         for bnsType, bnsId, pInfo in bonusExtractor.getBonusInfo():
@@ -262,21 +273,25 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
             valueStr = param_formatter.formatParameterDelta(pInfo, scheme)
             if valueStr is not None:
                 hasSituational = hasSituational or isSituational
-                bonusName = _packBonusName(bnsType, bnsId, hasFemales=hasFemales)
+                bonusName = _packBonusName(bnsType, bnsId)
                 if isSituational:
                     icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL, 16, 16, 0, 2)
                     bonusName = param_formatter.packSituationalIcon(bonusName, icon)
                     titlePadding = formatters.packPadding(left=8, top=-2)
                 else:
                     titlePadding = self.__titlePadding
-                result.append(formatters.packTitleDescParameterWithIconBlockData(bonusName, _ms(TOOLTIPS.VEHICLEPARAMS_TITLE_VALUETEMPLATE, value=valueStr), icon=param_formatter.getBonusIcon(bnsId), iconPadding=self.__iconPadding, titlePadding=titlePadding, padding=self.__listPadding))
+                result.append(self.__packBonusField(bnsId, bonusName, value=_ms(TOOLTIPS.VEHICLEPARAMS_TITLE_VALUETEMPLATE, value=valueStr), padding=titlePadding))
 
-        possibleBonuses = sorted(self._extendedData.possibleBonuses, _bonusCmp)
-        if possibleBonuses and len(possibleBonuses) > 0:
-            for bnsId, bnsType in possibleBonuses:
-                result.append(formatters.packTitleDescParameterWithIconBlockData(_packBonusName(bnsType, bnsId, False), icon=param_formatter.getBonusIcon(bnsId), iconAlpha=self.__iconDisabledAlpha, iconPadding=self.__iconPadding, titlePadding=self.__titlePadding, padding=self.__listPadding))
+        possibleBonuses = sorted(self._extendedData.possibleBonuses, cmp=_bonusCmp)
+        inactiveBonuses = self._extendedData.inactiveBonuses
+        for bnsId, bnsType in possibleBonuses:
+            isInactive = (bnsId, bnsType) in inactiveBonuses
+            result.append(self.__packBonusField(bnsId, _packBonusName(bnsType, bnsId, enabled=False, inactive=isInactive), isDisabled=True))
 
         return (result, hasSituational)
+
+    def __packBonusField(self, bonusID, name, value='', isDisabled=False, padding=None):
+        return formatters.packTitleDescParameterWithIconBlockData(name, value=value, icon=param_formatter.getBonusIcon(bonusID), iconAlpha=self.__iconDisabledAlpha if isDisabled else 1, iconPadding=self.__iconPadding, titlePadding=padding or self.__titlePadding, padding=self.__listPadding)
 
 
 class VehicleListDescParameterTooltipData(BaseVehicleAdvancedParametersTooltipData):
@@ -424,6 +439,8 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
         super(PriceBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
         self._valueWidth = valueWidth
         self._rentExpiryTime = params.get('rentExpiryTime')
+        self._rentBattlesLeft = params.get('rentBattlesLeft')
+        self._rentWinsLeft = params.get('rentWinsLeft')
 
     def construct(self):
         xp = self.configuration.xp
@@ -518,7 +535,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
             if rentals and not self.vehicle.isPremiumIGR:
                 if futureRentals:
                     rentLeftKey = '#tooltips:vehicle/rentLeftFuture/%s'
-                    rentInfo = RentalInfoProvider(time=self._rentExpiryTime, isRented=True)
+                    rentInfo = RentalInfoProvider(time=self._rentExpiryTime, battles=self._rentBattlesLeft, wins=self._rentWinsLeft, isRented=True)
                 else:
                     rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                     rentInfo = self.vehicle.rentInfo

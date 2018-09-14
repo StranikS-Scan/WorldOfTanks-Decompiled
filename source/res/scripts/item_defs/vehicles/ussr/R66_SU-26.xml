@@ -21,8 +21,8 @@
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
-    <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/russian/R66_SU-26/SU-26_CM.dds	</exclusionMask>
+    <tiling>	3.7 2.6 0.2 0.16	</tiling>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -38,7 +38,6 @@
       <armor_6>	6	</armor_6>
       <armor_7>	6	</armor_7>
       <armor_8>	10	</armor_8>
-      <armor_9>	0	</armor_9>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5045	</weight>
@@ -60,11 +59,11 @@
       <sensitivityToImpulse>	0.92	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	diesel_small	</pixie>
+      <pixie>	gas_small	</pixie>
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.288209 -0.7929	</turret>
+      <turret>	0.00167 0.26605 -0.777614	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R66_SU-26/collision/Hull.model	</collisionModelServer>
@@ -72,14 +71,17 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.445686 0.244669 1.61135	</rayStart>
-        <rayEnd>	0.445687 -0.145095 1.52144	</rayEnd>
+        <rayStart>	0.441357 0.113362 1.58359	</rayStart>
+        <rayEnd>	0.441358 -0.0833446 1.54744	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R66_SU-26/SU-26_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	4 2 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Su-26A>
@@ -124,7 +126,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.23	</textureScale>
+        <textureScale>	-5.5	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -147,6 +149,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.352125	</radius>
+          <syncAngle>	15.652	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -160,12 +163,14 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.31833	</radius>
+          <syncAngle>	15.652	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.352125	</radius>
+          <syncAngle>	15.6522	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -179,10 +184,11 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.31833	</radius>
+          <syncAngle>	15.6522	</syncAngle>
         </wheel>
       </wheels>
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
-      <hullPosition>	0.000000 0.951091 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.973021 0.000000	</hullPosition>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	smallTankMud	</mud>
@@ -193,7 +199,7 @@
         <collisionModelServer>	vehicles/russian/R66_SU-26/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R66_SU-26/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.02922 1.34508	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.02666 1.39475	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -206,6 +212,137 @@
           </transform>
         </decal>
       </AODecals>
+      <trackThickness>	-0.008	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	2.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	2.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	2.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	2.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.049569	</minOffset>
+          <maxOffset>	0.0538793	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.049569	</minOffset>
+          <maxOffset>	0.0538793	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R66_SU-26/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R66_SU-26/track/segment.model	</segmentModelRight>
+        <left>	vehicles/russian/R66_SU-26/track/left.track	</left>
+        <right>	vehicles/russian/R66_SU-26/track/right.track	</right>
+        <segmentLength>	0.085	</segmentLength>
+        <segmentOffset>	0.114	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
     </Su-26A>
     <Su-26B>
       <userString>	#ussr_vehicles:Su-26B	</userString>
@@ -245,7 +382,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.23	</textureScale>
+        <textureScale>	-5.5	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -268,6 +405,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.352125	</radius>
+          <syncAngle>	15.652	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -281,12 +419,14 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.31833	</radius>
+          <syncAngle>	15.652	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.352125	</radius>
+          <syncAngle>	15.6522	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -300,10 +440,11 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.31833	</radius>
+          <syncAngle>	15.6522	</syncAngle>
         </wheel>
       </wheels>
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
-      <hullPosition>	0.000000 0.951091 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.973021 0.000000	</hullPosition>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	smallTankMud	</mud>
@@ -314,7 +455,7 @@
         <collisionModelServer>	vehicles/russian/R66_SU-26/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R66_SU-26/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.02922 1.34508	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.02666 1.39475	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -327,6 +468,127 @@
           </transform>
         </decal>
       </AODecals>
+      <trackThickness>	0.000000	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	2.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	2.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <offset>	-0.053	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.049569	</minOffset>
+          <maxOffset>	0.0538793	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.049569	</minOffset>
+          <maxOffset>	0.0538793	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R66_SU-26/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R66_SU-26/track/segment.model	</segmentModelRight>
+        <left>	vehicles/russian/R66_SU-26/track/left.track	</left>
+        <right>	vehicles/russian/R66_SU-26/track/right.track	</right>
+        <segmentLength>	0.085	</segmentLength>
+        <segmentOffset>	0.103	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
     </Su-26B>
   </chassis>
   <turrets0>
@@ -343,9 +605,6 @@
         <armor_3>	10	</armor_3>
         <armor_4>	5	</armor_4>
         <armor_5>	0	</armor_5>
-        <armor_6>	5	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
       <maxHealth>	22	</maxHealth>
@@ -395,6 +654,9 @@
             <collisionModelServer>	vehicles/russian/R66_SU-26/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R66_SU-26/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.8 1.8 0.000000 0.000000	</tiling>
+          </camouflage>
         </_76mm_cannon_mod_1927>
         <_76mm_cannon_mod_1905_30>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
@@ -423,14 +685,17 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/russian/R66_SU-26/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/russian/R66_SU-26/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/russian/R66_SU-26/crash/lod0/Gun_04.model	</exploded>
+            <undamaged>	vehicles/russian/R66_SU-26/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R66_SU-26/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R66_SU-26/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/russian/R66_SU-26/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R66_SU-26/collision_client/Gun_04.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/russian/R66_SU-26/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R66_SU-26/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.8 1.8 0.000000 0.000000	</tiling>
+          </camouflage>
         </_76mm_cannon_mod_1905_30>
         <_76mm_cannon_mod_1905_40>	shared	  <maxAmmo>	48	</maxAmmo>
           <armor>
@@ -453,14 +718,17 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/russian/R66_SU-26/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R66_SU-26/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R66_SU-26/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/russian/R66_SU-26/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R66_SU-26/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R66_SU-26/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/russian/R66_SU-26/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R66_SU-26/collision_client/Gun_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/russian/R66_SU-26/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R66_SU-26/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	2.4 1.8 0.000000 0.000000	</tiling>
+          </camouflage>
         </_76mm_cannon_mod_1905_40>
       </guns>
       <models>
@@ -472,41 +740,44 @@
         <collisionModelServer>	vehicles/russian/R66_SU-26/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R66_SU-26/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.003114 0.711482 -0.072098	</gunPosition>
+      <gunPosition>	-0.000442 0.551803 -0.101492	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.88952 1.09012 -0.162048	</rayStart>
-          <rayEnd>	-0.491364 1.07518 -0.197371	</rayEnd>
+          <rayStart>	-0.696055 1.06401 -0.131465	</rayStart>
+          <rayEnd>	-0.69287 1.0639 -0.131747	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	-0.927359 0.56329 -0.540952	</rayStart>
-          <rayEnd>	-0.527644 0.548241 -0.539906	</rayEnd>
+          <rayStart>	-0.799954 0.525464 -0.412267	</rayStart>
+          <rayEnd>	-0.666049 0.520421 -0.411892	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.74	</size>
+          <size>	0.836	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.88952 1.09012 -0.162048	</rayStart>
-          <rayEnd>	0.491364 1.07518 -0.197371	</rayEnd>
+          <rayStart>	0.710389 1.06455 -0.130198	</rayStart>
+          <rayEnd>	0.678536 1.06336 -0.133014	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	0.927359 0.56329 -0.540952	</rayStart>
-          <rayEnd>	0.527644 0.548241 -0.539906	</rayEnd>
+          <rayStart>	0.801502 0.497108 -0.389421	</rayStart>
+          <rayEnd>	0.649609 0.491473 -0.388645	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.74	</size>
+          <size>	0.836	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 0.937 0.000 1.013 0.000 0.500 0.100 0.000 0.500 0.000 0.500 0.296 0.100 0.000	</physicsShape>
+      <physicsShape>	1.000 0.044 0.973 0.000 1.019 0.003 0.500 0.100 0.055 0.500 0.000 0.500 0.315 0.100 0.038	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	2.3 2.3 0.4 0.2	</tiling>
+      </camouflage>
     </SU-26>
   </turrets0>
   <engines>

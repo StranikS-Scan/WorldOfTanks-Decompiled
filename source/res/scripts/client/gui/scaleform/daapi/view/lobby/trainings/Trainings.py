@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/Trainings.py
 import ArenaType
 from adisp import process
-from constants import PREBATTLE_TYPE
+from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_TYPE
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -76,14 +76,18 @@ class Trainings(LobbySubView, TrainingFormMeta, ILegacyListener):
             Waiting.hide('Flash')
         listData = []
         playersTotal = 0
+        addObservers = self.prbEntity.getEntityType() in OBSERVERS_BONUS_TYPES
         for item in prebattles:
             arena = ArenaType.g_cache[item.arenaTypeID]
             playersTotal += item.playersCount
+            maxPlayersInTeam = arena.maxPlayersInTeam
+            if addObservers:
+                maxPlayersInTeam += PREBATTLE_MAX_OBSERVERS_IN_TEAM
             listData.append({'id': item.prbID,
              'comment': item.getCensoredComment(),
              'arena': getArenaFullName(item.arenaTypeID),
              'count': item.playersCount,
-             'total': arena.maxPlayersInTeam,
+             'total': maxPlayersInTeam,
              'owner': item.getCreatorFullName(),
              'creatorName': item.creator,
              'creatorClan': item.clanAbbrev,

@@ -224,7 +224,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
         self.as_hideAutoSearchS()
 
     def __createAutoUpdateModel(self, state, countDownSeconds, ctxMessage, playersReadiness):
-        permissions = self.prbEntity.getPermissions(unitIdx=self.prbEntity.getUnitIdx())
+        permissions = self.prbEntity.getPermissions(unitMgrID=self.prbEntity.getID())
         model = {'state': state,
          'countDownSeconds': countDownSeconds,
          'contextMessage': ctxMessage,

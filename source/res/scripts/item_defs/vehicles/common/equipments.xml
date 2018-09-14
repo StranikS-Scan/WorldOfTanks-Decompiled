@@ -113,7 +113,7 @@
     </incompatibleTags>
     <vehicleFilter>
       <include>
-        <nations>	usa germany france uk czech sweden	</nations>
+        <nations>	usa germany france uk czech sweden poland	</nations>
         <engine>
           <tags>	gasoline	</tags>
         </engine>
@@ -136,7 +136,7 @@
     </incompatibleTags>
     <vehicleFilter>
       <include>
-        <nations>	usa germany france uk czech sweden	</nations>
+        <nations>	usa germany france uk czech sweden poland	</nations>
         <engine>
           <tags>	gasoline	</tags>
         </engine>
@@ -325,6 +325,22 @@
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
     </script>
   </ration_sweden>
+  <ration_poland>
+    <id>	63	</id>
+    <userString>	#artefacts:ration_poland/name	</userString>
+    <description>	#artefacts:ration_poland/descr	</description>
+    <icon>	ration_poland 0 0	</icon>
+    <price>	50	  <gold></gold>
+    </price>
+    <tags>	stimulator	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+  </ration_poland>
   <artillery_tier1>
     <id>	19	</id>
     <userString>	#artefacts:artillery/name	</userString>

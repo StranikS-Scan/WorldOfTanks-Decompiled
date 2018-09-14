@@ -9,10 +9,20 @@
       <Type>	FLOAT	</Type>
       <Editable>	False	</Editable>
     </radius>
+    <scale>
+      <Type>	VECTOR3	</Type>
+      <Editable>	False	</Editable>
+      <Default>	1.0 1.0 1.0	</Default>
+    </scale>
     <exitInterval>
       <Type>	FLOAT	</Type>
       <Editable>	True	</Editable>
       <Default>	1.0	</Default>
     </exitInterval>
+    <direction>
+      <Type>	VECTOR3	</Type>
+      <Editable>	False	</Editable>
+      <Default>	1.0 1.0 1.0	</Default>
+    </direction>
   </Properties>
 </AreaTrigger.def>

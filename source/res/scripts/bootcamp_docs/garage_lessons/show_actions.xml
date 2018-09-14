@@ -1,0 +1,58 @@
+<show_actions.xml>
+  <action>
+    <name>	showElementsLessonI	</name>
+    <show>	Header	</show>
+    <next_hint>	callbackOnBattleReady	</next_hint>
+  </action>
+  <action>
+    <name>	showElementsLessonII_Step1	</name>
+    <show>	HeaderSilver MenuHangar HeaderMainMenuButtonBar HangarVehResearchPanel HangarParams	</show>
+    <next_hint>	callbackEnableResearchButton	</next_hint>
+  </action>
+  <action>
+    <name>	showElementsLessonII_Step2	</name>
+    <show_condition>
+      <view>	hangar	</view>
+      <name>	moduleBought_LessonII	</name>
+      <result>	True	</result>
+    </show_condition>
+    <show>	HangarComponents	</show>
+    <next_hint>	highlightButton_AmmunitionSlot_LessonII	</next_hint>
+  </action>
+  <action>
+    <name>	showElementsLessonIII_Step1	</name>
+    <show>	MenuTechTree	</show>
+    <next_hint>	highlightButton_TechTree_LessonIII	</next_hint>
+  </action>
+  <action>
+    <name>	showElementsLessonIII_Step2	</name>
+    <show>	HangarCarousel HangarCrew	</show>
+    <next_hint>	conditional_CrewCaptain_Check_LessonIII	</next_hint>
+  </action>
+  <action>
+    <name>	showElementsLessonIV_Step1	</name>
+    <show>	HangarEquipment	</show>
+    <next_hint>	highlightButton_Consumables_LessonIV	</next_hint>
+  </action>
+  <action>
+    <name>	showElementsLessonIV_Step2	</name>
+    <show_condition>
+      <view>	hangar	</view>
+      <name>	hasOptionalDevicesView_LessonV	</name>
+      <result>	False	</result>
+    </show_condition>
+    <show>	HangarOptionalDevices	</show>
+    <next_hint>	highlightButton_Equipment_LessonIV	</next_hint>
+  </action>
+  <action>
+    <name>	showElementsLessonV_Step1	</name>
+    <show>	HangarQuestControl	</show>
+    <save>	True	</save>
+    <next_hint>	highlightButton_Quests_LessonV	</next_hint>
+  </action>
+  <action>
+    <name>	showElementsLessonV_Step2	</name>
+    <show>	HeaderBattleSelector	</show>
+    <next_hint>	highlightButton_BattleType_LessonV	</next_hint>
+  </action>
+</show_actions.xml>

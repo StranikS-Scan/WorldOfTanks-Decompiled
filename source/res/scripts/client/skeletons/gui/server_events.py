@@ -54,10 +54,6 @@ class IEventsCache(object):
         raise NotImplementedError
 
     @property
-    def companies(self):
-        raise NotImplementedError
-
-    @property
     def prefetcher(self):
         raise NotImplementedError
 
@@ -116,9 +112,6 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getFutureEvents(self):
-        raise NotImplementedError
-
-    def getCompanyBattles(self):
         raise NotImplementedError
 
     def isFalloutEnabled(self):

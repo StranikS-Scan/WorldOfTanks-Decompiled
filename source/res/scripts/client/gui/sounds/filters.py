@@ -70,6 +70,12 @@ class WWISEFilteredHangarFilter(_WWISEStateAmbient):
         _WWISEStateAmbient.__init__(self, 'STATE_hangar_filtered')
 
 
+class WWISEFilteredBootcampArenaFilter(_WWISEStateAmbient):
+
+    def __init__(self):
+        _WWISEStateAmbient.__init__(self, 'STATE_bootcamp_arena_filtered')
+
+
 def getEmptyFilter():
     return EmptySoundFilter()
 

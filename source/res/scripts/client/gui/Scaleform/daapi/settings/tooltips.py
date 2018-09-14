@@ -3,7 +3,7 @@
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_day_tooltip import RankedCalendarDayTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_selector_tooltip import RankedSelectorTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_step_tooltip import RankedStepTooltip
-from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, potapovquests, tutorial, fortifications, clans, boosters, veh_cmp, quests, ranked, battle_booster
+from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, potapovquests, tutorial, fortifications, clans, boosters, veh_cmp, quests, ranked, battle_booster, bootcamp
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import BonusTooltip as CustomizationBonusTooltip
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip, QuestElementTooltip as CustomizationQuestElementTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -176,18 +176,6 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.SORTIE_DIVISION: {'tooltip': TOOLTIPS_CONSTANTS.SORTIE_DIVISION_UI,
                                       'method': common.SortieDivisionTooltipData(contexts.FortificationContext()).buildToolTip,
                                       'complex': None},
- TOOLTIPS_CONSTANTS.FORT_POPOVER_DEFRESPROGRESS: {'tooltip': TOOLTIPS_CONSTANTS.FORT_POPOVER_DEFRESPROGRESS_UI,
-                                                  'method': fortifications.FortPopoverDefResTooltipData(contexts.FortPopoverDefResProgressContext()).buildToolTip,
-                                                  'complex': None},
- TOOLTIPS_CONSTANTS.FORT_SORTIE_TIME_LIMIT: {'tooltip': TOOLTIPS_CONSTANTS.FORT_SORTIE_TIME_LIMIT_UI,
-                                             'method': fortifications.SortiesTimeLimitPacker(contexts.FortSortieLimitContext()).buildToolTip,
-                                             'complex': None},
- TOOLTIPS_CONSTANTS.FORT_SORTIE_SERVER_LIMIT: {'tooltip': TOOLTIPS_CONSTANTS.FORT_SORTIE_SERVER_LIMIT_UI,
-                                               'method': fortifications.SortiesServerLimitPacker(contexts.FortSortieLimitContext()).buildToolTip,
-                                               'complex': None},
- TOOLTIPS_CONSTANTS.CLAN_PROFILE_FORT_BUILDING: {'tooltip': TOOLTIPS_CONSTANTS.FORT_SORTIE_TIME_LIMIT_UI,
-                                                 'method': clans.ClanProfileFortBuildingTooltipData(contexts.FortificationContext()).buildToolTip,
-                                                 'complex': None},
  TOOLTIPS_CONSTANTS.MAP: {'tooltip': TOOLTIPS_CONSTANTS.MAP_UI,
                           'method': common.MapTooltipData(contexts.HangarContext()).buildToolTip,
                           'complex': None},
@@ -233,9 +221,6 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.SETTINGS_CONTROL: {'tooltip': TOOLTIPS_CONSTANTS.COMPLEX_UI,
                                        'method': common.SettingsControlTooltipData(contexts.HangarContext()).buildToolTip,
                                        'complex': lambda data: False},
- TOOLTIPS_CONSTANTS.CLAN_INFO: {'tooltip': TOOLTIPS_CONSTANTS.CLAN_INFO_UI,
-                                'method': common.ClanInfoTooltipData(contexts.HangarContext()).buildToolTip,
-                                'complex': None},
  TOOLTIPS_CONSTANTS.CLAN_COMMON_INFO: {'tooltip': TOOLTIPS_CONSTANTS.CLAN_COMMON_INFO_UI,
                                        'method': common.ClanCommonInfoTooltipData(contexts.HangarContext()).buildToolTip,
                                        'complex': None},
@@ -266,9 +251,6 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_BONUS: {'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_BONUS_UI,
                                                'method': CustomizationBonusTooltip(contexts.TechCustomizationContext()).buildToolTip,
                                                'complex': None},
- TOOLTIPS_CONSTANTS.FORT_WRONG_TIME: {'tooltip': TOOLTIPS_CONSTANTS.COMPLEX_UI,
-                                      'method': common.ToolTipFortWrongTime(contexts.HangarContext()).buildToolTip,
-                                      'complex': lambda data: False},
  TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TILE: {'tooltip': TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_UI,
                                           'method': potapovquests.PrivateQuestsTileTooltipData(contexts.PotapovQuestsTileContext()).buildToolTip,
                                           'complex': None},
@@ -290,18 +272,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.MAP_SMALL: {'tooltip': TOOLTIPS_CONSTANTS.MAP_SMALL_UI,
                                 'method': common.MapSmallTooltipData(contexts.FortificationContext()).buildToolTip,
                                 'complex': None},
- TOOLTIPS_CONSTANTS.FORT_CONSUMABLE_ORDER: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
-                                            'method': fortifications.FortConsumableOrderTooltipData(contexts.FortOrderContext()).buildToolTip,
-                                            'complex': None},
  TOOLTIPS_CONSTANTS.BATTLE_CONSUMABLE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                         'method': battle_consumable.BattleConsumableTooltipData(contexts.BattleConsumableContext()).buildToolTip,
                                         'complex': None},
- TOOLTIPS_CONSTANTS.FORT_DIVISION: {'tooltip': TOOLTIPS_CONSTANTS.FORT_DIVISION_UI,
-                                    'method': common.FortDivisionTooltipData(contexts.HangarContext()).buildToolTip,
-                                    'complex': None},
- TOOLTIPS_CONSTANTS.FORT_SORTIE: {'tooltip': TOOLTIPS_CONSTANTS.FORT_SORTIE_UI,
-                                  'method': common.FortSortieTooltipData(contexts.HangarContext()).buildToolTip,
-                                  'complex': None},
  TOOLTIPS_CONSTANTS.ENVIRONMENT: {'tooltip': TOOLTIPS_CONSTANTS.ENVIRONMENT_UI,
                                   'method': common.EnvironmentTooltipData(contexts.HangarContext()).buildToolTip,
                                   'complex': None},
@@ -394,4 +367,7 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
                                                'complex': None},
  TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                            'method': RankedSelectorTooltip(contexts.ToolTipContext(None)).buildToolTip,
+                                           'complex': None},
+ TOOLTIPS_CONSTANTS.BOOTCAMP_AWARD_MEDAL: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                           'method': bootcamp.StatsTooltipData(contexts.ToolTipContext(None)).buildToolTip,
                                            'complex': None}}

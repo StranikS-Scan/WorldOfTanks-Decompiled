@@ -32,6 +32,9 @@ class SquadWindow(SquadWindowMeta):
     def _getSquadViewAlias(self):
         return PREBATTLE_ALIASES.SQUAD_VIEW_PY
 
+    def onUnitRejoin(self):
+        self.as_enableWndCloseBtnS(not self.prbEntity.hasLockedState())
+
     def onUnitFlagsChanged(self, flags, timeLeft):
         self.as_enableWndCloseBtnS(not self.prbEntity.hasLockedState())
 

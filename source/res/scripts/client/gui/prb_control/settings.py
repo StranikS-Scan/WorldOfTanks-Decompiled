@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/settings.py
 from UnitBase import UNIT_ERROR, UNIT_BROWSER_ERROR, LEADER_SLOT
-from constants import PREBATTLE_TYPE, PREBATTLE_INVITE_STATE, QUEUE_TYPE
+from constants import PREBATTLE_TYPE, PREBATTLE_INVITE_STATE
 from prebattle_shared import SETTING_DEFAULTS, PrebattleSettings
 from shared_utils import CONST_CONTAINER, BitmaskHelper
 VEHICLE_MIN_LEVEL = 1
@@ -44,22 +44,21 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
     PRE_QUEUE_INTRO = 1024
     PRE_QUEUE = 2048
     E_SPORT = 4096
-    FORT = 8192
-    FALLOUT = 16384
-    COMPANY = 32768
-    TRAINING = 65536
-    BATTLE_SESSION = 131072
-    RANDOM = 262144
-    EVENT = 524288
-    SANDBOX = 1048576
-    TUTORIAL = 2097152
-    FORT2 = 4194304
-    RANKED = 8388608
-    DEFAULT = 1048576
+    FALLOUT = 8192
+    TRAINING = 16384
+    BATTLE_SESSION = 32768
+    RANDOM = 65536
+    EVENT = 131072
+    SANDBOX = 262144
+    TUTORIAL = 524288
+    STRONGHOLD = 1048576
+    RANKED = 2097152
+    BOOTCAMP = 4194304
+    DEFAULT = 8388608
     LEGACY_BITMASK = LEGACY_INTRO | LEGACY
     UNIT_BITMASK = UNIT_INTRO | UNIT_BROWSER | UNIT
     PRE_QUEUE_BITMASK = PRE_QUEUE_INTRO | PRE_QUEUE
-    MODES_BITMASK = E_SPORT | FORT | FALLOUT | COMPANY | TRAINING | BATTLE_SESSION | RANDOM | EVENT | SANDBOX | TUTORIAL | FORT2 | RANKED
+    MODES_BITMASK = E_SPORT | FALLOUT | TRAINING | BATTLE_SESSION | RANDOM | EVENT | SANDBOX | TUTORIAL | STRONGHOLD | RANKED | BOOTCAMP
     SET_GLOBAL_LISTENERS = LEGACY_BITMASK | UNIT_BITMASK | PRE_QUEUE_BITMASK
     RANGE = (UNDEFINED,
      SWITCH,
@@ -75,17 +74,16 @@ class FUNCTIONAL_FLAG(BitmaskHelper):
      PRE_QUEUE_INTRO,
      PRE_QUEUE,
      E_SPORT,
-     FORT,
      FALLOUT,
-     COMPANY,
      TRAINING,
      BATTLE_SESSION,
      RANDOM,
      EVENT,
      SANDBOX,
      TUTORIAL,
-     FORT2,
-     RANKED)
+     STRONGHOLD,
+     RANKED,
+     BOOTCAMP)
 
 
 _FUNCTIONAL_FLAG_NAMES = dict([ (k, v) for k, v in FUNCTIONAL_FLAG.__dict__.iteritems() if v in FUNCTIONAL_FLAG.RANGE ])
@@ -134,7 +132,6 @@ class PREBATTLE_ACTION_NAME(object):
     UNDEFINED = ''
     RANDOM = 'random'
     TRAININGS_LIST = 'trainingsList'
-    COMPANIES_LIST = 'companiesList'
     SPEC_BATTLES_LIST = 'specBattlesList'
     SQUAD = 'squad'
     EVENT_SQUAD = 'eventSquad'
@@ -142,15 +139,13 @@ class PREBATTLE_ACTION_NAME(object):
     CLAN = 'clan'
     E_SPORT = 'eSport'
     PUBLICS_LIST = 'publicsList'
-    FORT = 'fort'
-    FORT_BATTLES_LIST = 'fortBattlesList'
-    SORTIES_LIST = 'sortiesList'
     BATTLE_TUTORIAL = 'tutorial'
     FALLOUT = 'fallout'
     FALLOUT_CLASSIC = 'falloutClassic'
     FALLOUT_MULTITEAM = 'falloutMultiTeam'
     SANDBOX = 'battleTeaching'
-    FORT2 = 'fort2'
+    STRONGHOLD = 'stronghold'
+    BOOTCAMP = 'bootcamp'
     STRONGHOLDS_BATTLES_LIST = 'strongholdsBattlesList'
     RANKED = 'ranked'
     RANKED_FORCED = 'rankedForced'
@@ -323,6 +318,7 @@ class UNIT_RESTRICTION(object):
     UNIT_INACTIVE_PERIPHERY_SORTIE = 35
     UNIT_INACTIVE_PERIPHERY_BATTLE = 36
     SPG_IS_FORBIDDEN = 37
+    UNIT_WAITINGFORDATA = 38
 
 
 class PRE_QUEUE_RESTRICTION:
@@ -348,7 +344,6 @@ class PREBATTLE_ROSTER(object):
      ASSIGNED_IN_TEAM2,
      UNASSIGNED_IN_TEAM2)
     PREBATTLE_RANGES = {PREBATTLE_TYPE.TRAINING: ALL,
-     PREBATTLE_TYPE.COMPANY: (ASSIGNED_IN_TEAM1, UNASSIGNED_IN_TEAM1),
      PREBATTLE_TYPE.TOURNAMENT: ALL,
      PREBATTLE_TYPE.CLAN: ALL}
 

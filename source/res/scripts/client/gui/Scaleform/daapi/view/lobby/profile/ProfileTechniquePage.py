@@ -47,6 +47,12 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
     def _getStorageId(self):
         return PROFILE_TECHNIQUE
 
+    def _sendAccountData(self, targetData, accountDossier):
+        super(ProfileTechniquePage, self)._sendAccountData(targetData, accountDossier)
+        if self._selectedVehicleIntCD is not None and self._selectedVehicleIntCD not in targetData.getVehicles():
+            self.as_setSelectedVehicleIntCDS(-1)
+        return
+
     def setIsInHangarSelected(self, value):
         storageId = self._getStorageId()
         storedData = AccountSettings.getFilter(storageId)

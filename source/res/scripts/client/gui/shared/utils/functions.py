@@ -10,7 +10,7 @@ from helpers.i18n import makeString
 from gui import GUI_SETTINGS, SystemMessages
 from items import ITEM_TYPE_INDICES, vehicles
 from debug_utils import LOG_DEBUG
-from gui.shared.money import Currency
+from gui.shared.money import Currency, ZERO_MONEY
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 
 def rnd_choice(*args):
@@ -108,34 +108,56 @@ def checkAmmoLevel(vehicles, callback):
     """
     showAmmoWarning = False
     ammoWarningMessage = 'lowAmmo'
+
+    def _validateMoneyForLayouts(vehicle):
+        from gui.shared.gui_items.processors.plugins import MoneyValidator
+        shellsPrice = ZERO_MONEY
+        eqsPrice = ZERO_MONEY
+        for shell in vehicle.shells:
+            if shell.defaultCount:
+                shellPrice = shell.getBuyPrice()
+                shellsPrice += shellPrice * (shell.defaultCount - shell.inventoryCount - shell.count)
+
+        for idx, eq in enumerate(vehicle.eqsLayout):
+            if eq is not None:
+                vehEquipment = vehicle.eqs[idx]
+                if vehEquipment:
+                    eqPrice = eq.getBuyPrice()
+                    eqsPrice += eqPrice
+
+        return MoneyValidator(shellsPrice + eqsPrice).validate()
+
+    def _autoFillLayouts(vehicle):
+        from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+        shellsLayout = []
+        eqsLayout = []
+        for shell in vehicle.shells:
+            shellsLayout.extend(shell.defaultLayoutValue)
+
+        for eq in vehicle.eqsLayout:
+            if eq is not None:
+                eqsLayout.extend(eq.defaultLayoutValue)
+            eqsLayout.extend((0, 0))
+
+        LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, vehicle, shellsLayout, eqsLayout)
+        return
+
     for vehicle in vehicles:
         if vehicle.isReadyToFight:
-            if not vehicle.isAutoLoadFull() or not vehicle.isAutoEquipFull():
-                from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-                shellsLayout = []
-                eqsLayout = []
-                for shell in vehicle.shells:
-                    shellsLayout.extend(shell.defaultLayoutValue)
-
-                for eq in vehicle.eqsLayout:
-                    if eq is not None:
-                        eqsLayout.extend(eq.defaultLayoutValue)
-                    eqsLayout.extend((0, 0))
-
-                LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
-                ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, vehicle, shellsLayout, eqsLayout)
             showAmmoWarning = showAmmoWarning or not vehicle.isAmmoFull
-            if vehicle.isAutoLoadFull() and showAmmoWarning:
+        if showAmmoWarning:
+            validateResult = _validateMoneyForLayouts(vehicle)
+            if vehicle.isAutoLoadFull() or not validateResult.success:
                 ammoWarningMessage = 'lowAmmoAutoLoad'
-
-    if showAmmoWarning:
-        from gui import DialogsInterface
-        success = yield DialogsInterface.showI18nConfirmDialog(ammoWarningMessage)
-        callback(success)
-    else:
+            from gui import DialogsInterface
+            success = yield DialogsInterface.showI18nConfirmDialog(ammoWarningMessage)
+            if success:
+                if not vehicle.isAutoLoadFull() or not vehicle.isAutoEquipFull() and validateResult.success:
+                    _autoFillLayouts(vehicle)
+            callback(success)
         yield lambda callback: callback(None)
         callback(True)
-    return
 
 
 def getModuleGoldStatus(price, money):

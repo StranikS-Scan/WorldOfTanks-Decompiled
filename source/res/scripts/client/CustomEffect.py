@@ -452,7 +452,7 @@ class EffectDescriptorBase(object):
         self._selectorDesc = None
         return
 
-    def getActiveEffects(self, args, effectIDs):
+    def getActiveEffects(self, effects, args):
         pass
 
 
@@ -492,26 +492,34 @@ class CustomEffectsDescriptor(EffectDescriptorBase):
             return
             return
 
-    def getActiveEffects(self, args, effectIDs):
-        return self._selectorDesc.getActiveEffects(args, effectIDs) if self._selectorDesc is not None else None
+    def getActiveEffects(self, effects, args):
+        return self._selectorDesc.getActiveEffects(effects, args) if self._selectorDesc is not None else None
 
 
 class ExhaustEffectDescriptor(EffectDescriptorBase):
 
-    def __init__(self, dataSection, xmlCtx, customDescriptor, name):
+    def __init__(self, dataSection, xmlCtx, customDescriptors, name):
+        assert 'default' in customDescriptors
         super(ExhaustEffectDescriptor, self).__init__()
-        self._selectorDesc = customDescriptor
+        self.__descriptors = customDescriptors
         self.nodes = _xml.readNonEmptyString(xmlCtx, dataSection, name).split()
 
     def create(self, args):
-        if self._selectorDesc is not None:
-            return ExhaustMainSelector(self._selectorDesc, args, self.nodes)
+        effectDescriptor = self.__descriptors['default']
+        if len(self.__descriptors) > 1:
+            for tag in args['engineTags']:
+                if tag in self.__descriptors:
+                    effectDescriptor = self.__descriptors[tag]
+                    break
+
+        if effectDescriptor is not None:
+            return ExhaustMainSelector(effectDescriptor, args, self.nodes)
         else:
             return
             return
 
-    def getActiveEffects(self, args, effectIDs):
-        return self._selectorDesc.getActiveEffects(args, effectIDs) if self._selectorDesc is not None else None
+    def getActiveEffects(self, effects, args):
+        raise AssertionError('This function should not be called by hand.')
 
 
 class EffectSettings:

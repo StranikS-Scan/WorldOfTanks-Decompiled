@@ -5,7 +5,7 @@ from adisp import process, async
 from debug_utils import LOG_WARNING
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
-from items import tankmen as tmen_core, vehicles as vehs_core
+from items import tankmen as tmen_core
 from gui import DialogsInterface
 from gui.game_control import restore_contoller
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
@@ -563,7 +563,7 @@ class VehicleSlotsConfirmator(MessageInformator):
         super(VehicleSlotsConfirmator, self).__init__('haveNoEmptySlots', isEnabled=isEnabled)
 
     def _activeHandler(self):
-        return self.itemsCache.items.stats.vehicleSlots <= len(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY))
+        return self.itemsCache.items.inventory.getFreeSlots(self.itemsCache.items.stats.vehicleSlots) <= 0
 
 
 class VehicleFreeLimitConfirmator(MessageInformator):
@@ -758,19 +758,28 @@ class TankmanLockedValidator(SyncValidator):
 
     def __init__(self, tankman):
         super(TankmanLockedValidator, self).__init__()
-        self.__tankman = tankman
+        self._tankman = tankman
 
     def _validate(self):
-        return makeError('FORBIDDEN') if tmen_core.ownVehicleHasTags(self.__tankman.strCD, (VEHICLE_TAGS.CREW_LOCKED,)) else makeSuccess()
+        return makeError('FORBIDDEN') if tmen_core.ownVehicleHasTags(self._tankman.strCD, (VEHICLE_TAGS.CREW_LOCKED,)) else makeSuccess()
+
+
+class TankmanChangePassportValidator(TankmanLockedValidator):
+
+    def _validate(self):
+        if self._tankman.descriptor.getRestrictions().isPassportReplacementForbidden():
+            return makeError('FORBIDDEN')
+        else:
+            return super(TankmanChangePassportValidator, self)._validate()
 
 
 class BattleBoosterConfirmator(I18nMessageAbstractConfirmator):
 
-    def __init__(self, localeKey, notSuitableLocaleKey, vehicle, battleBooster):
+    def __init__(self, localeKey, notSuitableLocaleKey, vehicle, battleBooster, isEnabled=True):
         self.__notSuitableLocaleKey = notSuitableLocaleKey
         self.__vehicle = vehicle
         self.__battleBooster = battleBooster
-        super(BattleBoosterConfirmator, self).__init__(localeKey)
+        super(BattleBoosterConfirmator, self).__init__(localeKey, isEnabled=isEnabled)
 
     def _activeHandler(self):
         return not self.__battleBooster.isAffectsOnVehicle(self.__vehicle)

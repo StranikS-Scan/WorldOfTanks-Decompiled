@@ -82,8 +82,8 @@ class _ChannelController(LobbyLayout):
         self._channel.onMembersListChanged -= self._onMembersListChanged
 
     def _onConnectStateChanged(self, channel):
-        if self._view:
-            self._view.as_setJoinedS(channel.isJoined())
+        for view in self._views:
+            view.as_setJoinedS(channel.isJoined())
 
     def _onMembersListChanged(self):
         self._refreshMembersDP()
@@ -174,8 +174,9 @@ class BSLazyChannelController(LazyChannelController):
          'text': AutoInviteTextFormatter().getText(invite)})
         self.__notifications.append(formatted)
         if self._activated:
-            if self._view:
-                self._view.as_addMessageS(formatted)
+            for view in self._views:
+                view.as_addMessageS(formatted)
+
         else:
             events_dispatcher.notifyCarousel(self._channel.getClientID())
 

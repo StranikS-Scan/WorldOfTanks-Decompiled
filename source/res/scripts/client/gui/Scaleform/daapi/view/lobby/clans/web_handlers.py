@@ -3,7 +3,7 @@
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_dispatcher import showClanProfileWindow, showClanInvitesWindow
 from messenger.m_constants import USER_TAG
-from messenger.proto.shared_find_criteria import FriendsFindCriteria
+from messenger.proto.shared_find_criteria import MutualFriendsFindCriteria
 from web_client_api import WebCommandException
 from web_client_api.commands import instantiateObject
 from web_client_api.commands.window_navigator import OpenClanCardCommand
@@ -69,7 +69,7 @@ def _getMembersStatus(callback):
 
 def _getFriendsStatus(callback):
     storage = g_clanCache.usersStorage
-    friends = storage.getList(FriendsFindCriteria(), iterator=storage.getClanMembersIterator(False))
+    friends = storage.getList(MutualFriendsFindCriteria(), iterator=storage.getClanMembersIterator(False))
     callback({'friends_status': _getStatuses(friends)})
 
 

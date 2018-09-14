@@ -45,6 +45,7 @@ OPT_DEVICE_START_IDX = 9
 OPT_DEVICE_END_IDX = 11
 OPT_DEVICE_RANGE = xrange(OPT_DEVICE_START_IDX, OPT_DEVICE_END_IDX + 1)
 OPT_DEVICE_FULL_MASK = sum([ 1 << idx for idx in OPT_DEVICE_RANGE ])
+EQUIPMENT_ICON_PATH = '../maps/icons/artefact/%s.png'
 EMPTY_EQUIPMENTS_SLICE = [0] * (EQUIPMENT_END_IDX - EQUIPMENT_START_IDX + 1)
 EMPTY_ORDERS_SLICE = [0] * (ORDERS_START_IDX - ORDERS_END_IDX + 1)
 EMPTY_EQUIPMENT_TOOLTIP = i18n.makeString('#ingame_gui:consumables_panel/equipment/tooltip/empty')
@@ -99,6 +100,17 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         self.__removeListeners()
         self.__keys.clear()
         super(ConsumablesPanel, self)._dispose()
+
+    def _addShellSlot(self, idx, keyCode, sfKeyCode, quantity, clipCapacity, shellIconPath, noShellIconPath, tooltipText):
+        self.as_addShellSlotS(idx, keyCode, sfKeyCode, quantity, clipCapacity, shellIconPath, noShellIconPath, tooltipText)
+
+    def _showEquipmentGlow(self, equipmentIndex):
+        if equipmentIndex in self.__equipmentsGlowCallbacks:
+            BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
+            del self.__equipmentsGlowCallbacks[equipmentIndex]
+        else:
+            self.as_setGlowS(equipmentIndex, False)
+        self.__equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(_EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
 
     def __addListeners(self):
         vehicleCtrl = self.sessionProvider.shared.vehicleState
@@ -311,7 +323,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         self.__cds[idx] = intCD
         bwKey, sfKey = self.__genKey(idx)
         self.__keys[bwKey] = partial(self.__handleAmmoPressed, intCD)
-        self.as_addShellSlotS(idx, bwKey, sfKey, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, toolTip)
+        self._addShellSlot(idx, bwKey, sfKey, quantity, gunSettings.clip.size, shellIconPath, noShellIconPath, toolTip)
 
     def __onShellsUpdated(self, intCD, quantity, *args):
         if intCD in self.__cds:
@@ -378,7 +390,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                 self.onPopUpClosed()
                 if item.isReusable:
                     if self.__canApplyingGlowEquipment(item):
-                        self.__showEquipmentGlow(idx)
+                        self._showEquipmentGlow(idx)
                     elif item.becomeReady:
                         self.as_setGlowS(idx, isGreen=True)
                     elif idx in self.__equipmentsGlowCallbacks:
@@ -390,6 +402,9 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         if intCD in self.__cds:
             self.as_setCoolDownPosAsPercentS(self.__cds.index(intCD), percent)
 
+    def _getEquipmentIconPath(self):
+        return EQUIPMENT_ICON_PATH
+
     def __onEquipmentCooldownTime(self, intCD, timeLeft, isBaseTime, isFlash):
         if intCD in self.__cds:
             self.as_setCoolDownTimeSnapshotS(self.__cds.index(intCD), timeLeft, isBaseTime, isFlash)
@@ -398,7 +413,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         idx = self.__genNextIdx(EQUIPMENT_FULL_MASK, EQUIPMENT_START_IDX)
         self.__cds[idx] = intCD
         descriptor = item.getDescriptor()
-        iconPath = '../maps/icons/artefact/%s.png' % descriptor.icon[0]
+        iconPath = self._getEquipmentIconPath() % descriptor.icon[0]
         body = descriptor.description
         if item.getTotalTime() > 0:
             tooltipStr = INGAME_GUI.CONSUMABLES_PANEL_EQUIPMENT_COOLDOWNSECONDS
@@ -424,7 +439,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         idx = self.__genNextIdx(ORDERS_FULL_MASK, ORDERS_START_IDX)
         self.__cds[idx] = intCD
         descriptor = item.getDescriptor()
-        iconPath = '../maps/icons/artefact/%s.png' % descriptor.icon[0]
+        iconPath = self._getEquipmentIconPath() % descriptor.icon[0]
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
         bwKey, sfKey = self.__genKey(idx)
         self.__keys[bwKey] = partial(self.__handleEquipmentPressed, intCD)
@@ -459,7 +474,8 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             LOG_ERROR('Optional device is not found in panel', intCD, self.__cds)
 
     def __onPostMortemSwitched(self):
-        self.__keys.clear()
+        self.__reset()
+        self.__removeListeners()
         self.as_switchToPosmortemS()
 
     def __onRespawnBaseMoving(self):
@@ -495,7 +511,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                 equipmentTag = 'medkit' if itemName in TANKMEN_ROLES_ORDER_DICT['enum'] else 'repairkit'
                 if deviceState == actualState and deviceState == DEVICE_STATE_DESTROYED:
                     for intCD, _ in ctrl.iterEquipmentsByTag(equipmentTag, _isEquipmentAvailableToUse):
-                        self.__showEquipmentGlow(self.__cds.index(intCD))
+                        self._showEquipmentGlow(self.__cds.index(intCD))
 
                 elif deviceState != DEVICE_STATE_DESTROYED:
                     for intCD, equipment in ctrl.iterEquipmentsByTag(equipmentTag):
@@ -514,7 +530,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             elif state == VEHICLE_VIEW_STATE.STUN:
                 if value > 0:
                     for intCD, _ in ctrl.iterEquipmentsByTag('medkit', _isEquipmentAvailableToUse):
-                        self.__showEquipmentGlow(self.__cds.index(intCD))
+                        self._showEquipmentGlow(self.__cds.index(intCD))
 
                 else:
                     for intCD, equipment in ctrl.iterEquipmentsByTag('medkit'):
@@ -534,7 +550,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
 
                     if not hasReadyAutoExt:
                         for cID in glowCandidates:
-                            self.__showEquipmentGlow(self.__cds.index(cID))
+                            self._showEquipmentGlow(self.__cds.index(cID))
 
                 else:
                     for intCD, equipment in ctrl.iterEquipmentsByTag('extinguisher'):
@@ -554,14 +570,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         canActivate, info = equipment.canActivate(entityName)
         infoType = type(info)
         return correction and (canActivate or infoType == NeedEntitySelection) or infoType == IgnoreEntitySelection
-
-    def __showEquipmentGlow(self, equipmentIndex):
-        if equipmentIndex in self.__equipmentsGlowCallbacks:
-            BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
-            del self.__equipmentsGlowCallbacks[equipmentIndex]
-        else:
-            self.as_setGlowS(equipmentIndex, False)
-        self.__equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(_EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
 
     def __hideEquipmentGlowCallback(self, equipmentIndex):
         return self.__clearEquipmentGlow(equipmentIndex, cancelCallback=False)

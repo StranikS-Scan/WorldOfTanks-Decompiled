@@ -312,7 +312,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
 
     def _updateMembersData(self):
         entity = self.prbEntity
-        self.as_setMembersS(*vo_converters.makeSlotsVOs(entity, entity.getUnitIdx(), app=self.app))
+        self.as_setMembersS(*vo_converters.makeSlotsVOs(entity, entity.getID(), app=self.app))
         self._setActionButtonState()
 
     def __handleCurrentVehicleChanged(self):

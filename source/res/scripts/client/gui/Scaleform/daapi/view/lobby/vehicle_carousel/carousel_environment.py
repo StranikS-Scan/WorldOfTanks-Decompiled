@@ -111,7 +111,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener):
 
     def updateAviability(self):
         state = self._currentVehicle.getViewState()
-        self.as_setEnabledS(not state.isLocked)
+        self.as_setEnabledS(not state.isLocked())
 
     def _populate(self):
         super(CarouselEnvironment, self)._populate()
@@ -179,7 +179,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener):
             self.updateVehicles(vehicles)
 
     def __onCacheResync(self, reason, diff):
-        if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
+        if reason in (CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.DOSSIER_RESYNC):
             self.updateVehicles()
             self.updateAviability()
             return

@@ -3,6 +3,7 @@
     <Interface>	ChatProvider_chat2	</Interface>
     <Interface>	SyncObjectsHost	</Interface>
     <Interface>	IndirectVisibility	</Interface>
+    <Interface>	VehicleAIController	</Interface>
     <Interface>	TeamBase_Arena	</Interface>
     <Interface>	ArtilleryEquipment	</Interface>
     <Interface>	BomberEquipment	</Interface>
@@ -269,5 +270,12 @@
     <onDamageTakenByVehicleRP>
       <Arg>	OBJECT_ID	</Arg>
     </onDamageTakenByVehicleRP>
+    <killEnemies>
+      <Arg>	OBJECT_ID	</Arg>
+    </killEnemies>
+    <sendBootcampEvent>
+      <Arg>	ARRAY	  <of>	UINT64	</of>
+      </Arg>
+    </sendBootcampEvent>
   </BaseMethods>
 </Arena.def>

@@ -7,7 +7,6 @@ from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.training.legacy.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -24,7 +23,6 @@ from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.utils.functions import checkAmmoLevel
 from prebattle_shared import decodeRoster
 
 class TrainingEntryPoint(LegacyEntryPoint):
@@ -113,8 +111,7 @@ class TrainingEntity(LegacyEntity):
      VIEW_ALIAS.LOBBY_STORE,
      VIEW_ALIAS.LOBBY_TECHTREE,
      VIEW_ALIAS.LOBBY_BARRACKS,
-     VIEW_ALIAS.LOBBY_PROFILE,
-     FORTIFICATION_ALIASES.FORTIFICATIONS_VIEW_ALIAS)
+     VIEW_ALIAS.LOBBY_PROFILE)
 
     def __init__(self, settings):
         requests = {REQUEST_TYPE.ASSIGN: self.assign,

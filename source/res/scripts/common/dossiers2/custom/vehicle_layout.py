@@ -216,16 +216,8 @@ FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'crusher',
  'counterblow',
  'kampfer',
- 'soldierOfFortune',
- 'wins',
- 'capturedBasesInAttack',
- 'capturedBasesInDefence']
-_fortPersonalAchievementsPopUps = ['conqueror',
- 'fireAndSword',
- 'crusher',
- 'counterblow',
- 'kampfer',
  'soldierOfFortune']
+_fortPersonalAchievementsPopUps = ['soldierOfFortune']
 _fortPersonalAchievementsBlockBuilder = StaticSizeBlockBuilder('fortAchievements', FORT_ACHIEVEMENTS_BLOCK_LAYOUT, FORT_ACHIEVEMENTS_DEPENDENCIES, _fortPersonalAchievementsPopUps)
 CLAN_ACHIEVEMENTS_BLOCK_LAYOUT = ['medalRotmistrov']
 _clanAchievementsBlockBuilder = StaticSizeBlockBuilder('clanAchievements', CLAN_ACHIEVEMENTS_BLOCK_LAYOUT, {}, [])

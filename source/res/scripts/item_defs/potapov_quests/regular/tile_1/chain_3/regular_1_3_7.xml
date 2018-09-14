@@ -7,10 +7,10 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleKills>
+            <vehicleDamage>
               <classes>	SPG	</classes>
               <greaterOrEqual>	1	</greaterOrEqual>
-            </vehicleKills>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>
@@ -30,10 +30,10 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleKills>
+            <vehicleDamage>
               <classes>	SPG	</classes>
               <greaterOrEqual>	1	</greaterOrEqual>
-            </vehicleKills>
+            </vehicleDamage>
             <isAlive></isAlive>
           </and>
         </postBattle>

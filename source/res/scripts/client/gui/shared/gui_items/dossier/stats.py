@@ -402,50 +402,6 @@ class _FalloutStatsBlock(_BattleStatsBlock):
         return self._getStat('soloFlagCapture')
 
 
-class _FortMiscStatsBlock(_StatsBlockAbstract):
-    __metaclass__ = ABCMeta
-
-    def __init__(self, dossier):
-        self._statsMisc = self._getStatsMiscBlock(dossier)
-
-    def getLootInSorties(self):
-        return self._getStatMisc('fortResourceInSorties')
-
-    def getMaxLootInSorties(self):
-        return self._getStatMisc('maxFortResourceInSorties')
-
-    def getLootInBattles(self):
-        return self._getStatMisc('fortResourceInBattles')
-
-    def getMaxLootInBattles(self):
-        return self._getStatMisc('maxFortResourceInBattles')
-
-    def getDefenceHours(self):
-        return self._getStatMisc('defenceHours')
-
-    def getSuccessfulDefenceHours(self):
-        return self._getStatMisc('successfulDefenceHours')
-
-    def getAttackNumber(self):
-        return self._getStatMisc('attackNumber')
-
-    def getEnemyBasePlunderNumber(self):
-        return self._getStatMisc('enemyBasePlunderNumber')
-
-    def getEnemyBasePlunderNumberInAttack(self):
-        return self._getStatMisc('enemyBasePlunderNumberInAttack')
-
-    def getRecord(self, recordName):
-        return self._statsMisc[recordName]
-
-    @abstractmethod
-    def _getStatsMiscBlock(self, dossier):
-        raise NotImplemented
-
-    def _getStatMisc(self, statName):
-        return self._statsMisc[statName]
-
-
 class _AchievementsBlock(_StatsBlockAbstract):
 
     def __init__(self, dossier):
@@ -664,9 +620,9 @@ class _TotalVehRankedSeasonsStatsBlock(_StoredVehRankedSeasonsStatsBlock):
         self._vehIntCD = dossier.getCompactDescriptor()
 
     def getTotalRanksCount(self):
-        storedCount = super(_TotalVehRankedSeasonsStatsBlock, self).getTotalRanksCount()
-        currentRankCount, _ = self.itemsCache.items.ranked.vehRanks.get(self._vehIntCD, (0, 0))
-        return storedCount + currentRankCount
+        passedSeasonsRanks = super(_TotalVehRankedSeasonsStatsBlock, self).getTotalRanksCount()
+        currentSeasonRankCount, _ = self.itemsCache.items.ranked.maxVehRanks.get(self._vehIntCD, (0, 0))
+        return passedSeasonsRanks + currentSeasonRankCount
 
 
 class _VehRankedCurrentSeasonStatsBlock(_StatsBlock):
@@ -1243,21 +1199,6 @@ class FortSortiesInClanStatsBlock(FortSortiesStatsBlock):
         return dossier.getDossierDescr()['maxFortSortiesInClan']
 
 
-class FortMiscStats(_FortMiscStatsBlock):
-
-    def __init__(self, dossier):
-        _FortMiscStatsBlock.__init__(self, dossier)
-
-    def _getStatsMiscBlock(self, dossier):
-        return dossier.getDossierDescr()['fortMisc']
-
-
-class FortMiscInClanStats(FortMiscStats):
-
-    def _getStatsMiscBlock(self, dossier):
-        return dossier.getDossierDescr()['fortMiscInClan']
-
-
 class FortRegionBattlesStats(_CommonStatsBlock):
 
     def getAttackCount(self):
@@ -1497,17 +1438,11 @@ class AccountDossierStats(_DossierStats):
     def getFortSortiesInClanStats(self):
         return FortSortiesInClanStatsBlock(self._getDossierItem())
 
-    def getFortMiscInClanStats(self):
-        return FortMiscInClanStats(self._getDossierItem())
-
     def getFortBattlesStats(self):
         return AccountFortBattlesStatsBlock(self._getDossierItem())
 
     def getFortSortiesStats(self):
         return AccountFortSortiesStatsBlock(self._getDossierItem())
-
-    def getFortMiscStats(self):
-        return FortMiscStats(self._getDossierItem())
 
     def getRated7x7Stats(self):
         return AccountRated7x7StatsBlock(self._getDossierItem())

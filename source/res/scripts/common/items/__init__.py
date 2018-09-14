@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/__init__.py
-from functools import partial
-import ResMgr
 import nations
+from realm_utils import ResMgr
 from items import _xml
 from constants import IS_CLIENT, IS_CELLAPP, ITEM_DEFS_PATH
 if IS_CLIENT:

@@ -14,7 +14,7 @@ from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
-from gui.battle_control.battle_constants import PLAYER_GUI_PROPS
+from gui.battle_control.battle_constants import PLAYER_GUI_PROPS, MARKER_HIT_STATE, MARKER_HIT_STATE_BOOTCAMP
 from gui.doc_loaders import GuiColorsLoader
 from gui.shared import g_eventBus
 from gui.shared.events import GameEvent
@@ -26,6 +26,7 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IBootcampController
 _TO_FLASH_SYMBOL_NAME_MAPPING = {STUN_AREA_STATIC_MARKER: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER}
 
 class IMarkersManager(object):
@@ -269,7 +270,7 @@ class AreaStaticMarkerPlugin(MarkerPlugin):
 
 
 class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
-    """ Base plugin that manages vehicle's 2D markers."""
+    bootcamp = dependency.descriptor(IBootcampController)
     __slots__ = ('_markers', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled')
 
     def __init__(self, parentObj, clazz=markers.VehicleMarker):
@@ -393,7 +394,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         marker.onVehicleModelChanged += self.__onVehicleModelChanged
         self._markers[vehicleID] = marker
         if marker.isActive() and not marker.isAlive():
-            self.__updateMarkerState(markerID, 'dead', True)
+            self.__updateMarkerState(markerID, 'dead', True, '')
         return marker
 
     def __setVehicleInfo(self, marker, vInfo, guiProps, nameParts):
@@ -461,25 +462,32 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         """
         if vehicleID not in self._markers:
             return
-        handle = self._markers[vehicleID].getMarkerID()
-        if eventID == _EVENT_ID.VEHICLE_HIT:
-            self.__updateMarkerState(handle, 'hit', value)
-        elif eventID == _EVENT_ID.VEHICLE_ARMOR_PIERCED:
-            self.__updateMarkerState(handle, 'hit_pierced', value)
-        elif eventID == _EVENT_ID.VEHICLE_DEAD:
-            self.__updateMarkerState(handle, 'dead', value)
-        elif eventID == _EVENT_ID.VEHICLE_SHOW_MARKER:
-            self.__showActionMarker(handle, value)
-        elif eventID == _EVENT_ID.VEHICLE_HEALTH:
-            self.__updateVehicleHealth(handle, *value)
-        elif eventID == _EVENT_ID.VEHICLE_STUN:
-            self.__updateStunMarker(handle, value)
+        else:
+            handle = self._markers[vehicleID].getMarkerID()
+            hitStates = MARKER_HIT_STATE_BOOTCAMP if self.bootcamp.isInBootcamp() else MARKER_HIT_STATE
+            if eventID in hitStates:
+                newState = 'hit'
+                stateText = ''
+                stateData = hitStates.get(eventID)
+                if stateData is not None:
+                    newState = stateData[0]
+                    stateText = i18n.makeString(stateData[1])
+                self.__updateMarkerState(handle, newState, value, stateText)
+            elif eventID == _EVENT_ID.VEHICLE_DEAD:
+                self.__updateMarkerState(handle, 'dead', value, '')
+            elif eventID == _EVENT_ID.VEHICLE_SHOW_MARKER:
+                self.__showActionMarker(handle, value)
+            elif eventID == _EVENT_ID.VEHICLE_HEALTH:
+                self.__updateVehicleHealth(handle, *value)
+            elif eventID == _EVENT_ID.VEHICLE_STUN:
+                self.__updateStunMarker(handle, value)
+            return
 
     def __onVehicleModelChanged(self, markerID, matrixProvider):
         self._setMarkerMatrix(markerID, matrixProvider)
 
-    def __updateMarkerState(self, handle, newState, isImmediate=False):
-        self._invokeMarker(handle, 'updateState', newState, isImmediate)
+    def __updateMarkerState(self, handle, newState, isImmediate, text):
+        self._invokeMarker(handle, 'updateState', newState, isImmediate, text)
 
     def __showActionMarker(self, handle, newState):
         self._invokeMarker(handle, 'showActionMarker', newState)

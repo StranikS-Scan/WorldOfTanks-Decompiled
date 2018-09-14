@@ -537,6 +537,7 @@ class SETTINGS(object):
     FEEDBACK_TAB_DAMAGELOGPANEL_DAMAGEDONE = '#settings:feedback/tab/damageLogPanel/damageDone'
     FEEDBACK_TAB_DAMAGELOGPANEL_BLOCKEDDAMAGE = '#settings:feedback/tab/damageLogPanel/blockedDamage'
     FEEDBACK_TAB_DAMAGELOGPANEL_DAMAGEASSIST = '#settings:feedback/tab/damageLogPanel/damageAssist'
+    FEEDBACK_TAB_DAMAGELOGPANEL_ASSISTSTUN = '#settings:feedback/tab/damageLogPanel/assistStun'
     FEEDBACK_TAB_DAMAGELOGPANEL_DETAILSLABEL = '#settings:feedback/tab/damageLogPanel/detailsLabel'
     FEEDBACK_TAB_DAMAGELOGPANEL_DETAILS_ALWAYS = '#settings:feedback/tab/damageLogPanel/details/always'
     FEEDBACK_TAB_DAMAGELOGPANEL_DETAILS_BYALT = '#settings:feedback/tab/damageLogPanel/details/byAlt'
@@ -570,6 +571,7 @@ class SETTINGS(object):
     FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_WORLDCOLLISION = '#settings:feedback/tab/battleEvents/checkbox/WorldCollision'
     FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_RECEIVEDDAMAGE = '#settings:feedback/tab/battleEvents/checkbox/ReceivedDamage'
     FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_RECEIVEDCRITS = '#settings:feedback/tab/battleEvents/checkbox/ReceivedCrits'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ASSISTSTUN = '#settings:feedback/tab/battleEvents/checkbox/AssistStun'
     FEEDBACK_TAB_BATTLEEVENTS_INFO = '#settings:feedback/tab/battleEvents/info'
     FEEDBACK_TAB_BATTLEEVENTS_RECEIVEDDAMAGE = '#settings:feedback/tab/battleEvents/receivedDamage'
     FEEDBACK_TAB_DAMAGEINDICATOR = '#settings:feedback/tab/damageIndicator'
@@ -597,6 +599,7 @@ class SETTINGS(object):
     FEEDBACK_TAB_RIBBONS_BURNVALUE = '#settings:feedback/tab/ribbons/burnValue'
     FEEDBACK_TAB_RIBBONS_ASSISTTRACKVALUE = '#settings:feedback/tab/ribbons/assistTrackValue'
     FEEDBACK_TAB_RIBBONS_VISIBLEITEMSCOUNT = '#settings:feedback/tab/ribbons/visibleItemsCount'
+    FEEDBACK_TAB_RIBBONS_ASSISTSTUN = '#settings:feedback/tab/ribbons/assistStun'
     FEEDBACK_TAB_DAMAGELOGPANEL_TOTAL_VALUE1 = '#settings:feedback/tab/damageLogPanel/total/value1'
     FEEDBACK_TAB_DAMAGELOGPANEL_TOTAL_VALUE2 = '#settings:feedback/tab/damageLogPanel/total/value2'
     FEEDBACK_TAB_DAMAGELOGPANEL_TOTAL_VALUE3 = '#settings:feedback/tab/damageLogPanel/total/value3'
@@ -612,6 +615,7 @@ class SETTINGS(object):
     FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYDAMAGE = '#settings:feedback/tab/damageLogPanel/summaryDamage'
     FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYBLOCK = '#settings:feedback/tab/damageLogPanel/summaryBlock'
     FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYASSIST = '#settings:feedback/tab/damageLogPanel/summaryAssist'
+    FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYASSISTSTUN = '#settings:feedback/tab/damageLogPanel/summaryAssistStun'
     GRAPHICSSETTINGSOPTIONS_ENUM = (GRAPHICSSETTINGSOPTIONS_DEFERRED,
      GRAPHICSSETTINGSOPTIONS_FORWARD,
      GRAPHICSSETTINGSOPTIONS_ON,

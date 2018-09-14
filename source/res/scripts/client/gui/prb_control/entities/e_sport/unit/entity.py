@@ -187,17 +187,17 @@ class ESportBrowserEntity(UnitBrowserEntity):
     def getIntroType(self):
         return PREBATTLE_TYPE.E_SPORT_COMMON
 
-    def _getUnit(self, unitIdx=None):
+    def _getUnit(self, unitMgrID=None):
         unitBrowser = prb_getters.getClientUnitBrowser()
         if unitBrowser:
             results = unitBrowser.results
         else:
             results = {}
-        if unitIdx in results:
-            unit = results[unitIdx]['unit']
+        if unitMgrID in results:
+            unit = results[unitMgrID]['unit']
         else:
             unit = None
-        return (unitIdx, unit)
+        return (unitMgrID, unit)
 
     def _loadUnit(self):
         g_eventDispatcher.loadUnit(self._prbType)

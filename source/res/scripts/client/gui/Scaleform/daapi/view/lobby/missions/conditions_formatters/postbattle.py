@@ -3,6 +3,7 @@
 from debug_utils import LOG_WARNING, LOG_ERROR
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters import CONDITION_ICON, POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, SimpleMissionsFormatter, MissionsVehicleListFormatter, MissionsBattleConditionsFormatter, FormattableField, FORMATTER_IDS, packDescriptionField
+from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.requirements import relate
 from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -43,6 +44,7 @@ class MissionsPostBattleConditionsFormatter(MissionsBattleConditionsFormatter):
     def __init__(self):
         super(MissionsPostBattleConditionsFormatter, self).__init__({'vehicleKills': _VehiclesKillFormatter(),
          'vehicleDamage': _VehiclesDamageFormatter(),
+         'vehicleStun': _VehiclesStunFormatter(),
          'win': _WinFormatter(),
          'isAlive': _SurviveFormatter(),
          'achievements': _AchievementsFormatter(),
@@ -131,7 +133,7 @@ class _AchievementsFormatter(SimpleMissionsFormatter):
 
     def _packGui(self, condition):
         achievementsList = _packAchievementsList(condition.getValue())
-        return formatters.packMissionIconCondition(self._getTitle(condition), MISSIONS_ALIASES.NONE, self._getDescription(condition), self._getIconKey(), conditionData={'data': {'rendererLinkage': MISSIONS_ALIASES.ACHIEVEMENT_RENDERER,
+        return formatters.packMissionIconCondition(self._getTitle(condition), MISSIONS_ALIASES.NONE, self._getDescription(condition), self._getIconKey(condition), conditionData={'data': {'rendererLinkage': MISSIONS_ALIASES.ACHIEVEMENT_RENDERER,
                   'list': achievementsList,
                   'icon': RES_ICONS.get90ConditionIcon(self._getIconKey()),
                   'description': i18n.makeString(QUESTS.DETAILS_CONDITIONS_ACHIEVEMENTS)}})
@@ -151,7 +153,7 @@ class _VehiclesKillFormatter(MissionsVehicleListFormatter):
         return CONDITION_ICON.KILL_VEHICLES
 
     @classmethod
-    def _getLabelKey(cls):
+    def _getLabelKey(cls, condition=None):
         return QUESTS.DETAILS_CONDITIONS_VEHICLESKILLS
 
 
@@ -165,8 +167,26 @@ class _VehiclesDamageFormatter(MissionsVehicleListFormatter):
         return CONDITION_ICON.DAMAGE
 
     @classmethod
-    def _getLabelKey(cls):
+    def _getLabelKey(cls, condition=None):
         return QUESTS.DETAILS_CONDITIONS_VEHICLEDAMAGE
+
+
+class _VehiclesStunFormatter(MissionsVehicleListFormatter):
+    """
+    VehicleStun condition formatter. Shows how many stuns player must do in one battle to complete quest.
+    """
+
+    @classmethod
+    def _getIconKey(cls, condition=None):
+        return CONDITION_ICON.ASSIST_STUN if condition.getEventCount() else CONDITION_ICON.ASSIST_STUN_DURATION
+
+    @classmethod
+    def _getLabelKey(cls, condition=None):
+        if condition.getEventCount():
+            key = QUESTS.DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT
+        else:
+            key = QUESTS.DETAILS_CONDITIONS_VEHICLESTUN
+        return key
 
 
 class _BattleResultsFormatter(SimpleMissionsFormatter):

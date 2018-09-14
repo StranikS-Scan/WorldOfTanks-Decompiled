@@ -123,14 +123,6 @@ class RegularVehicleStatsBlock(base.StatsBlock):
             self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE)
 
 
-class SortieVehicleStatsBlock(RegularVehicleStatsBlock):
-    __slots__ = ('fortResource',)
-
-    def setRecord(self, result, reusable):
-        super(SortieVehicleStatsBlock, self).setRecord(result, reusable)
-        self.fortResource = result.fortResource
-
-
 class RankedBattlesVehicleStatsBlock(RegularVehicleStatsBlock):
     __slots__ = ('rank', 'rankIcon')
 
@@ -255,13 +247,6 @@ class RegularTeamStatsBlock(TeamStatsBlock):
 
     def __init__(self, meta=None, field='', *path):
         super(RegularTeamStatsBlock, self).__init__(RegularVehicleStatsBlock, meta, field, *path)
-
-
-class SortieTeamStatsBlock(TeamStatsBlock):
-    __slots__ = ()
-
-    def __init__(self, meta=None, field='', *path):
-        super(SortieTeamStatsBlock, self).__init__(SortieVehicleStatsBlock, meta, field, *path)
 
 
 class RankedBattlesTeamStatsBlock(TeamStatsBlock):

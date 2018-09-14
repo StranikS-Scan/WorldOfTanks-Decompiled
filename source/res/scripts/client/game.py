@@ -28,17 +28,20 @@ import WebBrowser
 import SoundGroups
 from functools import reduce
 from skeletons.connection_mgr import IConnectionManager
-loadingScreenClass = None
+from bootcamp.Bootcamp import g_bootcamp
 tutorialLoaderInit = lambda : None
 tutorialLoaderFini = lambda : None
-if GUI_SETTINGS.isGuiEnabled():
-    try:
-        from tutorial.loader import init as tutorialLoaderInit
-        from tutorial.loader import fini as tutorialLoaderFini
-    except ImportError:
-        LOG_ERROR('Module tutorial not found')
+bootcampLoaderInit = lambda : None
+bootcampLoaderFini = lambda : None
+if constants.IS_TUTORIAL_ENABLED:
+    if GUI_SETTINGS.isGuiEnabled():
+        try:
+            from tutorial.loader import init as tutorialLoaderInit
+            from tutorial.loader import fini as tutorialLoaderFini
+        except ImportError:
+            LOG_ERROR('Module tutorial not found')
 
-    loadingScreenClass = GameLoading
+loadingScreenClass = GameLoading
 __import__('__main__').GameLoading = loadingScreenClass
 import locale
 try:
@@ -77,6 +80,7 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         import BattleReplay
         g_replayCtrl = BattleReplay.g_replayCtrl = BattleReplay.BattleReplay()
         g_replayCtrl.registerWotReplayFileExtension()
+        g_bootcamp.replayCallbackSubscribe()
         try:
             from Vibroeffects import VibroManager
             VibroManager.g_instance = VibroManager.VibroManager()
@@ -96,14 +100,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         ArenaType.init()
         import dossiers2
         dossiers2.init()
-        import fortified_regions
-        fortified_regions.init()
-        import clubs_settings
-        clubs_settings.init()
         import potapov_quests
         potapov_quests.init()
-        import clubs_quests
-        clubs_quests.init()
         import motivation_quests
         motivation_quests.init()
         BigWorld.worldDrawEnabled(False)
@@ -248,6 +246,7 @@ def abort():
 
 
 def fini():
+    global g_replayCtrl
     global g_onBeforeSendEvent
     global g_scenario
     LOG_DEBUG('fini')
@@ -301,6 +300,7 @@ def fini():
         dependency.clear()
         if g_replayCtrl is not None:
             g_replayCtrl.destroy()
+            g_replayCtrl = None
         voipRespHandler = VOIP.getVOIPManager()
         if voipRespHandler is not None:
             VOIP.getVOIPManager().destroy()
@@ -383,6 +383,8 @@ def handleKeyEvent(event):
         return True
     else:
         isDown, key, mods, isRepeat = convertKeyEvent(event)
+        if g_bootcamp.isRunning():
+            g_bootcamp.handleKeyEvent(event)
         if WebBrowser.g_mgr.handleKeyEvent(event):
             return True
         if g_replayCtrl.isPlaying:

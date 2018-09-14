@@ -26,6 +26,8 @@ class Crew(CrewMeta):
     def __init__(self):
         super(Crew, self).__init__()
         self.dogSound = None
+        self._showPersonalCase = True
+        self._showRecruit = True
         return
 
     def _populate(self):
@@ -113,7 +115,9 @@ class Crew(CrewMeta):
                  'skills': skillsList}
                 tankmenData.append(tankmanData)
 
-            self.as_tankmenResponseS({'roles': roles,
+            self.as_tankmenResponseS({'showPersonalCase': self._showPersonalCase,
+             'showRecruit': self._showRecruit,
+             'roles': roles,
              'tankmen': tankmenData})
             dogName = ''
             if 'dog' in self.itemsCache.items.getItemByCD(g_currentVehicle.item.intCD).tags:

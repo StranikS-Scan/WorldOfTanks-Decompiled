@@ -38,6 +38,8 @@
     <SCR_506_IGR>	60004	</SCR_506_IGR>
     <SCR_528_IGR>	60005	</SCR_528_IGR>
     <AN-VRC-7_IGR>	60006	</AN-VRC-7_IGR>
+    <SCR_200_bootcamp>	64001	</SCR_200_bootcamp>
+    <SCR_508_bootcamp>	64002	</SCR_508_bootcamp>
   </ids>
   <shared>
     <Alarm_flags_bot>
@@ -63,6 +65,18 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </SCR_200>
+    <SCR_200_bootcamp>
+      <userString>	#usa_vehicles:SCR_200	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	265	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </SCR_200_bootcamp>
     <SCR_200_bot>
       <userString>	#usa_vehicles:SCR_200_bot	</userString>
       <tags></tags>
@@ -144,6 +158,18 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.2	</repairCost>
     </SCR_508>
+    <SCR_508_bootcamp>
+      <userString>	#usa_vehicles:SCR_508	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	21600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	395	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.2	</repairCost>
+    </SCR_508_bootcamp>
     <SCR_538>
       <userString>	#usa_vehicles:SCR_538	</userString>
       <tags></tags>

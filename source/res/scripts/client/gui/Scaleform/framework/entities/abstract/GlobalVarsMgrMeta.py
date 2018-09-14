@@ -54,3 +54,6 @@ class GlobalVarsMgrMeta(BaseDAAPIComponent):
 
     def isTradeInEnabled(self):
         self._printOverrideError('isTradeInEnabled')
+
+    def isBootcampFinished(self):
+        self._printOverrideError('isBootcampFinished')

@@ -15,7 +15,8 @@ class BattleQuestsStartReqs(context.StartReqs):
         arenaGuiTypes = [ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.SANDBOX, ARENA_GUI_TYPE.RATED_SANDBOX]
         if IS_DEVELOPMENT:
             arenaGuiTypes.append(ARENA_GUI_TYPE.TRAINING)
-        return self.sessionProvider.arenaVisitor.getArenaGuiType() in arenaGuiTypes and areSettingsInited
+        isEnabled = self.sessionProvider.arenaVisitor.getArenaGuiType() in arenaGuiTypes and areSettingsInited
+        return isEnabled and super(BattleQuestsStartReqs, self).isEnabled()
 
     def __areSettingsInited(self):
         validateSettings = (TUTORIAL.FIRE_EXTINGUISHER_INSTALLED, TUTORIAL.MEDKIT_INSTALLED, TUTORIAL.REPAIRKIT_INSTALLED)

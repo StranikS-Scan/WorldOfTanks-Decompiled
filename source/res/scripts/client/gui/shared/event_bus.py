@@ -8,7 +8,7 @@ class EVENT_BUS_SCOPE(object):
     LOBBY = 1
     STATS = 2
     BATTLE = 3
-    FORT = 4
+    STRONGHOLD = 4
     DEFAULT = GLOBAL
 
 

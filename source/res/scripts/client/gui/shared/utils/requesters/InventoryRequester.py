@@ -120,6 +120,9 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         """
         return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('igrCustomizationLayout', {})
 
+    def getFreeSlots(self, vehiclesSlots):
+        return vehiclesSlots - len(self.__getVehiclesData())
+
     @async
     def _requestCache(self, callback=None):
         BigWorld.player().inventory.getCache(lambda resID, value: self._response(resID, value, callback))

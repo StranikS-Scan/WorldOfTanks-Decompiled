@@ -6,7 +6,6 @@ from abc import ABCMeta, abstractmethod
 import ArenaType
 import gui.awards.event_dispatcher as shared_events
 import potapov_quests
-from FortifiedRegionBase import FORT_ATTACK_RESULT
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, AWARDS
 from account_shared import getFairPlayViolationName
@@ -18,7 +17,6 @@ from dossiers2.ui.layouts import POTAPOV_QUESTS_GROUP
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
@@ -42,7 +40,7 @@ from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
 from potapov_quests import PQ_BRANCH
 from shared_utils import findFirst
-from skeletons.gui.game_control import IRefSystemController, IAwardController, IRankedBattlesController
+from skeletons.gui.game_control import IRefSystemController, IAwardController, IRankedBattlesController, IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -57,7 +55,6 @@ class AwardController(IAwardController, IGlobalListener):
          BoosterAfterBattleAwardHandler(self),
          PunishWindowHandler(self),
          RefSystemQuestsWindowHandler(self),
-         FortResultsWindowHandler(self),
          PotapovQuestsBonusHandler(self),
          PotapovWindowAfterBattleHandler(self),
          TokenQuestsWindowHandler(self),
@@ -231,19 +228,6 @@ class RefSystemQuestsWindowHandler(ServiceChannelHandler):
                 self._awardCtrl.refSystem.showVehicleAwardWindow(Vehicle(typeCompDescr=abs(vehTypeCompDescr)), completedQuestIDs)
 
         self._awardCtrl.refSystem.showCreditsAwardWindow(message.data.get('credits', 0), completedQuestIDs)
-
-
-class FortResultsWindowHandler(ServiceChannelHandler):
-
-    def __init__(self, awardCtrl):
-        super(FortResultsWindowHandler, self).__init__(SYS_MESSAGE_TYPE.fortBattleEnd.index(), awardCtrl)
-
-    def _showAward(self, ctx):
-        battleResult = ctx[1].data
-        if battleResult and battleResult['isWinner'] == 0:
-            if battleResult['attackResult'] == FORT_ATTACK_RESULT.TECHNICAL_DRAW:
-                battleResult['isWinner'] = -1
-        g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, ctx={'data': battleResult}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class PotapovQuestsBonusHandler(ServiceChannelHandler):
@@ -516,6 +500,7 @@ class RefSysStatusWindowHandler(ServiceChannelHandler):
 
 
 class SpecialAchievement(AwardHandler):
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, key, awardCtrl, awardCountToMessage):
         super(SpecialAchievement, self).__init__(awardCtrl)
@@ -532,7 +517,7 @@ class SpecialAchievement(AwardHandler):
         raise NotImplementedError
 
     def _needToShowAward(self, ctx=None):
-        return self._awardCtrl.canShow() is False or self._getAchievementToShow() is not None
+        return (not self._awardCtrl.canShow() or self._getAchievementToShow() is not None) and not self.bootcampController.isInBootcamp()
 
     def _getAchievementToShow(self):
         achievementCount = self.getAchievementCount()

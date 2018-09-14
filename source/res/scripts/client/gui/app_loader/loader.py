@@ -135,6 +135,11 @@ class _AppLoader(object):
     def showLobby(self):
         return self.changeSpace(_SPACE_ID.LOBBY)
 
+    def switchAccountEntity(self):
+        self.changeSpace(_SPACE_ID.WAITING)
+        self.__appFactory.destroyLobby()
+        self.__appFactory.createLobby()
+
     def createBattle(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
         self.__ctx.arenaGuiType = arenaGuiType
         self.__appFactory.createBattle(arenaGuiType)

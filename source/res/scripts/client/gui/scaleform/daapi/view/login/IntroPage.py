@@ -34,6 +34,8 @@ class IntroPage(IntroPageMeta):
         self.__soundValue = SoundGroups.g_instance.getMasterVolume() / 2
         self.__writeSetting = False
         self.__bufferTime = Settings.g_instance.userPrefs.readFloat(Settings.VIDEO_BUFFERING_TIME, _DEFAULT_BUFFERING)
+        self.__moviePath = None
+        return
 
     def stopVideo(self):
         if self.__movieFiles:
@@ -45,6 +47,11 @@ class IntroPage(IntroPageMeta):
     def handleError(self, data):
         self.__sendResult(False, 'Startup Video: ERROR - NetStream code = {0:>s}'.format(data))
 
+    def onUpdateStage(self):
+        ds = Settings.g_instance.userPrefs[Settings.KEY_SOUND_PREFERENCES]
+        self.__soundValue = ds.readFloat('masterVolume', SoundGroups.MASTER_VOLUME_DEFAULT) / 2
+        self.__showMovie(self.__moviePath, True)
+
     def _populate(self):
         super(IntroPage, self)._populate()
         if self.__movieFiles:
@@ -52,21 +59,23 @@ class IntroPage(IntroPageMeta):
             self.__showNextMovie()
         else:
             self.__sendResult(False, 'There is no movie files for broadcast!')
+        gui.g_guiResetters.add(self.onUpdateStage)
 
     def _dispose(self):
+        gui.g_guiResetters.discard(self.onUpdateStage)
         ScaleformFileLoader.disableStreaming()
         super(IntroPage, self)._dispose()
 
     def __showNextMovie(self):
-        moviePath = self.__movieFiles.pop(0)
-        settings = _getCompalsoryVideoSettings(moviePath)
+        self.__moviePath = self.__movieFiles.pop(0)
+        settings = _getCompalsoryVideoSettings(self.__moviePath)
         if settings:
-            self.__showMovie(moviePath, settings.canBeSkipped)
+            self.__showMovie(self.__moviePath, settings.canBeSkipped)
         elif isIntroVideoSettingChanged():
-            self.__showMovie(moviePath, True)
+            self.__showMovie(self.__moviePath, True)
             self.__writeSetting = True
         else:
-            LOG_DEBUG('Startup Video skipped: {}'.format(moviePath))
+            LOG_DEBUG('Startup Video skipped: {}'.format(self.__moviePath))
             if self.__movieFiles:
                 self.__showNextMovie()
             else:

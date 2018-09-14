@@ -8,9 +8,12 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 class StrongholdActionButtonStateVO(ActionButtonStateVO):
 
     def __init__(self, unitEntity):
-        data = unitEntity.getStrongholdData()
-        self.__isFirstBattle = data.isFirstBattle() if data else None
-        self.__isSortie = data.isSortie() if data else None
+        if unitEntity.isStrongholdSettingsValid():
+            self.__isFirstBattle = unitEntity.isFirstBattle()
+            self.__isSortie = unitEntity.isSortie()
+        else:
+            self.__isFirstBattle = None
+            self.__isSortie = None
         result = unitEntity.canPlayerDoAction()
         self.__unitIsValid, self.__restrictionType = result.isValid, result.restriction
         super(StrongholdActionButtonStateVO, self).__init__(unitEntity)

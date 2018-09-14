@@ -3,7 +3,6 @@
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers import gEffectsDisabled
 from debug_utils import LOG_DEBUG
-from functools import partial
 from math import fabs
 import SoundGroups
 import BigWorld
@@ -63,7 +62,16 @@ def effectFromSection(section):
     return _createReloadEffectDesc(type, section)
 
 
+def playByName(soundName):
+    import BattleReplay
+    replayCtrl = BattleReplay.g_replayCtrl
+    if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+        return
+    SoundGroups.g_instance.playSound2D(soundName)
+
+
 class SimpleReload(CallbackDelayer):
+    __slots__ = ('_desc', '_sound', '_startLoopT')
 
     def __init__(self, effectDesc):
         CallbackDelayer.__init__(self)
@@ -88,8 +96,9 @@ class SimpleReload(CallbackDelayer):
             else:
                 self._sound.stop()
             time = shellReloadTime - self._desc.duration
-            if time > 0.0:
-                self.delayCallback(time, self.__playSound)
+            if time < 0.0:
+                time = 0.0
+            self.delayCallback(time, self.__playSound)
             return
 
     def stop(self):
@@ -109,20 +118,13 @@ class SimpleReload(CallbackDelayer):
             self._sound.play()
         return
 
-    def _playByName(self, soundName):
-        import BattleReplay
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-            return
-        SoundGroups.g_instance.playSound2D(soundName)
-
 
 class BarrelReload(SimpleReload):
+    __slots__ = ('__reloadSequence',)
 
     def __init__(self, effectDesc):
         SimpleReload.__init__(self, effectDesc)
-        self.__shellDt = 0.0
-        self.__reloadCount = 0
+        self.__reloadSequence = LoopSequence(self._desc)
 
     def __del__(self):
         self.stop()
@@ -132,81 +134,125 @@ class BarrelReload(SimpleReload):
         if gEffectsDisabled():
             return
         SoundGroups.g_instance.setSwitch('SWITCH_ext_rld_automat_caliber', self._desc.caliber)
+        currentTime = BigWorld.time()
         if shellCount == 0:
-            self.stopCallback(self._startLoopEvent)
-            self.stopCallback(self._loopOneShoot)
-            time = shellReloadTime - self._desc.duration
-            self.delayCallback(time, partial(self._startLoopEvent, BigWorld.time() + time))
-            if reloadShellCount != 0:
-                self.__shellDt = self._desc.duration / reloadShellCount
-            else:
-                self.__shellDt = self._desc.duration
-            self.__reloadCount = reloadShellCount
+            self.__reloadSequence.schedule(shellReloadTime, reloadShellCount)
             if reloadStart:
-                self._playByName(self._desc.stopLoop)
-                self._playByName(self._desc.startLong)
+                playByName(self._desc.startLong)
                 if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! Play Long  = {0} {1}'.format(BigWorld.time(), self._desc.startLong))
+                    LOG_DEBUG('!!! Play Long  = {0} {1}'.format(currentTime, self._desc.startLong))
             if alert:
                 if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! Play Ammo Low  = {0} {1}'.format(BigWorld.time(), self._desc.ammoLow))
-                self._playByName(self._desc.ammoLow)
+                    LOG_DEBUG('!!! Play Ammo Low  = {0} {1}'.format(currentTime, self._desc.ammoLow))
         else:
             if shellCount == 1:
                 if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! Play Alert  = {0} {1}'.format(BigWorld.time(), self._desc.lastShellAlert))
-                self._playByName(self._desc.lastShellAlert)
+                    LOG_DEBUG('!!! Play Alert  = {0} {1}'.format(currentTime, self._desc.lastShellAlert))
+                playByName(self._desc.lastShellAlert)
             time = shellReloadTime - self._desc.shellDuration
-            self.delayCallback(time, partial(self._startOneShoot, BigWorld.time() + time))
+            self.delayCallback(time, self._startOneShoot, currentTime + time)
 
     def stop(self):
         if BARREL_DEBUG_ENABLED:
             LOG_DEBUG('!!! Stop Loop = {0}'.format(self._desc.stopLoop))
-        self.__reloadCount = 0
-        self.stopCallback(self._startLoopEvent)
-        self.stopCallback(self._loopOneShoot)
         self.stopCallback(self._startOneShoot)
-        self._playByName(self._desc.stopLoop)
-
-    def __getShellDt(self):
-        if self.__reloadCount > 1:
-            dt = self.__shellDt
-        elif self.__reloadCount > 0:
-            dt = self.__shellDt + self._desc.shellDt - self._desc.shellDtLast
-        else:
-            dt = self._desc.shellDtLast
-        dt = dt if dt > 0.0 else 0.0
-        return dt
-
-    def _startLoopEvent(self, invokeTime):
-        if fabs(invokeTime - BigWorld.time()) < 0.1:
-            if BARREL_DEBUG_ENABLED:
-                LOG_DEBUG('!!! {0} Start Loop = {1}'.format(BigWorld.time(), self._desc.startLoop))
-                LOG_DEBUG('!!!Shell DT = {0}'.format(self.__shellDt))
-            self._playByName(self._desc.startLoop)
-            self._startLoopT = BigWorld.time()
-            self.delayCallback(self.__getShellDt() - self._desc.shellDt, self._loopOneShoot)
+        self.__reloadSequence.stop()
 
     def _startOneShoot(self, invokeTime):
         if fabs(invokeTime - BigWorld.time()) < 0.1:
             if BARREL_DEBUG_ENABLED:
                 LOG_DEBUG('!!!{0} Play One Shoot = {1}'.format(BigWorld.time(), self._desc.soundEvent))
-            self._playByName(self._desc.soundEvent)
+            playByName(self._desc.soundEvent)
 
-    def _loopOneShoot(self):
-        if self.__reloadCount > 0:
-            self.__reloadCount -= 1
-            if self.__reloadCount == 0:
-                if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! {0} Play In Loop One Shoot Last= {1}'.format(BigWorld.time() - self._startLoopT, self._desc.loopShellLast))
-                self._playByName(self._desc.loopShellLast)
-                return self.__getShellDt()
-            else:
-                if BARREL_DEBUG_ENABLED:
-                    LOG_DEBUG('!!! {0}Play In Loop One Shoot = {1}'.format(BigWorld.time() - self._startLoopT, self._desc.loopShell))
-                self._playByName(self._desc.loopShell)
-                return self.__getShellDt()
+
+class LoopSequence(CallbackDelayer):
+    __slots__ = ('__startLoop', '__stopLoop', '__shell', '__lastShell', '__duration', '__shellT', '__shellTLast', '__sequence')
+
+    def __init__(self, desc):
+        CallbackDelayer.__init__(self)
+        self.__startLoop = desc.startLoop
+        self.__stopLoop = desc.stopLoop
+        self.__shell = desc.loopShell
+        self.__lastShell = desc.loopShellLast
+        self.__duration = desc.duration
+        self.__shellT = desc.shellDt
+        self.__shellTLast = desc.shellDtLast
+        self.__sequence = []
+
+    def __del__(self):
+        self.stop()
+        CallbackDelayer.destroy(self)
+
+    def schedule(self, reloadD, shellCount):
+        time = BigWorld.time()
         if BARREL_DEBUG_ENABLED:
-            LOG_DEBUG('!!!{0} Stop Loop = {1}'.format(BigWorld.time() - self._startLoopT, self._desc.stopLoop))
-        self._playByName(self._desc.stopLoop)
-        return None
+            LOG_DEBUG('LoopSequence::schedule time = {0} end time = {1} duration = {2}'.format(BigWorld.time(), time + reloadD, reloadD))
+        loopDuration = self.__duration
+        if reloadD < self.__duration:
+            loopDuration = reloadD
+            startLoopD = 0.0
+            inProgress = True
+        else:
+            startLoopD = reloadD - self.__duration
+            inProgress = False
+        self.__sequence = self.__generateTimeLine(startLoopD, loopDuration, inProgress, shellCount)
+        if BARREL_DEBUG_ENABLED:
+            for item in self.__sequence:
+                LOG_DEBUG('LoopSequence::schedule dt = {0} name = {1}'.format(item[0], item[1]))
+
+        self.__start()
+
+    def stop(self):
+        self.stopCallback(self.__start)
+        self.__sequence = []
+
+    def __start(self):
+        if len(self.__sequence) > 0:
+            callTime, _ = self.__sequence[0]
+            dt = callTime - BigWorld.time()
+            if dt < 0.0:
+                dt = 0.0
+            self.delayCallback(dt, self.__startCallback)
+
+    def __startCallback(self):
+        if len(self.__sequence) == 0:
+            return None
+        else:
+            invokeTime, name = self.__sequence.pop(0)
+            if fabs(invokeTime - BigWorld.time()) > 0.1:
+                return None
+            if BARREL_DEBUG_ENABLED:
+                LOG_DEBUG('LoopSequence::__startCallback time = {0} {1}'.format(BigWorld.time(), name))
+            playByName(name)
+            if len(self.__sequence) > 0:
+                callTime, _ = self.__sequence[0]
+                dt = callTime - BigWorld.time()
+                if dt < 0.0:
+                    dt = 0.0
+                return dt
+            return None
+            return None
+
+    def __generateTimeLine(self, loopStartDT, loopDuration, inProgress, count):
+        time = BigWorld.time()
+        timeLine = []
+        if not inProgress:
+            time += loopStartDT
+            timeLine += [(time, self.__startLoop)]
+        lastDt = loopDuration - self.__shellTLast
+        if lastDt <= 0.0:
+            timeLine += [(time, self.__lastShell)] * count
+            timeLine.append((time + loopDuration, self.__stopLoop))
+        else:
+            if count > 1:
+                dt = lastDt / (count - 1)
+                for i in xrange(0, count - 1):
+                    timeLine.append((time, self.__shell))
+                    time += dt
+
+                timeLine.append((time, self.__lastShell))
+            else:
+                time += lastDt
+                timeLine.append((time, self.__lastShell))
+            timeLine.append((time + self.__shellTLast, self.__stopLoop))
+        return timeLine

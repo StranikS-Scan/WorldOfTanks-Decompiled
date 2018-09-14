@@ -15,7 +15,7 @@ from gui.battle_results.components import style
 from gui.shared.crits_mask_parser import CRIT_MASK_SUB_TYPES
 from gui.shared.formatters import numbers
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import getIconPath, getSmallIconPath
+from gui.shared.gui_items.Vehicle import getIconPath, getSmallIconPath, getTypeBigIconPath
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
 _UNDEFINED_EFFICIENCY_VALUE = '-'
@@ -84,6 +84,14 @@ class PersonalVehicleNamesBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         for intCD, item in reusable.personal.getVehicleItemsIterator():
             self.addNextComponent(base.DirectStatsItem('', item.userName))
+
+
+class PersonalVehicleTypeIconsBlock(base.StatsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        for intCD, item in reusable.personal.getVehicleItemsIterator():
+            self.addNextComponent(base.DirectStatsItem('', getTypeBigIconPath(item.type, False)))
 
 
 class FalloutVehicleNamesBlock(PersonalVehicleNamesBlock):

@@ -239,13 +239,12 @@ class _FriendsCategory(_Category):
 
 
 class _FormationCategory(_Category):
-    __slots__ = ('_clan', '_club', '__parentItemData')
+    __slots__ = ('_clan', '__parentItemData')
 
     def __init__(self):
         super(_FormationCategory, self).__init__(CONTACTS_ALIASES.GROUP_FORMATIONS_CATEGORY_ID)
         self.__parentItemData = self._converter.makeBaseVO()
         self._clan = _vo_converter.ClanConverter(self.__parentItemData, self.playerCtx.getClanAbbrev())
-        self._club = _vo_converter.ClubConverter(self.__parentItemData, self.playerCtx.getMyClubName())
 
     @storage_getter('playerCtx')
     def playerCtx(self):
@@ -253,28 +252,24 @@ class _FormationCategory(_Category):
 
     def clear(self, full=False):
         self._clan.clear(full)
-        self._club.clear(full)
         super(_FormationCategory, self).clear(full)
 
     def getContactsDict(self):
         return self._clan.getContacts()
 
     def getTags(self):
-        return {_TAG.CLAN_MEMBER, _TAG.CLUB_MEMBER}
+        return {_TAG.CLAN_MEMBER}
 
     def isEmpty(self):
-        return self._clan.isEmpty() and self._club.isEmpty()
+        return self._clan.isEmpty()
 
     def hasContacts(self):
-        return self._clan.hasContacts() or self._club.hasContacts()
+        return self._clan.hasContacts()
 
     def toggleGroup(self, name):
         result = False
         if name == self._clan.getName():
             self._clan.toggle()
-            result = True
-        elif name == self._club.getName():
-            self._club.toggle()
             result = True
         return result
 
@@ -284,21 +279,15 @@ class _FormationCategory(_Category):
         else:
             clazz = _vo_converter.OnlineTotalCondition
         self._clan.setConditionClass(clazz)
-        self._club.setConditionClass(clazz)
 
     def updateClanAbbrev(self):
         self._clan.setClanAbbrev(self.playerCtx.getClanAbbrev())
-
-    def updateClubName(self):
-        self._club.setClubName(self.playerCtx.getMyClubName())
 
     def addContact(self, contact):
         result = False
         tags = contact.getTags()
         if _TAG.CLAN_MEMBER in tags:
             result = self._clan.setContact(contact)
-        if _TAG.CLUB_MEMBER in tags:
-            result |= self._club.setContact(contact)
         return result
 
     def updateContact(self, contact):
@@ -328,11 +317,11 @@ class _FormationCategory(_Category):
                     data.append(vos)
 
         if data:
-            data.append(self._club.makeEmptyRow(self.__parentItemData, False, False))
+            data.append(self._clan.makeEmptyRow(self.__parentItemData, False, False))
         return data
 
     def _getIterator(self):
-        for converter in (self._clan, self._club):
+        for converter in (self._clan,):
             yield converter
 
 
@@ -825,10 +814,6 @@ class ContactsDataProvider(DAAPIDataProvider):
 
     def __me_onUsersListReceived(self, tags):
         if _TAG.CACHED not in tags:
-            if _TAG.CLUB_MEMBER in tags:
-                _, category = self.__categories.findCategory(CONTACTS_ALIASES.GROUP_FORMATIONS_CATEGORY_ID)
-                if category:
-                    category.updateClubName()
             self.buildList()
             self.refresh()
             self.onTotalStatusChanged()

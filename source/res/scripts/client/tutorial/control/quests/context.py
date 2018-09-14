@@ -7,9 +7,6 @@ from tutorial import doc_loader
 
 class QuestsStartReqs(StartReqs):
 
-    def isEnabled(self):
-        return True
-
     def __validateTutorialsCompleted(self, ctx, descriptor):
         cache = ctx.cache
         self._areAllBonusesReceived = descriptor.areAllBonusesReceived(ctx.bonusCompleted)

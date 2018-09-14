@@ -28,6 +28,7 @@ KEY_DYNAMIC_FOV = 'dynamicFov'
 KEY_DYNAMIC_FOV_ENABLED = 'dynamicFovEnabled'
 INTRO_VIDEO_VERSION = 'introVideoVersion'
 VIDEO_BUFFERING_TIME = 'videoBufferingTime'
+KEY_BOOTCAMP_PREFERENCES = 'bootcampPrefs'
 POPUPS_WINDOWS_DISABLED = 'popupsWindowsDisabled'
 
 class Settings(object):

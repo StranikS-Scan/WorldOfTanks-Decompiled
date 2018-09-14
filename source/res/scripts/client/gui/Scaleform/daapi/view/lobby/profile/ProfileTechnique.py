@@ -23,6 +23,8 @@ class ProfileTechnique(ProfileTechniqueMeta):
 
     def __init__(self, *args):
         super(ProfileTechnique, self).__init__(*args)
+        self._selectedVehicleIntCD = None
+        return
 
     def _populate(self):
         super(ProfileTechnique, self)._populate()
@@ -33,7 +35,10 @@ class ProfileTechnique(ProfileTechniqueMeta):
         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT)
         if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL))
-        dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN)))
+        dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM))
+        if accountDossier is not None and accountDossier.getRated7x7Stats().getVehicles():
+            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM))
+        dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN))
         if self.lobbyContext.getServerSettings().isStrongholdsEnabled():
             dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES)))
         storedData = self._getStorageData()
@@ -185,6 +190,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         else:
             layout = STATISTICS_LAYOUT
         preparedStatistics = DetailedStatisticsUtils.getStatistics(stats, self._userID is None, layout)
+        self._selectedVehicleIntCD = vehicleIntCD
         self.as_responseVehicleDossierS({'detailedData': preparedStatistics,
          'achievements': achievementsList})
         return

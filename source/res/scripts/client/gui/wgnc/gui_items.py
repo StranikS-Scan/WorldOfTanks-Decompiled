@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/gui_items.py
-from collections import namedtuple
+from collections import namedtuple, defaultdict
+from functools import partial
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import WGNCShowItemEvent
@@ -11,7 +12,7 @@ from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_GUI_TYPE, WGNC_GUI_INVALID_SEQS, convertToLocalIcon, convertToLocalBG
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
-from skeletons.gui.game_control import IRefSystemController
+from skeletons.gui.game_control import IRefSystemController, IPromoController
 _ButtonData = namedtuple('_ButtonData', ['label',
  'action',
  'visible',
@@ -217,6 +218,35 @@ class PollItem(WindowItem):
         if len(self._buttons) < 2:
             raise ValidationError('Poll item "{0}" must has two buttons.'.format(self._name))
         super(PollItem, self).validate(actionsHolder)
+
+
+class BrowserItem(_GUIItem):
+    __slots__ = ('_handlers', '__browserID')
+    promoCtrl = dependency.descriptor(IPromoController)
+
+    def __init__(self, name, body, topic='', handlers=None, buttons=None, hidden=True):
+        super(BrowserItem, self).__init__(name, body, topic, buttons, hidden)
+        self._handlers = handlers
+
+    def getHandlers(self):
+        return self._handlers
+
+    def getType(self):
+        return WGNC_GUI_TYPE.BROWSER
+
+    def show(self, notID):
+        LOG_DEBUG('BrowserItem.show', notID, self._name)
+        url = self._body
+        handlersData = defaultdict(list)
+        for gui_event, actions in self._handlers:
+            if gui_event in self.promoCtrl.GUI_EVENTS.ALL():
+                handlersData[gui_event] = partial(self.__handleActions, notID, actions)
+            LOG_WARNING('Unsupported browser gui event="{}"'.format(gui_event))
+
+        self.promoCtrl.showPromo(url, self.getTopic(), handlersData)
+
+    def __handleActions(self, notID, actionNames):
+        g_wgncEvents.onItemActionFired(notID, actionNames, self.getName())
 
 
 @ReprInjector.simple(('__items', 'items'))

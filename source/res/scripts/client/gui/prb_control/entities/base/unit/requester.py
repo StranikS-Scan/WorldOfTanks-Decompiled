@@ -86,18 +86,17 @@ class UnitRequestProcessor(IUnitRequestProcessor):
         """
         self._onResponseReceived(requestID, True)
 
-    def unitMgr_onUnitErrorReceived(self, requestID, unitMgrID, unitIdx, errorCode, errorStr):
+    def unitMgr_onUnitErrorReceived(self, requestID, unitMgrID, errorCode, errorStr):
         """
         Listener for event on unit manager's error received
         Args:
             requestID: received request's response ID
             unitMgrID: unit manager ID
-            unitIdx: unit index
             errorCode: error's code
             errorStr: error's message
         """
         self._onResponseReceived(requestID, False)
-        if errorCode != UNIT_ERROR.OK and self.__entity.getID() == unitMgrID and self.__entity.getUnitIdx() == unitIdx:
+        if errorCode != UNIT_ERROR.OK and self.__entity.getID() == unitMgrID:
             for listener in self.__entity.getListenersIterator():
                 listener.onUnitErrorReceived(errorCode)
 

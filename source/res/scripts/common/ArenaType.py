@@ -192,6 +192,8 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['artilleryPreparationChance'] = __readFloat('artilleryPreparationChance', section, defaultXml)
     if raiseIfMissing or section.has_key('mapActivities'):
         cfg['mapActivitiesTimeframes'] = __readMapActivitiesTimeframes(section)
+    if raiseIfMissing or section.has_key('boundingBox'):
+        cfg['boundingBox'] = __readBoundingBox(section)
     maxTeamsInArena = cfg.get('maxTeamsInArena', geometryCfg.get('maxTeamsInArena', None))
     assert maxTeamsInArena is not None
     cfg.update(__readWinPoints(section))

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/squad/actions_validator.py
 from CurrentVehicle import g_currentVehicle
+from constants import VEHICLE_CLASS_INDICES
 from gui.prb_control.entities.base.actions_validator import BaseActionsValidator
 from gui.prb_control.entities.base.unit.actions_validator import UnitActionsValidator, UnitVehiclesValidator
 from gui.prb_control.items import ValidationResult, unit_items
@@ -36,7 +37,8 @@ class SquadVehiclesValidator(UnitVehiclesValidator):
         if not findFirst(lambda v: not v.isEmpty(), vInfos, False):
             if g_currentVehicle.isPresent():
                 vehicle = g_currentVehicle.item
-                vInfos = (unit_items.VehicleInfo(vehicle.invID, vehicle.intCD, vehicle.level),)
+                vehClassIdx = VEHICLE_CLASS_INDICES[vehicle.type]
+                vInfos = (unit_items.VehicleInfo(vehicle.invID, vehicle.intCD, vehicle.level, vehClassIdx),)
         return vInfos
 
 

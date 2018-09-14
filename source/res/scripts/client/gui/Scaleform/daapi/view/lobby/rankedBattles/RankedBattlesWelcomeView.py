@@ -26,7 +26,6 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
         self.__close()
 
     def onCloseBtnClick(self):
-        self.onAnimationFinished(False)
         self.__close()
 
     def onNextBtnClick(self):
@@ -79,6 +78,7 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
          'isComplete': bool(isCompleted)}
 
     def __close(self):
+        self.onAnimationFinished(False)
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
         SoundGroups.g_instance.playSound2D(SOUND.ANIMATION_WINDOW_CLOSED)
         self.destroy()

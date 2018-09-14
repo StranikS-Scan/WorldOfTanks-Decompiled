@@ -71,12 +71,14 @@
     <AMX_B_272>	87	</AMX_B_272>
     <Sovam_de_250cv>	88	</Sovam_de_250cv>
     <_6F11SRYT>	89	</_6F11SRYT>
+    <SOFAM_12_58>	90	</SOFAM_12_58>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
     <Somua_S-40Bis_IGR>	60004	</Somua_S-40Bis_IGR>
     <Sovam_de_250cv_IGR>	60005	</Sovam_de_250cv_IGR>
     <Hispano-Suiza_HS110_IGR>	60006	</Hispano-Suiza_HS110_IGR>
+    <Renault_S6Bis_bootcamp>	64001	</Renault_S6Bis_bootcamp>
   </ids>
   <shared>
     <Somua_S-40>
@@ -357,6 +359,23 @@
       <rpm_min>	338	</rpm_min>
       <rpm_max>	2184	</rpm_max>
     </SOFAM_12GSds>
+    <SOFAM_12_58>
+      <userString>	#france_vehicles:SOFAM_12_58	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	86050	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	720	</power>
+      <weight>	840	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	537	</rpm_min>
+      <rpm_max>	2570	</rpm_max>
+    </SOFAM_12_58>
     <Renault_S6>
       <userString>	#france_vehicles:Renault_S6	</userString>
       <tags>	gasoline	</tags>
@@ -389,6 +408,23 @@
       <rpm_min>	273	</rpm_min>
       <rpm_max>	2723	</rpm_max>
     </Renault_S6Bis>
+    <Renault_S6Bis_bootcamp>
+      <userString>	#france_vehicles:Renault_S6Bis	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	3500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	180	</power>
+      <weight>	540	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	273	</rpm_min>
+      <rpm_max>	2723	</rpm_max>
+    </Renault_S6Bis_bootcamp>
     <Renault_Naeder-FIEUX>
       <userString>	#france_vehicles:Renault_Naeder-FIEUX	</userString>
       <shortUserString>	#france_vehicles:Renault_Naeder-FIEUX_short	</shortUserString>

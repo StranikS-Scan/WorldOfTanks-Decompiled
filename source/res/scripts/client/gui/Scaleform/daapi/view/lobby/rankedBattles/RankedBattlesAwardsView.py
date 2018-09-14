@@ -66,8 +66,5 @@ class RankedBattlesAwardsView(RankedBattlesAwardsViewMeta):
         SoundGroups.g_instance.playSound2D(SOUND.getRankAwardAnimationEvent(rankID))
         return
 
-    def _dispose(self):
-        super(RankedBattlesAwardsView, self)._dispose()
-
     def __close(self):
         self.destroy()

@@ -10,11 +10,12 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampController
 from skeletons.gui.shared import IItemsCache
 
 class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
     itemsCache = dependency.descriptor(IItemsCache)
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, cmProxy, ctx=None):
         super(ResearchItemContextMenuHandler, self).__init__(cmProxy, ctx, {MODULE.INFO: 'showModuleInfo',
@@ -22,6 +23,7 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
          MODULE.BUY_AND_EQUIP: 'buyModule',
          MODULE.EQUIP: 'equipModule',
          MODULE.SELL: 'sellModule'})
+        self.__skipConfirm = self.bootcampController.isInBootcamp()
 
     def fini(self):
         super(ResearchItemContextMenuHandler, self).fini()
@@ -35,10 +37,10 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
         vehicle = self.itemsCache.items.getItemByCD(self._rootCD)
         if vehicle:
             unlockIdx, xpCost, _ = vehicle.getUnlockDescrByIntCD(self._nodeCD)
-            ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, self._rootCD, unlockIdx, xpCost)
+            ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, self._rootCD, unlockIdx, xpCost, skipConfirm=self.__skipConfirm)
 
     def buyModule(self):
-        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_ITEM, self._nodeCD, self._rootCD)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_ITEM, self._nodeCD, self._rootCD, skipConfirm=self.__skipConfirm)
 
     def equipModule(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.INSTALL_ITEM, self._nodeCD, self._rootCD)

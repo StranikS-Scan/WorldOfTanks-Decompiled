@@ -28,6 +28,28 @@ class TankPartNames:
         raise Exception('Invalid part name!')
 
 
+class DetachedTurretPartNames:
+    ALL = (TankPartNames.TURRET, TankPartNames.GUN)
+
+    @staticmethod
+    def getIdx(name):
+        for idx, n in enumerate(DetachedTurretPartNames.ALL):
+            if n == name:
+                return idx
+
+        return None
+
+
+class DetachedTurretPartIndexes:
+    TURRET = 0
+    GUN = 1
+    ALL = (TURRET, GUN)
+
+    @staticmethod
+    def getName(idx):
+        return DetachedTurretPartNames.ALL[idx]
+
+
 VehiclePartsTuple = namedtuple('VehiclePartsTuple', TankPartNames.ALL)
 
 class TankPartIndexes:

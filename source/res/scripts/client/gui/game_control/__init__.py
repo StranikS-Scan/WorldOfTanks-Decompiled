@@ -35,6 +35,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.trade_in import TradeInController as _TradeIn
     from gui.game_control.quests_controller import QuestsController as _Quests
     from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
+    from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from skeletons.gui import game_control as _interface
     tracker = GameStateTracker()
     tracker.init()
@@ -70,6 +71,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IEncyclopediaController, _Exncyclopedia())
     _config(_interface.ITradeInController, _TradeIn())
     _config(_interface.IQuestsController, _Quests())
+    _config(_interface.IBootcampController, _Bootcamp())
     _config(_interface.IRankedBattlesController, _Ranked())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())

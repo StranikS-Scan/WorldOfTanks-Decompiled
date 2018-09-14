@@ -7,6 +7,15 @@ class VehicleErrorMessages(fading_messages.FadingMessages):
 
     def __init__(self):
         super(VehicleErrorMessages, self).__init__('VehicleErrorsPanel', 'vehicle_errors_panel.xml')
+        self.__ignoreKeys = ()
+
+    @property
+    def ignoreKeys(self):
+        return self.__ignoreKeys
+
+    @ignoreKeys.setter
+    def ignoreKeys(self, keys):
+        self.__ignoreKeys = keys
 
     def __del__(self):
         LOG_DEBUG('VehicleErrorMessages panel is deleted')
@@ -26,4 +35,5 @@ class VehicleErrorMessages(fading_messages.FadingMessages):
         return
 
     def __onShowVehicleErrorByKey(self, key, args=None, extra=None):
-        self.showMessage(key, args, extra)
+        if key not in self.__ignoreKeys:
+            self.showMessage(key, args, extra)

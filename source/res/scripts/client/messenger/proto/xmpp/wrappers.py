@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/wrappers.py
 from collections import namedtuple
-import time
 from constants import IGR_TYPE, ARENA_GUI_TYPE_LABEL
 from gui.shared.utils.decorators import ReprInjector
 from helpers import time_utils
@@ -43,7 +42,7 @@ class BanInfo(object):
         self._items = items
 
     def getFirstActiveItem(self, game=None, components=None):
-        now = time.time()
+        now = time_utils.getCurrentLocalServerTimestamp()
         for item in sorted(self._items, key=lambda item: item.expiresAt):
             if game is not None and item.game not in (game, ANY_ITEM_LITERAL):
                 continue

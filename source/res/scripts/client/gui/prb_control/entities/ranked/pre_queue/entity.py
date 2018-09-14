@@ -132,6 +132,9 @@ class RankedEntity(PreQueueEntity):
                     g_eventDispatcher.loadHangar()
         return super(RankedEntity, self).fini(ctx, woEvents)
 
+    def invalidate(self):
+        self.__processWelcome()
+
     def leave(self, ctx, callback=None):
         self.storage.suspend()
         SoundGroups.g_instance.playSound2D('gui_rb_rank_Exit')

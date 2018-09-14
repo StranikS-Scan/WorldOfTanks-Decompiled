@@ -58,6 +58,7 @@ _COMMON_VO_META = base.DictMeta({'iconType': 'tank',
  'regionNameStr': '',
  'playerVehicles': [],
  'playerVehicleNames': [],
+ 'playerVehicleTypeIcons': [],
  'falloutMode': '',
  'overtime': {},
  'totalFortResourceStr': '',
@@ -111,7 +112,8 @@ REGULAR_COMMON_STATS_BLOCK.addComponent(9, personal.PersonalVehicleNamesBlock(ba
 REGULAR_COMMON_STATS_BLOCK.addComponent(10, personal.PersonalVehiclesBlock(base.ListMeta(), 'playerVehicles', _RECORD.PERSONAL))
 REGULAR_COMMON_STATS_BLOCK.addComponent(11, _TIME_STATS_BLOCK.clone())
 REGULAR_COMMON_STATS_BLOCK.addComponent(12, shared.ClientIndexItem('clientArenaIdx'))
-REGULAR_COMMON_STATS_BLOCK.addComponent(13, common.TeamsUiVisibility('uiVisibility'))
+REGULAR_COMMON_STATS_BLOCK.addComponent(13, personal.PersonalVehicleTypeIconsBlock(base.ListMeta(), 'playerVehicleTypeIcons'))
+REGULAR_COMMON_STATS_BLOCK.addComponent(14, common.TeamsUiVisibility('uiVisibility'))
 _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'hasGetPremBtn': False,
  'getPremVO': {},

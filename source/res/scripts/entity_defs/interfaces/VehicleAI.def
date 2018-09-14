@@ -15,6 +15,14 @@
       <Arg>	STRING	</Arg>
       <Arg>	PYTHON	</Arg>
     </vehicleAI_autoBotReroute>
+    <vehicleAI_onEvent>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </vehicleAI_onEvent>
+    <vehicleAI_receiveVehicleID>
+      <Arg>	STRING	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </vehicleAI_receiveVehicleID>
   </CellMethods>
   <BaseMethods>
     <vehicleAI_createAutoBotController>

@@ -3,6 +3,7 @@
 import operator
 import BigWorld
 from debug_utils import LOG_WARNING
+from dossiers2.custom.account_layout import RANKED_BADGES_BLOCK_LAYOUT
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import settings
 from gui.Scaleform.daapi.view.meta.BadgesPageMeta import BadgesPageMeta
@@ -48,15 +49,14 @@ class BadgesPage(BadgesPageMeta):
 
     def onSelectBadge(self, badgeID):
         badgeID = str(badgeID)
-        availableBadges = self.rankedController.getAvailableBadges()
         if badgeID == _EMPTY_BADGE_ID:
             self.rankedController.selectBadge(None)
             self.as_setSelectedBadgeImgS('')
-        elif badgeID in availableBadges:
+        elif badgeID in RANKED_BADGES_BLOCK_LAYOUT:
             self.rankedController.selectBadge(badgeID)
             self.as_setSelectedBadgeImgS(settings.getBadgeIconPath(settings.BADGES_ICONS.X24, badgeID))
         else:
-            LOG_WARNING('Attempt to select unknown badge {}.\nFrom {}'.format(badgeID, availableBadges))
+            LOG_WARNING('Attempt to select unknown badge {}.\nFrom {}'.format(badgeID, RANKED_BADGES_BLOCK_LAYOUT))
         return
 
     def _dispose(self):
@@ -74,7 +74,7 @@ class BadgesPage(BadgesPageMeta):
         selectedBadges = self.itemsCache.items.ranked.badges
         selectedBadge = selectedBadges[0] if selectedBadges else None
         receivedBadgesDict = self.rankedController.getReceivedBadges()
-        receivedBadges = sorted(receivedBadgesDict.items(), key=operator.itemgetter(1), reverse=True)
+        receivedBadges = sorted(receivedBadgesDict.items(), key=operator.itemgetter(1), reverse=False)
         receivedBadgesData = [ _makeBadgeVO(badgeID, True, badgeID == selectedBadge) for badgeID, _ in receivedBadges ]
         receivedBadgesData.insert(0, _makeBadgeVO(_EMPTY_BADGE_ID, True, selectedBadge is None))
         self.as_setReceivedBadgesS({'badgesData': receivedBadgesData})

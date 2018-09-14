@@ -23,12 +23,6 @@ class SetReserveUnitCtx(UnitRequestCtx):
     def getRequestType(self):
         return _REQUEST_TYPE.SET_RESERVE
 
-    def getID(self):
-        """
-        Proxy call.
-        """
-        return self.getUnitIdx()
-
     def getReserveID(self):
         return self.__reserveID
 
@@ -49,12 +43,6 @@ class UnsetReserveUnitCtx(UnitRequestCtx):
 
     def getRequestType(self):
         return _REQUEST_TYPE.UNSET_RESERVE
-
-    def getID(self):
-        """
-        Proxy call.
-        """
-        return self.getUnitIdx()
 
     def getReserveID(self):
         return self.__reserveID
@@ -119,12 +107,6 @@ class CreateUnitCtx(TimeoutCtx):
         Unit roster type ID.
         """
         return self.__rosterID
-
-    def getID(self):
-        """
-        Unit Mgr ID.
-        """
-        return self.getUnitIdx()
 
 
 class JoinUnitCtx(TimeoutCtx):

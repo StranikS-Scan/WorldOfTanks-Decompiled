@@ -10,9 +10,6 @@ class BaseBattleLoadingMeta(BaseDAAPIComponent):
     def as_setMapIconS(self, source):
         return self.flashObject.as_setMapIcon(source) if self._isDAAPIInited() else None
 
-    def as_setPlayerDataS(self, playerVehicleID, prebattleID):
-        return self.flashObject.as_setPlayerData(playerVehicleID, prebattleID) if self._isDAAPIInited() else None
-
     def as_setEventInfoPanelDataS(self, data):
         """
         :param data: Represented by EventInfoPanelVO (AS)

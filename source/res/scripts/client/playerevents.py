@@ -89,10 +89,18 @@ class _PlayerEvents(object):
         self.onKickWhileLoginReceived = Event.Event()
         self.onGuiCacheSyncCompleted = Event.Event()
         self.onPQLocksChanged = Event.Event()
+        self.onBootcampEnqueued = Event.Event()
+        self.onBootcampDequeued = Event.Event()
+        self.onBootcampShowGUI = Event.Event()
+        self.onKickedFromBootcampQueue = Event.Event()
+        self.onBootcampAccountMigrationComplete = Event.Event()
         self.onNotification = Event.Event()
         self.onTeamChanged = Event.Event()
+        self.onBootcampEnqueueFailure = Event.Event()
         self.onDisconnected = Event.Event()
         self.onShowDevelopmentInfo = Event.Event()
+        self.onEntityCheckOutEnqueued = Event.Event()
+        self.onBootcampRoundFinished = Event.Event()
 
 
 g_playerEvents = _PlayerEvents()

@@ -25,6 +25,7 @@ class ENTRY_SYMBOL_NAME(object):
     ENEMY_TEAM_SPAWN = 'EnemyTeamSpawnEntry'
     CONTROL_POINT = 'ControlPointEntry'
     TUTORIAL_TARGET = 'TutorialTargetEntry'
+    BOOTCAMP_TARGET = 'BootcampTargetEntry'
     ARTILLERY_ENTRY = 'ArtilleryEntry'
     BOMBER_ENTRY = 'BomberEntry'
     VEHICLE = 'VehicleEntry'

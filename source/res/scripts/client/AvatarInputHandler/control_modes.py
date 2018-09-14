@@ -642,7 +642,11 @@ class _TrajectoryControlMode(_GunControlMode):
         self._cam.enable(args['preferredPos'], args['saveDist'])
         self.__trajectoryDrawer.visible = self._aih.isGuiVisible
         BigWorld.player().autoAim(None)
-        self.__updateTrajectoryDrawer()
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
+            self.__trajectoryDrawerClbk = BigWorld.callback(0.0, self.__updateTrajectoryDrawer)
+        else:
+            self.__updateTrajectoryDrawer()
         g_postProcessing.enable(CTRL_MODE_NAME.STRATEGIC)
         self.__curVehicleID = args.get('curVehicleID')
         if self.__curVehicleID is None:
@@ -865,7 +869,10 @@ class SniperControlMode(_GunControlMode):
         BigWorld.wg_enableTreeHiding(True)
         BigWorld.wg_setTreeHidingRadius(15.0, 10.0)
         BigWorld.wg_havokSetSniperMode(True)
-        TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.SNIPER_MODE)
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.SNIPER_MODE)
+        if BattleReplay.g_replayCtrl.isRecording:
+            BattleReplay.g_replayCtrl.onSniperModeChanged(True)
         g_postProcessing.enable('sniper')
         desc = BigWorld.player().getVehicleDescriptor()
         isHorizontalStabilizerAllowed = desc.gun['turretYawLimits'] is None
@@ -882,10 +889,13 @@ class SniperControlMode(_GunControlMode):
         BigWorld.wg_enableTreeHiding(False)
         g_postProcessing.disable()
         BigWorld.wg_setLowDetailedMode(False)
-        if TriggersManager.g_manager is not None:
-            TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.SNIPER_MODE)
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            if TriggersManager.g_manager is not None:
+                TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.SNIPER_MODE)
         if self._aih.siegeModeControl is not None:
             self._aih.siegeModeControl.onSiegeStateChanged -= self.__siegeModeStateChanged
+        if BattleReplay.g_replayCtrl.isRecording:
+            BattleReplay.g_replayCtrl.onSniperModeChanged(False)
         return
 
     def setObservedVehicle(self, vehicleID):

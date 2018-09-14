@@ -7,6 +7,7 @@ class WGNC_GUI_TYPE(object):
     POP_UP = 1
     BASIC_WINDOW = 2
     COMPLEX_WINDOW = 4
+    BROWSER = 8
 
 
 class WGNC_DATA_PROXY_TYPE(object):

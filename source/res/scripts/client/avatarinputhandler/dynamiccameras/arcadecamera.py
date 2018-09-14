@@ -650,6 +650,11 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         ucfg['startDist'] = readFloat(ds, 'startDist', bcfg['distRange'][0], 500, bcfg['optimalStartDist'])
         if ucfg['startDist'] < bcfg['minStartDist']:
             ucfg['startDist'] = bcfg['optimalStartDist']
+        if constants.IS_BOOTCAMP_ENABLED:
+            from bootcamp.Bootcamp import g_bootcamp
+            from bootcamp import START_DISTANCE
+            if g_bootcamp.isRunning():
+                ucfg['startDist'] = START_DISTANCE
         ucfg['startAngle'] = readFloat(ds, 'startAngle', 5, 180, 60)
         ucfg['startAngle'] = math.radians(ucfg['startAngle']) - math.pi * 0.5
         ucfg['fovMultMinMaxDist'] = MinMax(readFloat(ds, 'fovMultMinDist', 0.1, 100, bcfg['fovMultMinMaxDist'].min), readFloat(ds, 'fovMultMaxDist', 0.1, 100, bcfg['fovMultMinMaxDist'].max))

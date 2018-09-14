@@ -69,7 +69,7 @@ class BattleGameInputMgr(object):
             return True
         if key in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             if not self.__consumers:
-                avatar_getter.setForcedGuiControlMode(isDown)
+                avatar_getter.setForcedGuiControlMode(isDown, enableAiming=False)
             return True
         if key == Keys.KEY_TAB and (mods != Keys.MODIFIER_CTRL or not isDown):
             event_dispatcher.toggleFullStats(isDown)

@@ -100,6 +100,33 @@ class ContainerSettings(namedtuple('ContainerSettings', 'type clazz')):
 
 
 ContainerSettings.__new__.__defaults__ = (None, None)
+
+class ConditionalViewSettings(GroupedViewSettings):
+
+    @staticmethod
+    def __new__(cls, alias, clazzFunc, url, type, event, scope, cacheable, containers):
+        self = GroupedViewSettings.__new__(cls, alias, '', url, type, None, event, scope, cacheable, containers)
+        self.__clazzFunc = clazzFunc
+        self.__url = url
+        return self
+
+    @property
+    def clazz(self):
+        return self.__clazzFunc()
+
+    @property
+    def url(self):
+        return self.__url() if callable(self.__url) else self.__url
+
+
+ConditionalViewSettings.__new__.__defaults__ = (None,
+ None,
+ None,
+ None,
+ None,
+ None,
+ False,
+ None)
 g_entitiesFactories = EntitiesFactories((DAAPIModuleFactory((ViewTypes.COMPONENT,)), ViewFactory((ViewTypes.DEFAULT,
   ViewTypes.LOBBY_SUB,
   ViewTypes.LOBBY_TOP_SUB,

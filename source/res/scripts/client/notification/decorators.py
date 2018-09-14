@@ -26,7 +26,6 @@ def _makeShowTime():
 
 
 _ICONS_FIELDS = ('icon', 'defaultIcon', 'bgIcon')
-_CLUB_INVITE_VISIBILITY_INTERVAL = 1200
 
 def _getClanName(clanInfo):
     return '[{}] {}'.format(clanInfo[1], clanInfo[0])

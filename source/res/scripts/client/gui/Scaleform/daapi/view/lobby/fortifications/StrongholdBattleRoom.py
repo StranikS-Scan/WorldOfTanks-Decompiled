@@ -1,47 +1,49 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/StrongholdBattleRoom.py
-import BigWorld
 import weakref
-from helpers import time_utils
+import BigWorld
+from helpers import int2roman
 from UnitBase import UNIT_OP
 from adisp import process
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
-from helpers import dependency, i18n
 from debug_utils import LOG_CURRENT_EXCEPTION
-from shared_utils import CONST_CONTAINER
 from gui import GUI_SETTINGS, SystemMessages
-from gui.app_loader import g_appLoader
-from gui.clans.clan_helpers import getStrongholdUrl
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.MinimapLobby import MinimapLobby
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
+from gui.Scaleform.daapi.view.lobby.MinimapGrid import MinimapGrid
+from gui.Scaleform.daapi.view.lobby.prb_windows.StrongholdActionButtonStateVO import StrongholdActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import rally_dps
-from gui.Scaleform.daapi.view.meta.FortClanBattleRoomMeta import FortClanBattleRoomMeta
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO, MAX_PLAYER_COUNT_ALL
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO, MAX_PLAYER_COUNT_ALL
+from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
+from gui.Scaleform.daapi.view.lobby.strongholds.sound_controller import g_strongholdSoundController
+from gui.Scaleform.daapi.view.meta.FortClanBattleRoomMeta import FortClanBattleRoomMeta
+from gui.Scaleform.framework import ViewTypes
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
-from gui.Scaleform.daapi.view.lobby.strongholds import createStrongholdsWebHandlers
-from gui.Scaleform.daapi.view.lobby.prb_windows.StrongholdActionButtonStateVO import StrongholdActionButtonStateVO
-from gui.Scaleform.framework import ViewTypes
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.app_loader import g_appLoader
+from gui.clans.clan_helpers import getStrongholdUrl
 from gui.prb_control import settings
-from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.prb_control.entities.base.unit.listener import IStrongholdListener
+from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.prb_control.entities.stronghold.unit.ctx import SetReserveUnitCtx, UnsetReserveUnitCtx
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.prb_control.items.stronghold_items import REQUISITION_TYPE
-from gui.prb_control.formatters import messages
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.utils.functions import getViewName
 from gui.shared.utils.MethodsRules import MethodsRules
+from gui.shared.utils.functions import getViewName
 from gui.shared.view_helpers import UsersInfoHelper
-from skeletons.gui.game_control import IBrowserController
+from helpers import dependency, i18n
+from helpers import time_utils
 from messenger.proto.events import g_messengerEvents
+from shared_utils import CONST_CONTAINER
+from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.shared import IItemsCache
+from messenger.gui import events_dispatcher
+from messenger.ext import channel_num_gen
 
 class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdListener, MethodsRules, UsersInfoHelper):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -54,19 +56,21 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
     def __init__(self):
         super(StrongholdBattleRoom, self).__init__()
         self.__minimap = None
+        self.__minimapGrid = None
         self.__isOpened = False
-        self.__battleModeData = {}
         self.__proxy = None
         self.__changeModeBrowserId = 0
         self.__firstShowMainForm = False
+        self.__maintenanceWindowVisible = False
         return
 
     def onUnitFlagsChanged(self, flags, timeLeft):
         self.__setReadyStatus()
         self._setActionButtonState()
-        data = self.__getStrongholdData()
-        if data:
-            self._updateConfigureButtonState(data.isFirstBattle(), data.getReadyButtonEnabled())
+        if self.prbEntity.isStrongholdSettingsValid():
+            self._updateConfigureButtonState(self.prbEntity.isFirstBattle(), not self.prbEntity.isStrongholdUnitFreezed())
+            self._updateMembersData()
+            self._updateRallyData()
 
     def onUnitPlayerStateChanged(self, pInfo):
         self.__setMemberStatus(pInfo)
@@ -75,7 +79,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self._updateRallyData()
 
     def onTimerAlert(self):
-        g_fortSoundController.playBattleRoomTimerAlert()
+        g_strongholdSoundController.playBattleRoomTimerAlert()
 
     def isPlayerInUnit(self, databaseID):
         result = False
@@ -94,16 +98,15 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             self._setActionButtonState()
 
     def onUnitVehiclesChanged(self, dbID, vInfos):
-        entity = self.prbEntity
-        pInfo = entity.getPlayerInfo(dbID=dbID)
+        pInfo = self.prbEntity.getPlayerInfo(dbID=dbID)
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(self.itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
+                vehicleVO = makeVehicleVO(self.itemsCache.items.getItemByCD(vInfo.vehTypeCD), self.prbEntity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
                 slotCost = vInfo.vehLevel
             else:
-                slotState = entity.getSlotState(slotIdx)
+                slotState = self.prbEntity.getSlotState(slotIdx)
                 vehicleVO = None
                 if slotState.isClosed:
                     slotCost = settings.UNIT_CLOSED_SLOT_COST
@@ -121,6 +124,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
     def onStrongholdOnReadyStateChanged(self):
         if self._candidatesDP:
             self._rebuildCandidatesDP()
+            self._updateMembersData()
             self._updateRallyData()
 
     def onUnitMembersListChanged(self):
@@ -139,7 +143,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.prbEntity.getCandidates())
 
     def inviteFriendRequest(self):
-        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.STRONGHOLD_SEND_INVITES_WINDOW_PY, ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.FORT_BATTLE],
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.STRONGHOLD_SEND_INVITES_WINDOW_PY, ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.EXTERNAL],
          'ctrlType': CTRL_ENTITY_TYPE.UNIT,
          'showClanOnly': False}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -147,14 +151,13 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self.requestToOpen(not self.__isOpened)
 
     def chooseVehicleRequest(self):
-        wgshData = self.prbEntity.getStrongholdData()
-        if wgshData is not None:
-            minLvl, maxLvl = wgshData.getMinLevel(), wgshData.getMaxLevel()
+        if self.prbEntity.isStrongholdSettingsValid():
+            header = self.prbEntity.getStrongholdSettings().getHeader()
+            minLvl, maxLvl = header.getMinLevel(), header.getMaxLevel()
             levelsRange = self.prbEntity.getRosterSettings().getLevelsRange(minLvl, maxLvl)
         else:
             levelsRange = self.prbEntity.getRosterSettings().getLevelsRange()
         self._chooseVehicleRequest(levelsRange)
-        return
 
     @process
     def openConfigureWindow(self):
@@ -169,59 +172,47 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         else:
             self.__changeModeBrowserId = 0
 
-    def onAvailableReservesChanged(self, selectedReservesIdx, reserveOrder):
-        self._updateReserves(selectedReservesIdx, reserveOrder)
-
-    def onBattleSeriesStatusChanged(self, currentBattle, enemyClan, battleIdx, clan):
-        self._updateMiniMapData(currentBattle, clan)
-        self._updateBuildings(currentBattle, enemyClan, battleIdx)
-
-    def onDirectionChanged(self, isSortie, direction, resourceMultiplier):
-        self._updateTitle(isSortie, direction, resourceMultiplier)
-        self.__checkBattleMode()
-
-    def onSelectedReservesChanged(self, selectedReservesIdx, reserveOrder):
-        self._updateReserves(selectedReservesIdx, reserveOrder)
-
-    def onIndustrialResourceMultiplierChanged(self, isSortie, direction, resourceMultiplier):
-        self._updateTitle(isSortie, direction, resourceMultiplier)
-
-    def onBattleDurationChanged(self, currentBattle, enemyClan, battleIdx, clan):
-        self._updateMiniMapData(currentBattle, clan)
-        self._updateBuildings(currentBattle, enemyClan, battleIdx)
-
-    def onEnemyClanChanged(self, currentBattle, enemyClan, battleIdx, clan):
-        self._updateMiniMapData(currentBattle, clan)
-        self._updateBuildings(currentBattle, enemyClan, battleIdx)
+    def onUpdateHeader(self, header, isFirstBattle, isUnitFreezed):
+        self._updateMiniMapData(header.getCurrentBattle(), header.getClan())
+        self._updateTableHeader(header.getMaxPlayersCount(), header.getMaxLegionariesCount())
+        self._updateBuildings(header.getCurrentBattle(), header.getEnemyClan(), header.getBattleIdx())
+        self._updateTitle(header.isSortie(), header.getDirection(), header.getIndustrialResourceMultiplier())
+        self._updateConfigureButtonState(isFirstBattle, not isUnitFreezed)
         self.__setReadyStatus()
+        self._updateMembersData()
+        self._updateRallyData()
+        if not self.__firstShowMainForm:
+            self.__firstShowMainForm = True
+            self.as_setBattleRoomDataS(vo_converters.makeFortClanBattleRoomVO(0, '', '', '', '', False, False, header.isSortie()))
+            self.addListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self._onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.STRONGHOLD)
 
-    def onLevelChanged(self):
-        self.__checkBattleMode()
+    def onUpdateTimer(self, timer):
+        pass
 
-    def onPlayersCountChanged(self, maxPlayerCount, maxLegCount):
-        self._updateRallyData(maxPlayerCount)
-        self._updateTableHeader(maxPlayerCount, maxLegCount)
-        self.__checkBattleMode()
+    def onUpdateState(self, state):
+        self._updateOpenRoomBattleState(state.getPublic())
 
-    def onMaxLegionariesCountChanged(self, maxPlayerCount, maxLegCount):
-        self._updateTableHeader(maxPlayerCount, maxLegCount)
+    def onUpdateReserve(self, reserve, reserveOrder):
+        self._updateReserves(reserve, reserveOrder)
 
-    def onPermissionsChanged(self, selectedReservesIdx, reserveOrder):
-        self._updateReserves(selectedReservesIdx, reserveOrder)
-
-    def onPublicStateChanged(self, isOpened):
-        self._updateOpenRoomBattleState(isOpened)
-
-    def onTypeChanged(self, isSortie, direction, resourceMultiplier):
-        self._updateTitle(isSortie, direction, resourceMultiplier)
-        self.__checkBattleMode()
-
-    def onStrongholdDataChanged(self):
+    def onStrongholdDataChanged(self, header, isFirstBattle, reserve, reserveOrder):
         self.invalidateStrongholdWaiting()
-        self.__strongholdUpdate()
+        self.onUpdateReserve(reserve, reserveOrder)
+        self._updateMembersData()
+        self._updateRallyData()
 
-    def onUpdateAll(self):
-        self.__strongholdUpdate()
+    def onStrongholdDoBattleQueue(self, isFirstBattle, readyButtonEnabled, reserveOrder):
+        self._updateConfigureButtonState(isFirstBattle, readyButtonEnabled)
+        enabledReserves = []
+        for _, _ in enumerate(reserveOrder):
+            enabledReserves.append(readyButtonEnabled)
+
+        self.as_setReservesEnabledS(enabledReserves)
+
+    def onStrongholdMaintenance(self, showWindow):
+        self.__maintenanceWindowVisible = showWindow
+        if not self.__maintenanceWindowVisible:
+            self.__forceUpdateBuildings()
 
     def setProxy(self, parent):
         self.__proxy = weakref.proxy(parent)
@@ -229,8 +220,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
 
     def invalidateStrongholdWaiting(self):
         if self.__proxy:
-            self.__proxy.showStrongholdWaiting(self.__getStrongholdData() is None)
-        return
+            self.__proxy.showStrongholdWaiting(not self.prbEntity.isStrongholdSettingsValid())
 
     def _populate(self):
         super(StrongholdBattleRoom, self)._populate()
@@ -238,13 +228,13 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         g_messengerEvents.users.onUserActionReceived += self.__onUserDataChanged
         self.addListener(events.CSReserveSelectEvent.RESERVE_SELECTED, self.__onReserveSelectHandler)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__onFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.__strongholdUpdate()
+        self.prbEntity.updateStrongholdData()
 
     def _dispose(self):
         self.__proxy = None
         g_messengerEvents.users.onUserStatusUpdated -= self.__onUserStatusUpdated
         g_messengerEvents.users.onUserActionReceived -= self.__onUserDataChanged
-        self.removeListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self._onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.FORT)
+        self.removeListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self._onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.STRONGHOLD)
         self.removeListener(events.CSReserveSelectEvent.RESERVE_SELECTED, self.__onReserveSelectHandler)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__onFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         super(StrongholdBattleRoom, self)._dispose()
@@ -261,21 +251,31 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(StrongholdBattleRoom, self)._onRegisterFlashComponent(viewPy, alias)
+        if isinstance(viewPy, MinimapGrid):
+            self.__minimapGrid = viewPy
+            events_dispatcher.rqActivateChannel(self.__getClientID(), viewPy)
         if isinstance(viewPy, MinimapLobby):
             self.__minimap = viewPy
 
-    def _updateRallyData(self, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
+    def _onUnregisterFlashComponent(self, viewPy, alias):
+        super(StrongholdBattleRoom, self)._onUnregisterFlashComponent(viewPy, alias)
+        if alias == VIEW_ALIAS.MINIMAP_GRID:
+            events_dispatcher.rqDeactivateChannel(self.__getClientID())
+
+    def _updateRallyData(self):
         entity = self.prbEntity
         unitPermissions = entity.getPermissions()
-        havePermition = unitPermissions.canChangeUnitState()
+        havePermissions = unitPermissions.canChangeUnitState()
         canInvite = unitPermissions.canSendInvite()
-        maxPlayerCount = MAX_PLAYER_COUNT_ALL
-        dataSH = self.__getStrongholdData()
-        if dataSH:
-            maxPlayerCount = dataSH.getMaxPlayerCount()
-        data = vo_converters.makeSortieVO(entity, havePermition, unitIdx=entity.getUnitIdx(), app=self.app, canInvite=canInvite, maxPlayerCount=maxPlayerCount)
-        if self.__changeModeBrowserId and not havePermition:
+        if entity.isStrongholdSettingsValid():
+            maxPlayerCount = entity.getStrongholdSettings().getHeader().getMaxPlayersCount()
+        else:
+            maxPlayerCount = MAX_PLAYER_COUNT_ALL
+        data = vo_converters.makeSortieVO(entity, havePermissions, unitMgrID=entity.getID(), app=self.app, canInvite=canInvite, maxPlayerCount=maxPlayerCount)
+        if self.__changeModeBrowserId and not havePermissions:
             self.__destroyChangeModeWindow()
+        if self.__minimapGrid:
+            self.__minimapGrid.as_clickEnabledS(havePermissions)
         try:
             for slot in data['slots']:
                 if slot['selectedVehicle'] and not slot['isFreezed'] and not slot['isCommanderState']:
@@ -289,12 +289,11 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
     def _updateMembersData(self):
         entity = self.prbEntity
         self._setActionButtonState()
-        data = self.__getStrongholdData()
-        if data:
-            maxPlayerCount = data.getMaxPlayerCount()
-            maxLegCount = data.getMaxLegCount()
-            self._updateTableHeader(maxPlayerCount, maxLegCount)
-            self.as_setMembersS(*vo_converters.makeSlotsVOs(entity, entity.getUnitIdx(), app=self.app, maxPlayerCount=maxPlayerCount))
+        if entity.isStrongholdSettingsValid():
+            header = entity.getStrongholdSettings().getHeader()
+            maxPlayerCount = header.getMaxPlayersCount()
+            self._updateTableHeader(maxPlayerCount, header.getMaxLegionariesCount())
+            self.as_setMembersS(*vo_converters.makeSlotsVOs(entity, entity.getID(), app=self.app, maxPlayerCount=maxPlayerCount))
 
     def _getVehicleSelectorDescription(self):
         return FORTIFICATIONS.SORTIE_VEHICLESELECTOR_DESCRIPTION
@@ -319,11 +318,11 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             self.__minimap.setPlayerTeam(playerTeam)
             self.__minimap.setArena(currentBattle.getMapId())
 
-    def _updateReserves(self, selectedReservesIdx, reserveOrder):
+    def _updateReserves(self, reserve, reserveOrder):
         slots = []
         enabled = []
         for index, groupType in enumerate(reserveOrder):
-            reserveVO, enable = self.__updateReserve(groupType, selectedReservesIdx, index)
+            reserveVO, enable = self.__updateReserve(groupType, reserve, index)
             slots.append(reserveVO)
             enabled.append(enable)
 
@@ -331,10 +330,23 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self.as_setReservesEnabledS(enabled)
 
     def _updateBuildings(self, currentBattle, enemyClan, battleIdx):
-        index = currentBattle.getIndex() if currentBattle else None
-        attacker = currentBattle.attacker != enemyClan.id if currentBattle else None
-        self.as_setDirectionS(vo_converters.makeDirectionVO(index, attacker, battleIdx), self.prbEntity.animationNotAvailable())
+        data = self.prbEntity.getStrongholdSettings()
+        if data.isValid() and data.getHeader() and not data.getHeader().isSortie():
+            waitingForData = self.prbEntity.isStrongholdUnitWaitingForData() or self.__maintenanceWindowVisible
+            if not waitingForData:
+                if currentBattle is not None and enemyClan is not None:
+                    index = currentBattle.getIndex()
+                    attacker = currentBattle.getAttacker() != enemyClan.getId()
+                else:
+                    index = None
+                    attacker = None
+                self.as_setDirectionS(vo_converters.makeDirectionVO(index, attacker, battleIdx), self.prbEntity.animationNotAvailable())
+            self.as_updateReadyDirectionsS(not waitingForData)
         return
+
+    def _updateReadyDirections(self, readyButtonEnabled):
+        ready = readyButtonEnabled
+        self.as_updateReadyDirectionsS(ready)
 
     def _updateOpenRoomBattleState(self, isOpened):
         self.__isOpened = isOpened
@@ -356,18 +368,21 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
 
     def _updateTitle(self, isSortie, direction, resourceMultiplier):
         if isSortie:
-            title = i18n.makeString(FORTIFICATIONS.FORT2TITLE_SORTIE)
+            title = i18n.makeString(FORTIFICATIONS.STRONGHOLDTITLE_SORTIE)
         else:
             direction = vo_converters.getDirection(direction)
-            title = i18n.makeString(FORTIFICATIONS.FORT2TITLE_STRONGHOLD) % {'direction': direction}
+            title = i18n.makeString(FORTIFICATIONS.STRONGHOLDTITLE_STRONGHOLD) % {'direction': direction}
             if resourceMultiplier > 1:
                 title += ' (x%s)' % resourceMultiplier
         self.fireEvent(events.RenameWindowEvent(events.RenameWindowEvent.RENAME_WINDOW, ctx={'data': title}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _updateConfigureButtonState(self, isFirstBattle, readyButtonEnabled):
         flags = self.prbEntity.getFlags()
-        isEnabled = not flags.isInQueue() and not flags.isInArena() and readyButtonEnabled
-        vo = vo_converters.makeConfigureButtonVO(isEnabled and isFirstBattle, True)
+        if readyButtonEnabled and isFirstBattle and not flags.isInQueue() and not flags.isInArena():
+            isEnabled = True
+        else:
+            isEnabled = False
+        vo = vo_converters.makeConfigureButtonVO(isEnabled, True)
         self.as_setConfigureButtonStateS(vo)
 
     def _onMatchmakingTimerChanged(self, event):
@@ -383,9 +398,9 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         isInBattle = self.prbEntity.getFlags().isInArena()
         textid = data['textid']
         maxLvl = data['maxLevel']
-        level = fort_formatters.getTextLevel(maxLvl)
+        level = int2roman(maxLvl)
         if data['isSortie']:
-            headerDescr = i18n.makeString(FORTIFICATIONS.FORT2INFO_SORTIE) % {'level': level}
+            headerDescr = i18n.makeString(FORTIFICATIONS.STRONGHOLDINFO_SORTIE) % {'level': level}
             timetext = None
             if textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_ENDOFBATTLESOON:
                 timetext = time_utils.getTimeLeftFormat(data['dtime'])
@@ -398,12 +413,12 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             wfbDescr = i18n.makeString(textid, nextDate=timetext)
         else:
             direction = vo_converters.getDirection(data['direction'])
-            headerDescr = i18n.makeString(FORTIFICATIONS.FORT2INFO_STRONGHOLD) % {'direction': direction}
+            headerDescr = i18n.makeString(FORTIFICATIONS.STRONGHOLDINFO_STRONGHOLD) % {'direction': direction}
             if textid != FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON:
                 timetext = None
-                if textid == FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW:
+                if textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW:
                     timetext = BigWorld.wg_getShortTimeFormat(data['matchmakerNextTick'])
-                elif textid == FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY:
+                elif textid == FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY:
                     timetext = BigWorld.wg_getShortTimeFormat(data['matchmakerNextTick'])
                 wfbDescr = i18n.makeString(textid, nextDate=timetext)
             else:
@@ -423,7 +438,15 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
                     playerClanName = "<b><font face='$FieldFont' color='{0}'>[{1}]</font></b>".format(clColor, clan.getTag())
                 self.as_setTimerDeltaS(vo_converters.makeClanBattleTimerVO(data['dtime'] if not isInBattle else 0, "<font face='$FieldFont' size='18' color='{0}'>###</font>".format(colorRegular), "<font face='$FieldFont' size='18' color='{0}'>###</font>".format(colorAlarm), self.TIMER_GLOW_COLORS.NORMAL, self.TIMER_GLOW_COLORS.ALERT, '00', 0 if data['isFirstBattle'] else 1))
         self.as_setBattleRoomDataS(vo_converters.makeFortClanBattleRoomVO(mapId, headerDescr, playerClanName, enemyClanName, wfbDescr, enemyVisible, isBattleTimerVisible, data['isSortie']))
+        if data['forceUpdateBuildings']:
+            self.__forceUpdateBuildings()
         return
+
+    def __forceUpdateBuildings(self):
+        data = self.prbEntity.getStrongholdSettings()
+        if data.isValid() and data.getHeader():
+            header = data.getHeader()
+            self._updateBuildings(header.getCurrentBattle(), header.getEnemyClan(), header.getBattleIdx())
 
     def __setMemberStatus(self, pInfo):
         if pInfo.isInSlot:
@@ -437,71 +460,44 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
     def __onFightButtonUpdated(self, event):
         self._setActionButtonState()
 
-    def __getStrongholdData(self):
-        return self.prbEntity.getStrongholdData()
+    def __updateReserve(self, groupType, reserveData, slotIndex):
+        current = None
+        group = reserveData.getUniqueReservesByGroupType(groupType)
+        selectedReserves = reserveData.getSelectedReserves()
+        for reserve in group:
+            if reserve in selectedReserves:
+                current = reserve
+                break
 
-    def __strongholdUpdate(self):
-        allData = self.__getStrongholdData()
-        if allData is None:
-            return
+        unitPermissions = self.prbEntity.getPermissions()
+        havePermissions = unitPermissions.canChangeConsumables()
+        notChosen = current is None
+        if current:
+            slotType = current.getType()
+            level = current.getLevel()
+            title = current.getTitle()
+            description = current.getDescription()
+            reserveId = current.getId()
         else:
-            if not self.__firstShowMainForm:
-                self.__firstShowMainForm = True
-                self.as_setBattleRoomDataS(vo_converters.makeFortClanBattleRoomVO(0, '', '', '', '', False, False, allData.isSortie()))
-                self.addListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self._onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.FORT)
-            self._updateRallyData(allData.getMaxPlayerCount())
-            self._updateOpenRoomBattleState(allData.getPublic())
-            self._updateMiniMapData(allData.getCurrentBattle(), allData.getClan())
-            self._updateTableHeader(allData.getMaxPlayerCount(), allData.getMaxLegCount())
-            self._updateBuildings(allData.getCurrentBattle(), allData.getEnemyClan(), allData.getBattleIdx())
-            self._updateReserves(allData.getSelectedReservesIdx(), allData.getReserveOrder())
-            self._updateTitle(allData.isSortie(), allData.getDirection(), allData.getResourceMultiplier())
-            self._updateConfigureButtonState(allData.isFirstBattle(), allData.getReadyButtonEnabled())
-            self.__checkBattleMode()
-            return
-
-    def __updateReserve(self, groupType, selected, slotIndex):
-        data = self.__getStrongholdData()
-        if data is None:
-            return
-        else:
-            current = None
-            group = data.getUniqueReservesByGroupType(groupType)
-            for reserve in group:
-                if reserve.getId() in selected:
-                    current = reserve
-                    break
-
-            unitPermissions = self.prbEntity.getPermissions()
-            havePermition = unitPermissions.canChangeConsumables()
-            isFirstBattle = data.isFirstBattle()
-            isInBattle = self.prbEntity.getFlags().isInArena()
-            notChosen = current is None
-            if current:
-                slotType = current.getType()
-                level = current.getLevel()
-                title = current.getTitle()
-                description = current.getDescription()
-                reserveId = current.getId()
-            else:
-                slotType = None
-                level = 0
-                title = ''
-                description = ''
-                reserveId = 0
-            isRequsition = groupType == REQUISITION_TYPE
-            disabledByRequisition = isRequsition and not isFirstBattle
-            empty = len(group) == 0
-            enabled = havePermition and not empty and not isInBattle and not disabledByRequisition
-            tooltip, tooltiptype = vo_converters.makeReserveSlotTooltipVO(groupType, title, description, empty, notChosen, havePermition, isInBattle, disabledByRequisition)
-            vo = vo_converters.makeReserveSlotVO(slotType, groupType, reserveId, level, slotIndex, tooltip, tooltiptype)
-            return (vo, enabled)
+            slotType = None
+            level = 0
+            title = ''
+            description = ''
+            reserveId = 0
+        isRequsition = groupType == REQUISITION_TYPE
+        disabledByRequisition = isRequsition and not self.prbEntity.isFirstBattle()
+        empty = len(group) == 0
+        isInBattle = self.prbEntity.getFlags().isInArena()
+        enabled = havePermissions and not empty and not isInBattle and not disabledByRequisition
+        tooltip, tooltiptype = vo_converters.makeReserveSlotTooltipVO(groupType, title, description, empty, notChosen, havePermissions, isInBattle, disabledByRequisition)
+        vo = vo_converters.makeReserveSlotVO(slotType, groupType, reserveId, level, slotIndex, tooltip, tooltiptype)
+        return (vo, enabled)
 
     def __setReadyStatus(self):
-        data = self.__getStrongholdData()
         enemyReady = False
-        if data and data.getEnemyClan():
-            enemyReady = data.getEnemyClan().getReadyStatus()
+        data = self.prbEntity.getStrongholdSettings()
+        if data.isValid() and data.getHeader().getEnemyClan():
+            enemyReady = data.getHeader().getEnemyClan().getReadyStatus()
         self.as_updateReadyStatusS(self.prbEntity.getFlags().isInQueue(), enemyReady)
 
     def __onUserDataChanged(self, _, user):
@@ -518,22 +514,6 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
                 self._rebuildCandidatesDP()
                 self._updateRallyData()
 
-    def __checkBattleMode(self):
-        data = self.prbEntity.getStrongholdData()
-        if data and data.isFirstBattle():
-            battleModeFields = (('type', 'STRONGHOLDS_MODE_CHANGED'),
-             ('direction', 'STRONGHOLDS_DIRECTION_CHANGED'),
-             ('max_level', 'STRONGHOLDS_MODE_CHANGED'),
-             ('max_players_count', 'STRONGHOLDS_MODE_CHANGED'))
-            if self.__battleModeData:
-                for field, key in battleModeFields:
-                    if self.__battleModeData.get(field) != getattr(data, field):
-                        SystemMessages.pushI18nMessage(messages.getUnitWarningMessage(key), type=SystemMessages.SM_TYPE.Warning)
-                        break
-
-            for field, _ in battleModeFields:
-                self.__battleModeData[field] = getattr(data, field)
-
     def __destroyChangeModeWindow(self):
         if self.browserCtrl.getBrowser(self.__changeModeBrowserId):
             app = g_appLoader.getApp()
@@ -546,8 +526,10 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         return
 
     def __unitActive(self):
-        entity = self.prbEntity
-        flags = entity.getFunctionalFlags()
-        entityActive = flags & FUNCTIONAL_FLAG.FORT2 > 0
+        flags = self.prbEntity.getFunctionalFlags()
+        entityActive = flags & FUNCTIONAL_FLAG.STRONGHOLD > 0
         unitActive = flags & FUNCTIONAL_FLAG.UNIT > 0 and entityActive
         return unitActive
+
+    def __getClientID(self):
+        return channel_num_gen.getClientID4Prebattle(PREBATTLE_TYPE.EXTERNAL)

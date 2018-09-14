@@ -153,7 +153,15 @@ class TokenInfoSubRequester(SubRequester):
             self._storage[ticket] = ms(MENU.QUOTE, string=title)
 
     def _tickets(self):
-        return [(getClientLanguage(),)]
+        for quest in self._eventsCache.getQuests().itervalues():
+            if quest.getType() not in (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.BATTLE_QUEST):
+                continue
+            for token in quest.accountReqs.getTokens():
+                styleID = token.getStyleID()
+                if token.isDisplayable() and styleID not in _DEFAULT_TOKENS_STYLES:
+                    return [(getClientLanguage(),)]
+
+        return []
 
     @staticmethod
     def _urlGetter(fileserver):

@@ -82,8 +82,10 @@ class RentLeftFormatter(object):
     def getRentLeftStr(self, localization=None, timeStyle=None, ctx=None, formatter=None):
         if self.__rentInfo.getTimeLeft() > 0:
             resultStr = self.getRentTimeLeftStr(localization, timeStyle, ctx, formatter)
-        else:
+        elif self.__rentInfo.battlesLeft:
             resultStr = self.getRentBattlesLeftStr(localization, formatter)
+        else:
+            resultStr = self.getRentWinsLeftStr(localization, formatter)
         return resultStr
 
     def getRentTimeLeftStr(self, localization=None, timeStyle=None, ctx=None, formatter=None):
@@ -101,3 +103,11 @@ class RentLeftFormatter(object):
             formatter = defaultFormatter
         battlesLeft = self.__rentInfo.battlesLeft
         return formatter(localization, 'battles', battlesLeft) if battlesLeft > 0 else ''
+
+    def getRentWinsLeftStr(self, localization=None, formatter=None):
+        if localization is None:
+            localization = self.__localizationRootKey
+        if formatter is None:
+            formatter = defaultFormatter
+        winsLeft = self.__rentInfo.winsLeft
+        return formatter(localization, 'wins', winsLeft) if winsLeft > 0 else ''

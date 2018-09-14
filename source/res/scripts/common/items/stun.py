@@ -18,6 +18,7 @@ def readConfig():
     c['damageEffectCoeff'] = _xml.readFraction(xmlCtx, section, 'damageEffectCoeff')
     c['minStunDuration'] = _xml.readNonNegativeFloat(xmlCtx, section, 'minStunDuration')
     c['shellEffectFactor'] = _xml.readFraction(xmlCtx, section, 'shellEffectFactor')
+    c['allyStunTimeReduction'] = _xml.readFraction(xmlCtx, section, 'allyStunTimeReduction')
     c['stunFactorEnginePower'] = _xml.readFraction(xmlCtx, section, 'stunFactorEnginePower')
     c['stunFactorVehicleRotationSpeed'] = _xml.readFraction(xmlCtx, section, 'stunFactorVehicleRotationSpeed')
     c['stunFactorTurretTraverse'] = _xml.readFraction(xmlCtx, section, 'stunFactorTurretTraverse')

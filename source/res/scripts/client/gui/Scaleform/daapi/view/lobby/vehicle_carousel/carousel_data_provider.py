@@ -8,7 +8,7 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIData
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
-from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getBattlesLeft
+from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getBattlesLeft, getSmallIconPath, getIconPath
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as ms
 
@@ -100,6 +100,7 @@ def getVehicleDataVO(vehicle):
         bonusImage = ''
     label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
     labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
+    isVehicleAvailable = vState not in Vehicle.VEHICLE_STATE.CUSTOM
     return {'id': vehicle.invID,
      'intCD': vehicle.intCD,
      'infoText': largeStatus,
@@ -107,7 +108,9 @@ def getVehicleDataVO(vehicle):
      'clanLock': vehicle.clanLock,
      'lockBackground': _isLockedBackground(vState, vStateLvl),
      'icon': vehicle.icon,
+     'iconAlt': getIconPath('noImage'),
      'iconSmall': vehicle.iconSmall,
+     'iconSmallAlt': getSmallIconPath('noImage'),
      'label': labelStyle(label),
      'level': vehicle.level,
      'premium': vehicle.isPremium,
@@ -116,7 +119,7 @@ def getVehicleDataVO(vehicle):
      'xpImgSource': bonusImage,
      'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
      'rentLeft': rentInfoText,
-     'clickEnabled': vehicle.isInInventory,
+     'clickEnabled': vehicle.isInInventory and isVehicleAvailable,
      'alpha': 1,
      'infoImgSrc': getVehicleStateIcon(vState),
      'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL}

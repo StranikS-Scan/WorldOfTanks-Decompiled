@@ -29,6 +29,7 @@ from gui.shared import event_dispatcher as shared_events
 from items import getTypeInfoByName
 from skeletons.gui.shared import IItemsCache
 from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT
+from skeletons.gui.game_control import IBootcampController
 _PARAMS_LISTS = {GUI_ITEM_TYPE.RADIO: ('radioDistance',),
  GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxLoad'),
  GUI_ITEM_TYPE.ENGINE: ('enginePower', 'fireStartingChance'),
@@ -241,6 +242,7 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
 
 
 class HangarFittingSelectPopover(CommonFittingSelectPopover):
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, ctx=None):
         data_ = ctx['data']
@@ -250,7 +252,10 @@ class HangarFittingSelectPopover(CommonFittingSelectPopover):
             logicProvider = _PreviewLogicProvider(slotType, self.__slotIndex)
             vehicle = g_currentPreviewVehicle.item
         else:
-            logicProvider = _HangarLogicProvider(slotType, self.__slotIndex)
+            if self.bootcampController.isInBootcamp():
+                logicProvider = _BootCampLogicProvider(slotType, self.__slotIndex)
+            else:
+                logicProvider = _HangarLogicProvider(slotType, self.__slotIndex)
             vehicle = g_currentVehicle.item
         super(HangarFittingSelectPopover, self).__init__(vehicle, logicProvider, ctx)
 
@@ -507,10 +512,10 @@ class _HangarLogicProvider(PopoverLogicProvider):
         isEnoughCurrency = True
         price = module.buyPrice
         currency = price.getCurrency()
+        priceValue = price.get(currency)
         inInventory = module.isInInventory
         isInstalled = module.isInstalled(self._vehicle)
         isBought = inInventory or isInstalled
-        priceValue = price.get(currency)
         if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not isInstalled and module.hasSimilarDevicesInstalled(self._vehicle):
             isFit, reason = False, GUI_ITEM_PURCHASE_CODE.ITEM_IS_DUPLICATED
             _, purchaseReason = module.mayPurchase(stats['money'])
@@ -537,6 +542,18 @@ class _HangarLogicProvider(PopoverLogicProvider):
          'removeButtonLabel': MENU.MODULEFITS_REMOVENAME,
          'removeButtonTooltip': MENU.MODULEFITS_REMOVETOOLTIP})
         return moduleData
+
+
+class _BootCampLogicProvider(_HangarLogicProvider):
+
+    def __init__(self, slotType, slotIndex):
+        super(_BootCampLogicProvider, self).__init__(slotType, slotIndex)
+
+    def _buildModuleData(self, module, isInstalledInSlot, stats):
+        data = super(_BootCampLogicProvider, self)._buildModuleData(module, isInstalledInSlot, stats)
+        if self._slotType == FITTING_TYPES.OPTIONAL_DEVICE and isInstalledInSlot:
+            data.update({'disabled': True})
+        return data
 
 
 class _PreviewLogicProvider(PopoverLogicProvider):

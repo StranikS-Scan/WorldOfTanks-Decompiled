@@ -34,6 +34,8 @@ _HIST_BATTLEFIELD_POSTFIX = 'battlefield'
 TANK_EXPERT_GROUP = [_total(_TANK_EXPERT_PREFIX)]
 MECH_ENGINEER_GROUP = [_total(_MECH_ENGINEER_PREFIX)]
 for _nID, name in enumerate(nations.AVAILABLE_NAMES):
+    if name == 'poland':
+        continue
     TANK_EXPERT_GROUP.append(_total('%s%d' % (_TANK_EXPERT_PREFIX, _nID)))
     MECH_ENGINEER_GROUP.append(_total('%s%d' % (_MECH_ENGINEER_PREFIX, _nID)))
 
@@ -154,7 +156,6 @@ def init():
     _layoutsMap = {DOSSIER_TYPE.ACCOUNT: (ACCOUNT_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.ACCOUNT, com_layouts.accountDossierLayout)),
      DOSSIER_TYPE.VEHICLE: (VEHICLE_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.VEHICLE, com_layouts.vehicleDossierLayout)),
      DOSSIER_TYPE.TANKMAN: (TANKMAN_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.TANKMAN, com_layouts.tmanDossierLayout)),
-     DOSSIER_TYPE.FORTIFIED_REGIONS: (FORT_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.FORTIFIED_REGIONS, com_layouts.fortDossierLayout)),
      DOSSIER_TYPE.RATED7X7: (RATED7x7_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.RATED7X7, com_layouts.rated7x7DossierLayout)),
      DOSSIER_TYPE.CLUB: (CLUB_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.CLUB, com_layouts.clubDossierLayout))}
     for record, values in achievements.ACHIEVEMENTS.iteritems():

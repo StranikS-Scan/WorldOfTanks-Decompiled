@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/errors.py
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
-from helpers import i18n
+from helpers import i18n, time_utils
 from messenger.m_constants import CLIENT_ACTION_ID
 from messenger.proto.interfaces import IChatError
 from messenger.proto import shared_errors
@@ -172,5 +172,9 @@ def createChatBanError(banInfo):
     error = None
     item = banInfo.getFirstActiveItem()
     if item:
-        error = shared_errors.ChatBanError(item.expiresAt, item.reason)
+        if item.expiresAt:
+            expiresAt = time_utils.makeLocalServerTime(item.expiresAt)
+        else:
+            expiresAt = 0
+        error = shared_errors.ChatBanError(expiresAt, item.reason)
     return error

@@ -452,7 +452,7 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
     def getAimingMode(self, mode):
         return self.__aimingMode & mode == mode
 
-    def getDesiredShotPoint(self):
+    def getDesiredShotPoint(self, ignoreAimingMode=False):
         assert self.__isEnabled
         return self.__getDesiredShotPoint() if self.__aimingMode == 0 else None
 

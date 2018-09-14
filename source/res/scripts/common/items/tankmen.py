@@ -128,6 +128,13 @@ _MAX_FREE_XP = 2000000000
 _LEVELUP_K1 = 50.0
 _LEVELUP_K2 = 100.0
 
+class _GROUP_TAG(object):
+    """Class contains all available tags in group configuration."""
+    PASSPORT_REPLACEMENT_FORBIDDEN = 'passportReplacementForbidden'
+    RESTRICTIONS = (PASSPORT_REPLACEMENT_FORBIDDEN,)
+    RANGE = RESTRICTIONS
+
+
 def init(preloadEverything):
     if preloadEverything:
         getSkillsConfig()
@@ -149,6 +156,8 @@ def getSkillsMask(skills):
 
     return result
 
+
+ALL_SKILLS_MASK = getSkillsMask([ skill for skill in SKILL_NAMES if skill != 'reserved' ])
 
 def getNationConfig(nationID):
     global _g_nationsConfig
@@ -181,7 +190,7 @@ def generatePassport(nationID, isPremium=False):
      random.choice(group['iconsList']))
 
 
-def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, addTankmanSkills):
+def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, skillsMask):
     tankmenList = []
     prevPassports = []
     for i in xrange(len(roles)):
@@ -198,10 +207,15 @@ def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, addTan
 
         prevPassports.append(passport)
         skills = []
-        if addTankmanSkills:
+        if skillsMask != 0:
             tankmanSkills = set()
             for i in xrange(len(role)):
-                tankmanSkills.update(SKILLS_BY_ROLES[role[i]])
+                roleSkills = SKILLS_BY_ROLES[role[i]]
+                if skillsMask == ALL_SKILLS_MASK:
+                    tankmanSkills.update(roleSkills)
+                for skill, idx in SKILL_INDICES.iteritems():
+                    if 1 << idx & skillsMask and skill in roleSkills:
+                        tankmanSkills.add(skill)
 
             skills.extend(tankmanSkills)
         tmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role[0], roleLevel, skills)
@@ -223,8 +237,17 @@ def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills=[], la
 
     cd += pack((str(1 + numSkills) + 'B'), numSkills, *allSkills)
     cd += chr(lastSkillLevel if numSkills else 0)
-    rank, levelsToNextRank = divmod(roleLevel - MIN_ROLE_LEVEL, SKILL_LEVELS_PER_RANK)
+    totalLevel = roleLevel - MIN_ROLE_LEVEL
+    if skills:
+        totalLevel += (len(skills) - 1) * MAX_SKILL_LEVEL
+        totalLevel += lastSkillLevel
+    rank, levelsToNextRank = divmod(totalLevel, SKILL_LEVELS_PER_RANK)
     levelsToNextRank = SKILL_LEVELS_PER_RANK - levelsToNextRank
+    rankIDs = getNationConfig(nationID)['roleRanks'][role]
+    maxRankIdx = len(rankIDs) - 1
+    rank = min(rank, maxRankIdx)
+    if rank == maxRankIdx:
+        levelsToNextRank = 0
     isFemale = 1 if isFemale else 0
     isPremium = 1 if isPremium else 0
     flags = isFemale | isPremium << 1 | len(freeSkills) << 2
@@ -313,6 +336,20 @@ def fixObsoleteNames(compactDescr):
         hasChanges = True
         lastNameID = generatePassport(nationID)[4]
     return cd if not hasChanges else cd[:namesOffset] + struct.pack('<2H', firstNameID, lastNameID) + cd[namesOffset + 4:]
+
+
+class OperationsRestrictions(object):
+    """Class provides restrictions that must be checked in tankmen operations by:
+        - group tags if group is unique for tankman.
+    """
+    __slots__ = ('__groupTags',)
+
+    def __init__(self, tags=None):
+        super(OperationsRestrictions, self).__init__()
+        self.__groupTags = tags or frozenset()
+
+    def isPassportReplacementForbidden(self):
+        return _GROUP_TAG.PASSPORT_REPLACEMENT_FORBIDDEN in self.__groupTags
 
 
 class TankmanDescr(object):
@@ -557,6 +594,12 @@ class TankmanDescr(object):
          self.lastNameID,
          self.iconID)
 
+    def getRestrictions(self):
+        """Gets restrictions that must be checked in tankman operations.
+        :return: instance of OperationsRestrictions.
+        """
+        return OperationsRestrictions(getGroupTags(*self.getPassport()))
+
     @property
     def group(self):
         """
@@ -764,6 +807,63 @@ def ownVehicleHasTags(tankmanCD, tags=()):
     return bool(vehicleType.tags.intersection(tags))
 
 
+def getNationGroups(nationID, isPremium):
+    """Gets nation-specific configuration of tankmen.
+    :param nationID: integer containing ID of nation.
+    :param isPremium: if value equals True that gets premium groups, otherwise - normal.
+    :return: dictionary containing nation-specific configuration.
+    """
+    config = getNationConfig(nationID)
+    return config['premiumGroups' if isPremium else 'normalGroups']
+
+
+def findGroupsByIDs(groups, isFemale, firstNameID, secondNameID, iconID):
+    """Tries to find groups by the following criteria: ID of first name, ID of last name
+        and iconID. The first item has max. overlaps, and so on.
+    :param groups: integer containing ID of nation.
+    :param isFemale: boolean containing gender flag.
+    :param firstNameID: integer containing ID of first name.
+    :param secondNameID: integer containing ID of last name.
+    :param iconID: integer containing ID of icon.
+    :return: list where each item is tuple(ID/index of group, weight) and first item has max. overlaps.
+    """
+    found = []
+    for groupID, group in enumerate(groups):
+        if isFemale != group['isFemales']:
+            continue
+        overlap = 0
+        if firstNameID in group['firstNames']:
+            overlap += 1
+        if secondNameID in group['lastNames']:
+            overlap += 1
+        if iconID in group['icons']:
+            overlap += 1
+        if overlap:
+            found.append((groupID, overlap))
+
+    found.sort(key=lambda item: item[1], reverse=True)
+    return found
+
+
+def getGroupTags(nationID, isPremium, isFemale, firstNameID, secondNameID, iconID):
+    """ Gets tags of group if all ids equals desired, otherwise - empty value.
+    :param nationID: integer containing ID of nation.
+    :param isPremium: if value equals True that gets premium groups, otherwise - normal.
+    :param isFemale: boolean containing gender flag.
+    :param firstNameID: integer containing ID of first name.
+    :param secondNameID: integer containing ID of last name.
+    :param iconID: integer containing ID of icon.
+    :return: frozenset containing tags of group.
+    """
+    groups = getNationGroups(nationID, isPremium)
+    found = findGroupsByIDs(groups, isFemale, firstNameID, secondNameID, iconID)
+    if found:
+        groupID, overlap = found[0]
+        if overlap == 3:
+            return groups[groupID]['tags']
+    return frozenset()
+
+
 def __validateSkills(skills):
     if len(set(skills)) != len(skills):
         raise Exception('Duplicate tankman skills')
@@ -797,7 +897,8 @@ def _readNationConfigSection(xmlCtx, section):
              'isFemales': 'female' == _xml.readNonEmptyString(ctx, subsection, 'sex'),
              'firstNames': _readIDs((ctx, 'firstNames'), _xml.getChildren(ctx, subsection, 'firstNames'), firstNames, _parseName),
              'lastNames': _readIDs((ctx, 'lastNames'), _xml.getChildren(ctx, subsection, 'lastNames'), lastNames, _parseName),
-             'icons': _readIDs((ctx, 'icons'), _xml.getChildren(ctx, subsection, 'icons'), icons, _parseIcon)}
+             'icons': _readIDs((ctx, 'icons'), _xml.getChildren(ctx, subsection, 'icons'), icons, _parseIcon),
+             'tags': _readGroupTags((ctx, 'tags'), subsection, 'tags')}
             group['firstNamesList'] = list(group['firstNames'])
             group['lastNamesList'] = list(group['lastNames'])
             group['iconsList'] = list(group['icons'])
@@ -886,6 +987,24 @@ else:
 
     def _parseIcon(xmlCtx, section):
         return _xml.readNonEmptyString(xmlCtx, section, '')
+
+
+def _readGroupTags(xmlCtx, section, subsectionName):
+    source = _xml.readStringOrNone(xmlCtx, section, subsectionName)
+    if source is not None:
+        tags = source.split()
+        restrictions = []
+        for tag in tags:
+            if tag not in _GROUP_TAG.RANGE:
+                _xml.raiseWrongXml(xmlCtx, subsectionName, 'unknown tag "{}"'.format(tag))
+            if tag in _GROUP_TAG.RESTRICTIONS:
+                restrictions.append(tag)
+
+        if restrictions and _GROUP_TAG.PASSPORT_REPLACEMENT_FORBIDDEN not in restrictions:
+            _xml.raiseWrongXml(xmlCtx, subsectionName, 'Group contains tags of restrictions {}, so tag "{}" is mandatory'.format(restrictions, _GROUP_TAG.PASSPORT_REPLACEMENT_FORBIDDEN))
+    else:
+        tags = []
+    return frozenset(tags)
 
 
 def _readSkillsConfig(xmlPath):

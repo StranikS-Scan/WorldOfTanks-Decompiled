@@ -527,7 +527,6 @@ def questsSortFunc(a, b):
     res = cmp(a.isCompleted(), b.isCompleted())
     if res:
         return res
-    res = cmp(a.getType() == constants.EVENT_TYPE.FORT_QUEST, a.getType() == constants.EVENT_TYPE.FORT_QUEST)
     if res:
         return -res
     res = cmp(a.getPriority(), b.getPriority())

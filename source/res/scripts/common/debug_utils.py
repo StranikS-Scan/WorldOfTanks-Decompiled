@@ -25,6 +25,10 @@ class LOG_LEVEL:
     RELEASE = 5
 
 
+class LOG_TAGS:
+    BOOTCAMP = '[BOOTCAMP]'
+
+
 if CURRENT_REALM == 'DEV':
     _logLevel = LOG_LEVEL.DEV
 elif CURRENT_REALM == 'ST':
@@ -120,14 +124,14 @@ def CRITICAL_ERROR(msg, *kargs):
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
-def LOG_CURRENT_EXCEPTION():
-    msg = _makeMsgHeader(sys._getframe(1)) + '\n'
+def LOG_CURRENT_EXCEPTION(tags=None, frame=1):
+    msg = _makeMsgHeader(sys._getframe(frame)) + '\n'
     etype, value, tb = sys.exc_info()
     msg += ''.join(format_exception(etype, value, tb, None))
-    BigWorld.logError('EXCEPTION', msg, None)
+    BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, msg), None)
     extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, None, None, etype, value, tb)
     if extMsg:
-        BigWorld.logError('EXCEPTION', extMsg, None)
+        BigWorld.logError('EXCEPTION', _addTagsToMsg(tags, msg), None)
     return
 
 
@@ -234,7 +238,8 @@ def _doLog(category, msg, args=None, kwargs={}):
         output = ' '.join(map(str, [header, msg, args]))
     else:
         output = ' '.join(map(str, [header, msg]))
-    logFunc(category, output, None)
+    tags = kwargs.pop('tags', None)
+    logFunc(category, _addTagsToMsg(tags, output), None)
     if kwargs.get('stack', False):
         traceback.print_stack()
     return
@@ -254,6 +259,14 @@ def _doLogFmt(prefix, fmt, *args):
     msg += fmt.format(*args) if args else fmt
     BigWorld.logInfo(prefix, msg, None)
     return
+
+
+def _addTagsToMsg(tags, msg):
+    return '{0} {1}'.format(' '.join(tags), msg) if tags else msg
+
+
+def makeFuncLocationString(func):
+    return excepthook.formatLocation(*excepthook.getLocationFromCode(_src_file_trim_to, func.func_code))
 
 
 def trace(func):

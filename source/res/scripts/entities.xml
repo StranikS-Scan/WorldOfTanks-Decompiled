@@ -12,6 +12,7 @@
     <Login></Login>
     <DetachedTurret></DetachedTurret>
     <OfflineFlag></OfflineFlag>
+    <BootcampAccount></BootcampAccount>
   </ClientServerEntities>
   <ServerOnlyEntities>
     <Admin></Admin>
@@ -29,8 +30,6 @@
     <UnitMgr></UnitMgr>
     <SquadUnitMgr></SquadUnitMgr>
     <FalloutUnitMgr></FalloutUnitMgr>
-    <ClubUnitMgr></ClubUnitMgr>
-    <ClanUnitMgr></ClanUnitMgr>
     <SpecUnitMgr></SpecUnitMgr>
     <EventUnitMgr></EventUnitMgr>
     <VoiceChatMgr></VoiceChatMgr>
@@ -39,6 +38,7 @@
     <AccountRegistrator></AccountRegistrator>
     <WebPrebattleMgr></WebPrebattleMgr>
     <LoginQueue></LoginQueue>
+    <EntitiesQueue></EntitiesQueue>
     <GameStatsCollector></GameStatsCollector>
     <YYChatMgr></YYChatMgr>
     <TutorialQueue></TutorialQueue>
@@ -49,21 +49,18 @@
     <FalloutMgr></FalloutMgr>
     <FalloutMultiteamMgr></FalloutMultiteamMgr>
     <RankedBattlesMgr></RankedBattlesMgr>
-    <SortieQueue></SortieQueue>
-    <FortBattleMgr></FortBattleMgr>
     <SpecBattleMgr></SpecBattleMgr>
     <ClanRelay></ClanRelay>
-    <FortScheduler></FortScheduler>
     <AccountSurrogate></AccountSurrogate>
-    <ClubBucket></ClubBucket>
     <RankedMatchmaker></RankedMatchmaker>
     <RandomBattleMatchmaker></RandomBattleMatchmaker>
     <RandomBattleMatchmakerOld></RandomBattleMatchmakerOld>
-    <CompanyMatchmaker></CompanyMatchmaker>
     <SandboxMgr></SandboxMgr>
     <SingletonLock></SingletonLock>
     <ExternalBattleMgr></ExternalBattleMgr>
     <ExternalUnitMgr></ExternalUnitMgr>
     <ExternalUnitQueue></ExternalUnitQueue>
+    <BootcampQueue></BootcampQueue>
+    <EntityGetter></EntityGetter>
   </ServerOnlyEntities>
 </entities.xml>

@@ -29,12 +29,12 @@ class ResultSet(PyExtension):
         else:
             count = 0
         tag = findFirst(None, pyGlooxTag.filterXPath(self.getXPath(suffix='first')))
-        if tag:
+        if tag and tag.getCData():
             first = self._converter(tag.getCData())
         else:
             first = None
         tag = findFirst(None, pyGlooxTag.filterXPath(self.getXPath(suffix='last')))
-        if tag:
+        if tag and tag.getCData():
             last = self._converter(tag.getCData())
         else:
             last = None

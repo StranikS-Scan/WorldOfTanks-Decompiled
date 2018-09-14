@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/__init__.py
-from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileFortificationInfoView import ClanProfileFortificationInfoView
-from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileFortificationPromoView import ClanProfileFortificationPromoView
 from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ScopeTemplates, ViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
@@ -22,7 +20,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileGlobalMapPromoView import ClanProfileGlobalMapPromoView
     from gui.Scaleform.daapi.view.lobby.clans.search.ClanSearchInfo import ClanSearchInfo
     from gui.Scaleform.daapi.view.lobby.clans.search.ClanSearchWindow import ClanSearchWindow
-    from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileFortificationView import ClanProfileFortificationView
     from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileStrongholdsView import ClanProfileStrongholdsView
     from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileGlobalMapView import ClanProfileGlobalMapView
     from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesView import ClanInvitesView
@@ -38,13 +35,10 @@ def getViewSettings():
      GroupedViewSettings(CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY, ClanPersonalInvitesWindow, CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_UI, ViewTypes.WINDOW, CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY, None, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_SUMMARY_VIEW_ALIAS, ClanProfileSummaryView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_PERSONNEL_VIEW_ALIAS, ClanProfilePersonnelView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_FORTIFICATION_VIEW_ALIAS, ClanProfileFortificationView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_STRONGHOLDS_VIEW_ALIAS, ClanProfileStrongholdsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_VIEW_ALIAS, ClanProfileGlobalMapView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_PROMO_VIEW_ALIAS, ClanProfileGlobalMapPromoView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_INFO_VIEW_ALIAS, ClanProfileGlobalMapInfoView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_FORT_PROMO_VIEW_ALIAS, ClanProfileFortificationPromoView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_FORT_INFO_VIEW_ALIAS, ClanProfileFortificationInfoView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS, ClanRequestsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, ClanInvitesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_TABLE_STATISTICS_VIEW_ALIAS, ClanProfileTableStatisticsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

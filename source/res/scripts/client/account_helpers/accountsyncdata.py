@@ -39,9 +39,7 @@ class AccountSyncData(object):
             self.__syncController = None
         self.__savePersistentCache()
         if account is not None:
-            oldName = self.__persistentCache.getAccountName()
-            assert oldName is None or oldName == account.name
-            self.__persistentCache.setAccountName(account.name)
+            self.__persistentCache.setAccount(account)
             self.__syncController = SyncController(account, self.__sendSyncRequest, self.__onSyncResponse, self.__onSyncComplete)
         return
 

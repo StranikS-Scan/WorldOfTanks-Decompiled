@@ -2,11 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/notifications.py
 from constants import NC_MESSAGE_PRIORITY
 
-class MsgCustomEvents(object):
-    FORT_BATTLE_INVITE = 'fortBattleInv'
-    FORT_BATTLE_FINISHED = 'fortBattleFinished'
-
-
 class NotificationPriorityLevel(object):
     HIGH = 'high'
     MEDIUM = 'medium'

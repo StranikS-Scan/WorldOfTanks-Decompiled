@@ -7,9 +7,13 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleKills>
+            <vehicleDamage>
               <classes>	SPG	</classes>
               <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleKills>
+              <classes>	SPG	</classes>
+              <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
           </and>
         </postBattle>
@@ -30,9 +34,13 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleKills>
+            <vehicleDamage>
               <classes>	SPG	</classes>
               <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleKills>
+              <classes>	SPG	</classes>
+              <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
             <win></win>
             <isAlive></isAlive>

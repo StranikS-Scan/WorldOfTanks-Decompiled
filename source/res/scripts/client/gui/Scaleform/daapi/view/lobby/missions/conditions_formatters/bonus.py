@@ -2,7 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/conditions_formatters/bonus.py
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters import CONDITION_ICON, MissionFormatter, MissionsVehicleListFormatter, POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, FormattableField, MissionsBattleConditionsFormatter, FORMATTER_IDS, packDescriptionField
-from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.postbattle import _VehiclesKillFormatter, _VehiclesDamageFormatter
+from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.postbattle import _VehiclesKillFormatter
+from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.postbattle import _VehiclesDamageFormatter
+from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.postbattle import _VehiclesStunFormatter
 from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events import formatters
@@ -66,6 +68,7 @@ class MissionsBonusConditionsFormatter(MissionsBattleConditionsFormatter):
     def __init__(self):
         super(MissionsBonusConditionsFormatter, self).__init__({'vehicleKillsCumulative': _VehicleKillsCumulativeFormatter(),
          'vehicleDamageCumulative': _VehicleDamageCumulativeFormatter(),
+         'vehicleStunCumulative': _VehicleStunCumulativeFormatter(),
          'cumulative': _CumulativeResultFormatter(),
          'unit': _CumulativeResultFormatter()})
 
@@ -222,6 +225,13 @@ class _VehicleKillsCumulativeFormatter(_VehicleCumulativeFormatter, _VehiclesKil
 class _VehicleDamageCumulativeFormatter(_VehicleCumulativeFormatter, _VehiclesDamageFormatter):
     """
     Cumulative vehicle damage condition formatter. Shows how many damage player must shot to complete quest.
+    """
+    pass
+
+
+class _VehicleStunCumulativeFormatter(_VehicleCumulativeFormatter, _VehiclesStunFormatter):
+    """
+    Cumulative vehicle stun condition formatter. Shows how many stun player must shot to complete quest.
     """
     pass
 

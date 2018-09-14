@@ -82,3 +82,7 @@ class DossierDescr(object):
             self.__compDescr = compDescrArray.tostring()
             self.__blockRemoved = False
         return self.__compDescr
+
+    def isEmpty(self):
+        hasSmth = any(self.__sizes)
+        return not hasSmth

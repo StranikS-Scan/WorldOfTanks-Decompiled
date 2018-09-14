@@ -19,7 +19,7 @@ class FalloutSquadActionsHandler(SquadActionsHandler):
     def execute(self):
         if self._entity.isCommander():
             entity = self._entity
-            fullData = entity.getUnitFullData(unitIdx=entity.getUnitIdx())
+            fullData = entity.getUnitFullData(unitMgrID=entity.getID())
             isAutoFill = entity.getRosterType() == ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER
             notReadyCount = 0
             for slot in fullData.slotsIterator:

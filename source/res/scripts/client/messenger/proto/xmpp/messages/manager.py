@@ -121,7 +121,6 @@ class MessagesManager(ClientEventsHandler):
 
     def _addSysChannelsToStorage(self):
         self._addCommonChannelToStorage()
-        self._addCompanyChannelToStorage()
 
     def _addCommonChannelToStorage(self):
         sysChannelConfig = g_settings.server.XMPP.getChannelByType(XMPP_MUC_CHANNEL_TYPE.STANDARD)
@@ -129,14 +128,6 @@ class MessagesManager(ClientEventsHandler):
             sysChannelEntity = entities.XmppSystemChannelEntity(mucChannelType=XMPP_MUC_CHANNEL_TYPE.STANDARD, name=sysChannelConfig['userString'])
             if self.channelsStorage.addChannel(sysChannelEntity):
                 g_messengerEvents.channels.onChannelInited(sysChannelEntity)
-        return
-
-    def _addCompanyChannelToStorage(self):
-        companyChannelConfig = g_settings.server.XMPP.getChannelByType(XMPP_MUC_CHANNEL_TYPE.COMPANY)
-        if companyChannelConfig is not None and companyChannelConfig['enabled']:
-            companyChannelEntity = entities.XmppSystemChannelEntity(mucChannelType=XMPP_MUC_CHANNEL_TYPE.COMPANY, name=companyChannelConfig['userString'])
-            if self.channelsStorage.addChannel(companyChannelEntity):
-                g_messengerEvents.channels.onChannelInited(companyChannelEntity)
         return
 
     def __clearData(self):

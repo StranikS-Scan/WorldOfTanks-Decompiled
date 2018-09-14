@@ -8,8 +8,6 @@ from gui.prb_control.entities.base.legacy.entity import LegacyIntroEntryPoint, L
 from gui.prb_control.entities.base.legacy.entity import LegacyIntroEntity
 from gui.prb_control.entities.battle_session.legacy.entity import BattleSessionEntryPoint
 from gui.prb_control.entities.battle_session.legacy.entity import BattleSessionListEntryPoint, BattleSessionEntity
-from gui.prb_control.entities.company.legacy.entity import CompanyEntryPoint, CompanyIntroEntryPoint, CompanyEntity
-from gui.prb_control.entities.company.legacy.entity import CompanyIntroEntity
 from gui.prb_control.entities.training.legacy.entity import TrainingEntryPoint, TrainingIntroEntryPoint
 from gui.prb_control.entities.training.legacy.entity import TrainingEntity, TrainingIntroEntity
 from gui.prb_control.items import PlayerDecorator, FunctionalState
@@ -17,18 +15,14 @@ from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
 __all__ = ('LegacyFactory',)
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingEntryPoint,
- PREBATTLE_TYPE.COMPANY: CompanyEntryPoint,
  PREBATTLE_TYPE.TOURNAMENT: BattleSessionEntryPoint,
  PREBATTLE_TYPE.CLAN: BattleSessionEntryPoint}
 _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.TRAININGS_LIST: TrainingIntroEntryPoint,
- PREBATTLE_ACTION_NAME.COMPANIES_LIST: CompanyIntroEntryPoint,
  PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST: BattleSessionListEntryPoint}
 _SUPPORTED_ENTITY = {PREBATTLE_TYPE.TRAINING: TrainingEntity,
- PREBATTLE_TYPE.COMPANY: CompanyEntity,
  PREBATTLE_TYPE.TOURNAMENT: BattleSessionEntity,
  PREBATTLE_TYPE.CLAN: BattleSessionEntity}
-_SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingIntroEntity,
- PREBATTLE_TYPE.COMPANY: CompanyIntroEntity}
+_SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingIntroEntity}
 
 class LegacyFactory(ControlFactory):
     """

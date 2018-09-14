@@ -1,0 +1,147 @@
+<battle_page_visibility.xml>
+  <lesson>
+    <id>	0	</id>
+    <visible_garage></visible_garage>
+    <visible_battle>	DamageInfoPanel PreBattleTimer	</visible_battle>
+    <ribbons>	damage kill armor ram	</ribbons>
+    <prebattle></prebattle>
+    <primary_hints>
+      <hintMove></hintMove>
+      <hintMoveTurret></hintMoveTurret>
+      <hintSniperLevel0>
+        <time_completed>	5.0	</time_completed>
+      </hintSniperLevel0>
+      <hintShoot>
+        <time_completed>	3.0	</time_completed>
+      </hintShoot>
+    </primary_hints>
+    <secondary_hints>
+      <hintNoMove></hintNoMove>
+      <hintNoMoveTurret></hintNoMoveTurret>
+      <hintWaitReload></hintWaitReload>
+      <hintAim></hintAim>
+      <hintAllyShoot></hintAllyShoot>
+      <hintExitGameArea></hintExitGameArea>
+      <hintMoveToMarker></hintMoveToMarker>
+    </secondary_hints>
+  </lesson>
+  <lesson>
+    <id>	1	</id>
+    <visible_garage></visible_garage>
+    <visible_battle>	DamageInfoPanel TeamBasesPanel RibbonsPanel BattleTickerPanel FragCorrelationBar PreBattleTimer	</visible_battle>
+    <ribbons>	damage kill armor ram	</ribbons>
+    <prebattle></prebattle>
+    <primary_hints>
+      <hintStartNarrative>
+        <message>	Find and destroy all enemies	</message>
+        <time_before_shown>	3.0	</time_before_shown>
+      </hintStartNarrative>
+      <hintSniperOnDistance>
+        <names>
+          <name>	Jafry Hammilton	</name>
+          <name>	Aleksandr Antonuk	</name>
+        </names>
+      </hintSniperOnDistance>
+      <hintMessageAvoid>
+        <names>
+          <name>	John King	</name>
+        </names>
+      </hintMessageAvoid>
+      <hintAdvancedSniper>
+        <names>
+          <name>	Petr Sergeev	</name>
+        </names>
+      </hintAdvancedSniper>
+    </primary_hints>
+    <secondary_hints>
+      <hintNoMove></hintNoMove>
+      <hintNoMoveTurret></hintNoMoveTurret>
+      <hintWaitReload></hintWaitReload>
+      <hintAim></hintAim>
+      <hintAllyShoot></hintAllyShoot>
+      <hintExitGameArea></hintExitGameArea>
+      <hintMoveToMarker></hintMoveToMarker>
+    </secondary_hints>
+  </lesson>
+  <lesson>
+    <id>	2	</id>
+    <visible_garage></visible_garage>
+    <visible_battle>	DamageInfoPanel Minimap SixthSence TeamBasesPanel RibbonsPanel BattleTickerPanel FragCorrelationBar PreBattleTimer	</visible_battle>
+    <ribbons>	damage kill armor ram spotted capture	</ribbons>
+    <prebattle>
+      <timeout>	5.0	</timeout>
+    </prebattle>
+    <primary_hints>
+      <hintStartNarrative>
+        <message>	Scout for enemies	</message>
+        <time_before_shown>	6.0	</time_before_shown>
+      </hintStartNarrative>
+    </primary_hints>
+    <secondary_hints>
+      <hintNoMove></hintNoMove>
+      <hintNoMoveTurret></hintNoMoveTurret>
+      <hintWaitReload></hintWaitReload>
+      <hintAim></hintAim>
+      <hintAllyShoot></hintAllyShoot>
+      <hintExitGameArea></hintExitGameArea>
+      <hintMoveToMarker></hintMoveToMarker>
+      <hintShootWhileMoving></hintShootWhileMoving>
+      <hintSecondarySniper></hintSecondarySniper>
+    </secondary_hints>
+  </lesson>
+  <lesson>
+    <id>	3	</id>
+    <visible_garage></visible_garage>
+    <visible_battle>	DamageInfoPanel Minimap TeamBasesPanel RibbonsPanel BattleTickerPanel FragCorrelationBar ConsumablesPanel SixthSence PreBattleTimer	</visible_battle>
+    <ribbons>	damage kill armor ram spotted capture crits	</ribbons>
+    <prebattle>
+      <timeout>	5.0	</timeout>
+    </prebattle>
+    <primary_hints>
+      <hintStartNarrative>
+        <message>	Destroy all enemies or capture the base	</message>
+        <time_before_shown>	6.0	</time_before_shown>
+      </hintStartNarrative>
+      <hintRepairTrack></hintRepairTrack>
+      <hintUseExtinguisher></hintUseExtinguisher>
+      <hintHealCrew></hintHealCrew>
+    </primary_hints>
+    <secondary_hints>
+      <hintShootWhileMoving></hintShootWhileMoving>
+      <hintWaitReload></hintWaitReload>
+      <hintAim></hintAim>
+      <hintAllyShoot></hintAllyShoot>
+      <hintExitGameArea></hintExitGameArea>
+      <hintSecondarySniper></hintSecondarySniper>
+      <hintUselessConsumable></hintUselessConsumable>
+    </secondary_hints>
+  </lesson>
+  <lesson>
+    <id>	4	</id>
+    <visible_garage></visible_garage>
+    <visible_battle>	DamageInfoPanel Minimap TeamBasesPanel RibbonsPanel BattleTickerPanel FragCorrelationBar ConsumablesPanel PlayersPanel SixthSence PreBattleTimer	</visible_battle>
+    <ribbons>	damage kill armor ram spotted capture crits	</ribbons>
+    <prebattle>
+      <timeout>	5.0	</timeout>
+    </prebattle>
+    <primary_hints></primary_hints>
+  </lesson>
+  <lesson>
+    <id>	5	</id>
+    <visible_garage></visible_garage>
+    <visible_battle>	DamageInfoPanel Minimap TeamBasesPanel RibbonsPanel BattleTickerPanel FragCorrelationBar ConsumablesPanel PlayersPanel SixthSence PreBattleTimer	</visible_battle>
+    <ribbons>	damage kill armor ram spotted capture crits	</ribbons>
+    <prebattle>
+      <timeout>	5.0	</timeout>
+    </prebattle>
+    <primary_hints></primary_hints>
+  </lesson>
+  <lesson>
+    <id>	6	</id>
+    <visible_garage></visible_garage>
+    <visible_battle>	DamageInfoPanel Minimap TeamBasesPanel RibbonsPanel BattleTickerPanel FragCorrelationBar ConsumablesPanel PlayersPanel SixthSence PreBattleTimer	</visible_battle>
+    <ribbons>	damage kill armor ram spotted capture crits	</ribbons>
+    <prebattle></prebattle>
+    <primary_hints></primary_hints>
+  </lesson>
+</battle_page_visibility.xml>

@@ -10,7 +10,6 @@ from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.prb_control.formatters import getBattleSessionStartTimeString
 from gui.prb_control import prbDispatcherProperty, prbAutoInvitesProperty, prbInvitesProperty
 from gui.prb_control.settings import PRB_INVITE_STATE
-from gui.shared.fortifications import formatters as fort_fmt
 from helpers import dependency
 from helpers import i18n, html
 from messenger.ext import passCensor
@@ -188,24 +187,6 @@ class PrbExternalBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
         return '' if not comment else makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': html.escape(comment)})
 
 
-class PrbFortBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
-
-    def getTitle(self, invite):
-        extraData = invite.getExtraData()
-        regularInviteTitle = super(PrbFortBattleInviteHtmlTextFormatter, self).getTitle(invite)
-        if 'enemyClanAbbrev' in extraData:
-            enemyClanAbbrev = '[%s]' % extraData['enemyClanAbbrev']
-        else:
-            enemyClanAbbrev = ''
-        return makeHtmlString('html_templates:lobby/prebattle', 'inviteFortTitle', ctx={'inviteRegularTitle': regularInviteTitle,
-         'dir': fort_fmt.getDirectionString(extraData['direction']),
-         'clanAbbrev': enemyClanAbbrev,
-         'time': fort_fmt.getDefencePeriodString(extraData['attackTime'])}, sourceKey='defence' if extraData.get('isDefence') else 'offence')
-
-    def getIconName(self, invite):
-        return 'fortBattleDefenceInviteIcon' if invite.getExtraData('isDefence') else 'fortBattleOffenceInviteIcon'
-
-
 class FalloutInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
 
     def getTitle(self, invite):
@@ -224,8 +205,6 @@ class FalloutInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
 
 
 def getPrbInviteHtmlFormatter(invite):
-    if invite.type == PREBATTLE_TYPE.FORT_BATTLE:
-        return PrbFortBattleInviteHtmlTextFormatter()
     if invite.type == PREBATTLE_TYPE.EXTERNAL:
         return PrbExternalBattleInviteHtmlTextFormatter()
     return FalloutInviteHtmlTextFormatter() if invite.type == PREBATTLE_TYPE.FALLOUT else PrbInviteHtmlTextFormatter()

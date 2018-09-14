@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileTableStatisticsView.py
 import BigWorld
 from debug_utils import LOG_ERROR
+from helpers import int2roman
 from gui.Scaleform.daapi.view.lobby.clans.profile import getI18ArenaById
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.clans.items import formatField, isValueAvailable
 from gui.shared.utils import sortByFields
 from gui.shared.utils.functions import makeTooltip
@@ -184,7 +184,7 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
 
     def _makeVO(self, province):
         isRobbed = self.__isRobbed(province)
-        result = {'front': '%s %s' % (self.__getFront(province), text_styles.standard(formatField(province.getFrontLevel, formatter=fort_formatters.getTextLevel))),
+        result = {'front': '%s %s' % (self.__getFront(province), text_styles.standard(formatField(province.getFrontLevel, formatter=int2roman))),
          'province': self.__getProvinceName(province),
          'map': self.__getMap(province),
          'primeTime': text_styles.main(province.getUserPrimeTime()),

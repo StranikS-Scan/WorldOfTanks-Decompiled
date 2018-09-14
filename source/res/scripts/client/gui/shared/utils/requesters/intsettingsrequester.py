@@ -28,7 +28,7 @@ class IntSettingsRequester(object):
      'MARKERS_ALLY': 51,
      'GUI_START_BEHAVIOR': 52,
      'FEEDBACK': 53,
-     'EULA_VERSION': 54,
+     'EULA_VERSION': constants.USER_SERVER_SETTINGS.EULA_VERSION,
      'GAMEPLAY': 55,
      'FORT': 56,
      'USERS_STORAGE_REV': 57,
@@ -48,7 +48,10 @@ class IntSettingsRequester(object):
      'ENCYCLOPEDIA_RECOMMENDATIONS_2': 78,
      'ENCYCLOPEDIA_RECOMMENDATIONS_3': 79,
      'RANKED_CAROUSEL_FILTER_1': 80,
-     'RANKED_CAROUSEL_FILTER_2': 81}
+     'RANKED_CAROUSEL_FILTER_2': 81,
+     'FEEDBACK_DAMAGE_INDICATOR': 82,
+     'FEEDBACK_DAMAGE_LOG': 83,
+     'FEEDBACK_BATTLE_EVENTS': 84}
 
     def __init__(self):
         self.__cache = dict()

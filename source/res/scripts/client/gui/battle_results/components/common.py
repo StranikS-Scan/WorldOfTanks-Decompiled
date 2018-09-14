@@ -9,18 +9,16 @@ from gui.battle_results.components import base
 from gui.battle_results.components import style
 from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT, UI_VISIBILITY
 from gui.ranked_battles.ranked_models import RANK_CHANGE_STATES
-from gui.shared.fortifications.FortBuilding import FortBuilding
 from skeletons.gui.game_control import IRankedBattlesController
 from helpers import i18n, dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control.battle_constants import WinStatus
 _ARENA_TYPE_FORMAT = '#arenas:type/{0}/name'
 _ARENA_TYPE_EXT_FORMAT = '#menu:loading/battleTypes/{0}'
 _ARENA_FULL_NAME_FORMAT = '{0} - {1}'
 _ARENA_ICON_PATH = '../maps/icons/map/stats/%s.png'
 _FULL_RESULT_LABEL = '#menu:finalStatistic/commonStats/resultlabel/{0}'
 _FINISH_REASON_LABEL = '#battle_results:finish/reason/{0}'
-_FORT_BATTLE_SHORT_RESULT = 'clanBattle_{}'
-_FORT_BATTLE_FINISH_REASON_DEF = '#battle_results:finish/clanBattle_reason_def/1{0}'
-_FORT_BATTLE_FINISH_REASON_ATTACK = '#battle_results:finish/clanBattle_reason_attack/1{0}'
 _FALLOUT_RESULT_LABEL = '#battle_results:fallout/{submode}/{status}'
 
 def makeArenaFullName(arenaTypeName, i18nKey):
@@ -42,19 +40,6 @@ def makeRegularFinishResultLabel(finishReason, teamResult):
         return i18n.makeString(_FINISH_REASON_LABEL.format(''.join((str(finishReason), str(teamResult)))))
     else:
         return i18n.makeString(_FINISH_REASON_LABEL.format(finishReason))
-
-
-def makeFortBattleFinishResultLabel(teamResult, isDefender, buildingName):
-    """Returns i18n string describing finish reason of fort battle..
-    :param teamResult: string containing one of PLAYER_TEAM_RESULT.*.
-    :param isDefender: did player's team defend building?
-    :param buildingName: i18n string containing name of building
-    :return: i18n string.
-    """
-    if isDefender:
-        return i18n.makeString(_FORT_BATTLE_FINISH_REASON_DEF.format(teamResult), buildingName=buildingName)
-    else:
-        return i18n.makeString(_FORT_BATTLE_FINISH_REASON_ATTACK.format(teamResult), buildingName=buildingName)
 
 
 class RankInfoHelper(object):
@@ -168,9 +153,7 @@ class RegularArenaFullNameItem(base.StatsItem):
     def _convert(self, record, reusable):
         arenaGuiType = reusable.common.arenaGuiType
         arenaType = reusable.common.arenaType
-        if arenaGuiType == ARENA_GUI_TYPE.SORTIE:
-            i18nKey = BATTLE_RESULTS.COMMON_BATTLETYPE_SORTIE
-        elif arenaGuiType == ARENA_GUI_TYPE.RANDOM:
+        if arenaGuiType == ARENA_GUI_TYPE.RANDOM:
             i18nKey = _ARENA_TYPE_FORMAT.format(arenaType.getGamePlayName())
         else:
             i18nKey = _ARENA_TYPE_EXT_FORMAT.format(arenaGuiType)
@@ -258,34 +241,6 @@ class RegularFinishResultBlock(base.StatsBlock):
         self.fullResultLabel = _FULL_RESULT_LABEL.format(teamResult)
 
 
-class FortBattleFinishResultBlock(RegularFinishResultBlock):
-    __slots__ = ('finishReasonLabel', 'shortResultLabel', 'fullResultLabel')
-
-    def setRecord(self, result, reusable):
-        playerTeam = reusable.getPersonalTeam()
-        if 'fortBuilding' in result:
-            data = result['fortBuilding']
-            buildTypeID = data.get('buildTypeID')
-            buildTeam = data.get('buildTeam', 0)
-            if buildTypeID is not None:
-                buildingName = FortBuilding(typeID=buildTypeID).userName
-            else:
-                buildingName = ''
-        else:
-            buildTeam = 0
-            buildingName = ''
-        teamResult = reusable.getPersonalTeamResult()
-        if teamResult == _TEAM_RESULT.DRAW:
-            if buildTeam == playerTeam:
-                teamResult = _TEAM_RESULT.WIN
-            else:
-                teamResult = _TEAM_RESULT.DEFEAT
-        self.shortResultLabel = _FORT_BATTLE_SHORT_RESULT.format(teamResult)
-        self.finishReasonLabel = makeFortBattleFinishResultLabel(teamResult, buildTeam == playerTeam, buildingName)
-        self.fullResultLabel = _FULL_RESULT_LABEL.format(teamResult)
-        return
-
-
 class FalloutFinishResultBlock(RegularFinishResultBlock):
     __slots__ = ('finishReasonLabel', 'shortResultLabel', 'fullResultLabel')
 
@@ -313,6 +268,7 @@ class FalloutFinishResultBlock(RegularFinishResultBlock):
 
 class StrongholdBattleFinishResultBlock(RegularFinishResultBlock):
     __slots__ = ('finishReasonLabel', 'shortResultLabel', 'fullResultLabel')
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def setRecord(self, result, reusable):
         teamResult = reusable.getPersonalTeamResult()
@@ -321,11 +277,17 @@ class StrongholdBattleFinishResultBlock(RegularFinishResultBlock):
         if teamResult == _TEAM_RESULT.DRAW and winnerIfDraw:
             if team == winnerIfDraw:
                 teamResult = _TEAM_RESULT.WIN
+                winStatus = WinStatus.WIN
             else:
                 teamResult = _TEAM_RESULT.DEFEAT
+                winStatus = WinStatus.LOSE
+            sessionCtx = self.sessionProvider.getCtx()
+            if sessionCtx.extractLastArenaWinStatus() is not None:
+                sessionCtx.setLastArenaWinStatus(WinStatus(winStatus))
         self.finishReasonLabel = makeRegularFinishResultLabel(reusable.common.finishReason, teamResult)
         self.shortResultLabel = teamResult
         self.fullResultLabel = _FULL_RESULT_LABEL.format(teamResult)
+        return
 
 
 class AllyTeamClanTitle(base.StatsItem):
@@ -398,25 +360,6 @@ class RankedResultsBlockTitle(base.StatsItem):
     def _convert(self, value, reusable):
         helper = RankInfoHelper(reusable)
         return style.makeRankedResultsTitle(helper.makeTitleLabel())
-
-
-class TotalFortResourceItem(base.StatsItem):
-    __slots__ = ()
-
-    def _convert(self, value, reusable):
-        return style.makeTotalFortResourcesItem(reusable.personal.getFortTotalResourcesInfo().totalFortResource)
-
-
-class TotalInfluencePointsItem(base.StatsItem):
-    __slots__ = ()
-
-    def _convert(self, value, reusable):
-        info = reusable.personal.getFortTotalResourcesInfo()
-        if info.totalInfluencePoints > 0:
-            converted = style.makeTotalInfluencePointsItem(info.totalInfluencePoints)
-        else:
-            converted = ''
-        return converted
 
 
 class TeamsUiVisibility(base.StatsItem):

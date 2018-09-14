@@ -103,11 +103,15 @@ class TankCarousel(TankCarouselMeta):
             self.as_setSmallDoubleCarouselS(setting.enableSmallCarousel())
         super(TankCarousel, self)._onCarouselSettingsChange(diff)
 
+    def _getFiltersVisible(self):
+        return True
+
     def __getInitialFilterVO(self, contexts):
         filters = self.filter.getFilters(self._usedFilters)
         filtersVO = {'mainBtn': {'value': getButtonsAssetPath('params'),
                      'tooltip': '#tank_carousel_filter:tooltip/params'},
-         'hotFilters': []}
+         'hotFilters': [],
+         'isVisible': self._getFiltersVisible()}
         for entry in self._usedFilters:
             filterCtx = contexts.get(entry, FilterSetupContext())
             filtersVO['hotFilters'].append({'id': entry,

@@ -24,6 +24,7 @@ class ClanProfileStrongholdsView(ClanProfileBaseView):
             self._dummyMustBeShown = True
             self._updateDummy()
             self._hideWaiting()
+            yield lambda callback: callback(None)
             return
         super(ClanProfileStrongholdsView, self).setClanDossier(clanDossier)
         self._showWaiting()

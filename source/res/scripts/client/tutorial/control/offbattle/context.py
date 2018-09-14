@@ -23,13 +23,6 @@ def getBattleDescriptor():
 
 class OffbattleStartReqs(context.StartReqs):
 
-    def isEnabled(self):
-        isTutorialEnabled = IS_TUTORIAL_ENABLED
-        serverSettings = getServerSettings()
-        if 'isTutorialEnabled' in serverSettings:
-            isTutorialEnabled = serverSettings['isTutorialEnabled']
-        return isTutorialEnabled
-
     def prepare(self, ctx):
         ctx.bonusCompleted = game_vars.getTutorialsCompleted()
         ctx.battlesCount = game_vars.getRandomBattlesCount()

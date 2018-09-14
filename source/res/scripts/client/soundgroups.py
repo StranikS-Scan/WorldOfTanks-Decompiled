@@ -24,6 +24,7 @@ DSP_LOWPASS_HI = 20000
 DSP_SEEKSPEED = 200000
 SOUND_ENABLE_STATUS_DEFAULT = 0
 SOUND_ENABLE_STATUS_VALUES = range(3)
+MASTER_VOLUME_DEFAULT = 0.5
 _arenaPeriodState = {ARENA_PERIOD.WAITING: 'STATE_arenastate_waiting',
  ARENA_PERIOD.PREBATTLE: 'STATE_arenastate_counter',
  ARENA_PERIOD.BATTLE: 'STATE_arenastate_battle'}
@@ -304,7 +305,6 @@ class SoundGroups(object):
          'masterVivox': (),
          'micVivox': (),
          'masterFadeVivox': ()}
-        defMasterVolume = 0.5
         defCategoryVolumes = {'music': 0.5,
          'masterVivox': 0.7,
          'micVivox': 0.4}
@@ -314,7 +314,7 @@ class SoundGroups(object):
         self.__soundModes = None
         if not userPrefs.has_key(Settings.KEY_SOUND_PREFERENCES):
             userPrefs.write(Settings.KEY_SOUND_PREFERENCES, '')
-            self.__masterVolume = defMasterVolume
+            self.__masterVolume = MASTER_VOLUME_DEFAULT
             for categoryName in self.__categories.iterkeys():
                 self.__volumeByCategory[categoryName] = defCategoryVolumes.get(categoryName, 1.0)
 
@@ -322,7 +322,7 @@ class SoundGroups(object):
         else:
             ds = userPrefs[Settings.KEY_SOUND_PREFERENCES]
             self.__enableStatus = ds.readInt('enable', SOUND_ENABLE_STATUS_DEFAULT)
-            self.__masterVolume = ds.readFloat('masterVolume', defMasterVolume)
+            self.__masterVolume = ds.readFloat('masterVolume', MASTER_VOLUME_DEFAULT)
             self.__volumeByCategory['music_hangar'] = ds.readFloat('volume_music_hangar', 1.0)
             self.__volumeByCategory['voice'] = ds.readFloat('volume_voice', 1.0)
             self.__volumeByCategory['ev_ambient'] = ds.readFloat('volume_ev_ambient', 0.8)
@@ -469,7 +469,10 @@ class SoundGroups(object):
         self.onMusicVolumeChanged('ambient', self.__masterVolume, self.getVolume('ambient'))
 
     def getMasterVolume(self):
-        return self.__masterVolume
+        if self.__isWindowVisible:
+            return self.__masterVolume
+        else:
+            return 0.0
 
     def getEnableStatus(self):
         return self.__enableStatus
@@ -572,6 +575,12 @@ class SoundGroups(object):
         else:
             WWISE.WG_unloadHangar()
         MusicControllerWWISE.init(arenaName)
+
+    def loadSoundBank(self, name):
+        WWISE.WG_loadSoundBank(name)
+
+    def unLoadSoundBank(self, name):
+        WWISE.WG_unLoadSoundBank(name)
 
     def getSound3D(self, node, event):
         if DEBUG_TRACE_SOUND is True:

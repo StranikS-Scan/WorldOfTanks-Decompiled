@@ -38,7 +38,7 @@ def getPrbRequestCoolDown(rqTypeID):
     Returns:
         cooldown time left
     """
-    _rqc.getRequestCoolDown(REQUEST_SCOPE.PRB_CONTROL, rqTypeID)
+    return _rqc.getRequestCoolDown(REQUEST_SCOPE.PRB_CONTROL, rqTypeID)
 
 
 class PrbCooldownManager(RequestCooldownManager):

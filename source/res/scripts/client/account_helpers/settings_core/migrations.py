@@ -25,6 +25,7 @@ def _initializeDefaultSettings(core, data, initialized):
      GAME.MINIMAP_ALPHA: core.getSetting(GAME.MINIMAP_ALPHA),
      GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS),
      GAME.ENABLE_POSTMORTEM: core.getSetting(GAME.ENABLE_POSTMORTEM)}
+    data['gameExtData'][GAME.CHAT_CONTACTS_LIST_ONLY] = options.getSetting(GAME.CHAT_CONTACTS_LIST_ONLY).getDefaultValue()
     gameplayData = data['gameplayData'] = {GAME.GAMEPLAY_MASK: AccountSettings.getSettingsDefault('gameplayMask')}
     aimData = data['aimData'] = {'arcade': core.getSetting('arcade'),
      'sniper': core.getSetting('sniper')}
@@ -44,7 +45,8 @@ def _initializeDefaultSettings(core, data, initialized):
              GAME.INVITES_FROM_FRIENDS: 'readBool',
              GAME.RECEIVE_FRIENDSHIP_REQUEST: 'readBool',
              GAME.RECEIVE_INVITES_IN_BATTLE: 'readBool',
-             GAME.STORE_RECEIVER_IN_BATTLE: 'readBool'}
+             GAME.STORE_RECEIVER_IN_BATTLE: 'readBool',
+             GAME.CHAT_CONTACTS_LIST_ONLY: 'readBool'}
             for key, reader in _userProps.iteritems():
                 if key in tags:
                     gameData[key] = getattr(subSec, reader)(key)
@@ -305,6 +307,54 @@ def _migrateTo33(core, data, initialized):
     data['gameExtData'][GAME.VEHICLE_CAROUSEL_STATS] = True
 
 
+def _migrateTo34(core, data, initialized):
+    if constants.IS_CHINA:
+        data['gameExtData'][GAME.CHAT_CONTACTS_LIST_ONLY] = True
+
+
+def _migrateTo35(core, data, initialized):
+    feedbackDamageIndicator = data.get('feedbackDamageIndicator', {})
+    feedbackDamageLog = data.get('feedbackDamageLog', {})
+    feedbackBattleEvents = data.get('feedbackBattleEvents', {})
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    currentVal = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.FEEDBACK, 0)
+    feedbackDamageIndicator[DAMAGE_INDICATOR.TYPE] = __migrateMaskValue(currentVal, 1, 0)
+    feedbackDamageIndicator[DAMAGE_INDICATOR.PRESETS] = __migrateMaskValue(currentVal, 1, 1)
+    feedbackDamageIndicator[DAMAGE_INDICATOR.DAMAGE_VALUE] = __migrateMaskValue(currentVal, 1, 2)
+    feedbackDamageIndicator[DAMAGE_INDICATOR.VEHICLE_INFO] = __migrateMaskValue(currentVal, 1, 3)
+    feedbackDamageIndicator[DAMAGE_INDICATOR.ANIMATION] = __migrateMaskValue(currentVal, 1, 4)
+    feedbackDamageIndicator[DAMAGE_INDICATOR.DYNAMIC_INDICATOR] = __migrateMaskValue(currentVal, 1, 25)
+    feedbackDamageLog[DAMAGE_LOG.TOTAL_DAMAGE] = __migrateMaskValue(currentVal, 1, 5)
+    feedbackDamageLog[DAMAGE_LOG.BLOCKED_DAMAGE] = __migrateMaskValue(currentVal, 1, 6)
+    feedbackDamageLog[DAMAGE_LOG.ASSIST_DAMAGE] = __migrateMaskValue(currentVal, 1, 7)
+    feedbackDamageLog[DAMAGE_LOG.ASSIST_STUN] = False
+    feedbackDamageLog[DAMAGE_LOG.SHOW_DETAILS] = __migrateMaskValue(currentVal, 3, 8)
+    feedbackDamageLog[DAMAGE_LOG.SHOW_EVENT_TYPES] = __migrateMaskValue(currentVal, 3, 28)
+    feedbackDamageLog[DAMAGE_LOG.EVENT_POSITIONS] = __migrateMaskValue(currentVal, 3, 30)
+    feedbackBattleEvents[BATTLE_EVENTS.SHOW_IN_BATTLE] = __migrateMaskValue(currentVal, 1, 10)
+    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_HP_DAMAGE] = __migrateMaskValue(currentVal, 1, 11)
+    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_BURNING] = __migrateMaskValue(currentVal, 1, 12)
+    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_RAM_ATTACK] = __migrateMaskValue(currentVal, 1, 13)
+    feedbackBattleEvents[BATTLE_EVENTS.BLOCKED_DAMAGE] = __migrateMaskValue(currentVal, 1, 14)
+    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE] = __migrateMaskValue(currentVal, 1, 15)
+    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_TRACK_DAMAGE] = __migrateMaskValue(currentVal, 1, 16)
+    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_DETECTION] = __migrateMaskValue(currentVal, 1, 17)
+    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_KILL] = __migrateMaskValue(currentVal, 1, 18)
+    feedbackBattleEvents[BATTLE_EVENTS.BASE_CAPTURE_DROP] = __migrateMaskValue(currentVal, 1, 19)
+    feedbackBattleEvents[BATTLE_EVENTS.BASE_CAPTURE] = __migrateMaskValue(currentVal, 1, 20)
+    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_CRITICAL_HIT] = __migrateMaskValue(currentVal, 1, 21)
+    feedbackBattleEvents[BATTLE_EVENTS.EVENT_NAME] = __migrateMaskValue(currentVal, 1, 22)
+    feedbackBattleEvents[BATTLE_EVENTS.VEHICLE_INFO] = __migrateMaskValue(currentVal, 1, 23)
+    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_WORLD_COLLISION] = __migrateMaskValue(currentVal, 1, 24)
+    feedbackBattleEvents[BATTLE_EVENTS.RECEIVED_DAMAGE] = __migrateMaskValue(currentVal, 1, 26)
+    feedbackBattleEvents[BATTLE_EVENTS.RECEIVED_CRITS] = __migrateMaskValue(currentVal, 1, 27)
+    feedbackBattleEvents[BATTLE_EVENTS.ENEMY_ASSIST_STUN] = False
+
+
+def __migrateMaskValue(currentVal, mask, offset):
+    return currentVal >> offset & mask
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -431,6 +481,14 @@ _versions = ((1,
   False),
  (33,
   _migrateTo33,
+  False,
+  False),
+ (34,
+  _migrateTo34,
+  False,
+  False),
+ (35,
+  _migrateTo35,
   False,
   False))
 

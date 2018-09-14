@@ -27,3 +27,21 @@ class DisableTrainingFightButtonPointcut(aop.Pointcut):
 
     def __init__(self, config):
         aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.trainings.TrainingRoom', 'TrainingRoom', 'as_disableStartButtonS', aspects=(_DisableFightButtonAspect(config),))
+
+
+class _DisableBattlesForHiddenVehiclesAspect(aop.Aspect):
+
+    def __init__(self, config):
+        self.__vehicle_is_available = config['vehicle_is_available']
+        aop.Aspect.__init__(self)
+
+    def atReturn(self, cd):
+        if not self.__vehicle_is_available(cd.self):
+            cd.change()
+            return False
+
+
+class DisableBattlesForHiddenVehicles(aop.Pointcut):
+
+    def __init__(self, config):
+        aop.Pointcut.__init__(self, 'gui.shared.gui_items.Vehicle', 'Vehicle', 'isReadyToPrebattle', aspects=(_DisableBattlesForHiddenVehiclesAspect(config),))

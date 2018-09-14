@@ -113,8 +113,6 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_1 = '#menu:loading/battleTypes/desc/1'
     LOADING_BATTLETYPES_2 = '#menu:loading/battleTypes/2'
     LOADING_BATTLETYPES_DESC_2 = '#menu:loading/battleTypes/desc/2'
-    LOADING_BATTLETYPES_3 = '#menu:loading/battleTypes/3'
-    LOADING_BATTLETYPES_DESC_3 = '#menu:loading/battleTypes/desc/3'
     LOADING_BATTLETYPES_4 = '#menu:loading/battleTypes/4'
     LOADING_BATTLETYPES_DESC_4 = '#menu:loading/battleTypes/desc/4'
     LOADING_BATTLETYPES_5 = '#menu:loading/battleTypes/5'
@@ -365,7 +363,6 @@ class MENU(object):
     PREBATTLE_TITLE = '#menu:prebattle/title'
     PREBATTLE_DESCRIPTION = '#menu:prebattle/description'
     PREBATTLE_TYPESTITLE = '#menu:prebattle/typesTitle'
-    PREBATTLE_TYPESCOMPANIESTITLE = '#menu:prebattle/typesCompaniesTitle'
     PREBATTLE_WAITINGTIMEWARNING = '#menu:prebattle/waitingTimeWarning'
     PREBATTLE_COMPANIESTITLE_JUNIOR = '#menu:prebattle/CompaniesTitle/JUNIOR'
     PREBATTLE_COMPANIESTITLE_MIDDLE = '#menu:prebattle/CompaniesTitle/MIDDLE'
@@ -398,6 +395,7 @@ class MENU(object):
     NATIONS_UK = '#menu:nations/uk'
     NATIONS_CZECH = '#menu:nations/czech'
     NATIONS_SWEDEN = '#menu:nations/sweden'
+    NATIONS_POLAND = '#menu:nations/poland'
     NATIONS_ALL = '#menu:nations/all'
     CAROUSELFILTER_IGR = '#menu:carouselFilter/igr'
     LEVELS_1 = '#menu:levels/1'
@@ -430,6 +428,7 @@ class MENU(object):
     NATION_TREE_TITLE_JAPAN = '#menu:nation_tree/title/japan'
     NATION_TREE_TITLE_CZECH = '#menu:nation_tree/title/czech'
     NATION_TREE_TITLE_SWEDEN = '#menu:nation_tree/title/sweden'
+    NATION_TREE_TITLE_POLAND = '#menu:nation_tree/title/poland'
     SERVERSTATS_PLAYERSCOUNT = '#menu:serverStats/playersCount'
     SERVERSTATS_ARENASCOUNT = '#menu:serverStats/arenasCount'
     SERVERSTATS_PLAYERSINARENACOUNT = '#menu:serverStats/playersInArenaCount'
@@ -565,11 +564,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_SPEC_DESCR = '#menu:headerButtons/battle/types/spec/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVESPEC_DESCR = '#menu:headerButtons/battle/types/leaveSpec/descr'
     HEADERBUTTONS_BATTLE_TYPES_SPECLEAVE = '#menu:headerButtons/battle/types/specLeave'
-    HEADERBUTTONS_BATTLE_TYPES_COMPANY = '#menu:headerButtons/battle/types/company'
-    HEADERBUTTONS_BATTLE_TYPES_COMPANY_DESCR = '#menu:headerButtons/battle/types/company/descr'
-    HEADERBUTTONS_BATTLE_TYPES_LEAVECOMPANY_DESCR = '#menu:headerButtons/battle/types/leaveCompany/descr'
-    HEADERBUTTONS_BATTLE_TYPES_COMPANYLEAVEOWNER = '#menu:headerButtons/battle/types/companyLeaveOwner'
-    HEADERBUTTONS_BATTLE_TYPES_COMPANYLEAVE = '#menu:headerButtons/battle/types/companyLeave'
     HEADERBUTTONS_BATTLE_TYPES_UNIT = '#menu:headerButtons/battle/types/unit'
     HEADERBUTTONS_BATTLE_TYPES_UNIT_DESCR = '#menu:headerButtons/battle/types/unit/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVEUNIT_DESCR = '#menu:headerButtons/battle/types/leaveUnit/descr'
@@ -591,7 +585,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_MENU_FALLOUT_15 = '#menu:headerButtons/battle/menu/fallout/15'
     HEADERBUTTONS_BATTLE_MENU_SQUAD = '#menu:headerButtons/battle/menu/squad'
     HEADERBUTTONS_BATTLE_MENU_TRAINING = '#menu:headerButtons/battle/menu/training'
-    HEADERBUTTONS_BATTLE_MENU_TEAM = '#menu:headerButtons/battle/menu/team'
     HEADERBUTTONS_BATTLE_MENU_BATTLE_SESSION = '#menu:headerButtons/battle/menu/battle_session'
     HEADERBUTTONS_BATTLE_MENU_UNIT = '#menu:headerButtons/battle/menu/unit'
     HEADERBUTTONS_BATTLE_MENU_HISTORICAL = '#menu:headerButtons/battle/menu/historical'
@@ -630,9 +623,8 @@ class MENU(object):
     STORETAB_ACTIONS = '#menu:storeTab/actions'
     HEADERBUTTONS_TECHTREE = '#menu:headerButtons/techtree'
     HEADERBUTTONS_BARRACKS = '#menu:headerButtons/barracks'
-    HEADERBUTTONS_FORTS = '#menu:headerButtons/forts'
+    HEADERBUTTONS_STRONGHOLD = '#menu:headerButtons/stronghold'
     HEADERBUTTONS_ENCYCLOPEDIA = '#menu:headerButtons/encyclopedia'
-    HEADERBUTTONS_FORTS2 = '#menu:headerButtons/forts2'
     HEADERBUTTONS_BROWSER = '#menu:headerButtons/browser'
     HEADERBUTTONS_MENU = '#menu:headerButtons/menu'
     HEADERBUTTONS_ACCOUNT_PREMIUM = '#menu:headerButtons/account/premium'
@@ -1127,6 +1119,7 @@ class MENU(object):
     VEHICLE_RENTLEFT_DAYS = '#menu:vehicle/rentLeft/days'
     VEHICLE_RENTLEFT_HOURS = '#menu:vehicle/rentLeft/hours'
     VEHICLE_RENTLEFT_BATTLES = '#menu:vehicle/rentLeft/battles'
+    VEHICLE_RENTLEFT_WINS = '#menu:vehicle/rentLeft/wins'
     VEHICLE_RESTORELEFT_DISABLEDBYRENT = '#menu:vehicle/restoreLeft/disabledByRent'
     VEHICLE_RESTORELEFT_UNLIM = '#menu:vehicle/restoreLeft/unlim'
     VEHICLE_RESTORELEFT_DAYS = '#menu:vehicle/restoreLeft/days'
@@ -1438,7 +1431,6 @@ class MENU(object):
     BONUSTYPE_0 = '#menu:bonusType/0'
     BONUSTYPE_1 = '#menu:bonusType/1'
     BONUSTYPE_2 = '#menu:bonusType/2'
-    BONUSTYPE_3 = '#menu:bonusType/3'
     BONUSTYPE_4 = '#menu:bonusType/4'
     BONUSTYPE_5 = '#menu:bonusType/5'
     BONUSTYPE_6 = '#menu:bonusType/6'
@@ -1455,11 +1447,8 @@ class MENU(object):
     BONUSTYPE_20 = '#menu:bonusType/20'
     BONUSTYPE_21 = '#menu:bonusType/21'
     BONUSTYPE_22 = '#menu:bonusType/22'
-    FORTIFICATIONCTX_DIRECTIONCONTROL = '#menu:fortificationCtx/directionControl'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
-    FORTIFICATIONCTX_MODERNIZATION = '#menu:fortificationCtx/modernization'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
-    FORTIFICATIONCTX_DESTROY = '#menu:fortificationCtx/destroy'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
     FORTIFICATIONCTX_CLANDESCRIPTION_CLANCREW = '#menu:fortificationCtx/clanDescription/clanCrew'
     FORTIFICATIONCTX_CLANDESCRIPTION_CLANSTATISTICS = '#menu:fortificationCtx/clanDescription/clanStatistics'
@@ -1959,7 +1948,6 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_DESC_1,
      LOADING_BATTLETYPES_DESC_2,
-     LOADING_BATTLETYPES_DESC_3,
      LOADING_BATTLETYPES_DESC_4,
      LOADING_BATTLETYPES_DESC_5,
      LOADING_BATTLETYPES_DESC_6,
@@ -1980,8 +1968,6 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_1,
      LOADING_BATTLETYPES_2,
      LOADING_BATTLETYPES_DESC_2,
-     LOADING_BATTLETYPES_3,
-     LOADING_BATTLETYPES_DESC_3,
      LOADING_BATTLETYPES_4,
      LOADING_BATTLETYPES_DESC_4,
      LOADING_BATTLETYPES_5,
@@ -2068,6 +2054,7 @@ class MENU(object):
      NATIONS_UK,
      NATIONS_CZECH,
      NATIONS_SWEDEN,
+     NATIONS_POLAND,
      NATIONS_ALL)
     PROFILE_STATS_BLOCKS_ENUM = (PROFILE_STATS_BLOCKS_COMMON,
      PROFILE_STATS_BLOCKS_BATTLEEFFECT,
@@ -2342,7 +2329,8 @@ class MENU(object):
      NATION_TREE_TITLE_CHINA,
      NATION_TREE_TITLE_JAPAN,
      NATION_TREE_TITLE_CZECH,
-     NATION_TREE_TITLE_SWEDEN)
+     NATION_TREE_TITLE_SWEDEN,
+     NATION_TREE_TITLE_POLAND)
     DATETIME_WEEKDAYS_FULL_ENUM = (DATETIME_WEEKDAYS_FULL_1,
      DATETIME_WEEKDAYS_FULL_2,
      DATETIME_WEEKDAYS_FULL_3,

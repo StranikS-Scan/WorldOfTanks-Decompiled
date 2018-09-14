@@ -13,12 +13,10 @@ from messenger.m_constants import PROTO_TYPE, LAZY_CHANNEL, PRIMARY_CHANNEL_ORDE
 from messenger.proto.bw.wrappers import ChannelDataWrapper
 PREBATTLE_TYPE_CHAT_FLAG = {PREBATTLE_TYPE.SQUAD: chat_shared.CHAT_CHANNEL_SQUAD,
  PREBATTLE_TYPE.FALLOUT: chat_shared.CHAT_CHANNEL_SQUAD,
- PREBATTLE_TYPE.COMPANY: chat_shared.CHAT_CHANNEL_TEAM,
  PREBATTLE_TYPE.TRAINING: chat_shared.CHAT_CHANNEL_TRAINING,
  PREBATTLE_TYPE.CLAN: chat_shared.CHAT_CHANNEL_PREBATTLE_CLAN,
  PREBATTLE_TYPE.TOURNAMENT: chat_shared.CHAT_CHANNEL_TOURNAMENT,
- PREBATTLE_TYPE.UNIT: chat_shared.CHAT_CHANNEL_UNIT,
- PREBATTLE_TYPE.SORTIE: chat_shared.CHAT_CHANNEL_UNIT}
+ PREBATTLE_TYPE.UNIT: chat_shared.CHAT_CHANNEL_UNIT}
 PREBATTLE_CHAT_FLAG_TYPE = dict(((v, k) for k, v in PREBATTLE_TYPE_CHAT_FLAG.iteritems()))
 
 class BWChannelEntity(ChannelEntity):
@@ -57,9 +55,7 @@ class BWChannelEntity(ChannelEntity):
 
     def isAlwaysShow(self):
         name = self.getName()
-        if name == LAZY_CHANNEL.COMMON:
-            return True
-        return False if name == LAZY_CHANNEL.COMPANIES else False
+        return True if name == LAZY_CHANNEL.COMMON else False
 
     def isPrivate(self):
         return self._data.flags & chat_shared.CHAT_CHANNEL_PRIVATE != 0

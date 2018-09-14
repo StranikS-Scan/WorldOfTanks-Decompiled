@@ -117,8 +117,8 @@ class SquadView(SquadViewMeta):
         enabled = not (entity.getFlags().isInQueue() and entity.getPlayerInfo().isReady) and self.__canSendInvite()
         if enabled:
             enabled = False
-            unitIdx = entity.getUnitIdx()
-            for slot in entity.getSlotsIterator(*entity.getUnit(unitIdx=unitIdx)):
+            unitMgrID = entity.getID()
+            for slot in entity.getSlotsIterator(*entity.getUnit(unitMgrID=unitMgrID)):
                 if not slot.player:
                     enabled = True
                     break
@@ -186,12 +186,12 @@ class SquadView(SquadViewMeta):
 
     def _updateMembersData(self):
         entity = self.prbEntity
-        self.as_setMembersS(*vo_converters.makeSlotsVOs(entity, entity.getUnitIdx(), app=self.app))
+        self.as_setMembersS(*vo_converters.makeSlotsVOs(entity, entity.getID(), app=self.app))
         self._setActionButtonState()
 
     def _updateRallyData(self):
         entity = self.prbEntity
-        data = vo_converters.makeUnitVO(entity, unitIdx=entity.getUnitIdx(), app=self.app)
+        data = vo_converters.makeUnitVO(entity, unitMgrID=entity.getID(), app=self.app)
         self.as_updateRallyS(data)
         self.as_updateBattleTypeS({'battleTypeName': '',
          'isNew': self._isNew(),
@@ -275,7 +275,7 @@ class FalloutSquadView(SquadView):
 
     def _updateRallyData(self):
         entity = self.prbEntity
-        data = vo_converters.makeUnitVO(entity, unitIdx=entity.getUnitIdx(), app=self.app)
+        data = vo_converters.makeUnitVO(entity, unitMgrID=entity.getID(), app=self.app)
         self.as_updateRallyS(data)
         self.as_updateBattleTypeS({'battleTypeName': self._getBattleTypeName(),
          'isNew': self._isNew(),

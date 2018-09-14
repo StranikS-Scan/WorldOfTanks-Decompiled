@@ -8,8 +8,9 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <classes>	heavyTank	</classes>
-              <greaterOrEqual>	3	</greaterOrEqual>
+              <classes>	heavyTank mediumTank	</classes>
+              <lvlDiff>	0	</lvlDiff>
+              <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
           </and>
         </postBattle>
@@ -31,8 +32,9 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <classes>	heavyTank	</classes>
-              <greaterOrEqual>	3	</greaterOrEqual>
+              <classes>	heavyTank mediumTank	</classes>
+              <lvlDiff>	0	</lvlDiff>
+              <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
             <isAlive></isAlive>
             <win></win>

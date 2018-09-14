@@ -32,6 +32,7 @@ class GM_OP:
     REMOVE_BATTLE = 3
     UNPACK_BATTLE_UNIT = 4
     REMOVE_BATTLE_UNIT = 5
+    ON_CLAN_RESTORED = 6
 
 
 class GlobalMapBase(OpsUnpacker):

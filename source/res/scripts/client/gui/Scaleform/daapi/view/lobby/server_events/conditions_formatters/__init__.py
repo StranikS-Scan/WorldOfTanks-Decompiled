@@ -13,23 +13,23 @@ class _VehicleTableFormatter(ConditionFormatter):
         return [fmtData] if fmtData is not None else []
 
     @classmethod
-    def _getLabelKey(cls):
+    def _getLabelKey(cls, condition=None):
         pass
 
     @classmethod
     def _formatData(cls, condition, event, current=None, total=None):
         if condition.isAnyVehicleAcceptable():
             if not event.isGuiDisabled():
-                return formatters.packTextBlock(i18n.makeString('%s/all' % cls._getLabelKey()), value=condition.relationValue, relation=condition.relation)
+                return formatters.packTextBlock(i18n.makeString('%s/all' % cls._getLabelKey(condition)), value=condition.relationValue, relation=condition.relation)
         elif 'types' not in condition.data:
             if not event.isGuiDisabled():
                 if current is not None and total is not None:
-                    return formatters.packTextCondition(getFiltersLabel(cls._getLabelKey(), condition), current=current, total=total)
+                    return formatters.packTextCondition(getFiltersLabel(cls._getLabelKey(condition), condition), current=current, total=total)
                 else:
-                    return formatters.packTextBlock(getFiltersLabel(cls._getLabelKey(), condition), value=condition.relationValue, relation=condition.relation)
+                    return formatters.packTextBlock(getFiltersLabel(cls._getLabelKey(condition), condition), value=condition.relationValue, relation=condition.relation)
         else:
             subBlocks = []
-            titleKey = cls._getLabelKey()
+            titleKey = cls._getLabelKey(condition)
             if condition.isNegative():
                 titleKey = '%s/not' % titleKey
             subBlocks.append(cls._formatVehsTable(condition, event))

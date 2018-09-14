@@ -28,7 +28,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent
+from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent, BootcampEvent
 from helpers import getFullClientVersion, dependency
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
@@ -191,6 +191,7 @@ class LoginView(LoginPageMeta):
         self._rememberUser = False
         self.loginManager.servers.updateServerList()
         self._servers = self.loginManager.servers
+        self._entityEnqueueCancelCallback = None
         return
 
     def onRegister(self, host):
@@ -275,6 +276,8 @@ class LoginView(LoginPageMeta):
         self.connectionMgr.onKickWhileLoginReceived += self._onKickedWhileLogin
         self.connectionMgr.onQueued += self._onHandleQueue
         g_playerEvents.onAccountShowGUI += self._clearLoginView
+        g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
+        g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         self.as_setVersionS(getFullClientVersion())
         self.as_setCopyrightS(_ms(MENU.COPY), _ms(MENU.LEGAL))
         ScaleformFileLoader.enableStreaming([getPathForFlash(_LOGIN_VIDEO_FILE)])
@@ -297,8 +300,13 @@ class LoginView(LoginPageMeta):
         self.connectionMgr.onQueued -= self._onHandleQueue
         self._servers.onServersStatusChanged -= self.__updateServersList
         g_playerEvents.onAccountShowGUI -= self._clearLoginView
+        g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
+        g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer
+        if self._entityEnqueueCancelCallback:
+            g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
         self._serversDP.fini()
         self._serversDP = None
+        self._entityEnqueueCancelCallback = None
         View._dispose(self)
         return
 
@@ -360,6 +368,25 @@ class LoginView(LoginPageMeta):
 
     def _onLoginQueueClosed(self, event):
         self.__closeLoginQueueDialog()
+
+    def _onEntityCheckoutEnqueued(self, cancelCallback):
+        g_eventBus.addListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(BootcampEvent(BootcampEvent.QUEUE_DIALOG_SHOW), EVENT_BUS_SCOPE.LOBBY)
+        self._entityEnqueueCancelCallback = cancelCallback
+
+    def _onAccountBecomeNonPlayer(self):
+        if self._entityEnqueueCancelCallback:
+            self._entityEnqueueCancelCallback = None
+            g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+        return
+
+    def _onEntityCheckoutCanceled(self, _):
+        Waiting.show('login')
+        g_eventBus.removeListener(BootcampEvent.QUEUE_DIALOG_CANCEL, self._onEntityCheckoutCanceled, EVENT_BUS_SCOPE.LOBBY)
+        if self._entityEnqueueCancelCallback:
+            self._entityEnqueueCancelCallback()
+        self._entityEnqueueCancelCallback = None
+        return
 
     def _onLoginQueueSwitched(self, event):
         self.__closeLoginQueueDialog()

@@ -62,6 +62,13 @@ class FriendsFindCriteria(UserTagsFindCriteria):
         super(FriendsFindCriteria, self).__init__({USER_TAG.FRIEND}, onlineMode=onlineMode)
 
 
+class MutualFriendsFindCriteria(FriendsFindCriteria):
+
+    def filter(self, user):
+        friendsFilter = super(MutualFriendsFindCriteria, self).filter(user)
+        return friendsFilter and not user.getTags() & {USER_TAG.SUB_PENDING_OUT, USER_TAG.SUB_NONE}
+
+
 class PendingFriendsCandidatesFindCriteria(UserTagsFindCriteria):
 
     def __init__(self, onlineMode=None):

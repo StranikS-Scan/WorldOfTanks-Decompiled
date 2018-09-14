@@ -258,6 +258,9 @@ class ACHIEVEMENTS(object):
     MECHANICENGINEER8 = '#achievements:mechanicEngineer8'
     MECHANICENGINEER8_DESCR = '#achievements:mechanicEngineer8_descr'
     MECHANICENGINEER8_CONDITION = '#achievements:mechanicEngineer8_condition'
+    MECHANICENGINEER9 = '#achievements:mechanicEngineer9'
+    MECHANICENGINEER9_DESCR = '#achievements:mechanicEngineer9_descr'
+    MECHANICENGINEER9_CONDITION = '#achievements:mechanicEngineer9_condition'
     TANKEXPERT = '#achievements:tankExpert'
     TANKEXPERT_DESCR = '#achievements:tankExpert_descr'
     TANKEXPERT0 = '#achievements:tankExpert0'
@@ -579,6 +582,9 @@ class ACHIEVEMENTS(object):
     XMASTREEGOLD_DESCR = '#achievements:xmasTreeGold_descr'
     XMASTREEGOLD_CONDITION = '#achievements:xmasTreeGold_condition'
     XMASTREEGOLD_NOTIFICATION = '#achievements:xmasTreeGold_notification'
+    RANKEDBATTLESPIONEER = '#achievements:rankedBattlesPioneer'
+    RANKEDBATTLESPIONEER_DESCR = '#achievements:rankedBattlesPioneer_descr'
+    RANKEDBATTLESPIONEER_CONDITION = '#achievements:rankedBattlesPioneer_condition'
     HISTBATTLE1_HISTORYLESSONS = '#achievements:histBattle1_historyLessons'
     HISTBATTLE1_HISTORYLESSONS_DESCR = '#achievements:histBattle1_historyLessons_descr'
     HISTBATTLE1_HISTORYLESSONS_CONDITION = '#achievements:histBattle1_historyLessons_condition'
@@ -897,6 +903,9 @@ class ACHIEVEMENTS(object):
      MECHANICENGINEER8,
      MECHANICENGINEER8_DESCR,
      MECHANICENGINEER8_CONDITION,
+     MECHANICENGINEER9,
+     MECHANICENGINEER9_DESCR,
+     MECHANICENGINEER9_CONDITION,
      TANKEXPERT,
      TANKEXPERT_DESCR,
      TANKEXPERT0,
@@ -1218,6 +1227,9 @@ class ACHIEVEMENTS(object):
      XMASTREEGOLD_DESCR,
      XMASTREEGOLD_CONDITION,
      XMASTREEGOLD_NOTIFICATION,
+     RANKEDBATTLESPIONEER,
+     RANKEDBATTLESPIONEER_DESCR,
+     RANKEDBATTLESPIONEER_CONDITION,
      HISTBATTLE1_HISTORYLESSONS,
      HISTBATTLE1_HISTORYLESSONS_DESCR,
      HISTBATTLE1_HISTORYLESSONS_CONDITION,

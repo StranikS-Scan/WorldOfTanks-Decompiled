@@ -1,0 +1,33 @@
+<VehicleAIController.def>
+  <TempProperties>
+    <_vehicleAIController></_vehicleAIController>
+  </TempProperties>
+  <CellMethods>
+    <vehicleAIController_onVehicleCreated>
+      <Arg>	MAILBOX	</Arg>
+    </vehicleAIController_onVehicleCreated>
+    <vehicleAIController_assignAvatarToVehicle>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </vehicleAIController_assignAvatarToVehicle>
+    <vehicleAIController_assignParametersToVehicle>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+    </vehicleAIController_assignParametersToVehicle>
+    <vehicleAIController_registerListener>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	BOOL	</Arg>
+    </vehicleAIController_registerListener>
+    <vehicleAIController_onEvent>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </vehicleAIController_onEvent>
+    <vehicleAIController_getVehicleID>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </vehicleAIController_getVehicleID>
+  </CellMethods>
+</VehicleAIController.def>

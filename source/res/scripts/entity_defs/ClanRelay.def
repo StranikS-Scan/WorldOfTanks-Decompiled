@@ -1,23 +1,6 @@
 <ClanRelay.def>
   <Properties></Properties>
   <BaseMethods>
-    <onFortUpdate>
-      <Arg>	UINT64	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	STRING	</Arg>
-    </onFortUpdate>
-    <onSortieUpdate>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	STRING	</Arg>
-    </onSortieUpdate>
-    <onFortBattleUpdate>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	FLOAT64	</Arg>
-      <Arg>	STRING	</Arg>
-    </onFortBattleUpdate>
     <subscribe>
       <Arg>	UINT64	</Arg>
       <Arg>	UINT64	</Arg>

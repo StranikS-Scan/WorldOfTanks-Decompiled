@@ -8,6 +8,7 @@ import Event
 import ranked_common
 from adisp import async, process
 from constants import ARENA_BONUS_TYPE, EVENT_TYPE
+from dossiers2.custom.account_layout import RANKED_BADGES_BLOCK_LAYOUT
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -29,8 +30,9 @@ from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 
-class RankedBattlesController(IRankedBattlesController):
+class RankedBattlesController(IRankedBattlesController, Notifiable):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
     battleResultsService = dependency.descriptor(IBattleResultsService)
@@ -40,10 +42,18 @@ class RankedBattlesController(IRankedBattlesController):
     def __init__(self):
         super(RankedBattlesController, self).__init__()
         self.onUpdated = Event.Event()
+        self.onPrimeTimeStatusUpdated = Event.Event()
         self.__arenaBattleResultsWasShown = set()
+        self.__awardWindowWasShown = False
+
+    def init(self):
+        super(RankedBattlesController, self).init()
+        self.addNotificator(SimpleNotifier(self.__getTimer, self.__timerUpdate))
 
     def fini(self):
         self.onUpdated.clear()
+        self.onPrimeTimeStatusUpdated.clear()
+        self.clearNotification()
         super(RankedBattlesController, self).fini()
 
     def onDisconnected(self):
@@ -60,6 +70,7 @@ class RankedBattlesController(IRankedBattlesController):
         lobbyContext = dependency.instance(ILobbyContext)
         lobbyContext.getServerSettings().onServerSettingsChange += self.__updateRankedSettings
         g_clientUpdateManager.addCallbacks({'ranked': self.__updateRanked})
+        self.startNotification()
 
     def isEnabled(self):
         return self.__getSettings().isEnabled
@@ -227,10 +238,11 @@ class RankedBattlesController(IRankedBattlesController):
     def getReceivedBadges(self):
         result = {}
         dossierBadges = self.itemsCache.items.getAccountDossier().getDossierDescr()['rankedBadges']
-        for bID in self.getAvailableBadges():
-            receivedTimestamp = dossierBadges[bID]
-            if receivedTimestamp > 0:
-                result[bID] = receivedTimestamp
+        for bID in RANKED_BADGES_BLOCK_LAYOUT:
+            if bID in dossierBadges:
+                receivedTimestamp = dossierBadges[bID]
+                if receivedTimestamp > 0:
+                    result[bID] = receivedTimestamp
 
         return result
 
@@ -424,6 +436,9 @@ class RankedBattlesController(IRankedBattlesController):
     def setAwardWindowShown(rankID):
         BigWorld.player().ranked.setClientMaxRank(rankID, 0)
 
+    def wasAwardWindowShown(self):
+        return self.__awardWindowWasShown
+
     def getRankChangeStatus(self, changeInfo):
         stepChanges = changeInfo.stepChanges
         stepToJudge = changeInfo.vehStep or changeInfo.accStep
@@ -545,6 +560,7 @@ class RankedBattlesController(IRankedBattlesController):
     def __clear(self):
         lobbyContext = dependency.instance(ILobbyContext)
         lobbyContext.getServerSettings().onServerSettingsChange -= self.__updateRankedSettings
+        self.stopNotification()
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     @staticmethod
@@ -679,8 +695,10 @@ class RankedBattlesController(IRankedBattlesController):
             rankInfo = reusableInfo.personal.getRankInfo()
             vehicle = first(reusableInfo.personal.getVehicleItemsIterator())[1]
             if self.awardWindowShouldBeShown(rankInfo):
+                self.__awardWindowWasShown = True
                 event_dispatcher.showRankedAwardWindow(rankInfo.vehRank + rankInfo.accRank, vehicle=vehicle)
             else:
+                self.__awardWindowWasShown = False
                 rankedResultsVO = composer.getResultsTeamsVO()
                 event_dispatcher.showRankedBattleResultsWindow(rankedResultsVO, vehicle, rankInfo)
             self.__arenaBattleResultsWasShown.add(reusableInfo.arenaUniqueID)
@@ -692,7 +710,27 @@ class RankedBattlesController(IRankedBattlesController):
         changes -= {'clientRank', 'clientVehRanks'}
         if changes:
             self.onUpdated()
+            self.__resetTimer()
 
     def __updateRankedSettings(self, diff):
         if 'ranked_config' in diff:
             self.onUpdated()
+            self.__resetTimer()
+
+    def __getTimer(self):
+        """
+        Gets the prime time update time
+        """
+        _, timeLeft = self.getPrimeTimeStatus()
+        if timeLeft > 0:
+            return timeLeft + 1
+        else:
+            return time_utils.ONE_MINUTE
+
+    def __resetTimer(self):
+        self.startNotification()
+        self.__timerUpdate()
+
+    def __timerUpdate(self):
+        status, _ = self.getPrimeTimeStatus()
+        self.onPrimeTimeStatusUpdated(status)

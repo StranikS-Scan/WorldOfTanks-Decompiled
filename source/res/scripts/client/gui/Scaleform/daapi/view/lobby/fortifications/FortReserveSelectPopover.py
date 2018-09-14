@@ -28,6 +28,9 @@ class FortReserveSelectPopover(FittingSelectPopoverMeta, IUnitListener):
         self.fireEvent(CSReserveSelectEvent(CSReserveSelectEvent.RESERVE_SELECTED, settings))
         self.destroy()
 
+    def setCurrentTab(self, tabIndex):
+        pass
+
     def _populate(self):
         super(FortReserveSelectPopover, self)._populate()
         title = self.__getReserveGroup()
@@ -42,40 +45,40 @@ class FortReserveSelectPopover(FittingSelectPopoverMeta, IUnitListener):
          'preferredLayout': 0,
          'width': width})
 
-    def __getStrongholdData(self):
-        entity = self.prbEntity
-        if entity is None:
-            return
-        else:
-            data = entity.getStrongholdData()
-            return data
-
     def __buildModuleData(self, selectedIdxs, reserve, count):
-        isSelected = next(itertools.ifilter(lambda id: reserve.getId() == id, selectedIdxs), None) is not None
-        if isSelected:
-            count -= 1
+        isSelected = False
+        for selectReserve in selectedIdxs:
+            if selectReserve and selectReserve.getId() == reserve.getId():
+                isSelected = True
+                count -= 1
+                break
+
         bonusPersent = '+%d%%' % reserve.getBonusPercent()
         moduleData = vo_converters.makeReserveModuleData(reserve.getId(), reserve.getType(), reserve.getLevel(), str(count), isSelected, bonusPersent, reserve.getDescription())
         return moduleData
 
     def __getReserveGroup(self):
-        data = self.__getStrongholdData()
-        order = data.getReserveOrder()
-        groupType = order[self._slotIndex]
-        return vo_converters.getReserveGroupTitle(groupType)
-
-    def __buildList(self):
-        data = self.__getStrongholdData()
-        if data is None:
+        entity = self.prbEntity
+        if entity is None:
             return
         else:
-            selectedIdxs = data.getSelectedReservesIdx()
-            order = data.getReserveOrder()
+            order = entity.getStrongholdSettings().getReserveOrder()
+            groupType = order[self._slotIndex]
+            return vo_converters.getReserveGroupTitle(groupType)
+
+    def __buildList(self):
+        entity = self.prbEntity
+        if entity is None:
+            return
+        else:
+            selectedIdxs = entity.getStrongholdSettings().getReserve().getSelectedReserves()
+            order = entity.getStrongholdSettings().getReserveOrder()
             groupType = order[self._slotIndex]
             modulesList = []
-            group = data.getUniqueReservesByGroupType(groupType)
+            reserves = entity.getStrongholdSettings().getReserve()
+            group = reserves.getUniqueReservesByGroupType(groupType)
             for i, reserve in enumerate(group):
-                count = data.getReserveCount(reserve.getType(), reserve.getLevel())
+                count = reserves.getReserveCount(reserve.getType(), reserve.getLevel())
                 moduleData = self.__buildModuleData(selectedIdxs, reserve, count)
                 if moduleData.get('isSelected', None):
                     self._selectedIndex = i

@@ -17,8 +17,8 @@ class ClanBtnsUnavailableAspect(aop.Aspect):
         original_return_value['btnTooltip'] = warnTooltip
         original_return_value['requestInviteBtnTooltip'] = warnTooltip
         original_return_value['searchClanTooltip'] = warnTooltip
-        original_return_value['isOpenInviteBtnEnabled'] = False
         original_return_value['isSearchClanBtnEnabled'] = False
+        original_return_value['requestInviteBtnEnabled'] = False
         original_return_value['btnEnabled'] = False
         return original_return_value
 

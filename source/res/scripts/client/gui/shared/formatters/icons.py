@@ -107,5 +107,9 @@ def serverAlert():
     return _getIcon('serverAlert')
 
 
+def markerBlocked(vspace=-2):
+    return _getIcon('markerBlocked', vspace=vspace)
+
+
 def makeImageTag(source, width=16, height=16, vSpace=-4, hSpace=0):
     return _IMG_TAG_TPL.format(getAbsoluteUrl(source), width, height, vSpace, hSpace)

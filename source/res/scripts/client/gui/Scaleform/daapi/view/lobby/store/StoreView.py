@@ -68,7 +68,7 @@ class StoreView(StoreViewMeta):
     def __updateActionsCounter(self):
         newActions = filter(lambda i: i.getIsNew(), self.__checkForActiveActions())
         if newActions:
-            self.as_setBtnTabCountersS([{'tabId': STORE_CONSTANTS.STORE_ACTIONS,
+            self.as_setBtnTabCountersS([{'componentId': STORE_CONSTANTS.STORE_ACTIONS,
               'count': str(len(newActions))}])
         else:
             self.as_removeBtnTabCountersS([STORE_CONSTANTS.STORE_ACTIONS])

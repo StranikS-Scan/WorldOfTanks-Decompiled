@@ -22,6 +22,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.fallout import minimap
     from gui.Scaleform.daapi.view.battle.fallout import battle_timer
     from gui.Scaleform.daapi.view.battle.fallout import fallout_battle_loading
+    from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
     return (ViewSettings(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE, page.FalloutClassicPage, 'falloutClassicPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE, page.FalloutMultiteamPage, 'falloutMultiteamPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, fallout_battle_loading.FalloutMultiTeamBattleLoading, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -35,7 +36,8 @@ def getViewSettings():
      ViewSettings(BATTLE_VIEW_ALIASES.MINIMAP, minimap.FalloutMinimapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.REPAIR_POINT_TIMER, repair_timer.RepairPointTimer, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.FALLOUT_SCORE_PANEL, score_panel.FalloutScorePanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timer.FalloutBattleTimer, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timer.FalloutBattleTimer, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

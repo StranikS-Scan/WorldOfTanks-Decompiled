@@ -94,9 +94,17 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         feedback = self.sessionProvider.shared.feedback
         if feedback is not None:
             feedback.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+        vehicleState = self.sessionProvider.shared.vehicleState
+        if vehicleState is not None:
+            vehicleState.onPostMortemSwitched += self.__onPostMortemSwitched
+            vehicleState.onVehicleControlling += self.__onVehicleControlling
         return
 
     def _dispose(self):
+        vehicleState = self.sessionProvider.shared.vehicleState
+        if vehicleState is not None:
+            vehicleState.onPostMortemSwitched -= self.__onPostMortemSwitched
+            vehicleState.onVehicleControlling -= self.__onVehicleControlling
         feedback = self.sessionProvider.shared.feedback
         if feedback is not None:
             feedback.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
@@ -179,3 +187,9 @@ class DamageInfoPanel(DamageInfoPanelMeta):
             self.__show(vehicleID, value)
         elif eventID == _EVENT_ID.HIDE_VEHICLE_DAMAGES_DEVICES:
             self.__hide()
+
+    def __onPostMortemSwitched(self):
+        self.__hide()
+
+    def __onVehicleControlling(self, vehicle):
+        self.__hide()

@@ -37,5 +37,8 @@ class TechTreeMeta(ResearchView):
         """
         return self.flashObject.as_setUnlockProps(data) if self._isDAAPIInited() else None
 
+    def as_hideNationsBarS(self, value):
+        return self.flashObject.as_hideNationsBar(value) if self._isDAAPIInited() else None
+
     def as_showMiniClientInfoS(self, description, hyperlink):
         return self.flashObject.as_showMiniClientInfo(description, hyperlink) if self._isDAAPIInited() else None

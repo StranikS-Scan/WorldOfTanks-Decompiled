@@ -441,7 +441,16 @@ class SixthSenseIndicator(SixthSenseMeta):
         self.__callbackID = None
         self.__detectionSoundEventName = None
         self.__detectionSoundEvent = None
+        self.__enabled = True
         return
+
+    @property
+    def enabled(self):
+        return self.__enabled
+
+    @enabled.setter
+    def enabled(self, enabled):
+        self.__enabled = enabled
 
     def show(self):
         self.as_showS()
@@ -469,19 +478,25 @@ class SixthSenseIndicator(SixthSenseMeta):
         return
 
     def __show(self):
-        if self.__detectionSoundEvent is not None:
-            if self.__detectionSoundEvent.isPlaying:
-                self.__detectionSoundEvent.restart()
-            else:
-                self.__detectionSoundEvent.play()
-        self.as_showS()
-        self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self.__hide)
-        return
+        if not self.__enabled:
+            return
+        else:
+            if self.__detectionSoundEvent is not None:
+                if self.__detectionSoundEvent.isPlaying:
+                    self.__detectionSoundEvent.restart()
+                else:
+                    self.__detectionSoundEvent.play()
+            self.as_showS()
+            self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self.__hide)
+            return
 
     def __hide(self):
         self.__callbackID = None
-        self.as_hideS()
-        return
+        if not self.__enabled:
+            return
+        else:
+            self.as_hideS()
+            return
 
     def __cancelCallback(self):
         if self.__callbackID is not None:
@@ -496,7 +511,7 @@ class SixthSenseIndicator(SixthSenseMeta):
                 self.__show()
             else:
                 self.__cancelCallback()
-                self.as_hideS()
+                self.__hide()
 
     def __onSettingsChanged(self, diff):
         key = SOUND.DETECTION_ALERT_SOUND

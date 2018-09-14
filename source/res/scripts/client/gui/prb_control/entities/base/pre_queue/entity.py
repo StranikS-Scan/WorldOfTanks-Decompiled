@@ -122,6 +122,8 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
     def fini(self, ctx=None, woEvents=False):
         self.clear()
         self._subscriber.unsubscribe(self)
+        if self._requestCtx.isProcessing:
+            self._requestCtx.stopProcessing(True)
         self._requestCtx.clear()
         return super(PreQueueEntity, self).fini(ctx=ctx, woEvents=woEvents)
 

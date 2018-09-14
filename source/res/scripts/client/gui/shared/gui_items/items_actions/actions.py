@@ -72,6 +72,17 @@ def processMsg(result):
 
 class IGUIItemAction(object):
 
+    def __init(self):
+        self.__skipConfirm = False
+
+    @property
+    def skipConfirm(self):
+        return self.__skipConfirm
+
+    @skipConfirm.setter
+    def skipConfirm(self, value):
+        self.__skipConfirm = value
+
     def doAction(self):
         pass
 
@@ -203,7 +214,7 @@ class UnlockItemAction(CachedItemAction):
     def _unlockItem(self):
         costCtx = self._getCostCtx(self.__vehCD, self.__xpCost)
         unlockCtx = unlock.UnlockItemCtx(self.__unlockCD, self.__vehCD, self.__unlockIdx, self.__xpCost)
-        plugins = [unlock.UnlockItemConfirmator(unlockCtx, costCtx), unlock.UnlockItemValidator(unlockCtx)]
+        plugins = [unlock.UnlockItemConfirmator(unlockCtx, costCtx, isEnabled=not self.skipConfirm), unlock.UnlockItemValidator(unlockCtx)]
         self._doUnlockItem(unlockCtx, costCtx, plugins)
 
     def _isUnlocked(self):
@@ -254,7 +265,7 @@ class InstallItemAction(BuyAction):
         RequestState.sent(state)
         if item.isInInventory:
             Waiting.show('applyModule')
-            result = yield getInstallerProcessor(vehicle, item, conflictedEqs=conflictedEqs).request()
+            result = yield getInstallerProcessor(vehicle, item, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm).request()
             processMsg(result)
             if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
                 vehicle = self.itemsCache.items.getItemByCD(vehicle.intCD)
@@ -288,7 +299,7 @@ class BuyAndInstallItemAction(InstallItemAction):
             Waiting.show('buyAndInstall')
             vehicle = self.itemsCache.items.getItemByCD(rootCD)
             gunCD = getGunCD(item, vehicle)
-            result = yield BuyAndInstallItemProcessor(vehicle, item, 0, gunCD, conflictedEqs=conflictedEqs).request()
+            result = yield BuyAndInstallItemProcessor(vehicle, item, 0, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm).request()
             processMsg(result)
             if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
                 item = self.itemsCache.items.getItemByCD(itemCD)
@@ -328,7 +339,7 @@ class SetVehicleModuleAction(BuyAction):
             if not self.__isRemove:
                 if oldComponentItem and oldComponentItem.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.BATTLE_BOOSTER):
                     Waiting.show('installEquipment')
-                    result = yield getInstallerProcessor(vehicle, oldComponentItem, self.__slotIdx, False, True).request()
+                    result = yield getInstallerProcessor(vehicle, oldComponentItem, self.__slotIdx, False, True, skipConfirm=self.skipConfirm).request()
                     processMsg(result)
                     Waiting.hide('installEquipment')
                     if not result.success:
@@ -343,7 +354,7 @@ class SetVehicleModuleAction(BuyAction):
                     Waiting.show('buyAndInstall')
                     vehicle = self.itemsCache.items.getVehicle(self.__vehInvID)
                     gunCD = getGunCD(newComponentItem, vehicle)
-                    result = yield BuyAndInstallItemProcessor(vehicle, newComponentItem, self.__slotIdx, gunCD, conflictedEqs=conflictedEqs).request()
+                    result = yield BuyAndInstallItemProcessor(vehicle, newComponentItem, self.__slotIdx, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm).request()
                     processMsg(result)
                     if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
                         newComponentItem = self.itemsCache.items.getItemByCD(int(self.__newItemCD))
@@ -356,7 +367,7 @@ class SetVehicleModuleAction(BuyAction):
             else:
                 Waiting.show('applyModule')
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
-                result = yield getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseGold, conflictedEqs).request()
+                result = yield getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseGold, conflictedEqs, self.skipConfirm).request()
                 processMsg(result)
                 if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
                     newComponentItem = self.itemsCache.items.getItemByCD(int(self.__newItemCD))
@@ -385,11 +396,11 @@ class SetVehicleLayoutAction(IGUIItemAction):
         if self._battleBooster is not None:
             boosterLayout = (self._battleBooster.intCD, 1) if self._battleBooster else (0, 0)
             eqsLayout = EquipmentVehicleLayout(self._vehicle, self._eqsLayout, boosterLayout)
-            result = yield VehicleBattleBoosterLayoutProcessor(self._vehicle, self._battleBooster, eqsLayout).request()
+            result = yield VehicleBattleBoosterLayoutProcessor(self._vehicle, self._battleBooster, eqsLayout, self.skipConfirm).request()
         else:
             shellsLayout = ShellVehicleLayout(self._vehicle, self._shellsLayout)
             eqsLayout = EquipmentVehicleLayout(self._vehicle, self._eqsLayout)
-            result = yield VehicleLayoutProcessor(self._vehicle, shellsLayout, eqsLayout).request()
+            result = yield VehicleLayoutProcessor(self._vehicle, shellsLayout, eqsLayout, self.skipConfirm).request()
         self._showResult(result)
         return
 
@@ -419,7 +430,7 @@ class BuyAndInstallItemVehicleLayout(SetVehicleLayoutAction):
         if self._battleBooster is not None:
             boosterLayout = (self._battleBooster.intCD, 1)
             eqsLayout = EquipmentVehicleLayout(self._vehicle, self._eqsLayout, boosterLayout)
-            result = yield BuyAndInstallBattleBoosterProcessor(self._vehicle, self._battleBooster, eqsLayout, self._count).request()
+            result = yield BuyAndInstallBattleBoosterProcessor(self._vehicle, self._battleBooster, eqsLayout, self._count, self.skipConfirm).request()
             self._showResult(result)
         else:
             LOG_ERROR('Extend BuyAndInstallItemVehicleLayout action to support a new type of item!')

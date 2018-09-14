@@ -125,3 +125,11 @@ class Cursor(CursorMeta, View):
             GUI.mcursor().position = self.__savedMCursorPos
             self.__savedMCursorPos = None
         return
+
+    def resetMousePosition(self):
+        """
+        Set mouse cursor position to the center of the screen
+        """
+        GUI.mcursor().position = (0.0, 0.0)
+        self.__saveDeviceMousePosition(0.0, 0.0)
+        GUI.syncMousePosition(0.0, 0.0)

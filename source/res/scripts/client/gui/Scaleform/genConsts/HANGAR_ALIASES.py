@@ -16,6 +16,7 @@ class HANGAR_ALIASES(object):
     VEHICLE_PARAMETERS = 'params'
     HEADER = 'header'
     RANKED_WIDGET = 'rankedWdgt'
+    ALERT_MESSAGE_BLOCK = 'alertMessageBlock'
     TANK_CAROUSEL_UI = 'TankCarouselUI'
     FALLOUT_TANK_CAROUSEL_UI = 'FalloutTankCarouselUI'
     VEH_PARAM_RENDERER_STATE_SIMPLE_TOP = 'simpleTop'

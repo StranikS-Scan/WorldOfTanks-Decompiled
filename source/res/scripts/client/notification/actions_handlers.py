@@ -14,7 +14,6 @@ from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.prb_control.prb_getters import getBattleID
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
 from gui.shared.utils import decorators
 from gui.wgnc import g_wgncProvider
 from helpers import dependency
@@ -415,44 +414,6 @@ class DeclinePrbInviteHandler(_ActionHandler):
             LOG_ERROR('Invite is invalid', entityID)
 
 
-class AcceptPrbFortInviteHandler(_ActionHandler):
-
-    @prbDispatcherProperty
-    def prbDispatcher(self):
-        pass
-
-    @prbInvitesProperty
-    def prbInvites(self):
-        pass
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(self):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(AcceptPrbFortInviteHandler, self).handleAction(model, entityID, action)
-        notification = model.collection.getItem(NOTIFICATION_TYPE.MESSAGE, entityID)
-        if not notification:
-            LOG_ERROR('Notification not found', NOTIFICATION_TYPE.MESSAGE, entityID)
-            return
-        else:
-            customData = notification.getSavedData()
-            battleID = customData.get('battleID')
-            peripheryID = customData.get('peripheryID')
-            if battleID is not None and peripheryID is not None:
-                if battleID == getBattleID():
-                    fort_events.showFortBattleRoomWindow()
-                else:
-                    fort_helpers.tryToConnectFortBattle(battleID, peripheryID)
-            else:
-                LOG_ERROR('Invalid fort battle data', battleID, peripheryID)
-            return
-
-
 class ApproveFriendshipHandler(_ActionHandler):
 
     @proto_getter(PROTO_TYPE.XMPP)
@@ -524,7 +485,6 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
  OpenPollHandler,
- AcceptPrbFortInviteHandler,
  AcceptPrbInviteHandler,
  DeclinePrbInviteHandler,
  ApproveFriendshipHandler,

@@ -216,13 +216,23 @@ class _AvgDestroyedField(_AbstractField):
         return BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgFrags()))
 
 
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def _maxXPField(targetData, _, itemsCache=None):
-    formatedMaxXP = BigWorld.wg_getIntegralFormat(targetData.getMaxXp())
-    maxXpVehicle = None
-    if isinstance(targetData, _MaxVehicleStatsBlock):
-        maxXpVehicle = itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
-    return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, formatedMaxXP, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, ProfileUtils.getRecordTooltipDataByVehicle(maxXpVehicle))
+class _MaxXPField(_AbstractField):
+
+    def __call__(self, targetData, isCurrentUser):
+        tooltip = self._tooltip
+        tooltipData = None
+        if isinstance(targetData, _MaxVehicleStatsBlock):
+            tooltipData = self._buildTooltipData(targetData, isCurrentUser)
+        else:
+            tooltip = self._tooltip + '/vehicle'
+        return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, tooltipData)
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(targetData.getMaxXp())
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        maxXpVehicle = self.itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
+        return ProfileUtils.getRecordTooltipDataByVehicle(maxXpVehicle)
 
 
 class _MaxDamageField(_AbstractField):
@@ -238,11 +248,8 @@ class _MaxDamageField(_AbstractField):
             tooltip = self._tooltip
             if isinstance(targetData, _MaxVehicleStatsBlock):
                 tooltipData = self._buildTooltipData(targetData, isCurrentUser)
-            elif isinstance(targetData, _FalloutStatsBlock):
-                if not isinstance(targetData, _VehiclesStatsBlock):
-                    tooltip = self._tooltip + '/vehicle'
             else:
-                tooltipData = ProfileUtils.createToolTipData(None)
+                tooltip = self._tooltip + '/vehicle'
         return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, tooltipData)
 
     def _buildData(self, targetData, isCurrentUser):
@@ -260,11 +267,8 @@ class _MaxDestroyedField(_AbstractField):
         tooltipData = None
         if isinstance(targetData, _MaxVehicleStatsBlock):
             tooltipData = self._buildTooltipData(targetData, isCurrentUser)
-        elif isinstance(targetData, _FalloutStatsBlock):
-            if not isinstance(targetData, _VehiclesStatsBlock):
-                tooltip = self._tooltip + '/vehicle'
         else:
-            tooltipData = ProfileUtils.createToolTipData(None)
+            tooltip = self._tooltip + '/vehicle'
         return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, tooltipData)
 
     def _buildData(self, targetData, isCurrentUser):
@@ -359,8 +363,8 @@ AVERAGE_SECTION_FALLOUT_FIELDS = (_avgExpField,
  _AvgReceivedDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGRECEIVEDDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_AVGRECEIVEDDAMAGE),
  _emptyField,
  _AvgDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_AVGDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_AVGDESTROYEDVEHICLES))
-RECORD_SECTION_FIELDS = (_maxXPField, _MaxDamageField(PROFILE.SECTION_STATISTICS_SCORES_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLEMAXDAMAGE), _MaxDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_MAXDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDESTROYED))
-RECORD_SECTION_FALLOUT_FIELDS = (_maxXPField,
+RECORD_SECTION_FIELDS = (_MaxXPField(PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP), _MaxDamageField(PROFILE.SECTION_STATISTICS_SCORES_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLEMAXDAMAGE), _MaxDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_MAXDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDESTROYED))
+RECORD_SECTION_FALLOUT_FIELDS = (_MaxXPField(PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP),
  _MaxDamageField(PROFILE.SECTION_STATISTICS_SCORES_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLEMAXDAMAGE),
  _MaxDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_MAXDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDESTROYED),
  _maxWinPointsField)

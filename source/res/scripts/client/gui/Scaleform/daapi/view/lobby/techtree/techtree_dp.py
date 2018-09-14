@@ -14,7 +14,7 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from items import _xml, vehicles, getTypeOfCompactDescr
 import nations
-import ResMgr
+from realm_utils import ResMgr
 from skeletons.gui.shared import IItemsCache
 
 class _ConfigError(Exception):
@@ -523,7 +523,9 @@ class _TechTreeDataProvider(object):
         unlocks = self.itemsCache.items.stats.unlocks
         xps = self.itemsCache.items.stats.vehiclesXPs
         freeXP = self.itemsCache.items.stats.actualFreeXP
-        allPossibleXp = self.getAllVehiclePossibleXP(nodeCD, UnlockStats(unlocks, xps, freeXP))
+        unlockProps = g_techTreeDP.getUnlockProps(nodeCD)
+        parentID = unlockProps.parentID
+        allPossibleXp = self.getAllVehiclePossibleXP(parentID, UnlockStats(unlocks, xps, freeXP))
         isAvailable, props = self.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=xps, freeXP=freeXP)
         return (isAvailable and allPossibleXp >= props.xpCost, props.xpCost, allPossibleXp)
 

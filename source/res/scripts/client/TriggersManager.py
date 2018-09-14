@@ -21,9 +21,16 @@ class TRIGGER_TYPE():
     PLAYER_SHOT_NOT_PIERCED = 10
     PLAYER_SHOT_MADE_NONFATAL_DAMAGE = 11
     SNIPER_MODE = 12
+    PLAYER_TANKMAN_SHOOTED = 13
+    PLAYER_VEHICLE_IN_FIRE = 14
+    PLAYER_VEHICLE_OBSERVED = 15
+    PLAYER_RECEIVE_DAMAGE = 16
+    PLAYER_SHOOT = 17
+    PLAYER_DETECT_ENEMY = 18
+    VEHICLE_VISUAL_VISIBILITY_CHANGED = 19
 
 
-class ITriggerListener():
+class ITriggerListener(object):
 
     def onTriggerActivated(self, args):
         pass
@@ -43,12 +50,13 @@ class TriggersManager():
         self.__activeManualTriggers = {}
         self.__listeners = set()
         self.__nextTriggerId = 1
-        self.__cbID = BigWorld.callback(self.UPDATE_PERIOD, self.update)
+        self.__cbID = None
         self.__isOnArena = False
         self.__isEnabled = False
         self.__shotPoints = []
         self.__explodePoints = []
         PlayerEvents.g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
+        return
 
     def isEnabled(self):
         return self.__isEnabled
@@ -68,6 +76,12 @@ class TriggersManager():
         self.__isEnabled = enable
         if not enable:
             self.clearTriggers(True)
+            if self.__cbID is not None:
+                BigWorld.cancelCallback(self.__cbID)
+                self.__cbID = None
+        else:
+            self.__cbID = BigWorld.callback(self.UPDATE_PERIOD, self.update)
+        return
 
     def clearTriggers(self, keepTriggersFromMap):
         self.__pendingManualTriggers = {}
@@ -76,7 +90,8 @@ class TriggersManager():
             self.__autoTriggers = {}
             self.__activeAutoTriggers = set()
         else:
-            for k, v in self.__autoTriggers.iteritems():
+            autoTriggers = self.__autoTriggers.copy()
+            for k, v in autoTriggers.iteritems():
                 type = v['type']
                 if type != TRIGGER_TYPE.AIM and type != TRIGGER_TYPE.AREA:
                     del self.__autoTriggers[k]
@@ -111,7 +126,9 @@ class TriggersManager():
     def fireTrigger(self, type, **args):
         params = dict(args) if args is not None else {}
         params['type'] = type
-        self.__pendingManualTriggers[type] = (False, params)
+        if type not in self.__pendingManualTriggers:
+            self.__pendingManualTriggers[type] = []
+        self.__pendingManualTriggers[type].append((False, params))
         return
 
     def activateTrigger(self, triggerType, **args):
@@ -119,7 +136,9 @@ class TriggersManager():
             self.deactivateTrigger(triggerType)
         params = dict(args) if args is not None else {}
         params['type'] = triggerType
-        self.__pendingManualTriggers[triggerType] = (True, params)
+        if triggerType not in self.__pendingManualTriggers:
+            self.__pendingManualTriggers[triggerType] = []
+        self.__pendingManualTriggers[triggerType].append((True, params))
         return
 
     def deactivateTrigger(self, triggerType):
@@ -145,14 +164,15 @@ class TriggersManager():
             camDir = BigWorld.camera().direction
             vehicle = BigWorld.entities.get(player.playerVehicleID)
             try:
-                for type, (isTwoState, args) in self.__pendingManualTriggers.iteritems():
-                    params = dict(args)
-                    params['type'] = type
-                    for listener in self.__listeners:
-                        listener.onTriggerActivated(params)
+                for type, data in self.__pendingManualTriggers.iteritems():
+                    for isTwoState, args in data:
+                        params = dict(args)
+                        params['type'] = type
+                        for listener in self.__listeners:
+                            listener.onTriggerActivated(params)
 
-                    if isTwoState:
-                        self.__activeManualTriggers[type] = params
+                        if isTwoState:
+                            self.__activeManualTriggers[type] = params
 
                 self.__pendingManualTriggers = {}
                 for id, params in self.__autoTriggers.iteritems():
@@ -161,13 +181,23 @@ class TriggersManager():
                     distance = -1.0
                     type = params['type']
                     if type == TRIGGER_TYPE.AREA and vehicle is not None:
-                        triggerRadius = params['radius']
-                        if wasActive:
-                            triggerRadius = triggerRadius + params['exitInterval']
-                        offset = vehicle.position - Math.Vector3(params['position'])
-                        offset.y = 0
-                        distance = offset.length
-                        isActive = distance < triggerRadius
+                        scale = Math.Vector3(params['scale'])
+                        if scale == Math.Vector3(1, 1, 1):
+                            triggerRadius = params['radius']
+                            if wasActive:
+                                triggerRadius = triggerRadius + params['exitInterval']
+                            offset = vehicle.position - Math.Vector3(params['position'])
+                            offset.y = 0
+                            distance = offset.length
+                            isActive = distance < triggerRadius
+                        else:
+                            targetMatrix = Math.Matrix()
+                            targetMatrix.setRotateY(-params['direction'].z)
+                            offset = vehicle.position - Math.Vector3(params['position'])
+                            offset.y = 0
+                            offset = targetMatrix.applyPoint(offset)
+                            originalSize = 5.0
+                            isActive = -scale.x * originalSize < offset.x < scale.x * originalSize and -scale.z * originalSize < offset.z < scale.z * originalSize
                     if type == TRIGGER_TYPE.AIM:
                         camToTrigger = Math.Vector3(params['position']) - camPos
                         vehicleToTrigger = Math.Vector3(params['position']) - vehicle.position

@@ -116,7 +116,6 @@ class UnitDataFactory(IDataFactory):
 class CHAT_TYPE(object):
     UNIT = 1
     ARENA = 2
-    CLUB = 3
 
 
 ChannelProtoData = namedtuple('ChannelProtoData', ('chatType', 'settings'))

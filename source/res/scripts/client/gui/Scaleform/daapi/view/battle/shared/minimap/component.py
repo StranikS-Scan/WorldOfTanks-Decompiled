@@ -150,6 +150,19 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
             self.app.component.addChild(self.__component, 'minimap')
             self.__component.mapSize = Math.Vector2(minimap_utils.MINIMAP_SIZE)
             bl, tr = arenaVisitor.type.getBoundingBox()
+            if arenaVisitor.gui.isBootcampBattle():
+                topRightX = tr[0]
+                topRightY = tr[1]
+                bottomLeftX = bl[0]
+                bottomLeftY = bl[1]
+                vSide = topRightX - bottomLeftX
+                hSide = topRightY - bottomLeftY
+                if vSide > hSide:
+                    bl = (bottomLeftX, bottomLeftX)
+                    tr = (topRightX, topRightX)
+                else:
+                    bl = (bottomLeftY, bottomLeftY)
+                    tr = (topRightY, topRightY)
             self.__component.setArenaBB(bl, tr)
             self.as_setBackgroundS(_IMAGE_PATH_FORMATTER.format(arenaVisitor.type.getMinimapTexture()))
             return True

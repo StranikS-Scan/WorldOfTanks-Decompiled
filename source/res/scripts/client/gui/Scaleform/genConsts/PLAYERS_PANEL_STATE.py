@@ -12,3 +12,5 @@ class PLAYERS_PANEL_STATE(object):
     MEDIUM = 2
     LONG = 3
     FULL = 4
+    MEDIUM_NO_BADGES = 7
+    FULL_NO_BADGES = 9

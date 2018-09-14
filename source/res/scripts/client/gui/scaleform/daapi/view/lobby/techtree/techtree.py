@@ -141,6 +141,10 @@ class TechTree(TechTreeMeta):
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp += self.__handleReloadData
         self.setupContextHints(TUTORIAL.RESEARCH_TREE)
+        self._populateAfter()
+
+    def _populateAfter(self):
+        pass
 
     def _dispose(self):
         g_guiResetters.discard(self.__onUpdateStage)
@@ -148,6 +152,10 @@ class TechTree(TechTreeMeta):
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp -= self.__handleReloadData
         super(TechTree, self)._dispose()
+        self._disposeAfter()
+
+    def _disposeAfter(self):
+        pass
 
     def __onUpdateStage(self):
         g_techTreeDP.setOverride(self._getOverride())

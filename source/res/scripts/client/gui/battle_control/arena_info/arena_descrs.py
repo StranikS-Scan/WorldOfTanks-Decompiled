@@ -287,6 +287,14 @@ class FalloutBattlesDescription(ArenaWithLabelDescription):
             return _QuestInfo(i18n.makeString(INGAME_GUI.POTAPOVQUESTS_TIP_NOQUESTS_BATTLETYPE), '', '')
 
 
+class BootcampBattleDescription(ArenaWithLabelDescription):
+    __slots__ = ()
+
+    def getWinString(self, isInBattle=True):
+        lessonId = self._visitor.getArenaExtraData().get('lessonId', 0)
+        return i18n.makeString('#arenas:type/{}/description{}'.format(functions.getArenaSubTypeName(self._visitor.type.getID()), lessonId))
+
+
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui
     if guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle():
@@ -295,6 +303,8 @@ def createDescription(arenaVisitor):
         description = TutorialBattleDescription(arenaVisitor)
     elif guiVisitor.isFalloutBattle():
         description = FalloutBattlesDescription(arenaVisitor)
+    elif guiVisitor.isBootcampBattle():
+        description = BootcampBattleDescription(arenaVisitor)
     elif guiVisitor.hasLabel():
         description = ArenaWithLabelDescription(arenaVisitor)
     else:

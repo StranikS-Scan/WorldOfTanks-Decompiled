@@ -3,7 +3,7 @@
 import nations
 from items import vehicles, ITEM_TYPES
 from account_shared import AmmoIterator
-from constants import PREBATTLE_ACCOUNT_STATE, VEHICLE_CLASSES, ARENA_GUI_TYPE, PREBATTLE_ROLE, PREBATTLE_COMPANY_DIVISION, IGR_TYPE, IS_DEVELOPMENT
+from constants import PREBATTLE_ACCOUNT_STATE, VEHICLE_CLASSES, ARENA_GUI_TYPE, PREBATTLE_ROLE, IGR_TYPE, IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG
 
 def decodeRoster(roster):
@@ -205,7 +205,6 @@ SETTING_DEFAULTS = {'ver': 1,
  'arenaVoipChannels': 0,
  'notifyWeb': False,
  'extraData': {},
- 'division': PREBATTLE_COMPANY_DIVISION.ABSOLUTE,
  'gameplaysMask': 0,
  'vehicleLockMode': 0,
  'vehicleLockTimeFactors': {},

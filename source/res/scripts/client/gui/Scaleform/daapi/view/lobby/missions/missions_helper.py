@@ -3,6 +3,7 @@
 import sys
 import BigWorld
 import constants
+from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CardAwardComposer, DetailedCardAwardComposer
 from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.prebattle import MissionsPreBattleConditionsFormatter
@@ -11,7 +12,8 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.server_events.events_helpers import EVENT_STATUS, QuestInfoModel, AWARDS_PER_PAGE, AWARDS_PER_SINGLE_PAGE
+from gui.server_events.conditions import GROUP_TYPE
+from gui.server_events.events_helpers import EVENT_STATUS, QuestInfoModel, AWARDS_PER_SINGLE_PAGE
 from gui.server_events.formatters import isMarathon, DECORATION_SIZES
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
@@ -263,7 +265,7 @@ class _MissionInfo(QuestInfoModel):
         Data used in mission card to display its regular state.
         """
         statusTooltipData = None
-        timerMsg = self.getTimerMsg()
+        timerMsg = self.getTimerMsg('comeToEndInMinutesSeparated')
         if isLimited:
             isDaily = self.event.bonusCond.isDaily()
             statusLabel = text_styles.standard(_ms(_getDailyLimitedStatusKey(isDaily), count=text_styles.stats(bonusCount), total=text_styles.standard(bonusLimit)))
@@ -433,6 +435,9 @@ class _DetailedMissionInfo(_MissionInfo):
         """
         conds = self.event.vehicleReqs.getConditions()
         extraConditions = []
+        if conds.type == GROUP_TYPE.OR:
+            LOG_WARNING('OR group is not supported in vehicle section')
+            return (REQ_CRITERIA.DISCLOSABLE, [])
         cond = conds.find('vehicleDescr') or conds.find('premiumVehicle')
         if cond:
             criteria = cond.getFilterCriteria(cond.getData())
@@ -652,7 +657,7 @@ def getDetailedMissionData(event):
 
 def getAwardsWindowBonuses(bonuses):
     result = AwardsWindowBonusFormatter.getFormattedBonuses(bonuses)
-    while len(result) % AWARDS_PER_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
+    while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
         result.append({})
 
     return result

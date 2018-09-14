@@ -33,44 +33,44 @@ class CybersportSelectedVehicleToolTipData(CybersportToolTipData):
 
 class CybersportSlotToolTipData(CybersportToolTipData):
 
-    def getDisplayableData(self, index, unitIdx=None):
-        if unitIdx is not None:
-            unitIdx = int(unitIdx)
+    def getDisplayableData(self, index, unitMgrID=None):
+        if unitMgrID is not None:
+            unitMgrID = int(unitMgrID)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
             entity = dispatcher.getEntity()
-            return vo_converters.getUnitRosterData(entity, unitIdx, int(index))
+            return vo_converters.getUnitRosterData(entity, unitMgrID, int(index))
         else:
-            super(CybersportSlotToolTipData, self).getDisplayableData(index, unitIdx)
+            super(CybersportSlotToolTipData, self).getDisplayableData(index, unitMgrID)
             return
 
 
 class CybersportSlotSelectedToolTipData(CybersportToolTipData):
 
-    def getDisplayableData(self, index, unitIdx=None):
-        if unitIdx is not None:
-            unitIdx = int(unitIdx)
+    def getDisplayableData(self, index, unitMgrID=None):
+        if unitMgrID is not None:
+            unitMgrID = int(unitMgrID)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
             entity = dispatcher.getEntity()
-            _, unit = entity.getUnit(unitIdx)
+            _, unit = entity.getUnit(unitMgrID)
             accountDBID = unit.getMembers()[index]['accountDBID']
             vehicles = unit.getVehicles()[accountDBID]
             if vehicles:
                 vehicle = self.itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
                 return vo_converters.makeVehicleVO(vehicle, entity.getRosterSettings().getLevelsRange())
-        return super(CybersportSlotSelectedToolTipData, self).getDisplayableData(index, unitIdx)
+        return super(CybersportSlotSelectedToolTipData, self).getDisplayableData(index, unitMgrID)
 
 
 class SquadSlotSelectedToolTipData(CybersportToolTipData):
 
-    def getDisplayableData(self, index, unitIdx=None):
-        if unitIdx is not None:
-            unitIdx = int(unitIdx)
+    def getDisplayableData(self, index, unitMgrID=None):
+        if unitMgrID is not None:
+            unitMgrID = int(unitMgrID)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
             entity = dispatcher.getEntity()
-            _, unit = entity.getUnit(unitIdx)
+            _, unit = entity.getUnit(unitMgrID)
             accountDBID = unit.getMembers()[index]['accountDBID']
             vehicles = unit.getVehicles()[accountDBID]
             if vehicles:

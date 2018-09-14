@@ -208,10 +208,15 @@ class TankmanReturn(Processor):
 class TankmanRetraining(ItemProcessor):
 
     def __init__(self, tankman, vehicle, tmanCostTypeIdx):
+        hasUndistributedExp = False
+        if tmanCostTypeIdx != 2:
+            canLearnSkills, lastSkillLevel = tankman.newSkillCount
+            hasUndistributedExp = lastSkillLevel > 0 or canLearnSkills > 1
         super(TankmanRetraining, self).__init__(tankman, (plugins.VehicleValidator(vehicle, False),
          plugins.TankmanLockedValidator(tankman),
          plugins.VehicleCrewLockedValidator(vehicle),
-         plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory)))
+         plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory),
+         plugins.MessageConfirmator('tankmanRetraining/undistributedExp', ctx={}, isEnabled=hasUndistributedExp)))
         self.vehicle = vehicle
         self.tmanCostTypeIdx = tmanCostTypeIdx
 
@@ -237,10 +242,19 @@ class TankmanRetraining(ItemProcessor):
 class TankmanCrewRetraining(Processor):
 
     def __init__(self, tankmen, vehicle, tmanCostTypeIdx):
+        hasUndistributedExp = False
+        if tmanCostTypeIdx != 2:
+            for tmanInvID in tankmen:
+                canLearnSkills, lastSkillLevel = self.itemsCache.items.getTankman(tmanInvID).newSkillCount
+                hasUndistributedExp = lastSkillLevel > 0 or canLearnSkills > 1
+                if hasUndistributedExp:
+                    break
+
         super(TankmanCrewRetraining, self).__init__((plugins.VehicleValidator(vehicle, False),
          plugins.VehicleCrewLockedValidator(vehicle),
          plugins.GroupOperationsValidator(tankmen, tmanCostTypeIdx),
-         plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory)))
+         plugins.MessageConfirmator('tankmanRetraining/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory),
+         plugins.MessageConfirmator('tankmanRetraining/undistributedExp', ctx={}, isEnabled=hasUndistributedExp)))
         self.tankmen = tankmen
         self.vehicle = vehicle
         self.tmanCostTypeIdx = tmanCostTypeIdx
@@ -377,7 +391,7 @@ class TankmanChangePassport(ItemProcessor):
             price = self.itemsCache.items.shop.passportFemaleChangeCost
         else:
             price = self.itemsCache.items.shop.passportChangeCost
-        super(TankmanChangePassport, self).__init__(tankman, (plugins.TankmanLockedValidator(tankman), plugins.MessageConfirmator('replacePassport/unique' if hasUniqueData else 'replacePassportConfirmation', ctx={Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})))
+        super(TankmanChangePassport, self).__init__(tankman, (plugins.TankmanChangePassportValidator(tankman), plugins.MessageConfirmator('replacePassport/unique' if hasUniqueData else 'replacePassportConfirmation', ctx={Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})))
         self.firstNameID = firstNameID
         self.firstNameGroup = firstNameGroup
         self.lastNameID = lastNameID
@@ -389,7 +403,7 @@ class TankmanChangePassport(ItemProcessor):
         self.price = price
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('replace_tankman/server_error')
+        return makeI18nError('replace_tankman/%s' % errStr, defaultSysMsgKey='replace_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('replace_tankman/success', money=formatPrice(Money(gold=self.price)), type=SM_TYPE.PurchaseForGold)

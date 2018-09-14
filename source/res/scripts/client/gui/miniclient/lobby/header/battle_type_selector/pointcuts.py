@@ -21,12 +21,6 @@ class CommandBattle(_BattleItemSelector):
         _BattleItemSelector.__init__(self, '_addCommandBattleType', (aspects.CommandBattle,))
 
 
-class SortieBattle(_BattleItemSelector):
-
-    def __init__(self):
-        _BattleItemSelector.__init__(self, '_addSortieBattleType', (aspects.SortieBattle,))
-
-
 class TrainingBattle(_BattleItemSelector):
 
     def __init__(self):
@@ -37,12 +31,6 @@ class SpecialBattle(_BattleItemSelector):
 
     def __init__(self):
         _BattleItemSelector.__init__(self, '_addSpecialBattleType', (aspects.SpecialBattle,))
-
-
-class CompanyBattle(_BattleItemSelector):
-
-    def __init__(self):
-        _BattleItemSelector.__init__(self, '_addCompanyBattleType', (aspects.CompanyBattle,))
 
 
 class FalloutBattle(_BattleItemSelector):

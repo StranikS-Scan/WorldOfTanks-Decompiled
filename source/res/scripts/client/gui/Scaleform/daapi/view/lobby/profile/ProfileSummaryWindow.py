@@ -3,14 +3,12 @@
 import BigWorld
 from adisp import process
 from debug_utils import LOG_ERROR
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from helpers.i18n import makeString as _ms
 from gui.clans.clan_helpers import ClanListener
 from gui.clans.formatters import getClanRoleString
-from gui.shared.fortifications import isStartingScriptDone
 from gui.shared.ClanCache import ClanInfo
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
@@ -35,10 +33,6 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanList
             if clanID != 0:
                 clanInfo = ClanInfo(*clanInfo)
                 shared_events.showClanProfileWindow(clanID, clanInfo.getClanAbbrev())
-        elif self.__isFortClanProfileAvailable():
-            self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
-        else:
-            LOG_ERROR('Fort Clan Profile Statistics is Unavailable for current user profile')
 
     def onClanEmblem32x32Received(self, clanDbID, emblem):
         if emblem:
@@ -64,10 +58,9 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanList
         super(ProfileSummaryWindow, self)._dispose()
 
     def _requestClanInfo(self):
+        isShowClanProfileBtnVisible = False
         if self.clansCtrl.isEnabled():
             isShowClanProfileBtnVisible = True
-        else:
-            isShowClanProfileBtnVisible = self.__isFortClanProfileAvailable()
         clanDBID, clanInfo = self.itemsCache.items.getClanInfo(self._userID)
         if clanInfo is not None:
             clanInfo = ClanInfo(*clanInfo)
@@ -99,6 +92,3 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClanEmblemsHelper, ClanList
          'btnEnabled': btnEnabled,
          'btnVisible': isVisible,
          'btnTooltip': btnTooltip}
-
-    def __isFortClanProfileAvailable(self):
-        return self._databaseID is None and isStartingScriptDone()

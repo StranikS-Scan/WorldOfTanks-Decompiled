@@ -4,7 +4,7 @@ import datetime
 import BigWorld
 from constants import ACCOUNT_ATTR
 from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
-from shared_utils.account_helpers import BattleResultsCache, ClientClubs
+from shared_utils.account_helpers import BattleResultsCache
 from shared_utils.account_helpers import ClientInvitations
 from helpers.time_utils import getCurrentTimestamp
 

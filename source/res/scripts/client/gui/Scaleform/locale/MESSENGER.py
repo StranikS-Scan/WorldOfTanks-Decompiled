@@ -111,7 +111,6 @@ class MESSENGER(object):
     DIALOGS_CONTACTS_TITLE = '#messenger:dialogs/contacts/title'
     DIALOGS_CONTACTS_TREE_FRIENDS = '#messenger:dialogs/contacts/tree/friends'
     DIALOGS_CONTACTS_TREE_CLAN = '#messenger:dialogs/contacts/tree/clan'
-    DIALOGS_CONTACTS_TREE_CLUB = '#messenger:dialogs/contacts/tree/club'
     DIALOGS_CONTACTS_TREE_IGNORED = '#messenger:dialogs/contacts/tree/ignored'
     DIALOGS_CONTACTS_TREE_MUTED = '#messenger:dialogs/contacts/tree/muted'
     DIALOGS_CONTACTS_TREE_FRIENDSHIP_REQUEST = '#messenger:dialogs/contacts/tree/friendship_request'
@@ -184,9 +183,7 @@ class MESSENGER(object):
     DIALOGS_SQUADCHANNEL_HEADERMSG_SQUADFORMATIONRESTRICTION = '#messenger:dialogs/squadChannel/headerMsg/squadFormationRestriction'
     DIALOGS_SQUADCHANNEL_HEADERMSG_EVENTFORMATIONRESTRICTION = '#messenger:dialogs/squadChannel/headerMsg/eventFormationRestriction'
     DIALOGS_SQUADCHANNEL_HEADERMSG_DYNSQUAD = '#messenger:dialogs/squadChannel/headerMsg/dynSquad'
-    DIALOGS_TEAMCHANNEL_CONTEXT_KICKPLAYER = '#messenger:dialogs/teamChannel/context/kickPlayer'
     DIALOGS_BSCHANNEL_CONTEXT_KICKPLAYER = '#messenger:dialogs/bsChannel/context/kickPlayer'
-    DIALOGS_TEAMCHANNEL_BUTTONS_LEAVE = '#messenger:dialogs/teamChannel/buttons/leave'
     DIALOGS_TEAMCHANNEL_BUTTONS_DISMISS = '#messenger:dialogs/teamChannel/buttons/dismiss'
     DIALOGS_TEAMCHANNEL_BUTTONS_INVITE = '#messenger:dialogs/teamChannel/buttons/invite'
     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_OFFLINE = '#messenger:dialogs/squadChannel/tooltips/status/offline'
@@ -360,10 +357,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE_CLAN = '#messenger:serviceChannelMessages/battleResults/fortResource/clan'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE_PLAYER = '#messenger:serviceChannelMessages/battleResults/fortResource/player'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORT_CLAN = '#messenger:serviceChannelMessages/battleResults/fort/clan'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_CLUB_RATING_UP = '#messenger:serviceChannelMessages/battleResults/club/rating/up'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_CLUB_RATING_DOWN = '#messenger:serviceChannelMessages/battleResults/club/rating/down'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_CLUB_DIVISION_NEW = '#messenger:serviceChannelMessages/battleResults/club/division/new'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_CLUB_LEAGUE_NEW = '#messenger:serviceChannelMessages/battleResults/club/league/new'
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/rankEarned'
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKLOST = '#messenger:serviceChannelMessages/battleResults/rankedState/rankLost'
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/stepEarned'
@@ -431,7 +424,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PREMIUMRECEIVEDASGIFT = '#messenger:serviceChannelMessages/premiumReceivedAsGift'
     SERVICECHANNELMESSAGES_ITEMRECEIVEDASGIFT = '#messenger:serviceChannelMessages/itemReceivedAsGift'
     SERVICECHANNELMESSAGES_VEHICLERECEIVEDASGIFT = '#messenger:serviceChannelMessages/vehicleReceivedAsGift'
-    SERVICECHANNELMESSAGES_FORTIFICATIONSTARTUP_TITLE = '#messenger:serviceChannelMessages/fortificationStartUp/title'
     SERVICECHANNELMESSAGES_FORTIFICATIONSTARTUP = '#messenger:serviceChannelMessages/fortificationStartUp'
     SERVICECHANNELMESSAGES_WARESBOUGHTASGOLD = '#messenger:serviceChannelMessages/waresBoughtAsGold'
     SERVICECHANNELMESSAGES_WARESSOLDASGOLD = '#messenger:serviceChannelMessages/waresSoldAsGold'
@@ -472,6 +464,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_REPAIR = '#messenger:serviceChannelMessages/sysMsg/titles/repair'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_CUSTOMIZATION = '#messenger:serviceChannelMessages/sysMsg/titles/customization'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PRIMETIME = '#messenger:serviceChannelMessages/sysMsg/titles/primeTime'
+    SERVICECHANNELMESSAGES_SYSMSG_TITLES_RANKEDBATTLESAVAILABLE = '#messenger:serviceChannelMessages/sysMsg/titles/rankedBattlesAvailable'
     SERVICECHANNELMESSAGES_PREBATTLE_BATTLETYPE_TOURNAMENT = '#messenger:serviceChannelMessages/prebattle/battleType/tournament'
     SERVICECHANNELMESSAGES_PREBATTLE_BATTLETYPE_CLAN = '#messenger:serviceChannelMessages/prebattle/battleType/clan'
     SERVICECHANNELMESSAGES_PREBATTLE_BATTLETYPE_PREBATTLE = '#messenger:serviceChannelMessages/prebattle/battleType/prebattle'
@@ -530,7 +523,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_FORT_DEF_HOUR_SHUTDOWN = '#messenger:serviceChannelMessages/fort/DEF_HOUR_SHUTDOWN'
     SERVICECHANNELMESSAGES_FORT_RESERVE_ACTIVATED_TITLE = '#messenger:serviceChannelMessages/fort/RESERVE_ACTIVATED/title'
     SERVICECHANNELMESSAGES_FORT_RESERVE_ACTIVATED = '#messenger:serviceChannelMessages/fort/RESERVE_ACTIVATED'
-    SERVICECHANNELMESSAGES_FORT_PERMANENT_RESERVE_ACTIVATED = '#messenger:serviceChannelMessages/fort/PERMANENT_RESERVE_ACTIVATED'
     SERVICECHANNELMESSAGES_FORT_RESERVE_EXPIRED = '#messenger:serviceChannelMessages/fort/RESERVE_EXPIRED'
     SERVICECHANNELMESSAGES_FORT_RESERVE_PRODUCED = '#messenger:serviceChannelMessages/fort/RESERVE_PRODUCED'
     SERVICECHANNELMESSAGES_FORT_STORAGE_OVERFLOW = '#messenger:serviceChannelMessages/fort/STORAGE_OVERFLOW'
@@ -628,7 +620,6 @@ class MESSENGER(object):
     SERVER_ERROR_USER_ROOM_CREATION_WRONG_WORD = '#messenger:server_error/user_room_creation/WRONG_WORD'
     CHAT_ACTION_BROADCAST_UNIT_MESSAGE = '#messenger:chat_action/BROADCAST_UNIT_MESSAGE'
     CHAT_ACTION_BROADCAST_BATTLE_MESSAGE = '#messenger:chat_action/BROADCAST_BATTLE_MESSAGE'
-    CHAT_ACTION_BROADCAST_CLUB_MESSAGE = '#messenger:chat_action/BROADCAST_CLUB_MESSAGE'
     CHAT_ACTION_FIND_USERS_BY_NAME = '#messenger:chat_action/FIND_USERS_BY_NAME'
     CHAT_ACTION_GET_VOIP_CREDENTIALS = '#messenger:chat_action/GET_VOIP_CREDENTIALS'
     CLIENT_ACTION_ADD_FRIEND = '#messenger:client_action/ADD_FRIEND'
@@ -836,7 +827,6 @@ class MESSENGER(object):
      CHAT_ERROR_GENERIC_ERROR)
     CHAT_ACTION_ENUM = (CHAT_ACTION_BROADCAST_UNIT_MESSAGE,
      CHAT_ACTION_BROADCAST_BATTLE_MESSAGE,
-     CHAT_ACTION_BROADCAST_CLUB_MESSAGE,
      CHAT_ACTION_FIND_USERS_BY_NAME,
      CHAT_ACTION_GET_VOIP_CREDENTIALS)
     COMMAND_SUCCESS_ENUM = (COMMAND_SUCCESS_USERBAN, COMMAND_SUCCESS_USERUNBAN)

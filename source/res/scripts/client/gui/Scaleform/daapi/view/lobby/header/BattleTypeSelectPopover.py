@@ -13,17 +13,14 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME, BATTLES_TO_SELECT_RA
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.events import LoadViewEvent
-from gui.shared.fortifications import isStartingScriptDone
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency, time_utils
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.game_control import IRankedBattlesController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     eventsCache = dependency.descriptor(IEventsCache)
-    lobbyContext = dependency.descriptor(ILobbyContext)
     rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, _=None):
@@ -44,17 +41,6 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                 tooltip, isSpecial = self.__getRankedAvailabilityData()
             elif itemData == PREBATTLE_ACTION_NAME.E_SPORT:
                 tooltip = TOOLTIPS.BATTLETYPES_UNIT
-            elif itemData == PREBATTLE_ACTION_NAME.COMPANIES_LIST:
-                tooltip = self.__getCompanyAvailabilityData()
-            elif itemData == PREBATTLE_ACTION_NAME.FORT:
-                if not self.lobbyContext.getServerSettings().isFortsEnabled():
-                    tooltip = TOOLTIPS.BATTLETYPES_FORTIFICATION_DISABLED
-                elif not g_clanCache.isInClan:
-                    tooltip = '#tooltips:fortification/disabled/no_clan'
-                elif not isStartingScriptDone():
-                    tooltip = '#tooltips:fortification/disabled/no_fort'
-                else:
-                    tooltip = TOOLTIPS.BATTLETYPES_FORTIFICATION
             elif itemData == PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST:
                 if not itemIsDisabled:
                     tooltip = TOOLTIPS.BATTLETYPES_STRONGHOLDS
@@ -92,32 +78,6 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
 
     def _dispose(self):
         super(BattleTypeSelectPopover, self)._dispose()
-
-    def __getCompanyAvailabilityData(self):
-        tooltipData = TOOLTIPS.BATTLETYPES_COMPANY
-        battle = self.eventsCache.getCompanyBattles()
-        header = i18n.makeString(tooltipData + '/header')
-        body = i18n.makeString(tooltipData + '/body')
-        serversList = []
-        if battle.isValid() and battle.isDestroyingTimeCorrect():
-            for peripheryID in battle.peripheryIDs:
-                host = g_preDefinedHosts.periphery(peripheryID)
-                if host is not None:
-                    serversList.append(host.name)
-
-            beginDate = ''
-            endDate = ''
-            serversString = ''
-            if battle.startTime is not None:
-                beginDate = i18n.makeString(TOOLTIPS.BATTLETYPES_AVAILABLETIME_SINCE, beginDate=BigWorld.wg_getShortDateFormat(battle.startTime))
-            if battle.finishTime is not None:
-                endDate = i18n.makeString(TOOLTIPS.BATTLETYPES_AVAILABLETIME_UNTIL, endDate=BigWorld.wg_getShortDateFormat(battle.finishTime))
-            if serversList:
-                serversString = i18n.makeString(TOOLTIPS.BATTLETYPES_AVAILABLETIME_SERVERS, servers=', '.join(serversList))
-            if beginDate or endDate or serversString:
-                restrictInfo = i18n.makeString(TOOLTIPS.BATTLETYPES_AVAILABLETIME, since=beginDate, until=endDate, servers=serversString)
-                body = '%s\n\n%s' % (body, restrictInfo)
-        return makeTooltip(header, body)
 
     def __getRankedAvailabilityData(self):
         if self.rankedController.isAvailable():

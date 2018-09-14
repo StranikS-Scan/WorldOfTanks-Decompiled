@@ -5,6 +5,7 @@ from collections import defaultdict
 from functools import partial
 import BigWorld
 import Math
+import BattleReplay
 from AvatarInputHandler import aih_constants
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
@@ -426,7 +427,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
 
 
 class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController):
-    __slots__ = ('__playerVehicleID', '__isObserver', '__aoiToFarCallbacksIDs', '__destroyCallbacksIDs', '__flags', '__showDestroyEntries', '__isDestroyImmediately', '__destroyDuration', '__isSPG')
+    __slots__ = ('__playerVehicleID', '__isObserver', '__aoiToFarCallbacksIDs', '__destroyCallbacksIDs', '__flags', '__showDestroyEntries', '__isDestroyImmediately', '__destroyDuration', '__isSPG', '__replayRegistrator')
 
     def __init__(self, parent):
         super(ArenaVehiclesPlugin, self).__init__(parent, clazz=entries.VehicleEntry)
@@ -439,6 +440,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         self.__showDestroyEntries = GUI_SETTINGS.showMinimapDeath
         self.__isDestroyImmediately = GUI_SETTINGS.permanentMinimapDeath
         self.__destroyDuration = GUI_SETTINGS.minimapDeathDuration / 1000.0
+        self.__replayRegistrator = _ReplayRegistrator()
         if self.__showDestroyEntries and not self.__isDestroyImmediately and not self.__destroyDuration:
             self.__isDestroyImmediately = False
             LOG_WARNING('Gui setting permanentMinimapDeath is ignored because setting minimapDeathDuration is incorrect', self.__destroyDuration)
@@ -684,9 +686,10 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__setInAoI(entry, True)
             self.__setActive(entry, True)
             animation = self.__getSpottedAnimation(entry, isSpotted)
-            if animation:
+            if animation and self.__replayRegistrator.validateShowVehicle(vehicleID):
                 self.__playSpottedSound(entry)
                 self._invoke(entry.getID(), 'setAnimation', animation)
+                self.__replayRegistrator.registerShowVehicle(vehicleID)
             return
 
     def __hideVehicle(self, entry):
@@ -699,6 +702,13 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             isDeactivate = True
         self.__setInAoI(entry, False)
         self.__setLocationAndMatrix(entry, VEHICLE_LOCATION.UNDEFINED, matrix)
+        vehicleToHideID = None
+        for vehicleID, savedEntry in self._entries.iteritems():
+            if savedEntry.getID() == entry.getID():
+                vehicleToHideID = vehicleID
+                break
+
+        self.__replayRegistrator.registerHideVehicle(vehicleToHideID)
         if isDeactivate:
             self.__setActive(entry, False)
         return
@@ -891,3 +901,28 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
 
     def __delStaticMarker(self, objectID):
         self._delEntryEx(objectID)
+
+
+class _ReplayRegistrator(object):
+    __lastAppearances = {}
+
+    def registerShowVehicle(self, vehicleID):
+        if self.__isActive():
+            self.__lastAppearances[vehicleID] = self.__getCurrentTime()
+
+    def registerHideVehicle(self, vehicleID):
+        if self.__isActive() and not BattleReplay.g_replayCtrl.rewind:
+            self.__lastAppearances.pop(vehicleID, None)
+        return
+
+    def validateShowVehicle(self, vehicleID):
+        return not (self.__isActive() and vehicleID in self.__lastAppearances and self.__lastAppearances[vehicleID] + 1 < self.__getCurrentTime())
+
+    def __isActive(self):
+        return BattleReplay.g_replayCtrl.isPlaying
+
+    def __getCurrentTime(self):
+        return BattleReplay.g_replayCtrl.currentTime
+
+    def __getVehicleIntervals(self, vehicleID):
+        return self.__lastAppearances.setdefault(vehicleID, [])

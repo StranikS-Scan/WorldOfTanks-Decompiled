@@ -36,9 +36,6 @@ class TechnicalMaintenanceMeta(AbstractWindowView):
         """
         return self.flashObject.as_setEquipment(installed, setup, modules) if self._isDAAPIInited() else None
 
-    def as_onAmmoInstallS(self):
-        return self.flashObject.as_onAmmoInstall() if self._isDAAPIInited() else None
-
     def as_setCreditsS(self, credits):
         return self.flashObject.as_setCredits(credits) if self._isDAAPIInited() else None
 

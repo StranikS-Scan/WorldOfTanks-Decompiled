@@ -5,9 +5,6 @@ from tutorial.control.lobby.context import LobbyBonusesRequester
 
 class ChainsStartReqs(context.StartReqs):
 
-    def isEnabled(self):
-        return True
-
     def prepare(self, ctx):
         ctx.bonusCompleted = game_vars.getTutorialsCompleted()
 

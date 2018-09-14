@@ -21,7 +21,7 @@ class BalancedSquadActionsHandler(RandomSquadActionsHandler):
     def execute(self):
         if self._entity.isCommander():
             func = self._entity
-            fullData = func.getUnitFullData(unitIdx=self._entity.getUnitIdx())
+            fullData = func.getUnitFullData(unitMgrID=func.getID())
             notReadyCount = 0
             for slot in fullData.slotsIterator:
                 slotPlayer = slot.player

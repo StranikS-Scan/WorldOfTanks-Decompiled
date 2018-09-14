@@ -9,9 +9,17 @@ from account_helpers.settings_core.ServerSettingsManager import ServerSettingsMa
 from adisp import process
 from debug_utils import LOG_DEBUG
 from skeletons.account_helpers.settings_core import ISettingsCore
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def _getStunSwitch(lobbyContext=None):
+    return lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+
 
 class SettingsCore(ISettingsCore):
     onSettingsChanged = Event.Event()
+    onSettingsApplied = Event.Event()
 
     def __init__(self):
         super(SettingsCore, self).__init__()
@@ -49,7 +57,9 @@ class SettingsCore(ISettingsCore):
         MARKERS_SETTINGS_STORAGE = settings_storages.MarkersSettingsStorage(self.serverSettings, self)
         MARK_ON_GUN_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.MARKS_ON_GUN)
         FOV_SETTINGS_STORAGE = settings_storages.FOVSettingsStorage(self.serverSettings, self)
-        FEEDBACK_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.FEEDBACK)
+        DAMAGE_INDICATOR_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.DAMAGE_INDICATOR)
+        DAMAGE_LOG_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.DAMAGE_LOG)
+        BATTLE_EVENTS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.BATTLE_EVENTS)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
         EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
         self.__storages = {'game': GAME_SETTINGS_STORAGE,
@@ -66,7 +76,9 @@ class SettingsCore(ISettingsCore):
          'marksOnGun': MARK_ON_GUN_SETTINGS_STORAGE,
          'FOV': FOV_SETTINGS_STORAGE,
          'tutorial': TUTORIAL_SETTINGS_STORAGE,
-         'feedback': FEEDBACK_SETTINGS_STORAGE}
+         'damageIndicator': DAMAGE_INDICATOR_SETTINGS_STORAGE,
+         'damageLog': DAMAGE_LOG_SETTINGS_STORAGE,
+         'battleEvents': BATTLE_EVENTS_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
         graphicSettings = tuple(map(lambda settingName: (settingName, options.GraphicSetting(settingName)), BigWorld.generateGfxSettings()))
@@ -196,40 +208,40 @@ class SettingsCore(ISettingsCore):
          (TUTORIAL.REPAIRKIT_USED, options.TutorialSetting(TUTORIAL.REPAIRKIT_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
          (TUTORIAL.FIRE_EXTINGUISHER_USED, options.TutorialSetting(TUTORIAL.FIRE_EXTINGUISHER_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
          (TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, options.TutorialSetting(TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, storage=TUTORIAL_SETTINGS_STORAGE)),
-         (DAMAGE_INDICATOR.TYPE, options.DamageIndicatorTypeSetting(DAMAGE_INDICATOR.TYPE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_INDICATOR.PRESETS, options.DamageIndicatorPresetsSetting(DAMAGE_INDICATOR.PRESETS, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_INDICATOR.DAMAGE_VALUE, options.StorageAccountSetting(DAMAGE_INDICATOR.DAMAGE_VALUE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_INDICATOR.VEHICLE_INFO, options.StorageAccountSetting(DAMAGE_INDICATOR.VEHICLE_INFO, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_INDICATOR.ANIMATION, options.StorageAccountSetting(DAMAGE_INDICATOR.ANIMATION, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_INDICATOR.DYNAMIC_INDICATOR, options.StorageAccountSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_LOG.TOTAL_DAMAGE, options.StorageAccountSetting(DAMAGE_LOG.TOTAL_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_LOG.BLOCKED_DAMAGE, options.StorageAccountSetting(DAMAGE_LOG.BLOCKED_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_LOG.ASSIST_DAMAGE, options.StorageAccountSetting(DAMAGE_LOG.ASSIST_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_LOG.SHOW_DETAILS, options.DamageLogDetailsSetting(DAMAGE_LOG.SHOW_DETAILS, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.SHOW_IN_BATTLE, options.StorageAccountSetting(BATTLE_EVENTS.SHOW_IN_BATTLE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.ENEMY_HP_DAMAGE, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_HP_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.ENEMY_BURNING, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_BURNING, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.ENEMY_RAM_ATTACK, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_RAM_ATTACK, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.BLOCKED_DAMAGE, options.StorageAccountSetting(BATTLE_EVENTS.BLOCKED_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.ENEMY_TRACK_DAMAGE, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_TRACK_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.ENEMY_DETECTION, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_DETECTION, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.ENEMY_KILL, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_KILL, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.BASE_CAPTURE_DROP, options.StorageAccountSetting(BATTLE_EVENTS.BASE_CAPTURE_DROP, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.BASE_CAPTURE, options.StorageAccountSetting(BATTLE_EVENTS.BASE_CAPTURE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.ENEMY_CRITICAL_HIT, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_CRITICAL_HIT, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.EVENT_NAME, options.StorageAccountSetting(BATTLE_EVENTS.EVENT_NAME, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.VEHICLE_INFO, options.StorageAccountSetting(BATTLE_EVENTS.VEHICLE_INFO, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.ENEMY_WORLD_COLLISION, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_WORLD_COLLISION, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.RECEIVED_DAMAGE, options.StorageAccountSetting(BATTLE_EVENTS.RECEIVED_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.RECEIVED_CRITS, options.StorageAccountSetting(BATTLE_EVENTS.RECEIVED_CRITS, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_LOG.SHOW_EVENT_TYPES, options.DamageLogEventTypesSetting(DAMAGE_LOG.SHOW_EVENT_TYPES, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (DAMAGE_LOG.EVENT_POSITIONS, options.DamageLogEventPositionsSetting(DAMAGE_LOG.EVENT_POSITIONS, storage=FEEDBACK_SETTINGS_STORAGE))))
+         (DAMAGE_INDICATOR.TYPE, options.DamageIndicatorTypeSetting(DAMAGE_INDICATOR.TYPE, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.PRESETS, options.DamageIndicatorPresetsSetting(DAMAGE_INDICATOR.PRESETS, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.DAMAGE_VALUE, options.SettingFalseByDefault(DAMAGE_INDICATOR.DAMAGE_VALUE, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.VEHICLE_INFO, options.SettingFalseByDefault(DAMAGE_INDICATOR.VEHICLE_INFO, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.ANIMATION, options.SettingFalseByDefault(DAMAGE_INDICATOR.ANIMATION, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.DYNAMIC_INDICATOR, options.SettingFalseByDefault(DAMAGE_INDICATOR.DYNAMIC_INDICATOR, storage=DAMAGE_INDICATOR_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.TOTAL_DAMAGE, options.SettingFalseByDefault(DAMAGE_LOG.TOTAL_DAMAGE, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.BLOCKED_DAMAGE, options.SettingFalseByDefault(DAMAGE_LOG.BLOCKED_DAMAGE, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.ASSIST_DAMAGE, options.SettingFalseByDefault(DAMAGE_LOG.ASSIST_DAMAGE, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.ASSIST_STUN, options.BattleEventsSetting(DAMAGE_LOG.ASSIST_STUN, storage=DAMAGE_LOG_SETTINGS_STORAGE, callable=_getStunSwitch)),
+         (DAMAGE_LOG.SHOW_DETAILS, options.DamageLogDetailsSetting(DAMAGE_LOG.SHOW_DETAILS, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.SHOW_EVENT_TYPES, options.DamageLogEventTypesSetting(DAMAGE_LOG.SHOW_EVENT_TYPES, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.EVENT_POSITIONS, options.DamageLogEventPositionsSetting(DAMAGE_LOG.EVENT_POSITIONS, storage=DAMAGE_LOG_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.SHOW_IN_BATTLE, options.SettingFalseByDefault(BATTLE_EVENTS.SHOW_IN_BATTLE, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_HP_DAMAGE, options.SettingFalseByDefault(BATTLE_EVENTS.ENEMY_HP_DAMAGE, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_BURNING, options.SettingFalseByDefault(BATTLE_EVENTS.ENEMY_BURNING, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_RAM_ATTACK, options.SettingFalseByDefault(BATTLE_EVENTS.ENEMY_RAM_ATTACK, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.BLOCKED_DAMAGE, options.SettingFalseByDefault(BATTLE_EVENTS.BLOCKED_DAMAGE, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE, options.SettingFalseByDefault(BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_TRACK_DAMAGE, options.SettingFalseByDefault(BATTLE_EVENTS.ENEMY_TRACK_DAMAGE, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_DETECTION, options.SettingFalseByDefault(BATTLE_EVENTS.ENEMY_DETECTION, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_KILL, options.SettingFalseByDefault(BATTLE_EVENTS.ENEMY_KILL, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.BASE_CAPTURE_DROP, options.SettingFalseByDefault(BATTLE_EVENTS.BASE_CAPTURE_DROP, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.BASE_CAPTURE, options.SettingFalseByDefault(BATTLE_EVENTS.BASE_CAPTURE, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_CRITICAL_HIT, options.SettingFalseByDefault(BATTLE_EVENTS.ENEMY_CRITICAL_HIT, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.EVENT_NAME, options.SettingFalseByDefault(BATTLE_EVENTS.EVENT_NAME, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.VEHICLE_INFO, options.SettingFalseByDefault(BATTLE_EVENTS.VEHICLE_INFO, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_WORLD_COLLISION, options.SettingFalseByDefault(BATTLE_EVENTS.ENEMY_WORLD_COLLISION, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.RECEIVED_DAMAGE, options.SettingFalseByDefault(BATTLE_EVENTS.RECEIVED_DAMAGE, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.RECEIVED_CRITS, options.SettingFalseByDefault(BATTLE_EVENTS.RECEIVED_CRITS, storage=BATTLE_EVENTS_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_ASSIST_STUN, options.BattleEventsSetting(BATTLE_EVENTS.ENEMY_ASSIST_STUN, storage=BATTLE_EVENTS_SETTINGS_STORAGE, callable=_getStunSwitch))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         self.interfaceScale.init()
-        overrideSetting = self.options.getSetting(settings_constants.GRAPHICS.VIDEO_MODE)
-        BigWorld.wg_setSavePreferencesCallback(overrideSetting._savePrefsCallback)
         LOG_DEBUG('SettingsCore is created')
 
     def fini(self):
@@ -289,6 +301,7 @@ class SettingsCore(ISettingsCore):
 
     def applySettings(self, diff):
         self.__options.apply(diff)
+        self.onSettingsApplied(diff)
         from account_helpers.settings_core import settings_constants
         graphicsSettings = {k:v for k, v in diff.iteritems() if k in settings_constants.GRAPHICS.ALL()}
         if graphicsSettings:

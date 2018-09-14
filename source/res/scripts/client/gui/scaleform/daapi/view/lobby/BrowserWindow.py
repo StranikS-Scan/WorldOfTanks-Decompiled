@@ -1,12 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/BrowserWindow.py
+from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserWindowMeta import BrowserWindowMeta
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE
+from helpers import dependency
+from skeletons.gui.game_control import IBrowserController
 
 class BrowserWindow(BrowserWindowMeta):
     __metaclass__ = event_bus_handlers.EventBusListener
+    browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self, ctx=None):
         super(BrowserWindow, self).__init__()
@@ -27,7 +31,13 @@ class BrowserWindow(BrowserWindowMeta):
             viewPy.init(self.__browserID, self.__handlers, self.__alias)
 
     def onWindowClose(self):
+        webBrowser = self.browserCtrl.getBrowser(self.__browserID)
+        if webBrowser is not None:
+            webBrowser.onUserRequestToClose()
+        else:
+            LOG_ERROR('Browser not found. Browser id = "{}"'.format(self.__browserID))
         self.destroy()
+        return
 
     def _populate(self):
         super(BrowserWindow, self)._populate()

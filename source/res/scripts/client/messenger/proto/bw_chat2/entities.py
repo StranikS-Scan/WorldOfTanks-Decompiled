@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/entities.py
 from constants import PREBATTLE_TYPE_NAMES
 from messenger.ext import channel_num_gen
-from messenger.m_constants import PROTO_TYPE, PRIMARY_CHANNEL_ORDER
+from messenger.m_constants import PROTO_TYPE
 from messenger.proto.bw_chat2.wrappers import ChannelProtoData, CHAT_TYPE
 from messenger.proto.entities import ChannelEntity, MemberEntity
 
@@ -20,6 +20,7 @@ class _BWChannelEntity(ChannelEntity):
 
 
 class BWBattleChannelEntity(_BWChannelEntity):
+    """Class of channel entity on arena. It's created for the client only."""
 
     def __init__(self, settings):
         super(BWBattleChannelEntity, self).__init__(CHAT_TYPE.ARENA, settings)
@@ -38,6 +39,7 @@ class BWBattleChannelEntity(_BWChannelEntity):
 
 
 class BWUnitChannelEntity(_BWChannelEntity):
+    """Class of channel entity to unit. It's created for the client only."""
 
     def __init__(self, settings, prbType):
         super(BWUnitChannelEntity, self).__init__(CHAT_TYPE.UNIT, settings)
@@ -59,26 +61,8 @@ class BWUnitChannelEntity(_BWChannelEntity):
         return self._prbType
 
 
-class BWClubChannelEntity(_BWChannelEntity):
-
-    def __init__(self):
-        super(BWClubChannelEntity, self).__init__(CHAT_TYPE.CLUB, None)
-        return
-
-    def getID(self):
-        return channel_num_gen.getClientID4SpecialWindow(channel_num_gen.SPECIAL_CLIENT_WINDOWS.CLUB_CHAT)
-
-    def getName(self):
-        pass
-
-    def getFullName(self):
-        return self.getName()
-
-    def getPrimaryOrder(self):
-        return PRIMARY_CHANNEL_ORDER.CLUB
-
-
 class BWMemberEntity(MemberEntity):
+    """Class of member entity on unit. It's received from prebattle/unit."""
 
     def __init__(self, jid, nickName, status=None):
         super(BWMemberEntity, self).__init__(jid, nickName, status)

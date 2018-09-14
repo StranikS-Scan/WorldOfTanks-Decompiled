@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/events_dispatcher.py
 import weakref
 from collections import namedtuple
+from bootcamp.Bootcamp import g_bootcamp
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -16,7 +17,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.app_loader.decorators import sf_lobby
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, utils
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent
 from helpers import dependency
 from messenger.ext import channel_num_gen
@@ -69,8 +70,9 @@ class EventDispatcher(object):
     def isTrainingLoaded(self):
         return self.__getLoadedEvent() in _LOCKED_SCREENS or self.__loadingEvent in _LOCKED_SCREENS
 
-    def updateUI(self):
+    def updateUI(self, loadedAlias=None):
         self.__fireEvent(events.FightButtonEvent(events.FightButtonEvent.FIGHT_BUTTON_UPDATE))
+        self.__invalidatePrbEntity(loadedAlias)
 
     def loadHangar(self):
         self.__fireLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)
@@ -86,10 +88,6 @@ class EventDispatcher(object):
         self.addTrainingToCarousel(False)
         self.__showTrainingRoom()
 
-    def loadCompany(self):
-        self.addCompanyToCarousel()
-        self.showCompanyWindow()
-
     def loadBattleSessionWindow(self, prbType):
         self.addSpecBattleToCarousel(prbType)
         self.showBattleSessionWindow()
@@ -100,10 +98,6 @@ class EventDispatcher(object):
     def loadUnit(self, prbType):
         self.__addUnitToCarousel(prbType)
         self.showUnitWindow(prbType)
-
-    def loadFort(self, prbType):
-        self.__addFortToCarousel(prbType)
-        self.showFortWindow()
 
     def loadStrongholds(self, prbType):
         self.__addStrongholdsToCarousel(prbType)
@@ -124,6 +118,12 @@ class EventDispatcher(object):
 
     def unloadSandboxQueue(self):
         self.__fireHideEvent(events.HideWindowEvent.HIDE_SANDBOX_QUEUE_DIALOG)
+
+    def loadBootcampQueue(self):
+        self.__fireEvent(events.BootcampEvent(events.BootcampEvent.QUEUE_DIALOG_SHOW))
+
+    def unloadBootcampQueue(self):
+        self.__fireEvent(events.BootcampEvent(events.BootcampEvent.QUEUE_DIALOG_CLOSE))
 
     def removeTrainingFromCarousel(self, isList=True, closeWindow=True):
         clientType = SPECIAL_CLIENT_WINDOWS.TRAINING_LIST if isList else SPECIAL_CLIENT_WINDOWS.TRAINING_ROOM
@@ -149,21 +149,6 @@ class EventDispatcher(object):
             return
         currCarouselItemCtx = _defCarouselItemCtx._replace(label=MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias}, viewType=ViewTypes.LOBBY_SUB, openHandler=handler)
         self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
-
-    def addCompanyToCarousel(self):
-        clientID = self.__getClientIDForCompany()
-        if not clientID:
-            LOG_ERROR('Client ID not found', 'addCompanyToCarousel')
-            return
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=CHAT.CHANNELS_TEAM, criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.COMPANY_WINDOW_PY}, openHandler=self.showCompanyWindow)
-        self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
-
-    def removeCompanyFromCarousel(self, closeWindow=True):
-        clientID = channel_num_gen.getClientID4Prebattle(PREBATTLE_TYPE.COMPANY)
-        if not clientID:
-            LOG_ERROR('Client ID not found', 'removeCompanyFromCarousel')
-            return
-        self.__handleRemoveRequest(clientID, closeWindow=closeWindow)
 
     def addSpecBattleToCarousel(self, prbType):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
@@ -208,16 +193,12 @@ class EventDispatcher(object):
         else:
             self.__fireShowEvent(CYBER_SPORT_ALIASES.CYBER_SPORT_WINDOW_PY)
 
-    def showFortWindow(self):
-        from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-        self.__fireShowEvent(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_ALIAS)
-
     def showStrongholdsWindow(self):
         from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
         self.__fireShowEvent(FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS)
 
     def strongholdsOnTimer(self, data):
-        self.__fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_ON_TIMER, ctx=data), scope=EVENT_BUS_SCOPE.FORT)
+        self.__fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_ON_TIMER, ctx=data), scope=EVENT_BUS_SCOPE.STRONGHOLD)
 
     def showSwitchPeripheryWindow(self, ctx, isModal=True):
         if isModal:
@@ -258,9 +239,6 @@ class EventDispatcher(object):
     def showParentControlNotification(self):
         from gui import DialogsInterface
         DialogsInterface.showDialog(self.gameSession.getParentControlNotificationMeta(), lambda *args: None)
-
-    def showCompanyWindow(self):
-        self.__fireShowEvent(PREBATTLE_ALIASES.COMPANY_WINDOW_PY, self.__getCompanyWindowContext())
 
     def showBattleSessionWindow(self):
         self.__fireShowEvent(PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY)
@@ -380,18 +358,19 @@ class EventDispatcher(object):
     def __getTooltipPrbData(self, tooltipId, label=''):
         return TOOLTIP_PRB_DATA(tooltipId=tooltipId, label=label)._asdict()
 
-    def __getCompanyWindowContext(self):
-        return {'clientID': self.__getClientIDForCompany()}
-
-    def __getClientIDForCompany(self):
-        return channel_num_gen.getClientID4Prebattle(PREBATTLE_TYPE.COMPANY)
+    def __invalidatePrbEntity(self, loadedAlias):
+        if loadedAlias == VIEW_ALIAS.LOBBY_HANGAR and self.__prbDispatcher is not None:
+            entity = self.__prbDispatcher.getEntity()
+            if entity:
+                entity.invalidate()
+        return
 
     def __onViewAddedToContainer(self, _, pyEntity):
         settings = pyEntity.settings
         if settings.event == self.__loadingEvent:
             self.__loadingEvent = None
         if settings.type == ViewTypes.LOBBY_SUB:
-            self.updateUI()
+            self.updateUI(settings.alias)
         return
 
     def __getLoadedEvent(self):
@@ -407,11 +386,6 @@ class EventDispatcher(object):
     def __addUnitToCarousel(self, prbType):
         from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
         self.__addUnitToCarouselCommon(prbType, CYBERSPORT.WINDOW_TITLE, CYBER_SPORT_ALIASES.CYBER_SPORT_WINDOW_PY, lambda : self.showUnitWindow(prbType))
-
-    def __addFortToCarousel(self, prbType):
-        from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-        from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-        self.__addUnitToCarouselCommon(prbType, FORTIFICATIONS.SORTIE_INTROVIEW_TITLE, FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_ALIAS, self.showFortWindow)
 
     def __addStrongholdsToCarousel(self, prbType):
         from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS

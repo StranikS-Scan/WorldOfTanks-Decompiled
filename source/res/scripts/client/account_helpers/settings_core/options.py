@@ -458,6 +458,12 @@ class StorageAccountSetting(StorageDumpSetting):
         return AccountSettings.getSettingsDefault(self.settingName)
 
 
+class SettingFalseByDefault(StorageDumpSetting):
+
+    def getDefaultValue(self):
+        return False
+
+
 class TutorialSetting(StorageDumpSetting):
 
     def getDefaultValue(self):
@@ -547,7 +553,7 @@ class PreferencesSetting(SettingAbstract):
 
     def __init__(self, isPreview=False):
         super(PreferencesSetting, self).__init__(isPreview)
-        BigWorld.wg_setSavePreferencesCallback(self._savePrefsCallback)
+        BigWorld.wg_subscribeToSavePreferences(self._savePrefsCallback)
 
     def _savePrefsCallback(self, prefsRoot):
         pass
@@ -945,7 +951,7 @@ class MonitorSetting(SettingAbstract):
         return result
 
 
-class WindowSizeSetting(SettingAbstract):
+class WindowSizeSetting(PreferencesSetting):
 
     def __init__(self, isPreview=False, storage=None):
         super(WindowSizeSetting, self).__init__(isPreview)
@@ -1008,7 +1014,7 @@ class WindowSizeSetting(SettingAbstract):
 class ResolutionSetting(PreferencesSetting):
 
     def __init__(self, isPreview=False, storage=None):
-        super(PreferencesSetting, self).__init__(isPreview)
+        super(ResolutionSetting, self).__init__(isPreview)
         self._lastSelectedVideoMode = None
         self._storage = weakref.proxy(storage)
         return
@@ -1112,7 +1118,7 @@ class BorderlessSizeSetting(ResolutionSetting):
 class RefreshRateSetting(PreferencesSetting):
 
     def __init__(self, isPreview=False, storage=None):
-        super(PreferencesSetting, self).__init__(isPreview)
+        super(RefreshRateSetting, self).__init__(isPreview)
         self._storage = weakref.proxy(storage)
 
     def _getOptions(self):
@@ -1145,7 +1151,7 @@ class RefreshRateSetting(PreferencesSetting):
 class VideoModeSettings(PreferencesSetting):
 
     def __init__(self, storage):
-        super(PreferencesSetting, self).__init__()
+        super(VideoModeSettings, self).__init__()
         self._storage = weakref.proxy(storage)
         self.__videoMode = self._get()
 
@@ -1182,8 +1188,7 @@ class VideoModeSettings(PreferencesSetting):
         self.__videoMode = value
 
     def _savePrefsCallback(self, prefsRoot):
-        if g_monitorSettings.isMonitorChanged:
-            prefsRoot['devicePreferences'].writeInt('windowMode', self.__videoMode)
+        prefsRoot['devicePreferences'].writeInt('windowMode', self.__videoMode)
 
 
 class VehicleMarkerSetting(StorageAccountSetting):
@@ -2500,3 +2505,13 @@ class DamageLogEventPositionsSetting(GroupSetting):
 
     def getDefaultValue(self):
         pass
+
+
+class BattleEventsSetting(SettingFalseByDefault):
+
+    def __init__(self, settingName, storage, isPreview=False, callable=lambda : True):
+        self.__callable = callable
+        super(BattleEventsSetting, self).__init__(settingName, storage, isPreview)
+
+    def _get(self):
+        return None if not self.__callable() else super(BattleEventsSetting, self)._get()

@@ -22,7 +22,6 @@ from gui.clans.items import formatField
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.text_styles import concatStylesToMultiLine
 from gui.shared.formatters.time_formatters import getTimeLeftStr
-from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.view_helpers import UsersInfoHelper
 from gui.shared.tooltips import efficiency
@@ -33,11 +32,8 @@ from constants import PREBATTLE_TYPE, WG_GAMES, VISIBILITY
 from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import i18n, time_utils, html, int2roman
 from helpers.i18n import makeString as ms, makeString
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from UnitBase import SORTIE_DIVISION
 from gui import g_htmlTemplates, makeHtmlString
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.items.unit_items import SupportedRosterSettings
@@ -363,8 +359,7 @@ class StrongholdTooltipData(ToolTipBaseData):
         return dispatcher.getEntity()
 
     def _getData(self):
-        data = self._getEntity().getStrongholdData()
-        return data
+        return self._getEntity().getStrongholdSettings()
 
 
 class SortieDivisionTooltipData(StrongholdTooltipData):
@@ -373,54 +368,50 @@ class SortieDivisionTooltipData(StrongholdTooltipData):
         super(SortieDivisionTooltipData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
 
     def getDisplayableData(self):
-        data = self._getEntity().getStrongholdData()
-        if data is None:
+        if not self._getEntity().isStrongholdSettingsValid():
             return
+        headerData = self._getEntity().getStrongholdSettings().getHeader()
+        isSortie = self._getEntity().isSortie()
+        minLvl = headerData.getMinLevel()
+        maxLvl = headerData.getMaxLevel()
+        divisLevel = int2roman(minLvl)
+        if maxLvl != minLvl:
+            divisLevel += ' - ' + int2roman(maxLvl)
+        minPlayers = headerData.getMinPlayersCount()
+        maxPlayers = headerData.getMaxPlayersCount()
+        divisPlayers = str(minPlayers)
+        if minPlayers != maxPlayers:
+            divisPlayers += '-' + str(maxPlayers)
+        battleDuration = headerData.getBattleDurationMinutes()
+        minutes = i18n.makeString(FORTIFICATIONS.STRONGHOLDTOOLTIPS_MINUTS)
+        hours = i18n.makeString(FORTIFICATIONS.STRONGHOLDTOOLTIPS_HOURS)
+        battleDurationTime = '%d%s' % (battleDuration, minutes)
+        divisionData = {}
+        level = int2roman(maxLvl)
+        if self._getEntity().isSortie():
+            divisTime = battleDurationTime
+            divisName = i18n.makeString(FORTIFICATIONS.STRONGHOLDTOOLTIPS_SORTIETITLE, level=level)
         else:
-            isSortie = data.isSortie()
-            minLvl, maxLvl = data.getMinLevel(), data.getMaxLevel()
-            divisLevel = fort_formatters.getTextLevel(minLvl)
-            if maxLvl != minLvl:
-                divisLevel += ' - ' + fort_formatters.getTextLevel(maxLvl)
-            minPlayers, maxPlayers = data.getMinPlayerCount(), data.getMaxPlayerCount()
-            divisPlayers = str(minPlayers)
-            if minPlayers != maxPlayers:
-                divisPlayers += '-' + str(maxPlayers)
-            battleDuration = data.getBattleDurationMinuts()
-            minuts = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_MINUTS)
-            hours = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_HOURS)
-            battleDurationTime = '%d%s' % (battleDuration, minuts)
-            divisionData = {}
-            level = fort_formatters.getTextLevel(maxLvl)
-            if data.isSortie():
-                divisTime = battleDurationTime
-                divisName = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_SORTIETITLE, level=level)
+            battleSeriesDurationMinuts = headerData.getBattleSeriesDurationMinuts()
+            battleSeriesDurationHours = headerData.getBattleSeriesDurationHours()
+            if battleSeriesDurationHours >= 1:
+                battleSeriesDurationTime = '%d%s' % (battleSeriesDurationHours, hours)
             else:
-                battleSeriesDurationMinuts = data.getBattleSeriesDurationMinuts()
-                battleSeriesDurationHours = data.getBattleSeriesDurationHours()
-                if battleSeriesDurationHours >= 1:
-                    battleSeriesDurationTime = '%d%s' % (battleSeriesDurationHours, hours)
-                else:
-                    battleSeriesDurationTime = '%d%s' % (battleSeriesDurationMinuts, minuts)
-                divisTime = '%s (%s)' % (battleDurationTime, battleSeriesDurationTime)
-                direction = getDirection(data.getDirection())
-                divisName = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_FORTTITLE, direction=direction)
-            resourceMultiplier = data.getResourceMultiplier()
-            if resourceMultiplier > 1:
-                dailyBonus = 'x%d' % resourceMultiplier
-                divisionData['dailyBonus'] = dailyBonus
-            divisionData['isSortie'] = isSortie
-            divisionData['divisName'] = divisName
-            divisionData['divisLevels'] = divisLevel
-            divisionData['divisLegionnaires'] = str(data.getMaxLegCount())
-            divisionData['divisPlayers'] = divisPlayers
-            divisionData['divisTime'] = divisTime
-            return {'divisions': [divisionData]}
-
-    def __getPlayerLimits(self, divisionType):
-        divisionIndex = SORTIE_DIVISION._ORDER.index(divisionType)
-        division = SupportedRosterSettings.list(PREBATTLE_TYPE.SORTIE)[divisionIndex]
-        return (division.getMinSlots(), division.getMaxSlots())
+                battleSeriesDurationTime = '%d%s' % (battleSeriesDurationMinuts, minutes)
+            divisTime = '%s (%s)' % (battleDurationTime, battleSeriesDurationTime)
+            direction = getDirection(headerData.getDirection())
+            divisName = i18n.makeString(FORTIFICATIONS.STRONGHOLDTOOLTIPS_FORTTITLE, direction=direction)
+        resourceMultiplier = headerData.getIndustrialResourceMultiplier()
+        if resourceMultiplier > 1:
+            dailyBonus = 'x%d' % resourceMultiplier
+            divisionData['dailyBonus'] = dailyBonus
+        divisionData['isSortie'] = isSortie
+        divisionData['divisName'] = divisName
+        divisionData['divisLevels'] = divisLevel
+        divisionData['divisLegionnaires'] = str(headerData.getMaxLegionariesCount())
+        divisionData['divisPlayers'] = divisPlayers
+        divisionData['divisTime'] = divisTime
+        return {'divisions': [divisionData]}
 
     def __getPlayerLimitsStr(self, minCount, maxCount):
         return text_styles.main(str(minCount) + ' - ' + str(maxCount))
@@ -434,51 +425,49 @@ class ReserveTooltipData(StrongholdTooltipData):
     def __init__(self, context):
         super(ReserveTooltipData, self).__init__(context, TOOLTIP_TYPE.RESERVE)
 
-    def __getSelectReason(self, data, reserve, selected):
-        reasonMap = {SUPPORT_TYPE: FORTIFICATIONS.FORT2RESERVE_TOOLTIP_SUPPORTACTIVATION,
-         REQUISITION_TYPE: FORTIFICATIONS.FORT2RESERVE_TOOLTIP_REQUISITIONACTIVATION,
-         HEAVYTRUCKS_TYPE: FORTIFICATIONS.FORT2RESERVE_TOOLTIP_HEAVYTRUCKSACTIVATION}
+    def __getSelectReason(self, reserve, selected):
+        reasonMap = {SUPPORT_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_SUPPORTACTIVATION,
+         REQUISITION_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_REQUISITIONACTIVATION,
+         HEAVYTRUCKS_TYPE: FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_HEAVYTRUCKSACTIVATION}
         if selected:
-            title = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_SELECTED)
+            title = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_SELECTED)
         else:
-            title = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_READYTOSELECT)
+            title = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_READYTOSELECT)
         groupType = reserve.getGroupType()
         reason = i18n.makeString(reasonMap[groupType])
         return (title, reason)
 
     def getDisplayableData(self, *args, **kwargs):
         data = self._getData()
-        if data is None:
-            return
-        else:
-            isLegionary = self._getEntity().getPlayerInfo().isLegionary()
-            toolTipData = {}
-            reserveId = args[0]
-            reserve = data.getReserveById(reserveId)
-            moduleLabel = getReserveNameVO(reserve.getType())
-            infoLevel = '%s %s' % (fort_formatters.getTextLevel(reserve.getLevel()), i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_LEVEL))
-            selected = reserve in data.getSelectedReserves()
-            reserveCount = data.getReserveCount(reserve.getType(), reserve.getLevel())
-            if selected:
-                reserveCount -= 1
-            infoCount = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_INSTORAGE, count=reserveCount)
-            infoDescription1 = '+%s%%' % reserve.getBonusPercent()
-            infoDescription2 = '%s' % reserve.getDescription()
-            infoDescription3 = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_CONDITIONREQUISITION) if reserve.isRequsition() else i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_CONDITION)
-            selected = reserve in data.getSelectedReserves()
-            infoStatus, infoDescription = self.__getSelectReason(data, reserve, selected)
-            toolTipData['moduleLabel'] = moduleLabel
-            toolTipData['infoTitle'] = reserve.getTitle()
-            toolTipData['infoDescription'] = infoDescription
-            toolTipData['level'] = reserve.getLevel()
-            toolTipData['infoLevel'] = infoLevel
-            if not isLegionary:
-                toolTipData['infoCount'] = infoCount
-            toolTipData['infoDescription1'] = infoDescription1
-            toolTipData['infoDescription2'] = infoDescription2
-            toolTipData['infoDescription3'] = infoDescription3
-            toolTipData['infoStatus'] = infoStatus
-            return toolTipData
+        reserves = data.getReserve()
+        isLegionary = self._getEntity().getPlayerInfo().isLegionary()
+        toolTipData = {}
+        reserveId = args[0]
+        reserve = reserves.getReserveById(reserveId)
+        moduleLabel = getReserveNameVO(reserve.getType())
+        infoLevel = '%s %s' % (int2roman(reserve.getLevel()), i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_LEVEL))
+        selected = reserve in reserves.getSelectedReserves()
+        reserveCount = reserves.getReserveCount(reserve.getType(), reserve.getLevel())
+        if selected:
+            reserveCount -= 1
+        infoCount = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_INSTORAGE, count=reserveCount)
+        infoDescription1 = '+%s%%' % reserve.getBonusPercent()
+        infoDescription2 = '%s' % reserve.getDescription()
+        infoDescription3 = i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_CONDITIONREQUISITION) if reserve.isRequsition() else i18n.makeString(FORTIFICATIONS.STRONGHOLDRESERVE_TOOLTIP_CONDITION)
+        selected = reserve in reserves.getSelectedReserves()
+        infoStatus, infoDescription = self.__getSelectReason(reserve, selected)
+        toolTipData['moduleLabel'] = moduleLabel
+        toolTipData['infoTitle'] = reserve.getTitle()
+        toolTipData['infoDescription'] = infoDescription
+        toolTipData['level'] = reserve.getLevel()
+        toolTipData['infoLevel'] = infoLevel
+        if not isLegionary:
+            toolTipData['infoCount'] = infoCount
+        toolTipData['infoDescription1'] = infoDescription1
+        toolTipData['infoDescription2'] = infoDescription2
+        toolTipData['infoDescription3'] = infoDescription3
+        toolTipData['infoStatus'] = infoStatus
+        return toolTipData
 
 
 class MapTooltipData(ToolTipBaseData):
@@ -733,109 +722,6 @@ class ClanCommonInfoTooltipData(ToolTipBaseData):
              'isClanActive': data.isActive()}
 
 
-class ClanInfoTooltipData(ToolTipBaseData, FortViewHelper):
-
-    def __init__(self, context):
-        super(ClanInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
-
-    def getDisplayableData(self, clanDBID):
-        fortCtrl = g_clanCache.fortProvider.getController()
-        isFortFrozen = False
-        if clanDBID is None or clanDBID == g_clanCache.clanDBID:
-            fort = fortCtrl.getFort()
-            fortDossier = fort.getFortDossier()
-            battlesStats = fortDossier.getBattlesStats()
-            isFortFrozen = self._isFortFrozen()
-            clanName, clanMotto, clanTag = g_clanCache.clanName, g_clanCache.clanMotto, g_clanCache.clanTag
-            clanLvl = fort.level if fort is not None else 0
-            homePeripheryID = fort.peripheryID
-            playersAtClan, buildingsNum = len(g_clanCache.clanMembers), len(fort.getBuildingsCompleted())
-            wEfficiencyVal = ProfileUtils.getFormattedWinsEfficiency(battlesStats)
-            combatCount, winsEff, profitEff = battlesStats.getBattlesCount(), ProfileUtils.UNAVAILABLE_SYMBOL if wEfficiencyVal == str(ProfileUtils.UNAVAILABLE_VALUE) else wEfficiencyVal, battlesStats.getProfitFactor()
-            creationTime = fortDossier.getGlobalStats().getCreationTime()
-            defence, vacation, offDay = fort.getDefencePeriod(), fort.getVacationDate(), fort.getLocalOffDay()
-        elif type(clanDBID) in (types.IntType, types.LongType, types.FloatType):
-            clanInfo = fortCtrl.getPublicInfoCache().getItem(clanDBID)
-            if clanInfo is None:
-                LOG_WARNING('Requested clan info is empty', clanDBID)
-                return
-            clanName, clanMotto = clanInfo.getClanName(), clanInfo.getClanMotto()
-            clanMotto = html.escape(clanMotto)
-            clanTag, clanLvl = '[%s]' % clanInfo.getClanAbbrev(), clanInfo.getLevel()
-            homePeripheryID = clanInfo.getHomePeripheryID()
-            playersAtClan, buildingsNum = (None, None)
-            combatCount, profitEff = clanInfo.getBattleCount(), clanInfo.getProfitFactor()
-            creationTime = None
-            timestamp = clanInfo.getAvailability()
-            defHour, defMin = clanInfo.getDefHourFor(timestamp)
-            defenceStart = time_utils.getTimeForLocal(timestamp, defHour, defMin)
-            defenceFinish = defenceStart + time_utils.ONE_HOUR
-            defence = (defenceStart, defenceFinish)
-            offDay = clanInfo.getLocalOffDayFor(timestamp)
-            vacation = clanInfo.getVacationPeriod()
-            winsEff = None
-        else:
-            LOG_WARNING('Invalid clanDBID identifier', clanDBID, type(clanDBID))
-            return
-        topStats = []
-        host = g_preDefinedHosts.periphery(homePeripheryID)
-        if host is not None:
-            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_HOMEPEREPHIRY), host.name))
-        if playersAtClan is not None:
-            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_PLAYERSATCLAN), playersAtClan))
-        if buildingsNum is not None:
-            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_BUILDINGSATFORTIFICATION), buildingsNum))
-        if combatCount is not None:
-            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_FIGHTSFORFORTIFICATION), combatCount))
-        if winsEff is not None:
-            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_WINPERCENTAGE), winsEff))
-        if profitEff is not None:
-            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_PROFITPERCENTAGE), BigWorld.wg_getNiceNumberFormat(profitEff) if profitEff > 0 else ProfileUtils.UNAVAILABLE_SYMBOL))
-        if creationTime is not None:
-            fortCreationData = text_styles.neutral(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPCLANINFO_FORTCREATIONDATE, creationDate=BigWorld.wg_getLongDateFormat(creationTime)))
-        else:
-            fortCreationData = None
-
-        def _makeLabels(stats, itemIdx):
-            return '\n'.join((str(a[itemIdx]) for a in stats))
-
-        infoTexts, protectionHeader = [], ''
-        if defence[0]:
-            if isFortFrozen:
-                protectionHeader = text_styles.error(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSETIMESTOPPED))
-            else:
-                protectionHeader = text_styles.highTitle(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSETIME))
-            if isFortFrozen:
-                formatter = text_styles.disabled
-            else:
-                formatter = text_styles.stats
-            defencePeriodString = i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_PERIOD, startTime=BigWorld.wg_getShortTimeFormat(defence[0]), finishTime=BigWorld.wg_getShortTimeFormat(defence[1]))
-            defencePeriodString = formatter(defencePeriodString)
-            infoTexts.append(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSEHOUR, period=defencePeriodString))
-            if offDay > -1:
-                dayOffString = i18n.makeString('#menu:dateTime/weekDays/full/%d' % (offDay + 1))
-            else:
-                dayOffString = i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_NODAYOFF)
-            dayOffString = formatter(dayOffString)
-            infoTexts.append(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DAYOFF, dayOff=dayOffString))
-            if vacation[0] and vacation[1]:
-                vacationString = i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_PERIOD, startTime=BigWorld.wg_getShortDateFormat(vacation[0]), finishTime=BigWorld.wg_getShortDateFormat(vacation[1]))
-            else:
-                vacationString = i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_NOVACATION)
-            vacationString = formatter(vacationString)
-            infoTexts.append(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_VACATION, period=vacationString))
-        return {'headerText': text_styles.highTitle(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_HEADER, clanTag=clanTag, clanLevel=fort_formatters.getTextLevel(clanLvl))),
-         'fullClanName': text_styles.neutral(clanName),
-         'sloganText': text_styles.standard(clanMotto),
-         'infoDescriptionTopText': text_styles.main(_makeLabels(topStats, 0)),
-         'infoTopText': text_styles.stats(_makeLabels(topStats, 1)),
-         'infoDescriptionBottomText': '',
-         'infoBottomText': '',
-         'protectionHeaderText': protectionHeader,
-         'infoText': makeHtmlString('html_templates:lobby/fortifications/tooltips/defense_description', 'main', {'text': '\n'.join(infoTexts)}),
-         'fortCreationDate': fortCreationData}
-
-
 class ToolTipRefSysDescription(ToolTipBaseData):
     BONUSES_PRIORITY = ('vehicles', 'tankmen', 'credits')
     refSystem = dependency.descriptor(IRefSystemController)
@@ -1013,15 +899,24 @@ class ActionTooltipData(ToolTipBaseData):
         hasRentCompensation = False
         hasPersonalDiscount = False
         rentCompensation = None
-        item = None
         defaultCurrencyType = Currency.GOLD
+        itemName = ''
+        deviceNameType = None
+        deviceName = None
         if type == ACTION_TOOLTIPS_TYPE.ECONOMICS:
             if key == 'freeXPToTManXPRate':
                 defaultCurrencyType = 'freeXp'
         elif type == ACTION_TOOLTIPS_TYPE.RENT:
             item = self.itemsCache.items.getItemByCD(int(key))
+            itemName = '%s/rent/price' % item.name.split(':')[-1]
+            deviceNameType = item.itemTypeID
         elif type == ACTION_TOOLTIPS_TYPE.ITEM:
             item = self.itemsCache.items.getItemByCD(int(key))
+            if item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_COMPONENTS:
+                itemName = '%s/price' % item.name
+            elif item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+                itemName = '%s/%s' % (item.name.split(':')[-1], 'price')
+            deviceNameType = item.itemTypeID
             if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE and isBuying:
                 shop = self.itemsCache.items.shop
                 shopPrice = shop.getItemPrice(item.intCD)
@@ -1046,13 +941,18 @@ class ActionTooltipData(ToolTipBaseData):
         elif type == ACTION_TOOLTIPS_TYPE.CAMOUFLAGE:
             intCD, type = cPickle.loads(key)
             item = self.itemsCache.items.getItemByCD(int(intCD))
+            itemName = '%s/camouflage/priceFactor' % item.name.split(':')[-1]
         elif type == ACTION_TOOLTIPS_TYPE.EMBLEMS:
             group, type = cPickle.loads(key)
-            item = group
+            itemName = '%s/priceFactor' % group
         elif type == ACTION_TOOLTIPS_TYPE.AMMO:
             item = self.itemsCache.items.getItemByCD(int(key))
+            itemName = '%s/price' % item.name
+            deviceNameType = item.itemTypeID
         elif type == ACTION_TOOLTIPS_TYPE.BOOSTER:
             item = self.goodiesCache.getBooster(int(key))
+            itemName = 'booster_%s/price' % item.boosterID
+            deviceNameType = ACTION_TOOLTIPS_TYPE.BOOSTER
         _ms = makeHtmlString
         _template = 'html_templates:lobby/quests/actions'
         _format = BigWorld.wg_getGoldFormat
@@ -1060,46 +960,48 @@ class ActionTooltipData(ToolTipBaseData):
         fmtNewCredits = _ms(_template, Currency.CREDITS, {'value': _format(newPrice.credits)}) if newPrice.credits else ''
         fmtOldGold = _ms(_template, defaultCurrencyType, {'value': _format(oldPrice.gold)}) if oldPrice.gold else ''
         fmtOldCredits = _ms(_template, Currency.CREDITS, {'value': _format(oldPrice.credits)}) if oldPrice.credits else ''
-        if newPrice.isAllSet():
+        if newPrice.isSet(Currency.GOLD) and newPrice.isSet(Currency.CREDITS):
             formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCredits, gold=fmtNewGold)
+        elif newPrice.isSet(Currency.GOLD):
+            formatedNewPrice = fmtNewGold
         else:
-            formatedNewPrice = fmtNewGold if fmtNewGold else fmtNewCredits
-        if oldPrice.isAllSet():
+            formatedNewPrice = fmtNewCredits
+        if oldPrice.isSet(Currency.GOLD) and oldPrice.isSet(Currency.CREDITS):
             formatedOldPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtOldCredits, gold=fmtOldGold)
+        elif oldPrice.isSet(Currency.GOLD):
+            formatedOldPrice = fmtOldGold
         else:
-            formatedOldPrice = fmtOldGold if fmtOldGold else fmtOldCredits
+            formatedOldPrice = fmtOldCredits
         body = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
-        itemName = ''
-        if type == ACTION_TOOLTIPS_TYPE.BOOSTER:
-            itemName = 'booster_{}'.format(item.boosterID)
-        elif item:
-            if item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_COMPONENTS:
-                itemName = item.name
-            if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-                itemName = itemName.split(':')[-1]
-        affectedAction = self.eventsCache.getAffectedAction(itemName)
-        if affectedAction:
-            actionUserName = ''
-            action = self.eventsCache.getActions().get(affectedAction[ACTION_ENTITY_ITEM.ACTION_NAME_IDX])
-            if action:
-                actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAME, actionName=action.getUserName())
-            if type == ACTION_TOOLTIPS_TYPE.BOOSTER:
-                deviceNameType = ACTION_TOOLTIPS_TYPE.BOOSTER
-            else:
-                deviceNameType = item.itemTypeID
-            deviceName = _ITEM_TYPE_TO_TOOLTIP_DICT.get(deviceNameType, '')
-            hasAffectedActions = affectedAction[2]
-            if hasAffectedActions or hasPersonalDiscount:
-                descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_SEVERALACTIONS, deviceName=deviceName, actionName=actionUserName)
-            else:
-                descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, actionName=actionUserName)
+        if itemName:
+            affectedAction = self.eventsCache.getAffectedAction(itemName)
+            if affectedAction:
+                actionUserName = ''
+                action = self.eventsCache.getActions().get(affectedAction[ACTION_ENTITY_ITEM.ACTION_NAME_IDX])
+                if action:
+                    actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAME, actionName=action.getUserName())
+                deviceName = _ITEM_TYPE_TO_TOOLTIP_DICT.get(deviceNameType, '')
+                hasAffectedActions = affectedAction[2]
+                if hasAffectedActions or hasPersonalDiscount:
+                    descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_SEVERALACTIONS, deviceName=deviceName, actionName=actionUserName)
+                else:
+                    descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, actionName=actionUserName)
         if hasPersonalDiscount:
             descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORPERSONALDISCOUNT)
         if hasRentCompensation:
             formattedRentCompensation = makeHtmlString('html_templates:lobby/quests/actions', Currency.GOLD, {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
             descr += '\n' + i18n.makeString(TOOLTIPS.ACTIONPRICE_RENTCOMPENSATION, rentCompensation=formattedRentCompensation)
-        return {'header': i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER),
-         'body': body + '\n' + descr if descr else body}
+        if not isBuying and deviceName is not None:
+            headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_HEADER)
+            bodyText = i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_BODY, deviceName=deviceName) + '\n\n' + body
+        elif not isBuying:
+            headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_CHANGEPRICE_HEADER)
+            bodyText = i18n.makeString(TOOLTIPS.ACTIONPRICE_CHANGEPRICE_BODY) + '\n\n' + body
+        else:
+            headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER)
+            bodyText = descr + '\n\n' + body if descr else body
+        return {'header': headerText,
+         'body': bodyText}
 
 
 class ToolTipFortWrongTime(ToolTipBaseData):
@@ -1172,28 +1074,6 @@ class QuestVehiclesBonusTooltipData(ToolTipBaseData):
             columns = [col1Str, col2Str]
         return {'name': ms(TOOLTIPS.QUESTS_VEHICLESBONUS_TITLE),
          'columns': columns}
-
-
-class FortDivisionTooltipData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(FortDivisionTooltipData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
-
-    def getDisplayableData(self, divisionID, showWarning):
-        if divisionID == FORT_BATTLE_DIVISIONS.ABSOLUTE.divisionID:
-            division = FORT_BATTLE_DIVISIONS.ABSOLUTE
-            divisionType = 'absolute'
-            warning = i18n.makeString('#tooltips:fortDivision/warning/lowBacklog')
-        else:
-            division = FORT_BATTLE_DIVISIONS.CHAMPION
-            divisionType = 'champion'
-            warning = i18n.makeString('#tooltips:fortDivision/warning/forbiddenEquipment')
-        result = {'name': i18n.makeString('#tooltips:fortDivision/%s/header' % divisionType),
-         'descr': i18n.makeString('#tooltips:fortDivision/%s/description' % divisionType),
-         'params': [[i18n.makeString('#tooltips:fortDivision/params/vehicleLevel'), int2roman(1) + ' - ' + int2roman(division.maxVehicleLevel)], [i18n.makeString('#tooltips:fortDivision/params/vehiclesCount'), division.maxCombatants]]}
-        if showWarning:
-            result['warning'] = warning
-        return result
 
 
 class FortSortieTooltipData(ToolTipBaseData):

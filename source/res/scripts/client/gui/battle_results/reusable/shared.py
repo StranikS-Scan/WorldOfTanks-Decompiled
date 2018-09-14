@@ -335,11 +335,6 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
-    def fortResource(self):
-        """Gets total fortified resources."""
-        raise NotImplementedError
-
-    @property
     def xp(self):
         """Gets value of total XP according to vehicles without achievements XP."""
         raise NotImplementedError
@@ -353,7 +348,7 @@ class VehicleDetailedInfo(_VehicleInfo):
     This class can be used for vehicle and comments of properties related to this vehicle.
     Also this class can be used for enemies in the efficiency block and
     comments of properties related to some personal vehicle."""
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_fortResource', '_xp', '_fire')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -386,7 +381,6 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._mileage = 0
         self._capturePoints = 0
         self._droppedCapturePoints = 0
-        self._fortResource = 0
         self._xp = 0
         self._fire = 0
 
@@ -515,10 +509,6 @@ class VehicleDetailedInfo(_VehicleInfo):
         return self._droppedCapturePoints
 
     @property
-    def fortResource(self):
-        return self._fortResource
-
-    @property
     def xp(self):
         return self._xp
 
@@ -560,7 +550,6 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._mileage = vehicleRecords['mileage']
         info._capturePoints = vehicleRecords['capturePoints']
         info._droppedCapturePoints = vehicleRecords['droppedCapturePoints']
-        info._fortResource = vehicleRecords['fortResource']
         info._xp = vehicleRecords['xp'] - vehicleRecords['achievementXP']
         cls._setSharedRecords(info, vehicleRecords)
         return info
@@ -732,10 +721,6 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def droppedCapturePoints(self):
         return self.__accumulate('droppedCapturePoints')
-
-    @property
-    def fortResource(self):
-        return self.__accumulate('fortResource')
 
     @property
     def xp(self):

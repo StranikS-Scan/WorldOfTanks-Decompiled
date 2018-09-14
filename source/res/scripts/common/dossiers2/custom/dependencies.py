@@ -171,21 +171,10 @@ def _set_FORT_SORTIES_STATS_DEPENDENCIES():
      'wins': [_updateSoldierOfFortune]})
 
 
-FORT_MISC_DEPENDENCIES = {}
-
-def _set_FORT_MISC_DEPENDENCIES():
-    global FORT_MISC_DEPENDENCIES
-    FORT_MISC_DEPENDENCIES.update({'fortResourceInSorties': [_updateConquerorMedal],
-     'fortResourceInBattles': [_updateFireAndSword]})
-
-
 FORT_ACHIEVEMENTS_DEPENDENCIES = {}
 
 def _set_FORT_ACHIEVEMENTS_DEPENDENCIES():
-    global FORT_ACHIEVEMENTS_DEPENDENCIES
-    FORT_ACHIEVEMENTS_DEPENDENCIES.update({'wins': [_updateKampfer],
-     'capturedBasesInAttack': [_updateCrusher],
-     'capturedBasesInDefence': [_updateCounterblow]})
+    pass
 
 
 VEH_TYPE_FRAGS_DEPENDENCIES = {}
@@ -913,7 +902,6 @@ def init():
     _set_HISTORICAL_ACHIEVEMENTS_DEPENDENCIES()
     _set_FORT_BATTLES_STATS_DEPENDENCIES()
     _set_FORT_SORTIES_STATS_DEPENDENCIES()
-    _set_FORT_MISC_DEPENDENCIES()
     _set_FORT_ACHIEVEMENTS_DEPENDENCIES()
     _set_CLAN_STATS_DEPENDENCIES()
     _set_CLUB_BATTLES_STAT_DEPENDENCIES()

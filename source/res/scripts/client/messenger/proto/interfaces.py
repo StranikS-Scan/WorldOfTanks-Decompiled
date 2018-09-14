@@ -150,6 +150,21 @@ class IBattleCommandFactory(object):
         return None
 
 
+class IUnitCommandFactory(object):
+    """
+    Interface of factory to create outgoing unit commands.
+    """
+
+    def createByCellIdx(self, cellIdx):
+        """
+        Creates command (decorator) to indicate cell on the minimap.
+        :param cellIdx: integer containing coordinates of cell on the minimap.
+                        It equals row * size + column.
+        :return: instance of OutChatCommand.
+        """
+        return None
+
+
 class IEntityFindCriteria(object):
     """
     Interface of find criteria that uses to find entities in storage.

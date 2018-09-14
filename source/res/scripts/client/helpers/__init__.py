@@ -132,7 +132,7 @@ def isShowStartupVideo():
 
 
 def isIntroVideoSettingChanged(userPrefs=None):
-    userPrefs = userPrefs or Settings.g_instance.userPrefs
+    userPrefs = userPrefs if userPrefs is not None else Settings.g_instance.userPrefs
     import account_shared
     mainVersion = account_shared.getClientMainVersion()
     lastVideoVersion = userPrefs.readString(Settings.INTRO_VIDEO_VERSION, '')
@@ -141,9 +141,10 @@ def isIntroVideoSettingChanged(userPrefs=None):
 
 def writeIntroVideoSetting():
     userPrefs = Settings.g_instance.userPrefs
-    if userPrefs:
+    if userPrefs is not None:
         import account_shared
         userPrefs.writeString(Settings.INTRO_VIDEO_VERSION, account_shared.getClientMainVersion())
+    return
 
 
 def newFakeModel():

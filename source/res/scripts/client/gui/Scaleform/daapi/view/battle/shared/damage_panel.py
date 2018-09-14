@@ -205,7 +205,7 @@ class DamagePanel(DamagePanelMeta):
         return
 
     def _updatePlayerInfo(self, value):
-        result = self.sessionProvider.getCtx().getPlayerFullNameParts(vID=value, showVehShortName=False)
+        result = self.sessionProvider.getCtx().getPlayerFullNameParts(vID=value, showVehShortName=True)
         self.as_setPlayerInfoS(result.playerName, result.clanAbbrev, result.regionCode, result.vehicleName)
 
     def _updateDeviceState(self, value):

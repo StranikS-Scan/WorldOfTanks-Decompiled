@@ -681,11 +681,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.as_setSettingsDamageLogComponentS(isVisible, isColorBlind)
 
     def __isDamageSettingEnabled(self, settingName):
-        if settingName != DAMAGE_LOG.ASSIST_STUN:
-            return self.settingsCore.getSetting(settingName)
-        elif self.__arenaDP is None:
-            return False
-        else:
+        result = self.settingsCore.getSetting(settingName)
+        if settingName == DAMAGE_LOG.ASSIST_STUN and result:
             isSPG = self.__arenaDP.getVehicleInfo(self.__vehStateCtrl.getControllingVehicleID()).isSPG()
-            return isSPG and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
-            return
+            result = isSPG and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+        return result

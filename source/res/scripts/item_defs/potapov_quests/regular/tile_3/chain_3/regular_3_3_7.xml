@@ -7,9 +7,12 @@
       <conditions>
         <postBattle>
           <and>
+            <vehicleDamage>
+              <classes>	SPG	</classes>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleDamage>
             <vehicleKills>
               <classes>	SPG	</classes>
-              <soloAssist></soloAssist>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
           </and>
@@ -31,9 +34,12 @@
       <conditions>
         <postBattle>
           <and>
+            <vehicleDamage>
+              <classes>	SPG	</classes>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleDamage>
             <vehicleKills>
               <classes>	SPG	</classes>
-              <soloAssist></soloAssist>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
             <isAlive></isAlive>

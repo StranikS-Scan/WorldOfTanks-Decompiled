@@ -55,11 +55,20 @@
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <winnerIfExtermination>	1	</winnerIfExtermination>
     </assault2>
+    <bootcamp>
+      <wwmusic></wwmusic>
+      <wwcombatVictory></wwcombatVictory>
+      <wwcombatLose></wwcombatLose>
+      <wwcombatDraw></wwcombatDraw>
+      <roundLength>	900	</roundLength>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+    </bootcamp>
     <sandbox>
       <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
       <battleEndWarningDuration>	5	</battleEndWarningDuration>
       <battleEndingSoonTime>	60	</battleEndingSoonTime>
     </sandbox>
   </gameplayTypes>
-  <preloadSoundBanks>	fort_area.bnk ; hangar_v2.bnk ; ambient.bnk	</preloadSoundBanks>
+  <preloadSoundBanks>	fort_area.bnk ; hangar_v2.bnk	</preloadSoundBanks>
 </_default_.xml>

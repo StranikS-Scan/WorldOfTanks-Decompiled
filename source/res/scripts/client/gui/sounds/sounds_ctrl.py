@@ -65,6 +65,9 @@ class SoundsController(ISoundsController):
         """
         return EnabledStatus.isEnabled(SoundGroups.g_instance.getEnableStatus())
 
+    def setEnvForSpace(self, spaceID, newEnv):
+        return self.__guiAmbients.setEnvForSpace(spaceID, newEnv)
+
     def __onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):
         SOUND_DEBUG('Premium account status changed', isPremium, attrs, premiumExpiryTime)
         self.__setAccountAttrs(restartSounds=True)

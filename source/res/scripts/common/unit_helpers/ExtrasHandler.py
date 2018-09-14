@@ -53,9 +53,6 @@ class ClanBattleExtrasHandler(SimpleExtrasHandler):
     def new(self, initial=None):
         result = {'battleID': 0,
          'scheduleTime': 0,
-         'isBattleRound': 0,
-         'prevBuildNum': 0,
-         'currentBuildNum': 0,
          'roundStart': 0,
          'battleResultList': [],
          'isEnemyReadyForBattle': 0,
@@ -68,61 +65,6 @@ class ClanBattleExtrasHandler(SimpleExtrasHandler):
 
     def updateUnitExtras(self, extras, updateStr):
         self._processor.unpackOps(updateStr)
-
-
-class ClubExtrasHandler(SimpleExtrasHandler):
-
-    def __init__(self, unit=None):
-        self._unit = unit
-
-    def new(self, initial=None):
-        result = {'clubDBID': None,
-         'divisionID': None,
-         'clubName': None,
-         'accDBIDtoRole': None,
-         'isRatedBattle': True,
-         'accDBIDtoClubTimestamp': None,
-         'clubEmblemIDs': None,
-         'mapID': None,
-         'isEnemyReady': False,
-         'isBaseDefence': None,
-         'startTime': None}
-        if initial:
-            result.update(initial)
-        return result
-
-    def reset(self, extras):
-        return {'clubDBID': extras['clubDBID'],
-         'divisionID': extras['divisionID'],
-         'clubName': extras['clubName'],
-         'accDBIDtoRole': extras['accDBIDtoRole'],
-         'isRatedBattle': extras['isRatedBattle'],
-         'accDBIDtoClubTimestamp': extras['accDBIDtoClubTimestamp'],
-         'clubEmblemIDs': extras['clubEmblemIDs'],
-         'mapID': None,
-         'isEnemyReady': False,
-         'isBaseDefence': None,
-         'startTime': extras['startTime']}
-
-    def updateUnitExtras(self, extras, updateStr):
-        update = cPickle.loads(updateStr)
-        if isinstance(update, tuple):
-            extras[update[0]] = update[1]
-        else:
-            extras.update(update)
-
-
-class SortieExtrasHandler(SimpleExtrasHandler):
-
-    def __init__(self, unit=None):
-        self._unit = unit
-
-    def new(self, initial=None):
-        result = {'clanEquipments': None,
-         'lastEquipRev': 0}
-        if initial:
-            result.update(initial)
-        return result
 
 
 class SquadExtrasHandler(SimpleExtrasHandler):

@@ -390,22 +390,7 @@ def readBonusSection(bonusRange, section, eventType=None):
         return {}
     else:
         bonusReaders = getBonusReaders(bonusRange)
-        bonus = {}
-        if eventType == EVENT_TYPE.FORT_QUEST:
-            for name, sub in section.items():
-                if name.startswith('pack_'):
-                    words = name.split('_')
-                    if len(words) != 2:
-                        raise Exception('Invalid pack format (pack_id, where id between 1 and 10)')
-                    packID = int(words[1])
-                    if not 1 <= packID <= 10:
-                        raise Exception('Invalid pack format (pack_id, where id between 1 and 10)')
-                    if packID in bonus:
-                        raise Exception('Invalid pack. Already defined.')
-                    bonus[packID] = __readBonusSubSection(bonusReaders, bonusRange, sub)
-
-        else:
-            bonus = __readBonusSubSection(bonusReaders, bonusRange, section)
+        bonus = __readBonusSubSection(bonusReaders, bonusRange, section)
         return bonus
 
 

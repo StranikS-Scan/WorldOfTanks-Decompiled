@@ -206,12 +206,10 @@ class VehicleArenaInfoVO(object):
                 invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.PLAYER_STATUS)
         return invalidate
 
-    def updateInvitationStatus(self, invalidate=_INVALIDATE_OP.NONE, include=_DELIVERY_STATUS.NONE, exclude=_DELIVERY_STATUS.NONE, forbidInBattleInvitations=False, forbidInBattleSPGInvitations=False, **kwargs):
+    def updateInvitationStatus(self, invalidate=_INVALIDATE_OP.NONE, include=_DELIVERY_STATUS.NONE, exclude=_DELIVERY_STATUS.NONE, forbidInBattleInvitations=False, **kwargs):
         status = self.invitationDeliveryStatus
         if forbidInBattleInvitations:
             status = _DELIVERY_STATUS.addIfNot(status, _DELIVERY_STATUS.FORBIDDEN_BY_RECEIVER)
-        elif forbidInBattleSPGInvitations:
-            status = _DELIVERY_STATUS.addIfNot(status, _DELIVERY_STATUS.SPG_IS_FORBIDDEN)
         status = _DELIVERY_STATUS.addIfNot(status, include)
         status = _DELIVERY_STATUS.removeIfHas(status, exclude)
         if self.invitationDeliveryStatus ^ status:

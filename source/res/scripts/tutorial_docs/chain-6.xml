@@ -22,7 +22,6 @@
       <post-effects>
         <clear-scene></clear-scene>
         <inactivate>	FreeSlotBought	</inactivate>
-        <inactivate>	ShowCongratulation	</inactivate>
         <run-trigger>	FreeSlotTrigger	</run-trigger>
         <run-trigger>	SimpleDialogTrigger	</run-trigger>
         <run-trigger>	BonusTrigger	</run-trigger>
@@ -33,28 +32,9 @@
             <effect-not-triggered>	TankCarouselHint	</effect-not-triggered>
           </condition>
         </show-hint>
-        <activate>	ShowCongratulation	  <condition>
-            <active>	FreeSlotBought	</active>
-            <inactive>	BonusReceived	</inactive>
-          </condition>
-        </activate>
-        <request-bonus>
-          <condition>
-            <active>	FreeSlotBought	</active>
-            <inactive>	BonusReceived	</inactive>
-          </condition>
-        </request-bonus>
-        <show-award-window>	CongratulationWindow	  <condition>
-            <active>	FreeSlotBought	</active>
-            <active>	BonusReceived	</active>
-            <active>	ShowCongratulation	</active>
-          </condition>
-        </show-award-window>
         <refuse-training>
           <condition>
             <active>	FreeSlotBought	</active>
-            <active>	BonusReceived	</active>
-            <active>	ShowCongratulation	</active>
           </condition>
         </refuse-training>
       </runtime-effects>
@@ -110,16 +90,17 @@
     </trigger>
     <trigger>	FreeSlotTrigger	  <type>	freeSlot	</type>
       <on-effects>
-        <activate>	FreeSlotBought	</activate>
+        <show-award-window>	CongratulationWindow	  <condition>
+            <bonus-not-received>	Chain_6	</bonus-not-received>
+          </condition>
+        </show-award-window>
         <request-bonus>
           <condition>
-            <inactive>	BonusReceived	</inactive>
+            <bonus-not-received>	Chain_6	</bonus-not-received>
           </condition>
         </request-bonus>
+        <activate>	FreeSlotBought	</activate>
       </on-effects>
-      <off-effects>
-        <inactivate>	FreeSlotBought	</inactivate>
-      </off-effects>
     </trigger>
     <trigger>	SimpleDialogTrigger	  <type>	simpleDialog	</type>
       <on-effects></on-effects>

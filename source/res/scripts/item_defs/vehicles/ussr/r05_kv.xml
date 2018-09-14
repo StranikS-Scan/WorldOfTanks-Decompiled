@@ -341,18 +341,52 @@
   <radios>
     <Radio_01_KV>	shared	</Radio_01_KV>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <KV_1>
-        <alpha>	0.13685	</alpha>
-      </KV_1>
-    </chassis>
-    <engines>
-      <Engine_01_KV>
-        <bravo>	132.1601	</bravo>
-      </Engine_01_KV>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Engine_01_KV>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Engine_01_KV>
+      </engines>
+      <chassis>
+        <KV_1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </KV_1>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

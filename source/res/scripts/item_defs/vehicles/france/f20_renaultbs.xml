@@ -522,23 +522,89 @@
     </ER_52>
     <ER_53>	shared	</ER_53>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Renault>
+          <smplEnginePower>	41.23396	</smplEnginePower>
+        </Renault>
+        <Franklin>
+          <smplEnginePower>	105.7281	</smplEnginePower>
+        </Franklin>
+      </engines>
+      <chassis>
+        <Chassis_RenaultBS>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RenaultBS>
+        <Chassis_RenaultBS2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RenaultBS2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_RenaultBS>
-        <alpha>	0.12075	</alpha>
-      </Chassis_RenaultBS>
-      <Chassis_RenaultBS2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_RenaultBS2>
-    </chassis>
-    <engines>
-      <Renault>
-        <bravo>	10.30849	</bravo>
-      </Renault>
-      <Franklin>
-        <bravo>	26.43203	</bravo>
-      </Franklin>
-    </engines>
     <armour>	0.926794616	</armour>
   </clientAdjustmentFactors>
   <effects>

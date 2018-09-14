@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/RETRAIN_CREW.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class RETRAIN_CREW(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     WINDOW_TITLE = '#retrain_crew:window/title'
     LABEL_CREWMEMBERS = '#retrain_crew:label/crewMembers'
     LABEL_ONTHETECHNICS = '#retrain_crew:label/onTheTechnics'

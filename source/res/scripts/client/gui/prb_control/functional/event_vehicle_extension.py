@@ -26,7 +26,7 @@ from debug_utils import LOG_DEBUG
 from gui.prb_control.context import pre_queue_ctx
 from gui.prb_control.prb_getters import isInEventBattlesQueue
 from gui.server_events import g_eventsCache
-_SUPPORTED_FUNCTIONALS = ('RandomQueueFunctional',)
+_SUPPORTED_FUNCTIONALS = ()
 _PATCHED_METHODS = ('init', 'fini')
 _SWITCHED_METHODS = ('isInQueue', '_doQueue', '_doDequeue', '_makeQueueCtxByAction')
 

@@ -350,17 +350,52 @@
   <radios>
     <C45>	shared	</C45>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royce_Griffon>
+          <smplEnginePower>	1004.417	</smplEnginePower>
+        </Rolls_Royce_Griffon>
+      </engines>
+      <chassis>
+        <Chassis_GB13_FV215b>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB13_FV215b>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB13_FV215b>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB13_FV215b>
-    </chassis>
-    <engines>
-      <Rolls_Royce_Griffon>
-        <bravo>	251.1043	</bravo>
-      </Rolls_Royce_Griffon>
-    </engines>
     <armour>	0.935376997	</armour>
   </clientAdjustmentFactors>
   <effects>

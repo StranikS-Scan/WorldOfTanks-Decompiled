@@ -128,6 +128,17 @@ class IngameSoundNotifications(object):
             self.__enabledSoundCategories.remove(category)
             self.__clearQueue(category)
 
+    def isPlaying(self, eventName):
+        for category in ('fx', 'voice'):
+            eventDesc = self.__events[eventName].get(category, None)
+            if eventDesc is not None:
+                activeEvent = self.__activeEvents[category]
+                soundPath = eventDesc['sound']
+                if activeEvent is not None and activeEvent['soundPath'] == soundPath:
+                    return activeEvent['sound'].isPlaying
+
+        return False
+
     def __clearQueue(self, category):
         if self.__activeEvents[category] is not None:
             self.__activeEvents[category] = None

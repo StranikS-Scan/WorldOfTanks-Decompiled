@@ -426,17 +426,52 @@
   <radios>
     <SCR_510M2>	shared	</SCR_510M2>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Licoming_0-435t>
+          <smplEnginePower>	202.998	</smplEnginePower>
+        </Licoming_0-435t>
+      </engines>
+      <chassis>
+        <Chassis_M22_Locust>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.087745	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.087745	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.087745	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.087745	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.087745	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.087745	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M22_Locust>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M22_Locust>
-        <alpha>	0.087745	</alpha>
-      </Chassis_M22_Locust>
-    </chassis>
-    <engines>
-      <Licoming_0-435t>
-        <bravo>	50.7495	</bravo>
-      </Licoming_0-435t>
-    </engines>
     <armour>	0.874393971	</armour>
   </clientAdjustmentFactors>
   <effects>

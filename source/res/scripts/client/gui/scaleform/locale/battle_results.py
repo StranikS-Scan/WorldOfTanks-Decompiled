@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/BATTLE_RESULTS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
+from debug_utils import LOG_WARNING
 
 class BATTLE_RESULTS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     TEAM_SQUADHEADER = '#battle_results:team/squadHeader'
     TEAM_PLAYERHEADER = '#battle_results:team/playerHeader'
     TEAM_TANKHEADER = '#battle_results:team/tankHeader'
@@ -25,16 +23,14 @@ class BATTLE_RESULTS(object):
     TEAM_FALLOUTRESOURCEPOINTS = '#battle_results:team/falloutResourcePoints'
     TEAM_DEATHS = '#battle_results:team/deaths'
     TEAM_TEAMSCORE = '#battle_results:team/teamScore'
-    TEAM_SQUADHEADERNOSORT = TEAM_SQUADHEADER + 'NoSort'
-    TEAM_PLAYERHEADERNOSORT = TEAM_PLAYERHEADER + 'NoSort'
-    TEAM_XPHEADERNOSORT = TEAM_XPHEADER + 'NoSort'
-    TEAM_FRAGHEADERNOSORT = TEAM_FRAGHEADER + 'NoSort'
-    TEAM_DAMAGEHEADERNOSORT = TEAM_DAMAGEHEADER + 'NoSort'
-    TEAM_VICTORYSCORENOSORT = TEAM_VICTORYSCORE + 'NoSort'
-    TEAM_FLAGSNOSORT = TEAM_FLAGS + 'NoSort'
-    TEAM_DEATHSNOSORT = TEAM_DEATHS + 'NoSort'
-    TEAM_STATSBOMBS = '#battle_results:team/statsBombs'
-    TEAM_STATSREPAIR = '#battle_results:team/statsRepair'
+    TEAM_SQUADHEADERNOSORT = '#battle_results:team/squadHeaderNoSort'
+    TEAM_PLAYERHEADERNOSORT = '#battle_results:team/playerHeaderNoSort'
+    TEAM_XPHEADERNOSORT = '#battle_results:team/xpHeaderNoSort'
+    TEAM_FRAGHEADERNOSORT = '#battle_results:team/fragHeaderNoSort'
+    TEAM_DAMAGEHEADERNOSORT = '#battle_results:team/damageHeaderNoSort'
+    TEAM_VICTORYSCORENOSORT = '#battle_results:team/victoryScoreNoSort'
+    TEAM_FLAGSNOSORT = '#battle_results:team/flagsNoSort'
+    TEAM_DEATHSNOSORT = '#battle_results:team/deathsNoSort'
     CYBERSPORT_BTNTOTEAMPROFILE = '#battle_results:cyberSport/btnToTeamProfile'
     CYBERSPORT_POINTS = '#battle_results:cyberSport/points'
     CYBERSPORT_STATUS_WIN = '#battle_results:cyberSport/status/win'
@@ -48,12 +44,6 @@ class BATTLE_RESULTS(object):
     FINISH_CLANBATTLE_REASON_DEF_1WIN = '#battle_results:finish/clanBattle_reason_def/1win'
     FINISH_CLANBATTLE_REASON_DEF_1LOSE = '#battle_results:finish/clanBattle_reason_def/1lose'
     FINISH_CLANBATTLE_REASON_DEF_1TIE = '#battle_results:finish/clanBattle_reason_def/1tie'
-    FINISH_REASON_MARK1_1_2 = '#battle_results:finish/reason_mark1/1_2'
-    FINISH_REASON_MARK1_1_3 = '#battle_results:finish/reason_mark1/1_3'
-    FINISH_REASON_MARK1_1_8 = '#battle_results:finish/reason_mark1/1_8'
-    FINISH_REASON_MARK1_2_2 = '#battle_results:finish/reason_mark1/2_2'
-    FINISH_REASON_MARK1_2_3 = '#battle_results:finish/reason_mark1/2_3'
-    FINISH_REASON_MARK1_2_8 = '#battle_results:finish/reason_mark1/2_8'
     FINISH_REASON_1WIN = '#battle_results:finish/reason/1win'
     FINISH_REASON_1LOSE = '#battle_results:finish/reason/1lose'
     FINISH_REASON_1TIE = '#battle_results:finish/reason/1tie'
@@ -81,7 +71,6 @@ class BATTLE_RESULTS(object):
     COMMON_TOOLTIP_PARAMS_VAL = '#battle_results:common/tooltip/params/val'
     COMMON_TOOLTIP_ASSIST_PART1 = '#battle_results:common/tooltip/assist/part1'
     COMMON_TOOLTIP_ASSIST_PART2 = '#battle_results:common/tooltip/assist/part2'
-    COMMON_TOOLTIP_ASSIST_PART2_WHEEL = '#battle_results:common/tooltip/assist/part2_wheel'
     COMMON_TOOLTIP_ASSIST_TOTAL = '#battle_results:common/tooltip/assist/total'
     COMMON_PROGRESSTITLE = '#battle_results:common/progressTitle'
     COMMON_VEHICLE_RESEARCH = '#battle_results:common/vehicle/research'
@@ -165,48 +154,48 @@ class BATTLE_RESULTS(object):
     COMMON_NOINCOME_ALERT_TEXT = '#battle_results:common/noIncome/alert/text'
     TEAM_STATS_OWNTEAM = '#battle_results:team/stats/ownTeam'
     TEAM_STATS_ENEMYTEAM = '#battle_results:team/stats/enemyTeam'
-    TEAM_PLAYERNUMBER_HEADER = TEAM_PLAYERNUMBER + '/header'
-    TEAM_PLAYERNUMBER_BODY = TEAM_PLAYERNUMBER + '/body'
-    TEAM_SQUADHEADER_HEADER = TEAM_SQUADHEADER + '/header'
-    TEAM_SQUADHEADER_BODY = TEAM_SQUADHEADER + '/body'
-    TEAM_PLAYERHEADER_HEADER = TEAM_PLAYERHEADER + '/header'
-    TEAM_PLAYERHEADER_BODY = TEAM_PLAYERHEADER + '/body'
-    TEAM_TANKHEADER_HEADER = TEAM_TANKHEADER + '/header'
-    TEAM_TANKHEADER_BODY = TEAM_TANKHEADER + '/body'
+    TEAM_PLAYERNUMBER_HEADER = '#battle_results:team/playerNumber/header'
+    TEAM_PLAYERNUMBER_BODY = '#battle_results:team/playerNumber/body'
+    TEAM_SQUADHEADER_HEADER = '#battle_results:team/squadHeader/header'
+    TEAM_SQUADHEADER_BODY = '#battle_results:team/squadHeader/body'
+    TEAM_PLAYERHEADER_HEADER = '#battle_results:team/playerHeader/header'
+    TEAM_PLAYERHEADER_BODY = '#battle_results:team/playerHeader/body'
+    TEAM_TANKHEADER_HEADER = '#battle_results:team/tankHeader/header'
+    TEAM_TANKHEADER_BODY = '#battle_results:team/tankHeader/body'
     TEAM_HEALTHHEADER_HEADER = '#battle_results:team/healthHeader/header'
     TEAM_HEALTHHEADER_BODY = '#battle_results:team/healthHeader/body'
-    TEAM_DAMAGEHEADER_HEADER = TEAM_DAMAGEHEADER + '/header'
-    TEAM_DAMAGEHEADER_BODY = TEAM_DAMAGEHEADER + '/body'
-    TEAM_FRAGHEADER_HEADER = TEAM_FRAGHEADER + '/header'
-    TEAM_FRAGHEADER_BODY = TEAM_FRAGHEADER + '/body'
-    TEAM_XPHEADER_HEADER = TEAM_XPHEADER + '/header'
-    TEAM_XPHEADER_BODY = TEAM_XPHEADER + '/body'
-    TEAM_MEDALHEADER_HEADER = TEAM_MEDALHEADER + '/header'
-    TEAM_MEDALHEADER_BODY = TEAM_MEDALHEADER + '/body'
-    TEAM_RESOURCEHEADER_HEADER = TEAM_RESOURCEHEADER + '/header'
-    TEAM_RESOURCEHEADER_BODY = TEAM_RESOURCEHEADER + '/body'
-    TEAM_DAMAGEANDCONSUMABLESHEADER_HEADER = TEAM_DAMAGEANDCONSUMABLESHEADER + '/header'
-    TEAM_DAMAGEANDCONSUMABLESHEADER_BODY = TEAM_DAMAGEANDCONSUMABLESHEADER + '/body'
-    TEAM_FALLOUTFRAGHEADER_HEADER = TEAM_FALLOUTFRAGHEADER + '/header'
-    TEAM_FALLOUTFRAGHEADER_BODY = TEAM_FALLOUTFRAGHEADER + '/body'
-    TEAM_VICTORYSCORE_HEADER = TEAM_VICTORYSCORE + '/header'
-    TEAM_VICTORYSCORE_BODY = TEAM_VICTORYSCORE + '/body'
-    TEAM_FLAGS_HEADER = TEAM_FLAGS + '/header'
-    TEAM_FLAGS_BODY = TEAM_FLAGS + '/body'
-    TEAM_FALLOUTRESOURCEPOINTS_HEADER = TEAM_FALLOUTRESOURCEPOINTS + '/header'
-    TEAM_FALLOUTRESOURCEPOINTS_BODY = TEAM_FALLOUTRESOURCEPOINTS + '/body'
-    TEAM_DEATHS_HEADER = TEAM_DEATHS + '/header'
-    TEAM_DEATHS_BODY = TEAM_DEATHS + '/body'
-    TEAM_TEAMSCORE_HEADER = TEAM_TEAMSCORE + '/header'
-    TEAM_TEAMSCORE_BODY = TEAM_TEAMSCORE + '/body'
-    TEAM_DAMAGEHEADERNOSORT_HEADER = TEAM_DAMAGEHEADER + 'NoSort/header'
-    TEAM_FRAGHEADERNOSORT_HEADER = TEAM_FRAGHEADER + 'NoSort/header'
-    TEAM_XPHEADERNOSORT_HEADER = TEAM_XPHEADER + 'NoSort/header'
-    TEAM_VICTORYSCORENOSORT_HEADER = TEAM_VICTORYSCORE + 'NoSort/header'
-    TEAM_FLAGSNOSORT_HEADER = TEAM_FLAGS + 'NoSort/header'
-    TEAM_DEATHSNOSORT_HEADER = TEAM_DEATHS + 'NoSort/header'
-    TEAM_SQUADHEADERNOSORT_HEADER = TEAM_SQUADHEADER + 'NoSort/header'
-    TEAM_PLAYERHEADERNOSORT_HEADER = TEAM_PLAYERHEADER + 'NoSort/header'
+    TEAM_DAMAGEHEADER_HEADER = '#battle_results:team/damageHeader/header'
+    TEAM_DAMAGEHEADER_BODY = '#battle_results:team/damageHeader/body'
+    TEAM_FRAGHEADER_HEADER = '#battle_results:team/fragHeader/header'
+    TEAM_FRAGHEADER_BODY = '#battle_results:team/fragHeader/body'
+    TEAM_XPHEADER_HEADER = '#battle_results:team/xpHeader/header'
+    TEAM_XPHEADER_BODY = '#battle_results:team/xpHeader/body'
+    TEAM_MEDALHEADER_HEADER = '#battle_results:team/medalHeader/header'
+    TEAM_MEDALHEADER_BODY = '#battle_results:team/medalHeader/body'
+    TEAM_RESOURCEHEADER_HEADER = '#battle_results:team/resourceHeader/header'
+    TEAM_RESOURCEHEADER_BODY = '#battle_results:team/resourceHeader/body'
+    TEAM_DAMAGEANDCONSUMABLESHEADER_HEADER = '#battle_results:team/damageAndConsumablesHeader/header'
+    TEAM_DAMAGEANDCONSUMABLESHEADER_BODY = '#battle_results:team/damageAndConsumablesHeader/body'
+    TEAM_FALLOUTFRAGHEADER_HEADER = '#battle_results:team/falloutFragHeader/header'
+    TEAM_FALLOUTFRAGHEADER_BODY = '#battle_results:team/falloutFragHeader/body'
+    TEAM_VICTORYSCORE_HEADER = '#battle_results:team/victoryScore/header'
+    TEAM_VICTORYSCORE_BODY = '#battle_results:team/victoryScore/body'
+    TEAM_FLAGS_HEADER = '#battle_results:team/flags/header'
+    TEAM_FLAGS_BODY = '#battle_results:team/flags/body'
+    TEAM_FALLOUTRESOURCEPOINTS_HEADER = '#battle_results:team/falloutResourcePoints/header'
+    TEAM_FALLOUTRESOURCEPOINTS_BODY = '#battle_results:team/falloutResourcePoints/body'
+    TEAM_DEATHS_HEADER = '#battle_results:team/deaths/header'
+    TEAM_DEATHS_BODY = '#battle_results:team/deaths/body'
+    TEAM_TEAMSCORE_HEADER = '#battle_results:team/teamScore/header'
+    TEAM_TEAMSCORE_BODY = '#battle_results:team/teamScore/body'
+    TEAM_DAMAGEHEADERNOSORT_HEADER = '#battle_results:team/damageHeaderNoSort/header'
+    TEAM_FRAGHEADERNOSORT_HEADER = '#battle_results:team/fragHeaderNoSort/header'
+    TEAM_XPHEADERNOSORT_HEADER = '#battle_results:team/xpHeaderNoSort/header'
+    TEAM_VICTORYSCORENOSORT_HEADER = '#battle_results:team/victoryScoreNoSort/header'
+    TEAM_FLAGSNOSORT_HEADER = '#battle_results:team/flagsNoSort/header'
+    TEAM_DEATHSNOSORT_HEADER = '#battle_results:team/deathsNoSort/header'
+    TEAM_SQUADHEADERNOSORT_HEADER = '#battle_results:team/squadHeaderNoSort/header'
+    TEAM_PLAYERHEADERNOSORT_HEADER = '#battle_results:team/playerHeaderNoSort/header'
     TEAM_TEAMRESOURCETOTAL = '#battle_results:team/teamResourceTotal'
     TEAM_TEAMINFLUENCETOTAL = '#battle_results:team/teamInfluenceTotal'
     TEAM_STATS_LABELS_SHOTS = '#battle_results:team/stats/labels_shots'
@@ -234,10 +223,6 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_DEATHS = '#battle_results:team/stats/labels_deaths'
     TEAM_STATS_MILEAGE = '#battle_results:team/stats/mileage'
     TEAM_STATS_CLOSE = '#battle_results:team/stats/close'
-    TEAM_STATSREPAIR_HEADER = TEAM_STATSREPAIR + '/header'
-    TEAM_STATSREPAIR_BODY = TEAM_STATSREPAIR + '/body'
-    TEAM_STATSBOMBS_HEADER = TEAM_STATSBOMBS + '/header'
-    TEAM_STATSBOMBS_BODY = TEAM_STATSBOMBS + '/body'
     DETAILS_STATS = '#battle_results:details/stats'
     DETAILS_CREDITS = '#battle_results:details/credits'
     DETAILS_PREM = '#battle_results:details/prem'
@@ -310,7 +295,6 @@ class BATTLE_RESULTS(object):
      COMMON_TOOLTIP_PARAMS_VAL,
      COMMON_TOOLTIP_ASSIST_PART1,
      COMMON_TOOLTIP_ASSIST_PART2,
-     COMMON_TOOLTIP_ASSIST_PART2_WHEEL,
      COMMON_TOOLTIP_ASSIST_TOTAL,
      COMMON_TOOLTIP_DAMAGE_HEADER,
      COMMON_TOOLTIP_DAMAGE_DESCRIPTION,
@@ -357,13 +341,11 @@ class BATTLE_RESULTS(object):
      COMMON_TOOLTIP_COUNTER_FORENEMY,
      COMMON_TOOLTIP_COUNTER_NOITEMS)
 
-    @staticmethod
-    def common_tooltip(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#battle_results:common/tooltip/%s' % key
-        if outcome not in BATTLE_RESULTS.COMMON_TOOLTIP_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def common_tooltip(cls, key0):
+        outcome = '#battle_results:common/tooltip/{}'.format(key0)
+        if outcome not in cls.COMMON_TOOLTIP_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

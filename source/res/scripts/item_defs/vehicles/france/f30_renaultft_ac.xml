@@ -594,23 +594,89 @@
   <radios>
     <ER_52>	shared	</ER_52>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Renault>
+          <smplEnginePower>	41.23396	</smplEnginePower>
+        </Renault>
+        <Renault_M26_27>
+          <smplEnginePower>	47.57765	</smplEnginePower>
+        </Renault_M26_27>
+      </engines>
+      <chassis>
+        <Chassis_RenaultFT_AC>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RenaultFT_AC>
+        <Chassis_RenaultFT_AC_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RenaultFT_AC_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_RenaultFT_AC>
-        <alpha>	0.1127	</alpha>
-      </Chassis_RenaultFT_AC>
-      <Chassis_RenaultFT_AC_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_RenaultFT_AC_2>
-    </chassis>
-    <engines>
-      <Renault>
-        <bravo>	10.30849	</bravo>
-      </Renault>
-      <Renault_M26_27>
-        <bravo>	11.89441	</bravo>
-      </Renault_M26_27>
-    </engines>
     <armour>	0.887962439	</armour>
   </clientAdjustmentFactors>
   <effects>

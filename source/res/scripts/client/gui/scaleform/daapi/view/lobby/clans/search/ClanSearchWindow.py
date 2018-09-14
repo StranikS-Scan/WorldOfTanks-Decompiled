@@ -7,7 +7,7 @@ from gui.clans.items import ClanCommonData, formatField
 from gui.clans import formatters as clans_fmts
 from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLIENT_CLAN_RESTRICTIONS as _CCR
 from gui.Scaleform.daapi.view.meta.ClanSearchWindowMeta import ClanSearchWindowMeta
-from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
+from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -56,7 +56,8 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
             pass
 
     def search(self, text):
-        if len(text) < self.MIN_CHARS_FOR_SEARCH:
+        symbolsCount = len(text.decode('utf8'))
+        if symbolsCount < self.MIN_CHARS_FOR_SEARCH:
             self._showDummy(True)
             self._setDummyData(CLANS.SEARCH_REQUESTTOOSHORT_HEADER, CLANS.SEARCH_REQUESTTOOSHORT_BODY, None, self.__clanFinder.hasSuccessRequest(), _ms(CLANS.SEARCH_REQUESTTOOSHORT_BUTTON), CLANS.SEARCH_REQUESTTOOSHORT_BUTTON_TOOLTIP_HEADER)
         else:
@@ -195,9 +196,6 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
     def __doSearch(self, text):
         """
         :param text: - search criteria
-        :param getRecommended: - flag determines is need to get recommended clans
-        :type text: str
-        :type getRecommended: bool
         """
         self.as_showWaitingS(WAITING.PREBATTLE_AUTO_SEARCH, {})
         self._searchDP.rebuildList(None)
@@ -216,7 +214,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
         return
 
 
-class _ClanSearchDataProvider(SortableDAAPIDataProvider, ClanEmblemsHelper):
+class _ClanSearchDataProvider(ListDAAPIDataProvider, ClanEmblemsHelper):
 
     def __init__(self):
         super(_ClanSearchDataProvider, self).__init__()
@@ -289,12 +287,6 @@ class _ClanSearchDataProvider(SortableDAAPIDataProvider, ClanEmblemsHelper):
                 item = self._list[index]
                 item['clanInfo']['iconSource'] = 'img://' + self.getMemoryTexturePath(emblem)
                 self.refreshSingleItem(index, item)
-
-    def refreshRandomItems(self, indexes, items):
-        self.flashObject.invalidateItems(indexes, items)
-
-    def refreshSingleItem(self, index, item):
-        self.flashObject.invalidateItem(index, item)
 
     def _rebuildMapping(self):
         pass

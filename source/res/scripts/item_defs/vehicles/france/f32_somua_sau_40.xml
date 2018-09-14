@@ -569,23 +569,89 @@
     </ER_53>
     <ER_56>	shared	</ER_56>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Somua_S-40>
+          <smplEnginePower>	232.6019	</smplEnginePower>
+        </Somua_S-40>
+        <Somua_S-40Bis>
+          <smplEnginePower>	274.8931	</smplEnginePower>
+        </Somua_S-40Bis>
+      </engines>
+      <chassis>
+        <Chassis_Somua_Sau_40>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Somua_Sau_40>
+        <Chassis_Somua_Sau_40_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Somua_Sau_40_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Somua_Sau_40>
-        <alpha>	0.1288	</alpha>
-      </Chassis_Somua_Sau_40>
-      <Chassis_Somua_Sau_40_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Somua_Sau_40_2>
-    </chassis>
-    <engines>
-      <Somua_S-40>
-        <bravo>	58.15046	</bravo>
-      </Somua_S-40>
-      <Somua_S-40Bis>
-        <bravo>	68.72327	</bravo>
-      </Somua_S-40Bis>
-    </engines>
     <armour>	0.857849041	</armour>
   </clientAdjustmentFactors>
   <effects>

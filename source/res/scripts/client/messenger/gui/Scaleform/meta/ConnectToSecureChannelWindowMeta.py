@@ -8,25 +8,13 @@ class ConnectToSecureChannelWindowMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def sendPassword(self, value):
-        """
-        :param value:
-        :return :
-        """
         self._printOverrideError('sendPassword')
 
     def cancelPassword(self):
-        """
-        :return :
-        """
         self._printOverrideError('cancelPassword')
 
     def as_infoMessageS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_infoMessage(value) if self._isDAAPIInited() else None

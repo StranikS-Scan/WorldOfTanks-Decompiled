@@ -2,14 +2,20 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleSellDialog.py
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
+from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.game_control import getRestoreController
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from account_helpers.AccountSettings import AccountSettings
 from gui import SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared import g_itemsCache
-from gui.shared.tooltips import ACTION_TOOLTIPS_STATE, ACTION_TOOLTIPS_TYPE
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.gui_items.processors.vehicle import VehicleSeller
 from gui.shared.gui_items.vehicle_modules import Shell
@@ -17,6 +23,9 @@ from gui.shared.utils import decorators, flashObject2Dict
 from gui.shared.money import Money
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.shared.formatters.tankmen import formatDeletedTankmanStr
+from helpers import int2roman
+from helpers.i18n import makeString as _ms
 
 class VehicleSellDialog(VehicleSellDialogMeta):
 
@@ -48,6 +57,11 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         g_itemsCache.onSyncCompleted += self.__shopResyncHandler
         items = g_itemsCache.items
         vehicle = items.getVehicle(self.vehInvID)
+        sellPrice = vehicle.sellPrice
+        sellForGold = sellPrice.gold > 0
+        priceTextColor = CURRENCIES_CONSTANTS.GOLD_COLOR if sellForGold else CURRENCIES_CONSTANTS.CREDITS_COLOR
+        priceTextValue = _ms(DIALOGS.VEHICLESELLDIALOG_PRICE_SIGN_ADD) + _ms(BigWorld.wg_getIntegralFormat(sellPrice.gold if sellForGold else sellPrice.credits))
+        currencyIcon = CURRENCIES_CONSTANTS.GOLD if sellForGold else CURRENCIES_CONSTANTS.CREDITS
         invVehs = items.getVehicles(REQ_CRITERIA.INVENTORY)
         if vehicle.isPremium or vehicle.level >= 3:
             self.as_visibleControlBlockS(True)
@@ -63,9 +77,30 @@ class VehicleSellDialog(VehicleSellDialogMeta):
                     otherVehsShells.add(shot['shell']['compactDescr'])
 
         vehicleAction = None
-        if vehicle.sellPrice != vehicle.defaultSellPrice:
+        if sellPrice != vehicle.defaultSellPrice:
             vehicleAction = packItemActionTooltipData(vehicle, False)
-        vehicleData = {'intCD': vehicle.intCD,
+        if vehicle.isElite:
+            description = TOOLTIPS.tankcaruseltooltip_vehicletype_elite(vehicle.type)
+        else:
+            description = DIALOGS.vehicleselldialog_vehicletype(vehicle.type)
+        levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(vehicle.level)), text_styles.main(_ms(DIALOGS.VEHICLESELLDIALOG_VEHICLE_LEVEL)))
+        restoreController = getRestoreController()
+        tankmenGoingToBuffer, deletedTankmen = restoreController.getTankmenDeletedBySelling(vehicle)
+        deletedCount = len(deletedTankmen)
+        if deletedCount > 0:
+            recoveryBufferFull = True
+            deletedStr = formatDeletedTankmanStr(deletedTankmen[0])
+            maxCount = restoreController.getMaxTankmenBufferLength()
+            currCount = len(restoreController.getDismissedTankmen())
+            if deletedCount == 1:
+                crewTooltip = text_styles.concatStylesToMultiLine(text_styles.middleTitle(_ms(TOOLTIPS.VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_HEADER)), text_styles.main(_ms(TOOLTIPS.VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_BODY, maxVal=maxCount, curVal=currCount, sourceName=tankmenGoingToBuffer[-1].fullUserName, targetInfo=deletedStr)))
+            else:
+                crewTooltip = text_styles.concatStylesToMultiLine(text_styles.middleTitle(_ms(TOOLTIPS.VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_HEADER)), text_styles.main(_ms(TOOLTIPS.DISMISSTANKMANDIALOG_BUFFERISFULLMULTIPLE_BODY, deletedStr=deletedStr, extraCount=deletedCount - 1, maxCount=maxCount, currCount=currCount)))
+        else:
+            crewTooltip = None
+            recoveryBufferFull = False
+        barracksDropDownData = [{'label': _ms(MENU.BARRACKS_BTNUNLOAD)}, {'label': _ms(MENU.BARRACKS_BTNDISSMISS)}]
+        sellVehicleData = {'intCD': vehicle.intCD,
          'userName': vehicle.userName,
          'icon': vehicle.icon,
          'level': vehicle.level,
@@ -73,13 +108,22 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'isPremium': vehicle.isPremium,
          'type': vehicle.type,
          'nationID': vehicle.nationID,
-         'sellPrice': vehicle.sellPrice,
+         'sellPrice': sellPrice,
+         'priceTextValue': priceTextValue,
+         'priceTextColor': priceTextColor,
+         'currencyIcon': currencyIcon,
          'action': vehicleAction,
          'hasCrew': vehicle.hasCrew,
-         'isRented': vehicle.isRented}
+         'isRented': vehicle.isRented,
+         'description': description,
+         'levelStr': levelStr,
+         'priceLabel': _ms(DIALOGS.VEHICLESELLDIALOG_VEHICLE_EMPTYSELLPRICE),
+         'crewLabel': _ms(DIALOGS.VEHICLESELLDIALOG_CREW_LABEL),
+         'crewTooltip': crewTooltip,
+         'barracksDropDownData': barracksDropDownData,
+         'crewRecoveryBufferFull': recoveryBufferFull}
         onVehicleOptionalDevices = []
         for o in vehicle.optDevices:
-            data = None
             if o is not None:
                 action = None
                 if o.sellPrice != o.defaultSellPrice:
@@ -93,31 +137,29 @@ class VehicleSellDialog(VehicleSellDialogMeta):
                 onVehicleOptionalDevices.append(data)
 
         onVehicleoShells = []
-        for s in vehicle.shells:
-            data = None
-            if s is not None:
+        for shell in vehicle.shells:
+            if shell is not None:
                 action = None
-                if s.sellPrice != s.defaultSellPrice:
-                    action = packItemActionTooltipData(s, False)
-                data = {'intCD': s.intCD,
-                 'count': s.count,
-                 'sellPrice': s.sellPrice,
-                 'userName': s.userName,
-                 'kind': s.type,
-                 'toInventory': s in otherVehsShells or s.isPremium,
+                if shell.sellPrice != shell.defaultSellPrice:
+                    action = packItemActionTooltipData(shell, False)
+                data = {'intCD': shell.intCD,
+                 'count': shell.count,
+                 'sellPrice': shell.sellPrice,
+                 'userName': shell.userName,
+                 'kind': shell.type,
+                 'toInventory': shell in otherVehsShells or shell.isPremium,
                  'action': action}
                 onVehicleoShells.append(data)
 
         onVehicleEquipments = []
-        for e in vehicle.eqs:
-            data = None
-            if e is not None:
+        for equipmnent in vehicle.eqs:
+            if equipmnent is not None:
                 action = None
-                if e.sellPrice != e.defaultSellPrice:
-                    action = packItemActionTooltipData(e, False)
-                data = {'intCD': e.intCD,
-                 'userName': e.userName,
-                 'sellPrice': e.sellPrice,
+                if equipmnent.sellPrice != equipmnent.defaultSellPrice:
+                    action = packItemActionTooltipData(equipmnent, False)
+                data = {'intCD': equipmnent.intCD,
+                 'userName': equipmnent.userName,
+                 'sellPrice': equipmnent.sellPrice,
                  'toInventory': True,
                  'action': action}
                 onVehicleEquipments.append(data)
@@ -151,7 +193,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         settings = self.getDialogSettings()
         isSlidingComponentOpened = settings['isOpened']
         self.as_setDataS({'accountGold': items.stats.gold,
-         'sellVehicleVO': vehicleData,
+         'sellVehicleVO': sellVehicleData,
          'optionalDevicesOnVehicle': onVehicleOptionalDevices,
          'shellsOnVehicle': onVehicleoShells,
          'equipmentsOnVehicle': onVehicleEquipments,

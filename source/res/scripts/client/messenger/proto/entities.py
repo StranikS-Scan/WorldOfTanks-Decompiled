@@ -90,7 +90,7 @@ class ReceivedBattleChatCommand(_ChatCommand):
         result = self._getCommandVehMarker()
         if vehicle:
             mode = 'SPG' if vehicle.vehicleType.classTag == 'SPG' else ''
-        if mode:
+        if mode and result:
             result = '{0:>s}{1:>s}'.format(result, mode)
         return result
 
@@ -452,7 +452,10 @@ class UserEntity(ChatEntity):
         return USER_TAG.FRIEND in self.getTags()
 
     def isIgnored(self):
-        return USER_TAG.IGNORED in self.getTags()
+        return USER_TAG.IGNORED in self.getTags() or self.isTemporaryIgnored()
+
+    def isTemporaryIgnored(self):
+        return USER_TAG.IGNORED_TMP in self.getTags()
 
     def isMuted(self):
         return USER_TAG.MUTED in self.getTags()

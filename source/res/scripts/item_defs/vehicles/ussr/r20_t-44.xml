@@ -811,6 +811,91 @@
     </_9RM>
     <R113>	shared	</R113>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2-44>
+          <smplEnginePower>	592.0775	</smplEnginePower>
+        </V-2-44>
+        <V-2-54>
+          <smplEnginePower>	655.5143	</smplEnginePower>
+        </V-2-54>
+        <V-54-6>
+          <smplEnginePower>	718.9512	</smplEnginePower>
+        </V-54-6>
+      </engines>
+      <chassis>
+        <T-44>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T-44>
+        <T-44Bis>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T-44Bis>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_122mm_D-25-44>
@@ -820,25 +905,6 @@
         <delta>	1.1594202	</delta>
       </_100mm_D10T>
     </guns>
-    <chassis>
-      <T-44>
-        <alpha>	0.1127	</alpha>
-      </T-44>
-      <T-44Bis>
-        <alpha>	0.0966	</alpha>
-      </T-44Bis>
-    </chassis>
-    <engines>
-      <V-2-44>
-        <bravo>	148.0194	</bravo>
-      </V-2-44>
-      <V-2-54>
-        <bravo>	163.8786	</bravo>
-      </V-2-54>
-      <V-54-6>
-        <bravo>	179.7378	</bravo>
-      </V-54-6>
-    </engines>
     <armour>	1.08057228	</armour>
   </clientAdjustmentFactors>
   <effects>

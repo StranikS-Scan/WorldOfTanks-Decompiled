@@ -489,17 +489,52 @@
   <radios>
     <FuG6>	shared	</FuG6>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL45P>
+          <smplEnginePower>	169.165	</smplEnginePower>
+        </Maybach_HL45P>
+      </engines>
+      <chassis>
+        <PzII_ausf_J>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzII_ausf_J>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <PzII_ausf_J>
-        <alpha>	0.1288	</alpha>
-      </PzII_ausf_J>
-    </chassis>
-    <engines>
-      <Maybach_HL45P>
-        <bravo>	42.29124	</bravo>
-      </Maybach_HL45P>
-    </engines>
     <armour>	0.85509112	</armour>
   </clientAdjustmentFactors>
   <effects>

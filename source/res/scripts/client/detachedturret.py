@@ -8,14 +8,16 @@ import material_kinds
 from Math import Matrix
 from ModelHitTester import SegmentCollisionResult
 from VehicleEffects import DamageFromShotDecoder
+from svarog_script.py_component import Component
+from svarog_script.py_component_system import ComponentSystem
 from vehicle_systems import tankStructure
-from vehicle_systems.assembly_utility import ComponentSystem, ComponentDescriptor, Component
 from vehicle_systems.tankStructure import TankPartNames, TankNodeNames
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import EffectsListPlayer, SoundStartParam, SpecialKeyPointNames
 from helpers.bound_effects import ModelBoundEffects
 from items import vehicles
 from constants import SERVER_TICK_LENGTH
+from ProjectileMover import ProjectileAwareEntities
 _MIN_COLLISION_SPEED = 3.5
 
 class DetachedTurret(BigWorld.Entity, ComponentSystem):
@@ -72,11 +74,13 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         self.__isBeingPulledCallback = CallbackDelayer()
         self.__isBeingPulledCallback.delayCallback(self.__checkIsBeingPulled(), self.__checkIsBeingPulled)
         DetachedTurret.allTurrets.append(self)
+        ProjectileAwareEntities.addEntity(self)
         return
 
     def onLeaveWorld(self):
         ComponentSystem.destroy(self)
         DetachedTurret.allTurrets.remove(self)
+        ProjectileAwareEntities.removeEntity(self)
         self.__detachConfirmationTimer.cancel()
         self.__detachConfirmationTimer = None
         self.__isBeingPulledCallback.destroy()
@@ -141,7 +145,7 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
     def __checkIsBeingPulled(self):
         if self.__detachmentEffects is not None:
             if self.isCollidingWithWorld and not self.isUnderWater and self.velocity.lengthSquared > 0.1:
-                extent = Math.Matrix(self.model.bounds).applyVector(Math.Vector3(0.5, 0.5, 0.5)).length
+                extent = Math.Matrix(self.model.getBoundsForRoot()).applyVector(Math.Vector3(0.5, 0.5, 0.5)).length
                 surfaceMaterial = calcSurfaceMaterialNearPoint(self.position, Math.Vector3(0, extent, 0), self.spaceID)
                 self.__detachmentEffects.notifyAboutBeingPulled(True, surfaceMaterial.effectIdx)
                 if surfaceMaterial.matKind == 0:
@@ -202,7 +206,7 @@ class _TurretDetachmentEffects(Component):
             stages, effectsList, _ = self.__detachmentEffectsDesc['collision'][effectMaterialIdx]
             normalizedEnergy = self.__normalizeEnergy(energy)
             dropEnergyParam = SoundStartParam(_TurretDetachmentEffects._DROP_ENERGY_PARAM, normalizedEnergy)
-            BigWorld.player().terrainEffects.addNew(collisionPoint, effectsList, stages, None, soundParams=(dropEnergyParam,))
+            BigWorld.player().terrainEffects.addNew(collisionPoint, effectsList, stages, None, soundParams=[dropEnergyParam])
         if self.__state != self.State.ON_GROUND:
             self.__state = self.State.ON_GROUND
             if not underWater:

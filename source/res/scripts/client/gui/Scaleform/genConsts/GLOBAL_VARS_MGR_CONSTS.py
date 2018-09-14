@@ -7,6 +7,5 @@ class GLOBAL_VARS_MGR_CONSTS(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     BATTLE = 'BATTLE_V2'

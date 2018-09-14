@@ -489,17 +489,52 @@
   <radios>
     <_10RK-26>	shared	</_10RK-26>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-12-6V>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </V-12-6V>
+      </engines>
+      <chassis>
+        <Chassis_R126_Object_730_5>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R126_Object_730_5>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R126_Object_730_5>
-        <alpha>	0.161	</alpha>
-      </Chassis_R126_Object_730_5>
-    </chassis>
-    <engines>
-      <V-12-6V>
-        <bravo>	198.2402	</bravo>
-      </V-12-6V>
-    </engines>
     <armour>	1.084830728	</armour>
   </clientAdjustmentFactors>
   <effects>

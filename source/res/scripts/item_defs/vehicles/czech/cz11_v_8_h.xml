@@ -989,26 +989,92 @@
     </Radiostanice_vz_35>
     <Radiostanice_vz_37>	shared	</Radiostanice_vz_37>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Praga_NR>
+          <smplEnginePower>	237.8883	</smplEnginePower>
+        </Praga_NR>
+        <Praga_V_8_H_Sv>
+          <smplEnginePower>	253.7475	</smplEnginePower>
+        </Praga_V_8_H_Sv>
+        <Praga_V_8_H>
+          <smplEnginePower>	274.8931	</smplEnginePower>
+        </Praga_V_8_H>
+      </engines>
+      <chassis>
+        <Chassis_Cz11_V_8_H>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz11_V_8_H>
+        <Chassis_Cz11_V_8_H_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz11_V_8_H_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Cz11_V_8_H>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Cz11_V_8_H>
-      <Chassis_Cz11_V_8_H_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Cz11_V_8_H_2>
-    </chassis>
-    <engines>
-      <Praga_NR>
-        <bravo>	59.47206	</bravo>
-      </Praga_NR>
-      <Praga_V_8_H_Sv>
-        <bravo>	63.43687	</bravo>
-      </Praga_V_8_H_Sv>
-      <Praga_V_8_H>
-        <bravo>	68.72327	</bravo>
-      </Praga_V_8_H>
-    </engines>
     <armour>	0.82362332	</armour>
   </clientAdjustmentFactors>
   <effects>

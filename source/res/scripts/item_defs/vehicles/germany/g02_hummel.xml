@@ -151,7 +151,7 @@
         <left>	vehicles/german/G02_Hummel/track/left.track	</left>
         <right>	vehicles/german/G02_Hummel/track/right.track	</right>
         <segmentLength>	0.122	</segmentLength>
-        <segmentOffset>	0.149	</segmentOffset>
+        <segmentOffset>	0.084	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -252,14 +252,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxAmplitude>	0.3	</maxAmplitude>
         <maxOffset>	0.3	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1049	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -415,7 +412,7 @@
         <left>	vehicles/german/G02_Hummel/track/left.track	</left>
         <right>	vehicles/german/G02_Hummel/track/right.track	</right>
         <segmentLength>	0.122	</segmentLength>
-        <segmentOffset>	0.149	</segmentOffset>
+        <segmentOffset>	0.089	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -516,14 +513,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxAmplitude>	0.3	</maxAmplitude>
         <maxOffset>	0.3	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1049	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -858,26 +852,92 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_108_TR_R>
+          <smplEnginePower>	264.3203	</smplEnginePower>
+        </Maybach_HL_108_TR_R>
+        <Maybach_HL_120_TRM_112_R>
+          <smplEnginePower>	287.5805	</smplEnginePower>
+        </Maybach_HL_120_TRM_112_R>
+        <Maybach_HL_120_TRM_R>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </Maybach_HL_120_TRM_R>
+      </engines>
+      <chassis>
+        <Hummel_Ausf_1943>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Hummel_Ausf_1943>
+        <Hummel_Ausf_1944>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Hummel_Ausf_1944>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Hummel_Ausf_1943>
-        <alpha>	0.12075	</alpha>
-      </Hummel_Ausf_1943>
-      <Hummel_Ausf_1944>
-        <alpha>	0.1127	</alpha>
-      </Hummel_Ausf_1944>
-    </chassis>
-    <engines>
-      <Maybach_HL_108_TR_R>
-        <bravo>	66.08007	</bravo>
-      </Maybach_HL_108_TR_R>
-      <Maybach_HL_120_TRM_112_R>
-        <bravo>	71.89512	</bravo>
-      </Maybach_HL_120_TRM_112_R>
-      <Maybach_HL_120_TRM_R>
-        <bravo>	79.29608	</bravo>
-      </Maybach_HL_120_TRM_R>
-    </engines>
     <armour>	0.579698456	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -562,28 +562,94 @@
     </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Meadows_HOP>
+          <smplEnginePower>	171.2795	</smplEnginePower>
+        </Meadows_HOP>
+        <Meadows_HOP_OC>
+          <smplEnginePower>	190.3106	</smplEnginePower>
+        </Meadows_HOP_OC>
+      </engines>
+      <chassis>
+        <Chassis_GB57_Alecto>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB57_Alecto>
+        <Chassis_GB57_Alecto_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB57_Alecto_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_25pdr_AT_Field_Gun>
         <delta>	2.173913	</delta>
       </_25pdr_AT_Field_Gun>
     </guns>
-    <chassis>
-      <Chassis_GB57_Alecto>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB57_Alecto>
-      <Chassis_GB57_Alecto_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB57_Alecto_2>
-    </chassis>
-    <engines>
-      <Meadows_HOP>
-        <bravo>	42.81989	</bravo>
-      </Meadows_HOP>
-      <Meadows_HOP_OC>
-        <bravo>	47.57765	</bravo>
-      </Meadows_HOP_OC>
-    </engines>
     <armour>	0.643060845	</armour>
   </clientAdjustmentFactors>
   <effects>

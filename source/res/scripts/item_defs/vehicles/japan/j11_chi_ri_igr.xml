@@ -22,25 +22,17 @@
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/japan/J11_Chi_Ri/Chi_Ri_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
       <armor_1>	75	</armor_1>
-      <armor_2>	75	</armor_2>
+      <armor_2>	50	</armor_2>
       <armor_3>	35	</armor_3>
       <armor_4>	35	</armor_4>
-      <armor_5>	50	</armor_5>
-      <armor_6>	20	</armor_6>
-      <armor_7>	35	</armor_7>
-      <armor_8>	12	</armor_8>
-      <armor_9>	35	</armor_9>
-      <armor_10>	35	</armor_10>
-      <armor_11>	20	</armor_11>
-      <armor_12>	75	</armor_12>
-      <armor_13>	20	</armor_13>
-      <armor_14>	50	</armor_14>
-      <armor_15>	0	</armor_15>
+      <armor_5>	20	</armor_5>
+      <armor_6>	12	</armor_6>
+      <armor_8>	0	</armor_8>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13796	</weight>
@@ -65,11 +57,11 @@
       <pixie>	diesel_large	</pixie>
       <nodes>	HP_Track_Exhaus_1	</nodes>
       <tags>
-        <gasoline>	gas	</gasoline>
+        <gasoline>	gas_large	</gasoline>
       </tags>
     </exhaust>
     <turretPositions>
-      <turret>	-0.00623 0.629199 0.31068	</turret>
+      <turret>	0.000000 0.724157 0.224992	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Hull.model	</collisionModelServer>
@@ -77,8 +69,8 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.183945 0.317259 2.44466	</rayStart>
-        <rayEnd>	0.183945 0.216728 2.0575	</rayEnd>
+        <rayStart>	0.111454 0.494911 2.43289	</rayStart>
+        <rayEnd>	0.111486 0.391939 2.04637	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -126,7 +118,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.65	</textureScale>
+        <textureScale>	-1.58	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -135,6 +127,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.407536	</radius>
+          <syncAngle>	24	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -148,6 +141,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.360329	</radius>
+          <syncAngle>	24	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -161,6 +155,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.407536	</radius>
+          <syncAngle>	24	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -174,6 +169,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.360329	</radius>
+          <syncAngle>	24	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -186,29 +182,142 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
-        <mud>	mediumTankMud	</mud>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.12964 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.00989 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.20819 2.47563	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.21514 2.4714	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
         <decal>
           <transform>
-            <row0>	4.307380 0.000000 0.000000	</row0>
+            <row0>	4.301390 0.000000 0.000000	</row0>
             <row1>	0.000000 1.694460 0.000000	</row1>
             <row2>	0.000000 0.000000 9.407390	</row2>
             <row3>	0.000000 0.000000 0.000000	</row3>
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/japan/J11_Chi_Ri/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/japan/J11_Chi_Ri/track/segment.model	</segmentModelRight>
+        <left>	vehicles/japan/J11_Chi_Ri/track/left.track	</left>
+        <right>	vehicles/japan/J11_Chi_Ri/track/right.track	</right>
+        <segmentLength>	0.135	</segmentLength>
+        <segmentOffset>	0.312	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0047	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.075	</maxAmplitude>
+        <maxOffset>	0.075	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.069	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.061	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.061	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.069	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.061	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.061	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_Chi_Ri_2_IGR>
   </chassis>
   <turrets0>
@@ -223,18 +332,13 @@
         <armor_2>	95	</armor_2>
         <armor_3>	50	</armor_3>
         <armor_4>	50	</armor_4>
-        <armor_5>	75	</armor_5>
-        <armor_6>	35	</armor_6>
-        <armor_7>	150	</armor_7>
-        <armor_8>	75	</armor_8>
-        <armor_9>	40	</armor_9>
-        <armor_10>	35	</armor_10>
-        <armor_11>	20	</armor_11>
-        <armor_12>	20	</armor_12>
-        <armor_13>	20	</armor_13>
-        <armor_14>	20	</armor_14>
-        <armor_15>	0	</armor_15>
-        <armor_16>	75	</armor_16>
+        <armor_5>	20	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	75	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	35	</armor_9>
+        <armor_10>	40	</armor_10>
+        <armor_11>	150	</armor_11>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	13752	</weight>
@@ -259,10 +363,6 @@
             </armor_1>
             <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
             <gun>	20	</gun>
           </armor>
           <pitchLimits>
@@ -283,24 +383,28 @@
           </clip>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_05.model	</exploded>
+            <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Gun_05.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0115446 -0.0330916 1.43	</rayStart>
+              <rayStart>	0.00122585 -0.008763 1.43	</rayStart>
               <rayEnd>	-0.536527 -0.508383 1.45337	</rayEnd>
-              <rayUp>	0.0675 0.0675 1	</rayUp>
+              <rayUp>	0.072 0.069 4	</rayUp>
               <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
+          <camouflage>
+            <tiling>	0.3 0.3 0.000000 0.000000	</tiling>
+          </camouflage>
         </_75mm_Gun_Type5_M1_auto_IGR>
       </guns>
       <models>
@@ -312,41 +416,44 @@
         <collisionModelServer>	vehicles/japan/J11_Chi_Ri/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/japan/J11_Chi_Ri/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.094393 0.382215 0.960595	</gunPosition>
+      <gunPosition>	-0.101 0.417757 1.03001	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.914466 0.602328 0.637926	</rayStart>
-          <rayEnd>	-0.603932 0.498381 0.408227	</rayEnd>
+          <rayStart>	-1.12034 0.725965 0.409472	</rayStart>
+          <rayEnd>	-0.804981 0.619531 0.187629	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	-0.998332 0.531331 -1.69731	</rayStart>
-          <rayEnd>	-0.618488 0.432128 -1.62064	</rayEnd>
+          <rayStart>	-0.994928 0.625625 -1.66148	</rayStart>
+          <rayEnd>	-0.615241 0.51981 -1.59335	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.96	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
-        <inscription>
-          <rayStart>	0.998332 0.531331 -1.69731	</rayStart>
-          <rayEnd>	0.618488 0.432128 -1.62064	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.96	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
         <player>
-          <rayStart>	0.914466 0.602328 0.637926	</rayStart>
-          <rayEnd>	0.603932 0.498381 0.408227	</rayEnd>
+          <rayStart>	1.12034 0.725965 0.409472	</rayStart>
+          <rayEnd>	0.804981 0.619531 0.187629	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
+        <inscription>
+          <rayStart>	0.994928 0.625625 -1.66148	</rayStart>
+          <rayEnd>	0.615241 0.51981 -1.59335	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.96	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.973 -0.068 1.021 0.000 0.578 0.104 1.000 0.723 0.474 0.500 0.220 0.500 0.033 0.000 0.000	</physicsShape>
+      <physicsShape>	0.960 -0.070 1.010 0.005 0.550 0.210 0.995 0.715 0.350 0.500 0.220 0.500 0.050 0.000 0.050	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_2_Chi_Ri_IGR>
   </turrets0>
   <engines>
@@ -358,22 +465,57 @@
   <radios>
     <_Type3_Ko_IGR>	shared	</_Type3_Ko_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Type98_V12_IGR>
+          <smplEnginePower>	581.5046	</smplEnginePower>
+        </_Type98_V12_IGR>
+      </engines>
+      <chassis>
+        <Chassis_Chi_Ri_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Chi_Ri_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_75mm_Gun_Type5_M1_auto_IGR>
         <delta>	1.03	</delta>
       </_75mm_Gun_Type5_M1_auto_IGR>
     </guns>
-    <chassis>
-      <Chassis_Chi_Ri_2_IGR>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Chi_Ri_2_IGR>
-    </chassis>
-    <engines>
-      <_Type98_V12_IGR>
-        <bravo>	145.3762	</bravo>
-      </_Type98_V12_IGR>
-    </engines>
     <armour>	0.717653107	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -1019,6 +1019,7 @@
             <collisionModelServer>	vehicles/czech/Cz10_LT_vz38/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz10_LT_vz38/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_20_45	</reloadEffect>
           <camouflage>
             <tiling>	0.5 0.25 0.000000 0.2	</tiling>
           </camouflage>
@@ -1097,26 +1098,92 @@
     </Radiostanice_vz_35>
     <Radiostanice_vz_37>	shared	</Radiostanice_vz_37>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Praga_TNHPS>
+          <smplEnginePower>	126.8737	</smplEnginePower>
+        </Praga_TNHPS>
+        <Praga_TNHPS_II>
+          <smplEnginePower>	132.1601	</smplEnginePower>
+        </Praga_TNHPS_II>
+        <Praga_TNHPS_dvojkarb>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </Praga_TNHPS_dvojkarb>
+      </engines>
+      <chassis>
+        <Chassis_Cz10_LT_vz38>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz10_LT_vz38>
+        <Chassis_Cz10_LT_vz38_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz10_LT_vz38_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Cz10_LT_vz38>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Cz10_LT_vz38>
-      <Chassis_Cz10_LT_vz38_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Cz10_LT_vz38_2>
-    </chassis>
-    <engines>
-      <Praga_TNHPS>
-        <bravo>	31.71843	</bravo>
-      </Praga_TNHPS>
-      <Praga_TNHPS_II>
-        <bravo>	33.04004	</bravo>
-      </Praga_TNHPS_II>
-      <Praga_TNHPS_dvojkarb>
-        <bravo>	37.00484	</bravo>
-      </Praga_TNHPS_dvojkarb>
-    </engines>
     <armour>	0.733729079	</armour>
   </clientAdjustmentFactors>
   <effects>

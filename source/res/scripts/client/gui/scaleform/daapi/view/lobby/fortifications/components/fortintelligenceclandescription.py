@@ -4,7 +4,7 @@ import BigWorld
 import time
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from ClientFortifiedRegion import ATTACK_PLAN_RESULT
-from constants import FORT_MAX_ELECTED_CLANS, FORT_BUILDING_TYPE
+from constants import FORT_FAVORITES_LIMIT, FORT_BUILDING_TYPE
 import fortified_regions
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
@@ -153,13 +153,15 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
 
     def __makeData(self):
         fort = self.fortCtrl.getFort()
+        isAvailableByLevel = False if self.__item is None else fort.isAttackAvaliableByLevel(self.__item.getLevel())
         data = {'numOfFavorites': len(fort.favorites),
-         'favoritesLimit': FORT_MAX_ELECTED_CLANS,
+         'favoritesLimit': FORT_FAVORITES_LIMIT,
          'canAttackDirection': self.fortCtrl.getPermissions().canPlanAttack(),
          'canAddToFavorite': self.fortCtrl.getPermissions().canAddToFavorite(),
          'isOurFortFrozen': self._isFortFrozen(),
          'isSelected': self.__item is not None,
-         'haveResults': self.__hasResults}
+         'haveResults': self.__hasResults,
+         'isAvailableByLevel': isAvailableByLevel}
         isWarDeclared = False
         isAlreadyFought = False
         if self.__item is not None:
@@ -209,7 +211,7 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
                                'icon': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_DEFRESRATIO40X32,
                                'ttHeader': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_AVGDEFRES_HEADER),
                                'ttBody': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_AVGDEFRES_BODY)},
-             'directions': self.__getDirectionsData()})
+             'directions': self.__getDirectionsData(isAvailableByLevel)})
             if self.fortCtrl.getPermissions().canPlanAttack() and not isWarDeclared and not isAlreadyFought:
                 attackerLevel = self.fortCtrl.getFort().level
                 defenderLevel = self.__item.getLevel()
@@ -227,7 +229,7 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
                 self.as_updateBookMarkS(isAdd)
         return
 
-    def __getDirectionsData(self):
+    def __getDirectionsData(self, availableByLevel):
         directions = []
         fort = self.fortCtrl.getFort()
         start, finish = time_utils.getDayTimeBoundsForUTC(self.__selectedDefencePeriodStart)
@@ -251,7 +253,7 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
                 if availableTime <= self.__selectedDefencePeriodStart:
                     availableTime = None
                 buildings = self.__getDirectionBuildings(direction)
-                ttHeader, ttBody, infoMessage = self.__getDirectionTooltipData(name, buildings, attackerClanDBID, attackerClanName, attackTime, availableTime)
+                ttHeader, ttBody, infoMessage = self.__getDirectionTooltipData(name, buildings, attackerClanDBID, attackerClanName, attackTime, availableTime, availableByLevel)
                 isBusy = attackerClanDBID is not None
                 isInCooldown = availableTime is not None
                 isAvailableForAttack = self.fortCtrl.getFort().canPlanAttackOn(self.__selectedDefencePeriodStart, self.__item) == ATTACK_PLAN_RESULT.OK
@@ -310,10 +312,10 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
          attackerClanName,
          byMyClan)
 
-    def __getDirectionTooltipData(self, dirName, buildings, attackerClanDBID, attackerClanName, attackTime, availableTime):
+    def __getDirectionTooltipData(self, dirName, buildings, attackerClanDBID, attackerClanName, attackTime, availableTime, availableByLevel):
         infoMessage = ''
         bodyParts = []
-        if self.fortCtrl.getFort().isFrozen() or self.__weAreAtWar:
+        if self.fortCtrl.getFort().isFrozen() or self.__weAreAtWar or not availableByLevel:
             return (None, None, None)
         else:
             buildingsMsgs = []

@@ -1151,23 +1151,89 @@
     </_12RT>
     <R113>	shared	</R113>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-12-5>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </V-12-5>
+        <V-12-6>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </V-12-6>
+      </engines>
+      <chassis>
+        <Chassis_IS8>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_IS8>
+        <Chassis_IS8_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_IS8_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_IS8>
-        <alpha>	0.1127	</alpha>
-      </Chassis_IS8>
-      <Chassis_IS8_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_IS8_2>
-    </chassis>
-    <engines>
-      <V-12-5>
-        <bravo>	185.0242	</bravo>
-      </V-12-5>
-      <V-12-6>
-        <bravo>	198.2402	</bravo>
-      </V-12-6>
-    </engines>
     <armour>	1.09988962	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/tabs/shop.py
 import BigWorld
 from gui.Scaleform.daapi.view.lobby.store.tabs import StoreItemsTab, StoreModuleTab, StoreVehicleTab, StoreShellTab, StoreArtefactTab, StoreOptionalDeviceTab, StoreEquipmentTab
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips.formatters import getActionPriceData
@@ -12,10 +12,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 class ShopItemsTab(StoreItemsTab):
 
     def _getItemPrice(self, item):
-        return item.rentOrBuyPrice
-
-    def _getCurrency(self, item):
-        return item.rentOrBuyPrice.getCurrency()
+        return item.altPrice or item.buyPrice
 
     def _getItemActionData(self, item):
         return getActionPriceData(item)
@@ -24,19 +21,12 @@ class ShopItemsTab(StoreItemsTab):
         return REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.HIDDEN
 
     def _isPurchaseEnabled(self, item, money):
-        canBuy, buyReason = item.mayPurchase(money)
-        canRentOrBuy, rentReason = item.mayRentOrBuy(money)
-        canBuyWithExchange = item.mayPurchaseWithExchange(money, g_itemsCache.items.shop.exchangeRate)
-        if not canRentOrBuy:
-            if not canBuy and buyReason == 'credits_error':
-                if item.itemTypeID in (GUI_ITEM_TYPE.VEHICLE, GUI_ITEM_TYPE.OPTIONALDEVICE):
-                    return canBuyWithExchange
-            return canBuy
-        return canRentOrBuy
+        canBuy, _ = item.mayPurchase(money)
+        return canBuy
 
     def _getStatusParams(self, item):
         statusMessage = ''
-        money = g_itemsCache.items.stats.money
+        money = self._items.stats.money
         return (statusMessage, not self._isPurchaseEnabled(item, money))
 
     def _getItemStatusLevel(self, item):
@@ -56,18 +46,18 @@ class ShopModuleTab(ShopItemsTab, StoreModuleTab):
 
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = super(ShopModuleTab, self)._getRequestCriteria(invVehicles)
-        fitsType = self.filterData['fitsType']
-        requestTypeIds = self.filterData['requestTypeIds']
+        fitsType = self._filterData['fitsType']
+        requestTypeIds = self._getItemTypeID()
         if fitsType == 'myVehicle':
-            vehicle = g_itemsCache.items.getItemByCD(int(self.filterData['vehicleCD']))
+            vehicle = self._items.getItemByCD(int(self._filterData['vehicleCD']))
             requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], requestTypeIds)
         elif fitsType != 'otherVehicles':
             requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE(invVehicles, requestTypeIds)
-        return self._getExtraCriteria(self.filterData['extra'], requestCriteria, invVehicles)
+        return self._getExtraCriteria(self._filterData['extra'], requestCriteria, invVehicles)
 
     def _getStatusParams(self, item):
         statusMessage = ''
-        money = g_itemsCache.items.stats.money
+        money = self._items.stats.money
         if not item.isUnlocked:
             statusMessage = MENU.SHOP_ERRORS_UNLOCKNEEDED
             disabled = True
@@ -78,15 +68,25 @@ class ShopModuleTab(ShopItemsTab, StoreModuleTab):
 
 class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
 
+    @classmethod
+    def getFilterInitData(cls):
+        return (STORE_CONSTANTS.SHOP_VEHICLES_FILTERS_VO_CLASS, True)
+
+    def _getItemPrice(self, item):
+        return item.restorePrice if item.isRestorePossible() else super(ShopVehicleTab, self)._getItemPrice(item)
+
+    def _isPurchaseEnabled(self, item, money):
+        mayObtainForMoney, _ = item.mayObtainForMoney(money)
+        mayObtainForMoneyWithExchange = item.mayObtainWithMoneyExchange(money, self._items.shop.exchangeRate)
+        return mayObtainForMoney or mayObtainForMoneyWithExchange
+
     def _getRequestCriteria(self, invVehicles):
-        requestCriteria = super(ShopVehicleTab, self)._getRequestCriteria(invVehicles)
-        requestCriteria = requestCriteria | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
-        requestType = self.filterData['requestType']
-        extra = self.filterData['extra']
-        if 'all' not in requestType:
-            requestType = map(lambda x: x.lower(), requestType)
-            requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: item.type.lower() in requestType)
-        return self._getExtraCriteria(extra, requestCriteria, invVehicles)
+        requestCriteria = REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.CUSTOM(lambda item: item.isHidden and not item.isRestorePossible()) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
+        vehicleType = self._filterData['vehicleType']
+        if vehicleType != 'all':
+            vehicleType = vehicleType.lower()
+            requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: item.type.lower() == vehicleType)
+        return self._getExtraCriteria(self._filterData['extra'], requestCriteria, invVehicles)
 
     def _getExtraCriteria(self, extra, requestCriteria, invVehicles):
         if 'locked' not in extra:
@@ -99,7 +99,7 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
 
     def _getStatusParams(self, item):
         statusMessage = ''
-        money = g_itemsCache.items.stats.money
+        money = self._items.stats.money
         if item.getState()[0] == Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER:
             statusMessage = '#menu:store/vehicleStates/%s' % item.getState()[0]
             disabled = not self._isPurchaseEnabled(item, money)
@@ -109,7 +109,7 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
         elif item.inventoryCount > 0:
             statusMessage = MENU.SHOP_ERRORS_INHANGAR
             disabled = True
-            if item.isRentable:
+            if not item.isPurchased:
                 disabled = not self._isPurchaseEnabled(item, money)
         elif not item.isUnlocked:
             statusMessage = MENU.SHOP_ERRORS_UNLOCKNEEDED
@@ -118,20 +118,50 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
             disabled = not self._isPurchaseEnabled(item, money)
         return (statusMessage, disabled)
 
+    def _getComparator(self):
+
+        def comparator(a, b):
+            if a.isRestorePossible() and not b.isRestorePossible():
+                return -1
+            if not a.isRestorePossible() and b.isRestorePossible():
+                return 1
+            return cmp(b.hasLimitedRestore(), a.hasLimitedRestore()) or cmp(a.restoreInfo.getRestoreTimeLeft(), b.restoreInfo.getRestoreTimeLeft()) if a.isRestorePossible() and b.isRestorePossible() else cmp(a, b)
+
+        return comparator
+
+
+class ShopRestoreVehicleTab(ShopVehicleTab):
+
+    @classmethod
+    def getFilterInitData(cls):
+        return (STORE_CONSTANTS.SHOP_VEHICLES_FILTERS_VO_CLASS, False)
+
+    def _getItemPrice(self, item):
+        return item.restorePrice
+
+    def _getRequestCriteria(self, invVehicles):
+        requestCriteria = REQ_CRITERIA.VEHICLE.IS_RESTORE_POSSIBLE
+        vehicleType = self._filterData['vehicleType']
+        if vehicleType != 'all':
+            vehicleType = vehicleType.lower()
+            requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: item.type.lower() == vehicleType)
+        return requestCriteria
+
 
 class ShopShellTab(ShopItemsTab, StoreShellTab):
 
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = super(ShopShellTab, self)._getRequestCriteria(invVehicles)
-        requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: item.type in self.filterData['requestType'])
-        fitsType = self.filterData['fitsType']
+        itemTypes = self._filterData['itemTypes']
+        requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: item.type in itemTypes)
+        fitsType = self._filterData['fitsType']
         if fitsType == 'myVehicleGun':
-            vehicle = g_itemsCache.items.getItemByCD(int(self.filterData['vehicleCD']))
+            vehicle = self._items.getItemByCD(int(self._filterData['vehicleCD']))
             shellsList = map(lambda x: x.intCD, vehicle.gun.defaultAmmo)
             requestCriteria |= REQ_CRITERIA.IN_CD_LIST(shellsList)
         elif fitsType != 'otherGuns':
             shellsList = set()
-            myGuns = g_itemsCache.items.getItems(GUI_ITEM_TYPE.GUN, REQ_CRITERIA.INVENTORY).values()
+            myGuns = self._items.getItems(GUI_ITEM_TYPE.GUN, REQ_CRITERIA.INVENTORY).values()
             for gun in myGuns:
                 shellsList.update(map(lambda x: x.intCD, gun.defaultAmmo))
 
@@ -146,10 +176,10 @@ class ShopArtefactTab(ShopItemsTab, StoreArtefactTab):
 
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = super(ShopArtefactTab, self)._getRequestCriteria(invVehicles)
-        fitsType = self.filterData['fitsType']
+        fitsType = self._filterData['fitsType']
         itemTypeID = self._getItemTypeID()
         if fitsType == 'myVehicle':
-            vehicle = g_itemsCache.items.getItemByCD(int(self.filterData['vehicleCD']))
+            vehicle = self._items.getItemByCD(int(self._filterData['vehicleCD']))
             requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [itemTypeID])
         elif fitsType != 'otherVehicles':
             requestCriteria |= REQ_CRITERIA.VEHICLE.SUITABLE(invVehicles, [itemTypeID])
@@ -157,7 +187,11 @@ class ShopArtefactTab(ShopItemsTab, StoreArtefactTab):
 
 
 class ShopOptionalDeviceTab(ShopArtefactTab, StoreOptionalDeviceTab):
-    pass
+
+    def _isPurchaseEnabled(self, item, money):
+        canBuy, _ = item.mayPurchase(money)
+        canBuyWithExchange = item.mayPurchaseWithExchange(money, self._items.shop.exchangeRate)
+        return canBuy or canBuyWithExchange
 
 
 class ShopEquipmentTab(ShopArtefactTab, StoreEquipmentTab):

@@ -25,6 +25,8 @@ class FadingMessages(BattleMessageListMeta):
         self.__settingsFilePath = _MESSAGES_SETTINGS_PATH.format(file)
         self.__isColorBlind = g_settingsCore.getSetting('isColorBlind')
         self.__messages = {}
+        self.__styles = None
+        return
 
     def __del__(self):
         LOG_DEBUG('{0} is deleted'.format(self.__name))
@@ -45,14 +47,18 @@ class FadingMessages(BattleMessageListMeta):
         if key in self.__messages:
             self.__doShowMessage(key, args, extra)
 
+    def getStyles(self):
+        return self.__styles
+
     def _populate(self):
         super(FadingMessages, self)._populate()
-        settings, self.__messages = messages_panel_reader.readXML(self.__settingsFilePath)
+        settings, self.__styles, self.__messages = messages_panel_reader.readXML(self.__settingsFilePath)
         self.as_setupListS(settings)
         self._addGameListeners()
 
     def _dispose(self):
         self.__messages = None
+        self.__styles = None
         self._removeGameListeners()
         super(FadingMessages, self)._dispose()
         return

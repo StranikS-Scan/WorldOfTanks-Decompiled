@@ -3,8 +3,7 @@
 from external_strings_utils import unicode_from_utf8
 from messenger.proto.xmpp.errors import ClientContactError, ClientIntLimitError, ClientChannelError
 from messenger.proto.xmpp.xmpp_constants import CONTACT_LIMIT, CONTACT_ERROR_ID, LIMIT_ERROR_ID, CHANNEL_LIMIT, CHANNEL_ERROR_ID
-from messenger.proto.xmpp.xmpp_string_grep import ResourcePrep
-from messenger.proto.xmpp.xmpp_string_grep import XmppStringPrepError
+from messenger.proto.xmpp.xmpp_string_grep import ResourcePrep, XmppStringPrepError
 
 def validateRosterItemGroup(name):
     if not name:

@@ -188,7 +188,7 @@ class ChatSessionsProvider(ChatProvider):
         return
 
     def setUserAction(self, actionID, contact):
-        if actionID == USER_ACTION_ID.IGNORED_ADDED:
+        if actionID in (USER_ACTION_ID.IGNORED_ADDED, USER_ACTION_ID.TMP_IGNORED_ADDED):
             self.stopSession(jid_entity.makeContactJID(contact.getID()))
 
     def restore(self, jid, state):

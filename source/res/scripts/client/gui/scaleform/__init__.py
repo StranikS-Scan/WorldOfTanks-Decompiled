@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/__init__.py
 import os
+from gui.Scaleform.locale.MENU import MENU
 from nations import NAMES
 SCALEFORM_SUPPORT = False
 try:
@@ -20,21 +21,22 @@ SCALEFORM_FONT_CONFIG_PATH = 'gui/flash/%s' % SCALEFORM_FONT_CONFIG_FILE
 SCALEFORM_DEFAULT_CONFIG_NAME = 'All'
 VEHICLE_TYPES_ICONS_DIR_PATH = '../maps/icons/filters/tanks/'
 NATION_FILTER_ICONS_DIR_PATH = '../maps/icons/filters/nations/'
-BUTTON_FILTER_ICONS_DIR_PARH = '../maps/icons/filters/buttons/'
+BUTTON_FILTER_ICONS_DIR_PARH = '../maps/icons/library/'
 LEVEL_FILTER_ICONS_DIR_PARH = '../maps/icons/filters/levels/'
 NATIONS_ICON_FILENAME = '../maps/icons/nations/%s_%s.%s'
 NATION_ICON_PREFIX_131x31 = '131x31'
+DEFAULT_VIDEO_BUFFERING_TIME = 2.0
 
 def getVehicleTypeAssetPath(vehicleType, extension='.png'):
     return ''.join([VEHICLE_TYPES_ICONS_DIR_PATH, vehicleType, extension])
 
 
 def getButtonsAssetPath(button, extension='.png'):
-    return ''.join([BUTTON_FILTER_ICONS_DIR_PARH, button, extension])
+    return ''.join((BUTTON_FILTER_ICONS_DIR_PARH, button, extension))
 
 
 def getNationsFilterAssetPath(nationName, extension='.png'):
-    return ''.join([NATION_FILTER_ICONS_DIR_PATH, nationName, extension])
+    return ''.join((NATION_FILTER_ICONS_DIR_PATH, nationName, extension))
 
 
 def getNationsAssetPath(nation, namePrefix='', extension='png'):

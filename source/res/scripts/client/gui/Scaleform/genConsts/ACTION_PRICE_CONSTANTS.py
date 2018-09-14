@@ -7,7 +7,6 @@ class ACTION_PRICE_CONSTANTS(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     STATE_ALIGN_MIDDLE = 'alignMiddle'
     STATE_ALIGN_MIDDLE_SMALL = 'alignMiddleSmall'

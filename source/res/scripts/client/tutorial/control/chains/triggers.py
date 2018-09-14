@@ -171,7 +171,7 @@ class QueueTrigger(_CurrentVehicleViewStateTrigger):
         self.toggle(isOn=self.isOn())
 
     def isOn(self):
-        return self.preQueueFunctional.isInQueue()
+        return self.preQueueFunctional is not None and self.preQueueFunctional.isInQueue()
 
 
 class TankmanPriceDiscountTrigger(TriggerWithSubscription):

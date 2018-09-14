@@ -236,6 +236,8 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
             i18nKey = 'discontinuingEmptyFormationConfirmation'
         sysMsg = club_fmts.getDestroyClubSysMsg(self.clubsCtrl.getClub(self._clubDbID))
         self._doExitAction(DestroyClubCtx(self._clubDbID), I18nConfirmDialogMeta('staticFormation/staffView/%s' % i18nKey, focusedID=DIALOG_BUTTON_ID.CLOSE), WAITING.CLUBS_DESTROYCLUB, sysMsg)
+        inviteAnimationDefaultValue = AccountSettings.getFilterDefault(SHOW_INVITE_COMMAND_BTN_ANIMATION)
+        AccountSettings.setFilter(SHOW_INVITE_COMMAND_BTN_ANIMATION, inviteAnimationDefaultValue)
 
     def _leaveClub(self):
         sysMsg = club_fmts.getLeaveClubSysMsg(self.clubsCtrl.getClub(self._clubDbID))

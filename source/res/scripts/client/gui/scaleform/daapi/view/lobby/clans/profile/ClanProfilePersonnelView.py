@@ -149,14 +149,14 @@ class ClanProfilePersonnelView(ClanProfilePersonnelViewMeta):
          _packStat(CLANS.PERSONNELVIEW_CLANSTATS_AVGBATTLESCOUNT, CLANS.PERSONNELVIEW_CLANSTATS_AVGBATTLESCOUNT_TOOLTIP, 'avgBattlesCount40x32.png', *self.__membersDP.getAvgBattlesCount()),
          _packStat(CLANS.PERSONNELVIEW_CLANSTATS_AVGWINS, CLANS.PERSONNELVIEW_CLANSTATS_AVGWINS_TOOLTIP, 'avgWins40x32.png', *self.__membersDP.getAvgPerformanceBattles()),
          _packStat(CLANS.PERSONNELVIEW_CLANSTATS_AVGEXP, CLANS.PERSONNELVIEW_CLANSTATS_AVGEXP_TOOLTIP, 'avgExp40x32.png', *self.__membersDP.getAvgXp())]
-        headers = [_packColumn(_SORT_IDS.USER_NAME, CLANS.PERSONNELVIEW_TABLE_PLAYER, 223, CLANS.PERSONNELVIEW_TABLE_PLAYER_TOOLTIP),
+        headers = [_packColumn(_SORT_IDS.USER_NAME, _ms(CLANS.PERSONNELVIEW_TABLE_PLAYER, count=text_styles.stats(str(membersCount)), max=str(MAX_MEMBERS_IN_CLAN)), 223, CLANS.PERSONNELVIEW_TABLE_PLAYER_TOOLTIP),
          _packColumn(_SORT_IDS.POST, CLANS.PERSONNELVIEW_TABLE_POST, 275, CLANS.PERSONNELVIEW_TABLE_POST_TOOLTIP),
          _packColumn(_SORT_IDS.RATING, '', 100, CLANS.PERSONNELVIEW_TABLE_PERSONALRATING_TOOLTIP, RES_ICONS.MAPS_ICONS_STATISTIC_RATING24),
          _packColumn(_SORT_IDS.BATTLES_COUNT, '', 100, CLANS.PERSONNELVIEW_TABLE_BATTLESCOUNT_TOOLTIP, RES_ICONS.MAPS_ICONS_STATISTIC_BATTLES24),
          _packColumn(_SORT_IDS.BATTLES_PERFORMANCE, '', 100, CLANS.PERSONNELVIEW_TABLE_WINS_TOOLTIP, RES_ICONS.MAPS_ICONS_STATISTIC_WINS24),
          _packColumn(_SORT_IDS.AWG_XP, '', 100, CLANS.PERSONNELVIEW_TABLE_AVGEXP_TOOLTIP, RES_ICONS.MAPS_ICONS_STATISTIC_AVGEXP24),
          _packColumn(_SORT_IDS.DAYS_IN_CLAN, '', 100, CLANS.PERSONNELVIEW_TABLE_DAYSINCLAN_TOOLTIP, RES_ICONS.MAPS_ICONS_STATISTIC_DAYSINCLAN24, showSeparator=False)]
-        self.as_setDataS({'membersCount': _ms(CLANS.PERSONNELVIEW_MEMBERSCOUNT, count=text_styles.stats(str(membersCount)), max=str(MAX_MEMBERS_IN_CLAN)),
+        self.as_setDataS({'title': text_styles.standard(CLANS.PERSONNELVIEW_TITLE),
          'tableHeaders': headers,
          'statistics': statistics,
          'defaultSortField': _SORT_IDS.POST,
@@ -227,7 +227,7 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
         usersEvents.onUserActionReceived += self.__me_onUserActionReceived
 
     def __me_onUserActionReceived(self, actionID, contact):
-        if actionID == USER_ACTION_ID.FRIEND_REMOVED or actionID == USER_ACTION_ID.FRIEND_ADDED or actionID == USER_ACTION_ID.MUTE_SET or actionID == USER_ACTION_ID.MUTE_UNSET or actionID == USER_ACTION_ID.NOTE_CHANGED or actionID == USER_ACTION_ID.IGNORED_ADDED or actionID == USER_ACTION_ID.IGNORED_REMOVED:
+        if actionID == USER_ACTION_ID.FRIEND_REMOVED or actionID == USER_ACTION_ID.FRIEND_ADDED or actionID == USER_ACTION_ID.MUTE_SET or actionID == USER_ACTION_ID.MUTE_UNSET or actionID == USER_ACTION_ID.NOTE_CHANGED or actionID == USER_ACTION_ID.IGNORED_ADDED or actionID == USER_ACTION_ID.IGNORED_REMOVED or actionID == USER_ACTION_ID.TMP_IGNORED_ADDED or actionID == USER_ACTION_ID.TMP_IGNORED_REMOVED:
             self.buildList(self.__accountsList)
             self.refresh()
 

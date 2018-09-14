@@ -8,12 +8,10 @@ class FortRosterIntroWindowMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def as_setDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by RosterIntroVO (AS)
         """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

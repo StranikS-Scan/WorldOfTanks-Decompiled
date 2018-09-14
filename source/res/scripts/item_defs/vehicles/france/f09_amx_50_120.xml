@@ -797,6 +797,7 @@
             <collisionModelServer>	vehicles/french/F09_AMX_50_120/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	-0.000810579 0.0161144 5.75876	</rayStart>
@@ -861,6 +862,7 @@
             <collisionModelServer>	vehicles/french/F09_AMX_50_120/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	-0.000070 0.0157696 5.63531	</rayStart>
@@ -998,23 +1000,89 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_295>
+          <smplEnginePower>	898.689	</smplEnginePower>
+        </Maybach_HL_295>
+        <Saurer>
+          <smplEnginePower>	1057.281	</smplEnginePower>
+        </Saurer>
+      </engines>
+      <chassis>
+        <Chassis_AMX_50_120>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_50_120>
+        <Chassis_AMX_50_120_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_50_120_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_50_120>
-        <alpha>	0.12075	</alpha>
-      </Chassis_AMX_50_120>
-      <Chassis_AMX_50_120_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_AMX_50_120_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_295>
-        <bravo>	224.6722	</bravo>
-      </Maybach_HL_295>
-      <Saurer>
-        <bravo>	264.3203	</bravo>
-      </Saurer>
-    </engines>
     <armour>	1.161288356	</armour>
   </clientAdjustmentFactors>
   <effects>

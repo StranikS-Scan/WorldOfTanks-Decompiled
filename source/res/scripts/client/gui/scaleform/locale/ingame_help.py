@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/INGAME_HELP.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class INGAME_HELP(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     BATTLECONTROLS_TITLE = '#ingame_help:battleControls/title'
     BATTLECONTROLS_MOVEMENTFORWARD = '#ingame_help:battleControls/movementForward'
     BATTLECONTROLS_MOVEMENTBACKWARD = '#ingame_help:battleControls/movementBackward'

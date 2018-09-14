@@ -550,17 +550,52 @@
   <radios>
     <FuG8_1>	shared	</FuG8_1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230P30_2500rpm>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Maybach_HL_230P30_2500rpm>
+      </engines>
+      <chassis>
+        <Chassis_G106_PzKpfwPanther_AusfF>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G106_PzKpfwPanther_AusfF>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G106_PzKpfwPanther_AusfF>
-        <alpha>	0.0644	</alpha>
-      </Chassis_G106_PzKpfwPanther_AusfF>
-    </chassis>
-    <engines>
-      <Maybach_HL_230P30_2500rpm>
-        <bravo>	158.5922	</bravo>
-      </Maybach_HL_230P30_2500rpm>
-    </engines>
     <armour>	0.953631965	</armour>
   </clientAdjustmentFactors>
   <effects>

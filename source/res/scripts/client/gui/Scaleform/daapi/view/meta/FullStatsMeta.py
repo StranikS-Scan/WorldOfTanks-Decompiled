@@ -8,6 +8,5 @@ class FullStatsMeta(StatsBase):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends StatsBase
-    null
     """
     pass

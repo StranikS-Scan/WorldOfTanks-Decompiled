@@ -7,7 +7,6 @@ class CONFIRM_DIALOG_ALIASES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     MODULE_ICON = 'moduleIconExtra'
     ORDER_ICON = 'moduleIconExtra'

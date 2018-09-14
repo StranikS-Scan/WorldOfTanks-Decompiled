@@ -571,17 +571,52 @@
   <radios>
     <FuG7A>	shared	</FuG7A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230P30A>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230P30A>
+      </engines>
+      <chassis>
+        <Chassis_Panther_M10>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Panther_M10>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Panther_M10>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Panther_M10>
-    </chassis>
-    <engines>
-      <Maybach_HL_230P30A>
-        <bravo>	185.0242	</bravo>
-      </Maybach_HL_230P30A>
-    </engines>
     <armour>	0.879257199	</armour>
   </clientAdjustmentFactors>
   <effects>

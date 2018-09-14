@@ -979,7 +979,7 @@
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <models>
             <undamaged>	vehicles/american/A11_T29/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/american/A11_T29/crash/lod0/Gun_06.model	</destroyed>
@@ -1070,31 +1070,97 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAC>
+          <smplEnginePower>	761.2424	</smplEnginePower>
+        </Ford_GAC>
+        <GMC_Allison_V1710-E32>
+          <smplEnginePower>	803.5337	</smplEnginePower>
+        </GMC_Allison_V1710-E32>
+        <Continental_AV-1790-3>
+          <smplEnginePower>	845.8249	</smplEnginePower>
+        </Continental_AV-1790-3>
+      </engines>
+      <chassis>
+        <T84E1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T84E1>
+        <T84E3>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T84E3>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_105mm_Gun_T5E1>
         <delta>	1.25592	</delta>
       </_105mm_Gun_T5E1>
     </guns>
-    <chassis>
-      <T84E1>
-        <alpha>	0.15295	</alpha>
-      </T84E1>
-      <T84E3>
-        <alpha>	0.12075	</alpha>
-      </T84E3>
-    </chassis>
-    <engines>
-      <Ford_GAC>
-        <bravo>	190.3106	</bravo>
-      </Ford_GAC>
-      <GMC_Allison_V1710-E32>
-        <bravo>	200.8834	</bravo>
-      </GMC_Allison_V1710-E32>
-      <Continental_AV-1790-3>
-        <bravo>	211.4562	</bravo>
-      </Continental_AV-1790-3>
-    </engines>
     <armour>	1.035144781	</armour>
   </clientAdjustmentFactors>
   <effects>

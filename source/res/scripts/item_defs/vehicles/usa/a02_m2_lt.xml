@@ -918,23 +918,89 @@
   <radios>
     <SCR_200>	shared	</SCR_200>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Cuiberson_T-10204>
+          <smplEnginePower>	232.6019	</smplEnginePower>
+        </Cuiberson_T-10204>
+        <Continental_W670-7>
+          <smplEnginePower>	277.0077	</smplEnginePower>
+        </Continental_W670-7>
+      </engines>
+      <chassis>
+        <VVSS_T16E1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VVSS_T16E1>
+        <VVSS_T16E2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VVSS_T16E2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <VVSS_T16E1>
-        <alpha>	0.12075	</alpha>
-      </VVSS_T16E1>
-      <VVSS_T16E2>
-        <alpha>	0.12075	</alpha>
-      </VVSS_T16E2>
-    </chassis>
-    <engines>
-      <Cuiberson_T-10204>
-        <bravo>	58.15046	</bravo>
-      </Cuiberson_T-10204>
-      <Continental_W670-7>
-        <bravo>	69.25191	</bravo>
-      </Continental_W670-7>
-    </engines>
     <armour>	0.744882416	</armour>
   </clientAdjustmentFactors>
   <effects>

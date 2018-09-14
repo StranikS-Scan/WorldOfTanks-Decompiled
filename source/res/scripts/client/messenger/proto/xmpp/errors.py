@@ -117,10 +117,13 @@ class ServerActionError(StanzaConditionError):
 
     def __init__(self, actionID, errorType, condition):
         super(ServerActionError, self).__init__(errorType, condition)
-        self._action = shared_errors.I18nActionID(actionID)
+        self._actionID = actionID
+
+    def getActionID(self):
+        return self._actionID
 
     def getMessage(self):
-        return i18n.makeString(I18N_MESSENGER.XMPP_ERROR_ACTION, actionName=self._action.getI18nName(), strArg1=self.getCondition())
+        return i18n.makeString(I18N_MESSENGER.XMPP_ERROR_ACTION, actionName=shared_errors.I18nActionID(self._actionID).getI18nName(), strArg1=self.getCondition())
 
 
 class ServerUserRoomCreationError(IChatError):

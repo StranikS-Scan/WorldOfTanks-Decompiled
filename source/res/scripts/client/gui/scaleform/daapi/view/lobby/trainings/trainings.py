@@ -39,6 +39,8 @@ class Trainings(LobbySubView, TrainingFormMeta, PrbListener):
         self.sendData([], 0)
 
     def _dispose(self):
+        if Waiting.isOpened('Flash'):
+            Waiting.hide('Flash')
         self.stopPrbListening()
         window = self.app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY})
         if window is not None:

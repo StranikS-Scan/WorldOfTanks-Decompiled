@@ -8,40 +8,19 @@ class RadialMenuMeta(BaseDAAPIComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIComponent
-    null
     """
 
     def onSelect(self):
-        """
-        :return :
-        """
         self._printOverrideError('onSelect')
 
     def onAction(self, action):
-        """
-        :param action:
-        :return :
-        """
         self._printOverrideError('onAction')
 
     def as_buildDataS(self, data):
-        """
-        :param data:
-        :return :
-        """
         return self.flashObject.as_buildData(data) if self._isDAAPIInited() else None
 
     def as_showS(self, radialState, offset, ratio):
-        """
-        :param radialState:
-        :param offset:
-        :param ratio:
-        :return :
-        """
         return self.flashObject.as_show(radialState, offset, ratio) if self._isDAAPIInited() else None
 
     def as_hideS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hide() if self._isDAAPIInited() else None

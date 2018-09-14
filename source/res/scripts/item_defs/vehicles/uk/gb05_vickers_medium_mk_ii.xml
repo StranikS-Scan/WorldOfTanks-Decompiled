@@ -708,23 +708,89 @@
   <radios>
     <N14>	shared	</N14>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Vickers-Armstrong>
+          <smplEnginePower>	95.1553	</smplEnginePower>
+        </Vickers-Armstrong>
+        <Sunbeam_Amazon>
+          <smplEnginePower>	169.165	</smplEnginePower>
+        </Sunbeam_Amazon>
+      </engines>
+      <chassis>
+        <Chassis_GB05_Vickers_Medium_Mk_II>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB05_Vickers_Medium_Mk_II>
+        <Chassis_GB05_Vickers_Medium_Mk_II_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB05_Vickers_Medium_Mk_II_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB05_Vickers_Medium_Mk_II>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB05_Vickers_Medium_Mk_II>
-      <Chassis_GB05_Vickers_Medium_Mk_II_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB05_Vickers_Medium_Mk_II_2>
-    </chassis>
-    <engines>
-      <Vickers-Armstrong>
-        <bravo>	23.78883	</bravo>
-      </Vickers-Armstrong>
-      <Sunbeam_Amazon>
-        <bravo>	42.29124	</bravo>
-      </Sunbeam_Amazon>
-    </engines>
     <armour>	0.878901598	</armour>
   </clientAdjustmentFactors>
   <effects>

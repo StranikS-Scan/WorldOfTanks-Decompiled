@@ -9,7 +9,8 @@ from gui.shared.utils import code2str
 
 class IntSettingsRequester(object):
     """
-    Setting dictionary presenting int settings keys by section names
+    Setting dictionary presenting int settings keys by section names.
+    Don't forget to duplicate new value in common.constanst.INT_USER_SETTINGS_KEYS
     """
     SETTINGS = {'VERSION': 0,
      'GAME': 1,
@@ -64,6 +65,7 @@ class IntSettingsRequester(object):
      'MARKERS_DEAD': 50,
      'MARKERS_ALLY': 51,
      'GUI_START_BEHAVIOR': 52,
+     'FEEDBACK': 53,
      'EULA_VERSION': 54,
      'GAMEPLAY': 55,
      'FORT': 56,
@@ -81,7 +83,10 @@ class IntSettingsRequester(object):
      'CAROUSEL_FILTER_1': 73,
      'CAROUSEL_FILTER_2': 74,
      'FALLOUT_CAROUSEL_FILTER_1': 75,
-     'FALLOUT_CAROUSEL_FILTER_2': 76}
+     'FALLOUT_CAROUSEL_FILTER_2': 76,
+     'ENCYCLOPEDIA_RECOMMENDATIONS_1': 77,
+     'ENCYCLOPEDIA_RECOMMENDATIONS_2': 78,
+     'ENCYCLOPEDIA_RECOMMENDATIONS_3': 79}
 
     def __init__(self):
         self.__cache = dict()

@@ -4,9 +4,8 @@ from gui.game_control import getFalloutCtrl
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
-from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.Scaleform import getButtonsAssetPath
+from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.tank_carousel import FilterSetupContext
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.fallout.carousel_data_provider import FalloutCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.fallout.slot_data_provider import SlotDataProvider
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.fallout.carousel_filter import FalloutCarouselFilter
@@ -23,6 +22,7 @@ class FalloutTankCarousel(FalloutTankCarouselMeta, GlobalListener):
         self._carouselDPCls = FalloutCarouselDataProvider
         self._carouselFilterCls = FalloutCarouselFilter
         self._falloutCtrl = None
+        self._slotDP = None
         return
 
     def changeVehicle(self, vehicleInvId):
@@ -81,14 +81,11 @@ class FalloutTankCarousel(FalloutTankCarouselMeta, GlobalListener):
         self.as_setMultiselectionInfoS(self.__getMultiselectionInfoVO())
         self._slotDP.buildList()
 
-    def _getInitialFilterVO(self):
-        data = super(FalloutTankCarousel, self)._getInitialFilterVO()
-        filters = self.filter.getFilters(self._usedFilters)
-        battleTypeStr = i18n.makeString('#menu:headerButtons/battle/menu/fallout/{}'.format(self._falloutCtrl.getBattleType()))
-        data['hotFilters'].append({'value': getButtonsAssetPath('game_mode'),
-         'selected': filters['gameMode'],
-         'tooltip': makeTooltip('#tank_carousel_filter:filter/gameModeFilter/header', i18n.makeString('#tank_carousel_filter:filter/gameModeFilter/body', type=battleTypeStr))})
-        return data
+    def _getFilterSetupContexts(self):
+        contexts = super(FalloutTankCarousel, self)._getFilterSetupContexts()
+        battleType = i18n.makeString('#menu:headerButtons/battle/menu/fallout/{}'.format(self._falloutCtrl.getBattleType()))
+        contexts['gameMode'] = FilterSetupContext(ctx={'battleType': battleType})
+        return contexts
 
     def __getMultiselectionStatus(self):
         config = self._falloutCtrl.getConfig()

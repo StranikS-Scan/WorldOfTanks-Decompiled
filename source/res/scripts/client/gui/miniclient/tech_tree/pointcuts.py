@@ -12,4 +12,10 @@ class OnTechTreePopulate(aop.Pointcut):
 class OnBuyVehicle(aop.Pointcut):
 
     def __init__(self, config):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.VehicleBuyWindow', 'VehicleBuyWindow', 'submit', aspects=(aspects.OnBuyVehicle(config),))
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.vehicle_obtain_windows', 'VehicleBuyWindow', 'submit', aspects=(aspects.OnBuyVehicle(config),))
+
+
+class OnRestoreVehicle(aop.Pointcut):
+
+    def __init__(self, config):
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.vehicle_obtain_windows', 'VehicleRestoreWindow', 'submit', aspects=(aspects.OnRestoreVehicle(config),))

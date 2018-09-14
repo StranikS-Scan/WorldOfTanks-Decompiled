@@ -16,6 +16,7 @@ from ShopRequester import ShopRequester
 from InventoryRequester import InventoryRequester
 from DossierRequester import DossierRequester
 from gui.shared.utils.requesters.GoodiesRequester import GoodiesRequester
+from gui.shared.utils.requesters.recycle_bin_requester import RecycleBinRequester
 from gui.shared.utils.requesters.parsers.ShopDataParser import ShopDataParser
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
 from gui.shared.gui_items.dossier import TankmanDossier, AccountDossier, VehicleDossier
@@ -134,10 +135,10 @@ class REQ_CRITERIA(object):
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
-        MARK1 = RequestCriteria(PredicateCondition(lambda item: item.isMark1))
         LOCKED_BY_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isLocked and item.typeOfLockingArena in ARENA_BONUS_TYPE.FALLOUT_RANGE))
         ONLY_FOR_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isFalloutOnly()))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
+        IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
 
         class FALLOUT:
             SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isFalloutSelected))
@@ -147,6 +148,8 @@ class REQ_CRITERIA(object):
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
         ROLES = staticmethod(lambda roles=tankmen.ROLES: RequestCriteria(PredicateCondition(lambda item: item.descriptor.role in roles)))
         NATIVE_TANKS = staticmethod(lambda vehiclesList=[]: RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeDescr.type.compactDescr in vehiclesList)))
+        DISMISSED = RequestCriteria(PredicateCondition(lambda item: item.isDismissed))
+        ACTIVE = ~DISMISSED
 
     class BOOSTER:
         ENABLED = RequestCriteria(PredicateCondition(lambda item: item.enabled))
@@ -187,6 +190,7 @@ class ItemsRequester(object):
         self.dossiers = DossierRequester()
         self.goodies = GoodiesRequester()
         self.shop = ShopRequester(self.goodies)
+        self.recycleBin = RecycleBinRequester()
         self.__itemsCache = defaultdict(dict)
         self.__vehCustomStateCache = defaultdict(dict)
 
@@ -207,10 +211,13 @@ class ItemsRequester(object):
         Waiting.show('download/discounts')
         yield self.goodies.request()
         Waiting.hide('download/discounts')
+        Waiting.show('download/recycleBin')
+        yield self.recycleBin.request()
+        Waiting.hide('download/recycleBin')
         callback(self)
 
     def isSynced(self):
-        return self.stats.isSynced() and self.inventory.isSynced() and self.shop.isSynced() and self.dossiers.isSynced() and self.goodies.isSynced()
+        return self.stats.isSynced() and self.inventory.isSynced() and self.recycleBin.isSynced() and self.shop.isSynced() and self.dossiers.isSynced() and self.goodies.isSynced()
 
     @async
     @process
@@ -249,6 +256,7 @@ class ItemsRequester(object):
         self.stats.clear()
         self.dossiers.clear()
         self.goodies.clear()
+        self.recycleBin.clear()
 
     def invalidateCache(self, diff=None):
         invalidate = defaultdict(set)
@@ -318,6 +326,13 @@ class ItemsRequester(object):
 
             invalidate[itemTypeID].update(itemsDiff.keys())
 
+        for itemType, itemsDiff in diff.get('recycleBin', {}).iteritems():
+            deletedItems = itemsDiff.get('buffer', {})
+            for itemID in deletedItems.iterkeys():
+                if itemType == 'tankmen':
+                    invalidate[GUI_ITEM_TYPE.TANKMAN].add(itemID * -1)
+                invalidate[GUI_ITEM_TYPE.VEHICLE].add(itemID)
+
         for itemTypeID, uniqueIDs in invalidate.iteritems():
             self._invalidateItems(itemTypeID, uniqueIDs)
 
@@ -335,8 +350,16 @@ class ItemsRequester(object):
             return
 
     def getTankman(self, tmanInvID):
+        tankman = None
         tmanInvData = self.inventory.getTankmanData(tmanInvID)
-        return self.__makeTankman(tmanInvID, tmanInvData) if tmanInvData is not None else None
+        if tmanInvData is not None:
+            tankman = self.__makeTankman(tmanInvID, tmanInvData)
+        else:
+            duration = self.shop.tankmenRestoreConfig.goldDuration
+            tankmanData = self.recycleBin.getTankman(tmanInvID, duration)
+            if tankmanData is not None:
+                tankman = self.__makeDismissedTankman(tmanInvID, tankmanData)
+        return tankman
 
     def getItems(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None):
         shopParser = ShopDataParser(self.shop.getItemsData())
@@ -351,11 +374,18 @@ class ItemsRequester(object):
 
         return result
 
-    def getTankmen(self, criteria=REQ_CRITERIA.EMPTY):
+    def getTankmen(self, criteria=REQ_CRITERIA.TANKMAN.ACTIVE):
         result = ItemsCollection()
-        tmanInvData = self.inventory.getItemsData(GUI_ITEM_TYPE.TANKMAN)
-        for invID, invData in tmanInvData.iteritems():
-            item = self.__makeTankman(invID, invData)
+        activeTankmenInvData = self.inventory.getItemsData(GUI_ITEM_TYPE.TANKMAN)
+        for invID, tankmanInvData in activeTankmenInvData.iteritems():
+            item = self.__makeTankman(invID, tankmanInvData)
+            if criteria(item):
+                result[invID] = item
+
+        duration = self.shop.tankmenRestoreConfig.goldDuration
+        dismissedTankmenData = self.recycleBin.getTankmen(duration)
+        for invID, tankmanData in dismissedTankmenData.iteritems():
+            item = self.__makeDismissedTankman(invID, tankmanData)
             if criteria(item):
                 result[invID] = item
 
@@ -456,6 +486,14 @@ class ItemsRequester(object):
         itemData = self.inventory.getPreviousItem(itemTypeID, invDataIdx)
         return self.__makeItem(itemTypeID, invDataIdx, strCompactDescr=itemData.compDescr, inventoryID=itemData.invID, proxy=self)
 
+    def doesVehicleExist(self, intCD):
+        """ returns existing flag of target vehicle's int compact descriptor.
+        Raises error in case of given non-vehicle CD.
+        """
+        itemTypeID, nationID, innationID = vehicles.parseIntCompactDescr(intCD)
+        assert itemTypeID == GUI_ITEM_TYPE.VEHICLE
+        return innationID in vehicles.g_list.getList(nationID)
+
     def _invalidateItems(self, itemTypeID, uniqueIDs):
         cache = self.__itemsCache[itemTypeID]
         for uid in uniqueIDs:
@@ -541,6 +579,10 @@ class ItemsRequester(object):
             return self.__makeItem(GUI_ITEM_TYPE.TANKMAN, tmanInvID, strCompactDescr=tmanInvData.compDescr, inventoryID=tmanInvID, vehicle=vehicle, proxy=self)
         else:
             return
+
+    def __makeDismissedTankman(self, tmanID, tmanData):
+        strCD, dismissedAt = tmanData
+        return self.__makeItem(GUI_ITEM_TYPE.TANKMAN, tmanID, strCompactDescr=strCD, inventoryID=tmanID, proxy=self, dismissedAt=dismissedAt)
 
     def __makeSimpleItem(self, typeCompDescr):
         return self.__makeItem(getTypeOfCompactDescr(typeCompDescr), typeCompDescr, intCompactDescr=typeCompDescr, proxy=self)

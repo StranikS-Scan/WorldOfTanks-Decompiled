@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/find_criteria.py
 from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto.interfaces import IEntityFindCriteria
+from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 
 class ItemsFindCriteria(IEntityFindCriteria):
@@ -19,7 +20,7 @@ class GroupFindCriteria(ItemsFindCriteria):
     __slots__ = ('__groups',)
 
     def __init__(self, group):
-        super(GroupFindCriteria, self).__init__((XMPP_ITEM_TYPE.ROSTER_ITEM,))
+        super(GroupFindCriteria, self).__init__(XMPP_ITEM_TYPE.ROSTER_ITEMS)
         self.__groups = {group}
 
     def filter(self, entity):
@@ -29,7 +30,7 @@ class GroupFindCriteria(ItemsFindCriteria):
 class RqFriendshipCriteria(IEntityFindCriteria):
 
     def filter(self, entity):
-        if entity.getProtoType() == PROTO_TYPE.XMPP and entity.getItemType() == XMPP_ITEM_TYPE.SUB_PENDING:
+        if entity.getProtoType() == PROTO_TYPE.XMPP and entity.getItemType() in XMPP_ITEM_TYPE.SUB_PENDING_ITEMS:
             tags = entity.getTags()
             result = USER_TAG.SUB_PENDING_IN in tags and USER_TAG.WO_NOTIFICATION not in tags
         else:
@@ -71,3 +72,14 @@ class XMPPChannelByNameFindCriteria(IEntityFindCriteria):
 
     def filter(self, channel):
         return channel.getProtoType() == PROTO_TYPE.XMPP and channel.getName() == self.__name
+
+
+class XmppClanChannelCriteria(IEntityFindCriteria):
+    """Filter for clan channels
+    """
+
+    def __init__(self):
+        super(XmppClanChannelCriteria, self).__init__()
+
+    def filter(self, channel):
+        return channel.getProtoType() is PROTO_TYPE.XMPP and channel.getMessageType() == MESSAGE_TYPE.GROUPCHAT and channel.isClan()

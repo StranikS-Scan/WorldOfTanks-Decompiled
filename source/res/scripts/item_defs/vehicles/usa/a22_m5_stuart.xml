@@ -693,7 +693,7 @@
             <collisionModelServer>	vehicles/american/A22_M5_Stuart/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A22_M5_Stuart/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <camouflage>
             <tiling>	0.25 0.25 0.15 0.000000	</tiling>
           </camouflage>
@@ -843,7 +843,7 @@
             <collisionModelServer>	vehicles/american/A22_M5_Stuart/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A22_M5_Stuart/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <camouflage>
             <tiling>	0.25 0.25 0.14 0.000000	</tiling>
           </camouflage>
@@ -907,23 +907,89 @@
       </unlocks>
     </SCR_506>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Twin_Cadillac_42series>
+          <smplEnginePower>	338.33	</smplEnginePower>
+        </Twin_Cadillac_42series>
+        <Continental_R-975-C1>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Continental_R-975-C1>
+      </engines>
+      <chassis>
+        <VVSS_T16E3>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VVSS_T16E3>
+        <VVSS_T36E8>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VVSS_T36E8>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <VVSS_T16E3>
-        <alpha>	0.08855	</alpha>
-      </VVSS_T16E3>
-      <VVSS_T36E8>
-        <alpha>	0.0805	</alpha>
-      </VVSS_T36E8>
-    </chassis>
-    <engines>
-      <Twin_Cadillac_42series>
-        <bravo>	84.58249	</bravo>
-      </Twin_Cadillac_42series>
-      <Continental_R-975-C1>
-        <bravo>	92.5121	</bravo>
-      </Continental_R-975-C1>
-    </engines>
     <armour>	0.910591167	</armour>
   </clientAdjustmentFactors>
   <effects>

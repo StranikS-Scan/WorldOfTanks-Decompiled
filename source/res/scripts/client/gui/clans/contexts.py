@@ -96,7 +96,7 @@ class ClanFavouriteAttributesCtx(CommonClanRequestCtx):
         return makeTupleByDict(items.ClanFavouriteAttrs, incomeData)
 
     def getDefDataObj(self):
-        return items.ClanFavouriteAttrs
+        return items.ClanFavouriteAttrs()
 
 
 @ReprInjector.withParent()

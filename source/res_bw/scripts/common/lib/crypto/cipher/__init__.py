@@ -53,5 +53,14 @@ Module name                   Description
 :undocumented: __revision__, __package__, _AES, _ARC2, _ARC4, _Blowfish
                _CAST, _DES, _DES3, _XOR
 """
-__all__ = ['AES']
+__all__ = ['AES',
+ 'ARC2',
+ 'ARC4',
+ 'Blowfish',
+ 'CAST',
+ 'DES',
+ 'DES3',
+ 'XOR',
+ 'PKCS1_v1_5',
+ 'PKCS1_OAEP']
 __revision__ = '$Id$'

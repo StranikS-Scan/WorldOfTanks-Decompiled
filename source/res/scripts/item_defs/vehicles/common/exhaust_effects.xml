@@ -9,13 +9,17 @@
     <mainLoad>
       <rpm>	0 0.05 0.3	</rpm>
       <effects>	particles/Tank/exhaust/small_diesel_rpm3.xml			
+
 				particles/Tank/exhaust/small_diesel_rpm2.xml
+
 				particles/Tank/exhaust/small_diesel_rpm1.xml	</effects>
     </mainLoad>
     <highLoad>
       <rpm>	0 0.1 0.8	</rpm>
       <effects>	particles/Tank/exhaust/small_diesel_gear.xml
+
 				particles/Tank/exhaust/small_diesel_rpm3.xml
+
 				particles/Tank/exhaust/small_diesel_rpm2.xml	</effects>
     </highLoad>
   </diesel_small>
@@ -29,13 +33,17 @@
     <mainLoad>
       <rpm>	0 0.05 0.3	</rpm>
       <effects>	particles/Tank/exhaust/medium_diesel_rpm3.xml			
+
 				particles/Tank/exhaust/medium_diesel_rpm2.xml
+
 				particles/Tank/exhaust/medium_diesel_rpm1.xml	</effects>
     </mainLoad>
     <highLoad>
       <rpm>	0 0.1 0.8	</rpm>
       <effects>	particles/Tank/exhaust/medium_diesel_gear.xml
+
 				particles/Tank/exhaust/medium_diesel_rpm3.xml
+
 				particles/Tank/exhaust/medium_diesel_rpm2.xml	</effects>
     </highLoad>
   </diesel_medium>
@@ -49,13 +57,17 @@
     <mainLoad>
       <rpm>	0 0.05 0.3	</rpm>
       <effects>	particles/Tank/exhaust/large_diesel_rpm3.xml			
+
 				particles/Tank/exhaust/large_diesel_rpm2.xml
+
 				particles/Tank/exhaust/large_diesel_rpm1.xml	</effects>
     </mainLoad>
     <highLoad>
       <rpm>	0 0.1 0.8	</rpm>
       <effects>	particles/Tank/exhaust/large_diesel_gear.xml
+
 				particles/Tank/exhaust/large_diesel_rpm3.xml
+
 				particles/Tank/exhaust/large_diesel_rpm2.xml	</effects>
     </highLoad>
   </diesel_large>
@@ -69,12 +81,15 @@
     <mainLoad>
       <rpm>	0 0.2	</rpm>
       <effects>	particles/Tank/exhaust/small_gas_rpm2.xml
+
 				particles/Tank/exhaust/small_gas_rpm1.xml	</effects>
     </mainLoad>
     <highLoad>
       <rpm>	0 0.1 0.8	</rpm>
       <effects>	particles/Tank/exhaust/small_gas_gear.xml
+
 				particles/Tank/exhaust/small_gas_rpm3.xml
+
 				particles/Tank/exhaust/small_gas_rpm2.xml	</effects>
     </highLoad>
   </gas_small>
@@ -88,12 +103,15 @@
     <mainLoad>
       <rpm>	0 0.2	</rpm>
       <effects>	particles/Tank/exhaust/medium_gas_rpm2.xml
+
 				particles/Tank/exhaust/medium_gas_rpm1.xml	</effects>
     </mainLoad>
     <highLoad>
       <rpm>	0 0.1 0.8	</rpm>
       <effects>	particles/Tank/exhaust/medium_gas_gear.xml
+
 				particles/Tank/exhaust/medium_gas_rpm3.xml
+
 				particles/Tank/exhaust/medium_gas_rpm2.xml	</effects>
     </highLoad>
   </gas_medium>
@@ -107,12 +125,15 @@
     <mainLoad>
       <rpm>	0 0.2	</rpm>
       <effects>	particles/Tank/exhaust/large_gas_rpm2.xml
+
 				particles/Tank/exhaust/large_gas_rpm1.xml	</effects>
     </mainLoad>
     <highLoad>
       <rpm>	0 0.1 0.8	</rpm>
       <effects>	particles/Tank/exhaust/large_gas_gear.xml
+
 				particles/Tank/exhaust/large_gas_rpm3.xml
+
 				particles/Tank/exhaust/large_gas_rpm2.xml	</effects>
     </highLoad>
   </gas_large>

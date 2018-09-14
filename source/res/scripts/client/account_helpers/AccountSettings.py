@@ -11,6 +11,7 @@ import Event
 from constants import FORT_BUILDING_TYPE as _FBT
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_CURRENT_EXCEPTION
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 KEY_FILTERS = 'filters'
 KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
@@ -20,7 +21,6 @@ FALLOUT_CAROUSEL_FILTER_1 = 'FALLOUT_CAROUSEL_FILTER_1'
 FALLOUT_CAROUSEL_FILTER_2 = 'FALLOUT_CAROUSEL_FILTER_2'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
-SHOW_BATTLE_EFFICIENCY_RIBBONS = 'SHOW_BATTLE_EFFICIENCY_RIBBONS'
 VEHICLE_BUY_WINDOW_SETTINGS = 'vehicleBuyWindowSettings'
 CURRENT_VEHICLE = 'current'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
@@ -35,27 +35,64 @@ FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
+LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
-NEW_CUSTOMIZATION_ITEMS = 'new_customization_items'
-STATS_SORTING_EVENT = 'statsSortingEvent'
+NEW_SETTINGS_COUNTER = 'newSettingsCounter'
 LAST_CLUB_OPENED_FOR_APPS = 'lastClubOpenedForApps'
 SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
-               'shop_current': (-1, 'vehicle'),
-               'shop_vehicle': (5, 'lightTank', 'mediumTank', 'heavyTank', 'at-spg', 'spg', 'locked'),
-               'shop_module': (5, 'vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'myVehicles', 0, 'locked', 'inHangar'),
-               'shop_shell': (4, 'ARMOR_PIERCING', 'ARMOR_PIERCING_CR', 'HOLLOW_CHARGE', 'HIGH_EXPLOSIVE', 'myVehicleGun', 0),
-               'shop_optionalDevice': ('myVehicle', 0, 'onVehicle'),
-               'shop_equipment': ('myVehicle', 0, 'onVehicle'),
-               'inventory_current': (-1, 'vehicle'),
-               'inventory_vehicle': (5, 'lightTank', 'mediumTank', 'heavyTank', 'at-spg', 'spg', 'brocken', 'locked'),
-               'inventory_module': (5, 'vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'myVehicles', 0),
-               'inventory_shell': (4, 'ARMOR_PIERCING', 'ARMOR_PIERCING_CR', 'HOLLOW_CHARGE', 'HIGH_EXPLOSIVE', 'myVehicleGun', 0),
-               'inventory_optionalDevice': ('myVehicle', 0, 'onVehicle'),
-               'inventory_equipment': ('myVehicle', 0, 'onVehicle'),
+               'shop_current': (-1, STORE_CONSTANTS.VEHICLE),
+               'shop_vehicle': {'obtainingType': STORE_CONSTANTS.BUY_VEHICLE_OBTAINING_TYPE,
+                                'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME,
+                                'extra': [STORE_CONSTANTS.LOCKED_EXTRA_NAME]},
+               'shop_restoreVehicle': {'obtainingType': STORE_CONSTANTS.RESTORE_VEHICLE_OBTAINING_TYPE,
+                                       'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME},
+               'shop_module': {'fitsType': STORE_CONSTANTS.MY_VEHICLES_ARTEFACT_FIT,
+                               'vehicleCD': -1,
+                               'extra': [STORE_CONSTANTS.LOCKED_EXTRA_NAME, STORE_CONSTANTS.IN_HANGAR_EXTRA_NAME],
+                               'itemTypes': [STORE_CONSTANTS.GUN_MODULE_NAME,
+                                             STORE_CONSTANTS.TURRET_MODULE_NAME,
+                                             STORE_CONSTANTS.ENGINE_MODULE_NAME,
+                                             STORE_CONSTANTS.CHASSIS_MODULE_NAME,
+                                             STORE_CONSTANTS.RADIO_MODULE_NAME]},
+               'shop_shell': {'fitsType': STORE_CONSTANTS.CURRENT_VEHICLE_SHELL_FIT,
+                              'vehicleCD': -1,
+                              'itemTypes': [STORE_CONSTANTS.ARMOR_PIERCING_SHELL,
+                                            STORE_CONSTANTS.ARMOR_PIERCING_CR_SHELL,
+                                            STORE_CONSTANTS.HOLLOW_CHARGE_SHELL,
+                                            STORE_CONSTANTS.HIGH_EXPLOSIVE_SHELL]},
+               'shop_optionalDevice': {'fitsType': STORE_CONSTANTS.CURRENT_VEHICLE_ARTEFACT_FIT,
+                                       'vehicleCD': -1,
+                                       'extra': [STORE_CONSTANTS.ON_VEHICLE_EXTRA_NAME]},
+               'shop_equipment': {'fitsType': STORE_CONSTANTS.CURRENT_VEHICLE_ARTEFACT_FIT,
+                                  'vehicleCD': -1,
+                                  'extra': [STORE_CONSTANTS.ON_VEHICLE_EXTRA_NAME]},
+               'inventory_current': (-1, STORE_CONSTANTS.VEHICLE),
+               'inventory_vehicle': {'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME,
+                                     'extra': [STORE_CONSTANTS.BROCKEN_EXTRA_NAME, STORE_CONSTANTS.LOCKED_EXTRA_NAME]},
+               'inventory_module': {'fitsType': STORE_CONSTANTS.MY_VEHICLES_ARTEFACT_FIT,
+                                    'vehicleCD': -1,
+                                    'extra': [],
+                                    'itemTypes': [STORE_CONSTANTS.GUN_MODULE_NAME,
+                                                  STORE_CONSTANTS.TURRET_MODULE_NAME,
+                                                  STORE_CONSTANTS.ENGINE_MODULE_NAME,
+                                                  STORE_CONSTANTS.CHASSIS_MODULE_NAME,
+                                                  STORE_CONSTANTS.RADIO_MODULE_NAME]},
+               'inventory_shell': {'fitsType': STORE_CONSTANTS.CURRENT_VEHICLE_SHELL_FIT,
+                                   'vehicleCD': -1,
+                                   'itemTypes': [STORE_CONSTANTS.ARMOR_PIERCING_SHELL,
+                                                 STORE_CONSTANTS.ARMOR_PIERCING_CR_SHELL,
+                                                 STORE_CONSTANTS.HOLLOW_CHARGE_SHELL,
+                                                 STORE_CONSTANTS.HIGH_EXPLOSIVE_SHELL]},
+               'inventory_optionalDevice': {'fitsType': STORE_CONSTANTS.CURRENT_VEHICLE_ARTEFACT_FIT,
+                                            'vehicleCD': -1,
+                                            'extra': [STORE_CONSTANTS.ON_VEHICLE_EXTRA_NAME]},
+               'inventory_equipment': {'fitsType': STORE_CONSTANTS.CURRENT_VEHICLE_ARTEFACT_FIT,
+                                       'vehicleCD': -1,
+                                       'extra': [STORE_CONSTANTS.ON_VEHICLE_EXTRA_NAME]},
                CAROUSEL_FILTER_1: {'ussr': False,
                                    'germany': False,
                                    'usa': False,
@@ -259,7 +296,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      'markerAltVehicleName': True,
                                      'markerAltPlayerName': False}},
                 VEHICLE_BUY_WINDOW_SETTINGS: True,
-                'showBattleEfficiencyRibbons': True,
                 'showVehicleIcon': False,
                 'showVehicleLevel': False,
                 'showExInf4Destroyed': False,
@@ -286,8 +322,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                  'sortDirection': 'descending'},
                 'statsSortingSortie': {'iconType': 'tank',
                                        'sortDirection': 'descending'},
-                STATS_SORTING_EVENT: {'iconType': 'mark1BonusDelivered',
-                                      'sortDirection': 'descending'},
                 'backDraftInvert': False,
                 'quests': {'lastVisitTime': -1,
                            'visited': [],
@@ -312,12 +346,19 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'fireExtinguisherInstalled': False,
                 'PveTriggerShown': False,
                 LAST_PROMO_PATCH_VERSION: '',
+                LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,
                 'bassBoost': False,
+                'lowQualitySound': False,
+                'nightMode': False,
+                'bulbVoices': 'lightbulb',
                 PREVIEW_INFO_PANEL_IDX: 0,
-                NEW_CUSTOMIZATION_ITEMS: {'inscriptions': True,
-                                          'emblems': True}}}
+                'carouselType': 0,
+                NEW_SETTINGS_COUNTER: {'FeedbackSettings0': True,
+                                       'FeedbackSettings1': True,
+                                       'FeedbackSettings2': True,
+                                       'GameSettings': True}}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -335,7 +376,7 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 24
+    version = 26
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -615,6 +656,30 @@ class AccountSettings(object):
                 for key, section in _filterAccountSection(ads):
                     AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('FootballCustTriggerShown')
                     AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('FootballVehSelectedOnce')
+
+            if currVersion < 24:
+                import SoundGroups
+                SoundGroups.g_instance.setVolume('music_hangar', 1.0)
+                SoundGroups.g_instance.setVolume('voice', 1.0)
+                SoundGroups.g_instance.setVolume('ev_ambient', 0.8)
+                SoundGroups.g_instance.setVolume('ev_effects', 0.8)
+                SoundGroups.g_instance.setVolume('ev_gui', 0.8)
+                SoundGroups.g_instance.setVolume('ev_music', 0.8)
+                SoundGroups.g_instance.setVolume('ev_vehicles', 0.8)
+                SoundGroups.g_instance.setVolume('ev_voice', 0.8)
+                SoundGroups.g_instance.savePreferences()
+            if currVersion < 25:
+                for key, section in _filterAccountSection(ads):
+                    accFilters = AccountSettings.__readSection(section, KEY_FILTERS)
+                    for filterName, filterPickle in accFilters.items():
+                        if filterName in ('shop_vehicle', 'shop_module', 'shop_shell', 'shop_optionalDevice', 'shop_equipment', 'inventory_vehicle', 'inventory_module', 'inventory_shell', 'inventory_optionalDevice', 'inventory_equipment'):
+                            defaults = DEFAULT_VALUES[KEY_FILTERS][filterName].copy()
+                            accFilters.write(filterName, base64.b64encode(pickle.dumps(defaults)))
+
+            if currVersion < 26:
+                for key, section in _filterAccountSection(ads):
+                    AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('new_customization_items')
+                    AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('statsSortingEvent')
 
             ads.writeInt('version', AccountSettings.version)
         return

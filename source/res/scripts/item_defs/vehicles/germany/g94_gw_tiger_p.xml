@@ -1199,28 +1199,94 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_120_TRM_x2>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Maybach_HL_120_TRM_x2>
+        <Porsche_Typ_101_1_x2>
+          <smplEnginePower>	676.6599	</smplEnginePower>
+        </Porsche_Typ_101_1_x2>
+      </engines>
+      <chassis>
+        <Chassis_GW_Elefant>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GW_Elefant>
+        <Chassis_GW_Elefant_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GW_Elefant_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_210mm_Morser_21>
         <delta>	1.03773584	</delta>
       </_210mm_Morser_21>
     </guns>
-    <chassis>
-      <Chassis_GW_Elefant>
-        <alpha>	0.1288	</alpha>
-      </Chassis_GW_Elefant>
-      <Chassis_GW_Elefant_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GW_Elefant_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_120_TRM_x2>
-        <bravo>	158.5922	</bravo>
-      </Maybach_HL_120_TRM_x2>
-      <Porsche_Typ_101_1_x2>
-        <bravo>	169.165	</bravo>
-      </Porsche_Typ_101_1_x2>
-    </engines>
     <armour>	0.499670091	</armour>
   </clientAdjustmentFactors>
   <effects>

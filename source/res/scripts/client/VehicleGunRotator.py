@@ -184,13 +184,7 @@ class VehicleGunRotator(object):
             middleX = (hullBox[0][0] + hullBox[1][0]) / 2.0
             middleZ = (hullBox[0][2] + hullBox[1][2]) / 2.0
             hullPosition = Math.Vector3(middleX, td.chassis['hullPosition'][1], middleZ)
-            turretsMiddlePoint = Math.Vector3(0.0, 0.0, 0.0)
-            hulls = td.type.hulls
-            for hull in hulls:
-                turretsMiddlePoint += hull['turretPositions'][0]
-
-            turretsMiddlePoint /= len(hulls)
-            offset = turretsMiddlePoint / 2.0 + hullPosition
+            offset = td.hull['turretPositions'][0] / 2.0 + hullPosition
             autoAimPosition += Math.Matrix(autoAimVehicle.matrix).applyVector(offset)
             return autoAimPosition
         else:
@@ -318,9 +312,9 @@ class VehicleGunRotator(object):
                 if vehicle is not None and vehicle is avatar.vehicle:
                     if _ENABLE_RELATIVE_SHOT_POINT:
                         shotPoint = shotPoint - Math.Matrix(avatar.getOwnVehicleStabilisedMatrix()).translation
-                        vehicle.cell.trackRelativePointWithGun(shotPoint, 0)
+                        vehicle.cell.trackRelativePointWithGun(shotPoint)
                     else:
-                        vehicle.cell.trackWorldPointWithGun(shotPoint, 0)
+                        vehicle.cell.trackWorldPointWithGun(shotPoint)
                 else:
                     avatar.base.vehicle_trackWorldPointWithGun(shotPoint)
             return
@@ -831,7 +825,8 @@ class _PlayerTurretRotationSoundEffectWWISE(CallbackDelayer):
     def lockSoundMatrix(self):
         if self.__manualSound is not None:
             provider = self.__manualSound.matrixProvider
-            self.__manualSound.matrixProvider = Math.Matrix(provider)
+            if provider is not None:
+                self.__manualSound.matrixProvider = Math.Matrix(provider)
         return
 
     def destroy(self):

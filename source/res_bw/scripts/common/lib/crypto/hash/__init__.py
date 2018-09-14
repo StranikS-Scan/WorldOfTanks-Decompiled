@@ -30,7 +30,17 @@ The hashing modules here all support the interface described in `PEP
 
 :undocumented: _MD2, _MD4, _RIPEMD160, _SHA224, _SHA256, _SHA384, _SHA512
 """
-__all__ = ['HMAC', 'SHA1', 'CMAC']
+__all__ = ['HMAC',
+ 'MD2',
+ 'MD4',
+ 'MD5',
+ 'RIPEMD160',
+ 'SHA1',
+ 'SHA224',
+ 'SHA256',
+ 'SHA384',
+ 'SHA512',
+ 'CMAC']
 __revision__ = '$Id$'
 import sys
 if sys.version_info[0] == 2 and sys.version_info[1] == 1:

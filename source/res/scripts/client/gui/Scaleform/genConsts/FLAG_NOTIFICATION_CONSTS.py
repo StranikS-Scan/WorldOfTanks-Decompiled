@@ -7,7 +7,6 @@ class FLAG_NOTIFICATION_CONSTS(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     STATE_FLAG_CAPTURED = 'flagCaptured'
     STATE_FLAG_DROPPED = 'flagDropped'

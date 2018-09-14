@@ -688,4 +688,39 @@
       </gameSecondsPerSecond>
     </Properties>
   </SpaceToD>
+  <BATTLE_EVENT>	FIXED_DICT	  <Properties>
+      <eventType>
+        <Type>	UINT8	</Type>
+      </eventType>
+      <targetID>
+        <Type>	OBJECT_ID	</Type>
+      </targetID>
+      <details>
+        <Type>	UINT32	</Type>
+      </details>
+      <count>
+        <Type>	UINT16	</Type>
+      </count>
+    </Properties>
+  </BATTLE_EVENT>
+  <BATTLE_EVENTS_SUMMARY>	FIXED_DICT	  <Properties>	&gt;	  <damage>
+        <Type>	UINT32	</Type>
+      </damage>
+      <trackAssist>
+        <Type>	UINT32	</Type>
+      </trackAssist>
+      <radioAssist>
+        <Type>	UINT32	</Type>
+      </radioAssist>
+      <tankings>
+        <Type>	UINT32	</Type>
+      </tankings>
+      <lastKillerID>
+        <Type>	OBJECT_ID	</Type>
+      </lastKillerID>
+      <lastDeathReasonID>
+        <Type>	UINT8	</Type>
+      </lastDeathReasonID>
+    </Properties>
+  </BATTLE_EVENTS_SUMMARY>
 </alias.xml>

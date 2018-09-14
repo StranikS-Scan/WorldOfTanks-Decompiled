@@ -8,46 +8,28 @@ class IngameMenuMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def quitBattleClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('quitBattleClick')
 
     def settingsClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('settingsClick')
 
     def helpClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('helpClick')
 
     def cancelClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('cancelClick')
 
+    def onCounterNeedUpdate(self):
+        self._printOverrideError('onCounterNeedUpdate')
+
     def as_setServerSettingS(self, serverName, tooltipFullData, serverState):
-        """
-        :param serverName:
-        :param tooltipFullData:
-        :param serverState:
-        :return :
-        """
         return self.flashObject.as_setServerSetting(serverName, tooltipFullData, serverState) if self._isDAAPIInited() else None
 
     def as_setServerStatsS(self, stats, tooltipType):
-        """
-        :param stats:
-        :param tooltipType:
-        :return :
-        """
         return self.flashObject.as_setServerStats(stats, tooltipType) if self._isDAAPIInited() else None
+
+    def as_setSettingsBtnCounterS(self, value):
+        return self.flashObject.as_setSettingsBtnCounter(value) if self._isDAAPIInited() else None

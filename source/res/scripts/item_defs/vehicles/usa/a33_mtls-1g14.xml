@@ -341,17 +341,52 @@
   <radios>
     <SCR_210A>	shared	</SCR_210A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Hercules_HXE>
+          <smplEnginePower>	253.7475	</smplEnginePower>
+        </Hercules_HXE>
+      </engines>
+      <chassis>
+        <MTLS_T1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.105455	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.105455	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.105455	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.105455	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.105455	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.105455	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </MTLS_T1>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <MTLS_T1>
-        <alpha>	0.105455	</alpha>
-      </MTLS_T1>
-    </chassis>
-    <engines>
-      <Hercules_HXE>
-        <bravo>	63.43687	</bravo>
-      </Hercules_HXE>
-    </engines>
     <armour>	0.819304505	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -117,7 +117,6 @@ class FittingSelectPopover(FittingSelectPopoverMeta):
          'rendererDataClass': rendererDataClass,
          'selectedIndex': self.__logicProvider.getSelectedIdx(),
          'availableDevices': self.__logicProvider.getDevices(),
-         'minAvailableHeight': FITTING_TYPES.HANGAR_POPOVER_MIN_AVAILABLE_HEIGHT,
          'width': width})
 
 
@@ -194,8 +193,9 @@ class _PopoverLogicProvider(object):
         paramsData = params_helper.getParameters(module)
         for paramName in _PARAMS_LISTS[self._slotType]:
             value = paramsData.get(paramName)
-            values.append(_formatValuesString(baseFormatParameter(paramName, value)))
-            names.append(formatModuleParamName(paramName))
+            if value is not None:
+                values.append(_formatValuesString(baseFormatParameter(paramName, value)))
+                names.append(formatModuleParamName(paramName))
 
         return ('\n'.join(values), '\n'.join(names))
 

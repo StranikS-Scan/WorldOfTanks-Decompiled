@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/carousel_data_provider.py
 from gui import GUI_NATIONS_ORDER_INDEX
+from gui.Scaleform import getButtonsAssetPath
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES
@@ -10,7 +11,7 @@ from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
-from helpers import i18n
+from helpers.i18n import makeString as _ms
 
 class _SUPPLY_ITEMS(object):
     BUY_TANK = 0
@@ -48,17 +49,40 @@ def _vehicleComparisonKey(vehicle):
      vehicle.userName)
 
 
-def _getStatusString(vState, vStateLvl):
-    if vState == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
-        status = i18n.makeString('#menu:tankCarousel/vehicleStates/{}'.format(vState), icon=icons.premiumIgrSmall())
+def _getStatusStyles(vStateLvl):
+    """ Get text styles for small and large slots according to vehicle's state.
+    """
+    if vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL:
+        return (text_styles.critical, text_styles.vehicleStatusCriticalText)
     else:
-        status = i18n.makeString('#menu:tankCarousel/vehicleStates/{}'.format(vState))
-    if not status:
-        return status
-    elif vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL:
-        return text_styles.vehicleStatusCriticalText(status)
+        return (text_styles.middleTitle, text_styles.vehicleStatusInfoText)
+
+
+def _getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substitute='', style=None, ctx=None):
+    """ Get status string for small and large slots.
+    
+    :param vState: one of VEHICLE_STATE
+    :param vStateLvl: one of VEHICLE_STATE_LEVEL
+    :param substitute: is provided, substitutes status string for small slot
+                       (since it's too small to hold multiple strings)
+    :param style: if provided, forces usage of this style
+    :param ctx: keyword arguments for status text
+    
+    :return: tuple (status for small slot, status for large slot)
+    """
+    ctx = ctx or {}
+    status = _ms('#menu:tankCarousel/vehicleStates/{}'.format(vState), **ctx)
+    if style is None:
+        smallStyle, largeStyle = _getStatusStyles(vStateLvl)
     else:
-        return text_styles.vehicleStatusInfoText(status)
+        smallStyle = largeStyle = style
+    if status:
+        return (smallStyle(status), largeStyle(status))
+    elif substitute:
+        return (text_styles.middleTitle(substitute), status)
+    else:
+        return (status, status)
+        return
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
@@ -195,24 +219,30 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         return
 
     def _getVehicleDataVO(self, vehicle):
-        rentInfoStr = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
+        rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
         vState, vStateLvl = vehicle.getState()
-        infoText = _getStatusString(vState, vStateLvl)
+        smallStatus, largeStatus = _getStatusStrings(vState, vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall()})
+        if vehicle.dailyXPFactor > 1:
+            bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
+        else:
+            bonusImage = ''
+        label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
+        labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
         return {'id': vehicle.invID,
-         'showInfoText': bool(infoText),
-         'infoText': infoText,
+         'infoText': largeStatus,
+         'smallInfoText': smallStatus,
          'clanLock': vehicle.clanLock,
          'lockBackground': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
-         'tankIconData': {'image': vehicle.icon,
-                          'label': vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName,
-                          'level': vehicle.level,
-                          'elite': vehicle.isElite,
-                          'premium': vehicle.isPremium,
-                          'favorite': vehicle.isFavorite,
-                          'nation': vehicle.nationID,
-                          'doubleXPReceived': vehicle.dailyXPFactor,
-                          'tankType': vehicle.type,
-                          'rentLeft': rentInfoStr}}
+         'icon': vehicle.icon,
+         'iconSmall': vehicle.iconSmall,
+         'label': labelStyle(label),
+         'level': vehicle.level,
+         'premium': vehicle.isPremium,
+         'favorite': vehicle.isFavorite,
+         'nation': vehicle.nationID,
+         'xpImgSource': bonusImage,
+         'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
+         'rentLeft': rentInfoText}
 
     def _buildVehicleItems(self):
         self._vehicles = []
@@ -256,16 +286,18 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         else:
             sale = None
         self._emptySlotsCount = slots - vehicles
+        smallBuySlotString, buySlotString = _getStatusStrings('buySlot')
+        smallBuyTankString, buyTankString = _getStatusStrings('buyTank')
+        smallEmptySlotsString, emptySlotsString = _getStatusStrings('buyTankEmptyCount', style=text_styles.main, ctx={'count': self._emptySlotsCount})
         self._supplyItems.append({'buyTank': True,
-         'additionalText': i18n.makeString('#menu:tankCarousel/vehicleStates/buyTankEmptyCount', count=self._emptySlotsCount),
-         'showInfoText': True,
-         'infoText': _getStatusString('buyTank', Vehicle.VEHICLE_STATE_LEVEL.INFO),
+         'smallInfoText': text_styles.concatStylesToMultiLine(smallBuyTankString, smallEmptySlotsString),
+         'infoText': text_styles.concatStylesToMultiLine(buyTankString, emptySlotsString),
          'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK})
         buySlotVO = {'buySlot': True,
          'slotPrice': slotPrice,
          'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_SLOT,
-         'showInfoText': True,
-         'infoText': _getStatusString('buySlot', Vehicle.VEHICLE_STATE_LEVEL.INFO),
+         'infoText': buySlotString,
+         'smallInfoText': smallBuySlotString,
          'hasSale': sale is not None}
         if sale is not None:
             buySlotVO.update({'slotPriceActionData': sale})

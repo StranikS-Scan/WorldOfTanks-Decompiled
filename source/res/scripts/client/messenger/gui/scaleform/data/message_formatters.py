@@ -10,7 +10,7 @@ class _WARNING_FONT_COLOR(object):
     TEAM_SIDE_BASED = '#999999'
 
 
-_DYN_SQUAD_IMAGE = 'squad{0}s'
+_DYN_SQUAD_IMAGE = 'squad_silver_{0}'
 
 def getMessageFormatter(actionMessage):
     if actionMessage.getType() == ACTION_MESSAGE_TYPE.WARNING:
@@ -41,7 +41,7 @@ class WarningMessageFormatter(BaseMessageFormatter):
         if self._actionMessage.squadType in (DYN_SQUAD_TYPE.ENEMY, DYN_SQUAD_TYPE.ALLY):
             fontColor = _WARNING_FONT_COLOR.TEAM_SIDE_BASED
         formatted = g_settings.htmlTemplates.format('battleWarningMessage', ctx={'fontColor': fontColor,
-         'message': ' ' + self._actionMessage.getMessage()})
+         'message': self._actionMessage.getMessage()})
         if self._actionMessage.squadNum is not None and self._actionMessage.squadType != DYN_SQUAD_TYPE.OWN:
             formatted = '{0}{1}'.format(g_settings.htmlTemplates.format('battleWarningMessageImage', ctx={'image': _DYN_SQUAD_IMAGE.format(self._actionMessage.squadNum)}), formatted)
         return formatted

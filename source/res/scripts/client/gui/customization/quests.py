@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization/quests.py
 from collections import namedtuple
-from gui.customization.shared import CUSTOMIZATION_TYPE
+from gui.customization.shared import CUSTOMIZATION_TYPE, TYPE_NAME
 _QuestData = namedtuple('QuestData', ('id', 'name', 'count'))
 
 class Quests(object):
@@ -28,8 +28,15 @@ class Quests(object):
         incompleteQuestItems = ({}, {}, {})
         for name, quest in self._questsCache.getEvents().items():
             for bonus in quest.getBonuses('customizations'):
-                for item in bonus.getList():
-                    if item['nationId'] == cNationID or item['type'] == CUSTOMIZATION_TYPE.EMBLEM:
-                        incompleteQuestItems[item['type']][item['id']] = _QuestData(id=quest.getID(), name=quest.getUserName(), count=item['value'])
+                for item in bonus.getCustomizations():
+                    cType = TYPE_NAME[item['custType']]
+                    value = item['value']
+                    if cType == CUSTOMIZATION_TYPE.EMBLEM:
+                        nationId, itemId = None, item['id']
+                    else:
+                        nationId, itemId = item['id']
+                    if nationId == cNationID or cType == CUSTOMIZATION_TYPE.EMBLEM:
+                        incompleteQuestItems[cType][itemId] = _QuestData(id=quest.getID(), name=quest.getUserName(), count=value)
 
         self.__events.onQuestsUpdated(incompleteQuestItems)
+        return

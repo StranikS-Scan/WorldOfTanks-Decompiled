@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/NATIONS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
+from debug_utils import LOG_WARNING
 
 class NATIONS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     USSR = '#nations:ussr'
     GERMANY = '#nations:germany'
     USA = '#nations:usa'
@@ -18,7 +16,7 @@ class NATIONS(object):
     CZECH = '#nations:czech'
     CHINA = '#nations:china'
     SWEDEN = '#nations:sweden'
-    all_ENUM = (USSR,
+    ALL_ENUM = (USSR,
      GERMANY,
      USA,
      FRANCE,
@@ -28,13 +26,11 @@ class NATIONS(object):
      CHINA,
      SWEDEN)
 
-    @staticmethod
-    def all(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#nations:%s' % key
-        if outcome not in NATIONS.all_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def all(cls, key0):
+        outcome = '#nations:{}'.format(key0)
+        if outcome not in cls.ALL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

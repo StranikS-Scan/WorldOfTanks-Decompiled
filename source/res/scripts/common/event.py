@@ -97,3 +97,56 @@ class EventManager(object):
     def clear(self):
         for event in self.__events:
             event.clear()
+
+
+class SuspendedEvent(Event):
+
+    def __init__(self, manager):
+        """
+        Constructor.
+        
+        :param manager: EventManager derived event manager
+        """
+        assert isinstance(manager, SuspendedEventManager)
+        super(SuspendedEvent, self).__init__(manager)
+        self.__manager = manager
+
+    def clear(self):
+        self.__manager = None
+        super(SuspendedEvent, self).clear()
+        return
+
+    def __call__(self, *args, **kwargs):
+        if self.__manager.isSuspended():
+            self.__manager.suspendEvent(self, *args, **kwargs)
+        else:
+            super(SuspendedEvent, self).__call__(*args, **kwargs)
+
+
+class SuspendedEventManager(EventManager):
+
+    def __init__(self):
+        super(SuspendedEventManager, self).__init__()
+        self.__isSuspended = False
+        self.__suspendedEvents = []
+
+    def suspendEvent(self, e, *args, **kwargs):
+        self.__suspendedEvents.append((e, args, kwargs))
+
+    def isSuspended(self):
+        return self.__isSuspended
+
+    def suspend(self):
+        self.__isSuspended = True
+
+    def resume(self):
+        if self.__isSuspended:
+            self.__isSuspended = False
+            while self.__suspendedEvents:
+                e, args, kwargs = self.__suspendedEvents.pop(0)
+                e(*args, **kwargs)
+
+    def clear(self):
+        self.__isSuspended = False
+        self.__suspendedEvents = []
+        super(SuspendedEventManager, self).clear()

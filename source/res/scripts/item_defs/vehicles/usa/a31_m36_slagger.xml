@@ -708,26 +708,92 @@
     </SCR_508>
     <SCR_506>	shared	</SCR_506>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_Continental_R-975EC2>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Wright_Continental_R-975EC2>
+        <Wright_Continental_R-975C1>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Wright_Continental_R-975C1>
+        <GMC_6046>
+          <smplEnginePower>	444.0581	</smplEnginePower>
+        </GMC_6046>
+      </engines>
+      <chassis>
+        <Chassis_M36_Slagger_4>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M36_Slagger_4>
+        <Chassis_M36_Slagger_5>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M36_Slagger_5>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M36_Slagger_4>
-        <alpha>	0.13685	</alpha>
-      </Chassis_M36_Slagger_4>
-      <Chassis_M36_Slagger_5>
-        <alpha>	0.10465	</alpha>
-      </Chassis_M36_Slagger_5>
-    </chassis>
-    <engines>
-      <Wright_Continental_R-975EC2>
-        <bravo>	92.5121	</bravo>
-      </Wright_Continental_R-975EC2>
-      <Wright_Continental_R-975C1>
-        <bravo>	105.7281	</bravo>
-      </Wright_Continental_R-975C1>
-      <GMC_6046>
-        <bravo>	111.0145	</bravo>
-      </GMC_6046>
-    </engines>
     <armour>	0.80599386	</armour>
   </clientAdjustmentFactors>
   <effects>

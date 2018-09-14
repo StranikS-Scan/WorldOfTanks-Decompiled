@@ -352,17 +352,52 @@
   <radios>
     <SCR_528L>	shared	</SCR_528L>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_234P50>
+          <smplEnginePower>	1036.135	</smplEnginePower>
+        </Maybach_HL_234P50>
+      </engines>
+      <chassis>
+        <Chassis_Lorraine40t_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Lorraine40t_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Lorraine40t_2>
-        <alpha>	0.0805	</alpha>
-      </Chassis_Lorraine40t_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_234P50>
-        <bravo>	259.0339	</bravo>
-      </Maybach_HL_234P50>
-    </engines>
     <armour>	0.978068533	</armour>
   </clientAdjustmentFactors>
   <effects>

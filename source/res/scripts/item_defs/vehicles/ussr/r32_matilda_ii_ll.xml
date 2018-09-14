@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/russian/R32_Matilda_II_LL/Matilda_II_LL_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -36,13 +36,14 @@
       <armor_8>	20	</armor_8>
       <armor_9>	13	</armor_9>
       <armor_10>	0	</armor_10>
-      <armor_11>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_11>
-      <armor_12>	13	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      <armor_11>	10	</armor_11>
+      <armor_12>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_12>
       <armor_13>	55	</armor_13>
-      <armor_14>	70	</armor_14>
+      <armor_14>	13	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_14>
       <armor_15>	47	</armor_15>
+      <armor_16>	47	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15000	</weight>
@@ -64,11 +65,11 @@
       <sensitivityToImpulse>	0.4	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	diesel_medium	</pixie>
+      <pixie>	gas_medium	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.674534 0.58587	</turret>
+      <turret>	-0.00866 0.58264 0.55971	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R32_Matilda_II_LL/collision/Hull.model	</collisionModelServer>
@@ -76,28 +77,31 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.342852 0.315285 2.28735	</rayStart>
-        <rayEnd>	-0.342852 0.314098 1.88735	</rayEnd>
+        <rayStart>	-0.327243 0.240243 2.25282	</rayStart>
+        <rayEnd>	-0.319858 0.217046 1.85356	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.28	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <size>	0.225	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-1.38068 0.584165 0.555825	</rayStart>
-        <rayEnd>	-1.01308 0.426455 0.555825	</rayEnd>
+        <rayStart>	-1.35954 0.488767 0.552063	</rayStart>
+        <rayEnd>	-1.00176 0.309898 0.552063	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.58	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R32_Matilda_II_LL/Matilda_II_LL_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	5 5 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Matilda>
       <userString>	#ussr_vehicles:Matilda	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	9380.0	</price>
+      <price>	9380	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	10	</leftTrack>
@@ -132,64 +136,172 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.36	</textureScale>
+        <textureScale>	-2.1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.112891	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	10	</count>
-        </group>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.112891	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	10	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.262318	</radius>
+          <radius>	0.278458	</radius>
+          <syncAngle>	30	</syncAngle>
         </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.152948	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	1	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
-          <name>	WD_L2	</name>
-          <radius>	0.301846	</radius>
+          <name>	WD_L1	</name>
+          <radius>	0.376002	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.159717	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L1	</name>
+          <radius>	0.169105	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L2	</name>
+          <radius>	0.111412	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L3	</name>
+          <radius>	0.169106	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L4	</name>
+          <radius>	0.111412	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L5	</name>
+          <radius>	0.169104	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L6	</name>
+          <radius>	0.111411	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L7	</name>
+          <radius>	0.143529	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L8	</name>
+          <radius>	0.111407	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L9	</name>
+          <radius>	0.168088	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L10	</name>
+          <radius>	0.111411	</radius>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
-          <radius>	0.262318	</radius>
+          <radius>	0.278458	</radius>
+          <syncAngle>	30	</syncAngle>
         </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.152948	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	1	</count>
-        </group>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
-          <name>	WD_R2	</name>
-          <radius>	0.301846	</radius>
+          <name>	WD_R1	</name>
+          <radius>	0.376002	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.159717	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R1	</name>
+          <radius>	0.111411	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R2	</name>
+          <radius>	0.184457	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R3	</name>
+          <radius>	0.111413	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R4	</name>
+          <radius>	0.220965	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R5	</name>
+          <radius>	0.11141	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R6	</name>
+          <radius>	0.184457	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R7	</name>
+          <radius>	0.11141	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R8	</name>
+          <radius>	0.169161	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R9	</name>
+          <radius>	0.111409	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R10	</name>
+          <radius>	0.220964	</radius>
         </wheel>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L2	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <dust>	mediumTankDust	</dust>
@@ -197,12 +309,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.884713 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.94351 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R32_Matilda_II_LL/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R32_Matilda_II_LL/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.01784 1.72807	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.02912 1.79094	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -215,6 +327,71 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R32_Matilda_II_LL/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R32_Matilda_II_LL/track/segment.model	</segmentModelRight>
+        <left>	vehicles/russian/R32_Matilda_II_LL/track/left.track	</left>
+        <right>	vehicles/russian/R32_Matilda_II_LL/track/right.track	</right>
+        <segmentLength>	0.182	</segmentLength>
+        <segmentOffset>	0.263	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0099	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.01	</maxAmplitude>
+        <maxOffset>	0.01	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+      </trackNodes>
     </Matilda>
   </chassis>
   <turrets0>
@@ -222,19 +399,16 @@
       <userString>	#ussr_vehicles:Matilda_II_LL	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	9670.0	</price>
+      <price>	9670	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	75	</armor_1>
-        <armor_2>	47	</armor_2>
+        <armor_2>	75	</armor_2>
         <armor_3>	75	</armor_3>
         <armor_4>	75	</armor_4>
-        <armor_5>	75	</armor_5>
-        <armor_6>	75	</armor_6>
-        <armor_7>	25	</armor_7>
-        <armor_8>	20	</armor_8>
-        <armor_9>	0	</armor_9>
-        <armor_10>	20	</armor_10>
+        <armor_6>	20	</armor_6>
+        <armor_8>	0	</armor_8>
+        <armor_12>	0	</armor_12>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3500	</weight>
@@ -255,8 +429,10 @@
         <_76mm_ZiS-96>	shared	  <armor>
             <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
+            <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
@@ -275,16 +451,16 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0203335 0.0696408 0.875721	</rayStart>
-              <rayEnd>	0.0129766 0.0629162 0.873976	</rayEnd>
-              <rayUp>	0.065 0.06 2	</rayUp>
+              <rayStart>	0.0149747 0.111742 0.956116	</rayStart>
+              <rayEnd>	-0.0183412 0.15816 0.955993	</rayEnd>
+              <rayUp>	0.077 0.074 5	</rayUp>
               <size>	0.514	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
+            <tiling>	1.2 1.2 3.1 0.000000	</tiling>
           </camouflage>
         </_76mm_ZiS-96>
       </guns>
@@ -297,19 +473,22 @@
         <collisionModelServer>	vehicles/russian/R32_Matilda_II_LL/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R32_Matilda_II_LL/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.386856 0.762349	</gunPosition>
+      <gunPosition>	-0.05857 0.41794 0.76615	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.00304 0.603438 -0.0494977	</rayStart>
-          <rayEnd>	-0.609163 0.603438 -0.119189	</rayEnd>
+          <rayStart>	-0.919489 0.570072 -0.266107	</rayStart>
+          <rayEnd>	-0.521029 0.570072 -0.301092	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.913 -0.076 1.000 0.000 0.499 0.141 0.773 0.453 0.261 0.500 0.187 0.371 0.120 0.558 0.000	</physicsShape>
+      <physicsShape>	0.913 -0.076 0.908 0.000 0.525 0.141 0.773 0.453 0.261 0.500 0.187 0.371 0.120 0.558 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	2.3 2.3 0.000000 0.000000	</tiling>
+      </camouflage>
     </Matilda_II_LL>
   </turrets0>
   <engines>
@@ -321,17 +500,52 @@
   <radios>
     <Mk19R>	shared	</Mk19R>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <AEC3>
+          <smplEnginePower>	289.695	</smplEnginePower>
+        </AEC3>
+      </engines>
+      <chassis>
+        <Matilda>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Matilda>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Matilda>
-        <alpha>	0.10143	</alpha>
-      </Matilda>
-    </chassis>
-    <engines>
-      <AEC3>
-        <bravo>	72.42376	</bravo>
-      </AEC3>
-    </engines>
     <armour>	1.042627815	</armour>
   </clientAdjustmentFactors>
   <effects>

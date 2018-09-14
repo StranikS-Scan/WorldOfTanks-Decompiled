@@ -417,7 +417,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <camouflage>
             <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
           </camouflage>
@@ -459,22 +459,57 @@
   <radios>
     <SCR_528_IGR>	shared	</SCR_528_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Detroit_Diesel_6V53T-S_IGR>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Detroit_Diesel_6V53T-S_IGR>
+      </engines>
+      <chassis>
+        <Chassis_AMX_13_90_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_13_90_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_90mm_F3_IGR>
         <delta>	1.460784	</delta>
       </_90mm_F3_IGR>
     </guns>
-    <chassis>
-      <Chassis_AMX_13_90_2_IGR>
-        <alpha>	0.07245	</alpha>
-      </Chassis_AMX_13_90_2_IGR>
-    </chassis>
-    <engines>
-      <Detroit_Diesel_6V53T-S_IGR>
-        <bravo>	92.5121	</bravo>
-      </Detroit_Diesel_6V53T-S_IGR>
-    </engines>
     <armour>	0.705171195	</armour>
   </clientAdjustmentFactors>
   <effects>

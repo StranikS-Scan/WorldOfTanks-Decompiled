@@ -12,7 +12,7 @@ PACKAGE_LIMIT = 70
 
 class EventLogManager(EventLogManagerMeta):
 
-    def __init__(self):
+    def __init__(self, isEnabled=False):
         super(EventLogManager, self).__init__()
         self.__currentPackage = []
         self.__sendList = []
@@ -20,7 +20,12 @@ class EventLogManager(EventLogManagerMeta):
         self.__onAutoSending = False
         self.__cbckIdx = None
         self.__packageIdx = 0
+        self._isEnabled = isEnabled
         return
+
+    def _populate(self):
+        super(EventLogManager, self)._populate()
+        self.as_setSystemEnabledS(self._isEnabled)
 
     def __sendPackageToServer(self, package):
         if self.__packageIdx <= PACKAGE_LIMIT:

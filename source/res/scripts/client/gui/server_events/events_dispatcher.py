@@ -17,9 +17,10 @@ def showTankwomanRecruitWindow(questID, isPremium, fnGroup, lnGroup, iGroup):
      'iGroupID': iGroup}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showEventsWindow(eventID=None, eventType=None):
+def showEventsWindow(eventID=None, eventType=None, doResetNavInfo=False):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EVENTS_WINDOW, ctx={'eventID': eventID,
-     'eventType': eventType}), EVENT_BUS_SCOPE.LOBBY)
+     'eventType': eventType,
+     'doResetNavInfo': doResetNavInfo}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showTutorialTabInEventsWindow(eventID=''):
@@ -46,5 +47,11 @@ def showTankwomanAward(questID, tankmanData):
     shared_events.showAwardWindow(awards.TankwomanAward(questID, tankmanData, showTankwomanRecruitWindow), isUniqueName=False)
 
 
-def showRegularAward(quest, isMainReward=True, isAddReward=False):
-    shared_events.showAwardWindow(awards.RegularAward(quest, showEventsWindow, isMainReward, isAddReward))
+def showMissionAward(quest, ctx):
+    missionAward = awards.MissionAward(quest, ctx, showEventsWindow)
+    if missionAward.getAwards():
+        shared_events.showMissionAwardWindow(missionAward)
+
+
+def showPersonalMissionAward(quest, ctx):
+    shared_events.showMissionAwardWindow(awards.PersonalMissionAward(quest, ctx, showEventsWindow))

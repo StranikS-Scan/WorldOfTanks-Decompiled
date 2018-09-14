@@ -585,18 +585,52 @@
   <radios>
     <FuG5_T>	shared	</FuG5_T>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Pz-V_Vetstaerktketten_T>
-        <alpha>	0.1127	</alpha>
-      </Pz-V_Vetstaerktketten_T>
-    </chassis>
-    <engines>
-      <Maybach_HL_230P45_T>
-        <bravo>	198.2402	</bravo>
-      </Maybach_HL_230P45_T>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230P45_T>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Maybach_HL_230P45_T>
+      </engines>
+      <chassis>
+        <Pz-V_Vetstaerktketten_T>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Pz-V_Vetstaerktketten_T>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

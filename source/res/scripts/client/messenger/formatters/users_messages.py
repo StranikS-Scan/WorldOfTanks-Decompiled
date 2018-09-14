@@ -6,17 +6,19 @@ from messenger.m_constants import USER_ACTION_ID, MESSENGER_I18N_FILE
 from messenger.proto.xmpp.xmpp_constants import CONTACT_LIMIT
 _userTransferUserMsgKeys = {USER_ACTION_ID.FRIEND_ADDED: '#%s:client/information/addToFriends/message' % MESSENGER_I18N_FILE,
  USER_ACTION_ID.IGNORED_ADDED: '#%s:client/information/addToIgnored/message' % MESSENGER_I18N_FILE,
+ USER_ACTION_ID.TMP_IGNORED_ADDED: '#%s:client/information/addToTmpIgnored/message' % MESSENGER_I18N_FILE,
  USER_ACTION_ID.MUTE_SET: '#%s:client/information/setMuted/message' % MESSENGER_I18N_FILE,
  USER_ACTION_ID.MUTE_UNSET: '#%s:client/information/unsetMuted/message' % MESSENGER_I18N_FILE,
  USER_ACTION_ID.FRIEND_REMOVED: '#%s:client/information/removeFromFriends/message' % MESSENGER_I18N_FILE,
- USER_ACTION_ID.IGNORED_REMOVED: '#%s:client/information/removeFromIgnored/message' % MESSENGER_I18N_FILE}
+ USER_ACTION_ID.IGNORED_REMOVED: '#%s:client/information/removeFromIgnored/message' % MESSENGER_I18N_FILE,
+ USER_ACTION_ID.TMP_IGNORED_REMOVED: '#%s:client/information/removeFromTmpIgnored/message' % MESSENGER_I18N_FILE}
 
 def getUserActionReceivedMessage(actionIndex, user):
     if not GUI_SETTINGS.voiceChat and actionIndex in [USER_ACTION_ID.MUTE_SET, USER_ACTION_ID.MUTE_UNSET]:
         return
     else:
         if actionIndex in _userTransferUserMsgKeys:
-            message = i18n.makeString(_userTransferUserMsgKeys[actionIndex], user.getName())
+            message = i18n.makeString(_userTransferUserMsgKeys[actionIndex], user.getFullName(isClan=True, isRegion=False))
         else:
             message = None
         return message

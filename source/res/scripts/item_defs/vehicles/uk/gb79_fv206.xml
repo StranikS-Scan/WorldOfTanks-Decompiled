@@ -615,23 +615,89 @@
     </N22>
     <C42>	shared	</C42>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Meteor_MkIV>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkIV>
+        <Rolls_Royse_Meteor_MkIVC>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkIVC>
+      </engines>
+      <chassis>
+        <Chassis_GB79_FV206>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB79_FV206>
+        <Chassis_GB79_FV206_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB79_FV206_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB79_FV206>
-        <alpha>	0.1288	</alpha>
-      </Chassis_GB79_FV206>
-      <Chassis_GB79_FV206_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GB79_FV206_2>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Meteor_MkIV>
-        <bravo>	171.8082	</bravo>
-      </Rolls_Royse_Meteor_MkIV>
-      <Rolls_Royse_Meteor_MkIVC>
-        <bravo>	198.2402	</bravo>
-      </Rolls_Royse_Meteor_MkIVC>
-    </engines>
     <armour>	0.939310604	</armour>
   </clientAdjustmentFactors>
   <effects>

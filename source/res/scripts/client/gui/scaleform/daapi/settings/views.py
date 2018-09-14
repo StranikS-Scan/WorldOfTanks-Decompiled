@@ -29,11 +29,13 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     LOBBY_BARRACKS = 'barracks'
     LOBBY_CUSTOMIZATION = 'customization'
     LOBBY_MENU = 'lobbyMenu'
+    BROWSER = 'browser'
     SYSTEM_MESSAGES = 'systemMessages'
     MESSENGER_BAR = 'messengerBar'
     RECRUIT_PARAMS = 'recruitParams'
     NOTIFICATION_LIST_BUTTON = 'notificationListButton'
     CONTACTS_LIST_BUTTON = 'contactsListButton'
+    VEHICLE_COMPARE_CART_BUTTON = 'vehicleCompareCartButton'
     TEST_WINDOW = 'testWindow'
     ELITE_WINDOW = 'eliteWindow'
     RECRUIT_WINDOW = 'recruitWindow'
@@ -44,6 +46,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     EXCHANGE_XP_WINDOW = 'exchangeXPWindow'
     EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW = 'exchangeFreeToTankmanXpWindow'
     VEHICLE_BUY_WINDOW = 'vehicleBuyWindow'
+    VEHICLE_RESTORE_WINDOW = 'vehicleRestoreWindow'
     BATTLE_QUEUE = 'battleQueue'
     BATTLE_LOADING = 'battleLoading'
     FALLOUT_MULTI_TEAM_BATTLE_LOADING = 'falloutMultiTeamBattleLoading'
@@ -60,7 +63,8 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BROWSER_WINDOW = 'browserWindow'
     DEMONSTRATOR_WINDOW = 'demonstratorWindow'
     VEHICLE_PREVIEW = 'vehiclePreview'
-    MARK_PREVIEW = 'markPreview'
+    VEHICLE_COMPARE = 'vehicleCompare'
+    LOBBY_ACADEMY = 'academy'
     SIMPLE_DIALOG = 'simpleDialog'
     CONFIRM_MODULE_DIALOG = 'confirmModuleDialog'
     CONFIRM_BOOSTER_DIALOG = 'confirmBoosterDialog'
@@ -77,6 +81,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     SQUAD_TYPE_SELECT_POPOVER = 'squadTypeSelectPopover'
     ACCOUNT_POPOVER = 'accountPopover'
     DISMISS_TANKMAN_DIALOG = 'dismissTankmanDialog'
+    RESTORE_TANKMAN_DIALOG = 'restoreTankmanDialog'
     AWARD_WINDOW = 'awardWindow'
     REFERRAL_MANAGEMENT_WINDOW = 'referralManagementWindow'
     BOOSTERS_WINDOW = 'boostersWindow'
@@ -113,11 +118,11 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     CUSTOMIZATION_FILTER_POPOVER = 'CustomizationFilterPopover'
     TANK_CAROUSEL_FILTER_POPOVER = 'TankCarouselFilterPopover'
     CLASSIC_BATTLE_PAGE = 'classicBattlePage'
-    EVENT_BATTLE_PAGE = 'eventBattlePage'
     TUTORIAL_BATTLE_PAGE = 'tutorialBattlePage'
     FALLOUT_CLASSIC_PAGE = 'falloutClassicPage'
     FALLOUT_MULTITEAM_PAGE = 'falloutMultiteamPage'
     DEV_BATTLE_PAGE = 'devBattlePage'
+    MISSION_AWARD_WINDOW = 'missionAwardWindow'
     INGAME_MENU = 'ingameMenu'
     INGAME_HELP = 'ingameHelp'
     INGAME_DESERTER = 'ingameDeserter'
@@ -127,5 +132,4 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      TUTORIAL_BATTLE_PAGE,
      FALLOUT_CLASSIC_PAGE,
      FALLOUT_MULTITEAM_PAGE,
-     DEV_BATTLE_PAGE,
-     EVENT_BATTLE_PAGE)
+     DEV_BATTLE_PAGE)

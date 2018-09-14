@@ -7,6 +7,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
+from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 
@@ -84,7 +85,8 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.BUY: 'buyVehicle',
          VEHICLE.SELL: 'sellVehicle',
          VEHICLE.SELECT: 'selectVehicle',
-         VEHICLE.STATS: 'showVehicleStats'})
+         VEHICLE.STATS: 'showVehicleStats',
+         VEHICLE.COMPARE: 'compareVehicle'})
 
     def getVehCD(self):
         return self._nodeCD
@@ -101,6 +103,9 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def selectVehicle(self):
         shared_events.selectVehicleInHangar(self._nodeCD)
+
+    def compareVehicle(self):
+        getVehicleComparisonBasketCtrl().addVehicle(self._nodeCD)
 
     def _initFlashValues(self, ctx):
         self._nodeCD = int(ctx.nodeCD)
@@ -125,10 +130,15 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
             options.append(self._makeItem(VEHICLE.PREVIEW, MENU.CONTEXTMENU_SHOWVEHICLEPREVIEW))
         if NODE_STATE.isWasInBattle(self._nodeState):
             options.append(self._makeItem(VEHICLE.STATS, MENU.CONTEXTMENU_SHOWVEHICLESTATISTICS))
+        self._manageVehCompareItem(options, vehicle)
         options.append(self._makeSeparator())
         if vehicle.isUnlocked:
             if not vehicle.isPremiumIGR and (not vehicle.isInInventory or vehicle.isRented):
-                options.append(self._makeItem(VEHICLE.BUY, MENU.CONTEXTMENU_BUY, {'enabled': NODE_STATE.isAvailable2Buy(self._nodeState)}))
+                if vehicle.isRestoreAvailable():
+                    label = MENU.CONTEXTMENU_RESTORE
+                else:
+                    label = MENU.CONTEXTMENU_BUY
+                options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': NODE_STATE.isAvailable2Buy(self._nodeState)}))
         else:
             options.append(self._makeItem(VEHICLE.UNLOCK, MENU.CONTEXTMENU_UNLOCK, {'enabled': NODE_STATE.isAvailable2Unlock(self._nodeState) and not NODE_STATE.isPremium(self._nodeState)}))
         if not vehicle.isPremiumIGR:
@@ -137,3 +147,12 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
                 options.append(self._makeItem(VEHICLE.SELL, MENU.CONTEXTMENU_VEHICLEREMOVE if vehicle.isRented else MENU.CONTEXTMENU_SELL, {'enabled': isAvailable2SellOrRemove}))
         options.extend([self._makeSeparator(), self._makeItem(VEHICLE.SELECT, MENU.CONTEXTMENU_SELECTVEHICLEINHANGAR, {'enabled': (NODE_STATE.inInventory(self._nodeState) or NODE_STATE.isRentalOver(self._nodeState)) and NODE_STATE.isVehicleCanBeChanged(self._nodeState)})])
         return options
+
+    def _manageVehCompareItem(self, optionsRef, vehicle):
+        """
+        :param vehicle: instance of gui.shared.gui_items.Vehicle.Vehicle
+        :param optionsRef: reference to Context Menu items list
+        """
+        comparisonBasket = getVehicleComparisonBasketCtrl()
+        if comparisonBasket.isEnabled():
+            optionsRef.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': comparisonBasket.isReadyToAdd(vehicle)}))

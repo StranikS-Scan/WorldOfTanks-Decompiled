@@ -10,6 +10,7 @@ import helpers
 from debug_utils import *
 from functools import partial
 from PixieBG import PixieBG
+from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 import string
 import SoundGroups
 _ALLOW_DYNAMIC_LIGHTS = True
@@ -72,7 +73,8 @@ class EffectsList(object):
                 eff.create(model, data['_EffectsList_effects'], args)
 
     def reattachTo(self, model, data):
-        for elem in data['_EffectsList_effects']:
+        effects = data.get('_EffectsList_effects', ())
+        for elem in effects:
             elem['typeDesc'].reattach(elem, model)
 
     def detachFrom(self, data, key):
@@ -83,24 +85,29 @@ class EffectsList(object):
                     effects.remove(elem)
 
     def detachAllFrom(self, data, keepPosteffects=False):
-        effects = data['_EffectsList_effects']
-        if keepPosteffects:
+        effects = data.get('_EffectsList_effects', None)
+        if effects is None:
+            return
+        elif keepPosteffects:
             for elem in effects[:]:
                 if elem['typeDesc'].delete(elem, 2):
                     effects.remove(elem)
 
             return
-        for elem in effects[:]:
-            elem['typeDesc'].delete(elem, 0)
-            effects.remove(elem)
+        else:
+            for elem in effects[:]:
+                elem['typeDesc'].delete(elem, 0)
+                effects.remove(elem)
 
-        del data['_EffectsList_effects']
+            del data['_EffectsList_effects']
+            return
 
 
 class EffectsListPlayer:
     effectsList = property(lambda self: self.__effectsList)
     isPlaying = property(lambda self: self.__isStarted)
-    activeEffects = []
+    activeEffects = set()
+    clearInProgress = False
 
     @staticmethod
     def clear():
@@ -110,14 +117,21 @@ class EffectsListPlayer:
             return
         else:
             warpDelta = replayCtrl.warpTime - replayCtrl.currentTime
-            for effect in EffectsListPlayer.activeEffects[:]:
+            EffectsListPlayer.clearInProgress = True
+            for effect in EffectsListPlayer.activeEffects:
                 if effect.__waitForKeyOff and warpDelta > 0.0:
                     continue
-                if warpDelta <= 0.0 or effect.__keyPoints[-1].time - effect.__curKeyPoint.time < warpDelta:
+                effectCurTime = 0
+                if effect.__curKeyPoint is not None:
+                    effectCurTime = effect.__curKeyPoint.time
+                else:
+                    effectCurTime = 0.0
+                if warpDelta <= 0.0 or effect.__keyPoints[-1].time - effectCurTime < warpDelta:
                     if effect.__callbackFunc is not None:
                         effect.__callbackFunc()
                     effect.stop()
 
+            EffectsListPlayer.clearInProgress = False
             return
 
     def __init__(self, effectsList, keyPoints, **args):
@@ -127,9 +141,11 @@ class EffectsListPlayer:
         self.__args['keyPoints'] = self.__keyPoints
         self.__curKeyPoint = None
         self.__callbackFunc = None
+        self.__callbackID = None
         self.__keyPointIdx = -1
         self.__isStarted = False
         self.__waitForKeyOff = False
+        self.__data = dict()
         return
 
     def play(self, model, startKeyPoint=None, callbackFunc=None, waitForKeyOff=False):
@@ -144,11 +160,10 @@ class EffectsListPlayer:
                 return
             import BattleReplay
             if BattleReplay.g_replayCtrl.isPlaying:
-                EffectsListPlayer.activeEffects.append(self)
+                EffectsListPlayer.activeEffects.add(self)
             self.__isStarted = True
             self.__callbackID = None
             self.__model = model
-            self.__data = {}
             self.__callbackFunc = callbackFunc
             self.__waitForKeyOff = waitForKeyOff
             self.__keyPointIdx = self.__getKeyPointIdx(startKeyPoint) if startKeyPoint is not None else 0
@@ -166,9 +181,8 @@ class EffectsListPlayer:
             self.__playKeyPoint(waitForNextKeyOff)
 
     def reattachTo(self, model):
-        if self.__isStarted:
-            self.__effectsList.reattachTo(model, self.__data)
-            self.__model = model
+        self.__effectsList.reattachTo(model, self.__data)
+        self.__model = model
 
     def __isNeedToPlay(self, waitForKeyOff):
         if helpers.gEffectsDisabled():
@@ -199,24 +213,23 @@ class EffectsListPlayer:
             return (True, None)
 
     def stop(self, keepPosteffects=False, forceCallback=False):
-        if not self.__isStarted:
-            return
-        else:
+        if self.__isStarted:
             if forceCallback and self.__callbackFunc is not None:
                 self.__callbackFunc()
-            import BattleReplay
-            if BattleReplay.g_replayCtrl.isPlaying:
-                EffectsListPlayer.activeEffects.remove(self)
-            self.__isStarted = False
-            if self.__callbackID is not None:
-                BigWorld.cancelCallback(self.__callbackID)
-                self.__callbackID = None
+        import BattleReplay
+        if BattleReplay.g_replayCtrl.isPlaying and not EffectsListPlayer.clearInProgress:
+            EffectsListPlayer.activeEffects.discard(self)
+        self.__isStarted = False
+        if self.__callbackID is not None:
+            BigWorld.cancelCallback(self.__callbackID)
+            self.__callbackID = None
+        if self.__effectsList is not None:
             self.__effectsList.detachAllFrom(self.__data, keepPosteffects)
-            self.__model = None
-            self.__data = None
-            self.__curKeyPoint = None
-            self.__callbackFunc = None
-            return
+        self.__model = None
+        self.__data = dict()
+        self.__curKeyPoint = None
+        self.__callbackFunc = None
+        return
 
     def __getKeyPointIdx(self, name):
         for i, keyPoint in enumerate(self.__keyPoints):
@@ -254,8 +267,8 @@ class _EffectDesc:
         if not self.startKey:
             _raiseWrongConfig('startKey', self.TYPE)
         self.endKey = dataSection.readString('endKey')
-        pos = dataSection.readString('position')
-        self._pos = string.split(pos, '/') if pos else []
+        nodeName = dataSection.readString('position')
+        self._nodeName = string.split(nodeName, '/') if nodeName else []
 
     def prerequisites(self):
         return []
@@ -304,11 +317,11 @@ class _PixieEffectDesc(_EffectDesc):
         return self._files
 
     def reattach(self, elem, model):
-        nodePos = self._pos
+        nodePos = self._nodeName
         elem['model'] = model
         if elem['newPos'] is not None:
             nodePos = string.split(elem['newPos'][0], '/') if elem['newPos'][0] else []
-        if elem['pixie'].pixie is not None:
+        if elem['pixie'].pixie is not None and elem['node'] is not None:
             elem['node'].detach(elem['pixie'].pixie)
             elem['node'] = _findTargetNode(model, nodePos, elem['newPos'][1] if elem['newPos'] else None, self._orientByClosestSurfaceNormal, elem['surfaceNormal'])
             elem['node'].attach(elem['pixie'].pixie)
@@ -319,7 +332,7 @@ class _PixieEffectDesc(_EffectDesc):
     def create(self, model, list, args):
         elem = {}
         elem['newPos'] = args.get('position', None)
-        nodePos = self._pos
+        nodePos = self._nodeName
         if elem['newPos'] is not None:
             nodePos = string.split(elem['newPos'][0], '/') if elem['newPos'][0] else []
         scale = args.get('scale')
@@ -355,6 +368,7 @@ class _PixieEffectDesc(_EffectDesc):
         if elem['pixie'].pixie is not None:
             elem['node'].detach(elem['pixie'].pixie)
         elem['pixie'] = None
+        elem['node'] = None
         return True
 
     def _callbackAfterLoading(self, elem, pixieBG):
@@ -364,11 +378,12 @@ class _PixieEffectDesc(_EffectDesc):
     def _callbackCreate(self, elem):
         scale = elem.get('scale')
         pixie = elem['pixie']
-        if pixie is not None:
+        node = elem['node']
+        if pixie is not None and node is not None:
             if scale is not None:
                 pixie.scale(scale)
             pixie.force(self._force)
-            elem['node'].attach(pixie.pixie)
+            node.attach(pixie.pixie)
         return
 
     @staticmethod
@@ -388,7 +403,7 @@ class _AnimationEffectDesc(_EffectDesc):
             _raiseWrongConfig('name', self.TYPE)
 
     def create(self, model, list, args):
-        targetModel = _findTargetModel(model, self._pos)
+        targetModel = _findTargetModel(model, self._nodeName)
         self._action = targetModel.action(self._name)
         self._action()
         list.append({'typeDesc': self,
@@ -418,7 +433,7 @@ class _VisibilityEffectDesc(_EffectDesc):
             self._hasInitial = True
 
     def create(self, model, list, args):
-        targetModel = _findTargetModel(model, self._pos)
+        targetModel = _findTargetModel(model, self._nodeName)
         if self._hasInitial:
             targetModel.visible = self._initial
         else:
@@ -456,7 +471,7 @@ class _ModelEffectDesc(_EffectDesc):
 
     def reattach(self, elem, model):
         elem['node'].detach(elem['attachment'])
-        nodeName = self._pos
+        nodeName = self._nodeName
         if elem['newPos'] is not None:
             nodeName = string.split(elem['newPos'][0], '/') if elem['newPos'][0] else []
         targetNode = _findTargetNode(model, nodeName, elem['newPos'][1] if elem['newPos'] else None)
@@ -466,7 +481,7 @@ class _ModelEffectDesc(_EffectDesc):
     def create(self, model, list, args):
         currentModel = BigWorld.Model(self._modelName)
         newPos = args.get('position', None)
-        nodeName = self._pos
+        nodeName = self._nodeName
         if newPos is not None:
             nodeName = string.split(newPos[0], '/') if newPos[0] else []
         targetNode = _findTargetNode(model, nodeName, newPos[1] if newPos else None)
@@ -495,7 +510,7 @@ class _BaseSoundEvent(_EffectDesc, object):
     def reattach(self, elem, model):
         sound = elem.get('sound')
         if sound is not None:
-            elem['node'] = node = _findTargetNodeSafe(model, self._pos)
+            elem['node'] = node = _findTargetNodeSafe(model, self._nodeName)
             sound.matrixProvider = node.actualNode
         else:
             elem['node'] = None
@@ -522,36 +537,15 @@ class _BaseSoundEvent(_EffectDesc, object):
             isPlayerVehicle = args.get('isPlayerVehicle', False)
         return (isPlayerVehicle, entityID)
 
+    def _getName(self, args):
+        isPlayer, id = self._isPlayer(args)
+        return (self._soundName[0 if isPlayer else 1], id)
 
-class _SimpleSoundEffectDesc(_BaseSoundEvent):
-    TYPE = '_SimpleSoundEffectDesc'
-
-    def __init__(self, dataSection):
-        _BaseSoundEvent.__init__(self, dataSection)
-
-    def create(self, model, list, args):
-        isPlayerVehicle, entityID = self._isPlayer(args)
-        soundName = self._soundName[0 if isPlayerVehicle else 1]
-        if soundName == '':
-            return
-        else:
-            elem = {'typeDesc': self}
-            elem['node'] = node = _findTargetNodeSafe(model, self._pos)
-            startParams = args.get('soundParams', ())
-            objectName = soundName + str(entityID) + '_' + str(node.actualNode)
-            sound = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
-            elem['sound'] = sound
-            if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                LOG_DEBUG('SOUND: EffectList dynamic, ', soundName, args, node.actualNode, self._pos, elem['sound'])
-            if SoundGroups.DEBUG_TRACE_STACK is True:
-                import traceback
-                traceback.print_stack()
-            for soundStartParam in startParams:
-                sound.setRTPC(soundStartParam.name, soundStartParam.value)
-
-            sound.play(soundName)
-            list.append(elem)
-            return sound
+    def _register(self, list, node, sound):
+        elem = {'typeDesc': self}
+        elem['node'] = node
+        elem['sound'] = sound
+        list.append(elem)
 
 
 class _ShotSoundEffectDesc(_BaseSoundEvent, object):
@@ -563,40 +557,100 @@ class _ShotSoundEffectDesc(_BaseSoundEvent, object):
     def create(self, model, list, args):
         vehicle = args.get('entity', None)
         if vehicle is not None and vehicle.isAlive() and vehicle.isStarted:
-            soundObject = vehicle.appearance.getGunSoundObj()
+            soundObject = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.GUN)
             if soundObject is not None:
                 isPlayer, _ = self._isPlayer(args)
                 soundName = self._soundName[0 if isPlayer else 1]
                 distance = (BigWorld.camera().position - vehicle.position).length
-                soundObject.setRTPC('RTPC_ext_control_reflections_priority', distance)
                 soundObject.play(soundName)
-                from gui.battle_control import g_sessionProvider
-                from gui.battle_control.controllers.event_mark1.bonus_ctrl import EXTRA_BIG_GUN
-                bonusCtrl = g_sessionProvider.dynamic.mark1Bonus
-                if bonusCtrl is not None:
-                    currentBonus = bonusCtrl.getVehicleBonus(vehicle.id)
-                    if currentBonus != EXTRA_BIG_GUN:
-                        vehicle.appearance.engineAudition.setBigGunSwitch(False)
+                soundObject.setRTPC('RTPC_ext_control_reflections_priority', distance)
         return
 
 
-class _SplashSoundEffectDesc(_SimpleSoundEffectDesc, object):
-    TYPE = '_SplashSoundEffectDesc'
+class _NodeSoundEffectDesc(_BaseSoundEvent, object):
+    TYPE = '_NodeSoundEffectDesc'
 
     def __init__(self, dataSection):
-        _SimpleSoundEffectDesc.__init__(self, dataSection)
+        _BaseSoundEvent.__init__(self, dataSection)
 
     def create(self, model, list, args):
-        sound = _SimpleSoundEffectDesc.create(self, model, list, args)
+        soundName, id = self._getName(args)
+        if soundName == '':
+            return
+        else:
+            vehicle = args.get('entity', None)
+            if vehicle is not None and vehicle.isAlive() and vehicle.isStarted:
+                local = args.get('position', None)
+                if local is not None:
+                    local = local[1].translation
+                else:
+                    local = Math.Vector3(0.0, 0.0, 0.0)
+                node = _findTargetNodeSafe(model, self._nodeName)
+                objectName = soundName + str(id) + '_' + str(local)
+                soundObject = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode, local)
+                if soundObject is not None:
+                    damageFactor = args.get('damageFactor', None)
+                    if damageFactor is not None:
+                        damage_size = 'SWITCH_ext_damage_size_medium'
+                        factor = args.get('damageFactor', 0.0)
+                        if factor < 4335.0 / 100.0:
+                            damage_size = 'SWITCH_ext_damage_size_small'
+                        elif factor > 8925.0 / 100.0:
+                            damage_size = 'SWITCH_ext_damage_size_large'
+                        LOG_DEBUG('Sound Name = {0} Damage Size = {1}'.format(soundName, damage_size))
+                        soundObject.setSwitch('SWITCH_ext_damage_size', damage_size)
+                    startParams = args.get('soundParams', ())
+                    for soundStartParam in startParams:
+                        soundObject.setRTPC(soundStartParam.name, soundStartParam.value)
+
+                    soundObject.play(soundName)
+                    self._register(list, node, soundObject)
+                    return soundObject
+            else:
+                return
+            return
+
+
+class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
+    TYPE = '_CollisionSoundEffectDesc'
+
+    def __init__(self, dataSection):
+        _EffectDesc.__init__(self, dataSection)
+        pcSounds, npcSounds = dataSection.readString('wwsoundPC', '').split(';'), dataSection.readString('wwsoundNPC', '').split(';')
+        if pcSounds is not None and len(pcSounds) > 1:
+            pcSounds = (pcSounds[0].split()[0], pcSounds[1].split()[0])
+        else:
+            pcSounds = None
+        if npcSounds is not None and len(npcSounds) > 1:
+            npcSounds = (npcSounds[0].split()[0], npcSounds[1].split()[0])
+        else:
+            npcSounds = None
+        self._soundName = (pcSounds, npcSounds)
+        return
+
+    def _getName(self, args):
+        isPlayer, id = self._isPlayer(args)
+        isTracks = args.get('isTracks', False)
+        sounds = self._soundName[0 if isPlayer else 1]
+        if sounds is not None:
+            return (sounds[1 if isTracks else 0], id)
+        else:
+            return ('', id)
+            return
+
+    def create(self, model, list, args):
         damageFactor = args.get('damageFactor', None)
-        if damageFactor is not None and sound is not None:
-            damage_size = 'SWITCH_ext_damage_size_medium'
-            factor = args.get('damageFactor', 0.0)
-            if factor < 4335.0 / 100.0:
-                damage_size = 'SWITCH_ext_damage_size_small'
-            elif factor > 8925.0 / 100.0:
-                damage_size = 'SWITCH_ext_damage_size_large'
-            sound.setSwitch('SWITCH_ext_damage_size', damage_size)
+        if damageFactor < 1.0:
+            args['damageFactor'] = None
+            damageFactor = None
+        impulse = args.get('impulse', None)
+        if impulse is not None:
+            impulseParam = SoundStartParam('RTPC_ext_collision_impulse_static_object', impulse)
+            soundParams = args.get('soundParams', [impulseParam])
+            args['soundParams'] = soundParams
+        object = _NodeSoundEffectDesc.create(self, model, list, args)
+        if damageFactor is not None and object is not None:
+            object.play('collision_static_object_damage')
         return
 
 
@@ -632,7 +686,7 @@ class _SoundEffectDesc(_EffectDesc, object):
     def reattach(self, elem, model):
         sound = elem.get('sound')
         if sound is not None:
-            elem['node'] = node = _findTargetNodeSafe(model, self._pos)
+            elem['node'] = node = _findTargetNodeSafe(model, self._nodeName)
             sound.matrixProvider = node.actualNode
         else:
             elem['node'] = None
@@ -663,14 +717,14 @@ class _SoundEffectDesc(_EffectDesc, object):
             if soundName.startswith('expl_') and playerID != entityID:
                 soundName = self._soundNames[1] if self._soundNames is not None else self._soundName
         elem = {'typeDesc': self}
-        elem['node'] = node = _findTargetNodeSafe(model, self._pos)
+        elem['node'] = node = _findTargetNodeSafe(model, self._nodeName)
         pos = Math.Matrix(node.actualNode).translation
         startParams = args.get('soundParams', ())
         if self._dynamic is True or self._stopSyncVisual:
-            objectName = soundName + '_NODE_' + str(entityID) + '_' + str(self._pos)
+            objectName = soundName + '_NODE_' + str(entityID) + '_' + str(self._nodeName)
             elem['sound'] = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
             if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                LOG_DEBUG('SOUND: EffectList dynamic, ', soundName, args, node.actualNode, self._pos, elem['sound'])
+                LOG_DEBUG('SOUND: EffectList dynamic, ', soundName, args, node.actualNode, self._nodeName, elem['sound'])
             if SoundGroups.DEBUG_TRACE_STACK is True:
                 import traceback
                 traceback.print_stack()
@@ -903,7 +957,7 @@ class _LightEffectDesc(_EffectDesc):
         if not _ALLOW_DYNAMIC_LIGHTS:
             return
         else:
-            nodePos = self._pos
+            nodePos = self._nodeName
             if elem['newPos'] is not None:
                 nodePos = string.split(elem['newPos'][0], '/') if elem['newPos'][0] else []
             elem['model'] = model
@@ -918,7 +972,7 @@ class _LightEffectDesc(_EffectDesc):
         else:
             elem = {}
             elem['newPos'] = args.get('position', None)
-            nodePos = self._pos
+            nodePos = self._nodeName
             if elem['newPos'] is not None:
                 nodePos = string.split(elem['newPos'][0], '/') if elem['newPos'][0] else []
             elem['model'] = model
@@ -973,8 +1027,8 @@ class _LightEffectDesc(_EffectDesc):
 _effectDescFactory = {'pixie': _PixieEffectDesc,
  'animation': _AnimationEffectDesc,
  'sound': _SoundEffectDesc,
- 'simpleSound': _SimpleSoundEffectDesc,
- 'splashSound': _SplashSoundEffectDesc,
+ 'splashSound': _NodeSoundEffectDesc,
+ 'collisionSound': _CollisionSoundEffectDesc,
  'shotSound': _ShotSoundEffectDesc,
  'visibility': _VisibilityEffectDesc,
  'model': _ModelEffectDesc,
@@ -1088,12 +1142,12 @@ def _findTargetNode(model, nodes, localTransform=None, orientByClosestSurfaceNor
     return _NodeWithLocal(model, nodes[-1], localTransform)
 
 
-def _findTargetNodeSafe(model, nodes):
+def _findTargetNodeSafe(model, nodes, local=None):
     node = None
     if len(nodes) > 0:
-        node = _findTargetNode(model, nodes)
+        node = _findTargetNode(model, nodes, local)
     if node is None:
-        node = _NodeWithLocal(model)
+        node = _NodeWithLocal(model, '', local)
     return node
 
 

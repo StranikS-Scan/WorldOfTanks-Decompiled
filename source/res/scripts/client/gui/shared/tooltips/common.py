@@ -9,7 +9,6 @@ import ResMgr
 import BigWorld
 import constants
 import ArenaType
-import fortified_regions
 from account_helpers.settings_core import g_settingsCore
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.goodies.GoodiesCache import g_goodiesCache
@@ -187,6 +186,7 @@ class EfficiencyTooltipData(BlocksTooltipData):
 
     def __init__(self, context):
         super(EfficiencyTooltipData, self).__init__(context, TOOLTIP_TYPE.EFFICIENCY)
+        self._setWidth(290)
 
     def _packBlocks(self, data):
         if data is not None and data.type in self._packers:
@@ -258,7 +258,7 @@ class ContactTooltipData(ToolTipBaseData):
             if currentUnit != '':
                 units.append(currentUnit)
             currentUnit = ''
-            if USER_TAG.IGNORED in tags:
+            if {USER_TAG.IGNORED, USER_TAG.IGNORED_TMP} & tags:
                 currentUnit += self.__makeIconUnitStr('contactIgnored.png', TOOLTIPS.CONTACT_UNITS_STATUS_DESCRIPTION_IGNORED)
             elif USER_TAG.SUB_TO not in tags and (USER_TAG.SUB_PENDING_IN in tags or userEntity.isFriend() and USER_TAG.SUB_FROM not in tags):
                 currentUnit += self.__addBR(currentUnit)
@@ -286,7 +286,7 @@ class ContactTooltipData(ToolTipBaseData):
                 if clubName:
                     groupsStr += self.__addComma(groupsStr)
                     groupsStr += makeClubFullName(clubName)
-            if USER_TAG.IGNORED in tags:
+            if USER_TAG.IGNORED in tags or USER_TAG.IGNORED_TMP in tags:
                 groupsStr += self.__addComma(groupsStr)
                 groupsStr += makeString(MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER_IGNORED)
             if USER_TAG.SUB_PENDING_IN in tags:
@@ -849,96 +849,6 @@ class _BattleStatus(object):
         return ''.join((self.style('%s %s' % (self.prefix, BigWorld.wg_getIntegralFormat(count))), icons.nut()))
 
 
-class ToolTipFortBuildingData(ToolTipBaseData, FortViewHelper):
-
-    class BATTLE_STATUSES(CONST_CONTAINER):
-        NO_BATTLE = _BattleStatus('warning', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_WASNOTBATTLE, text_styles.defRes, '')
-        LOST = _BattleStatus('critical', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_DEFEAT, text_styles.error, '-')
-        WON = _BattleStatus('info', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_VICTORY, text_styles.success, '+')
-
-    def __init__(self, context):
-        super(ToolTipFortBuildingData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
-
-    def getDisplayableData(self, buildingUID, isMine):
-        ms = i18n.makeString
-        fort = self.fortCtrl.getFort()
-        battleID = getBattleID()
-        battle = fort.getBattle(battleID)
-        buildingTypeID = self.getBuildingIDbyUID(buildingUID)
-        if battle.isDefence():
-            isAttack = not isMine
-        else:
-            isAttack = isMine
-        if isAttack:
-            buildingsList = battle.getAttackerBuildList()
-            buildingsFullList = battle.getAttackerFullBuildList()
-        else:
-            buildingsList = battle.getDefenderBuildList()
-            buildingsFullList = battle.getDefenderFullBuildList()
-        buildingFullData = findFirst(lambda x: x[0] == buildingTypeID, buildingsFullList)
-        _, status, buildingLevel, hpVal, defResVal = buildingFullData
-        isReadyForBattle = status == constants.FORT_BUILDING_STATUS.READY_FOR_BATTLE
-        buildingData = None
-        resCount, arenaTypeID = (None, None)
-        if isReadyForBattle:
-            buildingData = findFirst(lambda x: x[0] == buildingTypeID, buildingsList)
-            _, resCount, arenaTypeID = buildingData
-        _, status, buildingLevel, hpVal, defResVal = buildingFullData
-        progress = self._getProgress(buildingTypeID, buildingLevel)
-        normLevel = max(buildingLevel, 1)
-        buildingLevelData = fortified_regions.g_cache.buildings[buildingTypeID].levels[normLevel]
-        hpTotalVal = buildingLevelData.hp
-        maxDefResVal = buildingLevelData.storage
-        buildingName = text_styles.highTitle(ms(FORT.buildings_buildingname(buildingUID)))
-        currentMapTxt = None
-        buildingLevelTxt = text_styles.main(ms(FORT.FORTMAINVIEW_HEADER_LEVELSLBL, buildLevel=str(fort_formatters.getTextLevel(buildingLevel))))
-        descrActionTxt = ''
-        statusTxt = None
-        statusLevel = None
-        indicatorsModel = None
-        infoMessage = None
-        if status == constants.FORT_BUILDING_STATUS.LOW_LEVEL:
-            minBuildingLevel = fortified_regions.g_cache.defenceConditions.minRegionLevel
-            minLevel = fort_formatters.getTextLevel(1)
-            maxLevel = fort_formatters.getTextLevel(minBuildingLevel - 1)
-            infoMessage = ms(FORT.TOOLTIPBUILDINGINFO_LOWLEVELMESSAGE, minLevel=minLevel, maxLevel=maxLevel)
-        else:
-            indicatorsModel = makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResVal, maxDefResVal)
-            if isReadyForBattle:
-                lootedBuildings = battle.getLootedBuildList()
-                battleStatus = self.BATTLE_STATUSES.NO_BATTLE
-                if (buildingData, isAttack) in lootedBuildings:
-                    battleStatus = self.BATTLE_STATUSES.LOST
-                    if battle.isDefence() and isAttack or not battle.isDefence() and not isAttack:
-                        battleStatus = self.BATTLE_STATUSES.WON
-                arenaType = ArenaType.g_cache.get(arenaTypeID)
-                prefix = text_styles.standard(ms(FORT.TOOLTIPBUILDINGINFO_MEP_MAPPREFIX))
-                mapName = text_styles.neutral(arenaType.name)
-                currentMapTxt = prefix + mapName
-                statusLevel = battleStatus.level
-                statusTxt = battleStatus.getMsgText()
-                defResStatusTxt = battleStatus.getResText(resCount)
-                descrActionTxt = text_styles.main(ms(FORT.TOOLTIPBUILDINGINFO_DESCRACTION))
-                descrActionTxt = descrActionTxt % {'value': defResStatusTxt}
-            else:
-                minResCount = hpTotalVal * 0.2
-                minResStatusTxt = ''.join((text_styles.neutral(BigWorld.wg_getIntegralFormat(minResCount)), icons.nut()))
-                infoMessage = text_styles.main(ms(FORT.TOOLTIPBUILDINGINFO_DESTROYEDMESSAGE))
-                infoMessage = infoMessage % {'value': minResStatusTxt}
-        result = {'buildingUID': buildingUID,
-         'buildingName': buildingName,
-         'currentMap': currentMapTxt,
-         'buildingLevel': buildingLevelTxt,
-         'descrAction': descrActionTxt,
-         'statusMsg': statusTxt,
-         'statusLevel': statusLevel,
-         'indicatorModel': indicatorsModel,
-         'isAvailable': isReadyForBattle,
-         'infoMessage': infoMessage,
-         'buildingIcon': FortViewHelper.getPopoverIconSource(buildingUID, buildingLevel, True)}
-        return result
-
-
 class ActionTooltipData(ToolTipBaseData):
 
     def __init__(self, context):
@@ -1329,6 +1239,7 @@ _CurrencySetting = namedtuple('_CurrencySetting', 'text, icon, textStyle, frame'
 
 class CURRENCY_SETTINGS(object):
     BUY_CREDITS_PRICE = 'buyCreditsPrice'
+    RESTORE_PRICE = 'restorePrice'
     BUY_GOLD_PRICE = 'buyGoldPrice'
     RENT_CREDITS_PRICE = 'rentCreditsPrice'
     RENT_GOLD_PRICE = 'rentGoldPrice'
@@ -1345,6 +1256,7 @@ class CURRENCY_SETTINGS(object):
 
 
 _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
+ CURRENCY_SETTINGS.RESTORE_PRICE: _CurrencySetting('#tooltips:vehicle/restore_price', icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
  CURRENCY_SETTINGS.BUY_GOLD_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD),
  CURRENCY_SETTINGS.RENT_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_MINRENTALSPRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
  CURRENCY_SETTINGS.RENT_GOLD_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_MINRENTALSPRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD),

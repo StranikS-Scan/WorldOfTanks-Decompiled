@@ -8,27 +8,13 @@ class BattleTimerMeta(BaseDAAPIComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIComponent
-    null
     """
 
     def as_setTotalTimeS(self, minutes, seconds):
-        """
-        :param minutes:
-        :param seconds:
-        :return :
-        """
         return self.flashObject.as_setTotalTime(minutes, seconds) if self._isDAAPIInited() else None
 
     def as_setColorS(self, criticalColor):
-        """
-        :param criticalColor:
-        :return :
-        """
         return self.flashObject.as_setColor(criticalColor) if self._isDAAPIInited() else None
 
     def as_showBattleTimerS(self, show):
-        """
-        :param show:
-        :return :
-        """
         return self.flashObject.as_showBattleTimer(show) if self._isDAAPIInited() else None

@@ -474,17 +474,52 @@
   <radios>
     <_10RKM>	shared	</_10RKM>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2IS_B>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </V-2IS_B>
+      </engines>
+      <chassis>
+        <Chassis_R71_IS_2B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R71_IS_2B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R71_IS_2B>
-        <alpha>	0.08855	</alpha>
-      </Chassis_R71_IS_2B>
-    </chassis>
-    <engines>
-      <V-2IS_B>
-        <bravo>	158.5922	</bravo>
-      </V-2IS_B>
-    </engines>
     <armour>	1.194832217	</armour>
   </clientAdjustmentFactors>
   <effects>

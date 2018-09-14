@@ -871,26 +871,92 @@
     </FuG5>
     <FuG8>	shared	</FuG8>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Praga_EPA_AC>
+          <smplEnginePower>	158.5922	</smplEnginePower>
+        </Praga_EPA_AC>
+        <Praga_NS>
+          <smplEnginePower>	169.165	</smplEnginePower>
+        </Praga_NS>
+        <Praga_AusfIV>
+          <smplEnginePower>	190.3106	</smplEnginePower>
+        </Praga_AusfIV>
+      </engines>
+      <chassis>
+        <Chassis_Marder_III>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Marder_III>
+        <Chassis_Marder_III_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Marder_III_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Marder_III>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Marder_III>
-      <Chassis_Marder_III_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Marder_III_2>
-    </chassis>
-    <engines>
-      <Praga_EPA_AC>
-        <bravo>	39.64804	</bravo>
-      </Praga_EPA_AC>
-      <Praga_NS>
-        <bravo>	42.29124	</bravo>
-      </Praga_NS>
-      <Praga_AusfIV>
-        <bravo>	47.57765	</bravo>
-      </Praga_AusfIV>
-    </engines>
     <armour>	0.620406336	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/BWAutoImport.py
 import collections
 from weakref import proxy as _proxy
+from WeakMethod import WeakMethodProxy
 
 def _fix_base_handler_in_urllib2():
     import functools
@@ -12,6 +13,60 @@ def _fix_base_handler_in_urllib2():
 
     functools.update_wrapper(add_parent, BaseHandler.add_parent)
     setattr(BaseHandler, 'add_parent', add_parent)
+
+
+def _fix_http_response_in_urllib2():
+    import functools
+    import socket
+    from urllib import addinfourl
+    from urllib2 import AbstractHTTPHandler, URLError
+
+    def do_open(self, http_class, req, **http_conn_args):
+        """Return an addinfourl object for the request, using http_class.
+        
+        http_class must implement the HTTPConnection API from httplib.
+        The addinfourl return value is a file-like object.  It also
+        has methods and attributes including:
+            - info(): return a mimetools.Message object for the headers
+            - geturl(): return the original request URL
+            - code: HTTP status code
+        """
+        host = req.get_host()
+        if not host:
+            raise URLError('no host given')
+        h = http_class(host, timeout=req.timeout, **http_conn_args)
+        h.set_debuglevel(self._debuglevel)
+        headers = dict(req.unredirected_hdrs)
+        headers.update(dict(((k, v) for k, v in req.headers.items() if k not in headers)))
+        headers['Connection'] = 'close'
+        headers = dict(((name.title(), val) for name, val in headers.items()))
+        if req._tunnel_host:
+            tunnel_headers = {}
+            proxy_auth_hdr = 'Proxy-Authorization'
+            if proxy_auth_hdr in headers:
+                tunnel_headers[proxy_auth_hdr] = headers[proxy_auth_hdr]
+                del headers[proxy_auth_hdr]
+            h.set_tunnel(req._tunnel_host, headers=tunnel_headers)
+        try:
+            h.request(req.get_method(), req.get_selector(), req.data, headers)
+        except socket.error as err:
+            h.close()
+            raise URLError(err)
+        else:
+            try:
+                r = h.getresponse(buffering=True)
+            except TypeError:
+                r = h.getresponse()
+
+        r.recv = WeakMethodProxy(r.read)
+        fp = socket._fileobject(r, close=True)
+        resp = addinfourl(fp, r.msg, req.get_full_url())
+        resp.code = r.status
+        resp.msg = r.reason
+        return resp
+
+    functools.update_wrapper(do_open, AbstractHTTPHandler.do_open)
+    setattr(AbstractHTTPHandler, 'do_open', do_open)
 
 
 def _fix_ordered_dict():
@@ -210,5 +265,6 @@ def _fix_namedtuple():
 
 
 _fix_base_handler_in_urllib2()
+_fix_http_response_in_urllib2()
 _fix_ordered_dict()
 _fix_namedtuple()

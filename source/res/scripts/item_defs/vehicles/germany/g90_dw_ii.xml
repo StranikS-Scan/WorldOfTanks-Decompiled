@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G90_DW_II/DW_II_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -30,18 +30,16 @@
       <armor_2>	50	</armor_2>
       <armor_3>	50	</armor_3>
       <armor_4>	50	</armor_4>
-      <armor_5>	20	</armor_5>
+      <armor_5>	35	</armor_5>
       <armor_6>	20	</armor_6>
-      <armor_7>	35	</armor_7>
+      <armor_7>	25	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	35	</armor_9>
-      <armor_10>	35	</armor_10>
-      <armor_11>	50	</armor_11>
-      <armor_12>	50	</armor_12>
-      <armor_13>	50	</armor_13>
-      <armor_14>	50	</armor_14>
-      <armor_15>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      <armor_10>	0	</armor_10>
+      <armor_15>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_15>
+      <armor_16>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15250	</weight>
@@ -63,11 +61,11 @@
       <sensitivityToImpulse>	0.3	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_medium	</pixie>
+      <pixie>	gas_large	</pixie>
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.647553 0.020744	</turret>
+      <turret>	0.000000 0.655288 0.146847	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/german/G90_DW_II/collision/Hull.model	</collisionModelServer>
@@ -75,8 +73,8 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.209476 0.504636 2.00963	</rayStart>
-        <rayEnd>	0.209476 0.446082 1.61394	</rayEnd>
+        <rayStart>	0.210132 0.47809 2.09511	</rayStart>
+        <rayEnd>	0.210132 0.419072 1.69949	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -90,6 +88,9 @@
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/german/G90_DW_II/DW_II_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.6 1.6 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_DW_II>
@@ -127,22 +128,23 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	usa_02	</textureSet>
-        <size>	0.44 0.54	</size>
+        <textureSet>	usa_03	</textureSet>
+        <size>	0.64 0.5	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.74	</textureScale>
+        <textureScale>	-3.4	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.396766	</radius>
+          <syncAngle>	40	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -153,9 +155,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.399343	</radius>
+          <syncAngle>	40	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -166,9 +169,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.3967	</radius>
+          <syncAngle>	40	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -179,9 +183,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.399343	</radius>
+          <syncAngle>	40	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -194,17 +199,17 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
-        <mud>	mediumTankMud	</mud>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.18762 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.19556 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G90_DW_II/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.31445 1.51426	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.31588 1.60808	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -217,6 +222,127 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G90_DW_II/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G90_DW_II/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G90_DW_II/track/left.track	</left>
+        <right>	vehicles/german/G90_DW_II/track/right.track	</right>
+        <segmentLength>	0.264	</segmentLength>
+        <segmentOffset>	0.158	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0029	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+      </trackNodes>
     </Chassis_DW_II>
     <Chassis_DW_II_2>
       <userString>	#germany_vehicles:Chassis_DW_II_2	</userString>
@@ -249,22 +375,23 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	usa_02	</textureSet>
-        <size>	0.44 0.54	</size>
+        <textureSet>	usa_03	</textureSet>
+        <size>	0.64 0.5	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.74	</textureScale>
+        <textureScale>	-3.4	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.396766	</radius>
+          <syncAngle>	40	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -275,9 +402,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.399343	</radius>
+          <syncAngle>	40	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -288,9 +416,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.3967	</radius>
+          <syncAngle>	40	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -301,9 +430,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.399343	</radius>
+          <syncAngle>	40	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -316,17 +446,17 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
-        <mud>	mediumTankMud	</mud>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.18762 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.19556 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G90_DW_II/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.31445 1.51426	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.31588 1.60808	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -339,6 +469,127 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G90_DW_II/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G90_DW_II/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G90_DW_II/track/left.track	</left>
+        <right>	vehicles/german/G90_DW_II/track/right.track	</right>
+        <segmentLength>	0.264	</segmentLength>
+        <segmentOffset>	0.158	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0029	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+      </trackNodes>
     </Chassis_DW_II_2>
   </chassis>
   <turrets0>
@@ -353,19 +604,16 @@
       </unlocks>
       <armor>
         <armor_1>	50	</armor_1>
-        <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_2>
+        <armor_2>	50	</armor_2>
         <armor_3>	50	</armor_3>
         <armor_4>	50	</armor_4>
-        <armor_5>	15	</armor_5>
+        <armor_5>	50	</armor_5>
         <armor_6>	15	</armor_6>
-        <armor_7>	50	</armor_7>
+        <armor_7>	15	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	50	</armor_9>
         <armor_10>	50	</armor_10>
-        <armor_11>	50	</armor_11>
-        <armor_12>	50	</armor_12>
         <armor_13>	50	</armor_13>
+        <armor_16>	75	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2750	</weight>
@@ -388,10 +636,12 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
             <gun>	20	</gun>
           </armor>
           <maxAmmo>	90	</maxAmmo>
@@ -412,13 +662,18 @@
             <collisionModelServer>	vehicles/german/G90_DW_II/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
+          </camouflage>
         </_75mm_KwK_37_L24>
         <_50mm_KwK_39_L60>	shared	  <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
           <armor>
-            <armor_1>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
             <gun>	10	</gun>
           </armor>
           <maxAmmo>	120	</maxAmmo>
@@ -439,7 +694,7 @@
             <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
+            <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
           </camouflage>
         </_50mm_KwK_39_L60>
       </guns>
@@ -452,27 +707,30 @@
         <collisionModelServer>	vehicles/german/G90_DW_II/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.324 0.8695	</gunPosition>
+      <gunPosition>	0.066 0.273596 0.893412	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.981881 0.415958 0.715149	</rayStart>
-          <rayEnd>	-0.62003 0.24718 0.691168	</rayEnd>
+          <rayStart>	-0.989076 0.391778 0.666968	</rayStart>
+          <rayEnd>	-0.628644 0.219262 0.649176	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <size>	0.22	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.981881 0.415958 0.715149	</rayStart>
-          <rayEnd>	0.62003 0.24718 0.691168	</rayEnd>
+          <rayStart>	0.989076 0.391778 0.666968	</rayStart>
+          <rayEnd>	0.628644 0.219262 0.649176	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
+          <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.930 0.000 1.000 0.000 0.546 0.139 0.500 1.000 0.337 0.500 0.359 0.500 0.128 0.880 0.301	</physicsShape>
+      <physicsShape>	0.856 0.029 1.013 0.000 0.679 0.266 0.457 1.000 0.350 0.500 0.454 0.500 0.233 0.728 0.449	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_1_DW_II>
     <Turret_2_DW_II>
       <userString>	#germany_vehicles:Turret_2_DW_II	</userString>
@@ -488,15 +746,11 @@
         <armor_2>	50	</armor_2>
         <armor_3>	50	</armor_3>
         <armor_4>	50	</armor_4>
-        <armor_5>	15	</armor_5>
+        <armor_5>	50	</armor_5>
         <armor_6>	15	</armor_6>
-        <armor_7>	50	</armor_7>
+        <armor_7>	15	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	50	</armor_9>
-        <armor_10>	50	</armor_10>
-        <armor_11>	50	</armor_11>
-        <armor_12>	50	</armor_12>
-        <armor_13>	15	</armor_13>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
@@ -516,16 +770,16 @@
       <invisibilityFactor>	1.007	</invisibilityFactor>
       <guns>
         <_75mm_KwK_37_L24>	shared	  <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
             <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
             <gun>	20	</gun>
           </armor>
           <maxAmmo>	90	</maxAmmo>
@@ -552,21 +806,21 @@
             <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+            <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
           </camouflage>
         </_75mm_KwK_37_L24>
         <_50mm_KwK_39_L60>	shared	  <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
           <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
             <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
             <gun>	10	</gun>
           </armor>
           <maxAmmo>	120	</maxAmmo>
@@ -593,7 +847,7 @@
             <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.625 0.625 0.000000 0.000000	</tiling>
+            <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
           </camouflage>
         </_50mm_KwK_39_L60>
       </guns>
@@ -606,33 +860,33 @@
         <collisionModelServer>	vehicles/german/G90_DW_II/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G90_DW_II/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.0716 0.324 0.8695	</gunPosition>
+      <gunPosition>	-0.0324 0.279639 0.841098	</gunPosition>
       <emblemSlots>
+        <inscription>
+          <rayStart>	1.03372 0.363898 0.374886	</rayStart>
+          <rayEnd>	0.651431 0.255096 0.329955	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.64	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
         <player>
-          <rayStart>	-1.00359 0.399931 0.393733	</rayStart>
-          <rayEnd>	-0.62137 0.290931 0.348732	</rayEnd>
+          <rayStart>	-0.974304 0.375306 -0.471689	</rayStart>
+          <rayEnd>	-0.593559 0.272821 -0.404394	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.934033 0.419398 -0.470537	</rayStart>
-          <rayEnd>	0.553287 0.316913 -0.403241	</rayEnd>
+          <rayStart>	0.974304 0.375306 -0.471689	</rayStart>
+          <rayEnd>	0.593559 0.272821 -0.404394	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
-        <inscription>
-          <rayStart>	1.00129 0.396087 0.422557	</rayStart>
-          <rayEnd>	0.619073 0.287087 0.377556	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.64	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.949 0.000 1.000 0.000 0.514 0.161 0.291 1.000 0.442 0.500 0.178 0.500 0.106 0.899 0.155	</physicsShape>
+      <physicsShape>	0.949 0.000 0.963 0.000 0.638 0.261 0.374 0.818 0.398 0.500 0.195 0.500 0.163 0.687 0.356	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Turret_2_DW_II>
   </turrets0>
@@ -665,31 +919,97 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_108_TR_R>
+          <smplEnginePower>	264.3203	</smplEnginePower>
+        </Maybach_HL_108_TR_R>
+        <Maybach_HL_120_TR_R>
+          <smplEnginePower>	280.1795	</smplEnginePower>
+        </Maybach_HL_120_TR_R>
+        <Maybach_HL_116>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </Maybach_HL_116>
+      </engines>
+      <chassis>
+        <Chassis_DW_II>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_DW_II>
+        <Chassis_DW_II_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_DW_II_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_DW_II>
-        <alpha>	0.0966	</alpha>
-      </Chassis_DW_II>
-      <Chassis_DW_II_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_DW_II_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_108_TR_R>
-        <bravo>	66.08007	</bravo>
-      </Maybach_HL_108_TR_R>
-      <Maybach_HL_120_TR_R>
-        <bravo>	70.04488	</bravo>
-      </Maybach_HL_120_TR_R>
-      <Maybach_HL_116>
-        <bravo>	79.29608	</bravo>
-      </Maybach_HL_116>
-    </engines>
     <armour>	0.913747005	</armour>
   </clientAdjustmentFactors>
   <effects>
     <collision></collision>
-    <damagedStateGroup>	medium	</damagedStateGroup>
+    <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
     <default>	germany_cross	</default>

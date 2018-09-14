@@ -745,26 +745,92 @@
     </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <GAZ-203>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </GAZ-203>
+        <M-80>
+          <smplEnginePower>	179.7378	</smplEnginePower>
+        </M-80>
+        <GMC>
+          <smplEnginePower>	222.029	</smplEnginePower>
+        </GMC>
+      </engines>
+      <chassis>
+        <GAZ-74B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </GAZ-74B>
+        <SU-85A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </SU-85A>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <GAZ-74B>
-        <alpha>	0.12075	</alpha>
-      </GAZ-74B>
-      <SU-85A>
-        <alpha>	0.10465	</alpha>
-      </SU-85A>
-    </chassis>
-    <engines>
-      <GAZ-203>
-        <bravo>	37.00484	</bravo>
-      </GAZ-203>
-      <M-80>
-        <bravo>	44.93445	</bravo>
-      </M-80>
-      <GMC>
-        <bravo>	55.50726	</bravo>
-      </GMC>
-    </engines>
     <armour>	0.850502793	</armour>
   </clientAdjustmentFactors>
   <effects>

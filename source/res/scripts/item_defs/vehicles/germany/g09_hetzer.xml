@@ -719,29 +719,95 @@
     </FuG10>
     <FuG11>	shared	</FuG11>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Praga_TN_100>
+          <smplEnginePower>	105.7281	</smplEnginePower>
+        </Praga_TN_100>
+        <Praga_TNPS>
+          <smplEnginePower>	126.8737	</smplEnginePower>
+        </Praga_TNPS>
+        <Scania_Vabis1664>
+          <smplEnginePower>	174.4514	</smplEnginePower>
+        </Scania_Vabis1664>
+        <Tatra_V-103>
+          <smplEnginePower>	232.6019	</smplEnginePower>
+        </Tatra_V-103>
+      </engines>
+      <chassis>
+        <Hetzer_Ausf_A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Hetzer_Ausf_A>
+        <Hetzer_Ausf_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Hetzer_Ausf_B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Hetzer_Ausf_A>
-        <alpha>	0.1288	</alpha>
-      </Hetzer_Ausf_A>
-      <Hetzer_Ausf_B>
-        <alpha>	0.12075	</alpha>
-      </Hetzer_Ausf_B>
-    </chassis>
-    <engines>
-      <Praga_TN_100>
-        <bravo>	26.43203	</bravo>
-      </Praga_TN_100>
-      <Praga_TNPS>
-        <bravo>	31.71843	</bravo>
-      </Praga_TNPS>
-      <Scania_Vabis1664>
-        <bravo>	43.61285	</bravo>
-      </Scania_Vabis1664>
-      <Tatra_V-103>
-        <bravo>	58.15046	</bravo>
-      </Tatra_V-103>
-    </engines>
     <armour>	1.049737287	</armour>
   </clientAdjustmentFactors>
   <effects>

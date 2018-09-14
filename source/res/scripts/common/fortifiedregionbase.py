@@ -177,6 +177,8 @@ class FORT_ERROR():
     LEGIONARE_FORT_RESOURCE = 110
     BAD_SORTIE_TIME = 111
     BAD_SORTIE_PERIPHERY_ID = 112
+    BAD_LEVEL_PLANNED_ATTACK = 113
+    DISCONNECTED_FROM_CENTER = 114
 
 
 OK = FORT_ERROR.OK
@@ -318,6 +320,7 @@ class DELETE_BATTLE_REASON():
     DIR_CLOSED = 4
     FORT_DELETED = 5
     NO_ATTACK_INFO = 6
+    WRONG_LEVEL_RATIO = 7
 
 
 class FORT_CLIENT_METHOD():
@@ -569,7 +572,7 @@ class FortifiedRegionBase(OpsUnpacker):
      FORT_OP.CHANGE_OFF_DAY: ('biiq', '_changeOffDay'),
      FORT_OP.CHANGE_VACATION: ('iiiq', '_changeVacation'),
      FORT_OP.EXPIRE_EVENT: ('Bi', '_expireEvent'),
-     FORT_OP.SET_DEV_MODE: ('B', '_setDevMode'),
+     FORT_OP.SET_DEV_MODE: ('BB', '_setDevMode'),
      FORT_OP.SET_TIME_SHIFT: ('i', '_setTimeShift'),
      FORT_OP.OPEN_DIR: ('Biq', '_openDir'),
      FORT_OP.CLOSE_DIR: ('B', '_closeDir'),
@@ -682,7 +685,7 @@ class FortifiedRegionBase(OpsUnpacker):
         self._empty()
         return
 
-    def _persist(self):
+    def _persist(self, force=False):
         pass
 
     def isEmpty(self):
@@ -1611,6 +1614,9 @@ class FortifiedRegionBase(OpsUnpacker):
 
             self._dirty = True
 
+    def isLessEqualShutdownLevel(self):
+        return self.level <= DEF_SHUTDOWN_LEVEL
+
     def _addEvent(self, eventTypeID, timestamp, value, callerDBID):
         LOG_DEBUG_DEV('_addEvent', eventTypeID, timestamp, value, callerDBID)
         self.events[eventTypeID] = (timestamp, value, callerDBID)
@@ -1622,10 +1628,17 @@ class FortifiedRegionBase(OpsUnpacker):
         self.storeOp(FORT_OP.CANCEL_EVENT, eventTypeID)
         return
 
-    def _setDevMode(self, isActive):
-        LOG_DEBUG_DEV('_setDevMode', isActive)
+    def _setDevMode(self, isActive, applySettingsDevPatch):
+        LOG_DEBUG_DEV('_setDevMode', isActive, applySettingsDevPatch)
         self._devMode = bool(isActive)
-        self.storeOp(FORT_OP.SET_DEV_MODE, int(isActive))
+        if bool(applySettingsDevPatch):
+            fortified_regions.g_cache.clanMembersPerDirection = 0
+            fortified_regions.g_cache.defenceConditions.minClanMembers = 1
+            fortified_regions.g_cache.defenceConditions.minRegionLevel = 1
+            fortified_regions.g_cache.openDirAttacksTime = 1
+            fortified_regions.g_cache.attackPreorderTime = 1
+            fortified_regions.g_cache.attackCooldownTime = 1
+        self.storeOp(FORT_OP.SET_DEV_MODE, int(isActive), int(applySettingsDevPatch))
 
     def _setTimeShift(self, timeShift):
         LOG_DEBUG_DEV('_setTimeShift', timeShift)

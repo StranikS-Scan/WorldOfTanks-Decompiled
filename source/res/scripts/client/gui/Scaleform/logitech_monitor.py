@@ -10,11 +10,11 @@ from debug_utils import LOG_DEBUG, LOG_WARNING
 from game import convertKeyEvent
 from gui import g_keyEventHandlers
 from gui.Scaleform.Flash import Flash
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
+from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.app_loader import g_appLoader
 from gui.app_loader.settings import APP_NAME_SPACE
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import AppLifeCycleEvent
 _LOGITECH_SWF_MONO = 'keyboardMono.swf'
@@ -28,7 +28,7 @@ class _LogitechScreen(object):
     DEFAULT = LOGO
 
 
-ScreenInfo = namedtuple('ScreenInfo', ('mono', 'colored', 'frame'))
+ScreenInfo = namedtuple('ScreenInfo', ['mono', 'colored', 'frame'])
 
 def _lazyLoad(className):
     moduleName, className = className.rsplit('.', 1)
@@ -37,6 +37,7 @@ def _lazyLoad(className):
 
 
 def __lll(relName):
+    """ Creates lambda to load logitech class by class name """
     return lambda : _lazyLoad(className='gui.Scaleform.daapi.view.logitech.' + relName)
 
 
@@ -85,10 +86,7 @@ class LogitechMonitorEntry(object):
         return self.__screenName
 
     def activate(self):
-        if LcdKeyboard.g_instance:
-            LcdKeyboard.g_instance.changeNotifyCallback = self.__onMonitorInitialized
-        else:
-            LOG_DEBUG("Can't activate")
+        pass
 
     def close(self):
         if LcdKeyboard.g_instance:
@@ -200,7 +198,7 @@ class LogitechMonitorEntry(object):
         return
 
 
-_EventToScreen = namedtuple('_EventToScreen', ('screen', 'eventTypes', 'scope'))
+_EventToScreen = namedtuple('_EventToScreen', ['screen', 'eventTypes', 'scope'])
 _EVENT_TO_SCREEN = (_EventToScreen(screen=_LogitechScreen.LOGO, eventTypes=(VIEW_ALIAS.LOGIN,), scope=EVENT_BUS_SCOPE.LOBBY),
  _EventToScreen(screen=_LogitechScreen.HANGAR, eventTypes=(VIEW_ALIAS.LOBBY,), scope=EVENT_BUS_SCOPE.LOBBY),
  _EventToScreen(screen=_LogitechScreen.BATTLE_LOADING, eventTypes=VIEW_ALIAS.LOADINGS, scope=EVENT_BUS_SCOPE.LOBBY),

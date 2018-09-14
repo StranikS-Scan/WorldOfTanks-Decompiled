@@ -653,26 +653,92 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Nuffield_liberty_MKII>
+          <smplEnginePower>	359.4756	</smplEnginePower>
+        </Nuffield_liberty_MKII>
+        <Nuffield_liberty_MKIV>
+          <smplEnginePower>	417.626	</smplEnginePower>
+        </Nuffield_liberty_MKIV>
+        <Nuffield_liberty_MKV>
+          <smplEnginePower>	433.4853	</smplEnginePower>
+        </Nuffield_liberty_MKV>
+      </engines>
+      <chassis>
+        <Chassis_GB74_AT8>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB74_AT8>
+        <Chassis_GB74_AT8_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB74_AT8_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB74_AT8>
-        <alpha>	0.1449	</alpha>
-      </Chassis_GB74_AT8>
-      <Chassis_GB74_AT8_2>
-        <alpha>	0.1288	</alpha>
-      </Chassis_GB74_AT8_2>
-    </chassis>
-    <engines>
-      <Nuffield_liberty_MKII>
-        <bravo>	89.8689	</bravo>
-      </Nuffield_liberty_MKII>
-      <Nuffield_liberty_MKIV>
-        <bravo>	104.4065	</bravo>
-      </Nuffield_liberty_MKIV>
-      <Nuffield_liberty_MKV>
-        <bravo>	108.3713	</bravo>
-      </Nuffield_liberty_MKV>
-    </engines>
     <armour>	0.822822163	</armour>
   </clientAdjustmentFactors>
   <effects>

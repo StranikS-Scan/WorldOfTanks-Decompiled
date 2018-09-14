@@ -8,19 +8,13 @@ class QuestsTabMeta(BaseDAAPIComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIComponent
-    null
     """
 
     def as_setQuestsDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by QuestsDataVO (AS)
         """
         return self.flashObject.as_setQuestsData(data) if self._isDAAPIInited() else None
 
     def as_setSelectedQuestS(self, questID):
-        """
-        :param questID:
-        :return :
-        """
         return self.flashObject.as_setSelectedQuest(questID) if self._isDAAPIInited() else None

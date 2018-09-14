@@ -919,28 +919,94 @@
     </SCR_508>
     <SCR_506>	shared	</SCR_506>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAA>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </Ford_GAA>
+        <Ford_GAN>
+          <smplEnginePower>	592.0775	</smplEnginePower>
+        </Ford_GAN>
+      </engines>
+      <chassis>
+        <HVSS_T48>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </HVSS_T48>
+        <HVSS_T51>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </HVSS_T51>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_90mm_Gun_M3>
         <delta>	1.07216	</delta>
       </_90mm_Gun_M3>
     </guns>
-    <chassis>
-      <HVSS_T48>
-        <alpha>	0.13685	</alpha>
-      </HVSS_T48>
-      <HVSS_T51>
-        <alpha>	0.08855	</alpha>
-      </HVSS_T51>
-    </chassis>
-    <engines>
-      <Ford_GAA>
-        <bravo>	137.4465	</bravo>
-      </Ford_GAA>
-      <Ford_GAN>
-        <bravo>	148.0194	</bravo>
-      </Ford_GAN>
-    </engines>
     <armour>	1.003286086	</armour>
   </clientAdjustmentFactors>
   <effects>

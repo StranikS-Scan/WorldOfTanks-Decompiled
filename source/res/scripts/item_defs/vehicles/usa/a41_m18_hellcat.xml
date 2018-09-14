@@ -672,7 +672,7 @@
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.386338 10 0.45 6 0.55 6 0.613662 10 1 10	</maxPitch>
+            <maxPitch>	0 10 0.388889 10 0.416667 0 0.583333 0 0.597222 10 1 10	</maxPitch>
           </pitchLimits>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
@@ -724,7 +724,7 @@
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.386338 10 0.45 6 0.55 6 0.613662 10 1 10	</maxPitch>
+            <maxPitch>	0 10 0.388889 10 0.416667 0 0.583333 0 0.597222 10 1 10	</maxPitch>
           </pitchLimits>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
@@ -776,7 +776,7 @@
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.386338 10 0.45 6 0.55 6 0.613662 10 1 10	</maxPitch>
+            <maxPitch>	0 10 0.388889 10 0.416667 0 0.583333 0 0.597222 10 1 10	</maxPitch>
           </pitchLimits>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
@@ -897,7 +897,7 @@
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.366894 10 0.430556 3 0.569444 3 0.633106 10 1 10	</maxPitch>
+            <maxPitch>	0 10 0.388889 10 0.416667 0 0.583333 0 0.597222 10 1 10	</maxPitch>
           </pitchLimits>
           <reloadTime>	3.8	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
@@ -951,7 +951,7 @@
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 1 10	</maxPitch>
+            <maxPitch>	0 10 0.388889 10 0.416667 0 0.583333 0 0.597222 10 1 10	</maxPitch>
           </pitchLimits>
           <reloadTime>	3.4	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
@@ -1010,7 +1010,7 @@
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 1 10	</maxPitch>
+            <maxPitch>	0 10 0.388889 10 0.416667 0 0.583333 0 0.597222 10 1 10	</maxPitch>
           </pitchLimits>
           <reloadTime>	3.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
@@ -1069,7 +1069,7 @@
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 1 10	</maxPitch>
+            <maxPitch>	0 10 0.388889 10 0.416667 0 0.583333 0 0.597222 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
@@ -1163,31 +1163,97 @@
     </SCR_610>
     <SCR_619>	shared	</SCR_619>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_Continental_R-975EC2>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Wright_Continental_R-975EC2>
+        <Wright_Continental_R-975C1>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Wright_Continental_R-975C1>
+        <Wright_Continental_R-975C4>
+          <smplEnginePower>	486.3493	</smplEnginePower>
+        </Wright_Continental_R-975C4>
+      </engines>
+      <chassis>
+        <Chassis_M18_Hellcat>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M18_Hellcat>
+        <Chassis_M18_Hellcat_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M18_Hellcat_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_90mm_Gun_M3>
         <delta>	1.108597	</delta>
       </_90mm_Gun_M3>
     </guns>
-    <chassis>
-      <Chassis_M18_Hellcat>
-        <alpha>	0.1288	</alpha>
-      </Chassis_M18_Hellcat>
-      <Chassis_M18_Hellcat_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_M18_Hellcat_2>
-    </chassis>
-    <engines>
-      <Wright_Continental_R-975EC2>
-        <bravo>	92.5121	</bravo>
-      </Wright_Continental_R-975EC2>
-      <Wright_Continental_R-975C1>
-        <bravo>	105.7281	</bravo>
-      </Wright_Continental_R-975C1>
-      <Wright_Continental_R-975C4>
-        <bravo>	121.5873	</bravo>
-      </Wright_Continental_R-975C4>
-    </engines>
     <armour>	0.654565359	</armour>
   </clientAdjustmentFactors>
   <effects>

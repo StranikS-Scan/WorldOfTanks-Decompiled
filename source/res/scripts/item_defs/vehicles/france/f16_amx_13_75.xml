@@ -744,26 +744,92 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <SOFAM_8Gxb>
+          <smplEnginePower>	264.3203	</smplEnginePower>
+        </SOFAM_8Gxb>
+        <_6F11SRY>
+          <smplEnginePower>	296.0387	</smplEnginePower>
+        </_6F11SRY>
+        <Detroit_Diesel_6V53T>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </Detroit_Diesel_6V53T>
+      </engines>
+      <chassis>
+        <Chassis_AMX_13_75_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_13_75_2>
+        <Chassis_AMX_13_75_3>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_13_75_3>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_13_75_2>
-        <alpha>	0.07245	</alpha>
-      </Chassis_AMX_13_75_2>
-      <Chassis_AMX_13_75_3>
-        <alpha>	0.0644	</alpha>
-      </Chassis_AMX_13_75_3>
-    </chassis>
-    <engines>
-      <SOFAM_8Gxb>
-        <bravo>	66.08007	</bravo>
-      </SOFAM_8Gxb>
-      <_6F11SRY>
-        <bravo>	74.00968	</bravo>
-      </_6F11SRY>
-      <Detroit_Diesel_6V53T>
-        <bravo>	79.29608	</bravo>
-      </Detroit_Diesel_6V53T>
-    </engines>
     <armour>	0.988708203	</armour>
   </clientAdjustmentFactors>
   <effects>

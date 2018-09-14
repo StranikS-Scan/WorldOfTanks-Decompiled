@@ -48,6 +48,9 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
     def setAttentionToCell(self, x, y, isRightClick):
         self.__plugins.setAttentionToCell(x, y, isRightClick)
 
+    def applyNewSize(self, sizeIndex):
+        self.__plugins.applyNewSize(sizeIndex)
+
     def addEntry(self, symbol, container, matrix=None, active=False, transformProps=settings.TRANSFORM_FLAG.DEFAULT):
         entryID = self.__component.addEntry(symbol, container, matrix, active, transformProps)
         if entryID:
@@ -83,12 +86,7 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
             SoundGroups.g_instance.playSound2D(soundID)
 
     def isModalViewShown(self):
-        result = False
-        if self.app is not None:
-            manager = self.app.containerManager
-            if manager is not None:
-                result = manager.isModalViewsIsExists()
-        return result
+        return self.app is not None and self.app.isModalViewShown()
 
     def getPlugin(self, name):
         if self.__plugins is not None:
@@ -185,6 +183,9 @@ class MinimapPluginsCollection(PluginsCollection):
 
     def setAttentionToCell(self, x, y, isRightClick):
         self._invoke('setAttentionToCell', x, y, isRightClick)
+
+    def applyNewSize(self, sizeIndex):
+        self._invoke('applyNewSize', sizeIndex)
 
     def __onSettingsChanged(self, diff):
         """

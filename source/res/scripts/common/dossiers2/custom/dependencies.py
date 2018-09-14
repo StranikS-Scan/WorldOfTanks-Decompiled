@@ -58,6 +58,7 @@ def _set_ACHIEVEMENT15X15_DEPENDENCIES():
      'maxKillingSeries': [_updateHandOfDeath],
      'piercingSeries': [_updateMaxPiercingSeries],
      'maxPiercingSeries': [_updateArmorPiercer],
+     'maxAimerSeries': [_updateAimerSeries],
      'sniper2': [_updateBattleHeroes],
      'mainGun': [_updateBattleHeroes],
      'WFC2014WinSeries': [_updateMaxWFC2014WinSeries],
@@ -74,8 +75,8 @@ def _set_ACHIEVEMENT7X7_DEPENDENCIES():
     ACHIEVEMENT7X7_DEPENDENCIES.update({'wolfAmongSheep': [_updateWolfAmongSheepMedal],
      'geniusForWar': [_updateGeniusForWarMedal],
      'crucialShot': [_updateCrucialShotMedal],
-     'tacticalBreakthroughSeries': [_updateMaxTacticalBreakthroughSeries, _updateTacticalBreakthrough],
-     'maxTacticalBreakthroughSeries': [_updateAwardCount],
+     'tacticalBreakthroughSeries': [_updateMaxTacticalBreakthroughSeries],
+     'maxTacticalBreakthroughSeries': [_updateTacticalBreakthrough, _updateAwardCount],
      'fightingReconnaissance': [_updateFightingReconnaissanceMedal],
      'pyromaniac': [_updatePyromaniacMedal],
      'ranger': [_updateRangerMedal],
@@ -481,6 +482,13 @@ def _updateArmorPiercer(dossierDescr, dossierBlockDescr, key, value, prevValue):
         dossierDescr.addPopUp('singleAchievements', 'armorPiercer', 1)
 
 
+def _updateAimerSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    assert value > prevValue, 'Try to store wrong value as max record'
+    achievementName = 'aimer'
+    block = 'singleAchievements'
+    dossierDescr[block][achievementName] = 1
+
+
 def _updateMaxWFC2014WinSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
     if value > dossierBlockDescr['maxWFC2014WinSeries']:
         dossierBlockDescr['maxWFC2014WinSeries'] = value
@@ -562,7 +570,7 @@ def _updateMaxTacticalBreakthroughSeries(dossierDescr, dossierBlockDescr, key, v
 
 
 def _updateTacticalBreakthrough(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    if dossierBlockDescr['tacticalBreakthroughSeries'] >= RECORD_CONFIGS['tacticalBreakthrough']:
+    if value >= RECORD_CONFIGS['tacticalBreakthrough']:
         dossierDescr['singleAchievements']['tacticalBreakthrough'] = 1
         dossierDescr.addPopUp('singleAchievements', 'tacticalBreakthrough', 1)
 
@@ -745,9 +753,15 @@ def _updateSoldierOfFortune(dossierDescr, dossierBlockDescr, key, value, prevVal
 
 def _updateMedalRotmistrov(dossierDescr, dossierBlockDescr, key, value, prevValue):
     cfg = RECORD_CONFIGS['medalRotmistrov']
+    battlesCount = 0
+    for block in ('globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+        if dossierDescr.isBlockInLayout(block):
+            if block in dossierDescr:
+                battlesCount += dossierDescr[block][key]
+
     i = 0
-    for count in cfg:
-        if value < count:
+    for cfgBattlesCount in cfg:
+        if battlesCount < cfgBattlesCount:
             break
         i += 1
 

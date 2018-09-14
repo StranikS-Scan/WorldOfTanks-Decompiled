@@ -4,7 +4,6 @@ import BigWorld
 from adisp import async, process
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS
-from gui.game_control import gc_constants
 from gui.game_control.controllers import Controller
 from gui.game_control.links import URLMarcos
 from gui.shared import g_eventBus
@@ -25,7 +24,7 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO_SUMMARY: '_handleGmPromoSummaryURL',
  OpenLinkEvent.GLOBAL_MAP_CAP: '_handleGmCapURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO: '_handleGmPromoURL',
- OpenLinkEvent.FORUM: '_handleForumURL'}
+ OpenLinkEvent.PREM_SHOP: '_handleOpenPremShopURL'}
 
 class ExternalLinksHandler(Controller):
 
@@ -135,5 +134,5 @@ class ExternalLinksHandler(Controller):
     def _handleGmPromoURL(self, _):
         self.__openParsedUrl('globalMapPromo')
 
-    def _handleForumURL(self, event):
-        self.open(event.url)
+    def _handleOpenPremShopURL(self, _):
+        self.__openParsedUrl('premShopURL')

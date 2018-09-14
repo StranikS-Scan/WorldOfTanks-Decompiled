@@ -1021,26 +1021,92 @@
     </_Type96_Bo>
     <_Type3_Otsu>	shared	</_Type3_Otsu>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Type97>
+          <smplEnginePower>	179.7378	</smplEnginePower>
+        </_Type97>
+        <_Type100_W>
+          <smplEnginePower>	211.4562	</smplEnginePower>
+        </_Type100_W>
+        <_Type100_A>
+          <smplEnginePower>	253.7475	</smplEnginePower>
+        </_Type100_A>
+      </engines>
+      <chassis>
+        <Chassis_Ch08_Type97_Chi_Ha>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch08_Type97_Chi_Ha>
+        <Chassis_Ch08_Type97_Chi_Ha_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch08_Type97_Chi_Ha_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch08_Type97_Chi_Ha>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Ch08_Type97_Chi_Ha>
-      <Chassis_Ch08_Type97_Chi_Ha_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Ch08_Type97_Chi_Ha_2>
-    </chassis>
-    <engines>
-      <_Type97>
-        <bravo>	44.93445	</bravo>
-      </_Type97>
-      <_Type100_W>
-        <bravo>	52.86406	</bravo>
-      </_Type100_W>
-      <_Type100_A>
-        <bravo>	63.43687	</bravo>
-      </_Type100_A>
-    </engines>
     <armour>	0.752276412	</armour>
   </clientAdjustmentFactors>
   <effects>

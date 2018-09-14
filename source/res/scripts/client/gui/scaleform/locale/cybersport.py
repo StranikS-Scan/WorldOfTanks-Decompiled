@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/CYBERSPORT.py
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 from debug_utils import LOG_WARNING
 
 class CYBERSPORT(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     WINDOW_TITLE = '#cyberSport:window/title'
     TEXTLOADING_LOADING = '#cyberSport:TextLoading/loading'
     WINDOW_INTRO_TITLE = '#cyberSport:window/intro/title'
@@ -375,20 +373,18 @@ class CYBERSPORT(object):
     LADDERREGULATIONS_TOOLTIP_SCHEDULE_FREE = '#cyberSport:ladderRegulations/tooltip/schedule/free'
     LADDERREGULATIONS_TOOLTIP_INFO = '#cyberSport:ladderRegulations/tooltip/info'
     LADDERREGULATIONS_TOOLTIP_DATE = '#cyberSport:ladderRegulations/tooltip/date'
+    SQUADWINDOW_WAITINGFORBATTLE = '#cyberSport:squadWindow/waitingForBattle'
+    CLUBS_LEAGUE_LABEL = '#cyberSport:clubs/league/label'
     WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_ENUM = (WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_UNRESOLVED,
      WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_6,
      WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_7,
      WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_6_7)
 
-    @staticmethod
-    def window_unit_message_invalidlevelerror(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#cyberSport:window/unit/message/invalidLevelError/%s' % key
-        if outcome not in CYBERSPORT.WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def window_unit_message_invalidlevelerror(cls, key0):
+        outcome = '#cyberSport:window/unit/message/invalidLevelError/{}'.format(key0)
+        if outcome not in cls.WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome

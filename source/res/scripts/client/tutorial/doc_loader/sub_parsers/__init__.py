@@ -662,7 +662,7 @@ def _readGameAttribute(xmlCtx, section, _):
     return chapter.GameAttribute(attributeID, name, varID, args)
 
 
-_BASE_ENTITY_PARERS = {'dialog': _parseDialog,
+_BASE_ENTITY_PARSERS = {'dialog': _parseDialog,
  'window': _parseWindow,
  'simple-window': _parseSimpleWindow,
  'message': _parseMessage,
@@ -673,18 +673,18 @@ _BASE_ENTITY_PARERS = {'dialog': _parseDialog,
  'click-outside-action': _readClickOutsideAction,
  'esc-action': _readEscapeAction,
  'game-attribute': _readGameAttribute}
-_ENTITY_PARERS = _BASE_ENTITY_PARERS.copy()
+_ENTITY_PARSERS = _BASE_ENTITY_PARSERS.copy()
 
 def setEntitiesParsers(parsers):
-    global _ENTITY_PARERS
-    global _BASE_ENTITY_PARERS
-    _ENTITY_PARERS.clear()
-    _ENTITY_PARERS = _BASE_ENTITY_PARERS.copy()
-    _ENTITY_PARERS.update(parsers)
+    global _ENTITY_PARSERS
+    global _BASE_ENTITY_PARSERS
+    _ENTITY_PARSERS.clear()
+    _ENTITY_PARSERS = _BASE_ENTITY_PARSERS.copy()
+    _ENTITY_PARSERS.update(parsers)
 
 
 def parseEntity(xmlCtx, name, section, flags):
-    parser = _ENTITY_PARERS.get(name)
+    parser = _ENTITY_PARSERS.get(name)
     item = None
     if parser is not None:
         item = parser(xmlCtx, section, flags)

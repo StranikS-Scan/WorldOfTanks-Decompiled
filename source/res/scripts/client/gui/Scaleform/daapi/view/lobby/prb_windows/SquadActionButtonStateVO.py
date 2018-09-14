@@ -6,11 +6,12 @@ from gui.game_control import getFalloutCtrl
 from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.shared.formatters.ranges import toRomanRangeString
 from helpers import int2roman
+_VALID_RESTRICTIONS = (UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED, UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS)
 
 class SquadActionButtonStateVO(ActionButtonStateVO):
 
     def _isEnabled(self, isValid, restriction):
-        return isValid or restriction == UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS
+        return isValid or restriction in _VALID_RESTRICTIONS
 
     def _getLabel(self):
         if self._playerInfo.isReady:
@@ -26,7 +27,7 @@ class SquadActionButtonStateVO(ActionButtonStateVO):
         return (CYBERSPORT.WINDOW_UNIT_MESSAGE_GETNOTREADY, {})
 
     def _getIdleStateStr(self):
-        return ('', {})
+        return (CYBERSPORT.SQUADWINDOW_WAITINGFORBATTLE, {})
 
     def _getFalloutVehLevelStr(self):
         config = getFalloutCtrl().getConfig()

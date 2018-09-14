@@ -340,17 +340,52 @@
   <radios>
     <_9RM_O>	shared	</_9RM_O>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_120_TRM_A>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </Maybach_HL_120_TRM_A>
+      </engines>
+      <chassis>
+        <Chassis_SU_85I>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_SU_85I>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_SU_85I>
-        <alpha>	0.08855	</alpha>
-      </Chassis_SU_85I>
-    </chassis>
-    <engines>
-      <Maybach_HL_120_TRM_A>
-        <bravo>	79.29608	</bravo>
-      </Maybach_HL_120_TRM_A>
-    </engines>
     <armour>	0.768827663	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -33,6 +33,10 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     FALLOUT = 'FALLOUT'
     TUTORIAL = 'TUTORIAL'
     ONCE_ONLY_HINTS = 'ONCE_ONLY_HINTS'
+    FEEDBACK = 'FEEDBACK'
+    ENCYCLOPEDIA_RECOMMENDATIONS_1 = 'ENCYCLOPEDIA_RECOMMENDATIONS_1'
+    ENCYCLOPEDIA_RECOMMENDATIONS_2 = 'ENCYCLOPEDIA_RECOMMENDATIONS_2'
+    ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
 
 
 class ServerSettingsManager(object):
@@ -43,6 +47,9 @@ class ServerSettingsManager(object):
     Section = namedtuple('Section', ['masks', 'offsets'])
     Offset = namedtuple('Offset', ['offset', 'mask'])
     CONTACTS = settings_constants.CONTACTS
+    DAMAGE_INDICATOR = settings_constants.DAMAGE_INDICATOR
+    DAMAGE_LOG = settings_constants.DAMAGE_LOG
+    BATTLE_EVENTS = settings_constants.BATTLE_EVENTS
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -61,8 +68,7 @@ class ServerSettingsManager(object):
                               GAME.DATE_TIME_MESSAGE_INDEX: Offset(16, 983040),
                               GAME.MINIMAP_ALPHA: Offset(20, 267386880),
                               GAME.SHOW_VEH_MODELS_ON_MAP: Offset(29, 1610612736)}),
-     SETTINGS_SECTIONS.GAME_EXTENDED: Section(masks={GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS: 0,
-                                       GAME.CHAT_CONTACTS_LIST_ONLY: 1,
+     SETTINGS_SECTIONS.GAME_EXTENDED: Section(masks={GAME.CHAT_CONTACTS_LIST_ONLY: 1,
                                        GAME.RECEIVE_INVITES_IN_BATTLE: 2,
                                        GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS: 3,
                                        GAME.MINIMAP_VIEW_RANGE: 6,
@@ -70,7 +76,8 @@ class ServerSettingsManager(object):
                                        GAME.MINIMAP_DRAW_RANGE: 8,
                                        GAME.INCREASED_ZOOM: 9,
                                        GAME.SNIPER_MODE_BY_SHIFT: 10,
-                                       GAME.SIMPLIFIED_TTC: 11}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48)}),
+                                       GAME.SIMPLIFIED_TTC: 11,
+                                       GAME.CAROUSEL_TYPE: 12}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GRAPHICS.FPS_PERFOMANCER: 0,
                                   GAME.LENS_EFFECT: 1}, offsets={}),
@@ -186,7 +193,35 @@ class ServerSettingsManager(object):
                                   TUTORIAL.FIRE_EXTINGUISHER_USED: 10,
                                   TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED: 11}, offsets={}),
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS: Section(masks={'FalloutQuestsTab': 0,
-                                         'CustomizationSlotsHint': 1}, offsets={})}
+                                         'CustomizationSlotsHint': 1}, offsets={}),
+     SETTINGS_SECTIONS.FEEDBACK: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
+                                  DAMAGE_INDICATOR.PRESETS: 1,
+                                  DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
+                                  DAMAGE_INDICATOR.VEHICLE_INFO: 3,
+                                  DAMAGE_INDICATOR.ANIMATION: 4,
+                                  DAMAGE_LOG.TOTAL_DAMAGE: 5,
+                                  DAMAGE_LOG.BLOCKED_DAMAGE: 6,
+                                  DAMAGE_LOG.ASSIST_DAMAGE: 7,
+                                  BATTLE_EVENTS.SHOW_IN_BATTLE: 10,
+                                  BATTLE_EVENTS.ENEMY_HP_DAMAGE: 11,
+                                  BATTLE_EVENTS.ENEMY_BURNING: 12,
+                                  BATTLE_EVENTS.ENEMY_RAM_ATTACK: 13,
+                                  BATTLE_EVENTS.BLOCKED_DAMAGE: 14,
+                                  BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE: 15,
+                                  BATTLE_EVENTS.ENEMY_TRACK_DAMAGE: 16,
+                                  BATTLE_EVENTS.ENEMY_DETECTION: 17,
+                                  BATTLE_EVENTS.ENEMY_KILL: 18,
+                                  BATTLE_EVENTS.BASE_CAPTURE_DROP: 19,
+                                  BATTLE_EVENTS.BASE_CAPTURE: 20,
+                                  BATTLE_EVENTS.ENEMY_CRITICAL_HIT: 21,
+                                  BATTLE_EVENTS.EVENT_NAME: 22,
+                                  BATTLE_EVENTS.VEHICLE_INFO: 23}, offsets={DAMAGE_LOG.SHOW_DETAILS: Offset(8, 768)}),
+     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1: Section(masks={'hasNew': 15}, offsets={'item_1': Offset(0, 36863),
+                                                        'item_2': Offset(16, 2415853568L)}),
+     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2: Section(masks={}, offsets={'item_3': Offset(0, 36863),
+                                                        'item_4': Offset(16, 2415853568L)}),
+     SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3: Section(masks={}, offsets={'item_5': Offset(0, 36863),
+                                                        'item_6': Offset(16, 2415853568L)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -239,6 +274,18 @@ class ServerSettingsManager(object):
 
     def setOnceOnlyHintsSettings(self, settings):
         self.setSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, settings)
+
+    def getEncyclopediaRecommendations(self):
+        return self.getSections([SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2, SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3], {})
+
+    def setEncyclopediaRecommendationsSections(self, ids):
+        self.setSections([SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2, SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3], ids)
+
+    def getHasNewEncyclopediaRecommendations(self):
+        return self.getSectionSettings(SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, 'hasNew')
+
+    def setHasNewEncyclopediaRecommendations(self, value=True):
+        return self.setSectionSettings(SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, {'hasNew': value})
 
     def _buildAimSettings(self, settings):
         settingToServer = {}
@@ -412,6 +459,7 @@ class ServerSettingsManager(object):
          'marksOnGun': {},
          'fallout': {},
          'carousel_filter': {},
+         'feedbackData': {},
          'clear': {}}
         yield migrateToVersion(currentVersion, self._core, data)
         self._setSettingsSections(data)
@@ -458,6 +506,9 @@ class ServerSettingsManager(object):
         carousel_filter = data.get('carousel_filter', {})
         if carousel_filter:
             settings[SETTINGS_SECTIONS.CAROUSEL_FILTER_2] = self._buildSectionSettings(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, carousel_filter)
+        feedbackData = data.get('feedbackData', {})
+        if feedbackData:
+            settings[SETTINGS_SECTIONS.FEEDBACK] = self._buildSectionSettings(SETTINGS_SECTIONS.FEEDBACK, feedbackData)
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

@@ -427,6 +427,7 @@
             <collisionModelServer>	vehicles/czech/Cz04_T50_51/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz04_T50_51/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	0.0939178 0.000000 2.54004	</rayStart>
@@ -436,7 +437,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_mainext	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
@@ -487,17 +488,52 @@
   <radios>
     <Radiostanice_RM_31T_A>	shared	</Radiostanice_RM_31T_A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Praga_AXK>
+          <smplEnginePower>	1057.281	</smplEnginePower>
+        </Praga_AXK>
+      </engines>
+      <chassis>
+        <Chassis_Cz04_T50_51>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz04_T50_51>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Cz04_T50_51>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Cz04_T50_51>
-    </chassis>
-    <engines>
-      <Praga_AXK>
-        <bravo>	264.3203	</bravo>
-      </Praga_AXK>
-    </engines>
     <armour>	1.032813638	</armour>
   </clientAdjustmentFactors>
   <effects>

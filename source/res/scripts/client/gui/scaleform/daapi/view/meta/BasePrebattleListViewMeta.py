@@ -8,11 +8,7 @@ class BasePrebattleListViewMeta(AbstractRallyView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractRallyView
-    null
     """
 
     def as_getSearchDPS(self):
-        """
-        :return Object:
-        """
         return self.flashObject.as_getSearchDP() if self._isDAAPIInited() else None

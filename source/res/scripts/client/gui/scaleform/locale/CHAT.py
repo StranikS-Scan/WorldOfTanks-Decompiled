@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/CHAT.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class CHAT(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     CHANNELS_SQUADREADY_TOOLTIP = '#chat:channels/squadReady/tooltip'
     CHANNELS_SQUADNOTREADY_TOOLTIP = '#chat:channels/squadNotReady/tooltip'
     CHANNELS_PREBATTLE = '#chat:channels/prebattle'
@@ -26,10 +23,10 @@ class CHAT(object):
     CHANNELS_BATTLE_TEAM = '#chat:channels/battle/team'
     CHANNELS_TRAINING = '#chat:channels/training'
     CHANNELS_SQUAD = '#chat:channels/squad'
-    CHANNELS_SQUADREADY_TOOLTIP_HEADER = CHANNELS_SQUADREADY_TOOLTIP + '/header'
-    CHANNELS_SQUADREADY_TOOLTIP_BODY = CHANNELS_SQUADREADY_TOOLTIP + '/body'
-    CHANNELS_SQUADNOTREADY_TOOLTIP_HEADER = CHANNELS_SQUADNOTREADY_TOOLTIP + '/header'
-    CHANNELS_SQUADNOTREADY_TOOLTIP_BODY = CHANNELS_SQUADNOTREADY_TOOLTIP + '/body'
+    CHANNELS_SQUADREADY_TOOLTIP_HEADER = '#chat:channels/squadReady/tooltip/header'
+    CHANNELS_SQUADREADY_TOOLTIP_BODY = '#chat:channels/squadReady/tooltip/body'
+    CHANNELS_SQUADNOTREADY_TOOLTIP_HEADER = '#chat:channels/squadNotReady/tooltip/header'
+    CHANNELS_SQUADNOTREADY_TOOLTIP_BODY = '#chat:channels/squadNotReady/tooltip/body'
     ERRORS_USERBANHIMSELF = '#chat:errors/userbanhimself'
     ERRORS_BANCHANNELOWNER = '#chat:errors/banchannelowner'
     ERRORS_BANCHATADMIN = '#chat:errors/banchatadmin'

@@ -75,6 +75,27 @@ class NoClanState(_ClientFortState):
 
     def update(self, provider):
         result = False
+        state = None
+        cache = provider.getClanCache()
+        if cache.isInClan:
+            state = CenterUnavailableState()
+        elif provider.isSubscribed():
+            state = NoClanSubscribedState()
+        if state:
+            result = state.update(provider)
+            if not result:
+                result = True
+                provider.changeState(state)
+        return result
+
+
+class NoClanSubscribedState(_ClientFortState):
+
+    def __init__(self):
+        super(NoClanSubscribedState, self).__init__(CLIENT_FORT_STATE.NO_CLAN_SUBSCRIBED, isInitial=True)
+
+    def update(self, provider):
+        result = False
         cache = provider.getClanCache()
         if cache.isInClan:
             state = CenterUnavailableState()
@@ -126,7 +147,7 @@ class NoFortState(_ClientFortState):
         result = False
         state = None
         fort = getClientFort()
-        if not fort.isEmpty():
+        if fort and not fort.isEmpty():
             if isStartingScriptDone():
                 state = HasFortState()
             elif provider.getController().getPermissions().canCreate():

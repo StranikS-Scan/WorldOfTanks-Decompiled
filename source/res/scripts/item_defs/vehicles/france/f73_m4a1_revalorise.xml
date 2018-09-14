@@ -421,7 +421,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main_mb	</effects>
+          <effects>	shot_large_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.835 0.61 0.41 0.21	</tiling>
@@ -479,17 +479,52 @@
   <radios>
     <SCR_528A>	shared	</SCR_528A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Cummins_VT8-460>
+          <smplEnginePower>	486.3493	</smplEnginePower>
+        </Cummins_VT8-460>
+      </engines>
+      <chassis>
+        <Chassis_M4A1_Revalorise>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M4A1_Revalorise>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M4A1_Revalorise>
-        <alpha>	0.08855	</alpha>
-      </Chassis_M4A1_Revalorise>
-    </chassis>
-    <engines>
-      <Cummins_VT8-460>
-        <bravo>	121.5873	</bravo>
-      </Cummins_VT8-460>
-    </engines>
     <armour>	0.97400431	</armour>
   </clientAdjustmentFactors>
   <effects>

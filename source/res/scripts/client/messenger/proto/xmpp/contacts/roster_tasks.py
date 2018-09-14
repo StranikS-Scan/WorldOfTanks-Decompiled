@@ -9,7 +9,7 @@ from messenger.proto.xmpp.find_criteria import ItemsFindCriteria
 from messenger.proto.xmpp.gloox_constants import ROSTER_CONTEXT
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from messenger.proto.xmpp.xmpp_items import RosterItem
+from messenger.proto.xmpp.xmpp_items import RosterItem, ContactItem
 
 def _syncRosterItem(storage, jid, name, groups, sub=None, clanInfo=None):
     dbID = jid.getDatabaseID()
@@ -17,7 +17,7 @@ def _syncRosterItem(storage, jid, name, groups, sub=None, clanInfo=None):
     if user:
         if user.isCurrentPlayer():
             return None
-        if user.getItemType() == XMPP_ITEM_TYPE.ROSTER_ITEM:
+        if user.getItemType() in XMPP_ITEM_TYPE.ROSTER_ITEMS:
             user.update(name=name, groups=groups, sub=sub, trusted=True, clanInfo=clanInfo)
         else:
             user.update(name=name, clanInfo=clanInfo, item=RosterItem(jid, groups, sub=sub, resources=user.getItem().getResources()))
@@ -50,7 +50,7 @@ class RosterResultTask(SeqTask):
         for jid, name, groups, sub, clanInfo in seq:
             _syncRosterItem(storage, jid, name, groups, sub, clanInfo)
 
-        storage.removeTags({USER_TAG.CACHED}, ItemsFindCriteria((XMPP_ITEM_TYPE.ROSTER_ITEM,)))
+        storage.removeTags({USER_TAG.CACHED}, ItemsFindCriteria(XMPP_ITEM_TYPE.ROSTER_ITEMS))
 
 
 class RosterItemTask(ContactTask):
@@ -116,18 +116,17 @@ class RemoveRosterItemTask(RosterItemTask):
         user = self._getUser()
         if not user or user.isCurrentPlayer():
             return user
-        else:
-            if user.getItemType() == XMPP_ITEM_TYPE.ROSTER_ITEM:
-                user.update(item=None)
-                _syncEmptyGroups(self.usersStorage, self._groups)
-                g_logOutput.debug(CLIENT_LOG_AREA.ROSTER, 'Roster item is removed', user)
-                self._doNotify(USER_ACTION_ID.FRIEND_REMOVED, user)
-            elif user.getItemType() == XMPP_ITEM_TYPE.SUB_PENDING:
-                user.update(item=None)
-                _syncEmptyGroups(self.usersStorage, self._groups)
-                g_logOutput.debug(CLIENT_LOG_AREA.ROSTER, 'Friendship request is revoked by sender', user)
-                g_messengerEvents.users.onFriendshipRequestsUpdated([user])
-            return user
+        if user.getItemType() in XMPP_ITEM_TYPE.ROSTER_ITEMS:
+            user.update(item=ContactItem(user.getJID()))
+            _syncEmptyGroups(self.usersStorage, self._groups)
+            g_logOutput.debug(CLIENT_LOG_AREA.ROSTER, 'Roster item is removed', user)
+            self._doNotify(USER_ACTION_ID.FRIEND_REMOVED, user)
+        elif user.getItemType() in XMPP_ITEM_TYPE.SUB_PENDING_ITEMS:
+            user.update(item=ContactItem(user.getJID()))
+            _syncEmptyGroups(self.usersStorage, self._groups)
+            g_logOutput.debug(CLIENT_LOG_AREA.ROSTER, 'Friendship request is revoked by sender', user)
+            g_messengerEvents.users.onFriendshipRequestsUpdated([user])
+        return user
 
     def _doRun(self, client):
         client.removeContactFromRoster(self._jid)
@@ -197,7 +196,7 @@ class RemoveRosterItemsGroupsChain(RemoveRosterItemTask, _RosterItemsGroupsChain
 
     def sync(self, name, groups, sub=None, clanInfo=None):
         user = self._doSync(name, groups, sub, clanInfo)
-        if user and user.getItemType() != XMPP_ITEM_TYPE.ROSTER_ITEM and canNoteAutoDelete(user):
+        if user and user.getItemType() not in XMPP_ITEM_TYPE.ROSTER_ITEMS and canNoteAutoDelete(user):
             self._removeNotes.add(user.getID())
         self._result = TASK_RESULT.REMOVE
         if self._chain:

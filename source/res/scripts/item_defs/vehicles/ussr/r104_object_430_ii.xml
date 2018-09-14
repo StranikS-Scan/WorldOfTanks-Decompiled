@@ -738,23 +738,89 @@
     </R113>
     <_10RT-26E>	shared	</_10RT-26E>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_4TD>
+          <smplEnginePower>	581.5046	</smplEnginePower>
+        </_4TD>
+        <_5TD>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+        </_5TD>
+      </engines>
+      <chassis>
+        <Chassis_R104_Object_430_II>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R104_Object_430_II>
+        <Chassis_R104_Object_430_II_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R104_Object_430_II_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R104_Object_430_II>
-        <alpha>	0.07245	</alpha>
-      </Chassis_R104_Object_430_II>
-      <Chassis_R104_Object_430_II_2>
-        <alpha>	0.0644	</alpha>
-      </Chassis_R104_Object_430_II_2>
-    </chassis>
-    <engines>
-      <_4TD>
-        <bravo>	145.3762	</bravo>
-      </_4TD>
-      <_5TD>
-        <bravo>	153.3058	</bravo>
-      </_5TD>
-    </engines>
     <armour>	1.019151218	</armour>
   </clientAdjustmentFactors>
   <effects>

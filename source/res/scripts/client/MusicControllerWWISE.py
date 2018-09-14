@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/MusicControllerWWISE.py
 import BigWorld
 import ResMgr
-import WWISE
 import SoundGroups
-from constants import ARENA_PERIOD
-from items import _xml
+import WWISE
 from PlayerEvents import g_playerEvents
+from constants import ARENA_PERIOD
 from helpers import isPlayerAvatar
+from items import _xml
 MUSIC_EVENT_NONE = 0
 MUSIC_EVENT_LOBBY = 2
 MUSIC_EVENT_COMBAT = 3
@@ -15,15 +15,7 @@ MUSIC_EVENT_COMBAT_LOADING = 4
 MUSIC_EVENT_COMBAT_VICTORY = 5
 MUSIC_EVENT_COMBAT_LOSE = 6
 MUSIC_EVENT_COMBAT_DRAW = 7
-MUSIC_EVENT_COMBAT_EVENT_VICTORY = 8
-MUSIC_EVENT_COMBAT_EVENT_LOSE = 9
-MUSIC_EVENT_COMBAT_EVENT_DRAW = 10
-_BATTLE_RESULT_MUSIC_EVENTS = (MUSIC_EVENT_COMBAT_VICTORY,
- MUSIC_EVENT_COMBAT_LOSE,
- MUSIC_EVENT_COMBAT_DRAW,
- MUSIC_EVENT_COMBAT_EVENT_VICTORY,
- MUSIC_EVENT_COMBAT_EVENT_LOSE,
- MUSIC_EVENT_COMBAT_EVENT_DRAW)
+_BATTLE_RESULT_MUSIC_EVENTS = (MUSIC_EVENT_COMBAT_VICTORY, MUSIC_EVENT_COMBAT_LOSE, MUSIC_EVENT_COMBAT_DRAW)
 AMBIENT_EVENT_NONE = 1000
 AMBIENT_EVENT_LOBBY = 1001
 AMBIENT_EVENT_SHOP = 1002
@@ -142,7 +134,7 @@ class MusicController(object):
             if self.__event is not None:
                 if self.__eventID == MUSIC_EVENT_COMBAT_LOADING:
                     WWISE.WW_eventGlobalSync('ue_stop_loadscreen_music')
-                elif self.__eventID in _BATTLE_RESULT_MUSIC_EVENTS:
+                elif self.__eventID >= MUSIC_EVENT_COMBAT_VICTORY and self.__eventID <= MUSIC_EVENT_COMBAT_DRAW:
                     WWISE.WW_eventGlobalSync('ue_events_hangar_stop_afterBattleMusic')
                 else:
                     self.__event.stop()
@@ -323,9 +315,6 @@ class MusicController(object):
                 eventNames[MUSIC_EVENT_COMBAT_VICTORY] = s.readString('wwcombat_victory')
                 eventNames[MUSIC_EVENT_COMBAT_LOSE] = s.readString('wwcombat_lose')
                 eventNames[MUSIC_EVENT_COMBAT_DRAW] = s.readString('wwcombat_draw')
-                eventNames[MUSIC_EVENT_COMBAT_EVENT_VICTORY] = s.readString('wwcombat_event_victory')
-                eventNames[MUSIC_EVENT_COMBAT_EVENT_LOSE] = s.readString('wwcombat_event_lose')
-                eventNames[MUSIC_EVENT_COMBAT_EVENT_DRAW] = s.readString('wwcombat_event_draw')
             if i[0] == 'ambient':
                 eventNames[AMBIENT_EVENT_LOBBY] = (s.readString('wwlobby'), s.readString('wwlobby'))
                 eventNames[AMBIENT_EVENT_SHOP] = (s.readString('wwshop'), s.readString('wwlobby'))
@@ -438,9 +427,6 @@ class MusicController(object):
             combatVictory = settings.readString('wwcombatVictory')
             combatLose = settings.readString('wwcombatLose')
             combatDraw = settings.readString('wwcombatDraw')
-            combatEventVictory = settings.readString('wwcombatEventVictory')
-            combatEventLose = settings.readString('wwcombatEventLose')
-            combatEventDraw = settings.readString('wwcombatEventDraw')
             if musicName:
                 self.__updateOverridden(MUSIC_EVENT_LOBBY, _CLIENT_OVERRIDDEN, (musicName, musicName))
             if combatVictory:
@@ -449,12 +435,6 @@ class MusicController(object):
                 self.__updateOverridden(MUSIC_EVENT_COMBAT_LOSE, _CLIENT_OVERRIDDEN, combatLose)
             if combatDraw:
                 self.__updateOverridden(MUSIC_EVENT_COMBAT_DRAW, _CLIENT_OVERRIDDEN, combatDraw)
-            if combatEventVictory:
-                self.__updateOverridden(MUSIC_EVENT_COMBAT_EVENT_VICTORY, _CLIENT_OVERRIDDEN, combatEventVictory)
-            if combatEventLose:
-                self.__updateOverridden(MUSIC_EVENT_COMBAT_EVENT_LOSE, _CLIENT_OVERRIDDEN, combatEventLose)
-            if combatEventDraw:
-                self.__updateOverridden(MUSIC_EVENT_COMBAT_EVENT_DRAW, _CLIENT_OVERRIDDEN, combatEventDraw)
             if ambientName:
                 self.__updateOverridden(AMBIENT_EVENT_LOBBY, _CLIENT_OVERRIDDEN, (ambientName, ambientName))
                 self.__updateOverridden(AMBIENT_EVENT_SHOP, _CLIENT_OVERRIDDEN, (ambientName, ambientName))

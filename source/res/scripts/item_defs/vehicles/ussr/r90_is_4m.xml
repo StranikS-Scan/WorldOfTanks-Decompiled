@@ -533,17 +533,52 @@
   <radios>
     <_10RK-26>	shared	</_10RK-26>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-12>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </V-12>
+      </engines>
+      <chassis>
+        <IS-4>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </IS-4>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <IS-4>
-        <alpha>	0.1288	</alpha>
-      </IS-4>
-    </chassis>
-    <engines>
-      <V-12>
-        <bravo>	198.2402	</bravo>
-      </V-12>
-    </engines>
     <armour>	1.258736932	</armour>
   </clientAdjustmentFactors>
   <effects>

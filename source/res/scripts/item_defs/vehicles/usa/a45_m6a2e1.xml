@@ -496,17 +496,52 @@
   <radios>
     <SCR_508_1>	shared	</SCR_508_1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_G200_m_781C9GC5>
+          <smplEnginePower>	1014.99	</smplEnginePower>
+        </Wright_G200_m_781C9GC5>
+      </engines>
+      <chassis>
+        <Chassis_M6A2E1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M6A2E1>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M6A2E1>
-        <alpha>	0.119945	</alpha>
-      </Chassis_M6A2E1>
-    </chassis>
-    <engines>
-      <Wright_G200_m_781C9GC5>
-        <bravo>	253.7475	</bravo>
-      </Wright_G200_m_781C9GC5>
-    </engines>
     <armour>	1.000684301	</armour>
   </clientAdjustmentFactors>
   <effects>

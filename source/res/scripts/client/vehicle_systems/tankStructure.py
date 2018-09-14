@@ -28,20 +28,7 @@ class TankPartNames:
         raise Exception('Invalid part name!')
 
 
-class VehiclePartsTuple(namedtuple('VehiclePartsTuple', TankPartNames.ALL + ('turret2', 'gun2'))):
-
-    def __new__(cls, chassis, hull, turret, gun, turret2=None, gun2=None):
-        return super(VehiclePartsTuple, cls).__new__(cls, chassis, hull, turret, gun, turret2, gun2)
-
-    def stripEmpty(self):
-        noneIdx = len(self) - 1
-        while noneIdx > 0:
-            if self[noneIdx] is not None:
-                break
-            noneIdx -= 1
-
-        return self[0:noneIdx + 1]
-
+VehiclePartsTuple = namedtuple('VehiclePartsTuple', TankPartNames.ALL)
 
 class TankPartIndexes:
     CHASSIS = 0
@@ -73,9 +60,18 @@ class TankNodeNames:
     HULL_FIRE_1 = 'HP_Fire_1'
     GUN_JOINT = 'HP_gunJoint'
     GUN_INCLINATION = 'Gun'
+    GUN_RECOIL = 'G'
     TRACK_LEFT_MID = 'DM_Track_LMid'
     TRACK_RIGHT_MID = 'DM_Track_RMid'
     CHASSIS_MID_TRAIL = 'DM_Mid_Trail'
+
+
+class TankSoundObjectsIndexes:
+    CHASSIS = 0
+    ENGINE = 1
+    GUN = 2
+    HIT = 3
+    COUNT = 4
 
 
 UNDAMAGED_SKELETON = VehiclePartsTuple(chassis=[('Tank', ''),
@@ -88,42 +84,20 @@ UNDAMAGED_SKELETON = VehiclePartsTuple(chassis=[('Tank', ''),
  (TankNodeNames.TRACK_LEFT_UP_FRONT, ''),
  (TankNodeNames.TRACK_LEFT_UP_REAR, ''),
  (TankNodeNames.TRACK_RIGHT_UP_FRONT, ''),
- (TankNodeNames.TRACK_RIGHT_UP_REAR, '')], turret=[('HP_gunJoint', '')], gun=[('Gun', ''), ('G', 'Gun'), ('HP_gunFire', 'G')])
+ (TankNodeNames.TRACK_RIGHT_UP_REAR, '')], turret=[('HP_gunJoint', '')], gun=[(TankNodeNames.GUN_INCLINATION, ''), (TankNodeNames.GUN_RECOIL, TankNodeNames.GUN_INCLINATION), ('HP_gunFire', TankNodeNames.GUN_RECOIL)])
 CRASHED_SKELETON = VehiclePartsTuple(chassis=[('Tank', ''), ('V', 'Tank'), ('HP_gui', '')], hull=[('HP_Fire_1', '')], turret=[('HP_gunJoint', '')], gun=[])
-UNDAMAGED_SKELETON_WHEELED = VehiclePartsTuple(chassis=[('Tank', ''),
- (TankNodeNames.HULL_SWINGING, 'Tank'),
- (TankNodeNames.GUI, ''),
- (TankNodeNames.TRACK_LEFT_FRONT, ''),
- (TankNodeNames.TRACK_LEFT_REAR, ''),
- (TankNodeNames.TRACK_RIGHT_FRONT, ''),
- (TankNodeNames.TRACK_RIGHT_REAR, ''),
- (TankNodeNames.TRACK_LEFT_UP_FRONT, ''),
- (TankNodeNames.TRACK_LEFT_UP_REAR, ''),
- (TankNodeNames.TRACK_RIGHT_UP_FRONT, ''),
- (TankNodeNames.TRACK_RIGHT_UP_REAR, '')], hull=[('HP_Fire_1', ''), ('HP_Fire_2', '')], turret=[('HP_gunJoint', '')], gun=[('Gun', ''), ('G', 'Gun'), ('HP_gunFire', 'G')])
 
 def getUndamagedSkeleton(vehicleDesc):
     exhaustNodes = getExhaustNodesFromDesc(vehicleDesc)
     exhaustNodes = [ (x, '') for x in exhaustNodes ]
     turretJointNode = (vehicleDesc.hull['turretHardPoints'][0], '')
-    chassisSkeleton = None
-    hullSkeleton = None
-    if 'wheeledVehicle' in vehicleDesc.type.tags:
-        chassisSkeleton = UNDAMAGED_SKELETON_WHEELED.chassis
-        hullSkeleton = UNDAMAGED_SKELETON_WHEELED.hull
-    else:
-        chassisSkeleton = UNDAMAGED_SKELETON.chassis
-        hullSkeleton = UNDAMAGED_SKELETON.hull
-    result = VehiclePartsTuple(chassis=chassisSkeleton, hull=hullSkeleton + exhaustNodes + [turretJointNode], turret=UNDAMAGED_SKELETON.turret, gun=UNDAMAGED_SKELETON.gun)
+    result = VehiclePartsTuple(chassis=UNDAMAGED_SKELETON.chassis, hull=UNDAMAGED_SKELETON.hull + exhaustNodes + [turretJointNode], turret=UNDAMAGED_SKELETON.turret, gun=UNDAMAGED_SKELETON.gun)
     return result
 
 
 def getCrashedSkeleton(vehicleDesc):
     turretJointNode = (vehicleDesc.hull['turretHardPoints'][0], '')
-    turretJoints = [turretJointNode]
-    if 'markI' in vehicleDesc.type.tags:
-        turretJoints.append(('HP_turretJoint_02', ''))
-    result = VehiclePartsTuple(chassis=CRASHED_SKELETON.chassis, hull=CRASHED_SKELETON.hull + turretJoints, turret=CRASHED_SKELETON.turret, gun=CRASHED_SKELETON.gun)
+    result = VehiclePartsTuple(chassis=CRASHED_SKELETON.chassis, hull=CRASHED_SKELETON.hull + [turretJointNode], turret=CRASHED_SKELETON.turret, gun=CRASHED_SKELETON.gun)
     return result
 
 

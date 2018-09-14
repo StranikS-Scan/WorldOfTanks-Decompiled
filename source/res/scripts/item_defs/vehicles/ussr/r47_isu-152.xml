@@ -934,23 +934,89 @@
     </_10RK>
     <_12RT>	shared	</_12RT>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2IS>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </V-2IS>
+        <V-2-54IS>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </V-2-54IS>
+      </engines>
+      <chassis>
+        <ISU-152>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </ISU-152>
+        <ISU-152_mod_1945>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </ISU-152_mod_1945>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <ISU-152>
-        <alpha>	0.1449	</alpha>
-      </ISU-152>
-      <ISU-152_mod_1945>
-        <alpha>	0.1127	</alpha>
-      </ISU-152_mod_1945>
-    </chassis>
-    <engines>
-      <V-2IS>
-        <bravo>	158.5922	</bravo>
-      </V-2IS>
-      <V-2-54IS>
-        <bravo>	185.0242	</bravo>
-      </V-2-54IS>
-    </engines>
     <armour>	0.949442544	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -1132,23 +1132,89 @@
   <radios>
     <FuG37>	shared	</FuG37>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Skoda_T-11>
+          <smplEnginePower>	126.8737	</smplEnginePower>
+        </Skoda_T-11>
+        <Skoda_T-15>
+          <smplEnginePower>	232.6019	</smplEnginePower>
+        </Skoda_T-15>
+      </engines>
+      <chassis>
+        <Pz35t_Standardketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Pz35t_Standardketten>
+        <Pz35t_Vetstaerktketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Pz35t_Vetstaerktketten>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Pz35t_Standardketten>
-        <alpha>	0.1288	</alpha>
-      </Pz35t_Standardketten>
-      <Pz35t_Vetstaerktketten>
-        <alpha>	0.10465	</alpha>
-      </Pz35t_Vetstaerktketten>
-    </chassis>
-    <engines>
-      <Skoda_T-11>
-        <bravo>	31.71843	</bravo>
-      </Skoda_T-11>
-      <Skoda_T-15>
-        <bravo>	58.15046	</bravo>
-      </Skoda_T-15>
-    </engines>
     <armour>	0.80077794	</armour>
   </clientAdjustmentFactors>
   <effects>

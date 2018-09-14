@@ -1078,23 +1078,89 @@
     </N11>
     <N9>	shared	</N9>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Armstrong-Siddeley>
+          <smplEnginePower>	190.3106	</smplEnginePower>
+        </Armstrong-Siddeley>
+        <Rolls_Royse_Phantom_II>
+          <smplEnginePower>	232.6019	</smplEnginePower>
+        </Rolls_Royse_Phantom_II>
+      </engines>
+      <chassis>
+        <Chassis_GB06_Vickers_Medium_Mk_III>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB06_Vickers_Medium_Mk_III>
+        <Chassis_GB06_Vickers_Medium_Mk_III_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB06_Vickers_Medium_Mk_III_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB06_Vickers_Medium_Mk_III>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB06_Vickers_Medium_Mk_III>
-      <Chassis_GB06_Vickers_Medium_Mk_III_2>
-        <alpha>	0.0805	</alpha>
-      </Chassis_GB06_Vickers_Medium_Mk_III_2>
-    </chassis>
-    <engines>
-      <Armstrong-Siddeley>
-        <bravo>	47.57765	</bravo>
-      </Armstrong-Siddeley>
-      <Rolls_Royse_Phantom_II>
-        <bravo>	58.15046	</bravo>
-      </Rolls_Royse_Phantom_II>
-    </engines>
     <armour>	0.888097942	</armour>
   </clientAdjustmentFactors>
   <effects>

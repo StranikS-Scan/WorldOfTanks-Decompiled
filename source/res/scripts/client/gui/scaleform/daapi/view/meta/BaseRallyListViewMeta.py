@@ -8,46 +8,22 @@ class BaseRallyListViewMeta(BaseRallyView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseRallyView
-    null
     """
 
     def getRallyDetails(self, index):
-        """
-        :param index:
-        :return Object:
-        """
         self._printOverrideError('getRallyDetails')
 
     def as_selectByIndexS(self, index):
-        """
-        :param index:
-        :return :
-        """
         return self.flashObject.as_selectByIndex(index) if self._isDAAPIInited() else None
 
     def as_selectByIDS(self, rallyID):
-        """
-        :param rallyID:
-        :return :
-        """
         return self.flashObject.as_selectByID(rallyID) if self._isDAAPIInited() else None
 
     def as_getSearchDPS(self):
-        """
-        :return Object:
-        """
         return self.flashObject.as_getSearchDP() if self._isDAAPIInited() else None
 
     def as_setDetailsS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_setDetails(value) if self._isDAAPIInited() else None
 
     def as_setVehiclesTitleS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_setVehiclesTitle(value) if self._isDAAPIInited() else None

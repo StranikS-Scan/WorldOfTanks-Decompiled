@@ -219,7 +219,7 @@
     <shortUserString>	#gb_vehicles:GB70_FV4202_105_short	</shortUserString>
     <price>	6100000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user secret	</tags>
+    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user secret unrecoverable	</tags>
     <level>	10	</level>
   </GB70_FV4202_105>
   <GB59_Cruiser_Mk_IV>
@@ -348,7 +348,7 @@
     <description>	#gb_vehicles:GB29_Crusader_5inch_descr	</description>
     <shortUserString>	#gb_vehicles:GB29_Crusader_5inch_short	</shortUserString>
     <price>	1440000	</price>
-    <tags>	SPG mediumSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSuspension_Christie_user	</tags>
+    <tags>	SPG mediumSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSuspension_Christie_user HD	</tags>
     <level>	7	</level>
   </GB29_Crusader_5inch>
   <GB30_FV3805>
@@ -610,31 +610,9 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank special aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD secret testTank	</tags>
+    <tags>	heavyTank special aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD secret	</tags>
     <level>	10	</level>
   </GB88_T95_Chieftain_turret>
-  <GB89_Mark_I_Male>
-    <id>	221	</id>
-    <userString>	#gb_vehicles:GB89_Mark_I_Male	</userString>
-    <description>	#gb_vehicles:GB89_Mark_I_Male_descr	</description>
-    <shortUserString>	#gb_vehicles:GB89_Mark_I_Male_short	</shortUserString>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank HD markI secret	</tags>
-    <level>	1	</level>
-  </GB89_Mark_I_Male>
-  <GB90_Lanchester_Armored_Car>
-    <id>	222	</id>
-    <userString>	#gb_vehicles:GB90_Lanchester_Armored_Car	</userString>
-    <description>	#gb_vehicles:GB90_Lanchester_Armored_Car_descr	</description>
-    <shortUserString>	#gb_vehicles:GB90_Lanchester_Armored_Car_short	</shortUserString>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank HD event_battles special cannot_be_sold wheeledVehicle secret	</tags>
-    <level>	1	</level>
-  </GB90_Lanchester_Armored_Car>
   <GB23_Centurion_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:GB23_Centurion_IGR	</userString>
@@ -703,7 +681,7 @@
     <shortUserString>	#gb_vehicles:GB01_Medium_Mark_I_bot_short	</shortUserString>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank lightTankArtefacts_User improvedVentilation_class1_user enhancedVertical_elastic_elements_user secret	</tags>
+    <tags>	mediumTank lightTankArtefacts_User improvedVentilation_class1_user enhancedVertical_elastic_elements_user secret unrecoverable	</tags>
     <level>	1	</level>
   </GB01_Medium_Mark_I_bot>
   <GB05_Vickers_Medium_Mk_II_bot>
@@ -713,7 +691,7 @@
     <shortUserString>	#gb_vehicles:GB05_Vickers_Medium_Mk_II_bot_short	</shortUserString>
     <price>	3500	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank enhancedVertical_elastic_elements_user secret	</tags>
+    <tags>	mediumTank enhancedVertical_elastic_elements_user secret unrecoverable	</tags>
     <level>	2	</level>
   </GB05_Vickers_Medium_Mk_II_bot>
 </list.xml>

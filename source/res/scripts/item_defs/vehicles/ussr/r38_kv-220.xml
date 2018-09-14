@@ -23,7 +23,7 @@
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/russian/R38_KV-220/KV-220_hull_01_AM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -86,15 +86,15 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R38_KV-220/KV-220_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+      <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
     </camouflage>
   </hull>
   <chassis>
-    <KV220>
+    <KV220_A>
       <userString>	#ussr_vehicles:KV220	</userString>
       <tags></tags>
       <level>	6	</level>
-      <price>	16300.0	</price>
+      <price>	16300	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
@@ -129,7 +129,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.55	</textureScale>
+        <textureScale>	-1.6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -209,7 +209,7 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	4.692590 0.000000 0.000000	</row0>
+            <row0>	4.709100 0.000000 0.000000	</row0>
             <row1>	0.000000 1.624200 0.000000	</row1>
             <row2>	0.000000 0.000000 8.974650	</row2>
             <row3>	0.000000 0.000000 0.000000	</row3>
@@ -240,7 +240,7 @@
         <left>	vehicles/russian/R38_KV-220/track/left.track	</left>
         <right>	vehicles/russian/R38_KV-220/track/right.track	</right>
         <segmentLength>	0.161	</segmentLength>
-        <segmentOffset>	0.138	</segmentOffset>
+        <segmentOffset>	0.129	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -255,9 +255,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1099	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -281,83 +278,83 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
+          <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.03	</offset>
+          <offset>	-0.048	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
+          <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
-          <offset>	-0.03	</offset>
+          <offset>	-0.089	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.9	</forwardElastK>
+          <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.8	</backwardElastK>
-          <offset>	-0.03	</offset>
+          <offset>	-0.089	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.9	</forwardElastK>
+          <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
-          <offset>	-0.03	</offset>
+          <offset>	-0.089	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L4	</name>
-          <forwardElastK>	0.9	</forwardElastK>
+          <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	2.01	</backwardElastK>
-          <offset>	-0.03	</offset>
+          <offset>	-0.063	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.9	</forwardElastK>
+          <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.03	</offset>
+          <offset>	-0.048	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.9	</forwardElastK>
+          <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
-          <offset>	-0.03	</offset>
+          <offset>	-0.089	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <forwardElastK>	0.9	</forwardElastK>
+          <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.8	</backwardElastK>
-          <offset>	-0.03	</offset>
+          <offset>	-0.089	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
-          <forwardElastK>	0.9	</forwardElastK>
+          <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
-          <offset>	-0.03	</offset>
+          <offset>	-0.089	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
-          <forwardElastK>	0.9	</forwardElastK>
+          <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	2.01	</backwardElastK>
-          <offset>	-0.03	</offset>
+          <offset>	-0.063	</offset>
         </node>
       </trackNodes>
       <trackThickness>	-0.0076	</trackThickness>
-    </KV220>
+    </KV220_A>
   </chassis>
   <turrets0>
-    <KV-220-1>
-      <userString>	#ussr_vehicles:KV-220-1	</userString>
+    <KV-220-1A>
+      <userString>	#ussr_vehicles:KV-220	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	9430.0	</price>
+      <price>	9430	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	90	</armor_1>
@@ -423,7 +420,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.46 0.25 0.000000 0.000000	</tiling>
+            <tiling>	0.505 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_76mm_ZiS-5A>
       </guns>
@@ -469,12 +466,12 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.972 -0.089 1.000 0.000 0.607 0.050 0.500 0.586 0.115 0.500 0.223 0.500 0.112 0.737 0.000	</physicsShape>
+      <physicsShape>	0.972 -0.089 1.000 0.000 0.667 0.006 0.500 0.586 0.115 0.500 0.223 0.500 0.112 0.737 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	0.625 0.625 0.000000 0.000000	</tiling>
+        <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
       </camouflage>
-    </KV-220-1>
+    </KV-220-1A>
   </turrets0>
   <engines>
     <V-2KT>	shared	</V-2KT>
@@ -485,17 +482,52 @@
   <radios>
     <_10RB>	shared	</_10RB>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2KT>
+          <smplEnginePower>	898.689	</smplEnginePower>
+        </V-2KT>
+      </engines>
+      <chassis>
+        <KV220_A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </KV220_A>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <KV220>
-        <alpha>	0.1449	</alpha>
-      </KV220>
-    </chassis>
-    <engines>
-      <V-2KT>
-        <bravo>	224.6722	</bravo>
-      </V-2KT>
-    </engines>
     <armour>	0.988863778	</armour>
   </clientAdjustmentFactors>
   <effects>
@@ -503,7 +535,7 @@
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
-    <default>	beta_tester	</default>
+    <default>	ussr_star	</default>
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.89	</alpha>
   </emblems>

@@ -1,0 +1,31 @@
+<hangar_halloween_v2.xml>
+  <wwambientSound>	hangar_halloween	</wwambientSound>
+  <wwmusic>	hangar_halloween_silence	</wwmusic>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	hangar_halloween.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_v2.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
+  <roadMap></roadMap>
+  <mapActivities>
+    <warplane>
+      <preset>	hangar_halloween_v2_skull_flying_1	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	15.000000 15.000000	</startTime>
+      <period>	550.000000	</period>
+    </warplane>
+    <warplane>
+      <preset>	hangar_halloween_v2_ghost_3	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	45.000000 45.000000	</startTime>
+      <period>	550.000000	</period>
+    </warplane>
+  </mapActivities>
+</hangar_halloween_v2.xml>

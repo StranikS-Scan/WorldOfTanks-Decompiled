@@ -192,7 +192,7 @@ class NoFortController(_FortController):
 
     @classmethod
     def isNext(cls, stateID, isLeader):
-        if stateID in (CLIENT_FORT_STATE.NO_CLAN, CLIENT_FORT_STATE.UNSUBSCRIBED):
+        if stateID in (CLIENT_FORT_STATE.NO_CLAN, CLIENT_FORT_STATE.UNSUBSCRIBED, CLIENT_FORT_STATE.NO_CLAN_SUBSCRIBED):
             return True
         return True if not isLeader and stateID == CLIENT_FORT_STATE.NO_FORT else None
 

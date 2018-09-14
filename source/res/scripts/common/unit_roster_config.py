@@ -52,7 +52,7 @@ class BaseSortieRoster(BaseUnitRoster):
 
 class SortieRoster6(BaseSortieRoster):
     MAX_SLOTS = 7
-    MAX_EMPTY_SLOTS = 1
+    MAX_EMPTY_SLOTS = 6
     SLOT_TYPE = SortieSlot6
     DEFAULT_SLOT_PACK = SortieSlot6().pack()
     MAX_UNIT_POINTS_SUM = 7 * max(SortieSlot6.DEFAULT_LEVELS)
@@ -61,7 +61,7 @@ class SortieRoster6(BaseSortieRoster):
 
 class SortieRoster8(BaseSortieRoster):
     MAX_SLOTS = 10
-    MAX_EMPTY_SLOTS = 2
+    MAX_EMPTY_SLOTS = 9
     SLOT_TYPE = SortieSlot8
     DEFAULT_SLOT_PACK = SortieSlot8().pack()
     MAX_UNIT_POINTS_SUM = 10 * max(SortieSlot8.DEFAULT_LEVELS)
@@ -70,7 +70,7 @@ class SortieRoster8(BaseSortieRoster):
 
 class SortieRoster10(BaseSortieRoster):
     MAX_SLOTS = 15
-    MAX_EMPTY_SLOTS = 3
+    MAX_EMPTY_SLOTS = 14
     SLOT_TYPE = SortieSlot10
     DEFAULT_SLOT_PACK = SortieSlot10().pack()
     MAX_UNIT_POINTS_SUM = 15 * max(SortieSlot10.DEFAULT_LEVELS)

@@ -54,11 +54,28 @@ class IArenaLoadController(IArenaController):
         pass
 
 
-class IArenaVehiclesController(IArenaLoadController):
+class IContactsController(IArenaController):
     __slots__ = ()
 
     def getCtrlScope(self):
-        return _SCOPE.VEHICLES | _SCOPE.LOAD
+        return _SCOPE.CONTACTS
+
+    def invalidateUsersTags(self):
+        """New list of chat rosters has been received."""
+        pass
+
+    def invalidateUserTags(self, user):
+        """Chat rosters has been changed.
+        :param user: instance of UserEntity.
+        """
+        pass
+
+
+class IArenaVehiclesController(IArenaLoadController, IContactsController):
+    __slots__ = ()
+
+    def getCtrlScope(self):
+        return _SCOPE.VEHICLES | _SCOPE.LOAD | _SCOPE.CONTACTS
 
     def invalidateArenaInfo(self):
         """Starts to invalidate information of arena."""
@@ -93,7 +110,7 @@ class IArenaVehiclesController(IArenaLoadController):
 
     def updateVehiclesInfo(self, updated, arenaDP):
         """Vehicle has been updated on arena.
-        :param updated: [(flags, VehicleArenaStatsVO), ...].
+        :param updated: container of VOs which have been changed, where first element belongs to updated vehicle
         :param arenaDP: instance of ArenaDataProvider.
         """
         pass
@@ -111,16 +128,6 @@ class IArenaVehiclesController(IArenaLoadController):
         :param flags: bitmask containing values from INVALIDATE_OP.
         :param vo: instance of VehicleArenaInfoVO for that status updated.
         :param arenaDP: instance of ArenaDataProvider.
-        """
-        pass
-
-    def invalidateUsersTags(self):
-        """New list of chat rosters has been received."""
-        pass
-
-    def invalidateUserTags(self, user):
-        """Chat rosters has been changed.
-        :param user: instance of UserEntity.
         """
         pass
 
@@ -225,14 +232,21 @@ class IArenaRespawnController(IArenaController):
         pass
 
 
-class IPersonalInvitationsController(IArenaVehiclesController):
+class IPersonalInvitationsController(IArenaController):
     __slots__ = ()
 
     def getCtrlScope(self):
-        return _SCOPE.VEHICLES | _SCOPE.INVITATIONS
+        return _SCOPE.INVITATIONS
 
     def invalidateInvitationsStatuses(self, vos, arenaDP):
         pass
+
+
+class IVehiclesAndPersonalInvitationsController(IArenaVehiclesController, IPersonalInvitationsController):
+    __slots__ = ()
+
+    def getCtrlScope(self):
+        return _SCOPE.VEHICLES | _SCOPE.INVITATIONS | _SCOPE.CONTACTS
 
 
 class IVehiclesAndPositionsController(IArenaVehiclesController):
@@ -245,11 +259,8 @@ class IVehiclesAndPositionsController(IArenaVehiclesController):
         pass
 
 
-class IVehiclesPositionsTeamBasesController(IVehiclesAndPositionsController, ITeamsBasesController):
-    """
-    Interface for Mark1 Event (progress bar panel)
-    """
+class IContactsAndPersonalInvitationsController(IContactsController, IPersonalInvitationsController):
     __slots__ = ()
 
     def getCtrlScope(self):
-        return _SCOPE.VEHICLES | _SCOPE.POSITIONS | _SCOPE.TEAMS_BASES
+        return _SCOPE.CONTACTS | _SCOPE.INVITATIONS

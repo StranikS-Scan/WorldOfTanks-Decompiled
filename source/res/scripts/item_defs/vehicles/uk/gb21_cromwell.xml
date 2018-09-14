@@ -1273,26 +1273,92 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Nuffield_liberty_MKV>
+          <smplEnginePower>	433.4853	</smplEnginePower>
+        </Nuffield_liberty_MKV>
+        <Rolls_Royse_Meteor>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Rolls_Royse_Meteor>
+        <Rolls_Royse_Meteor_MkIV>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkIV>
+      </engines>
+      <chassis>
+        <Chassis_GB21_Cromwell>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB21_Cromwell>
+        <Chassis_GB21_Cromwell_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB21_Cromwell_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB21_Cromwell>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB21_Cromwell>
-      <Chassis_GB21_Cromwell_2>
-        <alpha>	0.0805	</alpha>
-      </Chassis_GB21_Cromwell_2>
-    </chassis>
-    <engines>
-      <Nuffield_liberty_MKV>
-        <bravo>	108.3713	</bravo>
-      </Nuffield_liberty_MKV>
-      <Rolls_Royse_Meteor>
-        <bravo>	158.5922	</bravo>
-      </Rolls_Royse_Meteor>
-      <Rolls_Royse_Meteor_MkIV>
-        <bravo>	171.8082	</bravo>
-      </Rolls_Royse_Meteor_MkIV>
-    </engines>
     <armour>	0.896736835	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -493,17 +493,52 @@
   <radios>
     <_10RK_IGR>	shared	</_10RK_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2IS_IGR>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </V-2IS_IGR>
+      </engines>
+      <chassis>
+        <Chassis_R106_KV85_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R106_KV85_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R106_KV85_2_IGR>
-        <alpha>	0.08855	</alpha>
-      </Chassis_R106_KV85_2_IGR>
-    </chassis>
-    <engines>
-      <V-2IS_IGR>
-        <bravo>	158.5922	</bravo>
-      </V-2IS_IGR>
-    </engines>
     <armour>	1.069430323	</armour>
   </clientAdjustmentFactors>
   <effects>

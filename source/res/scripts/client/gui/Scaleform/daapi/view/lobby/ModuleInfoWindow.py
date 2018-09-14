@@ -10,13 +10,15 @@ from items import ITEM_TYPE_NAMES
 from helpers import i18n
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
+from debug_utils import LOG_DEBUG
 _DEF_SHOT_DISTANCE = 720
 
 class ModuleInfoWindow(ModuleInfoMeta):
 
     def __init__(self, ctx=None):
         super(ModuleInfoWindow, self).__init__()
-        self.moduleCompactDescr = int(ctx.get('moduleCompactDescr'))
+        self.moduleCompactDescr = ctx.get('moduleCompactDescr')
+        assert self.moduleCompactDescr, 'module compact descriptor must be defined'
         self.__vehicleDescr = ctx.get('vehicleDescr')
         self.__isAdditionalInfoShow = ctx.get('isAdditionalInfoShow')
 

@@ -7,7 +7,6 @@ class PLAYERS_PANEL_STATE(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     NONE = -1
     HIDEN = 0

@@ -332,17 +332,52 @@
   <radios>
     <British_Wireless_set_N19>	shared	</British_Wireless_set_N19>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_Continental_R-975EC2_A>
+          <smplEnginePower>	412.3396	</smplEnginePower>
+        </Wright_Continental_R-975EC2_A>
+      </engines>
+      <chassis>
+        <Chassis_Sexton_I>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Sexton_I>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Sexton_I>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Sexton_I>
-    </chassis>
-    <engines>
-      <Wright_Continental_R-975EC2_A>
-        <bravo>	103.0849	</bravo>
-      </Wright_Continental_R-975EC2_A>
-    </engines>
     <armour>	0.558690874	</armour>
   </clientAdjustmentFactors>
   <effects>

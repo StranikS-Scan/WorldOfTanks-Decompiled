@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/formatters.py
-import collections
 import BigWorld
 from itertools import chain
 from gui.Scaleform.locale.MENU import MENU
@@ -24,6 +23,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'clipFireRate': MENU.TANK_PARAMS_CLIPSEC,
  'damageAvg': MENU.TANK_PARAMS_VAL,
  'damageAvgPerMinute': MENU.TANK_PARAMS_VPM,
+ 'avgDamagePerMinute': MENU.TANK_PARAMS_VPM,
  'fireStartingChance': MENU.TANK_PARAMS_PERCENT,
  'maxHealth': MENU.TANK_PARAMS_VAL,
  'flyDelayRange': MENU.TANK_PARAMS_S,
@@ -56,6 +56,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'invisibilityStillFactor': MENU.TANK_PARAMS_PERCENT,
  'invisibilityMovingFactor': MENU.TANK_PARAMS_PERCENT,
  'maxShotDistance': MENU.TANK_PARAMS_M}
+NO_COLORIZE_FORMATTERS = (text_styles.stats, text_styles.stats, text_styles.stats)
 NO_BONUS_SIMPLIFIED_FORMATTERS = (text_styles.warning, text_styles.warning, text_styles.warning)
 NO_BONUS_BASE_FORMATTERS = (text_styles.error, text_styles.stats, text_styles.stats)
 SIMPLIFIED_FORMATTERS = (text_styles.critical, text_styles.warning, text_styles.statInfo)
@@ -138,7 +139,7 @@ _niceListFormat = {'rounder': BigWorld.wg_getNiceNumberFormat,
  'separator': '/'}
 _integralFormat = {'rounder': BigWorld.wg_getIntegralFormat}
 _percentFormat = {'rounder': lambda v: '%d%%' % v}
-_FORMAT_SETTINGS = {'relativePower': _integralFormat,
+FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'damage': _niceRangeFormat,
  'piercingPower': _niceRangeFormat,
  'reloadTime': _niceRangeFormat,
@@ -152,6 +153,7 @@ _FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'aimingTime': _niceRangeFormat,
  'shotDispersionAngle': _niceFormat,
  'damageAvgPerMinute': _niceFormat,
+ 'avgDamagePerMinute': _niceFormat,
  'relativeArmor': _integralFormat,
  'damageAvg': _niceFormat,
  'maxHealth': _integralFormat,
@@ -199,17 +201,17 @@ def _colorize(paramStr, state, colorScheme):
 
 
 def baseFormatParameter(parameterName, parameterValue):
-    return _formatParameter(parameterName, parameterValue)
+    return formatParameter(parameterName, parameterValue)
 
 
 def colorizedFormatParameter(parameter, colorScheme):
-    return _formatParameter(parameter.name, parameter.value, parameter.state, colorScheme)
+    return formatParameter(parameter.name, parameter.value, parameter.state, colorScheme)
 
 
 def simlifiedDeltaParameter(parameter):
     mainFormatter = SIMPLIFIED_FORMATTERS[1]
     delta = int(parameter.state[1])
-    paramStr = _formatParameter(parameter.name, parameter.value)
+    paramStr = formatParameter(parameter.name, parameter.value)
     if delta:
         sign = '-' if delta < 0 else '+'
         deltaStr = _colorize('%s%s' % (sign, abs(delta)), parameter.state, SIMPLIFIED_FORMATTERS)
@@ -218,8 +220,8 @@ def simlifiedDeltaParameter(parameter):
         return mainFormatter(paramStr)
 
 
-def simlifiedVehicleParameter(parameter):
-    paramStr = _formatParameter(parameter.name, parameter.value)
+def simplifiedVehicleParameter(parameter):
+    paramStr = formatParameter(parameter.name, parameter.value)
     if parameter.state[0] == PARAM_STATE.WORSE:
         return _colorize(paramStr, parameter.state, NO_BONUS_SIMPLIFIED_FORMATTERS)
     else:
@@ -227,22 +229,26 @@ def simlifiedVehicleParameter(parameter):
         return mainFormatter(paramStr)
 
 
-def _formatParameter(parameterName, paramValue, parameterState=None, colorScheme=None):
-    if parameterState is None and isinstance(paramValue, collections.Sequence):
+def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=None, formatSettings=None):
+    if parameterState is None and isinstance(paramValue, (tuple, list)):
         parameterState = [None] * len(paramValue)
-    settings = _FORMAT_SETTINGS.get(parameterName, _listFormat)
+    formatSettings = formatSettings or FORMAT_SETTINGS
+    settings = formatSettings.get(parameterName, _listFormat)
     rounder = settings['rounder']
     doSmartRound = parameterName in _SMART_ROUND_PARAMS
 
     def applyFormat(value, state):
         if doSmartRound:
             value = _cutDigits(value)
-        paramStr = rounder(value)
+        if isinstance(value, str):
+            paramStr = value
+        else:
+            paramStr = rounder(value)
         if state is not None and colorScheme is not None:
             paramStr = _colorize(paramStr, state, colorScheme)
         return paramStr
 
-    if isinstance(paramValue, collections.Sequence):
+    if isinstance(paramValue, (tuple, list)):
         if doSmartRound and len(set(paramValue)) == 1:
             if paramValue[0] > 0:
                 return applyFormat(paramValue[0], parameterState[0])
@@ -259,7 +265,10 @@ def _formatParameter(parameterName, paramValue, parameterState=None, colorScheme
 
 
 def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
-    compactDescr = descriptor.type.compactDescr if isinstance(descriptor, vehicles.VehicleDescr) else descriptor['compactDescr']
+    if isinstance(descriptor, vehicles.VehicleDescr):
+        compactDescr = descriptor.type.compactDescr
+    else:
+        compactDescr = descriptor['compactDescr']
     itemTypeIdx = getTypeOfCompactDescr(compactDescr)
     if itemTypeIdx == ITEM_TYPES.equipment:
         eqDescr = vehicles.getDictDescr(compactDescr)
@@ -271,9 +280,10 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
         if excludeRelative and isRelativeParameter(paramName):
             continue
         paramValue = parameters.get(paramName)
-        fmtValue = paramValue if paramValue is None else baseFormatParameter(paramName, paramValue)
-        if fmtValue:
-            params.append((paramName, fmtValue))
+        if paramValue:
+            fmtValue = baseFormatParameter(paramName, paramValue)
+            if fmtValue:
+                params.append((paramName, baseFormatParameter(paramName, paramValue)))
 
     return params
 

@@ -7,7 +7,6 @@ class COMPANY_ALIASES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     STANDARD_TYPE = 1
     STARDARD_UI_ALIASE = 'CompanyRoomHeaderUI'

@@ -55,8 +55,11 @@
       <Arg>	FLOAT32	</Arg>
     </avatarClientProxy_updateTargetingInfo>
     <avatarClientProxy_showOwnVehicleHitDirection>
-      <Arg>	OBJECT_ID	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
     </avatarClientProxy_showOwnVehicleHitDirection>
     <avatarClientProxy_showShotResults>
@@ -93,5 +96,12 @@
       <Arg>	UINT8	</Arg>
       <Arg>	STRING	</Arg>
     </avatarClientProxy_showDevelopmentInfo>
+    <avatarClientProxy_onBattleEvents>
+      <Arg>	ARRAY	  <of>	BATTLE_EVENT	</of>
+      </Arg>
+    </avatarClientProxy_onBattleEvents>
+    <avatarClientProxy_battleEventsSummary>
+      <Arg>	BATTLE_EVENTS_SUMMARY	</Arg>
+    </avatarClientProxy_battleEventsSummary>
   </BaseMethods>
 </avatarclientproxy.def>

@@ -19,6 +19,7 @@ class OnBuyVehicle(aop.Aspect):
 
     def __init__(self, config):
         self.__vehicle_is_available = config['vehicle_is_available']
+        self._localKey = '#miniclient:buy_vehicle/%s'
         aop.Aspect.__init__(self)
 
     def atCall(self, cd):
@@ -30,9 +31,16 @@ class OnBuyVehicle(aop.Aspect):
 
             def dialogButtonClickHandler(confirm):
                 if confirm:
-                    BigWorld.callback(0.1, lambda : cd.self._VehicleBuyWindow__requestForBuy(cd.args[0]))
+                    BigWorld.callback(0.1, lambda : cd.self._VehicleBuyWindow__requestForMoneyObtain(cd.args[0]))
                 else:
                     cd.self.as_setEnabledSubmitBtnS(True)
 
-            showDialog(SimpleDialogMeta(title=_ms('#miniclient:buy_vehicle/title'), message=icons.alert() + _ms('#miniclient:buy_vehicle/message'), buttons=I18nConfirmDialogButtons(i18nKey='questsConfirmDialog', focusedIndex=DIALOG_BUTTON_ID.SUBMIT)), dialogButtonClickHandler)
+            showDialog(SimpleDialogMeta(title=_ms(self._localKey % 'title'), message=icons.alert() + _ms(self._localKey % 'message'), buttons=I18nConfirmDialogButtons(i18nKey='questsConfirmDialog', focusedIndex=DIALOG_BUTTON_ID.SUBMIT)), dialogButtonClickHandler)
             return None
+
+
+class OnRestoreVehicle(OnBuyVehicle):
+
+    def __init__(self, config):
+        super(OnRestoreVehicle, self).__init__(config)
+        self._localKey = '#miniclient:restore_vehicle/%s'

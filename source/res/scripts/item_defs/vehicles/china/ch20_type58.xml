@@ -1189,26 +1189,92 @@
     </_9R>
     <_9RM_shop>	shared	</_9RM_shop>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2-34>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V-2-34>
+        <_Type_102S1>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </_Type_102S1>
+        <_12150L>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </_12150L>
+      </engines>
+      <chassis>
+        <Chassis_Ch20_Type58>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch20_Type58>
+        <Chassis_Ch20_Type58_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch20_Type58_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch20_Type58>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Ch20_Type58>
-      <Chassis_Ch20_Type58_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Ch20_Type58_2>
-    </chassis>
-    <engines>
-      <V-2-34>
-        <bravo>	132.1601	</bravo>
-      </V-2-34>
-      <_Type_102S1>
-        <bravo>	132.1601	</bravo>
-      </_Type_102S1>
-      <_12150L>
-        <bravo>	137.4465	</bravo>
-      </_12150L>
-    </engines>
     <armour>	1.110845508	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -517,26 +517,92 @@
     </_10R>
     <_12RT>	shared	</_12RT>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M-5-400F>
+          <smplEnginePower>	465.2037	</smplEnginePower>
+        </M-5-400F>
+        <M-17T>
+          <smplEnginePower>	475.7765	</smplEnginePower>
+        </M-17T>
+        <M-17F>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </M-17F>
+      </engines>
+      <chassis>
+        <SU-8>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </SU-8>
+        <SU-8Bis>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </SU-8Bis>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <SU-8>
-        <alpha>	0.12075	</alpha>
-      </SU-8>
-      <SU-8Bis>
-        <alpha>	0.1127	</alpha>
-      </SU-8Bis>
-    </chassis>
-    <engines>
-      <M-5-400F>
-        <bravo>	116.3009	</bravo>
-      </M-5-400F>
-      <M-17T>
-        <bravo>	118.9441	</bravo>
-      </M-17T>
-      <M-17F>
-        <bravo>	132.1601	</bravo>
-      </M-17F>
-    </engines>
     <armour>	0.786373558	</armour>
   </clientAdjustmentFactors>
   <effects>

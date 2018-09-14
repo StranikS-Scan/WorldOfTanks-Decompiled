@@ -140,6 +140,14 @@ def getSkillsConfig():
     return _g_skillsConfig
 
 
+def getSkillsMask(skills):
+    result = 0
+    for skill in skills:
+        result |= 1 << SKILL_INDICES[skill]
+
+    return result
+
+
 def getNationConfig(nationID):
     global _g_nationsConfig
     if _g_nationsConfig[nationID] is None:
@@ -409,12 +417,12 @@ class TankmanDescr(object):
             return
         prevTotalXP = self.totalXP()
         if self.numLevelsToNextRank != 0:
-            self.numLevelsToNextRank += self.__lastSkillLevel
             numSkills = self.lastSkillNumber - self.freeSkillsNumber
             if numSkills < 1:
                 if throwIfNoChange:
                     raise Exception('attempt to reset free skills')
                 return
+            self.numLevelsToNextRank += self.__lastSkillLevel
             if numSkills > 1:
                 self.numLevelsToNextRank += MAX_SKILL_LEVEL * (numSkills - 1)
         del self.__skills[self.freeSkillsNumber:]
@@ -533,6 +541,14 @@ class TankmanDescr(object):
         cd += pack('<B4Hi', flags, self.firstNameID, self.lastNameID, self.iconID, self.__rankIdx & 31 | (self.numLevelsToNextRank & 2047) << 5, self.freeXP)
         cd += self.dossierCompactDescr
         return cd
+
+    def isRestorable(self):
+        """
+        Tankman is restorable if he has at least one skill fully developed or
+        if his main speciality is 100% and he has enough free experience for one skill
+        :return: bool
+        """
+        return len(self.skills) > 0 and self.skillLevel(self.skills[0]) == MAX_SKILL_LEVEL or self.roleLevel == MAX_SKILL_LEVEL and self.freeXP >= _g_totalFirstSkillXpCost
 
     def __initFromCompactDescr(self, compactDescr, battleOnly):
         cd = compactDescr
@@ -695,6 +711,11 @@ def makeTmanDescrByTmanData(tmanData):
         tankmanDescr.addXP(freeXP)
         tankmanCompDescr = tankmanDescr.makeCompactDescr()
     return tankmanCompDescr
+
+
+def isRestorable(tankmanCD):
+    tankmanDescr = TankmanDescr(tankmanCD)
+    return tankmanDescr.isRestorable()
 
 
 def __validateSkills(skills):
@@ -948,3 +969,13 @@ def _makeLevelXpCosts():
 
 
 _g_levelXpCosts = _makeLevelXpCosts()
+
+def _calcFirstSkillXpCost():
+    result = 0
+    for level in range(MAX_SKILL_LEVEL):
+        result += TankmanDescr.levelUpXpCost(level, 1)
+
+    return result
+
+
+_g_totalFirstSkillXpCost = _calcFirstSkillXpCost()

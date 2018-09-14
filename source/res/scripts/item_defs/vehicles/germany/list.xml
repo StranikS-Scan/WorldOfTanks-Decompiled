@@ -6,7 +6,7 @@
     <description>	#germany_vehicles:PzIV_descr	</description>
     <price>	373000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret enhancedLevers_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank secret enhancedLevers_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user unrecoverable	</tags>
     <level>	5	</level>
   </G79_Pz_IV_AusfGH>
   <G02_Hummel>
@@ -114,7 +114,7 @@
     <shortUserString>	#germany_vehicles:Ltraktor_short	</shortUserString>
     <description>	#germany_vehicles:Ltraktor_descr	</description>
     <price>	0	</price>
-    <tags>	lightTank	</tags>
+    <tags>	lightTank HD	</tags>
     <level>	1	</level>
   </G12_Ltraktor>
   <G08_Pz38t>
@@ -171,15 +171,15 @@
     <tags>	SPG lightSPG enhancedSprings_user grousers_user mediumCaliberHowitzerRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	4	</level>
   </G22_Sturmpanzer_II>
-  <G14_PzIII_A>
+  <G102_Pz_III>
     <id>	19	</id>
     <userString>	#germany_vehicles:PzIII_A	</userString>
     <shortUserString>	#germany_vehicles:PzIII_A_short	</shortUserString>
     <description>	#germany_vehicles:PzIII_A_descr	</description>
     <price>	35000	</price>
-    <tags>	lightTank grousers_user	</tags>
+    <tags>	lightTank grousers_user HD	</tags>
     <level>	3	</level>
-  </G14_PzIII_A>
+  </G102_Pz_III>
   <G16_PzVIB_Tiger_II>
     <id>	20	</id>
     <userString>	#germany_vehicles:PzVIB_Tiger_II	</userString>
@@ -231,7 +231,7 @@
     <shortUserString>	#germany_vehicles:PzIII_IV_short	</shortUserString>
     <description>	#germany_vehicles:PzIII_IV_descr	</description>
     <price>	315000	</price>
-    <tags>	mediumTank enhancedLevers_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user	</tags>
+    <tags>	mediumTank enhancedLevers_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user HD	</tags>
     <level>	5	</level>
   </G28_PzIII_IV>
   <G20_Marder_II>
@@ -445,7 +445,7 @@
     <shortUserString>	#germany_vehicles:PzI_ausf_C_short	</shortUserString>
     <description>	#germany_vehicles:PzI_ausf_C_descr	</description>
     <price>	45800	</price>
-    <tags>	lightTank enhancedSprings_user	</tags>
+    <tags>	lightTank enhancedSprings_user HD	</tags>
     <level>	3	</level>
   </G63_PzI_ausf_C>
   <G53_PzI>
@@ -472,7 +472,7 @@
     <shortUserString>	#germany_vehicles:DW_II_short	</shortUserString>
     <description>	#germany_vehicles:DW_II_descr	</description>
     <price>	170000	</price>
-    <tags>	heavyTank enhancedTorsions3t_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class2_user	</tags>
+    <tags>	heavyTank enhancedTorsions3t_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	4	</level>
   </G90_DW_II>
   <G86_VK2001DB>
@@ -509,7 +509,7 @@
     <description>	#germany_vehicles:Auf_Panther_descr	</description>
     <price>	1360000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank scout beast enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user secret	</tags>
+    <tags>	lightTank scout beast enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user secret unrecoverable	</tags>
     <level>	7	</level>
   </G85_Auf_Panther>
   <G89_Leopard1>
@@ -563,7 +563,7 @@
     <shortUserString>	#germany_vehicles:VK3002M_short	</shortUserString>
     <description>	#germany_vehicles:VK3002M_descr	</description>
     <price>	915000	</price>
-    <tags>	mediumTank enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	6	</level>
   </G96_VK3002M>
   <G76_Pz_Sfl_IVc>
@@ -600,7 +600,7 @@
     <shortUserString>	#germany_vehicles:Waffentrager_E100_short	</shortUserString>
     <price>	6100000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG heavyAT-SPG noImprovedVentilation antifragmentationLining_superheavy_user wetCombatPack_class2_user enhancedBelwillWashers_user secret	</tags>
+    <tags>	AT-SPG heavyAT-SPG noImprovedVentilation antifragmentationLining_superheavy_user wetCombatPack_class2_user enhancedBelwillWashers_user secret unrecoverable	</tags>
     <level>	10	</level>
   </G98_Waffentrager_E100>
   <G83_Pz_IV_AusfA>
@@ -685,7 +685,7 @@
     <notInShop>	true	</notInShop>
     <price>	3000	  <gold></gold>
     </price>
-    <tags>	mediumTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user secret disabledInRoaming	</tags>
+    <tags>	mediumTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user secret disabledInRoaming HD	</tags>
     <level>	6	</level>
   </G32_PzV_PzIV_CN>
   <G32_PzV_PzIV_ausf_Alfa_CN>
@@ -696,7 +696,7 @@
     <notInShop>	true	</notInShop>
     <price>	1500	  <gold></gold>
     </price>
-    <tags>	mediumTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user secret disabledInRoaming	</tags>
+    <tags>	mediumTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user secret disabledInRoaming HD	</tags>
     <level>	6	</level>
   </G32_PzV_PzIV_ausf_Alfa_CN>
   <G120_M41_90_GrandFinal>
@@ -707,7 +707,7 @@
     <price>	6500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank scout mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD secret	</tags>
+    <tags>	lightTank scout mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
     <level>	8	</level>
   </G120_M41_90_GrandFinal>
   <G32_PzV_PzIV>
@@ -718,7 +718,7 @@
     <notInShop>	true	</notInShop>
     <price>	3000	  <gold></gold>
     </price>
-    <tags>	mediumTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	5	</level>
   </G32_PzV_PzIV>
   <G36_PzII_J>
@@ -750,7 +750,7 @@
     <price>	1250	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank wetCombatPack_class2_user enhancedSprings_class3_user	</tags>
+    <tags>	heavyTank wetCombatPack_class2_user enhancedSprings_class3_user HD	</tags>
     <level>	4	</level>
   </G35_B-1bis_captured>
   <G33_H39_captured>
@@ -772,7 +772,7 @@
     <notInShop>	true	</notInShop>
     <price>	1500	  <gold></gold>
     </price>
-    <tags>	mediumTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user disabledInRoaming	</tags>
+    <tags>	mediumTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user disabledInRoaming HD	</tags>
     <level>	5	</level>
   </G32_PzV_PzIV_ausf_Alfa>
   <G51_Lowe>
@@ -875,7 +875,7 @@
     <description>	#germany_vehicles:PzIII_AusfJ_descr	</description>
     <price>	138000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret enhancedTorsions3t_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank secret enhancedTorsions3t_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user unrecoverable	</tags>
     <level>	1	</level>
   </G10_PzIII_AusfJ_training>
   <G16_PzVIB_Tiger_II_training>
@@ -885,7 +885,7 @@
     <description>	#germany_vehicles:PzVIB_Tiger_II_descr	</description>
     <price>	50000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank secret enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
+    <tags>	heavyTank secret enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD unrecoverable	</tags>
     <level>	1	</level>
   </G16_PzVIB_Tiger_II_training>
   <G03_PzV_Panther_training>
@@ -895,7 +895,7 @@
     <description>	#germany_vehicles:PzV_descr	</description>
     <price>	80000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank secret enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user unrecoverable	</tags>
     <level>	1	</level>
   </G03_PzV_Panther_training>
   <G92_VK7201>
@@ -917,7 +917,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank enhancedTorsions3t_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD secret testTank	</tags>
+    <tags>	heavyTank enhancedTorsions3t_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD secret	</tags>
     <level>	5	</level>
   </G122_VK6501H>
   <G100_Gtraktor_Krupp>
@@ -981,7 +981,7 @@
     <description>	#germany_vehicles:G04_PzVI_Tiger_IA_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank secret beast enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
+    <tags>	heavyTank secret beast enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD unrecoverable	</tags>
     <level>	7	</level>
   </G04_PzVI_Tiger_IA>
   <G107_PzKpfwIII_AusfK>
@@ -1110,7 +1110,7 @@
     <description>	#germany_vehicles:Env_Artillery_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	SPG secret	</tags>
+    <tags>	SPG secret unrecoverable	</tags>
     <level>	1	</level>
   </Env_Artillery>
   <G58_VK4502P7>
@@ -1212,7 +1212,7 @@
     <description>	#germany_vehicles:Ltraktor_bot_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank secret	</tags>
+    <tags>	lightTank secret HD unrecoverable	</tags>
     <level>	1	</level>
   </G12_Ltraktor_bot>
   <G06_PzII_bot>
@@ -1222,7 +1222,7 @@
     <description>	#germany_vehicles:PzII_bot_descr	</description>
     <price>	3000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank enhancedSprings_user secret HD	</tags>
+    <tags>	lightTank enhancedSprings_user secret HD unrecoverable	</tags>
     <level>	2	</level>
   </G06_PzII_bot>
 </list.xml>

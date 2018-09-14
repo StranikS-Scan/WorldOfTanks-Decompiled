@@ -358,17 +358,52 @@
   <radios>
     <JAN-GRC-4Z_IGR>	shared	</JAN-GRC-4Z_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Mitsubishi_12HM20WT_IGR>
+          <smplEnginePower>	602.6503	</smplEnginePower>
+        </_Mitsubishi_12HM20WT_IGR>
+      </engines>
+      <chassis>
+        <Chassis_STA_1_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_STA_1_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_STA_1_2_IGR>
-        <alpha>	0.08855	</alpha>
-      </Chassis_STA_1_2_IGR>
-    </chassis>
-    <engines>
-      <_Mitsubishi_12HM20WT_IGR>
-        <bravo>	150.6626	</bravo>
-      </_Mitsubishi_12HM20WT_IGR>
-    </engines>
     <armour>	0.839928268	</armour>
   </clientAdjustmentFactors>
   <effects>

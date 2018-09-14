@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/LobbyHeader.py
 import math
 import BigWorld
+import constants
 import account_helpers
 from account_helpers.settings_core import g_settingsCore
-import constants
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from account_helpers.AccountSettings import AccountSettings, BOOSTERS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
@@ -15,6 +15,7 @@ from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control import getFalloutCtrl
+from gui.game_control.ServerStats import STATS_TYPE
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.goodies import g_goodiesCache
 from gui.prb_control.prb_helpers import GlobalListener
@@ -45,6 +46,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.settings.tooltips import TOOLTIPS_CONSTANTS
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.tooltips import formatters
+from gui.shared.formatters import text_styles
 _MAX_BOOSTERS_TO_DISPLAY = 99
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
@@ -61,6 +63,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
         SETTINGS = 'settings'
         ACCOUNT = 'account'
         PREM = 'prem'
+        PREMSHOP = 'premShop'
         SQUAD = 'squad'
         GOLD = 'gold'
         SILVER = 'silver'
@@ -75,56 +78,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
         PREBATTLE = 'prebattle'
         BROWSER = 'browser'
         RESEARCH = 'research'
+        ACADEMY = 'academy'
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
         self.__falloutCtrl = None
-        self.__mark1PreviewOpened = False
         return
-
-    def _populate(self):
-        self.__updateHangarMenuData()
-        battle_selector_items.create()
-        super(LobbyHeader, self)._populate()
-        self.startGlobalListening()
-        self.app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
-        game_control.g_instance.wallet.onWalletStatusChanged += self.__onWalletChanged
-        game_control.g_instance.gameSession.onPremiumNotify += self.__onPremiumTimeChanged
-        game_control.g_instance.igr.onIgrTypeChanged += self.__onIGRChanged
-        g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
-        g_currentVehicle.onChanged += self.__onVehicleChanged
-        g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
-        g_eventsCache.onSyncCompleted += self.__onEventsCacheResync
-        g_itemsCache.onSyncCompleted += self.__onItemsChanged
-        game_control.g_instance.boosters.onBoosterChangeNotify += self.__onUpdateGoodies
-        self.__falloutCtrl = getFalloutCtrl()
-        self.__falloutCtrl.onVehiclesChanged += self.__updateFalloutSettings
-        self.__falloutCtrl.onSettingsChanged += self.__updateFalloutSettings
-        self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.Mark1PreviewEvent.MARK1_WINDOW_OPENED, self.__onMark1PreviewOpened, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.Mark1PreviewEvent.MARK1_WINDOW_CLOSED, self.__onMark1PreviewClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_clientUpdateManager.addCallbacks({'stats.credits': self.__setCredits,
-         'stats.gold': self.__setGold,
-         'stats.freeXP': self.__setFreeXP,
-         'stats.clanInfo': self.__setClanInfo,
-         'goodies': self.__updateGoodies,
-         'account.premiumExpiryTime': self.__onPremiumExpireTimeChanged,
-         'cache.SPA': self.__onSPAUpdated})
-        self.as_setFightButtonS(i18n.makeString('#menu:headerButtons/battle'))
-        self.as_setWalletStatusS(game_control.g_instance.wallet.componentsStatuses)
-        self.updateAccountInfo()
-        self.__updateServerData()
-        if not isTimeToShowGoldFishPromo():
-            enabledVal = isGoldFishActionActive()
-            tooltip = TOOLTIPS.HEADER_REFILL_ACTION if enabledVal else TOOLTIPS.HEADER_REFILL
-            self.as_setGoldFishEnabledS(enabledVal, False, tooltip, TOOLTIP_TYPES.COMPLEX)
-        g_preDefinedHosts.onPingPerformed += self.__onPingPerformed
-        g_preDefinedHosts.requestPing()
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
-        Waiting.hide('enter')
 
     def onClanEmblem32x32Received(self, clanDbID, emblem):
         if not self.isDisposed() and emblem:
@@ -154,46 +113,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
 
     def onPreQueueFunctionalFinished(self):
         self.__updatePrebattleControls()
-
-    def __updateServerData(self):
-        serverShortName = connectionManager.serverUserNameShort.strip().split(' ')[-1]
-        if len(serverShortName) > _MAX_HEADER_SERVER_NAME_LEN:
-            serverShortName = _SERVER_NAME_PREFIX % serverShortName[:_MAX_HEADER_SERVER_NAME_LEN]
-        self.as_setServerS(serverShortName, TOOLTIPS_CONSTANTS.SETTINGS_BUTTON, TOOLTIP_TYPES.SPECIAL)
-
-    def __updateServerName(self):
-        serverShortName = connectionManager.serverUserNameShort.strip().split(' ')[-1]
-        if len(serverShortName) > _MAX_HEADER_SERVER_NAME_LEN:
-            serverShortName = _SERVER_NAME_PREFIX % serverShortName[:_MAX_HEADER_SERVER_NAME_LEN]
-        self.as_setServerS(serverShortName, TOOLTIPS_CONSTANTS.SETTINGS_BUTTON, TOOLTIP_TYPES.SPECIAL)
-
-    def _dispose(self):
-        battle_selector_items.clear()
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        self.stopGlobalListening()
-        self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.Mark1PreviewEvent.MARK1_WINDOW_OPENED, self.__onMark1PreviewOpened, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.Mark1PreviewEvent.MARK1_WINDOW_CLOSED, self.__onMark1PreviewClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        game_control.g_instance.gameSession.onPremiumNotify -= self.__onPremiumTimeChanged
-        game_control.g_instance.wallet.onWalletStatusChanged -= self.__onWalletChanged
-        game_control.g_instance.igr.onIgrTypeChanged -= self.__onIGRChanged
-        g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
-        g_currentVehicle.onChanged -= self.__onVehicleChanged
-        g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
-        g_eventsCache.onSyncCompleted -= self.__onEventsCacheResync
-        g_itemsCache.onSyncCompleted -= self.__onItemsChanged
-        self.__falloutCtrl.onVehiclesChanged -= self.__updateFalloutSettings
-        self.__falloutCtrl.onSettingsChanged -= self.__updateFalloutSettings
-        self.__falloutCtrl = None
-        self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
-        game_control.g_instance.boosters.onBoosterChangeNotify -= self.__onUpdateGoodies
-        g_preDefinedHosts.onPingPerformed -= self.__onPingPerformed
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
-        super(LobbyHeader, self)._dispose()
-        return
 
     def updateAccountInfo(self):
         self.updateMoneyStats()
@@ -241,6 +160,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
     def showPremiumDialog(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
+    def onPremShopClick(self):
+        self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.PREM_SHOP))
+
     def fightClick(self, mapID, actionName):
         if self.prbDispatcher:
             self.prbDispatcher.doAction(PrebattleAction(actionName, mapID=mapID))
@@ -252,6 +174,97 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
             self.prbDispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.SQUAD))
         else:
             LOG_ERROR('Prebattle dispatcher is not defined')
+
+    def _populate(self):
+        self.__updateHangarMenuData()
+        battle_selector_items.create()
+        super(LobbyHeader, self)._populate()
+        self.startGlobalListening()
+        self.app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
+        game_control.g_instance.wallet.onWalletStatusChanged += self.__onWalletChanged
+        game_control.g_instance.gameSession.onPremiumNotify += self.__onPremiumTimeChanged
+        game_control.g_instance.igr.onIgrTypeChanged += self.__onIGRChanged
+        g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        g_currentVehicle.onChanged += self.__onVehicleChanged
+        g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
+        g_eventsCache.onSyncCompleted += self.__onEventsCacheResync
+        g_itemsCache.onSyncCompleted += self.__onItemsChanged
+        game_control.g_instance.boosters.onBoosterChangeNotify += self.__onUpdateGoodies
+        self.__falloutCtrl = getFalloutCtrl()
+        self.__falloutCtrl.onVehiclesChanged += self.__updateFalloutSettings
+        self.__falloutCtrl.onSettingsChanged += self.__updateFalloutSettings
+        self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_clientUpdateManager.addCallbacks({'stats.credits': self.__setCredits,
+         'stats.gold': self.__setGold,
+         'stats.freeXP': self.__setFreeXP,
+         'stats.clanInfo': self.__setClanInfo,
+         'goodies': self.__updateGoodies,
+         'account.premiumExpiryTime': self.__onPremiumExpireTimeChanged,
+         'cache.SPA': self.__onSPAUpdated})
+        self.as_setFightButtonS(i18n.makeString('#menu:headerButtons/battle'))
+        self.as_setWalletStatusS(game_control.g_instance.wallet.componentsStatuses)
+        self.as_setPremShopDataS(RES_ICONS.MAPS_ICONS_LOBBY_ICON_PREMSHOP, MENU.HEADERBUTTONS_BTNLABEL_PREMSHOP, TOOLTIPS.HEADER_PREMSHOP, TOOLTIP_TYPES.COMPLEX)
+        self.as_initOnlineCounterS(constants.IS_SHOW_SERVER_STATS)
+        game_control.g_instance.serverStats.onStatsReceived += self.__onStatsReceived
+        self.updateAccountInfo()
+        self.__updateServerData()
+        self.__onStatsReceived()
+        if not isTimeToShowGoldFishPromo():
+            enabledVal = isGoldFishActionActive()
+            tooltip = TOOLTIPS.HEADER_REFILL_ACTION if enabledVal else TOOLTIPS.HEADER_REFILL
+            self.as_setGoldFishEnabledS(enabledVal, False, tooltip, TOOLTIP_TYPES.COMPLEX)
+        g_preDefinedHosts.onPingPerformed += self.__onPingPerformed
+        g_preDefinedHosts.requestPing()
+        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        encyclopediaController = game_control.getEncyclopediaController()
+        encyclopediaController.onNewRecommendationReceived += self.__onNewEncyclopediaRecommendation
+        encyclopediaController.onStateChanged += self.__updateHangarMenuData
+        Waiting.hide('enter')
+
+    def _dispose(self):
+        battle_selector_items.clear()
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        self.stopGlobalListening()
+        self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
+        game_control.g_instance.gameSession.onPremiumNotify -= self.__onPremiumTimeChanged
+        game_control.g_instance.wallet.onWalletStatusChanged -= self.__onWalletChanged
+        game_control.g_instance.igr.onIgrTypeChanged -= self.__onIGRChanged
+        g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        g_currentVehicle.onChanged -= self.__onVehicleChanged
+        g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
+        g_eventsCache.onSyncCompleted -= self.__onEventsCacheResync
+        g_itemsCache.onSyncCompleted -= self.__onItemsChanged
+        self.__falloutCtrl.onVehiclesChanged -= self.__updateFalloutSettings
+        self.__falloutCtrl.onSettingsChanged -= self.__updateFalloutSettings
+        self.__falloutCtrl = None
+        self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
+        game_control.g_instance.serverStats.onStatsReceived -= self.__onStatsReceived
+        game_control.g_instance.boosters.onBoosterChangeNotify -= self.__onUpdateGoodies
+        g_preDefinedHosts.onPingPerformed -= self.__onPingPerformed
+        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        encyclopediaController = game_control.getEncyclopediaController()
+        encyclopediaController.onStateChanged -= self.__updateHangarMenuData
+        encyclopediaController.onNewRecommendationReceived -= self.__onNewEncyclopediaRecommendation
+        super(LobbyHeader, self)._dispose()
+        return
+
+    def __updateServerData(self):
+        serverShortName = connectionManager.serverUserNameShort.strip().split(' ')[-1]
+        if len(serverShortName) > _MAX_HEADER_SERVER_NAME_LEN:
+            serverShortName = _SERVER_NAME_PREFIX % serverShortName[:_MAX_HEADER_SERVER_NAME_LEN]
+        self.as_setServerS(serverShortName, TOOLTIPS_CONSTANTS.SETTINGS_BUTTON, TOOLTIP_TYPES.SPECIAL)
+
+    def __updateServerName(self):
+        serverShortName = connectionManager.serverUserNameShort.strip().split(' ')[-1]
+        if len(serverShortName) > _MAX_HEADER_SERVER_NAME_LEN:
+            serverShortName = _SERVER_NAME_PREFIX % serverShortName[:_MAX_HEADER_SERVER_NAME_LEN]
+        self.as_setServerS(serverShortName, TOOLTIPS_CONSTANTS.SETTINGS_BUTTON, TOOLTIP_TYPES.SPECIAL)
 
     def __setClanInfo(self, clanInfo):
         if not isPlayerAccount():
@@ -343,6 +356,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
         if alias == 'browser':
             game_control.getChinaCtrl().showBrowser()
         else:
+            if alias == self.TABS.ACADEMY:
+                self.as_removeButtonCounterS(alias)
             event = g_entitiesFactories.makeLoadEvent(alias)
             if event is not None:
                 self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -408,7 +423,18 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
         body = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_BODY, tankName=vehicle.shortUserName)
         return makeTooltip(header, body)
 
-    def __getFightBtnTooltipData(self, state):
+    def __getSquadFightBtnTooltipData(self, state):
+        if state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
+            header = i18n.makeString(TOOLTIPS.HANGAR_STARTBTN_SQUADNOTREADY_HEADER)
+            body = i18n.makeString(TOOLTIPS.HANGAR_STARTBTN_SQUADNOTREADY_BODY)
+        elif state == UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL:
+            header = i18n.makeString(TOOLTIPS.HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_HEADER)
+            body = i18n.makeString(TOOLTIPS.HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_BODY)
+        else:
+            return None
+        return makeTooltip(header, body)
+
+    def __getFalloutFightBtnTooltipData(self, state):
         falloutCtrl = getFalloutCtrl()
         config = falloutCtrl.getConfig()
         if state == PREBATTLE_RESTRICTION.VEHICLE_FALLOUT_ONLY:
@@ -473,16 +499,16 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
             else:
                 iconSquad = RES_ICONS.MAPS_ICONS_BATTLETYPES_40X40_SQUAD
             self.as_updateSquadS(isInSquad, tooltip, TOOLTIP_TYPES.COMPLEX, isEvent, iconSquad)
-            isFightBtnDisabled = not canDo or selected.isFightButtonForcedDisabled() or isEvent and self.__mark1PreviewOpened
+            isFightBtnDisabled = not canDo or selected.isFightButtonForcedDisabled()
             if isFightBtnDisabled and not state.hasLockedState:
                 if state.isInPreQueue(queueType=constants.QUEUE_TYPE.SANDBOX) and canDoMsg == QUEUE_RESTRICTION.LIMIT_LEVEL:
                     self.as_setFightBtnTooltipS(self.__getSandboxTooltipData())
                 elif isFallout:
-                    self.as_setFightBtnTooltipS(self.__getFightBtnTooltipData(canDoMsg))
+                    self.as_setFightBtnTooltipS(self.__getFalloutFightBtnTooltipData(canDoMsg))
                 elif isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
                     self.as_setFightBtnTooltipS(self.__getEventTooltipData())
-                elif isEvent and self.__mark1PreviewOpened:
-                    self.as_setFightBtnTooltipS(self.__getMark1PreviewTooltipData())
+                elif isInSquad:
+                    self.as_setFightBtnTooltipS(self.__getSquadFightBtnTooltipData(canDoMsg))
                 else:
                     self.as_setFightBtnTooltipS(None)
             else:
@@ -499,10 +525,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
             else:
                 self.__updateSquadTypeSelectPopover()
             isNavigationEnabled = not state.isNavigationDisabled()
+            self.as_doDisableHeaderButtonS(self.BUTTONS.PREM, isNavigationEnabled)
             self.as_doDisableHeaderButtonS(self.BUTTONS.SILVER, isNavigationEnabled)
             self.as_doDisableHeaderButtonS(self.BUTTONS.GOLD, isNavigationEnabled)
             self.as_doDisableHeaderButtonS(self.BUTTONS.FREE_XP, isNavigationEnabled)
             self.as_doDisableHeaderButtonS(self.BUTTONS.ACCOUNT, isNavigationEnabled)
+            self.as_doDisableHeaderButtonS(self.BUTTONS.PREMSHOP, isNavigationEnabled)
             self.updateAccountAttrs()
             return
 
@@ -534,6 +562,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
 
     def __updateGoodies(self, *args):
         self.updateClanInfo()
+        self.updateXPInfo()
         self.updateAccountAttrs()
 
     def __updateHangarMenuData(self):
@@ -568,7 +597,14 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
          'value': FORTIFICATION_ALIASES.FORTIFICATIONS_VIEW_ALIAS,
          'tooltip': tooltip,
          'enabled': fortEnabled})
+        encyclopediaCtrl = game_control.getEncyclopediaController()
+        if encyclopediaCtrl.isActivated():
+            tabDataProvider.append({'label': MENU.HEADERBUTTONS_ENCYCLOPEDIA,
+             'value': self.TABS.ACADEMY,
+             'tooltip': TOOLTIPS.HEADER_BUTTONS_ENCYCLOPEDIA})
         self.as_setHangarMenuDataS({'tabDataProvider': tabDataProvider})
+        if encyclopediaCtrl.isActivated() and encyclopediaCtrl.hasNewRecommendations():
+            self.__onNewEncyclopediaRecommendation()
 
     def __onSPAUpdated(self, _):
         enabledVal = isGoldFishActionActive()
@@ -613,15 +649,33 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
         currentPing = pingValues.get(connectionManager.url, UNDEFINED_PING_VAL)
         self.as_updatePingStatusS(getPingStatus(currentPing), g_settingsCore.getSetting('isColorBlind'))
 
-    def __onMark1PreviewOpened(self, _):
-        self.__mark1PreviewOpened = True
-        self.__updatePrebattleControls()
+    def __setCounter(self, alias):
+        text = i18n.makeString(MENU.HEADER_NOTIFICATIONSIGN)
+        self.as_setButtonCounterS(alias, text_styles.counterLabelText(text))
 
-    def __onMark1PreviewClosed(self, _):
-        self.__mark1PreviewOpened = False
-        self.__updatePrebattleControls()
+    def __onNewEncyclopediaRecommendation(self):
+        if game_control.getEncyclopediaController().isActivated():
+            self.__setCounter(self.TABS.ACADEMY)
 
-    def __getMark1PreviewTooltipData(self):
-        header = i18n.makeString(TOOLTIPS.HANGAR_MARKPREVIEW_REDBUTTONDISABLED_HEADER)
-        body = i18n.makeString(TOOLTIPS.HANGAR_MARKPREVIEW_REDBUTTONDISABLED_DESCRIPTION)
-        return makeTooltip(header, body)
+    def __onStatsReceived(self):
+        """ Fill up the data required for online stats and send to flash.
+        """
+        clusterUsers, regionUsers, tooltipType = game_control.g_instance.serverStats.getStats()
+        if tooltipType == STATS_TYPE.UNAVAILABLE:
+            tooltip = TOOLTIPS.HEADER_INFO_PLAYERS_UNAVAILABLE
+            clusterUsers = regionUsers = ''
+        elif tooltipType == STATS_TYPE.CLUSTER:
+            tooltip = TOOLTIPS.HEADER_INFO_PLAYERS_ONLINE_REGION
+        else:
+            tooltip = TOOLTIPS.HEADER_INFO_PLAYERS_ONLINE_FULL
+        clusterStats = makeHtmlString('html_templates:lobby', 'onlineCounter', {'key': connectionManager.serverUserNameShort,
+         'value': clusterUsers})
+        if tooltipType == STATS_TYPE.FULL:
+            regionStats = makeHtmlString('html_templates:lobby', 'onlineCounter', {'key': i18n.makeString(MENU.ONLINECOUNTER_TOTAL),
+             'value': regionUsers})
+        else:
+            regionStats = ''
+        body = i18n.makeString('{}/body'.format(tooltip), servername=connectionManager.serverUserName)
+        header = '{}/header'.format(tooltip)
+        isAvailable = tooltipType != STATS_TYPE.UNAVAILABLE
+        self.as_updateOnlineCounterS(clusterStats, regionStats, makeTooltip(header, body), isAvailable)

@@ -359,18 +359,52 @@
   <radios>
     <Alarm_flags_bot>	shared	</Alarm_flags_bot>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB01_Medium_Mark_I_bot>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB01_Medium_Mark_I_bot>
-    </chassis>
-    <engines>
-      <Vickers-Armstrong_bot>
-        <bravo>	23.78883	</bravo>
-      </Vickers-Armstrong_bot>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Vickers-Armstrong_bot>
+          <smplEnginePower>	95.1553	</smplEnginePower>
+        </Vickers-Armstrong_bot>
+      </engines>
+      <chassis>
+        <Chassis_GB01_Medium_Mark_I_bot>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB01_Medium_Mark_I_bot>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

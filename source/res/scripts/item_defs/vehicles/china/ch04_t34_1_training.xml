@@ -553,17 +553,52 @@
   <radios>
     <A-220B_T>	shared	</A-220B_T>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Type_102S_T>
+          <smplEnginePower>	507.4949	</smplEnginePower>
+        </_Type_102S_T>
+      </engines>
+      <chassis>
+        <Chassis_Ch04_T34_1_training>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch04_T34_1_training>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch04_T34_1_training>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Ch04_T34_1_training>
-    </chassis>
-    <engines>
-      <_Type_102S_T>
-        <bravo>	126.8737	</bravo>
-      </_Type_102S_T>
-    </engines>
     <armour>	1.190270854	</armour>
   </clientAdjustmentFactors>
   <effects>

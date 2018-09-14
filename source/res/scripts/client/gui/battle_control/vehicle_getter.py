@@ -3,7 +3,7 @@
 from collections import defaultdict
 from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import VEHICLE_DEVICES, WHEEL_VEHICLE_DEVICES, VEHICLE_GUI_ITEMS, WHEEL_VEHICLE_GUI_ITEMS, VEHICLE_COMPLEX_ITEMS, VEHICLE_INDICATOR_TYPE
+from gui.battle_control.battle_constants import VEHICLE_DEVICES, VEHICLE_GUI_ITEMS, VEHICLE_COMPLEX_ITEMS, VEHICLE_INDICATOR_TYPE, AUTO_ROTATION_FLAG
 
 def hasTurretRotator(vDesc):
     if vDesc is None:
@@ -15,14 +15,6 @@ def hasTurretRotator(vDesc):
             if len(vDesc.hull.get('fakeTurrets', {}).get('battle', ())) > 0:
                 result = False
         return result
-
-
-def hasWheelBase(vDesc):
-    """
-    Returns True if a vehicle with the given desc has wheel base, Otherwise returns False.
-    :param vDesc: instance of vehicles.VehicleDescr.
-    """
-    return False if vDesc is None else 'wheeledVehicle' in vDesc.type.tags
 
 
 def getYawLimits(vDesc):
@@ -38,9 +30,7 @@ def getVehicleIndicatorType(vDesc):
         return VEHICLE_INDICATOR_TYPE.DEFAULT
     else:
         iType = VEHICLE_INDICATOR_TYPE.DEFAULT
-        if hasWheelBase(vDesc):
-            iType = VEHICLE_INDICATOR_TYPE.CAR
-        elif not hasTurretRotator(vDesc):
+        if not hasTurretRotator(vDesc):
             tags = vDesc.type.tags
             if 'SPG' in tags:
                 iType = VEHICLE_INDICATOR_TYPE.SPG
@@ -49,14 +39,19 @@ def getVehicleIndicatorType(vDesc):
         return iType
 
 
-def isAutoRotationOn(vDesc):
-    isOn = None
+def getAutoRotationFlag(vDesc):
+    """ Gets auto rotation flag. Auto rotation means hull is tuned if yaw limit is reached.
+    :param vDesc: instance of vehicles.VehicleDescr.
+    :return: one of AUTO_ROTATION_FLAG.*.
+    """
+    flag = AUTO_ROTATION_FLAG.IGNORE_IN_UI
     if hasYawLimits(vDesc):
         aih = avatar_getter.getInputHandler()
-        isOn = False
-        if aih is not None:
-            isOn = aih.getAutorotation()
-    return isOn
+        if aih is None or aih.getAutorotation():
+            flag = AUTO_ROTATION_FLAG.TURN_ON
+        else:
+            flag = AUTO_ROTATION_FLAG.TURN_OFF
+    return flag
 
 
 def getCrewMainRolesWoIndexes(crewRoles):
@@ -115,14 +110,7 @@ class VehicleDeviceStatesIterator(object):
         super(VehicleDeviceStatesIterator, self).__init__()
         self._states = defaultdict(lambda : 'normal', states or {})
         self._hasTurret = hasTurretRotator(vDesc)
-        if devices is not None:
-            self._devices = devices
-        elif hasWheelBase(vDesc):
-            self._devices = WHEEL_VEHICLE_DEVICES
-        else:
-            self._devices = VEHICLE_DEVICES
-        self._devices = list(self._devices)
-        return
+        self._devices = list(devices or VEHICLE_DEVICES)
 
     def __iter__(self):
         return self
@@ -146,8 +134,7 @@ class VehicleDeviceStatesIterator(object):
 class VehicleGUIItemStatesIterator(VehicleDeviceStatesIterator):
 
     def __init__(self, states=None, vDesc=None):
-        devices = WHEEL_VEHICLE_GUI_ITEMS if hasWheelBase(vDesc) else VEHICLE_GUI_ITEMS
-        super(VehicleGUIItemStatesIterator, self).__init__(states, vDesc, devices)
+        super(VehicleGUIItemStatesIterator, self).__init__(states, vDesc, VEHICLE_GUI_ITEMS)
 
     def next(self):
         itemName, deviceState = super(VehicleGUIItemStatesIterator, self).next()

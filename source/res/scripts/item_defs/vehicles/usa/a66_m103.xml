@@ -1124,23 +1124,89 @@
     </AN-GRC-3>
     <AN-ARC-27>	shared	</AN-ARC-27>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AV-1790-5B>
+          <smplEnginePower>	856.3977	</smplEnginePower>
+        </Continental_AV-1790-5B>
+        <Continental_AV-1790-7C>
+          <smplEnginePower>	909.2618	</smplEnginePower>
+        </Continental_AV-1790-7C>
+      </engines>
+      <chassis>
+        <Chassis_M103>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M103>
+        <Chassis_M103_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M103_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M103>
-        <alpha>	0.12075	</alpha>
-      </Chassis_M103>
-      <Chassis_M103_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_M103_2>
-    </chassis>
-    <engines>
-      <Continental_AV-1790-5B>
-        <bravo>	214.0994	</bravo>
-      </Continental_AV-1790-5B>
-      <Continental_AV-1790-7C>
-        <bravo>	227.3154	</bravo>
-      </Continental_AV-1790-7C>
-    </engines>
     <armour>	0.959665224	</armour>
   </clientAdjustmentFactors>
   <effects>

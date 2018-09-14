@@ -187,19 +187,20 @@ class FortSettingsWindow(FortSettingsWindowMeta, FortViewHelper):
         conditionPostfix = text_styles.standard(i18n.makeString(FORTIFICATIONS.SETTINGSWINDOW_BLOCKCONDITION_VACATIONNOTPLANNED))
         if inProcess or inCooldown:
             blockBtnEnabled = False
-            cooldownEnd = vacationEnd + g_fortCache.vacationCooldownTime
             if fort.isOnVacation():
-                blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED
-                daysBeforeVacation = time_utils.getTimeDeltaFromNow(cooldownEnd) / time_utils.ONE_DAY
+                blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED
+                daysBeforeVacation = -1
             elif time_utils.getTimeDeltaFromNow(vacationEnd) != 0:
                 blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED
             else:
-                daysBeforeVacation = time_utils.getTimeDeltaFromNow(cooldownEnd) / time_utils.ONE_DAY
+                cooldownEnd = vacationEnd + g_fortCache.vacationCooldownTime
+                daysBeforeVacation = time_utils.getTimeDeltaFromNow(cooldownEnd) / time_utils.ONE_DAY + 1
                 if daysBeforeVacation == 0:
                     blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDSBLDLESSADAY
                     daysBeforeVacation = -1
                 else:
                     blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED
+                    isVacationEnabled = False
         if isVacationEnabled:
             vacation = fort.getVacationDateTimeStr()
             if not self._isFortFrozen():
@@ -302,7 +303,10 @@ class FortSettingsWindow(FortSettingsWindowMeta, FortViewHelper):
         self.destroy()
 
     def onShutdownDowngrade(self):
-        self.as_setCanDisableDefencePeriodS(not self.fortCtrl.getFort().isDefenceHourShutDown())
+        fort = self.fortCtrl.getFort()
+        self.as_setCanDisableDefencePeriodS(not fort.isDefenceHourShutDown())
+        if self.__defencePeriod and fort.isLessEqualShutdownLevel():
+            self.destroy()
 
     def onDefenceHourShutdown(self):
         self.as_setCanDisableDefencePeriodS(not self.fortCtrl.getFort().isDefenceHourShutDown())

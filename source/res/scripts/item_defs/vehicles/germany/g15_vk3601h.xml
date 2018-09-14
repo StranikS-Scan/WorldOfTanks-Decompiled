@@ -1249,23 +1249,89 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_150>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Maybach_HL_150>
+        <Maybach_HL_174>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Maybach_HL_174>
+      </engines>
+      <chassis>
+        <VK3601H_henshelketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VK3601H_henshelketten>
+        <VK3601H_henshelketten_ausf_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VK3601H_henshelketten_ausf_B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <VK3601H_henshelketten>
-        <alpha>	0.12075	</alpha>
-      </VK3601H_henshelketten>
-      <VK3601H_henshelketten_ausf_B>
-        <alpha>	0.1127	</alpha>
-      </VK3601H_henshelketten_ausf_B>
-    </chassis>
-    <engines>
-      <Maybach_HL_150>
-        <bravo>	105.7281	</bravo>
-      </Maybach_HL_150>
-      <Maybach_HL_174>
-        <bravo>	132.1601	</bravo>
-      </Maybach_HL_174>
-    </engines>
     <armour>	0.930391702	</armour>
   </clientAdjustmentFactors>
   <effects>

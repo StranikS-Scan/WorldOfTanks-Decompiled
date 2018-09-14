@@ -19,20 +19,6 @@ class SoundSystemAbstract(object):
     def fini(self):
         pass
 
-    def setHQEnabled(self, isEnabled):
-        """
-        Do set high quality sound rendering enabled
-        :param isEnabled: bool
-        """
-        pass
-
-    def isHQEnabled(self):
-        """
-        Is high quality sound rendering enabled
-        :return: bool
-        """
-        return HQRenderState.isEnabled(SoundGroups.g_instance.getLQRenderState(), self.isMSR())
-
     def isMSR(self):
         """
         Is user's PC a weak for current sound system

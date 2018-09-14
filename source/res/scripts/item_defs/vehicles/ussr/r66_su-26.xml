@@ -540,26 +540,92 @@
     </_9RK>
     <_12LL>	shared	</_12LL>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <T-26>
+          <smplEnginePower>	95.1553	</smplEnginePower>
+        </T-26>
+        <T-26M>
+          <smplEnginePower>	105.7281	</smplEnginePower>
+        </T-26M>
+        <T-26F>
+          <smplEnginePower>	137.4465	</smplEnginePower>
+        </T-26F>
+      </engines>
+      <chassis>
+        <Su-26A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Su-26A>
+        <Su-26B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Su-26B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Su-26A>
-        <alpha>	0.12075	</alpha>
-      </Su-26A>
-      <Su-26B>
-        <alpha>	0.1127	</alpha>
-      </Su-26B>
-    </chassis>
-    <engines>
-      <T-26>
-        <bravo>	23.78883	</bravo>
-      </T-26>
-      <T-26M>
-        <bravo>	26.43203	</bravo>
-      </T-26M>
-      <T-26F>
-        <bravo>	34.36164	</bravo>
-      </T-26F>
-    </engines>
     <armour>	0.780095282	</armour>
   </clientAdjustmentFactors>
   <effects>

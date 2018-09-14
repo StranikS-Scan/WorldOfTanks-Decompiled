@@ -7,7 +7,6 @@ class BATTLE_CONSUMABLES_PANEL_TAGS(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     WITHOUT_TAG = 'withoutTag'
     MED_KIT = 'medkit'

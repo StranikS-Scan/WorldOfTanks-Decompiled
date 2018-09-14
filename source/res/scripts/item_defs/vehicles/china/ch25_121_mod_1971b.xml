@@ -532,17 +532,52 @@
   <radios>
     <A-220B_1>	shared	</A-220B_1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_12150L7>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+        </_12150L7>
+      </engines>
+      <chassis>
+        <Chassis_Ch25_121_mod_1971B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch25_121_mod_1971B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch25_121_mod_1971B>
-        <alpha>	0.0644	</alpha>
-      </Chassis_Ch25_121_mod_1971B>
-    </chassis>
-    <engines>
-      <_12150L7>
-        <bravo>	153.3058	</bravo>
-      </_12150L7>
-    </engines>
     <armour>	0.988786572	</armour>
   </clientAdjustmentFactors>
   <effects>

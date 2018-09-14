@@ -8,12 +8,7 @@ class ShopMeta(StoreComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends StoreComponent
-    null
     """
 
-    def buyItem(self, data):
-        """
-        :param data:
-        :return :
-        """
+    def buyItem(self, itemCD):
         self._printOverrideError('buyItem')

@@ -8,28 +8,16 @@ class FittingSelectPopoverMeta(SmartPopOverView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends SmartPopOverView
-    null
     """
 
     def setVehicleModule(self, newId, oldId, isRemove):
-        """
-        :param newId:
-        :param oldId:
-        :param isRemove:
-        :return :
-        """
         self._printOverrideError('setVehicleModule')
 
     def showModuleInfo(self, moduleId):
-        """
-        :param moduleId:
-        :return :
-        """
         self._printOverrideError('showModuleInfo')
 
     def as_updateS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by FittingSelectPopoverVO (AS)
         """
         return self.flashObject.as_update(data) if self._isDAAPIInited() else None

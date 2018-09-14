@@ -256,69 +256,6 @@
         <effect-triggered>	TutorialQuest_10	</effect-triggered>
       </condition>
     </show-award-window>
-    <request-bonus>	TutorialQuest_11	  <condition>
-        <active>	MedKitUsed	</active>
-        <bonus-not-received>	TutorialQuest_11	</bonus-not-received>
-      </condition>
-    </request-bonus>
-    <activate>	Bonus11Received	  <condition>
-        <bonus-received>	TutorialQuest_11	</bonus-received>
-      </condition>
-    </activate>
-    <activate>	ShowAward11	  <condition>
-        <active>	MedKitUsed	</active>
-        <active>	Bonus11Received	</active>
-        <inactive>	CloseChapter11	</inactive>
-      </condition>
-    </activate>
-    <show-award-window>	TutorialAwardWindow11	  <condition>
-        <active>	ShowAward11	</active>
-        <effect-not-triggered>	TutorialAwardWindow11	</effect-not-triggered>
-        <effect-triggered>	TutorialQuest_11	</effect-triggered>
-      </condition>
-    </show-award-window>
-    <request-bonus>	TutorialQuest_12	  <condition>
-        <active>	RepairKitUsed	</active>
-        <bonus-not-received>	TutorialQuest_12	</bonus-not-received>
-      </condition>
-    </request-bonus>
-    <activate>	Bonus12Received	  <condition>
-        <bonus-received>	TutorialQuest_12	</bonus-received>
-      </condition>
-    </activate>
-    <activate>	ShowAward12	  <condition>
-        <active>	RepairKitUsed	</active>
-        <active>	Bonus12Received	</active>
-        <inactive>	CloseChapter11	</inactive>
-      </condition>
-    </activate>
-    <show-award-window>	TutorialAwardWindow12	  <condition>
-        <active>	ShowAward12	</active>
-        <effect-not-triggered>	TutorialAwardWindow12	</effect-not-triggered>
-        <effect-triggered>	TutorialQuest_12	</effect-triggered>
-      </condition>
-    </show-award-window>
-    <request-bonus>	TutorialQuest_13	  <condition>
-        <active>	FireExtinguisherUsed	</active>
-        <bonus-not-received>	TutorialQuest_13	</bonus-not-received>
-      </condition>
-    </request-bonus>
-    <activate>	Bonus13Received	  <condition>
-        <bonus-received>	TutorialQuest_13	</bonus-received>
-      </condition>
-    </activate>
-    <activate>	ShowAward13	  <condition>
-        <active>	FireExtinguisherUsed	</active>
-        <active>	Bonus13Received	</active>
-        <inactive>	CloseChapter13	</inactive>
-      </condition>
-    </activate>
-    <show-award-window>	TutorialAwardWindow13	  <condition>
-        <active>	ShowAward13	</active>
-        <effect-not-triggered>	TutorialAwardWindow13	</effect-not-triggered>
-        <effect-triggered>	TutorialQuest_13	</effect-triggered>
-      </condition>
-    </show-award-window>
     <request-bonus>	TutorialQuest_14	  <condition>
         <active>	OptionalDeviceInstalled	</active>
         <bonus-not-received>	TutorialQuest_14	</bonus-not-received>
@@ -523,10 +460,6 @@
         <bonus-not-received>	TutorialQuest_11	</bonus-not-received>
       </condition>
     </run-trigger>
-    <activate>	CloseChapter11	  <condition>
-        <bonus-received>	TutorialQuest_11	</bonus-received>
-      </condition>
-    </activate>
     <run-trigger>	RepairKitInstallTrigger	  <condition>
         <bonus-not-received>	TutorialQuest_12	</bonus-not-received>
       </condition>
@@ -535,10 +468,6 @@
         <bonus-not-received>	TutorialQuest_12	</bonus-not-received>
       </condition>
     </run-trigger>
-    <activate>	CloseChapter12	  <condition>
-        <bonus-received>	TutorialQuest_12	</bonus-received>
-      </condition>
-    </activate>
     <run-trigger>	FireExtinguisherInstallTrigger	  <condition>
         <bonus-not-received>	TutorialQuest_13	</bonus-not-received>
       </condition>
@@ -547,10 +476,6 @@
         <bonus-not-received>	TutorialQuest_13	</bonus-not-received>
       </condition>
     </run-trigger>
-    <activate>	CloseChapter13	  <condition>
-        <bonus-received>	TutorialQuest_13	</bonus-received>
-      </condition>
-    </activate>
     <run-trigger>	OptionalDeviceInstallTrigger	  <condition>
         <bonus-not-received>	TutorialQuest_14	</bonus-not-received>
       </condition>

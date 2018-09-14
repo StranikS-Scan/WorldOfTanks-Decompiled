@@ -68,6 +68,8 @@ class FalloutBasePage(FalloutBattlePageMeta):
         alias = BATTLE_VIEW_ALIASES.FALLOUT_CONSUMABLES_PANEL
         if self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(hidden={alias})
+        if self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.RADIAL_MENU):
+            self._toggleRadialMenu(False)
 
     def _switching(self, _):
         self.as_hidePostmortemGasAtackInfoS()

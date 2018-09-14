@@ -1023,23 +1023,89 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <GMC_6046>
+          <smplEnginePower>	433.4853	</smplEnginePower>
+        </GMC_6046>
+        <Ford_GAA>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Ford_GAA>
+      </engines>
+      <chassis>
+        <Chassis_GB45_Achilles_IIC>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB45_Achilles_IIC>
+        <Chassis_GB45_Achilles_IIC_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB45_Achilles_IIC_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB45_Achilles_IIC>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB45_Achilles_IIC>
-      <Chassis_GB45_Achilles_IIC_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_GB45_Achilles_IIC_2>
-    </chassis>
-    <engines>
-      <GMC_6046>
-        <bravo>	108.3713	</bravo>
-      </GMC_6046>
-      <Ford_GAA>
-        <bravo>	132.1601	</bravo>
-      </Ford_GAA>
-    </engines>
     <armour>	0.847232066	</armour>
   </clientAdjustmentFactors>
   <effects>

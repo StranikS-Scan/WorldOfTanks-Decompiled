@@ -1,10 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/SimpleChannelWindow.py
+from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared.events import FocusEvent
+from helpers.i18n import makeString
 from messenger.gui.Scaleform.meta.ChannelWindowMeta import ChannelWindowMeta
 from gui.shared import events, EVENT_BUS_SCOPE
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from messenger.inject import channelsCtrlProperty
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
 
 class SimpleChannelWindow(ChannelWindowMeta):
 
@@ -15,6 +19,10 @@ class SimpleChannelWindow(ChannelWindowMeta):
         if self._controller is None:
             raise ValueError('Controller for lobby channel by clientID={0:1} is not found'.format(self._clientID))
         return
+
+    @proto_getter(PROTO_TYPE.MIGRATION)
+    def proto(self):
+        return None
 
     def onFocusIn(self, alias):
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self._clientID}))
@@ -58,14 +66,17 @@ class SimpleChannelWindow(ChannelWindowMeta):
         super(SimpleChannelWindow, self)._populate()
         channel = self._controller.getChannel()
         channel.onChannelInfoUpdated += self.__ce_onChannelInfoUpdated
+        channel.onConnectStateChanged += self.__ce_onConnectStateChanged
         self.as_setTitleS(channel.getFullName())
         self.as_setCloseEnabledS(not channel.isSystem())
+        self.__checkConnectStatus()
 
     def _dispose(self):
         if self._controller is not None:
             channel = self._controller.getChannel()
             if channel is not None:
                 channel.onChannelInfoUpdated -= self.__ce_onChannelInfoUpdated
+                channel.onConnectStateChanged -= self.__ce_onConnectStateChanged
             self._controller = None
         super(SimpleChannelWindow, self)._dispose()
         return
@@ -76,3 +87,16 @@ class SimpleChannelWindow(ChannelWindowMeta):
 
     def __ce_onChannelInfoUpdated(self, channel):
         self.as_setTitleS(channel.getFullName())
+
+    def __ce_onConnectStateChanged(self, _):
+        """Channel status updated (connected/disconnected)
+        """
+        self.__checkConnectStatus()
+
+    def __checkConnectStatus(self):
+        """Hide waiting if we've been joined or show waiting if we've been disconnected
+        """
+        if self._controller.getChannel().isJoined():
+            self.as_hideWaitingS()
+        else:
+            self.as_showWaitingS(makeString(WAITING.MESSENGER_SUBSCRIBE), {})

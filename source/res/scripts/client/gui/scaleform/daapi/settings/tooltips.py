@@ -1,12 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/tooltips.py
-from gui.Scaleform.daapi.view.lobby import markPreview
-from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, potapovquests, tutorial, fortifications, clans, boosters
+from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, potapovquests, tutorial, fortifications, clans, boosters
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import BonusTooltip as CustomizationBonusTooltip
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip, QuestElementTooltip as CustomizationQuestElementTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.tooltips.filter import VehicleFilterTooltip
-from gui.Scaleform.daapi.view.lobby.markPreview.MarkPreview import MarkPreviewTooltipData
 TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_UI,
                               'method': lambda invID, isCurrentVehicle=None: tankman.TankmanTooltipData(contexts.TankmanHangarContext()).buildToolTip(invID),
                               'complex': None},
@@ -49,6 +47,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.SHOP_VEHICLE: {'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI,
                                    'method': lambda intCD, inventoryCount=0, vehicleCount=0: vehicle.VehicleInfoTooltipData(contexts.ShopContext()).buildToolTip(intCD),
                                    'complex': None},
+ TOOLTIPS_CONSTANTS.AWARD_VEHICLE: {'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI,
+                                    'method': vehicle.VehicleInfoTooltipData(contexts.AwardContext()).buildToolTip,
+                                    'complex': None},
  TOOLTIPS_CONSTANTS.INVENTORY_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                        'method': lambda intCD, sellPrice=0, sellCurrency=0, inventoryCount=0, vehicleCount=0: module.ModuleBlockTooltipData(contexts.InventoryContext()).buildToolTip(intCD),
                                        'complex': None},
@@ -64,12 +65,21 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.TECHTREE_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                       'method': module.ModuleBlockTooltipData(contexts.TechTreeContext()).buildToolTip,
                                       'complex': None},
+ TOOLTIPS_CONSTANTS.VEH_COMPARE_TECHTREE_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                                  'method': module.VehCompareModuleBlockTooltipData(contexts.TechTreeContext()).buildToolTip,
+                                                  'complex': None},
  TOOLTIPS_CONSTANTS.SHOP_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                   'method': lambda intCD, inventoryCount=0, vehicleCount=0: module.ModuleBlockTooltipData(contexts.ShopContext()).buildToolTip(intCD),
                                   'complex': None},
+ TOOLTIPS_CONSTANTS.AWARD_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                   'method': module.ModuleBlockTooltipData(contexts.AwardContext()).buildToolTip,
+                                   'complex': None},
  TOOLTIPS_CONSTANTS.SHOP_SHELL: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                  'method': lambda intCD, inventoryCount=0, vehicleCount=0: shell.ShellBlockToolTipData(contexts.ShopContext()).buildToolTip(intCD),
                                  'complex': None},
+ TOOLTIPS_CONSTANTS.AWARD_SHELL: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                  'method': lambda intCD, inventoryCount=0, vehicleCount=0: shell.ShellBlockToolTipData(contexts.AwardContext()).buildToolTip(intCD),
+                                  'complex': None},
  TOOLTIPS_CONSTANTS.HANGAR_SHELL: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                    'method': lambda intCD, historicalBattleID=-1: shell.ShellBlockToolTipData(contexts.HangarContext()).buildToolTip(intCD, historicalBattleID=historicalBattleID),
                                    'complex': None},
@@ -169,6 +179,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_PARAMETERS: {'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI,
                                                  'method': vehicle.VehicleParametersTooltipData(contexts.PreviewParamContext()).buildToolTip,
                                                  'complex': None},
+ TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS: {'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI,
+                                              'method': vehicle.VehicleParametersTooltipData(contexts.BaseHangarParamContext()).buildToolTip,
+                                              'complex': None},
  TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER: {'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER_UI,
                                                   'method': vehicle.VehiclePreviewCrewMemberTooltipData(contexts.PreviewContext()).buildToolTip,
                                                   'complex': None},
@@ -183,9 +196,6 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
                                        'complex': None},
  TOOLTIPS_CONSTANTS.LADDER_REGULATIONS: {'tooltip': TOOLTIPS_CONSTANTS.LADDER_REGULATIONS_UI,
                                          'method': common.LadderRegulations(contexts.HangarContext()).buildToolTip,
-                                         'complex': None},
- TOOLTIPS_CONSTANTS.FORT_BUILDING_INFO: {'tooltip': TOOLTIPS_CONSTANTS.FORT_BUILDING_INFO_UI,
-                                         'method': common.ToolTipFortBuildingData(contexts.HangarContext()).buildToolTip,
                                          'complex': None},
  TOOLTIPS_CONSTANTS.REF_SYS_AWARDS: {'tooltip': TOOLTIPS_CONSTANTS.REF_SYS_AWARDS_UI,
                                      'method': common.ToolTipRefSysAwards(contexts.HangarContext()).buildToolTip,
@@ -241,6 +251,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.FORT_CONSUMABLE_ORDER: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                             'method': fortifications.FortConsumableOrderTooltipData(contexts.FortOrderContext()).buildToolTip,
                                             'complex': None},
+ TOOLTIPS_CONSTANTS.BATTLE_CONSUMABLE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                        'method': battle_consumable.BattleConsumableTooltipData(contexts.BattleConsumableContext()).buildToolTip,
+                                        'complex': None},
  TOOLTIPS_CONSTANTS.LADDER: {'tooltip': TOOLTIPS_CONSTANTS.LADDER_UI,
                              'method': common.LadderTooltipData(contexts.CyberSportUnitContext()).buildToolTip,
                              'complex': None},
@@ -271,9 +284,6 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.VEHICLE_FILTER: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                      'method': VehicleFilterTooltip(contexts.TechCustomizationContext()).buildToolTip,
                                      'complex': None},
- TOOLTIPS_CONSTANTS.MARK_PREVIEW: {'tooltip': TOOLTIPS_CONSTANTS.MARK_MODULE_TOOLTIP_UI,
-                                   'method': MarkPreviewTooltipData(contexts.HangarContext()).buildToolTip,
-                                   'complex': None},
  'default': {'tooltip': TOOLTIPS_CONSTANTS.COMPLEX_UI,
              'method': None,
              'complex': None}}

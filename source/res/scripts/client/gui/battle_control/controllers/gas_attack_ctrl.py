@@ -131,13 +131,7 @@ class GasAttackController(IViewComponentsController):
         self.onEnded(self.__state)
 
     def __initIndicator(self):
-        if self.__indicatorUI is None:
-            from gui.Scaleform.daapi.view.battle.legacy.indicators import createDirectIndicatorMessage
-            self.__indicatorUI = createDirectIndicatorMessage()
-            self.__indicatorUI.track(self.__settings.position)
-            self.__indicatorUI.setMessage(FALLOUT.SAFEZONEDIRECTION_MESSAGE)
-            self.__indicatorUI.setVisibility(False)
-        return
+        pass
 
     def __updateIndicator(self):
         isVisible = self.__state.state in GAS_ATTACK_STATE.VISIBLE

@@ -306,6 +306,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         self.__basisMProv.bind(None)
         self.__rotateAroundPointEnabled = False
         self.__alignerToLand.disable()
+        self.__cam.speedTreeTarget = self.__cam.invViewMatrix
         if isPlayerAvatar() and g_sessionProvider.getCtx().isPlayerObserver():
             BigWorld.player().positionControl.moveTo(self.__position)
             BigWorld.player().positionControl.followCamera(True)
@@ -319,6 +320,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         if isPlayerAvatar():
             BigWorld.player().positionControl.followCamera(False)
         self.__isModeOverride = False
+        self.__cam.speedTreeTarget = None
         return
 
     def handleKeyEvent(self, key, isDown):

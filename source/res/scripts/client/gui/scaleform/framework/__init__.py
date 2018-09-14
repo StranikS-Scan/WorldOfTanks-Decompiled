@@ -15,17 +15,44 @@ class COMMON_VIEW_ALIAS(object):
     WAITING = 'waiting'
 
 
-ViewSettings = namedtuple('ViewSettings', ('alias', 'clazz', 'url', 'type', 'event', 'scope', 'cacheable'))
-ViewSettings.__new__.__defaults__ = (None,
+class GroupedViewSettings(namedtuple('GroupedViewSettings', 'alias clazz url type group event scope cacheable')):
+    """
+    :param alias: alias of view
+    :param clazz: class of view
+    :param url: url to SWF-file
+    :param group: name of group
+    :param type: type of view
+    :param event: name of event for loading view
+    :param cacheable: can be cached
+    """
+
+    def getDAAPIObject(self):
+        return {'alias': self.alias,
+         'url': self.url,
+         'type': self.type,
+         'event': self.event,
+         'group': self.group,
+         'isGrouped': self.group is not None}
+
+
+GroupedViewSettings.__new__.__defaults__ = (None,
+ None,
  None,
  None,
  None,
  None,
  None,
  False)
-GroupedViewSettings = namedtuple('GroupedViewSettings', ('alias', 'clazz', 'url', 'type', 'group', 'event', 'scope', 'cacheable'))
-GroupedViewSettings.__new__.__defaults__ = (None,
- None,
+
+class ViewSettings(GroupedViewSettings):
+
+    @staticmethod
+    def __new__(cls, alias, clazz, url, type, event, scope, cacheable):
+        """ overloaded ctor only for empty group passing reason """
+        return GroupedViewSettings.__new__(cls, alias, clazz, url, type, None, event, scope, cacheable)
+
+
+ViewSettings.__new__.__defaults__ = (None,
  None,
  None,
  None,

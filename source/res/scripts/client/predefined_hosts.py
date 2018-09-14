@@ -11,6 +11,7 @@ import BigWorld
 import ResMgr
 import constants
 from Event import Event, EventManager
+from helpers.time_utils import ONE_MINUTE
 from shared_utils import BitmaskHelper
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_WARNING
 from helpers import i18n
@@ -18,9 +19,9 @@ AUTO_LOGIN_QUERY_ENABLED = not (constants.IS_DEVELOPMENT or constants.IS_CHINA)
 AUTO_LOGIN_QUERY_URL = 'auto.login.app:0000'
 AUTO_LOGIN_QUERY_TIMEOUT = 5
 CSIS_REQUEST_TIMEOUT = 10
-CSIS_REQUEST_TIMER = 10 * 60
-_PING_FORCE_COOLDOWN_TIME = 60
-_PING_COOLDOWN_TIME = 10 * 60
+CSIS_REQUEST_TIMER = 10 * ONE_MINUTE
+_PING_FORCE_COOLDOWN_TIME = ONE_MINUTE
+_PING_COOLDOWN_TIME = 10 * ONE_MINUTE
 UNDEFINED_PING_VAL = -1
 _DEFINED_PING_VAL = 0
 _LOW_PING_BOUNDARY_VAL = 59
@@ -42,6 +43,14 @@ def getPingStatus(pingVal):
         return PING_STATUSES.NORM
     else:
         return PING_STATUSES.HIGH
+
+
+def _isReplay(opType=''):
+    import BattleReplay
+    if BattleReplay.isLoading() or BattleReplay.isPlaying():
+        LOG_DEBUG('Replay is currently playing. {} requesting operations are forbidden'.format(opType))
+        return True
+    return False
 
 
 class HOST_AVAILABILITY(object):
@@ -204,7 +213,7 @@ class _PingRequester(object):
             LOG_CURRENT_EXCEPTION()
 
     def request(self, peripheries, forced=False):
-        if not self.__setPingCallback:
+        if _isReplay('Ping'):
             self.__onPingPerformed([])
             return
         peripheries = map(lambda host: host.url, peripheries)
@@ -560,7 +569,8 @@ class _PreDefinedHostList(object):
         return
 
     def __sendCsisQuery(self):
-        if len(self.__csisUrl):
+        isReplay = _isReplay('CSIS')
+        if not isReplay and len(self.__csisUrl):
             if not self._isCSISQueryInProgress:
                 timeFromLastUpdate = time.time() - self.__lastCsisUpdateTime
                 if timeFromLastUpdate >= CSIS_REQUEST_TIMER:
@@ -573,7 +583,8 @@ class _PreDefinedHostList(object):
                 else:
                     self.__finishCsisQuery()
         else:
-            LOG_DEBUG('CSIS url is not defined - ignore')
+            if not isReplay:
+                LOG_DEBUG('CSIS url is not defined - ignore')
             self._isCSISQueryInProgress = False
             self.stopCSISUpdate()
             self.__finishCsisQuery()

@@ -20,6 +20,9 @@ class _TutorialState(TutorialProxyHolder):
     def setInput(self, _):
         pass
 
+    def unlock(self, targetID):
+        pass
+
 
 class TutorialStateLoading(_TutorialState):
 
@@ -118,13 +121,24 @@ class TutorialStateRunEffects(_TutorialState):
                 action = target.getAction(event)
                 if action is not None:
                     self._tutorial.storeEffectsInQueue(action.getEffects(), benefit=True)
-                    self._current.stop()
-                    self._current = None
+                    self.__clearCurrent()
         else:
             scene = self._tutorial.getFunctionalScene()
             action = scene.getAction(event)
             if action is not None:
                 self._tutorial.storeEffectsInQueue(action.getEffects())
+        return
+
+    def unlock(self, targetID):
+        if self._current is not None and self._current.isStillRunning():
+            target = self._current.getTarget()
+            if hasattr(target, 'getTargetID') and target.getTargetID() == targetID:
+                self.__clearCurrent()
+        return
+
+    def __clearCurrent(self):
+        self._current.stop()
+        self._current = None
         return
 
 

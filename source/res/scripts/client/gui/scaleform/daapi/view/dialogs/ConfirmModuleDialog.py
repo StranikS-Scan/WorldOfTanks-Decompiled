@@ -7,7 +7,6 @@ from gui.Scaleform.daapi.view.meta.ConfirmItemWindowMeta import ConfirmItemWindo
 from gui.Scaleform.genConsts.CONFIRM_DIALOG_ALIASES import CONFIRM_DIALOG_ALIASES
 from gui.shared import g_itemsCache
 from gui.shared.utils import CLIP_ICON_PATH, EXTRA_MODULE_INFO
-from gui.shared.utils.requesters import ItemsRequester
 from items import vehicles
 
 class ConfirmModuleDialog(ConfirmItemWindowMeta):
@@ -101,10 +100,8 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
         self._callHandler(False)
         self.destroy()
 
-    @process
     def submit(self, count, currency):
-        items = yield ItemsRequester().request()
-        module = items.getItemByCD(self.meta.getTypeCompDescr())
+        module = g_itemsCache.items.getItemByCD(self.meta.getTypeCompDescr())
         self.meta.submit(module, count, currency)
         self._callHandler(True, self.meta.getTypeCompDescr(), count, currency)
         self.destroy()

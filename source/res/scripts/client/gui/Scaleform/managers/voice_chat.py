@@ -203,6 +203,7 @@ class BattleVoiceChatManager(BaseVoiceChatManager):
         """
         super(BattleVoiceChatManager, self).__init__(app)
         self.__enteredToBattle = False
+        self.__failedEventRaised = False
 
     def _onViewAdded(self, viewAlias):
         """
@@ -219,7 +220,8 @@ class BattleVoiceChatManager(BaseVoiceChatManager):
 
     def _showChatInitErrorMessage(self):
         """
-        Show the dialog about error only we have entered to the battle.
+        Show the dialog about error ONCE only we have entered to the battle.
         """
-        if self.__enteredToBattle:
+        if self.__enteredToBattle and not self.__failedEventRaised:
             self._showDialog(_MESSAGE_INIT_FAILED)
+            self.__failedEventRaised = True

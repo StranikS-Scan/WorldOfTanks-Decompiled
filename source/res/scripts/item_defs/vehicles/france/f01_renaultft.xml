@@ -432,17 +432,52 @@
   <radios>
     <ER_52>	shared	</ER_52>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Renault>
+          <smplEnginePower>	41.23396	</smplEnginePower>
+        </Renault>
+      </engines>
+      <chassis>
+        <Chassis_RenaultFT2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RenaultFT2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_RenaultFT2>
-        <alpha>	0.07245	</alpha>
-      </Chassis_RenaultFT2>
-    </chassis>
-    <engines>
-      <Renault>
-        <bravo>	10.30849	</bravo>
-      </Renault>
-    </engines>
     <armour>	0.868342991	</armour>
   </clientAdjustmentFactors>
   <effects>

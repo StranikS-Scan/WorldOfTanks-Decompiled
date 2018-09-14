@@ -508,7 +508,6 @@ def __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, results):
     if achievements['marksOnGun'] < results['marksOnGun']:
         achievements['marksOnGun'] = results['marksOnGun']
     if results['winnerTeam'] == results['team'] and results['aimerSeries'] > 0:
-        dossierDescr['singleAchievements']['aimer'] = 1
         if achievements['maxAimerSeries'] < results['aimerSeries']:
             achievements['maxAimerSeries'] = results['aimerSeries']
     isSPG = isVehicleSPG(vehTypeCompDescr)
@@ -606,3 +605,45 @@ def __updateCapturePointsWithBaseCapture(dossierDescr, results):
 def __updateDefencePoints(dossierDescr, results):
     if results['winnerTeam'] == results['team']:
         dossierDescr['achievements7x7']['sentinel'] += results['droppedCapturePoints']
+
+
+def computeFortResource(id, idToFinalStats, vehPlayersInfo, division, resourceBonus, fortClanDBIDs):
+    topXpID = [None, None]
+    topXp = [-1, -1]
+    xpSum = 0
+    for vehID, fullFinalStats in idToFinalStats.iteritems():
+        for vehTypeCompDescr, finalStats in fullFinalStats.iteritems():
+            xp = finalStats['xp']
+            team = vehPlayersInfo[vehID]['team'] - 1
+            xpSum += xp
+            if xp > topXp[team] and vehPlayersInfo[vehID]['clanDBID'] in fortClanDBIDs:
+                topXpID[team] = (vehID, vehTypeCompDescr)
+                topXp[team] = xp
+
+    totalResourceBefore = resourceBonus
+    totalResourceAfter = 0
+    totalResourceLegionaries = [0, 0]
+    for vehID, fullFinalStats in idToFinalStats.iteritems():
+        for finalStats in fullFinalStats.itervalues():
+            resource = totalResourceBefore * finalStats['xp'] / xpSum if xpSum else 0
+            team = vehPlayersInfo[vehID]['team'] - 1
+            if vehPlayersInfo[vehID]['clanDBID'] not in fortClanDBIDs:
+                totalResourceLegionaries[team] += resource
+                finalStats['fortResource'] = 0
+            else:
+                finalStats['fortResource'] = resource
+            totalResourceAfter += resource
+
+    roundingError = totalResourceBefore - totalResourceAfter
+    if roundingError > 0 and xpSum > 0 and topXpID[0] is not None and topXpID[1] is not None:
+        if topXp[0] > topXp[1]:
+            idToFinalStats[topXpID[0][0]][topXpID[0][1]]['fortResource'] += roundingError
+        else:
+            idToFinalStats[topXpID[1][0]][topXpID[1][1]]['fortResource'] += roundingError
+    for team in [0, 1]:
+        if totalResourceLegionaries[team] > 0:
+            legionRes = totalResourceLegionaries[team] / 2
+            idToFinalStats[topXpID[team][0]][topXpID[team][1]]['fortResource'] += legionRes
+
+    LOG_DEBUG('__computeFortResource', id, division, totalResourceBefore, totalResourceAfter, totalResourceLegionaries[0], totalResourceLegionaries[1], roundingError)
+    return

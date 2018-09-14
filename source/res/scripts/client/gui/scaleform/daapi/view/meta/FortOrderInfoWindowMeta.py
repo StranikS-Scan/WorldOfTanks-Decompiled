@@ -8,19 +8,16 @@ class FortOrderInfoWindowMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def as_setWindowDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by FortOrderInfoWindowVO (AS)
         """
         return self.flashObject.as_setWindowData(data) if self._isDAAPIInited() else None
 
     def as_setDynPropertiesS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by FortOrderInfoTitleVO (AS)
         """
         return self.flashObject.as_setDynProperties(data) if self._isDAAPIInited() else None

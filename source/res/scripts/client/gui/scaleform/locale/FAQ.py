@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/FAQ.py
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 from debug_utils import LOG_WARNING
 
 class FAQ(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     QUESTION_1 = '#faq:question_1'
     ANSWER_1 = '#faq:answer_1'
     QUESTION_2 = '#faq:question_2'
@@ -78,28 +76,20 @@ class FAQ(object):
      ANSWER_16,
      ANSWER_17_CONTAINS_LINKS)
 
-    @staticmethod
-    def question(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#faq:question_%s' % key
-        if outcome not in FAQ.QUESTION_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def question(cls, key0):
+        outcome = '#faq:question_{}'.format(key0)
+        if outcome not in cls.QUESTION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def answer(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#faq:answer_%s' % key
-        if outcome not in FAQ.ANSWER_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def answer(cls, key0):
+        outcome = '#faq:answer_{}'.format(key0)
+        if outcome not in cls.ANSWER_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome

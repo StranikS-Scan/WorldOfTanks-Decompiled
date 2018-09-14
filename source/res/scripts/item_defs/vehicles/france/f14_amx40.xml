@@ -649,23 +649,89 @@
     </ER_52>
     <ER_53>	shared	</ER_53>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Aster>
+          <smplEnginePower>	158.5922	</smplEnginePower>
+        </Aster>
+        <Somua_LM>
+          <smplEnginePower>	200.8834	</smplEnginePower>
+        </Somua_LM>
+      </engines>
+      <chassis>
+        <Chassis_AMX40>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX40>
+        <Chassis_AMX40_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX40_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX40>
-        <alpha>	0.1288	</alpha>
-      </Chassis_AMX40>
-      <Chassis_AMX40_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_AMX40_2>
-    </chassis>
-    <engines>
-      <Aster>
-        <bravo>	39.64804	</bravo>
-      </Aster>
-      <Somua_LM>
-        <bravo>	50.22086	</bravo>
-      </Somua_LM>
-    </engines>
     <armour>	1.195352097	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -937,26 +937,92 @@
     </SCR_508>
     <SCR_538>	shared	</SCR_538>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_G200_m_795C9GC1>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Wright_G200_m_795C9GC1>
+        <Wright_G2X_m_781C9GC1>
+          <smplEnginePower>	872.257	</smplEnginePower>
+        </Wright_G2X_m_781C9GC1>
+        <Wright_G200_m_781C9GC1>
+          <smplEnginePower>	1014.99	</smplEnginePower>
+        </Wright_G200_m_781C9GC1>
+      </engines>
+      <chassis>
+        <HVSST31>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </HVSST31>
+        <HVSST35>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </HVSST35>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <HVSST31>
-        <alpha>	0.13685	</alpha>
-      </HVSST31>
-      <HVSST35>
-        <alpha>	0.1127	</alpha>
-      </HVSST35>
-    </chassis>
-    <engines>
-      <Wright_G200_m_795C9GC1>
-        <bravo>	185.0242	</bravo>
-      </Wright_G200_m_795C9GC1>
-      <Wright_G2X_m_781C9GC1>
-        <bravo>	218.0642	</bravo>
-      </Wright_G2X_m_781C9GC1>
-      <Wright_G200_m_781C9GC1>
-        <bravo>	253.7475	</bravo>
-      </Wright_G200_m_781C9GC1>
-    </engines>
     <armour>	1.038658905	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -524,23 +524,89 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230_TRM_P30>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230_TRM_P30>
+        <Maybach_850CV>
+          <smplEnginePower>	898.689	</smplEnginePower>
+        </Maybach_850CV>
+      </engines>
+      <chassis>
+        <Chassis_Lorraine155_51>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Lorraine155_51>
+        <Chassis_Lorraine155_51_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Lorraine155_51_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Lorraine155_51>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Lorraine155_51>
-      <Chassis_Lorraine155_51_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Lorraine155_51_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_230_TRM_P30>
-        <bravo>	185.0242	</bravo>
-      </Maybach_HL_230_TRM_P30>
-      <Maybach_850CV>
-        <bravo>	224.6722	</bravo>
-      </Maybach_850CV>
-    </engines>
     <armour>	0.738580048	</armour>
   </clientAdjustmentFactors>
   <effects>

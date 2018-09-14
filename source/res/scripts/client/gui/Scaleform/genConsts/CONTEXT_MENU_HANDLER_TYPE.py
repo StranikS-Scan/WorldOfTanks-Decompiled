@@ -7,7 +7,6 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     CREW = 'crew'
     CHANNEL_LIST = 'channelList'
@@ -16,7 +15,7 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     RESEARCH_VEHICLE = 'researchVehicle'
     BASE_USER = 'baseUser'
     BASE_CLAN = 'baseClan'
-    APPEAL_USER = 'appealUser'
+    BATTLE_RESULTS_USER = 'battleResultsUser'
     PREBATTLE_USER = 'prebattleUser'
     UNIT_USER = 'unitUser'
     FORT_BUILDING = 'fortBuilding'
@@ -24,3 +23,6 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     CONTACTS_GROUP = 'contactsGroup'
     PLAYER_CONTACTS = 'playerContacts'
     CLUB_STAFF = 'clubStaff'
+    STORE_VEHICLE = 'storeVehicle'
+    PROFILE_VEHICLE = 'profileVehicle'
+    VEH_COMPARE = 'vehCompare'

@@ -860,26 +860,92 @@
     </AN-GRC-3>
     <AN-ARC-27>	shared	</AN-ARC-27>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AV-1790-1>
+          <smplEnginePower>	744.3259	</smplEnginePower>
+        </Continental_AV-1790-1>
+        <Continental_AV-1790-3>
+          <smplEnginePower>	845.8249	</smplEnginePower>
+        </Continental_AV-1790-3>
+        <Continental_AV-1790-5B>
+          <smplEnginePower>	856.3977	</smplEnginePower>
+        </Continental_AV-1790-5B>
+      </engines>
+      <chassis>
+        <Chassis_T54E1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T54E1>
+        <Chassis_T54E1_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T54E1_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T54E1>
-        <alpha>	0.1127	</alpha>
-      </Chassis_T54E1>
-      <Chassis_T54E1_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_T54E1_2>
-    </chassis>
-    <engines>
-      <Continental_AV-1790-1>
-        <bravo>	186.0815	</bravo>
-      </Continental_AV-1790-1>
-      <Continental_AV-1790-3>
-        <bravo>	211.4562	</bravo>
-      </Continental_AV-1790-3>
-      <Continental_AV-1790-5B>
-        <bravo>	214.0994	</bravo>
-      </Continental_AV-1790-5B>
-    </engines>
     <armour>	1.217037705	</armour>
   </clientAdjustmentFactors>
   <effects>

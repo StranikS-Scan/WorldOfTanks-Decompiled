@@ -554,17 +554,52 @@
   <radios>
     <FuG7A>	shared	</FuG7A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V12_cylinder_Boxer_Motor>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </V12_cylinder_Boxer_Motor>
+      </engines>
+      <chassis>
+        <Chassis_G109_Steyr_WT>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G109_Steyr_WT>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G109_Steyr_WT>
-        <alpha>	0.08855	</alpha>
-      </Chassis_G109_Steyr_WT>
-    </chassis>
-    <engines>
-      <V12_cylinder_Boxer_Motor>
-        <bravo>	37.00484	</bravo>
-      </V12_cylinder_Boxer_Motor>
-    </engines>
     <armour>	0.703179268	</armour>
   </clientAdjustmentFactors>
   <effects>

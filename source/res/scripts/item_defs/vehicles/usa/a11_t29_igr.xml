@@ -413,7 +413,7 @@
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <models>
             <undamaged>	vehicles/american/A11_T29/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/american/A11_T29/crash/lod0/Gun_06.model	</destroyed>
@@ -489,22 +489,57 @@
   <radios>
     <SCR_528_IGR>	shared	</SCR_528_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AV-1790-3_IGR>
+          <smplEnginePower>	845.8249	</smplEnginePower>
+        </Continental_AV-1790-3_IGR>
+      </engines>
+      <chassis>
+        <T84E3_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T84E3_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_105mm_Gun_T5E1_IGR>
         <delta>	1.25592	</delta>
       </_105mm_Gun_T5E1_IGR>
     </guns>
-    <chassis>
-      <T84E3_IGR>
-        <alpha>	0.12075	</alpha>
-      </T84E3_IGR>
-    </chassis>
-    <engines>
-      <Continental_AV-1790-3_IGR>
-        <bravo>	211.4562	</bravo>
-      </Continental_AV-1790-3_IGR>
-    </engines>
     <armour>	1.035144781	</armour>
   </clientAdjustmentFactors>
   <effects>

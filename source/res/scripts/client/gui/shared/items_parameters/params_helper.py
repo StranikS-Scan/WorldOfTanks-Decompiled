@@ -2,11 +2,15 @@
 # Embedded file name: scripts/client/gui/shared/items_parameters/params_helper.py
 from collections import namedtuple
 import copy
-from datetime import time
 import time
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
-from gui.shared.items_parameters import params
+from gui import GUI_SETTINGS
+from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared.items_parameters import params, RELATIVE_PARAMS, formatters
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
+from gui.shared.items_parameters.formatters import PARAMS_GROUPS
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst
@@ -44,6 +48,25 @@ def getParameters(item, vehicleDescr=None):
 
 def getCompatibles(item, vehicleDescr=None):
     return get(item, vehicleDescr).get('compatible')
+
+
+def getAllParametersTitles():
+    result = []
+    for groupIdx, groupName in enumerate(RELATIVE_PARAMS):
+        data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP, groupName)
+        data['titleText'] = formatters.formatVehicleParamName(groupName)
+        data['isEnabled'] = True
+        data['tooltip'] = TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
+        result.append(data)
+        for paramName in PARAMS_GROUPS[groupName]:
+            data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, paramName)
+            data['iconSource'] = formatters.getParameterIconPath(paramName)
+            data['titleText'] = formatters.formatVehicleParamName(paramName)
+            data['isEnabled'] = False
+            data['tooltip'] = TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
+            result.append(data)
+
+    return result
 
 
 def idealCrewComparator(vehicle):
@@ -135,3 +158,79 @@ def camouflageComparator(vehicle, camouflage):
     else:
         newParams = currParams.copy()
     return VehiclesComparator(newParams, currParams)
+
+
+def hasGroupBonuses(groupName, comparator):
+    for paramName in PARAMS_GROUPS[groupName]:
+        if len(comparator.getExtendedData(paramName).bonuses):
+            return True
+
+    return False
+
+
+def hasGroupPenalties(groupName, comparator):
+    for paramName in PARAMS_GROUPS[groupName]:
+        if len(comparator.getExtendedData(paramName).penalties):
+            return True
+
+    return False
+
+
+def getBuffIcon(param, comparator):
+    if hasGroupPenalties(param.name, comparator):
+        return RES_ICONS.MAPS_ICONS_VEHPARAMS_ICON_DECREASE
+    else:
+        return ''
+
+
+def getCommonParam(state, name):
+    return {'state': state,
+     'paramID': name}
+
+
+class VehParamsBaseGenerator(object):
+
+    def getFormattedParams(self, comparator, expandedGroups=None, vehIntCD=None):
+        """
+        Provides list of parameters in predefined order for particular vehicle in proper format
+        :param comparator: instance gui.shared.items_parameters.comparator.ItemsComparator
+        :param expandedGroups: the list of groups which parameters have to be added into the result list
+        :param vehIntCD: intCD of target Vehicle
+        :return: list of formatted parameters
+        """
+        result = []
+        if GUI_SETTINGS.technicalInfo:
+            for groupIdx, groupName in enumerate(RELATIVE_PARAMS):
+                hasParams = False
+                relativeParam = comparator.getExtendedData(groupName)
+                isOpened = expandedGroups is None or expandedGroups.get(groupName, False)
+                result.append(self._makeSimpleParamHeaderVO(relativeParam, isOpened, comparator))
+                bottomVo = self._makeSimpleParamBottomVO(relativeParam, vehIntCD)
+                if bottomVo:
+                    result.append(bottomVo)
+                if isOpened:
+                    for paramName in PARAMS_GROUPS[groupName]:
+                        param = comparator.getExtendedData(paramName)
+                        formattedParam = self._makeAdvancedParamVO(param)
+                        if formattedParam:
+                            result.append(formattedParam)
+                            hasParams = True
+
+                if hasParams and groupIdx < len(RELATIVE_PARAMS) - 1:
+                    separator = self._makeSeparator()
+                    if separator:
+                        result.append(separator)
+
+        return result
+
+    def _makeSimpleParamHeaderVO(self, param, isOpen, comparator):
+        return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP, param.name)
+
+    def _makeAdvancedParamVO(self, param):
+        return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, param.name)
+
+    def _makeSimpleParamBottomVO(self, param, vehIntCD=None):
+        return None
+
+    def _makeSeparator(self):
+        return None

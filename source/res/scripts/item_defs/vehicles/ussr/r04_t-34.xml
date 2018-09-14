@@ -1350,23 +1350,89 @@
       </unlocks>
     </_9RM>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2>
+          <smplEnginePower>	507.4949	</smplEnginePower>
+        </V-2>
+        <V-2-34>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V-2-34>
+      </engines>
+      <chassis>
+        <T-34_mod_1941>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T-34_mod_1941>
+        <T-34_mod_1943>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T-34_mod_1943>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <T-34_mod_1941>
-        <alpha>	0.13685	</alpha>
-      </T-34_mod_1941>
-      <T-34_mod_1943>
-        <alpha>	0.10465	</alpha>
-      </T-34_mod_1943>
-    </chassis>
-    <engines>
-      <V-2>
-        <bravo>	126.8737	</bravo>
-      </V-2>
-      <V-2-34>
-        <bravo>	132.1601	</bravo>
-      </V-2-34>
-    </engines>
     <armour>	0.986516759	</armour>
   </clientAdjustmentFactors>
   <effects>

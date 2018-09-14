@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/RosterSlotSettingsWindow.py
 from account_helpers.AccountSettings import AccountSettings
-from gui.Scaleform.daapi.view.lobby.cyberSport.VehicleSelectorBase import VehicleSelectorBase
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO, makeFiltersVO
+from gui.Scaleform.daapi.view.lobby.vehicle_selector_base import VehicleSelectorBase
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO, makeFiltersVO, makeVehicleBasicVO
 from gui.Scaleform.daapi.view.meta.RosterSlotSettingsWindowMeta import RosterSlotSettingsWindowMeta
+from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
+from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.events import CSRosterSlotSettingsWindow
 from gui.shared.formatters import text_styles, icons
-from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
-from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
+from gui.shared.utils.requesters import REQ_CRITERIA
 VEHICLE_SELECTOR_TAB_ID = 'vehicleSelectorTab'
 RANGE_SELECTOR_TAB_ID = 'rangeSelectorTab'
 TAB_ORDER = [VEHICLE_SELECTOR_TAB_ID, RANGE_SELECTOR_TAB_ID]
@@ -22,9 +22,9 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
     def __init__(self, ctx=None):
         super(RosterSlotSettingsWindow, self).__init__()
         assert 'section' in ctx, 'Section is required to show selector popup'
+        self._levelsRange = ctx.get('levelsRange', self._levelsRange)
         self.__section = ctx.get('section')
-        self.__levelsRange = ctx.get('levelsRange', [1, 10])
-        self.__levelsLimits = self.__convertLevelsRange(self.__levelsRange)
+        self.__levelsLimits = self.__convertLevelsRange(self._levelsRange)
         self.__vehicleTypes = ctx.get('vehicleTypes', None)
         self.__flashSlots = ctx.get('settings')
         return
@@ -38,7 +38,7 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
         self.updateData()
 
     def updateData(self):
-        result = self._updateData(g_itemsCache.items.getVehicles(~REQ_CRITERIA.SECRET), self.__levelsRange, self.__vehicleTypes, isVehicleRoster=True)
+        result = self._updateData(g_itemsCache.items.getVehicles(~REQ_CRITERIA.SECRET))
         self.as_setListDataS(result)
 
     def requestVehicleFilters(self):
@@ -57,9 +57,6 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
 
     def onWindowClose(self):
         self.destroy()
-
-    def _getLevelsRange(self):
-        return [0] + self.__levelsRange
 
     def _populate(self):
         super(RosterSlotSettingsWindow, self)._populate()
@@ -81,13 +78,16 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
              'level': currentFilters['level'],
              'compatibleOnly': currentFilters['compatibleOnly']}
             AccountSettings.setFilter(self.__section, filters)
+        self._levelsRange = None
         self.__currentSlot = None
         self.__flashSlots = None
         self.__section = None
-        self.__levelsRange = None
         self.__vehicleTypes = None
         super(RosterSlotSettingsWindow, self)._dispose()
         return
+
+    def _makeVehicleVOAction(self, vehicle):
+        return makeVehicleBasicVO(vehicle, self._levelsRange, self.__vehicleTypes)
 
     def __packStaticData(self):
         text = text_styles.main(CYBERSPORT.WINDOW_ROSTERSLOTSETTINGS_VEHICLETAB_HEADERTEXT)
@@ -121,12 +121,12 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
 
     def __makeInitialSlotData(self, currentSlotSetting):
         if currentSlotSetting is None:
-            return (makeFiltersVO([], [], self.__convertLevelsRange(self.__levelsRange)), RANGE_SELECTOR_TAB_ID)
+            return (makeFiltersVO([], [], self.__convertLevelsRange(self._levelsRange)), RANGE_SELECTOR_TAB_ID)
         elif currentSlotSetting.selectedVehicle > 0:
             vehicle = g_itemsCache.items.getItemByCD(int(currentSlotSetting.selectedVehicle))
-            return (makeVehicleVO(vehicle, self.__convertLevelsRange(self.__levelsRange), self.__vehicleTypes), VEHICLE_SELECTOR_TAB_ID)
+            return (makeVehicleVO(vehicle, self.__convertLevelsRange(self._levelsRange), self.__vehicleTypes), VEHICLE_SELECTOR_TAB_ID)
         elif currentSlotSetting.nationIDRange or currentSlotSetting.vTypeRange or currentSlotSetting.vLevelRange:
-            levelsRange = self.__convertLevelsRange(currentSlotSetting.vLevelRange or self.__levelsRange)
+            levelsRange = self.__convertLevelsRange(currentSlotSetting.vLevelRange or self._levelsRange)
             return (makeFiltersVO(currentSlotSetting.nationIDRange, currentSlotSetting.vTypeRange, levelsRange), RANGE_SELECTOR_TAB_ID)
         else:
             return (None, None)

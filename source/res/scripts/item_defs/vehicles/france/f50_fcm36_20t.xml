@@ -851,23 +851,89 @@
   <radios>
     <ER_54>	shared	</ER_54>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Berliet_MDPA>
+          <smplEnginePower>	96.21259	</smplEnginePower>
+        </Berliet_MDPA>
+        <Berliet_Ricardo>
+          <smplEnginePower>	111.0145	</smplEnginePower>
+        </Berliet_Ricardo>
+      </engines>
+      <chassis>
+        <Chassis_FCM36_20t>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_FCM36_20t>
+        <Chassis_FCM36_20t_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_FCM36_20t_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_FCM36_20t>
-        <alpha>	0.1127	</alpha>
-      </Chassis_FCM36_20t>
-      <Chassis_FCM36_20t_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_FCM36_20t_2>
-    </chassis>
-    <engines>
-      <Berliet_MDPA>
-        <bravo>	24.05315	</bravo>
-      </Berliet_MDPA>
-      <Berliet_Ricardo>
-        <bravo>	27.75363	</bravo>
-      </Berliet_Ricardo>
-    </engines>
     <armour>	0.948227893	</armour>
   </clientAdjustmentFactors>
   <effects>

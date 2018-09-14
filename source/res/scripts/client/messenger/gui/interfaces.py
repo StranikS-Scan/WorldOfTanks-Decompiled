@@ -149,5 +149,13 @@ class IBattleChannelView(object):
     def removeController(self, ctrl):
         pass
 
-    def addMessage(self, text, fillColor=FILL_COLORS.BLACK):
+    def addMessage(self, text, fillColor=FILL_COLORS.BLACK, accountDBID=0):
+        """
+        Invoked when a new message is relieved.
+        
+        :param text: Formatted message text.
+        :param fillColor: Color scheme.
+        :param accountDBID: Sender database ID or 0 if it is not defined or a specific processing
+        is not supposed.
+        """
         pass

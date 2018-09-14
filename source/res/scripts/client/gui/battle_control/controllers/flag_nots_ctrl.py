@@ -15,16 +15,16 @@ ALLY_DELIVERED_SOUND_ID = 'ally_deliver_flag'
 
 class IFlagNotificationView(object):
 
-    def showFlagCaptured(self, flagType):
+    def showFlagCaptured(self):
         raise NotImplementedError
 
-    def showFlagDelivered(self, flagType):
+    def showFlagDelivered(self):
         raise NotImplementedError
 
-    def showFlagAbsorbed(self, flagType):
+    def showFlagAbsorbed(self):
         raise NotImplementedError
 
-    def showFlagDropped(self, flagType):
+    def showFlagDropped(self):
         raise NotImplementedError
 
 
@@ -73,9 +73,8 @@ class NotificationsController(IViewComponentsController):
 
     def __setPlayerFlagBearerIfNeed(self):
         playerVehicleID = self.__arenaDP.getPlayerVehicleID()
-        flagID = g_ctfManager.getVehicleCarriedFlagID(playerVehicleID)
-        if self.__ui is not None and flagID is not None:
-            self.__ui.showFlagCaptured(g_ctfManager.getFlagType(flagID))
+        if self.__ui is not None and g_ctfManager.getVehicleCarriedFlagID(playerVehicleID) is not None:
+            self.__ui.showFlagCaptured()
         return
 
     def __onFlagCapturedByVehicle(self, flagID, flagTeam, vehicleID):
@@ -84,8 +83,7 @@ class NotificationsController(IViewComponentsController):
         if vehicleID == playerVehicleID:
             self.__playSound(CAPTURE_SOUND_ID)
             if self.__ui is not None:
-                flagType = g_ctfManager.getFlagType(flagID)
-                self.__ui.showFlagCaptured(flagType)
+                self.__ui.showFlagCaptured()
         elif vehInfo.team == self.__arenaDP.getNumberOfTeam():
             self.__playSound(ALLY_CAPTURE_SOUND_ID)
         else:
@@ -95,16 +93,15 @@ class NotificationsController(IViewComponentsController):
     def __onFlagAbsorbed(self, flagID, flagTeam, vehicleID, respawnTime):
         vehInfo = self.__arenaDP.getVehicleInfo(vehicleID)
         playerVehicleID = self.__arenaDP.getPlayerVehicleID()
-        flagType = g_ctfManager.getFlagType(flagID)
         if vehicleID == playerVehicleID:
             if self.__arenaVisitor.isSoloTeam(self.__arenaDP.getNumberOfTeam()):
                 self.__playSound(CONSUMED_SOUND_ID)
                 if self.__ui is not None:
-                    self.__ui.showFlagAbsorbed(flagType)
+                    self.__ui.showFlagAbsorbed()
             else:
                 self.__playSound(DELIVERED_SOUND_ID)
                 if self.__ui is not None:
-                    self.__ui.showFlagDelivered(flagType)
+                    self.__ui.showFlagDelivered()
         elif vehInfo.team == self.__arenaDP.getNumberOfTeam():
             self.__playSound(ALLY_DELIVERED_SOUND_ID)
         return
@@ -114,8 +111,7 @@ class NotificationsController(IViewComponentsController):
         playerVehicleID = self.__arenaDP.getPlayerVehicleID()
         if loserVehicleID == playerVehicleID:
             if self.__ui is not None:
-                flagType = g_ctfManager.getFlagType(flagID)
-                self.__ui.showFlagDropped(flagType)
+                self.__ui.showFlagDropped()
         elif vehInfo.team == self.__arenaDP.getNumberOfTeam():
             self.__playSound(ALLY_DROPPED_SOUND_ID)
         return
@@ -123,8 +119,7 @@ class NotificationsController(IViewComponentsController):
     def __onFlagRemoved(self, flagID, flagTeam, vehicleID):
         playerVehicleID = self.__arenaDP.getPlayerVehicleID()
         if self.__ui is not None and vehicleID == playerVehicleID:
-            flagType = g_ctfManager.getFlagType(flagID)
-            self.__ui.showFlagDropped(flagType)
+            self.__ui.showFlagDropped()
         return
 
     def __playSound(self, soundID):

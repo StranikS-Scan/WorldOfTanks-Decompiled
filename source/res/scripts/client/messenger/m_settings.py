@@ -89,7 +89,7 @@ class _LobbySettings(object):
 _BattleMessageLifeCycle = namedtuple('_MessageInBattle', ('lifeTime', 'alphaSpeed'))
 
 class _BattleSettings(object):
-    __slots__ = ('messageLifeCycle', 'messageFormat', 'targetFormat', 'inactiveStateAlpha', 'hintText', 'toolTipText', 'numberOfMessagesInHistory', 'receivers', 'alphaForLastMessages', 'chatIsLockedToolTipText', 'recoveredLatestMessages', 'lifeTimeRecoveredMessages', 'lastReceiver')
+    __slots__ = ('messageLifeCycle', 'messageFormat', 'targetFormat', 'inactiveStateAlpha', 'hintText', 'toolTipText', 'numberOfMessagesInHistory', 'receivers', 'alphaForLastMessages', 'chatIsLockedToolTipText', 'recoveredLatestMessages', 'lifeTimeRecoveredMessages', 'lastReceiver', 'toolTipTextWithMuteInfo')
 
     def __init__(self):
         super(_BattleSettings, self).__init__()
@@ -100,6 +100,7 @@ class _BattleSettings(object):
         self.hintText = ''
         self.toolTipText = ''
         self.chatIsLockedToolTipText = ''
+        self.toolTipTextWithMuteInfo = ''
         self.numberOfMessagesInHistory = 6
         self.receivers = {}
         self.alphaForLastMessages = 20
@@ -111,7 +112,7 @@ class _BattleSettings(object):
 _UserPrefs = namedtuple('_UserPrefs', ('version', 'datetimeIdx', 'enableOlFilter', 'enableSpamFilter', 'invitesFromFriendsOnly', 'storeReceiverInBattle', 'disableBattleChat', 'chatContactsListOnly', 'receiveFriendshipRequest', 'receiveInvitesInBattle'))
 
 def _makeDefUserPrefs():
-    return _UserPrefs(1, 2, True, False, False, False, False, False, True, True)
+    return _UserPrefs(version=1, datetimeIdx=2, enableOlFilter=True, enableSpamFilter=False, invitesFromFriendsOnly=False, storeReceiverInBattle=False, disableBattleChat=False, chatContactsListOnly=False, receiveFriendshipRequest=True, receiveInvitesInBattle=True)
 
 
 class MessengerSettings(object):

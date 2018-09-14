@@ -6,7 +6,8 @@
       <Arg>	STRING	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT64	</Arg>
+      <Arg>	ARRAY	  <of>	UINT64	</of>
+      </Arg>
       <Arg>	STRING	</Arg>
       <Arg>	PYTHON	</Arg>
     </enqueue>

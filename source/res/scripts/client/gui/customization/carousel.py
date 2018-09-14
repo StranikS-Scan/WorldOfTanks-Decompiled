@@ -57,10 +57,14 @@ class Carousel(object):
         for item in self.__carouselItems:
             item['duration'] = self.__currentDuration
 
+        if self.__currentType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
+            unfilteredLength = len(self.__carouselItems)
+        else:
+            unfilteredLength = len(self.__displayedElements[self.__currentType])
         self.__events.onCarouselUpdated({'items': self.__carouselItems,
          'rendererWidth': _RENDERER_WIDTH[self.__currentType],
          'goToIndex': self.__goToIndex,
-         'unfilteredLength': len(self.__displayedElements[self.__currentType]),
+         'unfilteredLength': unfilteredLength,
          'hasAppliedItem': self.__hasAppliedItem})
 
     def __saveDisplayedElements(self, displayedElements, displayedGroups):
@@ -84,14 +88,10 @@ class Carousel(object):
     def __update(self):
         newElements = AccountSettings.getSettings('customization')
         newElementsSubset = newElements[self.__currentType].get(self.__currentVehicle.item.intCD, {})
-        topItems = defaultdict(list)
         installedItems = defaultdict(list)
         purchasedItems = defaultdict(list)
         otherItems = defaultdict(list)
-        allItems = [topItems,
-         installedItems,
-         purchasedItems,
-         otherItems]
+        allItems = [installedItems, purchasedItems, otherItems]
         currentSlotElement = self.__slots.getCurrentSlotData()['element']
         installedSlotElement = self.__slots.getInstalledSlotData()['element']
         currentCarouselItem = None
@@ -100,16 +100,12 @@ class Carousel(object):
             installedInCurrentSlot = False
             if installedSlotElement is not None:
                 installedInCurrentSlot = elementID == installedSlotElement.getID()
-            if self.__filter.check(element, installedInCurrentSlot) or element.isDisplayedFirst:
+            if self.__filter.check(element, installedInCurrentSlot):
                 appliedToCurrentSlot = False
                 if currentSlotElement is not None:
                     appliedToCurrentSlot = elementID == currentSlotElement.getID() and not installedInCurrentSlot
                 if not self.__hasAppliedItem and appliedToCurrentSlot:
                     self.__hasAppliedItem = True
-                if element.isDisplayedFirst:
-                    isEventElement = True
-                else:
-                    isEventElement = False
                 if elementID in newElementsSubset:
                     isNewElement = newElementsSubset[elementID]
                     newElementsSubset[elementID] = False
@@ -119,11 +115,8 @@ class Carousel(object):
                  'appliedToCurrentSlot': appliedToCurrentSlot,
                  'duration': self.__currentDuration,
                  'isNewElement': isNewElement,
-                 'isEventElement': isEventElement,
                  'installedInCurrentSlot': installedInCurrentSlot}
-                if element.isDisplayedFirst:
-                    group = topItems[element.getGroup()]
-                elif installedInCurrentSlot:
+                if installedInCurrentSlot:
                     group = installedItems[element.getGroup()]
                 elif element.isInDossier:
                     group = purchasedItems[element.getGroup()]

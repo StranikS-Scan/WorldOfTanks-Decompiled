@@ -1098,31 +1098,97 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Porsche_Typ_100>
+          <smplEnginePower>	444.0581	</smplEnginePower>
+        </Porsche_Typ_100>
+        <Porsche_Typ_100_1>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Porsche_Typ_100_1>
+        <Porsche_Typ_100_3>
+          <smplEnginePower>	708.3784	</smplEnginePower>
+        </Porsche_Typ_100_3>
+      </engines>
+      <chassis>
+        <VK3001P>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VK3001P>
+        <VK3001P_ausf_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VK3001P_ausf_B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_88mm_PaK_36_L56>
         <delta>	1.088888	</delta>
       </_88mm_PaK_36_L56>
     </guns>
-    <chassis>
-      <VK3001P>
-        <alpha>	0.12075	</alpha>
-      </VK3001P>
-      <VK3001P_ausf_B>
-        <alpha>	0.12075	</alpha>
-      </VK3001P_ausf_B>
-    </chassis>
-    <engines>
-      <Porsche_Typ_100>
-        <bravo>	111.0145	</bravo>
-      </Porsche_Typ_100>
-      <Porsche_Typ_100_1>
-        <bravo>	158.5922	</bravo>
-      </Porsche_Typ_100_1>
-      <Porsche_Typ_100_3>
-        <bravo>	177.0946	</bravo>
-      </Porsche_Typ_100_3>
-    </engines>
     <armour>	0.94968942	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -89,15 +89,17 @@ class _GUIItem(object):
 
 _idGen = SequenceIDGenerator()
 
-@ReprInjector.withParent(('_priority', 'priority'), ('_icon', 'icon'), ('_bg', 'bg'))
+@ReprInjector.withParent(('_priority', 'priority'), ('_icon', 'icon'), ('_bg', 'bg'), ('_group', 'group'), ('_isNotify', 'isNotify'))
 class PopUpItem(_GUIItem):
-    __slots__ = ('_priority', '_icon', '_bg')
+    __slots__ = ('_priority', '_icon', '_bg', '_group', '_isNotify')
 
-    def __init__(self, body, topic, priority, buttons=None, icon='information', bg=''):
+    def __init__(self, body, topic, priority, buttons=None, icon='information', bg='', group='info', isNotify=True):
         super(PopUpItem, self).__init__('pop-up-{0}'.format(_idGen.next()), body, topic, buttons, False)
         self._priority = priority
         self._icon = icon
         self._bg = bg
+        self._group = group
+        self._isNotify = isNotify
 
     def hideButtons(self):
         self._buttons = map(lambda button: button._replace(visible=False), self._buttons)
@@ -119,6 +121,12 @@ class PopUpItem(_GUIItem):
 
     def getLocalBG(self):
         return convertToLocalBG(self._bg)
+
+    def getGroup(self):
+        return self._group
+
+    def isNotify(self):
+        return self._isNotify
 
 
 @ReprInjector.withParent(('_modal', 'modal'))

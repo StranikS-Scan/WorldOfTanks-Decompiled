@@ -8,19 +8,13 @@ class CrewOperationsPopOverMeta(SmartPopOverView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends SmartPopOverView
-    null
     """
 
     def invokeOperation(self, operationName):
-        """
-        :param operationName:
-        :return :
-        """
         self._printOverrideError('invokeOperation')
 
     def as_updateS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by CrewOperationsInitVO (AS)
         """
         return self.flashObject.as_update(data) if self._isDAAPIInited() else None

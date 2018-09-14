@@ -478,17 +478,52 @@
   <radios>
     <FuG5A>	shared	</FuG5A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_120_TR_A>
+          <smplEnginePower>	287.5805	</smplEnginePower>
+        </Maybach_HL_120_TR_A>
+      </engines>
+      <chassis>
+        <Chassis_DickerMax>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_DickerMax>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_DickerMax>
-        <alpha>	0.10465	</alpha>
-      </Chassis_DickerMax>
-    </chassis>
-    <engines>
-      <Maybach_HL_120_TR_A>
-        <bravo>	71.89512	</bravo>
-      </Maybach_HL_120_TR_A>
-    </engines>
     <armour>	0.655714106	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -454,18 +454,52 @@
   <radios>
     <Alarm_flags_bot>	shared	</Alarm_flags_bot>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <T-18_bot>
-        <alpha>	0.12075	</alpha>
-      </T-18_bot>
-    </chassis>
-    <engines>
-      <MS-1_bot>
-        <bravo>	11.36577	</bravo>
-      </MS-1_bot>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <MS-1_bot>
+          <smplEnginePower>	45.46309	</smplEnginePower>
+        </MS-1_bot>
+      </engines>
+      <chassis>
+        <T-18_bot>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T-18_bot>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

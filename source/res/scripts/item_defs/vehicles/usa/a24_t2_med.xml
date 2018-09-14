@@ -960,23 +960,89 @@
   <radios>
     <SCR_200>	shared	</SCR_200>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Liberty>
+          <smplEnginePower>	348.9028	</smplEnginePower>
+        </Liberty>
+        <Wright_Continental_R-975C2>
+          <smplEnginePower>	359.4756	</smplEnginePower>
+        </Wright_Continental_R-975C2>
+      </engines>
+      <chassis>
+        <T2E1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T2E1>
+        <T2E4>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T2E4>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <T2E1>
-        <alpha>	0.1127	</alpha>
-      </T2E1>
-      <T2E4>
-        <alpha>	0.0966	</alpha>
-      </T2E4>
-    </chassis>
-    <engines>
-      <Liberty>
-        <bravo>	87.22569	</bravo>
-      </Liberty>
-      <Wright_Continental_R-975C2>
-        <bravo>	89.8689	</bravo>
-      </Wright_Continental_R-975C2>
-    </engines>
     <armour>	0.779067102	</armour>
   </clientAdjustmentFactors>
   <effects>

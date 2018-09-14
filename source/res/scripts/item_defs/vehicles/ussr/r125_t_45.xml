@@ -414,15 +414,15 @@
       <gunPosition>	0.00314 0.2878 0.57443	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.563621 0.366437 -0.440857	</rayStart>
-          <rayEnd>	-0.289918 0.252112 -0.395974	</rayEnd>
+          <rayStart>	-0.518005 0.347383 -0.433377	</rayStart>
+          <rayEnd>	-0.335534 0.271166 -0.403454	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.563621 0.366437 -0.440857	</rayStart>
-          <rayEnd>	0.289918 0.252112 -0.395974	</rayEnd>
+          <rayStart>	0.518005 0.347383 -0.433377	</rayStart>
+          <rayEnd>	0.335534 0.271166 -0.403454	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -446,18 +446,52 @@
   <radios>
     <_71-TK-3A>	shared	</_71-TK-3A>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R125_T_45>
-        <alpha>	0.0966	</alpha>
-      </Chassis_R125_T_45>
-    </chassis>
-    <engines>
-      <ZiS-16_A>
-        <bravo>	22.46722	</bravo>
-      </ZiS-16_A>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <ZiS-16_A>
+          <smplEnginePower>	89.8689	</smplEnginePower>
+        </ZiS-16_A>
+      </engines>
+      <chassis>
+        <Chassis_R125_T_45>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R125_T_45>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision>	collision	</collision>
     <damagedStateGroup>	small	</damagedStateGroup>

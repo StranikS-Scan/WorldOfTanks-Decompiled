@@ -43,11 +43,6 @@ def packAlignedTextBlockData(text, align, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_T
      'useHtml': True}, padding)
 
 
-def packHeadBlockData(title, icon):
-    return packBlockDataItem(BATTLE_RESULT_TYPES.TOOLTIP_HEAD_BLOCK_LINKAGE, {'title': title,
-     'icon': icon})
-
-
 def packTotalItemsBlockData(counter, text, counterVisible):
     return packBlockDataItem(BATTLE_RESULT_TYPES.TOOLTIP_TOTAL_ITEMS_BLOCK_LINKAGE, {'text': text,
      'counter': counter,
@@ -138,11 +133,11 @@ def packSaleTextParameterBlockData(name, saleData, actionStyle=ACTION_PRICE_CONS
     return packBlockDataItem(linkage, data, padding)
 
 
-def packStatusDeltaBlockData(title, valueStr, statusBarData, showDecreaseArrow=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_STATUS_DELTA_PARAMETER_BLOCK_LINKAGE, padding=None):
+def packStatusDeltaBlockData(title, valueStr, statusBarData, buffIconSrc='', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_STATUS_DELTA_PARAMETER_BLOCK_LINKAGE, padding=None):
     data = {'title': title,
      'valueStr': valueStr,
      'statusBarData': statusBarData,
-     'showDecreaseArrow': showDecreaseArrow}
+     'buffIconSrc': buffIconSrc}
     return packBlockDataItem(linkage, data, padding)
 
 
@@ -190,7 +185,8 @@ def packActionTooltipData(type, key, isBuying, price, oldPrice):
      'isBuying': isBuying,
      'state': states,
      'newPrice': price,
-     'oldPrice': oldPrice}
+     'oldPrice': oldPrice,
+     'ico': price.getCurrency()}
 
 
 def packItemRentActionTooltipData(item, rentPackage):
@@ -223,11 +219,12 @@ def getActionPriceData(item):
     defaultPrice = item.defaultAltPrice or item.defaultPrice
     minRentPricePackage = item.getRentPackage()
     action = None
-    if price != defaultPrice and not minRentPricePackage:
-        action = packItemActionTooltipData(item)
-    elif minRentPricePackage:
+    if minRentPricePackage:
         if minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
             action = packItemRentActionTooltipData(item, minRentPricePackage)
+    elif not item.isRestoreAvailable():
+        if price != defaultPrice:
+            action = packItemActionTooltipData(item)
     return action
 
 

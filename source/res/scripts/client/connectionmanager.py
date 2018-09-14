@@ -113,7 +113,7 @@ class ConnectionManager(object):
         else:
             for server in BigWorld.serverDiscovery.servers:
                 if server.serverString == self.__connectionUrl:
-                    self.__hostItem = self.__hostItem._replace(name=server.ownerName)
+                    self.__hostItem = self.__hostItem._replace(name=server.ownerName, shortName=server.ownerName)
                     break
 
         return
@@ -179,12 +179,15 @@ class ConnectionManager(object):
         self.__connectionData.username = json.dumps(params, encoding='utf-8')
         return
 
-    def __setHostDataAndConnect(self, predefinedHost):
+    def __setHostData(self, predefinedHost):
         self.__connectionData.publicKeyPath = predefinedHost.keyPath
         self.__connectionUrl = predefinedHost.urlToken if (self.__connectionMethod == CONNECTION_METHOD.TOKEN or self.__connectionMethod == CONNECTION_METHOD.TOKEN2) and predefinedHost.urlToken else predefinedHost.url
+
+    def __setHostDataAndConnect(self, predefinedHost):
+        self.__setHostData(predefinedHost)
         self.__connect()
 
-    def __reconnect(self, peripheryID=0):
+    def __reconnect(self):
         self.stopRetryConnection()
         self.__retryConnectionCallbackID = BigWorld.callback(self.__getRetryConnectionPeriod(), self.__connect)
 
@@ -195,8 +198,12 @@ class ConnectionManager(object):
 
     def __processKick(self, peripheryID):
         if peripheryID > 0:
-            self.__reconnect(peripheryID)
+            host = g_preDefinedHosts.periphery(peripheryID, False)
+            if host is not None:
+                self.__setHostData(host)
+            self.__reconnect()
         self.onKickWhileLoginReceived(peripheryID)
+        return
 
     def __processQueue(self, queueNumber):
         self.onQueued(queueNumber)

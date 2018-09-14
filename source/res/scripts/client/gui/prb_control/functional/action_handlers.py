@@ -15,6 +15,7 @@ from gui.prb_control.functional.decorators import vehicleAmmoCheck
 from gui.prb_control.settings import REQUEST_TYPE, FUNCTIONAL_FLAG
 from gui.server_events import g_eventsCache
 from messenger.storage import storage_getter
+from gui.shared.utils.functions import showSentInviteMessage
 
 class AbstractActionsHandler(object):
 
@@ -209,11 +210,7 @@ class SquadActionsHandler(AbstractActionsHandler):
         getUser = self.usersStorage.getUser
         for dbID in accountsToInvite:
             user = getUser(dbID)
-            if user is not None:
-                SystemMessages.pushI18nMessage('#system_messages:prebattle/invites/sendInvite/name', type=SystemMessages.SM_TYPE.Information, name=user.getFullName())
-            SystemMessages.pushI18nMessage('#system_messages:prebattle/invites/sendInvite', type=SystemMessages.SM_TYPE.Information)
-
-        return
+            showSentInviteMessage(user)
 
     def __onKickedFromQueue(self, *args):
         SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
@@ -223,6 +220,9 @@ class EventSquadActionsHandler(SquadActionsHandler):
 
     def _loadWindow(self, ctx):
         g_eventDispatcher.loadEventSquad(ctx, self._getTeamReady())
+        if not self._functional.getPlayerInfo().isReady:
+            eventVehicle = g_eventsCache.getEventVehicles()[0]
+            g_currentVehicle.selectVehicle(eventVehicle.invID)
 
 
 class BalancedSquadActionsHandler(SquadActionsHandler):

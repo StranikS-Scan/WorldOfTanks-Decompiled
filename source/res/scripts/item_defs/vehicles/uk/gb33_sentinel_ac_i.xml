@@ -467,17 +467,52 @@
   <radios>
     <N19Mk2_Aust>	shared	</N19Mk2_Aust>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Cadillac_75_x_3>
+          <smplEnginePower>	348.9028	</smplEnginePower>
+        </Cadillac_75_x_3>
+      </engines>
+      <chassis>
+        <Chassis_GB33_Sentinel_AC_I>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB33_Sentinel_AC_I>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB33_Sentinel_AC_I>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB33_Sentinel_AC_I>
-    </chassis>
-    <engines>
-      <Cadillac_75_x_3>
-        <bravo>	87.22569	</bravo>
-      </Cadillac_75_x_3>
-    </engines>
     <armour>	0.825278879	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -223,6 +223,10 @@ class ConnectionHandler(ClientEventsHandler):
             self.__reqTokenCallbackID = None
         return
 
+    def __invokeConnectFailedEvent(self, tries):
+        host, port = self.__connectionsInfo.getLastAddress()
+        g_messengerEvents.onPluginConnectFailed(PROTO_TYPE.XMPP, (host, port), tries)
+
     def __handleConnect(self):
         g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Client is connected')
         self.__cancelReconnectCallback()
@@ -251,17 +255,19 @@ class ConnectionHandler(ClientEventsHandler):
             g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Will try to reconnect after {0} seconds'.format(delay), description)
             host, port = self.__connectionsInfo.getLastAddress()
             tries = self.__connectionsInfo.getTries()
-            g_messengerEvents.onPluginConnectFailed(PROTO_TYPE.XMPP, (host, port), tries)
+            self.__invokeConnectFailedEvent(tries)
             sendEventToServer(XMPP_EVENT_LOG.DISCONNECT, host, port, reason, description, tries)
 
     def __handleTokenError(self):
         client = self.client()
         if not client:
             return
-        if self.__reqTokenBackOff.getTries() < _MAX_REQ_TOKEN_TRIES:
+        tries = self.__reqTokenBackOff.getTries()
+        if tries < _MAX_REQ_TOKEN_TRIES:
             delay = self.__reqTokenBackOff.next()
             self.__reqTokenCallbackID = BigWorld.callback(delay, self.__doNextLogin)
             g_logOutput.debug(CLIENT_LOG_AREA.TOKEN, 'Will try to request token after {0} seconds'.format(delay))
+            self.__invokeConnectFailedEvent(tries)
         else:
             self.client().disconnect()
             self.__handleDisconnect(DISCONNECT_REASON.OTHER_ERROR, 'Received chat token is not valid')

@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/READABLE_KEY_NAMES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
+from debug_utils import LOG_WARNING
 
 class READABLE_KEY_NAMES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     KEY_NONE = '#readable_key_names:KEY_NONE'
     KEY_ESCAPE = '#readable_key_names:KEY_ESCAPE'
     KEY_1 = '#readable_key_names:KEY_1'
@@ -195,7 +193,7 @@ class READABLE_KEY_NAMES(object):
     KEY_LCDKB_DOWN = '#readable_key_names:KEY_LCDKB_DOWN'
     KEY_LCDKB_MENU = '#readable_key_names:KEY_LCDKB_MENU'
     KEY_IME_CHAR = '#readable_key_names:KEY_IME_CHAR'
-    all_ENUM = (KEY_NONE,
+    ALL_ENUM = (KEY_NONE,
      KEY_ESCAPE,
      KEY_1,
      KEY_2,
@@ -382,13 +380,11 @@ class READABLE_KEY_NAMES(object):
      KEY_LCDKB_MENU,
      KEY_IME_CHAR)
 
-    @staticmethod
-    def all(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#readable_key_names:%s' % key
-        if outcome not in READABLE_KEY_NAMES.all_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def all(cls, key0):
+        outcome = '#readable_key_names:{}'.format(key0)
+        if outcome not in cls.ALL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

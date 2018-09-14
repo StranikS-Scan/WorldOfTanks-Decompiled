@@ -57,7 +57,7 @@ class SquadView(SquadViewMeta):
                     needToUpdateSlots = True
             elif vehicleVO is None:
                 needToUpdateSlots = True
-        if g_eventsCache.isSquadXpFactorsEnabled():
+        if g_eventsCache.isSquadXpFactorsEnabled() or g_eventsCache.isBalancedSquadEnabled():
             self.as_setActionButtonStateS(self.__getActionButtonStateVO())
         if needToUpdateSlots:
             self._updateMembersData()
@@ -210,7 +210,8 @@ class SquadView(SquadViewMeta):
         return False
 
     def __getActionButtonStateVO(self):
-        return SquadActionButtonStateVO(self.unitFunctional)
+        unitFunctional = self.unitFunctional
+        return SquadActionButtonStateVO(unitFunctional)
 
     def __canSendInvite(self):
         return self.unitFunctional.getPermissions().canSendInvite()

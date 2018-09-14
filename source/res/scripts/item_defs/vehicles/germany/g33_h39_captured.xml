@@ -314,17 +314,52 @@
   <radios>
     <FuG8f>	shared	</FuG8f>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Hotchkiss>
+          <smplEnginePower>	79.29608	</smplEnginePower>
+        </Hotchkiss>
+      </engines>
+      <chassis>
+        <H35ketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </H35ketten>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <H35ketten>
-        <alpha>	0.10143	</alpha>
-      </H35ketten>
-    </chassis>
-    <engines>
-      <Hotchkiss>
-        <bravo>	19.82402	</bravo>
-      </Hotchkiss>
-    </engines>
     <armour>	0.955789308	</armour>
   </clientAdjustmentFactors>
   <effects>

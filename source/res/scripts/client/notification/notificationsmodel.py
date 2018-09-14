@@ -2,19 +2,18 @@
 # Embedded file name: scripts/client/notification/NotificationsModel.py
 import Event
 from notification.NotificationsCollection import NotificationsCollection
-from notification.NotificationsCounter import NotificationsCounter
 from notification.listeners import NotificationsListeners
 from notification.settings import NOTIFICATION_STATE
 
 class NotificationsModel:
 
-    def __init__(self):
+    def __init__(self, counter):
         self.__layoutSettings = {'paddingRight': 0,
          'paddingBottom': 0}
         self.__currentDisplayState = None
         self.__collection = NotificationsCollection()
         self.__listeners = NotificationsListeners()
-        self.__counter = NotificationsCounter()
+        self.__counter = counter
         self.onLayoutSettingsChanged = Event.Event()
         self.onDisplayStateChanged = Event.Event()
         self.onNotificationReceived = Event.Event()
@@ -39,8 +38,6 @@ class NotificationsModel:
             oldState = self.__currentDisplayState
             self.__currentDisplayState = newState
             self.onDisplayStateChanged(oldState, newState, data)
-            if newState == NOTIFICATION_STATE.LIST:
-                self.resetNotifiedMessagesCount()
 
     def getDisplayState(self):
         return self.__currentDisplayState
@@ -54,8 +51,9 @@ class NotificationsModel:
             self.onNotificationUpdated(self.__collection.getItem(typeID, entityID), isStateChanged)
 
     def removeNotification(self, typeID, entityID):
+        groupID = self.getNotification(typeID, entityID).getGroup()
         if self.__collection.removeItem(typeID, entityID):
-            self.onNotificationRemoved(typeID, entityID)
+            self.onNotificationRemoved(typeID, entityID, groupID)
 
     def removeNotificationsByType(self, typeID):
         self.__collection.removeItemsByType(typeID)
@@ -74,17 +72,17 @@ class NotificationsModel:
     def getLayoutSettings(self):
         return self.__layoutSettings
 
-    def incrementNotifiedMessagesCount(self):
-        self.onNotifiedMessagesCountChanged(self.__counter.increment())
+    def incrementNotifiedMessagesCount(self, group, typeID, entityID):
+        self.onNotifiedMessagesCountChanged(self.__counter.addNotification(group, typeID, entityID))
 
-    def resetNotifiedMessagesCount(self):
-        self.onNotifiedMessagesCountChanged(self.__counter.reset())
+    def decrementNotifiedMessagesCount(self, group, typeID, entityID):
+        self.onNotifiedMessagesCountChanged(self.__counter.removeNotification(group, typeID, entityID))
 
-    def decrementNotifiedMessagesCount(self):
-        self.onNotifiedMessagesCountChanged(self.__counter.decrement())
+    def resetNotifiedMessagesCount(self, group=None):
+        self.onNotifiedMessagesCountChanged(self.__counter.reset(group))
 
-    def getNotifiedMessagesCount(self):
-        return self.__counter.count()
+    def getNotifiedMessagesCount(self, group=None):
+        return self.__counter.count(group)
 
     def setup(self):
         self.__collection.default()
@@ -93,8 +91,10 @@ class NotificationsModel:
     def cleanUp(self):
         self.__collection.clear()
         self.__listeners.stop()
-        self.__counter.reset()
+        self.__counter.resetUnreadCount()
+        self.__counter = None
         self.onLayoutSettingsChanged.clear()
         self.onDisplayStateChanged.clear()
         self.onNotificationReceived.clear()
         self.onNotifiedMessagesCountChanged.clear()
+        return

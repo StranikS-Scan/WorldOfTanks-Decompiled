@@ -46,19 +46,8 @@ class QuestsControl(QuestsControlMeta):
     def __onQuestsUpdated(self, *args):
         svrEvents = g_eventsCache.getEvents()
         quest_settings.updateCommonEventsSettings(svrEvents)
-        btnInfo = _createBtnInfo(QUESTS.QUESTSCONTROL_ADDITIONALTITLE_EMPTY, TOOLTIPS.PRIVATEQUESTS_QUESTCONTROL_EMPTY, highlight=False)
-        if g_lobbyContext.getServerSettings().isPotapovQuestEnabled():
-            if not quest_settings.isNeedToShowHeaderAlert():
-                quest_settings.markHeaderAlertAsVisited()
-                btnInfo = _createBtnInfo(QUESTS.QUESTSCONTROL_ADDITIONALTITLE_FIRSTRUN, TOOLTIPS.PRIVATEQUESTS_QUESTCONTROL_NEW)
-            elif g_eventsCache.potapov.hasQuestsForReward():
-                btnInfo = _createBtnInfo(QUESTS.QUESTSCONTROL_ADDITIONALTITLE_NEEDRECEIVEDAWARD, TOOLTIPS.PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD, alert=True)
-            elif g_eventsCache.potapov.hasQuestsForSelect():
-                btnInfo = _createBtnInfo(QUESTS.QUESTSCONTROL_ADDITIONALTITLE_FREESLOTSANDFREEQUESTS, TOOLTIPS.PRIVATEQUESTS_QUESTCONTROL_AVAILABLE, alert=True)
         self.as_setDataS({'titleText': QUESTS.QUESTSCONTROL_TITLE,
-         'additionalText': text_styles.alert(i18n.makeString(btnInfo.text)),
-         'tooltip': btnInfo.tooltip})
-        self.as_isShowAlertIconS(btnInfo.alert, btnInfo.highlight)
+         'tooltip': TOOLTIPS.PRIVATEQUESTS_QUESTCONTROL})
         premiumIgrVehiclesQuests = g_eventsCache.getQuests(lambda q: q.getStartTimeLeft() <= 0 < q.getFinishTimeLeft() and q.hasPremIGRVehBonus())
         if len(premiumIgrVehiclesQuests):
             storedValue = AccountSettings.getFilter(IGR_PROMO)

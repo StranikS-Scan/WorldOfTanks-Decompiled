@@ -1010,28 +1010,94 @@
       </unlocks>
     </_10RK>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2K>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V-2K>
+        <V-2IS>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </V-2IS>
+      </engines>
+      <chassis>
+        <Chassis_R106_KV85>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R106_KV85>
+        <Chassis_R106_KV85_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R106_KV85_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_122-mm_D-25T_with_a_piston_shutter>
         <delta>	1.9	</delta>
       </_122-mm_D-25T_with_a_piston_shutter>
     </guns>
-    <chassis>
-      <Chassis_R106_KV85>
-        <alpha>	0.10465	</alpha>
-      </Chassis_R106_KV85>
-      <Chassis_R106_KV85_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_R106_KV85_2>
-    </chassis>
-    <engines>
-      <V-2K>
-        <bravo>	132.1601	</bravo>
-      </V-2K>
-      <V-2IS>
-        <bravo>	158.5922	</bravo>
-      </V-2IS>
-    </engines>
     <armour>	1.069430323	</armour>
   </clientAdjustmentFactors>
   <effects>

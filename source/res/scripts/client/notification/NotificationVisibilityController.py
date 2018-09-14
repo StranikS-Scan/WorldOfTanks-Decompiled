@@ -32,7 +32,7 @@ class NotificationVisibilityController(BaseMessagesController):
     def __onNotificationUpdated(self, notification, _):
         self._processNotification(notification)
 
-    def __onNotificationRemoved(self, typeID, entityID):
+    def __onNotificationRemoved(self, typeID, entityID, _):
         self.__visibilitySch.cancelTask((typeID, entityID))
 
     def _processNotification(self, notification):

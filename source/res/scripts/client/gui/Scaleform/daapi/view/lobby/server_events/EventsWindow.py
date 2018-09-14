@@ -19,7 +19,7 @@ class EventsWindow(QuestsWindowMeta):
     def __init__(self, ctx=None):
         super(EventsWindow, self).__init__()
         self._navInfo = caches.getNavInfo()
-        self._updateNavInfo(ctx.get('eventType'), ctx.get('eventID'))
+        self._updateNavInfo(ctx.get('eventType'), ctx.get('eventID'), ctx.get('doResetNavInfo', False))
 
     def onWindowClose(self):
         caches.clearVehiclesData()
@@ -83,7 +83,7 @@ class EventsWindow(QuestsWindowMeta):
         self.as_selectTabS(tabID)
         return tabID
 
-    def _updateNavInfo(self, eventType=None, eventID=None):
+    def _updateNavInfo(self, eventType=None, eventID=None, doResetNavInfo=False):
         if eventType is not None:
             if eventID is not None:
                 if eventType == constants.EVENT_TYPE.POTAPOV_QUEST:
@@ -100,7 +100,7 @@ class EventsWindow(QuestsWindowMeta):
                 else:
                     self._navInfo.selectCommonQuest(eventID)
             elif eventType == constants.EVENT_TYPE.POTAPOV_QUEST:
-                self._navInfo.selectTab(_QA.TAB_PERSONAL_QUESTS)
+                self._navInfo.selectTab(_QA.TAB_PERSONAL_QUESTS, doResetNavInfo)
             elif eventType in (constants.EVENT_TYPE.TUTORIAL, constants.EVENT_TYPE.MOTIVE_QUEST):
                 self._navInfo.selectTab(_QA.TAB_BEGINNER_QUESTS)
             else:

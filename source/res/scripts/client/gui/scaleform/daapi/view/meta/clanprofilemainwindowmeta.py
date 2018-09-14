@@ -8,19 +8,13 @@ class ClanProfileMainWindowMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def as_setDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by ClanProfileMainWindowVO (AS)
         """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setWindowTitleS(self, title):
-        """
-        :param title:
-        :return :
-        """
         return self.flashObject.as_setWindowTitle(title) if self._isDAAPIInited() else None

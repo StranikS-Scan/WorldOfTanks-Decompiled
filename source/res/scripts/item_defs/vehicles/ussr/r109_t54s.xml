@@ -895,23 +895,89 @@
     </R113>
     <_10RT-26E>	shared	</_10RT-26E>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-54>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </V-54>
+        <V-55U>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </V-55U>
+      </engines>
+      <chassis>
+        <Chassis_R109_T54S>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R109_T54S>
+        <Chassis_R109_T54S_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R109_T54S_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R109_T54S>
-        <alpha>	0.0805	</alpha>
-      </Chassis_R109_T54S>
-      <Chassis_R109_T54S_2>
-        <alpha>	0.0644	</alpha>
-      </Chassis_R109_T54S_2>
-    </chassis>
-    <engines>
-      <V-54>
-        <bravo>	137.4465	</bravo>
-      </V-54>
-      <V-55U>
-        <bravo>	185.0242	</bravo>
-      </V-55U>
-    </engines>
     <armour>	1.007627808	</armour>
   </clientAdjustmentFactors>
   <effects>

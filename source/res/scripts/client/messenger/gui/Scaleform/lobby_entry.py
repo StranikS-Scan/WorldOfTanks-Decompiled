@@ -4,7 +4,7 @@ import weakref
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view import dialogs
-from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData, TARGET_ID, DATA_TYPE
+from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData, TARGET_ID
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import MessengerEvent, ChannelManagementEvent
 from messenger.formatters.users_messages import getUserActionReceivedMessage
@@ -85,12 +85,10 @@ class LobbyEntry(IGUIEntry):
 
     def close(self, nextScope):
         self.__components.clear()
-        storedData = g_windowsStoredData.getMap(TARGET_ID.CHANNEL_CAROUSEL, DATA_TYPE.CHANNEL_WINDOW)
+        setTrustedCriteria = g_windowsStoredData.setTrustedCriteria
         for controller in self.__channelsCtrl.getControllersIterator():
             channel = controller.getChannel()
-            key = (channel.getProtoType(), channel.getID())
-            if key in storedData:
-                storedData[key].setTrusted(True)
+            setTrustedCriteria(TARGET_ID.CHANNEL_CAROUSEL, (channel.getProtoType(), channel.getID()))
             controller.deactivate(entryClosing=True)
 
         self.__carouselHandler.stop()

@@ -96,8 +96,8 @@
     <M-50T_fallout>	206	</M-50T_fallout>
     <V-55_fallout>	207	</V-55_fallout>
     <MS-1_bot>	211	</MS-1_bot>
-    <T-26_bot>	213	</T-26_bot>
     <V-12-5_shortened>	212	</V-12-5_shortened>
+    <T-26_bot>	213	</T-26_bot>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -644,6 +644,22 @@
       <rpm_min>	352	</rpm_min>
       <rpm_max>	2142	</rpm_max>
     </V-55U>
+    <T-26>
+      <userString>	#ussr_vehicles:T-26	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	770	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	90	</power>
+      <weight>	545	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	20	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2361	</rpm_max>
+    </T-26>
     <T-26_bot>
       <userString>	#ussr_vehicles:T-26_bot	</userString>
       <tags>	gasoline	</tags>
@@ -661,54 +677,6 @@
       <rpm_min>	386	</rpm_min>
       <rpm_max>	2361	</rpm_max>
     </T-26_bot>
-    <V-54-6>
-      <userString>	#ussr_vehicles:V-54-6	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	82300	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	680	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	356	</rpm_min>
-      <rpm_max>	2131	</rpm_max>
-    </V-54-6>
-    <T-26>
-      <userString>	#ussr_vehicles:T-26	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	770	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	90	</power>
-      <weight>	545	</weight>
-      <maxHealth>	40	</maxHealth>
-      <maxRegenHealth>	20	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2361	</rpm_max>
-    </T-26>
-    <T-26M>
-      <userString>	#ussr_vehicles:T-26M	</userString>
-      <tags>	gasoline	</tags>
-      <level>	2	</level>
-      <price>	1230	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	100	</power>
-      <weight>	545	</weight>
-      <maxHealth>	42	</maxHealth>
-      <maxRegenHealth>	21	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	374	</rpm_min>
-      <rpm_max>	2402	</rpm_max>
-    </T-26M>
     <T-26F>
       <userString>	#ussr_vehicles:T-26F	</userString>
       <tags>	gasoline	</tags>
@@ -725,6 +693,38 @@
       <rpm_min>	336	</rpm_min>
       <rpm_max>	2522	</rpm_max>
     </T-26F>
+    <V-54-6>
+      <userString>	#ussr_vehicles:V-54-6	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	356	</rpm_min>
+      <rpm_max>	2131	</rpm_max>
+    </V-54-6>
+    <T-26M>
+      <userString>	#ussr_vehicles:T-26M	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	1230	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	100	</power>
+      <weight>	545	</weight>
+      <maxHealth>	42	</maxHealth>
+      <maxRegenHealth>	21	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	374	</rpm_min>
+      <rpm_max>	2402	</rpm_max>
+    </T-26M>
     <V-11-IS-3>
       <userString>	#ussr_vehicles:V-11-IS-3	</userString>
       <tags>	diesel	</tags>

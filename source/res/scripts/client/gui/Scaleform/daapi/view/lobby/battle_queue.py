@@ -1,24 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/battle_queue.py
-import BigWorld
 import weakref
-from UnitBase import FALLOUT_QUEUE_TYPE_TO_ROSTER
-import constants
+import BigWorld
 import MusicControllerWWISE
+import constants
+from CurrentVehicle import g_currentVehicle
+from PlayerEvents import g_playerEvents
+from UnitBase import FALLOUT_QUEUE_TYPE_TO_ROSTER
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
+from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.meta.BattleQueueMeta import BattleQueueMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control import prb_getters
 from gui.prb_control.prb_helpers import preQueueFunctionalProperty, prbDispatcherProperty
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.sounds.ambients import BattleQueueEnv
 from helpers.i18n import makeString
-from PlayerEvents import g_playerEvents
-from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.view.meta.BattleQueueMeta import BattleQueueMeta
 from shared_utils import findFirst
 TYPES_ORDERED = (('heavyTank', '#item_types:vehicle/tags/heavy_tank/name'),
  ('mediumTank', '#item_types:vehicle/tags/medium_tank/name'),
@@ -29,6 +34,12 @@ DIVISIONS_ORDERED = (constants.PREBATTLE_COMPANY_DIVISION.JUNIOR,
  constants.PREBATTLE_COMPANY_DIVISION.MIDDLE,
  constants.PREBATTLE_COMPANY_DIVISION.CHAMPION,
  constants.PREBATTLE_COMPANY_DIVISION.ABSOLUTE)
+_LONG_WAITING_LEVELS = (9, 10)
+
+def _needShowLongWaitingWarning():
+    vehicle = g_currentVehicle.item
+    return g_lobbyContext.getServerSettings().isTemplateMatchmakerEnabled() and vehicle.type == VEHICLE_CLASS_NAME.SPG and vehicle.level in _LONG_WAITING_LEVELS
+
 
 class _QueueProvider(object):
 
@@ -67,6 +78,18 @@ class _QueueProvider(object):
     def processQueueInfo(self, qInfo):
         pass
 
+    def needAdditionalInfo(self):
+        """
+        If need show additional info for battle queue return True, otherwise - False.
+        """
+        return False
+
+    def additionalInfo(self):
+        """
+        Additional information for display on battle queue view.
+        """
+        pass
+
 
 class _RandomQueueProvider(_QueueProvider):
 
@@ -85,10 +108,21 @@ class _RandomQueueProvider(_QueueProvider):
             vClassesData = data['data']
             for vClass, message in TYPES_ORDERED:
                 idx = constants.VEHICLE_CLASS_INDICES[vClass]
-                vClassesData.append((message, vClasses[idx] if idx < vClassesLen else 0))
+                vClassesData.append({'type': message,
+                 'count': vClasses[idx] if idx < vClassesLen else 0})
 
             self._proxy.as_setListByTypeS(data)
         self._proxy.as_showStartS(constants.IS_DEVELOPMENT and sum(vClasses) > 1)
+
+    def needAdditionalInfo(self):
+        """
+        If need show long waiting warning for random battles return True, otherwise - False.
+        """
+        needInfo = _needShowLongWaitingWarning()
+        self.needAdditionalInfo = lambda : needInfo
+
+    def additionalInfo(self):
+        return text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
 
 
 class _CompanyQueueProvider(_QueueProvider):
@@ -103,7 +137,9 @@ class _CompanyQueueProvider(_QueueProvider):
         if vDivisions is not None:
             vClassesLen = len(vDivisions)
             for vDivision in DIVISIONS_ORDERED:
-                data['data'].append(('#menu:prebattle/CompaniesTitle/%s' % constants.PREBATTLE_COMPANY_DIVISION_NAMES[vDivision], vDivisions[vDivision] if vDivision < vClassesLen else 0))
+                divisionLbl = constants.PREBATTLE_COMPANY_DIVISION_NAMES[vDivision]
+                data['data'].append({'type': '#menu:prebattle/CompaniesTitle/%s' % divisionLbl,
+                 'count': vDivisions[vDivision] if vDivision < vClassesLen else 0})
 
             self._proxy.as_setListByTypeS(data)
         self._proxy.as_showStartS(constants.IS_DEVELOPMENT)
@@ -124,7 +160,8 @@ class _FalloutQueueProvider(_QueueProvider):
             vClassesData = data['data']
             for vClass, message in TYPES_ORDERED:
                 idx = constants.VEHICLE_CLASS_INDICES[vClass]
-                vClassesData.append((message, vClasses[idx] if idx < vClassesLen else 0))
+                vClassesData.append({'type': message,
+                 'count': vClasses[idx] if idx < vClassesLen else 0})
 
             self._proxy.as_setListByTypeS(data)
         self._proxy.as_showStartS(constants.IS_DEVELOPMENT and sum(vClasses) > 1)
@@ -207,7 +244,14 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             iconlabel = constants.ARENA_GUI_TYPE_LABEL.LABELS[guiType]
         else:
             iconlabel = 'neutral'
-        self.as_setTypeInfoS(iconlabel, title, description)
+        if self.__provider.needAdditionalInfo():
+            additional = self.__provider.additionalInfo()
+        else:
+            additional = ''
+        self.as_setTypeInfoS({'iconLabel': iconlabel,
+         'title': title,
+         'description': description,
+         'additional': additional})
         return
 
     def __stopUpdateScreen(self):
@@ -242,6 +286,9 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.__timerCallback = BigWorld.callback(1, self.__updateTimer)
         textLabel = makeString('#menu:prebattle/timerLabel')
         timeLabel = '%d:%02d' % divmod(self.__createTime, 60)
-        self.flashObject.as_setTimer(textLabel, timeLabel)
+        result = text_styles.concatStylesWithSpace(text_styles.main(textLabel), timeLabel)
+        if self.__provider.needAdditionalInfo():
+            result = text_styles.concatStylesToSingleLine(result, text_styles.main('*'))
+        self.as_setTimerS(result)
         self.__createTime += 1
         return

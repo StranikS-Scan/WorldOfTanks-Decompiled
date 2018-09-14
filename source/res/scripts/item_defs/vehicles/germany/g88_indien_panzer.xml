@@ -561,23 +561,89 @@
     </FuG7>
     <AN-GRC-4>	shared	</AN-GRC-4>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <MB-837>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </MB-837>
+        <MB-837A>
+          <smplEnginePower>	666.0871	</smplEnginePower>
+        </MB-837A>
+      </engines>
+      <chassis>
+        <Chassis_Indien_Panzer>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Indien_Panzer>
+        <Chassis_Indien_Panzer_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Indien_Panzer_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Indien_Panzer>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Indien_Panzer>
-      <Chassis_Indien_Panzer_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Indien_Panzer_2>
-    </chassis>
-    <engines>
-      <MB-837>
-        <bravo>	132.1601	</bravo>
-      </MB-837>
-      <MB-837A>
-        <bravo>	166.5218	</bravo>
-      </MB-837A>
-    </engines>
     <armour>	1.014666487	</armour>
   </clientAdjustmentFactors>
   <effects>

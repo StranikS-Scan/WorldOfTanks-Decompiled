@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/settings.py
 from collections import namedtuple, defaultdict
+from debug_utils import LOG_DEBUG
+from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items import getTypeInfoByName
 from items.vehicles import VEHICLE_CLASS_TAGS
@@ -18,24 +20,6 @@ RESEARCH_ITEMS = (GUI_ITEM_TYPE.GUN,
 MAX_PATH_LIMIT = 5
 
 class NODE_STATE:
-    LOCKED = 1
-    NEXT_2_UNLOCK = 2
-    UNLOCKED = 4
-    ENOUGH_XP = 8
-    ENOUGH_MONEY = 16
-    IN_INVENTORY = 32
-    WAS_IN_BATTLE = 64
-    ELITE = 128
-    PREMIUM = 256
-    SELECTED = 512
-    AUTO_UNLOCKED = 1024
-    INSTALLED = 2048
-    SHOP_ACTION = 4096
-    CAN_SELL = 8192
-    VEHICLE_CAN_BE_CHANGED = 16384
-    VEHICLE_IN_RENT = 32768
-    VEHICLE_RENTAL_IS_OVER = 65536
-    PURCHASE_DISABLED = 131072
 
     @classmethod
     def add(cls, state, flag):
@@ -63,64 +47,73 @@ class NODE_STATE:
 
     @classmethod
     def isAvailable2Unlock(cls, state):
-        return not state & cls.UNLOCKED and state & cls.NEXT_2_UNLOCK and state & cls.ENOUGH_XP
+        return not state & NODE_STATE_FLAGS.UNLOCKED and state & NODE_STATE_FLAGS.NEXT_2_UNLOCK and state & NODE_STATE_FLAGS.ENOUGH_XP
 
     @classmethod
     def isUnlocked(cls, state):
-        return state & cls.UNLOCKED > 0
+        return state & NODE_STATE_FLAGS.UNLOCKED > 0
 
     @classmethod
     def inInventory(cls, state):
-        return state & cls.IN_INVENTORY > 0
+        return state & NODE_STATE_FLAGS.IN_INVENTORY > 0
 
     @classmethod
     def isVehicleCanBeChanged(cls, state):
-        return state & cls.VEHICLE_CAN_BE_CHANGED > 0
+        return state & NODE_STATE_FLAGS.VEHICLE_CAN_BE_CHANGED > 0
 
     @classmethod
     def isInstalled(cls, state):
-        return state & cls.INSTALLED > 0
+        return state & NODE_STATE_FLAGS.INSTALLED > 0
 
     @classmethod
     def isAvailable2Buy(cls, state):
-        return (not state & cls.IN_INVENTORY or state & cls.VEHICLE_IN_RENT) and state & cls.UNLOCKED and state & cls.ENOUGH_MONEY
+        return (not state & NODE_STATE_FLAGS.IN_INVENTORY or state & NODE_STATE_FLAGS.VEHICLE_IN_RENT) and state & NODE_STATE_FLAGS.UNLOCKED and state & NODE_STATE_FLAGS.ENOUGH_MONEY
 
     @classmethod
     def isAvailable2Sell(cls, state):
-        return state & cls.CAN_SELL > 0
+        return state & NODE_STATE_FLAGS.CAN_SELL > 0
 
     @classmethod
     def isWasInBattle(cls, state):
-        return state & cls.WAS_IN_BATTLE > 0
+        return state & NODE_STATE_FLAGS.WAS_IN_BATTLE > 0
 
     @classmethod
     def isPremium(cls, state):
-        return state & cls.PREMIUM > 0
+        return state & NODE_STATE_FLAGS.PREMIUM > 0
 
     @classmethod
     def isBuyForCredits(cls, state):
-        return state & cls.UNLOCKED and not state & cls.IN_INVENTORY and not state & cls.PREMIUM
+        return state & NODE_STATE_FLAGS.UNLOCKED and not state & NODE_STATE_FLAGS.IN_INVENTORY and not state & NODE_STATE_FLAGS.PREMIUM or state & NODE_STATE_FLAGS.RESTORE_AVAILABLE
 
     @classmethod
     def isBuyForGold(cls, state):
-        return state & cls.UNLOCKED and (not state & cls.IN_INVENTORY or state & cls.VEHICLE_IN_RENT) and state & cls.PREMIUM
+        return state & NODE_STATE_FLAGS.UNLOCKED and (not state & NODE_STATE_FLAGS.IN_INVENTORY or state & NODE_STATE_FLAGS.VEHICLE_IN_RENT) and state & NODE_STATE_FLAGS.PREMIUM
 
     @classmethod
     def change2Unlocked(cls, state):
-        if state & NODE_STATE.UNLOCKED > 0:
+        if state & NODE_STATE_FLAGS.UNLOCKED > 0:
             return -1
-        if state & cls.LOCKED > 0:
-            state ^= cls.LOCKED
-        if state & cls.NEXT_2_UNLOCK > 0:
-            state ^= cls.NEXT_2_UNLOCK
-            if state & cls.ENOUGH_XP > 0:
-                state ^= cls.ENOUGH_XP
-        state |= cls.UNLOCKED
+        if state & NODE_STATE_FLAGS.LOCKED > 0:
+            state ^= NODE_STATE_FLAGS.LOCKED
+        if state & NODE_STATE_FLAGS.NEXT_2_UNLOCK > 0:
+            state ^= NODE_STATE_FLAGS.NEXT_2_UNLOCK
+            if state & NODE_STATE_FLAGS.ENOUGH_XP > 0:
+                state ^= NODE_STATE_FLAGS.ENOUGH_XP
+        state |= NODE_STATE_FLAGS.UNLOCKED
         return state
 
     @classmethod
     def isRentalOver(cls, state):
-        return state & cls.VEHICLE_RENTAL_IS_OVER
+        return state & NODE_STATE_FLAGS.VEHICLE_RENTAL_IS_OVER
+
+    @classmethod
+    def printStates(cls, state):
+        states = []
+        for k, v in NODE_STATE_FLAGS.__dict__.iteritems():
+            if not k.startswith('_') and state & v:
+                states.append(k)
+
+        LOG_DEBUG('Next states are in node state: ', states)
 
 
 class UnlockStats(namedtuple('UnlockStats', 'unlocked xps freeXP')):

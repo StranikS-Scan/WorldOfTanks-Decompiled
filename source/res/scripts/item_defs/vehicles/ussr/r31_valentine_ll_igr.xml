@@ -333,17 +333,52 @@
   <radios>
     <Mk19R_IGR>	shared	</Mk19R_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <AEC_A190_IGR>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </AEC_A190_IGR>
+      </engines>
+      <chassis>
+        <ValentineMK_I_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.082915	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.082915	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.082915	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.082915	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.082915	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.082915	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </ValentineMK_I_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <ValentineMK_I_IGR>
-        <alpha>	0.082915	</alpha>
-      </ValentineMK_I_IGR>
-    </chassis>
-    <engines>
-      <AEC_A190_IGR>
-        <bravo>	37.00484	</bravo>
-      </AEC_A190_IGR>
-    </engines>
     <armour>	0.847473423	</armour>
   </clientAdjustmentFactors>
   <effects>

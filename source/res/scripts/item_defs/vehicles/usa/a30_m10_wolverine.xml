@@ -818,7 +818,7 @@
           <shotDispersionRadius>	0.53	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <models>
             <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_07.model	</destroyed>
@@ -1083,7 +1083,7 @@
           <shotDispersionRadius>	0.53	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <models>
             <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_07.model	</destroyed>
@@ -1172,29 +1172,95 @@
     </SCR_508>
     <SCR_506>	shared	</SCR_506>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_Continental_R-975EC2>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Wright_Continental_R-975EC2>
+        <Wright_Continental_R-975C1>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Wright_Continental_R-975C1>
+        <GMC_6046>
+          <smplEnginePower>	444.0581	</smplEnginePower>
+        </GMC_6046>
+        <Ford_GAA_R>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Ford_GAA_R>
+      </engines>
+      <chassis>
+        <Chassis_M10_Wolverine>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M10_Wolverine>
+        <Chassis_M10_Wolverine_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M10_Wolverine_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M10_Wolverine>
-        <alpha>	0.13685	</alpha>
-      </Chassis_M10_Wolverine>
-      <Chassis_M10_Wolverine_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_M10_Wolverine_2>
-    </chassis>
-    <engines>
-      <Wright_Continental_R-975EC2>
-        <bravo>	92.5121	</bravo>
-      </Wright_Continental_R-975EC2>
-      <Wright_Continental_R-975C1>
-        <bravo>	105.7281	</bravo>
-      </Wright_Continental_R-975C1>
-      <GMC_6046>
-        <bravo>	111.0145	</bravo>
-      </GMC_6046>
-      <Ford_GAA_R>
-        <bravo>	132.1601	</bravo>
-      </Ford_GAA_R>
-    </engines>
     <armour>	0.847232066	</armour>
   </clientAdjustmentFactors>
   <effects>

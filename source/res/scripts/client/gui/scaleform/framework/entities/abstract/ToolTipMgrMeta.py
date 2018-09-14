@@ -8,30 +8,13 @@ class ToolTipMgrMeta(BaseDAAPIModule):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIModule
-    null
     """
 
     def onCreateComplexTooltip(self, tooltipId, stateType):
-        """
-        :param tooltipId:
-        :param stateType:
-        :return :
-        """
         self._printOverrideError('onCreateComplexTooltip')
 
     def onCreateTypedTooltip(self, tooltipType, args, stateType):
-        """
-        :param tooltipType:
-        :param args:
-        :param stateType:
-        :return :
-        """
         self._printOverrideError('onCreateTypedTooltip')
 
     def as_showS(self, tooltipData, linkage):
-        """
-        :param tooltipData:
-        :param linkage:
-        :return :
-        """
         return self.flashObject.as_show(tooltipData, linkage) if self._isDAAPIInited() else None

@@ -8,26 +8,16 @@ class QuestsContentTabsMeta(BaseDAAPIComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIComponent
-    null
     """
 
     def onSelectTab(self, id):
-        """
-        :param id:
-        :return :
-        """
         self._printOverrideError('onSelectTab')
 
     def as_selectTabS(self, index):
-        """
-        :param index:
-        :return :
-        """
         return self.flashObject.as_selectTab(index) if self._isDAAPIInited() else None
 
     def as_setTabsS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by TabsVO (AS)
         """
         return self.flashObject.as_setTabs(data) if self._isDAAPIInited() else None

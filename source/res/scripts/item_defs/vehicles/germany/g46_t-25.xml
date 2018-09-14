@@ -597,17 +597,52 @@
   <radios>
     <FuG7A>	shared	</FuG7A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Praga_C9>
+          <smplEnginePower>	475.7765	</smplEnginePower>
+        </Praga_C9>
+      </engines>
+      <chassis>
+        <Chassis_T-25>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.119945	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T-25>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T-25>
-        <alpha>	0.119945	</alpha>
-      </Chassis_T-25>
-    </chassis>
-    <engines>
-      <Praga_C9>
-        <bravo>	118.9441	</bravo>
-      </Praga_C9>
-    </engines>
     <armour>	0.949921335	</armour>
   </clientAdjustmentFactors>
   <effects>

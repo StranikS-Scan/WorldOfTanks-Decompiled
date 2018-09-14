@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/TOOLTIPS.py
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 from debug_utils import LOG_WARNING
 
 class TOOLTIPS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     ACHIEVEMENT_PARAMS = '#tooltips:achievement/params'
     BATTLERESULTS_FORTRESOURCE_TEAMINFLUENCETOTAL = '#tooltips:battleResults/FortResource/teamInfluenceTotal'
     BATTLERESULTS_FORTRESOURCE_TEAMRESOURCETOTAL = '#tooltips:battleResults/FortResource/teamResourceTotal'
@@ -23,7 +21,7 @@ class TOOLTIPS(object):
     PRIVATEQUESTS_AWARDSBUTTON = '#tooltips:privateQuests/awardsButton'
     PRIVATEQUESTS_SLOT_EMPTY = '#tooltips:privateQuests/slot/empty'
     PRIVATEQUESTS_SLOT_MISSION = '#tooltips:privateQuests/slot/mission'
-    PRIVATEQUESTS_SLOT_MISSIONCOMPLETE = PRIVATEQUESTS_SLOT_MISSION + 'Complete'
+    PRIVATEQUESTS_SLOT_MISSIONCOMPLETE = '#tooltips:privateQuests/slot/missionComplete'
     PRIVATEQUESTS_BACKBUTTON = '#tooltips:privateQuests/backButton'
     PRIVATEQUESTS_TASKLISTITEM = '#tooltips:privateQuests/taskListItem'
     PRIVATEQUESTS_ABOUTVEHICLE = '#tooltips:privateQuests/aboutVehicle'
@@ -32,11 +30,7 @@ class TOOLTIPS(object):
     PRIVATEQUESTS_ACTIONPANNEL_ABORT = '#tooltips:privateQuests/actionPannel/abort'
     PRIVATEQUESTS_ACTIONPANNEL_RECEIVETHEAWARD = '#tooltips:privateQuests/actionPannel/receiveTheAward'
     PRIVATEQUESTS_ACTIONPANNEL_REPEAT = '#tooltips:privateQuests/actionPannel/repeat'
-    PRIVATEQUESTS_QUESTCONTROL_NEW = '#tooltips:privateQuests/questControl/new'
-    PRIVATEQUESTS_QUESTCONTROL_AVAILABLE = '#tooltips:privateQuests/questControl/available'
-    PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD = '#tooltips:privateQuests/questControl/receiveTheAward'
-    PRIVATEQUESTS_QUESTCONTROL_EMPTY = '#tooltips:privateQuests/questControl/empty'
-    PRIVATEQUESTS_QUESTSSTATS_TOKEN = '#tooltips:privateQuests/questsStats/token'
+    PRIVATEQUESTS_QUESTCONTROL = '#tooltips:privateQuests/questControl'
     SQUADWINDOW_BUTTONS_INVITE = '#tooltips:squadWindow/buttons/invite'
     SQUADWINDOW_BUTTONS_RECOMMEND = '#tooltips:squadWindow/buttons/recommend'
     SQUADWINDOW_BUTTONS_LEAVESQUAD = '#tooltips:squadWindow/buttons/leaveSquad'
@@ -48,7 +42,6 @@ class TOOLTIPS(object):
     SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE = '#tooltips:squadWindow/teammate/notValidVehicle'
     SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE = '#tooltips:squadWindow/demandForVehicle/notValidVehicle'
     SQUADWINDOW_DOMINATION_VEHICLESINFOICON = '#tooltips:squadWindow/domination/vehiclesInfoIcon'
-    CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE = '#tooltips:cyberSport/unit/fightBtn/eventVehicleWrongMode'
     LOGIN_LEGAL = '#tooltips:login/legal'
     LOGIN_REMEMBERPASSWORD_SIMPLE = '#tooltips:login/rememberPassword/simple'
     LOGIN_REMEMBERPASSWORD_SOCIAL = '#tooltips:login/rememberPassword/social'
@@ -76,7 +69,7 @@ class TOOLTIPS(object):
     ACHIEVEMENT_ATTR_DEGREE = '#tooltips:achievement/attr/degree'
     HANGAR_MAINTENANCE = '#tooltips:hangar/maintenance'
     HANGAR_TUNING = '#tooltips:hangar/tuning'
-    HANGAR_TUNING_DISABLEDFOREVENTVEHICLE = HANGAR_TUNING + '/disabledForEventVehicle'
+    HANGAR_TUNING_DISABLEDFOREVENTVEHICLE = '#tooltips:hangar/tuning/disabledForEventVehicle'
     HANGAR_AMMO_PANEL_DEVICE_EMPTY = '#tooltips:hangar/ammo_panel/device/empty'
     HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY = '#tooltips:hangar/ammo_panel/equipment/empty'
     HANGAR_UNLOCKBUTTON = '#tooltips:hangar/unlockButton'
@@ -85,10 +78,11 @@ class TOOLTIPS(object):
     HEADER_SQUAD = '#tooltips:header/squad'
     HEADER_EVENTSQUAD = '#tooltips:header/eventSquad'
     HEADER_DOMINATIONSQUAD = '#tooltips:header/dominationSquad'
-    HEADER_SQUAD_MEMBER = HEADER_SQUAD + '_member'
+    HEADER_SQUAD_MEMBER = '#tooltips:header/squad_member'
     HEADER_BATTLETYPE = '#tooltips:header/battleType'
     HEADER_INFO_PLAYERS_UNAVAILABLE = '#tooltips:header/info/players_unavailable'
     HEADER_INFO_PLAYERS_ONLINE_REGION = '#tooltips:header/info/players_online_region'
+    HEADER_INFO_PLAYERS_ONLINE_FULL = '#tooltips:header/info/players_online_full'
     HEADER_BUTTONS_HANGAR = '#tooltips:header/buttons/hangar'
     HEADER_BUTTONS_INVENTORY = '#tooltips:header/buttons/inventory'
     HEADER_BUTTONS_SHOP = '#tooltips:header/buttons/shop'
@@ -96,13 +90,14 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_TECHTREE = '#tooltips:header/buttons/techtree'
     HEADER_BUTTONS_BARRACKS = '#tooltips:header/buttons/barracks'
     HEADER_BUTTONS_FORTS = '#tooltips:header/buttons/forts'
-    HEADER_BUTTONS_FORTS_TURNEDOFF = HEADER_BUTTONS_FORTS + '/turnedOff'
+    HEADER_BUTTONS_FORTS_TURNEDOFF = '#tooltips:header/buttons/forts/turnedOff'
     HEADER_BUTTONS_BROWSER = '#tooltips:header/buttons/browser'
+    HEADER_BUTTONS_ENCYCLOPEDIA = '#tooltips:header/buttons/encyclopedia'
     HEADER_ELITEICON = '#tooltips:header/eliteIcon'
     HEADER_PREMIUM_BUY = '#tooltips:header/premium_buy'
     HEADER_PREMIUM_EXTEND = '#tooltips:header/premium_extend'
     HEADER_REFILL = '#tooltips:header/refill'
-    HEADER_REFILL_ACTION = HEADER_REFILL + '_action'
+    HEADER_REFILL_ACTION = '#tooltips:header/refill_action'
     HEADER_GOLD_EXCHANGE = '#tooltips:header/gold_exchange'
     HEADER_XP_GATHERING = '#tooltips:header/xp_gathering'
     TRAINING_CREATE_INVITES_CHECKBOX = '#tooltips:training/create/invites_checkbox'
@@ -140,6 +135,7 @@ class TOOLTIPS(object):
     TANKS_CAROUSEL_BUY_VEHICLE = '#tooltips:tanks_carousel/buy_vehicle'
     LOBY_MESSENGER_SERVICE_BUTTON = '#tooltips:loby_messenger/service_button'
     LOBY_MESSENGER_CONTACTS_BUTTON = '#tooltips:loby_messenger/contacts_button'
+    LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON = '#tooltips:loby_messenger/vehicle_compare_button'
     LOBY_MESSENGER_CHANNELS_BUTTON = '#tooltips:loby_messenger/channels_button'
     HANGAR_XPTOTMENCHECKBOX = '#tooltips:hangar/xpToTmenCheckbox'
     QUESTS_NOTIFIER = '#tooltips:quests/notifier'
@@ -160,7 +156,7 @@ class TOOLTIPS(object):
     CYBERSPORT_UNITLIST_JOIN = '#tooltips:cyberSport/unitList/join'
     CYBERSPORT_UNITLIST_CREATEBTN_ALREADYRALLYOWNER = '#tooltips:cyberSport/unitList/createBtn/alreadyRallyOwner'
     CYBERSPORT_UNITLIST_CREATEBTN_ALREADYINRALLY = '#tooltips:cyberSport/unitList/createBtn/alreadyInRally'
-    CYBERSPORT_UNITLIST_JOINTOSTATICASLEGIONARY = CYBERSPORT_UNITLIST_JOIN + 'ToStaticAsLegionary'
+    CYBERSPORT_UNITLIST_JOINTOSTATICASLEGIONARY = '#tooltips:cyberSport/unitList/joinToStaticAsLegionary'
     CYBERSPORT_UNITLEVEL_BACK = '#tooltips:cyberSport/unitLevel/back'
     CYBERSPORT_UNIT_SLOTLABELCLOSED = '#tooltips:cyberSport/unit/slotLabelClosed'
     CYBERSPORT_UNIT_SLOTLABELUNAVAILABLE = '#tooltips:cyberSport/unit/slotLabelUnavailable'
@@ -182,7 +178,6 @@ class TOOLTIPS(object):
     FREEXP = '#tooltips:freeXP'
     TURNOFFCOMBATCHAT = '#tooltips:turnOffCombatChat'
     SHOWMARKSONGUN = '#tooltips:showMarksOnGun'
-    SHOWBATTLEEFFICIENCYRIBBONS = '#tooltips:showBattleEfficiencyRibbons'
     SHOWSIMPLIFIEDVEHPARAMS = '#tooltips:showSimplifiedVehParams'
     FORTIFICATION_FOUNDATION = '#tooltips:fortification/foundation'
     FORTIFICATION_HEADER_STATISTICS = '#tooltips:fortification/header/statistics'
@@ -191,7 +186,7 @@ class TOOLTIPS(object):
     FORTIFICATION_WELCOME_CREATEFORT = '#tooltips:fortification/welcome/createFort'
     FORTIFICATION_WELCOME_CANTCREATEFORT = '#tooltips:fortification/welcome/cantCreateFort'
     FORTIFICATION_WELCOME_CLANSEARCH = '#tooltips:fortification/welcome/clanSearch'
-    FORTIFICATION_WELCOME_CLANSEARCHLABEL = FORTIFICATION_WELCOME_CLANSEARCH + 'Label'
+    FORTIFICATION_WELCOME_CLANSEARCHLABEL = '#tooltips:fortification/welcome/clanSearchLabel'
     FORTIFICATION_WELCOME_CLANCREATE = '#tooltips:fortification/welcome/clanCreate'
     FORTIFICATION_TRANPORTINGBUTTON_ACTIVE = '#tooltips:fortification/tranportingButton/active'
     FORTIFICATION_TRANPORTINGBUTTON_INACTIVE = '#tooltips:fortification/tranportingButton/inactive'
@@ -199,16 +194,16 @@ class TOOLTIPS(object):
     FORTIFICATION_CLOSEDIRECTIONBUTTON_INACTIVE = '#tooltips:fortification/closeDirectionButton/inactive'
     FORTIFICATION_DEFRESICONINFO = '#tooltips:fortification/defResIconInfo'
     FORTIFICATION_MODERNIZATION = '#tooltips:fortification/modernization'
-    FORTIFICATION_MODERNIZATION_DESCRIPTIONLINK = FORTIFICATION_MODERNIZATION + '/descriptionLink'
+    FORTIFICATION_MODERNIZATION_DESCRIPTIONLINK = '#tooltips:fortification/modernization/descriptionLink'
     FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN = '#tooltips:fortification/popOver/upgradeFoundationBtn'
     FORTIFICATION_POPOVER_PREPAREORDERDISABLE = '#tooltips:fortification/popOver/prepareOrderDisable'
     FORTIFICATION_POPOVER_HPPROGRESS = '#tooltips:fortification/popOver/hpProgress'
     FORTIFICATION_POPOVER_FIXEDPLAYERSBTN = '#tooltips:fortification/popOver/fixedPlayersBtn'
-    FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_DISABLED = FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN + '_Disabled'
+    FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_DISABLED = '#tooltips:fortification/popOver/upgradeFoundationBtn_Disabled'
     FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNENABLED = '#tooltips:fortification/fixedPlayers/assignBtnEnabled'
     FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNDISABLED = '#tooltips:fortification/fixedPlayers/assignBtnDisabled'
     FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIP = '#tooltips:fortification/fixedPlayers/generalTooltip'
-    FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIPMAXLIMIT = FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIP + 'MaxLimit'
+    FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIPMAXLIMIT = '#tooltips:fortification/fixedPlayers/generalTooltipMaxLimit'
     FORTIFICATION_FOOTER_SORTIEBUTTON = '#tooltips:fortification/footer/sortieButton'
     FORTIFICATION_FOOTER_INTELLIGENCEBUTTON = '#tooltips:fortification/footer/intelligenceButton'
     FORTIFICATION_BUILDINGPROCESS_STATUSICONSUCCESS = '#tooltips:fortification/buildingProcess/statusIconSuccess'
@@ -257,7 +252,7 @@ class TOOLTIPS(object):
     FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_BUILDINGS = '#tooltips:fortification/intelligenceWindow/sortBtn/buildings'
     FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_AVAILABILITY = '#tooltips:fortification/intelligenceWindow/sortBtn/availability'
     FORTIFICATION_BATTLEROOMLEGIONARIES = '#tooltips:fortification/battleRoomLegionaries'
-    FORTIFICATION_BATTLEROOMLEGIONARIES_TEAMSECTION = FORTIFICATION_BATTLEROOMLEGIONARIES + '/teamSection'
+    FORTIFICATION_BATTLEROOMLEGIONARIES_TEAMSECTION = '#tooltips:fortification/battleRoomLegionaries/teamSection'
     FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_OFFENSE = '#tooltips:fortification/fortBattleDirectionPopover/offense'
     FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_DEFENSE = '#tooltips:fortification/fortBattleDirectionPopover/defense'
     FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_ISINBATTLE = '#tooltips:fortification/fortBattleDirectionPopover/isInBattle'
@@ -279,7 +274,7 @@ class TOOLTIPS(object):
     FORTIFICATION_FORTSETTINGSDAYOFFPOPOVER_APPLY_ENABLED = '#tooltips:fortification/FortSettingsDayoffPopover/apply/enabled'
     FORTIFICATION_FORTSETTINGSDAYOFFPOPOVER_APPLY_DISABLED = '#tooltips:fortification/FortSettingsDayoffPopover/apply/disabled'
     FORTIFICATION_CHOICEDIVISION_PLAYERRANGE = '#tooltips:fortification/choiceDivision/playerRange'
-    FORTIFICATION_POPOVER_DEMOUNTBTNDISABLED = FORTIFICATION_POPOVER_DEMOUNTBTN + 'Disabled'
+    FORTIFICATION_POPOVER_DEMOUNTBTNDISABLED = '#tooltips:fortification/popOver/demountBtnDisabled'
     FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYBATTLE = '#tooltips:fortification/popOver/upgradeBtn_DisabledByBattle'
     FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNENABLED = '#tooltips:fortification/fortSettingsWindow/defenceBtnEnabled'
     FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNDISABLED = '#tooltips:fortification/fortSettingsWindow/defenceBtnDisabled'
@@ -287,7 +282,7 @@ class TOOLTIPS(object):
     FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNDISABLED = '#tooltips:fortification/fortSettingsWindow/weekEndBtnDisabled'
     FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNENABLED = '#tooltips:fortification/fortSettingsWindow/vacationBtnEnabled'
     FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED = '#tooltips:fortification/fortSettingsWindow/vacationBtnDisabled'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED + 'NotPlanned'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED = '#tooltips:fortification/fortSettingsWindow/vacationBtnDisabledNotPlanned'
     FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDSBLDLESSADAY = '#tooltips:fortification/fortSettingsWindow/vacationBtnDsbldLessADay'
     FORTIFICATION_FORTSETTINGSWINDOW_INFOICON = '#tooltips:fortification/fortSettingsWindow/infoIcon'
     FORTIFICATION_FORTSETTINGSWINDOW_DISABLEDEFENCEPERIOD = '#tooltips:fortification/fortSettingsWindow/disableDefencePeriod'
@@ -310,7 +305,7 @@ class TOOLTIPS(object):
     FORTIFICATION_FORTSETTINGSWINDOW_VACATIONDESCRIPTION = '#tooltips:fortification/fortSettingsWindow/vacationDescription'
     FORTIFICATION_FORTSETTINGSWINDOW_PERIPHERYDESCRIPTION = '#tooltips:fortification/fortSettingsWindow/peripheryDescription'
     FORTIFICATION_FORTSETTINGSVACATIONPOPOVER_APPLYBTN = '#tooltips:fortification/fortSettingsVacationPopover/applyBtn'
-    FORTIFICATION_FORTSETTINGSVACATIONPOPOVER_APPLYBTN_DISABLE = FORTIFICATION_FORTSETTINGSVACATIONPOPOVER_APPLYBTN + '/disable'
+    FORTIFICATION_FORTSETTINGSVACATIONPOPOVER_APPLYBTN_DISABLE = '#tooltips:fortification/fortSettingsVacationPopover/applyBtn/disable'
     FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_JOINBTN = '#tooltips:fortification/fortBattleDirectionPopover/joinBtn'
     FORTIFICATION_FORTCLANBATTLEROOM_ORDERSDISABLED_DIVISIONMISMATCH = '#tooltips:fortification/fortClanBattleRoom/ordersDisabled/divisionMismatch'
     STATICFORMATIONSUMMARYVIEW_STATS_BATTLES = '#tooltips:StaticFormationSummaryView/stats/battles'
@@ -355,7 +350,7 @@ class TOOLTIPS(object):
     ROLECHANGE_ROLEANDVEHICLETAKEN = '#tooltips:RoleChange/roleAndVehicleTaken'
     ROLECHANGE_FOOTERINFO = '#tooltips:RoleChange/footerInfo'
     PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN = '#tooltips:personal_case/skills/accTeachingOfSkillBtn'
-    PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_NOTENOUGHFREEXP = PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN + '/notEnoughFreeXP'
+    PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_NOTENOUGHFREEXP = '#tooltips:personal_case/skills/accTeachingOfSkillBtn/notEnoughFreeXP'
     PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN = '#tooltips:personal_case/training/light_tank_btn'
     PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN = '#tooltips:personal_case/training/medium_tank_btn'
     PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN = '#tooltips:personal_case/training/heavy_tank_btn'
@@ -382,51 +377,50 @@ class TOOLTIPS(object):
     HANGARTUTORIAL_CUSTOMIZATIONOPTIONS = '#tooltips:hangarTutorial/customizationOptions'
     HANGARTUTORIAL_CUSTOMIZATIONCOST = '#tooltips:hangarTutorial/customizationCost'
     STATICFORMATIONSTAFFVIEW_LBLSTAFFED = '#tooltips:StaticFormationStaffView/lblStaffed'
-    STATICFORMATIONSTAFFVIEW_INVITEBTNDIS = STATICFORMATIONSTAFFVIEW_INVITEBTN + 'Dis'
+    STATICFORMATIONSTAFFVIEW_INVITEBTNDIS = '#tooltips:StaticFormationStaffView/inviteBtnDis'
     MULTISELECTION_ALERT = '#tooltips:multiselection/alert'
-    HEADER_ACCOUNTPOPOVER_INVITEBTN = HEADER_ACCOUNT + 'Popover/inviteBtn'
-    HEADER_ACCOUNTPOPOVER_SEARCHCLAN = HEADER_ACCOUNT + 'Popover/searchClan'
-    HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN = HEADER_ACCOUNT + 'Popover/inviteRequestBtn'
-    HEADER_ACCOUNTPOPOVER_SEARCHCLAN_UNAVAILABLE = HEADER_ACCOUNT + 'Popover/searchClan/unavailable'
-    HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_UNAVAILABLE = HEADER_ACCOUNT + 'Popover/inviteRequestBtn/unavailable'
-    HEADER_ACCOUNTPOPOVER_INVITEBTN_UNAVAILABLE = HEADER_ACCOUNT + 'Popover/inviteBtn/unavailable'
-    HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE = HEADER_ACCOUNT + 'Popover/clanProfile/unavailable'
-    HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE = HEADER_ACCOUNT + 'Popover/boostersTitle'
+    HEADER_ACCOUNTPOPOVER_INVITEBTN = '#tooltips:header/accountPopover/inviteBtn'
+    HEADER_ACCOUNTPOPOVER_SEARCHCLAN = '#tooltips:header/accountPopover/searchClan'
+    HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN = '#tooltips:header/accountPopover/inviteRequestBtn'
+    HEADER_ACCOUNTPOPOVER_SEARCHCLAN_UNAVAILABLE = '#tooltips:header/accountPopover/searchClan/unavailable'
+    HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_UNAVAILABLE = '#tooltips:header/accountPopover/inviteRequestBtn/unavailable'
+    HEADER_ACCOUNTPOPOVER_INVITEBTN_UNAVAILABLE = '#tooltips:header/accountPopover/inviteBtn/unavailable'
+    HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE = '#tooltips:header/accountPopover/clanProfile/unavailable'
+    HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE = '#tooltips:header/accountPopover/boostersTitle'
     BATTLESELECTORWINDOW_TOOLTIP_DOMINATION_SELECTBTN = '#tooltips:battleSelectorWindow/tooltip/domination/selectBtn'
     BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN = '#tooltips:battleSelectorWindow/tooltip/multiteam/selectBtn'
     AWARDITEM_CREDITS = '#tooltips:awardItem/credits'
     AWARDITEM_GOLD = '#tooltips:awardItem/gold'
     AWARDITEM_FREEXP = '#tooltips:awardItem/freeXP'
-    AWARDITEM_PREMDAYS = '#tooltips:awardItem/premDays'
+    AWARDITEM_PREMIUM = '#tooltips:awardItem/premium'
     FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED = '#tooltips:falloutBattleSelectorWindow/btnInSquadDisabled'
     FALLOUTBATTLESELECTORWINDOW_BTNDISABLED = '#tooltips:falloutBattleSelectorWindow/btnDisabled'
     MASTERVOLUMETOGGLEOFF = '#tooltips:masterVolumeToggleOff'
     SOUNDQUALITY = '#tooltips:soundQuality'
     SOUND_DYNAMICRANGE_HELP = '#tooltips:sound/dynamicRange/help'
-    SOUND_SOUNDDEVICE_HELP = '#tooltips:sound/soundDevice/help'
     RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked'
     RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP = '#tooltips:researchPage/module/status/notEnoughXP'
     MODULEFITS_GOLD_ERROR = '#tooltips:moduleFits/gold_error'
     MODULEFITS_CREDITS_ERROR = '#tooltips:moduleFits/credits_error'
     MODULEFITS_OPERATION_ERROR = '#tooltips:moduleFits/operation_error'
-    BATTLETYPES_FORTIFICATION_DISABLED = BATTLETYPES_FORTIFICATION + '/disabled'
+    BATTLETYPES_FORTIFICATION_DISABLED = '#tooltips:battleTypes/fortification/disabled'
     SQUADWINDOW_INFOICON_TECH = '#tooltips:squadWindow/infoIcon/tech'
     VEHICLEPREVIEW_CREW = '#tooltips:vehiclePreview/crew'
-    HANGAR_MARKPREVIEW_CLOSEBUTTON = '#tooltips:hangar/markPreview/closeButton'
-    HANGAR_MARKPREVIEW_REDBUTTONDISABLED_HEADER = '#tooltips:hangar/markPreview/redButtonDisabled/header'
-    HANGAR_MARKPREVIEW_REDBUTTONDISABLED_DESCRIPTION = '#tooltips:hangar/markPreview/redButtonDisabled/description'
-    HANGAR_MARKPREVIEW_CLOSEBUTTON_HEADER = HANGAR_MARKPREVIEW_CLOSEBUTTON + '/header'
-    HANGAR_MARKPREVIEW_CLOSEBUTTON_DESCRIPTION = HANGAR_MARKPREVIEW_CLOSEBUTTON + '/description'
-    MARK1_MARKGUN_HEADER = '#tooltips:mark1/markGun/header'
-    MARK1_MARKGUN_DESCRIPTION = '#tooltips:mark1/markGun/description'
-    MARK1_MARKCHASSIS_HEADER = '#tooltips:mark1/markChassis/header'
-    MARK1_MARKCHASSIS_DESCRIPTION = '#tooltips:mark1/markChassis/description'
-    MARK1_MARKENGINE_HEADER = '#tooltips:mark1/markEngine/header'
-    MARK1_MARKENGINE_DESCRIPTION = '#tooltips:mark1/markEngine/description'
-    MARK1_MARKRADIO_HEADER = '#tooltips:mark1/markRadio/header'
-    MARK1_MARKRADIO_DESCRIPTION = '#tooltips:mark1/markRadio/description'
-    MARK1_MARKTURRET_HEADER = '#tooltips:mark1/markTurret/header'
-    MARK1_MARKTURRET_DESCRIPTION = '#tooltips:mark1/markTurret/description'
+    RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_ADD = '#tooltips:researchPage/vehicle/button/compare/add'
+    RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED = '#tooltips:researchPage/vehicle/button/compare/disabled'
+    VEHICLEPREVIEW_VEHICLEPANEL_INFO = '#tooltips:vehiclePreview/vehiclePanel/info'
+    RECEIVECLANINVITESNOTIFICATIONS = '#tooltips:receiveClanInvitesNotifications'
+    SETTINGS_DAMAGELOG_DETAILS = '#tooltips:settings/damagelog/details'
+    HEADER_PREMSHOP = '#tooltips:header/premShop'
+    BARRACKS_PLACESCOUNT_DISMISS = '#tooltips:barracks/placesCount/dismiss'
+    DISMISSTANKMANDIALOG_CANTRESTORALERT = '#tooltips:dismissTankmanDialog/cantRestorAlert'
+    NOTIFICATIONSVIEW_TAB_INFO = '#tooltips:notificationsView/tab/info'
+    NOTIFICATIONSVIEW_TAB_INVITES = '#tooltips:notificationsView/tab/invites'
+    NOTIFICATIONSVIEW_TAB_OFFERS = '#tooltips:notificationsView/tab/offers'
+    TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
+    TEMPLATE_HOURS_SHORT = '#tooltips:template/hours/short'
+    TEMPLATE_MINUTES_SHORT = '#tooltips:template/minutes/short'
+    TEMPLATE_TIME_LESSTHENMINUTE = '#tooltips:template/time/lessThenMinute'
     PREMIUM_DAYS_HEADER = '#tooltips:premium/days/header'
     PREMIUM_DAYS_PARAMS_BUY = '#tooltips:premium/days/params/buy'
     PREMIUM_DAYS_PARAMS_OLDPRICE = '#tooltips:premium/days/params/oldPrice'
@@ -449,47 +443,38 @@ class TOOLTIPS(object):
     LADDER_SEASON_SUSPENDED = '#tooltips:ladder/season/SUSPENDED'
     LADDER_SEASON_INACTIVE = '#tooltips:ladder/season/INACTIVE'
     LADDER_SEASON_UNKNOWN = '#tooltips:ladder/season/UNKNOWN'
-    PRIVATEQUESTS_AWARDSBUTTON_HEADER = PRIVATEQUESTS_AWARDSBUTTON + '/header'
-    PRIVATEQUESTS_AWARDSBUTTON_BODY = PRIVATEQUESTS_AWARDSBUTTON + '/body'
-    PRIVATEQUESTS_SLOT_EMPTY_HEADER = PRIVATEQUESTS_SLOT_EMPTY + '/header'
-    PRIVATEQUESTS_SLOT_EMPTY_BODY = PRIVATEQUESTS_SLOT_EMPTY + '/body'
-    PRIVATEQUESTS_SLOT_MISSION_HEADER = PRIVATEQUESTS_SLOT_MISSION + '/header'
-    PRIVATEQUESTS_SLOT_MISSION_BODY = PRIVATEQUESTS_SLOT_MISSION + '/body'
-    PRIVATEQUESTS_SLOT_MISSION_NOTE = PRIVATEQUESTS_SLOT_MISSION + '/note'
-    PRIVATEQUESTS_SLOT_MISSIONCOMPLETE_HEADER = PRIVATEQUESTS_SLOT_MISSION + 'Complete/header'
-    PRIVATEQUESTS_SLOT_MISSIONCOMPLETE_BODY = PRIVATEQUESTS_SLOT_MISSION + 'Complete/body'
-    PRIVATEQUESTS_SLOT_MISSIONCOMPLETE_ATTENTION = PRIVATEQUESTS_SLOT_MISSION + 'Complete/attention'
-    PRIVATEQUESTS_BACKBUTTON_HEADER = PRIVATEQUESTS_BACKBUTTON + '/header'
-    PRIVATEQUESTS_BACKBUTTON_BODY = PRIVATEQUESTS_BACKBUTTON + '/body'
-    PRIVATEQUESTS_TASKLISTITEM_BODY = PRIVATEQUESTS_TASKLISTITEM + '/body'
-    PRIVATEQUESTS_ABOUTVEHICLE_HEADER = PRIVATEQUESTS_ABOUTVEHICLE + '/header'
-    PRIVATEQUESTS_ABOUTVEHICLE_BODY = PRIVATEQUESTS_ABOUTVEHICLE + '/body'
-    PRIVATEQUESTS_SHOWVEHICLE_HEADER = PRIVATEQUESTS_SHOWVEHICLE + '/header'
-    PRIVATEQUESTS_SHOWVEHICLE_BODY = PRIVATEQUESTS_SHOWVEHICLE + '/body'
-    PRIVATEQUESTS_ACTIONPANNEL_PERFORM_HEADER = PRIVATEQUESTS_ACTIONPANNEL_PERFORM + '/header'
-    PRIVATEQUESTS_ACTIONPANNEL_PERFORM_BODY = PRIVATEQUESTS_ACTIONPANNEL_PERFORM + '/body'
-    PRIVATEQUESTS_ACTIONPANNEL_ABORT_HEADER = PRIVATEQUESTS_ACTIONPANNEL_ABORT + '/header'
-    PRIVATEQUESTS_ACTIONPANNEL_ABORT_BODY = PRIVATEQUESTS_ACTIONPANNEL_ABORT + '/body'
-    PRIVATEQUESTS_ACTIONPANNEL_ABORT_NOTE = PRIVATEQUESTS_ACTIONPANNEL_ABORT + '/note'
-    PRIVATEQUESTS_ACTIONPANNEL_RECEIVETHEAWARD_HEADER = PRIVATEQUESTS_ACTIONPANNEL_RECEIVETHEAWARD + '/header'
-    PRIVATEQUESTS_ACTIONPANNEL_RECEIVETHEAWARD_BODY = PRIVATEQUESTS_ACTIONPANNEL_RECEIVETHEAWARD + '/body'
-    PRIVATEQUESTS_ACTIONPANNEL_REPEAT_HEADER = PRIVATEQUESTS_ACTIONPANNEL_REPEAT + '/header'
-    PRIVATEQUESTS_ACTIONPANNEL_REPEAT_BODY = PRIVATEQUESTS_ACTIONPANNEL_REPEAT + '/body'
-    PRIVATEQUESTS_ACTIONPANNEL_REPEAT_NOTE = PRIVATEQUESTS_ACTIONPANNEL_REPEAT + '/note'
-    PRIVATEQUESTS_QUESTCONTROL_NEW_HEADER = PRIVATEQUESTS_QUESTCONTROL_NEW + '/header'
-    PRIVATEQUESTS_QUESTCONTROL_NEW_BODY = PRIVATEQUESTS_QUESTCONTROL_NEW + '/body'
-    PRIVATEQUESTS_QUESTCONTROL_NEW_ATTENTION = PRIVATEQUESTS_QUESTCONTROL_NEW + '/attention'
-    PRIVATEQUESTS_QUESTCONTROL_AVAILABLE_HEADER = PRIVATEQUESTS_QUESTCONTROL_AVAILABLE + '/header'
-    PRIVATEQUESTS_QUESTCONTROL_AVAILABLE_BODY = PRIVATEQUESTS_QUESTCONTROL_AVAILABLE + '/body'
-    PRIVATEQUESTS_QUESTCONTROL_AVAILABLE_ATTENTION = PRIVATEQUESTS_QUESTCONTROL_AVAILABLE + '/attention'
-    PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD_HEADER = PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD + '/header'
-    PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD_BODY = PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD + '/body'
-    PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD_ATTENTION = PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD + '/attention'
-    PRIVATEQUESTS_QUESTCONTROL_EMPTY_HEADER = PRIVATEQUESTS_QUESTCONTROL_EMPTY + '/header'
-    PRIVATEQUESTS_QUESTCONTROL_EMPTY_BODY = PRIVATEQUESTS_QUESTCONTROL_EMPTY + '/body'
-    PRIVATEQUESTS_QUESTSSTATS_TOKEN_HEADER = PRIVATEQUESTS_QUESTSSTATS_TOKEN + '/header'
-    PRIVATEQUESTS_QUESTSSTATS_TOKEN_BODY = PRIVATEQUESTS_QUESTSSTATS_TOKEN + '/body'
-    PRIVATEQUESTS_QUESTSSTATS_TOKEN_NOTE = PRIVATEQUESTS_QUESTSSTATS_TOKEN + '/note'
+    PRIVATEQUESTS_AWARDSBUTTON_HEADER = '#tooltips:privateQuests/awardsButton/header'
+    PRIVATEQUESTS_AWARDSBUTTON_BODY = '#tooltips:privateQuests/awardsButton/body'
+    PRIVATEQUESTS_SLOT_EMPTY_HEADER = '#tooltips:privateQuests/slot/empty/header'
+    PRIVATEQUESTS_SLOT_EMPTY_BODY = '#tooltips:privateQuests/slot/empty/body'
+    PRIVATEQUESTS_SLOT_MISSION_HEADER = '#tooltips:privateQuests/slot/mission/header'
+    PRIVATEQUESTS_SLOT_MISSION_BODY = '#tooltips:privateQuests/slot/mission/body'
+    PRIVATEQUESTS_SLOT_MISSION_NOTE = '#tooltips:privateQuests/slot/mission/note'
+    PRIVATEQUESTS_SLOT_MISSIONCOMPLETE_HEADER = '#tooltips:privateQuests/slot/missionComplete/header'
+    PRIVATEQUESTS_SLOT_MISSIONCOMPLETE_BODY = '#tooltips:privateQuests/slot/missionComplete/body'
+    PRIVATEQUESTS_SLOT_MISSIONCOMPLETE_ATTENTION = '#tooltips:privateQuests/slot/missionComplete/attention'
+    PRIVATEQUESTS_BACKBUTTON_HEADER = '#tooltips:privateQuests/backButton/header'
+    PRIVATEQUESTS_BACKBUTTON_BODY = '#tooltips:privateQuests/backButton/body'
+    PRIVATEQUESTS_TASKLISTITEM_BODY = '#tooltips:privateQuests/taskListItem/body'
+    PRIVATEQUESTS_ABOUTVEHICLE_HEADER = '#tooltips:privateQuests/aboutVehicle/header'
+    PRIVATEQUESTS_ABOUTVEHICLE_BODY = '#tooltips:privateQuests/aboutVehicle/body'
+    PRIVATEQUESTS_SHOWVEHICLE_HEADER = '#tooltips:privateQuests/showVehicle/header'
+    PRIVATEQUESTS_SHOWVEHICLE_BODY = '#tooltips:privateQuests/showVehicle/body'
+    PRIVATEQUESTS_ACTIONPANNEL_PERFORM_HEADER = '#tooltips:privateQuests/actionPannel/perform/header'
+    PRIVATEQUESTS_ACTIONPANNEL_PERFORM_BODY = '#tooltips:privateQuests/actionPannel/perform/body'
+    PRIVATEQUESTS_ACTIONPANNEL_ABORT_HEADER = '#tooltips:privateQuests/actionPannel/abort/header'
+    PRIVATEQUESTS_ACTIONPANNEL_ABORT_BODY = '#tooltips:privateQuests/actionPannel/abort/body'
+    PRIVATEQUESTS_ACTIONPANNEL_ABORT_NOTE = '#tooltips:privateQuests/actionPannel/abort/note'
+    PRIVATEQUESTS_ACTIONPANNEL_RECEIVETHEAWARD_HEADER = '#tooltips:privateQuests/actionPannel/receiveTheAward/header'
+    PRIVATEQUESTS_ACTIONPANNEL_RECEIVETHEAWARD_BODY = '#tooltips:privateQuests/actionPannel/receiveTheAward/body'
+    PRIVATEQUESTS_ACTIONPANNEL_REPEAT_HEADER = '#tooltips:privateQuests/actionPannel/repeat/header'
+    PRIVATEQUESTS_ACTIONPANNEL_REPEAT_BODY = '#tooltips:privateQuests/actionPannel/repeat/body'
+    PRIVATEQUESTS_ACTIONPANNEL_REPEAT_NOTE = '#tooltips:privateQuests/actionPannel/repeat/note'
+    PRIVATEQUESTS_QUESTCONTROL_HEADER = '#tooltips:privateQuests/questControl/header'
+    PRIVATEQUESTS_QUESTCONTROL_BODY = '#tooltips:privateQuests/questControl/body'
+    PRIVATEQUESTS_QUESTSSTATS_TOKEN_HEADER = '#tooltips:privateQuests/questsStats/token/header'
+    PRIVATEQUESTS_QUESTSSTATS_TOKEN_BODY = '#tooltips:privateQuests/questsStats/token/body'
+    PRIVATEQUESTS_QUESTSSTATS_TOKEN_NOTE = '#tooltips:privateQuests/questsStats/token/note'
     PRIVATEQUESTS_PROGRESS_CONDITION = '#tooltips:privateQuests/progress/condition'
     PRIVATEQUESTS_SLOT_CONDITION_VEHICLE = '#tooltips:privateQuests/slot/condition/vehicle'
     PRIVATEQUESTSFALLOUT_SLOT_CONDITION_VEHICLE = '#tooltips:privateQuestsFallout/slot/condition/vehicle'
@@ -521,31 +506,31 @@ class TOOLTIPS(object):
     SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_ALERT = '#tooltips:squadWindow/simpleSlotNotification/alert/alert'
     SQUADWINDOW_SIMPLESLOTNOTIFICATION_INFO_HEADER = '#tooltips:squadWindow/simpleSlotNotification/info/header'
     SQUADWINDOW_SIMPLESLOTNOTIFICATION_INFO_BODY = '#tooltips:squadWindow/simpleSlotNotification/info/body'
-    SQUADWINDOW_BATTLETYPEINFO_HEADER = SQUADWINDOW_BATTLETYPEINFO + '/header'
-    SQUADWINDOW_BATTLETYPEINFO_BODY = SQUADWINDOW_BATTLETYPEINFO + '/body'
-    SQUADWINDOW_BUTTONS_BTNNOTREADY_HEADER = SQUADWINDOW_BUTTONS_BTNNOTREADY + '/header'
-    SQUADWINDOW_BUTTONS_BTNNOTREADY_BODY = SQUADWINDOW_BUTTONS_BTNNOTREADY + '/body'
-    SQUADWINDOW_BUTTONS_BTNFIGHT_HEADER = SQUADWINDOW_BUTTONS_BTNFIGHT + '/header'
-    SQUADWINDOW_BUTTONS_BTNFIGHT_BODY = SQUADWINDOW_BUTTONS_BTNFIGHT + '/body'
-    SQUADWINDOW_BUTTONS_INVITE_HEADER = SQUADWINDOW_BUTTONS_INVITE + '/header'
-    SQUADWINDOW_BUTTONS_INVITE_BODY = SQUADWINDOW_BUTTONS_INVITE + '/body'
-    SQUADWINDOW_BUTTONS_RECOMMEND_HEADER = SQUADWINDOW_BUTTONS_RECOMMEND + '/header'
-    SQUADWINDOW_BUTTONS_RECOMMEND_BODY = SQUADWINDOW_BUTTONS_RECOMMEND + '/body'
-    SQUADWINDOW_BUTTONS_LEAVESQUAD_HEADER = SQUADWINDOW_BUTTONS_LEAVESQUAD + '/header'
-    SQUADWINDOW_BUTTONS_LEAVESQUAD_BODY = SQUADWINDOW_BUTTONS_LEAVESQUAD + '/body'
-    SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD_HEADER = SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD + '/header'
-    SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD_BODY = SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD + '/body'
-    SQUADWINDOW_INFOICON_TECH_HEADER = SQUADWINDOW_INFOICON_TECH + '/header'
-    SQUADWINDOW_INFOICON_TECH_BODY = SQUADWINDOW_INFOICON_TECH + '/body'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_HEADER = SQUADWINDOW_INFOICON_TECH + 'Restrictions/header'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE0 = SQUADWINDOW_INFOICON_TECH + 'Restrictions/title0'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY0 = SQUADWINDOW_INFOICON_TECH + 'Restrictions/body0'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE1 = SQUADWINDOW_INFOICON_TECH + 'Restrictions/title1'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY1 = SQUADWINDOW_INFOICON_TECH + 'Restrictions/body1'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE2 = SQUADWINDOW_INFOICON_TECH + 'Restrictions/title2'
-    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY2 = SQUADWINDOW_INFOICON_TECH + 'Restrictions/body2'
-    SQUADWINDOW_BUTTONS_SENDMESSAGE_HEADER = SQUADWINDOW_BUTTONS_SENDMESSAGE + '/header'
-    SQUADWINDOW_BUTTONS_SENDMESSAGE_BODY = SQUADWINDOW_BUTTONS_SENDMESSAGE + '/body'
+    SQUADWINDOW_BATTLETYPEINFO_HEADER = '#tooltips:squadWindow/battleTypeInfo/header'
+    SQUADWINDOW_BATTLETYPEINFO_BODY = '#tooltips:squadWindow/battleTypeInfo/body'
+    SQUADWINDOW_BUTTONS_BTNNOTREADY_HEADER = '#tooltips:squadWindow/buttons/btnNotReady/header'
+    SQUADWINDOW_BUTTONS_BTNNOTREADY_BODY = '#tooltips:squadWindow/buttons/btnNotReady/body'
+    SQUADWINDOW_BUTTONS_BTNFIGHT_HEADER = '#tooltips:squadWindow/buttons/btnFight/header'
+    SQUADWINDOW_BUTTONS_BTNFIGHT_BODY = '#tooltips:squadWindow/buttons/btnFight/body'
+    SQUADWINDOW_BUTTONS_INVITE_HEADER = '#tooltips:squadWindow/buttons/invite/header'
+    SQUADWINDOW_BUTTONS_INVITE_BODY = '#tooltips:squadWindow/buttons/invite/body'
+    SQUADWINDOW_BUTTONS_RECOMMEND_HEADER = '#tooltips:squadWindow/buttons/recommend/header'
+    SQUADWINDOW_BUTTONS_RECOMMEND_BODY = '#tooltips:squadWindow/buttons/recommend/body'
+    SQUADWINDOW_BUTTONS_LEAVESQUAD_HEADER = '#tooltips:squadWindow/buttons/leaveSquad/header'
+    SQUADWINDOW_BUTTONS_LEAVESQUAD_BODY = '#tooltips:squadWindow/buttons/leaveSquad/body'
+    SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD_HEADER = '#tooltips:squadWindow/buttons/leaveEventSquad/header'
+    SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD_BODY = '#tooltips:squadWindow/buttons/leaveEventSquad/body'
+    SQUADWINDOW_INFOICON_TECH_HEADER = '#tooltips:squadWindow/infoIcon/tech/header'
+    SQUADWINDOW_INFOICON_TECH_BODY = '#tooltips:squadWindow/infoIcon/tech/body'
+    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_HEADER = '#tooltips:squadWindow/infoIcon/techRestrictions/header'
+    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE0 = '#tooltips:squadWindow/infoIcon/techRestrictions/title0'
+    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY0 = '#tooltips:squadWindow/infoIcon/techRestrictions/body0'
+    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE1 = '#tooltips:squadWindow/infoIcon/techRestrictions/title1'
+    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY1 = '#tooltips:squadWindow/infoIcon/techRestrictions/body1'
+    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE2 = '#tooltips:squadWindow/infoIcon/techRestrictions/title2'
+    SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY2 = '#tooltips:squadWindow/infoIcon/techRestrictions/body2'
+    SQUADWINDOW_BUTTONS_SENDMESSAGE_HEADER = '#tooltips:squadWindow/buttons/sendMessage/header'
+    SQUADWINDOW_BUTTONS_SENDMESSAGE_BODY = '#tooltips:squadWindow/buttons/sendMessage/body'
     SQUADWINDOW_STATUS_COMMANDER = '#tooltips:squadWindow/status/commander'
     SQUADWINDOW_STATUS_NORMAL = '#tooltips:squadWindow/status/normal'
     SQUADWINDOW_STATUS_CANCELED = '#tooltips:squadWindow/status/canceled'
@@ -554,22 +539,22 @@ class TOOLTIPS(object):
     SQUADWINDOW_STATUS_LOCKED = '#tooltips:squadWindow/status/locked'
     SQUADWINDOW_EVENT_DOMINATION = '#tooltips:squadWindow/event/domination'
     SQUADWINDOW_EVENT_DOMINATION_NOTE = '#tooltips:squadWindow/event/domination/note'
-    SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_HEADER = SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE + '/header'
-    SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_BODY = SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE + '/body'
-    SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_HEADER = SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE + '/header'
-    SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_BODY = SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE + '/body'
-    SQUADWINDOW_DOMINATION_VEHICLESINFOICON_HEADER = SQUADWINDOW_DOMINATION_VEHICLESINFOICON + '/header'
-    SQUADWINDOW_DOMINATION_VEHICLESINFOICON_BODY = SQUADWINDOW_DOMINATION_VEHICLESINFOICON + '/body'
-    LOGIN_REMEMBERPASSWORD_SIMPLE_HEADER = LOGIN_REMEMBERPASSWORD_SIMPLE + '/header'
-    LOGIN_REMEMBERPASSWORD_SIMPLE_BODY = LOGIN_REMEMBERPASSWORD_SIMPLE + '/body'
-    LOGIN_REMEMBERPASSWORD_SOCIAL_HEADER = LOGIN_REMEMBERPASSWORD_SOCIAL + '/header'
-    LOGIN_REMEMBERPASSWORD_SOCIAL_BODY = LOGIN_REMEMBERPASSWORD_SOCIAL + '/body'
-    LOGIN_BYSOCIAL_HEADER = LOGIN_BYSOCIAL + '/header'
-    LOGIN_BYSOCIAL_BODY = LOGIN_BYSOCIAL + '/body'
-    LOGIN_BYSOCIAL_WGNI_HEADER = LOGIN_BYSOCIAL + '/wgni/header'
-    LOGIN_BYSOCIAL_WGNI_BODY = LOGIN_BYSOCIAL + '/wgni/body'
-    LOGIN_SOCIAL_ENTER_HEADER = LOGIN_SOCIAL_ENTER + '/header'
-    LOGIN_SOCIAL_ENTER_BODY = LOGIN_SOCIAL_ENTER + '/body'
+    SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_HEADER = '#tooltips:squadWindow/teammate/notValidVehicle/header'
+    SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_BODY = '#tooltips:squadWindow/teammate/notValidVehicle/body'
+    SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_HEADER = '#tooltips:squadWindow/demandForVehicle/notValidVehicle/header'
+    SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_BODY = '#tooltips:squadWindow/demandForVehicle/notValidVehicle/body'
+    SQUADWINDOW_DOMINATION_VEHICLESINFOICON_HEADER = '#tooltips:squadWindow/domination/vehiclesInfoIcon/header'
+    SQUADWINDOW_DOMINATION_VEHICLESINFOICON_BODY = '#tooltips:squadWindow/domination/vehiclesInfoIcon/body'
+    LOGIN_REMEMBERPASSWORD_SIMPLE_HEADER = '#tooltips:login/rememberPassword/simple/header'
+    LOGIN_REMEMBERPASSWORD_SIMPLE_BODY = '#tooltips:login/rememberPassword/simple/body'
+    LOGIN_REMEMBERPASSWORD_SOCIAL_HEADER = '#tooltips:login/rememberPassword/social/header'
+    LOGIN_REMEMBERPASSWORD_SOCIAL_BODY = '#tooltips:login/rememberPassword/social/body'
+    LOGIN_BYSOCIAL_HEADER = '#tooltips:login/bySocial/header'
+    LOGIN_BYSOCIAL_BODY = '#tooltips:login/bySocial/body'
+    LOGIN_BYSOCIAL_WGNI_HEADER = '#tooltips:login/bySocial/wgni/header'
+    LOGIN_BYSOCIAL_WGNI_BODY = '#tooltips:login/bySocial/wgni/body'
+    LOGIN_SOCIAL_ENTER_HEADER = '#tooltips:login/social/enter/header'
+    LOGIN_SOCIAL_ENTER_BODY = '#tooltips:login/social/enter/body'
     LOGIN_SOCIAL_FACEBOOK = '#tooltips:login/social/facebook'
     LOGIN_SOCIAL_GOOGLE = '#tooltips:login/social/google'
     LOGIN_SOCIAL_YAHOO = '#tooltips:login/social/yahoo'
@@ -578,20 +563,20 @@ class TOOLTIPS(object):
     LOGIN_SOCIAL_ODNOKLASSNIKI = '#tooltips:login/social/odnoklassniki'
     LOGIN_SOCIAL_WGNI = '#tooltips:login/social/wgni'
     LOGIN_SOCIAL_NAVER = '#tooltips:login/social/naver'
-    LOGIN_CHANGEACCOUNT_HEADER = LOGIN_CHANGEACCOUNT + '/header'
-    LOGIN_CHANGEACCOUNT_BODY = LOGIN_CHANGEACCOUNT + '/body'
-    LOGIN_LEGAL_BODY = LOGIN_LEGAL + '/body'
-    LOGIN_BGMODEBUTTON_ON_HEADER = LOGIN_BGMODEBUTTON_ON + '/header'
-    LOGIN_BGMODEBUTTON_ON_BODY = LOGIN_BGMODEBUTTON_ON + '/body'
-    LOGIN_BGMODEBUTTON_OFF_HEADER = LOGIN_BGMODEBUTTON_OFF + '/header'
-    LOGIN_BGMODEBUTTON_OFF_BODY = LOGIN_BGMODEBUTTON_OFF + '/body'
-    LOGIN_SOUNDBUTTON_ON_HEADER = LOGIN_SOUNDBUTTON_ON + '/header'
-    LOGIN_SOUNDBUTTON_ON_BODY = LOGIN_SOUNDBUTTON_ON + '/body'
-    LOGIN_SOUNDBUTTON_OFF_HEADER = LOGIN_SOUNDBUTTON_OFF + '/header'
-    LOGIN_SOUNDBUTTON_OFF_BODY = LOGIN_SOUNDBUTTON_OFF + '/body'
-    PREBATTLE_NAMEFILTERBUTTON_HEADER = PREBATTLE_NAMEFILTERBUTTON + '/header'
-    PREBATTLE_NAMEFILTERBUTTON_BODY = PREBATTLE_NAMEFILTERBUTTON + '/body'
-    PREBATTLE_INVITATIONS_TOOLTIP_ISONLINE_BODY = PREBATTLE_INVITATIONS_TOOLTIP_ISONLINE + '/body'
+    LOGIN_CHANGEACCOUNT_HEADER = '#tooltips:login/changeAccount/header'
+    LOGIN_CHANGEACCOUNT_BODY = '#tooltips:login/changeAccount/body'
+    LOGIN_LEGAL_BODY = '#tooltips:login/legal/body'
+    LOGIN_BGMODEBUTTON_ON_HEADER = '#tooltips:login/bgModeButton/on/header'
+    LOGIN_BGMODEBUTTON_ON_BODY = '#tooltips:login/bgModeButton/on/body'
+    LOGIN_BGMODEBUTTON_OFF_HEADER = '#tooltips:login/bgModeButton/off/header'
+    LOGIN_BGMODEBUTTON_OFF_BODY = '#tooltips:login/bgModeButton/off/body'
+    LOGIN_SOUNDBUTTON_ON_HEADER = '#tooltips:login/soundButton/on/header'
+    LOGIN_SOUNDBUTTON_ON_BODY = '#tooltips:login/soundButton/on/body'
+    LOGIN_SOUNDBUTTON_OFF_HEADER = '#tooltips:login/soundButton/off/header'
+    LOGIN_SOUNDBUTTON_OFF_BODY = '#tooltips:login/soundButton/off/body'
+    PREBATTLE_NAMEFILTERBUTTON_HEADER = '#tooltips:prebattle/nameFilterButton/header'
+    PREBATTLE_NAMEFILTERBUTTON_BODY = '#tooltips:prebattle/nameFilterButton/body'
+    PREBATTLE_INVITATIONS_TOOLTIP_ISONLINE_BODY = '#tooltips:prebattle/invitations/tooltip/isOnline/body'
     SETTINGSCONTROL_RECOMMENDED = '#tooltips:settingsControl/recommended'
     SETTINGS_MINIMAPCIRCLES_TITLE = '#tooltips:settings/minimapCircles/title'
     SETTINGS_MINIMAPCIRCLES_VIEWRANGE_TITLE = '#tooltips:settings/minimapCircles/viewRange/title'
@@ -601,9 +586,11 @@ class TOOLTIPS(object):
     SETTINGS_MINIMAPCIRCLES_MAXVIEWRANGE_AS3_BODY = '#tooltips:settings/minimapCircles/maxViewRange/as3/body'
     SETTINGS_MINIMAPCIRCLES_DRAWRANGE_TITLE = '#tooltips:settings/minimapCircles/drawRange/title'
     SETTINGS_MINIMAPCIRCLES_DRAWRANGE_BODY = '#tooltips:settings/minimapCircles/drawRange/body'
-    LOBBYMENU_VERSIONINFOBUTTON_BODY = LOBBYMENU_VERSIONINFOBUTTON + '/body'
-    WINDOWHELP_HEADER = WINDOWHELP + '/header'
-    WINDOWHELP_BODY = WINDOWHELP + '/body'
+    SETTINGS_DAMAGELOG_DETAILS_HEADER = '#tooltips:settings/damagelog/details/header'
+    SETTINGS_DAMAGELOG_DETAILS_BODY = '#tooltips:settings/damagelog/details/body'
+    LOBBYMENU_VERSIONINFOBUTTON_BODY = '#tooltips:lobbyMenu/versionInfoButton/body'
+    WINDOWHELP_HEADER = '#tooltips:windowHelp/header'
+    WINDOWHELP_BODY = '#tooltips:windowHelp/body'
     ACTIONPRICE_HEADER = '#tooltips:actionPrice/header'
     ACTIONPRICE_BODY = '#tooltips:actionPrice/body'
     ACTIONPRICE_ACTIONNAME = '#tooltips:actionPrice/actionName'
@@ -619,65 +606,61 @@ class TOOLTIPS(object):
     ACTIONPRICE_SELL_TYPE_OPTIONALDEVICE = '#tooltips:actionPrice/sell/type/optionalDevice'
     ACTIONPRICE_EXCHANGE_HEADER = '#tooltips:actionPrice/exchange/header'
     ACTIONPRICE_EXCHANGE_BODY = '#tooltips:actionPrice/exchange/body'
-    RECEIVEFRIENDSHIPREQUEST_HEADER = RECEIVEFRIENDSHIPREQUEST + '/header'
-    RECEIVEFRIENDSHIPREQUEST_BODY = RECEIVEFRIENDSHIPREQUEST + '/body'
-    RECEIVEINVITESINBATTLE_HEADER = RECEIVEINVITESINBATTLE + '/header'
-    RECEIVEINVITESINBATTLE_BODY = RECEIVEINVITESINBATTLE + '/body'
-    CHATCONTACTSLISTONLY_HEADER = CHATCONTACTSLISTONLY + '/header'
-    CHATCONTACTSLISTONLY_BODY = CHATCONTACTSLISTONLY + '/body'
-    TURNOFFCOMBATCHAT_HEADER = TURNOFFCOMBATCHAT + '/header'
-    TURNOFFCOMBATCHAT_BODY = TURNOFFCOMBATCHAT + '/body'
-    SHOWMARKSONGUN_HEADER = SHOWMARKSONGUN + '/header'
-    SHOWMARKSONGUN_BODY = SHOWMARKSONGUN + '/body'
-    SHOWVEHMODELSONMAP_HEADER = SHOWVEHMODELSONMAP + '/header'
-    SHOWVEHMODELSONMAP_BODY = SHOWVEHMODELSONMAP + '/body'
-    SHOWVEHMODELSONMAP_ATTENTION = SHOWVEHMODELSONMAP + '/attention'
-    BATTLELOADINGINFO_HEADER = BATTLELOADINGINFO + '/header'
-    BATTLELOADINGINFO_BODY = BATTLELOADINGINFO + '/body'
-    SHOWVECTORONMAP_HEADER = SHOWVECTORONMAP + '/header'
-    SHOWVECTORONMAP_BODY = SHOWVECTORONMAP + '/body'
-    SHOWSECTORONMAP_HEADER = SHOWSECTORONMAP + '/header'
-    SHOWSECTORONMAP_BODY = SHOWSECTORONMAP + '/body'
-    SHOWBATTLEEFFICIENCYRIBBONS_HEADER = SHOWBATTLEEFFICIENCYRIBBONS + '/header'
-    SHOWBATTLEEFFICIENCYRIBBONS_BODY = SHOWBATTLEEFFICIENCYRIBBONS + '/body'
-    SHOWSIMPLIFIEDVEHPARAMS_HEADER = SHOWSIMPLIFIEDVEHPARAMS + '/header'
-    SHOWSIMPLIFIEDVEHPARAMS_BODY = SHOWSIMPLIFIEDVEHPARAMS + '/body'
+    RECEIVEFRIENDSHIPREQUEST_HEADER = '#tooltips:receiveFriendshipRequest/header'
+    RECEIVEFRIENDSHIPREQUEST_BODY = '#tooltips:receiveFriendshipRequest/body'
+    RECEIVEINVITESINBATTLE_HEADER = '#tooltips:receiveInvitesInBattle/header'
+    RECEIVEINVITESINBATTLE_BODY = '#tooltips:receiveInvitesInBattle/body'
+    RECEIVECLANINVITESNOTIFICATIONS_HEADER = '#tooltips:receiveClanInvitesNotifications/header'
+    RECEIVECLANINVITESNOTIFICATIONS_BODY = '#tooltips:receiveClanInvitesNotifications/body'
+    CHATCONTACTSLISTONLY_HEADER = '#tooltips:chatContactsListOnly/header'
+    CHATCONTACTSLISTONLY_BODY = '#tooltips:chatContactsListOnly/body'
+    TURNOFFCOMBATCHAT_HEADER = '#tooltips:turnOffCombatChat/header'
+    TURNOFFCOMBATCHAT_BODY = '#tooltips:turnOffCombatChat/body'
+    SHOWMARKSONGUN_HEADER = '#tooltips:showMarksOnGun/header'
+    SHOWMARKSONGUN_BODY = '#tooltips:showMarksOnGun/body'
+    SHOWVEHMODELSONMAP_HEADER = '#tooltips:showVehModelsOnMap/header'
+    SHOWVEHMODELSONMAP_BODY = '#tooltips:showVehModelsOnMap/body'
+    SHOWVEHMODELSONMAP_ATTENTION = '#tooltips:showVehModelsOnMap/attention'
+    BATTLELOADINGINFO_HEADER = '#tooltips:battleLoadingInfo/header'
+    BATTLELOADINGINFO_BODY = '#tooltips:battleLoadingInfo/body'
+    SHOWVECTORONMAP_HEADER = '#tooltips:showVectorOnMap/header'
+    SHOWVECTORONMAP_BODY = '#tooltips:showVectorOnMap/body'
+    SHOWSECTORONMAP_HEADER = '#tooltips:showSectorOnMap/header'
+    SHOWSECTORONMAP_BODY = '#tooltips:showSectorOnMap/body'
+    SHOWSIMPLIFIEDVEHPARAMS_HEADER = '#tooltips:showSimplifiedVehParams/header'
+    SHOWSIMPLIFIEDVEHPARAMS_BODY = '#tooltips:showSimplifiedVehParams/body'
     INCREASEDZOOM_HEADER = '#tooltips:increasedZoom/header'
     INCREASEDZOOM_BODY = '#tooltips:increasedZoom/body'
-    MASTERVOLUMETOGGLEOFF_HEADER = MASTERVOLUMETOGGLEOFF + '/header'
-    MASTERVOLUMETOGGLEOFF_BODY = MASTERVOLUMETOGGLEOFF + '/body'
-    SOUNDQUALITYON_HEADER = SOUNDQUALITY + 'On/header'
-    SOUNDQUALITYON_BODY = SOUNDQUALITY + 'On/body'
-    SOUNDQUALITY_HEADER = SOUNDQUALITY + '/header'
-    SOUNDQUALITY_BODY = SOUNDQUALITY + '/body'
-    SOUND_DYNAMICRANGE_HELP_HEADER = SOUND_DYNAMICRANGE_HELP + '/header'
-    SOUND_DYNAMICRANGE_HELP_BODY = SOUND_DYNAMICRANGE_HELP + '/body'
-    SOUND_SOUNDDEVICE_HELP_HEADER = SOUND_SOUNDDEVICE_HELP + '/header'
-    SOUND_SOUNDDEVICE_HELP_BODY = SOUND_SOUNDDEVICE_HELP + '/body'
+    MASTERVOLUMETOGGLEOFF_HEADER = '#tooltips:masterVolumeToggleOff/header'
+    MASTERVOLUMETOGGLEOFF_BODY = '#tooltips:masterVolumeToggleOff/body'
+    SOUNDQUALITYON_HEADER = '#tooltips:soundQualityOn/header'
+    SOUNDQUALITYON_BODY = '#tooltips:soundQualityOn/body'
+    SOUND_DYNAMICRANGE_HELP_HEADER = '#tooltips:sound/dynamicRange/help/header'
+    SOUND_DYNAMICRANGE_HELP_BODY = '#tooltips:sound/dynamicRange/help/body'
     GOLD_HEADER = '#tooltips:gold/header'
     GOLD_BODY = '#tooltips:gold/body'
-    WALLET_NOT_AVAILABLE_GOLD_HEADER = WALLET_NOT_AVAILABLE_GOLD + '/header'
-    WALLET_NOT_AVAILABLE_GOLD_BODY = WALLET_NOT_AVAILABLE_GOLD + '/body'
-    WALLET_NOT_AVAILABLE_FREEXP_HEADER = WALLET_NOT_AVAILABLE_FREEXP + '/header'
-    WALLET_NOT_AVAILABLE_FREEXP_BODY = WALLET_NOT_AVAILABLE_FREEXP + '/body'
+    WALLET_NOT_AVAILABLE_GOLD_HEADER = '#tooltips:wallet/not_available_gold/header'
+    WALLET_NOT_AVAILABLE_GOLD_BODY = '#tooltips:wallet/not_available_gold/body'
+    WALLET_NOT_AVAILABLE_FREEXP_HEADER = '#tooltips:wallet/not_available_freexp/header'
+    WALLET_NOT_AVAILABLE_FREEXP_BODY = '#tooltips:wallet/not_available_freexp/body'
     CREDITS_HEADER = '#tooltips:credits/header'
     CREDITS_BODY = '#tooltips:credits/body'
-    FREEXP_HEADER = FREEXP + '/header'
-    FREEXP_BODY = FREEXP + '/body'
-    USEFREEXP_HEADER = USEFREEXP + '/header'
-    USEFREEXP_BODY = USEFREEXP + '/body'
+    FREEXP_HEADER = '#tooltips:freeXP/header'
+    FREEXP_BODY = '#tooltips:freeXP/body'
+    USEFREEXP_HEADER = '#tooltips:useFreeXP/header'
+    USEFREEXP_BODY = '#tooltips:useFreeXP/body'
     XP_HEADER = '#tooltips:XP/header'
     XP_BODY = '#tooltips:XP/body'
     ELITEXP_HEADER = '#tooltips:eliteXP/header'
     ELITEXP_BODY = '#tooltips:eliteXP/body'
-    HEADER_ELITEICON_HEADER = HEADER_ELITEICON + '/header'
-    HEADER_ELITEICON_BODY = HEADER_ELITEICON + '/body'
-    CYBERSPORT_RESPAWN_STATUS_INFO_BODY = CYBERSPORT_RESPAWN_STATUS_INFO + '/body'
-    CYBERSPORT_RESPAWN_STATUS_WARNING_BODY = CYBERSPORT_RESPAWN_STATUS_WARNING + '/body'
+    HEADER_ELITEICON_HEADER = '#tooltips:header/eliteIcon/header'
+    HEADER_ELITEICON_BODY = '#tooltips:header/eliteIcon/body'
+    CYBERSPORT_RESPAWN_STATUS_INFO_BODY = '#tooltips:cyberSport/respawn/status/info/body'
+    CYBERSPORT_RESPAWN_STATUS_WARNING_BODY = '#tooltips:cyberSport/respawn/status/warning/body'
     CYBERSPORT_RESPAWN_STATUS_READY_BODY = '#tooltips:cyberSport/respawn/status/ready/body'
     CYBERSPORT_RESPAWN_FIGHTBTN_BODY = '#tooltips:cyberSport/respawn/fightBtn/body'
-    CYBERSPORT_SELECTVEHICLE_HEADER = CYBERSPORT_SELECTVEHICLE + '/header'
-    CYBERSPORT_SELECTVEHICLE_BODY = CYBERSPORT_SELECTVEHICLE + '/body'
+    CYBERSPORT_SELECTVEHICLE_HEADER = '#tooltips:cyberSport/selectVehicle/header'
+    CYBERSPORT_SELECTVEHICLE_BODY = '#tooltips:cyberSport/selectVehicle/body'
     CYBERSPORT_UNITLEVEL_TITLE = '#tooltips:cyberSport/unitLevel/title'
     CYBERSPORT_UNITLEVEL_DESCRIPTION = '#tooltips:cyberSport/unitLevel/description'
     CYBERSPORT_UNITLEVEL_BODY = '#tooltips:cyberSport/unitLevel/body'
@@ -689,61 +672,61 @@ class TOOLTIPS(object):
     CYBERSPORT_UNITLEVEL_BODY_MAXTOTALLEVELERROR = '#tooltips:cyberSport/unitLevel/body/maxTotalLevelError'
     CYBERSPORT_UNITLEVEL_BODY_ERROR = '#tooltips:cyberSport/unitLevel/body/error'
     CYBERSPORT_UNITLEVEL_BODY_ERRORSTATUS = '#tooltips:cyberSport/unitLevel/body/errorStatus'
-    CYBERSPORT_UNITLEVEL_BACK_HEADER = CYBERSPORT_UNITLEVEL_BACK + '/header'
-    CYBERSPORT_UNITLEVEL_BACK_BODY = CYBERSPORT_UNITLEVEL_BACK + '/body'
-    CYBERSPORT_STATICFORMATION_WAITLIST_LEGIONNAIRES_HEADER = CYBERSPORT_STATICFORMATION_WAITLIST_LEGIONNAIRES + '/header'
-    CYBERSPORT_STATICFORMATION_WAITLIST_LEGIONNAIRES_BODY = CYBERSPORT_STATICFORMATION_WAITLIST_LEGIONNAIRES + '/body'
-    CYBERSPORT_STATICFORMATION_LEGIONNAIRE_HEADER = CYBERSPORT_STATICFORMATION_LEGIONNAIRE + '/header'
-    CYBERSPORT_STATICFORMATION_LEGIONNAIRE_BODY = CYBERSPORT_STATICFORMATION_LEGIONNAIRE + '/body'
-    CYBERSPORT_NOVEHICLESINHANGAR_HEADER = CYBERSPORT_NOVEHICLESINHANGAR + '/header'
-    CYBERSPORT_NOVEHICLESINHANGAR_BODY = CYBERSPORT_NOVEHICLESINHANGAR + '/body'
-    CYBERSPORT_MODECHANGEFROZEN_HEADER = CYBERSPORT_MODECHANGEFROZEN + '/header'
-    CYBERSPORT_MODECHANGEFROZEN_BODY = CYBERSPORT_MODECHANGEFROZEN + '/body'
-    CYBERSPORT_ROSTERSLOTSETTINGS_HEADERTEXT_BODY = CYBERSPORT_ROSTERSLOTSETTINGS_HEADERTEXT + '/body'
-    BATTLETYPES_STANDART_HEADER = BATTLETYPES_STANDART + '/header'
-    BATTLETYPES_STANDART_BODY = BATTLETYPES_STANDART + '/body'
-    BATTLETYPES_FALLOUT_HEADER = BATTLETYPES_FALLOUT + '/header'
-    BATTLETYPES_FALLOUT_BODY = BATTLETYPES_FALLOUT + '/body'
-    BATTLETYPES_TRAINING_HEADER = BATTLETYPES_TRAINING + '/header'
-    BATTLETYPES_TRAINING_BODY = BATTLETYPES_TRAINING + '/body'
-    BATTLETYPES_LEAVETRAINING_HEADER = BATTLETYPES_LEAVETRAINING + '/header'
-    BATTLETYPES_LEAVETRAINING_BODY = BATTLETYPES_LEAVETRAINING + '/body'
-    BATTLETYPES_COMPANY_HEADER = BATTLETYPES_COMPANY + '/header'
-    BATTLETYPES_COMPANY_BODY = BATTLETYPES_COMPANY + '/body'
+    CYBERSPORT_UNITLEVEL_BACK_HEADER = '#tooltips:cyberSport/unitLevel/back/header'
+    CYBERSPORT_UNITLEVEL_BACK_BODY = '#tooltips:cyberSport/unitLevel/back/body'
+    CYBERSPORT_STATICFORMATION_WAITLIST_LEGIONNAIRES_HEADER = '#tooltips:cyberSport/staticFormation/waitList/legionnaires/header'
+    CYBERSPORT_STATICFORMATION_WAITLIST_LEGIONNAIRES_BODY = '#tooltips:cyberSport/staticFormation/waitList/legionnaires/body'
+    CYBERSPORT_STATICFORMATION_LEGIONNAIRE_HEADER = '#tooltips:cyberSport/staticFormation/legionnaire/header'
+    CYBERSPORT_STATICFORMATION_LEGIONNAIRE_BODY = '#tooltips:cyberSport/staticFormation/legionnaire/body'
+    CYBERSPORT_NOVEHICLESINHANGAR_HEADER = '#tooltips:cyberSport/noVehiclesInHangar/header'
+    CYBERSPORT_NOVEHICLESINHANGAR_BODY = '#tooltips:cyberSport/noVehiclesInHangar/body'
+    CYBERSPORT_MODECHANGEFROZEN_HEADER = '#tooltips:cyberSport/modeChangeFrozen/header'
+    CYBERSPORT_MODECHANGEFROZEN_BODY = '#tooltips:cyberSport/modeChangeFrozen/body'
+    CYBERSPORT_ROSTERSLOTSETTINGS_HEADERTEXT_BODY = '#tooltips:cyberSport/rosterSlotSettings/headerText/body'
+    BATTLETYPES_STANDART_HEADER = '#tooltips:battleTypes/standart/header'
+    BATTLETYPES_STANDART_BODY = '#tooltips:battleTypes/standart/body'
+    BATTLETYPES_FALLOUT_HEADER = '#tooltips:battleTypes/fallout/header'
+    BATTLETYPES_FALLOUT_BODY = '#tooltips:battleTypes/fallout/body'
+    BATTLETYPES_TRAINING_HEADER = '#tooltips:battleTypes/training/header'
+    BATTLETYPES_TRAINING_BODY = '#tooltips:battleTypes/training/body'
+    BATTLETYPES_LEAVETRAINING_HEADER = '#tooltips:battleTypes/leaveTraining/header'
+    BATTLETYPES_LEAVETRAINING_BODY = '#tooltips:battleTypes/leaveTraining/body'
+    BATTLETYPES_COMPANY_HEADER = '#tooltips:battleTypes/company/header'
+    BATTLETYPES_COMPANY_BODY = '#tooltips:battleTypes/company/body'
     COMPANY_FALLOUT_RESTRICTION_HEADER = '#tooltips:company/fallout/restriction/header'
     COMPANY_FALLOUT_RESTRICTION_BODY = '#tooltips:company/fallout/restriction/body'
-    BATTLETYPES_LEAVECOMPANY_HEADER = BATTLETYPES_LEAVECOMPANY + '/header'
-    BATTLETYPES_LEAVECOMPANY_BODY = BATTLETYPES_LEAVECOMPANY + '/body'
-    BATTLETYPES_SPEC_HEADER = BATTLETYPES_SPEC + '/header'
-    BATTLETYPES_SPEC_BODY = BATTLETYPES_SPEC + '/body'
-    BATTLETYPES_LEAVESPEC_HEADER = BATTLETYPES_LEAVESPEC + '/header'
-    BATTLETYPES_LEAVESPEC_BODY = BATTLETYPES_LEAVESPEC + '/body'
-    BATTLETYPES_UNIT_HEADER = BATTLETYPES_UNIT + '/header'
-    BATTLETYPES_UNIT_BODY = BATTLETYPES_UNIT + '/body'
-    BATTLETYPES_LEAVEUNIT_HEADER = BATTLETYPES_LEAVEUNIT + '/header'
-    BATTLETYPES_LEAVEUNIT_BODY = BATTLETYPES_LEAVEUNIT + '/body'
-    BATTLETYPES_HISTORICAL_BODY = BATTLETYPES_HISTORICAL + '/body'
-    BATTLETYPES_LEAVEHISTORICAL_HEADER = BATTLETYPES_LEAVEHISTORICAL + '/header'
-    BATTLETYPES_LEAVEHISTORICAL_BODY = BATTLETYPES_LEAVEHISTORICAL + '/body'
-    BATTLETYPES_BATTLETUTORIAL_HEADER = BATTLETYPES_BATTLETUTORIAL + '/header'
-    BATTLETYPES_BATTLETUTORIAL_BODY = BATTLETYPES_BATTLETUTORIAL + '/body'
+    BATTLETYPES_LEAVECOMPANY_HEADER = '#tooltips:battleTypes/leaveCompany/header'
+    BATTLETYPES_LEAVECOMPANY_BODY = '#tooltips:battleTypes/leaveCompany/body'
+    BATTLETYPES_SPEC_HEADER = '#tooltips:battleTypes/spec/header'
+    BATTLETYPES_SPEC_BODY = '#tooltips:battleTypes/spec/body'
+    BATTLETYPES_LEAVESPEC_HEADER = '#tooltips:battleTypes/leaveSpec/header'
+    BATTLETYPES_LEAVESPEC_BODY = '#tooltips:battleTypes/leaveSpec/body'
+    BATTLETYPES_UNIT_HEADER = '#tooltips:battleTypes/unit/header'
+    BATTLETYPES_UNIT_BODY = '#tooltips:battleTypes/unit/body'
+    BATTLETYPES_LEAVEUNIT_HEADER = '#tooltips:battleTypes/leaveUnit/header'
+    BATTLETYPES_LEAVEUNIT_BODY = '#tooltips:battleTypes/leaveUnit/body'
+    BATTLETYPES_HISTORICAL_BODY = '#tooltips:battleTypes/historical/body'
+    BATTLETYPES_LEAVEHISTORICAL_HEADER = '#tooltips:battleTypes/leaveHistorical/header'
+    BATTLETYPES_LEAVEHISTORICAL_BODY = '#tooltips:battleTypes/leaveHistorical/body'
+    BATTLETYPES_BATTLETUTORIAL_HEADER = '#tooltips:battleTypes/battleTutorial/header'
+    BATTLETYPES_BATTLETUTORIAL_BODY = '#tooltips:battleTypes/battleTutorial/body'
     BATTLETYPES_AVAILABLETIME = '#tooltips:battleTypes/availableTime'
     BATTLETYPES_AVAILABLETIME_SINCE = '#tooltips:battleTypes/availableTime/since'
-    BATTLETYPES_BATTLETEACHING_HEADER = BATTLETYPES_BATTLETEACHING + '/header'
-    BATTLETYPES_BATTLETEACHING_BODY = BATTLETYPES_BATTLETEACHING + '/body'
+    BATTLETYPES_BATTLETEACHING_HEADER = '#tooltips:battleTypes/battleTeaching/header'
+    BATTLETYPES_BATTLETEACHING_BODY = '#tooltips:battleTypes/battleTeaching/body'
     BATTLETYPES_AVAILABLETIME_UNTIL = '#tooltips:battleTypes/availableTime/until'
     BATTLETYPES_AVAILABLETIME_SERVERS = '#tooltips:battleTypes/availableTime/servers'
     FALLOUTBATTLESELECTORWINDOW_INFO_HEADER = '#tooltips:falloutBattleSelectorWindow/info/header'
     FALLOUTBATTLESELECTORWINDOW_INFO_BODY = '#tooltips:falloutBattleSelectorWindow/info/body'
     FALLOUTBATTLESELECTORWINDOW_INFO_ALERT = '#tooltips:falloutBattleSelectorWindow/info/alert'
-    FALLOUTBATTLESELECTORWINDOW_BTNDISABLED_HEADER = FALLOUTBATTLESELECTORWINDOW_BTNDISABLED + '/header'
-    FALLOUTBATTLESELECTORWINDOW_BTNDISABLED_BODY = FALLOUTBATTLESELECTORWINDOW_BTNDISABLED + '/body'
-    FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED_HEADER = FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED + '/header'
-    FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED_BODY = FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED + '/body'
-    REDBUTTON_DISABLED_BUYNEEDED_HEADER = REDBUTTON_DISABLED_BUYNEEDED + '/header'
-    REDBUTTON_DISABLED_BUYNEEDED_BODY = REDBUTTON_DISABLED_BUYNEEDED + '/body'
-    REDBUTTON_DISABLED_REPAIRNEEDED_HEADER = REDBUTTON_DISABLED_REPAIRNEEDED + '/header'
-    REDBUTTON_DISABLED_REPAIRNEEDED_BODY = REDBUTTON_DISABLED_REPAIRNEEDED + '/body'
+    FALLOUTBATTLESELECTORWINDOW_BTNDISABLED_HEADER = '#tooltips:falloutBattleSelectorWindow/btnDisabled/header'
+    FALLOUTBATTLESELECTORWINDOW_BTNDISABLED_BODY = '#tooltips:falloutBattleSelectorWindow/btnDisabled/body'
+    FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED_HEADER = '#tooltips:falloutBattleSelectorWindow/btnInSquadDisabled/header'
+    FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED_BODY = '#tooltips:falloutBattleSelectorWindow/btnInSquadDisabled/body'
+    REDBUTTON_DISABLED_BUYNEEDED_HEADER = '#tooltips:redButton/disabled/buyNeeded/header'
+    REDBUTTON_DISABLED_BUYNEEDED_BODY = '#tooltips:redButton/disabled/buyNeeded/body'
+    REDBUTTON_DISABLED_REPAIRNEEDED_HEADER = '#tooltips:redButton/disabled/repairNeeded/header'
+    REDBUTTON_DISABLED_REPAIRNEEDED_BODY = '#tooltips:redButton/disabled/repairNeeded/body'
     REDBUTTON_DISABLED_VEHICLE_INBATTLE_HEADER = '#tooltips:redButton/disabled/vehicle/inBattle/header'
     REDBUTTON_DISABLED_VEHICLE_INBATTLE_BODY = '#tooltips:redButton/disabled/vehicle/inBattle/body'
     REDBUTTON_DISABLED_VEHICLE_ROAMING_HEADER = '#tooltips:redButton/disabled/vehicle/roaming/header'
@@ -771,6 +754,10 @@ class TOOLTIPS(object):
     REDBUTTON_DISABLED_LIMITS_LEVEL_BODY = '#tooltips:redButton/disabled/limits/level/body'
     MEMBERS_VEHICLELEVELLIMITS_BODY = '#tooltips:members/vehicleLevelLimits/body'
     MEMBERS_INVALIDVEHICLETYPE_BODY = '#tooltips:members/invalidVehicleType/body'
+    HANGAR_STARTBTN_SQUADNOTREADY_HEADER = '#tooltips:hangar/startBtn/squadNotReady/header'
+    HANGAR_STARTBTN_SQUADNOTREADY_BODY = '#tooltips:hangar/startBtn/squadNotReady/body'
+    HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_HEADER = '#tooltips:hangar/tankCarusel/wrongSquadVehicle/header'
+    HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_BODY = '#tooltips:hangar/tankCarusel/wrongSquadVehicle/body'
     ACHIEVEMENT_HISTORYDESCRIPTIONHEADER = '#tooltips:achievement/historyDescriptionHeader'
     ACHIEVEMENT_CURRENTDEGREE = '#tooltips:achievement/currentDegree'
     ACHIEVEMENT_MARKSONGUNCOUNT = '#tooltips:achievement/marksOnGunCount'
@@ -781,151 +768,153 @@ class TOOLTIPS(object):
     ACHIEVEMENT_CLOSETORECORD = '#tooltips:achievement/closeToRecord'
     ACHIEVEMENT_NEWRECORD = '#tooltips:achievement/newRecord'
     ACHIEVEMENT_RECORDONVEHICLE = '#tooltips:achievement/recordOnVehicle'
-    ACHIEVEMENT_PARAMS_MAXSNIPERSERIES = ACHIEVEMENT_PARAMS + '/maxSniperSeries'
-    ACHIEVEMENT_PARAMS_MAXINVINCIBLESERIES = ACHIEVEMENT_PARAMS + '/maxInvincibleSeries'
-    ACHIEVEMENT_PARAMS_MAXDIEHARDSERIES = ACHIEVEMENT_PARAMS + '/maxDiehardSeries'
-    ACHIEVEMENT_PARAMS_MAXKILLINGSERIES = ACHIEVEMENT_PARAMS + '/maxKillingSeries'
-    ACHIEVEMENT_PARAMS_MAXRELIABLECOMRADESERIES = ACHIEVEMENT_PARAMS + '/maxReliableComradeSeries'
-    ACHIEVEMENT_PARAMS_MAXAIMERSERIES = ACHIEVEMENT_PARAMS + '/maxAimerSeries'
-    ACHIEVEMENT_PARAMS_MAXWFC2014WINSERIES = ACHIEVEMENT_PARAMS + '/maxWFC2014WinSeries'
-    ACHIEVEMENT_PARAMS_MAXDEATHTRACKWINSERIES = ACHIEVEMENT_PARAMS + '/maxDeathTrackWinSeries'
-    ACHIEVEMENT_PARAMS_MAXPIERCINGSERIES = ACHIEVEMENT_PARAMS + '/maxPiercingSeries'
-    ACHIEVEMENT_PARAMS_MAXTACTICALBREAKTHROUGHSERIES = ACHIEVEMENT_PARAMS + '/maxTacticalBreakthroughSeries'
-    ACHIEVEMENT_PARAMS_MAXVICTORYMARCHSERIES = ACHIEVEMENT_PARAMS + '/maxVictoryMarchSeries'
-    ACHIEVEMENT_PARAMS_MAXEFC2016WINSERIES = ACHIEVEMENT_PARAMS + '/maxEFC2016WinSeries'
-    ACHIEVEMENT_PARAMS_NO_CLASS_ACHIEVEMENT_LEFT = ACHIEVEMENT_PARAMS + '/no_class_achievement_left'
-    ACHIEVEMENT_PARAMS_LEFT4 = ACHIEVEMENT_PARAMS + '/left4'
-    ACHIEVEMENT_PARAMS_LEFT3 = ACHIEVEMENT_PARAMS + '/left3'
-    ACHIEVEMENT_PARAMS_LEFT2 = ACHIEVEMENT_PARAMS + '/left2'
-    ACHIEVEMENT_PARAMS_LEFT1 = ACHIEVEMENT_PARAMS + '/left1'
-    ACHIEVEMENT_PARAMS_HEROESLEFT = ACHIEVEMENT_PARAMS + '/heroesLeft'
-    ACHIEVEMENT_PARAMS_PAIRWINSLEFT = ACHIEVEMENT_PARAMS + '/pairWinsLeft'
-    ACHIEVEMENT_PARAMS_VEHICLESLEFT = ACHIEVEMENT_PARAMS + '/vehiclesLeft'
-    ACHIEVEMENT_PARAMS_QUESTSLEFT = ACHIEVEMENT_PARAMS + '/questsLeft'
-    ACHIEVEMENT_PARAMS_TANKWOMENLEFT = ACHIEVEMENT_PARAMS + '/tankwomenLeft'
-    ACHIEVEMENT_PARAMS_DAMAGELEFT = ACHIEVEMENT_PARAMS + '/damageLeft'
-    ACHIEVEMENT_PARAMS_BATTLESLEFT = ACHIEVEMENT_PARAMS + '/battlesLeft'
-    ACHIEVEMENT_PARAMS_CAPTUREPOINTSLEFT = ACHIEVEMENT_PARAMS + '/capturePointsLeft'
-    ACHIEVEMENT_PARAMS_DROPPOINTSLEFT = ACHIEVEMENT_PARAMS + '/dropPointsLeft'
-    ACHIEVEMENT_PARAMS_WINSLEFT = ACHIEVEMENT_PARAMS + '/winsLeft'
-    ACHIEVEMENT_PARAMS_ACHIEVESLEFT = ACHIEVEMENT_PARAMS + '/achievesLeft'
-    ACHIEVEMENT_PARAMS_FORTDEFRESLEFT = ACHIEVEMENT_PARAMS + '/fortDefResLeft'
-    ACHIEVEMENT_PARAMS_WINPOINTSLEFT = ACHIEVEMENT_PARAMS + '/winPointsLeft'
-    ACHIEVEMENT_PARAMS_VEHICLESTAKEPART = ACHIEVEMENT_PARAMS + '/vehiclesTakePart'
-    ACHIEVEMENT_PARAMS_VEHICLESTOKILL = ACHIEVEMENT_PARAMS + '/vehiclesToKill'
-    ACHIEVEMENT_PARAMS_VEHICLESTORESEARCH = ACHIEVEMENT_PARAMS + '/vehiclesToResearch'
-    ACHIEVEMENT_PARAMS_VEHICLES = ACHIEVEMENT_PARAMS + '/vehicles'
+    ACHIEVEMENT_PARAMS_MAXSNIPERSERIES = '#tooltips:achievement/params/maxSniperSeries'
+    ACHIEVEMENT_PARAMS_MAXINVINCIBLESERIES = '#tooltips:achievement/params/maxInvincibleSeries'
+    ACHIEVEMENT_PARAMS_MAXDIEHARDSERIES = '#tooltips:achievement/params/maxDiehardSeries'
+    ACHIEVEMENT_PARAMS_MAXKILLINGSERIES = '#tooltips:achievement/params/maxKillingSeries'
+    ACHIEVEMENT_PARAMS_MAXRELIABLECOMRADESERIES = '#tooltips:achievement/params/maxReliableComradeSeries'
+    ACHIEVEMENT_PARAMS_MAXAIMERSERIES = '#tooltips:achievement/params/maxAimerSeries'
+    ACHIEVEMENT_PARAMS_MAXWFC2014WINSERIES = '#tooltips:achievement/params/maxWFC2014WinSeries'
+    ACHIEVEMENT_PARAMS_MAXDEATHTRACKWINSERIES = '#tooltips:achievement/params/maxDeathTrackWinSeries'
+    ACHIEVEMENT_PARAMS_MAXPIERCINGSERIES = '#tooltips:achievement/params/maxPiercingSeries'
+    ACHIEVEMENT_PARAMS_MAXTACTICALBREAKTHROUGHSERIES = '#tooltips:achievement/params/maxTacticalBreakthroughSeries'
+    ACHIEVEMENT_PARAMS_MAXVICTORYMARCHSERIES = '#tooltips:achievement/params/maxVictoryMarchSeries'
+    ACHIEVEMENT_PARAMS_MAXEFC2016WINSERIES = '#tooltips:achievement/params/maxEFC2016WinSeries'
+    ACHIEVEMENT_PARAMS_NO_CLASS_ACHIEVEMENT_LEFT = '#tooltips:achievement/params/no_class_achievement_left'
+    ACHIEVEMENT_PARAMS_LEFT4 = '#tooltips:achievement/params/left4'
+    ACHIEVEMENT_PARAMS_LEFT3 = '#tooltips:achievement/params/left3'
+    ACHIEVEMENT_PARAMS_LEFT2 = '#tooltips:achievement/params/left2'
+    ACHIEVEMENT_PARAMS_LEFT1 = '#tooltips:achievement/params/left1'
+    ACHIEVEMENT_PARAMS_HEROESLEFT = '#tooltips:achievement/params/heroesLeft'
+    ACHIEVEMENT_PARAMS_PAIRWINSLEFT = '#tooltips:achievement/params/pairWinsLeft'
+    ACHIEVEMENT_PARAMS_VEHICLESLEFT = '#tooltips:achievement/params/vehiclesLeft'
+    ACHIEVEMENT_PARAMS_QUESTSLEFT = '#tooltips:achievement/params/questsLeft'
+    ACHIEVEMENT_PARAMS_TANKWOMENLEFT = '#tooltips:achievement/params/tankwomenLeft'
+    ACHIEVEMENT_PARAMS_DAMAGELEFT = '#tooltips:achievement/params/damageLeft'
+    ACHIEVEMENT_PARAMS_BATTLESLEFT = '#tooltips:achievement/params/battlesLeft'
+    ACHIEVEMENT_PARAMS_CAPTUREPOINTSLEFT = '#tooltips:achievement/params/capturePointsLeft'
+    ACHIEVEMENT_PARAMS_DROPPOINTSLEFT = '#tooltips:achievement/params/dropPointsLeft'
+    ACHIEVEMENT_PARAMS_WINSLEFT = '#tooltips:achievement/params/winsLeft'
+    ACHIEVEMENT_PARAMS_ACHIEVESLEFT = '#tooltips:achievement/params/achievesLeft'
+    ACHIEVEMENT_PARAMS_FORTDEFRESLEFT = '#tooltips:achievement/params/fortDefResLeft'
+    ACHIEVEMENT_PARAMS_WINPOINTSLEFT = '#tooltips:achievement/params/winPointsLeft'
+    ACHIEVEMENT_PARAMS_VEHICLESTAKEPART = '#tooltips:achievement/params/vehiclesTakePart'
+    ACHIEVEMENT_PARAMS_VEHICLESTOKILL = '#tooltips:achievement/params/vehiclesToKill'
+    ACHIEVEMENT_PARAMS_VEHICLESTORESEARCH = '#tooltips:achievement/params/vehiclesToResearch'
+    ACHIEVEMENT_PARAMS_VEHICLES = '#tooltips:achievement/params/vehicles'
     ACHIEVEMENT_ACTION_UNAVAILABLE_DESCR = '#tooltips:achievement/action/unavailable/descr'
     ACHIEVEMENT_ACTION_UNAVAILABLE_TITLE = '#tooltips:achievement/action/unavailable/title'
-    ACHIEVEMENT_ATTR_COUNTER_HEADER = ACHIEVEMENT_ATTR_COUNTER + '/header'
-    ACHIEVEMENT_ATTR_SMALL_HEADER = ACHIEVEMENT_ATTR_SMALL + '/header'
-    ACHIEVEMENT_ATTR_RECORD_HEADER = ACHIEVEMENT_ATTR_RECORD + '/header'
-    ACHIEVEMENT_ATTR_VEHICLERECORD_HEADER = ACHIEVEMENT_ATTR_VEHICLERECORD + '/header'
-    ACHIEVEMENT_ATTR_DEGREE_HEADER = ACHIEVEMENT_ATTR_DEGREE + '/header'
+    ACHIEVEMENT_ATTR_COUNTER_HEADER = '#tooltips:achievement/attr/counter/header'
+    ACHIEVEMENT_ATTR_SMALL_HEADER = '#tooltips:achievement/attr/small/header'
+    ACHIEVEMENT_ATTR_RECORD_HEADER = '#tooltips:achievement/attr/record/header'
+    ACHIEVEMENT_ATTR_VEHICLERECORD_HEADER = '#tooltips:achievement/attr/vehicleRecord/header'
+    ACHIEVEMENT_ATTR_DEGREE_HEADER = '#tooltips:achievement/attr/degree/header'
     HEADER_MENU_HEADER = '#tooltips:header/menu/header'
     HEADER_MENU_DESCRIPTION = '#tooltips:header/menu/description'
     HEADER_MENU_SERVER = '#tooltips:header/menu/server'
     HEADER_MENU_SERVER_CURRENT = '#tooltips:header/menu/server/current'
     SERVER_NOTRECOMENDED = '#tooltips:server/notRecomended'
     HEADER_MENU_PLAYERSONSERVER = '#tooltips:header/menu/playersOnServer'
-    HEADER_ACCOUNT_HEADER = HEADER_ACCOUNT + '/header'
-    HEADER_ACCOUNT_BODY = HEADER_ACCOUNT + '/body'
-    HEADER_PREMIUM_BUY_HEADER = HEADER_PREMIUM_BUY + '/header'
-    HEADER_PREMIUM_BUY_BODY = HEADER_PREMIUM_BUY + '/body'
-    HEADER_PREMIUM_EXTEND_HEADER = HEADER_PREMIUM_EXTEND + '/header'
-    HEADER_PREMIUM_EXTEND_BODY = HEADER_PREMIUM_EXTEND + '/body'
-    HEADER_SQUAD_MEMBER_HEADER = HEADER_SQUAD + '_member/header'
-    HEADER_SQUAD_MEMBER_BODY = HEADER_SQUAD + '_member/body'
-    HEADER_SQUAD_HEADER = HEADER_SQUAD + '/header'
-    HEADER_SQUAD_BODY = HEADER_SQUAD + '/body'
-    HEADER_EVENTSQUAD_HEADER = HEADER_EVENTSQUAD + '/header'
-    HEADER_EVENTSQUAD_BODY = HEADER_EVENTSQUAD + '/body'
-    HEADER_DOMINATIONSQUAD_HEADER = HEADER_DOMINATIONSQUAD + '/header'
-    HEADER_DOMINATIONSQUAD_BODY = HEADER_DOMINATIONSQUAD + '/body'
-    HEADER_BATTLETYPE_HEADER = HEADER_BATTLETYPE + '/header'
-    HEADER_BATTLETYPE_BODY = HEADER_BATTLETYPE + '/body'
-    HEADER_REFILL_HEADER = HEADER_REFILL + '/header'
-    HEADER_REFILL_BODY = HEADER_REFILL + '/body'
-    HEADER_REFILL_ACTION_HEADER = HEADER_REFILL + '_action/header'
-    HEADER_REFILL_ACTION_BODY = HEADER_REFILL + '_action/body'
-    HEADER_REFILL_ACTION_ATTENTION = HEADER_REFILL + '_action/attention'
-    HEADER_GOLD_EXCHANGE_HEADER = HEADER_GOLD_EXCHANGE + '/header'
-    HEADER_GOLD_EXCHANGE_BODY = HEADER_GOLD_EXCHANGE + '/body'
-    HEADER_XP_GATHERING_HEADER = HEADER_XP_GATHERING + '/header'
-    HEADER_XP_GATHERING_BODY = HEADER_XP_GATHERING + '/body'
-    HEADER_ACCOUNTPOPOVER_INVITEBTN_HEADER = HEADER_ACCOUNT + 'Popover/inviteBtn/header'
-    HEADER_ACCOUNTPOPOVER_INVITEBTN_BODY = HEADER_ACCOUNT + 'Popover/inviteBtn/body'
-    HEADER_ACCOUNTPOPOVER_SEARCHCLAN_HEADER = HEADER_ACCOUNT + 'Popover/searchClan/header'
-    HEADER_ACCOUNTPOPOVER_SEARCHCLAN_BODY = HEADER_ACCOUNT + 'Popover/searchClan/body'
-    HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_HEADER = HEADER_ACCOUNT + 'Popover/inviteRequestBtn/header'
-    HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_BODY = HEADER_ACCOUNT + 'Popover/inviteRequestBtn/body'
-    HEADER_ACCOUNTPOPOVER_UNAVAILABLE = HEADER_ACCOUNT + 'Popover/unavailable'
-    HEADER_ACCOUNTPOPOVER_SEARCHCLAN_UNAVAILABLE_ATTENTION = HEADER_ACCOUNT + 'Popover/searchClan/unavailable/attention'
-    HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_UNAVAILABLE_ATTENTION = HEADER_ACCOUNT + 'Popover/inviteRequestBtn/unavailable/attention'
-    HEADER_ACCOUNTPOPOVER_INVITEBTN_UNAVAILABLE_ATTENTION = HEADER_ACCOUNT + 'Popover/inviteBtn/unavailable/attention'
-    HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE_ATTENTION = HEADER_ACCOUNT + 'Popover/clanProfile/unavailable/attention'
-    HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE_HEADER = HEADER_ACCOUNT + 'Popover/boostersTitle/header'
-    HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE_BODY = HEADER_ACCOUNT + 'Popover/boostersTitle/body'
-    HANGAR_UNLOCKBUTTON_HEADER = HANGAR_UNLOCKBUTTON + '/header'
-    HANGAR_UNLOCKBUTTON_BODY = HANGAR_UNLOCKBUTTON + '/body'
-    HANGAR_MAINTENANCE_HEADER = HANGAR_MAINTENANCE + '/header'
-    HANGAR_MAINTENANCE_BODY = HANGAR_MAINTENANCE + '/body'
-    HANGAR_TUNING_HEADER = HANGAR_TUNING + '/header'
-    HANGAR_TUNING_BODY = HANGAR_TUNING + '/body'
-    HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER = HANGAR_TUNING + '/disabledForEventVehicle/header'
-    HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY = HANGAR_TUNING + '/disabledForEventVehicle/body'
+    HEADER_ACCOUNT_HEADER = '#tooltips:header/account/header'
+    HEADER_ACCOUNT_BODY = '#tooltips:header/account/body'
+    HEADER_PREMIUM_BUY_HEADER = '#tooltips:header/premium_buy/header'
+    HEADER_PREMIUM_BUY_BODY = '#tooltips:header/premium_buy/body'
+    HEADER_PREMIUM_EXTEND_HEADER = '#tooltips:header/premium_extend/header'
+    HEADER_PREMIUM_EXTEND_BODY = '#tooltips:header/premium_extend/body'
+    HEADER_PREMSHOP_HEADER = '#tooltips:header/premShop/header'
+    HEADER_PREMSHOP_BODY = '#tooltips:header/premShop/body'
+    HEADER_SQUAD_MEMBER_HEADER = '#tooltips:header/squad_member/header'
+    HEADER_SQUAD_MEMBER_BODY = '#tooltips:header/squad_member/body'
+    HEADER_SQUAD_HEADER = '#tooltips:header/squad/header'
+    HEADER_SQUAD_BODY = '#tooltips:header/squad/body'
+    HEADER_EVENTSQUAD_HEADER = '#tooltips:header/eventSquad/header'
+    HEADER_EVENTSQUAD_BODY = '#tooltips:header/eventSquad/body'
+    HEADER_DOMINATIONSQUAD_HEADER = '#tooltips:header/dominationSquad/header'
+    HEADER_DOMINATIONSQUAD_BODY = '#tooltips:header/dominationSquad/body'
+    HEADER_BATTLETYPE_HEADER = '#tooltips:header/battleType/header'
+    HEADER_BATTLETYPE_BODY = '#tooltips:header/battleType/body'
+    HEADER_REFILL_HEADER = '#tooltips:header/refill/header'
+    HEADER_REFILL_BODY = '#tooltips:header/refill/body'
+    HEADER_REFILL_ACTION_HEADER = '#tooltips:header/refill_action/header'
+    HEADER_REFILL_ACTION_BODY = '#tooltips:header/refill_action/body'
+    HEADER_REFILL_ACTION_ATTENTION = '#tooltips:header/refill_action/attention'
+    HEADER_GOLD_EXCHANGE_HEADER = '#tooltips:header/gold_exchange/header'
+    HEADER_GOLD_EXCHANGE_BODY = '#tooltips:header/gold_exchange/body'
+    HEADER_XP_GATHERING_HEADER = '#tooltips:header/xp_gathering/header'
+    HEADER_XP_GATHERING_BODY = '#tooltips:header/xp_gathering/body'
+    HEADER_ACCOUNTPOPOVER_INVITEBTN_HEADER = '#tooltips:header/accountPopover/inviteBtn/header'
+    HEADER_ACCOUNTPOPOVER_INVITEBTN_BODY = '#tooltips:header/accountPopover/inviteBtn/body'
+    HEADER_ACCOUNTPOPOVER_SEARCHCLAN_HEADER = '#tooltips:header/accountPopover/searchClan/header'
+    HEADER_ACCOUNTPOPOVER_SEARCHCLAN_BODY = '#tooltips:header/accountPopover/searchClan/body'
+    HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_HEADER = '#tooltips:header/accountPopover/inviteRequestBtn/header'
+    HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_BODY = '#tooltips:header/accountPopover/inviteRequestBtn/body'
+    HEADER_ACCOUNTPOPOVER_UNAVAILABLE = '#tooltips:header/accountPopover/unavailable'
+    HEADER_ACCOUNTPOPOVER_SEARCHCLAN_UNAVAILABLE_ATTENTION = '#tooltips:header/accountPopover/searchClan/unavailable/attention'
+    HEADER_ACCOUNTPOPOVER_INVITEREQUESTBTN_UNAVAILABLE_ATTENTION = '#tooltips:header/accountPopover/inviteRequestBtn/unavailable/attention'
+    HEADER_ACCOUNTPOPOVER_INVITEBTN_UNAVAILABLE_ATTENTION = '#tooltips:header/accountPopover/inviteBtn/unavailable/attention'
+    HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE_ATTENTION = '#tooltips:header/accountPopover/clanProfile/unavailable/attention'
+    HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE_HEADER = '#tooltips:header/accountPopover/boostersTitle/header'
+    HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE_BODY = '#tooltips:header/accountPopover/boostersTitle/body'
+    HANGAR_UNLOCKBUTTON_HEADER = '#tooltips:hangar/unlockButton/header'
+    HANGAR_UNLOCKBUTTON_BODY = '#tooltips:hangar/unlockButton/body'
+    HANGAR_MAINTENANCE_HEADER = '#tooltips:hangar/maintenance/header'
+    HANGAR_MAINTENANCE_BODY = '#tooltips:hangar/maintenance/body'
+    HANGAR_TUNING_HEADER = '#tooltips:hangar/tuning/header'
+    HANGAR_TUNING_BODY = '#tooltips:hangar/tuning/body'
+    HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER = '#tooltips:hangar/tuning/disabledForEventVehicle/header'
+    HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY = '#tooltips:hangar/tuning/disabledForEventVehicle/body'
     HANGAR_MENU_HEADER = '#tooltips:hangar/menu/header'
     HANGAR_MENU_BODY = '#tooltips:hangar/menu/body'
     HANGAR_STATUS_TORENT = '#tooltips:hangar/status/toRent'
-    HANGAR_CREW_RUDY_DOG_HEADER = HANGAR_CREW_RUDY_DOG + '/header'
-    HANGAR_CREW_RUDY_DOG_BODY = HANGAR_CREW_RUDY_DOG + '/body'
+    HANGAR_CREW_RUDY_DOG_HEADER = '#tooltips:hangar/crew/rudy/dog/header'
+    HANGAR_CREW_RUDY_DOG_BODY = '#tooltips:hangar/crew/rudy/dog/body'
     HANGAR_CREW_ASSIGNEDTO = '#tooltips:hangar/crew/assignedTo'
     HANGAR_CREW_NEW_SKILL_AVAILABLE_HEADER = '#tooltips:hangar/crew/new_skill_available/header'
     HANGAR_CREW_NEW_SKILL_AVAILABLE_TEXT = '#tooltips:hangar/crew/new_skill_available/text'
     HANGAR_CREW_SPECIALTY_SKILLS = '#tooltips:hangar/crew/specialty_skills'
-    HANGAR_XPTOTMENCHECKBOX_HEADER = HANGAR_XPTOTMENCHECKBOX + '/header'
-    HANGAR_XPTOTMENCHECKBOX_BODY = HANGAR_XPTOTMENCHECKBOX + '/body'
+    HANGAR_XPTOTMENCHECKBOX_HEADER = '#tooltips:hangar/xpToTmenCheckbox/header'
+    HANGAR_XPTOTMENCHECKBOX_BODY = '#tooltips:hangar/xpToTmenCheckbox/body'
     PERSONAL_CASE_SKILLS_DROP_HEADER = '#tooltips:personal_case/skills/drop/header'
     PERSONAL_CASE_SKILLS_DROP_BODY = '#tooltips:personal_case/skills/drop/body'
     PERSONAL_CASE_SKILLS_NEW_HEADER = '#tooltips:personal_case/skills/new/header'
     PERSONAL_CASE_SKILLS_NEW_BODY = '#tooltips:personal_case/skills/new/body'
-    PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_HEADER = PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN + '/header'
-    PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_BODY = PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN + '/body'
-    PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_NOTENOUGHFREEXP_HEADER = PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN + '/notEnoughFreeXP/header'
-    PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_NOTENOUGHFREEXP_BODY = PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN + '/notEnoughFreeXP/body'
-    PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN_HEADER = PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN + '/header'
-    PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN_BODY = PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN + '/body'
-    PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN_DISABLED_HEADER = PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN + '_disabled/header'
-    PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN_DISABLED_BODY = PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN + '_disabled/body'
-    PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN_HEADER = PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN + '/header'
-    PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN_BODY = PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN + '/body'
-    PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN_DISABLED_HEADER = PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN + '_disabled/header'
-    PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN_DISABLED_BODY = PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN + '_disabled/body'
-    PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN_HEADER = PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN + '/header'
-    PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN_BODY = PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN + '/body'
-    PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN_DISABLED_HEADER = PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN + '_disabled/header'
-    PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN_DISABLED_BODY = PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN + '_disabled/body'
-    PERSONAL_CASE_TRAINING_AT_SPG_BTN_HEADER = PERSONAL_CASE_TRAINING_AT_SPG_BTN + '/header'
-    PERSONAL_CASE_TRAINING_AT_SPG_BTN_BODY = PERSONAL_CASE_TRAINING_AT_SPG_BTN + '/body'
-    PERSONAL_CASE_TRAINING_AT_SPG_BTN_DISABLED_HEADER = PERSONAL_CASE_TRAINING_AT_SPG_BTN + '_disabled/header'
-    PERSONAL_CASE_TRAINING_AT_SPG_BTN_DISABLED_BODY = PERSONAL_CASE_TRAINING_AT_SPG_BTN + '_disabled/body'
-    PERSONAL_CASE_TRAINING_SPG_BTN_HEADER = PERSONAL_CASE_TRAINING_SPG_BTN + '/header'
-    PERSONAL_CASE_TRAINING_SPG_BTN_BODY = PERSONAL_CASE_TRAINING_SPG_BTN + '/body'
-    PERSONAL_CASE_TRAINING_SPG_BTN_DISABLED_HEADER = PERSONAL_CASE_TRAINING_SPG_BTN + '_disabled/header'
-    PERSONAL_CASE_TRAINING_SPG_BTN_DISABLED_BODY = PERSONAL_CASE_TRAINING_SPG_BTN + '_disabled/body'
-    PERSONAL_CASE_TRAINING_TANK_HEADER = PERSONAL_CASE_TRAINING_TANK + '/header'
-    PERSONAL_CASE_TRAINING_TANK_BODY = PERSONAL_CASE_TRAINING_TANK + '/body'
-    PERSONAL_CASE_TRAINING_CURRENT_TANK_HEADER = PERSONAL_CASE_TRAINING_CURRENT_TANK + '/header'
-    PERSONAL_CASE_TRAINING_CURRENT_TANK_BODY = PERSONAL_CASE_TRAINING_CURRENT_TANK + '/body'
-    HANGAR_AMMO_PANEL_DEVICE_EMPTY_HEADER = HANGAR_AMMO_PANEL_DEVICE_EMPTY + '/header'
-    HANGAR_AMMO_PANEL_DEVICE_EMPTY_BODY = HANGAR_AMMO_PANEL_DEVICE_EMPTY + '/body'
-    HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY_HEADER = HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY + '/header'
-    HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY_BODY = HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY + '/body'
-    MODULEFITS_CREDITS_ERROR_HEADER = MODULEFITS_CREDITS_ERROR + '/header'
-    MODULEFITS_CREDITS_ERROR_TEXT = MODULEFITS_CREDITS_ERROR + '/text'
-    MODULEFITS_GOLD_ERROR_HEADER = MODULEFITS_GOLD_ERROR + '/header'
-    MODULEFITS_GOLD_ERROR_TEXT = MODULEFITS_GOLD_ERROR + '/text'
-    MODULEFITS_OPERATION_ERROR_HEADER = MODULEFITS_OPERATION_ERROR + '/header'
+    PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_HEADER = '#tooltips:personal_case/skills/accTeachingOfSkillBtn/header'
+    PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_BODY = '#tooltips:personal_case/skills/accTeachingOfSkillBtn/body'
+    PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_NOTENOUGHFREEXP_HEADER = '#tooltips:personal_case/skills/accTeachingOfSkillBtn/notEnoughFreeXP/header'
+    PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_NOTENOUGHFREEXP_BODY = '#tooltips:personal_case/skills/accTeachingOfSkillBtn/notEnoughFreeXP/body'
+    PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN_HEADER = '#tooltips:personal_case/training/light_tank_btn/header'
+    PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN_BODY = '#tooltips:personal_case/training/light_tank_btn/body'
+    PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN_DISABLED_HEADER = '#tooltips:personal_case/training/light_tank_btn_disabled/header'
+    PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN_DISABLED_BODY = '#tooltips:personal_case/training/light_tank_btn_disabled/body'
+    PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN_HEADER = '#tooltips:personal_case/training/medium_tank_btn/header'
+    PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN_BODY = '#tooltips:personal_case/training/medium_tank_btn/body'
+    PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN_DISABLED_HEADER = '#tooltips:personal_case/training/medium_tank_btn_disabled/header'
+    PERSONAL_CASE_TRAINING_MEDIUM_TANK_BTN_DISABLED_BODY = '#tooltips:personal_case/training/medium_tank_btn_disabled/body'
+    PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN_HEADER = '#tooltips:personal_case/training/heavy_tank_btn/header'
+    PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN_BODY = '#tooltips:personal_case/training/heavy_tank_btn/body'
+    PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN_DISABLED_HEADER = '#tooltips:personal_case/training/heavy_tank_btn_disabled/header'
+    PERSONAL_CASE_TRAINING_HEAVY_TANK_BTN_DISABLED_BODY = '#tooltips:personal_case/training/heavy_tank_btn_disabled/body'
+    PERSONAL_CASE_TRAINING_AT_SPG_BTN_HEADER = '#tooltips:personal_case/training/at_spg_btn/header'
+    PERSONAL_CASE_TRAINING_AT_SPG_BTN_BODY = '#tooltips:personal_case/training/at_spg_btn/body'
+    PERSONAL_CASE_TRAINING_AT_SPG_BTN_DISABLED_HEADER = '#tooltips:personal_case/training/at_spg_btn_disabled/header'
+    PERSONAL_CASE_TRAINING_AT_SPG_BTN_DISABLED_BODY = '#tooltips:personal_case/training/at_spg_btn_disabled/body'
+    PERSONAL_CASE_TRAINING_SPG_BTN_HEADER = '#tooltips:personal_case/training/spg_btn/header'
+    PERSONAL_CASE_TRAINING_SPG_BTN_BODY = '#tooltips:personal_case/training/spg_btn/body'
+    PERSONAL_CASE_TRAINING_SPG_BTN_DISABLED_HEADER = '#tooltips:personal_case/training/spg_btn_disabled/header'
+    PERSONAL_CASE_TRAINING_SPG_BTN_DISABLED_BODY = '#tooltips:personal_case/training/spg_btn_disabled/body'
+    PERSONAL_CASE_TRAINING_TANK_HEADER = '#tooltips:personal_case/training/tank/header'
+    PERSONAL_CASE_TRAINING_TANK_BODY = '#tooltips:personal_case/training/tank/body'
+    PERSONAL_CASE_TRAINING_CURRENT_TANK_HEADER = '#tooltips:personal_case/training/current_tank/header'
+    PERSONAL_CASE_TRAINING_CURRENT_TANK_BODY = '#tooltips:personal_case/training/current_tank/body'
+    HANGAR_AMMO_PANEL_DEVICE_EMPTY_HEADER = '#tooltips:hangar/ammo_panel/device/empty/header'
+    HANGAR_AMMO_PANEL_DEVICE_EMPTY_BODY = '#tooltips:hangar/ammo_panel/device/empty/body'
+    HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY_HEADER = '#tooltips:hangar/ammo_panel/equipment/empty/header'
+    HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY_BODY = '#tooltips:hangar/ammo_panel/equipment/empty/body'
+    MODULEFITS_CREDITS_ERROR_HEADER = '#tooltips:moduleFits/credits_error/header'
+    MODULEFITS_CREDITS_ERROR_TEXT = '#tooltips:moduleFits/credits_error/text'
+    MODULEFITS_GOLD_ERROR_HEADER = '#tooltips:moduleFits/gold_error/header'
+    MODULEFITS_GOLD_ERROR_TEXT = '#tooltips:moduleFits/gold_error/text'
+    MODULEFITS_OPERATION_ERROR_HEADER = '#tooltips:moduleFits/operation_error/header'
     MODULEFITS_NEED_TURRET_HEADER = '#tooltips:moduleFits/need_turret/header'
     MODULEFITS_NEED_TURRET_TEXT = '#tooltips:moduleFits/need_turret/text'
     MODULEFITS_TOO_HEAVY_HEADER = '#tooltips:moduleFits/too_heavy/header'
@@ -972,10 +961,10 @@ class TOOLTIPS(object):
     EQUIPMENT_ONUSE = '#tooltips:equipment/onUse'
     EQUIPMENT_ALWAYS = '#tooltips:equipment/always'
     EQUIPMENT_RESTRICTION = '#tooltips:equipment/restriction'
-    TANKS_CAROUSEL_BUY_VEHICLE_HEADER = TANKS_CAROUSEL_BUY_VEHICLE + '/header'
-    TANKS_CAROUSEL_BUY_VEHICLE_BODY = TANKS_CAROUSEL_BUY_VEHICLE + '/body'
-    TANKS_CAROUSEL_BUY_SLOT_HEADER = TANKS_CAROUSEL_BUY_SLOT + '/header'
-    TANKS_CAROUSEL_BUY_SLOT_BODY = TANKS_CAROUSEL_BUY_SLOT + '/body'
+    TANKS_CAROUSEL_BUY_VEHICLE_HEADER = '#tooltips:tanks_carousel/buy_vehicle/header'
+    TANKS_CAROUSEL_BUY_VEHICLE_BODY = '#tooltips:tanks_carousel/buy_vehicle/body'
+    TANKS_CAROUSEL_BUY_SLOT_HEADER = '#tooltips:tanks_carousel/buy_slot/header'
+    TANKS_CAROUSEL_BUY_SLOT_BODY = '#tooltips:tanks_carousel/buy_slot/body'
     TANKS_CAROUSEL_VEHICLESTATES_BATTLE = '#tooltips:tanks_carousel/vehicleStates/battle'
     TANKS_CAROUSEL_VEHICLESTATES_EXPLODED = '#tooltips:tanks_carousel/vehicleStates/exploded'
     TANKS_CAROUSEL_VEHICLESTATES_LOCKED = '#tooltips:tanks_carousel/vehicleStates/locked'
@@ -995,69 +984,80 @@ class TOOLTIPS(object):
     TANKCARUSEL_LOCK_CLAN = '#tooltips:tankCarusel/lock/CLAN'
     TANKCARUSEL_LOCK_TOURNAMENT = '#tooltips:tankCarusel/lock/TOURNAMENT'
     TANKCARUSEL_LOCK_ROAMING = '#tooltips:tankCarusel/lock/ROAMING'
-    MULTISELECTION_ALERT_HEADER = MULTISELECTION_ALERT + '/header'
-    MULTISELECTION_ALERT_BODY = MULTISELECTION_ALERT + '/body'
-    LOBY_MESSENGER_SERVICE_BUTTON_HEADER = LOBY_MESSENGER_SERVICE_BUTTON + '/header'
-    LOBY_MESSENGER_SERVICE_BUTTON_BODY = LOBY_MESSENGER_SERVICE_BUTTON + '/body'
-    LOBY_MESSENGER_CONTACTS_BUTTON_HEADER = LOBY_MESSENGER_CONTACTS_BUTTON + '/header'
-    LOBY_MESSENGER_CONTACTS_BUTTON_BODY = LOBY_MESSENGER_CONTACTS_BUTTON + '/body'
-    LOBY_MESSENGER_CHANNELS_BUTTON_HEADER = LOBY_MESSENGER_CHANNELS_BUTTON + '/header'
-    LOBY_MESSENGER_CHANNELS_BUTTON_BODY = LOBY_MESSENGER_CHANNELS_BUTTON + '/body'
+    MULTISELECTION_ALERT_HEADER = '#tooltips:multiselection/alert/header'
+    MULTISELECTION_ALERT_BODY = '#tooltips:multiselection/alert/body'
+    LOBY_MESSENGER_SERVICE_BUTTON_HEADER = '#tooltips:loby_messenger/service_button/header'
+    LOBY_MESSENGER_SERVICE_BUTTON_BODY = '#tooltips:loby_messenger/service_button/body'
+    LOBY_MESSENGER_CONTACTS_BUTTON_HEADER = '#tooltips:loby_messenger/contacts_button/header'
+    LOBY_MESSENGER_CONTACTS_BUTTON_BODY = '#tooltips:loby_messenger/contacts_button/body'
+    LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON_HEADER = '#tooltips:loby_messenger/vehicle_compare_button/header'
+    LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON_BODY = '#tooltips:loby_messenger/vehicle_compare_button/body'
+    LOBY_MESSENGER_CHANNELS_BUTTON_HEADER = '#tooltips:loby_messenger/channels_button/header'
+    LOBY_MESSENGER_CHANNELS_BUTTON_BODY = '#tooltips:loby_messenger/channels_button/body'
     LOBY_MESSENGER_CHANNEL_BUTTON_INROAMING = '#tooltips:loby_messenger/channel_button/inRoaming'
-    LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_LEFT_HEADER = LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_LEFT + '/header'
-    LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_LEFT_BODY = LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_LEFT + '/body'
-    LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_LEFT_HEADER = LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_LEFT + '/header'
-    LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_LEFT_BODY = LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_LEFT + '/body'
-    LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_RIGHT_HEADER = LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_RIGHT + '/header'
-    LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_RIGHT_BODY = LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_RIGHT + '/body'
-    LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT_HEADER = LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT + '/header'
-    LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT_BODY = LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT + '/body'
+    LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_LEFT_HEADER = '#tooltips:loby_messenger/channels_carousel_button_left/header'
+    LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_LEFT_BODY = '#tooltips:loby_messenger/channels_carousel_button_left/body'
+    LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_LEFT_HEADER = '#tooltips:loby_messenger/new/channels_carousel_button_left/header'
+    LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_LEFT_BODY = '#tooltips:loby_messenger/new/channels_carousel_button_left/body'
+    LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_RIGHT_HEADER = '#tooltips:loby_messenger/channels_carousel_button_right/header'
+    LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_RIGHT_BODY = '#tooltips:loby_messenger/channels_carousel_button_right/body'
+    LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT_HEADER = '#tooltips:loby_messenger/new/channels_carousel_button_right/header'
+    LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT_BODY = '#tooltips:loby_messenger/new/channels_carousel_button_right/body'
     LOBBY_MESSENGER_REFERRAL_BODY = '#tooltips:lobby_messenger/referral/body'
     LOBBY_MESSENGER_REFERRER_BODY = '#tooltips:lobby_messenger/referrer/body'
     LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER = '#tooltips:lobby/header/buyPremiumAccount/disabled/header'
     LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY = '#tooltips:lobby/header/buyPremiumAccount/disabled/body'
-    TRAINING_CREATE_INVITES_CHECKBOX_HEADER = TRAINING_CREATE_INVITES_CHECKBOX + '/header'
-    TRAINING_CREATE_INVITES_CHECKBOX_BODY = TRAINING_CREATE_INVITES_CHECKBOX + '/body'
-    TRAINING_OBSERVER_BTN_HEADER = TRAINING_OBSERVER_BTN + '/header'
-    TRAINING_OBSERVER_BTN_BODY = TRAINING_OBSERVER_BTN + '/body'
-    TRAINING_OBSERVER_SELECTEDICON_HEADER = TRAINING_OBSERVER_SELECTEDICON + '/header'
-    TRAINING_OBSERVER_SELECTEDICON_BODY = TRAINING_OBSERVER_SELECTEDICON + '/body'
-    TRAINING_OBSERVER_ICON_HEADER = TRAINING_OBSERVER_ICON + '/header'
-    TRAINING_OBSERVER_ICON_BODY = TRAINING_OBSERVER_ICON + '/body'
-    BARRACKS_TANKMEN_UNLOAD_HEADER = BARRACKS_TANKMEN_UNLOAD + '/header'
-    BARRACKS_TANKMEN_UNLOAD_BODY = BARRACKS_TANKMEN_UNLOAD + '/body'
-    BARRACKS_TANKMEN_DISMISS_HEADER = BARRACKS_TANKMEN_DISMISS + '/header'
-    BARRACKS_TANKMEN_DISMISS_BODY = BARRACKS_TANKMEN_DISMISS + '/body'
-    HEADER_INFO_PLAYERS_UNAVAILABLE_HEADER = HEADER_INFO_PLAYERS_UNAVAILABLE + '/header'
-    HEADER_INFO_PLAYERS_UNAVAILABLE_BODY = HEADER_INFO_PLAYERS_UNAVAILABLE + '/body'
-    HEADER_INFO_PLAYERS_ONLINE_REGION_HEADER = HEADER_INFO_PLAYERS_ONLINE_REGION + '/header'
-    HEADER_INFO_PLAYERS_ONLINE_REGION_BODY = HEADER_INFO_PLAYERS_ONLINE_REGION + '/body'
+    TRAINING_CREATE_INVITES_CHECKBOX_HEADER = '#tooltips:training/create/invites_checkbox/header'
+    TRAINING_CREATE_INVITES_CHECKBOX_BODY = '#tooltips:training/create/invites_checkbox/body'
+    TRAINING_OBSERVER_BTN_HEADER = '#tooltips:training/observer/btn/header'
+    TRAINING_OBSERVER_BTN_BODY = '#tooltips:training/observer/btn/body'
+    TRAINING_OBSERVER_SELECTEDICON_HEADER = '#tooltips:training/observer/selectedicon/header'
+    TRAINING_OBSERVER_SELECTEDICON_BODY = '#tooltips:training/observer/selectedicon/body'
+    TRAINING_OBSERVER_ICON_HEADER = '#tooltips:training/observer/icon/header'
+    TRAINING_OBSERVER_ICON_BODY = '#tooltips:training/observer/icon/body'
+    BARRACKS_TANKMEN_UNLOAD_HEADER = '#tooltips:barracks/tankmen/unload/header'
+    BARRACKS_TANKMEN_UNLOAD_BODY = '#tooltips:barracks/tankmen/unload/body'
+    BARRACKS_TANKMEN_DISMISS_HEADER = '#tooltips:barracks/tankmen/dismiss/header'
+    BARRACKS_TANKMEN_DISMISS_BODY = '#tooltips:barracks/tankmen/dismiss/body'
+    BARRACKS_TANKMEN_RECOVERYBTN_HEADER = '#tooltips:barracks/tankmen/recoveryBtn/header'
+    BARRACKS_TANKMEN_RECOVERY_HEADER = '#tooltips:barracks/tankmen/recovery/header'
+    BARRACKS_TANKMEN_RECOVERY_FREE_BODY = '#tooltips:barracks/tankmen/recovery/free/body'
+    BARRACKS_TANKMEN_RECOVERY_GOLD_BODY = '#tooltips:barracks/tankmen/recovery/gold/body'
+    BARRACKS_PLACESCOUNT_DISMISS_HEADER = '#tooltips:barracks/placesCount/dismiss/header'
+    BARRACKS_PLACESCOUNT_DISMISS_BODY = '#tooltips:barracks/placesCount/dismiss/body'
+    BARRACKS_TANKMEN_RECOVERY_NEWSKILL = '#tooltips:barracks/tankmen/recovery/newSkill'
+    HEADER_INFO_PLAYERS_UNAVAILABLE_HEADER = '#tooltips:header/info/players_unavailable/header'
+    HEADER_INFO_PLAYERS_UNAVAILABLE_BODY = '#tooltips:header/info/players_unavailable/body'
+    HEADER_INFO_PLAYERS_ONLINE_REGION_HEADER = '#tooltips:header/info/players_online_region/header'
+    HEADER_INFO_PLAYERS_ONLINE_REGION_BODY = '#tooltips:header/info/players_online_region/body'
     HEADER_INFO_PLAYERS_ONLINE_FULL_HEADER = '#tooltips:header/info/players_online_full/header'
     HEADER_INFO_PLAYERS_ONLINE_FULL_BODY = '#tooltips:header/info/players_online_full/body'
     HEADER_VERSIONINFOHINT = '#tooltips:header/versionInfoHint'
     SETTING_WINDOW_CONTROLS_KEY_INPUT_WARNING = '#tooltips:setting_window/controls/key_input/warning'
-    HEADER_BUTTONS_HANGAR_HEADER = HEADER_BUTTONS_HANGAR + '/header'
-    HEADER_BUTTONS_HANGAR_BODY = HEADER_BUTTONS_HANGAR + '/body'
-    HEADER_BUTTONS_INVENTORY_HEADER = HEADER_BUTTONS_INVENTORY + '/header'
-    HEADER_BUTTONS_INVENTORY_BODY = HEADER_BUTTONS_INVENTORY + '/body'
-    HEADER_BUTTONS_SHOP_HEADER = HEADER_BUTTONS_SHOP + '/header'
-    HEADER_BUTTONS_SHOP_BODY = HEADER_BUTTONS_SHOP + '/body'
-    HEADER_BUTTONS_PROFILE_HEADER = HEADER_BUTTONS_PROFILE + '/header'
-    HEADER_BUTTONS_PROFILE_BODY = HEADER_BUTTONS_PROFILE + '/body'
-    HEADER_BUTTONS_TECHTREE_HEADER = HEADER_BUTTONS_TECHTREE + '/header'
-    HEADER_BUTTONS_TECHTREE_BODY = HEADER_BUTTONS_TECHTREE + '/body'
-    HEADER_BUTTONS_BARRACKS_HEADER = HEADER_BUTTONS_BARRACKS + '/header'
-    HEADER_BUTTONS_BARRACKS_BODY = HEADER_BUTTONS_BARRACKS + '/body'
-    HEADER_BUTTONS_FORTS_HEADER = HEADER_BUTTONS_FORTS + '/header'
-    HEADER_BUTTONS_FORTS_BODY = HEADER_BUTTONS_FORTS + '/body'
-    HEADER_BUTTONS_BROWSER_HEADER = HEADER_BUTTONS_BROWSER + '/header'
-    HEADER_BUTTONS_BROWSER_BODY = HEADER_BUTTONS_BROWSER + '/body'
-    BARRACKS_ITEM_EMPTY_HEADER = BARRACKS_ITEM_EMPTY + '/header'
-    BARRACKS_ITEM_EMPTY_BODY = BARRACKS_ITEM_EMPTY + '/body'
-    BARRACKS_ITEM_BUY_HEADER = BARRACKS_ITEM_BUY + '/header'
-    BARRACKS_ITEM_BUY_BODY = BARRACKS_ITEM_BUY + '/body'
-    HEADER_BUTTONS_FORTS_TURNEDOFF_HEADER = HEADER_BUTTONS_FORTS + '/turnedOff/header'
-    HEADER_BUTTONS_FORTS_TURNEDOFF_BODY = HEADER_BUTTONS_FORTS + '/turnedOff/body'
+    HEADER_BUTTONS_HANGAR_HEADER = '#tooltips:header/buttons/hangar/header'
+    HEADER_BUTTONS_HANGAR_BODY = '#tooltips:header/buttons/hangar/body'
+    HEADER_BUTTONS_INVENTORY_HEADER = '#tooltips:header/buttons/inventory/header'
+    HEADER_BUTTONS_INVENTORY_BODY = '#tooltips:header/buttons/inventory/body'
+    HEADER_BUTTONS_SHOP_HEADER = '#tooltips:header/buttons/shop/header'
+    HEADER_BUTTONS_SHOP_BODY = '#tooltips:header/buttons/shop/body'
+    HEADER_BUTTONS_PROFILE_HEADER = '#tooltips:header/buttons/profile/header'
+    HEADER_BUTTONS_PROFILE_BODY = '#tooltips:header/buttons/profile/body'
+    HEADER_BUTTONS_TECHTREE_HEADER = '#tooltips:header/buttons/techtree/header'
+    HEADER_BUTTONS_TECHTREE_BODY = '#tooltips:header/buttons/techtree/body'
+    HEADER_BUTTONS_BARRACKS_HEADER = '#tooltips:header/buttons/barracks/header'
+    HEADER_BUTTONS_BARRACKS_BODY = '#tooltips:header/buttons/barracks/body'
+    HEADER_BUTTONS_FORTS_HEADER = '#tooltips:header/buttons/forts/header'
+    HEADER_BUTTONS_FORTS_BODY = '#tooltips:header/buttons/forts/body'
+    HEADER_BUTTONS_BROWSER_HEADER = '#tooltips:header/buttons/browser/header'
+    HEADER_BUTTONS_BROWSER_BODY = '#tooltips:header/buttons/browser/body'
+    HEADER_BUTTONS_ENCYCLOPEDIA_HEADER = '#tooltips:header/buttons/encyclopedia/header'
+    HEADER_BUTTONS_ENCYCLOPEDIA_BODY = '#tooltips:header/buttons/encyclopedia/body'
+    BARRACKS_ITEM_EMPTY_HEADER = '#tooltips:barracks/item_empty/header'
+    BARRACKS_ITEM_EMPTY_BODY = '#tooltips:barracks/item_empty/body'
+    BARRACKS_ITEM_BUY_HEADER = '#tooltips:barracks/item_buy/header'
+    BARRACKS_ITEM_BUY_BODY = '#tooltips:barracks/item_buy/body'
+    HEADER_BUTTONS_FORTS_TURNEDOFF_HEADER = '#tooltips:header/buttons/forts/turnedOff/header'
+    HEADER_BUTTONS_FORTS_TURNEDOFF_BODY = '#tooltips:header/buttons/forts/turnedOff/body'
     VEHICLE_GRAPH_NOTES_SHOWCONTEXTMENU = '#tooltips:vehicle/graph/notes/showContextMenu'
     VEHICLE_GRAPH_NOTES_SHOWINFOWINDOW = '#tooltips:vehicle/graph/notes/showInfoWindow'
     VEHICLE_GRAPH_NOTES_VEHICLEUNLOCK = '#tooltips:vehicle/graph/notes/vehicleUnlock'
@@ -1068,17 +1068,17 @@ class TOOLTIPS(object):
     VEHICLE_GRAPH_NOTES_GOTONEXTVEHICLE = '#tooltips:vehicle/graph/notes/goToNextVehicle'
     VEHICLE_GRAPH_BODY_MODULEINSTALLED = '#tooltips:vehicle/graph/body/moduleInstalled'
     VEHICLE_GRAPH_BODY_NOTENOUGH = '#tooltips:vehicle/graph/body/notEnough'
-    REPAIR_AUTO_HEADER = REPAIR_AUTO + '/header'
-    REPAIR_AUTO_BODY = REPAIR_AUTO + '/body'
-    AMMO_AUTO_HEADER = AMMO_AUTO + '/header'
-    AMMO_AUTO_BODY = AMMO_AUTO + '/body'
-    EQUIPMENT_AUTO_HEADER = EQUIPMENT_AUTO + '/header'
-    EQUIPMENT_AUTO_BODY = EQUIPMENT_AUTO + '/body'
-    EQUIPMENT_EMPTY_HEADER = EQUIPMENT_EMPTY + '/header'
-    EQUIPMENT_EMPTY_BODY = EQUIPMENT_EMPTY + '/body'
-    SETTINGS_DIALOG_SOUND_PTTKEY_HEADER = SETTINGS_DIALOG_SOUND_PTTKEY + '/header'
-    SETTINGS_DIALOG_SOUND_PTTKEY_BODY = SETTINGS_DIALOG_SOUND_PTTKEY + '/body'
-    SETTINGS_DIALOG_SOUND_ALTERNATIVEVOICES_BODY = SETTINGS_DIALOG_SOUND_ALTERNATIVEVOICES + '/body'
+    REPAIR_AUTO_HEADER = '#tooltips:repair/auto/header'
+    REPAIR_AUTO_BODY = '#tooltips:repair/auto/body'
+    AMMO_AUTO_HEADER = '#tooltips:ammo/auto/header'
+    AMMO_AUTO_BODY = '#tooltips:ammo/auto/body'
+    EQUIPMENT_AUTO_HEADER = '#tooltips:equipment/auto/header'
+    EQUIPMENT_AUTO_BODY = '#tooltips:equipment/auto/body'
+    EQUIPMENT_EMPTY_HEADER = '#tooltips:equipment/empty/header'
+    EQUIPMENT_EMPTY_BODY = '#tooltips:equipment/empty/body'
+    SETTINGS_DIALOG_SOUND_PTTKEY_HEADER = '#tooltips:settings_dialog/sound/PTTKey/header'
+    SETTINGS_DIALOG_SOUND_PTTKEY_BODY = '#tooltips:settings_dialog/sound/PTTKey/body'
+    SETTINGS_DIALOG_SOUND_ALTERNATIVEVOICES_BODY = '#tooltips:settings_dialog/sound/alternativeVoices/body'
     SETTINGS_DIALOG_SOUND_SOUNDMODEINVALID = '#tooltips:settings_dialog/sound/soundModeInvalid'
     CUSTOMIZATION_CAMOUFLAGE_CURRENT_DROP_HEADER = '#tooltips:customization/camouflage/current/drop/header'
     CUSTOMIZATION_CAMOUFLAGE_CURRENT_DROP_BODY = '#tooltips:customization/camouflage/current/drop/body'
@@ -1141,11 +1141,13 @@ class TOOLTIPS(object):
     VEHICLE_STATS_FOOTNOTE = '#tooltips:vehicle/stats/footnote'
     VEHICLE_ELITE = '#tooltips:vehicle/elite'
     VEHICLE_CREW = '#tooltips:vehicle/crew'
+    VEHICLE_CREW_AWARD = '#tooltips:vehicle/crew_award'
     VEHICLE_AMMO = '#tooltips:vehicle/ammo'
     VEHICLE_XP = '#tooltips:vehicle/xp'
     VEHICLE_MULTIPLIED_XP = '#tooltips:vehicle/multiplied_xp'
     VEHICLE_UNLOCK_PRICE = '#tooltips:vehicle/unlock_price'
     VEHICLE_BUY_PRICE = '#tooltips:vehicle/buy_price'
+    VEHICLE_RESTORE_PRICE = '#tooltips:vehicle/restore_price'
     VEHICLE_ACTION_PRC = '#tooltips:vehicle/action_prc'
     VEHICLE_MINRENTALSPRICE = '#tooltips:vehicle/minRentalsPrice'
     VEHICLE_BUY_PRICE_ACTION = '#tooltips:vehicle/buy_price_action'
@@ -1161,6 +1163,11 @@ class TOOLTIPS(object):
     VEHICLE_TEXTDELIMITER_OR = '#tooltips:vehicle/textDelimiter/or'
     VEHICLE_RENTLEFT_DAYS = '#tooltips:vehicle/rentLeft/days'
     VEHICLE_RENTLEFT_HOURS = '#tooltips:vehicle/rentLeft/hours'
+    VEHICLE_RENTLEFTFUTURE_DAYS = '#tooltips:vehicle/rentLeftFuture/days'
+    VEHICLE_RENTLEFTFUTURE_HOURS = '#tooltips:vehicle/rentLeftFuture/hours'
+    VEHICLE_RENTAVAILABLE = '#tooltips:vehicle/rentAvailable'
+    VEHICLE_RESTORELEFT_DAYS = '#tooltips:vehicle/restoreLeft/days'
+    VEHICLE_RESTORELEFT_HOURS = '#tooltips:vehicle/restoreLeft/hours'
     VEHICLE_RENTLEFT_BATTLES = '#tooltips:vehicle/rentLeft/battles'
     VEHICLEIGR_SPECIALABILITY = '#tooltips:vehicleIgr/specialAbility'
     VEHICLEIGR_DAYS = '#tooltips:vehicleIgr/days'
@@ -1180,13 +1187,12 @@ class TOOLTIPS(object):
     QUESTS_STATUS_DONE = '#tooltips:quests/status/done'
     QUESTS_STATUS_NOTREADY = '#tooltips:quests/status/notready'
     QUESTS_STATUS_NOTDONE = '#tooltips:quests/status/notDone'
-    QUESTS_COMPLEXTASK_LABEL = '#tooltips:quests/complexTask/label'
     QUESTS_RENDERER_LABEL = '#tooltips:quests/renderer/label'
     QUESTS_COUNTER_LABEL = '#tooltips:quests/counter/label'
-    QUESTS_NOTIFIER_HEADER = QUESTS_NOTIFIER + '/header'
-    QUESTS_NOTIFIER_BODY = QUESTS_NOTIFIER + '/body'
-    QUESTS_VEHICLESEASONAWARD_ABOUTBTN_HEADER = QUESTS_VEHICLESEASONAWARD_ABOUTBTN + '/header'
-    QUESTS_VEHICLESEASONAWARD_ABOUTBTN_BODY = QUESTS_VEHICLESEASONAWARD_ABOUTBTN + '/body'
+    QUESTS_NOTIFIER_HEADER = '#tooltips:quests/notifier/header'
+    QUESTS_NOTIFIER_BODY = '#tooltips:quests/notifier/body'
+    QUESTS_VEHICLESEASONAWARD_ABOUTBTN_HEADER = '#tooltips:quests/vehicleSeasonAward/aboutBtn/header'
+    QUESTS_VEHICLESEASONAWARD_ABOUTBTN_BODY = '#tooltips:quests/vehicleSeasonAward/aboutBtn/body'
     QUESTS_VEHICLESBONUS_TITLE = '#tooltips:quests/vehiclesBonus/title'
     QUESTS_VEHICLESBONUS_VEHICLESLEFT = '#tooltips:quests/vehiclesBonus/vehiclesLeft'
     QUESTS_SEASONAWARD_TITLE = '#tooltips:quests/seasonAward/title'
@@ -1211,6 +1217,8 @@ class TOOLTIPS(object):
     VEHICLESTATUS_CREWNOTFULL_HEADER = '#tooltips:vehicleStatus/crewNotFull/header'
     VEHICLESTATUS_NOTUNLOCKED_HEADER = '#tooltips:vehicleStatus/notUnlocked/header'
     VEHICLESTATUS_INHANGAR_HEADER = '#tooltips:vehicleStatus/inHangar/header'
+    VEHICLESTATUS_RESTORECOOLDOWN_DAYS = '#tooltips:vehicleStatus/restoreCooldown/days'
+    VEHICLESTATUS_RESTORECOOLDOWN_HOURS = '#tooltips:vehicleStatus/restoreCooldown/hours'
     VEHICLESTATUS_SERVERRESTRICTION_HEADER = '#tooltips:vehicleStatus/serverRestriction/header'
     VEHICLESTATUS_DEALISOVER_HEADER = '#tooltips:vehicleStatus/dealIsOver/header'
     VEHICLESTATUS_DEALISOVER_TEXT = '#tooltips:vehicleStatus/dealIsOver/text'
@@ -1218,6 +1226,7 @@ class TOOLTIPS(object):
     VEHICLESTATUS_NOTENOUGHCREDITS_TEXT = '#tooltips:vehicleStatus/notEnoughCredits/text'
     VEHICLESTATUS_NOTENOUGHGOLD_HEADER = '#tooltips:vehicleStatus/notEnoughGold/header'
     VEHICLESTATUS_NOTENOUGHGOLD_TEXT = '#tooltips:vehicleStatus/notEnoughGold/text'
+    VEHICLESTATUS_OPERATIONERROR_HEADER = '#tooltips:vehicleStatus/operationError/header'
     VEHICLESTATUS_NOTSUITABLE_HEADER = '#tooltips:vehicleStatus/notSuitable/header'
     VEHICLESTATUS_GROUP_IS_NOT_READY_HEADER = '#tooltips:vehicleStatus/group_is_not_ready/header'
     VEHICLESTATUS_GROUPAMMONOTFULL_HEADER = '#tooltips:vehicleStatus/groupAmmoNotFull/header'
@@ -1247,8 +1256,8 @@ class TOOLTIPS(object):
     RESEARCHPAGE_MODULE_STATUS_ROOTVEHICLEISLOCKED_TEXT = '#tooltips:researchPage/module/status/rootVehicleIsLocked/text'
     RESEARCHPAGE_MODULE_STATUS_PARENTMODULEISLOCKED_HEADER = '#tooltips:researchPage/module/status/parentModuleIsLocked/header'
     RESEARCHPAGE_MODULE_STATUS_PARENTMODULEISLOCKED_TEXT = '#tooltips:researchPage/module/status/parentModuleIsLocked/text'
-    RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP_HEADER = RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP + '/header'
-    RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP_TEXT = RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP + '/text'
+    RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP_HEADER = '#tooltips:researchPage/module/status/notEnoughXP/header'
+    RESEARCHPAGE_MODULE_STATUS_NOTENOUGHXP_TEXT = '#tooltips:researchPage/module/status/notEnoughXP/text'
     RESEARCHPAGE_MODULE_STATUS_NEEDTOBUYTANK_HEADER = '#tooltips:researchPage/module/status/needToBuyTank/header'
     RESEARCHPAGE_MODULE_STATUS_NEEDTOBUYTANK_TEXT = '#tooltips:researchPage/module/status/needToBuyTank/text'
     RESEARCHPAGE_MODULE_STATUS_VEHICLEISINBATTLE_HEADER = '#tooltips:researchPage/module/status/vehicleIsInBattle/header'
@@ -1257,8 +1266,12 @@ class TOOLTIPS(object):
     RESEARCHPAGE_MODULE_STATUS_VEHICLEISREADYTOFIGHT_TEXT = '#tooltips:researchPage/module/status/vehicleIsReadyToFight/text'
     RESEARCHPAGE_MODULE_STATUS_VEHICLEISBROKEN_HEADER = '#tooltips:researchPage/module/status/vehicleIsBroken/header'
     RESEARCHPAGE_MODULE_STATUS_VEHICLEISBROKEN_TEXT = '#tooltips:researchPage/module/status/vehicleIsBroken/text'
-    RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_HEADER = RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED + '/header'
-    RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_TEXT = RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED + '/text'
+    RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_HEADER = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked/header'
+    RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_TEXT = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked/text'
+    RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_ADD_HEADER = '#tooltips:researchPage/vehicle/button/compare/add/header'
+    RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_ADD_BODY = '#tooltips:researchPage/vehicle/button/compare/add/body'
+    RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED_HEADER = '#tooltips:researchPage/vehicle/button/compare/disabled/header'
+    RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED_BODY = '#tooltips:researchPage/vehicle/button/compare/disabled/body'
     TECHTREEPAGE_NATIONS_USSR = '#tooltips:techTreePage/nations/ussr'
     TECHTREEPAGE_NATIONS_GERMANY = '#tooltips:techTreePage/nations/germany'
     TECHTREEPAGE_NATIONS_USA = '#tooltips:techTreePage/nations/usa'
@@ -1268,8 +1281,10 @@ class TOOLTIPS(object):
     TECHTREEPAGE_NATIONS_JAPAN = '#tooltips:techTreePage/nations/japan'
     TECHTREEPAGE_NATIONS_CZECH = '#tooltips:techTreePage/nations/czech'
     TECHTREEPAGE_NATIONS_SWEDEN = '#tooltips:techTreePage/nations/sweden'
-    VEHICLESELLDIALOG_RENDERER_ALERTICON_HEADER = VEHICLESELLDIALOG_RENDERER_ALERTICON + '/header'
-    VEHICLESELLDIALOG_RENDERER_ALERTICON_BODY = VEHICLESELLDIALOG_RENDERER_ALERTICON + '/body'
+    VEHICLESELLDIALOG_RENDERER_ALERTICON_HEADER = '#tooltips:vehicleSellDialog/renderer/alertIcon/header'
+    VEHICLESELLDIALOG_RENDERER_ALERTICON_BODY = '#tooltips:vehicleSellDialog/renderer/alertIcon/body'
+    VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_HEADER = '#tooltips:vehicleSellDialog/crew/alertIcon/recovery/header'
+    VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_BODY = '#tooltips:vehicleSellDialog/crew/alertIcon/recovery/body'
     ACHIEVEMENT_CUSTOM_NOTENOUGH = '#tooltips:achievement/custom/notEnough'
     IGR_TITLE = '#tooltips:igr/title'
     IGR_MSG1 = '#tooltips:igr/msg1'
@@ -1278,8 +1293,8 @@ class TOOLTIPS(object):
     IGR_PROGRESSHEADER = '#tooltips:igr/progressHeader'
     SUITABLEVEHICLE_HEADER = '#tooltips:suitableVehicle/header'
     SELECTEDVEHICLE_HEADER = '#tooltips:selectedVehicle/header'
-    MEDALION_NOVEHICLE_HEADER = MEDALION_NOVEHICLE + '/header'
-    MEDALION_NOVEHICLE_BODY = MEDALION_NOVEHICLE + '/body'
+    MEDALION_NOVEHICLE_HEADER = '#tooltips:medalion/noVehicle/header'
+    MEDALION_NOVEHICLE_BODY = '#tooltips:medalion/noVehicle/body'
     SUITABLEVEHICLE_SUITABLETITLE = '#tooltips:suitableVehicle/suitableTitle'
     SUITABLEVEHICLE_CONDITIONSTITLE = '#tooltips:suitableVehicle/conditionsTitle'
     SUITABLEVEHICLE_MORE = '#tooltips:suitableVehicle/more'
@@ -1292,38 +1307,38 @@ class TOOLTIPS(object):
     CSAUTOSEARCHVEHICLE_MORE = '#tooltips:csAutoSearchVehicle/more'
     CSAUTOSEARCHVEHICLE_UNSUITABLE = '#tooltips:csAutoSearchVehicle/unsuitable'
     CYBERSPORT_VEHICLESELECTOR_NOTREADY = '#tooltips:cyberSport/vehicleSelector/notReady'
-    CYBERSPORT_VEHICLESELECTOR_OVERFLOWLEVEL_HEADER = CYBERSPORT_VEHICLESELECTOR_OVERFLOWLEVEL + '/header'
-    CYBERSPORT_VEHICLESELECTOR_OVERFLOWLEVEL_BODY = CYBERSPORT_VEHICLESELECTOR_OVERFLOWLEVEL + '/body'
-    CYBERSPORT_VEHICLESELECTOR_BADVEHICLE_HEADER = CYBERSPORT_VEHICLESELECTOR_BADVEHICLE + '/header'
-    CYBERSPORT_VEHICLESELECTOR_BADVEHICLE_BODY = CYBERSPORT_VEHICLESELECTOR_BADVEHICLE + '/body'
-    SETTINGSICON_FREEZED_HEADER = SETTINGSICON_FREEZED + '/header'
-    SETTINGSICON_FREEZED_BODY = SETTINGSICON_FREEZED + '/body'
-    SETTINGSICON_CONDITIONS_HEADER = SETTINGSICON_CONDITIONS + '/header'
-    SETTINGSICON_CONDITIONS_BODY = SETTINGSICON_CONDITIONS + '/body'
-    CYBERSPORT_INTRO_SEARCH_BTN_HEADER = CYBERSPORT_INTRO_SEARCH_BTN + '/header'
-    CYBERSPORT_INTRO_SEARCH_BTN_BODY = CYBERSPORT_INTRO_SEARCH_BTN + '/body'
-    CYBERSPORT_INTRO_CREATE_BTN_HEADER = CYBERSPORT_INTRO_CREATE_BTN + '/header'
-    CYBERSPORT_INTRO_CREATE_BTN_BODY = CYBERSPORT_INTRO_CREATE_BTN + '/body'
-    CYBERSPORT_INTRO_CREATEBTN_LOOK_HEADER = CYBERSPORT_INTRO_CREATEBTN_LOOK + '/header'
-    CYBERSPORT_INTRO_CREATEBTN_LOOK_BODY = CYBERSPORT_INTRO_CREATEBTN_LOOK + '/body'
-    CYBERSPORT_INTRO_CANCELBTN_HEADER = CYBERSPORT_INTRO_CANCELBTN + '/header'
-    CYBERSPORT_INTRO_CANCELBTN_BODY = CYBERSPORT_INTRO_CANCELBTN + '/body'
-    CYBERSPORT_INTRO_ADDITIONALBTN_HEADER = CYBERSPORT_INTRO_ADDITIONALBTN + '/header'
-    CYBERSPORT_INTRO_ADDITIONALBTN_BODY = CYBERSPORT_INTRO_ADDITIONALBTN + '/body'
-    CYBERSPORT_INTRO_CREATEBTN_ASSEMBLETEAM_HEADER = CYBERSPORT_INTRO_CREATEBTN_ASSEMBLETEAM + '/header'
-    CYBERSPORT_INTRO_CREATEBTN_ASSEMBLETEAM_BODY = CYBERSPORT_INTRO_CREATEBTN_ASSEMBLETEAM + '/body'
-    CYBERSPORT_INTRO_CREATEBTN_JOINTEAM_HEADER = CYBERSPORT_INTRO_CREATEBTN_JOINTEAM + '/header'
-    CYBERSPORT_INTRO_CREATEBTN_JOINTEAM_BODY = CYBERSPORT_INTRO_CREATEBTN_JOINTEAM + '/body'
-    CYBERSPORT_INTRO_CREATEBTN_ASSEMBLEDISABLED_HEADER = CYBERSPORT_INTRO_CREATEBTN_ASSEMBLEDISABLED + '/header'
-    CYBERSPORT_INTRO_CREATEBTN_ASSEMBLEDISABLED_BODY = CYBERSPORT_INTRO_CREATEBTN_ASSEMBLEDISABLED + '/body'
-    CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS_HEADER = CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS + '/header'
-    CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS_BODY = CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS + '/body'
-    CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS_PRIVATE_HEADER = CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS + '/private/header'
-    CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS_PRIVATE_BODY = CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS + '/private/body'
-    CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE_HEADER = CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE + '/header'
-    CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE_BODY = CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE + '/body'
-    CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLELEVEL_HEADER = CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLELEVEL + '/header'
-    CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLELEVEL_BODY = CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLELEVEL + '/body'
+    CYBERSPORT_VEHICLESELECTOR_OVERFLOWLEVEL_HEADER = '#tooltips:cyberSport/vehicleSelector/overflowLevel/header'
+    CYBERSPORT_VEHICLESELECTOR_OVERFLOWLEVEL_BODY = '#tooltips:cyberSport/vehicleSelector/overflowLevel/body'
+    CYBERSPORT_VEHICLESELECTOR_BADVEHICLE_HEADER = '#tooltips:cyberSport/vehicleSelector/badVehicle/header'
+    CYBERSPORT_VEHICLESELECTOR_BADVEHICLE_BODY = '#tooltips:cyberSport/vehicleSelector/badVehicle/body'
+    SETTINGSICON_FREEZED_HEADER = '#tooltips:settingsIcon/freezed/header'
+    SETTINGSICON_FREEZED_BODY = '#tooltips:settingsIcon/freezed/body'
+    SETTINGSICON_CONDITIONS_HEADER = '#tooltips:settingsIcon/conditions/header'
+    SETTINGSICON_CONDITIONS_BODY = '#tooltips:settingsIcon/conditions/body'
+    CYBERSPORT_INTRO_SEARCH_BTN_HEADER = '#tooltips:cyberSport/intro/search/btn/header'
+    CYBERSPORT_INTRO_SEARCH_BTN_BODY = '#tooltips:cyberSport/intro/search/btn/body'
+    CYBERSPORT_INTRO_CREATE_BTN_HEADER = '#tooltips:cyberSport/intro/create/btn/header'
+    CYBERSPORT_INTRO_CREATE_BTN_BODY = '#tooltips:cyberSport/intro/create/btn/body'
+    CYBERSPORT_INTRO_CREATEBTN_LOOK_HEADER = '#tooltips:cyberSport/intro/createBtn/look/header'
+    CYBERSPORT_INTRO_CREATEBTN_LOOK_BODY = '#tooltips:cyberSport/intro/createBtn/look/body'
+    CYBERSPORT_INTRO_CANCELBTN_HEADER = '#tooltips:cyberSport/intro/cancelBtn/header'
+    CYBERSPORT_INTRO_CANCELBTN_BODY = '#tooltips:cyberSport/intro/cancelBtn/body'
+    CYBERSPORT_INTRO_ADDITIONALBTN_HEADER = '#tooltips:cyberSport/intro/additionalBtn/header'
+    CYBERSPORT_INTRO_ADDITIONALBTN_BODY = '#tooltips:cyberSport/intro/additionalBtn/body'
+    CYBERSPORT_INTRO_CREATEBTN_ASSEMBLETEAM_HEADER = '#tooltips:cyberSport/intro/createBtn/assembleTeam/header'
+    CYBERSPORT_INTRO_CREATEBTN_ASSEMBLETEAM_BODY = '#tooltips:cyberSport/intro/createBtn/assembleTeam/body'
+    CYBERSPORT_INTRO_CREATEBTN_JOINTEAM_HEADER = '#tooltips:cyberSport/intro/createBtn/joinTeam/header'
+    CYBERSPORT_INTRO_CREATEBTN_JOINTEAM_BODY = '#tooltips:cyberSport/intro/createBtn/joinTeam/body'
+    CYBERSPORT_INTRO_CREATEBTN_ASSEMBLEDISABLED_HEADER = '#tooltips:cyberSport/intro/createBtn/assembleDisabled/header'
+    CYBERSPORT_INTRO_CREATEBTN_ASSEMBLEDISABLED_BODY = '#tooltips:cyberSport/intro/createBtn/assembleDisabled/body'
+    CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS_HEADER = '#tooltips:cyberSport/intro/createBtn/addPlayers/header'
+    CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS_BODY = '#tooltips:cyberSport/intro/createBtn/addPlayers/body'
+    CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS_PRIVATE_HEADER = '#tooltips:cyberSport/intro/createBtn/addPlayers/private/header'
+    CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS_PRIVATE_BODY = '#tooltips:cyberSport/intro/createBtn/addPlayers/private/body'
+    CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE_HEADER = '#tooltips:cyberSport/intro/selectedVehicleWarn/incompatibleType/header'
+    CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE_BODY = '#tooltips:cyberSport/intro/selectedVehicleWarn/incompatibleType/body'
+    CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLELEVEL_HEADER = '#tooltips:cyberSport/intro/selectedVehicleWarn/incompatibleLevel/header'
+    CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLELEVEL_BODY = '#tooltips:cyberSport/intro/selectedVehicleWarn/incompatibleLevel/body'
     CYBERSPORT_COMMANDER_STATS = '#tooltips:cyberSport/commander/stats'
     CYBERSPORT_CAPTAIN_STATS = '#tooltips:cyberSport/captain/stats'
     CYBERSPORT_ALERT_ONANOTHERSERVER = '#tooltips:cyberSport/alert/onAnotherServer'
@@ -1331,68 +1346,68 @@ class TOOLTIPS(object):
     CYBERSPORT_UNITLIST_FILTERBYVEHICLE_HEADER = '#tooltips:cyberSport/unitList/filterByVehicle/header'
     CYBERSPORT_UNITLIST_FILTERBYVEHICLE_NOVEHICLESSELECTED = '#tooltips:cyberSport/unitList/filterByVehicle/noVehiclesSelected'
     CYBERSPORT_UNITLIST_FILTERBYVEHICLE_SOMEVEHICLESSELECTED = '#tooltips:cyberSport/unitList/filterByVehicle/someVehiclesSelected'
-    CYBERSPORT_UNITLIST_REFRESH_HEADER = CYBERSPORT_UNITLIST_REFRESH + '/header'
-    CYBERSPORT_UNITLIST_REFRESH_BODY = CYBERSPORT_UNITLIST_REFRESH + '/body'
-    CYBERSPORT_UNITLIST_PAGINGUP_HEADER = CYBERSPORT_UNITLIST_PAGINGUP + '/header'
-    CYBERSPORT_UNITLIST_PAGINGUP_BODY = CYBERSPORT_UNITLIST_PAGINGUP + '/body'
-    CYBERSPORT_UNITLIST_PAGINGDOWN_HEADER = CYBERSPORT_UNITLIST_PAGINGDOWN + '/header'
-    CYBERSPORT_UNITLIST_PAGINGDOWN_BODY = CYBERSPORT_UNITLIST_PAGINGDOWN + '/body'
-    CYBERSPORT_UNITLIST_JOIN_HEADER = CYBERSPORT_UNITLIST_JOIN + '/header'
-    CYBERSPORT_UNITLIST_JOIN_BODY = CYBERSPORT_UNITLIST_JOIN + '/body'
-    CYBERSPORT_UNITLIST_CREATEBTN_ALREADYRALLYOWNER_HEADER = CYBERSPORT_UNITLIST_CREATEBTN_ALREADYRALLYOWNER + '/header'
-    CYBERSPORT_UNITLIST_CREATEBTN_ALREADYRALLYOWNER_BODY = CYBERSPORT_UNITLIST_CREATEBTN_ALREADYRALLYOWNER + '/body'
-    CYBERSPORT_UNITLIST_CREATEBTN_ALREADYINRALLY_HEADER = CYBERSPORT_UNITLIST_CREATEBTN_ALREADYINRALLY + '/header'
-    CYBERSPORT_UNITLIST_CREATEBTN_ALREADYINRALLY_BODY = CYBERSPORT_UNITLIST_CREATEBTN_ALREADYINRALLY + '/body'
-    CYBERSPORT_STATICRALLYINFO_STATSBATTLESCOUNT_HEADER = CYBERSPORT_STATICRALLYINFO_STATSBATTLESCOUNT + '/header'
-    CYBERSPORT_STATICRALLYINFO_STATSBATTLESCOUNT_BODY = CYBERSPORT_STATICRALLYINFO_STATSBATTLESCOUNT + '/body'
-    CYBERSPORT_STATICRALLYINFO_STATSWINSPERCENT_HEADER = CYBERSPORT_STATICRALLYINFO_STATSWINSPERCENT + '/header'
-    CYBERSPORT_STATICRALLYINFO_STATSWINSPERCENT_BODY = CYBERSPORT_STATICRALLYINFO_STATSWINSPERCENT + '/body'
-    CYBERSPORT_STATICRALLYINFO_JOINBTN_JOIN_HEADER = CYBERSPORT_STATICRALLYINFO_JOINBTN + '/join/header'
-    CYBERSPORT_STATICRALLYINFO_JOINBTN_JOIN_BODY = CYBERSPORT_STATICRALLYINFO_JOINBTN + '/join/body'
-    CYBERSPORT_STATICRALLYINFO_JOINBTN_APPLICATIONCOOLDOWN_HEADER = CYBERSPORT_STATICRALLYINFO_JOINBTN + '/applicationCooldown/header'
-    CYBERSPORT_STATICRALLYINFO_JOINBTN_APPLICATIONCOOLDOWN_BODY = CYBERSPORT_STATICRALLYINFO_JOINBTN + '/applicationCooldown/body'
-    CYBERSPORT_STATICRALLYINFO_JOINBTN_INPROCESS_HEADER = CYBERSPORT_STATICRALLYINFO_JOINBTN + '/inProcess/header'
-    CYBERSPORT_STATICRALLYINFO_JOINBTN_INPROCESS_BODY = CYBERSPORT_STATICRALLYINFO_JOINBTN + '/inProcess/body'
-    CYBERSPORT_STATICRALLYINFO_JOINBTN_INPROCESSOTHER_HEADER = CYBERSPORT_STATICRALLYINFO_JOINBTN + '/inProcessOther/header'
-    CYBERSPORT_STATICRALLYINFO_JOINBTN_INPROCESSOTHER_BODY = CYBERSPORT_STATICRALLYINFO_JOINBTN + '/inProcessOther/body'
-    CYBERSPORT_STATICRALLYINFO_JOINBTN_ALREADYJOINED_HEADER = CYBERSPORT_STATICRALLYINFO_JOINBTN + '/alreadyJoined/header'
-    CYBERSPORT_STATICRALLYINFO_JOINBTN_ALREADYJOINED_BODY = CYBERSPORT_STATICRALLYINFO_JOINBTN + '/alreadyJoined/body'
-    RALLYINFO_PROFILEBTN_HEADER = RALLYINFO_PROFILEBTN + '/header'
-    RALLYINFO_PROFILEBTN_BODY = RALLYINFO_PROFILEBTN + '/body'
-    CYBERSPORT_UNITLIST_JOINTOSTATICASLEGIONARY_HEADER = CYBERSPORT_UNITLIST_JOIN + 'ToStaticAsLegionary/header'
-    CYBERSPORT_UNITLIST_JOINTOSTATICASLEGIONARY_BODY = CYBERSPORT_UNITLIST_JOIN + 'ToStaticAsLegionary/body'
+    CYBERSPORT_UNITLIST_REFRESH_HEADER = '#tooltips:cyberSport/unitList/refresh/header'
+    CYBERSPORT_UNITLIST_REFRESH_BODY = '#tooltips:cyberSport/unitList/refresh/body'
+    CYBERSPORT_UNITLIST_PAGINGUP_HEADER = '#tooltips:cyberSport/unitList/pagingUp/header'
+    CYBERSPORT_UNITLIST_PAGINGUP_BODY = '#tooltips:cyberSport/unitList/pagingUp/body'
+    CYBERSPORT_UNITLIST_PAGINGDOWN_HEADER = '#tooltips:cyberSport/unitList/pagingDown/header'
+    CYBERSPORT_UNITLIST_PAGINGDOWN_BODY = '#tooltips:cyberSport/unitList/pagingDown/body'
+    CYBERSPORT_UNITLIST_JOIN_HEADER = '#tooltips:cyberSport/unitList/join/header'
+    CYBERSPORT_UNITLIST_JOIN_BODY = '#tooltips:cyberSport/unitList/join/body'
+    CYBERSPORT_UNITLIST_CREATEBTN_ALREADYRALLYOWNER_HEADER = '#tooltips:cyberSport/unitList/createBtn/alreadyRallyOwner/header'
+    CYBERSPORT_UNITLIST_CREATEBTN_ALREADYRALLYOWNER_BODY = '#tooltips:cyberSport/unitList/createBtn/alreadyRallyOwner/body'
+    CYBERSPORT_UNITLIST_CREATEBTN_ALREADYINRALLY_HEADER = '#tooltips:cyberSport/unitList/createBtn/alreadyInRally/header'
+    CYBERSPORT_UNITLIST_CREATEBTN_ALREADYINRALLY_BODY = '#tooltips:cyberSport/unitList/createBtn/alreadyInRally/body'
+    CYBERSPORT_STATICRALLYINFO_STATSBATTLESCOUNT_HEADER = '#tooltips:cyberSport/staticRallyInfo/statsBattlesCount/header'
+    CYBERSPORT_STATICRALLYINFO_STATSBATTLESCOUNT_BODY = '#tooltips:cyberSport/staticRallyInfo/statsBattlesCount/body'
+    CYBERSPORT_STATICRALLYINFO_STATSWINSPERCENT_HEADER = '#tooltips:cyberSport/staticRallyInfo/statsWinsPercent/header'
+    CYBERSPORT_STATICRALLYINFO_STATSWINSPERCENT_BODY = '#tooltips:cyberSport/staticRallyInfo/statsWinsPercent/body'
+    CYBERSPORT_STATICRALLYINFO_JOINBTN_JOIN_HEADER = '#tooltips:cyberSport/staticRallyInfo/joinBtn/join/header'
+    CYBERSPORT_STATICRALLYINFO_JOINBTN_JOIN_BODY = '#tooltips:cyberSport/staticRallyInfo/joinBtn/join/body'
+    CYBERSPORT_STATICRALLYINFO_JOINBTN_APPLICATIONCOOLDOWN_HEADER = '#tooltips:cyberSport/staticRallyInfo/joinBtn/applicationCooldown/header'
+    CYBERSPORT_STATICRALLYINFO_JOINBTN_APPLICATIONCOOLDOWN_BODY = '#tooltips:cyberSport/staticRallyInfo/joinBtn/applicationCooldown/body'
+    CYBERSPORT_STATICRALLYINFO_JOINBTN_INPROCESS_HEADER = '#tooltips:cyberSport/staticRallyInfo/joinBtn/inProcess/header'
+    CYBERSPORT_STATICRALLYINFO_JOINBTN_INPROCESS_BODY = '#tooltips:cyberSport/staticRallyInfo/joinBtn/inProcess/body'
+    CYBERSPORT_STATICRALLYINFO_JOINBTN_INPROCESSOTHER_HEADER = '#tooltips:cyberSport/staticRallyInfo/joinBtn/inProcessOther/header'
+    CYBERSPORT_STATICRALLYINFO_JOINBTN_INPROCESSOTHER_BODY = '#tooltips:cyberSport/staticRallyInfo/joinBtn/inProcessOther/body'
+    CYBERSPORT_STATICRALLYINFO_JOINBTN_ALREADYJOINED_HEADER = '#tooltips:cyberSport/staticRallyInfo/joinBtn/alreadyJoined/header'
+    CYBERSPORT_STATICRALLYINFO_JOINBTN_ALREADYJOINED_BODY = '#tooltips:cyberSport/staticRallyInfo/joinBtn/alreadyJoined/body'
+    RALLYINFO_PROFILEBTN_HEADER = '#tooltips:rallyInfo/profileBtn/header'
+    RALLYINFO_PROFILEBTN_BODY = '#tooltips:rallyInfo/profileBtn/body'
+    CYBERSPORT_UNITLIST_JOINTOSTATICASLEGIONARY_HEADER = '#tooltips:cyberSport/unitList/joinToStaticAsLegionary/header'
+    CYBERSPORT_UNITLIST_JOINTOSTATICASLEGIONARY_BODY = '#tooltips:cyberSport/unitList/joinToStaticAsLegionary/body'
     CYBERSPORT_UNIT_FREEZE_HEADER = '#tooltips:cyberSport/unit/freeze/header'
     CYBERSPORT_UNIT_FREEZE_BODYON = '#tooltips:cyberSport/unit/freeze/bodyOn'
     CYBERSPORT_UNIT_FREEZE_BODYOFF = '#tooltips:cyberSport/unit/freeze/bodyOff'
-    CYBERSPORT_UNIT_CONFIGURE_HEADER = CYBERSPORT_UNIT_CONFIGURE + '/header'
-    CYBERSPORT_UNIT_CONFIGURE_BODY = CYBERSPORT_UNIT_CONFIGURE + '/body'
+    CYBERSPORT_UNIT_CONFIGURE_HEADER = '#tooltips:cyberSport/unit/configure/header'
+    CYBERSPORT_UNIT_CONFIGURE_BODY = '#tooltips:cyberSport/unit/configure/body'
     CYBERSPORT_UNIT_SUMLEVEL_HEADER = '#tooltips:cyberSport/unit/sumLevel/header'
     CYBERSPORT_UNIT_SUMLEVEL_BODYNORMAL = '#tooltips:cyberSport/unit/sumLevel/bodyNormal'
     CYBERSPORT_UNIT_SUMLEVEL_BODYERROR = '#tooltips:cyberSport/unit/sumLevel/bodyError'
     CYBERSPORT_UNIT_ACCESS_HEADER = '#tooltips:cyberSport/unit/access/header'
-    CYBERSPORT_UNIT_INVITEBTN_HEADER = CYBERSPORT_UNIT_INVITEBTN + '/header'
-    CYBERSPORT_UNIT_INVITEBTN_BODY = CYBERSPORT_UNIT_INVITEBTN + '/body'
+    CYBERSPORT_UNIT_INVITEBTN_HEADER = '#tooltips:cyberSport/unit/inviteBtn/header'
+    CYBERSPORT_UNIT_INVITEBTN_BODY = '#tooltips:cyberSport/unit/inviteBtn/body'
     CYBERSPORT_UNIT_ACCESS_BODYOPEN = '#tooltips:cyberSport/unit/access/bodyOpen'
     CYBERSPORT_UNIT_ACCESS_BODYCLOSED = '#tooltips:cyberSport/unit/access/bodyClosed'
-    CYBERSPORT_UNIT_SLOTLABELCLOSED_HEADER = CYBERSPORT_UNIT_SLOTLABELCLOSED + '/header'
-    CYBERSPORT_UNIT_SLOTLABELCLOSED_BODY = CYBERSPORT_UNIT_SLOTLABELCLOSED + '/body'
-    CYBERSPORT_UNIT_SLOTLABELUNAVAILABLE_HEADER = CYBERSPORT_UNIT_SLOTLABELUNAVAILABLE + '/header'
-    CYBERSPORT_UNIT_SLOTLABELUNAVAILABLE_BODY = CYBERSPORT_UNIT_SLOTLABELUNAVAILABLE + '/body'
-    CYBERSPORT_UNIT_TAKEPLACEBTN_HEADER = CYBERSPORT_UNIT_TAKEPLACEBTN + '/header'
-    CYBERSPORT_UNIT_TAKEPLACEBTN_BODY = CYBERSPORT_UNIT_TAKEPLACEBTN + '/body'
-    CYBERSPORT_UNIT_TAKEPLACEFIRSTTIMEBTN_HEADER = CYBERSPORT_UNIT_TAKEPLACEFIRSTTIMEBTN + '/header'
-    CYBERSPORT_UNIT_TAKEPLACEFIRSTTIMEBTN_BODY = CYBERSPORT_UNIT_TAKEPLACEFIRSTTIMEBTN + '/body'
+    CYBERSPORT_UNIT_SLOTLABELCLOSED_HEADER = '#tooltips:cyberSport/unit/slotLabelClosed/header'
+    CYBERSPORT_UNIT_SLOTLABELCLOSED_BODY = '#tooltips:cyberSport/unit/slotLabelClosed/body'
+    CYBERSPORT_UNIT_SLOTLABELUNAVAILABLE_HEADER = '#tooltips:cyberSport/unit/slotLabelUnavailable/header'
+    CYBERSPORT_UNIT_SLOTLABELUNAVAILABLE_BODY = '#tooltips:cyberSport/unit/slotLabelUnavailable/body'
+    CYBERSPORT_UNIT_TAKEPLACEBTN_HEADER = '#tooltips:cyberSport/unit/takePlaceBtn/header'
+    CYBERSPORT_UNIT_TAKEPLACEBTN_BODY = '#tooltips:cyberSport/unit/takePlaceBtn/body'
+    CYBERSPORT_UNIT_TAKEPLACEFIRSTTIMEBTN_HEADER = '#tooltips:cyberSport/unit/takePlaceFirstTimeBtn/header'
+    CYBERSPORT_UNIT_TAKEPLACEFIRSTTIMEBTN_BODY = '#tooltips:cyberSport/unit/takePlaceFirstTimeBtn/body'
     CYBERSPORT_UNIT_COMMAND = '#tooltips:cyberSport/unit/command'
     CYBERSPORT_UNIT_SLOT_VEHICLE_NOTREADY_TEMPORALLY_BODY = '#tooltips:cyberSport/unit/slot/vehicle/notReady/temporally/body'
     CYBERSPORT_UNIT_SLOT_VEHICLE_NOTREADY_PERMANENTLY_BODY = '#tooltips:cyberSport/unit/slot/vehicle/notReady/permanently/body'
-    CYBERSPORT_WAITINGPLAYERS_CONFIGALERT_HEADER = CYBERSPORT_WAITINGPLAYERS_CONFIGALERT + '/header'
-    CYBERSPORT_WAITINGPLAYERS_CONFIGALERT_BODY = CYBERSPORT_WAITINGPLAYERS_CONFIGALERT + '/body'
-    CYBERSPORT_UNIT_FIGHTBTN_VEHICLENOTVALID_BODY = CYBERSPORT_UNIT_FIGHTBTN_VEHICLENOTVALID + '/body'
-    CYBERSPORT_UNIT_FIGHTBTN_NOTINSLOT_BODY = CYBERSPORT_UNIT_FIGHTBTN_NOTINSLOT + '/body'
-    CYBERSPORT_UNIT_FIGHTBTN_PRESSFORREADY_BODY = CYBERSPORT_UNIT_FIGHTBTN_PRESSFORREADY + '/body'
-    CYBERSPORT_UNIT_FIGHTBTN_PRESSFORNOTREADY_BODY = CYBERSPORT_UNIT_FIGHTBTN_PRESSFORNOTREADY + '/body'
-    CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE_HEADER = CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE + '/header'
-    CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE_BODY = CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE + '/body'
+    CYBERSPORT_WAITINGPLAYERS_CONFIGALERT_HEADER = '#tooltips:cyberSport/waitingPlayers/configAlert/header'
+    CYBERSPORT_WAITINGPLAYERS_CONFIGALERT_BODY = '#tooltips:cyberSport/waitingPlayers/configAlert/body'
+    CYBERSPORT_UNIT_FIGHTBTN_VEHICLENOTVALID_BODY = '#tooltips:cyberSport/unit/fightBtn/vehicleNotValid/body'
+    CYBERSPORT_UNIT_FIGHTBTN_NOTINSLOT_BODY = '#tooltips:cyberSport/unit/fightBtn/notInSlot/body'
+    CYBERSPORT_UNIT_FIGHTBTN_PRESSFORREADY_BODY = '#tooltips:cyberSport/unit/fightBtn/pressForReady/body'
+    CYBERSPORT_UNIT_FIGHTBTN_PRESSFORNOTREADY_BODY = '#tooltips:cyberSport/unit/fightBtn/pressForNotReady/body'
+    CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE_HEADER = '#tooltips:cyberSport/unit/fightBtn/eventVehicleWrongMode/header'
+    CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE_BODY = '#tooltips:cyberSport/unit/fightBtn/eventVehicleWrongMode/body'
     HISTORICALBATTLES_SHOWBATTLEHISTORY_HEADER = '#tooltips:historicalBattles/showBattleHistory/header'
     HISTORICALBATTLES_SHOWBATTLEHISTORY_BODY = '#tooltips:historicalBattles/showBattleHistory/body'
     HISTORICALBATTLES_DATESTATUS_STARTDATE = '#tooltips:historicalBattles/dateStatus/startDate'
@@ -1416,12 +1431,12 @@ class TOOLTIPS(object):
     HISTORICALBATTLES_FIGHTBUTTON_DISABLED_MONEY = '#tooltips:historicalBattles/fightButton/disabled/money'
     HISTORICALBATTLES_MODULES_TITLE = '#tooltips:historicalBattles/modules/title'
     HISTORICALBATTLES_MODULES_SUBTITLE = '#tooltips:historicalBattles/modules/subTitle'
-    FORTIFICATION_BATTLEROOMLEGIONARIES_HEADER = FORTIFICATION_BATTLEROOMLEGIONARIES + '/header'
-    FORTIFICATION_BATTLEROOMLEGIONARIES_BODY = FORTIFICATION_BATTLEROOMLEGIONARIES + '/body'
-    FORTIFICATION_BATTLEROOMLEGIONARIES_TEAMSECTION_HEADER = FORTIFICATION_BATTLEROOMLEGIONARIES + '/teamSection/header'
-    FORTIFICATION_BATTLEROOMLEGIONARIES_TEAMSECTION_BODY = FORTIFICATION_BATTLEROOMLEGIONARIES + '/teamSection/body'
-    FORTIFICATION_INTROVIEW_CLANBATTLEBTN_ENABLED_HEADER = FORTIFICATION_INTROVIEW_CLANBATTLEBTN_ENABLED + '/header'
-    FORTIFICATION_INTROVIEW_CLANBATTLEBTN_ENABLED_BODY = FORTIFICATION_INTROVIEW_CLANBATTLEBTN_ENABLED + '/body'
+    FORTIFICATION_BATTLEROOMLEGIONARIES_HEADER = '#tooltips:fortification/battleRoomLegionaries/header'
+    FORTIFICATION_BATTLEROOMLEGIONARIES_BODY = '#tooltips:fortification/battleRoomLegionaries/body'
+    FORTIFICATION_BATTLEROOMLEGIONARIES_TEAMSECTION_HEADER = '#tooltips:fortification/battleRoomLegionaries/teamSection/header'
+    FORTIFICATION_BATTLEROOMLEGIONARIES_TEAMSECTION_BODY = '#tooltips:fortification/battleRoomLegionaries/teamSection/body'
+    FORTIFICATION_INTROVIEW_CLANBATTLEBTN_ENABLED_HEADER = '#tooltips:fortification/introView/clanBattleBtn/enabled/header'
+    FORTIFICATION_INTROVIEW_CLANBATTLEBTN_ENABLED_BODY = '#tooltips:fortification/introView/clanBattleBtn/enabled/body'
     FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_LEADER = '#tooltips:fortification/introView/clanBattleBtn/disabled/leader'
     FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_NOTLEADER = '#tooltips:fortification/introView/clanBattleBtn/disabled/notLeader'
     FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_NEXTBATTLE = '#tooltips:fortification/introView/clanBattleBtn/disabled/nextBattle'
@@ -1430,53 +1445,53 @@ class TOOLTIPS(object):
     FORTIFICATION_INTROVIEW_FORTBATTLES_BTNTOOLTIP = '#tooltips:fortification/introView/fortBattles/btnTooltip'
     FORTIFICATION_INTROVIEW_SORTIE_BTNTOOLTIP = '#tooltips:fortification/introView/sortie/btnTooltip'
     FORTIFICATION_INTROVIEW_BATTLE_BTNTOOLTIP = '#tooltips:fortification/introView/battle/btnTooltip'
-    FORTIFICATION_MODERNIZATION_APPLYBUTTON_HEADER = FORTIFICATION_MODERNIZATION + '/applyButton/header'
-    FORTIFICATION_MODERNIZATION_APPLYBUTTON_LOWBASELEVEL = FORTIFICATION_MODERNIZATION + '/applyButton/lowBaseLevel'
-    FORTIFICATION_MODERNIZATION_APPLYBUTTON_NETENOUGHRESOURCE = FORTIFICATION_MODERNIZATION + '/applyButton/netEnoughResource'
-    FORTIFICATION_MODERNIZATION_APPLYBUTTON_LOWLEVELANDRESOURCE = FORTIFICATION_MODERNIZATION + '/applyButton/lowLevelAndResource'
-    FORTIFICATION_MODERNIZATION_DESCRIPTIONLINK_HEADER = FORTIFICATION_MODERNIZATION + '/descriptionLink/header'
-    FORTIFICATION_MODERNIZATION_DESCRIPTIONLINK_BODY = FORTIFICATION_MODERNIZATION + '/descriptionLink/body'
-    FORTIFICATION_DEFRESICONINFO_HEADER = FORTIFICATION_DEFRESICONINFO + '/header'
-    FORTIFICATION_DEFRESICONINFO_BODY = FORTIFICATION_DEFRESICONINFO + '/body'
-    FORTIFICATION_MODERNIZATION_NOTACTIVATEDDEFPERIOD_HEADER = FORTIFICATION_MODERNIZATION + '/notActivatedDefPeriod/header'
-    FORTIFICATION_MODERNIZATION_NOTACTIVATEDDEFPERIOD_BODY = FORTIFICATION_MODERNIZATION + '/notActivatedDefPeriod/body'
-    FORTIFICATION_FOUNDATIONCOMMANDER_HEADER = FORTIFICATION_FOUNDATION + 'Commander/header'
-    FORTIFICATION_FOUNDATIONCOMMANDER_BODY = FORTIFICATION_FOUNDATION + 'Commander/body'
-    FORTIFICATION_FOUNDATIONCOMMANDER_NOTAVAILABLE_BODY = FORTIFICATION_FOUNDATION + 'Commander/notAvailable/body'
-    FORTIFICATION_FOUNDATIONNOTCOMMANDER_HEADER = FORTIFICATION_FOUNDATION + 'NotCommander/header'
-    FORTIFICATION_FOUNDATIONNOTCOMMANDER_BODY = FORTIFICATION_FOUNDATION + 'NotCommander/body'
-    FORTIFICATION_HEADER_STATISTICS_HEADER = FORTIFICATION_HEADER_STATISTICS + '/header'
-    FORTIFICATION_HEADER_STATISTICS_BODY = FORTIFICATION_HEADER_STATISTICS + '/body'
-    FORTIFICATION_HEADER_CLANLIST_HEADER = FORTIFICATION_HEADER_CLANLIST + '/header'
-    FORTIFICATION_HEADER_CLANLIST_BODY = FORTIFICATION_HEADER_CLANLIST + '/body'
-    FORTIFICATION_HEADER_CALENDARBTN_HEADER = FORTIFICATION_HEADER_CALENDARBTN + '/header'
-    FORTIFICATION_HEADER_CALENDARBTN_BODY = FORTIFICATION_HEADER_CALENDARBTN + '/body'
-    FORTIFICATION_HEADER_SETTINGSBTN_HEADER = FORTIFICATION_HEADER_SETTINGSBTN + '/header'
-    FORTIFICATION_HEADER_SETTINGSBTN_BODY = FORTIFICATION_HEADER_SETTINGSBTN + '/body'
-    FORTIFICATION_FOOTER_SORTIEBUTTON_HEADER = FORTIFICATION_FOOTER_SORTIEBUTTON + '/header'
-    FORTIFICATION_FOOTER_SORTIEBUTTON_BODY = FORTIFICATION_FOOTER_SORTIEBUTTON + '/body'
-    FORTIFICATION_FOOTER_INTELLIGENCEBUTTON_HEADER = FORTIFICATION_FOOTER_INTELLIGENCEBUTTON + '/header'
-    FORTIFICATION_FOOTER_INTELLIGENCEBUTTON_BODY = FORTIFICATION_FOOTER_INTELLIGENCEBUTTON + '/body'
-    FORTIFICATION_WELCOME_DETAILS_HEADER = FORTIFICATION_WELCOME_DETAILS + '/header'
-    FORTIFICATION_WELCOME_DETAILS_BODY = FORTIFICATION_WELCOME_DETAILS + '/body'
-    FORTIFICATION_WELCOME_CREATEFORT_HEADER = FORTIFICATION_WELCOME_CREATEFORT + '/header'
-    FORTIFICATION_WELCOME_CREATEFORT_BODY = FORTIFICATION_WELCOME_CREATEFORT + '/body'
-    FORTIFICATION_WELCOME_CANTCREATEFORT_HEADER = FORTIFICATION_WELCOME_CANTCREATEFORT + '/header'
-    FORTIFICATION_WELCOME_CANTCREATEFORT_BODY = FORTIFICATION_WELCOME_CANTCREATEFORT + '/body'
-    FORTIFICATION_WELCOME_CLANSEARCH_HEADER = FORTIFICATION_WELCOME_CLANSEARCH + '/header'
-    FORTIFICATION_WELCOME_CLANSEARCH_BODY = FORTIFICATION_WELCOME_CLANSEARCH + '/body'
-    FORTIFICATION_WELCOME_CLANSEARCHLABEL_HEADER = FORTIFICATION_WELCOME_CLANSEARCH + 'Label/header'
-    FORTIFICATION_WELCOME_CLANSEARCHLABEL_BODY = FORTIFICATION_WELCOME_CLANSEARCH + 'Label/body'
-    FORTIFICATION_WELCOME_CLANCREATE_HEADER = FORTIFICATION_WELCOME_CLANCREATE + '/header'
-    FORTIFICATION_WELCOME_CLANCREATE_BODY = FORTIFICATION_WELCOME_CLANCREATE + '/body'
-    FORTIFICATION_TRANPORTINGBUTTON_ACTIVE_HEADER = FORTIFICATION_TRANPORTINGBUTTON_ACTIVE + '/header'
-    FORTIFICATION_TRANPORTINGBUTTON_ACTIVE_BODY = FORTIFICATION_TRANPORTINGBUTTON_ACTIVE + '/body'
-    FORTIFICATION_TRANPORTINGBUTTON_INACTIVE_HEADER = FORTIFICATION_TRANPORTINGBUTTON_INACTIVE + '/header'
-    FORTIFICATION_TRANPORTINGBUTTON_INACTIVE_BODY = FORTIFICATION_TRANPORTINGBUTTON_INACTIVE + '/body'
-    FORTIFICATION_CLOSEDIRECTIONBUTTON_ACTIVE_HEADER = FORTIFICATION_CLOSEDIRECTIONBUTTON_ACTIVE + '/header'
-    FORTIFICATION_CLOSEDIRECTIONBUTTON_ACTIVE_BODY = FORTIFICATION_CLOSEDIRECTIONBUTTON_ACTIVE + '/body'
-    FORTIFICATION_CLOSEDIRECTIONBUTTON_INACTIVE_HEADER = FORTIFICATION_CLOSEDIRECTIONBUTTON_INACTIVE + '/header'
-    FORTIFICATION_CLOSEDIRECTIONBUTTON_INACTIVE_BODY = FORTIFICATION_CLOSEDIRECTIONBUTTON_INACTIVE + '/body'
+    FORTIFICATION_MODERNIZATION_APPLYBUTTON_HEADER = '#tooltips:fortification/modernization/applyButton/header'
+    FORTIFICATION_MODERNIZATION_APPLYBUTTON_LOWBASELEVEL = '#tooltips:fortification/modernization/applyButton/lowBaseLevel'
+    FORTIFICATION_MODERNIZATION_APPLYBUTTON_NETENOUGHRESOURCE = '#tooltips:fortification/modernization/applyButton/netEnoughResource'
+    FORTIFICATION_MODERNIZATION_APPLYBUTTON_LOWLEVELANDRESOURCE = '#tooltips:fortification/modernization/applyButton/lowLevelAndResource'
+    FORTIFICATION_MODERNIZATION_DESCRIPTIONLINK_HEADER = '#tooltips:fortification/modernization/descriptionLink/header'
+    FORTIFICATION_MODERNIZATION_DESCRIPTIONLINK_BODY = '#tooltips:fortification/modernization/descriptionLink/body'
+    FORTIFICATION_DEFRESICONINFO_HEADER = '#tooltips:fortification/defResIconInfo/header'
+    FORTIFICATION_DEFRESICONINFO_BODY = '#tooltips:fortification/defResIconInfo/body'
+    FORTIFICATION_MODERNIZATION_NOTACTIVATEDDEFPERIOD_HEADER = '#tooltips:fortification/modernization/notActivatedDefPeriod/header'
+    FORTIFICATION_MODERNIZATION_NOTACTIVATEDDEFPERIOD_BODY = '#tooltips:fortification/modernization/notActivatedDefPeriod/body'
+    FORTIFICATION_FOUNDATIONCOMMANDER_HEADER = '#tooltips:fortification/foundationCommander/header'
+    FORTIFICATION_FOUNDATIONCOMMANDER_BODY = '#tooltips:fortification/foundationCommander/body'
+    FORTIFICATION_FOUNDATIONCOMMANDER_NOTAVAILABLE_BODY = '#tooltips:fortification/foundationCommander/notAvailable/body'
+    FORTIFICATION_FOUNDATIONNOTCOMMANDER_HEADER = '#tooltips:fortification/foundationNotCommander/header'
+    FORTIFICATION_FOUNDATIONNOTCOMMANDER_BODY = '#tooltips:fortification/foundationNotCommander/body'
+    FORTIFICATION_HEADER_STATISTICS_HEADER = '#tooltips:fortification/header/statistics/header'
+    FORTIFICATION_HEADER_STATISTICS_BODY = '#tooltips:fortification/header/statistics/body'
+    FORTIFICATION_HEADER_CLANLIST_HEADER = '#tooltips:fortification/header/clanList/header'
+    FORTIFICATION_HEADER_CLANLIST_BODY = '#tooltips:fortification/header/clanList/body'
+    FORTIFICATION_HEADER_CALENDARBTN_HEADER = '#tooltips:fortification/header/calendarBtn/header'
+    FORTIFICATION_HEADER_CALENDARBTN_BODY = '#tooltips:fortification/header/calendarBtn/body'
+    FORTIFICATION_HEADER_SETTINGSBTN_HEADER = '#tooltips:fortification/header/settingsBtn/header'
+    FORTIFICATION_HEADER_SETTINGSBTN_BODY = '#tooltips:fortification/header/settingsBtn/body'
+    FORTIFICATION_FOOTER_SORTIEBUTTON_HEADER = '#tooltips:fortification/footer/sortieButton/header'
+    FORTIFICATION_FOOTER_SORTIEBUTTON_BODY = '#tooltips:fortification/footer/sortieButton/body'
+    FORTIFICATION_FOOTER_INTELLIGENCEBUTTON_HEADER = '#tooltips:fortification/footer/intelligenceButton/header'
+    FORTIFICATION_FOOTER_INTELLIGENCEBUTTON_BODY = '#tooltips:fortification/footer/intelligenceButton/body'
+    FORTIFICATION_WELCOME_DETAILS_HEADER = '#tooltips:fortification/welcome/details/header'
+    FORTIFICATION_WELCOME_DETAILS_BODY = '#tooltips:fortification/welcome/details/body'
+    FORTIFICATION_WELCOME_CREATEFORT_HEADER = '#tooltips:fortification/welcome/createFort/header'
+    FORTIFICATION_WELCOME_CREATEFORT_BODY = '#tooltips:fortification/welcome/createFort/body'
+    FORTIFICATION_WELCOME_CANTCREATEFORT_HEADER = '#tooltips:fortification/welcome/cantCreateFort/header'
+    FORTIFICATION_WELCOME_CANTCREATEFORT_BODY = '#tooltips:fortification/welcome/cantCreateFort/body'
+    FORTIFICATION_WELCOME_CLANSEARCH_HEADER = '#tooltips:fortification/welcome/clanSearch/header'
+    FORTIFICATION_WELCOME_CLANSEARCH_BODY = '#tooltips:fortification/welcome/clanSearch/body'
+    FORTIFICATION_WELCOME_CLANSEARCHLABEL_HEADER = '#tooltips:fortification/welcome/clanSearchLabel/header'
+    FORTIFICATION_WELCOME_CLANSEARCHLABEL_BODY = '#tooltips:fortification/welcome/clanSearchLabel/body'
+    FORTIFICATION_WELCOME_CLANCREATE_HEADER = '#tooltips:fortification/welcome/clanCreate/header'
+    FORTIFICATION_WELCOME_CLANCREATE_BODY = '#tooltips:fortification/welcome/clanCreate/body'
+    FORTIFICATION_TRANPORTINGBUTTON_ACTIVE_HEADER = '#tooltips:fortification/tranportingButton/active/header'
+    FORTIFICATION_TRANPORTINGBUTTON_ACTIVE_BODY = '#tooltips:fortification/tranportingButton/active/body'
+    FORTIFICATION_TRANPORTINGBUTTON_INACTIVE_HEADER = '#tooltips:fortification/tranportingButton/inactive/header'
+    FORTIFICATION_TRANPORTINGBUTTON_INACTIVE_BODY = '#tooltips:fortification/tranportingButton/inactive/body'
+    FORTIFICATION_CLOSEDIRECTIONBUTTON_ACTIVE_HEADER = '#tooltips:fortification/closeDirectionButton/active/header'
+    FORTIFICATION_CLOSEDIRECTIONBUTTON_ACTIVE_BODY = '#tooltips:fortification/closeDirectionButton/active/body'
+    FORTIFICATION_CLOSEDIRECTIONBUTTON_INACTIVE_HEADER = '#tooltips:fortification/closeDirectionButton/inactive/header'
+    FORTIFICATION_CLOSEDIRECTIONBUTTON_INACTIVE_BODY = '#tooltips:fortification/closeDirectionButton/inactive/body'
     FORTIFICATION_ORDERPOPOVER_USEORDERBTN_HEADER = '#tooltips:fortification/orderPopover/useOrderBtn/header'
     FORTIFICATION_ORDERPOPOVER_USEORDERBTN_CANTUSE_HEADER = '#tooltips:fortification/orderPopover/useOrderBtn/cantUse/header'
     FORTIFICATION_ORDERPOPOVER_USEORDERBTN_CANTUSE_BODY = '#tooltips:fortification/orderPopover/useOrderBtn/cantUse/body'
@@ -1497,58 +1512,58 @@ class TOOLTIPS(object):
     FORTIFICATION_ORDERPOPOVER_LINKBTN = '#tooltips:fortification/orderPopover/linkBtn'
     FORTIFICATION_ORDERPOPOVER_PERMANENTORDER_INFO = '#tooltips:fortification/orderPopover/permanentOrder/info'
     FORTIFICATION_ORDERSPANEL_CANTUSEORDER = '#tooltips:fortification/ordersPanel/cantUseOrder'
-    FORTIFICATION_ORDERSPANEL_CHECKBOXORDERTYPE_HEADER = FORTIFICATION_ORDERSPANEL_CHECKBOXORDERTYPE + '/header'
-    FORTIFICATION_ORDERSPANEL_CHECKBOXORDERTYPE_BODY = FORTIFICATION_ORDERSPANEL_CHECKBOXORDERTYPE + '/body'
+    FORTIFICATION_ORDERSPANEL_CHECKBOXORDERTYPE_HEADER = '#tooltips:fortification/ordersPanel/checkBoxOrderType/header'
+    FORTIFICATION_ORDERSPANEL_CHECKBOXORDERTYPE_BODY = '#tooltips:fortification/ordersPanel/checkBoxOrderType/body'
     FORTIFICATION_CALENDAREVENT_BATTLERESULTTOOLTIP_ROBBED = '#tooltips:fortification/calendarEvent/battleResultTooltip/robbed'
     FORTIFICATION_CALENDAREVENT_BATTLERESULTTOOLTIP_PLUNDERED = '#tooltips:fortification/calendarEvent/battleResultTooltip/plundered'
     FORTIFICATION_CALENDAREVENT_BATTLERESULTTOOLTIP_BATTLESCOUNT = '#tooltips:fortification/calendarEvent/battleResultTooltip/battlesCount'
     FORTIFICATION_CALENDAREVENT_BATTLERESULTTOOLTIP_BUILDINGSLOST = '#tooltips:fortification/calendarEvent/battleResultTooltip/buildingsLost'
     FORTIFICATION_CALENDAREVENT_BATTLERESULTTOOLTIP_BUILDINGSSEIZED = '#tooltips:fortification/calendarEvent/battleResultTooltip/buildingsSeized'
-    FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_HEADER = FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN + '/header'
-    FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_BODY = FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN + '/body'
-    FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_DISABLED_HEADER = FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN + '_Disabled/header'
-    FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_DISABLED_BODY = FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN + '_Disabled/body'
-    FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYBATTLE_HEADER = FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYBATTLE + '/header'
-    FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYBATTLE_BODY = FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYBATTLE + '/body'
-    FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYDESTROY_HEADER = FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYDESTROY + '/header'
-    FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYDESTROY_BODY = FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYDESTROY + '/body'
-    FORTIFICATION_POPOVER_DEMOUNTBTN_HEADER = FORTIFICATION_POPOVER_DEMOUNTBTN + '/header'
-    FORTIFICATION_POPOVER_DEMOUNTBTN_BODY = FORTIFICATION_POPOVER_DEMOUNTBTN + '/body'
-    FORTIFICATION_POPOVER_DEMOUNTBTNDISABLED_HEADER = FORTIFICATION_POPOVER_DEMOUNTBTN + 'Disabled/header'
-    FORTIFICATION_POPOVER_DEMOUNTBTNDISABLED_BODY = FORTIFICATION_POPOVER_DEMOUNTBTN + 'Disabled/body'
-    FORTIFICATION_POPOVER_PREPAREORDERDISABLE_HEADER = FORTIFICATION_POPOVER_PREPAREORDERDISABLE + '/header'
-    FORTIFICATION_POPOVER_PREPAREORDERDISABLE_BODY = FORTIFICATION_POPOVER_PREPAREORDERDISABLE + '/body'
+    FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_HEADER = '#tooltips:fortification/popOver/upgradeFoundationBtn/header'
+    FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_BODY = '#tooltips:fortification/popOver/upgradeFoundationBtn/body'
+    FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_DISABLED_HEADER = '#tooltips:fortification/popOver/upgradeFoundationBtn_Disabled/header'
+    FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_DISABLED_BODY = '#tooltips:fortification/popOver/upgradeFoundationBtn_Disabled/body'
+    FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYBATTLE_HEADER = '#tooltips:fortification/popOver/upgradeBtn_DisabledByBattle/header'
+    FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYBATTLE_BODY = '#tooltips:fortification/popOver/upgradeBtn_DisabledByBattle/body'
+    FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYDESTROY_HEADER = '#tooltips:fortification/popOver/upgradeBtn_DisabledByDestroy/header'
+    FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYDESTROY_BODY = '#tooltips:fortification/popOver/upgradeBtn_DisabledByDestroy/body'
+    FORTIFICATION_POPOVER_DEMOUNTBTN_HEADER = '#tooltips:fortification/popOver/demountBtn/header'
+    FORTIFICATION_POPOVER_DEMOUNTBTN_BODY = '#tooltips:fortification/popOver/demountBtn/body'
+    FORTIFICATION_POPOVER_DEMOUNTBTNDISABLED_HEADER = '#tooltips:fortification/popOver/demountBtnDisabled/header'
+    FORTIFICATION_POPOVER_DEMOUNTBTNDISABLED_BODY = '#tooltips:fortification/popOver/demountBtnDisabled/body'
+    FORTIFICATION_POPOVER_PREPAREORDERDISABLE_HEADER = '#tooltips:fortification/popOver/prepareOrderDisable/header'
+    FORTIFICATION_POPOVER_PREPAREORDERDISABLE_BODY = '#tooltips:fortification/popOver/prepareOrderDisable/body'
     FORTIFICATION_POPOVER_PREPAREORDERENABLE = '#tooltips:fortification/popOver/prepareOrderEnable'
-    FORTIFICATION_POPOVER_PREPAREORDEROVERLOAD_HEADER = FORTIFICATION_POPOVER_PREPAREORDEROVERLOAD + '/header'
-    FORTIFICATION_POPOVER_PREPAREORDEROVERLOAD_BODY = FORTIFICATION_POPOVER_PREPAREORDEROVERLOAD + '/body'
-    FORTIFICATION_POPOVER_HPPROGRESS_HEADER = FORTIFICATION_POPOVER_HPPROGRESS + '/header'
-    FORTIFICATION_POPOVER_HPPROGRESS_BODY = FORTIFICATION_POPOVER_HPPROGRESS + '/body'
+    FORTIFICATION_POPOVER_PREPAREORDEROVERLOAD_HEADER = '#tooltips:fortification/popOver/prepareOrderOverload/header'
+    FORTIFICATION_POPOVER_PREPAREORDEROVERLOAD_BODY = '#tooltips:fortification/popOver/prepareOrderOverload/body'
+    FORTIFICATION_POPOVER_HPPROGRESS_HEADER = '#tooltips:fortification/popOver/hpProgress/header'
+    FORTIFICATION_POPOVER_HPPROGRESS_BODY = '#tooltips:fortification/popOver/hpProgress/body'
     FORTIFICATION_POPOVER_DEFRESPROGRESS_HEADER = '#tooltips:fortification/popOver/defResProgress/header'
     FORTIFICATION_POPOVER_DEFRESPROGRESS_BODY = '#tooltips:fortification/popOver/defResProgress/body'
     FORTIFICATION_POPOVER_DEFRESPROGRESS_COMPENSATION_HEADER = '#tooltips:fortification/popOver/defResProgress/compensation/header'
     FORTIFICATION_POPOVER_DEFRESPROGRESS_COMPENSATION_BODY = '#tooltips:fortification/popOver/defResProgress/compensation/body'
-    FORTIFICATION_POPOVER_FIXEDPLAYERSBTN_HEADER = FORTIFICATION_POPOVER_FIXEDPLAYERSBTN + '/header'
-    FORTIFICATION_POPOVER_FIXEDPLAYERSBTN_BODY = FORTIFICATION_POPOVER_FIXEDPLAYERSBTN + '/body'
-    FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNENABLED_HEADER = FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNENABLED + '/header'
-    FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNENABLED_BODY = FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNENABLED + '/body'
-    FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNDISABLED_HEADER = FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNDISABLED + '/header'
-    FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNDISABLED_BODY = FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNDISABLED + '/body'
-    FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIP_HEADER = FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIP + '/header'
-    FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIP_BODY = FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIP + '/body'
-    FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIPMAXLIMIT_HEADER = FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIP + 'MaxLimit/header'
-    FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIPMAXLIMIT_BODY = FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIP + 'MaxLimit/body'
-    FORTIFICATION_FIXEDPLAYERS_WEEK_HEADER = FORTIFICATION_FIXEDPLAYERS_WEEK + '/header'
-    FORTIFICATION_FIXEDPLAYERS_WEEK_BODY = FORTIFICATION_FIXEDPLAYERS_WEEK + '/body'
-    FORTIFICATION_FIXEDPLAYERS_ALLTIME_HEADER = FORTIFICATION_FIXEDPLAYERS_ALLTIME + '/header'
-    FORTIFICATION_FIXEDPLAYERS_ALLTIME_BODY = FORTIFICATION_FIXEDPLAYERS_ALLTIME + '/body'
-    FORTIFICATION_FIXEDPLAYERS_FORTROLE_HEADER = FORTIFICATION_FIXEDPLAYERS_FORTROLE + '/header'
-    FORTIFICATION_FIXEDPLAYERS_FORTROLE_BODY = FORTIFICATION_FIXEDPLAYERS_FORTROLE + '/body'
-    FORTIFICATION_FIXEDPLAYERS_NIC_HEADER = FORTIFICATION_FIXEDPLAYERS_NIC + '/header'
-    FORTIFICATION_FIXEDPLAYERS_NIC_BODY = FORTIFICATION_FIXEDPLAYERS_NIC + '/body'
-    FORTIFICATION_BUILDINGPROCESS_STATUSICONSUCCESS_HEADER = FORTIFICATION_BUILDINGPROCESS_STATUSICONSUCCESS + '/header'
-    FORTIFICATION_BUILDINGPROCESS_STATUSICONSUCCESS_BODY = FORTIFICATION_BUILDINGPROCESS_STATUSICONSUCCESS + '/body'
-    FORTIFICATION_BUILDINGPROCESS_STATUSICONNOTAVAILABLE_HEADER = FORTIFICATION_BUILDINGPROCESS_STATUSICONNOTAVAILABLE + '/header'
-    FORTIFICATION_BUILDINGPROCESS_STATUSICONNOTAVAILABLE_BODY = FORTIFICATION_BUILDINGPROCESS_STATUSICONNOTAVAILABLE + '/body'
+    FORTIFICATION_POPOVER_FIXEDPLAYERSBTN_HEADER = '#tooltips:fortification/popOver/fixedPlayersBtn/header'
+    FORTIFICATION_POPOVER_FIXEDPLAYERSBTN_BODY = '#tooltips:fortification/popOver/fixedPlayersBtn/body'
+    FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNENABLED_HEADER = '#tooltips:fortification/fixedPlayers/assignBtnEnabled/header'
+    FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNENABLED_BODY = '#tooltips:fortification/fixedPlayers/assignBtnEnabled/body'
+    FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNDISABLED_HEADER = '#tooltips:fortification/fixedPlayers/assignBtnDisabled/header'
+    FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNDISABLED_BODY = '#tooltips:fortification/fixedPlayers/assignBtnDisabled/body'
+    FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIP_HEADER = '#tooltips:fortification/fixedPlayers/generalTooltip/header'
+    FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIP_BODY = '#tooltips:fortification/fixedPlayers/generalTooltip/body'
+    FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIPMAXLIMIT_HEADER = '#tooltips:fortification/fixedPlayers/generalTooltipMaxLimit/header'
+    FORTIFICATION_FIXEDPLAYERS_GENERALTOOLTIPMAXLIMIT_BODY = '#tooltips:fortification/fixedPlayers/generalTooltipMaxLimit/body'
+    FORTIFICATION_FIXEDPLAYERS_WEEK_HEADER = '#tooltips:fortification/fixedPlayers/week/header'
+    FORTIFICATION_FIXEDPLAYERS_WEEK_BODY = '#tooltips:fortification/fixedPlayers/week/body'
+    FORTIFICATION_FIXEDPLAYERS_ALLTIME_HEADER = '#tooltips:fortification/fixedPlayers/allTime/header'
+    FORTIFICATION_FIXEDPLAYERS_ALLTIME_BODY = '#tooltips:fortification/fixedPlayers/allTime/body'
+    FORTIFICATION_FIXEDPLAYERS_FORTROLE_HEADER = '#tooltips:fortification/fixedPlayers/fortRole/header'
+    FORTIFICATION_FIXEDPLAYERS_FORTROLE_BODY = '#tooltips:fortification/fixedPlayers/fortRole/body'
+    FORTIFICATION_FIXEDPLAYERS_NIC_HEADER = '#tooltips:fortification/fixedPlayers/nic/header'
+    FORTIFICATION_FIXEDPLAYERS_NIC_BODY = '#tooltips:fortification/fixedPlayers/nic/body'
+    FORTIFICATION_BUILDINGPROCESS_STATUSICONSUCCESS_HEADER = '#tooltips:fortification/buildingProcess/statusIconSuccess/header'
+    FORTIFICATION_BUILDINGPROCESS_STATUSICONSUCCESS_BODY = '#tooltips:fortification/buildingProcess/statusIconSuccess/body'
+    FORTIFICATION_BUILDINGPROCESS_STATUSICONNOTAVAILABLE_HEADER = '#tooltips:fortification/buildingProcess/statusIconNotAvailable/header'
+    FORTIFICATION_BUILDINGPROCESS_STATUSICONNOTAVAILABLE_BODY = '#tooltips:fortification/buildingProcess/statusIconNotAvailable/body'
     FORTIFICATION_BUILDINGPROCESS_BTNENABLED_HEADER = '#tooltips:fortification/buildingProcess/btnEnabled/header'
     FORTIFICATION_BUILDINGPROCESS_BTNENABLED_BODY = '#tooltips:fortification/buildingProcess/btnEnabled/body'
     FORTIFICATION_BUILDINGPROCESS_BTNDISABLEDBUILT_HEADER = '#tooltips:fortification/buildingProcess/btnDisabledBuilt/header'
@@ -1589,82 +1604,82 @@ class TOOLTIPS(object):
     FORTIFICATION_SORTIE_LISTROOM_REGULATION_TIMELIMITFORMAT = '#tooltips:fortification/sortie/listRoom/regulation/timeLimitFormat'
     FORTIFICATION_SORTIE_LISTROOM_REGULATION_SERVERLIMITTIMEDESCR = '#tooltips:fortification/sortie/listRoom/regulation/serverLimitTimeDescr'
     FORTIFICATION_SORTIE_LISTROOM_REGULATION_FOOTER = '#tooltips:fortification/sortie/listRoom/regulation/footer'
-    FORTIFICATION_SORTIE_LISTROOM_BACK_HEADER = FORTIFICATION_SORTIE_LISTROOM_BACK + '/header'
-    FORTIFICATION_SORTIE_LISTROOM_BACK_BODY = FORTIFICATION_SORTIE_LISTROOM_BACK + '/body'
-    FORTIFICATION_SORTIE_LISTROOM_CREATEBTN_HEADER = FORTIFICATION_SORTIE_LISTROOM_CREATEBTN + '/header'
-    FORTIFICATION_SORTIE_LISTROOM_CREATEBTN_BODY = FORTIFICATION_SORTIE_LISTROOM_CREATEBTN + '/body'
-    FORTIFICATION_SORTIE_LISTROOM_SORTNAMEBTN_HEADER = FORTIFICATION_SORTIE_LISTROOM_SORTNAMEBTN + '/header'
-    FORTIFICATION_SORTIE_LISTROOM_SORTNAMEBTN_BODY = FORTIFICATION_SORTIE_LISTROOM_SORTNAMEBTN + '/body'
-    FORTIFICATION_SORTIE_LISTROOM_DESCR_HEADER = FORTIFICATION_SORTIE_LISTROOM_DESCR + '/header'
-    FORTIFICATION_SORTIE_LISTROOM_DESCR_BODY = FORTIFICATION_SORTIE_LISTROOM_DESCR + '/body'
-    FORTIFICATION_SORTIE_LISTROOM_STATUS_HEADER = FORTIFICATION_SORTIE_LISTROOM_STATUS + '/header'
-    FORTIFICATION_SORTIE_LISTROOM_STATUS_BODY = FORTIFICATION_SORTIE_LISTROOM_STATUS + '/body'
-    FORTIFICATION_SORTIE_LISTROOM_BATTLESTATUS_HEADER = FORTIFICATION_SORTIE_LISTROOM_BATTLESTATUS + '/header'
-    FORTIFICATION_SORTIE_LISTROOM_BATTLESTATUS_BODY = FORTIFICATION_SORTIE_LISTROOM_BATTLESTATUS + '/body'
-    FORTIFICATION_SORTIE_LISTROOM_SORTDIVISIONBTN_HEADER = FORTIFICATION_SORTIE_LISTROOM_SORTDIVISIONBTN + '/header'
-    FORTIFICATION_SORTIE_LISTROOM_SORTDIVISIONBTN_BODY = FORTIFICATION_SORTIE_LISTROOM_SORTDIVISIONBTN + '/body'
-    FORTIFICATION_SORTIE_LISTROOM_SORTSQUADBTN_HEADER = FORTIFICATION_SORTIE_LISTROOM_SORTSQUADBTN + '/header'
-    FORTIFICATION_SORTIE_LISTROOM_SORTSQUADBTN_BODY = FORTIFICATION_SORTIE_LISTROOM_SORTSQUADBTN + '/body'
-    FORTIFICATION_SORTIE_LISTROOM_JOINBTN_HEADER = FORTIFICATION_SORTIE_LISTROOM_JOINBTN + '/header'
-    FORTIFICATION_SORTIE_LISTROOM_JOINBTN_BODY = FORTIFICATION_SORTIE_LISTROOM_JOINBTN + '/body'
-    FORTIFICATION_SORTIE_LISTROOM_SINGINBTN_HEADER = FORTIFICATION_SORTIE_LISTROOM_SINGINBTN + '/header'
-    FORTIFICATION_SORTIE_LISTROOM_SINGINBTN_BODY = FORTIFICATION_SORTIE_LISTROOM_SINGINBTN + '/body'
+    FORTIFICATION_SORTIE_LISTROOM_BACK_HEADER = '#tooltips:fortification/sortie/listRoom/back/header'
+    FORTIFICATION_SORTIE_LISTROOM_BACK_BODY = '#tooltips:fortification/sortie/listRoom/back/body'
+    FORTIFICATION_SORTIE_LISTROOM_CREATEBTN_HEADER = '#tooltips:fortification/sortie/listRoom/createBtn/header'
+    FORTIFICATION_SORTIE_LISTROOM_CREATEBTN_BODY = '#tooltips:fortification/sortie/listRoom/createBtn/body'
+    FORTIFICATION_SORTIE_LISTROOM_SORTNAMEBTN_HEADER = '#tooltips:fortification/sortie/listRoom/sortNameBtn/header'
+    FORTIFICATION_SORTIE_LISTROOM_SORTNAMEBTN_BODY = '#tooltips:fortification/sortie/listRoom/sortNameBtn/body'
+    FORTIFICATION_SORTIE_LISTROOM_DESCR_HEADER = '#tooltips:fortification/sortie/listRoom/descr/header'
+    FORTIFICATION_SORTIE_LISTROOM_DESCR_BODY = '#tooltips:fortification/sortie/listRoom/descr/body'
+    FORTIFICATION_SORTIE_LISTROOM_STATUS_HEADER = '#tooltips:fortification/sortie/listRoom/status/header'
+    FORTIFICATION_SORTIE_LISTROOM_STATUS_BODY = '#tooltips:fortification/sortie/listRoom/status/body'
+    FORTIFICATION_SORTIE_LISTROOM_BATTLESTATUS_HEADER = '#tooltips:fortification/sortie/listRoom/battleStatus/header'
+    FORTIFICATION_SORTIE_LISTROOM_BATTLESTATUS_BODY = '#tooltips:fortification/sortie/listRoom/battleStatus/body'
+    FORTIFICATION_SORTIE_LISTROOM_SORTDIVISIONBTN_HEADER = '#tooltips:fortification/sortie/listRoom/sortDivisionBtn/header'
+    FORTIFICATION_SORTIE_LISTROOM_SORTDIVISIONBTN_BODY = '#tooltips:fortification/sortie/listRoom/sortDivisionBtn/body'
+    FORTIFICATION_SORTIE_LISTROOM_SORTSQUADBTN_HEADER = '#tooltips:fortification/sortie/listRoom/sortSquadBtn/header'
+    FORTIFICATION_SORTIE_LISTROOM_SORTSQUADBTN_BODY = '#tooltips:fortification/sortie/listRoom/sortSquadBtn/body'
+    FORTIFICATION_SORTIE_LISTROOM_JOINBTN_HEADER = '#tooltips:fortification/sortie/listRoom/joinBtn/header'
+    FORTIFICATION_SORTIE_LISTROOM_JOINBTN_BODY = '#tooltips:fortification/sortie/listRoom/joinBtn/body'
+    FORTIFICATION_SORTIE_LISTROOM_SINGINBTN_HEADER = '#tooltips:fortification/sortie/listRoom/singInBtn/header'
+    FORTIFICATION_SORTIE_LISTROOM_SINGINBTN_BODY = '#tooltips:fortification/sortie/listRoom/singInBtn/body'
     FORTIFICATION_SORTIE_LISTROOM_RENDERERINFO = '#tooltips:fortification/sortie/listRoom/rendererInfo'
     FORTIFICATION_TOOLTIPFORTSORTIE_TITLE = '#tooltips:fortification/ToolTipFortSortie/title'
     FORTIFICATION_TOOLTIPFORTSORTIE_DIVISION = '#tooltips:fortification/ToolTipFortSortie/division'
     FORTIFICATION_TOOLTIPFORTSORTIE_INBATTLE = '#tooltips:fortification/ToolTipFortSortie/inBattle'
     FORTIFICATION_TOOLTIPFORTSORTIE_HINT = '#tooltips:fortification/ToolTipFortSortie/hint'
-    BATTLETYPES_FORTIFICATION_HEADER = BATTLETYPES_FORTIFICATION + '/header'
-    BATTLETYPES_FORTIFICATION_BODY = BATTLETYPES_FORTIFICATION + '/body'
+    BATTLETYPES_FORTIFICATION_HEADER = '#tooltips:battleTypes/fortification/header'
+    BATTLETYPES_FORTIFICATION_BODY = '#tooltips:battleTypes/fortification/body'
     FORTIFICATION_DISABLED_NO_CLAN_HEADER = '#tooltips:fortification/disabled/no_clan/header'
     FORTIFICATION_DISABLED_NO_CLAN_BODY = '#tooltips:fortification/disabled/no_clan/body'
     FORTIFICATION_DISABLED_NO_FORT_HEADER = '#tooltips:fortification/disabled/no_fort/header'
     FORTIFICATION_DISABLED_NO_FORT_BODY = '#tooltips:fortification/disabled/no_fort/body'
-    BATTLETYPES_LEAVEFORTIFICATION_HEADER = BATTLETYPES_LEAVEFORTIFICATION + '/header'
-    BATTLETYPES_LEAVEFORTIFICATION_BODY = BATTLETYPES_LEAVEFORTIFICATION + '/body'
-    FORTIFICATION_CLAN_LISTROOM_BACK_HEADER = FORTIFICATION_CLAN_LISTROOM_BACK + '/header'
-    FORTIFICATION_CLAN_LISTROOM_BACK_BODY = FORTIFICATION_CLAN_LISTROOM_BACK + '/body'
-    BATTLETYPES_FORTIFICATION_DISABLED_HEADER = BATTLETYPES_FORTIFICATION + '/disabled/header'
-    BATTLETYPES_FORTIFICATION_DISABLED_BODY = BATTLETYPES_FORTIFICATION + '/disabled/body'
-    FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN_HEADER = FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN + '/header'
-    FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN_BODY = FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN + '/body'
+    BATTLETYPES_LEAVEFORTIFICATION_HEADER = '#tooltips:battleTypes/leaveFortification/header'
+    BATTLETYPES_LEAVEFORTIFICATION_BODY = '#tooltips:battleTypes/leaveFortification/body'
+    FORTIFICATION_CLAN_LISTROOM_BACK_HEADER = '#tooltips:fortification/clan/listRoom/back/header'
+    FORTIFICATION_CLAN_LISTROOM_BACK_BODY = '#tooltips:fortification/clan/listRoom/back/body'
+    BATTLETYPES_FORTIFICATION_DISABLED_HEADER = '#tooltips:battleTypes/fortification/disabled/header'
+    BATTLETYPES_FORTIFICATION_DISABLED_BODY = '#tooltips:battleTypes/fortification/disabled/body'
+    FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN_HEADER = '#tooltips:fortification/sortie/battleRoom/leaveBtn/header'
+    FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN_BODY = '#tooltips:fortification/sortie/battleRoom/leaveBtn/body'
     FORTIFICATION_SORTIE_BATTLEROOM_LEGIONARIESCOUNT_HEADER = '#tooltips:fortification/sortie/battleRoom/legionariesCount/header'
     FORTIFICATION_SORTIE_BATTLEROOM_LEGIONARIESCOUNT_BODY = '#tooltips:fortification/sortie/battleRoom/legionariesCount/body'
-    FORTIFICATION_SORTIE_BATTLEROOM_CHANGEDIVISION_HEADER = FORTIFICATION_SORTIE_BATTLEROOM_CHANGEDIVISION + '/header'
-    FORTIFICATION_SORTIE_BATTLEROOM_CHANGEDIVISION_BODY = FORTIFICATION_SORTIE_BATTLEROOM_CHANGEDIVISION + '/body'
-    FORTIFICATION_SORTIE_BATTLEROOM_INVITEBTN_HEADER = FORTIFICATION_SORTIE_BATTLEROOM_INVITEBTN + '/header'
-    FORTIFICATION_SORTIE_BATTLEROOM_INVITEBTN_BODY = FORTIFICATION_SORTIE_BATTLEROOM_INVITEBTN + '/body'
+    FORTIFICATION_SORTIE_BATTLEROOM_CHANGEDIVISION_HEADER = '#tooltips:fortification/sortie/battleRoom/changeDivision/header'
+    FORTIFICATION_SORTIE_BATTLEROOM_CHANGEDIVISION_BODY = '#tooltips:fortification/sortie/battleRoom/changeDivision/body'
+    FORTIFICATION_SORTIE_BATTLEROOM_INVITEBTN_HEADER = '#tooltips:fortification/sortie/battleRoom/inviteBtn/header'
+    FORTIFICATION_SORTIE_BATTLEROOM_INVITEBTN_BODY = '#tooltips:fortification/sortie/battleRoom/inviteBtn/body'
     FORTIFICATION_SORTIE_BATTLEROOM_STATUS_ISREADY = '#tooltips:fortification/sortie/battleRoom/status/isReady'
     FORTIFICATION_SORTIE_BATTLEROOM_STATUS_NOTREADY = '#tooltips:fortification/sortie/battleRoom/status/notReady'
     FORTIFICATION_SORTIE_BATTLEROOM_STATUS_COMMANDER = '#tooltips:fortification/sortie/battleRoom/status/commander'
-    FORTIFICATION_SORTIE_TAKEPLACEFIRSTTIMEBTN_HEADER = FORTIFICATION_SORTIE_TAKEPLACEFIRSTTIMEBTN + '/header'
-    FORTIFICATION_SORTIE_TAKEPLACEFIRSTTIMEBTN_BODY = FORTIFICATION_SORTIE_TAKEPLACEFIRSTTIMEBTN + '/body'
-    FORTIFICATION_SORTIE_SELECTVEHICLE_HEADER = FORTIFICATION_SORTIE_SELECTVEHICLE + '/header'
-    FORTIFICATION_SORTIE_SELECTVEHICLE_BODY = FORTIFICATION_SORTIE_SELECTVEHICLE + '/body'
-    FORTIFICATION_SORTIE_CHAT_DESCRIPTION_HEADER = FORTIFICATION_SORTIE_CHAT_DESCRIPTION + '/header'
-    FORTIFICATION_SORTIE_CHAT_DESCRIPTION_BODY = FORTIFICATION_SORTIE_CHAT_DESCRIPTION + '/body'
-    FORTIFICATION_SORTIE_CHAT_SENDMESSAGEBTN_HEADER = FORTIFICATION_SORTIE_CHAT_SENDMESSAGEBTN + '/header'
-    FORTIFICATION_SORTIE_CHAT_SENDMESSAGEBTN_BODY = FORTIFICATION_SORTIE_CHAT_SENDMESSAGEBTN + '/body'
-    FORTIFICATION_SORTIE_REMOVEBTN_HEADER = FORTIFICATION_SORTIE_REMOVEBTN + '/header'
-    FORTIFICATION_SORTIE_REMOVEBTN_BODY = FORTIFICATION_SORTIE_REMOVEBTN + '/body'
+    FORTIFICATION_SORTIE_TAKEPLACEFIRSTTIMEBTN_HEADER = '#tooltips:fortification/sortie/takePlaceFirstTimeBtn/header'
+    FORTIFICATION_SORTIE_TAKEPLACEFIRSTTIMEBTN_BODY = '#tooltips:fortification/sortie/takePlaceFirstTimeBtn/body'
+    FORTIFICATION_SORTIE_SELECTVEHICLE_HEADER = '#tooltips:fortification/sortie/selectVehicle/header'
+    FORTIFICATION_SORTIE_SELECTVEHICLE_BODY = '#tooltips:fortification/sortie/selectVehicle/body'
+    FORTIFICATION_SORTIE_CHAT_DESCRIPTION_HEADER = '#tooltips:fortification/sortie/chat/description/header'
+    FORTIFICATION_SORTIE_CHAT_DESCRIPTION_BODY = '#tooltips:fortification/sortie/chat/description/body'
+    FORTIFICATION_SORTIE_CHAT_SENDMESSAGEBTN_HEADER = '#tooltips:fortification/sortie/chat/sendMessageBtn/header'
+    FORTIFICATION_SORTIE_CHAT_SENDMESSAGEBTN_BODY = '#tooltips:fortification/sortie/chat/sendMessageBtn/body'
+    FORTIFICATION_SORTIE_REMOVEBTN_HEADER = '#tooltips:fortification/sortie/removeBtn/header'
+    FORTIFICATION_SORTIE_REMOVEBTN_BODY = '#tooltips:fortification/sortie/removeBtn/body'
     FORTIFICATION_SORTIE_PLAYER_VEHICLE = '#tooltips:fortification/sortie/player/vehicle'
-    FORTIFICATION_SORTIE_PLAYER_CANCELREADY_HEADER = FORTIFICATION_SORTIE_PLAYER_CANCELREADY + '/header'
-    FORTIFICATION_SORTIE_PLAYER_CANCELREADY_BODY = FORTIFICATION_SORTIE_PLAYER_CANCELREADY + '/body'
-    FORTIFICATION_SORTIE_PLAYER_CHANGEVEHICLE_HEADER = FORTIFICATION_SORTIE_PLAYER_CHANGEVEHICLE + '/header'
-    FORTIFICATION_SORTIE_PLAYER_CHANGEVEHICLE_BODY = FORTIFICATION_SORTIE_PLAYER_CHANGEVEHICLE + '/body'
+    FORTIFICATION_SORTIE_PLAYER_CANCELREADY_HEADER = '#tooltips:fortification/sortie/player/cancelReady/header'
+    FORTIFICATION_SORTIE_PLAYER_CANCELREADY_BODY = '#tooltips:fortification/sortie/player/cancelReady/body'
+    FORTIFICATION_SORTIE_PLAYER_CHANGEVEHICLE_HEADER = '#tooltips:fortification/sortie/player/changeVehicle/header'
+    FORTIFICATION_SORTIE_PLAYER_CHANGEVEHICLE_BODY = '#tooltips:fortification/sortie/player/changeVehicle/body'
     FORTIFICATION_SORTIE_SLOT_VEHICLE_NOTREADY_TEMPORALLY_BODY = '#tooltips:fortification/sortie/slot/vehicle/notReady/temporally/body'
-    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFATTACK_HEADER = FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFATTACK + '/header'
-    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFATTACK_BODY = FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFATTACK + '/body'
-    PERIODDEFENCEWINDOW_TOOLTIP_PERIPHERY_HEADER = PERIODDEFENCEWINDOW_TOOLTIP_PERIPHERY + '/header'
-    PERIODDEFENCEWINDOW_TOOLTIP_PERIPHERY_BODY = PERIODDEFENCEWINDOW_TOOLTIP_PERIPHERY + '/body'
-    PERIODDEFENCEWINDOW_TOOLTIP_HOURDEFENCE_HEADER = PERIODDEFENCEWINDOW_TOOLTIP_HOURDEFENCE + '/header'
-    PERIODDEFENCEWINDOW_TOOLTIP_HOURDEFENCE_BODY = PERIODDEFENCEWINDOW_TOOLTIP_HOURDEFENCE + '/body'
-    PERIODDEFENCEWINDOW_TOOLTIP_HOLIDAY_HEADER = PERIODDEFENCEWINDOW_TOOLTIP_HOLIDAY + '/header'
-    PERIODDEFENCEWINDOW_TOOLTIP_HOLIDAY_BODY = PERIODDEFENCEWINDOW_TOOLTIP_HOLIDAY + '/body'
-    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFDEFENCE_HEADER = FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFDEFENCE + '/header'
-    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFDEFENCE_BODY = FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFDEFENCE + '/body'
-    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_BATTLESCOUNT_HEADER = FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_BATTLESCOUNT + '/header'
-    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_BATTLESCOUNT_BODY = FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_BATTLESCOUNT + '/body'
+    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFATTACK_HEADER = '#tooltips:fortification/clanStats/periodDefence/battles/efficiencyOfAttack/header'
+    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFATTACK_BODY = '#tooltips:fortification/clanStats/periodDefence/battles/efficiencyOfAttack/body'
+    PERIODDEFENCEWINDOW_TOOLTIP_PERIPHERY_HEADER = '#tooltips:periodDefenceWindow/tooltip/periphery/header'
+    PERIODDEFENCEWINDOW_TOOLTIP_PERIPHERY_BODY = '#tooltips:periodDefenceWindow/tooltip/periphery/body'
+    PERIODDEFENCEWINDOW_TOOLTIP_HOURDEFENCE_HEADER = '#tooltips:periodDefenceWindow/tooltip/hourDefence/header'
+    PERIODDEFENCEWINDOW_TOOLTIP_HOURDEFENCE_BODY = '#tooltips:periodDefenceWindow/tooltip/hourDefence/body'
+    PERIODDEFENCEWINDOW_TOOLTIP_HOLIDAY_HEADER = '#tooltips:periodDefenceWindow/tooltip/holiday/header'
+    PERIODDEFENCEWINDOW_TOOLTIP_HOLIDAY_BODY = '#tooltips:periodDefenceWindow/tooltip/holiday/body'
+    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFDEFENCE_HEADER = '#tooltips:fortification/clanStats/periodDefence/battles/efficiencyOfDefence/header'
+    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_EFFICIENCYOFDEFENCE_BODY = '#tooltips:fortification/clanStats/periodDefence/battles/efficiencyOfDefence/body'
+    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_BATTLESCOUNT_HEADER = '#tooltips:fortification/clanStats/periodDefence/battles/battlesCount/header'
+    FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_BATTLESCOUNT_BODY = '#tooltips:fortification/clanStats/periodDefence/battles/battlesCount/body'
     FORTIFICATION_TOOLTIPCLANINFO_HEADER = '#tooltips:fortification/TooltipClanInfo/header'
     FORTIFICATION_TOOLTIPCLANINFO_DESCRIPTION = '#tooltips:fortification/TooltipClanInfo/description'
     FORTIFICATION_TOOLTIPCLANINFO_FORTCREATIONDATE = '#tooltips:fortification/TooltipClanInfo/fortCreationDate'
@@ -1683,59 +1698,59 @@ class TOOLTIPS(object):
     FORTIFICATION_TOOLTIPENEMYCLANINFO_DAYOFF = '#tooltips:fortification/TooltipEnemyClanInfo/dayOff'
     FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSEHOUR = '#tooltips:fortification/TooltipEnemyClanInfo/defenseHour'
     FORTIFICATION_TOOLTIPENEMYCLANINFO_PERIOD = '#tooltips:fortification/TooltipEnemyClanInfo/period'
-    FORTIFICATION_FORTINTELLIGENCECLANFILTERPOPOVER_APPLY_NOTE = FORTIFICATION_FORTINTELLIGENCECLANFILTERPOPOVER_APPLY + '/note'
-    FORTIFICATION_FORTINTELLIGENCECLANFILTERPOPOVER_DEFAULT_NOTE = FORTIFICATION_FORTINTELLIGENCECLANFILTERPOPOVER_DEFAULT + '/note'
+    FORTIFICATION_FORTINTELLIGENCECLANFILTERPOPOVER_APPLY_NOTE = '#tooltips:fortification/FortIntelligenceClanFilterPopover/apply/note'
+    FORTIFICATION_FORTINTELLIGENCECLANFILTERPOPOVER_DEFAULT_NOTE = '#tooltips:fortification/FortIntelligenceClanFilterPopover/default/note'
     VEHICLESELECTOR_FILTER_NATION = '#tooltips:vehicleSelector/filter/nation'
     VEHICLESELECTOR_FILTER_VEHTYPE = '#tooltips:vehicleSelector/filter/vehType'
     VEHICLESELECTOR_FILTER_VEHLVL = '#tooltips:vehicleSelector/filter/vehLvl'
     VEHICLESELECTOR_FILTER_MAINVEHICLE = '#tooltips:vehicleSelector/filter/mainVehicle'
-    VEHICLESELECTOR_SORTING_NATION_HEADER = VEHICLESELECTOR_SORTING_NATION + '/header'
-    VEHICLESELECTOR_SORTING_NATION_BODY = VEHICLESELECTOR_SORTING_NATION + '/body'
-    VEHICLESELECTOR_SORTING_VEHTYPE_HEADER = VEHICLESELECTOR_SORTING_VEHTYPE + '/header'
-    VEHICLESELECTOR_SORTING_VEHTYPE_BODY = VEHICLESELECTOR_SORTING_VEHTYPE + '/body'
-    VEHICLESELECTOR_SORTING_VEHLVL_HEADER = VEHICLESELECTOR_SORTING_VEHLVL + '/header'
-    VEHICLESELECTOR_SORTING_VEHLVL_BODY = VEHICLESELECTOR_SORTING_VEHLVL + '/body'
-    VEHICLESELECTOR_SORTING_VEHNAME_HEADER = VEHICLESELECTOR_SORTING_VEHNAME + '/header'
-    VEHICLESELECTOR_SORTING_VEHNAME_BODY = VEHICLESELECTOR_SORTING_VEHNAME + '/body'
-    VEHICLESELECTOR_OVERFLOWLEVEL_HEADER = VEHICLESELECTOR_OVERFLOWLEVEL + '/header'
-    VEHICLESELECTOR_OVERFLOWLEVEL_BODY = VEHICLESELECTOR_OVERFLOWLEVEL + '/body'
-    VEHICLESELECTOR_INCOMPATIBLETYPE_HEADER = VEHICLESELECTOR_INCOMPATIBLETYPE + '/header'
-    VEHICLESELECTOR_INCOMPATIBLETYPE_BODY = VEHICLESELECTOR_INCOMPATIBLETYPE + '/body'
+    VEHICLESELECTOR_SORTING_NATION_HEADER = '#tooltips:vehicleSelector/sorting/nation/header'
+    VEHICLESELECTOR_SORTING_NATION_BODY = '#tooltips:vehicleSelector/sorting/nation/body'
+    VEHICLESELECTOR_SORTING_VEHTYPE_HEADER = '#tooltips:vehicleSelector/sorting/vehType/header'
+    VEHICLESELECTOR_SORTING_VEHTYPE_BODY = '#tooltips:vehicleSelector/sorting/vehType/body'
+    VEHICLESELECTOR_SORTING_VEHLVL_HEADER = '#tooltips:vehicleSelector/sorting/vehLvl/header'
+    VEHICLESELECTOR_SORTING_VEHLVL_BODY = '#tooltips:vehicleSelector/sorting/vehLvl/body'
+    VEHICLESELECTOR_SORTING_VEHNAME_HEADER = '#tooltips:vehicleSelector/sorting/vehName/header'
+    VEHICLESELECTOR_SORTING_VEHNAME_BODY = '#tooltips:vehicleSelector/sorting/vehName/body'
+    VEHICLESELECTOR_OVERFLOWLEVEL_HEADER = '#tooltips:vehicleSelector/overflowLevel/header'
+    VEHICLESELECTOR_OVERFLOWLEVEL_BODY = '#tooltips:vehicleSelector/overflowLevel/body'
+    VEHICLESELECTOR_INCOMPATIBLETYPE_HEADER = '#tooltips:vehicleSelector/incompatibleType/header'
+    VEHICLESELECTOR_INCOMPATIBLETYPE_BODY = '#tooltips:vehicleSelector/incompatibleType/body'
     FORTIFICATION_FORTCLANBATTLELIST_GENERALRENDER = '#tooltips:fortification/fortClanBattleList/generalRender'
     FORTIFICATION_FORTCLANBATTLELIST_BATTLETYPEICON_DEFENCE = '#tooltips:fortification/fortClanBattleList/battleTypeIcon/defence'
     FORTIFICATION_FORTCLANBATTLELIST_BATTLETYPEICON_OFFENCE = '#tooltips:fortification/fortClanBattleList/battleTypeIcon/offence'
-    FORTIFICATION_FORTCLANBATTLELIST_BATTLENAME_HEADER = FORTIFICATION_FORTCLANBATTLELIST_BATTLENAME + '/header'
-    FORTIFICATION_FORTCLANBATTLELIST_BATTLENAME_BODY = FORTIFICATION_FORTCLANBATTLELIST_BATTLENAME + '/body'
-    FORTIFICATION_FORTCLANBATTLELIST_BATTLEDATE_HEADER = FORTIFICATION_FORTCLANBATTLELIST_BATTLEDATE + '/header'
-    FORTIFICATION_FORTCLANBATTLELIST_BATTLEDATE_BODY = FORTIFICATION_FORTCLANBATTLELIST_BATTLEDATE + '/body'
-    FORTIFICATION_FORTCLANBATTLELIST_BATTLETIME_HEADER = FORTIFICATION_FORTCLANBATTLELIST_BATTLETIME + '/header'
-    FORTIFICATION_FORTCLANBATTLELIST_BATTLETIME_BODY = FORTIFICATION_FORTCLANBATTLELIST_BATTLETIME + '/body'
-    FORTIFICATION_FORTCLANBATTLEROOM_ORDERSDISABLED_DIVISIONMISMATCH_BODY = FORTIFICATION_FORTCLANBATTLEROOM_ORDERSDISABLED_DIVISIONMISMATCH + '/body'
-    FORTIFICATION_CHOICEDIVISION_PLAYERRANGE_HEADER = FORTIFICATION_CHOICEDIVISION_PLAYERRANGE + '/header'
-    FORTIFICATION_CHOICEDIVISION_PLAYERRANGE_BODY = FORTIFICATION_CHOICEDIVISION_PLAYERRANGE + '/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_LEVEL_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_LEVEL + '/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_LEVEL_BODY = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_LEVEL + '/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT + '/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_BODY = FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT + '/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_CN_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT + '/CN/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_CN_BODY = FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT + '/CN/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_KR_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT + '/KR/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_KR_BODY = FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT + '/KR/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHBUTTON_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHBUTTON + '/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHBUTTON_BODY = FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHBUTTON + '/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_CLEARFILTERBTN_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_CLEARFILTERBTN + '/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_CLEARFILTERBTN_BODY = FORTIFICATION_INTELLIGENCEWINDOW_CLEARFILTERBTN + '/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_FILTERBUTTON_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_FILTERBUTTON + '/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_FILTERBUTTON_BODY = FORTIFICATION_INTELLIGENCEWINDOW_FILTERBUTTON + '/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_CLANTAG_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_CLANTAG + '/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_CLANTAG_BODY = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_CLANTAG + '/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_CLANTAG_NOTE = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_CLANTAG + '/note'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_DEFENCETIME_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_DEFENCETIME + '/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_DEFENCETIME_BODY = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_DEFENCETIME + '/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_BUILDINGS_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_BUILDINGS + '/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_BUILDINGS_BODY = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_BUILDINGS + '/body'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_AVAILABILITY_HEADER = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_AVAILABILITY + '/header'
-    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_AVAILABILITY_BODY = FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_AVAILABILITY + '/body'
+    FORTIFICATION_FORTCLANBATTLELIST_BATTLENAME_HEADER = '#tooltips:fortification/fortClanBattleList/battleName/header'
+    FORTIFICATION_FORTCLANBATTLELIST_BATTLENAME_BODY = '#tooltips:fortification/fortClanBattleList/battleName/body'
+    FORTIFICATION_FORTCLANBATTLELIST_BATTLEDATE_HEADER = '#tooltips:fortification/fortClanBattleList/battleDate/header'
+    FORTIFICATION_FORTCLANBATTLELIST_BATTLEDATE_BODY = '#tooltips:fortification/fortClanBattleList/battleDate/body'
+    FORTIFICATION_FORTCLANBATTLELIST_BATTLETIME_HEADER = '#tooltips:fortification/fortClanBattleList/battleTime/header'
+    FORTIFICATION_FORTCLANBATTLELIST_BATTLETIME_BODY = '#tooltips:fortification/fortClanBattleList/battleTime/body'
+    FORTIFICATION_FORTCLANBATTLEROOM_ORDERSDISABLED_DIVISIONMISMATCH_BODY = '#tooltips:fortification/fortClanBattleRoom/ordersDisabled/divisionMismatch/body'
+    FORTIFICATION_CHOICEDIVISION_PLAYERRANGE_HEADER = '#tooltips:fortification/choiceDivision/playerRange/header'
+    FORTIFICATION_CHOICEDIVISION_PLAYERRANGE_BODY = '#tooltips:fortification/choiceDivision/playerRange/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_LEVEL_HEADER = '#tooltips:fortification/intelligenceWindow/sortBtn/level/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_LEVEL_BODY = '#tooltips:fortification/intelligenceWindow/sortBtn/level/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_HEADER = '#tooltips:fortification/intelligenceWindow/tagSearchTextInput/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_BODY = '#tooltips:fortification/intelligenceWindow/tagSearchTextInput/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_CN_HEADER = '#tooltips:fortification/intelligenceWindow/tagSearchTextInput/CN/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_CN_BODY = '#tooltips:fortification/intelligenceWindow/tagSearchTextInput/CN/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_KR_HEADER = '#tooltips:fortification/intelligenceWindow/tagSearchTextInput/KR/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHTEXTINPUT_KR_BODY = '#tooltips:fortification/intelligenceWindow/tagSearchTextInput/KR/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHBUTTON_HEADER = '#tooltips:fortification/intelligenceWindow/tagSearchButton/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_TAGSEARCHBUTTON_BODY = '#tooltips:fortification/intelligenceWindow/tagSearchButton/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_CLEARFILTERBTN_HEADER = '#tooltips:fortification/intelligenceWindow/clearFilterBtn/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_CLEARFILTERBTN_BODY = '#tooltips:fortification/intelligenceWindow/clearFilterBtn/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_FILTERBUTTON_HEADER = '#tooltips:fortification/intelligenceWindow/filterButton/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_FILTERBUTTON_BODY = '#tooltips:fortification/intelligenceWindow/filterButton/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_CLANTAG_HEADER = '#tooltips:fortification/intelligenceWindow/sortBtn/clanTag/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_CLANTAG_BODY = '#tooltips:fortification/intelligenceWindow/sortBtn/clanTag/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_CLANTAG_NOTE = '#tooltips:fortification/intelligenceWindow/sortBtn/clanTag/note'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_DEFENCETIME_HEADER = '#tooltips:fortification/intelligenceWindow/sortBtn/defenceTime/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_DEFENCETIME_BODY = '#tooltips:fortification/intelligenceWindow/sortBtn/defenceTime/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_BUILDINGS_HEADER = '#tooltips:fortification/intelligenceWindow/sortBtn/buildings/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_BUILDINGS_BODY = '#tooltips:fortification/intelligenceWindow/sortBtn/buildings/body'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_AVAILABILITY_HEADER = '#tooltips:fortification/intelligenceWindow/sortBtn/availability/header'
+    FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_AVAILABILITY_BODY = '#tooltips:fortification/intelligenceWindow/sortBtn/availability/body'
     FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_CALENDARBTN = '#tooltips:fortification/fortIntelligenceClanDescription/calendarBtn'
     FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_CALENDARBTN_CANTATTACK = '#tooltips:fortification/fortIntelligenceClanDescription/calendarBtn/cantAttack'
     FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_LINKBTN = '#tooltips:fortification/fortIntelligenceClanDescription/linkBtn'
@@ -1749,30 +1764,30 @@ class TOOLTIPS(object):
     FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_AVGDEFRES_HEADER = '#tooltips:fortification/fortIntelligenceClanDescription/avgDefRes/header'
     FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_AVGDEFRES_BODY = '#tooltips:fortification/fortIntelligenceClanDescription/avgDefRes/body'
     FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_WARTIME = '#tooltips:fortification/fortIntelligenceClanDescription/warTime'
-    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_OFFENSE_HEADER = FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_OFFENSE + '/header'
-    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_OFFENSE_BODY = FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_OFFENSE + '/body'
-    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_DEFENSE_HEADER = FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_DEFENSE + '/header'
-    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_DEFENSE_BODY = FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_DEFENSE + '/body'
-    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_ISINBATTLE_HEADER = FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_ISINBATTLE + '/header'
-    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_ISINBATTLE_BODY = FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_ISINBATTLE + '/body'
-    FORTIFICATION_BATTLENOTIFIER_OFFENSE_HEADER = FORTIFICATION_BATTLENOTIFIER_OFFENSE + '/header'
-    FORTIFICATION_BATTLENOTIFIER_OFFENSE_BODY = FORTIFICATION_BATTLENOTIFIER_OFFENSE + '/body'
-    FORTIFICATION_BATTLENOTIFIER_DEFENSE_HEADER = FORTIFICATION_BATTLENOTIFIER_DEFENSE + '/header'
-    FORTIFICATION_BATTLENOTIFIER_DEFENSE_BODY = FORTIFICATION_BATTLENOTIFIER_DEFENSE + '/body'
-    FORTIFICATION_BATTLENOTIFIER_OFFANDDEF_HEADER = FORTIFICATION_BATTLENOTIFIER_OFFANDDEF + '/header'
-    FORTIFICATION_BATTLENOTIFIER_OFFANDDEF_BODY = FORTIFICATION_BATTLENOTIFIER_OFFANDDEF + '/body'
-    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_JOINBTN_HEADER = FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_JOINBTN + '/header'
-    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_JOINBTN_BODY = FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_JOINBTN + '/body'
+    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_OFFENSE_HEADER = '#tooltips:fortification/fortBattleDirectionPopover/offense/header'
+    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_OFFENSE_BODY = '#tooltips:fortification/fortBattleDirectionPopover/offense/body'
+    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_DEFENSE_HEADER = '#tooltips:fortification/fortBattleDirectionPopover/defense/header'
+    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_DEFENSE_BODY = '#tooltips:fortification/fortBattleDirectionPopover/defense/body'
+    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_ISINBATTLE_HEADER = '#tooltips:fortification/fortBattleDirectionPopover/isInBattle/header'
+    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_ISINBATTLE_BODY = '#tooltips:fortification/fortBattleDirectionPopover/isInBattle/body'
+    FORTIFICATION_BATTLENOTIFIER_OFFENSE_HEADER = '#tooltips:fortification/battleNotifier/offense/header'
+    FORTIFICATION_BATTLENOTIFIER_OFFENSE_BODY = '#tooltips:fortification/battleNotifier/offense/body'
+    FORTIFICATION_BATTLENOTIFIER_DEFENSE_HEADER = '#tooltips:fortification/battleNotifier/defense/header'
+    FORTIFICATION_BATTLENOTIFIER_DEFENSE_BODY = '#tooltips:fortification/battleNotifier/defense/body'
+    FORTIFICATION_BATTLENOTIFIER_OFFANDDEF_HEADER = '#tooltips:fortification/battleNotifier/offAndDef/header'
+    FORTIFICATION_BATTLENOTIFIER_OFFANDDEF_BODY = '#tooltips:fortification/battleNotifier/offAndDef/body'
+    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_JOINBTN_HEADER = '#tooltips:fortification/fortBattleDirectionPopover/joinBtn/header'
+    FORTIFICATION_FORTBATTLEDIRECTIONPOPOVER_JOINBTN_BODY = '#tooltips:fortification/fortBattleDirectionPopover/joinBtn/body'
     FORTIFICATION_FORTSETTINGSPERIPHERYPOPOVER_APPLYBTN_ENABLED = '#tooltips:fortification/fortSettingsPeripheryPopover/applyBtn/enabled'
     FORTIFICATION_FORTSETTINGSPERIPHERYPOPOVER_APPLYBTN_DISABLED = '#tooltips:fortification/fortSettingsPeripheryPopover/applyBtn/disabled'
     FORTIFICATION_FORTSETTINGSDEFENCEHOURPOPOVER_APPLYBTN_ENABLED = '#tooltips:fortification/fortSettingsDefenceHourPopover/applyBtn/enabled'
     FORTIFICATION_FORTSETTINGSDEFENCEHOURPOPOVER_APPLYBTN_DISABLED = '#tooltips:fortification/fortSettingsDefenceHourPopover/applyBtn/disabled'
-    FORTIFICATION_FORTSETTINGSVACATIONPOPOVER_APPLYBTN_BODY = FORTIFICATION_FORTSETTINGSVACATIONPOPOVER_APPLYBTN + '/body'
-    FORTIFICATION_FORTSETTINGSVACATIONPOPOVER_APPLYBTN_DISABLE_BODY = FORTIFICATION_FORTSETTINGSVACATIONPOPOVER_APPLYBTN + '/disable/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_DISABLEDEFENCEPERIOD_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_DISABLEDEFENCEPERIOD + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_DISABLEDEFENCEPERIOD_BODY = FORTIFICATION_FORTSETTINGSWINDOW_DISABLEDEFENCEPERIOD + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_INFOICON_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_INFOICON + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_INFOICON_BODY = FORTIFICATION_FORTSETTINGSWINDOW_INFOICON + '/body'
+    FORTIFICATION_FORTSETTINGSVACATIONPOPOVER_APPLYBTN_BODY = '#tooltips:fortification/fortSettingsVacationPopover/applyBtn/body'
+    FORTIFICATION_FORTSETTINGSVACATIONPOPOVER_APPLYBTN_DISABLE_BODY = '#tooltips:fortification/fortSettingsVacationPopover/applyBtn/disable/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_DISABLEDEFENCEPERIOD_HEADER = '#tooltips:fortification/fortSettingsWindow/disableDefencePeriod/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_DISABLEDEFENCEPERIOD_BODY = '#tooltips:fortification/fortSettingsWindow/disableDefencePeriod/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_INFOICON_HEADER = '#tooltips:fortification/fortSettingsWindow/infoIcon/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_INFOICON_BODY = '#tooltips:fortification/fortSettingsWindow/infoIcon/body'
     FORTIFICATION_FORTSETTINGSWINDOW_DISABLEBUTTON = '#tooltips:fortification/fortSettingsWindow/disableButton'
     FORTIFICATION_FORTSETTINGSWINDOW_STATUSSTRING_ACTIVATED = '#tooltips:fortification/fortSettingsWindow/statusString/activated'
     FORTIFICATION_FORTSETTINGSWINDOW_STATUSSTRING_FREEZED = '#tooltips:fortification/fortSettingsWindow/statusString/freezed'
@@ -1781,32 +1796,32 @@ class TOOLTIPS(object):
     FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_HEADER = '#tooltips:fortification/fortSettingsWindow/perepheryBtn/header'
     FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_ENABLED_BODY = '#tooltips:fortification/fortSettingsWindow/perepheryBtn/enabled/body'
     FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_DISABLED_BODY = '#tooltips:fortification/fortSettingsWindow/perepheryBtn/disabled/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNENABLED_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNENABLED + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNENABLED_BODY = FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNENABLED + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNDISABLED_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNDISABLED + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNDISABLED_BODY = FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNDISABLED + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNENABLED_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNENABLED + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNENABLED_BODY = FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNENABLED + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNDISABLED_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNDISABLED + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNDISABLED_BODY = FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNDISABLED + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNENABLED_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNENABLED + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNENABLED_BODY = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNENABLED + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED + 'NotPlanned/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED_BODY = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED + 'NotPlanned/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDSBLDLESSADAY_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDSBLDLESSADAY + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDSBLDLESSADAY_BODY = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDSBLDLESSADAY + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED_BODY = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEPERIODDESCRIPTION_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEPERIODDESCRIPTION + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEPERIODDESCRIPTION_BODY = FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEPERIODDESCRIPTION + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_DAYOFFDESCRIPTION_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_DAYOFFDESCRIPTION + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_DAYOFFDESCRIPTION_BODY = FORTIFICATION_FORTSETTINGSWINDOW_DAYOFFDESCRIPTION + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONDESCRIPTION_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONDESCRIPTION + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONDESCRIPTION_BODY = FORTIFICATION_FORTSETTINGSWINDOW_VACATIONDESCRIPTION + '/body'
-    FORTIFICATION_FORTSETTINGSWINDOW_PERIPHERYDESCRIPTION_HEADER = FORTIFICATION_FORTSETTINGSWINDOW_PERIPHERYDESCRIPTION + '/header'
-    FORTIFICATION_FORTSETTINGSWINDOW_PERIPHERYDESCRIPTION_BODY = FORTIFICATION_FORTSETTINGSWINDOW_PERIPHERYDESCRIPTION + '/body'
-    FORTIFICATION_FORTSETTINGSDAYOFFPOPOVER_APPLY_ENABLED_BODY = FORTIFICATION_FORTSETTINGSDAYOFFPOPOVER_APPLY_ENABLED + '/body'
-    FORTIFICATION_FORTSETTINGSDAYOFFPOPOVER_APPLY_DISABLED_BODY = FORTIFICATION_FORTSETTINGSDAYOFFPOPOVER_APPLY_DISABLED + '/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNENABLED_HEADER = '#tooltips:fortification/fortSettingsWindow/defenceBtnEnabled/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNENABLED_BODY = '#tooltips:fortification/fortSettingsWindow/defenceBtnEnabled/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNDISABLED_HEADER = '#tooltips:fortification/fortSettingsWindow/defenceBtnDisabled/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNDISABLED_BODY = '#tooltips:fortification/fortSettingsWindow/defenceBtnDisabled/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNENABLED_HEADER = '#tooltips:fortification/fortSettingsWindow/weekEndBtnEnabled/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNENABLED_BODY = '#tooltips:fortification/fortSettingsWindow/weekEndBtnEnabled/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNDISABLED_HEADER = '#tooltips:fortification/fortSettingsWindow/weekEndBtnDisabled/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNDISABLED_BODY = '#tooltips:fortification/fortSettingsWindow/weekEndBtnDisabled/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNENABLED_HEADER = '#tooltips:fortification/fortSettingsWindow/vacationBtnEnabled/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNENABLED_BODY = '#tooltips:fortification/fortSettingsWindow/vacationBtnEnabled/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED_HEADER = '#tooltips:fortification/fortSettingsWindow/vacationBtnDisabledNotPlanned/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED_BODY = '#tooltips:fortification/fortSettingsWindow/vacationBtnDisabledNotPlanned/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDSBLDLESSADAY_HEADER = '#tooltips:fortification/fortSettingsWindow/vacationBtnDsbldLessADay/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDSBLDLESSADAY_BODY = '#tooltips:fortification/fortSettingsWindow/vacationBtnDsbldLessADay/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED_HEADER = '#tooltips:fortification/fortSettingsWindow/vacationBtnDisabled/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED_BODY = '#tooltips:fortification/fortSettingsWindow/vacationBtnDisabled/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEPERIODDESCRIPTION_HEADER = '#tooltips:fortification/fortSettingsWindow/defencePeriodDescription/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEPERIODDESCRIPTION_BODY = '#tooltips:fortification/fortSettingsWindow/defencePeriodDescription/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_DAYOFFDESCRIPTION_HEADER = '#tooltips:fortification/fortSettingsWindow/dayOffDescription/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_DAYOFFDESCRIPTION_BODY = '#tooltips:fortification/fortSettingsWindow/dayOffDescription/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONDESCRIPTION_HEADER = '#tooltips:fortification/fortSettingsWindow/vacationDescription/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_VACATIONDESCRIPTION_BODY = '#tooltips:fortification/fortSettingsWindow/vacationDescription/body'
+    FORTIFICATION_FORTSETTINGSWINDOW_PERIPHERYDESCRIPTION_HEADER = '#tooltips:fortification/fortSettingsWindow/peripheryDescription/header'
+    FORTIFICATION_FORTSETTINGSWINDOW_PERIPHERYDESCRIPTION_BODY = '#tooltips:fortification/fortSettingsWindow/peripheryDescription/body'
+    FORTIFICATION_FORTSETTINGSDAYOFFPOPOVER_APPLY_ENABLED_BODY = '#tooltips:fortification/FortSettingsDayoffPopover/apply/enabled/body'
+    FORTIFICATION_FORTSETTINGSDAYOFFPOPOVER_APPLY_DISABLED_BODY = '#tooltips:fortification/FortSettingsDayoffPopover/apply/disabled/body'
     FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_ENABLED_HEADER = '#tooltips:fortification/fortCreateDirWin/newDirBtn/enabled/header'
     FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_ENABLED_BODY = '#tooltips:fortification/fortCreateDirWin/newDirBtn/enabled/body'
     FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_DISABLEDBYFROZEN_HEADER = '#tooltips:fortification/fortCreateDirWin/newDirBtn/disabledByFrozen/header'
@@ -1817,16 +1832,16 @@ class TOOLTIPS(object):
     FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_BODY = '#tooltips:fortification/fortBuildingCardPopover/mapInfo/body'
     FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_NOBATTLE_HEADER = '#tooltips:fortification/fortBuildingCardPopover/mapInfo/noBattle/header'
     FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_NOBATTLE_BODY = '#tooltips:fortification/fortBuildingCardPopover/mapInfo/noBattle/body'
-    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED_HEADER = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED + '/header'
-    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED_BODY = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED + '/body'
-    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE_HEADER = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE + '/header'
-    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE_BODY = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE + '/body'
-    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL_HEADER = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL + '/header'
-    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL_BODY = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL + '/body'
-    REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE_HEADER = REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE + '/header'
-    REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE_BODY = REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE + '/body'
-    REFERRALMANAGEMENTWINDOW_MULTIPLIER_X1_HEADER = REFERRALMANAGEMENTWINDOW_MULTIPLIER_X1 + '/header'
-    REFERRALMANAGEMENTWINDOW_MULTIPLIER_X1_BODY = REFERRALMANAGEMENTWINDOW_MULTIPLIER_X1 + '/body'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED_HEADER = '#tooltips:ReferralManagementWindow/createSquadBtn/enabled/header'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED_BODY = '#tooltips:ReferralManagementWindow/createSquadBtn/enabled/body'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE_HEADER = '#tooltips:ReferralManagementWindow/createSquadBtn/disabled/isOffline/header'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE_BODY = '#tooltips:ReferralManagementWindow/createSquadBtn/disabled/isOffline/body'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL_HEADER = '#tooltips:ReferralManagementWindow/createSquadBtn/disabled/squadIsFull/header'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL_BODY = '#tooltips:ReferralManagementWindow/createSquadBtn/disabled/squadIsFull/body'
+    REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE_HEADER = '#tooltips:ReferralManagementWindow/table/experience/header'
+    REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE_BODY = '#tooltips:ReferralManagementWindow/table/experience/body'
+    REFERRALMANAGEMENTWINDOW_MULTIPLIER_X1_HEADER = '#tooltips:ReferralManagementWindow/multiplier/x1/header'
+    REFERRALMANAGEMENTWINDOW_MULTIPLIER_X1_BODY = '#tooltips:ReferralManagementWindow/multiplier/x1/body'
     TOOLTIPREFSYSAWARDS_TITLE_GENERAL = '#tooltips:ToolTipRefSysAwards/title/general'
     TOOLTIPREFSYSAWARDS_TITLE_CREDITS = '#tooltips:ToolTipRefSysAwards/title/credits'
     TOOLTIPREFSYSAWARDS_TITLE_TANKMAN = '#tooltips:ToolTipRefSysAwards/title/tankman'
@@ -1857,103 +1872,110 @@ class TOOLTIPS(object):
     FORTWRONGTIME_BODY = '#tooltips:fortWrongTime/body'
     FORTWRONGTIME_LOCKTIME_HEADER = '#tooltips:fortWrongTime/lockTime/header'
     FORTWRONGTIME_LOCKTIME_BODY = '#tooltips:fortWrongTime/lockTime/body'
-    FORTIFICATION_FORTORDERSELECTPOPOVER_ARSENALICON_HEADER = FORTIFICATION_FORTORDERSELECTPOPOVER_ARSENALICON + '/header'
-    FORTIFICATION_FORTORDERSELECTPOPOVER_ARSENALICON_BODY = FORTIFICATION_FORTORDERSELECTPOPOVER_ARSENALICON + '/body'
-    BATTLERESULTS_CYBERSPORT_POINTS_WIN_HEADER = BATTLERESULTS_CYBERSPORT_POINTS_WIN + '/header'
-    BATTLERESULTS_CYBERSPORT_POINTS_WIN_BODY = BATTLERESULTS_CYBERSPORT_POINTS_WIN + '/body'
-    BATTLERESULTS_CYBERSPORT_POINTS_LOSE_HEADER = BATTLERESULTS_CYBERSPORT_POINTS_LOSE + '/header'
-    BATTLERESULTS_CYBERSPORT_POINTS_LOSE_BODY = BATTLERESULTS_CYBERSPORT_POINTS_LOSE + '/body'
+    FORTIFICATION_FORTORDERSELECTPOPOVER_ARSENALICON_HEADER = '#tooltips:fortification/FortOrderSelectPopover/arsenalIcon/header'
+    FORTIFICATION_FORTORDERSELECTPOPOVER_ARSENALICON_BODY = '#tooltips:fortification/FortOrderSelectPopover/arsenalIcon/body'
+    BATTLERESULTS_CYBERSPORT_POINTS_WIN_HEADER = '#tooltips:battleResults/CyberSport/points/win/header'
+    BATTLERESULTS_CYBERSPORT_POINTS_WIN_BODY = '#tooltips:battleResults/CyberSport/points/win/body'
+    BATTLERESULTS_CYBERSPORT_POINTS_LOSE_HEADER = '#tooltips:battleResults/CyberSport/points/lose/header'
+    BATTLERESULTS_CYBERSPORT_POINTS_LOSE_BODY = '#tooltips:battleResults/CyberSport/points/lose/body'
     BATTLERESULTS_FORTRESOURCE_LEGIONER_BODY = '#tooltips:battleResults/FortResource/legioner/body'
-    BATTLERESULTS_FORTRESOURCE_TEAMINFLUENCETOTAL_HEADER = BATTLERESULTS_FORTRESOURCE_TEAMINFLUENCETOTAL + '/header'
-    BATTLERESULTS_FORTRESOURCE_TEAMINFLUENCETOTAL_BODY = BATTLERESULTS_FORTRESOURCE_TEAMINFLUENCETOTAL + '/body'
-    BATTLERESULTS_FORTRESOURCE_TEAMRESOURCETOTAL_HEADER = BATTLERESULTS_FORTRESOURCE_TEAMRESOURCETOTAL + '/header'
-    BATTLERESULTS_FORTRESOURCE_TEAMRESOURCETOTAL_BODY = BATTLERESULTS_FORTRESOURCE_TEAMRESOURCETOTAL + '/body'
-    BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN_HEADER = BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN + '/header'
-    BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN_BODY = BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN + '/body'
-    BATTLERESULTS_VICTORYSCOREDESCRIPTION_HEADER = BATTLERESULTS_VICTORYSCOREDESCRIPTION + '/header'
-    BATTLERESULTS_VICTORYSCOREDESCRIPTION_BODY = BATTLERESULTS_VICTORYSCOREDESCRIPTION + '/body'
-    BATTLERESULTS_VICTORYSCOREDESCRIPTION_COST = BATTLERESULTS_VICTORYSCOREDESCRIPTION + '/cost'
-    BATTLERESULTS_VICTORYSCOREDESCRIPTION_KILLSPATTERN = BATTLERESULTS_VICTORYSCOREDESCRIPTION + '/killsPattern'
-    BATTLERESULTS_VICTORYSCOREDESCRIPTION_POINTSPATTERN = BATTLERESULTS_VICTORYSCOREDESCRIPTION + '/pointsPattern'
-    BATTLERESULTS_VICTORYSCOREDESCRIPTION_DAMAGEPATTERN = BATTLERESULTS_VICTORYSCOREDESCRIPTION + '/damagePattern'
-    STATICFORMATIONSUMMARYVIEW_STATS_BATTLES_HEADER = STATICFORMATIONSUMMARYVIEW_STATS_BATTLES + '/header'
-    STATICFORMATIONSUMMARYVIEW_STATS_BATTLES_BODY = STATICFORMATIONSUMMARYVIEW_STATS_BATTLES + '/body'
-    STATICFORMATIONSUMMARYVIEW_STATS_WINSPERCENT_HEADER = STATICFORMATIONSUMMARYVIEW_STATS_WINSPERCENT + '/header'
-    STATICFORMATIONSUMMARYVIEW_STATS_WINSPERCENT_BODY = STATICFORMATIONSUMMARYVIEW_STATS_WINSPERCENT + '/body'
-    STATICFORMATIONSUMMARYVIEW_STATS_WINSBYCAPTURE_HEADER = STATICFORMATIONSUMMARYVIEW_STATS_WINSBYCAPTURE + '/header'
-    STATICFORMATIONSUMMARYVIEW_STATS_WINSBYCAPTURE_BODY = STATICFORMATIONSUMMARYVIEW_STATS_WINSBYCAPTURE + '/body'
-    STATICFORMATIONSUMMARYVIEW_STATS_TECHDEFEATS_HEADER = STATICFORMATIONSUMMARYVIEW_STATS_TECHDEFEATS + '/header'
-    STATICFORMATIONSUMMARYVIEW_STATS_TECHDEFEATS_BODY = STATICFORMATIONSUMMARYVIEW_STATS_TECHDEFEATS + '/body'
-    STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHTANKS_HEADER = STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHTANKS + '/header'
-    STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHTANKS_BODY = STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHTANKS + '/body'
-    STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHMAPS_HEADER = STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHMAPS + '/header'
-    STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHMAPS_BODY = STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHMAPS + '/body'
-    STATICFORMATIONSTATSVIEW_MAINSTATS_BATTLES_HEADER = STATICFORMATIONSTATSVIEW_MAINSTATS_BATTLES + '/header'
-    STATICFORMATIONSTATSVIEW_MAINSTATS_BATTLES_BODY = STATICFORMATIONSTATSVIEW_MAINSTATS_BATTLES + '/body'
-    STATICFORMATIONSTATSVIEW_MAINSTATS_WINSPERCENT_HEADER = STATICFORMATIONSTATSVIEW_MAINSTATS_WINSPERCENT + '/header'
-    STATICFORMATIONSTATSVIEW_MAINSTATS_WINSPERCENT_BODY = STATICFORMATIONSTATSVIEW_MAINSTATS_WINSPERCENT + '/body'
-    STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSPERCENT_HEADER = STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSPERCENT + '/header'
-    STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSPERCENT_BODY = STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSPERCENT + '/body'
-    STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSNUMBER_HEADER = STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSNUMBER + '/header'
-    STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSNUMBER_BODY = STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSNUMBER + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERCOUNT_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERCOUNT + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERCOUNT_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERCOUNT + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAPPOINTMENT_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERAPPOINTMENT + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAPPOINTMENT_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERAPPOINTMENT + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERNAME_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERNAME + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERNAME_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERNAME + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERRATING_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERRATING + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERRATING_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERRATING + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERBATTLESCOUNT_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERBATTLESCOUNT + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERBATTLESCOUNT_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERBATTLESCOUNT + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERDAMAGECOEF_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERDAMAGECOEF + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERDAMAGECOEF_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERDAMAGECOEF + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRDAMAGE_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRDAMAGE + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRDAMAGE_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRDAMAGE + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRASSISTDAMAGE_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRASSISTDAMAGE + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRASSISTDAMAGE_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRASSISTDAMAGE + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVREXPIRIENCE_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVREXPIRIENCE + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVREXPIRIENCE_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVREXPIRIENCE + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERTAUNT_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERTAUNT + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERTAUNT_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERTAUNT + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERJOINDATE_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERJOINDATE + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERJOINDATE_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERJOINDATE + '/body'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERREMOVEMEMBER_HEADER = STATICFORMATIONSTAFFVIEW_TABLE_HEADERREMOVEMEMBER + '/header'
-    STATICFORMATIONSTAFFVIEW_TABLE_HEADERREMOVEMEMBER_BODY = STATICFORMATIONSTAFFVIEW_TABLE_HEADERREMOVEMEMBER + '/body'
-    STATICFORMATIONSTAFFVIEW_REMOVEMEMBERBTN_HEADER = STATICFORMATIONSTAFFVIEW_REMOVEMEMBERBTN + '/header'
-    STATICFORMATIONSTAFFVIEW_REMOVEMEMBERBTN_BODY = STATICFORMATIONSTAFFVIEW_REMOVEMEMBERBTN + '/body'
-    STATICFORMATIONSTAFFVIEW_REMOVEHIMSELFBTN_HEADER = STATICFORMATIONSTAFFVIEW_REMOVEHIMSELFBTN + '/header'
-    STATICFORMATIONSTAFFVIEW_REMOVEHIMSELFBTN_BODY = STATICFORMATIONSTAFFVIEW_REMOVEHIMSELFBTN + '/body'
-    STATICFORMATIONSTAFFVIEW_INVITEBTN_HEADER = STATICFORMATIONSTAFFVIEW_INVITEBTN + '/header'
-    STATICFORMATIONSTAFFVIEW_INVITEBTN_BODY = STATICFORMATIONSTAFFVIEW_INVITEBTN + '/body'
-    STATICFORMATIONSTAFFVIEW_LBLSTAFFED_HEADER = STATICFORMATIONSTAFFVIEW_LBLSTAFFED + '/header'
-    STATICFORMATIONSTAFFVIEW_LBLSTAFFED_BODY = STATICFORMATIONSTAFFVIEW_LBLSTAFFED + '/body'
-    STATICFORMATIONSTAFFVIEW_INVITEBTNDIS_HEADER = STATICFORMATIONSTAFFVIEW_INVITEBTN + 'Dis/header'
-    STATICFORMATIONSTAFFVIEW_INVITEBTNDIS_BODY = STATICFORMATIONSTAFFVIEW_INVITEBTN + 'Dis/body'
-    STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN_HEADER = STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN + '/header'
-    STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN_BODY = STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN + '/body'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE_HEADER = STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE + '/header'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE_BODY = STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE + '/body'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERPOINTS_HEADER = STATICFORMATIONLADDERVIEW_TABLE_HEADERPOINTS + '/header'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERPOINTS_BODY = STATICFORMATIONLADDERVIEW_TABLE_HEADERPOINTS + '/body'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERFORMATIONNAME_HEADER = STATICFORMATIONLADDERVIEW_TABLE_HEADERFORMATIONNAME + '/header'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERFORMATIONNAME_BODY = STATICFORMATIONLADDERVIEW_TABLE_HEADERFORMATIONNAME + '/body'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERBATTLESCOUNT_HEADER = STATICFORMATIONLADDERVIEW_TABLE_HEADERBATTLESCOUNT + '/header'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERBATTLESCOUNT_BODY = STATICFORMATIONLADDERVIEW_TABLE_HEADERBATTLESCOUNT + '/body'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERWINPERCENT_HEADER = STATICFORMATIONLADDERVIEW_TABLE_HEADERWINPERCENT + '/header'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERWINPERCENT_BODY = STATICFORMATIONLADDERVIEW_TABLE_HEADERWINPERCENT + '/body'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERSHOWFORMATIONPROFILE_HEADER = STATICFORMATIONLADDERVIEW_TABLE_HEADERSHOWFORMATIONPROFILE + '/header'
-    STATICFORMATIONLADDERVIEW_TABLE_HEADERSHOWFORMATIONPROFILE_BODY = STATICFORMATIONLADDERVIEW_TABLE_HEADERSHOWFORMATIONPROFILE + '/body'
-    STATICFORMATIONLADDERVIEW_SHOWFORMATIONPROFILEBTN_HEADER = STATICFORMATIONLADDERVIEW_SHOWFORMATIONPROFILEBTN + '/header'
-    STATICFORMATIONLADDERVIEW_SHOWFORMATIONPROFILEBTN_BODY = STATICFORMATIONLADDERVIEW_SHOWFORMATIONPROFILEBTN + '/body'
-    STATICFORMATION_OWNERICON_HEADER = STATICFORMATION_OWNERICON + '/header'
-    STATICFORMATION_OWNERICON_BODY = STATICFORMATION_OWNERICON + '/body'
-    STATICFORMATION_OFFICERICON_HEADER = STATICFORMATION_OFFICERICON + '/header'
-    STATICFORMATION_OFFICERICON_BODY = STATICFORMATION_OFFICERICON + '/body'
-    STATICFORMATION_DEMOTEBTN_HEADER = STATICFORMATION_DEMOTEBTN + '/header'
-    STATICFORMATION_DEMOTEBTN_BODY = STATICFORMATION_DEMOTEBTN + '/body'
-    STATICFORMATION_PROMOTEBTN_HEADER = STATICFORMATION_PROMOTEBTN + '/header'
-    STATICFORMATION_PROMOTEBTN_BODY = STATICFORMATION_PROMOTEBTN + '/body'
+    BATTLERESULTS_FORTRESOURCE_TEAMINFLUENCETOTAL_HEADER = '#tooltips:battleResults/FortResource/teamInfluenceTotal/header'
+    BATTLERESULTS_FORTRESOURCE_TEAMINFLUENCETOTAL_BODY = '#tooltips:battleResults/FortResource/teamInfluenceTotal/body'
+    BATTLERESULTS_FORTRESOURCE_TEAMRESOURCETOTAL_HEADER = '#tooltips:battleResults/FortResource/teamResourceTotal/header'
+    BATTLERESULTS_FORTRESOURCE_TEAMRESOURCETOTAL_BODY = '#tooltips:battleResults/FortResource/teamResourceTotal/body'
+    BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN_HEADER = '#tooltips:battleResults/FortResource/resultsShareBtn/header'
+    BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN_BODY = '#tooltips:battleResults/FortResource/resultsShareBtn/body'
+    BATTLERESULTS_VICTORYSCOREDESCRIPTION_HEADER = '#tooltips:battleResults/victoryScoreDescription/header'
+    BATTLERESULTS_VICTORYSCOREDESCRIPTION_BODY = '#tooltips:battleResults/victoryScoreDescription/body'
+    BATTLERESULTS_VICTORYSCOREDESCRIPTION_COST = '#tooltips:battleResults/victoryScoreDescription/cost'
+    BATTLERESULTS_VICTORYSCOREDESCRIPTION_KILLSPATTERN = '#tooltips:battleResults/victoryScoreDescription/killsPattern'
+    BATTLERESULTS_VICTORYSCOREDESCRIPTION_POINTSPATTERN = '#tooltips:battleResults/victoryScoreDescription/pointsPattern'
+    BATTLERESULTS_VICTORYSCOREDESCRIPTION_DAMAGEPATTERN = '#tooltips:battleResults/victoryScoreDescription/damagePattern'
+    BATTLERESULTS_EFFICIENCYHEADER_SUMMSPOTTED = '#tooltips:battleResults/efficiencyHeader/summSpotted'
+    BATTLERESULTS_EFFICIENCYHEADER_SUMMASSIST = '#tooltips:battleResults/efficiencyHeader/summAssist'
+    BATTLERESULTS_EFFICIENCYHEADER_SUMMARMOR = '#tooltips:battleResults/efficiencyHeader/summArmor'
+    BATTLERESULTS_EFFICIENCYHEADER_SUMMCRITS = '#tooltips:battleResults/efficiencyHeader/summCrits'
+    BATTLERESULTS_EFFICIENCYHEADER_SUMMDAMAGE = '#tooltips:battleResults/efficiencyHeader/summDamage'
+    BATTLERESULTS_EFFICIENCYHEADER_SUMMKILL = '#tooltips:battleResults/efficiencyHeader/summKill'
+    BATTLERESULTS_EFFICIENCYHEADER_VALUE = '#tooltips:battleResults/efficiencyHeader/value'
+    STATICFORMATIONSUMMARYVIEW_STATS_BATTLES_HEADER = '#tooltips:StaticFormationSummaryView/stats/battles/header'
+    STATICFORMATIONSUMMARYVIEW_STATS_BATTLES_BODY = '#tooltips:StaticFormationSummaryView/stats/battles/body'
+    STATICFORMATIONSUMMARYVIEW_STATS_WINSPERCENT_HEADER = '#tooltips:StaticFormationSummaryView/stats/winsPercent/header'
+    STATICFORMATIONSUMMARYVIEW_STATS_WINSPERCENT_BODY = '#tooltips:StaticFormationSummaryView/stats/winsPercent/body'
+    STATICFORMATIONSUMMARYVIEW_STATS_WINSBYCAPTURE_HEADER = '#tooltips:StaticFormationSummaryView/stats/winsByCapture/header'
+    STATICFORMATIONSUMMARYVIEW_STATS_WINSBYCAPTURE_BODY = '#tooltips:StaticFormationSummaryView/stats/winsByCapture/body'
+    STATICFORMATIONSUMMARYVIEW_STATS_TECHDEFEATS_HEADER = '#tooltips:StaticFormationSummaryView/stats/techDefeats/header'
+    STATICFORMATIONSUMMARYVIEW_STATS_TECHDEFEATS_BODY = '#tooltips:StaticFormationSummaryView/stats/techDefeats/body'
+    STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHTANKS_HEADER = '#tooltips:StaticFormationSummaryView/stats/notEnoughTanks/header'
+    STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHTANKS_BODY = '#tooltips:StaticFormationSummaryView/stats/notEnoughTanks/body'
+    STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHMAPS_HEADER = '#tooltips:StaticFormationSummaryView/stats/notEnoughMaps/header'
+    STATICFORMATIONSUMMARYVIEW_STATS_NOTENOUGHMAPS_BODY = '#tooltips:StaticFormationSummaryView/stats/notEnoughMaps/body'
+    STATICFORMATIONSTATSVIEW_MAINSTATS_BATTLES_HEADER = '#tooltips:StaticFormationStatsView/mainStats/battles/header'
+    STATICFORMATIONSTATSVIEW_MAINSTATS_BATTLES_BODY = '#tooltips:StaticFormationStatsView/mainStats/battles/body'
+    STATICFORMATIONSTATSVIEW_MAINSTATS_WINSPERCENT_HEADER = '#tooltips:StaticFormationStatsView/mainStats/winsPercent/header'
+    STATICFORMATIONSTATSVIEW_MAINSTATS_WINSPERCENT_BODY = '#tooltips:StaticFormationStatsView/mainStats/winsPercent/body'
+    STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSPERCENT_HEADER = '#tooltips:StaticFormationStatsView/mainStats/techDefeatsPercent/header'
+    STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSPERCENT_BODY = '#tooltips:StaticFormationStatsView/mainStats/techDefeatsPercent/body'
+    STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSNUMBER_HEADER = '#tooltips:StaticFormationStatsView/mainStats/techDefeatsNumber/header'
+    STATICFORMATIONSTATSVIEW_MAINSTATS_TECHDEFEATSNUMBER_BODY = '#tooltips:StaticFormationStatsView/mainStats/techDefeatsNumber/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERCOUNT_HEADER = '#tooltips:StaticFormationStaffView/table/headerCount/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERCOUNT_BODY = '#tooltips:StaticFormationStaffView/table/headerCount/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAPPOINTMENT_HEADER = '#tooltips:StaticFormationStaffView/table/headerAppointment/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAPPOINTMENT_BODY = '#tooltips:StaticFormationStaffView/table/headerAppointment/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERNAME_HEADER = '#tooltips:StaticFormationStaffView/table/headerName/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERNAME_BODY = '#tooltips:StaticFormationStaffView/table/headerName/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERRATING_HEADER = '#tooltips:StaticFormationStaffView/table/headerRating/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERRATING_BODY = '#tooltips:StaticFormationStaffView/table/headerRating/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERBATTLESCOUNT_HEADER = '#tooltips:StaticFormationStaffView/table/headerBattlesCount/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERBATTLESCOUNT_BODY = '#tooltips:StaticFormationStaffView/table/headerBattlesCount/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERDAMAGECOEF_HEADER = '#tooltips:StaticFormationStaffView/table/headerDamageCoef/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERDAMAGECOEF_BODY = '#tooltips:StaticFormationStaffView/table/headerDamageCoef/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRDAMAGE_HEADER = '#tooltips:StaticFormationStaffView/table/headerAvrDamage/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRDAMAGE_BODY = '#tooltips:StaticFormationStaffView/table/headerAvrDamage/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRASSISTDAMAGE_HEADER = '#tooltips:StaticFormationStaffView/table/headerAvrAssistDamage/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRASSISTDAMAGE_BODY = '#tooltips:StaticFormationStaffView/table/headerAvrAssistDamage/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVREXPIRIENCE_HEADER = '#tooltips:StaticFormationStaffView/table/headerAvrExpirience/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVREXPIRIENCE_BODY = '#tooltips:StaticFormationStaffView/table/headerAvrExpirience/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERTAUNT_HEADER = '#tooltips:StaticFormationStaffView/table/headerTaunt/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERTAUNT_BODY = '#tooltips:StaticFormationStaffView/table/headerTaunt/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERJOINDATE_HEADER = '#tooltips:StaticFormationStaffView/table/headerJoinDate/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERJOINDATE_BODY = '#tooltips:StaticFormationStaffView/table/headerJoinDate/body'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERREMOVEMEMBER_HEADER = '#tooltips:StaticFormationStaffView/table/headerRemoveMember/header'
+    STATICFORMATIONSTAFFVIEW_TABLE_HEADERREMOVEMEMBER_BODY = '#tooltips:StaticFormationStaffView/table/headerRemoveMember/body'
+    STATICFORMATIONSTAFFVIEW_REMOVEMEMBERBTN_HEADER = '#tooltips:StaticFormationStaffView/removeMemberBtn/header'
+    STATICFORMATIONSTAFFVIEW_REMOVEMEMBERBTN_BODY = '#tooltips:StaticFormationStaffView/removeMemberBtn/body'
+    STATICFORMATIONSTAFFVIEW_REMOVEHIMSELFBTN_HEADER = '#tooltips:StaticFormationStaffView/removeHimselfBtn/header'
+    STATICFORMATIONSTAFFVIEW_REMOVEHIMSELFBTN_BODY = '#tooltips:StaticFormationStaffView/removeHimselfBtn/body'
+    STATICFORMATIONSTAFFVIEW_INVITEBTN_HEADER = '#tooltips:StaticFormationStaffView/inviteBtn/header'
+    STATICFORMATIONSTAFFVIEW_INVITEBTN_BODY = '#tooltips:StaticFormationStaffView/inviteBtn/body'
+    STATICFORMATIONSTAFFVIEW_LBLSTAFFED_HEADER = '#tooltips:StaticFormationStaffView/lblStaffed/header'
+    STATICFORMATIONSTAFFVIEW_LBLSTAFFED_BODY = '#tooltips:StaticFormationStaffView/lblStaffed/body'
+    STATICFORMATIONSTAFFVIEW_INVITEBTNDIS_HEADER = '#tooltips:StaticFormationStaffView/inviteBtnDis/header'
+    STATICFORMATIONSTAFFVIEW_INVITEBTNDIS_BODY = '#tooltips:StaticFormationStaffView/inviteBtnDis/body'
+    STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN_HEADER = '#tooltips:StaticFormationStaffView/recruitmentBtn/header'
+    STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN_BODY = '#tooltips:StaticFormationStaffView/recruitmentBtn/body'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE_HEADER = '#tooltips:StaticFormationLadderView/table/headerPlace/header'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE_BODY = '#tooltips:StaticFormationLadderView/table/headerPlace/body'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERPOINTS_HEADER = '#tooltips:StaticFormationLadderView/table/headerPoints/header'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERPOINTS_BODY = '#tooltips:StaticFormationLadderView/table/headerPoints/body'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERFORMATIONNAME_HEADER = '#tooltips:StaticFormationLadderView/table/headerFormationName/header'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERFORMATIONNAME_BODY = '#tooltips:StaticFormationLadderView/table/headerFormationName/body'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERBATTLESCOUNT_HEADER = '#tooltips:StaticFormationLadderView/table/headerBattlesCount/header'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERBATTLESCOUNT_BODY = '#tooltips:StaticFormationLadderView/table/headerBattlesCount/body'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERWINPERCENT_HEADER = '#tooltips:StaticFormationLadderView/table/headerWinPercent/header'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERWINPERCENT_BODY = '#tooltips:StaticFormationLadderView/table/headerWinPercent/body'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERSHOWFORMATIONPROFILE_HEADER = '#tooltips:StaticFormationLadderView/table/headerShowFormationProfile/header'
+    STATICFORMATIONLADDERVIEW_TABLE_HEADERSHOWFORMATIONPROFILE_BODY = '#tooltips:StaticFormationLadderView/table/headerShowFormationProfile/body'
+    STATICFORMATIONLADDERVIEW_SHOWFORMATIONPROFILEBTN_HEADER = '#tooltips:StaticFormationLadderView/showFormationProfileBtn/header'
+    STATICFORMATIONLADDERVIEW_SHOWFORMATIONPROFILEBTN_BODY = '#tooltips:StaticFormationLadderView/showFormationProfileBtn/body'
+    STATICFORMATION_OWNERICON_HEADER = '#tooltips:StaticFormation/ownerIcon/header'
+    STATICFORMATION_OWNERICON_BODY = '#tooltips:StaticFormation/ownerIcon/body'
+    STATICFORMATION_OFFICERICON_HEADER = '#tooltips:StaticFormation/officerIcon/header'
+    STATICFORMATION_OFFICERICON_BODY = '#tooltips:StaticFormation/officerIcon/body'
+    STATICFORMATION_DEMOTEBTN_HEADER = '#tooltips:StaticFormation/demoteBtn/header'
+    STATICFORMATION_DEMOTEBTN_BODY = '#tooltips:StaticFormation/demoteBtn/body'
+    STATICFORMATION_PROMOTEBTN_HEADER = '#tooltips:StaticFormation/promoteBtn/header'
+    STATICFORMATION_PROMOTEBTN_BODY = '#tooltips:StaticFormation/promoteBtn/body'
     CONTACT_STATUS_INBATTLE_UNKNOWN = '#tooltips:Contact/status/inBattle/unknown'
     CONTACT_STATUS_INBATTLE_RANDOM = '#tooltips:Contact/status/inBattle/random'
     CONTACT_STATUS_INBATTLE_TRAINING = '#tooltips:Contact/status/inBattle/training'
@@ -1978,14 +2000,14 @@ class TOOLTIPS(object):
     CONTACT_UNITS_STATUS_DESCRIPTION_RECRUITER = '#tooltips:Contact/units/status/description/recruiter'
     CONTACT_UNITS_STATUS_DESCRIPTION_RECRUIT = '#tooltips:Contact/units/status/description/recruit'
     CONTACT_UNITS_GROUPS = '#tooltips:Contact/units/groups'
-    ROLECHANGE_CURRENTROLEWARNING_HEADER = ROLECHANGE_CURRENTROLEWARNING + '/header'
-    ROLECHANGE_CURRENTROLEWARNING_BODY = ROLECHANGE_CURRENTROLEWARNING + '/body'
-    ROLECHANGE_ROLETAKEN_HEADER = ROLECHANGE_ROLETAKEN + '/header'
-    ROLECHANGE_ROLETAKEN_BODY = ROLECHANGE_ROLETAKEN + '/body'
-    ROLECHANGE_ROLEANDVEHICLETAKEN_HEADER = ROLECHANGE_ROLEANDVEHICLETAKEN + '/header'
-    ROLECHANGE_ROLEANDVEHICLETAKEN_BODY = ROLECHANGE_ROLEANDVEHICLETAKEN + '/body'
-    ROLECHANGE_FOOTERINFO_HEADER = ROLECHANGE_FOOTERINFO + '/header'
-    ROLECHANGE_FOOTERINFO_BODY = ROLECHANGE_FOOTERINFO + '/body'
+    ROLECHANGE_CURRENTROLEWARNING_HEADER = '#tooltips:RoleChange/currentRoleWarning/header'
+    ROLECHANGE_CURRENTROLEWARNING_BODY = '#tooltips:RoleChange/currentRoleWarning/body'
+    ROLECHANGE_ROLETAKEN_HEADER = '#tooltips:RoleChange/roleTaken/header'
+    ROLECHANGE_ROLETAKEN_BODY = '#tooltips:RoleChange/roleTaken/body'
+    ROLECHANGE_ROLEANDVEHICLETAKEN_HEADER = '#tooltips:RoleChange/roleAndVehicleTaken/header'
+    ROLECHANGE_ROLEANDVEHICLETAKEN_BODY = '#tooltips:RoleChange/roleAndVehicleTaken/body'
+    ROLECHANGE_FOOTERINFO_HEADER = '#tooltips:RoleChange/footerInfo/header'
+    ROLECHANGE_FOOTERINFO_BODY = '#tooltips:RoleChange/footerInfo/body'
     FORTORDERSPANELCOMPONENT_EMPTYSLOT_BODY = '#tooltips:FortOrdersPanelComponent/emptySlot/body'
     STATICFORMATIONPROFILEWINDOW_ACTIONBTN_NOTENOUGHMEMBERS_HEADER = '#tooltips:StaticFormationProfileWindow/actionBtn/notEnoughMembers/header'
     STATICFORMATIONPROFILEWINDOW_ACTIONBTN_NOTENOUGHMEMBERS_BODY = '#tooltips:StaticFormationProfileWindow/actionBtn/notEnoughMembers/body'
@@ -2052,16 +2074,16 @@ class TOOLTIPS(object):
     HANGARTUTORIAL_CUSTOMIZATION_TYPES_EMBLEMBLOCKDESCRIPTION = '#tooltips:hangarTutorial/customization/types/emblemBlockDescription'
     HANGARTUTORIAL_CUSTOMIZATION_TYPES_LABELSBLOCKTITLE = '#tooltips:hangarTutorial/customization/types/labelsBlockTitle'
     HANGARTUTORIAL_CUSTOMIZATION_TYPES_LABELSBLOCKDESCRIPTION = '#tooltips:hangarTutorial/customization/types/labelsBlockDescription'
-    HANGARTUTORIAL_NEXTTECHMODELS_HEADER = HANGARTUTORIAL_NEXTTECHMODELS + '/header'
-    HANGARTUTORIAL_NEXTTECHMODELS_BODY = HANGARTUTORIAL_NEXTTECHMODELS + '/body'
-    HANGARTUTORIAL_TECHREPAIR_HEADER = HANGARTUTORIAL_TECHREPAIR + '/header'
-    HANGARTUTORIAL_TECHREPAIR_BODY = HANGARTUTORIAL_TECHREPAIR + '/body'
-    HANGARTUTORIAL_CUSTOMIZATIONDURATION_HEADER = HANGARTUTORIAL_CUSTOMIZATIONDURATION + '/header'
-    HANGARTUTORIAL_CUSTOMIZATIONDURATION_BODY = HANGARTUTORIAL_CUSTOMIZATIONDURATION + '/body'
-    HANGARTUTORIAL_CUSTOMIZATIONOPTIONS_HEADER = HANGARTUTORIAL_CUSTOMIZATIONOPTIONS + '/header'
-    HANGARTUTORIAL_CUSTOMIZATIONOPTIONS_BODY = HANGARTUTORIAL_CUSTOMIZATIONOPTIONS + '/body'
-    HANGARTUTORIAL_CUSTOMIZATIONCOST_HEADER = HANGARTUTORIAL_CUSTOMIZATIONCOST + '/header'
-    HANGARTUTORIAL_CUSTOMIZATIONCOST_BODY = HANGARTUTORIAL_CUSTOMIZATIONCOST + '/body'
+    HANGARTUTORIAL_NEXTTECHMODELS_HEADER = '#tooltips:hangarTutorial/nextTechModels/header'
+    HANGARTUTORIAL_NEXTTECHMODELS_BODY = '#tooltips:hangarTutorial/nextTechModels/body'
+    HANGARTUTORIAL_TECHREPAIR_HEADER = '#tooltips:hangarTutorial/techRepair/header'
+    HANGARTUTORIAL_TECHREPAIR_BODY = '#tooltips:hangarTutorial/techRepair/body'
+    HANGARTUTORIAL_CUSTOMIZATIONDURATION_HEADER = '#tooltips:hangarTutorial/customizationDuration/header'
+    HANGARTUTORIAL_CUSTOMIZATIONDURATION_BODY = '#tooltips:hangarTutorial/customizationDuration/body'
+    HANGARTUTORIAL_CUSTOMIZATIONOPTIONS_HEADER = '#tooltips:hangarTutorial/customizationOptions/header'
+    HANGARTUTORIAL_CUSTOMIZATIONOPTIONS_BODY = '#tooltips:hangarTutorial/customizationOptions/body'
+    HANGARTUTORIAL_CUSTOMIZATIONCOST_HEADER = '#tooltips:hangarTutorial/customizationCost/header'
+    HANGARTUTORIAL_CUSTOMIZATIONCOST_BODY = '#tooltips:hangarTutorial/customizationCost/body'
     HANGARTUTORIAL_NATIONS_TITLE = '#tooltips:hangarTutorial/nations/title'
     HANGARTUTORIAL_NATIONS_USSR = '#tooltips:hangarTutorial/nations/ussr'
     HANGARTUTORIAL_NATIONS_GERMANY = '#tooltips:hangarTutorial/nations/germany'
@@ -2088,6 +2110,7 @@ class TOOLTIPS(object):
     HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_RESEARCH = '#tooltips:hangarTutorial/researchTree/buttonsBlock/research'
     HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_BUY = '#tooltips:hangarTutorial/researchTree/buttonsBlock/buy'
     HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_INHANGAR = '#tooltips:hangarTutorial/researchTree/buttonsBlock/inHangar'
+    HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_ADDTOCOMPARE = '#tooltips:hangarTutorial/researchTree/buttonsBlock/addToCompare'
     HANGARTUTORIAL_PERSONALCASE_SKILLS_TITLE = '#tooltips:hangarTutorial/personalCase/skills/title'
     HANGARTUTORIAL_PERSONALCASE_SKILLS_HEADERDESCRIPTION = '#tooltips:hangarTutorial/personalCase/skills/headerDescription'
     HANGARTUTORIAL_PERSONALCASE_SKILLS_SPECIALTYTITLE = '#tooltips:hangarTutorial/personalCase/skills/specialtyTitle'
@@ -2123,10 +2146,10 @@ class TOOLTIPS(object):
     HANGARTUTORIAL_EQUIPMENT_DESCRIPTION = '#tooltips:hangarTutorial/equipment/description'
     HANGARTUTORIAL_EQUIPMENT_PREM_TITLE = '#tooltips:hangarTutorial/equipment/prem/title'
     HANGARTUTORIAL_EQUIPMENT_PREM_DESCRIPTION = '#tooltips:hangarTutorial/equipment/prem/description'
-    BATTLESELECTORWINDOW_TOOLTIP_DOMINATION_SELECTBTN_HEADER = BATTLESELECTORWINDOW_TOOLTIP_DOMINATION_SELECTBTN + '/header'
-    BATTLESELECTORWINDOW_TOOLTIP_DOMINATION_SELECTBTN_BODY = BATTLESELECTORWINDOW_TOOLTIP_DOMINATION_SELECTBTN + '/body'
-    BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN_HEADER = BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN + '/header'
-    BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN_BODY = BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN + '/body'
+    BATTLESELECTORWINDOW_TOOLTIP_DOMINATION_SELECTBTN_HEADER = '#tooltips:battleSelectorWindow/tooltip/domination/selectBtn/header'
+    BATTLESELECTORWINDOW_TOOLTIP_DOMINATION_SELECTBTN_BODY = '#tooltips:battleSelectorWindow/tooltip/domination/selectBtn/body'
+    BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN_HEADER = '#tooltips:battleSelectorWindow/tooltip/multiteam/selectBtn/header'
+    BATTLESELECTORWINDOW_TOOLTIP_MULTITEAM_SELECTBTN_BODY = '#tooltips:battleSelectorWindow/tooltip/multiteam/selectBtn/body'
     BOOSTER_QUESTLINKBTN_BODY = '#tooltips:booster/questLinkBtn/body'
     BOOSTER_ACTIVEBTN_DISABLED_BODY = '#tooltips:booster/activeBtn/disabled/body'
     BOOSTER_FILTERS_QUALITYSMALL_BODY = '#tooltips:booster/filters/qualitySmall/body'
@@ -2166,14 +2189,36 @@ class TOOLTIPS(object):
     CLANCOMMONINFO_ACTIVITY = '#tooltips:clanCommonInfo/activity'
     CLANCOMMONINFO_YES = '#tooltips:clanCommonInfo/yes'
     CLANCOMMONINFO_NO = '#tooltips:clanCommonInfo/no'
-    AWARDITEM_CREDITS_HEADER = AWARDITEM_CREDITS + '/header'
-    AWARDITEM_CREDITS_BODY = AWARDITEM_CREDITS + '/body'
-    AWARDITEM_GOLD_HEADER = AWARDITEM_GOLD + '/header'
-    AWARDITEM_GOLD_BODY = AWARDITEM_GOLD + '/body'
-    AWARDITEM_FREEXP_HEADER = AWARDITEM_FREEXP + '/header'
-    AWARDITEM_FREEXP_BODY = AWARDITEM_FREEXP + '/body'
-    AWARDITEM_PREMDAYS_HEADER = AWARDITEM_PREMDAYS + '/header'
-    AWARDITEM_PREMDAYS_BODY = AWARDITEM_PREMDAYS + '/body'
+    AWARDITEM_CREDITS_HEADER = '#tooltips:awardItem/credits/header'
+    AWARDITEM_CREDITS_BODY = '#tooltips:awardItem/credits/body'
+    AWARDITEM_GOLD_HEADER = '#tooltips:awardItem/gold/header'
+    AWARDITEM_GOLD_BODY = '#tooltips:awardItem/gold/body'
+    AWARDITEM_FREEXP_HEADER = '#tooltips:awardItem/freeXP/header'
+    AWARDITEM_FREEXP_BODY = '#tooltips:awardItem/freeXP/body'
+    AWARDITEM_PREMIUM_HEADER = '#tooltips:awardItem/premium/header'
+    AWARDITEM_PREMIUM_BODY = '#tooltips:awardItem/premium/body'
+    AWARDITEM_BERTHS_HEADER = '#tooltips:awardItem/berths/header'
+    AWARDITEM_BERTHS_BODY = '#tooltips:awardItem/berths/body'
+    AWARDITEM_CREDITSFACTOR_HEADER = '#tooltips:awardItem/creditsFactor/header'
+    AWARDITEM_CREDITSFACTOR_BODY = '#tooltips:awardItem/creditsFactor/body'
+    AWARDITEM_FREEXPFACTOR_HEADER = '#tooltips:awardItem/freeXPFactor/header'
+    AWARDITEM_FREEXPFACTOR_BODY = '#tooltips:awardItem/freeXPFactor/body'
+    AWARDITEM_TANKMENXP_HEADER = '#tooltips:awardItem/tankmenXP/header'
+    AWARDITEM_TANKMENXP_BODY = '#tooltips:awardItem/tankmenXP/body'
+    AWARDITEM_TANKMENXPFACTOR_HEADER = '#tooltips:awardItem/tankmenXPFactor/header'
+    AWARDITEM_TANKMENXPFACTOR_BODY = '#tooltips:awardItem/tankmenXPFactor/body'
+    AWARDITEM_XP_HEADER = '#tooltips:awardItem/xp/header'
+    AWARDITEM_XP_BODY = '#tooltips:awardItem/xp/body'
+    AWARDITEM_XPFACTOR_HEADER = '#tooltips:awardItem/xpFactor/header'
+    AWARDITEM_XPFACTOR_BODY = '#tooltips:awardItem/xpFactor/body'
+    AWARDITEM_SLOTS_HEADER = '#tooltips:awardItem/slots/header'
+    AWARDITEM_SLOTS_BODY = '#tooltips:awardItem/slots/body'
+    AWARDITEM_TOKENS_HEADER = '#tooltips:awardItem/tokens/header'
+    AWARDITEM_TOKENS_BODY = '#tooltips:awardItem/tokens/body'
+    AWARDITEM_TANKMEN_HEADER = '#tooltips:awardItem/tankmen/header'
+    AWARDITEM_TANKMEN_BODY = '#tooltips:awardItem/tankmen/body'
+    AWARDITEM_TANKWOMEN_HEADER = '#tooltips:awardItem/tankwomen/header'
+    AWARDITEM_TANKWOMEN_BODY = '#tooltips:awardItem/tankwomen/body'
     CUSTOMIZATION_HEADERCLOSEBTN_HEADER = '#tooltips:customization/headerCloseBtn/header'
     CUSTOMIZATION_HEADERCLOSEBTN_BODY = '#tooltips:customization/headerCloseBtn/body'
     CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER = '#tooltips:customization/notEnoughResources/header'
@@ -2216,8 +2261,8 @@ class TOOLTIPS(object):
     CUSTOMIZATION_SLOTREVERT_BODY = '#tooltips:customization/slotRevert/body'
     TANKSFILTER_COUNTER_CLOSE_HEADER = '#tooltips:tanksFilter/counter/close/header'
     TANKSFILTER_COUNTER_CLOSE_BODY = '#tooltips:tanksFilter/counter/close/body'
-    LOBBYMENU_VERSIONINFOBUTTON_MINICLIENT_HEADER = LOBBYMENU_VERSIONINFOBUTTON + '/miniclient/header'
-    LOBBYMENU_VERSIONINFOBUTTON_MINICLIENT_BODY = LOBBYMENU_VERSIONINFOBUTTON + '/miniclient/body'
+    LOBBYMENU_VERSIONINFOBUTTON_MINICLIENT_HEADER = '#tooltips:lobbyMenu/versionInfoButton/miniclient/header'
+    LOBBYMENU_VERSIONINFOBUTTON_MINICLIENT_BODY = '#tooltips:lobbyMenu/versionInfoButton/miniclient/body'
     TANK_PARAMS_DESC_MAXHEALTH = '#tooltips:tank_params/desc/maxHealth'
     TANK_PARAMS_DESC_VEHICLEWEIGHT = '#tooltips:tank_params/desc/vehicleWeight'
     TANK_PARAMS_DESC_ENGINEPOWER = '#tooltips:tank_params/desc/enginePower'
@@ -2270,21 +2315,175 @@ class TOOLTIPS(object):
     VEHICLEPARAMS_WARNING_TANKMANISOUT = '#tooltips:vehicleParams/warning/tankmanIsOut'
     VEHICLEPARAMS_COMMON_TITLE = '#tooltips:vehicleParams/common/title'
     VEHICLEPARAMS_SIMPLIFIED_TITLE = '#tooltips:vehicleParams/simplified/title'
-    VEHICLEPREVIEW_CREW_COMMANDER = VEHICLEPREVIEW_CREW + '/commander'
-    VEHICLEPREVIEW_CREW_DRIVER = VEHICLEPREVIEW_CREW + '/driver'
-    VEHICLEPREVIEW_CREW_RADIOMAN = VEHICLEPREVIEW_CREW + '/radioman'
-    VEHICLEPREVIEW_CREW_GUNNER = VEHICLEPREVIEW_CREW + '/gunner'
-    VEHICLEPREVIEW_CREW_LOADER = VEHICLEPREVIEW_CREW + '/loader'
-    VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE = VEHICLEPREVIEW_CREW + '/influence/reconnaissance'
-    VEHICLEPREVIEW_CREW_INFLUENCE_VISIONRADIUS = VEHICLEPREVIEW_CREW + '/influence/visionRadius'
-    VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER = VEHICLEPREVIEW_CREW + '/influence/firepower'
-    VEHICLEPREVIEW_CREW_INFLUENCE_AIMINGTIME = VEHICLEPREVIEW_CREW + '/influence/aimingTime'
-    VEHICLEPREVIEW_CREW_INFLUENCE_MOBILITY = VEHICLEPREVIEW_CREW + '/influence/mobility'
-    VEHICLEPREVIEW_CREW_INFLUENCE_CHASSISROTATIONSPEED = VEHICLEPREVIEW_CREW + '/influence/chassisRotationSpeed'
-    VEHICLEPREVIEW_CREW_INFLUENCE_ENGINEPOWER = VEHICLEPREVIEW_CREW + '/influence/enginePower'
-    VEHICLEPREVIEW_CREW_INFLUENCE_RADIODISTANCE = VEHICLEPREVIEW_CREW + '/influence/radioDistance'
-    VEHICLEPREVIEW_CREW_ADDITIONALROLES = VEHICLEPREVIEW_CREW + '/additionalRoles'
+    VEHICLEPREVIEW_CREW_COMMANDER = '#tooltips:vehiclePreview/crew/commander'
+    VEHICLEPREVIEW_CREW_DRIVER = '#tooltips:vehiclePreview/crew/driver'
+    VEHICLEPREVIEW_CREW_RADIOMAN = '#tooltips:vehiclePreview/crew/radioman'
+    VEHICLEPREVIEW_CREW_GUNNER = '#tooltips:vehiclePreview/crew/gunner'
+    VEHICLEPREVIEW_CREW_LOADER = '#tooltips:vehiclePreview/crew/loader'
+    VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE = '#tooltips:vehiclePreview/crew/influence/reconnaissance'
+    VEHICLEPREVIEW_CREW_INFLUENCE_VISIONRADIUS = '#tooltips:vehiclePreview/crew/influence/visionRadius'
+    VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER = '#tooltips:vehiclePreview/crew/influence/firepower'
+    VEHICLEPREVIEW_CREW_INFLUENCE_AIMINGTIME = '#tooltips:vehiclePreview/crew/influence/aimingTime'
+    VEHICLEPREVIEW_CREW_INFLUENCE_MOBILITY = '#tooltips:vehiclePreview/crew/influence/mobility'
+    VEHICLEPREVIEW_CREW_INFLUENCE_CHASSISROTATIONSPEED = '#tooltips:vehiclePreview/crew/influence/chassisRotationSpeed'
+    VEHICLEPREVIEW_CREW_INFLUENCE_ENGINEPOWER = '#tooltips:vehiclePreview/crew/influence/enginePower'
+    VEHICLEPREVIEW_CREW_INFLUENCE_RADIODISTANCE = '#tooltips:vehiclePreview/crew/influence/radioDistance'
+    VEHICLEPREVIEW_CREW_ADDITIONALROLES = '#tooltips:vehiclePreview/crew/additionalRoles'
+    VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER = '#tooltips:vehiclePreview/vehiclePanel/info/header'
+    VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY = '#tooltips:vehiclePreview/vehiclePanel/info/body'
     SQUADWINDOW_EVENTVEHICLE = '#tooltips:squadWindow/eventVehicle'
+    DISMISSTANKMANDIALOG_CANTRESTORALERT_HEADER = '#tooltips:dismissTankmanDialog/cantRestorAlert/header'
+    DISMISSTANKMANDIALOG_CANTRESTORALERT_BODY = '#tooltips:dismissTankmanDialog/cantRestorAlert/body'
+    DISMISSTANKMANDIALOG_BUFFERISFULL_HEADER = '#tooltips:dismissTankmanDialog/bufferIsFull/header'
+    DISMISSTANKMANDIALOG_BUFFERISFULL_BODY = '#tooltips:dismissTankmanDialog/bufferIsFull/body'
+    DISMISSTANKMANDIALOG_BUFFERISFULLMULTIPLE_BODY = '#tooltips:dismissTankmanDialog/bufferIsFullMultiple/body'
+    NOTIFICATIONSVIEW_TAB_INFO_BODY = '#tooltips:notificationsView/tab/info/body'
+    NOTIFICATIONSVIEW_TAB_INVITES_BODY = '#tooltips:notificationsView/tab/invites/body'
+    NOTIFICATIONSVIEW_TAB_OFFERS_BODY = '#tooltips:notificationsView/tab/offers/body'
+    HANGAR_HEADER_BATTLEQUESTS_AVAILABLE_HEADER = '#tooltips:hangar/header/battleQuests/available/header'
+    HANGAR_HEADER_BATTLEQUESTS_AVAILABLE_BODY = '#tooltips:hangar/header/battleQuests/available/body'
+    HANGAR_HEADER_BATTLEQUESTS_DISABLED_HEADER = '#tooltips:hangar/header/battleQuests/disabled/header'
+    HANGAR_HEADER_BATTLEQUESTS_DISABLED_BODY = '#tooltips:hangar/header/battleQuests/disabled/body'
+    HANGAR_HEADER_PERSONALQUESTS_DISABLED_HEADER = '#tooltips:hangar/header/personalQuests/disabled/header'
+    HANGAR_HEADER_PERSONALQUESTS_DISABLED_BODY = '#tooltips:hangar/header/personalQuests/disabled/body'
+    HANGAR_HEADER_PERSONALQUESTS_UNAVAILABLE_HEADER = '#tooltips:hangar/header/personalQuests/unavailable/header'
+    HANGAR_HEADER_PERSONALQUESTS_UNAVAILABLE_BODY = '#tooltips:hangar/header/personalQuests/unavailable/body'
+    HANGAR_HEADER_PERSONALQUESTS_AVAILABLE_HEADER = '#tooltips:hangar/header/personalQuests/available/header'
+    HANGAR_HEADER_PERSONALQUESTS_AVAILABLE_BODY = '#tooltips:hangar/header/personalQuests/available/body'
+    HANGAR_HEADER_PERSONALQUESTS_INPROGRESS_HEADER = '#tooltips:hangar/header/personalQuests/inprogress/header'
+    HANGAR_HEADER_PERSONALQUESTS_INPROGRESS_BODY = '#tooltips:hangar/header/personalQuests/inprogress/body'
+    HANGAR_HEADER_PERSONALQUESTS_AWARD_HEADER = '#tooltips:hangar/header/personalQuests/award/header'
+    HANGAR_HEADER_PERSONALQUESTS_AWARD_BODY = '#tooltips:hangar/header/personalQuests/award/body'
+    TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM = (TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_HEAVYTANK,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_AT_SPG,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_SPG)
+    TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_ENUM = (TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_LIGHTTANK,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_MEDIUMTANK,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_HEAVYTANK,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_AT_SPG,
+     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_SPG)
+    LEVEL_ENUM = (LEVEL_1,
+     LEVEL_2,
+     LEVEL_3,
+     LEVEL_4,
+     LEVEL_5,
+     LEVEL_6,
+     LEVEL_7,
+     LEVEL_8,
+     LEVEL_9,
+     LEVEL_10)
+    VEHICLE_ENUM = (VEHICLE_GRAPH_NOTES_SHOWCONTEXTMENU,
+     VEHICLE_GRAPH_NOTES_SHOWINFOWINDOW,
+     VEHICLE_GRAPH_NOTES_VEHICLEUNLOCK,
+     VEHICLE_GRAPH_NOTES_MODULEUNLOCK,
+     VEHICLE_GRAPH_NOTES_EQUIP,
+     VEHICLE_GRAPH_NOTES_BUYANDEQUIP,
+     VEHICLE_GRAPH_NOTES_GOTONATIONTREE,
+     VEHICLE_GRAPH_NOTES_GOTONEXTVEHICLE,
+     VEHICLE_GRAPH_BODY_MODULEINSTALLED,
+     VEHICLE_GRAPH_BODY_NOTENOUGH,
+     VEHICLE_INVENTORYCOUNT,
+     VEHICLE_VEHICLECOUNT,
+     VEHICLE_LEVEL,
+     VEHICLE_MASTERING,
+     VEHICLE_MASTERING_VERYSIMPLE,
+     VEHICLE_STATS_FOOTNOTE,
+     VEHICLE_ELITE,
+     VEHICLE_CREW,
+     VEHICLE_CREW_AWARD,
+     VEHICLE_AMMO,
+     VEHICLE_XP,
+     VEHICLE_MULTIPLIED_XP,
+     VEHICLE_UNLOCK_PRICE,
+     VEHICLE_BUY_PRICE,
+     VEHICLE_RESTORE_PRICE,
+     VEHICLE_ACTION_PRC,
+     VEHICLE_MINRENTALSPRICE,
+     VEHICLE_BUY_PRICE_ACTION,
+     VEHICLE_SELL_PRICE,
+     VEHICLE_EQUIPMENTS,
+     VEHICLE_DEVICES,
+     VEHICLE_FAVORITE,
+     VEHICLE_DAILYXPFACTOR,
+     VEHICLE_SPEEDLIMITS,
+     VEHICLE_DAMAGE,
+     VEHICLE_TURRETROTATIONSPEED,
+     VEHICLE_RADIODISTANCE,
+     VEHICLE_TEXTDELIMITER_OR,
+     VEHICLE_RENTLEFT_DAYS,
+     VEHICLE_RENTLEFT_HOURS,
+     VEHICLE_RENTLEFTFUTURE_DAYS,
+     VEHICLE_RENTLEFTFUTURE_HOURS,
+     VEHICLE_RENTAVAILABLE,
+     VEHICLE_RESTORELEFT_DAYS,
+     VEHICLE_RESTORELEFT_HOURS,
+     VEHICLE_RENTLEFT_BATTLES,
+     VEHICLE_DEAL_TELECOM_MAIN)
+    TANKCARUSEL_LOCK_ENUM = (TANKCARUSEL_LOCK_HEADER,
+     TANKCARUSEL_LOCK_TO,
+     TANKCARUSEL_LOCK_CLAN,
+     TANKCARUSEL_LOCK_TOURNAMENT,
+     TANKCARUSEL_LOCK_ROAMING)
+    ACHIEVEMENT_PARAMS_LEFT_ENUM = (ACHIEVEMENT_PARAMS_LEFT4,
+     ACHIEVEMENT_PARAMS_LEFT3,
+     ACHIEVEMENT_PARAMS_LEFT2,
+     ACHIEVEMENT_PARAMS_LEFT1)
+    ACTIONPRICE_SELL_TYPE_ENUM = (ACTIONPRICE_SELL_TYPE_VEHICLE,
+     ACTIONPRICE_SELL_TYPE_MODULE,
+     ACTIONPRICE_SELL_TYPE_EQUIPMENT,
+     ACTIONPRICE_SELL_TYPE_SHELL,
+     ACTIONPRICE_SELL_TYPE_OPTIONALDEVICE)
+    FORTIFICATION_TRANSPORTING_ENUM = (FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_HEADER,
+     FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_BODY,
+     FORTIFICATION_TRANSPORTING_COOLDOWN_HEADER,
+     FORTIFICATION_TRANSPORTING_COOLDOWN_BODY,
+     FORTIFICATION_TRANSPORTING_FOUNDATION_HEADER,
+     FORTIFICATION_TRANSPORTING_FOUNDATION_BODY,
+     FORTIFICATION_TRANSPORTING_NOTEMPTYSPACE_HEADER,
+     FORTIFICATION_TRANSPORTING_NOTEMPTYSPACE_BODY)
+    SQUADWINDOW_STATUS_ENUM = (SQUADWINDOW_STATUS_COMMANDER,
+     SQUADWINDOW_STATUS_NORMAL,
+     SQUADWINDOW_STATUS_CANCELED,
+     SQUADWINDOW_STATUS_READY,
+     SQUADWINDOW_STATUS_INBATTLE,
+     SQUADWINDOW_STATUS_LOCKED)
+    TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM = (TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_CREDITS, TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_TANKMAN, TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_VEHICLEWITHTANKMEN)
+    PRIVATEQUESTS_PARAMS_ENUM = (PRIVATEQUESTS_PARAMS_SHEETS,
+     PRIVATEQUESTS_PARAMS_RECRUITTANKMANFEMALE,
+     PRIVATEQUESTS_PARAMS_COLLECTEDSHEETS,
+     PRIVATEQUESTS_PARAMS_COMPETEDTASKS,
+     PRIVATEQUESTS_PARAMS_RECRUITEDTANKMANFEMALE)
+    LOGIN_SOCIAL_ENUM = (LOGIN_SOCIAL_ENTER_HEADER,
+     LOGIN_SOCIAL_ENTER_BODY,
+     LOGIN_SOCIAL_FACEBOOK,
+     LOGIN_SOCIAL_GOOGLE,
+     LOGIN_SOCIAL_YAHOO,
+     LOGIN_SOCIAL_TWITTER,
+     LOGIN_SOCIAL_VKONTAKTE,
+     LOGIN_SOCIAL_ODNOKLASSNIKI,
+     LOGIN_SOCIAL_WGNI,
+     LOGIN_SOCIAL_NAVER)
+    TECHTREEPAGE_NATIONS_ENUM = (TECHTREEPAGE_NATIONS_USSR,
+     TECHTREEPAGE_NATIONS_GERMANY,
+     TECHTREEPAGE_NATIONS_USA,
+     TECHTREEPAGE_NATIONS_CHINA,
+     TECHTREEPAGE_NATIONS_FRANCE,
+     TECHTREEPAGE_NATIONS_UK,
+     TECHTREEPAGE_NATIONS_JAPAN,
+     TECHTREEPAGE_NATIONS_CZECH,
+     TECHTREEPAGE_NATIONS_SWEDEN)
+    CONTACT_STATUS_INBATTLE_ENUM = (CONTACT_STATUS_INBATTLE_UNKNOWN,
+     CONTACT_STATUS_INBATTLE_RANDOM,
+     CONTACT_STATUS_INBATTLE_TRAINING,
+     CONTACT_STATUS_INBATTLE_TEAM,
+     CONTACT_STATUS_INBATTLE_TUTORIAL,
+     CONTACT_STATUS_INBATTLE_TEAM7X7,
+     CONTACT_STATUS_INBATTLE_HISTORICAL,
+     CONTACT_STATUS_INBATTLE_FORTIFICATIONS,
+     CONTACT_STATUS_INBATTLE_SPECIAL)
+    VEHICLE_RENTLEFT_ENUM = (VEHICLE_RENTLEFT_DAYS, VEHICLE_RENTLEFT_HOURS, VEHICLE_RENTLEFT_BATTLES)
     TANK_PARAMS_DESC_ENUM = (TANK_PARAMS_DESC_MAXHEALTH,
      TANK_PARAMS_DESC_VEHICLEWEIGHT,
      TANK_PARAMS_DESC_ENGINEPOWER,
@@ -2317,403 +2516,269 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_EXPLOSIONRADIUS,
      TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR,
      TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR)
-    CONTACT_STATUS_INBATTLE_ENUM = (CONTACT_STATUS_INBATTLE_UNKNOWN,
-     CONTACT_STATUS_INBATTLE_RANDOM,
-     CONTACT_STATUS_INBATTLE_TRAINING,
-     CONTACT_STATUS_INBATTLE_TEAM,
-     CONTACT_STATUS_INBATTLE_TUTORIAL,
-     CONTACT_STATUS_INBATTLE_TEAM7X7,
-     CONTACT_STATUS_INBATTLE_HISTORICAL,
-     CONTACT_STATUS_INBATTLE_FORTIFICATIONS,
-     CONTACT_STATUS_INBATTLE_SPECIAL)
-    TECHTREEPAGE_NATIONS_ENUM = (TECHTREEPAGE_NATIONS_USSR,
-     TECHTREEPAGE_NATIONS_GERMANY,
-     TECHTREEPAGE_NATIONS_USA,
-     TECHTREEPAGE_NATIONS_CHINA,
-     TECHTREEPAGE_NATIONS_FRANCE,
-     TECHTREEPAGE_NATIONS_UK,
-     TECHTREEPAGE_NATIONS_JAPAN,
-     TECHTREEPAGE_NATIONS_CZECH,
-     TECHTREEPAGE_NATIONS_SWEDEN)
-    VEHICLE_RENTLEFT_ENUM = (VEHICLE_RENTLEFT_DAYS, VEHICLE_RENTLEFT_HOURS, VEHICLE_RENTLEFT_BATTLES)
-    FORTIFICATION_TRANSPORTING_ENUM = (FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_HEADER,
-     FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_BODY,
-     FORTIFICATION_TRANSPORTING_COOLDOWN_HEADER,
-     FORTIFICATION_TRANSPORTING_COOLDOWN_BODY,
-     FORTIFICATION_TRANSPORTING_FOUNDATION_HEADER,
-     FORTIFICATION_TRANSPORTING_FOUNDATION_BODY,
-     FORTIFICATION_TRANSPORTING_NOTEMPTYSPACE_HEADER,
-     FORTIFICATION_TRANSPORTING_NOTEMPTYSPACE_BODY)
-    PRIVATEQUESTS_PARAMS_ENUM = (PRIVATEQUESTS_PARAMS_SHEETS,
-     PRIVATEQUESTS_PARAMS_RECRUITTANKMANFEMALE,
-     PRIVATEQUESTS_PARAMS_COLLECTEDSHEETS,
-     PRIVATEQUESTS_PARAMS_COMPETEDTASKS,
-     PRIVATEQUESTS_PARAMS_RECRUITEDTANKMANFEMALE)
-    TANKCARUSEL_LOCK_ENUM = (TANKCARUSEL_LOCK_HEADER,
-     TANKCARUSEL_LOCK_TO,
-     TANKCARUSEL_LOCK_CLAN,
-     TANKCARUSEL_LOCK_TOURNAMENT,
-     TANKCARUSEL_LOCK_ROAMING)
-    ACTIONPRICE_SELL_TYPE_ENUM = (ACTIONPRICE_SELL_TYPE_VEHICLE,
-     ACTIONPRICE_SELL_TYPE_MODULE,
-     ACTIONPRICE_SELL_TYPE_EQUIPMENT,
-     ACTIONPRICE_SELL_TYPE_SHELL,
-     ACTIONPRICE_SELL_TYPE_OPTIONALDEVICE)
-    SQUADWINDOW_STATUS_ENUM = (SQUADWINDOW_STATUS_COMMANDER,
-     SQUADWINDOW_STATUS_NORMAL,
-     SQUADWINDOW_STATUS_CANCELED,
-     SQUADWINDOW_STATUS_READY,
-     SQUADWINDOW_STATUS_INBATTLE,
-     SQUADWINDOW_STATUS_LOCKED)
-    TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM = (TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK,
-     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK,
-     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_HEAVYTANK,
-     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_AT_SPG,
-     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_SPG)
-    TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM = (TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_CREDITS, TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_TANKMAN, TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_VEHICLEWITHTANKMEN)
-    LEVEL_ENUM = (LEVEL_1,
-     LEVEL_2,
-     LEVEL_3,
-     LEVEL_4,
-     LEVEL_5,
-     LEVEL_6,
-     LEVEL_7,
-     LEVEL_8,
-     LEVEL_9,
-     LEVEL_10)
-    ACHIEVEMENT_PARAMS_LEFT_ENUM = (ACHIEVEMENT_PARAMS_LEFT4,
-     ACHIEVEMENT_PARAMS_LEFT3,
-     ACHIEVEMENT_PARAMS_LEFT2,
-     ACHIEVEMENT_PARAMS_LEFT1)
-    VEHICLE_ENUM = (VEHICLE_GRAPH_NOTES_SHOWCONTEXTMENU,
-     VEHICLE_GRAPH_NOTES_SHOWINFOWINDOW,
-     VEHICLE_GRAPH_NOTES_VEHICLEUNLOCK,
-     VEHICLE_GRAPH_NOTES_MODULEUNLOCK,
-     VEHICLE_GRAPH_NOTES_EQUIP,
-     VEHICLE_GRAPH_NOTES_BUYANDEQUIP,
-     VEHICLE_GRAPH_NOTES_GOTONATIONTREE,
-     VEHICLE_GRAPH_NOTES_GOTONEXTVEHICLE,
-     VEHICLE_GRAPH_BODY_MODULEINSTALLED,
-     VEHICLE_GRAPH_BODY_NOTENOUGH,
-     VEHICLEPARAMS_SPEEDLIMITS,
-     VEHICLEPARAMS_ENGINEPOWER,
-     VEHICLEPARAMS_CHASSISROTATIONSPEED,
-     VEHICLEPARAMS_DAMAGE,
-     VEHICLEPARAMS_HULLARMOR,
-     VEHICLEPARAMS_TURRETARMOR,
-     VEHICLEPARAMS_PIERCINGPOWER,
-     VEHICLE_INVENTORYCOUNT,
-     VEHICLE_VEHICLECOUNT,
-     VEHICLE_LEVEL,
-     VEHICLE_MASTERING,
-     VEHICLE_MASTERING_VERYSIMPLE,
-     VEHICLE_STATS_FOOTNOTE,
-     VEHICLE_ELITE,
-     VEHICLE_CREW,
-     VEHICLE_AMMO,
-     VEHICLE_XP,
-     VEHICLE_MULTIPLIED_XP,
-     VEHICLE_UNLOCK_PRICE,
-     VEHICLE_BUY_PRICE,
-     VEHICLE_ACTION_PRC,
-     VEHICLE_MINRENTALSPRICE,
-     VEHICLE_BUY_PRICE_ACTION,
-     VEHICLE_SELL_PRICE,
-     VEHICLE_EQUIPMENTS,
-     VEHICLE_DEVICES,
-     VEHICLE_FAVORITE,
-     VEHICLE_DAILYXPFACTOR,
-     VEHICLE_SPEEDLIMITS,
-     VEHICLE_DAMAGE,
-     VEHICLE_TURRETROTATIONSPEED,
-     VEHICLE_RADIODISTANCE,
-     VEHICLE_TEXTDELIMITER_OR,
-     VEHICLE_RENTLEFT_DAYS,
-     VEHICLE_RENTLEFT_HOURS,
-     VEHICLE_RENTLEFT_BATTLES,
-     VEHICLEIGR_SPECIALABILITY,
-     VEHICLEIGR_DAYS,
-     VEHICLEIGR_HOURS,
-     VEHICLE_DEAL_TELECOM_MAIN,
-     VEHICLESTATUS_BODY,
-     VEHICLESTATUS_BATTLE_HEADER,
-     VEHICLESTATUS_LOCKED_HEADER,
-     VEHICLESTATUS_RENTALISOVER_HEADER,
-     VEHICLESTATUS_IGRRENTALISOVER_HEADER,
-     VEHICLESTATUS_INPREMIUMIGRONLY_HEADER,
-     VEHICLESTATUS_INPREBATTLE_HEADER,
-     VEHICLESTATUS_CLANLOCKED_HEADER,
-     VEHICLESTATUS_AMMONOTFULL_HEADER,
-     VEHICLESTATUS_AMMONOTFULLEVENTS_HEADER,
-     VEHICLESTATUS_DAMAGED_HEADER,
-     VEHICLESTATUS_DESTROYED_HEADER,
-     VEHICLESTATUS_EXPLODED_HEADER,
-     VEHICLESTATUS_NOTPRESENT_HEADER,
-     VEHICLESTATUS_UNDAMAGED_HEADER,
-     VEHICLESTATUS_CREWNOTFULL_HEADER,
-     VEHICLESTATUS_NOTUNLOCKED_HEADER,
-     VEHICLESTATUS_INHANGAR_HEADER,
-     VEHICLESTATUS_SERVERRESTRICTION_HEADER,
-     VEHICLESTATUS_DEALISOVER_HEADER,
-     VEHICLESTATUS_DEALISOVER_TEXT,
-     VEHICLESTATUS_NOTENOUGHCREDITS_HEADER,
-     VEHICLESTATUS_NOTENOUGHCREDITS_TEXT,
-     VEHICLESTATUS_NOTENOUGHGOLD_HEADER,
-     VEHICLESTATUS_NOTENOUGHGOLD_TEXT,
-     VEHICLESTATUS_NOTSUITABLE_HEADER,
-     VEHICLESTATUS_GROUP_IS_NOT_READY_HEADER,
-     VEHICLESTATUS_GROUPAMMONOTFULL_HEADER,
-     VEHICLESTATUS_FALLOUT_ONLY_HEADER,
-     VEHICLESTATUS_NOT_SUITABLE_HEADER,
-     VEHICLESTATUS_UNSUITABLETOQUEUE_HEADER,
-     VEHICLESELLDIALOG_RENDERER_ALERTICON_HEADER,
-     VEHICLESELLDIALOG_RENDERER_ALERTICON_BODY,
-     VEHICLESELECTOR_FILTER_NATION,
-     VEHICLESELECTOR_FILTER_VEHTYPE,
-     VEHICLESELECTOR_FILTER_VEHLVL,
-     VEHICLESELECTOR_FILTER_MAINVEHICLE,
-     VEHICLESELECTOR_SORTING_NATION_HEADER,
-     VEHICLESELECTOR_SORTING_NATION_BODY,
-     VEHICLESELECTOR_SORTING_VEHTYPE_HEADER,
-     VEHICLESELECTOR_SORTING_VEHTYPE_BODY,
-     VEHICLESELECTOR_SORTING_VEHLVL_HEADER,
-     VEHICLESELECTOR_SORTING_VEHLVL_BODY,
-     VEHICLESELECTOR_SORTING_VEHNAME_HEADER,
-     VEHICLESELECTOR_SORTING_VEHNAME_BODY,
-     VEHICLESELECTOR_OVERFLOWLEVEL_HEADER,
-     VEHICLESELECTOR_OVERFLOWLEVEL_BODY,
-     VEHICLESELECTOR_INCOMPATIBLETYPE_HEADER,
-     VEHICLESELECTOR_INCOMPATIBLETYPE_BODY,
-     VEHICLEPARAMS_TITLE_VALUETEMPLATE,
-     VEHICLEPARAMS_POSSIBLEBONUSES_DESC,
-     VEHICLEPARAMS_BONUSES_TITLE,
-     VEHICLEPARAMS_PENALTIES_TITLE,
-     VEHICLEPARAMS_BONUS_ARTEFACT_TEMPLATE,
-     VEHICLEPARAMS_BONUS_SKILL_TEMPLATE,
-     VEHICLEPARAMS_BONUS_ROLE_TEMPLATE,
-     VEHICLEPARAMS_BONUS_EXTRA_CAMOUFLAGE,
-     VEHICLEPARAMS_SKILL_NAME,
-     VEHICLEPARAMS_BONUS_TANKMANLEVEL_COMMANDER,
-     VEHICLEPARAMS_BONUS_TANKMANLEVEL_GUNNER,
-     VEHICLEPARAMS_BONUS_TANKMANLEVEL_LOADER,
-     VEHICLEPARAMS_BONUS_TANKMANLEVEL_DRIVER,
-     VEHICLEPARAMS_BONUS_TANKMANLEVEL_RADIOMAN,
-     VEHICLEPARAMS_PENALTY_TANKMANLEVEL_TEMPLATE,
-     VEHICLEPARAMS_PENALTY_TANKMANDIFFERENTVEHICLE_TEMPLATE,
-     VEHICLEPARAMS_PENALTY_TANKMANLEVEL_VALUE,
-     VEHICLEPARAMS_WARNING_TANKMANISOUT,
-     VEHICLEPARAMS_COMMON_TITLE,
-     VEHICLEPARAMS_SIMPLIFIED_TITLE,
-     VEHICLEPREVIEW_CREW_COMMANDER,
-     VEHICLEPREVIEW_CREW_DRIVER,
-     VEHICLEPREVIEW_CREW_RADIOMAN,
-     VEHICLEPREVIEW_CREW_GUNNER,
-     VEHICLEPREVIEW_CREW_LOADER,
-     VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE,
-     VEHICLEPREVIEW_CREW_INFLUENCE_VISIONRADIUS,
-     VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER,
-     VEHICLEPREVIEW_CREW_INFLUENCE_AIMINGTIME,
-     VEHICLEPREVIEW_CREW_INFLUENCE_MOBILITY,
-     VEHICLEPREVIEW_CREW_INFLUENCE_CHASSISROTATIONSPEED,
-     VEHICLEPREVIEW_CREW_INFLUENCE_ENGINEPOWER,
-     VEHICLEPREVIEW_CREW_INFLUENCE_RADIODISTANCE,
-     VEHICLEPREVIEW_CREW_ADDITIONALROLES)
-    LOGIN_SOCIAL_ENUM = (LOGIN_SOCIAL_ENTER_HEADER,
-     LOGIN_SOCIAL_ENTER_BODY,
-     LOGIN_SOCIAL_FACEBOOK,
-     LOGIN_SOCIAL_GOOGLE,
-     LOGIN_SOCIAL_YAHOO,
-     LOGIN_SOCIAL_TWITTER,
-     LOGIN_SOCIAL_VKONTAKTE,
-     LOGIN_SOCIAL_ODNOKLASSNIKI,
-     LOGIN_SOCIAL_WGNI,
-     LOGIN_SOCIAL_NAVER)
-    TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_ENUM = (TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_LIGHTTANK,
-     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_MEDIUMTANK,
-     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_HEAVYTANK,
-     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_AT_SPG,
-     TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_SPG)
+    BATTLERESULTS_EFFICIENCYHEADER_ENUM = (BATTLERESULTS_EFFICIENCYHEADER_SUMMSPOTTED,
+     BATTLERESULTS_EFFICIENCYHEADER_SUMMASSIST,
+     BATTLERESULTS_EFFICIENCYHEADER_SUMMARMOR,
+     BATTLERESULTS_EFFICIENCYHEADER_SUMMCRITS,
+     BATTLERESULTS_EFFICIENCYHEADER_SUMMDAMAGE,
+     BATTLERESULTS_EFFICIENCYHEADER_SUMMKILL,
+     BATTLERESULTS_EFFICIENCYHEADER_VALUE)
+    HANGAR_HEADER_BATTLEQUESTS_ALL_HEADER_ENUM = (HANGAR_HEADER_BATTLEQUESTS_AVAILABLE_HEADER, HANGAR_HEADER_BATTLEQUESTS_DISABLED_HEADER)
+    HANGAR_HEADER_BATTLEQUESTS_ALL_BODY_ENUM = (HANGAR_HEADER_BATTLEQUESTS_AVAILABLE_BODY, HANGAR_HEADER_BATTLEQUESTS_DISABLED_BODY)
+    HANGAR_HEADER_PERSONALQUESTS_ALL_HEADER_ENUM = (HANGAR_HEADER_PERSONALQUESTS_DISABLED_HEADER,
+     HANGAR_HEADER_PERSONALQUESTS_UNAVAILABLE_HEADER,
+     HANGAR_HEADER_PERSONALQUESTS_AVAILABLE_HEADER,
+     HANGAR_HEADER_PERSONALQUESTS_INPROGRESS_HEADER,
+     HANGAR_HEADER_PERSONALQUESTS_AWARD_HEADER)
+    HANGAR_HEADER_PERSONALQUESTS_ALL_BODY_ENUM = (HANGAR_HEADER_PERSONALQUESTS_DISABLED_BODY,
+     HANGAR_HEADER_PERSONALQUESTS_UNAVAILABLE_BODY,
+     HANGAR_HEADER_PERSONALQUESTS_AVAILABLE_BODY,
+     HANGAR_HEADER_PERSONALQUESTS_INPROGRESS_BODY,
+     HANGAR_HEADER_PERSONALQUESTS_AWARD_BODY)
+    AWARDITEM_ALL_HEADER_ENUM = (AWARDITEM_CREDITS_HEADER,
+     AWARDITEM_GOLD_HEADER,
+     AWARDITEM_FREEXP_HEADER,
+     AWARDITEM_PREMIUM_HEADER,
+     AWARDITEM_BERTHS_HEADER,
+     AWARDITEM_CREDITSFACTOR_HEADER,
+     AWARDITEM_FREEXPFACTOR_HEADER,
+     AWARDITEM_TANKMENXP_HEADER,
+     AWARDITEM_TANKMENXPFACTOR_HEADER,
+     AWARDITEM_XP_HEADER,
+     AWARDITEM_XPFACTOR_HEADER,
+     AWARDITEM_SLOTS_HEADER,
+     AWARDITEM_TOKENS_HEADER,
+     AWARDITEM_TANKMEN_HEADER,
+     AWARDITEM_TANKWOMEN_HEADER)
+    AWARDITEM_ALL_BODY_ENUM = (AWARDITEM_CREDITS_BODY,
+     AWARDITEM_GOLD_BODY,
+     AWARDITEM_FREEXP_BODY,
+     AWARDITEM_PREMIUM_BODY,
+     AWARDITEM_BERTHS_BODY,
+     AWARDITEM_CREDITSFACTOR_BODY,
+     AWARDITEM_FREEXPFACTOR_BODY,
+     AWARDITEM_TANKMENXP_BODY,
+     AWARDITEM_TANKMENXPFACTOR_BODY,
+     AWARDITEM_XP_BODY,
+     AWARDITEM_XPFACTOR_BODY,
+     AWARDITEM_SLOTS_BODY,
+     AWARDITEM_TOKENS_BODY,
+     AWARDITEM_TANKMEN_BODY,
+     AWARDITEM_TANKWOMEN_BODY)
+    TEMPLATE_ALL_SHORT_ENUM = (TEMPLATE_DAYS_SHORT, TEMPLATE_HOURS_SHORT, TEMPLATE_MINUTES_SHORT)
 
-    @staticmethod
-    def tank_params_desc(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:tank_params/desc/%s' % key
-        if outcome not in TOOLTIPS.TANK_PARAMS_DESC_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def tankcaruseltooltip_vehicletype_normal(cls, key0):
+        outcome = '#tooltips:tankCaruselTooltip/vehicleType/normal/{}'.format(key0)
+        if outcome not in cls.TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def contact_status_inbattle(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:Contact/status/inBattle/%s' % key
-        if outcome not in TOOLTIPS.CONTACT_STATUS_INBATTLE_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def tankcaruseltooltip_vehicletype_elite(cls, key0):
+        outcome = '#tooltips:tankCaruselTooltip/vehicleType/elite/{}'.format(key0)
+        if outcome not in cls.TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def techtreepage_nations(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:techTreePage/nations/%s' % key
-        if outcome not in TOOLTIPS.TECHTREEPAGE_NATIONS_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def level(cls, key0):
+        outcome = '#tooltips:level/{}'.format(key0)
+        if outcome not in cls.LEVEL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def vehicle_rentleft(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:vehicle/rentLeft/%s' % key
-        if outcome not in TOOLTIPS.VEHICLE_RENTLEFT_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def vehicle(cls, key0):
+        outcome = '#tooltips:vehicle/{}'.format(key0)
+        if outcome not in cls.VEHICLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def fortification_transporting(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:fortification/transporting/%s' % key
-        if outcome not in TOOLTIPS.FORTIFICATION_TRANSPORTING_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def tankcarusel_lock(cls, key0):
+        outcome = '#tooltips:tankCarusel/lock/{}'.format(key0)
+        if outcome not in cls.TANKCARUSEL_LOCK_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def privatequests_params(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:privateQuests/params/%s' % key
-        if outcome not in TOOLTIPS.PRIVATEQUESTS_PARAMS_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def achievement_params_left(cls, key0):
+        outcome = '#tooltips:achievement/params/left{}'.format(key0)
+        if outcome not in cls.ACHIEVEMENT_PARAMS_LEFT_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def tankcarusel_lock(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:tankCarusel/lock/%s' % key
-        if outcome not in TOOLTIPS.TANKCARUSEL_LOCK_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def actionprice_sell_type(cls, key0):
+        outcome = '#tooltips:actionPrice/sell/type/{}'.format(key0)
+        if outcome not in cls.ACTIONPRICE_SELL_TYPE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def actionprice_sell_type(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:actionPrice/sell/type/%s' % key
-        if outcome not in TOOLTIPS.ACTIONPRICE_SELL_TYPE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def fortification_transporting(cls, key0):
+        outcome = '#tooltips:fortification/transporting/{}'.format(key0)
+        if outcome not in cls.FORTIFICATION_TRANSPORTING_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def squadwindow_status(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:squadWindow/status/%s' % key
-        if outcome not in TOOLTIPS.SQUADWINDOW_STATUS_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def squadwindow_status(cls, key0):
+        outcome = '#tooltips:squadWindow/status/{}'.format(key0)
+        if outcome not in cls.SQUADWINDOW_STATUS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def tankcaruseltooltip_vehicletype_normal(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:tankCaruselTooltip/vehicleType/normal/%s' % key
-        if outcome not in TOOLTIPS.TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def tooltiprefsysdescription_awards_descr(cls, key0):
+        outcome = '#tooltips:ToolTipRefSysDescription/awards/descr/{}'.format(key0)
+        if outcome not in cls.TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def tooltiprefsysdescription_awards_descr(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:ToolTipRefSysDescription/awards/descr/%s' % key
-        if outcome not in TOOLTIPS.TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def privatequests_params(cls, key0):
+        outcome = '#tooltips:privateQuests/params/{}'.format(key0)
+        if outcome not in cls.PRIVATEQUESTS_PARAMS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def level(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:level/%s' % key
-        if outcome not in TOOLTIPS.LEVEL_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def login_social(cls, key0):
+        outcome = '#tooltips:login/social/{}'.format(key0)
+        if outcome not in cls.LOGIN_SOCIAL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def achievement_params_left(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:achievement/params/left4%s' % key
-        if outcome not in TOOLTIPS.ACHIEVEMENT_PARAMS_LEFT_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def techtreepage_nations(cls, key0):
+        outcome = '#tooltips:techTreePage/nations/{}'.format(key0)
+        if outcome not in cls.TECHTREEPAGE_NATIONS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def vehicle(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:vehicle/%s' % key
-        if outcome not in TOOLTIPS.VEHICLE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def contact_status_inbattle(cls, key0):
+        outcome = '#tooltips:Contact/status/inBattle/{}'.format(key0)
+        if outcome not in cls.CONTACT_STATUS_INBATTLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def login_social(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:login/social/%s' % key
-        if outcome not in TOOLTIPS.LOGIN_SOCIAL_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def vehicle_rentleft(cls, key0):
+        outcome = '#tooltips:vehicle/rentLeft/{}'.format(key0)
+        if outcome not in cls.VEHICLE_RENTLEFT_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def tankcaruseltooltip_vehicletype_elite(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#tooltips:tankCaruselTooltip/vehicleType/elite/%s' % key
-        if outcome not in TOOLTIPS.TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def tank_params_desc(cls, key0):
+        outcome = '#tooltips:tank_params/desc/{}'.format(key0)
+        if outcome not in cls.TANK_PARAMS_DESC_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def battleresults_efficiencyheader(cls, key0):
+        outcome = '#tooltips:battleResults/efficiencyHeader/{}'.format(key0)
+        if outcome not in cls.BATTLERESULTS_EFFICIENCYHEADER_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def battleQuestsTooltipHeader(cls, state):
+        outcome = '#tooltips:hangar/header/battleQuests/{}/header'.format(state)
+        if outcome not in cls.HANGAR_HEADER_BATTLEQUESTS_ALL_HEADER_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def battleQuestsTooltipBody(cls, state):
+        outcome = '#tooltips:hangar/header/battleQuests/{}/body'.format(state)
+        if outcome not in cls.HANGAR_HEADER_BATTLEQUESTS_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def personalQuestsTooltipHeader(cls, state):
+        outcome = '#tooltips:hangar/header/personalQuests/{}/header'.format(state)
+        if outcome not in cls.HANGAR_HEADER_PERSONALQUESTS_ALL_HEADER_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def personalQuestsTooltipBody(cls, state):
+        outcome = '#tooltips:hangar/header/personalQuests/{}/body'.format(state)
+        if outcome not in cls.HANGAR_HEADER_PERSONALQUESTS_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getAwardHeader(cls, key0):
+        outcome = '#tooltips:awardItem/{}/header'.format(key0)
+        if outcome not in cls.AWARDITEM_ALL_HEADER_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getAwardBody(cls, key0):
+        outcome = '#tooltips:awardItem/{}/body'.format(key0)
+        if outcome not in cls.AWARDITEM_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def template_all_short(cls, key0):
+        outcome = '#tooltips:template/{}/short'.format(key0)
+        if outcome not in cls.TEMPLATE_ALL_SHORT_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

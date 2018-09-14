@@ -273,9 +273,6 @@
         <gravity>	-9.7	</gravity>
         <elasticity>	1038	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -462,7 +459,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.955 0.52 0.26 0.43	</tiling>
+            <tiling>	1.4 0.565 0.55 0.35	</tiling>
           </camouflage>
         </_90mm_Gun_T15E2M2_IGR>
       </guns>
@@ -503,17 +500,52 @@
   <radios>
     <SCR_528_IGR>	shared	</SCR_528_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AV-1790-1_IGR>
+          <smplEnginePower>	744.3259	</smplEnginePower>
+        </Continental_AV-1790-1_IGR>
+      </engines>
+      <chassis>
+        <Pershingchassis2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Pershingchassis2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Pershingchassis2_IGR>
-        <alpha>	0.10465	</alpha>
-      </Pershingchassis2_IGR>
-    </chassis>
-    <engines>
-      <Continental_AV-1790-1_IGR>
-        <bravo>	186.0815	</bravo>
-      </Continental_AV-1790-1_IGR>
-    </engines>
     <armour>	0.966014424	</armour>
   </clientAdjustmentFactors>
   <effects>

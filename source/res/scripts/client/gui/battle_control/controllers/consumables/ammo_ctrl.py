@@ -8,7 +8,7 @@ import Event
 from constants import VEHICLE_SETTING
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_ERROR
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import SHELL_SET_RESULT, CANT_SHOOT_ERROR, BATTLE_CTRL_ID, GUN_RELOADING_VALUE_TYPE
+from gui.battle_control.battle_constants import SHELL_SET_RESULT, CANT_SHOOT_ERROR, BATTLE_CTRL_ID, GUN_RELOADING_VALUE_TYPE, SHELL_QUANTITY_UNKNOWN
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
@@ -130,9 +130,8 @@ class ReloadingTimeSnapshot(IGunReloadingSnapshot):
             return 0.0
 
     def getTimeLeft(self):
-        timePassed = self.getTimePassed()
-        if timePassed:
-            return max(0.0, self._actualTime - timePassed)
+        if self.isReloading():
+            return max(0.0, self._actualTime - self.getTimePassed())
         else:
             return 0.0
 
@@ -362,7 +361,7 @@ class AmmoController(MethodsRules, IBattleController):
     @MethodsRules.delayable('setCurrentShellCD')
     def setGunReloadTime(self, timeLeft, baseTime):
         interval = self.__gunSettings.clip.interval
-        self.triggerReloadEffect(timeLeft, baseTime)
+        self.triggerReloadEffect(timeLeft)
         if interval > 0:
             if self.__ammo[self.__currShellCD][1] != 1:
                 baseTime = interval
@@ -375,9 +374,15 @@ class AmmoController(MethodsRules, IBattleController):
         if not isIgnored:
             self.onGunReloadTimeSet(self.__currShellCD, self._reloadingState.getSnapshot())
 
-    def triggerReloadEffect(self, timeLeft, baseTime):
-        if timeLeft == baseTime and self.__gunSettings.reloadEffect is not None:
-            self.__gunSettings.reloadEffect.start(baseTime)
+    def triggerReloadEffect(self, timeLeft):
+        if timeLeft > 0.0 and self.__gunSettings.reloadEffect is not None:
+            shellCounts = self.__ammo[self.__currShellCD]
+            clipCapacity = self.__gunSettings.clip.size
+            ammoLow = False
+            if clipCapacity > shellCounts[0]:
+                ammoLow = True
+                clipCapacity = shellCounts[0]
+            self.__gunSettings.reloadEffect.start(timeLeft, ammoLow, shellCounts[1], clipCapacity)
         return
 
     def getGunReloadingState(self):
@@ -406,7 +411,7 @@ class AmmoController(MethodsRules, IBattleController):
             quantity, quantityInClip = self.__ammo[intCD]
         except KeyError:
             LOG_ERROR('Shell is not found.', intCD)
-            quantity, quantityInClip = (-1, -1)
+            quantity, quantityInClip = (SHELL_QUANTITY_UNKNOWN,) * 2
 
         return (quantity, quantityInClip)
 
@@ -434,12 +439,12 @@ class AmmoController(MethodsRules, IBattleController):
 
     def getCurrentShells(self):
         """Gets quantity of current shells.
-        :return: tuple(quantity, quantityInClip).
+        :return: tuple(quantity, quantityInClip) or (-1, -1) if shells is not found.
         """
         if self.__currShellCD is not None:
             return self.getShells(self.__currShellCD)
         else:
-            return (-1, -1)
+            return (SHELL_QUANTITY_UNKNOWN,) * 2
             return
 
     def getShellsQuantityLeft(self):
@@ -448,7 +453,14 @@ class AmmoController(MethodsRules, IBattleController):
         """
         quantity, quantityInClip = self.getCurrentShells()
         if self.__gunSettings.isCassetteClip():
-            return quantityInClip
+            result = quantityInClip
+            if result == 0 and not self._reloadingState.isReloading():
+                clipSize = self.__gunSettings.clip.size
+                if clipSize <= quantity:
+                    result = clipSize
+                else:
+                    result = quantity
+            return result
         else:
             return quantity
 
@@ -593,7 +605,7 @@ class AmmoReplayPlayer(AmmoController):
 
     def setGunReloadTime(self, timeLeft, baseTime):
         self.__percent = None
-        self.triggerReloadEffect(timeLeft, baseTime)
+        self.triggerReloadEffect(timeLeft)
         if not self.__isActivated:
             self.__isActivated = True
             self.__timeLoop()

@@ -4,7 +4,7 @@ from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES
 from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT
 from gui.shared.utils.functions import getShortDescr
-from gui.shared.gui_items import HasStrCD, GUIItem, ItemsCollection
+from gui.shared.gui_items import HasStrCD, GUIItem, ItemsCollection, GUI_ITEM_TYPE
 
 class TankmenCollection(ItemsCollection):
 
@@ -62,15 +62,17 @@ class Tankman(GUIItem, HasStrCD):
      ROLES.RADIOMAN: 3,
      ROLES.LOADER: 4}
 
-    def __init__(self, strCompactDescr, inventoryID=-1, vehicle=None, proxy=None):
+    def __init__(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None):
         GUIItem.__init__(self, proxy)
         HasStrCD.__init__(self, strCompactDescr)
         self.__descriptor = None
         self.invID = inventoryID
         self.nationID = self.descriptor.nationID
-        self.itemTypeID = vehicles._TANKMAN
+        self.itemTypeID = GUI_ITEM_TYPE.TANKMAN
         self.itemTypeName = ITEM_TYPE_NAMES[self.itemTypeID]
         self.combinedRoles = (self.descriptor.role,)
+        self.dismissedAt = dismissedAt
+        self.isDismissed = self.dismissedAt is not None
         self.vehicleNativeDescr = vehicles.VehicleDescr(typeID=(self.nationID, self.descriptor.vehicleTypeID))
         self.vehicleInvID = -1
         self.vehicleDescr = None
@@ -189,7 +191,7 @@ class Tankman(GUIItem, HasStrCD):
         :return: True/False
         """
         availSkills = self.availableSkills(useCombinedRoles)
-        return self.roleLevel == tankmen.MAX_SKILL_LEVEL and len(availSkills) and (self.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not len(self.skills))
+        return self.roleLevel == tankmen.MAX_SKILL_LEVEL and len(availSkills) > 0 and (self.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not len(self.skills))
 
     @property
     def newSkillCount(self):
@@ -282,6 +284,9 @@ class Tankman(GUIItem, HasStrCD):
                 return True
 
         return False
+
+    def isRestorable(self):
+        return self.descriptor.isRestorable()
 
     def __packSkill(self, skillItem):
         return {'id': skillItem.name,

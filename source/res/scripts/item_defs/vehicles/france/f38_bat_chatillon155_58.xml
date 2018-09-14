@@ -342,17 +342,52 @@
   <radios>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Hispano-Suiza_HS110>
+          <smplEnginePower>	761.2424	</smplEnginePower>
+        </Hispano-Suiza_HS110>
+      </engines>
+      <chassis>
+        <Chassis_Bat_Chatillon155>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Bat_Chatillon155>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Bat_Chatillon155>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Bat_Chatillon155>
-    </chassis>
-    <engines>
-      <Hispano-Suiza_HS110>
-        <bravo>	190.3106	</bravo>
-      </Hispano-Suiza_HS110>
-    </engines>
     <armour>	0.807433134	</armour>
   </clientAdjustmentFactors>
   <effects>

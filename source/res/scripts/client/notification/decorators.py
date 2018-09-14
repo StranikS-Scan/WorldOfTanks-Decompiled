@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/decorators.py
 import BigWorld
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.INVITES import INVITES
 from gui.clans.clan_controller import g_clanCtrl
 from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter
@@ -15,7 +15,7 @@ from messenger.formatters.users_messages import makeFriendshipRequestText
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
+from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE, NOTIFICATION_GROUP
 from notification.settings import makePathToIcon
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from gui.clubs.ClubsController import g_clubsCtrl
@@ -70,6 +70,9 @@ class _NotificationDecorator(object):
 
     def getType(self):
         return NOTIFICATION_TYPE.UNDEFINED
+
+    def getGroup(self):
+        return NOTIFICATION_GROUP.INFO
 
     def getSettings(self):
         return self._settings
@@ -131,6 +134,9 @@ class _NotificationDecorator(object):
     def _make(self, entity=None, settings=None):
         self._vo = {}
         self._settings = settings
+
+    def getCounterInfo(self):
+        return (self.getGroup(), self.getType(), self.getID())
 
 
 class SearchCriteria(_NotificationDecorator):
@@ -204,6 +210,9 @@ class PrbInviteDecorator(_NotificationDecorator):
     def getType(self):
         return NOTIFICATION_TYPE.INVITE
 
+    def getGroup(self):
+        return NOTIFICATION_GROUP.INVITE
+
     def update(self, entity):
         super(PrbInviteDecorator, self).update(entity)
         self._make(entity)
@@ -264,6 +273,9 @@ class FriendshipRequestDecorator(_NotificationDecorator):
     def getType(self):
         return NOTIFICATION_TYPE.FRIENDSHIP_RQ
 
+    def getGroup(self):
+        return NOTIFICATION_GROUP.INVITE
+
     def getOrder(self):
         return (self.showAt(), self._receivedAt)
 
@@ -275,7 +287,7 @@ class FriendshipRequestDecorator(_NotificationDecorator):
         if settings:
             self._settings = settings
         contacts = self.proto.contacts
-        if user.getItemType() == XMPP_ITEM_TYPE.SUB_PENDING:
+        if user.getItemType() in XMPP_ITEM_TYPE.SUB_PENDING_ITEMS:
             self._receivedAt = user.getItem().receivedAt()
         canCancel, error = contacts.canCancelFriendship(user)
         if canCancel:
@@ -307,10 +319,13 @@ class WGNCPopUpDecorator(_NotificationDecorator):
     __slots__ = ('_itemName',)
 
     def __init__(self, entityID, item, offset=0):
-        super(WGNCPopUpDecorator, self).__init__(entityID, item, NotificationGuiSettings(True, item.getPriority(), showAt=_makeShowTime() + offset))
+        super(WGNCPopUpDecorator, self).__init__(entityID, item, NotificationGuiSettings(item.isNotify(), item.getPriority(), showAt=_makeShowTime() + offset))
 
     def getType(self):
         return NOTIFICATION_TYPE.WGNC_POP_UP
+
+    def getGroup(self):
+        return self.getEntity().getGroup()
 
     def getOrder(self):
         return (self.showAt(), self._entityID)
@@ -396,6 +411,9 @@ class ClubInviteDecorator(_NotificationDecorator):
     def getType(self):
         return NOTIFICATION_TYPE.CLUB_INVITE
 
+    def getGroup(self):
+        return NOTIFICATION_GROUP.INVITE
+
     def update(self, entity):
         super(ClubInviteDecorator, self).update(entity)
         self._make(entity)
@@ -458,6 +476,9 @@ class ClubAppsDecorator(_NotificationDecorator):
     def getType(self):
         return NOTIFICATION_TYPE.CLUB_APPS
 
+    def getGroup(self):
+        return NOTIFICATION_GROUP.INVITE
+
     def update(self, entity):
         super(ClubAppsDecorator, self).update(entity)
         self._make(entity)
@@ -496,6 +517,9 @@ class _ClanBaseDecorator(_NotificationDecorator):
 
     def getSavedData(self):
         return self.getID()
+
+    def getGroup(self):
+        return NOTIFICATION_GROUP.INVITE
 
 
 class _ClanDecorator(_ClanBaseDecorator):

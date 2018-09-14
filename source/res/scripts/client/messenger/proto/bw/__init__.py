@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/messenger/proto/bw/__init__.py
 from chat_shared import CHAT_RESPONSES
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto.bw import errors
 from messenger.proto.bw.ChannelsManager import ChannelsManager
@@ -20,8 +21,9 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
         self.__isConnected = False
         self.channels = ChannelsManager()
         self.users = UsersManager()
-        self.clanListener = ClanListener()
+        self.clanListener = None
         self.serviceChannel = ServiceChannelManager()
+        return
 
     def isConnected(self):
         return self.__isConnected
@@ -32,18 +34,23 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
         self.channels.clear()
         self.users.clear()
         self.serviceChannel.clear()
-        self.clanListener.stop()
+        if self.clanListener is not None:
+            self.clanListener.stop()
+        return
 
     def connect(self, scope):
         if not self.__isConnected:
             self.__isConnected = True
             self._addChatActionsListeners()
-            self.clanListener.start()
+            self.clanListener = self.__getClanListener()
+            if self.clanListener is not None:
+                self.clanListener.start()
             self.__isConnected = True
             g_messengerEvents.onPluginConnected(PROTO_TYPE.BW)
         self.channels.switch(scope)
         self.users.switch(scope)
         self.serviceChannel.switch(scope)
+        return
 
     def disconnect(self):
         self.serviceChannel.clear()
@@ -81,6 +88,18 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
         self.channels.removeAllListeners()
         self.users.removeAllListeners()
         self.serviceChannel.removeAllListeners()
+
+    @classmethod
+    def __getClanListener(cls):
+        """Gets ClanListener instance
+        :return: Instance of ClanListener, None if xmpp clan channels're enabled
+        :rtype ClanListener
+        """
+        if g_settings.server.isXmppClansEnabled():
+            return None
+        else:
+            return ClanListener()
+            return None
 
     __errorsHandlers = {CHAT_RESPONSES.channelNotExists: '_BWProtoPlugin__onChannelNotExists',
      CHAT_RESPONSES.memberBanned: '_BWProtoPlugin__onMemberBanned',

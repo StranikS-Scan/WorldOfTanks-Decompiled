@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/miniclient/login/aspects.py
 from helpers import aop
 
-class ShowBGInsteadVideo(aop.Aspect):
+class ShowBGWallpaper(aop.Aspect):
 
     def __init__(self):
-        super(ShowBGInsteadVideo, self).__init__()
+        super(ShowBGWallpaper, self).__init__()
 
     def atCall(self, cd):
-        super(ShowBGInsteadVideo, self).atCall(cd)
-        cd.self._showOnlyStaticBackground()
+        super(ShowBGWallpaper, self).atCall(cd)
+        cd.self.showWallpaper(showSwitchButton=False)
         cd.avoid()

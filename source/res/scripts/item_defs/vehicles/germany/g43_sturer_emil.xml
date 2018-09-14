@@ -534,23 +534,89 @@
     </FuG5>
     <FuG_Spr.A>	shared	</FuG_Spr.A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_116>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </Maybach_HL_116>
+        <Maybach_HL_116_S>
+          <smplEnginePower>	327.7571	</smplEnginePower>
+        </Maybach_HL_116_S>
+      </engines>
+      <chassis>
+        <Chassis_Sturer_Emil>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Sturer_Emil>
+        <Chassis_Sturer_Emil_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Sturer_Emil_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Sturer_Emil>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Sturer_Emil>
-      <Chassis_Sturer_Emil_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Sturer_Emil_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_116>
-        <bravo>	79.29608	</bravo>
-      </Maybach_HL_116>
-      <Maybach_HL_116_S>
-        <bravo>	81.93929	</bravo>
-      </Maybach_HL_116_S>
-    </engines>
     <armour>	0.799915266	</armour>
   </clientAdjustmentFactors>
   <effects>

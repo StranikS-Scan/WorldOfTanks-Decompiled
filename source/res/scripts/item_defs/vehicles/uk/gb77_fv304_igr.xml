@@ -429,17 +429,52 @@
   <radios>
     <N22_IGR>	shared	</N22_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royce_Meteor_M300_IGR>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Rolls_Royce_Meteor_M300_IGR>
+      </engines>
+      <chassis>
+        <Chassis_GB77_FV304_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB77_FV304_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB77_FV304_2_IGR>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB77_FV304_2_IGR>
-    </chassis>
-    <engines>
-      <Rolls_Royce_Meteor_M300_IGR>
-        <bravo>	132.1601	</bravo>
-      </Rolls_Royce_Meteor_M300_IGR>
-    </engines>
     <armour>	0.410133015	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
-from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from adisp import process
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
+from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.battle_results import data_providers
+from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getViewName, getUniqueViewName
-from gui.battle_results import data_providers
-from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
-from gui.prb_control.settings import CTRL_ENTITY_TYPE
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 
 class SETTINGS_TAB_INDEX(object):
     GAME = 0
@@ -19,22 +19,37 @@ class SETTINGS_TAB_INDEX(object):
     CONTROL = 3
     AIM = 4
     MARKERS = 5
+    FEEDBACK = 6
 
 
 def _showBattleResults(arenaUniqueID, dataProvider):
+    """
+    :param arenaUniqueID: long, arena unique id
+    :param dataProvider: gui.battle_results.data_providers.* instance
+    """
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID)), ctx={'dataProvider': dataProvider}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBattleResultsFromData(battleResultsData):
+    """
+    :param battleResultsData: dict, gotten battle results
+    """
     arenaUniqueID = battleResultsData['arenaUniqueID']
     return _showBattleResults(arenaUniqueID, data_providers.DirectDataProvider(arenaUniqueID, battleResultsData))
 
 
 def showMyBattleResults(arenaUniqueID):
+    """
+    :param arenaUniqueID: long, arena unique id
+    """
     return _showBattleResults(arenaUniqueID, data_providers.OwnResultsDataProvider(arenaUniqueID))
 
 
 def showUserBattleResults(arenaUniqueID, svrPackedData):
+    """
+    :param arenaUniqueID: long, arena unique id
+    :param svrPackedData: str or None, used to show other user post-battle results
+    """
     return _showBattleResults(arenaUniqueID, data_providers.UserResultsDataProvider(arenaUniqueID, svrPackedData))
 
 
@@ -43,6 +58,7 @@ def showVehicleInfo(vehTypeCompDescr):
 
 
 def showModuleInfo(itemCD, vehicleDescr):
+    itemCD = int(itemCD)
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, itemCD), {'moduleCompactDescr': itemCD,
      'vehicleDescr': vehicleDescr}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -52,7 +68,8 @@ def showVehicleSellDialog(vehInvID):
 
 
 def showVehicleBuyDialog(vehicle):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_BUY_WINDOW, ctx={'nationID': vehicle.nationID,
+    alias = VIEW_ALIAS.VEHICLE_RESTORE_WINDOW if vehicle.isRestoreAvailable() else VIEW_ALIAS.VEHICLE_BUY_WINDOW
+    g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'nationID': vehicle.nationID,
      'itemID': vehicle.innationID}), EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -80,21 +97,25 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
          'previewAlias': previewAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMarkPreview():
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MARK_PREVIEW, ctx={'entity3d': None}), scope=EVENT_BUS_SCOPE.LOBBY)
-    return
-
-
 def hideBattleResults():
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showAwardWindow(award, isUniqueName=True):
+    """
+    :param award: AwardAbstract instance object
+    :param isUniqueName:
+    """
     if isUniqueName:
         name = getUniqueViewName(VIEW_ALIAS.AWARD_WINDOW)
     else:
         name = VIEW_ALIAS.AWARD_WINDOW
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.AWARD_WINDOW, name=name, ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showMissionAwardWindow(award):
+    name = getUniqueViewName(VIEW_ALIAS.MISSION_AWARD_WINDOW)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.MISSION_AWARD_WINDOW, name=getUniqueViewName(VIEW_ALIAS.MISSION_AWARD_WINDOW), ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showProfileWindow(databaseID, userName):
@@ -126,6 +147,10 @@ def showClanSendInviteWindow(clanDbID):
 
 
 def selectVehicleInHangar(itemCD):
+    """
+    Selects vehicle and returns to hangar.
+    :param itemCD: int-type compact descriptor of vehicle
+    """
     from CurrentVehicle import g_currentVehicle
     veh = g_itemsCache.items.getItemByCD(int(itemCD))
     assert veh.isInInventory, 'Vehicle must be in inventory.'
@@ -134,11 +159,20 @@ def selectVehicleInHangar(itemCD):
 
 
 def showPersonalCase(tankmanInvID, tabIndex, scope=EVENT_BUS_SCOPE.DEFAULT):
+    """
+    Show personalCase window on current tab.
+    :param tankmanInvID: int-type tankman inventory ID.
+    :param tabIndex: int-type tab index
+    :param scope:
+    """
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_CASE, getViewName(VIEW_ALIAS.PERSONAL_CASE, tankmanInvID), {'tankmanID': tankmanInvID,
      'page': tabIndex}), scope)
 
 
 def showPremiumWindow(arenaUniqueID=0, premiumBonusesDiff=None):
+    """
+    Show premium window
+    """
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_WINDOW), ctx={'arenaUniqueID': arenaUniqueID,
      'premiumBonusesDiff': premiumBonusesDiff}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -184,3 +218,7 @@ def requestProfile(databaseID, userName, successCallback):
 def showSettingsWindow(redefinedKeyMode=False, tabIndex=None):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SETTINGS_WINDOW, ctx={'redefinedKeyMode': redefinedKeyMode,
      'tabIndex': tabIndex}), scope=EVENT_BUS_SCOPE.GLOBAL)
+
+
+def showVehicleCompare():
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_COMPARE), scope=EVENT_BUS_SCOPE.LOBBY)

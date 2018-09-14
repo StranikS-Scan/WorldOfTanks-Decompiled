@@ -466,17 +466,52 @@
   <radios>
     <AN-ARC-27_IGR>	shared	</AN-ARC-27_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AOI-628-2_IGR>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Continental_AOI-628-2_IGR>
+      </engines>
+      <chassis>
+        <Chassis_T71_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T71_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T71_2_IGR>
-        <alpha>	0.0644	</alpha>
-      </Chassis_T71_2_IGR>
-    </chassis>
-    <engines>
-      <Continental_AOI-628-2_IGR>
-        <bravo>	105.7281	</bravo>
-      </Continental_AOI-628-2_IGR>
-    </engines>
     <armour>	0.88113489	</armour>
   </clientAdjustmentFactors>
   <effects>

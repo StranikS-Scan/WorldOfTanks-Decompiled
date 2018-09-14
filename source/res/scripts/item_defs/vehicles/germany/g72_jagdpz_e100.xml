@@ -617,22 +617,57 @@
   <radios>
     <_10WSc>	shared	</_10WSc>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_234P60>
+          <smplEnginePower>	1268.737	</smplEnginePower>
+        </Maybach_HL_234P60>
+      </engines>
+      <chassis>
+        <Chassis_JagdPz_E100>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_JagdPz_E100>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_170mm_PaK_K72>
         <delta>	1.09278	</delta>
       </_170mm_PaK_K72>
     </guns>
-    <chassis>
-      <Chassis_JagdPz_E100>
-        <alpha>	0.10465	</alpha>
-      </Chassis_JagdPz_E100>
-    </chassis>
-    <engines>
-      <Maybach_HL_234P60>
-        <bravo>	317.1843	</bravo>
-      </Maybach_HL_234P60>
-    </engines>
     <armour>	1.305927037	</armour>
   </clientAdjustmentFactors>
   <effects>

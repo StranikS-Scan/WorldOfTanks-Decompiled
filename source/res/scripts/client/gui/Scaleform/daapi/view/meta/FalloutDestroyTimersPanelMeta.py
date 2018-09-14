@@ -8,6 +8,5 @@ class FalloutDestroyTimersPanelMeta(DestroyTimersPanel):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends DestroyTimersPanel
-    null
     """
     pass

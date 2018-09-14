@@ -474,17 +474,52 @@
   <radios>
     <R113_IGR>	shared	</R113_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2-54IS_IGR>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </V-2-54IS_IGR>
+      </engines>
+      <chassis>
+        <IS-3M_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </IS-3M_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <IS-3M_IGR>
-        <alpha>	0.1127	</alpha>
-      </IS-3M_IGR>
-    </chassis>
-    <engines>
-      <V-2-54IS_IGR>
-        <bravo>	185.0242	</bravo>
-      </V-2-54IS_IGR>
-    </engines>
     <armour>	1.098949784	</armour>
   </clientAdjustmentFactors>
   <effects>

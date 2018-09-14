@@ -4,17 +4,14 @@ import weakref
 from collections import namedtuple
 import BigWorld
 import CommandMapping
-from gui import GUI_SETTINGS
-from gui.Scaleform.ColorSchemeManager import _ColorSchemeManager
+from gui.Scaleform.daapi.view.logitech.color_scheme import ColorSchemeManager
 from gui.Scaleform.daapi.view.battle.fallout.battle_timer import FALLOUT_ENDING_SOON_TIME
 from gui.Scaleform.daapi.view.logitech.LogitechMonitorMeta import LogitechMonitorBattleMonoScreenMeta, LogitechMonitorBattleColoredScreenMeta
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.app_loader.decorators import sf_battle
 from gui.battle_control import g_sessionProvider
-from gui.battle_control.controllers.period_ctrl import ArenaPeriodController, ITimersBar
 from gui.battle_control.controllers.debug_ctrl import IDebugPanel, DebugController
-from gui.shared import events, EVENT_BUS_SCOPE
+from gui.battle_control.controllers.period_ctrl import ArenaPeriodController, ITimersBar
 from gui.shared.events import ComponentEvent
 from helpers import i18n
 from messenger.gui.Scaleform.legacy_entry import LegacyBattleEntry as MessengerBattleEntry
@@ -104,45 +101,10 @@ class _IFragsView(object):
         raise NotImplementedError
 
 
-class _LegacyFragsPresenter(EventSystemEntity):
+class _FragsPresenter(EventSystemEntity):
 
     def __init__(self, ui):
-        super(_LegacyFragsPresenter, self).__init__()
-        self.__ui = ui
-
-    @sf_battle
-    def app(self):
-        return None
-
-    def start(self):
-        self.addListener(events.ScoreEvent.FRAGS_UPDATED, self.__fragsUpdated, EVENT_BUS_SCOPE.BATTLE)
-        self._updateWithCurrent()
-
-    def stop(self):
-        self.removeListener(events.ScoreEvent.FRAGS_UPDATED, self.__fragsUpdated, EVENT_BUS_SCOPE.BATTLE)
-
-    def __updateFrags(self, ally, enemy):
-        self.__ui.updateFrags(_makeFragsDisplayData(ally, enemy))
-
-    def _updateWithCurrent(self):
-        battle = self.app
-        if battle is not None and hasattr(battle, 'fragCorrelation'):
-            score = battle.fragCorrelation.getTotalScore()
-            if score is not None:
-                ally, enemy = score
-                self.__updateFrags(ally, enemy)
-        return
-
-    def __fragsUpdated(self, event):
-        ctx = event.ctx
-        ally, enemy = ctx['ally'], ctx['enemy']
-        self.__updateFrags(ally, enemy)
-
-
-class _NewFragsPresenter(EventSystemEntity):
-
-    def __init__(self, ui):
-        super(_NewFragsPresenter, self).__init__()
+        super(_FragsPresenter, self).__init__()
         self.__ui = ui
 
     def start(self):
@@ -162,13 +124,6 @@ class _NewFragsPresenter(EventSystemEntity):
 
     def __onTotalScoreUpdated(self, leftScore, rightScore):
         self.__updateFrags(leftScore, rightScore)
-
-
-def _FragsPresenter(ui):
-    if GUI_SETTINGS.useAS3Battle:
-        return _NewFragsPresenter(ui)
-    else:
-        return _LegacyFragsPresenter(ui)
 
 
 class LogitechMonitorBattleMonoScreen(LogitechMonitorBattleMonoScreenMeta, _ITimerView, _IFragsView):
@@ -215,7 +170,7 @@ class LogitechMonitorBattleColoredScreen(LogitechMonitorBattleColoredScreenMeta,
 
     def __init__(self, frame):
         super(LogitechMonitorBattleColoredScreen, self).__init__(frame)
-        self._colorManager = _ColorSchemeManager()
+        self._colorManager = ColorSchemeManager()
         self.__debugCtrl = DebugController()
         self.__timerPresenter = _TimerPresenter(weakref.proxy(self))
         self.__fragsPresenter = _FragsPresenter(weakref.proxy(self))

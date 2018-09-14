@@ -491,17 +491,52 @@
   <radios>
     <AN_GRC_8>	shared	</AN_GRC_8>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AVI-1790-8>
+          <smplEnginePower>	872.257	</smplEnginePower>
+        </Continental_AVI-1790-8>
+      </engines>
+      <chassis>
+        <Chassis_A106_M48A2_120>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A106_M48A2_120>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_A106_M48A2_120>
-        <alpha>	0.07245	</alpha>
-      </Chassis_A106_M48A2_120>
-    </chassis>
-    <engines>
-      <Continental_AVI-1790-8>
-        <bravo>	218.0642	</bravo>
-      </Continental_AVI-1790-8>
-    </engines>
     <armour>	1.027276466	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -439,6 +439,7 @@
             <collisionModelServer>	vehicles/british/GB75_AT7/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB75_AT7/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	0.00705495 -0.000913759 1.00953	</rayStart>
@@ -638,26 +639,92 @@
     </N19Mk3>
     <N22>	shared	</N22>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Nuffield_liberty_MKIV>
+          <smplEnginePower>	417.626	</smplEnginePower>
+        </Nuffield_liberty_MKIV>
+        <Nuffield_liberty_MKV>
+          <smplEnginePower>	433.4853	</smplEnginePower>
+        </Nuffield_liberty_MKV>
+        <Ford_GAA>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Ford_GAA>
+      </engines>
+      <chassis>
+        <Chassis_GB75_AT7>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB75_AT7>
+        <Chassis_GB75_AT7_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB75_AT7_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB75_AT7>
-        <alpha>	0.1449	</alpha>
-      </Chassis_GB75_AT7>
-      <Chassis_GB75_AT7_2>
-        <alpha>	0.1288	</alpha>
-      </Chassis_GB75_AT7_2>
-    </chassis>
-    <engines>
-      <Nuffield_liberty_MKIV>
-        <bravo>	104.4065	</bravo>
-      </Nuffield_liberty_MKIV>
-      <Nuffield_liberty_MKV>
-        <bravo>	108.3713	</bravo>
-      </Nuffield_liberty_MKV>
-      <Ford_GAA>
-        <bravo>	132.1601	</bravo>
-      </Ford_GAA>
-    </engines>
     <armour>	0.909361795	</armour>
   </clientAdjustmentFactors>
   <effects>

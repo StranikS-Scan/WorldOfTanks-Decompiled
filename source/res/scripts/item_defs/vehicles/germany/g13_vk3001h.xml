@@ -1198,7 +1198,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_mainext_mb	</effects>
+          <effects>	shot_large_mb	</effects>
           <camouflage>
             <tiling>	0.865 0.865 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1275,26 +1275,92 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_116>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </Maybach_HL_116>
+        <Maybach_HL_190>
+          <smplEnginePower>	396.4804	</smplEnginePower>
+        </Maybach_HL_190>
+        <Maybach_HL_150>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Maybach_HL_150>
+      </engines>
+      <chassis>
+        <VK3001H>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VK3001H>
+        <VK3001H_ausf_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VK3001H_ausf_B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <VK3001H>
-        <alpha>	0.10465	</alpha>
-      </VK3001H>
-      <VK3001H_ausf_B>
-        <alpha>	0.0966	</alpha>
-      </VK3001H_ausf_B>
-    </chassis>
-    <engines>
-      <Maybach_HL_116>
-        <bravo>	79.29608	</bravo>
-      </Maybach_HL_116>
-      <Maybach_HL_190>
-        <bravo>	99.12011	</bravo>
-      </Maybach_HL_190>
-      <Maybach_HL_150>
-        <bravo>	105.7281	</bravo>
-      </Maybach_HL_150>
-    </engines>
     <armour>	0.914334004	</armour>
   </clientAdjustmentFactors>
   <effects>

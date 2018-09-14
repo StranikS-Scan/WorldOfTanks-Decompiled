@@ -75,7 +75,7 @@
     <description>	#usa_vehicles:T57_descr	</description>
     <price>	3300	</price>
     <notInShop>	true	</notInShop>
-    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_user secret	</tags>
+    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_user secret unrecoverable	</tags>
     <level>	2	</level>
   </A15_T57>
   <A08_T23>
@@ -84,7 +84,7 @@
     <description>	#usa_vehicles:T23_descr	</description>
     <price>	2103000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user	</tags>
+    <tags>	mediumTank secret aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user unrecoverable	</tags>
     <level>	8	</level>
   </A08_T23>
   <A14_T30>
@@ -212,7 +212,7 @@
     <description>	#usa_vehicles:T18_descr	</description>
     <price>	3000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG lightAT-SPG improvedVentilation_class1_user enhancedVertical_springs_user enhancedVertical_springs_user secret	</tags>
+    <tags>	AT-SPG lightAT-SPG improvedVentilation_class1_user enhancedVertical_springs_user enhancedVertical_springs_user secret unrecoverable	</tags>
     <level>	2	</level>
   </A26_T18>
   <A30_M10_Wolverine>
@@ -577,7 +577,7 @@
     <shortUserString>	#usa_vehicles:T2_lt_short	</shortUserString>
     <price>	750	  <gold></gold>
     </price>
-    <tags>	lightTank excluded_from_sandbox	</tags>
+    <tags>	lightTank excluded_from_sandbox HD	</tags>
     <level>	2	</level>
   </A19_T2_lt>
   <A62_Ram-II>
@@ -607,7 +607,7 @@
     <shortUserString>	#usa_vehicles:M4A2E4_short	</shortUserString>
     <price>	1500	  <gold></gold>
     </price>
-    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user disabledInRoaming	</tags>
+    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user disabledInRoaming HD	</tags>
     <level>	5	</level>
   </A44_M4A2E4>
   <A45_M6A2E1>
@@ -658,7 +658,7 @@
     <description>	#usa_vehicles:Sexton_I_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	SPG mediumSPG secret mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user	</tags>
+    <tags>	SPG mediumSPG secret mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user unrecoverable	</tags>
     <level>	3	</level>
   </Sexton_I>
   <A06_M4A3E8_Sherman_training>
@@ -668,7 +668,7 @@
     <shortUserString>	#usa_vehicles:M4A3E8_Sherman_short	</shortUserString>
     <price>	930500	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user	</tags>
+    <tags>	mediumTank secret aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user unrecoverable	</tags>
     <level>	1	</level>
   </A06_M4A3E8_Sherman_training>
   <A93_T7_Combat_Car>
@@ -744,7 +744,7 @@
     <price>	8700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user patton HD	</tags>
+    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user patton HD	</tags>
     <level>	8	</level>
   </A63_M46_Patton_KR>
   <A111_T25_Pilot>
@@ -769,6 +769,17 @@
     <tags>	lightTank scout wetCombatPack_class1_user mediumCaliberTankRammer_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
     <level>	7	</level>
   </A112_T71E2>
+  <A99_T92_LT>
+    <id>	226	</id>
+    <userString>	#usa_vehicles:A99_T92_LT	</userString>
+    <description>	#usa_vehicles:A99_T92_LT_descr	</description>
+    <shortUserString>	#usa_vehicles:A99_T92_LT_short	</shortUserString>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank scout wetCombatPack_class1_user mediumCaliberTankRammer_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD secret testTank	</tags>
+    <level>	7	</level>
+  </A99_T92_LT>
   <A90_T69_IGR>
     <id>	152	</id>
     <userString>	#igr_vehicles:T69_IGR	</userString>
@@ -854,7 +865,7 @@
     <shortUserString>	#usa_vehicles:T1_Cunningham_bot_short	</shortUserString>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank secret HD	</tags>
+    <tags>	lightTank secret HD unrecoverable	</tags>
     <level>	1	</level>
   </A01_T1_Cunningham_bot>
   <A24_T2_med_bot>
@@ -864,7 +875,7 @@
     <shortUserString>	#usa_vehicles:T2_med_bot_short	</shortUserString>
     <price>	3500	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank mediumCaliberTankRammer_user secret HD	</tags>
+    <tags>	mediumTank mediumCaliberTankRammer_user secret HD unrecoverable	</tags>
     <level>	2	</level>
   </A24_T2_med_bot>
 </list.xml>

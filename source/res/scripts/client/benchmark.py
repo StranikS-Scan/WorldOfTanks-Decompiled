@@ -10,7 +10,7 @@ from items import vehicles
 from AvatarInputHandler import mathUtils
 import Pixie
 import DataLinks
-import VehicleUtils
+import VehicleAppearance
 from vehicle_systems import model_assembler as assemblerModule
 from vehicle_systems.tankStructure import ModelStates
 reload(assemblerModule)
@@ -122,7 +122,7 @@ def setupTank(chassisFashion, gunFashion, vehicleDesc, worldMatrix, resources):
 def assembleCompoundModel2(models, position, vehicleDesc):
     worldMatrix = mathUtils.createTranslationMatrix(position)
     chassisFashion = BigWorld.WGVehicleFashion()
-    VehicleUtils.setupTracksFashion(chassisFashion, vehicleDesc)
+    VehicleAppearance.setupTracksFashion(chassisFashion, vehicleDesc)
     fashions.append(chassisFashion)
     gunFashion = BigWorld.WGGunRecoil('G')
     fashions.append(gunFashion)

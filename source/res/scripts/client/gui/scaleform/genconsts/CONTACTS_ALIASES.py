@@ -7,7 +7,6 @@ class CONTACTS_ALIASES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     FIND_CONTACT_VIEW_ALIAS = 'SearchContactView'
     FIND_CONTACT_VIEW_LINKAGE = 'SearchContactViewUI'

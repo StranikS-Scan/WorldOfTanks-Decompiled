@@ -6,14 +6,16 @@ import BattleReplay
 import BigWorld
 from account_helpers.settings_core import g_settingsCore
 from debug_utils import LOG_DEBUG
-from gui import DEPTH_OF_Aim, makeHtmlString
+from gui import DEPTH_OF_Aim
 from gui.Scaleform import Flash, SCALEFORM_SWF_PATH_V3
+from gui.Scaleform.daapi.view.battle.shared.formatters import getHealthPercent
 from gui.Scaleform.daapi.view.meta.CrosshairPanelMeta import CrosshairPanelMeta
 from gui.Scaleform.framework.application import DAAPIRootBridge
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import g_sessionProvider, avatar_getter
-from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID, FEEDBACK_EVENT_ID, getCrosshairViewIDByCtrlMode
-from gui.battle_control.battle_constants import GUN_RELOADING_VALUE_TYPE
+from gui.battle_control.battle_constants import getCrosshairViewIDByCtrlMode
+from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID, FEEDBACK_EVENT_ID
+from gui.battle_control.battle_constants import GUN_RELOADING_VALUE_TYPE, SHELL_QUANTITY_UNKNOWN
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, VEHICLE_VIEW_STATE
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
@@ -44,11 +46,6 @@ def _makeSettingsVO(*keys):
              'zoomIndicatorAlphaValue': settings['zoomIndicator'] / 100.0}
 
     return data
-
-
-def _getHealthPercent(health, maxHealth):
-    value = min(1.0, max(0, health) / float(maxHealth))
-    return round(value, 2)
 
 
 class _AmmoSettings(object):
@@ -230,8 +227,9 @@ class AmmoPlugin(IPlugin):
         self.__guiSettings = createAmmoSettings(ctrl.getGunSettings())
         self._parentObj.as_setClipParamsS(self.__guiSettings.getClipCapacity(), self.__guiSettings.getBurstSize())
         quantity, quantityInClip = ctrl.getCurrentShells()
-        isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
-        self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
+        if (quantity, quantityInClip) != (SHELL_QUANTITY_UNKNOWN,) * 2:
+            isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
+            self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
         self.__setReloadingState(ctrl.getGunReloadingState())
 
     def __setReloadingState(self, state):
@@ -267,26 +265,21 @@ class AmmoPlugin(IPlugin):
 class VehicleStatePlugin(IPlugin):
     """Plugin listens events of controlling vehicle and update information about given vehicle
     (health, vehicles has no any ammo, etc.) in UI panel."""
-    __slots__ = ('__playerInfo', '__isPlayerVehicle', '__maxHealth', '__healthPercent')
+    __slots__ = ('__maxHealth', '__healthPercent')
 
     def __init__(self, parentObj):
         super(VehicleStatePlugin, self).__init__(parentObj)
-        self.__playerInfo = None
-        self.__isPlayerVehicle = False
         self.__maxHealth = 0
         self.__healthPercent = 0
-        return
 
     def start(self):
         ctrl = g_sessionProvider.shared.vehicleState
         assert ctrl is not None, 'Vehicles state controller is not found'
         vehicle = ctrl.getControllingVehicle()
         if vehicle is not None:
-            self.__setPlayerInfo(vehicle.id)
             self.__onVehicleControlling(vehicle)
         ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         ctrl.onVehicleControlling += self.__onVehicleControlling
-        ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
         ctrl = g_sessionProvider.shared.feedback
         assert ctrl is not None, 'Feedback adaptor is not found'
         ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
@@ -297,36 +290,20 @@ class VehicleStatePlugin(IPlugin):
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             ctrl.onVehicleControlling -= self.__onVehicleControlling
-            ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
         ctrl = g_sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         return
 
     def __setHealth(self, health):
-        self.__healthPercent = _getHealthPercent(health, self.__maxHealth)
-
-    def __setPlayerInfo(self, vehicleID):
-        self.__playerInfo = g_sessionProvider.getCtx().getPlayerFullNameParts(vID=vehicleID, showVehShortName=True)
+        self.__healthPercent = getHealthPercent(health, self.__maxHealth)
 
     def __updateVehicleInfo(self):
-        if self._parentObj.getViewID() == CROSSHAIR_VIEW_ID.POSTMORTEM:
-            assert self.__playerInfo is not None, 'Player info must be defined at first, see vehicle_state_ctrl'
-            if self.__isPlayerVehicle:
-                ctx = {'type': self.__playerInfo.vehicleName}
-                template = 'personal'
-            else:
-                ctx = {'name': self.__playerInfo.playerFullName,
-                 'health': self.__healthPercent * 100}
-                template = 'other'
-            self._parentObj.as_updatePlayerInfoS(makeHtmlString('html_templates:battle/postmortemMessages', template, ctx=ctx))
-        else:
+        if self._parentObj.getViewID() != CROSSHAIR_VIEW_ID.POSTMORTEM:
             self._parentObj.as_setHealthS(self.__healthPercent)
-        return
 
     def __onVehicleControlling(self, vehicle):
         self.__maxHealth = vehicle.typeDescriptor.maxHealth
-        self.__isPlayerVehicle = vehicle.isPlayerVehicle
         self.__setHealth(vehicle.health)
         self.__updateVehicleInfo()
 
@@ -334,11 +311,6 @@ class VehicleStatePlugin(IPlugin):
         if state == VEHICLE_VIEW_STATE.HEALTH:
             self.__setHealth(value)
             self.__updateVehicleInfo()
-        elif state == VEHICLE_VIEW_STATE.PLAYER_INFO:
-            self.__setPlayerInfo(value)
-
-    def __onPostMortemSwitched(self):
-        self.__updateVehicleInfo()
 
     def __onVehicleFeedbackReceived(self, eventID, _, value):
         if eventID == FEEDBACK_EVENT_ID.VEHICLE_HAS_AMMO and self._parentObj.getViewID() == CROSSHAIR_VIEW_ID.POSTMORTEM:

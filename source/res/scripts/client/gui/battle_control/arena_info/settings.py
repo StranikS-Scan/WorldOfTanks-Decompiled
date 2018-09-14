@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/settings.py
-from gui import GUI_SETTINGS
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
 from helpers import i18n
 from shared_utils import BitmaskHelper
@@ -27,6 +26,7 @@ class ARENA_LISTENER_SCOPE(object):
     RESPAWN = 16
     INVITATIONS = 32
     POSITIONS = 64
+    CONTACTS = 128
 
 
 class VEHICLE_STATUS(BitmaskHelper):
@@ -99,32 +99,3 @@ def getOrderByVehicleClass(className=None):
     else:
         result = UNKNOWN_VEHICLE_CLASS_ORDER
     return result
-
-
-if GUI_SETTINGS.useAS3Battle:
-
-    def addUnknownContourIconToCache():
-        return True
-
-
-    def addContourIconToCache(_):
-        return True
-
-
-    def clearContourIconFromCache():
-        pass
-
-
-else:
-    from gui.shared import fo_precache
-
-    def addUnknownContourIconToCache():
-        fo_precache.add(UNKNOWN_CONTOUR_ICON_RES_PATH)
-
-
-    def addContourIconToCache(vName):
-        return fo_precache.add(makeContourIconResPath(vName))
-
-
-    def clearContourIconFromCache():
-        fo_precache.clear()

@@ -50,5 +50,8 @@ class SharedEvent(object):
         super(SharedEvent, self).__init__()
         self.eventType = eventType
 
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
 
 SharedEventType = type(SharedEvent)

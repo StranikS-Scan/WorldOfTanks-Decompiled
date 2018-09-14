@@ -64,7 +64,9 @@ class ClientUnitMgr(object):
         if packedOps:
             unit = self.units.get(unitIdx)
             if unit:
+                unit.lock()
                 unit.unpackOps(packedOps)
+                unit.unlock()
                 unit.onUnitUpdated()
         return
 

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/messages/muc.py
-from debug_utils import LOG_DEBUG
 from gui.shared import utils
 from messenger import g_settings
 from messenger.m_constants import CLIENT_ACTION_ID, CLIENT_ERROR_ID
@@ -16,7 +15,7 @@ from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA as _LOG
 from messenger.proto.xmpp.messages.provider import ChatProvider
 from messenger.proto.xmpp.xmpp_constants import MUC_STATUS, CHANNEL_ERROR_ID
 
-class ENTRY_STEP(object):
+class ENTRY_STEP(int):
     UNDEFINED = 0
     SEND_PRESENCE = 1
     SET_DATA_FORM = 2
@@ -24,7 +23,7 @@ class ENTRY_STEP(object):
     PASSWORD_REQUIRED = 4
 
 
-class ACTION_RESULT(object):
+class ACTION_RESULT(int):
     DO_NOTHING = 0
     LAZY_JOIN = 1
     LAZY_LEAVE = 2
@@ -247,19 +246,20 @@ class JoinAction(_RoomAction):
                 g_logOutput.warning(_LOG.MESSAGE, 'Room info is not found', tag.getXml())
                 self.clear()
                 return
-            if not self._name and identity.name:
-                roomName = identity.name
-            else:
-                roomName = self._name
-            self._room.setName(roomName)
+            if not self._room.getName():
+                roomName = ''
+                if self._name:
+                    roomName = self._name
+                elif identity.name:
+                    roomName = identity.name
+                self._room.setName(roomName)
             self._step = ENTRY_STEP.SEND_PRESENCE
             self._sendPresence(chat_ext.MUCEntryQuery(self._getUserJID()))
         return
 
 
 class LazyJoinAction(JoinAction):
-    """
-    Lazy join action doesn't request disco info, and doesn't place channel to channelStorage
+    """Lazy join action doesn't request disco info, and doesn't place channel to channelStorage
     """
 
     def _doStart(self):
@@ -269,6 +269,27 @@ class LazyJoinAction(JoinAction):
     def _join(self, info):
         self._step = ENTRY_STEP.UNDEFINED
         self._result |= ACTION_RESULT.LAZY_JOIN
+
+
+class ClanJoinAction(JoinAction):
+    """Join to clan channel
+    """
+
+    def _getActionID(self):
+        return CLIENT_ACTION_ID.JOIN_CLAN_ROOM
+
+    def _join(self, info):
+        self._step = ENTRY_STEP.UNDEFINED
+        self._result |= ACTION_RESULT.LAZY_JOIN
+
+    def _leave(self, resource):
+        self._step = ENTRY_STEP.UNDEFINED
+        self._result |= ACTION_RESULT.LAZY_LEAVE
+
+    def _remove(self):
+        """Don't remove channel after unsuccessful attempt
+        """
+        self._step = ENTRY_STEP.UNDEFINED
 
 
 class LeaveAction(_RoomAction):
@@ -290,8 +311,7 @@ class LeaveAction(_RoomAction):
 
 
 class LazyLeaveAction(LeaveAction):
-    """
-    Lazy leave action doesn't remove channel from channelStorage
+    """Lazy leave action doesn't remove channel from channelStorage
     """
 
     def _leave(self, resource):
@@ -307,26 +327,28 @@ class MUCProvider(ChatProvider):
         self.__actions = {}
 
     @staticmethod
-    def createJoinAction(channel, initResult, name=''):
-        """
-        Fabric method for join action
+    def createJoinAction(channel, initResult=ACTION_RESULT.DO_NOTHING, name=''):
+        """Fabric method for join action
         :param channel: message channel
+        :type channel: XMPPMucChannelEntity
         :param initResult: initial result for action
-        :param name: temp param, room name as 'room_name (room owner)'
-        :return: join action (_RoomAction)
+        :type initResult: int
+        :param name: room name as 'room_name (room owner)'
+        :type name: str
+        :return: join action
+        :rtype: _RoomAction
         """
         if channel.isLazy():
-            action = LazyJoinAction(channel, name=name, initResult=ACTION_RESULT.DO_NOTHING)
-        else:
-            action = JoinAction(channel, name=name, initResult=initResult)
-        return action
+            return LazyJoinAction(channel, name=name, initResult=initResult)
+        return ClanJoinAction(channel, name=name, initResult=initResult) if channel.isClan() else JoinAction(channel, name=name, initResult=initResult)
 
     @staticmethod
     def createLeaveAction(channel):
-        """
-        fabric method, get action for channel
-        :param channel: channel
-        :return: action
+        """Fabric method, get action for channel
+        :param channel: message channel
+        :type channel: XMPPMucChannelEntity
+        :return: leave action
+        :rtype: _RoomAction
         """
         if channel.isLazy():
             action = LazyLeaveAction(channel)
@@ -366,8 +388,7 @@ class MUCProvider(ChatProvider):
             if exists is not None:
                 return (False, ClientChannelError(CHANNEL_ERROR_ID.NAME_ALREADY_EXISTS, name))
             if roomJID not in self.__actions:
-                from gui.shared.utils import getPlayerName
-                name = '{0} ({1})'.format(name, getPlayerName())
+                name = '{0} ({1})'.format(name, utils.getPlayerName())
                 action = CreateAction(roomJID, name, password, initResult)
                 self.__actions[roomJID] = action
                 action.start()
@@ -491,7 +512,7 @@ class MUCProvider(ChatProvider):
             if leave:
                 self._removeChannel(found)
             else:
-                found.removeMember(jid)
+                found.removeMember(dbID)
 
     def __filterActions(self):
         for jid, action in self.__actions.items()[:]:
@@ -504,10 +525,8 @@ class MUCProvider(ChatProvider):
                 g_logOutput.error(_LOG.MESSAGE, 'Action is failed', jid)
                 continue
             if result & ACTION_RESULT.LAZY_JOIN > 0:
-                LOG_DEBUG('LAZY_JOIN')
                 room.setJoined(True)
             elif result & ACTION_RESULT.LAZY_LEAVE > 0:
-                LOG_DEBUG('LAZY_LEAVE')
                 room.clearHistory()
                 room.setJoined(False)
             elif result & ACTION_RESULT.ADD_TO_STORAGE > 0:

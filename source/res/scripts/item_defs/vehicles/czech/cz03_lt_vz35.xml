@@ -1021,23 +1021,89 @@
   <radios>
     <Radiostanice_vz_35>	shared	</Radiostanice_vz_35>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Skoda_T_11_0>
+          <smplEnginePower>	126.8737	</smplEnginePower>
+        </Skoda_T_11_0>
+        <Skoda_T_11_2>
+          <smplEnginePower>	142.733	</smplEnginePower>
+        </Skoda_T_11_2>
+      </engines>
+      <chassis>
+        <Chassis_Cz03_LT_vz35>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz03_LT_vz35>
+        <Chassis_Cz03_LT_vz35_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz03_LT_vz35_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Cz03_LT_vz35>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Cz03_LT_vz35>
-      <Chassis_Cz03_LT_vz35_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Cz03_LT_vz35_2>
-    </chassis>
-    <engines>
-      <Skoda_T_11_0>
-        <bravo>	31.71843	</bravo>
-      </Skoda_T_11_0>
-      <Skoda_T_11_2>
-        <bravo>	35.68324	</bravo>
-      </Skoda_T_11_2>
-    </engines>
     <armour>	0.813602698	</armour>
   </clientAdjustmentFactors>
   <effects>

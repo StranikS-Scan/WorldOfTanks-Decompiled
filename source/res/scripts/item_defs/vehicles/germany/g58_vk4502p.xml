@@ -678,7 +678,7 @@
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <models>
             <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_08.model	</destroyed>
@@ -728,7 +728,7 @@
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <models>
             <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_09.model	</undamaged>
             <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_09.model	</destroyed>
@@ -881,31 +881,97 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Porsche_Typ_100_1>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Porsche_Typ_100_1>
+        <Porsche_Typ_100_3>
+          <smplEnginePower>	708.3784	</smplEnginePower>
+        </Porsche_Typ_100_3>
+        <Porsche_Deutz_Typ180_2>
+          <smplEnginePower>	888.1161	</smplEnginePower>
+        </Porsche_Deutz_Typ180_2>
+      </engines>
+      <chassis>
+        <VK4502P_Standardketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VK4502P_Standardketten>
+        <VK4502P_Vetstaerktketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VK4502P_Vetstaerktketten>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_128mm_KwK44_L55>
         <delta>	1.16901408	</delta>
       </_128mm_KwK44_L55>
     </guns>
-    <chassis>
-      <VK4502P_Standardketten>
-        <alpha>	0.161	</alpha>
-      </VK4502P_Standardketten>
-      <VK4502P_Vetstaerktketten>
-        <alpha>	0.13685	</alpha>
-      </VK4502P_Vetstaerktketten>
-    </chassis>
-    <engines>
-      <Porsche_Typ_100_1>
-        <bravo>	158.5922	</bravo>
-      </Porsche_Typ_100_1>
-      <Porsche_Typ_100_3>
-        <bravo>	177.0946	</bravo>
-      </Porsche_Typ_100_3>
-      <Porsche_Deutz_Typ180_2>
-        <bravo>	222.029	</bravo>
-      </Porsche_Deutz_Typ180_2>
-    </engines>
     <armour>	1.014469501	</armour>
   </clientAdjustmentFactors>
   <effects>

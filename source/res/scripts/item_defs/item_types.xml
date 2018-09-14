@@ -86,16 +86,13 @@
       <testTank></testTank>
       <inGame></inGame>
       <telecom></telecom>
-      <markI></markI>
-      <wheeledVehicle></wheeledVehicle>
+      <unrecoverable></unrecoverable>
     </tags>
   </vehicle>
   <vehicleChassis>
     <userString>	#item_types:chassis/name	</userString>
     <description>	#item_types:chassis/desc	</description>
-    <tags>
-      <wheeledVehicle></wheeledVehicle>
-    </tags>
+    <tags></tags>
   </vehicleChassis>
   <vehicleTurret>
     <userString>	#item_types:turret/name	</userString>

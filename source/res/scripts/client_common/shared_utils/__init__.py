@@ -104,6 +104,17 @@ class CONST_CONTAINER(object):
         return
 
 
+def _getBitIndexesMap(capacity):
+    map = {}
+    for index in range(1, capacity + 1):
+        key = (1 << index) - 1
+        map[key] = index - 1
+
+    return map
+
+
+_INT64_SET_BITS_INDEXES_MAP = _getBitIndexesMap(64)
+
 class BitmaskHelper(object):
 
     @classmethod
@@ -129,6 +140,69 @@ class BitmaskHelper(object):
         if mask & flag > 0:
             mask ^= flag
         return mask
+
+    @classmethod
+    def hasAllBitsSet(cls, number, mask):
+        return number & mask == mask
+
+    @classmethod
+    def hasAnyBitSet(cls, number, mask):
+        return number & mask > 0
+
+    @classmethod
+    def isBitSet(self, number, bitIndex):
+        return number & 1 << bitIndex > 0
+
+    @classmethod
+    def getSetBitsCount(cls, mask):
+        """
+        Method goes through as many iterations as there are set bits. So if we have a 32-bit word
+        with only the high bit set, then it will only go once through the loop.
+        For details please see Brian Kernighan's algorithm.
+        :param mask: Bit mask
+        :return: Count of set bits
+        """
+        count = 0
+        while mask:
+            count += 1
+            mask &= mask - 1
+
+        return count
+
+    @classmethod
+    def getSetBitIndexes(cls, mask):
+        return [ i for i in BitmaskHelper.iterateSetBitsIndexes(mask) ]
+
+    @classmethod
+    def iterateSetBitsIndexes(cls, number):
+        """
+        Generator that returns indexes of set bits of the given number. Does NOT depend on number
+        bit capacity.
+        NOTE: If known that bit capacity <= INT64, use iterateInt64SetBitsIndexes because
+        it is faster on 25-30%.
+        :param number: Bit mask
+        :return: Indexes of set bits starting from 0
+        """
+        counter = 0
+        while number:
+            if number & 1:
+                yield counter
+            counter += 1
+            number >>= 1
+
+    @classmethod
+    def iterateInt64SetBitsIndexes(cls, number):
+        """
+        Generator that returns indexes of set bits of the given INT64. Depends on number
+        bit capacity (=64!). Generator goes through as many iterations as there are set bits.
+        NOTE: It faster on 25-30% than iterateSetBitsIndexes!
+        :param number: Bit mask
+        :return: Indexes of set bits starting from 0
+        """
+        while number:
+            submask = number - 1
+            yield _INT64_SET_BITS_INDEXES_MAP[number ^ submask]
+            number &= submask
 
 
 class AlwaysValidObject(object):

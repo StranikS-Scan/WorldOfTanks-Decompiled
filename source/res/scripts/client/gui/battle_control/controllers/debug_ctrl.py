@@ -2,8 +2,6 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/debug_ctrl.py
 import BigWorld
 import BattleReplay
-import constants
-from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import IViewComponentsController
 from gui.shared.utils.TimeInterval import TimeInterval
@@ -29,7 +27,6 @@ class DebugController(IViewComponentsController):
         super(DebugController, self).__init__()
         self._debugPanelUI = None
         self._timeInterval = None
-        self._visibleVehicles = set()
         return
 
     def getControllerID(self):
@@ -43,7 +40,6 @@ class DebugController(IViewComponentsController):
         self._timeInterval.stop()
         self._timeInterval = None
         self._debugPanelUI = None
-        self._visibleVehicles = set()
         return
 
     def setViewComponents(self, debugPanelUI):
@@ -54,13 +50,6 @@ class DebugController(IViewComponentsController):
         self._debugPanelUI = None
         return
 
-    def startVehicleVisual(self, vehicleID):
-        if avatar_getter.getPlayerVehicleID() != vehicleID:
-            self._visibleVehicles.add(vehicleID)
-
-    def stopVehicleVisual(self, vehicleID):
-        self._visibleVehicles.discard(vehicleID)
-
     def _update(self):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.fps > 0:
@@ -70,31 +59,18 @@ class DebugController(IViewComponentsController):
             isLaggingNow = replayCtrl.isLaggingNow
         else:
             fpsReplay = -1
-            player = BigWorld.player()
-            isLaggingNow = player.filter.isLaggingNow if player is not None else False
-            if not isLaggingNow:
-                for vehicleID in self._visibleVehicles:
-                    vehicle = BigWorld.entities[vehicleID]
-                    if vehicle is not None and vehicle.isAlive():
-                        try:
-                            if vehicle.filter.isLagginNow:
-                                isLaggingNow = True
-                                break
-                        except AttributeError:
-                            pass
-
-            avgLatency = BigWorld.LatencyInfo().value[3]
-            if avgLatency:
-                ping = min(avgLatency * 1000, 999)
-                if ping < 999:
-                    ping = max(1, ping - 500.0 * constants.SERVER_TICK_LENGTH)
-            else:
-                ping = 999
-            fpsInfo = BigWorld.getFPS()
-            g_statistics.update(fpsInfo, ping, isLaggingNow)
-            fps = fpsInfo[1]
+            isLaggingNow = BigWorld.statLagDetected()
+            ping = BigWorld.statPing()
+            fps = BigWorld.getFPS()[1]
+            g_statistics.update()
             if replayCtrl.isRecording:
                 replayCtrl.setFpsPingLag(fps, ping, isLaggingNow)
+        try:
+            ping = int(ping)
+            fps = int(fps)
+        except (ValueError, OverflowError):
+            return
+
         if self._debugPanelUI is not None:
             self._debugPanelUI.updateDebugInfo(int(ping), int(fps), isLaggingNow, fpsReplay=fpsReplay)
         return

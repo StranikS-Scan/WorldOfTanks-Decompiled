@@ -355,17 +355,52 @@
   <radios>
     <SCR_528_IGR>	shared	</SCR_528_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Hispano-Suiza_HS110_IGR>
+          <smplEnginePower>	761.2424	</smplEnginePower>
+        </Hispano-Suiza_HS110_IGR>
+      </engines>
+      <chassis>
+        <Chassis_Bat_Chatillon25t_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Bat_Chatillon25t_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Bat_Chatillon25t_2_IGR>
-        <alpha>	0.0805	</alpha>
-      </Chassis_Bat_Chatillon25t_2_IGR>
-    </chassis>
-    <engines>
-      <Hispano-Suiza_HS110_IGR>
-        <bravo>	190.3106	</bravo>
-      </Hispano-Suiza_HS110_IGR>
-    </engines>
     <armour>	1.321930894	</armour>
   </clientAdjustmentFactors>
   <effects>

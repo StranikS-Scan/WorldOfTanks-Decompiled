@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/LOBBY_HELP.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class LOBBY_HELP(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     HEADER_SETTINGS_BUTTON = '#lobby_help:header/settings-button'
     HEADER_ACCOUNT_BUTTON = '#lobby_help:header/account-button'
     HEADER_PREMIUM_BUTTON = '#lobby_help:header/premium-button'
@@ -29,3 +26,5 @@ class LOBBY_HELP(object):
     HANGAR_CREWOPERATIONBTN = '#lobby_help:hangar/crewOperationBtn'
     HANGAR_VEHRESEARCHPANEL = '#lobby_help:hangar/vehResearchPanel'
     HANGAR_VEHFILTERS = '#lobby_help:hangar/vehFilters'
+    HANGAR_HEADER_QUESTS = '#lobby_help:hangar/header/quests'
+    HANGAR_HEADER_VEHICLE = '#lobby_help:hangar/header/vehicle'

@@ -317,8 +317,8 @@ class TabsContainer(object):
 
     def __init__(self):
         self.__tabs = {TABS_IDS.INVENTORY: InventoryBoostersTab(),
-         TABS_IDS.SHOP: ShopBoostersTab(),
-         TABS_IDS.QUESTS: QuestsBoostersTab()}
+         TABS_IDS.QUESTS: QuestsBoostersTab(),
+         TABS_IDS.SHOP: ShopBoostersTab()}
         self.__currentTabIdx = None
         self.__activeBoostersCount = None
         self.__eManager = EventManager()
@@ -350,6 +350,9 @@ class TabsContainer(object):
     @property
     def questsTab(self):
         return self.__tabs[TABS_IDS.QUESTS]
+
+    def getTabs(self):
+        return self.__tabs
 
     def setFilters(self, qualities, boosterTypes):
         for tab in self.__tabs.itervalues():

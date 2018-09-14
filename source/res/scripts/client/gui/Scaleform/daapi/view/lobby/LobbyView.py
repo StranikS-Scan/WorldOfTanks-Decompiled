@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyView.py
 import BigWorld
-import VOIP
 import constants
 import CommandMapping
 from PlayerEvents import g_playerEvents
 from gui import game_control, SystemMessages
 import gui
+from messenger.proto import proto_getter
+from messenger.m_constants import PROTO_TYPE
 from gui.LobbyContext import g_lobbyContext
 from gui.battle_control import g_sessionProvider
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
@@ -34,12 +35,13 @@ class LobbyView(LobbyPageMeta):
      PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY,
      VIEW_ALIAS.LOBBY_CUSTOMIZATION,
      VIEW_ALIAS.VEHICLE_PREVIEW,
-     VIEW_ALIAS.MARK_PREVIEW,
+     VIEW_ALIAS.VEHICLE_COMPARE,
      VIEW_ALIAS.LOBBY_RESEARCH,
      VIEW_ALIAS.LOBBY_TECHTREE,
      FORTIFICATION_ALIASES.FORTIFICATIONS_VIEW_ALIAS,
      VIEW_ALIAS.BATTLE_QUEUE,
-     VIEW_ALIAS.BATTLE_LOADING)
+     VIEW_ALIAS.BATTLE_LOADING,
+     VIEW_ALIAS.LOBBY_ACADEMY)
 
     class COMPONENTS:
         HEADER = 'lobbyHeader'
@@ -47,6 +49,10 @@ class LobbyView(LobbyPageMeta):
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
         self.__currIgrType = constants.IGR_TYPE.NONE
+
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def bwProto(self):
+        return None
 
     def getSubContainerType(self):
         return ViewTypes.LOBBY_SUB
@@ -67,9 +73,7 @@ class LobbyView(LobbyPageMeta):
         battlesCount = g_itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
         g_lobbyContext.updateBattlesCount(battlesCount)
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
-        keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
-        if not BigWorld.isKeyDown(keyCode):
-            VOIP.getVOIPManager().setMicMute(True)
+        self.bwProto.voipController.invalidateMicrophoneMute()
 
     def _dispose(self):
         game_control.g_instance.igr.onIgrTypeChanged -= self.__onIgrTypeChanged

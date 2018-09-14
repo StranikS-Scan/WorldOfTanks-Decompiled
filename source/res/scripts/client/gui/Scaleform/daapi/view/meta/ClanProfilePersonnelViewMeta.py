@@ -8,11 +8,7 @@ class ClanProfilePersonnelViewMeta(ClanProfileBaseView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends ClanProfileBaseView
-    null
     """
 
     def as_getMembersDPS(self):
-        """
-        :return Object:
-        """
         return self.flashObject.as_getMembersDP() if self._isDAAPIInited() else None

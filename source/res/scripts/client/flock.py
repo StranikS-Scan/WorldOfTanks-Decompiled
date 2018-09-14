@@ -16,9 +16,12 @@ class DebugGizmo:
 
     def __init__(self, spaceID, modelName='helpers/models/position_gizmo.model'):
         self.model = BigWorld.Model(modelName)
-        BigWorld.addModel(self.model, spaceID)
+        BigWorld.player().addModel(self.model, spaceID)
         self.motor = BigWorld.Servo(Math.Matrix())
         self.model.addMotor(self.motor)
+
+    def __del__(self):
+        self.model.delMotor(self.motor)
 
     def visible(self, show):
         self.model.visible = show
@@ -44,7 +47,10 @@ class DebugLine(object):
         self.model.addMotor(self.motor)
         self.__thickness = 0.1
         self.set(start, end)
-        BigWorld.addModel(self.model)
+        BigWorld.player().addModel(self.model)
+
+    def __del__(self):
+        self.model.delMotor(self.motor)
 
     def set(self, start, end):
         self.start = start

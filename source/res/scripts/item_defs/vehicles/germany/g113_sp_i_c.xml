@@ -894,6 +894,7 @@
             <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	0.000001 0.0399404 1.78413	</rayStart>
@@ -982,31 +983,97 @@
     </AN-GRC-4>
     <SEM25>	shared	</SEM25>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Hotchkiss_6_Zyl_Benzin_154_PS>
+          <smplEnginePower>	162.8213	</smplEnginePower>
+        </Hotchkiss_6_Zyl_Benzin_154_PS>
+        <Hotchkiss_6_Zyl_Benzin_164_PS>
+          <smplEnginePower>	173.3941	</smplEnginePower>
+        </Hotchkiss_6_Zyl_Benzin_164_PS>
+        <Hotchkiss_6_Zyl_Benzin_195_PS>
+          <smplEnginePower>	206.1698	</smplEnginePower>
+        </Hotchkiss_6_Zyl_Benzin_195_PS>
+      </engines>
+      <chassis>
+        <Chassis_G113_SP_I_C>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G113_SP_I_C>
+        <Chassis_G113_SP_I_C_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G113_SP_I_C_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_90mm_Mecar_mit_Mehrladeeinrichtung>
         <delta>	1.16	</delta>
       </_90mm_Mecar_mit_Mehrladeeinrichtung>
     </guns>
-    <chassis>
-      <Chassis_G113_SP_I_C>
-        <alpha>	0.08855	</alpha>
-      </Chassis_G113_SP_I_C>
-      <Chassis_G113_SP_I_C_2>
-        <alpha>	0.07245	</alpha>
-      </Chassis_G113_SP_I_C_2>
-    </chassis>
-    <engines>
-      <Hotchkiss_6_Zyl_Benzin_154_PS>
-        <bravo>	40.70532	</bravo>
-      </Hotchkiss_6_Zyl_Benzin_154_PS>
-      <Hotchkiss_6_Zyl_Benzin_164_PS>
-        <bravo>	43.34853	</bravo>
-      </Hotchkiss_6_Zyl_Benzin_164_PS>
-      <Hotchkiss_6_Zyl_Benzin_195_PS>
-        <bravo>	51.54245	</bravo>
-      </Hotchkiss_6_Zyl_Benzin_195_PS>
-    </engines>
     <armour>	0.779232345	</armour>
   </clientAdjustmentFactors>
   <effects>

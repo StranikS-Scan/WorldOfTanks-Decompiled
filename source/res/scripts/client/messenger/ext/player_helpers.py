@@ -8,6 +8,8 @@ from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from messenger.m_constants import USER_TAG
 from messenger.proto.entities import ClanInfo
 from messenger.storage import storage_getter
+_CLAN_INFO_ABBREV_INDEX = 1
+_CLAN_INFO_ROLE_INDEX = 3
 
 def _getInfo4AccountPlayer():
     return (getPlayerDatabaseID(), getPlayerName(), None)
@@ -92,15 +94,16 @@ class CurrentPlayerHelper(object):
             length = len(info)
         else:
             length = 0
-        if length > 1:
-            abbrev = info[1]
+        if length > _CLAN_INFO_ABBREV_INDEX:
+            abbrev = info[_CLAN_INFO_ABBREV_INDEX]
         else:
             abbrev = ''
-        if length > 3:
-            role = info[3]
+        if length > _CLAN_INFO_ROLE_INDEX:
+            role = info[_CLAN_INFO_ROLE_INDEX]
         else:
             role = 0
-        clanInfo = ClanInfo(abbrev=abbrev, role=role)
+        clanDBID = g_itemsCache.items.stats.clanDBID
+        clanInfo = ClanInfo(dbID=clanDBID, abbrev=abbrev, role=role)
         self.playerCtx.setClanInfo(clanInfo)
         user = self.usersStorage.getUser(getPlayerDatabaseID())
         if user:

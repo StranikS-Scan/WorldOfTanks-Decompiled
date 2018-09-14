@@ -558,17 +558,52 @@
   <radios>
     <FuG5A>	shared	</FuG5A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_210_TRM_P45>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Maybach_HL_210_TRM_P45>
+      </engines>
+      <chassis>
+        <Chassis_Tiger_I_Jpn>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Tiger_I_Jpn>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Tiger_I_Jpn>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Tiger_I_Jpn>
-    </chassis>
-    <engines>
-      <Maybach_HL_210_TRM_P45>
-        <bravo>	171.8082	</bravo>
-      </Maybach_HL_210_TRM_P45>
-    </engines>
     <armour>	0.879999147	</armour>
   </clientAdjustmentFactors>
   <effects>

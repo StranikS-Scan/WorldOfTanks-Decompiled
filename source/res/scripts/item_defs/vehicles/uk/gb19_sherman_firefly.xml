@@ -1158,26 +1158,92 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_Continental_R-975C1>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Wright_Continental_R-975C1>
+        <Crysler_A57>
+          <smplEnginePower>	449.3445	</smplEnginePower>
+        </Crysler_A57>
+        <Wright_Continental_R-975C4>
+          <smplEnginePower>	486.3493	</smplEnginePower>
+        </Wright_Continental_R-975C4>
+      </engines>
+      <chassis>
+        <Chassis_GB19_Sherman_Firefly>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB19_Sherman_Firefly>
+        <Chassis_GB19_Sherman_Firefly_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB19_Sherman_Firefly_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB19_Sherman_Firefly>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB19_Sherman_Firefly>
-      <Chassis_GB19_Sherman_Firefly_2>
-        <alpha>	0.0805	</alpha>
-      </Chassis_GB19_Sherman_Firefly_2>
-    </chassis>
-    <engines>
-      <Wright_Continental_R-975C1>
-        <bravo>	105.7281	</bravo>
-      </Wright_Continental_R-975C1>
-      <Crysler_A57>
-        <bravo>	112.3361	</bravo>
-      </Crysler_A57>
-      <Wright_Continental_R-975C4>
-        <bravo>	121.5873	</bravo>
-      </Wright_Continental_R-975C4>
-    </engines>
     <armour>	1.073199045	</armour>
   </clientAdjustmentFactors>
   <effects>

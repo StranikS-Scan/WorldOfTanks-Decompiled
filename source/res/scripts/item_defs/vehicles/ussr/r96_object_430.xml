@@ -415,8 +415,8 @@
             <insigniaOnGun>
               <rayStart>	0.00145481 0.00239293 0.995517	</rayStart>
               <rayEnd>	-0.0716447 -0.0346777 0.991078	</rayEnd>
-              <rayUp>	0.106 0.1 5	</rayUp>
-              <size>	0.476	</size>
+              <rayUp>	0.108 0.098 5	</rayUp>
+              <size>	0.733	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
@@ -484,17 +484,52 @@
   <radios>
     <R113M>	shared	</R113M>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_5TD>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+        </_5TD>
+      </engines>
+      <chassis>
+        <Chassis_Object_430>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Object_430>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Object_430>
-        <alpha>	0.05635	</alpha>
-      </Chassis_Object_430>
-    </chassis>
-    <engines>
-      <_5TD>
-        <bravo>	153.3058	</bravo>
-      </_5TD>
-    </engines>
     <armour>	1.01837652	</armour>
   </clientAdjustmentFactors>
   <effects>

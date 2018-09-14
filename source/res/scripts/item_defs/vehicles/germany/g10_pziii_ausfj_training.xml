@@ -447,18 +447,52 @@
   <radios>
     <FuG5_T>	shared	</FuG5_T>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <PzIIIketten_Ausf_L_T>
-        <alpha>	0.08855	</alpha>
-      </PzIIIketten_Ausf_L_T>
-    </chassis>
-    <engines>
-      <Maybach_HL_108TR_T>
-        <bravo>	84.58249	</bravo>
-      </Maybach_HL_108TR_T>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_108TR_T>
+          <smplEnginePower>	338.33	</smplEnginePower>
+        </Maybach_HL_108TR_T>
+      </engines>
+      <chassis>
+        <PzIIIketten_Ausf_L_T>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzIIIketten_Ausf_L_T>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

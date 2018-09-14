@@ -106,6 +106,7 @@
       <tags></tags>
       <level>	5	</level>
       <price>	8300	</price>
+      <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -480,17 +481,52 @@
   <radios>
     <SCR_506_IGR>	shared	</SCR_506_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_Continental_R-975C4_IGR>
+          <smplEnginePower>	486.3493	</smplEnginePower>
+        </Wright_Continental_R-975C4_IGR>
+      </engines>
+      <chassis>
+        <T42_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T42_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <T42_IGR>
-        <alpha>	0.08855	</alpha>
-      </T42_IGR>
-    </chassis>
-    <engines>
-      <Wright_Continental_R-975C4_IGR>
-        <bravo>	121.5873	</bravo>
-      </Wright_Continental_R-975C4_IGR>
-    </engines>
     <armour>	0.99230542	</armour>
   </clientAdjustmentFactors>
   <effects>

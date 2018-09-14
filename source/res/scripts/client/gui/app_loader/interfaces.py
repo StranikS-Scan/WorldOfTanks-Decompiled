@@ -76,5 +76,5 @@ class IAppFactory(object):
     def showDisconnectDialog(self, appNS, description):
         pass
 
-    def handleKeyInBattle(self, isDown, key, mods):
+    def handleKey(self, appNS, isDown, key, mods):
         return False

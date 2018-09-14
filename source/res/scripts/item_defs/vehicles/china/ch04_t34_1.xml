@@ -1199,31 +1199,97 @@
     </A-220_1>
     <A-220B>	shared	</A-220B>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Type_102S>
+          <smplEnginePower>	507.4949	</smplEnginePower>
+        </_Type_102S>
+        <_Type_102S1>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </_Type_102S1>
+        <_12150L>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </_12150L>
+      </engines>
+      <chassis>
+        <Chassis_Ch04_T34_1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch04_T34_1>
+        <Chassis_Ch04_T34_1_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch04_T34_1_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_85mm_Tip_56-85JT>
         <delta>	0.907407407	</delta>
       </_85mm_Tip_56-85JT>
     </guns>
-    <chassis>
-      <Chassis_Ch04_T34_1>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Ch04_T34_1>
-      <Chassis_Ch04_T34_1_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Ch04_T34_1_2>
-    </chassis>
-    <engines>
-      <_Type_102S>
-        <bravo>	126.8737	</bravo>
-      </_Type_102S>
-      <_Type_102S1>
-        <bravo>	132.1601	</bravo>
-      </_Type_102S1>
-      <_12150L>
-        <bravo>	137.4465	</bravo>
-      </_12150L>
-    </engines>
     <armour>	1.190270854	</armour>
   </clientAdjustmentFactors>
   <effects>

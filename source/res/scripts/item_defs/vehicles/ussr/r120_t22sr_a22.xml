@@ -613,17 +613,52 @@
   <radios>
     <R123A>	shared	</R123A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-12-5_shortened>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </V-12-5_shortened>
+      </engines>
+      <chassis>
+        <Chassis_R120_T22SR_A22>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R120_T22SR_A22>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R120_T22SR_A22>
-        <alpha>	0.05635	</alpha>
-      </Chassis_R120_T22SR_A22>
-    </chassis>
-    <engines>
-      <V-12-5_shortened>
-        <bravo>	198.2402	</bravo>
-      </V-12-5_shortened>
-    </engines>
     <armour>	1.297795959	</armour>
   </clientAdjustmentFactors>
   <effects>

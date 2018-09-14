@@ -451,17 +451,52 @@
   <radios>
     <SCR_528A1_IGR>	shared	</SCR_528A1_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AV-1790-3A1_IGR>
+          <smplEnginePower>	856.3977	</smplEnginePower>
+        </Continental_AV-1790-3A1_IGR>
+      </engines>
+      <chassis>
+        <T80E3_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T80E3_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <T80E3_IGR>
-        <alpha>	0.13685	</alpha>
-      </T80E3_IGR>
-    </chassis>
-    <engines>
-      <Continental_AV-1790-3A1_IGR>
-        <bravo>	214.0994	</bravo>
-      </Continental_AV-1790-3A1_IGR>
-    </engines>
     <armour>	0.968169405	</armour>
   </clientAdjustmentFactors>
   <effects>

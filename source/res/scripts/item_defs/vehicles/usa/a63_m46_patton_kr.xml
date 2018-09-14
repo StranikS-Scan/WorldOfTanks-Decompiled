@@ -483,17 +483,52 @@
   <radios>
     <AN_GRC_8>	shared	</AN_GRC_8>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AV_1790_5A>
+          <smplEnginePower>	856.3977	</smplEnginePower>
+        </Continental_AV_1790_5A>
+      </engines>
+      <chassis>
+        <Chassis_M46_Patton_KR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M46_Patton_KR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M46_Patton_KR>
-        <alpha>	0.12075	</alpha>
-      </Chassis_M46_Patton_KR>
-    </chassis>
-    <engines>
-      <Continental_AV_1790_5A>
-        <bravo>	214.0994	</bravo>
-      </Continental_AV_1790_5A>
-    </engines>
     <armour>	0.994753238	</armour>
   </clientAdjustmentFactors>
   <effects>
@@ -510,4 +545,5 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
+  <customDefaultCamouflage>	true	</customDefaultCamouflage>
 </a63_m46_patton_kr.xml>

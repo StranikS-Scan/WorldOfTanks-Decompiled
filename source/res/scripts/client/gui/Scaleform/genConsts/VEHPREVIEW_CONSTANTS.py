@@ -7,7 +7,6 @@ class VEHPREVIEW_CONSTANTS(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     CREW_INFO_LINKAGE = 'VehPreviewCrewInfoUI'
     FACT_SHEET_LINKAGE = 'VehPreviewFactSheetUI'

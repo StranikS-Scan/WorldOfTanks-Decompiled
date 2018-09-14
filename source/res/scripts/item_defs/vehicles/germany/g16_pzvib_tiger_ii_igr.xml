@@ -573,22 +573,57 @@
   <radios>
     <FuG12_IGR>	shared	</FuG12_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230_TRM_P45_IGR>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230_TRM_P45_IGR>
+      </engines>
+      <chassis>
+        <PzVIB_Vetstaerktketten_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzVIB_Vetstaerktketten_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_105mm_KwK46_L68_IGR>
         <delta>	1.1335311	</delta>
       </_105mm_KwK46_L68_IGR>
     </guns>
-    <chassis>
-      <PzVIB_Vetstaerktketten_IGR>
-        <alpha>	0.0966	</alpha>
-      </PzVIB_Vetstaerktketten_IGR>
-    </chassis>
-    <engines>
-      <Maybach_HL_230_TRM_P45_IGR>
-        <bravo>	185.0242	</bravo>
-      </Maybach_HL_230_TRM_P45_IGR>
-    </engines>
     <armour>	0.946403743	</armour>
   </clientAdjustmentFactors>
   <effects>

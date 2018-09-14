@@ -1205,26 +1205,92 @@
     </_71-TK-3>
     <_10R>	shared	</_10R>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M-5-400>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </M-5-400>
+        <M-17T>
+          <smplEnginePower>	475.7765	</smplEnginePower>
+        </M-17T>
+        <M-17F>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </M-17F>
+      </engines>
+      <chassis>
+        <T-28_0>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T-28_0>
+        <T-28_A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T-28_A>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <T-28_0>
-        <alpha>	0.12075	</alpha>
-      </T-28_0>
-      <T-28_A>
-        <alpha>	0.10465	</alpha>
-      </T-28_A>
-    </chassis>
-    <engines>
-      <M-5-400>
-        <bravo>	105.7281	</bravo>
-      </M-5-400>
-      <M-17T>
-        <bravo>	118.9441	</bravo>
-      </M-17T>
-      <M-17F>
-        <bravo>	132.1601	</bravo>
-      </M-17F>
-    </engines>
     <armour>	0.843833809	</armour>
   </clientAdjustmentFactors>
   <effects>

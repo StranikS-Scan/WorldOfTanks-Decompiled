@@ -692,23 +692,89 @@
       </unlocks>
     </N9>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_V8-220>
+          <smplEnginePower>	68.72327	</smplEnginePower>
+        </Ford_V8-220>
+        <Ford_V8-221>
+          <smplEnginePower>	89.8689	</smplEnginePower>
+        </Ford_V8-221>
+      </engines>
+      <chassis>
+        <Chassis_GB25_Loyd_Carrier>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB25_Loyd_Carrier>
+        <Chassis_GB25_Loyd_Carrier_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB25_Loyd_Carrier_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB25_Loyd_Carrier>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GB25_Loyd_Carrier>
-      <Chassis_GB25_Loyd_Carrier_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB25_Loyd_Carrier_2>
-    </chassis>
-    <engines>
-      <Ford_V8-220>
-        <bravo>	17.18082	</bravo>
-      </Ford_V8-220>
-      <Ford_V8-221>
-        <bravo>	22.46722	</bravo>
-      </Ford_V8-221>
-    </engines>
     <armour>	0.42853594	</armour>
   </clientAdjustmentFactors>
   <effects>

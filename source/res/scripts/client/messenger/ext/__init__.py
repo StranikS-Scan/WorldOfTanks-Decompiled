@@ -29,6 +29,10 @@ def passCensor(text):
 
 
 def isBattleChatEnabled(common=False):
+    """Get if battle chat enabled
+    :param common: check if common chat is enabled
+    :return: True if enabled
+    """
     result = True
     arena = getattr(BigWorld.player(), 'arena', None)
     if arena is None:
@@ -38,10 +42,10 @@ def isBattleChatEnabled(common=False):
         guiType = arena.guiType
         if guiType is None:
             return result
-        if guiType in (constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.FALLOUT_CLASSIC, constants.ARENA_GUI_TYPE.FALLOUT_MULTITEAM):
+        if guiType == constants.ARENA_GUI_TYPE.RANDOM:
             result = not g_settings.userPrefs.disableBattleChat
         if result and common:
-            result = arena.bonusType != constants.ARENA_BONUS_TYPE.RATED_CYBERSPORT
+            result = arena.bonusType == constants.ARENA_BONUS_TYPE.TRAINING
         return result
 
 

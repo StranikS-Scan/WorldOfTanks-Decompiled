@@ -476,7 +476,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <camouflage>
             <tiling>	1.18 0.64 0.26 0.35	</tiling>
           </camouflage>
@@ -526,17 +526,52 @@
   <radios>
     <SCR_528_IGR>	shared	</SCR_528_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_295_IGR>
+          <smplEnginePower>	898.689	</smplEnginePower>
+        </Maybach_HL_295_IGR>
+      </engines>
+      <chassis>
+        <Chassis_AMX_50_100_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_50_100_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_50_100_2_IGR>
-        <alpha>	0.10465	</alpha>
-      </Chassis_AMX_50_100_2_IGR>
-    </chassis>
-    <engines>
-      <Maybach_HL_295_IGR>
-        <bravo>	224.6722	</bravo>
-      </Maybach_HL_295_IGR>
-    </engines>
     <armour>	1.34250162	</armour>
   </clientAdjustmentFactors>
   <effects>

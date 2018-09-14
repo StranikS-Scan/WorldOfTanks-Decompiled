@@ -549,28 +549,94 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAC_R>
+          <smplEnginePower>	814.1064	</smplEnginePower>
+        </Ford_GAC_R>
+        <Continental_AV-1790-7B>
+          <smplEnginePower>	856.3977	</smplEnginePower>
+        </Continental_AV-1790-7B>
+      </engines>
+      <chassis>
+        <Chassis_Bat_Chatillon155_55>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Bat_Chatillon155_55>
+        <Chassis_Bat_Chatillon155_55_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Bat_Chatillon155_55_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <Canon_de_155mm>
         <delta>	1.03275109	</delta>
       </Canon_de_155mm>
     </guns>
-    <chassis>
-      <Chassis_Bat_Chatillon155_55>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Bat_Chatillon155_55>
-      <Chassis_Bat_Chatillon155_55_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Bat_Chatillon155_55_2>
-    </chassis>
-    <engines>
-      <Ford_GAC_R>
-        <bravo>	203.5266	</bravo>
-      </Ford_GAC_R>
-      <Continental_AV-1790-7B>
-        <bravo>	214.0994	</bravo>
-      </Continental_AV-1790-7B>
-    </engines>
     <armour>	1.005337153	</armour>
   </clientAdjustmentFactors>
   <effects>

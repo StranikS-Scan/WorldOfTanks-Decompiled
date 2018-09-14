@@ -8,12 +8,7 @@ class ProfileTechniqueMeta(ProfileSection):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends ProfileSection
-    null
     """
 
     def as_responseVehicleDossierS(self, data):
-        """
-        :param data:
-        :return :
-        """
         return self.flashObject.as_responseVehicleDossier(data) if self._isDAAPIInited() else None

@@ -7,10 +7,9 @@ import BigWorld
 from AvatarInputHandler.cameras import FovExtended
 from adisp import async
 from debug_utils import LOG_DEBUG
-from gui import DialogsInterface, GUI_SETTINGS
+from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import TimerConfirmDialogMeta
 from gui.shared.utils.graphics import g_monitorSettings
-from helpers import isPlayerAccount
 from messenger import g_settings as messenger_settings
 
 class ISettingsStorage(object):
@@ -161,14 +160,10 @@ class VideoSettingsStorage(ISettingsStorage):
 
                     return revert
 
-                if isPlayerAccount() or GUI_SETTINGS.useAS3Battle:
+                @async
+                def confirmator(callback=None):
+                    BigWorld.callback(0.0, lambda : DialogsInterface.showI18nConfirmDialog('graphicsChangeConfirmation', callback, TimerConfirmDialogMeta('graphicsChangeConfirmation', timer=15)))
 
-                    @async
-                    def confirmator(callback=None):
-                        BigWorld.callback(0.0, lambda : DialogsInterface.showI18nConfirmDialog('graphicsChangeConfirmation', callback, TimerConfirmDialogMeta('graphicsChangeConfirmation', timer=15)))
-
-                else:
-                    confirmator = 'graphicsChangeConfirmation'
                 return (confirmator, wrapper(monitorChanged, windowSizeChanged, cMonitor, cWindowSize, cVideoMode, cIsFullScreen))
         return super(VideoSettingsStorage, self).apply(restartApproved)
 

@@ -12,8 +12,6 @@ class OfflineFlag(OfflineEntity):
         super(OfflineFlag, self).__init__()
         self.__parent = None
         self.__circleModel = None
-        self.__parent = g_ctfManager.getFlagInfo(self.flagID)['flag']
-        self.__flagType = self.__parent.flagType
         return
 
     def setPosition(self, position):
@@ -25,25 +23,24 @@ class OfflineFlag(OfflineEntity):
         return
 
     def prerequisites(self):
-        return [g_ctfManager.flagModelName(self.__flagType), g_ctfManager.flagCircleModelName]
+        return [g_ctfManager.flagModelName, g_ctfManager.flagCircleModelName]
 
     def onEnterWorld(self, prereqs):
         if prereqs.failedIDs:
             LOG_ERROR('Failed to load flag model %s' % (prereqs.failedIDs,))
             return
         else:
-            modelName = g_ctfManager.flagModelName(self.__flagType)
-            self.model = prereqs[modelName]
-            if g_ctfManager.flagCircleModelName != '':
-                self.__circleModel = prereqs[g_ctfManager.flagCircleModelName]
-                self.__circleModel.position = self.position
+            self.__parent = g_ctfManager.getFlagInfo(self.flagID)['flag']
+            self.model = prereqs[g_ctfManager.flagModelName]
+            self.__circleModel = prereqs[g_ctfManager.flagCircleModelName]
+            self.__circleModel.position = self.position
             self.model.position = self.position
-            animAction = g_ctfManager.flagAnimAction(self.__flagType)
-            if animAction is not None:
+            if g_ctfManager.flagAnimAction is not None:
                 try:
+                    animAction = self.model.action(g_ctfManager.flagAnimAction)
                     animAction()
                 except:
-                    LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (animAction, modelName))
+                    LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (g_ctfManager.flagAnimAction, g_ctfManager.flagModelName))
 
             self.model.visible = False
             self.__parent.flagEnterWorld(self)

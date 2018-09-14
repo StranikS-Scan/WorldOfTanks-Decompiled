@@ -334,17 +334,52 @@
   <radios>
     <SCR_200A>	shared	</SCR_200A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <American_LFF_Corporation_V12>
+          <smplEnginePower>	257.9766	</smplEnginePower>
+        </American_LFF_Corporation_V12>
+      </engines>
+      <chassis>
+        <Chassis_T1_E6>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T1_E6>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T1_E6>
-        <alpha>	0.10465	</alpha>
-      </Chassis_T1_E6>
-    </chassis>
-    <engines>
-      <American_LFF_Corporation_V12>
-        <bravo>	64.49415	</bravo>
-      </American_LFF_Corporation_V12>
-    </engines>
     <armour>	0.73595879	</armour>
   </clientAdjustmentFactors>
   <effects>

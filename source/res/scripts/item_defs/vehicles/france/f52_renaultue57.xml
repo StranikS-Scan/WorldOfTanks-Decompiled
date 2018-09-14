@@ -492,23 +492,89 @@
     </ER_53>
     <ER_56>	shared	</ER_56>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Renault_EU>
+          <smplEnginePower>	40.17668	</smplEnginePower>
+        </Renault_EU>
+        <Renault_ACL>
+          <smplEnginePower>	50.7495	</smplEnginePower>
+        </Renault_ACL>
+      </engines>
+      <chassis>
+        <Chassis_RenaultUE57>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RenaultUE57>
+        <Chassis_RenaultUE57_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RenaultUE57_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_RenaultUE57>
-        <alpha>	0.12075	</alpha>
-      </Chassis_RenaultUE57>
-      <Chassis_RenaultUE57_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_RenaultUE57_2>
-    </chassis>
-    <engines>
-      <Renault_EU>
-        <bravo>	10.04417	</bravo>
-      </Renault_EU>
-      <Renault_ACL>
-        <bravo>	12.68737	</bravo>
-      </Renault_ACL>
-    </engines>
     <armour>	0.988567898	</armour>
   </clientAdjustmentFactors>
   <effects>

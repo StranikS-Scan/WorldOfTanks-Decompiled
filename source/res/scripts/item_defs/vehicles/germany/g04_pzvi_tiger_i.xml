@@ -1116,7 +1116,7 @@
             <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_main_mb	</effects>
+          <effects>	shot_large_mb	</effects>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	0.0601428 -0.0032047 0.995846	</rayStart>
@@ -1319,23 +1319,89 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_210_TRM_P45>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Maybach_HL_210_TRM_P45>
+        <Maybach_HL_230_TRM_P45>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230_TRM_P45>
+      </engines>
+      <chassis>
+        <PzVI_Standardketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzVI_Standardketten>
+        <PzVI_Vetstaerktketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzVI_Vetstaerktketten>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <PzVI_Standardketten>
-        <alpha>	0.12075	</alpha>
-      </PzVI_Standardketten>
-      <PzVI_Vetstaerktketten>
-        <alpha>	0.1127	</alpha>
-      </PzVI_Vetstaerktketten>
-    </chassis>
-    <engines>
-      <Maybach_HL_210_TRM_P45>
-        <bravo>	171.8082	</bravo>
-      </Maybach_HL_210_TRM_P45>
-      <Maybach_HL_230_TRM_P45>
-        <bravo>	185.0242	</bravo>
-      </Maybach_HL_230_TRM_P45>
-    </engines>
     <armour>	0.886956578	</armour>
   </clientAdjustmentFactors>
   <effects>

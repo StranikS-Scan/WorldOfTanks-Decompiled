@@ -4,16 +4,17 @@ from collections import deque
 from messenger.m_constants import PROTO_TYPE, USER_TAG, GAME_ONLINE_STATUS
 from messenger.proto.entities import UserEntity, ChannelEntity, MemberEntity
 from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE, PRESENCE
+from messenger.proto.xmpp.jid import makeClanRoomJID, makeSystemRoomJID
 from messenger.proto.xmpp.xmpp_constants import XMPP_BAN_COMPONENT, XMPP_MUC_CHANNEL_TYPE, MESSAGE_LIMIT
 from messenger.proto.xmpp.xmpp_items import createItem
 
 class XMPPUserEntity(UserEntity):
     __slots__ = ('_item', '_gos')
 
-    def __init__(self, databaseID, name=None, tags=None, clanInfo=None, item=None):
+    def __init__(self, databaseID, name=None, tags=None, clanInfo=None, item=None, gos=GAME_ONLINE_STATUS.UNDEFINED):
         super(XMPPUserEntity, self).__init__(databaseID, name, tags, clanInfo)
         self._item = item or createItem(databaseID)
-        self._gos = GAME_ONLINE_STATUS.UNDEFINED
+        self._gos = gos
 
     def __repr__(self):
         return 'XMPPUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, item={3!r:s}, isOnline={4!r:s}, clanInfo={5!r:s})'.format(self._databaseID, self.getFullName(), self.getTags(), self._item, self.isOnline(), self._clanInfo)
@@ -270,6 +271,48 @@ class XMPPMucChannelEntity(_XMPPChannelEntity):
         else:
             self._isStored = False
         return self._isStored
+
+    def getMember(self, memberID):
+        member = None
+        if memberID in self._members:
+            member = self._members[memberID]
+        return member
+
+    def addMembers(self, members):
+        isChanged = False
+        for member in members:
+            if member is None:
+                continue
+            memberID = member.getDatabaseID()
+            if memberID in self._members:
+                self._members[memberID].clear()
+            isChanged = True
+            self._members[memberID] = member
+            member.onMemberStatusChanged += self._onMemberStatusChanged
+
+        if isChanged:
+            self.onMembersListChanged()
+        return
+
+
+class XmppSystemChannelEntity(XMPPMucChannelEntity):
+    """Describe system muc channels (common, company)
+    """
+
+    def __init__(self, mucChannelType=XMPP_MUC_CHANNEL_TYPE.UNKNOWN, name=''):
+        jid = makeSystemRoomJID(channelType=mucChannelType)
+        channelName = name or jid.getDomain()
+        super(XmppSystemChannelEntity, self).__init__(jid, name=channelName, isLazy=True, isSystem=True, channelType=mucChannelType)
+
+
+class XmppClanChannelEntity(XMPPMucChannelEntity):
+    """Describe clan channel entity
+    """
+
+    def __init__(self, dbID=0, clanTag=''):
+        jid = makeClanRoomJID(dbID, channelType=XMPP_MUC_CHANNEL_TYPE.CLANS)
+        channelName = '[{}]'.format(clanTag)
+        super(XmppClanChannelEntity, self).__init__(jid, name=channelName, isSystem=True, isLazy=False, channelType=XMPP_MUC_CHANNEL_TYPE.CLANS)
 
 
 class _XMPPMemberEntity(MemberEntity):

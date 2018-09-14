@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/plugin.py
+from messenger import g_settings
 from messenger.proto.xmpp.messages import MessagesManager
 from messenger.proto.xmpp.contacts import ContactsManager
 from messenger.proto.interfaces import IProtoPlugin
@@ -7,9 +8,10 @@ from messenger.proto.xmpp.logger import LogHandler
 from messenger.proto.xmpp.connection import ConnectionHandler
 from messenger.proto.xmpp.gloox_wrapper import ClientDecorator
 from messenger.proto.xmpp.spa_requesters import NicknameResolver
+from messenger.proto.xmpp.xmpp_clan_listener import XmppClanListener
 
 class XmppPlugin(IProtoPlugin):
-    __slots__ = ('__client', '__contacts', '__connection', '__logger', '__messages', '__isClientInited', '__nicknameResolver')
+    __slots__ = ('__client', '__contacts', '__connection', '__logger', '__messages', '__isClientInited', '__nicknameResolver', '__clanListener')
 
     def __init__(self):
         self.__client = ClientDecorator()
@@ -18,7 +20,9 @@ class XmppPlugin(IProtoPlugin):
         self.__messages = MessagesManager()
         self.__logger = LogHandler()
         self.__nicknameResolver = NicknameResolver()
+        self.__clanListener = None
         self.__isClientInited = False
+        return
 
     def __repr__(self):
         return 'XmppPlugin(id=0x{0:08X}, ro={1!r:s},'.format(id(self), ['client',
@@ -46,6 +50,10 @@ class XmppPlugin(IProtoPlugin):
     def nicknames(self):
         return self.__nicknameResolver
 
+    @property
+    def clanListener(self):
+        return self.__clanListener
+
     def isConnected(self):
         return self.__client.isConnected()
 
@@ -58,9 +66,13 @@ class XmppPlugin(IProtoPlugin):
         self.__messages.clear()
         self.__logger.clear()
         self.__nicknameResolver.clear()
+        if self.__clanListener is not None:
+            self.__clanListener.clear()
+        return
 
     def connect(self, scope):
         self.__contacts.switch(scope)
+        self.__clanListener = self.__getClanListener()
 
     def view(self, scope):
         if self.__client.isConnected():
@@ -78,6 +90,9 @@ class XmppPlugin(IProtoPlugin):
             self.__connection.clear()
             self.__logger.clear()
             self.__nicknameResolver.clear()
+            if self.__clanListener is not None:
+                self.__clanListener.clear()
+        return
 
     def setFilters(self, msgFilterChain):
         if self.__messages:
@@ -90,6 +105,8 @@ class XmppPlugin(IProtoPlugin):
         self.__messages.registerHandlers()
         self.__logger.registerHandlers()
         self.__nicknameResolver.registerHandlers()
+        if self.__clanListener:
+            self.__clanListener.registerHandlers()
 
     def __finiClientEnv(self):
         self.__connection.unregisterHandlers()
@@ -97,4 +114,19 @@ class XmppPlugin(IProtoPlugin):
         self.__messages.unregisterHandlers()
         self.__logger.unregisterHandlers()
         self.__nicknameResolver.unregisterHandlers()
+        if self.__clanListener is not None:
+            self.__clanListener.unregisterHandlers()
         self.__client.fini()
+        return
+
+    @classmethod
+    def __getClanListener(cls):
+        """Gets ClanListener instance
+        :return: Instance of XmppClanListener, None if xmpp clan channels aren't enabled
+        :rtype XmppClanListener
+        """
+        if g_settings.server.isXmppClansEnabled():
+            return XmppClanListener()
+        else:
+            return None
+            return None

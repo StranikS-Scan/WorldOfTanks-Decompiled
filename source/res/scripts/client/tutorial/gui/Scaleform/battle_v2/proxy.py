@@ -16,7 +16,6 @@ from tutorial.doc_loader import gui_config
 from tutorial.gui import GUIProxy, GUI_EFFECT_NAME
 from tutorial.gui.Scaleform import effects_player as _shared_player
 from tutorial.gui.Scaleform.battle_v2 import settings, effects
-from tutorial.gui.commands import GUICommandsFactory, GUICommand
 _Event = events.ComponentEvent
 _COMPONENT_EFFECTS = (GUI_EFFECT_NAME.SHOW_GREETING, GUI_EFFECT_NAME.SHOW_HINT, GUI_EFFECT_NAME.NEXT_TASK)
 
@@ -27,18 +26,6 @@ class TutorialFullNameFormatter(player_format.PlayerFullNameFormatter):
         if name.startswith('#battle_tutorial:'):
             name = i18n.makeString(name)
         return name
-
-
-class _EmptyCommand(GUICommand):
-
-    def invoke(self, gui, cmdData):
-        pass
-
-
-class _BattleCommandsFactory(GUICommandsFactory):
-
-    def __init__(self):
-        super(_BattleCommandsFactory, self).__init__({'flash-call': _EmptyCommand})
 
 
 class _MarkerManagerProxy(object):
@@ -75,7 +62,6 @@ class SfBattleProxy(GUIProxy):
         self.__tutorial = None
         self.__minimap = None
         self.__markersManager = None
-        self.__commands = _BattleCommandsFactory()
         return
 
     @sf_battle
@@ -227,14 +213,6 @@ class SfBattleProxy(GUIProxy):
         :return: True if effect is playing, otherwise - False.
         """
         return self.__effects.isStillRunning(effectName, effectID=effectID)
-
-    def invokeCommand(self, command):
-        """
-        Invokes GUI command.
-        :param command: tuple(<command name>, <lis of arguments>).
-        """
-        self.__commands.invoke(None, command)
-        return
 
     def clearScene(self):
         """

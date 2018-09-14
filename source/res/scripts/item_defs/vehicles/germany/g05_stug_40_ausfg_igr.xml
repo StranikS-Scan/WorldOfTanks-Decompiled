@@ -493,17 +493,52 @@
   <radios>
     <FuG7_IGR>	shared	</FuG7_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_120_TRM_IGR>
+          <smplEnginePower>	465.2037	</smplEnginePower>
+        </Maybach_HL_120_TRM_IGR>
+      </engines>
+      <chassis>
+        <StuGIII_Ausf_1943_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </StuGIII_Ausf_1943_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <StuGIII_Ausf_1943_IGR>
-        <alpha>	0.1127	</alpha>
-      </StuGIII_Ausf_1943_IGR>
-    </chassis>
-    <engines>
-      <Maybach_HL_120_TRM_IGR>
-        <bravo>	116.3009	</bravo>
-      </Maybach_HL_120_TRM_IGR>
-    </engines>
     <armour>	0.737779	</armour>
   </clientAdjustmentFactors>
   <effects>

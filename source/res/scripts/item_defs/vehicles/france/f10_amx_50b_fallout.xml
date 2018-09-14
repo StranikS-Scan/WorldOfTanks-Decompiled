@@ -546,17 +546,52 @@
   <radios>
     <SCR_619_fallout>	shared	</SCR_619_fallout>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_295_F_fallout>
+          <smplEnginePower>	1268.737	</smplEnginePower>
+        </Maybach_HL_295_F_fallout>
+      </engines>
+      <chassis>
+        <Chassis_AMX_50_68t_fallout>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_50_68t_fallout>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_50_68t_fallout>
-        <alpha>	0.1127	</alpha>
-      </Chassis_AMX_50_68t_fallout>
-    </chassis>
-    <engines>
-      <Maybach_HL_295_F_fallout>
-        <bravo>	317.1843	</bravo>
-      </Maybach_HL_295_F_fallout>
-    </engines>
     <armour>	1.168942063	</armour>
   </clientAdjustmentFactors>
   <effects>

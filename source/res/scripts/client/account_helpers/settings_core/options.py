@@ -19,11 +19,13 @@ import VOIP
 import Settings
 import SoundGroups
 import ArenaType
+import WWISE
 from constants import CONTENT_TYPE
 from gui.GraphicsPresets import GraphicsPresets
-from gui.app_loader.decorators import sf_lobby, app_getter
+from gui.app_loader.decorators import app_getter
 from gui.shared import event_dispatcher
-from helpers import isPlayerAccount, isPlayerAvatar
+from helpers import isPlayerAvatar
+from helpers.i18n import makeString
 import nations
 import CommandMapping
 from helpers import i18n
@@ -38,7 +40,7 @@ from Vibroeffects import VibroManager
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.SettingsCore import g_settingsCore
-from account_helpers.settings_core.settings_constants import GRAPHICS, SOUND
+from account_helpers.settings_core.settings_constants import SOUND
 from shared_utils import CONST_CONTAINER, forEach
 from gui import GUI_SETTINGS
 from gui.clans.clan_controller import g_clanCtrl
@@ -214,8 +216,12 @@ class SettingsContainer(ISetting):
             pass
 
     def pack(self, names=None):
-        settings = self.__filter(self.indices.keys(), names)
-        return dict(self.__forEach(settings, lambda n, p: (n, p.pack())))
+        result = {}
+        for name, param in self.settings:
+            if names is None or name in names:
+                result[name] = param.pack()
+
+        return result
 
     def dump(self, names=None):
         settings = self.__filter(self.indices.keys(), names)
@@ -296,25 +302,6 @@ class SoundEnableSetting(SettingAbstract):
             g_soundsCtrl.enable()
         else:
             g_soundsCtrl.disable()
-
-
-class SoundQualitySetting(SettingAbstract):
-    """
-    Sounds high quality setting
-    """
-
-    def getApplyMethod(self, value):
-        return APPLY_METHOD.RESTART
-
-    @classmethod
-    def isAvailable(cls):
-        return g_soundsCtrl.system.isMSR()
-
-    def _get(self):
-        return g_soundsCtrl.system.isHQEnabled()
-
-    def _set(self, value):
-        g_soundsCtrl.system.setHQEnabled(bool(value))
 
 
 class VOIPMasterSoundSetting(SoundSetting):
@@ -922,23 +909,18 @@ class GraphicSetting(SettingAbstract):
         self.name = settingName
         self._initialValue = None
         self._inited = False
+        self._currentValue = None
         return
 
     def _get(self):
-        setting = graphics.getGraphicsSetting(self.name)
-        if setting is not None:
-            if not self._inited:
-                self._initialValue = setting.value
-                self._inited = True
-            return setting.value
-        else:
-            return
+        currentValue = self._getCurrentValue()
+        return currentValue.value if currentValue is not None else None
 
     def _getOptions(self):
-        data = graphics.getGraphicsSetting(self.name)
-        if data is not None:
+        currentValue = self._getCurrentValue()
+        if currentValue is not None:
             options = []
-            for idx, (label, supported, advanced, _) in enumerate(data.options):
+            for idx, (label, supported, advanced, _) in enumerate(currentValue.options):
                 options.append({'label': '#settings:graphicsSettingsOptions/%s' % str(label),
                  'data': idx,
                  'advanced': advanced,
@@ -956,6 +938,10 @@ class GraphicSetting(SettingAbstract):
 
         if originalValue != value:
             LOG_NOTE('Adjusted value has been set: `%s`' % value)
+
+    def _save(self, value):
+        super(GraphicSetting, self)._save(value)
+        self._currentValue = graphics.getGraphicsSetting(self.name)
 
     def _tryToSetValue(self, value):
         try:
@@ -977,6 +963,13 @@ class GraphicSetting(SettingAbstract):
 
     def _initialValueChanged(self, value):
         return value != self._initialValue if self._initialValue is not None else True
+
+    def _getCurrentValue(self):
+        if not self._inited:
+            self._currentValue = graphics.getGraphicsSetting(self.name)
+            self._initialValue = self._currentValue.value if self._currentValue is not None else None
+            self._inited = True
+        return self._currentValue
 
 
 class SniperModeSwingingSetting(GraphicSetting):
@@ -1305,13 +1298,10 @@ class VehicleMarkerSetting(StorageAccountSetting):
         return AccountSettings.getSettingsDefault(self.settingKey)[self.settingName]
 
     def pack(self):
-        if GUI_SETTINGS.useAS3Battle:
-            return self.__getMarkerSettings(True)
-        else:
-            return super(VehicleMarkerSetting, self).pack()
+        return self.__getMarkerSettings(forcePackingHP=True)
 
     def _get(self):
-        return self.__getMarkerSettings()
+        return self.__getMarkerSettings(forcePackingHP=False)
 
     def __getMarkerSettings(self, forcePackingHP=False):
         marker = {}
@@ -1323,7 +1313,7 @@ class VehicleMarkerSetting(StorageAccountSetting):
                     value = BattleReplay.g_replayCtrl.getSetting(self.settingName, {}).get(on, default)
                 else:
                     value = self._storage.extract(self.settingName, on, self._default[on])
-                if param == self.OPTIONS.PARAMS.HP and (isPlayerAccount() or forcePackingHP):
+                if param == self.OPTIONS.PARAMS.HP and forcePackingHP:
                     marker[on] = self.PackStruct(value, [ '#settings:marker/hp/type%d' % mid for mid in xrange(4) ])._asdict()
                 marker[on] = value
 
@@ -1370,7 +1360,14 @@ class AimSetting(StorageAccountSetting):
     def pack(self):
         result = self._get()
         for vname, (name, optsLen) in self.VIRTUAL_OPTIONS.iteritems():
-            result[vname] = self.PackStruct(result[vname], [ '#settings:aim/%s/type%d' % (name, i) for i in xrange(int(optsLen)) ])._asdict()
+            types = [ {'loc': makeString('#settings:aim/%s/type%d' % (name, i)),
+             'label': '#settings:aim/%s/type%d' % (name, i),
+             'index': i} for i in xrange(int(optsLen)) ]
+            types = sorted(types, key=itemgetter('loc'))
+            for item in types:
+                item.pop('loc', None)
+
+            result[vname] = self.PackStruct(result[vname], types)._asdict()
 
         return result
 
@@ -1429,6 +1426,25 @@ class MinimapVehModelsSetting(StorageDumpSetting):
 
     def getDefaultValue(self):
         return self.VEHICLE_MODELS_TYPES.index(self.OPTIONS.ALWAYS)
+
+
+class CarouselTypeSetting(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        SINGLE = 'single'
+        DOUBLE = 'double'
+
+    CAROUSEL_TYPES = (OPTIONS.SINGLE, OPTIONS.DOUBLE)
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ {'label': settingsKey % (self.settingName, cType)} for cType in self.CAROUSEL_TYPES ]
+
+    def getDefaultValue(self):
+        return self.CAROUSEL_TYPES.index(self.OPTIONS.SINGLE)
+
+    def getRowCount(self):
+        return self._get() + 1
 
 
 class BattleLoadingTipSetting(AccountDumpSetting):
@@ -1887,41 +1903,135 @@ class _BaseSoundPresetSetting(AccountDumpSetting):
             super(_BaseSoundPresetSetting, self)._save(value)
 
 
-class DynamicSoundPresetSetting(_BaseSoundPresetSetting):
-
-    def __init__(self, settingName, key, subKey=None):
-        super(DynamicSoundPresetSetting, self).__init__(((g_soundsCtrl.system.enableDynamicPreset, None), (g_soundsCtrl.system.disableDynamicPreset, None)), settingName, key, subKey)
-        return
-
-    def _getOptions(self):
-        settingsKey = '#settings:sound/dynamicRange/%s'
-        return [ settingsKey % sName for sName in ('broad', 'narrow') ]
-
-
 class SoundDevicePresetSetting(_BaseSoundPresetSetting):
 
     def __init__(self, settingName, key, subKey=None):
         super(SoundDevicePresetSetting, self).__init__(((g_soundsCtrl.system.setSoundSystem, 0), (g_soundsCtrl.system.setSoundSystem, 1), (g_soundsCtrl.system.setSoundSystem, 2)), settingName, key, subKey)
 
     def _getOptions(self):
-        settingsKey = '#settings:sound/soundDevice/%s'
-        return [ settingsKey % sName for sName in ('acoustics', 'headphones', 'laptop') ]
+        options = []
+        for sName in ('acoustics', 'headphones', 'laptop'):
+            options.append({'label': '#settings:sounds/soundDevice/{}'.format(sName),
+             'image': '../maps/icons/settings/{}.png'.format(sName),
+             'tooltip': '#settings:sounds/soundDevice/{}'.format(sName)})
+
+        return options
 
 
-class BassBoostSetting(AccountDumpSetting):
+class SoundQualitySetting(AccountSetting):
+
+    def __init__(self):
+        super(SoundQualitySetting, self).__init__(SOUND.LOW_QUALITY)
+
+    @classmethod
+    def isAvailable(cls):
+        return True
+
+    def _set(self, isEnabled):
+        self.setSystemValue(isEnabled)
+        super(SoundQualitySetting, self)._set(isEnabled)
+
+    def setSystemValue(self, isEnabled):
+        WWISE.WW_setLowQuality(isEnabled)
+
+
+class BassBoostSetting(AccountSetting):
     """
     Enable/disable bass boost WOTD-64517
     """
 
     def __init__(self):
-        AccountDumpSetting.__init__(self, SOUND.BASS_BOOST, SOUND.BASS_BOOST)
+        super(BassBoostSetting, self).__init__(SOUND.BASS_BOOST)
 
     def _set(self, isEnabled):
         self.setSystemValue(isEnabled)
-        AccountDumpSetting._set(self, isEnabled)
+        super(BassBoostSetting, self)._set(isEnabled)
 
     def setSystemValue(self, isEnabled):
         g_soundsCtrl.system.setBassBoost(isEnabled)
+
+
+class NightModeSetting(AccountSetting):
+
+    def __init__(self):
+        super(NightModeSetting, self).__init__(SOUND.NIGHT_MODE)
+
+    def setSystemValue(self, isEnabled):
+        if isEnabled:
+            g_soundsCtrl.system.disableDynamicPreset()
+        else:
+            g_soundsCtrl.system.enableDynamicPreset()
+
+    def _set(self, isEnabled):
+        self.setSystemValue(isEnabled)
+        super(NightModeSetting, self)._set(isEnabled)
+
+
+class DetectionAlertSound(AccountSetting):
+    _DetectionAlertPackStruct = namedtuple('_DetectionAlertPackStruct', 'current options extraData')
+    _WWISE_EVENTS = ('lightbulb', 'lightbulb_02', 'sixthSense')
+    _CUSTOM_EVENT_FILE = 'audioww/sixthSense.mp3'
+
+    def __init__(self):
+        super(DetectionAlertSound, self).__init__(SOUND.DETECTION_ALERT_SOUND)
+        self.__previewSound = None
+        return
+
+    def playPreviewSound(self, eventIdx):
+        eventToPlay = self._WWISE_EVENTS[eventIdx]
+        if self.__previewSound is not None:
+            playingEvent = self.__previewSound.name.split(':')[1]
+            if self._WWISE_EVENTS.index(playingEvent) != eventIdx:
+                self.clearPreviewSound()
+                self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
+                self.__previewSound.play()
+            else:
+                if playingEvent != 'sixthSense':
+                    self.clearPreviewSound()
+                    self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
+                self.__previewSound.play()
+        else:
+            self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
+            self.__previewSound.play()
+        return
+
+    def clearPreviewSound(self):
+        if self.__previewSound is not None:
+            self.__previewSound.stop()
+            self.__previewSound = None
+        return
+
+    def getEventName(self):
+        return self._WWISE_EVENTS[self._get()]
+
+    def pack(self):
+        return self._DetectionAlertPackStruct(self._get(), self._getOptions(), self._getExtraData())._asdict()
+
+    def _getOptions(self):
+        options = []
+        for sample in self._WWISE_EVENTS:
+            options.append('#settings:sound/{}/{}'.format(SOUND.DETECTION_ALERT_SOUND, sample))
+
+        return options
+
+    def _getExtraData(self):
+        """ Gather information about ability to preview the options.
+        """
+        extraData = []
+        for sample in self._WWISE_EVENTS:
+            if sample == 'sixthSense':
+                canPreview = bool(ResMgr.isFile(self._CUSTOM_EVENT_FILE))
+            else:
+                canPreview = True
+            extraData.append(canPreview)
+
+        return extraData
+
+    def _get(self):
+        return self._WWISE_EVENTS.index(super(DetectionAlertSound, self)._get())
+
+    def _save(self, eventIdx):
+        super(DetectionAlertSound, self)._save(self._WWISE_EVENTS[eventIdx])
 
 
 class AltVoicesSetting(StorageDumpSetting):
@@ -2221,4 +2331,67 @@ class MouseAffectedSetting(RegularSetting):
 class SnipereModeByShiftSetting(StorageAccountSetting, MouseAffectedSetting):
 
     def _getCameras(self):
+        pass
+
+
+class GroupSetting(StorageDumpSetting):
+
+    def __init__(self, settingName, storage, options, settingsKey, isPreview=False):
+        super(GroupSetting, self).__init__(settingName, storage, isPreview)
+        self._options = options
+        self._settingsKey = settingsKey
+        self._visibleOrder = self._getVisibleOrder()
+
+    def getDefaultValue(self):
+        v = super(GroupSetting, self).getDefaultValue()
+        if v in self._visibleOrder:
+            return v
+        else:
+            return self._visibleOrder[0] if self._visibleOrder else None
+
+    def _getOptions(self):
+        return [ self._getOptionData(key) for key in self._visibleOrder ]
+
+    def _getVisibleOrder(self):
+        return sorted(self._options.iterkeys())
+
+    def _getOptionData(self, key):
+        return {'label': self._getOptionLabel(key),
+         'data': key}
+
+    def _getOptionLabel(self, key):
+        return self._settingsKey % str(self._options[key])
+
+
+class DamageIndicatorTypeSetting(GroupSetting):
+    OPTIONS = {0: 'standard',
+     1: 'extended'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(DamageIndicatorTypeSetting, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/damageIndicator/type/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        pass
+
+
+class DamageIndicatorPresetsSetting(GroupSetting):
+    OPTIONS = {0: 'all',
+     1: 'withoutCrit'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(DamageIndicatorPresetsSetting, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/damageIndicator/presets/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        pass
+
+
+class DamageLogDetailsSetting(GroupSetting):
+    OPTIONS = {0: 'always',
+     1: 'byAlt',
+     2: 'hide'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(DamageLogDetailsSetting, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/damageLogPanel/details/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
         pass

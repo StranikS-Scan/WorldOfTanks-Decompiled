@@ -7,6 +7,7 @@ import types
 from collections import namedtuple, defaultdict
 import BigWorld
 import constants
+from adisp import async
 from constants import EVENT_TYPE
 from gui.LobbyContext import g_lobbyContext
 from gui.server_events.bonuses import getTutorialBonusObj
@@ -19,10 +20,12 @@ from gui import GUI_SETTINGS
 from gui import makeHtmlString
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.EventsCache import g_eventsCache
+from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.shared.gui_items import Vehicle
 from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors import quests as quests_proc
+from gui.shared.utils.decorators import process
 from gui.server_events import formatters, conditions, settings as quest_settings, caches
 from gui.server_events.modifiers import ACTION_MODIFIER_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -31,12 +34,34 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from helpers import i18n, int2roman, time_utils
 from shared_utils import CONST_CONTAINER
 from quest_xml_source import MAX_BONUS_LIMIT
+_AWARDS_PER_PAGE = 3
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 RENDER_BACKS = {1: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_EXP,
  2: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_ITEMS,
  3: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_PREMDAYS,
- 4: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_VEHICLES}
+ 4: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_VEHICLES,
+ 1000: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_HISTORICAL_ANY,
+ 1001: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_HISTORICAL_WITH_BATTLES,
+ 2000: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_PERIODIC_DAILY,
+ 2001: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_PERIODIC_WEEKLY,
+ 3000: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_HOLIDAYS_WG_BIRTHDAY,
+ 4000: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_NEW_YEAR_0,
+ 4001: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_NEW_YEAR_1,
+ 4002: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_NEW_YEAR_2,
+ 4003: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_NEW_YEAR_RU_0,
+ 4004: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_NEW_YEAR_RU_1,
+ 4005: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_NEW_YEAR_3,
+ 5000: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_RANDOM_0,
+ 5001: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_RANDOM_1,
+ 5002: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_RANDOM_2,
+ 5003: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_RANDOM_3,
+ 5004: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_RANDOM_4,
+ 5005: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_RANDOM_5,
+ 5006: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_RANDOM_6,
+ DEFAULTS_GROUPS.UNGROUPED_QUESTS: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_OTHER_QUESTS,
+ DEFAULTS_GROUPS.UNGROUPED_ACTIONS: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_SALES,
+ DEFAULTS_GROUPS.CURRENTLY_AVAILABLE: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_CURRENTLY_AVAILABLE}
 
 class EVENT_STATUS(CONST_CONTAINER):
     COMPLETED = 'done'
@@ -64,26 +89,26 @@ class _EventInfo(object):
             qProgCur, qProgTot, qProgbarType, tooltip = self._getProgressValues(svrEvents, pCur, pPrev)
         bgImage = RENDER_BACKS.get(self.event.getIconID(), '')
         showBgImage = len(bgImage) > 0
+        isAvailable, _ = self.event.isAvailable()
         return {'questID': str(self.event.getID()),
-         'isNew': quest_settings.isNewCommonEvent(self.event),
          'eventType': self.event.getType(),
-         'status': status,
          'IGR': self.event.isIGR(),
          'taskType': self.event.getUserType(),
-         'description': self.event.getUserName(),
-         'timerDescr': self._getTimerMsg(),
          'tasksCount': bonusCount,
          'progrBarType': qProgbarType,
          'progrTooltip': tooltip,
          'maxProgrVal': qProgTot,
          'currentProgrVal': qProgCur,
-         'isLock': False,
-         'isLocked': False,
-         'isSelectable': True,
          'rendererType': QUESTS_ALIASES.RENDERER_TYPE_QUEST,
          'showBckgrImage': showBgImage,
          'bckgrImage': bgImage,
-         'tooltip': TOOLTIPS.QUESTS_RENDERER_LABEL}
+         'timerDescription': self._getTimerMsg(),
+         'status': status,
+         'description': self.event.getUserName(),
+         'tooltip': TOOLTIPS.QUESTS_RENDERER_LABEL,
+         'isSelectable': True,
+         'isNew': quest_settings.isNewCommonEvent(self.event),
+         'isAvailable': isAvailable}
 
     def getDetails(self, svrEvents):
         eProgCur, eProgTot, eProgbarType, tooltip = self._getProgressValues(svrEvents)
@@ -105,7 +130,7 @@ class _EventInfo(object):
                     'tasksCount': self._getBonusCount(),
                     'hasConditions': hasConditions,
                     'hasRequirements': len(requirements) > 0},
-         'award': self._getBonuses(svrEvents),
+         'awardsDataProvider': getCarouselAwardVO(self.event.getBonuses()),
          'requirements': {'title': '',
                           'description': '',
                           'containerElements': requirements},
@@ -113,6 +138,12 @@ class _EventInfo(object):
                         'description': condsDescription,
                         'topConditions': topConditions,
                         'containerElements': conds}}
+
+    def getActiveDateTimeString(self):
+        return self._getActiveDateTimeString()
+
+    def getConditions(self, svrEvents):
+        return self._getConditions(svrEvents)
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
         index = 0
@@ -656,8 +687,16 @@ def getEventInfo(event, svrEvents=None, noProgressInfo=False):
     return getEventInfoData(event).getInfo(svrEvents, noProgressInfo=noProgressInfo)
 
 
+def getEventActiveDateString(event):
+    return getEventInfoData(event).getActiveDateTimeString()
+
+
 def getEventDetails(event, svrEvents=None):
     return getEventInfoData(event).getDetails(svrEvents)
+
+
+def getEventConditions(event, svrEvents=None):
+    return getEventInfoData(event).getConditions(svrEvents)
 
 
 def getEventPostBattleInfo(event, svrEvents=None, pCur=None, pPrev=None, isProgressReset=False, isCompleted=False):
@@ -758,3 +797,54 @@ def getTabAliasByQuestBranchID(branchID):
 
 def getTabAliasByQuestBranchName(branchName):
     return getTabAliasByQuestBranchID(PQ_BRANCH.NAME_TO_TYPE[branchName])
+
+
+def getCarouselAwardVO(bonuses, isReceived=False):
+    """ Generate award VOs for carousel.
+    
+    :param bonuses: list of bonuses (instances of gui.server_events.SimpleBonus).
+    :param isReceived: flag describing whether this is 'already received' context.
+    """
+    result = []
+    for bonus in bonuses:
+        if not bonus.isShowInGUI():
+            continue
+        result.extend(bonus.getCarouselList(isReceived))
+
+    while len(result) % _AWARDS_PER_PAGE != 0 and len(result) > _AWARDS_PER_PAGE:
+        result.append({})
+
+    return result
+
+
+@async
+@process('updating')
+def getPotapovQuestAward(quest, callback):
+    """ Display special tankwoman award window.
+    """
+    from gui.server_events.events_dispatcher import showTankwomanAward
+    tankman, isMainBonus = quest.getTankmanBonus()
+    needToGetTankman = quest.needToGetAddReward() and not isMainBonus or quest.needToGetMainReward() and isMainBonus
+    if needToGetTankman and tankman is not None:
+        for tmanData in tankman.getTankmenData():
+            showTankwomanAward(quest.getID(), tmanData)
+            break
+
+        result = None
+    else:
+        result = yield getPotapovQuestsRewardProcessor()(quest).request()
+    callback(result)
+    return
+
+
+def questsSortFunc(a, b):
+    """ Sort function for common quests (all except potapov, club and motive).
+    """
+    res = cmp(a.isCompleted(), b.isCompleted())
+    if res:
+        return res
+    res = cmp(a.getType() == constants.EVENT_TYPE.FORT_QUEST, a.getType() == constants.EVENT_TYPE.FORT_QUEST)
+    if res:
+        return -res
+    res = cmp(a.getPriority(), b.getPriority())
+    return res if res else cmp(a.getUserName(), b.getUserName())

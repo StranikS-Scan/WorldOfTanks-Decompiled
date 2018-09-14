@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/recruitWindow/RecruitWindow.py
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 import nations
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
@@ -58,6 +58,7 @@ class RecruitWindow(RecruitWindowMeta):
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
+        super(RecruitWindow, self)._dispose()
 
     def __getInitialData(self):
         money = g_itemsCache.items.stats.money

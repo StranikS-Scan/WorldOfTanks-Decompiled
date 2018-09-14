@@ -7,6 +7,3 @@ try:
 except ImportError:
     print 'WARNING: WWISE support is not enabled.'
     enabled = False
-
-if enabled:
-    print 'WARNING: WWISE support IS enabled.'

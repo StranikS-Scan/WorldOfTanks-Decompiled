@@ -7,7 +7,6 @@ class BATTLE_DESTROY_TIMER_STATES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     DROWN = 0
     DEATH_ZONE = 1

@@ -42,7 +42,7 @@ class _SYNC_TYPE(object):
 
 class _CONTACTS_LIST(object):
     INVITES = {'invites'}
-    CONTACTS = {USER_TAG.FRIEND, USER_TAG.IGNORED}
+    CONTACTS = {USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.IGNORED_TMP}
     ALL = CONTACTS | INVITES
     EMPTY = set()
 
@@ -541,7 +541,10 @@ class ClubsController(subscriptions.ClubsListeners):
             self.notify('onColorBlindSettingsChanged')
 
     def __onUserActionReceived(self, actionID, user):
-        if actionID in (USER_ACTION_ID.IGNORED_ADDED, USER_ACTION_ID.IGNORED_REMOVED):
+        if actionID in (USER_ACTION_ID.IGNORED_ADDED,
+         USER_ACTION_ID.TMP_IGNORED_ADDED,
+         USER_ACTION_ID.IGNORED_REMOVED,
+         USER_ACTION_ID.TMP_IGNORED_REMOVED):
             self.notify('onUserActionIgnore', user)
         if actionID in (USER_ACTION_ID.FRIEND_ADDED, USER_ACTION_ID.FRIEND_REMOVED):
             self.notify('onUserActionFriend', user)

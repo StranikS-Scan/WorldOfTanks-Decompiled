@@ -7,7 +7,7 @@ from collections import namedtuple
 import Event
 import AccountCommands
 import ClientPrebattle
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientClubs, ClientGoodies
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientClubs, ClientGoodies, client_recycle_bin
 from account_helpers import ClientInvitations
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents as events
@@ -68,6 +68,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.gMap = g_accountRepository.gMap
         self.clubs = g_accountRepository.clubs
         self.goodies = g_accountRepository.goodies
+        self.recycleBin = g_accountRepository.recycleBin
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -82,6 +83,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.gMap.setAccount(self)
         self.clubs.setAccount(self)
         self.goodies.setAccount(self)
+        self.recycleBin.setAccount(self)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
         self.unitBrowser = ClientUnitBrowser(self)
@@ -121,6 +123,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.prebattleInvitations.onProxyBecomePlayer()
         self.clubs.onAccountBecomePlayer()
         self.goodies.onAccountBecomePlayer()
+        self.recycleBin.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -144,6 +147,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.prebattleInvitations.onProxyBecomeNonPlayer()
         self.clubs.onAccountBecomeNonPlayer()
         self.goodies.onAccountBecomeNonPlayer()
+        self.recycleBin.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -156,6 +160,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.prebattleInvitations.setProxy(None)
         self.clubs.setAccount(None)
         self.goodies.setAccount(None)
+        self.recycleBin.setAccount(None)
         self.fort.clear()
         events.onAccountBecomeNonPlayer()
         del self.inputHandler
@@ -474,6 +479,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def receiveNotification(self, notification):
         LOG_DEBUG('receiveNotification', notification)
         g_wgncProvider.fromXmlString(notification)
+        events.onNotification(notification)
 
     def sendNotificationReply(self, notificationID, purge, actionName):
         self.base.doCmdInt2Str(0, AccountCommands.CMD_NOTIFICATION_REPLY, notificationID, purge, actionName)
@@ -500,7 +506,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
                 events.onCenterIsLongDisconnected(isLongDisconnectedFromCenter)
         events.isPlayerEntityChanging = False
         events.onAccountShowGUI(ctx)
-        BigWorld.Screener.setUserId(self.databaseID)
 
     def receiveQueueInfo(self, queueInfo):
         events.onQueueInfoReceived(queueInfo)
@@ -902,8 +907,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def _update(self, triggerEvents, diff):
         LOG_DEBUG_DEV('_update', diff if triggerEvents else 'full sync')
         isFullSync = diff.get('prevRev', None) is None
-        LOG_NOTE('_update curRev={}, diffRev={}, diffPrevRev={}'.format(self.syncData.revision, diff.get('rev', None), diff.get('prevRev', None)))
-        self.__printEventsData(diff)
         if not self.syncData.updatePersistentCache(diff, isFullSync):
             return False
         else:
@@ -914,6 +917,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.intUserSettings.synchronize(isFullSync, diff)
             self.clubs.synchronize(isFullSync, diff)
             self.goodies.synchronize(isFullSync, diff)
+            self.recycleBin.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeEventNotifications(diff)
             self.__synchronizeCacheDict(self.prebattleAutoInvites, diff.get('account', None), 'prebattleAutoInvites', 'replace', events.onPrebattleAutoInvitesChanged)
@@ -982,23 +986,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
         self.__onStreamComplete.clear()
         return
-
-    @classmethod
-    def __printEventsData(cls, diff):
-        keys = ('eventsData', ('eventsData', '_r'))
-        for key in keys:
-            if key in diff:
-                LOG_NOTE('Diff contains {} key, try to unpickle...'.format(key))
-                cls.__printUnPickled(EVENT_CLIENT_DATA.INGAME_EVENTS, diff[key])
-            LOG_NOTE('No event key {} in diff.'.format(key))
-
-    @classmethod
-    def __printUnPickled(cls, subKey, data):
-        if subKey in data:
-            unPickled = cPickle.loads(zlib.decompress(data[subKey]))
-            LOG_NOTE('The data contains {} subKey with decompressed data: {}'.format(subKey, unPickled))
-        else:
-            LOG_NOTE('The data has not {} subKey.'.format(subKey))
 
     def __synchronizeCacheDict(self, repDict, diffDict, key, syncMode, event):
         assert syncMode in ('update', 'replace')
@@ -1132,6 +1119,7 @@ class _AccountRepository(object):
         self.prebattleInvitations = ClientInvitations.ClientInvitations(events)
         self.clubs = ClientClubs.ClientClubs(self.syncData)
         self.goodies = ClientGoodies.ClientGoodies(self.syncData)
+        self.recycleBin = client_recycle_bin.ClientRecycleBin(self.syncData)
         self.fort = ClientFortMgr()
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
@@ -1150,6 +1138,7 @@ def _delAccountRepository():
     else:
         g_accountRepository.customFilesCache.close()
         g_accountRepository.onTokenReceived.clear()
+        g_accountRepository.prebattleInvitations.clear()
         g_accountRepository = None
         return
 

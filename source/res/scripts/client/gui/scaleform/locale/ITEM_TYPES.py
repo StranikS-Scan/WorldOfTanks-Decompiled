@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/ITEM_TYPES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
+from debug_utils import LOG_WARNING
 
 class ITEM_TYPES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     VEHICLE_NAME = '#item_types:vehicle/name'
     VEHICLE_DESC = '#item_types:vehicle/desc'
     VEHICLE_TAGS_LIGHT_TANK_NAME = '#item_types:vehicle/tags/light_tank/name'
@@ -41,7 +39,6 @@ class ITEM_TYPES(object):
     TURRETROTATOR_NAME = '#item_types:turretRotator/name'
     SURVEYINGDEVICE_NAME = '#item_types:surveyingDevice/name'
     TRACK_NAME = '#item_types:track/name'
-    WHEEL_NAME = '#item_types:wheel/name'
     RADIO_NAME = '#item_types:radio/name'
     RADIO_DESC = '#item_types:radio/desc'
     RADIO_TAGS = '#item_types:radio/tags'
@@ -135,12 +132,17 @@ class ITEM_TYPES(object):
     SHELL_DIMENSION_INCH = '#item_types:shell/dimension/inch'
     SHELL_DIMENSION_MM = '#item_types:shell/dimension/mm'
     MARKER_IGR = '#item_types:marker/igr'
+    SHELL_KINDSABBREVIATION_ENUM = (SHELL_KINDSABBREVIATION_ARMOR_PIERCING,
+     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_CR,
+     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE,
+     SHELL_KINDSABBREVIATION_HOLLOW_CHARGE,
+     SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE)
+    SHELL_KINDS_ENUM = (SHELL_KINDS_ARMOR_PIERCING,
+     SHELL_KINDS_ARMOR_PIERCING_CR,
+     SHELL_KINDS_ARMOR_PIERCING_HE,
+     SHELL_KINDS_HOLLOW_CHARGE,
+     SHELL_KINDS_HIGH_EXPLOSIVE)
     TANKMAN_SKILLS_TYPE_ENUM = (TANKMAN_SKILLS_TYPE_SKILL, TANKMAN_SKILLS_TYPE_PERK, TANKMAN_SKILLS_TYPE_PERK_COMMON)
-    TANKMAN_ROLES_ENUM = (TANKMAN_ROLES_COMMANDER,
-     TANKMAN_ROLES_DRIVER,
-     TANKMAN_ROLES_RADIOMAN,
-     TANKMAN_ROLES_GUNNER,
-     TANKMAN_ROLES_LOADER)
     TANKMAN_SKILLS_ENUM = (TANKMAN_SKILLS_MAIN,
      TANKMAN_SKILLS_REPAIR,
      TANKMAN_SKILLS_REPAIR_DESCR,
@@ -197,69 +199,57 @@ class ITEM_TYPES(object):
      TANKMAN_SKILLS_RADIOMAN_LASTEFFORT,
      TANKMAN_SKILLS_RADIOMAN_LASTEFFORT_DESCR,
      TANKMAN_SKILLS_RADIOMAN_RETRANSMITTER,
-     TANKMAN_SKILLS_RADIOMAN_RETRANSMITTER_DESCR)
-    SHELL_KINDS_ENUM = (SHELL_KINDS_ARMOR_PIERCING,
-     SHELL_KINDS_ARMOR_PIERCING_CR,
-     SHELL_KINDS_ARMOR_PIERCING_HE,
-     SHELL_KINDS_HOLLOW_CHARGE,
-     SHELL_KINDS_HIGH_EXPLOSIVE)
-    SHELL_KINDSABBREVIATION_ENUM = (SHELL_KINDSABBREVIATION_ARMOR_PIERCING,
-     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_CR,
-     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE,
-     SHELL_KINDSABBREVIATION_HOLLOW_CHARGE,
-     SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE)
+     TANKMAN_SKILLS_RADIOMAN_RETRANSMITTER_DESCR,
+     TANKMAN_SKILLS_TYPE_SKILL,
+     TANKMAN_SKILLS_TYPE_PERK,
+     TANKMAN_SKILLS_TYPE_PERK_COMMON)
+    TANKMAN_ROLES_ENUM = (TANKMAN_ROLES_COMMANDER,
+     TANKMAN_ROLES_DRIVER,
+     TANKMAN_ROLES_RADIOMAN,
+     TANKMAN_ROLES_GUNNER,
+     TANKMAN_ROLES_LOADER)
 
-    @staticmethod
-    def tankman_skills_type(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#item_types:tankman/skills/type/%s' % key
-        if outcome not in ITEM_TYPES.TANKMAN_SKILLS_TYPE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def shell_kindsabbreviation(cls, key0):
+        outcome = '#item_types:shell/kindsAbbreviation/{}'.format(key0)
+        if outcome not in cls.SHELL_KINDSABBREVIATION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def tankman_roles(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#item_types:tankman/roles/%s' % key
-        if outcome not in ITEM_TYPES.TANKMAN_ROLES_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def shell_kinds(cls, key0):
+        outcome = '#item_types:shell/kinds/{}'.format(key0)
+        if outcome not in cls.SHELL_KINDS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def tankman_skills(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#item_types:tankman/skills/%s' % key
-        if outcome not in ITEM_TYPES.TANKMAN_SKILLS_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def tankman_skills_type(cls, key0):
+        outcome = '#item_types:tankman/skills/type/{}'.format(key0)
+        if outcome not in cls.TANKMAN_SKILLS_TYPE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def shell_kinds(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#item_types:shell/kinds/%s' % key
-        if outcome not in ITEM_TYPES.SHELL_KINDS_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def tankman_skills(cls, key0):
+        outcome = '#item_types:tankman/skills/{}'.format(key0)
+        if outcome not in cls.TANKMAN_SKILLS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def shell_kindsabbreviation(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#item_types:shell/kindsAbbreviation/%s' % key
-        if outcome not in ITEM_TYPES.SHELL_KINDSABBREVIATION_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def tankman_roles(cls, key0):
+        outcome = '#item_types:tankman/roles/{}'.format(key0)
+        if outcome not in cls.TANKMAN_ROLES_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

@@ -1154,23 +1154,89 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <GMC_6-71_Mk11>
+          <smplEnginePower>	174.4514	</smplEnginePower>
+        </GMC_6-71_Mk11>
+        <GM_6-71_M>
+          <smplEnginePower>	202.998	</smplEnginePower>
+        </GM_6-71_M>
+      </engines>
+      <chassis>
+        <Chassis_GB44_Archer>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB44_Archer>
+        <Chassis_GB44_Archer_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB44_Archer_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB44_Archer>
-        <alpha>	0.07245	</alpha>
-      </Chassis_GB44_Archer>
-      <Chassis_GB44_Archer_2>
-        <alpha>	0.05635	</alpha>
-      </Chassis_GB44_Archer_2>
-    </chassis>
-    <engines>
-      <GMC_6-71_Mk11>
-        <bravo>	43.61285	</bravo>
-      </GMC_6-71_Mk11>
-      <GM_6-71_M>
-        <bravo>	50.7495	</bravo>
-      </GM_6-71_M>
-    </engines>
     <armour>	1.089371996	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -7,6 +7,7 @@ from messenger.proto.shared_errors import ClientActionError
 from messenger_common_chat2 import MESSENGER_ACTION_IDS
 from gui.shared.rq_cooldown import REQUEST_SCOPE
 from gui.shared.events import CoolDownEvent, coolDownEventParams
+from debug_utils import LOG_WARNING
 
 class ContactsManagerProxy(MigrationProxy):
     __slots__ = ()
@@ -32,7 +33,13 @@ class ContactsManagerProxy(MigrationProxy):
     def addIgnored(self, dbID, name):
         raise NotImplementedError
 
+    def addTmpIgnored(self, dbID, name):
+        raise NotImplementedError
+
     def removeIgnored(self, dbID):
+        raise NotImplementedError
+
+    def removeTmpIgnored(self, dbID):
         raise NotImplementedError
 
     def setMuted(self, dbID, name):
@@ -94,9 +101,17 @@ class BWContactsManagerProxy(ContactsManagerProxy):
         self._proto.users.addIgnored(dbID, name)
         return True
 
+    def addTmpIgnored(self, dbID, name):
+        _showClientActionError(CLIENT_ACTION_ID.ADD_IGNORED)
+        return False
+
     def removeIgnored(self, dbID):
         self._proto.users.removeIgnored(dbID)
         return True
+
+    def removeTmpIgnored(self, dbID):
+        _showClientActionError(CLIENT_ACTION_ID.REMOVE_IGNORED)
+        return False
 
     def setMuted(self, dbID, name):
         self._proto.users.setMuted(dbID, name)
@@ -191,8 +206,20 @@ class XMPPContactsManagerProxy(ContactsManagerProxy):
             g_messengerEvents.onErrorReceived(error)
         return result
 
+    def addTmpIgnored(self, dbID, name):
+        result, error = self._proto.contacts.addTmpIgnored(dbID, name)
+        if not result:
+            g_messengerEvents.onErrorReceived(error)
+        return result
+
     def removeIgnored(self, dbID):
         result, error = self._proto.contacts.removeIgnored(dbID)
+        if not result:
+            g_messengerEvents.onErrorReceived(error)
+        return result
+
+    def removeTmpIgnored(self, dbID):
+        result, error = self._proto.contacts.removeTmpIgnored(dbID)
         if not result:
             g_messengerEvents.onErrorReceived(error)
         return result

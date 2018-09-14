@@ -945,23 +945,89 @@
     </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <AEC>
+          <smplEnginePower>	183.9669	</smplEnginePower>
+        </AEC>
+        <Leyland>
+          <smplEnginePower>	200.8834	</smplEnginePower>
+        </Leyland>
+      </engines>
+      <chassis>
+        <Chassis_GB07_Matilda>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB07_Matilda>
+        <Chassis_GB07_Matilda_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB07_Matilda_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB07_Matilda>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB07_Matilda>
-      <Chassis_GB07_Matilda_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB07_Matilda_2>
-    </chassis>
-    <engines>
-      <AEC>
-        <bravo>	45.99173	</bravo>
-      </AEC>
-      <Leyland>
-        <bravo>	50.22086	</bravo>
-      </Leyland>
-    </engines>
     <armour>	0.957555986	</armour>
   </clientAdjustmentFactors>
   <effects>

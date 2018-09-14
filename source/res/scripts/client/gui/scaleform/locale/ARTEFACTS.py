@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/ARTEFACTS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class ARTEFACTS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     TOOLBOX_NAME = '#artefacts:toolbox/name'
     TOOLBOX_DESCR = '#artefacts:toolbox/descr'
     ANTIFRAGMENTATIONLINING_LIGHT_NAME = '#artefacts:antifragmentationLining_light/name'

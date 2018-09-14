@@ -77,7 +77,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F68_AMX_Chasseur_de_char_46/AMX_Chasseur_de_char_HangarShadowMap.dds	</hangarShadowTexture>
+    <hangarShadowTexture>	vehicles/french/F68_AMX_Chasseur_de_char_46/AMX_Chasseur_de_char_46_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.84 1.84 0.000000 0.000000	</tiling>
     </camouflage>
@@ -250,14 +250,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.01	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	1035	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -485,17 +482,52 @@
   <radios>
     <SCR_528A>	shared	</SCR_528A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_295_FA>
+          <smplEnginePower>	1268.737	</smplEnginePower>
+        </Maybach_HL_295_FA>
+      </engines>
+      <chassis>
+        <Chassis_AMX_Chasseur_de_char_46>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_Chasseur_de_char_46>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_Chasseur_de_char_46>
-        <alpha>	0.13685	</alpha>
-      </Chassis_AMX_Chasseur_de_char_46>
-    </chassis>
-    <engines>
-      <Maybach_HL_295_FA>
-        <bravo>	317.1843	</bravo>
-      </Maybach_HL_295_FA>
-    </engines>
     <armour>	0.828800764	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -520,18 +520,52 @@
   <radios>
     <FuG7A>	shared	</FuG7A>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G04_PzVI_Tiger_IA>
-        <alpha>	0.0966	</alpha>
-      </Chassis_G04_PzVI_Tiger_IA>
-    </chassis>
-    <engines>
-      <Maybach_HL_210_TRM_P45A>
-        <bravo>	158.5922	</bravo>
-      </Maybach_HL_210_TRM_P45A>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_210_TRM_P45A>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Maybach_HL_210_TRM_P45A>
+      </engines>
+      <chassis>
+        <Chassis_G04_PzVI_Tiger_IA>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G04_PzVI_Tiger_IA>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
@@ -546,4 +580,5 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
+  <customDefaultCamouflage>	true	</customDefaultCamouflage>
 </g04_pzvi_tiger_ia.xml>

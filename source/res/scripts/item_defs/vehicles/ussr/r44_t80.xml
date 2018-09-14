@@ -845,28 +845,94 @@
       </unlocks>
     </_9RM>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M-80>
+          <smplEnginePower>	179.7378	</smplEnginePower>
+        </M-80>
+        <GMC>
+          <smplEnginePower>	222.029	</smplEnginePower>
+        </GMC>
+      </engines>
+      <chassis>
+        <Chassis_T80>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T80>
+        <Chassis_T80_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T80_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_37mm_automatic_SH-37>
         <delta>	2.209302	</delta>
       </_37mm_automatic_SH-37>
     </guns>
-    <chassis>
-      <Chassis_T80>
-        <alpha>	0.10465	</alpha>
-      </Chassis_T80>
-      <Chassis_T80_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_T80_2>
-    </chassis>
-    <engines>
-      <M-80>
-        <bravo>	44.93445	</bravo>
-      </M-80>
-      <GMC>
-        <bravo>	55.50726	</bravo>
-      </GMC>
-    </engines>
     <armour>	0.947572159	</armour>
   </clientAdjustmentFactors>
   <effects>

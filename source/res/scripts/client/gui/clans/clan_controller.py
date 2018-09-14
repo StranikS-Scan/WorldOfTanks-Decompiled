@@ -39,7 +39,7 @@ class _CACHE_KEYS(CONST_CONTAINER):
     APPS = 2
 
 
-_CLAN_WGNC_NOTOFICATION_TYPES = (WGNC_DATA_PROXY_TYPE.CLAN_APP,
+_CLAN_WGNC_NOTIFICATION_TYPES = (WGNC_DATA_PROXY_TYPE.CLAN_APP,
  WGNC_DATA_PROXY_TYPE.CLAN_INVITE,
  WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED,
  WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED,
@@ -539,7 +539,7 @@ class _ClanController(ClansListeners):
         :param notifID:
         :param item: instance of gui.wgnc.proxy_data._ProxyDataItem
         """
-        if item.getType() in _CLAN_WGNC_NOTOFICATION_TYPES:
+        if item.getType() in _CLAN_WGNC_NOTIFICATION_TYPES:
             if self.__profile is not None:
                 self.__profile.processWgncNotification(notifID, item)
             self.notify('onWgncNotificationReceived', notifID, item)

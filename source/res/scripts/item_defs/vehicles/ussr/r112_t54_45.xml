@@ -607,17 +607,52 @@
   <radios>
     <_9RSA>	shared	</_9RSA>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-44>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </V-44>
+      </engines>
+      <chassis>
+        <Chassis_R112_T54_45>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R112_T54_45>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R112_T54_45>
-        <alpha>	0.0966	</alpha>
-      </Chassis_R112_T54_45>
-    </chassis>
-    <engines>
-      <V-44>
-        <bravo>	137.4465	</bravo>
-      </V-44>
-    </engines>
     <armour>	1.035802048	</armour>
   </clientAdjustmentFactors>
   <effects>

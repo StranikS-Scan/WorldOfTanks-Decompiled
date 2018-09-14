@@ -413,17 +413,52 @@
   <radios>
     <Radio_VK4502P>	shared	</Radio_VK4502P>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Engine_VK4502P>
+          <smplEnginePower>	1268.737	</smplEnginePower>
+        </Engine_VK4502P>
+      </engines>
+      <chassis>
+        <Chassis_Waffentrager_E100>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Waffentrager_E100>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Waffentrager_E100>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Waffentrager_E100>
-    </chassis>
-    <engines>
-      <Engine_VK4502P>
-        <bravo>	317.1843	</bravo>
-      </Engine_VK4502P>
-    </engines>
     <armour>	1.043115808	</armour>
   </clientAdjustmentFactors>
   <effects>

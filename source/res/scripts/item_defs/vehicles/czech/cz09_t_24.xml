@@ -1030,23 +1030,89 @@
     </Radiostanice_Fu_7>
     <Radiostanice_Fu_12>	shared	</Radiostanice_Fu_12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Skoda_V12_16_2_liter>
+          <smplEnginePower>	401.7668	</smplEnginePower>
+        </Skoda_V12_16_2_liter>
+        <Skoda_V12_19_8_liter_450>
+          <smplEnginePower>	475.7765	</smplEnginePower>
+        </Skoda_V12_19_8_liter_450>
+      </engines>
+      <chassis>
+        <Chassis_Cz09_T_24>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz09_T_24>
+        <Chassis_Cz09_T_24_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz09_T_24_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Cz09_T_24>
-        <alpha>	0.13685	</alpha>
-      </Chassis_Cz09_T_24>
-      <Chassis_Cz09_T_24_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Cz09_T_24_2>
-    </chassis>
-    <engines>
-      <Skoda_V12_16_2_liter>
-        <bravo>	100.4417	</bravo>
-      </Skoda_V12_16_2_liter>
-      <Skoda_V12_19_8_liter_450>
-        <bravo>	118.9441	</bravo>
-      </Skoda_V12_19_8_liter_450>
-    </engines>
     <armour>	0.886862577	</armour>
   </clientAdjustmentFactors>
   <effects>

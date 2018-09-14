@@ -490,17 +490,52 @@
     <_10RKM>	shared	</_10RKM>
   </radios>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <physics>
+    <detailed>
+      <engines>
+        <V-11-IS-3>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </V-11-IS-3>
+      </engines>
+      <chassis>
+        <Chassis_R123_Kirovets_1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R123_Kirovets_1>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R123_Kirovets_1>
-        <alpha>	0.08855	</alpha>
-      </Chassis_R123_Kirovets_1>
-    </chassis>
-    <engines>
-      <V-11-IS-3>
-        <bravo>	137.4465	</bravo>
-      </V-11-IS-3>
-    </engines>
     <armour>	1.277180819	</armour>
   </clientAdjustmentFactors>
   <effects>

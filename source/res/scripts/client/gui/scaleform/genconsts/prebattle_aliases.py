@@ -7,7 +7,6 @@ class PREBATTLE_ALIASES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     COMPANY_LIST_VIEW_UI = 'CompanyListViewUI'
     COMPANY_LIST_VIEW_PY = 'prebattle/company/list'

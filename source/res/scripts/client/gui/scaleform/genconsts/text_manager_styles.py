@@ -7,7 +7,6 @@ class TEXT_MANAGER_STYLES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     PROMO_TITLE = 'promoTitle'
     PROMO_SUB_TITLE = 'promoSubTitle'
@@ -38,3 +37,5 @@ class TEXT_MANAGER_STYLES(object):
     TUTORIAL_TEXT = 'tutorialText'
     VEHICLE_STATUS_INFO_TEXT = 'vehicleStatusInfoText'
     VEHICLE_STATUS_CRITICAL_TEXT = 'vehicleStatusCriticalText'
+    VEHICLE_NAME = 'vehicleName'
+    PREMIUM_VEHICLE_NAME = 'premiumVehicleName'

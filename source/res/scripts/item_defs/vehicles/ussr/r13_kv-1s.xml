@@ -1043,23 +1043,89 @@
     </_10R>
     <_10RK>	shared	</_10RK>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2K>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V-2K>
+        <V-2IS>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </V-2IS>
+      </engines>
+      <chassis>
+        <KV-1s>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </KV-1s>
+        <KV-1s_bis>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </KV-1s_bis>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <KV-1s>
-        <alpha>	0.12075	</alpha>
-      </KV-1s>
-      <KV-1s_bis>
-        <alpha>	0.10465	</alpha>
-      </KV-1s_bis>
-    </chassis>
-    <engines>
-      <V-2K>
-        <bravo>	132.1601	</bravo>
-      </V-2K>
-      <V-2IS>
-        <bravo>	158.5922	</bravo>
-      </V-2IS>
-    </engines>
     <armour>	0.995927125	</armour>
   </clientAdjustmentFactors>
   <effects>

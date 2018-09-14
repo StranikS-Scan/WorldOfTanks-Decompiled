@@ -800,26 +800,92 @@
     </AN-GRC-4>
     <AN-GRC-7>	shared	</AN-GRC-7>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <MB-837-Aa>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </MB-837-Aa>
+        <MB-837-Ea-600>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </MB-837-Ea-600>
+        <MB-837A>
+          <smplEnginePower>	666.0871	</smplEnginePower>
+        </MB-837A>
+      </engines>
+      <chassis>
+        <Chassis_G103_RU_251>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G103_RU_251>
+        <Chassis_G103_RU_251_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G103_RU_251_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G103_RU_251>
-        <alpha>	0.08855	</alpha>
-      </Chassis_G103_RU_251>
-      <Chassis_G103_RU_251_2>
-        <alpha>	0.07245	</alpha>
-      </Chassis_G103_RU_251_2>
-    </chassis>
-    <engines>
-      <MB-837-Aa>
-        <bravo>	132.1601	</bravo>
-      </MB-837-Aa>
-      <MB-837-Ea-600>
-        <bravo>	158.5922	</bravo>
-      </MB-837-Ea-600>
-      <MB-837A>
-        <bravo>	166.5218	</bravo>
-      </MB-837A>
-    </engines>
     <armour>	0.850071649	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -598,6 +598,7 @@
             <collisionModelServer>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_20_45	</reloadEffect>
           <camouflage>
             <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
           </camouflage>
@@ -649,23 +650,89 @@
   <radios>
     <_71-TK-3>	shared	</_71-TK-3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Armstrong_Siddeley>
+          <smplEnginePower>	97.26987	</smplEnginePower>
+        </Armstrong_Siddeley>
+        <Franklin>
+          <smplEnginePower>	105.7281	</smplEnginePower>
+        </Franklin>
+      </engines>
+      <chassis>
+        <Chassis_Ch07_Vickers_MkE_Type_BT26>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch07_Vickers_MkE_Type_BT26>
+        <Chassis_Ch07_Vickers_MkE_Type_BT26_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch07_Vickers_MkE_Type_BT26_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch07_Vickers_MkE_Type_BT26>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Ch07_Vickers_MkE_Type_BT26>
-      <Chassis_Ch07_Vickers_MkE_Type_BT26_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Ch07_Vickers_MkE_Type_BT26_2>
-    </chassis>
-    <engines>
-      <Armstrong_Siddeley>
-        <bravo>	24.31747	</bravo>
-      </Armstrong_Siddeley>
-      <Franklin>
-        <bravo>	26.43203	</bravo>
-      </Franklin>
-    </engines>
     <armour>	0.746555606	</armour>
   </clientAdjustmentFactors>
   <effects>

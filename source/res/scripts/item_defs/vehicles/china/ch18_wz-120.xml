@@ -778,26 +778,92 @@
     </A-220_1>
     <A-220B>	shared	</A-220B>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_12150L>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </_12150L>
+        <_12150LS>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+        </_12150LS>
+        <_12150LT>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </_12150LT>
+      </engines>
+      <chassis>
+        <Chassis_Ch18_WZ-120>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch18_WZ-120>
+        <Chassis_Ch18_WZ-120_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch18_WZ-120_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch18_WZ-120>
-        <alpha>	0.0805	</alpha>
-      </Chassis_Ch18_WZ-120>
-      <Chassis_Ch18_WZ-120_2>
-        <alpha>	0.07245	</alpha>
-      </Chassis_Ch18_WZ-120_2>
-    </chassis>
-    <engines>
-      <_12150L>
-        <bravo>	137.4465	</bravo>
-      </_12150L>
-      <_12150LS>
-        <bravo>	153.3058	</bravo>
-      </_12150LS>
-      <_12150LT>
-        <bravo>	158.5922	</bravo>
-      </_12150LT>
-    </engines>
     <armour>	1.082015819	</armour>
   </clientAdjustmentFactors>
   <effects>

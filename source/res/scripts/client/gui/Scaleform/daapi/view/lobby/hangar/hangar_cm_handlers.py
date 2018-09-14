@@ -7,6 +7,7 @@ from gui import SystemMessages
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
+from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
@@ -41,6 +42,7 @@ class VEHICLE(object):
     REMOVE = 'vehicleRemove'
     CHECK = 'vehicleCheck'
     UNCHECK = 'vehicleUncheck'
+    COMPARE = 'compare'
 
 
 class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
@@ -144,7 +146,8 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.CHECK: 'checkFavoriteVehicle',
          VEHICLE.UNCHECK: 'uncheckFavoriteVehicle',
          VEHICLE.STATS: 'showVehicleStats',
-         VEHICLE.BUY: 'buyVehicle'})
+         VEHICLE.BUY: 'buyVehicle',
+         VEHICLE.COMPARE: 'compareVehicle'})
 
     def getVehCD(self):
         return self.vehCD
@@ -165,6 +168,9 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def uncheckFavoriteVehicle(self):
         self.__favoriteVehicle(False)
+
+    def compareVehicle(self):
+        getVehicleComparisonBasketCtrl().addVehicle(self.vehCD)
 
     def _initFlashValues(self, ctx):
         self.vehInvID = int(ctx.inventoryId)
@@ -192,20 +198,27 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     vehicleWasInBattle = True
             if vehicle is not None:
                 options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle}), self._makeSeparator()])
+                self._manageVehCompareOptions(options, vehicle)
+                options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH)))
                 if vehicle.isRented:
                     if not vehicle.isPremiumIGR:
-                        money = g_itemsCache.items.stats.money
-                        canBuyOrRent, _ = vehicle.mayRentOrBuy(money)
-                        options.append(self._makeItem(VEHICLE.BUY, MENU.contextmenu(VEHICLE.BUY), {'enabled': canBuyOrRent}))
+                        items = g_itemsCache.items
+                        enabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
+                        label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
+                        options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': enabled}))
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
                 else:
                     options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
-                options.extend([self._makeSeparator(), self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH))])
                 if vehicle.isFavorite:
                     options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
                 else:
                     options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK), {'enabled': not isEventVehicle}))
             return options
+
+    def _manageVehCompareOptions(self, options, vehicle):
+        comparisonBasket = getVehicleComparisonBasketCtrl()
+        if comparisonBasket.isEnabled():
+            options.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': comparisonBasket.isReadyToAdd(vehicle)}))
 
     @process
     def __favoriteVehicle(self, isFavorite):

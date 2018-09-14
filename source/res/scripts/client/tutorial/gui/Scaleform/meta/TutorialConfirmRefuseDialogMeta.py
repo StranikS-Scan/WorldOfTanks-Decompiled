@@ -8,12 +8,7 @@ class TutorialConfirmRefuseDialogMeta(TutorialDialog):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends TutorialDialog
-    null
     """
 
     def setStartOnNextLogin(self, vaule):
-        """
-        :param vaule:
-        :return :
-        """
         self._printOverrideError('setStartOnNextLogin')

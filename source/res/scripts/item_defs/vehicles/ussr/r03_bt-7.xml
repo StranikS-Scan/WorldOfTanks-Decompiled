@@ -1193,26 +1193,92 @@
     </_71-TK-3>
     <_12LL>	shared	</_12LL>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M-17T>
+          <smplEnginePower>	475.7765	</smplEnginePower>
+        </M-17T>
+        <M-17F>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </M-17F>
+        <V-2>
+          <smplEnginePower>	507.4949	</smplEnginePower>
+        </V-2>
+      </engines>
+      <chassis>
+        <BT-5>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </BT-5>
+        <BT-7>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </BT-7>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <BT-5>
-        <alpha>	0.08855	</alpha>
-      </BT-5>
-      <BT-7>
-        <alpha>	0.0805	</alpha>
-      </BT-7>
-    </chassis>
-    <engines>
-      <M-17T>
-        <bravo>	118.9441	</bravo>
-      </M-17T>
-      <M-17F>
-        <bravo>	132.1601	</bravo>
-      </M-17F>
-      <V-2>
-        <bravo>	126.8737	</bravo>
-      </V-2>
-    </engines>
     <armour>	0.823759907	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -186,10 +186,10 @@ class TutorialLoader(object):
     def leaveLobby(self):
         self.stop(restore=False)
 
-    def goToBattle(self, battleSettings=_SETTINGS.BATTLE):
+    def goToBattle(self):
         self.__afterBattle = True
         self.__doClear()
-        self.__doAutoRun((battleSettings, _SETTINGS.BATTLE_QUESTS), {})
+        self.__doAutoRun((_SETTINGS.BATTLE_V2, _SETTINGS.BATTLE_QUESTS), {})
 
     def leaveBattle(self):
         self.stop(restore=False)
@@ -279,8 +279,7 @@ class TutorialLoader(object):
 g_loader = None
 
 def init():
-    """
-    Initialization tutorial loader.
+    """Initialization tutorial loader.
     
     Routine must invoke in BWPersonality module.
     """
@@ -291,8 +290,7 @@ def init():
 
 
 def fini():
-    """
-    Tutorial loader finalizes work: stops training process, saving state,
+    """Tutorial loader finalizes work: stops training process, saving state,
     if tutorial is running.
     
     Routine must invoke in BWPersonality module.
@@ -303,3 +301,16 @@ def fini():
             g_loader.fini()
             g_loader = None
     return
+
+
+def isTutorialRunning(tutorialID):
+    """Is tutorial running with specified tutorialID.
+    :param tutorialID: string containing unique ID of tutorial (_SettingsDesc.id in settings).
+    :return: True if tutorial is running with specified tutorialID, otherwise - False.
+    :rtype: bool.
+    """
+    isRunning = False
+    if IS_TUTORIAL_ENABLED:
+        if g_loader is not None:
+            isRunning = g_loader.isRunning and g_loader.tutorialID == tutorialID
+    return isRunning

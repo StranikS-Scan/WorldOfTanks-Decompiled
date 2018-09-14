@@ -483,17 +483,52 @@
   <radios>
     <_10RKM>	shared	</_10RKM>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-12-5A>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </V-12-5A>
+      </engines>
+      <chassis>
+        <Chassis_R113_Object_730>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R113_Object_730>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R113_Object_730>
-        <alpha>	0.12075	</alpha>
-      </Chassis_R113_Object_730>
-    </chassis>
-    <engines>
-      <V-12-5A>
-        <bravo>	185.0242	</bravo>
-      </V-12-5A>
-    </engines>
     <armour>	1.21934901	</armour>
   </clientAdjustmentFactors>
   <effects>

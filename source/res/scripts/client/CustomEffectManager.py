@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CustomEffectManager.py
-import Math
 import math
+import Math
 import material_kinds
 from CustomEffect import PixieCache
 from CustomEffect import EffectSettings
-from vehicle_systems.assembly_utility import Component
+from svarog_script.py_component import Component
 from vehicle_systems.tankStructure import TankNodeNames
 from AvatarInputHandler import mathUtils
 _ENABLE_VALUE_TRACKER = False
@@ -17,7 +17,7 @@ class CustomEffectManager(Component):
     _RIGHT_TRACK = 2
     _DRAW_ORDER_IDX = 50
 
-    def __init__(self, vehicle, engineState):
+    def __init__(self, appearance):
         if _ENABLE_VALUE_TRACKER or _ENABLE_VALUE_TRACKER_ENGINE or _ENABLE_PIXIE_TRACKER:
             from helpers.ValueTracker import ValueTracker
             self.__vt = ValueTracker.instance()
@@ -25,24 +25,26 @@ class CustomEffectManager(Component):
             self.__vt = None
         self.__selectors = []
         self.__variableArgs = dict()
-        self.__vehicle = vehicle
-        self.__engineState = engineState
+        self.__vehicle = None
+        self.__appearance = appearance
+        self.__engineState = appearance.detailedEngineState
         self.__prevWaterHeight = None
         self.__gearUP = False
+        self.__trailParticleNodes = None
         self.__engineState.setGearUpCallback(self.__gearUp)
         args = {}
         args['chassis'] = {}
-        args['chassis']['model'] = self.__vehicle.appearance.compoundModel
+        args['chassis']['model'] = appearance.compoundModel
         args['hull'] = {}
-        args['hull']['model'] = self.__vehicle.appearance.compoundModel
+        args['hull']['model'] = appearance.compoundModel
         args['drawOrderBase'] = CustomEffectManager._DRAW_ORDER_IDX
-        for desc in self.__vehicle.typeDescriptor.hull['customEffects']:
+        for desc in appearance.typeDescriptor.hull['customEffects']:
             if desc is not None:
                 selector = desc.create(args)
                 if selector is not None:
                     self.__selectors.append(selector)
 
-        for desc in self.__vehicle.typeDescriptor.chassis['customEffects']:
+        for desc in appearance.typeDescriptor.chassis['customEffects']:
             if desc is not None:
                 selector = desc.create(args)
                 if selector is not None:
@@ -56,20 +58,22 @@ class CustomEffectManager(Component):
         return self.__variableArgs.get(name, 0.0)
 
     def destroy(self):
-        if self.__engineState is None:
-            return
-        else:
-            for effectSelector in self.__selectors:
-                effectSelector.destroy()
+        self.deactivate()
+        for effectSelector in self.__selectors:
+            effectSelector.destroy()
 
-            PixieCache.decref()
-            self.__engineState.delGearUpCallback()
-            self.__engineState = None
-            if _ENABLE_PIXIE_TRACKER and self.__vehicle.isPlayerVehicle:
-                self.__vt.addValue2('Pixie Count', PixieCache.pixiesCount)
-            if _ENABLE_VALUE_TRACKER or _ENABLE_VALUE_TRACKER_ENGINE or _ENABLE_PIXIE_TRACKER:
-                self.__vt = None
-            return
+        PixieCache.decref()
+        self.__engineState.delGearUpCallback()
+        self.__trailParticleNodes = None
+        self.__selectors = None
+        self.__engineState = None
+        self.__appearance = None
+        self.__variableArgs = None
+        if _ENABLE_PIXIE_TRACKER:
+            self.__vt.addValue2('Pixie Count', PixieCache.pixiesCount)
+        if _ENABLE_VALUE_TRACKER or _ENABLE_VALUE_TRACKER_ENGINE or _ENABLE_PIXIE_TRACKER:
+            self.__vt = None
+        return
 
     def enable(self, enable, settingsFlags=EffectSettings.SETTING_DUST):
         for effectSelector in self.__selectors:
@@ -79,12 +83,24 @@ class CustomEffectManager(Component):
                 else:
                     effectSelector.stop()
 
-    def stop(self):
+    def setVehicle(self, vehicle):
+        self.__vehicle = vehicle
+
+    def activate(self):
+        super(CustomEffectManager, self).activate()
+        for effectSelector in self.__selectors:
+            effectSelector.start()
+
+    def deactivate(self):
         for effectSelector in self.__selectors:
             effectSelector.stop()
 
+        self.__vehicle = None
+        super(CustomEffectManager, self).deactivate()
+        return
+
     def __createChassisCenterNodes(self):
-        compoundModel = self.__vehicle.appearance.compoundModel
+        compoundModel = self.__appearance.compoundModel
         self.__trailParticleNodes = [compoundModel.node(TankNodeNames.TRACK_LEFT_MID), compoundModel.node(TankNodeNames.TRACK_RIGHT_MID)]
 
     def getTrackCenterNode(self, trackIdx):
@@ -94,8 +110,8 @@ class CustomEffectManager(Component):
         self.__gearUP = True
 
     def update(self):
-        appearance = self.__vehicle.appearance
         vehicleSpeed = self.__vehicle.speedInfo.value[2]
+        appearance = self.__appearance
         self.__variableArgs['speed'] = vehicleSpeed
         self.__variableArgs['isPC'] = self.__vehicle.isPlayerVehicle
         direction = 1 if vehicleSpeed >= 0.0 else -1
@@ -126,7 +142,7 @@ class CustomEffectManager(Component):
         for effectSelector in self.__selectors:
             effectSelector.update(self.__variableArgs)
 
-        if _ENABLE_VALUE_TRACKER and self.__vehicle.isPlayerVehicle:
+        if _ENABLE_VALUE_TRACKER:
             self.__vt.addValue2('speed', self.__variableArgs['speed'])
             self.__vt.addValue2('direction', self.__variableArgs['direction'])
             self.__vt.addValue2('rotSpeed', self.__variableArgs['rotSpeed'])
@@ -146,13 +162,13 @@ class CustomEffectManager(Component):
                 self.__vt.addValue('materialR', material_kinds.EFFECT_MATERIALS[materialR])
             else:
                 self.__vt.addValue('materialR', 'No')
-        if _ENABLE_VALUE_TRACKER_ENGINE and self.__vehicle.isPlayerVehicle:
+        if _ENABLE_VALUE_TRACKER_ENGINE:
             self.__vt.addValue2('engineStart', self.__variableArgs['engineStart'])
             self.__vt.addValue2('gearUP', self.__variableArgs['gearUp'])
             self.__vt.addValue2('RPM', self.__variableArgs['RPM'])
             self.__vt.addValue2('engineLoad', self.__engineState.mode)
             self.__vt.addValue2('physicLoad', self.__engineState.physicLoad)
-        if _ENABLE_PIXIE_TRACKER and self.__vehicle.isPlayerVehicle:
+        if _ENABLE_PIXIE_TRACKER:
             self.__vt.addValue2('Pixie Count', PixieCache.pixiesCount)
 
     @staticmethod
@@ -168,9 +184,9 @@ class CustomEffectManager(Component):
         return (scrollDelta, direction, matKind)
 
     def __correctWaterNodes(self):
-        waterHeight = 0.0 if not self.__vehicle.appearance.isInWater else self.__vehicle.appearance.waterHeight
+        waterHeight = 0.0 if not self.__appearance.isInWater else self.__appearance.waterHeight
         if waterHeight != self.__prevWaterHeight:
-            invVehicleMatrix = Math.Matrix(self.__vehicle.matrix)
+            invVehicleMatrix = Math.Matrix(self.__appearance.compoundModel.matrix)
             invVehicleMatrix.invert()
             waterShiftRel = invVehicleMatrix.applyVector(Math.Vector3(0, waterHeight, 0))
             for effectSelector in self.__selectors:

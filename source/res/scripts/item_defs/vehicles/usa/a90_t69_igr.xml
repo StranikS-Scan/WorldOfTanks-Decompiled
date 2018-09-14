@@ -364,22 +364,57 @@
   <radios>
     <SCR_619_IGR>	shared	</SCR_619_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AOSI-895-5_IGR>
+          <smplEnginePower>	581.5046	</smplEnginePower>
+        </Continental_AOSI-895-5_IGR>
+      </engines>
+      <chassis>
+        <Chassis_T69_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T69_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_90mm_Gun_T178_IGR>
         <delta>	1.1093117	</delta>
       </_90mm_Gun_T178_IGR>
     </guns>
-    <chassis>
-      <Chassis_T69_2_IGR>
-        <alpha>	0.0966	</alpha>
-      </Chassis_T69_2_IGR>
-    </chassis>
-    <engines>
-      <Continental_AOSI-895-5_IGR>
-        <bravo>	145.3762	</bravo>
-      </Continental_AOSI-895-5_IGR>
-    </engines>
     <armour>	1.030878528	</armour>
   </clientAdjustmentFactors>
   <effects>

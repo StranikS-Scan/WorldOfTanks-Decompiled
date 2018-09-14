@@ -15,22 +15,13 @@ class WWISESoundSystem(SoundSystemAbstract):
     def isMSR(self):
         return WWISE.WG_isMSR()
 
-    def setHQEnabled(self, isEnabled):
-        if isEnabled:
-            state = HQRenderState.HQ_FOR_ALL
-        else:
-            state = HQRenderState.LQ_FOR_ALL
-        SoundGroups.g_instance.setLQRenderState(state)
-
     def enableDynamicPreset(self):
         wwiseEvent = 'ue_set_preset_high_dynamic_range'
-        WWISE.WW_setVolumeThreshold(-50)
         self.sendGlobalEvent(wwiseEvent)
         LOG_DEBUG('WWISE: triggered {0}'.format(wwiseEvent))
 
     def disableDynamicPreset(self):
         wwiseEvent = 'ue_set_preset_low_dynamic_range'
-        WWISE.WW_setVolumeThreshold(-40)
         self.sendGlobalEvent(wwiseEvent)
         LOG_DEBUG('WWISE: triggered {0}'.format(wwiseEvent))
 

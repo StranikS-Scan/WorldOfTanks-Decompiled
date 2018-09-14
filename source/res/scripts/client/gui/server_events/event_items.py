@@ -4,26 +4,28 @@ import operator
 import time
 from abc import ABCMeta
 from collections import namedtuple
-from debug_utils import LOG_CURRENT_EXCEPTION
-import nations
 import constants
+import nations
 from ConnectionManager import connectionManager
+from debug_utils import LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from potapov_quests import PQ_STATE as _PQS, PQ_BRANCH
-from helpers import getLocalizedData, i18n, time_utils
-from predefined_hosts import g_preDefinedHosts
-from shared_utils import findFirst
-from gui.shared import g_itemsCache
+from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.clubs.settings import getLeagueByDivision
 from gui.server_events.bonuses import getBonusObj, compareBonuses
 from gui.server_events.modifiers import getModifierObj, compareModifiers
 from gui.server_events.parsers import AccountRequirements, VehicleRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
-from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.shared import g_itemsCache
+from helpers import getLocalizedData, i18n, time_utils
+from potapov_quests import PQ_STATE as _PQS, PQ_BRANCH
+from predefined_hosts import g_preDefinedHosts
+from shared_utils import findFirst
 EventBattles = namedtuple('EventBattles', ['vehicleTags',
  'vehicles',
  'enabled',
  'arenaTypeID'])
 
 class DEFAULTS_GROUPS(object):
+    CURRENTLY_AVAILABLE = 'currentlyAvailable'
     UNGROUPED_ACTIONS = 'ungroupedActions'
     UNGROUPED_QUESTS = 'ungroupedQuests'
 
@@ -143,10 +145,21 @@ class ServerEventAbstract(object):
 
         return (False, 'requirements') if not self._checkConditions() else (True, '')
 
+    def isAvailableForVehicle(self, vehicle):
+        """ Check if quest is available for provided vehicle.
+        """
+        result, error = self.isAvailable()
+        return (False, 'requirement') if result and not self._checkVehicleConditions(vehicle) else (result, error)
+
     def getBonuses(self, bonusName=None):
         return []
 
     def _checkConditions(self):
+        return True
+
+    def _checkVehicleConditions(self, vehicle):
+        """ Check conditions with relation to provided vehicle.
+        """
         return True
 
     def __repr__(self):
@@ -270,6 +283,9 @@ class Quest(ServerEventAbstract):
         isAccAvailable = self.accountReqs.isAvailable()
         isVehAvailable = self.vehicleReqs.isAnyVehicleAcceptable() or len(self.vehicleReqs.getSuitableVehicles()) > 0
         return isAccAvailable and isVehAvailable
+
+    def _checkVehicleConditions(self, vehicle):
+        return self.vehicleReqs.isAnyVehicleAcceptable() or vehicle in self.vehicleReqs.getSuitableVehicles()
 
 
 class PersonalQuest(Quest):
@@ -698,6 +714,13 @@ class ClubsQuest(Quest):
 
     def getSeasonID(self):
         return self.__seasonID
+
+    def getDivision(self):
+        """ Returns quest's divisino and league
+        """
+        clubCond = self.postBattleCond.getConditions().find('clubs')
+        division = clubCond.getDivision()
+        return (division, getLeagueByDivision(division))
 
     def getUserName(self):
         return i18n.makeString(Quest.getUserName(self))

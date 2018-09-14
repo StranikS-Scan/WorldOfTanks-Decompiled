@@ -11,7 +11,7 @@ class ShadowForwardDecal:
 
     def __init__(self):
         self.__attached = False
-        self.__vehicle = None
+        self.__typeDesc = None
         self.__model = None
         self.__chassisDecals = []
         self.__chassisParent = None
@@ -26,13 +26,12 @@ class ShadowForwardDecal:
     def destroy(self):
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged -= self.onSettingsChanged
-        self.__vehicle = None
-        self.__model = None
+        self.__typeDesc = None
         self.detach()
         return
 
-    def attach(self, vehicle, model, isSettingsChaged=False):
-        self.__vehicle = vehicle
+    def attach(self, typeDesc, model, isSettingsChaged=False):
+        self.__typeDesc = typeDesc
         self.__model = model
         if not isSettingsChaged:
             if not ShadowForwardDecal.isEnabled() or self.__attached:
@@ -41,17 +40,17 @@ class ShadowForwardDecal:
             return
         self.__attached = True
         self.__chassisParent = model.root
-        for transform in vehicle.typeDescriptor.chassis['AODecals']:
+        for transform in typeDesc.chassis['AODecals']:
             decal = ShadowForwardDecal.__createDecal(transform, self.__chassisParent, False)
             self.__chassisDecals.append(decal)
 
         self.__hullParent = model.node(TankPartNames.HULL)
-        for transform in vehicle.typeDescriptor.hull['AODecals']:
+        for transform in typeDesc.hull['AODecals']:
             decal = ShadowForwardDecal.__createDecal(transform, self.__hullParent, True)
             self.__hullDecals.append(decal)
 
         self.__turretParent = model.node(TankPartNames.TURRET)
-        for transform in vehicle.typeDescriptor.turret['AODecals']:
+        for transform in typeDesc.turret['AODecals']:
             decal = ShadowForwardDecal.__createDecal(transform, self.__turretParent, True)
             self.__turretDecals.append(decal)
 
@@ -75,15 +74,16 @@ class ShadowForwardDecal:
 
             self.__turretDecals = []
             self.__turretParent = None
+            self.__model = None
             return
 
     def __reattach(self):
         if self.__attached:
             return
-        elif self.__vehicle is None or self.__model is None:
+        elif self.__typeDesc is None or self.__model is None:
             return
         else:
-            self.attach(self.__vehicle, self.__model, True)
+            self.attach(self.__typeDesc, self.__model, True)
             return
 
     def onSettingsChanged(self, diff=None):

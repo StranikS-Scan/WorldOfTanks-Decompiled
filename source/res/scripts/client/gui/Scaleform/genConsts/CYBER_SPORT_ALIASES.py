@@ -7,7 +7,6 @@ class CYBER_SPORT_ALIASES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     CYBER_SPORT_STATIC_PROFILE_UI = 'staticFormationProfileWindow.swf'
     CYBER_SPORT_STATIC_PROFILE_PY = 'cyberSport/static'

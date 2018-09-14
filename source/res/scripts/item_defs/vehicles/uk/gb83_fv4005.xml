@@ -119,8 +119,8 @@
         <segmentModelRight>	vehicles/british/GB83_FV4005/track/segment.model	</segmentModelRight>
         <left>	vehicles/british/GB83_FV4005/track/left.track	</left>
         <right>	vehicles/british/GB83_FV4005/track/right.track	</right>
-        <segmentLength>	0.165	</segmentLength>
-        <segmentOffset>	0.11	</segmentOffset>
+        <segmentLength>	0.144	</segmentLength>
+        <segmentOffset>	0.083	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -130,8 +130,8 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
-        <textureSet>	germany_01	</textureSet>
-        <size>	0.44 0.65	</size>
+        <textureSet>	gb_24	</textureSet>
+        <size>	0.6 0.7	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -219,23 +219,20 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.5	</forwardElastK>
+          <forwardElastK>	0.8	</forwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <forwardElastK>	0.5	</forwardElastK>
+          <forwardElastK>	0.8	</forwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -479,17 +476,52 @@
   <radios>
     <C45>	shared	</C45>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Meteor_MkIV_B>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkIV_B>
+      </engines>
+      <chassis>
+        <Chassis_GB83_FV4005>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB83_FV4005>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB83_FV4005>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB83_FV4005>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Meteor_MkIV_B>
-        <bravo>	171.8082	</bravo>
-      </Rolls_Royse_Meteor_MkIV_B>
-    </engines>
     <armour>	1.16649011	</armour>
   </clientAdjustmentFactors>
   <effects>

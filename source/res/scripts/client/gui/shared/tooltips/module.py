@@ -1,11 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
+from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import g_itemsCache
-from gui.shared.economics import getActionPrc
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.items_parameters import params_helper, MAX_RELATIVE_VALUE, formatters as params_formatters
-from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -13,11 +9,15 @@ from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared import g_itemsCache
+from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles
-from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
-from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
-from gui.shared.tooltips import formatters
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.items_parameters import params_helper, MAX_RELATIVE_VALUE, formatters as params_formatters
 from gui.shared.money import ZERO_MONEY
+from gui.shared.tooltips import formatters
+from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
+from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from helpers.i18n import makeString as _ms
 from items import VEHICLE_COMPONENT_TYPE_NAMES, ITEM_TYPES
 _TOOLTIP_MIN_WIDTH = 420
@@ -68,14 +68,52 @@ class ModuleBlockTooltipData(BlocksTooltipData):
                 items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
         statsModules = GUI_ITEM_TYPE.VEHICLE_MODULES + (GUI_ITEM_TYPE.OPTIONALDEVICE,)
         if module.itemTypeID in statsModules:
-            commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, valueWidth, leftPadding, rightPadding).construct()
+            commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, valueWidth, leftPadding, rightPadding, params_formatters.BASE_FORMATTERS).construct()
             if len(commonStatsBlock) > 0:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=blockPadding, gap=textGap))
-        if not module.isRemovable:
+        if not module.isRemovable and not statusConfig.isAwardWindow:
             items.append(formatters.packBuildUpBlockData(ArtefactBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct(), gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_COMPLEX_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=2), stretchBg=False))
         statusBlock = StatusBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
         if len(statusBlock) > 0:
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
+        return items
+
+
+class VehCompareModuleBlockTooltipData(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(VehCompareModuleBlockTooltipData, self).__init__(context, TOOLTIP_TYPE.MODULE)
+        self._setContentMargin(top=0, left=0, bottom=20, right=20)
+        self._setMargins(10, 15)
+        self._setWidth(_TOOLTIP_MIN_WIDTH)
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(VehCompareModuleBlockTooltipData, self)._packBlocks()
+        module = self.context.buildItem(*args, **kwargs)
+        statsConfig = self.context.getStatsConfiguration(module)
+        paramsConfig = self.context.getParamsConfiguration(module)
+        statusConfig = self.context.getStatusConfiguration(module)
+        leftPadding = 20
+        rightPadding = 20
+        topPadding = 20
+        blockTopPadding = -4
+        blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
+        textGap = -2
+        valueWidth = 110
+        items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding)))
+        if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
+            effectsBlock = EffectsBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
+            if len(effectsBlock) > 0:
+                items.append(formatters.packBuildUpBlockData(effectsBlock, padding=blockPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+        priceBlock, invalidWidth = PriceBlockConstructor(module, statsConfig, valueWidth, leftPadding, rightPadding).construct()
+        if priceBlock:
+            self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
+            items.append(formatters.packBuildUpBlockData(priceBlock, padding=blockPadding, gap=textGap))
+        statsModules = GUI_ITEM_TYPE.VEHICLE_MODULES + (GUI_ITEM_TYPE.OPTIONALDEVICE,)
+        if module.itemTypeID in statsModules:
+            commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, valueWidth, leftPadding, rightPadding, False).construct()
+            if commonStatsBlock:
+                items.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=blockPadding, gap=textGap))
         return items
 
 
@@ -87,6 +125,7 @@ class ModuleTooltipBlockConstructor(object):
      GUI_ITEM_TYPE.GUN: (RELOAD_TIME_PROP_NAME,
                          'avgPiercingPower',
                          'avgDamage',
+                         'avgDamagePerMinute',
                          'dispertionRadius',
                          AIMING_TIME_PROP_NAME,
                          'maxShotDistance',
@@ -99,6 +138,7 @@ class ModuleTooltipBlockConstructor(object):
                              RELOAD_MAGAZINE_TIME_PROP_NAME,
                              'avgPiercingPower',
                              'avgDamage',
+                             'avgDamagePerMinute',
                              'dispertionRadius',
                              'maxShotDistance',
                              AIMING_TIME_PROP_NAME,
@@ -164,11 +204,11 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 return bool(int(researchNode.state) & state) if researchNode is not None else False
 
             isEqOrDev = module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS
-            isNextToUnlock = checkState(NODE_STATE.NEXT_2_UNLOCK)
-            isInstalled = checkState(NODE_STATE.INSTALLED)
-            isInInventory = checkState(NODE_STATE.IN_INVENTORY)
-            isUnlocked = checkState(NODE_STATE.UNLOCKED)
-            isAutoUnlock = checkState(NODE_STATE.AUTO_UNLOCKED)
+            isNextToUnlock = checkState(NODE_STATE_FLAGS.NEXT_2_UNLOCK)
+            isInstalled = checkState(NODE_STATE_FLAGS.INSTALLED)
+            isInInventory = checkState(NODE_STATE_FLAGS.IN_INVENTORY)
+            isUnlocked = checkState(NODE_STATE_FLAGS.UNLOCKED)
+            isAutoUnlock = checkState(NODE_STATE_FLAGS.AUTO_UNLOCKED)
             items = g_itemsCache.items
             money = items.stats.money
             itemPrice = ZERO_MONEY
@@ -224,10 +264,11 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
 
 class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
 
-    def __init__(self, module, configuration, slotIdx, valueWidth, leftPadding, rightPadding):
+    def __init__(self, module, configuration, slotIdx, valueWidth, leftPadding, rightPadding, colorScheme=None):
         super(CommonStatsBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
         self._valueWidth = valueWidth
         self._slotIdx = slotIdx
+        self.__colorScheme = colorScheme or params_formatters.NO_COLORIZE_FORMATTERS
 
     def construct(self):
         module = self.module
@@ -254,7 +295,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 for paramName in paramsList:
                     if paramName in moduleParams:
                         paramInfo = comparator.getExtendedData(paramName)
-                        fmtValue = params_formatters.colorizedFormatParameter(paramInfo, params_formatters.BASE_FORMATTERS)
+                        fmtValue = params_formatters.colorizedFormatParameter(paramInfo, self.__colorScheme)
                         if fmtValue is not None:
                             block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
 
@@ -278,17 +319,18 @@ class SimplifiedStatsBlockConstructor(ModuleTooltipBlockConstructor):
 
     def construct(self):
         block = []
-        for parameter in params_formatters.getRelativeDiffParams(self.__comparator):
-            delta = parameter.state[1]
-            value = parameter.value
-            if delta > 0:
-                value -= delta
-            block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData={'value': value,
-             'delta': delta,
-             'minValue': 0,
-             'markerValue': self.__stockParams[parameter.name],
-             'maxValue': MAX_RELATIVE_VALUE,
-             'useAnim': False}, padding=formatters.packPadding(left=105, top=8)))
+        if self.configuration.params:
+            for parameter in params_formatters.getRelativeDiffParams(self.__comparator):
+                delta = parameter.state[1]
+                value = parameter.value
+                if delta > 0:
+                    value -= delta
+                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData={'value': value,
+                 'delta': delta,
+                 'minValue': 0,
+                 'markerValue': self.__stockParams[parameter.name],
+                 'maxValue': MAX_RELATIVE_VALUE,
+                 'useAnim': False}, padding=formatters.packPadding(left=105, top=8)))
 
         return block
 
@@ -346,6 +388,8 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
     def construct(self):
         if self.configuration.isResearchPage:
             return self._getResearchPageStatus()
+        elif self.configuration.isAwardWindow:
+            return []
         else:
             return self._getStatus()
 
@@ -438,10 +482,10 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
         statusTemplate = '#tooltips:researchPage/module/status/%s'
         parentCD = vehicle.intCD if vehicle is not None else None
         _, _, need = getUnlockPrice(module.intCD, parentCD)
-        if not nodeState & NODE_STATE.UNLOCKED:
+        if not nodeState & NODE_STATE_FLAGS.UNLOCKED:
             if not vehicle.isUnlocked:
                 header, text = getComplexStatus(statusTemplate % 'rootVehicleIsLocked')
-            elif not nodeState & NODE_STATE.NEXT_2_UNLOCK:
+            elif not nodeState & NODE_STATE_FLAGS.NEXT_2_UNLOCK:
                 header, text = getComplexStatus(statusTemplate % 'parentModuleIsLocked')
             elif need > 0:
                 header, text = getComplexStatus(statusTemplate % 'notEnoughXP')
@@ -450,7 +494,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
             header, text = getComplexStatus(statusTemplate % 'needToBuyTank')
             text %= {'vehiclename': vehicle.userName}
             return status(header, text)
-        elif nodeState & NODE_STATE.INSTALLED:
+        elif nodeState & NODE_STATE_FLAGS.INSTALLED:
             return status()
         else:
             if vehicle is not None:

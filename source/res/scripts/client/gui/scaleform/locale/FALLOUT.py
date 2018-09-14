@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/FALLOUT.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class FALLOUT(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     CHANNEL_LABEL = '#fallout:channel/label'
     INFOPANEL_GETFLAGS_HEAD = '#fallout:infoPanel/getFlags/head'
     INFOPANEL_GETFLAGS_DESCR = '#fallout:infoPanel/getFlags/descr'

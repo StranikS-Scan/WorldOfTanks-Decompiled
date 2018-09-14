@@ -8,19 +8,10 @@ class ProfileStatisticsMeta(ProfileSection):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends ProfileSection
-    null
     """
 
     def getData(self, data):
-        """
-        :param data:
-        :return :
-        """
         self._printOverrideError('getData')
 
     def setSeason(self, seasonId):
-        """
-        :param seasonId:
-        :return :
-        """
         self._printOverrideError('setSeason')

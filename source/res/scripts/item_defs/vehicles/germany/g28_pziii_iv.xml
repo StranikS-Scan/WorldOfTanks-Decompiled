@@ -22,22 +22,21 @@
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G28_PzIII_IV/PzIII_IV_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	60	</armor_1>
+      <armor_1>	80	</armor_1>
       <armor_2>	60	</armor_2>
-      <armor_3>	60	</armor_3>
-      <armor_4>	40	</armor_4>
-      <armor_5>	60	</armor_5>
-      <armor_6>	40	</armor_6>
-      <armor_7>	40	</armor_7>
-      <armor_8>	20	</armor_8>
-      <armor_9>	15	</armor_9>
-      <armor_10>	0	</armor_10>
+      <armor_3>	30	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	40	</armor_5>
+      <armor_7>	10	</armor_7>
+      <armor_8>	0	</armor_8>
       <armor_11>	40	</armor_11>
-      <armor_12>	40	</armor_12>
+      <armor_13>	10	</armor_13>
+      <armor_16>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13570	</weight>
@@ -59,11 +58,11 @@
       <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_medium	</pixie>
+      <pixie>	gas_large	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.063834 0.867121 -0.303423	</turret>
+      <turret>	-0.083045 0.725248 -0.263154	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Hull.model	</collisionModelServer>
@@ -71,35 +70,38 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.765749 0.46691 2.57481	</rayStart>
-        <rayEnd>	-0.765749 0.121094 2.37379	</rayEnd>
+        <rayStart>	-0.769462 0.35488 2.52167	</rayStart>
+        <rayEnd>	-0.769296 0.00847065 2.32167	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	0.506876 0.383268 2.71869	</rayStart>
-        <rayEnd>	0.506876 0.0374556 2.51767	</rayEnd>
+        <rayStart>	0.523407 0.234579 2.73006	</rayStart>
+        <rayEnd>	0.523407 -0.111742 2.52992	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.78	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <size>	0.7	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	1.47106 0.806475 -1.67568	</rayStart>
-        <rayEnd>	1.14429 0.575786 -1.67568	</rayEnd>
+        <rayStart>	1.49816 0.658609 -1.70958	</rayStart>
+        <rayEnd>	1.17469 0.423319 -1.70958	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/german/G28_PzIII_IV/PzIII_IV_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	3.2 3.2 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <PzIII-IV>
       <userString>	#germany_vehicles:PzIII-IV	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	4430.0	</price>
+      <price>	4430	</price>
       <unlocks>
         <chassis>	PzIII-IV_ausf_B	  <cost>	2025	</cost>
         </chassis>
@@ -131,13 +133,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.44 0.54	</size>
+        <size>	0.34 0.58	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1	</textureScale>
+        <textureScale>	-2.05	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -160,6 +162,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.437012	</radius>
+          <syncAngle>	17.1428	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -173,12 +176,14 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.350316	</radius>
+          <syncAngle>	17.1428	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.437012	</radius>
+          <syncAngle>	17.1428	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -192,22 +197,23 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.350316	</radius>
+          <syncAngle>	17.1428	</syncAngle>
         </wheel>
       </wheels>
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
-        <mud>	mediumTankMud	</mud>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.09161 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G28_PzIII_IV/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.26896 1.76118	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.27484 1.76125	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -220,12 +226,129 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G28_PzIII_IV/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G28_PzIII_IV/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G28_PzIII_IV/track/left.track	</left>
+        <right>	vehicles/german/G28_PzIII_IV/track/right.track	</right>
+        <segmentLength>	0.111	</segmentLength>
+        <segmentOffset>	0.136	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.01	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.2	</maxAmplitude>
+        <maxOffset>	0.2	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.044	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.044	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
     </PzIII-IV>
     <PzIII-IV_ausf_B>
       <userString>	#germany_vehicles:PzIII-IV_ausf_B	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	8310.0	</price>
+      <price>	8310	</price>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
@@ -253,13 +376,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.44 0.54	</size>
+        <size>	0.34 0.58	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1	</textureScale>
+        <textureScale>	-2.05	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -282,6 +405,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.437012	</radius>
+          <syncAngle>	17.1428	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -295,12 +419,14 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.350316	</radius>
+          <syncAngle>	17.1428	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.437012	</radius>
+          <syncAngle>	17.1428	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -314,22 +440,23 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.350316	</radius>
+          <syncAngle>	17.1428	</syncAngle>
         </wheel>
       </wheels>
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
-        <mud>	mediumTankMud	</mud>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.09161 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G28_PzIII_IV/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.26896 1.76118	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.27484 1.76125	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -342,6 +469,123 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G28_PzIII_IV/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G28_PzIII_IV/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G28_PzIII_IV/track/left.track	</left>
+        <right>	vehicles/german/G28_PzIII_IV/track/right.track	</right>
+        <segmentLength>	0.111	</segmentLength>
+        <segmentOffset>	0.136	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.01	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.2	</maxAmplitude>
+        <maxOffset>	0.2	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.053	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.044	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.044	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
     </PzIII-IV_ausf_B>
   </chassis>
   <turrets0>
@@ -350,25 +594,23 @@
       <shortUserString>	#germany_vehicles:PzIV_ausf_F_short	</shortUserString>
       <tags></tags>
       <level>	4	</level>
-      <price>	5370.0	</price>
+      <price>	5370	</price>
       <unlocks>
         <turret>	PzIV_ausf_H	  <cost>	2690	</cost>
         </turret>
       </unlocks>
       <armor>
         <armor_1>	50	</armor_1>
-        <armor_2>	45	</armor_2>
+        <armor_2>	50	</armor_2>
         <armor_3>	30	</armor_3>
         <armor_4>	30	</armor_4>
-        <armor_5>	50	</armor_5>
-        <armor_6>	25	</armor_6>
-        <armor_7>	20	</armor_7>
-        <armor_8>	20	</armor_8>
-        <armor_9>	20	</armor_9>
-        <armor_10>	0	</armor_10>
-        <armor_11>	35	</armor_11>
-        <armor_12>	20	</armor_12>
-        <armor_13>	15	</armor_13>
+        <armor_5>	30	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_8>	0	</armor_8>
+        <armor_9>	10	</armor_9>
+        <armor_11>	50	</armor_11>
+        <armor_12>	10	</armor_12>
+        <armor_16>	95	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
@@ -393,16 +635,61 @@
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
           </armor>
           <reloadTime>	4.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <pitchLimits>
-            <minPitch>	0 -17 1 -17	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/german/G28_PzIII_IV/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G28_PzIII_IV/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00178921 0.0149365 2.35279	</rayStart>
+              <rayEnd>	0.0232494 0.0113067 2.35151	</rayEnd>
+              <rayUp>	0.054 0.051 5	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK_40_L43>
+        <_75mm_KwK_40_L48>	shared	  <unlocks>
+            <vehicle>	G87_VK3002DB_V1	  <cost>	26800	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <reloadTime>	4.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <models>
             <undamaged>	vehicles/german/G28_PzIII_IV/normal/lod0/Gun_02.model	</undamaged>
@@ -415,52 +702,17 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0108125 -0.0160694 2.22671	</rayStart>
-              <rayEnd>	-0.130146 -0.104388 2.22148	</rayEnd>
-              <rayUp>	0.058 0.055 1	</rayUp>
-              <size>	0.23	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <rayStart>	-0.00219196 0.014448 2.7059	</rayStart>
+              <rayEnd>	-0.0196017 -0.00226488 2.70476	</rayEnd>
+              <rayUp>	0.053 0.051 5	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-        </_75mm_KwK_40_L43>
-        <_75mm_KwK_40_L48>	shared	  <unlocks>
-            <vehicle>	G87_VK3002DB_V1	  <cost>	26800	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	20	</gun>
-          </armor>
-          <reloadTime>	4.3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -17 1 -17	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/german/G28_PzIII_IV/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G28_PzIII_IV/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	-0.0116717 -0.0334042 2.2571	</rayStart>
-              <rayEnd>	-0.105861 -0.147066 2.24937	</rayEnd>
-              <rayUp>	0.06 0.055 2	</rayUp>
-              <size>	0.23	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
         </_75mm_KwK_40_L48>
       </guns>
       <models>
@@ -472,48 +724,51 @@
         <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G28_PzIII_IV/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.006173 0.327805 0.938091	</gunPosition>
+      <gunPosition>	0.004945 0.332443 0.837531	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	1.01237 0.43856 0.568639	</rayStart>
-          <rayEnd>	0.647924 0.275219 0.546246	</rayEnd>
+          <rayStart>	-1.01705 0.438759 0.245827	</rayStart>
+          <rayEnd>	-0.658819 0.264479 0.209813	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.01705 0.438759 0.245827	</rayStart>
+          <rayEnd>	0.658819 0.264479 0.209813	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
-        <player>
-          <rayStart>	-1.01237 0.43856 0.568639	</rayStart>
-          <rayEnd>	-0.647924 0.275219 0.546246	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.32	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.931 0.034 1.000 0.000 0.448 0.172 0.940 0.522 0.263 0.500 0.289 0.500 0.134 0.621 0.155	</physicsShape>
+      <physicsShape>	1.011 -0.021 1.026 0.000 0.479 0.158 0.676 0.605 0.316 0.558 0.318 0.500 0.174 0.650 0.218	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.6 0.8 0.000000 0.000000	</tiling>
+      </camouflage>
     </PzIV_ausf_F>
     <PzIV_ausf_H>
       <userString>	#germany_vehicles:PzIV_ausf_H	</userString>
       <shortUserString>	#germany_vehicles:PzIV_ausf_H_short	</shortUserString>
       <tags></tags>
       <level>	5	</level>
-      <price>	11330.0	</price>
+      <price>	11330	</price>
       <armor>
         <armor_1>	50	</armor_1>
-        <armor_2>	45	</armor_2>
+        <armor_2>	50	</armor_2>
         <armor_3>	30	</armor_3>
         <armor_4>	30	</armor_4>
-        <armor_5>	50	</armor_5>
-        <armor_6>	25	</armor_6>
-        <armor_7>	20	</armor_7>
-        <armor_8>	20	</armor_8>
-        <armor_9>	20	</armor_9>
-        <armor_10>	0	</armor_10>
-        <armor_11>	35	</armor_11>
-        <armor_12>	20	</armor_12>
-        <armor_13>	15	</armor_13>
+        <armor_5>	30	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_8>	0	</armor_8>
+        <armor_9>	10	</armor_9>
+        <armor_11>	50	</armor_11>
+        <armor_12>	10	</armor_12>
+        <armor_15>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_15>
+        <armor_16>	95	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4000	</weight>
@@ -539,36 +794,41 @@
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
           </armor>
           <reloadTime>	4.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <pitchLimits>
-            <minPitch>	0 -17 1 -17	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/german/G28_PzIII_IV/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_06.model	</exploded>
+            <undamaged>	vehicles/german/G28_PzIII_IV/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G28_PzIII_IV/collision_client/Gun_06.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G28_PzIII_IV/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0108125 -0.0179683 2.25898	</rayStart>
-              <rayEnd>	-0.0571123 -0.156657 2.25376	</rayEnd>
-              <rayUp>	0.059 0.056 1	</rayUp>
-              <size>	0.23	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <rayStart>	-0.00178921 0.0149365 2.34892	</rayStart>
+              <rayEnd>	-0.022585 0.00551056 2.34766	</rayEnd>
+              <rayUp>	0.053 0.051 5	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
         </_75mm_KwK_40_L43>
         <_75mm_KwK_40_L48>	shared	  <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
@@ -578,36 +838,41 @@
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
           </armor>
           <reloadTime>	4.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <pitchLimits>
-            <minPitch>	0 -17 1 -17	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/german/G28_PzIII_IV/normal/lod0/Gun_08.model	</undamaged>
-            <destroyed>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_08.model	</destroyed>
-            <exploded>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_08.model	</exploded>
+            <undamaged>	vehicles/german/G28_PzIII_IV/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G28_PzIII_IV/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Gun_08.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G28_PzIII_IV/collision_client/Gun_08.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G28_PzIII_IV/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0116716 -0.0330459 2.19	</rayStart>
-              <rayEnd>	-0.156981 -0.0621738 2.22579	</rayEnd>
-              <rayUp>	0.061 0.055 3	</rayUp>
-              <size>	0.29	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <rayStart>	-0.00219196 0.014448 2.70241	</rayStart>
+              <rayEnd>	-0.0239602 -0.00113907 2.70124	</rayEnd>
+              <rayUp>	0.053 0.051 5	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
         </_75mm_KwK_40_L48>
       </guns>
       <models>
@@ -619,29 +884,29 @@
         <collisionModelServer>	vehicles/german/G28_PzIII_IV/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G28_PzIII_IV/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.006173 0.32582 0.984197	</gunPosition>
+      <gunPosition>	0.004945 0.332443 0.837531	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	0.994208 0.470539 0.602806	</rayStart>
-          <rayEnd>	0.638016 0.290504 0.576081	</rayEnd>
+          <rayStart>	-1.21477 0.312678 0.449706	</rayStart>
+          <rayEnd>	-1.02134 0.312678 0.398846	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.21477 0.312678 0.449706	</rayStart>
+          <rayEnd>	1.02134 0.312678 0.398846	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.34	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
-        <player>
-          <rayStart>	-0.994208 0.470539 0.602806	</rayStart>
-          <rayEnd>	-0.638016 0.290504 0.576081	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.34	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.924 0.050 1.000 -0.000 0.448 0.155 0.957 0.595 0.254 0.500 0.310 0.500 0.185 0.538 0.042	</physicsShape>
+      <physicsShape>	1.000 -0.032 1.011 -0.000 0.484 0.084 0.945 0.611 0.274 0.458 0.000 0.500 0.000 0.538 0.121	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+        <tiling>	1.6 1.6 0.000000 0.000000	</tiling>
       </camouflage>
     </PzIV_ausf_H>
   </turrets0>
@@ -674,31 +939,97 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_120_TR>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Maybach_HL_120_TR>
+        <Maybach_HL_120_TRM>
+          <smplEnginePower>	465.2037	</smplEnginePower>
+        </Maybach_HL_120_TRM>
+        <Maybach_HL_157P>
+          <smplEnginePower>	618.5095	</smplEnginePower>
+        </Maybach_HL_157P>
+      </engines>
+      <chassis>
+        <PzIII-IV>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzIII-IV>
+        <PzIII-IV_ausf_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzIII-IV_ausf_B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <PzIII-IV>
-        <alpha>	0.1288	</alpha>
-      </PzIII-IV>
-      <PzIII-IV_ausf_B>
-        <alpha>	0.08855	</alpha>
-      </PzIII-IV_ausf_B>
-    </chassis>
-    <engines>
-      <Maybach_HL_120_TR>
-        <bravo>	92.5121	</bravo>
-      </Maybach_HL_120_TR>
-      <Maybach_HL_120_TRM>
-        <bravo>	116.3009	</bravo>
-      </Maybach_HL_120_TRM>
-      <Maybach_HL_157P>
-        <bravo>	154.6274	</bravo>
-      </Maybach_HL_157P>
-    </engines>
     <armour>	0.879873179	</armour>
   </clientAdjustmentFactors>
   <effects>
     <collision></collision>
-    <damagedStateGroup>	medium	</damagedStateGroup>
+    <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
     <default>	germany_cross	</default>

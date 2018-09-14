@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/ARENAS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class ARENAS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     TYPE_CTF_NAME = '#arenas:type/ctf/name'
     TYPE_CTF_DESCRIPTION = '#arenas:type/ctf/description'
     TYPE_DOMINATION_NAME = '#arenas:type/domination/name'
@@ -124,15 +121,7 @@ class ARENAS(object):
     C_100_THEPIT_DESCRIPTION = '#arenas:100_thepit/description'
     C_95_LOST_CITY_NAME = '#arenas:95_lost_city/name'
     C_95_LOST_CITY_DESCRIPTION = '#arenas:95_lost_city/description'
-    C_105_GERMANY_NAME = '#arenas:105_germany/name'
-    C_105_GERMANY_DESCRIPTION = '#arenas:105_germany/description'
-    C_111_PARIS_NAME = '#arenas:111_paris/name'
-    C_111_PARIS_DESCRIPTION = '#arenas:111_paris/description'
-    C_112_EIFFEL_TOWER_NAME = '#arenas:112_eiffel_tower/name'
-    C_112_EIFFEL_TOWER_DESCRIPTION = '#arenas:112_eiffel_tower/description'
     C_114_CZECH_NAME = '#arenas:114_czech/name'
     C_114_CZECH_DESCRIPTION = '#arenas:114_czech/description'
-    C_122_SOMME_NAME = '#arenas:122_somme/name'
-    C_122_SOMME_DESCRIPTION = '#arenas:122_somme/description'
-    EVENT_MARK1_DESCRIPTION_ATTACK = '#arenas:event/mark1/description/Attack'
-    EVENT_MARK1_DESCRIPTION_DEFENCE = '#arenas:event/mark1/description/Defence'
+    C_112_EIFFEL_TOWER_CTF_NAME = '#arenas:112_eiffel_tower_ctf/name'
+    C_112_EIFFEL_TOWER_CTF_DESCRIPTION = '#arenas:112_eiffel_tower_ctf/description'

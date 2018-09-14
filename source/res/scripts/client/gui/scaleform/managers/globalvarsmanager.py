@@ -31,10 +31,13 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
 
     def isTutorialRunning(self, tutorialID):
         try:
-            from tutorial.loader import g_loader
-            return g_loader.isRunning and g_loader.tutorialID == tutorialID
+            from tutorial.loader import isTutorialRunning
         except ImportError:
-            return False
+
+            def isTutorialRunning(_):
+                return False
+
+        return isTutorialRunning(tutorialID)
 
     def isFreeXpToTankman(self):
         return g_itemsCache.items.shop.freeXPToTManXPRate > 0

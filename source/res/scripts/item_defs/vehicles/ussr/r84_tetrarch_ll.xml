@@ -302,17 +302,52 @@
   <radios>
     <Tip_9>	shared	</Tip_9>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Medous_MAT>
+          <smplEnginePower>	190.3106	</smplEnginePower>
+        </Medous_MAT>
+      </engines>
+      <chassis>
+        <Chassis_Tetrarch_LL>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.110285	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.110285	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.110285	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.110285	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.110285	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.110285	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Tetrarch_LL>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Tetrarch_LL>
-        <alpha>	0.110285	</alpha>
-      </Chassis_Tetrarch_LL>
-    </chassis>
-    <engines>
-      <Medous_MAT>
-        <bravo>	47.57765	</bravo>
-      </Medous_MAT>
-    </engines>
     <armour>	0.861916163	</armour>
   </clientAdjustmentFactors>
   <effects>

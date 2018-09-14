@@ -7,7 +7,6 @@ class AWARDWINDOW_CONSTANTS(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     EXPLOSION_BACK_ANIMATION_PATH = '../flash/awardWindowAnimation.swf'
     EXPLOSION_BACK_ANIMATION_LINKAGE = 'ExplosionAwardWindowAnimationUI'

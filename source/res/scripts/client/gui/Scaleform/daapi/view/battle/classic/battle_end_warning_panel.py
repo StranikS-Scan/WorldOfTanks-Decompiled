@@ -39,13 +39,11 @@ class BattleEndWarningPanel(BattleEndWarningPanelMeta):
             self._callWWISE(_WWISE_EVENTS.APPEAR)
             self.as_setTotalTimeS(minutesStr, secondsStr)
             self.as_setTextInfoS(_ms(_WARNING_TEXT_KEY))
-            self._setVisible(True)
+            self.as_setStateS(True)
+            self.__isShown = True
         if totalTime <= self.__appearTime - self.__duration and self.__isShown:
-            self._setVisible(False)
-
-    def _setVisible(self, isVisible):
-        self.as_setStateS(isVisible)
-        self.__isShown = isVisible
+            self.as_setStateS(False)
+            self.__isShown = False
 
     def _getArenaVisitor(self):
         return g_sessionProvider.arenaVisitor

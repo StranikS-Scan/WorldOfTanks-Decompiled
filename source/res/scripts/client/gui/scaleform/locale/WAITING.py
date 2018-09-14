@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/WAITING.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
+from debug_utils import LOG_WARNING
 
 class WAITING(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     FLASH = '#waiting:Flash'
     DISCONNECT = '#waiting:disconnect'
     LOADPAGE = '#waiting:loadPage'
@@ -108,6 +106,7 @@ class WAITING(object):
     DOWNLOAD_SHOP = '#waiting:download/shop'
     DOWNLOAD_DOSSIER = '#waiting:download/dossier'
     DOWNLOAD_DISCOUNTS = '#waiting:download/discounts'
+    DOWNLOAD_RECYCLEBIN = '#waiting:download/recycleBin'
     UPDATINGSKILLWINDOW = '#waiting:updatingSkillWindow'
     PREBATTLE_CREATE = '#waiting:prebattle/create'
     PREBATTLE_TEAM_READY = '#waiting:prebattle/team_ready'
@@ -174,6 +173,11 @@ class WAITING(object):
     CLUBS_INVITATIONS_LIST_CHANGE = '#waiting:clubs/invitations/list/change'
     CLUBS_INVITES_SEND = '#waiting:clubs/invites/send'
     CLANS_INVITES_SEND = '#waiting:clans/invites/send'
+    TITLES_ENUM = (TITLES_QUEUE,
+     TITLES_REGISTERING,
+     TITLES_ANOTHER_PERIPHERY,
+     TITLES_CHECKOUT_ERROR,
+     TITLES_AUTO_LOGIN_QUERY_FAILED)
     MESSAGE_ENUM = (MESSAGE_QUEUE,
      MESSAGE_USEAUTOSEARCH,
      MESSAGE_AUTOLOGIN,
@@ -181,30 +185,21 @@ class WAITING(object):
      MESSAGE_CHECKOUT_ERROR,
      MESSAGE_AUTO_LOGIN_QUERY_FAILED,
      MESSAGE_AUTO_LOGIN_ACTIVATING)
-    TITLES_ENUM = (TITLES_QUEUE,
-     TITLES_REGISTERING,
-     TITLES_ANOTHER_PERIPHERY,
-     TITLES_CHECKOUT_ERROR,
-     TITLES_AUTO_LOGIN_QUERY_FAILED)
 
-    @staticmethod
-    def message(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#waiting:message/%s' % key
-        if outcome not in WAITING.MESSAGE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def titles(cls, key0):
+        outcome = '#waiting:titles/{}'.format(key0)
+        if outcome not in cls.TITLES_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def titles(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#waiting:titles/%s' % key
-        if outcome not in WAITING.TITLES_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def message(cls, key0):
+        outcome = '#waiting:message/{}'.format(key0)
+        if outcome not in cls.MESSAGE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

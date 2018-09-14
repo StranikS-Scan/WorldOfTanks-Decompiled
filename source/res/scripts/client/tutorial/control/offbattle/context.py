@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/offbattle/context.py
-from constants import FINISH_REASON, IS_TUTORIAL_ENABLED
+from constants import FINISH_REASON, IS_TUTORIAL_ENABLED, QUEUE_TYPE
+from gui.prb_control.dispatcher import g_prbLoader
 from tutorial import doc_loader
 from tutorial.control import context, getServerSettings, game_vars
 from tutorial.control.battle.context import ExtendedBattleClientCtx
@@ -17,7 +18,7 @@ class OffBattleClientCtx(ExtendedBattleClientCtx):
 
 
 def getBattleDescriptor():
-    return doc_loader.loadDescriptorData(TUTORIAL_SETTINGS.BATTLE)
+    return doc_loader.loadDescriptorData(TUTORIAL_SETTINGS.BATTLE_V2)
 
 
 class OffbattleStartReqs(context.StartReqs):
@@ -90,6 +91,12 @@ class OffbattleStartReqs(context.StartReqs):
 
     def __validateTutorialState(self, ctx):
         cache = ctx.cache
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is not None:
+            state = dispatcher.getFunctionalState()
+            if state.isInPreQueue(QUEUE_TYPE.TUTORIAL):
+                cache.setRefused(True).write()
+                return False
         if ctx.restart:
             return True
         elif not ctx.isFirstStart and not cache.isAfterBattle() and not ctx.restart:
@@ -108,6 +115,7 @@ class OffbattleStartReqs(context.StartReqs):
             result = not ctx.isAfterBattle and cache.doStartOnNextLogin()
             cache.setRefused(not result).write()
             return result
+            return
 
 
 class OffbattleBonusesRequester(LobbyBonusesRequester):

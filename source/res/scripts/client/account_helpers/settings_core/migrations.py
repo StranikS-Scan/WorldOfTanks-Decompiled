@@ -3,7 +3,7 @@
 from account_helpers.settings_core.SettingsCache import g_settingsCache
 import constants
 import BigWorld
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 
@@ -163,7 +163,7 @@ def _migrateTo14(core, data, initialized):
 
 
 def _migrateTo15(core, data, initialized):
-    data['gameExtData'][GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS] = True
+    pass
 
 
 def _migrateTo16(core, data, initialized):
@@ -220,11 +220,42 @@ def _migrateTo23(core, data, initialized):
 
 
 def _migrateTo24(core, data, initialized):
-    data['carousel_filter']['event'] = True
+    pass
 
 
 def _migrateTo25(core, data, initialized):
     data['carousel_filter']['hideEvent'] = False
+
+
+def _migrateTo26(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
+    maskOffset = 1
+    if (storedValue & maskOffset) >> 0:
+        clear = data['clear']
+        clear[SETTINGS_SECTIONS.GAME_EXTENDED] = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED, 0) | maskOffset
+    feedbackData = data.get('feedbackData', {})
+    feedbackData[DAMAGE_INDICATOR.TYPE] = 1
+    feedbackData[DAMAGE_INDICATOR.PRESETS] = 0
+    feedbackData[DAMAGE_INDICATOR.DAMAGE_VALUE] = True
+    feedbackData[DAMAGE_INDICATOR.VEHICLE_INFO] = True
+    feedbackData[DAMAGE_INDICATOR.ANIMATION] = True
+    feedbackData[DAMAGE_LOG.TOTAL_DAMAGE] = True
+    feedbackData[DAMAGE_LOG.BLOCKED_DAMAGE] = True
+    feedbackData[DAMAGE_LOG.ASSIST_DAMAGE] = True
+    feedbackData[DAMAGE_LOG.SHOW_DETAILS] = 2
+    for key in BATTLE_EVENTS.ALL():
+        feedbackData[key] = True
+
+    data['feedbackData'] = feedbackData
+
+
+def _migrateTo27(core, data, initialized):
+    data['carousel_filter']['hideEvent'] = False
+
+
+def _migrateTo28(core, data, initialized):
+    data['gameExtData'][GAME.CAROUSEL_TYPE] = 1
 
 
 _versions = ((1,
@@ -321,6 +352,18 @@ _versions = ((1,
   False),
  (25,
   _migrateTo25,
+  False,
+  False),
+ (26,
+  _migrateTo26,
+  False,
+  False),
+ (27,
+  _migrateTo27,
+  False,
+  False),
+ (28,
+  _migrateTo28,
   False,
   False))
 

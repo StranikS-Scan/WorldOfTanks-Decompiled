@@ -462,17 +462,52 @@
   <radios>
     <FuG8f>	shared	</FuG8f>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Somua_S-40>
+          <smplEnginePower>	232.6019	</smplEnginePower>
+        </Somua_S-40>
+      </engines>
+      <chassis>
+        <S-35ketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </S-35ketten>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <S-35ketten>
-        <alpha>	0.09177	</alpha>
-      </S-35ketten>
-    </chassis>
-    <engines>
-      <Somua_S-40>
-        <bravo>	58.15046	</bravo>
-      </Somua_S-40>
-    </engines>
     <armour>	0.89518319	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -16,16 +16,14 @@ class BattleContext(object):
         self.lastArenaUniqueID = None
         self.isInBattle = False
         self.wasInBattle = False
-        self.__isEventBattle = False
         return
 
-    def start(self, arenaDP, sessionProvider):
+    def start(self, arenaDP):
         prefs = Settings.g_instance.userPrefs
         if prefs is not None:
             self.__isShowVehShortName = prefs.readBool('showVehShortName', True)
         self.__arenaDP = arenaDP
         self.isInBattle = self.wasInBattle = True
-        self.__isEventBattle = sessionProvider.arenaVisitor.gui.isEventBattle()
         return
 
     def stop(self):
@@ -41,6 +39,29 @@ class BattleContext(object):
 
     def setPlayerFullNameFormatter(self, formatter):
         self.__playerFormatter = formatter
+
+    def getVehicleInfo(self, vID=None, accID=None):
+        """
+        Gets vehicle info.
+        
+        :param vID: long containing vehicle's entity ID.
+        :param accID: long containing account's database ID
+        :return: an instance of VehicleArenaInfoVO.
+        """
+        if vID is None:
+            vID = self.getVehIDByAccDBID(accID)
+        return self.__arenaDP.getVehicleInfo(vID)
+
+    def getPlayerName(self, vID=None, accID=None):
+        """
+        Gets player name by vehicle id or account id. If both are None, returns name of
+        the current player.
+        
+        :param vID: long containing vehicle's entity ID.
+        :param accID: long containing account's database ID
+        :return: string.
+        """
+        return self.getVehicleInfo(vID, accID).player.name
 
     def resetPlayerFullNameFormatter(self):
         self.__playerFormatter = player_format.PlayerFullNameFormatter()
@@ -179,6 +200,3 @@ class BattleContext(object):
         if vID is None:
             vID = self.__arenaDP.getVehIDByAccDBID(accID)
         return self.__arenaDP.getVehicleInfo(vID).team in teams
-
-    def isEventBattle(self):
-        return self.__isEventBattle

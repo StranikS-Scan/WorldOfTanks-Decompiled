@@ -542,17 +542,52 @@
   <radios>
     <FuG12A>	shared	</FuG12A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_234P30_Ausf_A>
+          <smplEnginePower>	845.8249	</smplEnginePower>
+        </Maybach_HL_234P30_Ausf_A>
+      </engines>
+      <chassis>
+        <Chassis_Lowe>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.115115	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.115115	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.115115	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.115115	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.115115	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.115115	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Lowe>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Lowe>
-        <alpha>	0.115115	</alpha>
-      </Chassis_Lowe>
-    </chassis>
-    <engines>
-      <Maybach_HL_234P30_Ausf_A>
-        <bravo>	211.4562	</bravo>
-      </Maybach_HL_234P30_Ausf_A>
-    </engines>
     <armour>	1.132732836	</armour>
   </clientAdjustmentFactors>
   <effects>

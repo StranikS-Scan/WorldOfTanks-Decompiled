@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/RES_COMMON.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class RES_COMMON(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     MAPS_BG = '../maps/bg.png'
     MAPS_LEGAL_BRANDS = '../maps/legal_brands.png'
     MAPS_LOADING_AWARD = '../maps/loading_award.png'

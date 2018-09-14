@@ -8,12 +8,7 @@ class EliteWindowMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def as_setVehicleS(self, vehicle):
-        """
-        :param vehicle:
-        :return :
-        """
         return self.flashObject.as_setVehicle(vehicle) if self._isDAAPIInited() else None

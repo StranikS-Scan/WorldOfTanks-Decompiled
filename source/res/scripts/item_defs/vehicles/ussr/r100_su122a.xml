@@ -668,7 +668,7 @@
             <amplitude>	0.25	</amplitude>
             <recoilEffect>	large	</recoilEffect>
           </recoil>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <models>
             <undamaged>	vehicles/russian/R100_SU122A/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R100_SU122A/crash/lod0/Gun_01.model	</destroyed>
@@ -782,23 +782,89 @@
     </_10R>
     <_12RT>	shared	</_12RT>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <GAZ-203>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </GAZ-203>
+        <M-80>
+          <smplEnginePower>	179.7378	</smplEnginePower>
+        </M-80>
+      </engines>
+      <chassis>
+        <Chassis_R100_SU122A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R100_SU122A>
+        <Chassis_R100_SU122A_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R100_SU122A_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R100_SU122A>
-        <alpha>	0.1127	</alpha>
-      </Chassis_R100_SU122A>
-      <Chassis_R100_SU122A_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_R100_SU122A_2>
-    </chassis>
-    <engines>
-      <GAZ-203>
-        <bravo>	37.00484	</bravo>
-      </GAZ-203>
-      <M-80>
-        <bravo>	44.93445	</bravo>
-      </M-80>
-    </engines>
     <armour>	0.873174641	</armour>
   </clientAdjustmentFactors>
   <effects>

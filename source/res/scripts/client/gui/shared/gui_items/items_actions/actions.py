@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
 import BigWorld
+from gui.shared.economics import getGUIPrice
 from items import vehicles
 from adisp import process
 from gui.shared.utils import decorators
@@ -14,7 +15,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats, RequestState
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta, BuyModuleMeta
-from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta, ExchangeCreditsMeta
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta, ExchangeCreditsMeta, RestoreExchangeCreditsMeta
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     kwargs['userString'] = item.userName
@@ -70,20 +71,13 @@ class IGUIItemAction(object):
 
 class BuyAction(IGUIItemAction):
 
-    def _canBuy(self, item):
-        canBuy, _ = item.mayPurchase(g_itemsCache.items.stats.money)
+    def _mayObtainForMoney(self, item):
+        canBuy, _ = item.mayObtainForMoney(g_itemsCache.items.stats.money)
         return canBuy
 
-    def _canBuyWithExchange(self, item):
-        money = g_itemsCache.items.stats.money
-        canBuy, buyReason = item.mayPurchase(money)
-        canRentOrBuy, rentReason = item.mayRentOrBuy(money)
-        canBuyWithExchange = item.mayPurchaseWithExchange(money, g_itemsCache.items.shop.exchangeRate)
-        if not canRentOrBuy:
-            if not canBuy and buyReason == 'credits_error':
-                return canBuyWithExchange
-            return canBuy
-        return canRentOrBuy
+    def _mayObtainWithMoneyExchange(self, item):
+        items = g_itemsCache.items
+        return item.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
 
 
 class SellItemAction(IGUIItemAction):
@@ -112,14 +106,14 @@ class ModuleBuyAction(BuyAction):
     @process
     def doAction(self):
         item = g_itemsCache.items.getItemByCD(self.__intCD)
-        if not self._canBuy(item):
-            if self._canBuyWithExchange(item):
+        if not self._mayObtainForMoney(item):
+            if self._mayObtainWithMoneyExchange(item):
                 isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(self.__intCD))
                 if not isOk:
                     return
             else:
                 showShopMsg('common_rent_or_buy_error', item)
-        if self._canBuy(item):
+        if self._mayObtainForMoney(item):
             yield DialogsInterface.showDialog(BuyModuleMeta(self.__intCD, g_itemsCache.items.stats.money))
         else:
             yield lambda callback=None: callback
@@ -142,26 +136,25 @@ class VehicleBuyAction(BuyAction):
             if item.isInInventory and not item.isRented:
                 showInventoryMsg('already_exists', item, msgType=SystemMessages.SM_TYPE.Warning)
             else:
-                price = item.minRentPrice or item.buyPrice
+                price = getGUIPrice(item, g_itemsCache.items.stats.money, g_itemsCache.items.shop.exchangeRate)
                 if price is None:
                     showShopMsg('not_found', item)
                     return
-                if not self._canRentOrBuy(item):
-                    if self._canBuyWithExchange(item):
-                        isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(self.__vehCD))
+                if not self._mayObtainForMoney(item):
+                    if self._mayObtainWithMoneyExchange(item):
+                        if item.isRestoreAvailable():
+                            meta = RestoreExchangeCreditsMeta(self.__vehCD)
+                        else:
+                            meta = ExchangeCreditsMeta(self.__vehCD)
+                        isOk, args = yield DialogsInterface.showDialog(meta)
                         if not isOk:
                             return
                     else:
                         showShopMsg('common_rent_or_buy_error', item)
-                if self._canRentOrBuy(item):
+                if self._mayObtainForMoney(item):
                     shared_events.showVehicleBuyDialog(item)
                 yield lambda callback=None: callback
             return
-
-    def _canRentOrBuy(self, item):
-        canRentOrBuy, reason = item.mayRentOrBuy(g_itemsCache.items.stats.money)
-        LOG_DEBUG('canRentOrBuy, reason', canRentOrBuy, reason)
-        return canRentOrBuy
 
 
 class UnlockItemAction(IGUIItemAction):
@@ -262,11 +255,11 @@ class BuyAndInstallItemAction(InstallItemAction):
         assert vehicle.isInInventory, 'Vehicle must be in inventory'
         item = g_itemsCache.items.getItemByCD(itemCD)
         conflictedEqs = item.getConflictedEquipments(vehicle)
-        if not self._canBuy(item) and self._canBuyWithExchange(item):
+        if not self._mayObtainForMoney(item) and self._mayObtainWithMoneyExchange(item):
             isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(itemCD, vehicle.intCD))
             if not isOk:
                 return
-        if self._canBuy(item):
+        if self._mayObtainForMoney(item):
             Waiting.show('buyAndInstall')
             vehicle = g_itemsCache.items.getItemByCD(rootCD)
             gunCD = getGunCD(item, vehicle)
@@ -315,11 +308,11 @@ class SetVehicleModuleAction(BuyAction):
                         return
             if not self.__isRemove and not newComponentItem.isInInventory:
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
-                if not self._canBuy(newComponentItem) and self._canBuyWithExchange(newComponentItem):
+                if not self._mayObtainForMoney(newComponentItem) and self._mayObtainWithMoneyExchange(newComponentItem):
                     isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(newComponentItem.intCD, vehicle.intCD))
                     if not isOk:
                         return
-                if self._canBuy(newComponentItem):
+                if self._mayObtainForMoney(newComponentItem):
                     Waiting.show('buyAndInstall')
                     vehicle = g_itemsCache.items.getVehicle(self.__vehInvID)
                     gunCD = getGunCD(newComponentItem, vehicle)

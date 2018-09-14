@@ -937,23 +937,89 @@
     </SCR_506>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Twin_Cadillac_series_44T4>
+          <smplEnginePower>	312.9552	</smplEnginePower>
+        </Twin_Cadillac_series_44T4>
+        <Wright_Continental_R-975C4>
+          <smplEnginePower>	486.3493	</smplEnginePower>
+        </Wright_Continental_R-975C4>
+      </engines>
+      <chassis>
+        <Chassis_M24_Chaffee>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M24_Chaffee>
+        <Chassis_M24_Chaffee_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M24_Chaffee_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M24_Chaffee>
-        <alpha>	0.08855	</alpha>
-      </Chassis_M24_Chaffee>
-      <Chassis_M24_Chaffee_2>
-        <alpha>	0.0805	</alpha>
-      </Chassis_M24_Chaffee_2>
-    </chassis>
-    <engines>
-      <Twin_Cadillac_series_44T4>
-        <bravo>	78.23881	</bravo>
-      </Twin_Cadillac_series_44T4>
-      <Wright_Continental_R-975C4>
-        <bravo>	121.5873	</bravo>
-      </Wright_Continental_R-975C4>
-    </engines>
     <armour>	0.780328468	</armour>
   </clientAdjustmentFactors>
   <effects>

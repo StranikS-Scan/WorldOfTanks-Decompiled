@@ -485,17 +485,52 @@
   <radios>
     <Fu7A>	shared	</Fu7A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Skoda_16_ADH_140>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Skoda_16_ADH_140>
+      </engines>
+      <chassis>
+        <Chassis_Cz01_Skoda_T40>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz01_Skoda_T40>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Cz01_Skoda_T40>
-        <alpha>	0.07245	</alpha>
-      </Chassis_Cz01_Skoda_T40>
-    </chassis>
-    <engines>
-      <Skoda_16_ADH_140>
-        <bravo>	185.0242	</bravo>
-      </Skoda_16_ADH_140>
-    </engines>
     <armour>	0.752201376	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -476,17 +476,52 @@
   <radios>
     <C45>	shared	</C45>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Meteor_Mk12>
+          <smplEnginePower>	845.8249	</smplEnginePower>
+        </Rolls_Royse_Meteor_Mk12>
+      </engines>
+      <chassis>
+        <Chassis_GB48_FV215b_183>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.161	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB48_FV215b_183>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB48_FV215b_183>
-        <alpha>	0.161	</alpha>
-      </Chassis_GB48_FV215b_183>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Meteor_Mk12>
-        <bravo>	211.4562	</bravo>
-      </Rolls_Royse_Meteor_Mk12>
-    </engines>
     <armour>	1.049459057	</armour>
   </clientAdjustmentFactors>
   <effects>

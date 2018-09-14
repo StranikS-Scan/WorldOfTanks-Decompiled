@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/SETTINGS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
+from debug_utils import LOG_WARNING
 
 class SETTINGS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     LANGUAGE_CODE = '#settings:LANGUAGE_CODE'
     WINDOWTITLE = '#settings:windowTitle'
     TITLE = '#settings:title'
@@ -20,6 +18,7 @@ class SETTINGS(object):
     OTHERTITLE = '#settings:otherTitle'
     KEYBOARDTITLE = '#settings:keyboardTitle'
     GRAPHICSQUALITY = '#settings:graphicsQuality'
+    FEEDBACK = '#settings:feedBack'
     GRAPHICSQUALITY_DESCRIPTION = '#settings:graphicsQuality/description'
     GRAPHICSQUALITYHDSD_SD = '#settings:graphicsQualityHDSD/SD'
     GRAPHICSQUALITYHDSD_HD = '#settings:graphicsQualityHDSD/HD'
@@ -148,6 +147,9 @@ class SETTINGS(object):
     GAME_SHOWVEHMODELSONMAP_NEVER = '#settings:game/showVehModelsOnMap/never'
     GAME_SHOWVEHMODELSONMAP_ALT = '#settings:game/showVehModelsOnMap/alt'
     GAME_SHOWVEHMODELSONMAP_ALWAYS = '#settings:game/showVehModelsOnMap/always'
+    GAME_CAROUSELTYPE = '#settings:game/carouselType'
+    GAME_CAROUSELTYPE_SINGLE = '#settings:game/carouselType/single'
+    GAME_CAROUSELTYPE_DOUBLE = '#settings:game/carouselType/double'
     GAME_BATTLELOADINGINFO = '#settings:game/battleLoadingInfo'
     GAME_BATTLELOADINGINFO_TEXTTIP = '#settings:game/battleLoadingInfo/textTip'
     GAME_BATTLELOADINGINFO_VISUALTIP = '#settings:game/battleLoadingInfo/visualTip'
@@ -206,14 +208,19 @@ class SETTINGS(object):
     CUSTOMAAMODE_MODE2 = '#settings:customAAMode/mode2'
     CUSTOMAAMODE_MODE3 = '#settings:customAAMode/mode3'
     SOUNDS_MASTERVOLUMETOGGLE = '#settings:sounds/masterVolumeToggle'
-    SOUNDS_SOUNDQUALITY = '#settings:sounds/soundQuality'
-    SOUNDQUALITY = '#settings:soundQuality'
-    SOUNDQUALITY_DESCRIPTION = '#settings:soundQuality/description'
+    SOUNDS_MASTERVOLUMETOGGLE_DESCRIPTION = '#settings:sounds/masterVolumeToggle/description'
+    SOUNDS_BULBVOICES = '#settings:sounds/bulbVoices'
+    SOUNDS_BULBVOICES_DESCRIPTION = '#settings:sounds/bulbVoices/description'
+    SOUNDS_TABCOMMON = '#settings:sounds/tabCommon'
+    SOUNDS_TABVIVOX = '#settings:sounds/tabVivox'
+    SOUNDS_TABSPECIAL = '#settings:sounds/tabSpecial'
     SOUNDS_MASTERVOLUME = '#settings:sounds/masterVolume'
     SOUNDS_ARENA = '#settings:sounds/arena'
+    SOUNDS_HANGAR = '#settings:sounds/hangar'
     SOUNDS_VEHICLES = '#settings:sounds/vehicles'
     SOUNDS_EFFECTS = '#settings:sounds/effects'
     SOUNDS_GUI = '#settings:sounds/gui'
+    SOUNDS_VOICENOTIFICATION = '#settings:sounds/voiceNotification'
     SOUNDS_AMBIENT = '#settings:sounds/ambient'
     SOUND_PLAYERS_NOTIFICATIONS = '#settings:sound/players_notifications'
     SOUND_VIVOX_MIC_SENSITIVITY = '#settings:sound/vivox/mic_sensitivity'
@@ -224,12 +231,23 @@ class SETTINGS(object):
     SOUND_VIVOX_BUTTONS_CAPTURE_DEVICES_REFRESH = '#settings:sound/vivox/buttons/capture_devices_refresh'
     SOUND_VIVOX_BUTTONS_TEST_FINISH = '#settings:sound/vivox/buttons/test_finish'
     SOUND_FIELDSET_HEADER = '#settings:sound/fieldset/header'
-    SOUND_DYNAMICRANGE_BROAD = '#settings:sound/dynamicRange/broad'
-    SOUND_DYNAMICRANGE_NARROW = '#settings:sound/dynamicRange/narrow'
-    SOUND_DYNAMICRANGE_NIGHTMODE = '#settings:sound/dynamicRange/nightMode'
-    SOUND_SOUNDDEVICE_ACOUSTICS = '#settings:sound/soundDevice/acoustics'
-    SOUND_SOUNDDEVICE_HEADPHONES = '#settings:sound/soundDevice/headphones'
-    SOUND_SOUNDDEVICE_LAPTOP = '#settings:sound/soundDevice/laptop'
+    SOUND_SPECIAL_FIELD_SET = '#settings:sound/special/field/set'
+    SOUNDS_NIGHTMODE = '#settings:sounds/nightMode'
+    SOUNDS_NIGHTMODE_DESCRIPTION = '#settings:sounds/nightMode/description'
+    SOUNDS_BASSBOOST = '#settings:sounds/bassBoost'
+    SOUNDS_BASSBOOST_DESCRIPTION = '#settings:sounds/bassBoost/description'
+    SOUNDS_SOUNDQUALITY = '#settings:sounds/soundQuality'
+    SOUNDS_SOUNDQUALITY_DESCRIPTION = '#settings:sounds/soundQuality/description'
+    SOUNDS_SOUNDDEVICE_LABEL = '#settings:sounds/soundDevice/label'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS = '#settings:sounds/soundDevice/acoustics'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS_HEADER = '#settings:sounds/soundDevice/acoustics/header'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS_BODY = '#settings:sounds/soundDevice/acoustics/body'
+    SOUNDS_SOUNDDEVICE_HEADPHONES = '#settings:sounds/soundDevice/headphones'
+    SOUNDS_SOUNDDEVICE_HEADPHONES_HEADER = '#settings:sounds/soundDevice/headphones/header'
+    SOUNDS_SOUNDDEVICE_HEADPHONES_BODY = '#settings:sounds/soundDevice/headphones/body'
+    SOUNDS_SOUNDDEVICE_LAPTOP = '#settings:sounds/soundDevice/laptop'
+    SOUNDS_SOUNDDEVICE_LAPTOP_HEADER = '#settings:sounds/soundDevice/laptop/header'
+    SOUNDS_SOUNDDEVICE_LAPTOP_BODY = '#settings:sounds/soundDevice/laptop/body'
     SOUND_SOUNDMODES_DEFAULT = '#settings:sound/soundModes/default'
     SOUND_SOUNDMODES_NATIONALDEFAULT = '#settings:sound/soundModes/nationalDefault'
     SOUND_SOUNDMODES_U01 = '#settings:sound/soundModes/U01'
@@ -237,6 +255,7 @@ class SETTINGS(object):
     SOUND_SOUNDMODES_U03 = '#settings:sound/soundModes/U03'
     SOUND_SOUNDMODES_U04 = '#settings:sound/soundModes/U04'
     VOICE_CHAT_FIELDSET_HEADER = '#settings:voice_chat/fieldset/header'
+    VOICE_CHAT_MICROPHONE_FIELDSET_HEADER = '#settings:voice_chat/microphone/fieldset/header'
     VOICE_CHAT_HEADER_COMMON = '#settings:voice_chat/header/common'
     VOICE_CHAT_VOICECHATENABLE = '#settings:voice_chat/voiceChatEnable'
     VOICE_CHAT_PTT = '#settings:voice_chat/PTT'
@@ -266,7 +285,6 @@ class SETTINGS(object):
     GAME_SHOWMARKSONGUN = '#settings:game/showMarksOnGun'
     GAME_FIELDSET_HEADERCHAT = '#settings:game/fieldset/headerChat'
     GAME_FIELDSET_HEADERGAMEPLAY = '#settings:game/fieldset/headerGameplay'
-    GAME_SHOWBATTLEEFFICIENCYRIBBONS = '#settings:game/showBattleEfficiencyRibbons'
     GAME_SHOWSIMPLIFIEDVEHPARAMS = '#settings:game/showSimplifiedVehParams'
     GAMEPLAY_CTF = '#settings:gameplay/ctf'
     GAMEPLAY_DOMINATION = '#settings:gameplay/domination'
@@ -447,11 +465,97 @@ class SETTINGS(object):
     DEFAULTBTN = '#settings:defaultBtn'
     ALTERNATIVEVOICES_FIELDSET_HEADER = '#settings:alternativeVoices/fieldset/header'
     ALTERNATIVEVOICES_LABELS_VOICEBATTLE = '#settings:alternativeVoices/labels/voiceBattle'
+    OTHERSETTINGS_FIELDSET_HEADER = '#settings:otherSettings/fieldset/header'
+    OTHERSETTINGS_LABELS_BULB = '#settings:otherSettings/labels/bulb'
     DEFAULTNAMEPREFIX = '#settings:defaultNamePrefix'
     SOUND_PRESETS_TITLE = '#settings:sound/presets/title'
     SOUND_DYNAMICRANGE_LABEL = '#settings:sound/dynamicRange/label'
-    SOUND_SOUNDDEVICE_LABEL = '#settings:sound/soundDevice/label'
-    SOUND_BASSBOOST_LABEL = '#settings:sound/bassBoost/label'
+    SOUND_BULBVOICES_LIGHTBULB = '#settings:sound/bulbVoices/lightbulb'
+    SOUND_BULBVOICES_LIGHTBULB_02 = '#settings:sound/bulbVoices/lightbulb_02'
+    SOUND_BULBVOICES_SIXTHSENSE = '#settings:sound/bulbVoices/sixthSense'
+    FEEDBACK_TAB_DAMAGEINDICATOR = '#settings:feedback/tab/damageIndicator'
+    FEEDBACK_TAB_DAMAGEINDICATOR_TYPELABEL = '#settings:feedback/tab/damageIndicator/typeLabel'
+    FEEDBACK_TAB_DAMAGEINDICATOR_TYPE_STANDARD = '#settings:feedback/tab/damageIndicator/type/standard'
+    FEEDBACK_TAB_DAMAGEINDICATOR_TYPE_EXTENDED = '#settings:feedback/tab/damageIndicator/type/extended'
+    FEEDBACK_TAB_DAMAGEINDICATOR_PRESETS = '#settings:feedback/tab/damageIndicator/presets'
+    FEEDBACK_TAB_DAMAGEINDICATOR_PRESETS_ALL = '#settings:feedback/tab/damageIndicator/presets/all'
+    FEEDBACK_TAB_DAMAGEINDICATOR_PRESETS_WITHOUTCRIT = '#settings:feedback/tab/damageIndicator/presets/withoutCrit'
+    FEEDBACK_TAB_DAMAGEINDICATOR_ITEMS = '#settings:feedback/tab/damageIndicator/items'
+    FEEDBACK_TAB_DAMAGEINDICATOR_ITEMS_DAMAGE = '#settings:feedback/tab/damageIndicator/items/damage'
+    FEEDBACK_TAB_DAMAGEINDICATOR_ITEMS_TANKNAME = '#settings:feedback/tab/damageIndicator/items/tankName'
+    FEEDBACK_TAB_DAMAGEINDICATOR_ITEMS_ANIMATION = '#settings:feedback/tab/damageIndicator/items/animation'
+    FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_CRITVALUE = '#settings:feedback/tab/damageIndicator/indicator/critValue'
+    FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_DAMAGEMODULE = '#settings:feedback/tab/damageIndicator/indicator/damageModule'
+    FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_BLOCKDAMAGECOUNTTF = '#settings:feedback/tab/damageIndicator/indicator/blockDamageCountTF'
+    FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_CRITLABEL = '#settings:feedback/tab/damageIndicator/indicator/critLabel'
+    FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_BLOCKEDVALUE = '#settings:feedback/tab/damageIndicator/indicator/blockedValue'
+    FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_BLOCKEDLABEL = '#settings:feedback/tab/damageIndicator/indicator/blockedLabel'
+    FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_DAMAGEVALUE = '#settings:feedback/tab/damageIndicator/indicator/damageValue'
+    FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_DAMAGELABEL = '#settings:feedback/tab/damageIndicator/indicator/damageLabel'
+    FEEDBACK_TAB_DAMAGELOGPANEL = '#settings:feedback/tab/damageLogPanel'
+    FEEDBACK_TAB_EVENTSINFO = '#settings:feedback/tab/eventsInfo'
+    FEEDBACK_TAB_DETAILSINFOBLOCK = '#settings:feedback/tab/detailsInfoBlock'
+    FEEDBACK_TAB_DAMAGELOGPANEL_SUMMLABEL = '#settings:feedback/tab/damageLogPanel/summLabel'
+    FEEDBACK_TAB_DAMAGELOGPANEL_DAMAGEDONE = '#settings:feedback/tab/damageLogPanel/damageDone'
+    FEEDBACK_TAB_DAMAGELOGPANEL_BLOCKEDDAMAGE = '#settings:feedback/tab/damageLogPanel/blockedDamage'
+    FEEDBACK_TAB_DAMAGELOGPANEL_DAMAGEASSIST = '#settings:feedback/tab/damageLogPanel/damageAssist'
+    FEEDBACK_TAB_DAMAGELOGPANEL_DETAILSLABEL = '#settings:feedback/tab/damageLogPanel/detailsLabel'
+    FEEDBACK_TAB_DAMAGELOGPANEL_DETAILS_ALWAYS = '#settings:feedback/tab/damageLogPanel/details/always'
+    FEEDBACK_TAB_DAMAGELOGPANEL_DETAILS_BYALT = '#settings:feedback/tab/damageLogPanel/details/byAlt'
+    FEEDBACK_TAB_DAMAGELOGPANEL_DETAILS_HIDE = '#settings:feedback/tab/damageLogPanel/details/hide'
+    FEEDBACK_TAB_BATTLEEVENTS_LABEL_COMMONLABEL = '#settings:feedback/tab/battleEvents/label/CommonLabel'
+    FEEDBACK_TAB_BATTLEEVENTS_LABEL_VISIBLEEVENTS = '#settings:feedback/tab/battleEvents/label/VisibleEvents'
+    FEEDBACK_TAB_BATTLEEVENTS_LABEL_INFORMATION = '#settings:feedback/tab/battleEvents/label/Information'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_SHOWINBATTLE = '#settings:feedback/tab/battleEvents/checkbox/ShowInBattle'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYHPDAMAGE = '#settings:feedback/tab/battleEvents/checkbox/EnemyHpDamage'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYBURNING = '#settings:feedback/tab/battleEvents/checkbox/EnemyBurning'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYRAMATTACK = '#settings:feedback/tab/battleEvents/checkbox/EnemyRamAttack'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_BLOCKEDDAMAGE = '#settings:feedback/tab/battleEvents/checkbox/BlockedDamage'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYDETECTIONDAMAGE = '#settings:feedback/tab/battleEvents/checkbox/EnemyDetectionDamage'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYTRACKDAMAGE = '#settings:feedback/tab/battleEvents/checkbox/EnemyTrackDamage'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYDETECTION = '#settings:feedback/tab/battleEvents/checkbox/EnemyDetection'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYKILL = '#settings:feedback/tab/battleEvents/checkbox/EnemyKill'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_BASECAPTUREDROP = '#settings:feedback/tab/battleEvents/checkbox/BaseCaptureDrop'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_BASECAPTURE = '#settings:feedback/tab/battleEvents/checkbox/BaseCapture'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYCRITICALHIT = '#settings:feedback/tab/battleEvents/checkbox/EnemyCriticalHit'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_EVENTNAME = '#settings:feedback/tab/battleEvents/checkbox/EventName'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_VEHICLEINFO = '#settings:feedback/tab/battleEvents/checkbox/VehicleInfo'
+    FEEDBACK_TAB_BATTLEEVENTS_INFO = '#settings:feedback/tab/battleEvents/info'
+    GRAPHICSSETTINGSOPTIONS_ENUM = (GRAPHICSSETTINGSOPTIONS_DEFERRED,
+     GRAPHICSSETTINGSOPTIONS_FORWARD,
+     GRAPHICSSETTINGSOPTIONS_ON,
+     GRAPHICSSETTINGSOPTIONS_OFF,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_16X,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_8X,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_4X,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_2X,
+     GRAPHICSSETTINGSOPTIONS_TRILINEAR,
+     GRAPHICSSETTINGSOPTIONS_BILINEAR,
+     GRAPHICSSETTINGSOPTIONS_POINT,
+     GRAPHICSSETTINGSOPTIONS_CUSTOM,
+     GRAPHICSSETTINGSOPTIONS_ULTRA,
+     GRAPHICSSETTINGSOPTIONS_VERY_HIGH,
+     GRAPHICSSETTINGSOPTIONS_MAX,
+     GRAPHICSSETTINGSOPTIONS_VERYHIGH,
+     GRAPHICSSETTINGSOPTIONS_HIGH,
+     GRAPHICSSETTINGSOPTIONS_MEDIUM,
+     GRAPHICSSETTINGSOPTIONS_FAR,
+     GRAPHICSSETTINGSOPTIONS_NEAR,
+     GRAPHICSSETTINGSOPTIONS_LOW,
+     GRAPHICSSETTINGSOPTIONS_LOWEST,
+     GRAPHICSSETTINGSOPTIONS_MIN,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_3,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_2,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_1,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_0,
+     GRAPHICSSETTINGSOPTIONS_NONE,
+     GRAPHICSSETTINGSOPTIONS_COLORIZATION,
+     GRAPHICSSETTINGSOPTIONS_MUTED,
+     GRAPHICSSETTINGSOPTIONS_CONTRASTY,
+     GRAPHICSSETTINGSOPTIONS_SOFT_COLORS,
+     GRAPHICSSETTINGSOPTIONS_PHOTOCHROMATIC,
+     GRAPHICSSETTINGSOPTIONS_SOFT,
+     GRAPHICSSETTINGSOPTIONS_RANDOM)
     AIM_ENUM = (AIM_MIXING,
      AIM_MIXING_TYPE0,
      AIM_MIXING_TYPE1,
@@ -501,6 +605,16 @@ class SETTINGS(object):
      AIM_CONDITION,
      AIM_CASSETTE,
      AIM_ZOOMINDICATOR)
+    KEYBOARD_KEYSBLOCKS_GROUP_ENUM = (KEYBOARD_KEYSBLOCKS_GROUP_MOVEMENT,
+     KEYBOARD_KEYSBLOCKS_GROUP_CRUIS_CONTROL,
+     KEYBOARD_KEYSBLOCKS_GROUP_FIRING,
+     KEYBOARD_KEYSBLOCKS_GROUP_EQUIPMENT,
+     KEYBOARD_KEYSBLOCKS_GROUP_SHORTCUTS,
+     KEYBOARD_KEYSBLOCKS_GROUP_CAMERA,
+     KEYBOARD_KEYSBLOCKS_GROUP_VOICECHAT,
+     KEYBOARD_KEYSBLOCKS_GROUP_LOGITECH_KEYBOARD,
+     KEYBOARD_KEYSBLOCKS_GROUP_VEHICLE_OTHER,
+     KEYBOARD_KEYSBLOCKS_GROUP_MINIMAP)
     KEYBOARD_KEYSBLOCKS_COMMAND_ENUM = (KEYBOARD_KEYSBLOCKS_COMMAND_FORWARD,
      KEYBOARD_KEYSBLOCKS_COMMAND_FORWARD_CRUISE,
      KEYBOARD_KEYSBLOCKS_COMMAND_BACKWARD,
@@ -554,92 +668,39 @@ class SETTINGS(object):
      KEYBOARD_KEYSBLOCKS_COMMAND_SIZEUP,
      KEYBOARD_KEYSBLOCKS_COMMAND_SIZEDOWN,
      KEYBOARD_KEYSBLOCKS_COMMAND_VISIBLE)
-    GRAPHICSSETTINGSOPTIONS_ENUM = (GRAPHICSSETTINGSOPTIONS_DEFERRED,
-     GRAPHICSSETTINGSOPTIONS_FORWARD,
-     GRAPHICSSETTINGSOPTIONS_ON,
-     GRAPHICSSETTINGSOPTIONS_OFF,
-     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_16X,
-     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_8X,
-     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_4X,
-     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_2X,
-     GRAPHICSSETTINGSOPTIONS_TRILINEAR,
-     GRAPHICSSETTINGSOPTIONS_BILINEAR,
-     GRAPHICSSETTINGSOPTIONS_POINT,
-     GRAPHICSSETTINGSOPTIONS_CUSTOM,
-     GRAPHICSSETTINGSOPTIONS_ULTRA,
-     GRAPHICSSETTINGSOPTIONS_VERY_HIGH,
-     GRAPHICSSETTINGSOPTIONS_MAX,
-     GRAPHICSSETTINGSOPTIONS_VERYHIGH,
-     GRAPHICSSETTINGSOPTIONS_HIGH,
-     GRAPHICSSETTINGSOPTIONS_MEDIUM,
-     GRAPHICSSETTINGSOPTIONS_FAR,
-     GRAPHICSSETTINGSOPTIONS_NEAR,
-     GRAPHICSSETTINGSOPTIONS_LOW,
-     GRAPHICSSETTINGSOPTIONS_LOWEST,
-     GRAPHICSSETTINGSOPTIONS_MIN,
-     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_3,
-     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_2,
-     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_1,
-     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_0,
-     GRAPHICSSETTINGSOPTIONS_NONE,
-     GRAPHICSSETTINGSOPTIONS_COLORIZATION,
-     GRAPHICSSETTINGSOPTIONS_MUTED,
-     GRAPHICSSETTINGSOPTIONS_CONTRASTY,
-     GRAPHICSSETTINGSOPTIONS_SOFT_COLORS,
-     GRAPHICSSETTINGSOPTIONS_PHOTOCHROMATIC,
-     GRAPHICSSETTINGSOPTIONS_SOFT,
-     GRAPHICSSETTINGSOPTIONS_RANDOM)
-    KEYBOARD_KEYSBLOCKS_GROUP_ENUM = (KEYBOARD_KEYSBLOCKS_GROUP_MOVEMENT,
-     KEYBOARD_KEYSBLOCKS_GROUP_CRUIS_CONTROL,
-     KEYBOARD_KEYSBLOCKS_GROUP_FIRING,
-     KEYBOARD_KEYSBLOCKS_GROUP_EQUIPMENT,
-     KEYBOARD_KEYSBLOCKS_GROUP_SHORTCUTS,
-     KEYBOARD_KEYSBLOCKS_GROUP_CAMERA,
-     KEYBOARD_KEYSBLOCKS_GROUP_VOICECHAT,
-     KEYBOARD_KEYSBLOCKS_GROUP_LOGITECH_KEYBOARD,
-     KEYBOARD_KEYSBLOCKS_GROUP_VEHICLE_OTHER,
-     KEYBOARD_KEYSBLOCKS_GROUP_MINIMAP)
 
-    @staticmethod
-    def aim(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#settings:aim/%s' % key
-        if outcome not in SETTINGS.AIM_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def graphicssettingsoptions(cls, key0):
+        outcome = '#settings:graphicsSettingsOptions/{}'.format(key0)
+        if outcome not in cls.GRAPHICSSETTINGSOPTIONS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def keyboard_keysblocks_command(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#settings:keyboard/keysBlocks/command/%s' % key
-        if outcome not in SETTINGS.KEYBOARD_KEYSBLOCKS_COMMAND_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def aim(cls, key0):
+        outcome = '#settings:aim/{}'.format(key0)
+        if outcome not in cls.AIM_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def graphicssettingsoptions(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#settings:graphicsSettingsOptions/%s' % key
-        if outcome not in SETTINGS.GRAPHICSSETTINGSOPTIONS_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def keyboard_keysblocks_group(cls, key0):
+        outcome = '#settings:keyboard/keysBlocks/group/{}'.format(key0)
+        if outcome not in cls.KEYBOARD_KEYSBLOCKS_GROUP_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def keyboard_keysblocks_group(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#settings:keyboard/keysBlocks/group/%s' % key
-        if outcome not in SETTINGS.KEYBOARD_KEYSBLOCKS_GROUP_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def keyboard_keysblocks_command(cls, key0):
+        outcome = '#settings:keyboard/keysBlocks/command/{}'.format(key0)
+        if outcome not in cls.KEYBOARD_KEYSBLOCKS_COMMAND_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

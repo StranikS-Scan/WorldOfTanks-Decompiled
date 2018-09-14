@@ -749,6 +749,7 @@
             <collisionModelServer>	vehicles/french/F75_Char_de_25t/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F75_Char_de_25t/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	-0.000366154 0.0036708 2.54598	</rayStart>
@@ -807,6 +808,7 @@
             <collisionModelServer>	vehicles/french/F75_Char_de_25t/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F75_Char_de_25t/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	0.00124021 0.00631482 3.64033	</rayStart>
@@ -865,6 +867,7 @@
             <collisionModelServer>	vehicles/french/F75_Char_de_25t/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F75_Char_de_25t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	0.00163382 0.00467078 3.64033	</rayStart>
@@ -941,23 +944,89 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Moteur_moderne_3M_27_1_01>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Moteur_moderne_3M_27_1_01>
+        <Maybach_HL_230_F>
+          <smplEnginePower>	800	</smplEnginePower>
+        </Maybach_HL_230_F>
+      </engines>
+      <chassis>
+        <Chassis_Char_de_25t>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Char_de_25t>
+        <Chassis_Char_de_25t_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Char_de_25t_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Char_de_25t>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Char_de_25t>
-      <Chassis_Char_de_25t_2>
-        <alpha>	0.07245	</alpha>
-      </Chassis_Char_de_25t_2>
-    </chassis>
-    <engines>
-      <Moteur_moderne_3M_27_1_01>
-        <bravo>	132.1601	</bravo>
-      </Moteur_moderne_3M_27_1_01>
-      <Maybach_HL_230_F>
-        <bravo>	200	</bravo>
-      </Maybach_HL_230_F>
-    </engines>
     <armour>	0.927792485	</armour>
   </clientAdjustmentFactors>
   <effects>

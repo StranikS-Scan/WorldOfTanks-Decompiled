@@ -39,7 +39,7 @@ class BoostersWindow(BoostersWindowMeta):
     def __init__(self, ctx=None):
         super(BoostersWindow, self).__init__()
         self.__tabsContainer = TabsContainer()
-        self.__tabsContainer.setCurrentTabIdx(ctx.get('tabID', TABS_IDS.INVENTORY))
+        self.__defaultTabIdx = ctx.get('tabID')
         self.__qualities = []
         self.__boosterTypes = []
 
@@ -68,7 +68,11 @@ class BoostersWindow(BoostersWindowMeta):
         self.__tabsContainer.onTabsUpdate += self.__onTabsUpdate
         self.__setFilters(AccountSettings.getFilter(BOOSTERS_FILTER))
         self.__setStaticData()
+        if self.__defaultTabIdx is None:
+            self.__defaultTabIdx = self.__getDefaultTabIdx()
+        self.__tabsContainer.setCurrentTabIdx(self.__defaultTabIdx)
         self.__update()
+        return
 
     def _dispose(self):
         self.__tabsContainer.onTabsUpdate -= self.__onTabsUpdate
@@ -78,6 +82,13 @@ class BoostersWindow(BoostersWindowMeta):
         self.__boosterTypes = None
         super(BoostersWindow, self)._dispose()
         return
+
+    def __getDefaultTabIdx(self):
+        for tab in self.__tabsContainer.getTabs().itervalues():
+            if tab.getTotalCount() > 0:
+                return tab.getID()
+
+        return TABS_IDS.INVENTORY
 
     def __onTabsUpdate(self):
         self.__update()

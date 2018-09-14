@@ -2,21 +2,22 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/TechTree.py
 import GUI
 import Keys
+import nations
+from account_helpers.settings_core.settings_constants import TUTORIAL
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import g_guiResetters
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
+from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.settings import USE_XML_DUMPING
-from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
+from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.sounds.ambients import LobbySubViewEnv
-import nations
-from account_helpers.settings_core.settings_constants import TUTORIAL
 _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 768
 _HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_768'
 
@@ -38,6 +39,9 @@ class TechTree(TechTreeMeta):
         self.as_refreshNationTreeDataS(SelectedNation.getName())
 
     def requestNationTreeData(self):
+        """
+        Overridden method of the class _Py_ScriptHandler.requestNationTreeData.
+        """
         if USE_XML_DUMPING and IS_DEVELOPMENT:
             self.as_useXMLDumpingS()
         self.as_setAvailableNationsS(g_techTreeDP.getAvailableNations())
@@ -45,6 +49,9 @@ class TechTree(TechTreeMeta):
         return True
 
     def getNationTreeData(self, nationName):
+        """
+        Overridden method of the class _Py_ScriptHandler.getNationTreeData.
+        """
         if nationName not in nations.INDICES:
             LOG_ERROR('Nation not found', nationName)
             return {}
@@ -54,9 +61,24 @@ class TechTree(TechTreeMeta):
         return self._data.dump()
 
     def request4Unlock(self, unlockCD, vehCD, unlockIdx, xpCost):
+        """
+        Overridden method of the class ResearchViewMeta.request4Unlock.
+        """
         ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, int(unlockCD), int(vehCD), int(unlockIdx), int(xpCost))
 
     def request4Buy(self, itemCD):
+        """
+        Overridden method of the class ResearchViewMeta.request4Buy
+        """
+        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, int(itemCD))
+
+    def request4VehCompare(self, vehCD):
+        """
+        :param vehCD: float
+        """
+        getVehicleComparisonBasketCtrl().addVehicle(int(vehCD))
+
+    def request4Restore(self, itemCD):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, int(itemCD))
 
     def goToNextVehicle(self, vehCD):
@@ -70,10 +92,17 @@ class TechTree(TechTreeMeta):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def invalidateVehLocks(self, locks):
+        """
+        Overridden method of the class ResearchView.invalidateVehLocks.
+        """
         if self._data.invalidateLocks(locks):
-            self.as_refreshNationTreeDataS(SelectedNation.getName())
+            self.redraw()
 
     def invalidateVTypeXP(self, xps):
+        """
+        Overridden method of the class ResearchView.invalidateVTypeXP.
+        Experience cost of some vehicles may changes if xps of vehicles has been updated, @see WOTD-12753.
+        """
         super(TechTree, self).invalidateVTypeXP(xps)
         result = self._data.invalidateXpCosts()
         if len(result):
@@ -120,9 +149,12 @@ class TechTree(TechTreeMeta):
     def __onUpdateStage(self):
         g_techTreeDP.setOverride(self._getOverride())
         if g_techTreeDP.load():
-            self.as_refreshNationTreeDataS(SelectedNation.getName())
+            self.redraw()
 
     def __handleReloadData(self, event):
+        """
+        Redraw nation tree.
+        """
         if event.key is Keys.KEY_R:
             g_techTreeDP.load(isReload=True)
-            self.as_refreshNationTreeDataS(SelectedNation.getName())
+            self.redraw()

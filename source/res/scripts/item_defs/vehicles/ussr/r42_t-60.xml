@@ -717,23 +717,89 @@
   <radios>
     <_71-TK-3>	shared	</_71-TK-3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <GAZ-202>
+          <smplEnginePower>	74.00968	</smplEnginePower>
+        </GAZ-202>
+        <ZiS-16>
+          <smplEnginePower>	89.8689	</smplEnginePower>
+        </ZiS-16>
+      </engines>
+      <chassis>
+        <Chassis_T-60>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T-60>
+        <Chassis_T-60_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T-60_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T-60>
-        <alpha>	0.10465	</alpha>
-      </Chassis_T-60>
-      <Chassis_T-60_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_T-60_2>
-    </chassis>
-    <engines>
-      <GAZ-202>
-        <bravo>	18.50242	</bravo>
-      </GAZ-202>
-      <ZiS-16>
-        <bravo>	22.46722	</bravo>
-      </ZiS-16>
-    </engines>
     <armour>	0.739526892	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -75,7 +75,6 @@ class ClanSearchInfo(ClanSearchInfoMeta, ClanListener, ClanEmblemsHelper):
     def _updateDetailedInfo(self):
         clanID = self.__selectedClan.getClanDbID()
         clanName = formatField(self.__selectedClan.getClanFullName)
-        creationDate = formatField(getter=self.__selectedClan.getCreationDate, formatter=BigWorld.wg_getShortDateFormat)
         rating = formatField(getter=self.__selectedClan.getPersonalRating, formatter=BigWorld.wg_getIntegralFormat)
         battlesCount = formatField(getter=self.__selectedClan.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat)
         wins = formatField(getter=self.__selectedClan.getBattleXpAvg, formatter=lambda value: BigWorld.wg_getNiceNumberFormat(value) + '%')
@@ -83,7 +82,7 @@ class ClanSearchInfo(ClanSearchInfoMeta, ClanListener, ClanEmblemsHelper):
         stats = [_packItemData(battlesCount, CLANS.SEARCH_INFO_STATS_BATTLES, CLANS.SEARCH_INFO_STATS_BATTLES_TOOLTIP, 'avgBattlesCount40x32.png'), _packItemData(wins, CLANS.SEARCH_INFO_STATS_WINS, CLANS.SEARCH_INFO_STATS_WINS_TOOLTIP, 'avgWins40x32.png'), _packItemData(avgExp, CLANS.SEARCH_INFO_STATS_AVGEXP, CLANS.SEARCH_INFO_STATS_AVGEXP_TOOLTIP, 'avgExp40x32.png')]
         self.as_setDataS({'clanId': clanID,
          'clanName': clanName,
-         'creationDate': text_styles.main(_ms(CLANS.SEARCH_INFO_CREATIONDATE, date=creationDate)),
+         'ratingTitle': text_styles.main(CLANS.SEARCH_INFO_RATINGTITLE),
          'rating': text_styles.promoTitle(rating),
          'stats': stats})
 

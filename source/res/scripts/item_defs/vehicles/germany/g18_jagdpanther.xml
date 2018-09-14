@@ -1097,28 +1097,94 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_210_TRM_P30>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Maybach_HL_210_TRM_P30>
+        <Maybach_HL_230_TRM_P30>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230_TRM_P30>
+      </engines>
+      <chassis>
+        <JgPzV_Standardketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </JgPzV_Standardketten>
+        <JgPzV_Vetstaerktketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </JgPzV_Vetstaerktketten>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_105mm_K18_L52>
         <delta>	1.1698113	</delta>
       </_105mm_K18_L52>
     </guns>
-    <chassis>
-      <JgPzV_Standardketten>
-        <alpha>	0.1127	</alpha>
-      </JgPzV_Standardketten>
-      <JgPzV_Vetstaerktketten>
-        <alpha>	0.10465	</alpha>
-      </JgPzV_Vetstaerktketten>
-    </chassis>
-    <engines>
-      <Maybach_HL_210_TRM_P30>
-        <bravo>	171.8082	</bravo>
-      </Maybach_HL_210_TRM_P30>
-      <Maybach_HL_230_TRM_P30>
-        <bravo>	185.0242	</bravo>
-      </Maybach_HL_230_TRM_P30>
-    </engines>
     <armour>	0.973669368	</armour>
   </clientAdjustmentFactors>
   <effects>

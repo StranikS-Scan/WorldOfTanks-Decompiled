@@ -368,17 +368,52 @@
   <radios>
     <ER_52>	shared	</ER_52>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Renault_NC>
+          <smplEnginePower>	79.29608	</smplEnginePower>
+        </_Renault_NC>
+      </engines>
+      <chassis>
+        <Chassis_Ch06_Renault_NC31_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch06_Renault_NC31_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch06_Renault_NC31_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Ch06_Renault_NC31_2>
-    </chassis>
-    <engines>
-      <_Renault_NC>
-        <bravo>	19.82402	</bravo>
-      </_Renault_NC>
-    </engines>
     <armour>	0.815043165	</armour>
   </clientAdjustmentFactors>
   <effects>

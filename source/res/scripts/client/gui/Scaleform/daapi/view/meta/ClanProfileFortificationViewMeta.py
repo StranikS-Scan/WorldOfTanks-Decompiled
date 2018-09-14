@@ -8,18 +8,13 @@ class ClanProfileFortificationViewMeta(ClanProfileBaseView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends ClanProfileBaseView
-    null
     """
 
     def as_showBodyDummyS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by DummyVO (AS)
         """
         return self.flashObject.as_showBodyDummy(data) if self._isDAAPIInited() else None
 
     def as_hideBodyDummyS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideBodyDummy() if self._isDAAPIInited() else None

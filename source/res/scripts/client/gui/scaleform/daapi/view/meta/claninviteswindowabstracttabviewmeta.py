@@ -8,19 +8,13 @@ class ClanInvitesWindowAbstractTabViewMeta(ClanInvitesViewWithTable):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends ClanInvitesViewWithTable
-    null
     """
 
     def filterBy(self, filterName):
-        """
-        :param filterName:
-        :return :
-        """
         self._printOverrideError('filterBy')
 
     def as_updateFilterStateS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by ClanInvitesWindowTableFilterVO (AS)
         """
         return self.flashObject.as_updateFilterState(data) if self._isDAAPIInited() else None

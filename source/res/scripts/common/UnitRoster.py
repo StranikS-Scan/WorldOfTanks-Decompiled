@@ -221,6 +221,8 @@ class BaseUnitRosterSlot(object):
     DEFAULT_LEVELS = (1, 10)
     DEFAULT_NATIONS = []
     DEFAULT_VEHICLE_CLASSES = []
+    NATION_MASK_POWER = 16
+    VEH_CLASS_MASK_POWER = 8
 
     def __init__(self, vehTypeCompDescr=None, nationNames=None, levels=None, vehClassNames=None, packed=''):
         if nationNames is None:
@@ -236,8 +238,8 @@ class BaseUnitRosterSlot(object):
             self.vehTypeCompDescr = vehTypeCompDescr
             if vehTypeCompDescr is not None:
                 return
-            self.nationMask = _makeBitMask(nationNames, nations.INDICES, 16)
-            self.vehClassMask = _makeBitMask(vehClassNames, VEHICLE_CLASS_INDICES)
+            self.nationMask = _makeBitMask(nationNames, nations.INDICES, self.NATION_MASK_POWER)
+            self.vehClassMask = _makeBitMask(vehClassNames, VEHICLE_CLASS_INDICES, self.VEH_CLASS_MASK_POWER)
             levelRange = xrange(self.DEFAULT_LEVELS[0], self.DEFAULT_LEVELS[1] + 1)
             if isinstance(levels, int) and levels in levelRange:
                 self.levels = (levels, levels)
@@ -266,6 +268,12 @@ class BaseUnitRosterSlot(object):
     _VEHICLE_MASKS_SIZE = struct.calcsize(_VEHICLE_MASKS)
     _VEHICLE_TYPE = '<BH'
     _VEHICLE_TYPE_SIZE = struct.calcsize(_VEHICLE_TYPE)
+
+    def isNationMaskFull(self):
+        return self.nationMask == _makeBitMask(self.DEFAULT_NATIONS, nations.INDICES, self.NATION_MASK_POWER)
+
+    def isVehClassMaskFull(self):
+        return self.vehClassMask == _makeBitMask(self.DEFAULT_VEHICLE_CLASSES, VEHICLE_CLASS_INDICES, self.VEH_CLASS_MASK_POWER)
 
     def pack(self):
         if self.vehTypeCompDescr is None:

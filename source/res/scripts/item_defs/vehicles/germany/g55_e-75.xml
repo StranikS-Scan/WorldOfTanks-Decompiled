@@ -829,7 +829,7 @@
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <effects>	shot_main_mb	</effects>
+          <effects>	shot_large_mb	</effects>
           <models>
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_02.model	</destroyed>
@@ -1067,7 +1067,7 @@
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <effects>	shot_main_mb	</effects>
+          <effects>	shot_large_mb	</effects>
           <models>
             <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_06.model	</destroyed>
@@ -1188,7 +1188,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_large_mb	</effects>
+          <effects>	shot_largeext_mb	</effects>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1267,28 +1267,94 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230_TRM_P45>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230_TRM_P45>
+        <Maybach_HL_234_TRM_P45>
+          <smplEnginePower>	951.553	</smplEnginePower>
+        </Maybach_HL_234_TRM_P45>
+      </engines>
+      <chassis>
+        <Chassis_E-75>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_E-75>
+        <Chassis_E-75_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_E-75_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_128mm_KwK44_L55>
         <delta>	1.16901408	</delta>
       </_128mm_KwK44_L55>
     </guns>
-    <chassis>
-      <Chassis_E-75>
-        <alpha>	0.10465	</alpha>
-      </Chassis_E-75>
-      <Chassis_E-75_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_E-75_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_230_TRM_P45>
-        <bravo>	185.0242	</bravo>
-      </Maybach_HL_230_TRM_P45>
-      <Maybach_HL_234_TRM_P45>
-        <bravo>	237.8883	</bravo>
-      </Maybach_HL_234_TRM_P45>
-    </engines>
     <armour>	1.039360667	</armour>
   </clientAdjustmentFactors>
   <effects>

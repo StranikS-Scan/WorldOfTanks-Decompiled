@@ -673,26 +673,92 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <MB-503>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+        </MB-503>
+        <Maybach_HL_210_TRM_P30>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Maybach_HL_210_TRM_P30>
+        <Maybach_HL_230_TRM_P30>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230_TRM_P30>
+      </engines>
+      <chassis>
+        <Chassis_VK3002DB_V1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_VK3002DB_V1>
+        <Chassis_VK3002DB_V1_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_VK3002DB_V1_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_VK3002DB_V1>
-        <alpha>	0.12075	</alpha>
-      </Chassis_VK3002DB_V1>
-      <Chassis_VK3002DB_V1_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_VK3002DB_V1_2>
-    </chassis>
-    <engines>
-      <MB-503>
-        <bravo>	153.3058	</bravo>
-      </MB-503>
-      <Maybach_HL_210_TRM_P30>
-        <bravo>	171.8082	</bravo>
-      </Maybach_HL_210_TRM_P30>
-      <Maybach_HL_230_TRM_P30>
-        <bravo>	185.0242	</bravo>
-      </Maybach_HL_230_TRM_P30>
-    </engines>
     <armour>	0.986927245	</armour>
   </clientAdjustmentFactors>
   <effects>

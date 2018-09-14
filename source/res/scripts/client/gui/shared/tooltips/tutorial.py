@@ -135,6 +135,7 @@ class ResearchTreePacker(HeaderPacker):
         self._title = TOOLTIPS.HANGARTUTORIAL_RESEARCHTREE_TITLE
         self._descr = TOOLTIPS.HANGARTUTORIAL_RESEARCHTREE_DESCRIPTION
         self._setMargins(afterBlock=13)
+        self._setContentMargin(top=15, left=19, bottom=-5, right=22)
         self._setWidth(375)
 
     def _packBlocks(self, *args, **kwargs):
@@ -164,7 +165,9 @@ class ResearchTreePacker(HeaderPacker):
          formatters.packImageTextBlockData(title=text_styles.main(TOOLTIPS.HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_RESEARCH), img=RES_ICONS.MAPS_ICONS_HANGARTUTORIAL_RESEARCHBUTTON, imgPadding=imgPdg, txtGap=txtGap, txtOffset=txtOffset),
          formatters.packImageTextBlockData(title=text_styles.main(TOOLTIPS.HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_BUY), img=RES_ICONS.MAPS_ICONS_HANGARTUTORIAL_BUYBUTTON, imgPadding=imgPdg, txtGap=txtGap, txtOffset=txtOffset),
          formatters.packImageTextBlockData(title=text_styles.main(TOOLTIPS.HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_INHANGAR), img=RES_ICONS.MAPS_ICONS_LIBRARY_COMPLETEDINDICATOR, imgPadding={'left': 3,
-          'top': -3}, txtGap=txtGap, txtOffset=txtOffset)], blocksGap))
+          'top': -3}, txtGap=txtGap, txtOffset=txtOffset),
+         formatters.packImageTextBlockData(title=text_styles.main(TOOLTIPS.HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_ADDTOCOMPARE), img=RES_ICONS.MAPS_ICONS_LIBRARY_ADD_TO_COMPARE, imgPadding={'left': 11,
+          'top': -22}, txtGap=txtGap, txtOffset=txtOffset, txtPadding={'top': -10})], blocksGap))
         return items
 
 

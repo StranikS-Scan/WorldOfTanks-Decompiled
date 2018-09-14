@@ -958,23 +958,89 @@
   <radios>
     <SCR_200>	shared	</SCR_200>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_W-670>
+          <smplEnginePower>	277.0077	</smplEnginePower>
+        </Continental_W-670>
+        <Continental_W-670-12>
+          <smplEnginePower>	304.497	</smplEnginePower>
+        </Continental_W-670-12>
+      </engines>
+      <chassis>
+        <Chassis_A46_T3>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A46_T3>
+        <Chassis_A46_T3_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A46_T3_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_A46_T3>
-        <alpha>	0.1288	</alpha>
-      </Chassis_A46_T3>
-      <Chassis_A46_T3_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_A46_T3_2>
-    </chassis>
-    <engines>
-      <Continental_W-670>
-        <bravo>	69.25191	</bravo>
-      </Continental_W-670>
-      <Continental_W-670-12>
-        <bravo>	76.12424	</bravo>
-      </Continental_W-670-12>
-    </engines>
     <armour>	0.783426524	</armour>
   </clientAdjustmentFactors>
   <effects>

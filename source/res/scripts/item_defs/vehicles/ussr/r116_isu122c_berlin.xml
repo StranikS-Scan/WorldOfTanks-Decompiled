@@ -476,17 +476,52 @@
   <radios>
     <_10RKM>	shared	</_10RKM>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2IS_B>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </V-2IS_B>
+      </engines>
+      <chassis>
+        <Chassis_R116_ISU122C_Berlin>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R116_ISU122C_Berlin>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R116_ISU122C_Berlin>
-        <alpha>	0.10465	</alpha>
-      </Chassis_R116_ISU122C_Berlin>
-    </chassis>
-    <engines>
-      <V-2IS_B>
-        <bravo>	158.5922	</bravo>
-      </V-2IS_B>
-    </engines>
     <armour>	0.982479122	</armour>
   </clientAdjustmentFactors>
   <effects>

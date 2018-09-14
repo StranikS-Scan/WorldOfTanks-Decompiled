@@ -7,7 +7,6 @@ class BATTLE_ICONS_CONSTS(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     FOLLOW_ME = 'Followme'
     STOP = 'Stop'

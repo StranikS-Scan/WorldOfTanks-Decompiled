@@ -8,26 +8,13 @@ class PlayersPanelMeta(StatsBase):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends StatsBase
-    null
     """
 
     def tryToSetPanelModeByMouse(self, panelMode):
-        """
-        :param panelMode:
-        :return :
-        """
         self._printOverrideError('tryToSetPanelModeByMouse')
 
     def switchToOtherPlayer(self, vehicleID):
-        """
-        :param vehicleID:
-        :return :
-        """
         self._printOverrideError('switchToOtherPlayer')
 
     def as_setPanelModeS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_setPanelMode(value) if self._isDAAPIInited() else None

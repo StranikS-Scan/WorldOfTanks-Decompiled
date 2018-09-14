@@ -4,7 +4,7 @@ from Event import Event
 from adisp import async
 from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
-from gui.shared.utils.requesters import ItemsRequester
+from gui.shared.utils.requesters.ItemsRequester import ItemsRequester
 
 class CACHE_SYNC_REASON(object):
     SHOW_GUI, CLIENT_UPDATE, SHOP_RESYNC, INVENTORY_RESYNC, DOSSIER_RESYNC, STATS_RESYNC = range(1, 7)

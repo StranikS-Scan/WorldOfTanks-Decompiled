@@ -18,7 +18,7 @@ def calcSurfaceMaterialNearPoint(point, normal, spaceID, defaultEffectMaterial='
         hitPoint = point
         surfNormal = normal
     else:
-        hitPoint, surfNormal, chunkID, itemIndex, matKind, fileName = matInfo
+        hitPoint, surfNormal, matKind, fileName, _, _ = matInfo
         effectIdx = None
         if DESTRUCTIBLE_MATKIND.MIN <= matKind <= DESTRUCTIBLE_MATKIND.MAX:
             desc = AreaDestructibles.g_cache.getDescByFilename(fileName)

@@ -64,6 +64,17 @@
     <tags>	SPG lightSPG noImprovedVentilation mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedSprings_class3_user HD	</tags>
     <level>	5	</level>
   </F28_105_leFH18B2>
+  <F27_FCM_36Pak40>
+    <id>	9	</id>
+    <userString>	#france_vehicles:FCM_36Pak40	</userString>
+    <shortUserString>	#france_vehicles:FCM_36Pak40_short	</shortUserString>
+    <description>	#france_vehicles:FCM_36Pak40_descr	</description>
+    <price>	850	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user enhancedSprings_user HD	</tags>
+    <level>	3	</level>
+  </F27_FCM_36Pak40>
   <F06_ARL_44>
     <id>	10	</id>
     <userString>	#france_vehicles:ARL_44	</userString>
@@ -73,17 +84,6 @@
     <tags>	heavyTank largeCaliberTankRammer_user wetCombatPack_class2_user enhancedSprings_class3_user HD	</tags>
     <level>	6	</level>
   </F06_ARL_44>
-  <F27_FCM_36Pak40>
-    <id>	9	</id>
-    <userString>	#france_vehicles:FCM_36Pak40	</userString>
-    <shortUserString>	#france_vehicles:FCM_36Pak40_short	</shortUserString>
-    <description>	#france_vehicles:FCM_36Pak40_descr	</description>
-    <price>	850	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user enhancedSprings_user	</tags>
-    <level>	3	</level>
-  </F27_FCM_36Pak40>
   <F14_AMX40>
     <id>	11	</id>
     <userString>	#france_vehicles:AMX40	</userString>
@@ -181,7 +181,7 @@
     <description>	#france_vehicles:Lorraine40t_descr	</description>
     <price>	3450000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user secret	</tags>
+    <tags>	mediumTank wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user secret unrecoverable	</tags>
     <level>	9	</level>
   </F19_Lorraine40t>
   <F13_AMX38>
@@ -298,7 +298,7 @@
     <description>	#france_vehicles:AMX50_Foch_descr	</description>
     <shortUserString>	#france_vehicles:AMX50_Foch_short	</shortUserString>
     <price>	3670000	</price>
-    <tags>	AT-SPG heavyAT-SPG enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user	</tags>
+    <tags>	AT-SPG heavyAT-SPG enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	9	</level>
   </F37_AMX50_Foch>
   <F34_ARL_V39>
@@ -427,6 +427,28 @@
     <tags>	mediumTank wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
     <level>	9	</level>
   </F75_Char_de_25t>
+  <F74_AMX_M4_1949_Liberte>
+    <id>	242	</id>
+    <userString>	#france_vehicles:F74_AMX_M4_1949_Liberte	</userString>
+    <shortUserString>	#france_vehicles:F74_AMX_M4_1949_Liberte_short	</shortUserString>
+    <description>	#france_vehicles:F74_AMX_M4_1949_Liberte_descr	</description>
+    <price>	11700	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <level>	8	</level>
+  </F74_AMX_M4_1949_Liberte>
+  <F84_Somua_SM>
+    <id>	243	</id>
+    <userString>	#france_vehicles:F84_Somua_SM	</userString>
+    <shortUserString>	#france_vehicles:F84_Somua_SM_short	</shortUserString>
+    <description>	#france_vehicles:F84_Somua_SM_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank aimingStabilizer_Mk2_user wetCombatPack_class2_user enhancedTorsions5t_user HD secret testTank	</tags>
+    <level>	8	</level>
+  </F84_Somua_SM>
   <F74_AMX_M4_1949>
     <id>	245	</id>
     <userString>	#france_vehicles:F74_AMX_M4_1949	</userString>
@@ -456,7 +478,7 @@
     <price>	5000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank secret scout wetCombatPack_class1_user enhancedTorsions1t_user HD inGame	</tags>
+    <tags>	lightTank scout wetCombatPack_class1_user enhancedTorsions1t_user HD inGame	</tags>
     <level>	7	</level>
   </F69_AMX13_57_100_GrandFinal>
   <F68_AMX_Chasseur_de_char_46>
@@ -571,7 +593,7 @@
     <description>	#france_vehicles:RenaultFT_bot_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank secret	</tags>
+    <tags>	lightTank secret unrecoverable	</tags>
     <level>	1	</level>
   </F01_RenaultFT_bot>
 </list.xml>

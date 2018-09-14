@@ -324,17 +324,52 @@
   <radios>
     <British_Wireless_set_N19>	shared	</British_Wireless_set_N19>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAA_1>
+          <smplEnginePower>	465.2037	</smplEnginePower>
+        </Ford_GAA_1>
+      </engines>
+      <chassis>
+        <VVSS_WE210>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VVSS_WE210>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <VVSS_WE210>
-        <alpha>	0.09177	</alpha>
-      </VVSS_WE210>
-    </chassis>
-    <engines>
-      <Ford_GAA_1>
-        <bravo>	116.3009	</bravo>
-      </Ford_GAA_1>
-    </engines>
     <armour>	1.130076372	</armour>
   </clientAdjustmentFactors>
   <effects>

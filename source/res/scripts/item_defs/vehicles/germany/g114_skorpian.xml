@@ -484,7 +484,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_large_mb	</effects>
+          <effects>	shot_largeext_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
@@ -535,17 +535,52 @@
   <radios>
     <FuG_FA>	shared	</FuG_FA>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_210_TRM_P30_A>
+          <smplEnginePower>	850	</smplEnginePower>
+        </Maybach_HL_210_TRM_P30_A>
+      </engines>
+      <chassis>
+        <Chassis_G114_Skorpian>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G114_Skorpian>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G114_Skorpian>
-        <alpha>	0.12075	</alpha>
-      </Chassis_G114_Skorpian>
-    </chassis>
-    <engines>
-      <Maybach_HL_210_TRM_P30_A>
-        <bravo>	212.5	</bravo>
-      </Maybach_HL_210_TRM_P30_A>
-    </engines>
     <armour>	0.850624002	</armour>
   </clientAdjustmentFactors>
   <effects>

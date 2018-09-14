@@ -249,7 +249,7 @@ class VehicleEntry(MinimapEntry):
             else:
                 count = 0
                 for entry in pool:
-                    if entry.getID() == self._entryID or not entry.isEnemy():
+                    if entry.getID() == self._entryID or not entry.isEnemy() or not entry.isInAoI():
                         continue
                     count += entry.getActualSpottedCount()
 

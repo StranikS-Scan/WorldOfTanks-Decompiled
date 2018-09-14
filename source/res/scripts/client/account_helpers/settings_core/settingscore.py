@@ -22,6 +22,9 @@ class _SettingsCore(object):
         AIM = settings_constants.AIM
         MARKERS = settings_constants.MARKERS
         OTHER = settings_constants.OTHER
+        DAMAGE_INDICATOR = settings_constants.DAMAGE_INDICATOR
+        DAMAGE_LOG = settings_constants.DAMAGE_LOG
+        BATTLE_EVENTS = settings_constants.BATTLE_EVENTS
         self.__serverSettings = ServerSettingsManager(self)
         self.interfaceScale = InterfaceScaleManager(self)
         VIDEO_SETTINGS_STORAGE = settings_storages.VideoSettingsStorage(self.serverSettings, self)
@@ -37,6 +40,7 @@ class _SettingsCore(object):
         MARKERS_SETTINGS_STORAGE = settings_storages.MarkersSettingsStorage(self.serverSettings, self)
         MARK_ON_GUN_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.MARKS_ON_GUN)
         FOV_SETTINGS_STORAGE = settings_storages.FOVSettingsStorage(self.serverSettings, self)
+        FEEDBACK_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.FEEDBACK)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
         EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
         self.__storages = {'game': GAME_SETTINGS_STORAGE,
@@ -53,7 +57,8 @@ class _SettingsCore(object):
          'extendedMessenger': EXTENDED_MESSENGER_SETTINGS_STORAGE,
          'marksOnGun': MARK_ON_GUN_SETTINGS_STORAGE,
          'FOV': FOV_SETTINGS_STORAGE,
-         'tutorial': TUTORIAL_SETTINGS_STORAGE}
+         'tutorial': TUTORIAL_SETTINGS_STORAGE,
+         'feedback': FEEDBACK_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
         self.__options = options.SettingsContainer(((GAME.REPLAY_ENABLED, options.ReplaySetting(GAME.REPLAY_ENABLED, storage=GAME_SETTINGS_STORAGE)),
@@ -62,7 +67,6 @@ class _SettingsCore(object):
          (GAME.ENABLE_POSTMORTEM, options.PostProcessingSetting(GAME.ENABLE_POSTMORTEM, 'mortem_post_effect', storage=GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_POSTMORTEM_DELAY, options.PostMortemDelaySetting(GAME.ENABLE_POSTMORTEM_DELAY, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_VEHICLES_COUNTER, options.StorageAccountSetting(GAME.SHOW_VEHICLES_COUNTER, storage=GAME_SETTINGS_STORAGE)),
-         (GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS, options.ExcludeInReplayAccountSetting(GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.BATTLE_LOADING_INFO, options.BattleLoadingTipSetting(GAME.BATTLE_LOADING_INFO, GAME.BATTLE_LOADING_INFO)),
          (GAME.SIMPLIFIED_TTC, options.StorageAccountSetting(GAME.SIMPLIFIED_TTC, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_MARKS_ON_GUN, options.ShowMarksOnGunSetting(GAME.SHOW_MARKS_ON_GUN, storage=MARK_ON_GUN_SETTINGS_STORAGE)),
@@ -78,6 +82,7 @@ class _SettingsCore(object):
          (GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS, options.ClansSetting(GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.RECEIVE_FRIENDSHIP_REQUEST, options.MessengerSetting(GAME.RECEIVE_FRIENDSHIP_REQUEST, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.RECEIVE_INVITES_IN_BATTLE, options.MessengerSetting(GAME.RECEIVE_INVITES_IN_BATTLE, storage=EXTENDED_MESSENGER_SETTINGS_STORAGE)),
+         (GAME.STORE_RECEIVER_IN_BATTLE, options.MessengerSetting(GAME.STORE_RECEIVER_IN_BATTLE, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.DISABLE_BATTLE_CHAT, options.MessengerSetting(GAME.DISABLE_BATTLE_CHAT, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.CHAT_CONTACTS_LIST_ONLY, options.MessengerSetting(GAME.CHAT_CONTACTS_LIST_ONLY, storage=EXTENDED_MESSENGER_SETTINGS_STORAGE)),
          (GAME.PLAYERS_PANELS_SHOW_LEVELS, options.PlayersPanelSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS, 'players_panel', 'showLevels', storage=GAME_SETTINGS_STORAGE)),
@@ -95,6 +100,7 @@ class _SettingsCore(object):
          (GAME.MINIMAP_VIEW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_VIEW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_MAX_VIEW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_MAX_VIEW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_DRAW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_DRAW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.CAROUSEL_TYPE, options.CarouselTypeSetting(GAME.CAROUSEL_TYPE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GRAPHICS.MONITOR, options.MonitorSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.RESOLUTION, options.ResolutionSetting(storage=VIDEO_SETTINGS_STORAGE)),
@@ -143,6 +149,8 @@ class _SettingsCore(object):
          (SOUND.SOUND_QUALITY_VISIBLE, options.ReadOnlySetting(options.SoundQualitySetting.isAvailable)),
          (SOUND.MASTER, options.SoundSetting('master')),
          (SOUND.MUSIC, options.SoundSetting('music')),
+         (SOUND.MUSIC_HANGAR, options.SoundSetting('music_hangar')),
+         (SOUND.VOICE_NOTIFICATION, options.SoundSetting('voice')),
          (SOUND.VEHICLES, options.SoundSetting('vehicles')),
          (SOUND.EFFECTS, options.SoundSetting('effects')),
          (SOUND.GUI, options.SoundSetting('gui')),
@@ -155,9 +163,16 @@ class _SettingsCore(object):
          (SOUND.CAPTURE_DEVICES, options.VOIPCaptureDevicesSetting()),
          (SOUND.VOIP_SUPPORTED, options.VOIPSupportSetting()),
          (SOUND.BASS_BOOST, options.BassBoostSetting()),
-         (SOUND.DYNAMIC_RANGE, options.DynamicSoundPresetSetting(SOUND.DYNAMIC_RANGE, SOUND.DYNAMIC_RANGE)),
+         (SOUND.NIGHT_MODE, options.NightModeSetting()),
          (SOUND.SOUND_DEVICE, options.SoundDevicePresetSetting(SOUND.SOUND_DEVICE, SOUND.SOUND_DEVICE)),
          (SOUND.ALT_VOICES, options.AltVoicesSetting(SOUND.ALT_VOICES, storage=SOUND_SETTINGS_STORAGE)),
+         (SOUND.DETECTION_ALERT_SOUND, options.DetectionAlertSound()),
+         (SOUND.GAME_EVENT_AMBIENT, options.SoundSetting('ev_ambient')),
+         (SOUND.GAME_EVENT_EFFECTS, options.SoundSetting('ev_effects')),
+         (SOUND.GAME_EVENT_GUI, options.SoundSetting('ev_gui')),
+         (SOUND.GAME_EVENT_MUSIC, options.SoundSetting('ev_music')),
+         (SOUND.GAME_EVENT_VEHICLES, options.SoundSetting('ev_vehicles')),
+         (SOUND.GAME_EVENT_VOICE, options.SoundSetting('ev_voice')),
          (CONTROLS.MOUSE_ARCADE_SENS, options.MouseSensitivitySetting('arcade')),
          (CONTROLS.MOUSE_SNIPER_SENS, options.MouseSensitivitySetting('sniper')),
          (CONTROLS.MOUSE_STRATEGIC_SENS, options.MouseSensitivitySetting('strategic')),
@@ -188,7 +203,30 @@ class _SettingsCore(object):
          (TUTORIAL.MEDKIT_USED, options.TutorialSetting(TUTORIAL.MEDKIT_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
          (TUTORIAL.REPAIRKIT_USED, options.TutorialSetting(TUTORIAL.REPAIRKIT_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
          (TUTORIAL.FIRE_EXTINGUISHER_USED, options.TutorialSetting(TUTORIAL.FIRE_EXTINGUISHER_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
-         (TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, options.TutorialSetting(TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, storage=TUTORIAL_SETTINGS_STORAGE))))
+         (TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, options.TutorialSetting(TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.TYPE, options.DamageIndicatorTypeSetting(DAMAGE_INDICATOR.TYPE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.PRESETS, options.DamageIndicatorPresetsSetting(DAMAGE_INDICATOR.PRESETS, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.DAMAGE_VALUE, options.StorageAccountSetting(DAMAGE_INDICATOR.DAMAGE_VALUE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.VEHICLE_INFO, options.StorageAccountSetting(DAMAGE_INDICATOR.VEHICLE_INFO, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.ANIMATION, options.StorageAccountSetting(DAMAGE_INDICATOR.ANIMATION, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.TOTAL_DAMAGE, options.StorageAccountSetting(DAMAGE_LOG.TOTAL_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.BLOCKED_DAMAGE, options.StorageAccountSetting(DAMAGE_LOG.BLOCKED_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.ASSIST_DAMAGE, options.StorageAccountSetting(DAMAGE_LOG.ASSIST_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.SHOW_DETAILS, options.DamageLogDetailsSetting(DAMAGE_LOG.SHOW_DETAILS, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.SHOW_IN_BATTLE, options.StorageAccountSetting(BATTLE_EVENTS.SHOW_IN_BATTLE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_HP_DAMAGE, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_HP_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_BURNING, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_BURNING, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_RAM_ATTACK, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_RAM_ATTACK, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.BLOCKED_DAMAGE, options.StorageAccountSetting(BATTLE_EVENTS.BLOCKED_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_DETECTION_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_TRACK_DAMAGE, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_TRACK_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_DETECTION, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_DETECTION, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_KILL, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_KILL, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.BASE_CAPTURE_DROP, options.StorageAccountSetting(BATTLE_EVENTS.BASE_CAPTURE_DROP, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.BASE_CAPTURE, options.StorageAccountSetting(BATTLE_EVENTS.BASE_CAPTURE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_CRITICAL_HIT, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_CRITICAL_HIT, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.EVENT_NAME, options.StorageAccountSetting(BATTLE_EVENTS.EVENT_NAME, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.VEHICLE_INFO, options.StorageAccountSetting(BATTLE_EVENTS.VEHICLE_INFO, storage=FEEDBACK_SETTINGS_STORAGE))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         self.interfaceScale.init()

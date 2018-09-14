@@ -7,7 +7,6 @@ class APP_CONTAINERS_NAMES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     LIBRARIES = 'libraries'
     VIEWS = 'views'

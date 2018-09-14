@@ -8,13 +8,7 @@ class DialogsManagerMeta(BaseDAAPIModule):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIModule
-    null
     """
 
     def showSimpleI18nDialog(self, i18nKey, handlers):
-        """
-        :param i18nKey:
-        :param handlers:
-        :return :
-        """
         self._printOverrideError('showSimpleI18nDialog')

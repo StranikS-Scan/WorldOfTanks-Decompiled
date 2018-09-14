@@ -22,13 +22,14 @@
     <Interface>	SessionTracker	</Interface>
     <Interface>	AccountFortConnector	</Interface>
     <Interface>	AccountGlobalMapConnector	</Interface>
+    <Interface>	AccountSysMessenger	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_91510>
+    <requiredVersion_91600>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_0.9.15.1	</Default>
-    </requiredVersion_91510>
+      <Default>	ct_0.9.16_4	</Default>
+    </requiredVersion_91600>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>

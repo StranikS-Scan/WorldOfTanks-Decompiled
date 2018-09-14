@@ -142,7 +142,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.311628	</radius>
-          <syncAngle>	22.5	</syncAngle>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
@@ -182,7 +182,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.311628	</radius>
-          <syncAngle>	22.5	</syncAngle>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -250,7 +250,7 @@
         <left>	vehicles/french/F07_AMX_M4_1945/track/left.track	</left>
         <right>	vehicles/french/F07_AMX_M4_1945/track/right.track	</right>
         <segmentLength>	0.166	</segmentLength>
-        <segmentOffset>	-0.022	</segmentOffset>
+        <segmentOffset>	0.109	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -261,14 +261,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.25	</maxAmplitude>
         <maxOffset>	0.25	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	1200	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
@@ -416,7 +413,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.311628	</radius>
-          <syncAngle>	22.5	</syncAngle>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
@@ -456,7 +453,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.311628	</radius>
-          <syncAngle>	22.5	</syncAngle>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -524,7 +521,7 @@
         <left>	vehicles/french/F07_AMX_M4_1945/track/left.track	</left>
         <right>	vehicles/french/F07_AMX_M4_1945/track/right.track	</right>
         <segmentLength>	0.166	</segmentLength>
-        <segmentOffset>	-0.022	</segmentOffset>
+        <segmentOffset>	0.109	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -535,14 +532,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.25	</maxAmplitude>
         <maxOffset>	0.25	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	1200	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
@@ -720,9 +714,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000221153 -0.0103708 1.88934	</rayStart>
+              <rayStart>	0.000120932 -0.010294 1.88934	</rayStart>
               <rayEnd>	-0.052128 -0.011017 1.88828	</rayEnd>
-              <rayUp>	0.07 0.063 4	</rayUp>
+              <rayUp>	0.095 0.083 5	</rayUp>
               <size>	0.55	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -772,9 +766,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.00010524 -0.0107412 2.03255	</rayStart>
+              <rayStart>	0.000108733 -0.0108349 2.03255	</rayStart>
               <rayEnd>	-0.0273119 -0.0705371 2.03203	</rayEnd>
-              <rayUp>	0.074 0.069 4	</rayUp>
+              <rayUp>	0.096 0.087 5	</rayUp>
               <size>	0.56	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -813,9 +807,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000112799 -0.00746383 2.56697	</rayStart>
+              <rayStart>	0.000098 -0.0102911 2.56697	</rayStart>
               <rayEnd>	0.0494658 0.0364151 2.56671	</rayEnd>
-              <rayUp>	0.07 0.068 4	</rayUp>
+              <rayUp>	0.087 0.082 5	</rayUp>
               <size>	0.56	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -947,7 +941,7 @@
             <insigniaOnGun>
               <rayStart>	-0.000004 0.00687904 2.23121	</rayStart>
               <rayEnd>	-0.0553048 -0.0455317 2.23028	</rayEnd>
-              <rayUp>	0.094 0.084 3	</rayUp>
+              <rayUp>	0.094 0.084 5	</rayUp>
               <size>	0.55	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -994,7 +988,7 @@
             <insigniaOnGun>
               <rayStart>	-0.000032 0.00639688 2.52689	</rayStart>
               <rayEnd>	0.0751192 0.0306324 2.52667	</rayEnd>
-              <rayUp>	0.095 0.085 3	</rayUp>
+              <rayUp>	0.095 0.086 5	</rayUp>
               <size>	0.55	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -1090,7 +1084,7 @@
             <insigniaOnGun>
               <rayStart>	-0.000014 0.00687687 3.03319	</rayStart>
               <rayEnd>	0.0546508 -0.0247132 3.03299	</rayEnd>
-              <rayUp>	0.085 0.082 3	</rayUp>
+              <rayUp>	0.085 0.082 5	</rayUp>
               <size>	0.56	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -1167,26 +1161,92 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230>
+          <smplEnginePower>	607.9366	</smplEnginePower>
+        </Maybach_HL_230>
+        <Maybach_HL_230P45>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Maybach_HL_230P45>
+        <Maybach_HL_295>
+          <smplEnginePower>	898.689	</smplEnginePower>
+        </Maybach_HL_295>
+      </engines>
+      <chassis>
+        <Chassis_AMX_M4_1945>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_M4_1945>
+        <Chassis_AMX_M4_1945_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_M4_1945_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_M4_1945>
-        <alpha>	0.1288	</alpha>
-      </Chassis_AMX_M4_1945>
-      <Chassis_AMX_M4_1945_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_AMX_M4_1945_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_230>
-        <bravo>	151.9842	</bravo>
-      </Maybach_HL_230>
-      <Maybach_HL_230P45>
-        <bravo>	198.2402	</bravo>
-      </Maybach_HL_230P45>
-      <Maybach_HL_295>
-        <bravo>	224.6722	</bravo>
-      </Maybach_HL_295>
-    </engines>
     <armour>	1.150655622	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -3,7 +3,7 @@
 import BigWorld
 import AccountCommands
 from gui import makeHtmlString
-from gui.shared.gui_items.vehicle_modules import VehicleTurret
+from gui.shared.gui_items.vehicle_modules import VehicleTurret, VehicleGun
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from debug_utils import LOG_DEBUG
 from gui.SystemMessages import SM_TYPE
@@ -357,6 +357,9 @@ class PreviewVehicleTurretInstaller(TurretInstaller):
         vehDescr = self.vehicle.descriptor
         vehDescr.installTurret(self.item.intCD, self.gunCD)
         self.vehicle.turret = VehicleTurret(vehDescr.turret['compactDescr'], descriptor=vehDescr.turret)
+        if self.gunCD:
+            self.vehicle.descriptor.installComponent(self.gunCD)
+            self.vehicle.gun = VehicleGun(self.gunCD, descriptor=self.vehicle.descriptor.gun)
         callback(makeSuccess())
 
 

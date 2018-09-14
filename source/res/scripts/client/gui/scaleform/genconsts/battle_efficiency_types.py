@@ -7,14 +7,17 @@ class BATTLE_EFFICIENCY_TYPES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     ARMOR = 'armor'
     DAMAGE = 'damage'
+    RAM = 'ram'
+    BURN = 'burn'
     DESTRUCTION = 'kill'
     TEAM_DESTRUCTION = 'teamKill'
     DETECTION = 'spotted'
-    ASSIST = 'assist'
+    ASSIST_TRACK = 'assistTrack'
+    ASSIST_SPOT = 'assistSpot'
     CRITS = 'crits'
     CAPTURE = 'capture'
     DEFENCE = 'defence'
+    ASSIST = 'assist'

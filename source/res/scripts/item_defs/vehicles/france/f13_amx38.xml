@@ -665,23 +665,89 @@
     </ER_52>
     <ER_53>	shared	</ER_53>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Aster>
+          <smplEnginePower>	158.5922	</smplEnginePower>
+        </Aster>
+        <Aster_M>
+          <smplEnginePower>	169.165	</smplEnginePower>
+        </Aster_M>
+      </engines>
+      <chassis>
+        <Chassis_AMX38>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX38>
+        <Chassis_AMX38_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX38_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX38>
-        <alpha>	0.1288	</alpha>
-      </Chassis_AMX38>
-      <Chassis_AMX38_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_AMX38_2>
-    </chassis>
-    <engines>
-      <Aster>
-        <bravo>	39.64804	</bravo>
-      </Aster>
-      <Aster_M>
-        <bravo>	42.29124	</bravo>
-      </Aster_M>
-    </engines>
     <armour>	0.861356293	</armour>
   </clientAdjustmentFactors>
   <effects>

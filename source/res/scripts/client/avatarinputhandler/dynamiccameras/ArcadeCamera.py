@@ -1,23 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/ArcadeCamera.py
 import math
-from collections import namedtuple
 import BattleReplay
 import BigWorld
 import Keys
 import Math
 import Settings
 import constants
+import GUI
 from AvatarInputHandler import mathUtils, cameras
 from AvatarInputHandler.AimingSystems.ArcadeAimingSystem import ArcadeAimingSystem
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, AccelerationSmoother
-from AvatarInputHandler.Oscillator import Oscillator, CompoundOscillator
 from AvatarInputHandler.VideoCamera import KeySensor
 from AvatarInputHandler.cameras import ICamera, readFloat, readVec2, ImpulseReason, FovExtended
 from Math import Vector2, Vector3, Vector4, Matrix
 from avatar_helpers import aim_global_binding
 from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
+from collections import namedtuple
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 
 def getCameraAsSettingsHolder(settingsDataSec):
@@ -26,14 +26,18 @@ def getCameraAsSettingsHolder(settingsDataSec):
 
 MinMax = namedtuple('MinMax', ('min', 'max'))
 
-class AdvancedColliderConstants(namedtuple('AdvancedColliderConstants', ('enable', 'ePower', 'fovRatio', 'specialCollisionRadius', 'forwardEstimatedTime', 'backwardEstimatedTime'))):
+class CollisionVolumeGroup(namedtuple('CollisionVolumeGroup', ('minVolume', 'lowSpeedLimit', 'vehicleVisibilityLimit', 'approachSpeed', 'cameraSpeedFactor', 'criticalDistance', 'canSkip'))):
 
     @staticmethod
     def fromSection(dataSection):
-        it = iter(AdvancedColliderConstants._fields)
-        return AdvancedColliderConstants(dataSection.readBool(next(it), True), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)))
+        it = iter(CollisionVolumeGroup._fields)
+        return CollisionVolumeGroup(dataSection.readFloat(next(it), 0.0), dataSection.readFloat(next(it), 0.0), dataSection.readFloat(next(it), 0.0), dataSection.readVector2(next(it), Math.Vector2(1.5, 10000.0)), dataSection.readFloat(next(it), 0.1), dataSection.readFloat(next(it), 5.0), dataSection.readBool(next(it), False))
 
 
+VOLUME_GROUPS_NAMES = ['tiny',
+ 'small',
+ 'medium',
+ 'large']
 _INERTIA_EASING = mathUtils.Easing.exponentialEasing
 ENABLE_INPUT_ROTATION_INERTIA = False
 
@@ -142,7 +146,12 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__updatedByKeyboard = False
         if defaultOffset is not None:
             self.__defaultAimOffset = defaultOffset
-            self.__cam = BigWorld.HomingCamera()
+            self.__cam = BigWorld.HomingCamera(self.__adCfg['enable'])
+            if self.__adCfg['enable']:
+                self.__cam.initAdvancedCollider(self.__adCfg['fovRatio'], self.__adCfg['rollbackSpeed'], self.__adCfg['minimalCameraDistance'], self.__adCfg['speedThreshold'], self.__adCfg['minimalVolume'])
+                for group_name in VOLUME_GROUPS_NAMES:
+                    self.__cam.addVolumeGroup(self.__adCfg['volumeGroups'][group_name])
+
             self.__cam.aimPointClipCoords = defaultOffset
         else:
             self.__defaultAimOffset = Vector2()
@@ -211,9 +220,9 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         for vehicle in vehicles:
             vehicleAppearance = vehicle.appearance
             compound = vehicleAppearance.compoundModel
-            colliders.append((compound.node(TankPartNames.HULL), compound.bounds, compound.getPartGeometryLink(TankPartIndexes.HULL)))
             if not vehicle.isTurretDetached:
-                colliders.append((compound.node(TankPartNames.TURRET), compound.bounds, compound.getPartGeometryLink(TankPartIndexes.TURRET)))
+                colliders.append((compound.node(TankPartNames.TURRET), compound.getBoundsForPart(TankPartIndexes.TURRET), compound.getPartGeometryLink(TankPartIndexes.TURRET)))
+            colliders.append((compound.node(TankPartNames.HULL), compound.getBoundsForPart(TankPartIndexes.HULL), compound.getPartGeometryLink(TankPartIndexes.HULL)))
 
         self.__cam.setDynamicColliders(colliders)
         self.__aimingSystem.setDynamicColliders(colliders)
@@ -428,7 +437,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         if delta != 0.0:
             self.__cam.setScrollDelta(math.copysign(delta, sign))
         FovExtended.instance().setFovByMultiplier(self.__inputInertia.fovZoomMultiplier)
-        unshakenPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.idealMatrix if self.__cam.advancedColliderEnabled else self.__aimingSystem.matrix)
+        unshakenPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.idealMatrix if self.__adCfg['enable'] else self.__aimingSystem.matrix)
         vehMatrix = Math.Matrix(self.__aimingSystem.vehicleMProv)
         vehiclePos = vehMatrix.translation
         fromVehicleToUnshakedPos = unshakenPos - vehiclePos
@@ -448,6 +457,8 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
             aimOffset = replayCtrl.getAimClipPosition()
+            if not BigWorld.player().isForcedGuiControlMode() and GUI.mcursor().inFocus:
+                GUI.mcursor().position = aimOffset
         else:
             aimOffset = self.__calcAimOffset(oscillationsZoomMultiplier)
             if replayCtrl.isRecording:
@@ -525,9 +536,9 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__impulseOscillator.update(deltaTime)
         self.__movementOscillator.update(deltaTime)
         self.__noiseOscillator.update(deltaTime)
-        self.__impulseOscillator.externalForce.set(0, 0, 0)
-        self.__movementOscillator.externalForce.set(0, 0, 0)
-        self.__noiseOscillator.externalForce.set(0, 0, 0)
+        self.__impulseOscillator.externalForce = Vector3(0)
+        self.__movementOscillator.externalForce = Vector3(0)
+        self.__noiseOscillator.externalForce = Vector3(0)
         relDist = self.__calcRelativeDist()
         zoomMultiplier = mathUtils.lerp(1.0, self.__dynamicCfg['zoomExposure'], relDist)
         impulseDeviation = Vector3(self.__impulseOscillator.deviation)
@@ -657,7 +668,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         dynamicsSection = dataSec['dynamics']
         self.__impulseOscillator = createOscillatorFromSection(dynamicsSection['impulseOscillator'], False)
         self.__movementOscillator = createOscillatorFromSection(dynamicsSection['movementOscillator'], False)
-        self.__movementOscillator = CompoundOscillator(self.__movementOscillator, Oscillator(1.0, Vector3(50), Vector3(20), Vector3(0.01, 0.0, 0.01)))
+        self.__movementOscillator = Math.PyCompoundOscillator(self.__movementOscillator, Math.PyOscillator(1.0, Vector3(50), Vector3(20), Vector3(0.01, 0.0, 0.01)))
         self.__noiseOscillator = createOscillatorFromSection(dynamicsSection['randomNoiseOscillatorSpherical'])
         self.__dynamicCfg.readImpulsesConfig(dynamicsSection)
         self.__dynamicCfg['accelerationSensitivity'] = readFloat(dynamicsSection, 'accelerationSensitivity', -1000, 1000, 0.1)
@@ -674,11 +685,24 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         maxAccelerationDuration = readFloat(dynamicsSection, 'maxAccelerationDuration', 0.0, 10000.0, ArcadeCamera._DEFAULT_MAX_ACCELERATION_DURATION)
         self.__accelerationSmoother = AccelerationSmoother(accelerationFilter, maxAccelerationDuration)
         self.__inputInertia = _InputInertia(self.__cfg['fovMultMinMaxDist'], 0.0)
-        advancedCollision = dataSec['advancedCollision']
-        if advancedCollision is None:
-            LOG_ERROR('<advancedCollision> dataSection is not found!')
+        advancedCollider = dataSec['advancedCollider']
+        self.__adCfg = dict()
+        cfg = self.__adCfg
+        if advancedCollider is None:
+            LOG_ERROR('<advancedCollider> dataSection is not found!')
+            cfg['enable'] = False
         else:
-            BigWorld.setAdvancedColliderConstants(AdvancedColliderConstants.fromSection(advancedCollision), cfg['distRange'][0])
+            cfg['enable'] = advancedCollider.readBool('enable', False)
+            cfg['fovRatio'] = advancedCollider.readFloat('fovRatio', 2.0)
+            cfg['rollbackSpeed'] = advancedCollider.readFloat('rollbackSpeed', 1.0)
+            cfg['minimalCameraDistance'] = self.__cfg['distRange'][0]
+            cfg['speedThreshold'] = advancedCollider.readFloat('speedThreshold', 0.1)
+            cfg['minimalVolume'] = advancedCollider.readFloat('minimalVolume', 200.0)
+            cfg['volumeGroups'] = dict()
+            for group in VOLUME_GROUPS_NAMES:
+                groups = advancedCollider['volumeGroups']
+                cfg['volumeGroups'][group] = CollisionVolumeGroup.fromSection(groups[group])
+
         return
 
     def writeUserPreferences(self):

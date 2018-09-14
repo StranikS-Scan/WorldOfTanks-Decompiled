@@ -339,17 +339,52 @@
   <radios>
     <FuG12_IGR>	shared	</FuG12_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230_TRM_P30_IGR>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230_TRM_P30_IGR>
+      </engines>
+      <chassis>
+        <Chassis_Panther_II_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Panther_II_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Panther_II_2_IGR>
-        <alpha>	0.0805	</alpha>
-      </Chassis_Panther_II_2_IGR>
-    </chassis>
-    <engines>
-      <Maybach_HL_230_TRM_P30_IGR>
-        <bravo>	185.0242	</bravo>
-      </Maybach_HL_230_TRM_P30_IGR>
-    </engines>
     <armour>	1.02451236	</armour>
   </clientAdjustmentFactors>
   <effects>

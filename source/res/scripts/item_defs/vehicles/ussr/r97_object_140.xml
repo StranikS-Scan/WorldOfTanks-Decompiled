@@ -369,17 +369,52 @@
   <radios>
     <R113M>	shared	</R113M>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <TD-12>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+        </TD-12>
+      </engines>
+      <chassis>
+        <Chassis_Object_140>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.052325	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.052325	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.052325	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.052325	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.052325	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.052325	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Object_140>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Object_140>
-        <alpha>	0.052325	</alpha>
-      </Chassis_Object_140>
-    </chassis>
-    <engines>
-      <TD-12>
-        <bravo>	153.3058	</bravo>
-      </TD-12>
-    </engines>
     <armour>	1.031583167	</armour>
   </clientAdjustmentFactors>
   <effects>

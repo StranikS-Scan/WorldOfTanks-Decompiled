@@ -581,17 +581,52 @@
   <radios>
     <AN_GRC_8>	shared	</AN_GRC_8>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AOI-1195-5>
+          <smplEnginePower>	592.0775	</smplEnginePower>
+        </Continental_AOI-1195-5>
+      </engines>
+      <chassis>
+        <Chassis_T95_E2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T95_E2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T95_E2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_T95_E2>
-    </chassis>
-    <engines>
-      <Continental_AOI-1195-5>
-        <bravo>	148.0194	</bravo>
-      </Continental_AOI-1195-5>
-    </engines>
     <armour>	1.078487088	</armour>
   </clientAdjustmentFactors>
   <effects>

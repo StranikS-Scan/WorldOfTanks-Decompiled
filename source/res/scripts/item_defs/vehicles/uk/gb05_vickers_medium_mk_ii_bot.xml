@@ -366,18 +366,52 @@
   <radios>
     <N14_bot>	shared	</N14_bot>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB05_Vickers_Medium_Mk_II_bot>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB05_Vickers_Medium_Mk_II_bot>
-    </chassis>
-    <engines>
-      <Vickers-Armstrong_bot>
-        <bravo>	23.78883	</bravo>
-      </Vickers-Armstrong_bot>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Vickers-Armstrong_bot>
+          <smplEnginePower>	95.1553	</smplEnginePower>
+        </Vickers-Armstrong_bot>
+      </engines>
+      <chassis>
+        <Chassis_GB05_Vickers_Medium_Mk_II_bot>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB05_Vickers_Medium_Mk_II_bot>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

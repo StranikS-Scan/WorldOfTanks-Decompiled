@@ -5,6 +5,7 @@ IDS_BY_NAMES = None
 GROUND_STRENGTHS_BY_IDS = None
 EFFECT_MATERIALS = ('ground', 'stone', 'wood', 'metal', 'snow', 'sand', 'water')
 EFFECT_MATERIAL_INDEXES_BY_NAMES = dict(((name, idx) for idx, name in enumerate(EFFECT_MATERIALS)))
+EFFECT_MATERIAL_NAMES_BY_INDEXES = dict(((idx, name) for idx, name in enumerate(EFFECT_MATERIALS)))
 EFFECT_MATERIAL_INDEXES_BY_IDS = None
 EFFECT_MATERIAL_IDS_BY_NAMES = None
 WATER_MATERIAL_KIND = -100

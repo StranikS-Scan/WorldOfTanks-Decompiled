@@ -336,17 +336,52 @@
   <radios>
     <Mk19R>	shared	</Mk19R>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Bedford_Twin-Six>
+          <smplEnginePower>	395.4232	</smplEnginePower>
+        </Bedford_Twin-Six>
+      </engines>
+      <chassis>
+        <Churchll>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10143	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Churchll>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Churchll>
-        <alpha>	0.10143	</alpha>
-      </Churchll>
-    </chassis>
-    <engines>
-      <Bedford_Twin-Six>
-        <bravo>	98.85579	</bravo>
-      </Bedford_Twin-Six>
-    </engines>
     <armour>	0.743615214	</armour>
   </clientAdjustmentFactors>
   <effects>

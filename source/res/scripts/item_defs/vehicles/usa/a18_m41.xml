@@ -777,23 +777,89 @@
     </SCR_610>
     <SCR_619>	shared	</SCR_619>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_W-670>
+          <smplEnginePower>	277.0077	</smplEnginePower>
+        </Continental_W-670>
+        <Twin_Cadillac_series_44T4>
+          <smplEnginePower>	312.9552	</smplEnginePower>
+        </Twin_Cadillac_series_44T4>
+      </engines>
+      <chassis>
+        <T72>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T72>
+        <T72E1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T72E1>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <T72>
-        <alpha>	0.12075	</alpha>
-      </T72>
-      <T72E1>
-        <alpha>	0.12075	</alpha>
-      </T72E1>
-    </chassis>
-    <engines>
-      <Continental_W-670>
-        <bravo>	69.25191	</bravo>
-      </Continental_W-670>
-      <Twin_Cadillac_series_44T4>
-        <bravo>	78.23881	</bravo>
-      </Twin_Cadillac_series_44T4>
-    </engines>
     <armour>	0.689806225	</armour>
   </clientAdjustmentFactors>
   <effects>

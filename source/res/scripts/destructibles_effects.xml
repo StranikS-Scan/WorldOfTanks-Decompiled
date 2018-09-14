@@ -1264,24 +1264,6 @@
     </inf_env414_Pole_Touchdown>
   </fallingAtoms>
   <fragiles>
-    <inf_gaf_122_01_PersonnelObstacles>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf_122_01_PersonnelObstacles.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wire_barricade	</wwsound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_gaf_122_01_PersonnelObstacles>
     <inf_env_18_01_FallingApplesSign>
       <variant1>
         <stages>
@@ -1300,6 +1282,63 @@
         </effects>
       </variant1>
     </inf_env_18_01_FallingApplesSign>
+    <inf_bld_112_04_TrocaderoFountain_01_2>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	True	</hasHavokVersion>
+            <file>	particles/Environment/buildings/inf_bld_112_04_TrocaderoFountain_01_2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_112_04_TrocaderoFountain_01_2>
+    <inf_bld_112_04_TrocaderoFountain_01_3>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	True	</hasHavokVersion>
+            <file>	particles/Environment/buildings/inf_bld_112_04_TrocaderoFountain_01_3.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_112_04_TrocaderoFountain_01_3>
+    <inf_bld_112_04_TrocaderoFountain_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	True	</hasHavokVersion>
+            <file>	particles/Environment/buildings/inf_bld_112_04_TrocaderoFountain_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_112_04_TrocaderoFountain_02>
     <inf_env_114_09_VentilationSys_outdoor_01>
       <variant1>
         <stages>
@@ -1678,7 +1717,7 @@
         </effects>
       </variant1>
     </inf_env_112_21_BridgeStatue_arab_warrior>
-    <inf_gaf_112_01_IronFence_003>
+    <inf_gaf_112_04_BridgeFence_01>
       <variant1>
         <stages>
           <base>	4.0	</base>
@@ -1686,17 +1725,17 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf_112_01_IronFence_003.xml	</file>
+            <file>	particles/Environment/objects/inf_gaf_112_04_BridgeFence_01.xml	</file>
             <force>	1	</force>
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_fence_stone_metall_mid	</wwsound>
+            <wwsound>	obj_stone_crash_mid	</wwsound>
           </sound>
         </effects>
       </variant1>
-    </inf_gaf_112_01_IronFence_003>
-    <inf_gaf_112_01_IronFence_002>
+    </inf_gaf_112_04_BridgeFence_01>
+    <inf_gaf_112_04_BridgeFence_02>
       <variant1>
         <stages>
           <base>	4.0	</base>
@@ -1704,16 +1743,16 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf_112_01_IronFence_002.xml	</file>
+            <file>	particles/Environment/objects/inf_gaf_112_04_BridgeFence_02.xml	</file>
             <force>	1	</force>
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_fence_stone_metall_mid	</wwsound>
+            <wwsound>	obj_stone_crash_mid	</wwsound>
           </sound>
         </effects>
       </variant1>
-    </inf_gaf_112_01_IronFence_002>
+    </inf_gaf_112_04_BridgeFence_02>
     <inf_gaf_101_01_StoneFenceBig_End>
       <variant1>
         <stages>
@@ -2051,51 +2090,6 @@
         </effects>
       </variant1>
     </inf_mle_101_02_Bedford_QL_1>
-    <inf_mle_101_04_Dodge_WC54>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle_101_04_Dodge_WC54.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_car_corps	</wwsound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_mle_101_04_Dodge_WC54>
-    <inf_fuel_mle_101_04_Dodge_WC54>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <hasHavokVersion>	true	</hasHavokVersion>
-            <file>	particles/Environment/objects/inf_fuel_mle_101_04_Dodge_WC54.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	inf_fuel_envAM_011_Truck	</wwsound>
-          </sound>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	explosive_objects	</wwsound>
-          </sound>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	explosive_objects	</wwsound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_fuel_mle_101_04_Dodge_WC54>
     <inf_mleSU_92_02_HE111_1>
       <variant1>
         <stages>
@@ -2485,24 +2479,6 @@
         </effects>
       </variant1>
     </inf_envSU_83_03_OldFurniture_group_01>
-    <inf_envSU_83_03_OldFurniture_4>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_03_OldFurniture_4.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_box_mid	</wwsound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_03_OldFurniture_4>
     <inf_envSU_83_03_OldFurniture_6>
       <variant1>
         <stages>
@@ -8832,7 +8808,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_wood_crash_light	</wwsound>
+            <wwsound>	obj_toilet	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -10305,7 +10281,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
+            <wwsound>	obj_fuel_barrel_mid	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -10485,7 +10461,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_bicycle	</wwsound>
+            <wwsound>	obj_auto_crash	</wwsound>
           </sound>
         </effects>
       </variant1>
@@ -10508,6 +10484,24 @@
         </effects>
       </variant1>
     </inf_env_112_12_BiCycle_04>
+    <inf_env_112_12_BiCycle_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_112_12_BiCycle_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_bicycle	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_112_12_BiCycle_03>
     <inf_env_112_12_BiCycle_02>
       <variant1>
         <stages>
@@ -10526,6 +10520,24 @@
         </effects>
       </variant1>
     </inf_env_112_12_BiCycle_02>
+    <inf_env_112_12_BiCycle_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_112_12_BiCycle_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_bicycle	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_112_12_BiCycle_01>
     <inf_env_114_14_JunctionBox_02>
       <variant1>
         <stages>
@@ -12428,6 +12440,63 @@
     </inf_shells_detonation_small>
   </fragiles>
   <structures>
+    <inf_bld_112_04_TrocaderoFountain_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	True	</hasHavokVersion>
+            <file>	particles/Environment/buildings/inf_bld_112_04_TrocaderoFountain_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_112_04_TrocaderoFountain_01>
+    <inf_bld_112_04_TrocaderoFountain_01_1>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	True	</hasHavokVersion>
+            <file>	particles/Environment/buildings/inf_bld_112_04_TrocaderoFountain_01_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_112_04_TrocaderoFountain_01_1>
+    <inf_bld_112_04_TrocaderoFountain_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	True	</hasHavokVersion>
+            <file>	particles/Environment/buildings/inf_bld_112_04_TrocaderoFountain_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_112_04_TrocaderoFountain_03>
     <inf_bld_114_01_Workshop_new_04_1>
       <variant1>
         <stages>
@@ -12502,44 +12571,6 @@
         </effects>
       </variant1>
     </inf_env_112_19_MetroEnterance_2>
-    <inf_env_105_01_BerlinFountain_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <hasHavokVersion>	True	</hasHavokVersion>
-            <file>	particles/Environment/objects/inf_env_105_01_BerlinFountain_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_light	</wwsound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_env_105_01_BerlinFountain_02>
-    <inf_env_105_01_BerlinFountain_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <hasHavokVersion>	True	</hasHavokVersion>
-            <file>	particles/Environment/objects/inf_env_105_01_BerlinFountain_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_light	</wwsound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_env_105_01_BerlinFountain_01>
     <inf_bld_101_02_Vhouse02_a>
       <variant1>
         <stages>

@@ -2,37 +2,38 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/LoginView.py
 import json
 import random
+import weakref
 from collections import defaultdict, namedtuple
 import BigWorld
 import ResMgr
+import ScaleformFileLoader
 import Settings
-import constants
 import WWISE
-from adisp import process
-from gui import DialogsInterface, GUI_SETTINGS
-from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
-from gui.battle_control import g_sessionProvider
-from gui.Scaleform.Waiting import Waiting
-from gui import Scaleform
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.meta.LoginPageMeta import LoginPageMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.BAN_REASON import BAN_REASON
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.Scaleform.locale.WAITING import WAITING
-from PlayerEvents import g_playerEvents
+import constants
 from ConnectionManager import connectionManager, LOGIN_STATUS
+from PlayerEvents import g_playerEvents
+from adisp import process
+from external_strings_utils import isAccountLoginValid, isPasswordValid, _PASSWORD_MIN_LENGTH, _PASSWORD_MAX_LENGTH
+from gui import DialogsInterface, GUI_SETTINGS, Scaleform
+from gui.Scaleform import getPathForFlash, SCALEFORM_STARTUP_VIDEO_MASK, DEFAULT_VIDEO_BUFFERING_TIME
+from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
+from gui.Scaleform.daapi.view.meta.LoginPageMeta import LoginPageMeta
+from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
+from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.locale.BAN_REASON import BAN_REASON
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.WAITING import WAITING
+from gui.battle_control import g_sessionProvider
+from gui.login import g_loginManager
 from gui.shared import events, g_eventBus
-from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent
 from helpers import getFullClientVersion
 from helpers.i18n import makeString as _ms
-from gui.login import g_loginManager
 from helpers.time_utils import makeLocalServerTime
 from predefined_hosts import AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_ENABLED, g_preDefinedHosts
-from external_strings_utils import isAccountLoginValid, isPasswordValid, _PASSWORD_MIN_LENGTH, _PASSWORD_MAX_LENGTH
 from external_strings_utils import _LOGIN_NAME_MIN_LENGTH
 from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
 
@@ -48,9 +49,125 @@ _STATUS_TO_INVALID_FIELDS_MAPPING = defaultdict(lambda : INVALID_FIELDS.ALL_VALI
  LOGIN_STATUS.LOGIN_REJECTED_ILLEGAL_CHARACTERS: INVALID_FIELDS.LOGIN_PWD_INVALID,
  LOGIN_STATUS.LOGIN_REJECTED_SERVER_NOT_READY: INVALID_FIELDS.SERVER_INVALID,
  LOGIN_STATUS.SESSION_END: INVALID_FIELDS.PWD_INVALID})
-_VIDEO_BG_MODE = 0
-_WALLPAPER_BG_MODE = 1
 _ValidateCredentialsResult = namedtuple('ValidateCredentialsResult', ('isValid', 'errorMessage', 'invalidFields'))
+_BG_MODE_VIDEO, _BG_MODE_WALLPAPER = range(0, 2)
+_LOGIN_VIDEO_FILE = SCALEFORM_STARTUP_VIDEO_MASK % '_login.usm'
+
+class BackgroundMode(object):
+    """
+    This class responsible for changing graphics and sound states on login page.
+    It load and save last state of mode to preferences.xml
+    
+    Description of section with background mode data of login page in preferences.xml
+    <root>
+        ...
+        <scriptsPreferences>
+            ...
+            <videoBufferingTime/> - float(0.0-...), time for buffering of video, 0.0 - full streaming without buffering
+            <loginPage>
+                <lastBgMode/> - int(_BG_MODE_VIDEO=0/_BG_MODE_WALLPAPER=1),
+                <mute/> - bool(mute=true/unmute=false),
+                <showLoginWallpaper/> - bool(show=true/hide=false),
+                <lastLoginBgImage/> - string, name last showed wallpaper
+            </loginPage>
+        </scriptsPreferences>
+    </root>
+    """
+
+    def __init__(self, view):
+        self.__isSoundMuted = False
+        self.__bgMode = _BG_MODE_VIDEO
+        self.__userPrefs = Settings.g_instance.userPrefs
+        self.__view = weakref.proxy(view)
+        self.__lastImage = ''
+        self.__show = True
+        self.__switchButton = True
+        self.__bufferTime = self.__userPrefs.readFloat(Settings.VIDEO_BUFFERING_TIME, DEFAULT_VIDEO_BUFFERING_TIME)
+        self.__images = self.__getWallpapersList()
+
+    def showWallpaper(self, showSwitchButton):
+        self.__view.as_showWallpaperS(self.__show, self.__randomImage(), showSwitchButton, self.__isSoundMuted)
+        WWISE.WW_eventGlobalSync('loginscreen_ambient_start')
+        if self.__isSoundMuted:
+            WWISE.WW_eventGlobalSync('loginscreen_mute')
+
+    def show(self):
+        self.__loadFromPrefs()
+        if self.__bgMode == _BG_MODE_VIDEO:
+            self.__view.as_showLoginVideoS(_LOGIN_VIDEO_FILE, self.__bufferTime, self.__isSoundMuted)
+        else:
+            self.showWallpaper(self.__switchButton)
+
+    def hide(self):
+        WWISE.WW_eventGlobalSync(('loginscreen_music_stop_longfade', 'loginscreen_ambient_stop')[self.__bgMode])
+        self.__saveToPrefs()
+
+    def toggleMute(self, value):
+        self.__isSoundMuted = value
+        WWISE.WW_eventGlobalSync(('loginscreen_unmute', 'loginscreen_mute')[self.__isSoundMuted])
+
+    def fadeSound(self):
+        WWISE.WW_eventGlobalSync(('loginscreen_music_pause', 'loginscreen_ambient_stop')[self.__bgMode])
+
+    def switch(self):
+        if self.__bgMode != _BG_MODE_VIDEO:
+            self.__bgMode = _BG_MODE_VIDEO
+            self.__view.as_showLoginVideoS(_LOGIN_VIDEO_FILE, self.__bufferTime, self.__isSoundMuted)
+        else:
+            self.__bgMode = _BG_MODE_WALLPAPER
+            self.__view.as_showWallpaperS(self.__show, self.__randomImage(), self.__switchButton, self.__isSoundMuted)
+        WWISE.WW_eventGlobalSync(('loginscreen_music_resume', 'loginscreen_ambient_start')[self.__bgMode])
+        if self.__isSoundMuted:
+            WWISE.WW_eventGlobalSync('loginscreen_mute')
+
+    def startVideoSound(self):
+        WWISE.WW_eventGlobalSync('loginscreen_music_start')
+        if self.__isSoundMuted:
+            WWISE.WW_eventGlobalSync('loginscreen_mute')
+
+    def __loadFromPrefs(self):
+        if self.__userPrefs.has_key(Settings.KEY_LOGINPAGE_PREFERENCES):
+            ds = self.__userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES]
+            self.__isSoundMuted = ds.readBool('mute', False)
+            self.__bgMode = ds.readInt('lastBgMode', _BG_MODE_VIDEO)
+            self.__lastImage = ds.readString('lastLoginBgImage', '')
+            self.__show = ds.readBool('showLoginWallpaper', True)
+
+    def __saveToPrefs(self):
+        if not self.__userPrefs.has_key(Settings.KEY_LOGINPAGE_PREFERENCES):
+            self.__userPrefs.write(Settings.KEY_LOGINPAGE_PREFERENCES, '')
+        ds = self.__userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES]
+        ds.writeBool('mute', self.__isSoundMuted)
+        ds.writeInt('lastBgMode', self.__bgMode)
+        ds.writeString('lastLoginBgImage', self.__lastImage)
+        ds.writeBool('showLoginWallpaper', self.__show)
+
+    def __randomImage(self):
+        BG_IMAGES_PATH = '../maps/login/%s.png'
+        if self.__show and self.__images:
+            if len(self.__images) == 1:
+                newFile = self.__images[0]
+            else:
+                while True:
+                    newFile = random.choice(self.__images)
+                    if newFile != self.__lastImage:
+                        break
+
+            self.__lastImage = newFile
+        else:
+            newFile = '__login_bg'
+        return BG_IMAGES_PATH % newFile
+
+    @staticmethod
+    def __getWallpapersList():
+        files = []
+        ds = ResMgr.openSection(Scaleform.SCALEFORM_WALLPAPER_PATH)
+        for filename in ds.keys():
+            if filename[-4:] == '.png' and filename[0:2] != '__':
+                files.append(filename[0:-4])
+
+        return files
+
 
 class LoginView(LoginPageMeta):
 
@@ -62,8 +179,7 @@ class LoginView(LoginPageMeta):
         self.__capsLockState = None
         self.__lang = None
         self.__capsLockCallbackID = None
-        self.__backgroundMode = _VIDEO_BG_MODE
-        self.__isSoundMuted = False
+        self.__backgroundMode = BackgroundMode(self)
         self.__customLoginStatus = None
         self._autoSearchVisited = False
         self._rememberUser = False
@@ -134,30 +250,16 @@ class LoginView(LoginPageMeta):
         pass
 
     def switchBgMode(self):
-        if self.__backgroundMode == _VIDEO_BG_MODE:
-            self.as_showLoginVideoS('video/_login.usm', self.__isSoundMuted)
-            WWISE.WW_eventGlobalSync('loginscreen_music_resume')
-        else:
-            self._loadRandomBgImage()
+        self.__backgroundMode.switch()
 
     def musicFadeOut(self):
-        if self.__backgroundMode == _VIDEO_BG_MODE:
-            WWISE.WW_eventGlobalSync('loginscreen_music_pause')
-            self.__backgroundMode = _WALLPAPER_BG_MODE
-        else:
-            WWISE.WW_eventGlobalSync('loginscreen_ambient_stop')
-            self.__backgroundMode = _VIDEO_BG_MODE
-        self.__saveLastBackgroundMode()
+        self.__backgroundMode.fadeSound()
 
     def setMute(self, value):
-        self.__isSoundMuted = value
-        self.__saveLastMuteState()
-        WWISE.WW_eventGlobalSync('loginscreen_mute' if self.__isSoundMuted else 'loginscreen_unmute')
+        self.__backgroundMode.toggleMute(value)
 
     def onVideoLoaded(self):
-        WWISE.WW_eventGlobalSync('loginscreen_music_start')
-        if self.__isSoundMuted:
-            WWISE.WW_eventGlobalSync('loginscreen_mute')
+        self.__backgroundMode.startVideoSound()
 
     def _populate(self):
         View._populate(self)
@@ -171,10 +273,8 @@ class LoginView(LoginPageMeta):
         g_playerEvents.onAccountShowGUI += self._clearLoginView
         self.as_setVersionS(getFullClientVersion())
         self.as_setCopyrightS(_ms(MENU.COPY), _ms(MENU.LEGAL))
-        if BigWorld.isLowProductivityPC():
-            self._showOnlyStaticBackground()
-        else:
-            self._showBackground()
+        ScaleformFileLoader.enableStreaming([getPathForFlash(_LOGIN_VIDEO_FILE)])
+        self.__backgroundMode.show()
         if self.__capsLockCallbackID is None:
             self.__capsLockCallbackID = BigWorld.callback(0.1, self.__checkUserInputState)
         g_sessionProvider.getCtx().lastArenaUniqueID = None
@@ -183,10 +283,8 @@ class LoginView(LoginPageMeta):
         return
 
     def _dispose(self):
-        if self.__backgroundMode == _VIDEO_BG_MODE:
-            WWISE.WW_eventGlobalSync('loginscreen_music_stop_longfade')
-        else:
-            WWISE.WW_eventGlobalSync('loginscreen_ambient_stop')
+        ScaleformFileLoader.disableStreaming()
+        self.__backgroundMode.hide()
         if self.__capsLockCallbackID is not None:
             BigWorld.cancelCallback(self.__capsLockCallbackID)
             self.__capsLockCallbackID = None
@@ -285,42 +383,6 @@ class LoginView(LoginPageMeta):
         if loginStatus != LOGIN_STATUS.LOGIN_REJECTED_RATE_LIMITED and self.__loginRetryDialogShown:
             self.__closeLoginQueueDialog()
 
-    def _showOnlyStaticBackground(self):
-        self._loadLastMuteState()
-        self._loadRandomBgImage(False)
-
-    def _showBackground(self):
-        self.__loadLastBackgroundMode()
-        self._loadLastMuteState()
-        if self.__backgroundMode == _WALLPAPER_BG_MODE:
-            self._loadRandomBgImage()
-        else:
-            self.as_showLoginVideoS('video/_login.usm', self.__isSoundMuted)
-
-    def _loadRandomBgImage(self, showSwitchButton=True):
-        wallpaperSettings = self.__loadLastBackgroundImage()
-        wallpaperFiles = self.__getWallpapersList()
-        BG_IMAGES_PATH = '../maps/login/%s.png'
-        if wallpaperSettings['show'] and len(wallpaperFiles) > 0:
-            if len(wallpaperFiles) == 1:
-                newFile = wallpaperFiles[0]
-            else:
-                newFile = ''
-                while True:
-                    newFile = random.choice(wallpaperFiles)
-                    if newFile != wallpaperSettings['filename']:
-                        break
-
-            self.__saveLastBackgroundImage(newFile)
-            bgImage = BG_IMAGES_PATH % newFile
-        else:
-            bgImage = BG_IMAGES_PATH % '__login_bg'
-            wallpaperSettings['show'] = False
-        WWISE.WW_eventGlobalSync('loginscreen_ambient_start')
-        if self.__isSoundMuted:
-            WWISE.WW_eventGlobalSync('loginscreen_mute')
-        self.as_showWallpaperS(wallpaperSettings['show'], bgImage, showSwitchButton, self.__isSoundMuted)
-
     def __clearFields(self, invalidField):
         if invalidField == INVALID_FIELDS.PWD_INVALID:
             self.as_resetPasswordS()
@@ -410,68 +472,6 @@ class LoginView(LoginPageMeta):
                 errorMessage = _ms(MENU.LOGIN_STATUS_INVALID_PASSWORD, minLength=_PASSWORD_MIN_LENGTH, maxLength=_PASSWORD_MAX_LENGTH)
                 invalidFields = INVALID_FIELDS.PWD_INVALID
             return _ValidateCredentialsResult(isValid, errorMessage, invalidFields)
-
-    @staticmethod
-    def __getWallpapersList():
-        result = []
-        ds = ResMgr.openSection(Scaleform.SCALEFORM_WALLPAPER_PATH)
-        for filename in ds.keys():
-            if filename[-4:] == '.png' and filename[0:2] != '__':
-                result.append(filename[0:-4])
-
-        return result
-
-    def __loadLastBackgroundImage(self):
-        result = {'show': True,
-         'filename': ''}
-        userPrefs = Settings.g_instance.userPrefs
-        ds = None
-        if userPrefs.has_key(Settings.KEY_LOGINPAGE_PREFERENCES):
-            ds = userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES]
-            result['filename'] = ds.readString('lastLoginBgImage', '')
-        else:
-            userPrefs.write(Settings.KEY_LOGINPAGE_PREFERENCES, '')
-            self.__saveLastBackgroundImage(result['filename'])
-        if ds is None:
-            ds = userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES]
-        if not ds.has_key('showLoginWallpaper'):
-            self.__createNodeShowWallpaper()
-        result['show'] = ds.readBool('showLoginWallpaper', True)
-        return result
-
-    @staticmethod
-    def __saveLastBackgroundImage(filename):
-        ds = Settings.g_instance.userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES]
-        ds.writeString('lastLoginBgImage', filename)
-
-    def _loadLastMuteState(self):
-        userPrefs = Settings.g_instance.userPrefs
-        if not userPrefs.has_key(Settings.KEY_LOGINPAGE_PREFERENCES):
-            userPrefs.write(Settings.KEY_LOGINPAGE_PREFERENCES, '')
-        if userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES].has_key('mute'):
-            self.__isSoundMuted = userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES].readBool('mute', False)
-        else:
-            self.__saveLastMuteState()
-
-    def __saveLastMuteState(self):
-        ds = Settings.g_instance.userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES]
-        ds.writeBool('mute', self.__isSoundMuted)
-
-    def __loadLastBackgroundMode(self):
-        userPrefs = Settings.g_instance.userPrefs
-        if userPrefs.has_key(Settings.KEY_LOGINPAGE_PREFERENCES):
-            self.__backgroundMode = userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES].readInt('lastBgMode', _VIDEO_BG_MODE)
-        else:
-            userPrefs.write(Settings.KEY_LOGINPAGE_PREFERENCES, '')
-            self.__saveLastBackgroundMode()
-
-    def __saveLastBackgroundMode(self):
-        ds = Settings.g_instance.userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES]
-        ds.writeInt('lastBgMode', self.__backgroundMode)
-
-    def __createNodeShowWallpaper(self):
-        ds = Settings.g_instance.userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES]
-        ds.writeBool('showLoginWallpaper', True)
 
     def __updateServersList(self, *args):
         self._serversDP.rebuildList(self._servers.serverList)

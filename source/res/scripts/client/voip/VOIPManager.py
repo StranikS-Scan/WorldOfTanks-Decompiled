@@ -86,6 +86,13 @@ class VOIPManager(VOIPHandler):
         """
         return not self.__initialized and self.getState() == STATE.NONE
 
+    def isInTesting(self):
+        """
+        Check if testing in progress (echo)
+        @return: True if if testing in progress, False otherwise
+        """
+        return self.__inTesting
+
     def getVOIPDomain(self):
         return self.__voipDomain
 

@@ -491,18 +491,52 @@
   <radios>
     <_10RK-26>	shared	</_10RK-26>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R129_Object_257>
-        <alpha>	0.13685	</alpha>
-      </Chassis_R129_Object_257>
-    </chassis>
-    <engines>
-      <_2xV-16_1000>
-        <bravo>	187.5	</bravo>
-      </_2xV-16_1000>
-    </engines>
-  </clientAdjustmentFactors>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <_2xV-16_1000>
+          <smplEnginePower>	750	</smplEnginePower>
+        </_2xV-16_1000>
+      </engines>
+      <chassis>
+        <Chassis_R129_Object_257>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R129_Object_257>
+      </chassis>
+    </detailed>
+  </physics>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

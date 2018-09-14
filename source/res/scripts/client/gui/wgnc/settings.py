@@ -25,7 +25,10 @@ WGNC_GUI_INVALID_SEQS = (WGNC_GUI_TYPE.UNDEFINED, WGNC_GUI_TYPE.BASIC_WINDOW | W
 WGNC_DEFAULT_ICON = 'InformationIcon'
 _WGNC_ICON_TO_LOCAL = {'information': WGNC_DEFAULT_ICON,
  'gold': 'GoldIcon',
- 'text_message': 'MessageIcon'}
+ 'text_message': 'MessageIcon',
+ 'offerIcon': 'OfferIcon',
+ 'gratzIcon': 'PersonalAchievementsIcon',
+ 'eventIcon': 'EventIcon'}
 
 def convertToLocalIcon(icon):
     result = WGNC_DEFAULT_ICON
@@ -37,7 +40,9 @@ def convertToLocalIcon(icon):
 _WGNC_BG_TO_LOCAL = {'battle_defeat': ('BgBattleResultIconDefeat', (288, 167)),
  'battle_draw': ('BgBattleResultIconDraw', (288, 167)),
  'battle_victory': ('BgBattleResultIconVictory', (288, 167)),
- 'poll': ('BgPoll', (288, 110))}
+ 'poll': ('BgPoll', (288, 110)),
+ 'offer': ('OfferIconBg', (288, 110)),
+ 'event': ('EventIconBg', (288, 110))}
 
 def convertToLocalBG(icon):
     result = ('', (0, 0))

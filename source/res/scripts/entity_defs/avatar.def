@@ -6,6 +6,7 @@
     <Interface>	InvitationsClient	</Interface>
     <Interface>	AccountAuthTokenProviderClient	</Interface>
     <Interface>	AvatarClientProxy	</Interface>
+    <Interface>	BattleFeedback	</Interface>
   </Implements>
   <Volatile>
     <position></position>
@@ -238,8 +239,11 @@
       <Arg>	FLOAT32	</Arg>
     </updateOwnVehiclePosition>
     <showOwnVehicleHitDirection>
-      <Arg>	OBJECT_ID	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
     </showOwnVehicleHitDirection>
     <showVehicleDamageInfo>
@@ -296,7 +300,6 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </showTracer>
     <stopTracer>
       <Arg>	SHOT_ID	</Arg>
@@ -318,11 +321,13 @@
     <onKickedFromArena>
       <Arg>	UINT8	</Arg>
     </onKickedFromArena>
-    <onBattleEvent>
-      <Arg>	UINT8	</Arg>
-      <Arg>	ARRAY	  <of>	UINT64	</of>
+    <onBattleEvents>
+      <Arg>	ARRAY	  <of>	BATTLE_EVENT	</of>
       </Arg>
-    </onBattleEvent>
+    </onBattleEvents>
+    <battleEventsSummary>
+      <Arg>	BATTLE_EVENTS_SUMMARY	</Arg>
+    </battleEventsSummary>
     <updateArena>
       <Arg>	UINT8	</Arg>
       <Arg>	STRING	</Arg>
@@ -392,11 +397,6 @@
       <Arg>	UINT8	</Arg>
       <Arg>	BOOL	</Arg>
     </receiveHorn>
-    <onBattleEvent>
-      <Arg>	UINT8	</Arg>
-      <Arg>	ARRAY	  <of>	UINT64	</of>
-      </Arg>
-    </onBattleEvent>
     <onOwnVehicleStatusChanged>
       <Arg>	INT8	</Arg>
       <Arg>	INT8	</Arg>
@@ -411,10 +411,11 @@
       <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
       </Arg>
     </fullyDiscloseVehicles>
-    <receiveVisibilityEvents>
-      <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
-      </Arg>
-    </receiveVisibilityEvents>
+    <receiveVisibilityUpdate>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+    </receiveVisibilityUpdate>
     <receivePositionsFromArena>
       <Arg>	BOOL	</Arg>
       <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
@@ -459,7 +460,6 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </showTracer>
     <stopTracer>
       <Arg>	SHOT_ID	</Arg>
@@ -555,11 +555,6 @@
       <Exposed></Exposed>
       <Arg>	STRING	</Arg>
     </setClientCtx>
-    <onBattleEvent>
-      <Arg>	UINT8	</Arg>
-      <Arg>	ARRAY	  <of>	UINT64	</of>
-      </Arg>
-    </onBattleEvent>
     <updateArena>
       <Arg>	UINT8	</Arg>
       <Arg>	STRING	</Arg>

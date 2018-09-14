@@ -3,8 +3,10 @@
 import inspect
 import weakref
 from abc import ABCMeta, abstractmethod
+import Keys
 from Event import EventManager, Event
 from debug_utils import LOG_WARNING
+from gui import InputHandler
 from gui.Scaleform.framework.entities.abstract.ContextMenuManagerMeta import ContextMenuManagerMeta
 _SEPARATOR_ID = 'separate'
 _handlers = {}
@@ -60,6 +62,7 @@ class ContextMenuManager(ContextMenuManagerMeta):
         if clazz is not None:
             self.__currentHandler = clazz(self, ctx)
             self.__currentHandler.onContextMenuHide += self.as_hideS
+            InputHandler.g_instance.onKeyDown += self.__onKeyDown
             self._sendOptionsToFlash(self.__currentHandler.getOptions(ctx))
         return
 
@@ -84,11 +87,16 @@ class ContextMenuManager(ContextMenuManagerMeta):
         self._sendOptionsToFlash(options)
 
     def __disposeHandler(self):
+        InputHandler.g_instance.onKeyDown -= self.__onKeyDown
         if self.__currentHandler is not None:
             self.__currentHandler.onContextMenuHide -= self.as_hideS
             self.__currentHandler.fini()
             self.__currentHandler = None
         return
+
+    def __onKeyDown(self, event):
+        if event.key == Keys.KEY_ESCAPE:
+            self.pyHide()
 
 
 class AbstractContextMenuHandler(object):

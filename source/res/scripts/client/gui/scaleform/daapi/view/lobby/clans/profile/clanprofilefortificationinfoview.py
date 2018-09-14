@@ -12,13 +12,11 @@ class ClanProfileFortificationInfoView(ClanProfileFortificationInfoViewMeta):
         super(ClanProfileFortificationInfoView, self).__init__()
         self._clanDossier = None
         self._proxy = None
-        self._fortDP = None
         return
 
-    def setProxy(self, proxy, fortDP, clanDossier):
+    def setProxy(self, proxy, clanDossier):
         self._proxy = weakref.proxy(proxy)
         self._clanDossier = clanDossier
-        self._fortDP = fortDP
         self.updateData()
 
     @process
@@ -26,11 +24,14 @@ class ClanProfileFortificationInfoView(ClanProfileFortificationInfoViewMeta):
         yield lambda callback: callback(None)
         if self.isDisposed():
             return
-        if not self._proxy.isShowDataBlocked():
-            self._proxy.showWaiting()
-            data = yield self._fortDP.requestFort(self._clanDossier)
-            self.as_setFortDataS(data)
-            self._proxy.hideWaiting()
+        else:
+            fortDP = self._proxy.fortDP
+            if fortDP is not None and not self._proxy.isShowDataBlocked():
+                self._proxy.showWaiting()
+                data = yield fortDP.requestFort(self._clanDossier)
+                self.as_setFortDataS(data)
+                self._proxy.hideWaiting()
+            return
 
     def _populate(self):
         super(ClanProfileFortificationInfoView, self)._populate()
@@ -41,6 +42,5 @@ class ClanProfileFortificationInfoView(ClanProfileFortificationInfoViewMeta):
     def _dispose(self):
         self._proxy = None
         self._clanDossier = None
-        self._fortDP = None
         super(ClanProfileFortificationInfoView, self)._dispose()
         return

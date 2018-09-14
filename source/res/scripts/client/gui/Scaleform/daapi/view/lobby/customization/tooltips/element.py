@@ -20,11 +20,12 @@ from gui.customization import g_customizationController as controller
 from gui.customization.shared import DURATION, CUSTOMIZATION_TYPE, PURCHASE_TYPE
 
 class STATUS(object):
-    ON_BOARD = 0
-    ALREADY_HAVE = 1
-    AVAILABLE_FOR_BUY = 2
-    DO_MISSION = 3
-    DO_IGR = 4
+    NONE = 0
+    ON_BOARD = 1
+    ALREADY_HAVE = 2
+    AVAILABLE_FOR_BUY = 3
+    DO_MISSION = 4
+    DO_IGR = 5
 
 
 class BUY_ITEM_TYPE(object):
@@ -109,7 +110,8 @@ class ElementTooltip(BlocksTooltipData):
             items.append(self._packWayToBuyBlock(data))
         if data['description'] is not None:
             items.append(self._packDescBlock(data))
-        items.append(self._packStatusBlock(data))
+        if data['status'] != STATUS.NONE:
+            items.append(self._packStatusBlock(data))
         return items
 
     def _packTitleBlock(self, data):
@@ -141,7 +143,7 @@ class ElementTooltip(BlocksTooltipData):
         blocks.append(formatters.packImageTextBlockData(title=text_styles.concatStylesWithSpace(bonusTitleLocal), desc=text_styles.main(data['bonus_desc']), img=data['bonus_icon'], imgPadding={'left': 11,
          'top': 3}, txtGap=-4, txtOffset=70, padding={'top': -1,
          'left': 7}))
-        if vehicle is not None and self._cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
+        if data['showTTC'] and vehicle is not None and self._cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
             stockVehicle = g_itemsCache.items.getStockVehicle(vehicle.intCD)
             comparator = params_helper.camouflageComparator(vehicle, self._item)
             stockParams = params_helper.getParameters(stockVehicle)
@@ -258,7 +260,8 @@ class ElementTooltip(BlocksTooltipData):
          'buyItems': buyItems,
          'status': status,
          'description': self._item.getDescription(),
-         'groupName': self._item.getGroupName()}
+         'groupName': self._item.getGroupName(),
+         'showTTC': True}
         return data
 
     def _getNationNames(self, nationIds):
@@ -405,29 +408,34 @@ class QuestElementTooltip(ElementTooltip):
         self.__isPermanent = False
         self.__boundToVehicle = None
         self.__boundToCurrentVehicle = False
-        self.__itemsCount = 0
+        self.__isReceived = False
         return
 
     def _getObtainMethod(self):
-        return ([], False, STATUS.DO_MISSION)
+        if self.__isReceived:
+            return ([{'value': 0,
+               'isSale': False}], True, STATUS.NONE)
+        else:
+            return ([], False, STATUS.DO_MISSION)
 
     def _getItemData(self):
         data = super(QuestElementTooltip, self)._getItemData()
         if self.__boundToVehicle is not None:
             data['allowedVehicles'].append(self.__boundToVehicle)
         data['boundToCurrentVehicle'] = self.__boundToCurrentVehicle
-        data['itemsCount'] = self.__itemsCount
+        data['description'] = None
+        data['showTTC'] = False
         return data
 
-    def _packBlocks(self, itemType, itemId, nationId, duration, isPermanent=False, itemsCount=0, isUsed=False, boundToVehicle=None, boundToCurrentVehicle=False):
+    def _packBlocks(self, itemType, itemId, nationId, duration, isPermanent=False, boundToVehicle=None, boundToCurrentVehicle=False, isReceived=True):
         items = []
         self._item = controller.dataAggregator.createElement(itemId, itemType, nationId)
         self._cType = itemType
         self.__duration = duration
-        self.__itemsCount = self.__getStoredCount()
         self.__isPermanent = isPermanent
         self.__boundToVehicle = boundToVehicle
         self.__boundToCurrentVehicle = boundToCurrentVehicle
+        self.__isReceived = isReceived
         data = self._getItemData()
         items.append(self._packTitleBlock(data))
         items.append(self._packIconBlock(data))
@@ -438,7 +446,8 @@ class QuestElementTooltip(ElementTooltip):
         items.append(self._packDurationBlock())
         if data['description'] is not None:
             items.append(self._packDescBlock(data))
-        items.append(self._packStatusBlock(data))
+        if data['status'] != STATUS.NONE:
+            items.append(self._packStatusBlock(data))
         return items
 
     def _packDurationBlock(self):
@@ -450,12 +459,3 @@ class QuestElementTooltip(ElementTooltip):
             duration = _ms('#vehicle_customization:timeLeft/temporal/used', time=self.__duration / 60 / 60 / 24, dimension=dimension)
         subBlocks.append(formatters.packTextBlockData(text_styles.main(duration)))
         return formatters.packBuildUpBlockData(subBlocks, 0, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE)
-
-    def __getStoredCount(self):
-        inventoryItems = controller.inventory.getInventoryItems(self._nationId)
-        if self._item.getID() in inventoryItems[self._cType]:
-            item = inventoryItems[self._cType][self._item.getID()]
-            isGold, itemNum = item[6]
-            if isGold:
-                return itemNum
-        return None

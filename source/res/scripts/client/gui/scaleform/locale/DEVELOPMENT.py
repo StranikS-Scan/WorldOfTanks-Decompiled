@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/DEVELOPMENT.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class DEVELOPMENT(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     BOTS_TITLE = '#development:bots/title'
     BOTS_LABELS_VEHICLECLASS = '#development:bots/labels/vehicleClass'
     BOTS_LABELS_TEAMONE = '#development:bots/labels/teamOne'

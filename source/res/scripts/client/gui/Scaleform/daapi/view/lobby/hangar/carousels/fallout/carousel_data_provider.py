@@ -18,8 +18,7 @@ class FalloutCarouselDataProvider(CarouselDataProvider):
         vehicleData = super(FalloutCarouselDataProvider, self)._getVehicleDataVO(vehicle)
         if not self._falloutCtrl.isSuitableVeh(vehicle):
             infoText = i18n.makeString('#menu:tankCarousel/vehicleStates/{}'.format(Vehicle.VEHICLE_STATE.NOT_SUITABLE))
-            vehicleData.update({'showInfoText': True,
-             'infoText': text_styles.vehicleStatusInfoText(infoText)})
+            vehicleData.update({'infoText': text_styles.vehicleStatusInfoText(infoText)})
         if vehicle.isFalloutSelected:
             selectButtonLabel = FALLOUT.TANKCAROUSELSLOT_DEACTIVATEBUTTON
             selected = True

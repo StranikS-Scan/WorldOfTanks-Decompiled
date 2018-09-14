@@ -59,6 +59,7 @@ class _ParamsCache(object):
         self.__init = False
         self.__simplifiedParamsCoefficients = {}
         self.__bonuses = {}
+        self.__noCamouflageVehicles = []
 
     @property
     def initialized(self):
@@ -73,6 +74,7 @@ class _ParamsCache(object):
             self.__precachGuns()
             self.__precachShells()
             self.__precachEquipments()
+            self.__cacheVehiclesWithoutCamouflage()
         except Exception:
             LOG_CURRENT_EXCEPTION()
             return False
@@ -117,9 +119,12 @@ class _ParamsCache(object):
 
         return compatibles
 
+    def getVehiclesWithoutCamouflage(self):
+        return self.__noCamouflageVehicles
+
     def __readXMLItems(self):
         result = dict()
-        for _, idx in nations.INDICES.iteritems():
+        for idx in nations.INDICES.itervalues():
             section = result.setdefault(idx, dict())
             for itemType in MODULES:
                 section[itemType] = self.__getItemsDescriptors(itemType, idx)
@@ -178,7 +183,7 @@ class _ParamsCache(object):
             self.__cache[nations.NONE_INDEX][ITEM_TYPES.optionalDevice][deviceDescr.compactDescr] = PrecachedOptionalDevice(weight=(wmin, wmax), nations=deviceNations)
 
     def __precachGuns(self):
-        for nationName, nationIdx in nations.INDICES.iteritems():
+        for nationIdx in nations.INDICES.itervalues():
             self.__cache.setdefault(nationIdx, {})[ITEM_TYPES.vehicleGun] = {}
             vcls = self.__getItems(ITEM_TYPES.vehicle, nationIdx)
             guns = self.__getItems(ITEM_TYPES.vehicleGun, nationIdx)
@@ -203,7 +208,7 @@ class _ParamsCache(object):
                 self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g['compactDescr']] = PrecachedGun(turrets=tuple(turretsList), clipVehicles=clipVehiclesList, avgParams=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
 
     def __precachShells(self):
-        for nationName, nationIdx in nations.INDICES.iteritems():
+        for nationIdx in nations.INDICES.values():
             self.__cache.setdefault(nationIdx, {})[ITEM_TYPES.shell] = {}
             guns = self.__getItems(ITEM_TYPES.vehicleGun, nationIdx)
             shells = self.__getItems(ITEM_TYPES.shell, nationIdx)
@@ -219,6 +224,26 @@ class _ParamsCache(object):
                                     descriptors.append(shot)
 
                 self.__cache[nationIdx][ITEM_TYPES.shell][sDescr['compactDescr']] = PrecachedShell(guns=tuple(gNames), avgParams=calcShellParams(descriptors))
+
+    def __cacheVehiclesWithoutCamouflage(self):
+        for nationID in nations.INDICES.itervalues():
+            deniedVehicles = {}
+            allowedVehicles = set()
+            restrictedCamouflages = 0
+            camouflages = vehicles.g_cache.customization(nationID)['camouflages']
+            totalCount = len(camouflages)
+            for camouflage in camouflages.itervalues():
+                currentAllowed = camouflage.get('allow', ())
+                for vehCD in camouflage.get('deny', ()):
+                    deniedVehicles[vehCD] = deniedVehicles.get(vehCD, 0) + 1
+
+                allowedVehicles.update(currentAllowed)
+                if len(currentAllowed) > 0:
+                    restrictedCamouflages += 1
+
+            for vehCD, count in deniedVehicles.iteritems():
+                if vehCD not in allowedVehicles and count + restrictedCamouflages >= totalCount:
+                    self.__noCamouflageVehicles.append(vehCD)
 
 
 g_paramsCache = _ParamsCache()

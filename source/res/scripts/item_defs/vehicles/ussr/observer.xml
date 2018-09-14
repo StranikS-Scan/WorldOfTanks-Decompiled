@@ -431,17 +431,52 @@
   <radios>
     <Observer>	shared	</Observer>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Observer>
+          <smplEnginePower>	45.46309	</smplEnginePower>
+        </Observer>
+      </engines>
+      <chassis>
+        <Observer>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Observer>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Observer>
-        <alpha>	0.12075	</alpha>
-      </Observer>
-    </chassis>
-    <engines>
-      <Observer>
-        <bravo>	11.36577	</bravo>
-      </Observer>
-    </engines>
     <armour>	0	</armour>
     <power>	0	</power>
     <mobility>	0	</mobility>

@@ -26,6 +26,7 @@ from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from messenger.ext import isNotFriendSenderIgnored
 from predefined_hosts import g_preDefinedHosts
+from shared_utils.account_helpers.ClientInvitations import UniqueId
 
 def isInviteSenderIgnoredInBattle(user, areFriendsOnly, isFromBattle):
     return isNotFriendSenderIgnored(user, False) if isFromBattle else isNotFriendSenderIgnored(user, areFriendsOnly)
@@ -436,7 +437,8 @@ class InvitesManager(UsersInfoHelper):
         prebattleInvitations = _getNewInvites()
         for invite in self.getInvites(version=_INVITE_VERSION.NEW):
             if invite.creatorDBID in names or invite.receiverDBID in names:
-                inviteData = prebattleInvitations.get(invite.id)
+                inviteUniqueId = UniqueId(id=invite.id, senderDBID=invite.creatorDBID)
+                inviteData = prebattleInvitations.get(inviteUniqueId)
                 inviteID, invite = inviteMaker(inviteData)
                 if inviteData and self._updateInvite(invite, rosterGetter):
                     updated[invite.isIncoming()].append(inviteID)
@@ -522,7 +524,10 @@ class InvitesManager(UsersInfoHelper):
             name, abbrev = ('', None)
             if userDBID:
                 if g_appLoader.getSpaceID() == GUI_GLOBAL_SPACE_ID.BATTLE:
-                    name, abbrev = g_battleCtrl.getCtx().getPlayerFullNameParts(accID=userDBID, showVehShortName=False)[1:3]
+                    ctx = g_battleCtrl.getCtx()
+                    isUserInBattle = ctx.getVehIDByAccDBID(userDBID) != 0
+                    if isUserInBattle:
+                        name, abbrev = ctx.getPlayerFullNameParts(accID=userDBID, showVehShortName=False)[1:3]
                 if not name:
                     userName = self.getUserName(userDBID)
                     userClanAbbrev = self.getUserClanAbbrev(userDBID)
@@ -564,7 +569,7 @@ class InvitesManager(UsersInfoHelper):
             step = PRB_INVITES_INIT_STEP.FRIEND_RECEIVED
             if self.__inited & step == 0:
                 self.__inited |= step
-        if USER_TAG.IGNORED in tags:
+        if USER_TAG.IGNORED in tags or USER_TAG.IGNORED_TMP in tags:
             doInit = True
             step = PRB_INVITES_INIT_STEP.IGNORED_RECEIVED
             if self.__inited & step == 0:

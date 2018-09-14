@@ -867,23 +867,89 @@
       </unlocks>
     </R113>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <KZ-V8>
+          <smplEnginePower>	606.7875	</smplEnginePower>
+        </KZ-V8>
+        <V-16M>
+          <smplEnginePower>	772.275	</smplEnginePower>
+        </V-16M>
+      </engines>
+      <chassis>
+        <Chassis_R107_LTB>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0924	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0924	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0924	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0924	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0924	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0924	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R107_LTB>
+        <Chassis_R107_LTB_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.084	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.084	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.084	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.084	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.084	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.084	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R107_LTB_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R107_LTB>
-        <alpha>	0.0924	</alpha>
-      </Chassis_R107_LTB>
-      <Chassis_R107_LTB_2>
-        <alpha>	0.084	</alpha>
-      </Chassis_R107_LTB_2>
-    </chassis>
-    <engines>
-      <KZ-V8>
-        <bravo>	151.6969	</bravo>
-      </KZ-V8>
-      <V-16M>
-        <bravo>	193.0688	</bravo>
-      </V-16M>
-    </engines>
     <armour>	1.096437537	</armour>
   </clientAdjustmentFactors>
   <effects>

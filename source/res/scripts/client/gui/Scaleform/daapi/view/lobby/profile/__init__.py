@@ -5,9 +5,11 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 
 def getContextMenuHandlers():
-    pass
+    from gui.Scaleform.daapi.view.lobby.profile import profile_cm_handlers
+    return ((CONTEXT_MENU_HANDLER_TYPE.PROFILE_VEHICLE, profile_cm_handlers.ProfileVehicleCMHandler),)
 
 
 def getViewSettings():

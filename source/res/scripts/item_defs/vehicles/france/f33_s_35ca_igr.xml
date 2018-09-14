@@ -341,17 +341,52 @@
   <radios>
     <ER_56_IGR>	shared	</ER_56_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Somua_S-40Bis_IGR>
+          <smplEnginePower>	274.8931	</smplEnginePower>
+        </Somua_S-40Bis_IGR>
+      </engines>
+      <chassis>
+        <Chassis_S_35CA_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_S_35CA_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_S_35CA_2_IGR>
-        <alpha>	0.1288	</alpha>
-      </Chassis_S_35CA_2_IGR>
-    </chassis>
-    <engines>
-      <Somua_S-40Bis_IGR>
-        <bravo>	68.72327	</bravo>
-      </Somua_S-40Bis_IGR>
-    </engines>
     <armour>	1.113536032	</armour>
   </clientAdjustmentFactors>
   <effects>

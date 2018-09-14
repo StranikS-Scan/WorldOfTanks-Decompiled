@@ -32,7 +32,6 @@ class ArenaDataProvider(object):
         self.__invitationStatuses = {}
         self.__squadFinder = squad_finder.createSquadFinder(setup.arenaVisitor, self.__teamsOnArena)
         self.__description = arena_descrs.createDescription(setup.arenaVisitor)
-        settings.addUnknownContourIconToCache()
 
     def __del__(self):
         LOG_DEBUG('Deleted:', self)
@@ -49,7 +48,6 @@ class ArenaDataProvider(object):
 
     def clear(self):
         """Clears data."""
-        settings.clearContourIconFromCache()
         self.clearInfo()
         self.clearStats()
         self.__description.clear()
@@ -286,13 +284,34 @@ class ArenaDataProvider(object):
     def isObserver(self, vID):
         return self.__getStateFlag(vID, 'isObserver')
 
-    def getVehIDByAccDBID(self, dbID):
+    def getVehIDByAccDBID(self, accDBID):
+        """
+        Gets player vehicle ID by account database ID.
+        
+        :param accDBID: account database ID.
+        :return: player vehicle ID (long) or 0 if there no player with the given database ID.
+        """
         try:
-            vID = self.__playersVIDs[dbID]
+            vID = self.__playersVIDs[accDBID]
         except KeyError:
             vID = 0
 
         return vID
+
+    def getAccountDBIDByVehID(self, vID):
+        """
+        Gets player database ID by the given vehicle ID.
+        
+        :param vID: vehicle ID
+        :return: account database ID (long) or 0 if there no vehicle with the given ID.
+        """
+        for accountDBID, vInfo in self.__playersVIDs:
+            if vInfo.vehicleID == vID:
+                break
+        else:
+            accountDBID = 0
+
+        return accountDBID
 
     def getVehiclesInfoIterator(self):
         """ Gets iterator where is each item is VehicleArenaInfoVO.

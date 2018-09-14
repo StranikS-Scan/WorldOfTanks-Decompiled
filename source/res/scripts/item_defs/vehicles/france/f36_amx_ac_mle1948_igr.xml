@@ -621,17 +621,52 @@
   <radios>
     <SCR_528_IGR>	shared	</SCR_528_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_295_IGR>
+          <smplEnginePower>	898.689	</smplEnginePower>
+        </Maybach_HL_295_IGR>
+      </engines>
+      <chassis>
+        <Chassis_AMX_AC_Mle1948_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_AC_Mle1948_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_AC_Mle1948_2_IGR>
-        <alpha>	0.1127	</alpha>
-      </Chassis_AMX_AC_Mle1948_2_IGR>
-    </chassis>
-    <engines>
-      <Maybach_HL_295_IGR>
-        <bravo>	224.6722	</bravo>
-      </Maybach_HL_295_IGR>
-    </engines>
     <armour>	1.113870608	</armour>
   </clientAdjustmentFactors>
   <effects>

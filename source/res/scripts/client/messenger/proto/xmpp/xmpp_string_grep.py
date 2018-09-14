@@ -20,6 +20,10 @@ def normalizeToNFKC(data):
     return unicodedata.normalize('NFKC', data)
 
 
+def normalizeToNFC(data):
+    return unicodedata.normalize('NFC', data)
+
+
 _NODE_PREP_PROHIBITED = {u'"',
  u'&',
  u"'",
@@ -115,7 +119,7 @@ NodePrep = _StringPrepProfile(unassigned=(stringprep.in_table_a1,), mapping=(doM
  stringprep.in_table_c8,
  stringprep.in_table_c9,
  inNodeProhibitedChars), bidi=True)
-ResourcePrep = _StringPrepProfile(unassigned=(stringprep.in_table_a1,), mapping=(doMappingToNothing,), normalization=normalizeToNFKC, prohibited=(stringprep.in_table_c12,
+ResourcePrep = _StringPrepProfile(unassigned=(stringprep.in_table_a1,), mapping=(doMappingToNothing,), normalization=normalizeToNFC, prohibited=(stringprep.in_table_c12,
  stringprep.in_table_c21,
  stringprep.in_table_c22,
  stringprep.in_table_c3,

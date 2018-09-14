@@ -61,6 +61,7 @@ class FortWelcomeInfoView(FortWelcomeInfoViewMeta, FortViewHelper, ClanListener)
 
     def _dispose(self):
         self.stopFortListening()
+        self.stopClanListening()
         try:
             self.onFortCreationRequested.clear()
             self.onFortCreationRequested = None
@@ -86,7 +87,7 @@ class FortWelcomeInfoView(FortWelcomeInfoViewMeta, FortViewHelper, ClanListener)
     def __updateViewState(self, data):
         state = self.fortState
         warningText = ('', None)
-        if state.getStateID() == CLIENT_FORT_STATE.NO_CLAN:
+        if state.getStateID() in (CLIENT_FORT_STATE.NO_CLAN, CLIENT_FORT_STATE.NO_CLAN_SUBSCRIBED):
             self.as_setRequirementTextS(self.__getNoClanText())
         elif self.fortCtrl.getPermissions().canCreate():
             result, reason = self.fortCtrl.getLimits().isCreationValid()

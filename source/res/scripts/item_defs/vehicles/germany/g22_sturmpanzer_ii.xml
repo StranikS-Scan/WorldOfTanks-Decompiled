@@ -754,23 +754,89 @@
     </FuG_Spr.1>
     <FuG_Spr.A>	shared	</FuG_Spr.A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <BNAG_L8V_GS36>
+          <smplEnginePower>	163.8786	</smplEnginePower>
+        </BNAG_L8V_GS36>
+        <BNAG_L8V_GS39>
+          <smplEnginePower>	190.3106	</smplEnginePower>
+        </BNAG_L8V_GS39>
+      </engines>
+      <chassis>
+        <Sturmpanzerketten_ausf_A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Sturmpanzerketten_ausf_A>
+        <Sturmpanzerketten_ausf_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Sturmpanzerketten_ausf_B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Sturmpanzerketten_ausf_A>
-        <alpha>	0.1288	</alpha>
-      </Sturmpanzerketten_ausf_A>
-      <Sturmpanzerketten_ausf_B>
-        <alpha>	0.12075	</alpha>
-      </Sturmpanzerketten_ausf_B>
-    </chassis>
-    <engines>
-      <BNAG_L8V_GS36>
-        <bravo>	40.96964	</bravo>
-      </BNAG_L8V_GS36>
-      <BNAG_L8V_GS39>
-        <bravo>	47.57765	</bravo>
-      </BNAG_L8V_GS39>
-    </engines>
     <armour>	0.612462671	</armour>
   </clientAdjustmentFactors>
   <effects>

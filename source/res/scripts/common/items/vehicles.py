@@ -1,11 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicles.py
-import pprint
 import BigWorld
 import ResMgr
 from Math import Vector2, Vector3
 from collections import namedtuple
-from math import radians, cos, atan, pi
+from math import radians, cos, atan, pi, isnan
 from functools import partial
 import struct
 import itertools
@@ -28,6 +27,8 @@ if IS_CLIENT:
     import ReloadEffect
 elif IS_WEB:
     from web_stubs import *
+if IS_CELLAPP:
+    from vehicle_constants import OVERMATCH_MECHANICS_VER
 VEHICLE_CLASS_TAGS = frozenset(('lightTank',
  'mediumTank',
  'heavyTank',
@@ -44,14 +45,6 @@ VEHICLE_DEVICE_TYPE_NAMES = ('engine',
  'fuelTank',
  'radio',
  'track',
- 'gun',
- 'turretRotator',
- 'surveyingDevice')
-WHEEL_VEHICLE_DEVICE_TYPE_NAMES = ('engine',
- 'ammoBay',
- 'fuelTank',
- 'radio',
- 'wheel',
  'gun',
  'turretRotator',
  'surveyingDevice')
@@ -119,8 +112,6 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'gun/reloadTime': 1.0,
  'gun/aimingTime': 1.0,
  'gun/canShoot': True,
- 'gun/canShoot/0': True,
- 'gun/canShoot/1': True,
  'engine/fireStartingChance': 1.0,
  'healthBurnPerSecLossFraction': 1.0,
  'repairSpeed': 1.0,
@@ -184,11 +175,6 @@ class VehicleDescr(object):
         self.turret, self.gun = self.turrets[turretPosition]
         self.__activeTurretPos = turretPosition
         self.activeGunShotIndex = 0
-        if 'markI' in self.type.tags and not IS_CLIENT:
-            self.secondTurret = copy.deepcopy(self.turret)
-            self.secondGun = copy.deepcopy(self.gun)
-            self.secondTurret['gunPosition'].x *= -1
-            self.secondGun['turretYawLimits'] = (-self.secondGun['turretYawLimits'][1], -self.secondGun['turretYawLimits'][0])
 
     activeTurretPosition = property(lambda self: self.__activeTurretPos, __set_activeTurretPos)
 
@@ -865,11 +851,6 @@ class VehicleDescr(object):
                 self.hull = type.hulls[0]
             else:
                 self.hull = self.__selectBestHull(self.turrets, self.chassis)
-            if 'markI' in type.tags and not IS_CLIENT:
-                turretPosition = self.hull['turretPositions'][0]
-                secondTurretPosition = copy.deepcopy(turretPosition)
-                secondTurretPosition.x *= -1
-                self.hull['turretPositions'] = (turretPosition, secondTurretPosition)
             self.optionalDevices = [None] * NUM_OPTIONAL_DEVICE_SLOTS
             idx = NUM_OPTIONAL_DEVICE_SLOTS - 1
             while optionalDeviceSlots:
@@ -1061,6 +1042,7 @@ class VehicleType(object):
         xmlCtx = (None, xmlPath)
         self.tags = basicInfo['tags']
         self.level = basicInfo['level']
+        self.hasCustomDefaultCamouflage = section.readBool('customDefaultCamouflage', False)
         customizationNation = section.readString('customizationNation')
         if not customizationNation:
             self.customizationNationID = nationID
@@ -1087,18 +1069,9 @@ class VehicleType(object):
          'firePenalty': _xml.readFraction(xmlCtx, section, 'invisibility/firePenalty')}
         self.crewRoles = _readCrew(xmlCtx, section, 'crew')
         commonConfig = g_cache.commonConfig
-        if IS_CELLAPP:
+        if IS_CLIENT or IS_CELLAPP:
             self.extras = commonConfig['extras']
             self.extrasDict = commonConfig['extrasDict']
-            self.devices = commonConfig['_devices']
-            self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
-        if IS_CLIENT:
-            if 'wheeledVehicle' in self.tags:
-                self.extras = commonConfig['extrasOverrides']
-                self.extrasDict = commonConfig['extrasDictWithOverrides']
-            else:
-                self.extras = commonConfig['extras']
-                self.extrasDict = commonConfig['extrasDict']
             self.devices = commonConfig['_devices']
             self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
         if IS_BASEAPP or IS_WEB:
@@ -1171,12 +1144,18 @@ class VehicleType(object):
         self.unlocksDescrs = self.__convertAndValidateUnlocksDescrs(unlocksDescrs)
         self.autounlockedItems = self.__collectDefaultUnlocks()
         if IS_CELLAPP:
+            overmatchVer = _xml.readIntOrNone(xmlCtx, section, 'overmatchMechanicsVer')
+            if overmatchVer is None:
+                overmatchVer = OVERMATCH_MECHANICS_VER.DEFAULT
+            self.overmatchMechanicsVer = overmatchVer
             try:
                 self.xphysics = _readXPhysics(xmlCtx, section, 'physics')
             except:
                 LOG_CURRENT_EXCEPTION()
                 self.xphysics = None
 
+        elif IS_CLIENT:
+            self.xphysics = _readXPhysicsClient(xmlCtx, section, 'physics')
         else:
             self.xphysics = None
         if IS_CLIENT and section.has_key('repaintParameters'):
@@ -1797,6 +1776,18 @@ def getUnlocksSources():
     return res
 
 
+def isRestorable(vehTypeCD, gameParams):
+    if vehTypeCD in gameParams['items']['vehiclesToSellForGold']:
+        return False
+    vehicleTags = getVehicleType(vehTypeCD).tags
+    isUnrecoverable = bool('unrecoverable' in vehicleTags)
+    if isUnrecoverable:
+        return False
+    isPremium = bool('premium' in vehicleTags)
+    notInShop = bool(vehTypeCD in gameParams['items']['notInShopItems'])
+    return isPremium or notInShop
+
+
 def _readComponents(xmlPath, reader, nationID, itemTypeName):
     section = ResMgr.openSection(xmlPath)
     if section is None:
@@ -2264,25 +2255,11 @@ def _readChassis(xmlCtx, section, compactDescr, unlocksDescrs=None, parentItem=N
         _readUserText(res, section)
     if IS_CLIENT:
         res['models'] = _readModels(xmlCtx, section, 'models')
-        if 'wheeledVehicle' in res['tags']:
-            res['traces'] = []
-            for sname, subsection in _xml.getChildren(xmlCtx, section, 'traces'):
-                if sname == 'trace':
-                    ctx = (xmlCtx, 'traces/trace')
-                    t = {'lodDist': _readLodDist(ctx, subsection, 'lodDist'),
-                     'isLeading': _xml.readBool(ctx, subsection, 'isLeading'),
-                     'bufferPrefs': _xml.readNonEmptyString(ctx, subsection, 'bufferPrefs'),
-                     'textureSet': _xml.readNonEmptyString(ctx, subsection, 'textureSet'),
-                     'centerOffset': res['topRightCarryingPoint'][0],
-                     'size': _xml.readPositiveVector2(ctx, subsection, 'size')}
-                    res['traces'].append(t)
-
-        else:
-            res['traces'] = {'lodDist': _readLodDist(xmlCtx, section, 'traces/lodDist'),
-             'bufferPrefs': _xml.readNonEmptyString(xmlCtx, section, 'traces/bufferPrefs'),
-             'textureSet': _xml.readNonEmptyString(xmlCtx, section, 'traces/textureSet'),
-             'centerOffset': res['topRightCarryingPoint'][0],
-             'size': _xml.readPositiveVector2(xmlCtx, section, 'traces/size')}
+        res['traces'] = {'lodDist': _readLodDist(xmlCtx, section, 'traces/lodDist'),
+         'bufferPrefs': _xml.readNonEmptyString(xmlCtx, section, 'traces/bufferPrefs'),
+         'textureSet': _xml.readNonEmptyString(xmlCtx, section, 'traces/textureSet'),
+         'centerOffset': res['topRightCarryingPoint'][0],
+         'size': _xml.readPositiveVector2(xmlCtx, section, 'traces/size')}
         res['tracks'] = {'lodDist': _readLodDist(xmlCtx, section, 'tracks/lodDist'),
          'leftMaterial': _xml.readNonEmptyString(xmlCtx, section, 'tracks/leftMaterial'),
          'rightMaterial': _xml.readNonEmptyString(xmlCtx, section, 'tracks/rightMaterial'),
@@ -2414,7 +2391,7 @@ def _parseFloatArrList(ctx, sec, floatArrList):
     return dict(((pn, _xml.readTupleOfFloats(ctx, sec, pn, sz)) for pn, sz in floatArrList))
 
 
-def _xphysicsParse_engine(ctx, sec):
+def _xphysicsParseEngine(ctx, sec):
     res = {}
     floatParamsCommon = ('startRPM',)
     res.update(_parseFloatList(ctx, sec, floatParamsCommon))
@@ -2431,9 +2408,9 @@ def _xphysicsParse_engine(ctx, sec):
     return res
 
 
-def _xphysicsParse_ground(ctx, sec):
+def _xphysicsParseGround(ctx, sec):
     if 'medium' in sec.keys():
-        return _parseSectionList(ctx, sec, _xphysicsParse_ground)
+        return _parseSectionList(ctx, sec, _xphysicsParseGround)
     floatParams = ('dirtCumulationRate', 'dirtReleaseRate', 'dirtSideVelocity', 'maxDirt', 'sideFriction', 'fwdFriction', 'rollingFriction')
     res = _parseFloatList(ctx, sec, floatParams)
     res['dirtSideVelocity'] *= KMH_TO_MS
@@ -2444,9 +2421,9 @@ def _xphysicsParse_ground(ctx, sec):
     return res
 
 
-def _xphysicsParse_chassis(ctx, sec):
+def _xphysicsParseChassis(ctx, sec):
     res = {}
-    res['grounds'] = _parseSectionList(ctx, sec, _xphysicsParse_ground, 'grounds')
+    res['grounds'] = _parseSectionList(ctx, sec, _xphysicsParseGround, 'grounds')
     floatParamsCommon = ('chassisMassFraction', 'hullCOMShiftY', 'wheelRadius', 'bodyHeight', 'clearance', 'wheelStroke', 'stiffness0', 'stiffness1', 'damping', 'movementRevertSpeed', 'comSideFriction', 'wheelInertiaFactor', 'rotationBrake', 'brake', 'angVelocityFactor')
     res.update(_parseFloatList(ctx, sec, floatParamsCommon))
     res['movementRevertSpeed'] *= KMH_TO_MS
@@ -2501,8 +2478,8 @@ def _readXPhysicsMode(xmlCtx, sec, subsectionName):
         res = {}
         res['gravityFactor'] = subsec.readFloat('gravityFactor', 1.0)
         res['fakegearbox'] = _readFakeGearBox(ctx, subsec)
-        res['engines'] = _parseSectionList(ctx, subsec, _xphysicsParse_engine, 'engines')
-        res['chassis'] = _parseSectionList(ctx, subsec, _xphysicsParse_chassis, 'chassis')
+        res['engines'] = _parseSectionList(ctx, subsec, _xphysicsParseEngine, 'engines')
+        res['chassis'] = _parseSectionList(ctx, subsec, _xphysicsParseChassis, 'chassis')
         return res
 
 
@@ -2517,6 +2494,42 @@ def _readXPhysics(xmlCtx, section, subsectionName):
         res['useSimplifiedGearbox'] = _xml.readBool(ctx, xsec, 'useSimplifiedGearbox')
         res['detailed'] = _readXPhysicsMode(ctx, xsec, 'detailed')
         return res
+
+
+def _xphysicsParseGroundClient(ctx, sec):
+    res = {}
+    if 'medium' in sec.keys():
+        res['rollingFriction'] = sec.readFloat('medium/rollingFriction', float('nan'))
+    else:
+        res['rollingFriction'] = sec.readFloat('rollingFriction', float('nan'))
+    if isnan(res['rollingFriction']):
+        _xml.raiseWrongXml(ctx, '', "'rollingFriction' is missing")
+    return res
+
+
+def _xphysicsParseChassisClient(ctx, sec):
+    res = {}
+    res['grounds'] = _parseSectionList(ctx, sec, _xphysicsParseGroundClient, 'grounds')
+    return res
+
+
+def _xphysicsParseEngineClient(ctx, sec):
+    res = {}
+    res['smplEnginePower'] = sec.readFloat('smplEnginePower', float('nan'))
+    if isnan(res['smplEnginePower']):
+        _xml.raiseWrongXml(ctx, '', "'smplEnginePower' is missing")
+    return res
+
+
+def _readXPhysicsClient(xmlCtx, section, subsectionName):
+    xsec = section[subsectionName]
+    if xsec is None:
+        _xml.raiseWrongXml(xmlCtx, '', "subsection '%s' is missing" % subsectionName)
+    ctx = (xmlCtx, subsectionName)
+    res = {}
+    res['engines'] = _parseSectionList(ctx, xsec, _xphysicsParseEngineClient, 'detailed/engines')
+    res['chassis'] = _parseSectionList(ctx, xsec, _xphysicsParseChassisClient, 'detailed/chassis')
+    return res
 
 
 def _readTurret(xmlCtx, section, compactDescr, unlocksDescrs=None, parentItem=None):
@@ -3662,8 +3675,6 @@ def _readCommonConfig(xmlCtx, section):
         res['miscParams']['explosionCandleVolumes'] = [ float(f) for f in _xml.readString(xmlCtx, section, 'miscParams/explosionCandleVolumes').split() ]
     if IS_CLIENT or IS_CELLAPP:
         res['extras'], res['extrasDict'] = _readExtras(xmlCtx, section, 'extras')
-        if IS_CLIENT:
-            res['extrasOverrides'], res['extrasDictWithOverrides'] = _readExtrasOverrides(xmlCtx, section, 'extrasOverrides', res['extras'], res['extrasDict'])
         res['materials'], res['_autoDamageKindMaterials'] = _readMaterials(xmlCtx, section, 'materials', res['extrasDict'])
         res['deviceExtraIndexToTypeIndex'], res['tankmanExtraIndexToTypeIndex'] = _readDeviceTypes(xmlCtx, section, 'deviceExtras', res['extrasDict'])
         res['_devices'] = frozenset((res['extras'][idx] for idx in res['deviceExtraIndexToTypeIndex'].iterkeys()))
@@ -3724,31 +3735,6 @@ def _readExtras(xmlCtx, section, subsectionName):
     if len(extras) > 200:
         _xml.raiseWrongXml(xmlCtx, subsectionName, 'too many extras')
     return (tuple(extras), extrasDict)
-
-
-def _readExtrasOverrides(xmlCtx, section, subsectionName, extras, overridenExtrasDict):
-    import vehicle_extras as mod
-    noneExtra = mod.NoneExtra('_NoneExtra', 0, '', None)
-    extras = list(extras)
-    extrasDictWithOverrides = overridenExtrasDict.copy()
-    for extraName, extraSection in _xml.getChildren(xmlCtx, section, subsectionName):
-        extraName = intern(extraName)
-        ctx = (xmlCtx, subsectionName + '/' + extraName)
-        overridenExtraName, sep, className = extraSection.asString.partition(':')
-        overridenExtraName = overridenExtraName.strip()
-        className = className.strip()
-        classObj = getattr(mod, className, None)
-        if classObj is None:
-            _xml.raiseWrongXml(ctx, '', "class '%s' is not found in '%s'" % (className, mod.__name__))
-        if overridenExtraName not in overridenExtrasDict:
-            _xml.raiseWrongXml(ctx, '', "'%s' is not found in extras" % overridenExtraName)
-        overridenExtra = overridenExtrasDict[overridenExtraName]
-        extra = classObj(extraName, overridenExtra.index, xmlCtx[1], extraSection)
-        extras[overridenExtra.index] = extra
-        extrasDictWithOverrides[extraName] = extra
-        extrasDictWithOverrides[overridenExtraName] = extra
-
-    return (tuple(extras), extrasDictWithOverrides)
 
 
 def _readDeviceTypes(xmlCtx, section, subsectionName, extrasDict):
@@ -4338,8 +4324,6 @@ def _readClientAdjustmentFactors(xmlCtx, section):
      'mobility': section.readFloat('clientAdjustmentFactors/mobility', 1.0),
      'visibility': section.readFloat('clientAdjustmentFactors/visibility', 1.0),
      'camouflage': section.readFloat('clientAdjustmentFactors/camouflage', 1.0),
-     'chassis': _readClientAdjustmentSection(xmlCtx, section, 'clientAdjustmentFactors/chassis', 'rollingFriction', 'alpha', True),
-     'engines': _readClientAdjustmentSection(xmlCtx, section, 'clientAdjustmentFactors/engines', 'smplEnginePower', 'bravo', True),
      'guns': _readClientAdjustmentSection(xmlCtx, section, 'clientAdjustmentFactors/guns', 'caliberCorrection', 'delta', False)}
 
 

@@ -4,26 +4,22 @@ import random
 from collections import namedtuple
 import BigWorld
 import constants
+from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 import potapov_quests
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
 from shared_utils import findFirst
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from gui import SystemMessages
 from gui.server_events import g_eventsCache
-from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward, packRibbonInfo
+from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward, packRibbonInfo, MissionAwardAbstract
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import text_styles
-_BG_IMG_BY_VEH_TYPE = {'lightTank': RES_ICONS.MAPS_ICONS_QUESTS_LTAWARDBACK,
- 'mediumTank': RES_ICONS.MAPS_ICONS_QUESTS_MTAWARDBACK,
- 'heavyTank': RES_ICONS.MAPS_ICONS_QUESTS_HTAWARDBACK,
- 'AT-SPG': RES_ICONS.MAPS_ICONS_QUESTS_AT_SPGAWARDBACK,
- 'SPG': RES_ICONS.MAPS_ICONS_QUESTS_SPGAWARDBACK}
-_BG_IMG_FALLOUT = {'classic': RES_ICONS.MAPS_ICONS_QUESTS_CLASSICFALLOUTAWARDBACK,
- 'multiteam': RES_ICONS.MAPS_ICONS_QUESTS_MULTITEAMFALLOUTAWARDBACK}
+from gui.shared.utils.decorators import process
 
 def _getNextQuestInTileByID(questID):
     quests = g_eventsCache.potapov.getQuests()
@@ -225,7 +221,7 @@ class FormattedAward(AwardAbstract):
         self._formatters = {'gold': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG, tooltip=TOOLTIPS.AWARDITEM_GOLD),
          'credits': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG_1, tooltip=TOOLTIPS.AWARDITEM_CREDITS),
          'freeXP': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_FREEXPICONBIG, tooltip=TOOLTIPS.AWARDITEM_FREEXP),
-         'premium': self._SimpleNoValueFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_PREMDAYICONBIG, tooltip=TOOLTIPS.AWARDITEM_PREMDAYS),
+         'premium': self._SimpleNoValueFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_PREMDAYICONBIG, tooltip=TOOLTIPS.AWARDITEM_PREMIUM),
          'items': self._ItemsFormatter(),
          'goodies': self._BoostersFormatter()}
 
@@ -259,76 +255,6 @@ class FormattedAward(AwardAbstract):
         if len(strAwardsList):
             strAwards = ', '.join(strAwardsList)
         return (awards, strAwards)
-
-
-class RegularAward(FormattedAward):
-
-    def __init__(self, potapovQuest, proxyEvent, isMainReward=False, isAddReward=False):
-        super(RegularAward, self).__init__()
-        assert True in (isMainReward, isAddReward)
-        self.__potapovQuest = potapovQuest
-        self.__isMainReward = isMainReward
-        self.__isAddReward = isAddReward
-        self.__proxyEvent = proxyEvent
-
-    def getWindowTitle(self):
-        return i18n.makeString(MENU.AWARDWINDOW_TITLE_TASKCOMPLETE)
-
-    def getBackgroundImage(self):
-        if self.__potapovQuest.getQuestBranch() == potapov_quests.PQ_BRANCH.FALLOUT:
-            return _BG_IMG_FALLOUT[self.__potapovQuest.getMajorTag()]
-        else:
-            vehType = findFirst(None, self.__potapovQuest.getVehicleClasses())
-            return _BG_IMG_BY_VEH_TYPE[vehType] if vehType in _BG_IMG_BY_VEH_TYPE else random.choice(_BG_IMG_BY_VEH_TYPE.values())
-
-    def getAwardImage(self):
-        pass
-
-    def getHeader(self):
-        return i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_HEADER, taskName=self.__potapovQuest.getUserName())
-
-    def getDescription(self):
-        return i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_DESCRIPTION)
-
-    def getAdditionalText(self):
-        nextQuestID = _getNextQuestInTileByID(self.__potapovQuest.getID())
-        if nextQuestID:
-            nextQuestInfo = i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_NEXTTASKAUTOCHOICE, taskName=g_eventsCache.potapov.getQuests()[nextQuestID].getUserName())
-        else:
-            nextQuestInfo = ''
-        if self.__isAddReward:
-            result = []
-            for b in self.__potapovQuest.getBonuses(isMain=False):
-                if b.isShowInGUI():
-                    result.append(b.format())
-
-            taskComplete = i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONAL, award=', '.join(result))
-            return text_styles.main('{0}\n{1}'.format(taskComplete, nextQuestInfo))
-        else:
-            return '{0}\n{1}'.format(i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONALNOTCOMPLETE), nextQuestInfo)
-
-    def getButtonStates(self):
-        nextQuestID = _getNextQuestInTileByID(int(self.__potapovQuest.getID()))
-        return (False, True, nextQuestID is not None)
-
-    def getBodyButtonText(self):
-        return i18n.makeString(MENU.AWARDWINDOW_TAKENEXTBUTTON)
-
-    def getRibbonInfo(self):
-        if self.__isMainReward:
-            awards, awardBonusStrText = self._getMainAwards(self._getBonuses())
-            return packRibbonInfo(awardForCompleteText=i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDFORCOMLETE), awards=awards, awardBonusStrText=awardBonusStrText)
-        else:
-            return packRibbonInfo(awardReceivedText=i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDRECIEVED))
-
-    def handleBodyButton(self):
-        nextQuestID = _getNextQuestInTileByID(int(self.__potapovQuest.getID()))
-        if nextQuestID is not None:
-            self.__proxyEvent(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
-        return
-
-    def _getBonuses(self):
-        return self.__potapovQuest.getBonuses(isMain=True)
 
 
 class MotiveQuestAward(FormattedAward):
@@ -379,3 +305,176 @@ class MotiveQuestAward(FormattedAward):
         if nextQuest is not None:
             self.__proxyEvent(nextQuest.getID(), constants.EVENT_TYPE.MOTIVE_QUEST)
         return
+
+
+class MissionAward(MissionAwardAbstract):
+
+    def __init__(self, quest, ctx, proxyEvent):
+        super(MissionAward, self).__init__()
+        self._quest = quest
+        self._eventsCache = ctx['eventsCache']
+        self._proxyEvent = proxyEvent
+
+    def getWindowTitle(self):
+        return i18n.makeString('#menu:awardWindow/title/taskComplete')
+
+    def getBackgroundImage(self):
+        pass
+
+    def getRibbonImage(self):
+        pass
+
+    def getDescription(self):
+        return text_styles.promoTitle('#menu:awardWindow/mission/complete')
+
+    def getCurrentQuestHeader(self):
+        return text_styles.highTitle(self._quest.getUserName())
+
+    def getCurrentQuestConditions(self):
+        return {'containerElements': events_helpers.getEventConditions(self._quest)}
+
+    def getMainStatusText(self):
+        return text_styles.success('#menu:awardWindow/mission/conditionComplete')
+
+    def getMainStatusIcon(self):
+        return RES_ICONS.MAPS_ICONS_LIBRARY_OKICON
+
+    def getAvalableText(self):
+        count = text_styles.neutral(self.__getMissionsCount())
+        return text_styles.standard(i18n.makeString('#menu:awardWindow/mission/available', count=count))
+
+    def getNextButtonText(self):
+        return i18n.makeString('#menu:awardWindow/mission/nextButton')
+
+    def getNextButtonTooltip(self):
+        return makeTooltip('#menu:awardWindow/mission/nextButton/tooltip/header', '#menu:awardWindow/mission/nextButton/tooltip/body')
+
+    def isNextAvailable(self):
+        return self.__getMissionsCount() != 0
+
+    def isLast(self):
+        return not self.isNextAvailable()
+
+    def getAwards(self):
+        return events_helpers.getCarouselAwardVO(self._quest.getBonuses(), isReceived=True)
+
+    def handleNextButton(self):
+        self._proxyEvent(eventType=constants.EVENT_TYPE.BATTLE_QUEST)
+
+    def __getMissionsCount(self):
+        return len(self._eventsCache.getQuests(lambda q: q.isAvailable()[0] and q.getType() not in constants.EVENT_TYPE.SHARED_QUESTS and not q.isCompleted()))
+
+
+class PersonalMissionAward(MissionAward):
+
+    def __init__(self, quest, ctx, proxyEvent):
+        super(PersonalMissionAward, self).__init__(quest, ctx, proxyEvent)
+        nextQuestID = _getNextQuestInTileByID(int(self._quest.getID()))
+        if nextQuestID is not None and not self._quest.isFinal():
+            self._nextQuest = self._eventsCache.potapov.getQuests()[nextQuestID]
+        else:
+            self._nextQuest = None
+        self._tile = self._eventsCache.potapov.getTiles()[self._quest.getTileID()]
+        self._isAddReward = ctx.get('isAddReward', False)
+        self._isMainReward = ctx.get('isMainReward', False)
+        return
+
+    def getBackgroundImage(self):
+        return '../maps/icons/quests/awards/tile_{}_{}_award_bg.png'.format(self._tile.getSeasonID(), self._tile.getID())
+
+    def getHeader(self):
+        return text_styles.stats(i18n.makeString('#quests:tileChainsView/title', name=self._tile.getUserName()))
+
+    def getDescription(self):
+        if self._isAddReward:
+            key = '#menu:awardWindow/personalMission/completeWithHonors'
+        else:
+            key = '#menu:awardWindow/personalMission/complete'
+        return text_styles.promoTitle(key)
+
+    def getCurrentQuestConditionsText(self):
+        return self._quest.getUserMainCondition()
+
+    def getCurrentQuestConditions(self):
+        return None
+
+    def getMainStatusText(self):
+        statusText = text_styles.success('#menu:awardWindow/mission/mainConditionComplete')
+        if not self._isMainReward:
+            return text_styles.concatStylesWithSpace(statusText, text_styles.standard('#menu:awardWindow/personalMission/alreadyCompleted'))
+        else:
+            return statusText
+
+    def getAdditionalStatusText(self):
+        if self._isAddReward:
+            return text_styles.success('#menu:awardWindow/personalMission/sideConditionCompleted')
+        else:
+            return text_styles.neutral('#menu:awardWindow/personalMission/sideConditionNotCompleted')
+
+    def getAdditionalStatusIcon(self):
+        if self._isAddReward:
+            return RES_ICONS.MAPS_ICONS_LIBRARY_OKICON
+        else:
+            return ''
+
+    def getNextQuestHeader(self):
+        if self._nextQuest is not None:
+            return text_styles.highTitle(self._nextQuest.getUserName())
+        else:
+            return ''
+            return
+
+    def getNextQuestConditions(self):
+        if self._nextQuest is not None:
+            return self._nextQuest.getUserMainCondition()
+        else:
+            return ''
+            return
+
+    def getAvalableText(self):
+        return text_styles.standard('#menu:awardWindow/personalMission/available')
+
+    def getAwards(self):
+        bonuses = []
+        if self._isMainReward:
+            bonuses.extend(self._quest.getBonuses(isMain=True))
+        if self._isAddReward:
+            bonuses.extend(self._quest.getBonuses(isMain=False))
+        return events_helpers.getCarouselAwardVO(bonuses, isReceived=True)
+
+    def getNextButtonText(self):
+        if self._quest.isFinal():
+            return i18n.makeString('#menu:awardWindow/personalMission/nextButtonAward')
+        else:
+            return i18n.makeString('#menu:awardWindow/personalMission/nextButton')
+
+    def isNextAvailable(self):
+        return not self._quest.isFinal() and self._nextQuest is not None
+
+    def isLast(self):
+        return self._quest.isFinal() and self._quest.needToGetReward()
+
+    def isPersonal(self):
+        return True
+
+    def getNextButtonTooltip(self):
+        if self._quest.isFinal():
+            return makeTooltip('#menu:awardWindow/personalMission/nextButtonAward/tooltip/header', '#menu:awardWindow/personalMission/nextButtonAward/tooltip/body')
+        else:
+            return makeTooltip('#menu:awardWindow/personalMission/nextButton/tooltip/header', '#menu:awardWindow/personalMission/nextButton/tooltip/body')
+
+    def handleNextButton(self):
+        if self._nextQuest is not None:
+            self._proxyEvent(eventID=self._nextQuest.getID(), eventType=constants.EVENT_TYPE.POTAPOV_QUEST)
+        else:
+            self.__tryGetAward()
+        return
+
+    def handleCurrentButton(self):
+        self._proxyEvent(eventID=self._quest.getID(), eventType=constants.EVENT_TYPE.POTAPOV_QUEST)
+
+    @process('updating')
+    def __tryGetAward(self):
+        result = yield events_helpers.getPotapovQuestAward(self._quest)
+        if result and len(result.userMsg):
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)

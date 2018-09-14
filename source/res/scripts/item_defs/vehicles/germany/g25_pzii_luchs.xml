@@ -1239,26 +1239,92 @@
     </FuG7>
     <FuG_Spr.1>	shared	</FuG_Spr.1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL62TR>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </Maybach_HL62TR>
+        <Maybach_HL66P>
+          <smplEnginePower>	190.3106	</smplEnginePower>
+        </Maybach_HL66P>
+        <Maybach_HL90>
+          <smplEnginePower>	380.6212	</smplEnginePower>
+        </Maybach_HL90>
+      </engines>
+      <chassis>
+        <Luchsketten_Ausf_A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Luchsketten_Ausf_A>
+        <Luchsketten_Ausf_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Luchsketten_Ausf_B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Luchsketten_Ausf_A>
-        <alpha>	0.10465	</alpha>
-      </Luchsketten_Ausf_A>
-      <Luchsketten_Ausf_B>
-        <alpha>	0.0966	</alpha>
-      </Luchsketten_Ausf_B>
-    </chassis>
-    <engines>
-      <Maybach_HL62TR>
-        <bravo>	37.00484	</bravo>
-      </Maybach_HL62TR>
-      <Maybach_HL66P>
-        <bravo>	47.57765	</bravo>
-      </Maybach_HL66P>
-      <Maybach_HL90>
-        <bravo>	95.1553	</bravo>
-      </Maybach_HL90>
-    </engines>
     <armour>	0.777856038	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -486,17 +486,52 @@
   <radios>
     <SCR_506_IGR>	shared	</SCR_506_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAA_IGR>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </Ford_GAA_IGR>
+      </engines>
+      <chassis>
+        <Chassis_Sherman_Jumbo_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Sherman_Jumbo_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Sherman_Jumbo_2_IGR>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Sherman_Jumbo_2_IGR>
-    </chassis>
-    <engines>
-      <Ford_GAA_IGR>
-        <bravo>	137.4465	</bravo>
-      </Ford_GAA_IGR>
-    </engines>
     <armour>	1.039018702	</armour>
   </clientAdjustmentFactors>
   <effects>

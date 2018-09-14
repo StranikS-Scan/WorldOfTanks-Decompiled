@@ -82,7 +82,7 @@ class ServerStats(ServerStatsMeta, PrbListener):
             tooltipBody = i18n.makeString('#tooltips:header/info/players_online_full/body')
             tooltipFullData = makeTooltip('#tooltips:header/info/players_online_full/header', tooltipBody % {'servername': connectionManager.serverUserName})
             self.as_setServerStatsInfoS(tooltipFullData)
-        self.__onStatsReceived(game_control.g_instance.serverStats.getStats())
+        self.__onStatsReceived()
 
     def _updateServersList(self):
         result = []
@@ -121,7 +121,7 @@ class ServerStats(ServerStatsMeta, PrbListener):
 
         self.as_disableRoamingDDS(isRoamingCtrlDisabled)
 
-    def __onStatsReceived(self, stats):
+    def __onStatsReceived(self):
         if constants.IS_SHOW_SERVER_STATS:
             self.as_setServerStatsS(*game_control.g_instance.serverStats.getFormattedStats())
 

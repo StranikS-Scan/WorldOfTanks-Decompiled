@@ -10,42 +10,41 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.battle_control import g_sessionProvider
 from gui.shared import g_itemsCache
 from messenger import MessengerEntry, g_settings
-_DENUNCIATIONS_MAP = {'offend': constants.DENUNCIATION.OFFEND,
- 'notFairPlay': constants.DENUNCIATION.NOT_FAIR_PLAY,
- 'forbiddenNick': constants.DENUNCIATION.FORBIDDEN_NICK,
- 'bot': constants.DENUNCIATION.BOT,
- 'flood': constants.DENUNCIATION.FLOOD,
- 'swindle': constants.DENUNCIATION.SWINDLE,
- 'blackmail': constants.DENUNCIATION.BLACKMAIL}
+from messenger.storage import storage_getter
 
 class DENUNCIATIONS(object):
     APPEAL = 'appeal'
-    OFFEND = 'offend'
+    INCORRECT_BEHAVIOR = 'incorrectBehavior'
     NOT_FAIR_PLAY = 'notFairPlay'
     FORBIDDEN_NICK = 'forbiddenNick'
     BOT = 'bot'
-    FLOOD = 'flood'
-    SWINDLE = 'swindle'
-    BLACKMAIL = 'blackmail'
-    ORDER = (OFFEND,
-     FLOOD,
-     BLACKMAIL,
-     SWINDLE,
+    ORDER = (INCORRECT_BEHAVIOR,
      NOT_FAIR_PLAY,
      FORBIDDEN_NICK,
      BOT)
+    ENEMY_ORDER = (NOT_FAIR_PLAY, FORBIDDEN_NICK, BOT)
 
+
+DENUNCIATIONS_MAP = {DENUNCIATIONS.INCORRECT_BEHAVIOR: constants.DENUNCIATION.INCORRECT_BEHAVIOR,
+ DENUNCIATIONS.NOT_FAIR_PLAY: constants.DENUNCIATION.NOT_FAIR_PLAY,
+ DENUNCIATIONS.FORBIDDEN_NICK: constants.DENUNCIATION.FORBIDDEN_NICK,
+ DENUNCIATIONS.BOT: constants.DENUNCIATION.BOT}
 
 class Denunciator(object):
     """Denunciation creation helper.
     """
 
-    def makeAppeal(self, violatorID, userName, topic):
-        topicID = _DENUNCIATIONS_MAP.get(topic)
+    @storage_getter('playerCtx')
+    def playerCtx(self):
+        return None
+
+    def makeAppeal(self, violatorID, userName, topic, arenaUniqueID):
+        topicID = DENUNCIATIONS_MAP.get(topic)
         player = BigWorld.player()
         violatorKind = self._getViolatorKind(player, violatorID)
         try:
             player.makeDenunciation(violatorID, topicID, violatorKind)
+            self.playerCtx.addDenunciationFor(violatorID, topicID, arenaUniqueID)
         except (AttributeError, TypeError):
             LOG_ERROR('Cannot make a denunciation')
             return
@@ -58,6 +57,9 @@ class Denunciator(object):
 
     def isAppealsEnabled(self):
         return self.getDenunciationsLeft() > 0
+
+    def isAppealsForTopicEnabled(self, violatorID, topicID, arenaUniqueID):
+        return self.isAppealsEnabled() and not self.playerCtx.hasDenunciationFor(violatorID, topicID, arenaUniqueID)
 
     def getDenunciationsLeft(self):
         raise NotImplementedError()
@@ -85,6 +87,10 @@ class BattleDenunciator(Denunciator):
 
     def getDenunciationsLeft(self):
         return getattr(BigWorld.player(), 'denunciationsLeft', 0)
+
+    @classmethod
+    def getArenaUniqueID(cls):
+        return BigWorld.player().arenaUniqueID
 
     def _getViolatorKind(self, player, violatorID):
         arenaDP = g_sessionProvider.getArenaDP()

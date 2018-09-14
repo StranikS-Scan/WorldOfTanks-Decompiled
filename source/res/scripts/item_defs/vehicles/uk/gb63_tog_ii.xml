@@ -323,17 +323,52 @@
   <radios>
     <British_Wireless_set_N19>	shared	</British_Wireless_set_N19>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Paxman_Ricardo>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Paxman_Ricardo>
+      </engines>
+      <chassis>
+        <Chassis_GB63_TOG_II>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB63_TOG_II>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB63_TOG_II>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB63_TOG_II>
-    </chassis>
-    <engines>
-      <Paxman_Ricardo>
-        <bravo>	158.5922	</bravo>
-      </Paxman_Ricardo>
-    </engines>
     <armour>	0.901164293	</armour>
   </clientAdjustmentFactors>
   <effects>

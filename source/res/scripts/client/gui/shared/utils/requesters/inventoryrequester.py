@@ -53,29 +53,14 @@ class InventoryRequester(AbstractSyncDataRequester):
             return True
         return False
 
-    @async
-    def _requestCache(self, callback=None):
-        BigWorld.player().inventory.getCache(lambda resID, value: self._response(resID, value, callback))
-
-    def __makeItem(self, itemTypeID, invDataIdx):
-        return self.__getMaker(itemTypeID)(invDataIdx)
-
     def getItemsData(self, itemTypeID):
         invData = self.getCacheValue(itemTypeID, {})
-        if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+        if itemTypeID != 'customizations':
             for invID in invData.get('compDescr', {}).iterkeys():
-                self.__makeVehicle(invID)
-
-        elif itemTypeID == GUI_ITEM_TYPE.TANKMAN:
-            for invID in invData.get('compDescr', {}).iterkeys():
-                self.__makeTankman(invID)
+                self.__makeItem(itemTypeID, invID)
 
         else:
-            if itemTypeID == 'customizations':
-                return invData
-            for typeCompDescr in invData.iterkeys():
-                self.__makeSimpleItem(typeCompDescr)
-
+            return invData
         return self.__itemsCache[itemTypeID]
 
     def getItemData(self, typeCompDescr):
@@ -90,6 +75,78 @@ class InventoryRequester(AbstractSyncDataRequester):
 
     def getPreviousItem(self, itemTypeID, invDataIdx):
         return self.__itemsPreviousCache[itemTypeID].get(invDataIdx)
+
+    def getItems(self, itemTypeIdx, dataIdx=None):
+        """
+        Returns inventory items data by given item type. If data index is
+        not specified - returns dictionary of items data, otherwise -
+        specific item data.
+        
+        @param itemTypeIdx: item type index from common.items.ITEM_TYPE_NAMES
+        @param dataIdx:optional  item data index in cache. Used to get data only for
+                                specific item. This index is different for each item type:
+                                        - for vehicles and tankmen: inventory id
+                                        - for the rest types: type compact descriptor (int)
+        @return: dict of items data or specific item data
+        """
+        if itemTypeIdx == GUI_ITEM_TYPE.VEHICLE:
+            return self.__getVehiclesData(dataIdx)
+        return self.__getTankmenData(dataIdx) if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN else self.__getItemsData(itemTypeIdx, dataIdx)
+
+    def isInInventory(self, intCompactDescr):
+        """
+        Check whether item is in inventory or not.
+        
+        @param intCompactDescr: item int compact descriptor to check
+        @return: bool flag of item inventory existence
+        """
+        itemTypeIdx, _, _ = vehicles.parseIntCompactDescr(intCompactDescr)
+        itemsData = self.__getItemsData(itemTypeIdx)
+        return intCompactDescr in self.__itemsCache[GUI_ITEM_TYPE.VEHICLE] if itemTypeIdx == GUI_ITEM_TYPE.VEHICLE else intCompactDescr in itemsData
+
+    def isItemInInventory(self, itemTypeID, invDataIdx):
+        if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+            placeToSearch = self.__vehsIDsByCD
+        else:
+            placeToSearch = self.__itemsCache[itemTypeID]
+        return invDataIdx in placeToSearch
+
+    def getIgrCustomizationsLayout(self):
+        """
+        Extracting igr customizations layout
+        
+        @return: layout or empty dict
+        """
+        return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('igrCustomizationLayout', {})
+
+    @async
+    def _requestCache(self, callback=None):
+        BigWorld.player().inventory.getCache(lambda resID, value: self._response(resID, value, callback))
+
+    def _response(self, resID, invData, callback=None):
+        self.__vehsCDsByID = {}
+        if invData is not None:
+            for invID, vCompDescr in invData[GUI_ITEM_TYPE.VEHICLE]['compDescr'].iteritems():
+                self.__vehsCDsByID[invID] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.parseVehicleCompactDescr(vCompDescr))
+
+        self.__vehsIDsByCD = dict(((v, k) for k, v in self.__vehsCDsByID.iteritems()))
+        super(InventoryRequester, self)._response(resID, invData, callback)
+        return
+
+    def __getItemsData(self, itemTypeIdx, compactDescr=None):
+        """
+        Common items request handler. Returns all given type items
+        data or only one specific data by @compactDescr.
+        
+        @param itemTypeIdx: item type index from common.items.ITEM_TYPE_NAMES
+        @param compactDescr: item int compact descriptor
+        @return dictionary of all items data or one item data
+        """
+        result = self.getCacheValue(itemTypeIdx)
+        return result.get(compactDescr) if result is not None and compactDescr is not None else result
+
+    def __makeItem(self, itemTypeID, invDataIdx):
+        return self.__getMaker(itemTypeID)(invDataIdx)
 
     def __getMaker(self, itemTypeID):
         return self.__makers.get(itemTypeID, self.__makeSimpleItem)
@@ -146,72 +203,6 @@ class InventoryRequester(AbstractSyncDataRequester):
             data = self.ITEM_DATA(typeCompDescr, vehicles.getDictDescr(typeCompDescr), itemsInvData[typeCompDescr])
             item = cache[typeCompDescr] = data
             return item
-
-    def _response(self, resID, invData, callback):
-        self.__vehsCDsByID = {}
-        if invData is not None:
-            for invID, vCompDescr in invData[GUI_ITEM_TYPE.VEHICLE]['compDescr'].iteritems():
-                self.__vehsCDsByID[invID] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.parseVehicleCompactDescr(vCompDescr))
-
-        self.__vehsIDsByCD = dict(((v, k) for k, v in self.__vehsCDsByID.iteritems()))
-        super(InventoryRequester, self)._response(resID, invData, callback)
-        return
-
-    def getItems(self, itemTypeIdx, dataIdx=None):
-        """
-        Returns inventory items data by given item type. If data index is
-        not specified - returns dictionary of items data, otherwise -
-        specific item data.
-        
-        @param itemTypeIdx: item type index from common.items.ITEM_TYPE_NAMES
-        @param dataIdx:optional  item data index in cache. Used to get data only for
-                                specific item. This index is different for each item type:
-                                        - for vehicles and tankmen: inventory id
-                                        - for the rest types: type compact descriptor (int)
-        @return: dict of items data or specific item data
-        """
-        if itemTypeIdx == GUI_ITEM_TYPE.VEHICLE:
-            return self.__getVehiclesData(dataIdx)
-        return self.__getTankmenData(dataIdx) if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN else self.__getItemsData(itemTypeIdx, dataIdx)
-
-    def isItemInInventory(self, itemTypeID, invDataIdx):
-        return invDataIdx in self.__vehsIDsByCD if itemTypeID == GUI_ITEM_TYPE.VEHICLE else invDataIdx in self.__itemsCache[itemTypeID]
-
-    def isInInventory(self, intCompactDescr):
-        """
-        Check whether item is in inventory or not.
-        
-        @param intCompactDescr: item int compact descriptor to check
-        @return: bool flag of item inventory existence
-        """
-        itemTypeIdx, _, _ = vehicles.parseIntCompactDescr(intCompactDescr)
-        itemsData = self.__getItemsData(itemTypeIdx)
-        if itemTypeIdx == GUI_ITEM_TYPE.VEHICLE:
-            return intCompactDescr in self.__itemsCache[GUI_ITEM_TYPE.VEHICLE]
-        return False if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN else intCompactDescr in itemsData
-
-    def getIgrCustomizationsLayout(self):
-        """
-        Extracting igr customizations layout
-        
-        @return: layout or empty dict
-        """
-        return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('igrCustomizationLayout', {})
-
-    def __getItemsData(self, itemTypeIdx, compactDescr=None):
-        """
-        Common items request handler. Returns all given type items
-        data or only one specific data by @compactDescr.
-        
-        @param itemTypeIdx: item type index from common.items.ITEM_TYPE_NAMES
-        @param compactDescr: item int compact descriptor
-        @return dictionary of all items data or one item data
-        """
-        result = self.getCacheValue(itemTypeIdx)
-        if result is not None:
-            if compactDescr is not None:
-                return result.get(compactDescr)
-        return result
 
     def __getTankmenData(self, inventoryID=None):
         """

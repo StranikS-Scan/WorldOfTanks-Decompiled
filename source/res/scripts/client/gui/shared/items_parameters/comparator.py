@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/items_parameters/comparator.py
 import collections
 import sys
-from debug_utils import LOG_DEBUG
 from gui.shared.items_parameters import params_cache
 BACKWARD_QUALITY_PARAMS = ['aimingTime',
  'shotDispersionAngle',
@@ -10,11 +9,13 @@ BACKWARD_QUALITY_PARAMS = ['aimingTime',
  'dispertionRadius',
  'fireStartingChance',
  'reloadTimeSecs',
- 'clipFireRate',
  'shellReloadingTime',
+ 'clipFireRate',
  'reloadMagazineTime',
- 'weight',
- 'vehicleWeight']
+ 'weight']
+CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
+ 'clipFireRate': (True, True, False),
+ 'pitchLimits': (True, False)}
 
 class PARAM_STATE(object):
     WORSE = 'worse'
@@ -24,6 +25,13 @@ class PARAM_STATE(object):
 
 PARAMS_STATES = (PARAM_STATE.WORSE, PARAM_STATE.NORMAL, PARAM_STATE.BETTER)
 DEFAULT_AVG_VALUE = (sys.maxint, -1)
+
+def getParamExtendedData(paramName, value, otherValue, penalties=None):
+    possibleBonuses, bonuses, penalties = penalties if penalties is not None else ([], [], [])
+    if otherValue is None or otherValue == DEFAULT_AVG_VALUE:
+        otherValue = value
+    return _ParameterInfo(paramName, value, rateParameterState(paramName, value, otherValue), possibleBonuses, bonuses, penalties)
+
 
 class ItemsComparator(object):
 
@@ -47,12 +55,7 @@ class ItemsComparator(object):
         return result
 
     def getExtendedData(self, paramName):
-        value = self._currentParams.get(paramName)
-        possibleBonuses, bonuses, penalties = self._getPenaltiesAndBonuses(paramName)
-        otherValue = self._otherParams.get(paramName)
-        if otherValue is None or otherValue == DEFAULT_AVG_VALUE:
-            otherValue = value
-        return _ParameterInfo(paramName, value, _rateParameterState(paramName, value, otherValue), possibleBonuses, bonuses, penalties)
+        return getParamExtendedData(paramName, self._currentParams.get(paramName), self._otherParams.get(paramName), self._getPenaltiesAndBonuses(paramName))
 
     def _getPenaltiesAndBonuses(self, _):
         return ([], [], [])
@@ -116,21 +119,29 @@ def _getConditionsForParamBonuses(paramName, allBonuses):
         return lambda _: True
 
 
-def _rateParameterState(paramName, val1, val2):
+def _getComparableValue(currentValue, comparableList, idx):
+    return comparableList[idx] if len(comparableList) > idx else currentValue
 
-    def getComparableValue(currentValue, comparableList, idx):
-        return comparableList[idx] if len(comparableList) > idx else currentValue
 
-    if isinstance(val1, collections.Iterable):
-        return tuple([ _rateParameterState(paramName, val, getComparableValue(val, val2, i)) for i, val in enumerate(val1) ])
+def _getParamStateInfo(paramName, val1, val2, valueIdx=None):
+    if val1 is None or val2 is None:
+        diff = 0
     else:
-        if val1 is None or val2 is None:
-            diff = 0
+        diff = val1 - val2
+    if diff == 0:
+        return (PARAM_STATE.NORMAL, diff)
+    else:
+        if valueIdx is not None and paramName in CUSTOM_QUALITY_PARAMS:
+            isInverted = CUSTOM_QUALITY_PARAMS[paramName][valueIdx]
         else:
-            diff = val1 - val2
-        if diff == 0:
-            return (PARAM_STATE.NORMAL, diff)
-        if diff > 0 and paramName in BACKWARD_QUALITY_PARAMS or diff < 0 and paramName not in BACKWARD_QUALITY_PARAMS:
+            isInverted = paramName in BACKWARD_QUALITY_PARAMS
+        if isInverted and diff > 0 or not isInverted and diff < 0:
             return (PARAM_STATE.WORSE, diff)
         return (PARAM_STATE.BETTER, diff)
         return
+
+
+def rateParameterState(paramName, val1, val2):
+    if isinstance(val1, collections.Iterable):
+        return tuple([ _getParamStateInfo(paramName, val, _getComparableValue(val, val2, i), i) for i, val in enumerate(val1) ])
+    return _getParamStateInfo(paramName, val1, val2)

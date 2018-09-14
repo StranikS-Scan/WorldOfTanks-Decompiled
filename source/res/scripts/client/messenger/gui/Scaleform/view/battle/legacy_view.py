@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/battle/legacy_view.py
 import weakref
 from gui import makeHtmlString
-from gui.Scaleform.CommandArgsParser import CommandArgsParser
 from gui.Scaleform.windows import UIInterface
 from gui.battle_control import g_sessionProvider
 from messenger import g_settings
 from messenger.ext import isBattleChatEnabled
 from messenger.gui.Scaleform import BTMS_COMMANDS, FILL_COLORS
+from messenger.gui.Scaleform.cmd_args_parser import CommandArgsParser
 from messenger.gui.interfaces import IBattleChannelView
 from messenger.m_constants import BATTLE_CHANNEL
 
@@ -79,7 +79,7 @@ class BattleChannelView(UIInterface, IBattleChannelView):
         if len(result):
             self.__flashCall(BTMS_COMMANDS.UpdateReceivers(), result)
 
-    def addMessage(self, message, fillColor=FILL_COLORS.BLACK):
+    def addMessage(self, message, fillColor=FILL_COLORS.BLACK, accountDBID=0):
         history = self.__sharedHistory()
         if history:
             history.addMessage(message, fillColor)

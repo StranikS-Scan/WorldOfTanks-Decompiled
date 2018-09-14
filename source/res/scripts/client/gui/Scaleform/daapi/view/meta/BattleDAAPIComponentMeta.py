@@ -8,17 +8,10 @@ class BattleDAAPIComponentMeta(BaseDAAPIComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIComponent
-    null
     """
 
     def as_populateS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_populate() if self._isDAAPIInited() else None
 
     def as_disposeS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_dispose() if self._isDAAPIInited() else None

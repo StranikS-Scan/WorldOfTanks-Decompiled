@@ -632,23 +632,89 @@
       </unlocks>
     </FuG5>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royce_I6>
+          <smplEnginePower>	69.78056	</smplEnginePower>
+        </Rolls_Royce_I6>
+        <Meadows_ESTL>
+          <smplEnginePower>	93.04074	</smplEnginePower>
+        </Meadows_ESTL>
+      </engines>
+      <chassis>
+        <Chassis_GW_Mk_IVe>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GW_Mk_IVe>
+        <Chassis_GW_Mk_IVe_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GW_Mk_IVe_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GW_Mk_IVe>
-        <alpha>	0.1288	</alpha>
-      </Chassis_GW_Mk_IVe>
-      <Chassis_GW_Mk_IVe_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GW_Mk_IVe_2>
-    </chassis>
-    <engines>
-      <Rolls_Royce_I6>
-        <bravo>	17.44514	</bravo>
-      </Rolls_Royce_I6>
-      <Meadows_ESTL>
-        <bravo>	23.26019	</bravo>
-      </Meadows_ESTL>
-    </engines>
     <armour>	0.705896267	</armour>
   </clientAdjustmentFactors>
   <effects>

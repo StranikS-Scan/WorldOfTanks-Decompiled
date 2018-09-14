@@ -297,17 +297,52 @@
   <radios>
     <_71-TK-3U>	shared	</_71-TK-3U>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <BD-2>
+          <smplEnginePower>	570.9318	</smplEnginePower>
+        </BD-2>
+      </engines>
+      <chassis>
+        <A-32>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </A-32>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <A-32>
-        <alpha>	0.09177	</alpha>
-      </A-32>
-    </chassis>
-    <engines>
-      <BD-2>
-        <bravo>	142.733	</bravo>
-      </BD-2>
-    </engines>
     <armour>	0.910096093	</armour>
   </clientAdjustmentFactors>
   <effects>

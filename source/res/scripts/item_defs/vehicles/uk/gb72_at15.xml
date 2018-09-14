@@ -920,26 +920,92 @@
     </N22>
     <C42>	shared	</C42>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAA>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Ford_GAA>
+        <Rolls_Royse_Meteor>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Rolls_Royse_Meteor>
+        <Rolls_Royse_Meteor_MkV>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkV>
+      </engines>
+      <chassis>
+        <Chassis_GB72_AT15>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB72_AT15>
+        <Chassis_GB72_AT15_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB72_AT15_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB72_AT15>
-        <alpha>	0.13685	</alpha>
-      </Chassis_GB72_AT15>
-      <Chassis_GB72_AT15_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GB72_AT15_2>
-    </chassis>
-    <engines>
-      <Ford_GAA>
-        <bravo>	132.1601	</bravo>
-      </Ford_GAA>
-      <Rolls_Royse_Meteor>
-        <bravo>	158.5922	</bravo>
-      </Rolls_Royse_Meteor>
-      <Rolls_Royse_Meteor_MkV>
-        <bravo>	171.8082	</bravo>
-      </Rolls_Royse_Meteor_MkV>
-    </engines>
     <armour>	0.833838827	</armour>
   </clientAdjustmentFactors>
   <effects>

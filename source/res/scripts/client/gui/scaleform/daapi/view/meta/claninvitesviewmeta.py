@@ -8,6 +8,5 @@ class ClanInvitesViewMeta(ClanInvitesWindowAbstractTabView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends ClanInvitesWindowAbstractTabView
-    null
     """
     pass

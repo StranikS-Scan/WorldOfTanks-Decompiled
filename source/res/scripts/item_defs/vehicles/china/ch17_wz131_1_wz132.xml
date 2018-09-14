@@ -811,6 +811,88 @@
     </A-220_1>
     <A-220B>	shared	</A-220B>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_12150L>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </_12150L>
+        <_8V135>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </_8V135>
+      </engines>
+      <chassis>
+        <Chassis_Ch17_WZ131_1_WZ132>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch17_WZ131_1_WZ132>
+        <Chassis_Ch17_WZ131_1_WZ132_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch17_WZ131_1_WZ132_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_100mm_60-100T>
@@ -820,22 +902,6 @@
         <delta>	1.12	</delta>
       </_100mm_59-100T>
     </guns>
-    <chassis>
-      <Chassis_Ch17_WZ131_1_WZ132>
-        <alpha>	0.05635	</alpha>
-      </Chassis_Ch17_WZ131_1_WZ132>
-      <Chassis_Ch17_WZ131_1_WZ132_2>
-        <alpha>	0.0483	</alpha>
-      </Chassis_Ch17_WZ131_1_WZ132_2>
-    </chassis>
-    <engines>
-      <_12150L>
-        <bravo>	137.4465	</bravo>
-      </_12150L>
-      <_8V135>
-        <bravo>	137.4465	</bravo>
-      </_8V135>
-    </engines>
     <armour>	0.900299889	</armour>
   </clientAdjustmentFactors>
   <effects>

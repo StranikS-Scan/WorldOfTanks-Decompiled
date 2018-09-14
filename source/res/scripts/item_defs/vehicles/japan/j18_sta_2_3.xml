@@ -499,17 +499,52 @@
   <radios>
     <JAN-GRC-3Z_1>	shared	</JAN-GRC-3Z_1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Mitsubishi_DL10TA>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </_Mitsubishi_DL10TA>
+      </engines>
+      <chassis>
+        <Chassis_STA_2_3>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_STA_2_3>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_STA_2_3>
-        <alpha>	0.07245	</alpha>
-      </Chassis_STA_2_3>
-    </chassis>
-    <engines>
-      <_Mitsubishi_DL10TA>
-        <bravo>	132.1601	</bravo>
-      </_Mitsubishi_DL10TA>
-    </engines>
     <armour>	0.753559261	</armour>
   </clientAdjustmentFactors>
   <effects>

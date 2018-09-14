@@ -916,23 +916,89 @@
     </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Guiberson_T-1020-4>
+          <smplEnginePower>	259.0339	</smplEnginePower>
+        </Guiberson_T-1020-4>
+        <Continental_W-670-9A>
+          <smplEnginePower>	277.0077	</smplEnginePower>
+        </Continental_W-670-9A>
+      </engines>
+      <chassis>
+        <Chassis_GB15_Stuart_I>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB15_Stuart_I>
+        <Chassis_GB15_Stuart_I_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB15_Stuart_I_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB15_Stuart_I>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB15_Stuart_I>
-      <Chassis_GB15_Stuart_I_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB15_Stuart_I_2>
-    </chassis>
-    <engines>
-      <Guiberson_T-1020-4>
-        <bravo>	64.75847	</bravo>
-      </Guiberson_T-1020-4>
-      <Continental_W-670-9A>
-        <bravo>	69.25191	</bravo>
-      </Continental_W-670-9A>
-    </engines>
     <armour>	0.794395802	</armour>
   </clientAdjustmentFactors>
   <effects>

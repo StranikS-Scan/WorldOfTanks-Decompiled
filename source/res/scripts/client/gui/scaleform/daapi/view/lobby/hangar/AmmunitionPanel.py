@@ -17,7 +17,6 @@ from gui.shared.events import LoadViewEvent
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from helpers import i18n
 from gui.shared import event_dispatcher as shared_events
-from gui.Scaleform.daapi.view.lobby.shared.new_items_notification import CustomizationItemNotification
 
 class AmmunitionPanel(AmmunitionPanelMeta):
     __FITTING_SLOTS = (GUI_ITEM_TYPE_NAMES[2],
@@ -42,7 +41,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
     def toRentContinue(self):
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            canBuyOrRent, _ = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
+            canBuyOrRent, _ = vehicle.mayObtainForMoney(g_itemsCache.items.stats.money)
             if vehicle.isRentable and vehicle.rentalIsOver and canBuyOrRent:
                 shared_events.showVehicleBuyDialog(vehicle)
 
@@ -74,7 +73,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
             statusId, msg, msgLvl = g_currentVehicle.getHangarMessage()
             rentAvailable = False
             if statusId == Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER:
-                canBuyOrRent, _ = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
+                canBuyOrRent, _ = vehicle.mayObtainForMoney(g_itemsCache.items.stats.money)
                 rentAvailable = vehicle.isRentable and canBuyOrRent
             isBackground = statusId == Vehicle.VEHICLE_STATE.NOT_PRESENT
             msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': i18n.makeString(msg)})
@@ -82,7 +81,6 @@ class AmmunitionPanel(AmmunitionPanelMeta):
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
              'isBackground': isBackground})
-            self.as_showCounterS(CustomizationItemNotification.getFormattedOverallCount())
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()

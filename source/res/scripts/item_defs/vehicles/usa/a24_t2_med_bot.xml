@@ -467,18 +467,52 @@
   <radios>
     <SCR_200_bot>	shared	</SCR_200_bot>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <T2E1_bot>
-        <alpha>	0.1127	</alpha>
-      </T2E1_bot>
-    </chassis>
-    <engines>
-      <Liberty_bot>
-        <bravo>	87.22569	</bravo>
-      </Liberty_bot>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Liberty_bot>
+          <smplEnginePower>	348.9028	</smplEnginePower>
+        </Liberty_bot>
+      </engines>
+      <chassis>
+        <T2E1_bot>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T2E1_bot>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

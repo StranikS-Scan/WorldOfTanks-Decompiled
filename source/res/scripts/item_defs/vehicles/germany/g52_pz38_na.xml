@@ -1032,23 +1032,89 @@
     </FuG5>
     <FuG8>	shared	</FuG8>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Praga_EPA_3>
+          <smplEnginePower>	211.4562	</smplEnginePower>
+        </Praga_EPA_3>
+        <Praga_NR>
+          <smplEnginePower>	289.695	</smplEnginePower>
+        </Praga_NR>
+      </engines>
+      <chassis>
+        <Chassis_Pz38_NA_1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Pz38_NA_1>
+        <Chassis_Pz38_NA_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Pz38_NA_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Pz38_NA_1>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Pz38_NA_1>
-      <Chassis_Pz38_NA_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Pz38_NA_2>
-    </chassis>
-    <engines>
-      <Praga_EPA_3>
-        <bravo>	52.86406	</bravo>
-      </Praga_EPA_3>
-      <Praga_NR>
-        <bravo>	72.42376	</bravo>
-      </Praga_NR>
-    </engines>
     <armour>	0.790616088	</armour>
   </clientAdjustmentFactors>
   <effects>

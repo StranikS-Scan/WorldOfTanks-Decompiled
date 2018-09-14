@@ -7,7 +7,6 @@ class LADDER_STATES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     INLADDER = 0
     NOSEASON = 1

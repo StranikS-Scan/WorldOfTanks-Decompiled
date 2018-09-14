@@ -4,7 +4,6 @@ import os
 import sys
 import ResMgr
 import BigWorld
-import inspect
 import threading
 import bwdebug
 REPLACE_PATHS = []
@@ -19,24 +18,24 @@ if os.name == 'posix':
 else:
 
     class BWConfig:
-        scriptConfig = None
+        debugConfig = None
 
         @staticmethod
         def readString(key, default=''):
-            return BWConfig.scriptConfig.readString(key, default)
+            return BWConfig.debugConfig.readString(key, default)
 
         @staticmethod
         def readBool(key, default=False):
-            return BWConfig.scriptConfig.readBool(key, default)
+            return BWConfig.debugConfig.readBool(key, default)
 
         @staticmethod
         def readInt(key, default=0):
-            return BWConfig.scriptConfig.readInt(key, default)
+            return BWConfig.debugConfig.readInt(key, default)
 
         @staticmethod
         def getSections(key):
             sections = []
-            for sectName, sect in BWConfig.scriptConfig.items():
+            for sectName, sect in BWConfig.debugConfig.items():
                 if sectName == key:
                     sections.append(sect)
 
@@ -50,11 +49,15 @@ def BWConfigWrapper(fn):
         if os.name == 'posix':
             return fn(*args, **kwargs)
         else:
-            BWConfig.scriptConfig = ResMgr.openSection('scripts_config.xml')
-            if BWConfig.scriptConfig is not None:
+            prefsConfig = ResMgr.openSection('../../bin/client/win32/preferences.xml')
+            if prefsConfig and prefsConfig.has_key('scriptsPreferences/development/pydevd'):
+                BWConfig.debugConfig = prefsConfig['scriptsPreferences/development']
+            else:
+                BWConfig.debugConfig = ResMgr.openSection('scripts_config.xml')
+            if BWConfig.debugConfig is not None:
                 HAS_BW_CONFIG = True
             fn(*args, **kwargs)
-            BWConfig.scriptConfig = None
+            BWConfig.debugConfig = None
             return
 
     return wrapped

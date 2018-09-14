@@ -82,3 +82,38 @@ class SortableDAAPIDataProvider(DAAPIDataProvider):
 
     def pyGetSelectedIdx(self):
         pass
+
+
+class ListDAAPIDataProvider(DAAPIDataProvider):
+
+    def __init__(self):
+        super(ListDAAPIDataProvider, self).__init__()
+        self._sort = ()
+
+    @property
+    def sortedCollection(self):
+        return sortByFields(self._sort, self.collection)
+
+    def sortOnHandler(self, fieldName, options):
+        return self.pySortOn(fieldName, options)
+
+    def getSelectedIdxHandler(self):
+        return self.pyGetSelectedIdx()
+
+    def pyRequestItemAt(self, idx):
+        return self._itemWrapper(self.sortedCollection[int(idx)]) if -1 < idx < self.pyLength() else None
+
+    def pyRequestItemRange(self, startIndex, endIndex):
+        return map(self._itemWrapper, self.sortedCollection[int(startIndex):int(endIndex) + 1])
+
+    def pySortOn(self, fields, order):
+        self._sort = tuple(zip(fields, order))
+
+    def pyGetSelectedIdx(self):
+        pass
+
+    def refreshRandomItems(self, indexes, items):
+        self.flashObject.invalidateItems(indexes, items)
+
+    def refreshSingleItem(self, index, item):
+        self.flashObject.invalidateItem(index, item)

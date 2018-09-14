@@ -474,17 +474,52 @@
   <radios>
     <SCR_200>	shared	</SCR_200>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Cunningham_type_3>
+          <smplEnginePower>	139.5611	</smplEnginePower>
+        </Cunningham_type_3>
+      </engines>
+      <chassis>
+        <Cunningham_E2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Cunningham_E2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Cunningham_E2>
-        <alpha>	0.08855	</alpha>
-      </Cunningham_E2>
-    </chassis>
-    <engines>
-      <Cunningham_type_3>
-        <bravo>	34.89028	</bravo>
-      </Cunningham_type_3>
-    </engines>
     <armour>	0.909431257	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -482,17 +482,52 @@
   <radios>
     <C42_B47>	shared	</C42_B47>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Leyland_L60_No_4>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Leyland_L60_No_4>
+      </engines>
+      <chassis>
+        <Chassis_GB87_Chieftain_T95_turret>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB87_Chieftain_T95_turret>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB87_Chieftain_T95_turret>
-        <alpha>	0.0805	</alpha>
-      </Chassis_GB87_Chieftain_T95_turret>
-    </chassis>
-    <engines>
-      <Leyland_L60_No_4>
-        <bravo>	198.2402	</bravo>
-      </Leyland_L60_No_4>
-    </engines>
     <armour>	1.059943384	</armour>
   </clientAdjustmentFactors>
   <effects>

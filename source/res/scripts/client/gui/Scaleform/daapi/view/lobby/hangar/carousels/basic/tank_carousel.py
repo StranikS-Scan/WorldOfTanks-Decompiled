@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/tank_carousel.py
+import constants
 from CurrentVehicle import g_currentVehicle
+from account_helpers.settings_core import settings_constants
+from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui import SystemMessages
 from gui.game_control import g_instance as g_gameCtrl
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
@@ -16,8 +19,27 @@ from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from helpers import i18n
-_CAROUSEL_FILTERS = ('bonus', 'favorite')
+from helpers.i18n import makeString as _ms
+_CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium')
+if constants.IS_KOREA:
+    _CAROUSEL_FILTERS += ('igr',)
+
+class FilterSetupContext(object):
+    """ Class responsible for configuration of filter creation.
+    
+    Some filters require specifically named asset or some additional runtime information,
+    this class provides this kind of stuff.
+    """
+
+    def __init__(self, ctx=None, asset=None):
+        """
+        :param ctx: context with runtime information required by filter
+        :param asset: name of the asset (icon) for filter
+        """
+        self.ctx = ctx or {}
+        self.asset = asset or ''
+        self.asset = self.asset.format(**self.ctx)
+
 
 class TankCarousel(TankCarouselMeta):
 
@@ -48,6 +70,11 @@ class TankCarousel(TankCarouselMeta):
     def buySlot(self):
         self.__buySlot()
 
+    def updateHotFilters(self):
+        """ This method is called from flash on resize in order to get actual state of filters.
+        """
+        self.__updateHotFilters()
+
     def updateParams(self):
         """ This method is called from Hangar in order to update
         the stats of last two items (free slots, slot price)
@@ -56,7 +83,7 @@ class TankCarousel(TankCarouselMeta):
 
     def resetFilters(self):
         self.filter.reset()
-        self.as_setCarouselFilterS({'hotFilters': [ self.filter.get(key) for key in self._usedFilters ]})
+        self.updateHotFilters()
         self.applyFilter()
 
     def setFilter(self, idx):
@@ -96,7 +123,7 @@ class TankCarousel(TankCarouselMeta):
 
     def updateVehicles(self, vehicles=None, filterCriteria=None):
         if vehicles is None and filterCriteria is None:
-            self.as_initCarouselFilterS(self._getInitialFilterVO())
+            self.as_initCarouselFilterS(self.__getInitialFilterVO(self._getFilterSetupContexts()))
         self._carouselDP.updateVehicles(vehicles, filterCriteria)
         self.applyFilter()
         return
@@ -114,7 +141,10 @@ class TankCarousel(TankCarouselMeta):
         g_gameCtrl.rentals.onRentChangeNotify += self.__updateRent
         g_gameCtrl.igr.onIgrTypeChanged += self.__updateIgrType
         g_gameCtrl.clanLock.onClanLockUpdate += self.__updateClanLocks
+        g_settingsCore.onSettingsChanged += self.__onCarouselTypeChange
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
+        setting = g_settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
+        self.as_rowCountS(setting.getRowCount())
         self._itemsCache = g_itemsCache
         self._carouselDPConfig.update({'carouselFilter': self._carouselFilterCls(),
          'itemsCache': self._itemsCache,
@@ -123,13 +153,14 @@ class TankCarousel(TankCarouselMeta):
         self._carouselDP.setEnvironment(self.app)
         self._carouselDP.setFlashObject(self.as_getDataProviderS())
         self._carouselDP.buildList()
-        self.as_initCarouselFilterS(self._getInitialFilterVO())
+        self.as_initCarouselFilterS(self.__getInitialFilterVO(self._getFilterSetupContexts()))
         self.applyFilter()
 
     def _dispose(self):
         g_gameCtrl.rentals.onRentChangeNotify -= self.__updateRent
         g_gameCtrl.igr.onIgrTypeChanged -= self.__updateIgrType
         g_gameCtrl.clanLock.onClanLockUpdate -= self.__updateClanLocks
+        g_settingsCore.onSettingsChanged -= self.__onCarouselTypeChange
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         self._itemsCache = None
         self._carouselDP.fini()
@@ -138,17 +169,33 @@ class TankCarousel(TankCarouselMeta):
         super(TankCarousel, self)._dispose()
         return
 
-    def _getInitialFilterVO(self):
+    def _getFilterSetupContexts(self):
+        """ Generate contexts for the filters that require special info.
+        
+        :return: dict {filter_name: FilterSetupContext}
+        """
+        xpRateMultiplier = self._itemsCache.items.shop.dailyXPFactor
+        return {'elite': FilterSetupContext(asset='elite_small_icon'),
+         'premium': FilterSetupContext(asset='prem_small_icon'),
+         'igr': FilterSetupContext(asset='premium_small'),
+         'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x{multiplier}')}
+
+    def __getInitialFilterVO(self, contexts):
         filters = self.filter.getFilters(self._usedFilters)
-        xpRateStr = 'x{}'.format(self._itemsCache.items.shop.dailyXPFactor)
-        return {'counterCloseTooltip': makeTooltip('#tooltips:tanksFilter/counter/close/header', '#tooltips:tanksFilter/counter/close/body'),
+        filtersVO = {'counterCloseTooltip': makeTooltip('#tooltips:tanksFilter/counter/close/header', '#tooltips:tanksFilter/counter/close/body'),
          'mainBtn': {'value': getButtonsAssetPath('params'),
-                     'tooltip': makeTooltip('#tank_carousel_filter:carousel/params/header', '#tank_carousel_filter:carousel/params/body')},
-         'hotFilters': [{'value': getButtonsAssetPath('bonus_{}'.format(xpRateStr)),
-                         'selected': filters['bonus'],
-                         'tooltip': makeTooltip('#tank_carousel_filter:carousel/bonus/header', i18n.makeString('#tank_carousel_filter:carousel/bonus/body', bonus=xpRateStr))}, {'value': getButtonsAssetPath('favorite'),
-                         'selected': filters['favorite'],
-                         'tooltip': makeTooltip('#tank_carousel_filter:carousel/favorite/header', '#tank_carousel_filter:carousel/favorite/body')}]}
+                     'tooltip': makeTooltip('#tank_carousel_filter:tooltip/params/header', '#tank_carousel_filter:tooltip/params/body')},
+         'hotFilters': []}
+        for entry in self._usedFilters:
+            filterCtx = contexts.get(entry, FilterSetupContext())
+            filtersVO['hotFilters'].append({'value': getButtonsAssetPath(filterCtx.asset or entry),
+             'selected': filters[entry],
+             'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), _ms('#tank_carousel_filter:tooltip/{}/body'.format(entry), **filterCtx.ctx))})
+
+        return filtersVO
+
+    def __updateHotFilters(self):
+        self.as_setCarouselFilterS({'hotFilters': [ self.filter.get(key) for key in self._usedFilters ]})
 
     @decorators.process('buySlot')
     def __buySlot(self):
@@ -167,6 +214,11 @@ class TankCarousel(TankCarouselMeta):
             self.updateVehicles()
         else:
             self.updateVehicles(vehicles)
+
+    def __onCarouselTypeChange(self, diff):
+        if settings_constants.GAME.CAROUSEL_TYPE in diff:
+            setting = g_settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
+            self.as_rowCountS(setting.getRowCount())
 
     def __onViewLoaded(self, view):
         if view is not None and view.settings is not None:

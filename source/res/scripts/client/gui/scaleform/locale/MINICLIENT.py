@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/MINICLIENT.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class MINICLIENT(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     PERSONAL_QUESTS_WELCOME_VIEW_DESCRIPTION = '#miniclient:personal_quests_welcome_view/description'
     PERSONAL_QUESTS_WELCOME_VIEW_CONTINUE_DOWNLOAD = '#miniclient:personal_quests_welcome_view/continue_download'
     CONTINUE_DOWNLOAD_DIALOG_TITLE = '#miniclient:continue_download_dialog/title'
@@ -28,6 +25,8 @@ class MINICLIENT(object):
     HANGAR_CONTINUE_DOWNLOAD = '#miniclient:hangar/continue_download'
     BUY_VEHICLE_TITLE = '#miniclient:buy_vehicle/title'
     BUY_VEHICLE_MESSAGE = '#miniclient:buy_vehicle/message'
+    RESTORE_VEHICLE_TITLE = '#miniclient:restore_vehicle/title'
+    RESTORE_VEHICLE_MESSAGE = '#miniclient:restore_vehicle/message'
     INVITATION_NOTE_SQUAD = '#miniclient:invitation/note/SQUAD'
     INVITATION_NOTE_EVENT = '#miniclient:invitation/note/EVENT'
     INVITATION_NOTE_FALLOUT = '#miniclient:invitation/note/FALLOUT'

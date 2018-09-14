@@ -8,298 +8,118 @@ class DamageInfoPanelMeta(BaseDAAPIComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIComponent
-    null
     """
 
     def as_showS(self, itemList, showFire):
-        """
-        :param itemList:
-        :param showFire:
-        :return :
-        """
         return self.flashObject.as_show(itemList, showFire) if self._isDAAPIInited() else None
 
     def as_hideS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hide() if self._isDAAPIInited() else None
 
     def as_updateEngineS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateEngine(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideEngineS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideEngine() if self._isDAAPIInited() else None
 
     def as_updateAmmoBayS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateAmmoBay(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideAmmoBayS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideAmmoBay() if self._isDAAPIInited() else None
 
     def as_updateFuelTankS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateFuelTank(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideFuelTankS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideFuelTank() if self._isDAAPIInited() else None
 
     def as_updateRadioS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateRadio(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideRadioS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideRadio() if self._isDAAPIInited() else None
 
     def as_updateLeftTrackS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateLeftTrack(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideLeftTrackS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideLeftTrack() if self._isDAAPIInited() else None
 
     def as_updateRightTrackS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateRightTrack(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideRightTrackS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideRightTrack() if self._isDAAPIInited() else None
 
     def as_updateGunS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateGun(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideGunS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideGun() if self._isDAAPIInited() else None
 
     def as_updateTurretRotatorS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateTurretRotator(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideTurretRotatorS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideTurretRotator() if self._isDAAPIInited() else None
 
     def as_updateSurveyingDeviceS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateSurveyingDevice(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideSurveyingDeviceS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideSurveyingDevice() if self._isDAAPIInited() else None
 
-    def as_updateLeftWheelS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
-        return self.flashObject.as_updateLeftWheel(stateId, isHit) if self._isDAAPIInited() else None
-
-    def as_hideLeftWheelS(self):
-        """
-        :return :
-        """
-        return self.flashObject.as_hideLeftWheel() if self._isDAAPIInited() else None
-
-    def as_updateRightWheelS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
-        return self.flashObject.as_updateRightWheel(stateId, isHit) if self._isDAAPIInited() else None
-
-    def as_hideRightWheelS(self):
-        """
-        :return :
-        """
-        return self.flashObject.as_hideRightWheel() if self._isDAAPIInited() else None
-
     def as_updateCommanderS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateCommander(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideCommanderS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideCommander() if self._isDAAPIInited() else None
 
     def as_updateFirstGunnerS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateFirstGunner(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_updateSecondGunnerS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateSecondGunner(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideFirstGunnerS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideFirstGunner() if self._isDAAPIInited() else None
 
     def as_hideSecondGunnerS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideSecondGunner() if self._isDAAPIInited() else None
 
     def as_updateDriverS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateDriver(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideDriverS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideDriver() if self._isDAAPIInited() else None
 
     def as_updateFirstRadiomanS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateFirstRadioman(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_updateSecondRadiomanS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateSecondRadioman(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideFirstRadiomanS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideFirstRadioman() if self._isDAAPIInited() else None
 
     def as_hideSecondRadiomanS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideSecondRadioman() if self._isDAAPIInited() else None
 
     def as_updateFirstLoaderS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateFirstLoader(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_updateSecondLoaderS(self, stateId, isHit):
-        """
-        :param stateId:
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_updateSecondLoader(stateId, isHit) if self._isDAAPIInited() else None
 
     def as_hideFirstLoaderS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideFirstLoader() if self._isDAAPIInited() else None
 
     def as_hideSecondLoaderS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideSecondLoader() if self._isDAAPIInited() else None
 
     def as_showFireS(self, isHit):
-        """
-        :param isHit:
-        :return :
-        """
         return self.flashObject.as_showFire(isHit) if self._isDAAPIInited() else None
 
     def as_hideFireS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_hideFire() if self._isDAAPIInited() else None

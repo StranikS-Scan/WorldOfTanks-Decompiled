@@ -409,7 +409,7 @@ class _PrebattleDispatcher(ListenersCollection):
             return
 
     def pe_onKickedFromPrebattle(self, _):
-        self.__changePrbFunctional(stop=False)
+        self.__changePrbFunctional(stop=True)
 
     def gs_onTillBanNotification(self, isPlayTimeBan, timeTillBlock):
         if prb_getters.isParentControlActivated():

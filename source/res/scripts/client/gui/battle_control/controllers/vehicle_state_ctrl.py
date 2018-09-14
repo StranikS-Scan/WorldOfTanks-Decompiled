@@ -206,7 +206,10 @@ class _EngineStateHandler(_StateHandler):
         :return:
         """
         super(_EngineStateHandler, self).__init__(updater)
-        self.__gear = vehicle.appearance.gear if vehicle is not None else _STOPPED_ENGINE_GEAR
+        if vehicle is not None and vehicle.appearance is not None:
+            self.__gear = vehicle.appearance.gear
+        else:
+            self.__gear = _STOPPED_ENGINE_GEAR
         self.__vehMoveAnimTimer = TimeInterval(_VEHICLE_ANIM_DURATION, self, '_stopVehMoveAnim')
         self.__engineStartAnimTimer = TimeInterval(_VEHICLE_ANIM_DURATION, self, '_stopEngineStartAnim')
         return
@@ -234,21 +237,22 @@ class _EngineStateHandler(_StateHandler):
         :return: The state change if any. Otherwise an empty list.
         """
         states = []
-        gear = vehicle.appearance.gear
-        if self.__gear != gear:
-            if not self.__gear and gear > 0:
-                if not self.__vehMoveAnimTimer.isStarted():
-                    states.append((VEHICLE_VIEW_STATE.VEHICLE_MOVEMENT_STATE, True))
-                    self.__vehMoveAnimTimer.start()
-            elif self.__gear == _STOPPED_ENGINE_GEAR and gear >= 0:
-                if not self.__engineStartAnimTimer.isStarted():
-                    states.append((VEHICLE_VIEW_STATE.VEHICLE_ENGINE_STATE, True))
-                    self.__engineStartAnimTimer.start()
-            elif self.__gear > 0 and not self.__gear:
-                pass
-            elif self.__gear >= 0 and gear == _STOPPED_ENGINE_GEAR:
-                pass
-            self.__gear = gear
+        if vehicle.appearance is not None:
+            gear = vehicle.appearance.gear
+            if self.__gear != gear:
+                if not self.__gear and gear > 0:
+                    if not self.__vehMoveAnimTimer.isStarted():
+                        states.append((VEHICLE_VIEW_STATE.VEHICLE_MOVEMENT_STATE, True))
+                        self.__vehMoveAnimTimer.start()
+                elif self.__gear == _STOPPED_ENGINE_GEAR and gear >= 0:
+                    if not self.__engineStartAnimTimer.isStarted():
+                        states.append((VEHICLE_VIEW_STATE.VEHICLE_ENGINE_STATE, True))
+                        self.__engineStartAnimTimer.start()
+                elif self.__gear > 0 and not self.__gear:
+                    pass
+                elif self.__gear >= 0 and gear == _STOPPED_ENGINE_GEAR:
+                    pass
+                self.__gear = gear
         return states
 
     def _stopVehMoveAnim(self):
@@ -455,6 +459,16 @@ class _VehicleUpdater(object):
 
             self.__handlers = None
         self.__vehicleID = None
+        self.__isAlive = True
+        return
+
+    def updateOnce(self):
+        """
+        Invokes this routine to singe update of information about vehicle if it is needed.
+        For example, player's vehicle is destroyed, we need to update modules and crew states, set max speed.
+        """
+        assert self.__updateTI is None or not self.__updateTI.isStarted(), 'Updater is started'
+        self._update()
         return
 
     def notifyStateChanged(self, state, value):
@@ -477,7 +491,7 @@ class _VehicleUpdater(object):
         if vehicle is not None and vehicle.isStarted:
             if not vehicle.isAlive() and self.__isAlive:
                 self.__isAlive = False
-                states.append((VEHICLE_VIEW_STATE.DESTROYED, None))
+                states.append((VEHICLE_VIEW_STATE.DESTROYED, 0))
             for handler in self.__handlers:
                 newStates = handler(vehicle)
                 states.extend(newStates)
@@ -495,7 +509,10 @@ class _VehicleUpdater(object):
         if vehicle is not None:
             isPlayerVehicle = vehicle.isPlayerVehicle
             if isPlayerVehicle:
-                self.__handlers = (_SpeedStateHandler(self, True), _RpmStateHandler(self, vehicle), _EngineStateHandler(self, vehicle))
+                if not vehicle.isAlive():
+                    self.__handlers = (_SpeedStateHandler(self, True),)
+                else:
+                    self.__handlers = (_SpeedStateHandler(self, True), _RpmStateHandler(self, vehicle), _EngineStateHandler(self, vehicle))
             else:
                 self.__handlers = (_HealthStateHandler(self),
                  _SpeedStateHandler(self, False),
@@ -585,13 +602,20 @@ class VehicleStateController(IBattleController):
             vehicle = BigWorld.entity(self.__vehicleID)
         return vehicle
 
+    def getControllingVehicleID(self):
+        return self.__vehicleID
+
     def notifyStateChanged(self, stateID, value):
         """
         Store the specified state value, and raise the event
         :param stateID: id for state, listed within VEHICLE_VIEW_STATE
         :param value: state value
         """
-        self.__cachedStateValues[stateID] = value
+        if stateID == VEHICLE_VIEW_STATE.DEVICES:
+            self.__cachedStateValues.setdefault(stateID, [])
+            self.__cachedStateValues[stateID].append(value)
+        else:
+            self.__cachedStateValues[stateID] = value
         self.onVehicleStateUpdated(stateID, value)
 
     def getStateValue(self, stateID):
@@ -606,14 +630,6 @@ class VehicleStateController(IBattleController):
             return None
             return None
 
-    def hasStateValue(self, statID):
-        """
-        Return if the provided stateID is in the cache
-        :param statID: state to check
-        :return: boolean result
-        """
-        return statID in self.__cachedStateValues
-
     def invalidate(self, state, value, vehicleID=0):
         """
         Invalidates vehicle sates. The method should be invoked by vehicle state change trigger.
@@ -626,6 +642,8 @@ class VehicleStateController(IBattleController):
             return
         else:
             isStateChangeHandled = False
+            if self.__isRqToSwitch and self.__waitingTI.isStarted():
+                self._waiting()
             if self.__updater is not None:
                 isStateChangeHandled = self.__updater.handleStateChange(state, value)
             if not isStateChangeHandled:
@@ -641,6 +659,7 @@ class VehicleStateController(IBattleController):
             self.__waitingTI.stop()
             if self.__updater is not None:
                 self.__updater.stop()
+                self.__updater.updateOnce()
         self.__isInPostmortem = True
         self.onPostMortemSwitched()
         return
@@ -661,6 +680,7 @@ class VehicleStateController(IBattleController):
             self.__vehicleID = vehicleID
             self.__isRqToSwitch = True
             self.notifyStateChanged(VEHICLE_VIEW_STATE.PLAYER_INFO, self.__vehicleID)
+            self.__cachedStateValues.clear()
             self.__waitingTI.start()
             return
 
@@ -698,9 +718,7 @@ class VehicleStateController(IBattleController):
                 notifications.clear()
             SoundGroups.g_instance.soundModes.setCurrentNation(nations.NAMES[nationID])
         self.onVehicleControlling(vehicle)
-        if not vehicle.isAlive():
-            self.notifyStateChanged(VEHICLE_VIEW_STATE.DESTROYED, None)
-        elif self.__updater is not None:
+        if self.__updater is not None:
             self.__updater.start()
         return
 

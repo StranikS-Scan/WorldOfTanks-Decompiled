@@ -8,28 +8,16 @@ class PremiumWindowMeta(SimpleWindowMeta):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends SimpleWindowMeta
-    null
     """
 
     def onRateClick(self, rateId):
-        """
-        :param rateId:
-        :return :
-        """
         self._printOverrideError('onRateClick')
 
     def as_setHeaderS(self, prc, bonus1, bonus2):
-        """
-        :param prc:
-        :param bonus1:
-        :param bonus2:
-        :return :
-        """
         return self.flashObject.as_setHeader(prc, bonus1, bonus2) if self._isDAAPIInited() else None
 
     def as_setRatesS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by PremiumWindowRatesVO (AS)
         """
         return self.flashObject.as_setRates(data) if self._isDAAPIInited() else None

@@ -90,30 +90,30 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <player>
-        <rayStart>	-1.59461 0.350975 -1.14013	</rayStart>
-        <rayEnd>	-1.49571 0.336172 -1.14013	</rayEnd>
+        <rayStart>	-1.61634 0.496879 -1.3057	</rayStart>
+        <rayEnd>	-1.51745 0.482076 -1.3057	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </player>
       <inscription>
-        <rayStart>	-1.64261 0.348711 -0.129774	</rayStart>
-        <rayEnd>	-1.44481 0.319106 -0.129774	</rayEnd>
+        <rayStart>	-1.63075 0.52847 0.866246	</rayStart>
+        <rayEnd>	-1.51207 0.510706 0.866246	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.918	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
       <player>
-        <rayStart>	1.59461 0.350975 -1.14013	</rayStart>
-        <rayEnd>	1.49571 0.336172 -1.14013	</rayEnd>
+        <rayStart>	1.63295 0.504652 -1.30738	</rayStart>
+        <rayEnd>	1.51427 0.486887 -1.30738	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
       </player>
       <inscription>
-        <rayStart>	1.64261 0.348711 -0.129774	</rayStart>
-        <rayEnd>	1.44481 0.319106 -0.129774	</rayEnd>
+        <rayStart>	1.63527 0.520496 -0.136201	</rayStart>
+        <rayEnd>	1.51659 0.502732 -0.136201	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.918	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -446,7 +446,7 @@
               <rayEnd>	0.0107446 -0.0470315 2.60319	</rayEnd>
               <rayUp>	0.065 0.061 4	</rayUp>
               <size>	0.35	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
@@ -480,17 +480,52 @@
   <radios>
     <FuG16>	shared	</FuG16>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_120_TRM_C>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </Maybach_HL_120_TRM_C>
+      </engines>
+      <chassis>
+        <Chassis_G104_Stug_IV>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G104_Stug_IV>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G104_Stug_IV>
-        <alpha>	0.0805	</alpha>
-      </Chassis_G104_Stug_IV>
-    </chassis>
-    <engines>
-      <Maybach_HL_120_TRM_C>
-        <bravo>	79.29608	</bravo>
-      </Maybach_HL_120_TRM_C>
-    </engines>
     <armour>	0.667515871	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -26,10 +26,10 @@ class BattleGameInputMgr(object):
         del self.__consumers[:]
         del self.__keyHandlers[:]
 
-    def enterGuiControlMode(self, consumerID, cursorVisible=True):
+    def enterGuiControlMode(self, consumerID, cursorVisible=True, enableAiming=True):
         if consumerID not in self.__consumers:
             if not self.__consumers:
-                avatar_getter.setForcedGuiControlMode(True, cursorVisible=cursorVisible)
+                avatar_getter.setForcedGuiControlMode(True, cursorVisible=cursorVisible, enableAiming=enableAiming)
             self.__consumers.append(consumerID)
 
     def leaveGuiControlMode(self, consumerID):

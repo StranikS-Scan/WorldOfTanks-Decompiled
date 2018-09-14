@@ -8,12 +8,7 @@ class FortIntelligenceNotAvailableWindowMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def as_setDataS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_setData(value) if self._isDAAPIInited() else None

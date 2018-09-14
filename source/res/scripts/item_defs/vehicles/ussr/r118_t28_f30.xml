@@ -492,17 +492,52 @@
   <radios>
     <_71-TK-3A>	shared	</_71-TK-3A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M-17L_R>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </M-17L_R>
+      </engines>
+      <chassis>
+        <Chassis_R118_T28_F30>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R118_T28_F30>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R118_T28_F30>
-        <alpha>	0.1288	</alpha>
-      </Chassis_R118_T28_F30>
-    </chassis>
-    <engines>
-      <M-17L_R>
-        <bravo>	132.1601	</bravo>
-      </M-17L_R>
-    </engines>
     <armour>	0.785012915	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -96,9 +96,9 @@ class BattleEntry(SFApplication):
             return False
             return
 
-    def enterGuiControlMode(self, consumerID, cursorVisible=True):
+    def enterGuiControlMode(self, consumerID, cursorVisible=True, enableAiming=True):
         if self.__input is not None:
-            self.__input.enterGuiControlMode(consumerID, cursorVisible=cursorVisible)
+            self.__input.enterGuiControlMode(consumerID, cursorVisible=cursorVisible, enableAiming=enableAiming)
         return
 
     def leaveGuiControlMode(self, consumerID):

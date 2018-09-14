@@ -1,17 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/FORTIFICATIONS.py
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 from debug_utils import LOG_WARNING
 
 class FORTIFICATIONS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     BUILDINGDIRECTION_TOOLTIP = '#fortifications:BuildingDirection/tooltip'
     FORTINTELLIGENCE_HEADERBLOCK = '#fortifications:FortIntelligence/headerBlock'
-    FORTINTELLIGENCE_HEADERBLOCKNODEFPERIOD = FORTINTELLIGENCE_HEADERBLOCK + 'NoDefPeriod'
+    FORTINTELLIGENCE_HEADERBLOCKNODEFPERIOD = '#fortifications:FortIntelligence/headerBlockNoDefPeriod'
     FORTINTELLIGENCE_TOPBLOCK = '#fortifications:FortIntelligence/topBlock'
     FORTINTELLIGENCE_MIDDLEBLOCK = '#fortifications:FortIntelligence/middleBlock'
     FORTINTELLIGENCE_BOTTOMBLOCK = '#fortifications:FortIntelligence/bottomBlock'
@@ -88,8 +86,8 @@ class FORTIFICATIONS(object):
     FORTDIRECTIONSWINDOW_LABEL_OPENEDDIRECTIONS = '#fortifications:FortDirectionsWindow/label/openedDirections'
     FORTDIRECTIONSWINDOW_LABEL_NOTOPENED = '#fortifications:FortDirectionsWindow/label/notOpened'
     FORTDIRECTIONSWINDOW_LABEL_NOBUILDINGS = '#fortifications:FortDirectionsWindow/label/noBuildings'
-    BUILDINGDIRECTION_TOOLTIP_HEADER = BUILDINGDIRECTION_TOOLTIP + '/header'
-    BUILDINGDIRECTION_TOOLTIP_BODY = BUILDINGDIRECTION_TOOLTIP + '/body'
+    BUILDINGDIRECTION_TOOLTIP_HEADER = '#fortifications:BuildingDirection/tooltip/header'
+    BUILDINGDIRECTION_TOOLTIP_BODY = '#fortifications:BuildingDirection/tooltip/body'
     BUILDINGDIRECTION_LABEL1 = '#fortifications:BuildingDirection/label1'
     BUILDINGDIRECTION_LABEL2 = '#fortifications:BuildingDirection/label2'
     BUILDINGDIRECTION_LABEL3 = '#fortifications:BuildingDirection/label3'
@@ -138,27 +136,27 @@ class FORTIFICATIONS(object):
     FORTCLANSTATISTICSWINDOW_TITLE = '#fortifications:FortClanStatisticsWindow/title'
     FORTCLANSTATISTICSWINDOW_SORTIE_BATTLESHEADER = '#fortifications:FortClanStatisticsWindow/sortie/battlesHeader'
     CLANSTATS_PARAMS_SORTIE_BATTLESCOUNT_LABEL = '#fortifications:clanStats/params/sortie/battlesCount/label'
-    CLANSTATS_PARAMS_SORTIE_BATTLESCOUNT_TOOLTIP_HEADER = CLANSTATS_PARAMS_SORTIE_BATTLESCOUNT_TOOLTIP + '/header'
-    CLANSTATS_PARAMS_SORTIE_BATTLESCOUNT_TOOLTIP_BODY = CLANSTATS_PARAMS_SORTIE_BATTLESCOUNT_TOOLTIP + '/body'
+    CLANSTATS_PARAMS_SORTIE_BATTLESCOUNT_TOOLTIP_HEADER = '#fortifications:clanStats/params/sortie/battlesCount/tooltip/header'
+    CLANSTATS_PARAMS_SORTIE_BATTLESCOUNT_TOOLTIP_BODY = '#fortifications:clanStats/params/sortie/battlesCount/tooltip/body'
     CLANSTATS_TABS_BUTTONLBL_PERIODDEFENCE = '#fortifications:clanStats/tabs/buttonLbl/periodDefence'
     CLANSTATS_TABS_BUTTONLBL_SORTIE = '#fortifications:clanStats/tabs/buttonLbl/sortie'
     CLANSTATS_PARAMS_SORTIE_WINS_LABEL = '#fortifications:clanStats/params/sortie/wins/label'
-    CLANSTATS_PARAMS_SORTIE_WINS_TOOLTIP_HEADER = CLANSTATS_PARAMS_SORTIE_WINS_TOOLTIP + '/header'
-    CLANSTATS_PARAMS_SORTIE_WINS_TOOLTIP_BODY = CLANSTATS_PARAMS_SORTIE_WINS_TOOLTIP + '/body'
+    CLANSTATS_PARAMS_SORTIE_WINS_TOOLTIP_HEADER = '#fortifications:clanStats/params/sortie/wins/tooltip/header'
+    CLANSTATS_PARAMS_SORTIE_WINS_TOOLTIP_BODY = '#fortifications:clanStats/params/sortie/wins/tooltip/body'
     CLANSTATS_PARAMS_SORTIE_AVGDEFRES_LABEL = '#fortifications:clanStats/params/sortie/avgDefres/label'
-    CLANSTATS_PARAMS_SORTIE_AVGDEFRES_TOOLTIP_HEADER = CLANSTATS_PARAMS_SORTIE_AVGDEFRES_TOOLTIP + '/header'
-    CLANSTATS_PARAMS_SORTIE_AVGDEFRES_TOOLTIP_BODY = CLANSTATS_PARAMS_SORTIE_AVGDEFRES_TOOLTIP + '/body'
+    CLANSTATS_PARAMS_SORTIE_AVGDEFRES_TOOLTIP_HEADER = '#fortifications:clanStats/params/sortie/avgDefres/tooltip/header'
+    CLANSTATS_PARAMS_SORTIE_AVGDEFRES_TOOLTIP_BODY = '#fortifications:clanStats/params/sortie/avgDefres/tooltip/body'
     CLANSTATS_PARAMS_SORTIE_BATTLES_MIDDLEBATTLESCOUNT_LABEL = '#fortifications:clanStats/params/sortie/battles/middleBattlesCount/label'
     CLANSTATS_PARAMS_SORTIE_BATTLES_CHAMPIONBATTLESCOUNT_LABEL = '#fortifications:clanStats/params/sortie/battles/championBattlesCount/label'
     CLANSTATS_PARAMS_SORTIE_BATTLES_ABSOLUTEBATTLESCOUNT_LABEL = '#fortifications:clanStats/params/sortie/battles/absoluteBattlesCount/label'
     CLANSTATS_PARAMS_SORTIE_DEFRES_LOOTINSORTIES_LABEL = '#fortifications:clanStats/params/sortie/defres/lootInSorties/label'
     CLANSTATS_PARAMS_PERIODDEFENCE_BATTLESCOUNT_LABEL = '#fortifications:clanStats/params/periodDefence/battlesCount/label'
     CLANSTATS_PARAMS_PERIODDEFENCE_WINS_LABEL = '#fortifications:clanStats/params/periodDefence/wins/label'
-    CLANSTATS_PARAMS_PERIODDEFENCE_WINS_TOOLTIP_HEADER = CLANSTATS_PARAMS_PERIODDEFENCE_WINS_TOOLTIP + '/header'
-    CLANSTATS_PARAMS_PERIODDEFENCE_WINS_TOOLTIP_BODY = CLANSTATS_PARAMS_PERIODDEFENCE_WINS_TOOLTIP + '/body'
+    CLANSTATS_PARAMS_PERIODDEFENCE_WINS_TOOLTIP_HEADER = '#fortifications:clanStats/params/periodDefence/wins/tooltip/header'
+    CLANSTATS_PARAMS_PERIODDEFENCE_WINS_TOOLTIP_BODY = '#fortifications:clanStats/params/periodDefence/wins/tooltip/body'
     CLANSTATS_PARAMS_PERIODDEFENCE_AVGDEFRES_LABEL = '#fortifications:clanStats/params/periodDefence/avgDefres/label'
-    CLANSTATS_PARAMS_PERIODDEFENCE_AVGDEFRES_TOOLTIP_HEADER = CLANSTATS_PARAMS_PERIODDEFENCE_AVGDEFRES_TOOLTIP + '/header'
-    CLANSTATS_PARAMS_PERIODDEFENCE_AVGDEFRES_TOOLTIP_BODY = CLANSTATS_PARAMS_PERIODDEFENCE_AVGDEFRES_TOOLTIP + '/body'
+    CLANSTATS_PARAMS_PERIODDEFENCE_AVGDEFRES_TOOLTIP_HEADER = '#fortifications:clanStats/params/periodDefence/avgDefres/tooltip/header'
+    CLANSTATS_PARAMS_PERIODDEFENCE_AVGDEFRES_TOOLTIP_BODY = '#fortifications:clanStats/params/periodDefence/avgDefres/tooltip/body'
     CLANSTATS_PARAMS_PERIODDEFENCE_BATTLES_COUNTCAPTUREDCOMMANDCENTRES_LABEL = '#fortifications:clanStats/params/periodDefence/battles/countCapturedCommandCentres/label'
     CLANSTATS_PARAMS_PERIODDEFENCE_BATTLES_COUNTPLUNDEREDENEMYBUILDINGS_LABEL = '#fortifications:clanStats/params/periodDefence/battles/countPlunderedEnemyBuildings/label'
     CLANSTATS_PARAMS_PERIODDEFENCE_BATTLES_COUNTPLUNDEREDALLYBUILDINGS_LABEL = '#fortifications:clanStats/params/periodDefence/battles/countPlunderedAllyBuildings/label'
@@ -204,6 +202,7 @@ class FORTIFICATIONS(object):
     ORDERS_BOMBER = '#fortifications:orders/BOMBER'
     ORDERTYPE_CONSUMABLE = '#fortifications:orderType/consumable'
     ORDERTYPE_BATTLECONSUMABLE = '#fortifications:orderType/battleConsumable'
+    ORDERTYPE_BATTLECONSUMABLE_NO_LEVEL = '#fortifications:orderType/battleConsumable_no_level'
     BUILDINGS_MILITARY_BASE = '#fortifications:buildings/MILITARY_BASE'
     BUILDINGS_MILITARY_ACADEMY = '#fortifications:buildings/MILITARY_ACADEMY'
     BUILDINGS_TROPHY_BRIGADE = '#fortifications:buildings/TROPHY_BRIGADE'
@@ -435,16 +434,16 @@ class FORTIFICATIONS(object):
     FORTMAINVIEW_COMMONTUTOR_TITLE = '#fortifications:FortMainView/commonTutor/title'
     FORTMAINVIEW_TRANSPORTINGTUTOR_TITLE = '#fortifications:FortMainView/transportingTutor/title'
     FORTINTELLIGENCE_WINDOWTITLE = '#fortifications:FortIntelligence/windowTitle'
-    FORTINTELLIGENCE_HEADERBLOCK_HEADER = FORTINTELLIGENCE_HEADERBLOCK + '/header'
-    FORTINTELLIGENCE_HEADERBLOCK_BODY = FORTINTELLIGENCE_HEADERBLOCK + '/body'
-    FORTINTELLIGENCE_HEADERBLOCKNODEFPERIOD_HEADER = FORTINTELLIGENCE_HEADERBLOCK + 'NoDefPeriod/header'
-    FORTINTELLIGENCE_HEADERBLOCKNODEFPERIOD_BODY = FORTINTELLIGENCE_HEADERBLOCK + 'NoDefPeriod/body'
-    FORTINTELLIGENCE_TOPBLOCK_HEADER = FORTINTELLIGENCE_TOPBLOCK + '/header'
-    FORTINTELLIGENCE_TOPBLOCK_BODY = FORTINTELLIGENCE_TOPBLOCK + '/body'
-    FORTINTELLIGENCE_MIDDLEBLOCK_HEADER = FORTINTELLIGENCE_MIDDLEBLOCK + '/header'
-    FORTINTELLIGENCE_MIDDLEBLOCK_BODY = FORTINTELLIGENCE_MIDDLEBLOCK + '/body'
-    FORTINTELLIGENCE_BOTTOMBLOCK_HEADER = FORTINTELLIGENCE_BOTTOMBLOCK + '/header'
-    FORTINTELLIGENCE_BOTTOMBLOCK_BODY = FORTINTELLIGENCE_BOTTOMBLOCK + '/body'
+    FORTINTELLIGENCE_HEADERBLOCK_HEADER = '#fortifications:FortIntelligence/headerBlock/header'
+    FORTINTELLIGENCE_HEADERBLOCK_BODY = '#fortifications:FortIntelligence/headerBlock/body'
+    FORTINTELLIGENCE_HEADERBLOCKNODEFPERIOD_HEADER = '#fortifications:FortIntelligence/headerBlockNoDefPeriod/header'
+    FORTINTELLIGENCE_HEADERBLOCKNODEFPERIOD_BODY = '#fortifications:FortIntelligence/headerBlockNoDefPeriod/body'
+    FORTINTELLIGENCE_TOPBLOCK_HEADER = '#fortifications:FortIntelligence/topBlock/header'
+    FORTINTELLIGENCE_TOPBLOCK_BODY = '#fortifications:FortIntelligence/topBlock/body'
+    FORTINTELLIGENCE_MIDDLEBLOCK_HEADER = '#fortifications:FortIntelligence/middleBlock/header'
+    FORTINTELLIGENCE_MIDDLEBLOCK_BODY = '#fortifications:FortIntelligence/middleBlock/body'
+    FORTINTELLIGENCE_BOTTOMBLOCK_HEADER = '#fortifications:FortIntelligence/bottomBlock/header'
+    FORTINTELLIGENCE_BOTTOMBLOCK_BODY = '#fortifications:FortIntelligence/bottomBlock/body'
     FORTINTELLIGENCE_ADDITIONALTEXT_COMINGSOON = '#fortifications:FortIntelligence/additionalText/comingSoon'
     FORTINTELLIGENCE_STATUS_EMPTY = '#fortifications:FortIntelligence/status/empty'
     FORTINTELLIGENCE_STATUS_DEFAULTREQUEST_EMPTY = '#fortifications:FortIntelligence/status/defaultRequest/empty'
@@ -472,10 +471,10 @@ class FORTIFICATIONS(object):
     FORTINTELLIGENCE_CLANFILTERPOPOVER_DEFAULTBUTTONTEXT = '#fortifications:FortIntelligence/ClanFilterPopover/defaultButtonText'
     FORTINTELLIGENCE_CLANFILTERPOPOVER_APPLYBUTTONTEXT = '#fortifications:FortIntelligence/ClanFilterPopover/applyButtonText'
     FORTINTELLIGENCE_CLANFILTERPOPOVER_CANCELBUTTONTEXT = '#fortifications:FortIntelligence/ClanFilterPopover/cancelButtonText'
-    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME_HEADER = FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME + '/header'
-    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME_BODY = FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME + '/body'
-    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME_HEADER = FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME + '/header'
-    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME_BODY = FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME + '/body'
+    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME_HEADER = '#fortifications:FortIntelligence/ClanFilterPopover/tooltipLockTime/header'
+    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME_BODY = '#fortifications:FortIntelligence/ClanFilterPopover/tooltipLockTime/body'
+    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME_HEADER = '#fortifications:FortIntelligence/ClanFilterPopover/tooltipOwnDefenceTime/header'
+    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME_BODY = '#fortifications:FortIntelligence/ClanFilterPopover/tooltipOwnDefenceTime/body'
     FORTINTELLIGENCE_TAGSEARCHTEXTINPUT_DEFAULT = '#fortifications:FortIntelligence/tagSearchTextInput/default'
     FORTINTELLIGENCE_CLEARFILTERBTN_TITLE = '#fortifications:FortIntelligence/clearFilterBtn/title'
     FORTINTELLIGENCE_FORTINTELFILTER_FILTERBUTTONSTATUS_MAX = '#fortifications:FortIntelligence/fortIntelFilter/filterButtonStatus/max'
@@ -492,6 +491,7 @@ class FORTIFICATIONS(object):
     FORTINTELLIGENCE_CLANDESCRIPTION_WARDECLARED = '#fortifications:FortIntelligence/clanDescription/warDeclared'
     FORTINTELLIGENCE_CLANDESCRIPTION_NEXTAVAILABLEATTACKINAWEEK = '#fortifications:FortIntelligence/clanDescription/nextAvailableAttackInAWeek'
     FORTINTELLIGENCE_CLANDESCRIPTION_NEXTAVAILABLEATTACK = '#fortifications:FortIntelligence/clanDescription/nextAvailableAttack'
+    FORTINTELLIGENCE_CLANDESCRIPTION_DISABLEATTACK = '#fortifications:FortIntelligence/clanDescription/disableAttack'
     FORTINTELLIGENCE_CLANDESCRIPTION_ATTACK = '#fortifications:FortIntelligence/clanDescription/attack'
     FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_ATTACK = '#fortifications:FortIntelligence/clanDescription/direction/tooltip/attack'
     FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTCOMMANDER = '#fortifications:FortIntelligence/clanDescription/direction/tooltip/notCommander'
@@ -566,13 +566,6 @@ class FORTIFICATIONS(object):
     FORTCLANBATTLEROOM_HEADER_BATTLEICON_DEFENCE_TOOLTIP_HEADER = '#fortifications:FortClanBattleRoom/header/battleIcon/defence/tooltip/header'
     FORTCLANBATTLEROOM_HEADER_BATTLEICON_DEFENCE_TOOLTIP_BODY = '#fortifications:FortClanBattleRoom/header/battleIcon/defence/tooltip/body'
     FORTCLANBATTLEROOM_HEADER_ORDERSDISABLED = '#fortifications:FortClanBattleRoom/header/ordersDisabled'
-    TOOLTIPBUILDINGINFO_DESCRACTION = '#fortifications:ToolTipBuildingInfo/descrAction'
-    TOOLTIPBUILDINGINFO_LOWLEVELMESSAGE = '#fortifications:ToolTipBuildingInfo/lowLevelMessage'
-    TOOLTIPBUILDINGINFO_DESTROYEDMESSAGE = '#fortifications:ToolTipBuildingInfo/destroyedMessage'
-    TOOLTIPBUILDINGINFO_STATUSMSG_VICTORY = '#fortifications:ToolTipBuildingInfo/statusMsg/victory'
-    TOOLTIPBUILDINGINFO_STATUSMSG_DEFEAT = '#fortifications:ToolTipBuildingInfo/statusMsg/defeat'
-    TOOLTIPBUILDINGINFO_STATUSMSG_WASNOTBATTLE = '#fortifications:ToolTipBuildingInfo/statusMsg/wasNotBattle'
-    TOOLTIPBUILDINGINFO_MEP_MAPPREFIX = '#fortifications:ToolTipBuildingInfo/mep/mapPrefix'
     FORTBATTLEROOM_LISTHEADER_CLANPLAYERS = '#fortifications:fortBattleRoom/listHeader/clanPlayers'
     FORTBATTLEROOM_LISTHEADER_LEGIONARIESPLAYERS = '#fortifications:fortBattleRoom/listHeader/legionariesPlayers'
     FORTBATTLEROOM_LEGIONARIESCOUNT = '#fortifications:fortBattleRoom/legionariesCount'
@@ -710,51 +703,6 @@ class FORTIFICATIONS(object):
     FORTCONSUMABLEORDER_DESCR_12 = '#fortifications:fortConsumableOrder/descr/12'
     FORTCONSUMABLEORDER_LEVELLBL = '#fortifications:fortConsumableOrder/levelLbl'
     FORTCONSUMABLEORDER_BATTLEPARAMS = '#fortifications:fortConsumableOrder/battleParams'
-    FORTCONSUMABLEORDER_DESCR_ENUM = (FORTCONSUMABLEORDER_DESCR_11, FORTCONSUMABLEORDER_DESCR_12)
-    SORTIE_DIVISION_NAME_ENUM = (SORTIE_DIVISION_NAME_ALL,
-     SORTIE_DIVISION_NAME_ABSOLUTE,
-     SORTIE_DIVISION_NAME_CHAMPION,
-     SORTIE_DIVISION_NAME_MIDDLE)
-    GENERAL_ORDERTYPE_ENUM = (GENERAL_ORDERTYPE_BATTLEPAYMENTS,
-     GENERAL_ORDERTYPE_REQUISITION,
-     GENERAL_ORDERTYPE_EVACUATION,
-     GENERAL_ORDERTYPE_HEAVYTRUCKS,
-     GENERAL_ORDERTYPE_MILITARYMANEUVERS,
-     GENERAL_ORDERTYPE_ADDITIONALBRIEFING,
-     GENERAL_ORDERTYPE_TACTICALTRAINING,
-     GENERAL_ORDERTYPE_SPECIALMISSION,
-     GENERAL_ORDERTYPE_ARTILLERY,
-     GENERAL_ORDERTYPE_BOMBER)
-    BUILDINGS_DEFRESINFO_ENUM = (BUILDINGS_DEFRESINFO_BASE_BUILDING,
-     BUILDINGS_DEFRESINFO_WARSCHOOL_BUILDING,
-     BUILDINGS_DEFRESINFO_TROPHY_BUILDING,
-     BUILDINGS_DEFRESINFO_TRAINING_BUILDING,
-     BUILDINGS_DEFRESINFO_TANKODROM_BUILDING,
-     BUILDINGS_DEFRESINFO_INTENDANCY_BUILDING,
-     BUILDINGS_DEFRESINFO_FINANCE_BUILDING,
-     BUILDINGS_DEFRESINFO_CAR_BUILDING,
-     BUILDINGS_DEFRESINFO_OFFICE_BUILDING,
-     BUILDINGS_DEFRESINFO_BOMBER_BUILDING,
-     BUILDINGS_DEFRESINFO_ARTILLERY_BUILDING)
-    BUILDINGPOPOVER_HEADER_TITLESTATUS_ENUM = (BUILDINGPOPOVER_HEADER_TITLESTATUS_FOUNDATION,
-     BUILDINGPOPOVER_HEADER_TITLESTATUS_MODERNIZATION,
-     BUILDINGPOPOVER_HEADER_TITLESTATUS_HALFDESTROY,
-     BUILDINGPOPOVER_HEADER_TITLESTATUS_CONGRATULATION,
-     BUILDINGPOPOVER_HEADER_TITLESTATUS_FREEZE)
-    FORTCLANBATTLELIST_RENDERDAYOFBATTLE_ENUM = (FORTCLANBATTLELIST_RENDERDAYOFBATTLE_TODAY, FORTCLANBATTLELIST_RENDERDAYOFBATTLE_TOMORROW)
-    FORTCLANBATTLELIST_RENDERBATTLENAME_ENUM = (FORTCLANBATTLELIST_RENDERBATTLENAME_CLANBATTLEDEFENCE, FORTCLANBATTLELIST_RENDERBATTLENAME_CLANBATTLEOFFENCE)
-    CHOICEDIVISION_DIVISIONTYPE_ENUM = (CHOICEDIVISION_DIVISIONTYPE_MIDDLEDIVISION, CHOICEDIVISION_DIVISIONTYPE_CHAMPIONDIVISION, CHOICEDIVISION_DIVISIONTYPE_ABSOLUTEDIVISION)
-    ORDERS_ORDERPOPOVER_ORDERTYPE_ENUM = (ORDERS_ORDERPOPOVER_ORDERTYPE_BATTLEPAYMENTS,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_REQUISITION,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_EVACUATION,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_HEAVYTRUCKS,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_MILITARYMANEUVERS,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_ADDITIONALBRIEFING,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_TACTICALTRAINING,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_SPECIALMISSION,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_ARTILLERY,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_BOMBER,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_EMPTYORDER)
     FORTMAINVIEW_ENUM = (FORTMAINVIEW_COMMON_TOTALDEPOTQUANTITYTEXT,
      FORTMAINVIEW_COMMON_TITLE,
      FORTMAINVIEW_DIRECTIONS_TITLE,
@@ -773,41 +721,6 @@ class FORTIFICATIONS(object):
      FORTMAINVIEW_DIRECTIONSTUTOR_TITLE,
      FORTMAINVIEW_COMMONTUTOR_TITLE,
      FORTMAINVIEW_TRANSPORTINGTUTOR_TITLE)
-    ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_ENUM = (ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_1,
-     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_2,
-     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_3,
-     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_4,
-     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_5,
-     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_6,
-     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_7,
-     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_8,
-     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_9,
-     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_10)
-    BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_ENUM = (BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_FOUNDATION, BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_FREEZE, BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_HALFDESTROY)
-    BUILDINGSPROCESS_LONGDESCR_ENUM = (BUILDINGSPROCESS_LONGDESCR_BASE_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_WARSCHOOL_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_OFFICE_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_TROPHY_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_TRAINING_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_TANKODROM_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_INTENDANCY_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_FINANCE_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_CAR_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_BOMBER_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_ARTILLERY_BUILDING)
-    BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_ENUM = (BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_FOUNDATION,
-     BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_HALFDESTROY,
-     BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_MODERNIZATION,
-     BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_CONGRATULATION,
-     BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_FREEZE)
-    SETTINGSWINDOW_BLOCKCONDITION_ENUM = (SETTINGSWINDOW_BLOCKCONDITION_DEFENCEPERIODTIME,
-     SETTINGSWINDOW_BLOCKCONDITION_WEEKEND,
-     SETTINGSWINDOW_BLOCKCONDITION_NOWEEKEND,
-     SETTINGSWINDOW_BLOCKCONDITION_VACATION,
-     SETTINGSWINDOW_BLOCKCONDITION_VACATIONNOTPLANNED,
-     SETTINGSWINDOW_BLOCKCONDITION_INPROGRESS,
-     SETTINGSWINDOW_BLOCKCONDITION_RECENTLYSCHEDULED)
-    SETTINGSWINDOW_BLOCKDESCR_ENUM = (SETTINGSWINDOW_BLOCKDESCR_DEFENCEPERIODTIME, SETTINGSWINDOW_BLOCKDESCR_WEEKEND, SETTINGSWINDOW_BLOCKDESCR_VACATION)
     BUILDINGS_BUILDINGNAME_ENUM = (BUILDINGS_BUILDINGNAME_UNKNOWN,
      BUILDINGS_BUILDINGNAME_BASE_BUILDING,
      BUILDINGS_BUILDINGNAME_WARSCHOOL_BUILDING,
@@ -820,6 +733,39 @@ class FORTIFICATIONS(object):
      BUILDINGS_BUILDINGNAME_OFFICE_BUILDING,
      BUILDINGS_BUILDINGNAME_BOMBER_BUILDING,
      BUILDINGS_BUILDINGNAME_ARTILLERY_BUILDING)
+    BUILDINGPOPOVER_HEADER_TITLESTATUS_ENUM = (BUILDINGPOPOVER_HEADER_TITLESTATUS_FOUNDATION,
+     BUILDINGPOPOVER_HEADER_TITLESTATUS_MODERNIZATION,
+     BUILDINGPOPOVER_HEADER_TITLESTATUS_HALFDESTROY,
+     BUILDINGPOPOVER_HEADER_TITLESTATUS_CONGRATULATION,
+     BUILDINGPOPOVER_HEADER_TITLESTATUS_FREEZE)
+    BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_ENUM = (BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_FOUNDATION,
+     BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_HALFDESTROY,
+     BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_MODERNIZATION,
+     BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_CONGRATULATION,
+     BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_FREEZE)
+    BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_ENUM = (BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_FOUNDATION, BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_FREEZE, BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_HALFDESTROY)
+    BUILDINGS_DEFRESINFO_ENUM = (BUILDINGS_DEFRESINFO_BASE_BUILDING,
+     BUILDINGS_DEFRESINFO_WARSCHOOL_BUILDING,
+     BUILDINGS_DEFRESINFO_TROPHY_BUILDING,
+     BUILDINGS_DEFRESINFO_TRAINING_BUILDING,
+     BUILDINGS_DEFRESINFO_TANKODROM_BUILDING,
+     BUILDINGS_DEFRESINFO_INTENDANCY_BUILDING,
+     BUILDINGS_DEFRESINFO_FINANCE_BUILDING,
+     BUILDINGS_DEFRESINFO_CAR_BUILDING,
+     BUILDINGS_DEFRESINFO_OFFICE_BUILDING,
+     BUILDINGS_DEFRESINFO_BOMBER_BUILDING,
+     BUILDINGS_DEFRESINFO_ARTILLERY_BUILDING)
+    ORDERS_ORDERPOPOVER_ORDERTYPE_ENUM = (ORDERS_ORDERPOPOVER_ORDERTYPE_BATTLEPAYMENTS,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_REQUISITION,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_EVACUATION,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_HEAVYTRUCKS,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_MILITARYMANEUVERS,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_ADDITIONALBRIEFING,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_TACTICALTRAINING,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_SPECIALMISSION,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_ARTILLERY,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_BOMBER,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_EMPTYORDER)
     BUILDINGSPROCESS_SHORTDESCR_ENUM = (BUILDINGSPROCESS_SHORTDESCR_WARSCHOOL_BUILDING,
      BUILDINGSPROCESS_SHORTDESCR_OFFICE_BUILDING,
      BUILDINGSPROCESS_SHORTDESCR_TROPHY_BUILDING,
@@ -830,11 +776,18 @@ class FORTIFICATIONS(object):
      BUILDINGSPROCESS_SHORTDESCR_CAR_BUILDING,
      BUILDINGSPROCESS_SHORTDESCR_BOMBER_BUILDING,
      BUILDINGSPROCESS_SHORTDESCR_ARTILLERY_BUILDING)
-    BUILDINGDIRECTION_LABEL_ENUM = (BUILDINGDIRECTION_LABEL1,
-     BUILDINGDIRECTION_LABEL2,
-     BUILDINGDIRECTION_LABEL3,
-     BUILDINGDIRECTION_LABEL4)
-    FORTINTELLIGENCE_CLANTYPES_ENUM = (FORTINTELLIGENCE_CLANTYPES_ALL, FORTINTELLIGENCE_CLANTYPES_BOOKED, FORTINTELLIGENCE_CLANTYPES_LAST)
+    BUILDINGSPROCESS_LONGDESCR_ENUM = (BUILDINGSPROCESS_LONGDESCR_BASE_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_WARSCHOOL_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_OFFICE_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_TROPHY_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_TRAINING_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_TANKODROM_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_INTENDANCY_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_FINANCE_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_CAR_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_BOMBER_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_ARTILLERY_BUILDING)
+    CHOICEDIVISION_DIVISIONTYPE_ENUM = (CHOICEDIVISION_DIVISIONTYPE_MIDDLEDIVISION, CHOICEDIVISION_DIVISIONTYPE_CHAMPIONDIVISION, CHOICEDIVISION_DIVISIONTYPE_ABSOLUTEDIVISION)
     BUILDINGS_PROCESSORDERINFO_ENUM = (BUILDINGS_PROCESSORDERINFO_WARSCHOOL_BUILDING,
      BUILDINGS_PROCESSORDERINFO_TROPHY_BUILDING,
      BUILDINGS_PROCESSORDERINFO_TRAINING_BUILDING,
@@ -845,240 +798,232 @@ class FORTIFICATIONS(object):
      BUILDINGS_PROCESSORDERINFO_OFFICE_BUILDING,
      BUILDINGS_PROCESSORDERINFO_BOMBER_BUILDING,
      BUILDINGS_PROCESSORDERINFO_ARTILLERY_BUILDING)
+    FORTCLANBATTLELIST_RENDERDAYOFBATTLE_ENUM = (FORTCLANBATTLELIST_RENDERDAYOFBATTLE_TODAY, FORTCLANBATTLELIST_RENDERDAYOFBATTLE_TOMORROW)
+    FORTCLANBATTLELIST_RENDERBATTLENAME_ENUM = (FORTCLANBATTLELIST_RENDERBATTLENAME_CLANBATTLEDEFENCE, FORTCLANBATTLELIST_RENDERBATTLENAME_CLANBATTLEOFFENCE)
+    FORTINTELLIGENCE_CLANTYPES_ENUM = (FORTINTELLIGENCE_CLANTYPES_ALL, FORTINTELLIGENCE_CLANTYPES_BOOKED, FORTINTELLIGENCE_CLANTYPES_LAST)
+    ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_ENUM = (ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_1,
+     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_2,
+     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_3,
+     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_4,
+     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_5,
+     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_6,
+     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_7,
+     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_8,
+     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_9,
+     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_10)
+    SETTINGSWINDOW_BLOCKCONDITION_ENUM = (SETTINGSWINDOW_BLOCKCONDITION_DEFENCEPERIODTIME,
+     SETTINGSWINDOW_BLOCKCONDITION_WEEKEND,
+     SETTINGSWINDOW_BLOCKCONDITION_NOWEEKEND,
+     SETTINGSWINDOW_BLOCKCONDITION_VACATION,
+     SETTINGSWINDOW_BLOCKCONDITION_VACATIONNOTPLANNED,
+     SETTINGSWINDOW_BLOCKCONDITION_INPROGRESS,
+     SETTINGSWINDOW_BLOCKCONDITION_RECENTLYSCHEDULED)
+    SETTINGSWINDOW_BLOCKDESCR_ENUM = (SETTINGSWINDOW_BLOCKDESCR_DEFENCEPERIODTIME, SETTINGSWINDOW_BLOCKDESCR_WEEKEND, SETTINGSWINDOW_BLOCKDESCR_VACATION)
+    BUILDINGDIRECTION_LABEL_ENUM = (BUILDINGDIRECTION_LABEL1,
+     BUILDINGDIRECTION_LABEL2,
+     BUILDINGDIRECTION_LABEL3,
+     BUILDINGDIRECTION_LABEL4)
+    SORTIE_DIVISION_NAME_ENUM = (SORTIE_DIVISION_NAME_ALL,
+     SORTIE_DIVISION_NAME_ABSOLUTE,
+     SORTIE_DIVISION_NAME_CHAMPION,
+     SORTIE_DIVISION_NAME_MIDDLE)
+    GENERAL_ORDERTYPE_ENUM = (GENERAL_ORDERTYPE_BATTLEPAYMENTS,
+     GENERAL_ORDERTYPE_REQUISITION,
+     GENERAL_ORDERTYPE_EVACUATION,
+     GENERAL_ORDERTYPE_HEAVYTRUCKS,
+     GENERAL_ORDERTYPE_MILITARYMANEUVERS,
+     GENERAL_ORDERTYPE_ADDITIONALBRIEFING,
+     GENERAL_ORDERTYPE_TACTICALTRAINING,
+     GENERAL_ORDERTYPE_SPECIALMISSION,
+     GENERAL_ORDERTYPE_ARTILLERY,
+     GENERAL_ORDERTYPE_BOMBER)
+    FORTCONSUMABLEORDER_DESCR_ENUM = (FORTCONSUMABLEORDER_DESCR_11, FORTCONSUMABLEORDER_DESCR_12)
 
-    @staticmethod
-    def fortconsumableorder_descr(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:fortConsumableOrder/descr/%s' % key
-        if outcome not in FORTIFICATIONS.FORTCONSUMABLEORDER_DESCR_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def fortmainview(cls, key0):
+        outcome = '#fortifications:FortMainView/{}'.format(key0)
+        if outcome not in cls.FORTMAINVIEW_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def sortie_division_name(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:sortie/division_name/%s' % key
-        if outcome not in FORTIFICATIONS.SORTIE_DIVISION_NAME_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def buildings_buildingname(cls, key0):
+        outcome = '#fortifications:Buildings/buildingName/{}'.format(key0)
+        if outcome not in cls.BUILDINGS_BUILDINGNAME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def general_ordertype(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:General/orderType/%s' % key
-        if outcome not in FORTIFICATIONS.GENERAL_ORDERTYPE_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def buildingpopover_header_titlestatus(cls, key0):
+        outcome = '#fortifications:BuildingPopover/header/titleStatus/{}'.format(key0)
+        if outcome not in cls.BUILDINGPOPOVER_HEADER_TITLESTATUS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def buildings_defresinfo(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:Buildings/defResInfo/%s' % key
-        if outcome not in FORTIFICATIONS.BUILDINGS_DEFRESINFO_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def buildingpopover_commanderstatus_bodystatus(cls, key0):
+        outcome = '#fortifications:BuildingPopover/commanderStatus/bodyStatus/{}'.format(key0)
+        if outcome not in cls.BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def buildingpopover_header_titlestatus(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:BuildingPopover/header/titleStatus/%s' % key
-        if outcome not in FORTIFICATIONS.BUILDINGPOPOVER_HEADER_TITLESTATUS_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def buildingpopover_soldierstatus_bodystatus(cls, key0):
+        outcome = '#fortifications:BuildingPopover/soldierStatus/bodyStatus/{}'.format(key0)
+        if outcome not in cls.BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def fortclanbattlelist_renderdayofbattle(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:FortClanBattleList/renderDayOfBattle/%s' % key
-        if outcome not in FORTIFICATIONS.FORTCLANBATTLELIST_RENDERDAYOFBATTLE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def buildings_defresinfo(cls, key0):
+        outcome = '#fortifications:Buildings/defResInfo/{}'.format(key0)
+        if outcome not in cls.BUILDINGS_DEFRESINFO_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def fortclanbattlelist_renderbattlename(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:FortClanBattleList/renderBattleName/%s' % key
-        if outcome not in FORTIFICATIONS.FORTCLANBATTLELIST_RENDERBATTLENAME_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def orders_orderpopover_ordertype(cls, key0):
+        outcome = '#fortifications:Orders/orderPopover/orderType/{}'.format(key0)
+        if outcome not in cls.ORDERS_ORDERPOPOVER_ORDERTYPE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def choicedivision_divisiontype(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:ChoiceDivision/divisionType/%s' % key
-        if outcome not in FORTIFICATIONS.CHOICEDIVISION_DIVISIONTYPE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def buildingsprocess_shortdescr(cls, key0):
+        outcome = '#fortifications:BuildingsProcess/shortDescr/{}'.format(key0)
+        if outcome not in cls.BUILDINGSPROCESS_SHORTDESCR_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def orders_orderpopover_ordertype(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:Orders/orderPopover/orderType/%s' % key
-        if outcome not in FORTIFICATIONS.ORDERS_ORDERPOPOVER_ORDERTYPE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def buildingsprocess_longdescr(cls, key0):
+        outcome = '#fortifications:BuildingsProcess/longDescr/{}'.format(key0)
+        if outcome not in cls.BUILDINGSPROCESS_LONGDESCR_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def fortmainview(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:FortMainView/%s' % key
-        if outcome not in FORTIFICATIONS.FORTMAINVIEW_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def choicedivision_divisiontype(cls, key0):
+        outcome = '#fortifications:ChoiceDivision/divisionType/{}'.format(key0)
+        if outcome not in cls.CHOICEDIVISION_DIVISIONTYPE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def orders_specialmission_possibleaward_description_level(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:Orders/specialMission/possibleAward/description/level/%s' % key
-        if outcome not in FORTIFICATIONS.ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def buildings_processorderinfo(cls, key0):
+        outcome = '#fortifications:Buildings/processOrderInfo/{}'.format(key0)
+        if outcome not in cls.BUILDINGS_PROCESSORDERINFO_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def buildingpopover_soldierstatus_bodystatus(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:BuildingPopover/soldierStatus/bodyStatus/%s' % key
-        if outcome not in FORTIFICATIONS.BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def fortclanbattlelist_renderdayofbattle(cls, key0):
+        outcome = '#fortifications:FortClanBattleList/renderDayOfBattle/{}'.format(key0)
+        if outcome not in cls.FORTCLANBATTLELIST_RENDERDAYOFBATTLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def buildingsprocess_longdescr(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:BuildingsProcess/longDescr/%s' % key
-        if outcome not in FORTIFICATIONS.BUILDINGSPROCESS_LONGDESCR_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def fortclanbattlelist_renderbattlename(cls, key0):
+        outcome = '#fortifications:FortClanBattleList/renderBattleName/{}'.format(key0)
+        if outcome not in cls.FORTCLANBATTLELIST_RENDERBATTLENAME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def buildingpopover_commanderstatus_bodystatus(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:BuildingPopover/commanderStatus/bodyStatus/%s' % key
-        if outcome not in FORTIFICATIONS.BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def fortintelligence_clantypes(cls, key0):
+        outcome = '#fortifications:FortIntelligence/clanTypes/{}'.format(key0)
+        if outcome not in cls.FORTINTELLIGENCE_CLANTYPES_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def settingswindow_blockcondition(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:SettingsWindow/blockCondition/%s' % key
-        if outcome not in FORTIFICATIONS.SETTINGSWINDOW_BLOCKCONDITION_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def orders_specialmission_possibleaward_description_level(cls, key0):
+        outcome = '#fortifications:Orders/specialMission/possibleAward/description/level/{}'.format(key0)
+        if outcome not in cls.ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def settingswindow_blockdescr(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:SettingsWindow/blockDescr/%s' % key
-        if outcome not in FORTIFICATIONS.SETTINGSWINDOW_BLOCKDESCR_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def settingswindow_blockcondition(cls, key0):
+        outcome = '#fortifications:SettingsWindow/blockCondition/{}'.format(key0)
+        if outcome not in cls.SETTINGSWINDOW_BLOCKCONDITION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def buildings_buildingname(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:Buildings/buildingName/%s' % key
-        if outcome not in FORTIFICATIONS.BUILDINGS_BUILDINGNAME_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def settingswindow_blockdescr(cls, key0):
+        outcome = '#fortifications:SettingsWindow/blockDescr/{}'.format(key0)
+        if outcome not in cls.SETTINGSWINDOW_BLOCKDESCR_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def buildingsprocess_shortdescr(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:BuildingsProcess/shortDescr/%s' % key
-        if outcome not in FORTIFICATIONS.BUILDINGSPROCESS_SHORTDESCR_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def buildingdirection_label(cls, key0):
+        outcome = '#fortifications:BuildingDirection/label{}'.format(key0)
+        if outcome not in cls.BUILDINGDIRECTION_LABEL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def buildingdirection_label(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:BuildingDirection/label1%s' % key
-        if outcome not in FORTIFICATIONS.BUILDINGDIRECTION_LABEL_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def sortie_division_name(cls, key0):
+        outcome = '#fortifications:sortie/division_name/{}'.format(key0)
+        if outcome not in cls.SORTIE_DIVISION_NAME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def fortintelligence_clantypes(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:FortIntelligence/clanTypes/%s' % key
-        if outcome not in FORTIFICATIONS.FORTINTELLIGENCE_CLANTYPES_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def general_ordertype(cls, key0):
+        outcome = '#fortifications:General/orderType/{}'.format(key0)
+        if outcome not in cls.GENERAL_ORDERTYPE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def buildings_processorderinfo(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#fortifications:Buildings/processOrderInfo/%s' % key
-        if outcome not in FORTIFICATIONS.BUILDINGS_PROCESSORDERINFO_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def fortconsumableorder_descr(cls, key0):
+        outcome = '#fortifications:fortConsumableOrder/descr/{}'.format(key0)
+        if outcome not in cls.FORTCONSUMABLEORDER_DESCR_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

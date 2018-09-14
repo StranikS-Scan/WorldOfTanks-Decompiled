@@ -21,7 +21,10 @@ class HeaderItemPacker(object):
 
     def pack(self, data):
         titleStr = text_styles.highTitle(self.__headerTitle)
-        return [formatters.packHeadBlockData(titleStr, self.__icon)]
+        return [formatters.packImageTextBlockData(titleStr, img=self.__icon, txtPadding={'left': 18,
+          'top': 9,
+          'bottom': 1}, padding={'left': 2,
+          'top': 7})]
 
 
 class TermsItemPacker(HeaderItemPacker):
@@ -43,7 +46,7 @@ class TermsItemPacker(HeaderItemPacker):
 class KillItemPacker(TermsItemPacker):
 
     def __init__(self):
-        super(KillItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_KILL_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_RIBBONS_180X68_DESTRUCTION, BATTLE_RESULTS.COMMON_TOOLTIP_KILL_1_DESCRIPTION)
+        super(KillItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_KILL_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_DESTRUCTION, BATTLE_RESULTS.COMMON_TOOLTIP_KILL_1_DESCRIPTION)
 
     def pack(self, data):
         items = super(KillItemPacker, self).pack(data)
@@ -65,7 +68,7 @@ class KillItemPacker(TermsItemPacker):
 class DetectionItemPacker(TermsItemPacker):
 
     def __init__(self):
-        super(DetectionItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_SPOTTED_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_RIBBONS_180X68_DETECTION, BATTLE_RESULTS.COMMON_TOOLTIP_SPOTTED_DESCRIPTION)
+        super(DetectionItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_SPOTTED_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_DETECTION, BATTLE_RESULTS.COMMON_TOOLTIP_SPOTTED_DESCRIPTION)
 
 
 class LinerItemPacker(TermsItemPacker):
@@ -87,37 +90,37 @@ class LinerItemPacker(TermsItemPacker):
 class DamageItemPacker(LinerItemPacker):
 
     def __init__(self):
-        super(DamageItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_RIBBONS_180X68_DAMAGE, BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_DESCRIPTION)
+        super(DamageItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_DAMAGE, BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_DESCRIPTION)
 
 
 class ArmorItemPacker(LinerItemPacker):
 
     def __init__(self):
-        super(ArmorItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_RIBBONS_180X68_ARMOR, BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_DESCRIPTION)
+        super(ArmorItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_ARMOR, BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_DESCRIPTION)
 
 
 class AssistItemPacker(LinerItemPacker):
 
     def __init__(self):
-        super(AssistItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_RIBBONS_180X68_HELP, BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_DESCRIPTION)
+        super(AssistItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_HELP, BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_DESCRIPTION)
 
 
 class CaptureItemPacker(LinerItemPacker):
 
     def __init__(self):
-        super(CaptureItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_CAPTURE_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_RIBBONS_180X68_CAPTURE, BATTLE_RESULTS.COMMON_TOOLTIP_CAPTURE_DESCRIPTION)
+        super(CaptureItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_CAPTURE_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_CAPTURE, BATTLE_RESULTS.COMMON_TOOLTIP_CAPTURE_DESCRIPTION)
 
 
 class DefenceItemPacker(LinerItemPacker):
 
     def __init__(self):
-        super(DefenceItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_DEFENCE_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_RIBBONS_180X68_DEFENCE, BATTLE_RESULTS.COMMON_TOOLTIP_DEFENCE_DESCRIPTION)
+        super(DefenceItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_DEFENCE_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_DEFENCE, BATTLE_RESULTS.COMMON_TOOLTIP_DEFENCE_DESCRIPTION)
 
 
 class CritsItemPacker(TermsItemPacker):
 
     def __init__(self):
-        super(CritsItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_CRITS_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_RIBBONS_180X68_MODULE, BATTLE_RESULTS.COMMON_TOOLTIP_CRITS_DESCRIPTION)
+        super(CritsItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_CRITS_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_MODULE, BATTLE_RESULTS.COMMON_TOOLTIP_CRITS_DESCRIPTION)
 
     def pack(self, data):
         items = super(CritsItemPacker, self).pack(data)

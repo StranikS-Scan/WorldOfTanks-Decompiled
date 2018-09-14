@@ -506,17 +506,52 @@
   <radios>
     <FuG12_IGR>	shared	</FuG12_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Porsche_Deutz_Typ180_2_IGR>
+          <smplEnginePower>	888.1161	</smplEnginePower>
+        </Porsche_Deutz_Typ180_2_IGR>
+      </engines>
+      <chassis>
+        <Ferdinandvetstaerktketten_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Ferdinandvetstaerktketten_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Ferdinandvetstaerktketten_IGR>
-        <alpha>	0.13685	</alpha>
-      </Ferdinandvetstaerktketten_IGR>
-    </chassis>
-    <engines>
-      <Porsche_Deutz_Typ180_2_IGR>
-        <bravo>	222.029	</bravo>
-      </Porsche_Deutz_Typ180_2_IGR>
-    </engines>
     <armour>	0.804393468	</armour>
   </clientAdjustmentFactors>
   <effects>

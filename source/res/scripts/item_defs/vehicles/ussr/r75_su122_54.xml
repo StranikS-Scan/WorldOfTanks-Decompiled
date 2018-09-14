@@ -1032,23 +1032,89 @@
     </R113>
     <_10RT-26E>	shared	</_10RT-26E>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2-54>
+          <smplEnginePower>	655.5143	</smplEnginePower>
+        </V-2-54>
+        <V-55U>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </V-55U>
+      </engines>
+      <chassis>
+        <Chassis_SU122_54>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_SU122_54>
+        <Chassis_SU122_54_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_SU122_54_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_SU122_54>
-        <alpha>	0.10465	</alpha>
-      </Chassis_SU122_54>
-      <Chassis_SU122_54_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_SU122_54_2>
-    </chassis>
-    <engines>
-      <V-2-54>
-        <bravo>	163.8786	</bravo>
-      </V-2-54>
-      <V-55U>
-        <bravo>	185.0242	</bravo>
-      </V-55U>
-    </engines>
     <armour>	0.978998906	</armour>
   </clientAdjustmentFactors>
   <effects>

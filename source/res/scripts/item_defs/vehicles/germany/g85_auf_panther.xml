@@ -343,18 +343,52 @@
   <radios>
     <Radio_Auf_Panther>	shared	</Radio_Auf_Panther>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Auf_Panther>
-        <alpha>	0.07245	</alpha>
-      </Chassis_Auf_Panther>
-    </chassis>
-    <engines>
-      <Engine_Auf_Panther>
-        <bravo>	237.8883	</bravo>
-      </Engine_Auf_Panther>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Engine_Auf_Panther>
+          <smplEnginePower>	951.553	</smplEnginePower>
+        </Engine_Auf_Panther>
+      </engines>
+      <chassis>
+        <Chassis_Auf_Panther>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Auf_Panther>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

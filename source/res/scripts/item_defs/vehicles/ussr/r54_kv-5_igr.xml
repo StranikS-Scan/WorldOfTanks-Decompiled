@@ -482,17 +482,52 @@
   <radios>
     <_10RKM_IGR>	shared	</_10RKM_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M500_IGR>
+          <smplEnginePower>	1268.737	</smplEnginePower>
+        </M500_IGR>
+      </engines>
+      <chassis>
+        <Chassis_KV-5_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_KV-5_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_KV-5_IGR>
-        <alpha>	0.1288	</alpha>
-      </Chassis_KV-5_IGR>
-    </chassis>
-    <engines>
-      <M500_IGR>
-        <bravo>	317.1843	</bravo>
-      </M500_IGR>
-    </engines>
     <armour>	1.005464988	</armour>
   </clientAdjustmentFactors>
   <effects>

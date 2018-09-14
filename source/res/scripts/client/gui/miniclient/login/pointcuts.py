@@ -3,7 +3,7 @@
 import aspects
 from helpers import aop
 
-class ShowBGInsteadVideo(aop.Pointcut):
+class ShowBGWallpaper(aop.Pointcut):
 
     def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.login.LoginView', 'LoginView', '_showBackground', aspects=(aspects.ShowBGInsteadVideo,))
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.login.LoginView', 'BackgroundMode', 'show$', aspects=(aspects.ShowBGWallpaper,))

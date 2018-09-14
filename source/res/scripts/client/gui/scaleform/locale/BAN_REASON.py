@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/BAN_REASON.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class BAN_REASON(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     EDITING = '#ban_reason:editing'
     CHINA_MIGRATION = '#ban_reason:china_migration'
     TEAM_KILL = '#ban_reason:team_kill'

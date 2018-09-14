@@ -1095,28 +1095,94 @@
     </AN-GRC-3>
     <AN-ARC-27>	shared	</AN-ARC-27>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AOS-895-3>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Continental_AOS-895-3>
+        <Continental_AOSI-895-5>
+          <smplEnginePower>	581.5046	</smplEnginePower>
+        </Continental_AOSI-895-5>
+      </engines>
+      <chassis>
+        <Chassis_M41_Bulldog>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M41_Bulldog>
+        <Chassis_M41_Bulldog_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M41_Bulldog_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_76mm_Gun_T91E5>
         <delta>	1.23502	</delta>
       </_76mm_Gun_T91E5>
     </guns>
-    <chassis>
-      <Chassis_M41_Bulldog>
-        <alpha>	0.05635	</alpha>
-      </Chassis_M41_Bulldog>
-      <Chassis_M41_Bulldog_2>
-        <alpha>	0.0483	</alpha>
-      </Chassis_M41_Bulldog_2>
-    </chassis>
-    <engines>
-      <Continental_AOS-895-3>
-        <bravo>	132.1601	</bravo>
-      </Continental_AOS-895-3>
-      <Continental_AOSI-895-5>
-        <bravo>	145.3762	</bravo>
-      </Continental_AOSI-895-5>
-    </engines>
     <armour>	0.817789876	</armour>
   </clientAdjustmentFactors>
   <effects>

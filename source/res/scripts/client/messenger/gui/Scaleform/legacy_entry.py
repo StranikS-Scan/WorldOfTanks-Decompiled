@@ -4,12 +4,12 @@ import Keys
 import VOIP
 from constants import CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from gui.Scaleform.CommandArgsParser import CommandArgsParser
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from messenger import g_settings
 from messenger.formatters.users_messages import getUserActionReceivedMessage
 from messenger.gui.Scaleform import BTMS_COMMANDS, channels, FILL_COLORS
+from messenger.gui.Scaleform.cmd_args_parser import CommandArgsParser
 from messenger.gui.Scaleform.data.BattleSharedHistory import BattleSharedHistory
 from messenger.gui.Scaleform.data.message_formatters import getMessageFormatter
 from messenger.gui.Scaleform.view.battle.legacy_view import BattleChannelView

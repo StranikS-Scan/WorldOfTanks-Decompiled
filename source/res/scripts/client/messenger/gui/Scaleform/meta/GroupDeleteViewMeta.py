@@ -8,6 +8,5 @@ class GroupDeleteViewMeta(BaseContactView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseContactView
-    null
     """
     pass

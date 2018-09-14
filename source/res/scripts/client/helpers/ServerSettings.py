@@ -2,19 +2,19 @@
 # Embedded file name: scripts/client/helpers/ServerSettings.py
 import types
 from collections import namedtuple
-from constants import IS_TUTORIAL_ENABLED
-from debug_utils import LOG_WARNING
-from shared_utils import makeTupleByDict
-from gui.shared.utils.decorators import ReprInjector
-from gui import GUI_SETTINGS
 from Event import Event
+from constants import IS_TUTORIAL_ENABLED, SWITCH_STATE
+from debug_utils import LOG_WARNING, LOG_ERROR
+from gui import GUI_SETTINGS
+from gui.shared.utils.decorators import ReprInjector
+from shared_utils import makeTupleByDict
 _CLAN_EMBLEMS_SIZE_MAPPING = {16: 'clan_emblems_16',
  32: 'clan_emblems_small',
  64: 'clan_emblems_big',
  128: 'clan_emblems_128',
  256: 'clan_emblems_256'}
 
-@ReprInjector.simple(('centerID', 'centerID'), ('dbidMin', 'dbidMin'), ('dbidMin', 'dbidMin'), ('regionCode', 'regionCode'))
+@ReprInjector.simple(('centerID', 'centerID'), ('dbidMin', 'dbidMin'), ('dbidMax', 'dbidMax'), ('regionCode', 'regionCode'))
 class _ServerInfo(object):
     __slots__ = ('centerID', 'dbidMin', 'dbidMax', 'regionCode')
 
@@ -257,6 +257,31 @@ class ServerSettings(object):
 
     def isPremiumInPostBattleEnabled(self):
         return self.__getGlobalSetting('isPremiumInPostBattleEnabled', True)
+
+    def isVehicleComparingEnabled(self):
+        return bool(self.__getGlobalSetting('isVehiclesCompareEnabled', True))
+
+    def isEncyclopediaEnabled(self, tokensCount):
+        switchState = self.__getGlobalSetting('isEncyclopediaEnabled')
+        if switchState == SWITCH_STATE.ALL:
+            state = True
+        elif switchState == SWITCH_STATE.NONE:
+            state = False
+        elif switchState == SWITCH_STATE.TOKEN:
+            state = tokensCount > 0
+        else:
+            LOG_ERROR('Wrong activation state for encyclopedia. Encyclopedia is considered to be disabled')
+            state = False
+        return state
+
+    def isTemplateMatchmakerEnabled(self):
+        return bool(self.__getGlobalSetting('isTemplateMatchmakerEnabled', True))
+
+    def isTankmanRestoreEnabled(self):
+        return self.__getGlobalSetting('isTankmanRestoreEnabled', True)
+
+    def isVehicleRestoreEnabled(self):
+        return self.__getGlobalSetting('isVehicleRestoreEnabled', True)
 
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)

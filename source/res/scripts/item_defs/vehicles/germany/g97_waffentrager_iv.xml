@@ -932,6 +932,88 @@
     </FuG8>
     <FuG_Spr.A>	shared	</FuG_Spr.A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL90>
+          <smplEnginePower>	380.6212	</smplEnginePower>
+        </Maybach_HL90>
+        <Maybach_HL100>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Maybach_HL100>
+      </engines>
+      <chassis>
+        <Chassis_Waffentrager_IV>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Waffentrager_IV>
+        <Chassis_Waffentrager_IV_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Waffentrager_IV_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_150mm_Rohr_L29_5>
@@ -941,22 +1023,6 @@
         <delta>	1.2	</delta>
       </_150mm_Rohr_L38>
     </guns>
-    <chassis>
-      <Chassis_Waffentrager_IV>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Waffentrager_IV>
-      <Chassis_Waffentrager_IV_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Waffentrager_IV_2>
-    </chassis>
-    <engines>
-      <Maybach_HL90>
-        <bravo>	95.1553	</bravo>
-      </Maybach_HL90>
-      <Maybach_HL100>
-        <bravo>	105.7281	</bravo>
-      </Maybach_HL100>
-    </engines>
     <armour>	0.739980136	</armour>
   </clientAdjustmentFactors>
   <effects>

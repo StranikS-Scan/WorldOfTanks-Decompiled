@@ -8,48 +8,34 @@ class LobbyMenuMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def settingsClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('settingsClick')
 
     def cancelClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('cancelClick')
 
     def refuseTraining(self):
-        """
-        :return :
-        """
         self._printOverrideError('refuseTraining')
 
     def logoffClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('logoffClick')
 
     def quitClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('quitClick')
 
     def versionInfoClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('versionInfoClick')
+
+    def onCounterNeedUpdate(self):
+        self._printOverrideError('onCounterNeedUpdate')
 
     def as_setVersionMessageS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by VersionMessageVO (AS)
         """
         return self.flashObject.as_setVersionMessage(data) if self._isDAAPIInited() else None
+
+    def as_setSettingsBtnCounterS(self, value):
+        return self.flashObject.as_setSettingsBtnCounter(value) if self._isDAAPIInited() else None

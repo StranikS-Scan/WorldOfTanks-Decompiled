@@ -479,7 +479,7 @@
             <insigniaOnGun>
               <rayStart>	-0.000056 0.246871 5.79	</rayStart>
               <rayEnd>	-0.00628333 0.485546 5.72571	</rayEnd>
-              <rayUp>	0.11 0.097 4	</rayUp>
+              <rayUp>	0.103 0.092 4	</rayUp>
               <size>	0.47	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -535,17 +535,52 @@
   <radios>
     <FuG_FA>	shared	</FuG_FA>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_210_TRM_P30_A>
+          <smplEnginePower>	850	</smplEnginePower>
+        </Maybach_HL_210_TRM_P30_A>
+      </engines>
+      <chassis>
+        <Chassis_G114_Rheinmetall_Skorpian>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G114_Rheinmetall_Skorpian>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G114_Rheinmetall_Skorpian>
-        <alpha>	0.12075	</alpha>
-      </Chassis_G114_Rheinmetall_Skorpian>
-    </chassis>
-    <engines>
-      <Maybach_HL_210_TRM_P30_A>
-        <bravo>	212.5	</bravo>
-      </Maybach_HL_210_TRM_P30_A>
-    </engines>
     <armour>	0.850624002	</armour>
   </clientAdjustmentFactors>
   <effects>
@@ -562,4 +597,5 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
+  <customDefaultCamouflage>	true	</customDefaultCamouflage>
 </g114_rheinmetall_skorpian.xml>

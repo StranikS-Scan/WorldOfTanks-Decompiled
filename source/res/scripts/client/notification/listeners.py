@@ -314,7 +314,7 @@ class FriendshipRqsListener(_NotificationListener):
     def __me_onUserActionReceived(self, actionID, contact):
         if contact.getProtoType() != PROTO_TYPE.XMPP:
             return
-        if actionID in (USER_ACTION_ID.SUBSCRIPTION_CHANGED, USER_ACTION_ID.IGNORED_ADDED):
+        if actionID in (USER_ACTION_ID.SUBSCRIPTION_CHANGED, USER_ACTION_ID.IGNORED_ADDED, USER_ACTION_ID.TMP_IGNORED_ADDED):
             self.__updateRequest(contact)
         elif actionID in (USER_ACTION_ID.FRIEND_ADDED, USER_ACTION_ID.FRIEND_REMOVED):
             self.__updateRequests()
@@ -773,6 +773,7 @@ class NotificationsListeners(_NotificationListener):
         self.__invitesListener.stop()
         self.__friendshipRqs.stop()
         self.__wgnc.stop()
+        self.__clubsInvitesListener.stop()
         self.__clanAppsListener.stop()
         self.__clanInvitesListener.stop()
         self.__tutorialListener.stop()

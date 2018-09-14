@@ -496,17 +496,52 @@
   <radios>
     <C42_IGR>	shared	</C42_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Meteor_MkV_IGR>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkV_IGR>
+      </engines>
+      <chassis>
+        <Chassis_GB72_AT15_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB72_AT15_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB72_AT15_2_IGR>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GB72_AT15_2_IGR>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Meteor_MkV_IGR>
-        <bravo>	171.8082	</bravo>
-      </Rolls_Royse_Meteor_MkV_IGR>
-    </engines>
     <armour>	0.833838827	</armour>
   </clientAdjustmentFactors>
   <effects>

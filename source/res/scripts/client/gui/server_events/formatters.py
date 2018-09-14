@@ -1,21 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/formatters.py
 import types
-import BigWorld
-import constants
 import ArenaType
-from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.shared.formatters import text_styles
-from helpers import i18n, int2roman
+import BigWorld
+from constants import ARENA_BONUS_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD
-from shared_utils import CONST_CONTAINER
-from gui import makeHtmlString, GUI_NATIONS
-from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
-from gui.server_events import caches
+from gui import makeHtmlString
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
-from constants import ARENA_BONUS_TYPE
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared.formatters.vehicle_filters import packIntVehicleTypesFilter, packNationsFilter, packVehicleLevelsFilter
+from gui.server_events import caches
+from gui.shared.formatters import text_styles
+from helpers import i18n, int2roman
+from shared_utils import CONST_CONTAINER
 
 class DISCOUNT_TYPE(CONST_CONTAINER):
     PERCENT = 'percent'
@@ -99,21 +97,22 @@ def indexing(uiElements, startIndex=1, step=1):
     return uiElements
 
 
-def _packTableHeaderBtn(btnID, width, label='', tooltip='', icon=None, showSeparator=True):
+def _packTableHeaderBtn(btnID, width, label='', tooltip='', icon=None, showSeparator=True, defaultSortDirection='descending', inverted=False):
     return {'id': btnID,
      'label': label,
      'toolTip': tooltip,
      'iconSource': icon,
      'buttonWidth': width,
      'buttonHeight': 40,
-     'defaultSortDirection': 'descending',
+     'defaultSortDirection': defaultSortDirection,
      'ascendingIconSource': '../maps/icons/buttons/tab_sort_button/ascProfileSortArrow.png',
      'descendingIconSource': '../maps/icons/buttons/tab_sort_button/descProfileSortArrow.png',
-     'showSeparator': showSeparator}
+     'showSeparator': showSeparator,
+     'inverted': inverted}
 
 
 def _packNationBtn(width):
-    return _packTableHeaderBtn('nation', width, label='', icon='../maps/icons/filters/nations/all.png', tooltip='#quests:tooltip/vehTable/nation')
+    return _packTableHeaderBtn('nation', width, label='', icon='../maps/icons/filters/nations/all.png', tooltip='#quests:tooltip/vehTable/nation', defaultSortDirection='ascending', inverted=True)
 
 
 def _packVehTypeBtn(width):
@@ -154,42 +153,6 @@ VEH_ACTION_HEADER = [_packNationBtn(40),
  _packVehLevelBtn(40),
  _packVehNameBtn(154),
  _packDiscountBtn(100, showSeparator=False)]
-
-def _packVehicleTypesFilter(defaultVehType=-1):
-    result = [{'label': '#menu:carousel_tank_filter/all',
-      'data': defaultVehType,
-      'icon': '../maps/icons/filters/tanks/none.png'}]
-    for idx, vehicleType in enumerate(VEHICLE_TYPES_ORDER):
-        result.append({'label': '#menu:carousel_tank_filter/%s' % vehicleType,
-         'data': idx,
-         'icon': '../maps/icons/filters/tanks/%s.png' % vehicleType})
-
-    return result
-
-
-def _packNationsFilter():
-    result = [{'label': '#menu:nations/all',
-      'data': -1,
-      'icon': '../maps/icons/filters/nations/all.png'}]
-    for idx, nation in enumerate(GUI_NATIONS):
-        result.append({'label': '#menu:nations/%s' % nation,
-         'data': idx,
-         'icon': '../maps/icons/filters/nations/%s.png' % nation})
-
-    return result
-
-
-def _packVehicleLevelsFilter():
-    result = [{'label': '#menu:levels/all',
-      'data': -1,
-      'icon': '../maps/icons/filters/levels/level_all.png'}]
-    for level in xrange(1, constants.MAX_VEHICLE_LEVEL + 1):
-        result.append({'label': '#menu:levels/%d' % level,
-         'data': level,
-         'icon': '../maps/icons/filters/levels/level_%s.png' % level})
-
-    return result
-
 
 def _packVehicle(vehicle, isAvailable=True, discountValue=None, discoutType=None, disableChecker=None, showDone=False):
     if vehicle is None:
@@ -371,9 +334,9 @@ def packVehiclesBlock(uniqueListID, header, vehs=None, showFilters=True, showInH
      'cbSelected': isShowInHangarCBChecked,
      'vehicles': packVehiclesList(vehs or [], disableChecker),
      'tableHeader': header,
-     'nationFilterData': _packNationsFilter(),
-     'tankFilterData': _packVehicleTypesFilter(),
-     'levelFilterData': _packVehicleLevelsFilter(),
+     'nationFilterData': packNationsFilter(),
+     'tankFilterData': packIntVehicleTypesFilter(),
+     'levelFilterData': packVehicleLevelsFilter(),
      'selectedNation': props.nationIdx,
      'selectedVehType': props.vehTypeIdx,
      'selectedLvl': props.levelIdx,
@@ -576,7 +539,14 @@ def getFullTileUserName(season, tile):
     return '%s, %s' % (getShortSeasonUserName(season), tile.getUserName())
 
 
-def packGroupBlock(groupName):
-    return {'isSelectable': False,
+def packGroupBlock(groupName, bgImg=None):
+    """ Prepair given data for the flash component to show group divider
+    :param groupName: visible group label
+    :param bgImg: divider background image
+    """
+    return {'isTitle': True,
+     'isOpen': False,
+     'description': text_styles.highTitle(groupName),
      'rendererType': QUESTS_ALIASES.RENDERER_TYPE_BLOCK_TITLE,
-     'description': text_styles.highTitle(groupName)}
+     'showBckgrImage': bgImg is not None,
+     'bckgrImage': bgImg}

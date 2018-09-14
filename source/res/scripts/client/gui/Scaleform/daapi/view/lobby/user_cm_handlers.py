@@ -13,19 +13,26 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.clans.clan_controller import g_clanCtrl
 from gui.clans.clan_helpers import showClanInviteSystemMsg
 from gui.clans.contexts import CreateInviteCtx
+from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.prb_control.context import SendInvitesCtx, PrebattleAction
 from gui.prb_control.prb_helpers import prbDispatcherProperty, prbFunctionalProperty
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui.server_events import g_eventsCache
 from gui.shared import g_itemsCache, event_dispatcher as shared_events, utils
 from gui.shared.ClanCache import ClanInfo
-from gui.shared.denunciator import LobbyDenunciator, DENUNCIATIONS
+from gui.shared.denunciator import LobbyDenunciator, DENUNCIATIONS, DENUNCIATIONS_MAP
 from helpers import i18n
+from constants import DENUNCIATIONS_PER_DAY
 from helpers.i18n import makeString
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
-from gui.server_events import g_eventsCache
+from gui.shared.utils.functions import showSentInviteMessage
+
+class _EXTENDED_OPT_IDS(object):
+    VEHICLE_COMPARE = 'userVehicleCompare'
+
 
 class USER(object):
     INFO = 'userInfo'
@@ -46,7 +53,6 @@ class USER(object):
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
     VEHICLE_PREVIEW = 'vehiclePreview'
-    MARK_PREVIEW = 'markPreview'
 
 
 class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
@@ -146,7 +152,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         for func in self.prbDispatcher.getFunctionalCollection().getIterator():
             if func.getPermissions().canSendInvite():
                 func.request(SendInvitesCtx([self.databaseID], ''))
-                self.__showInviteMessage(user)
+                showSentInviteMessage(user)
                 break
 
     def getOptions(self, ctx=None):
@@ -288,13 +294,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                 options.append(self._makeItem(USER.SEND_CLAN_INVITE, MENU.contextmenu(USER.SEND_CLAN_INVITE), optInitData={'enabled': isEnabled}))
         return options
 
-    @classmethod
-    def __showInviteMessage(cls, user):
-        if user:
-            SystemMessages.pushI18nMessage('#system_messages:prebattle/invites/sendInvite/name', type=SystemMessages.SM_TYPE.Information, name=user.getFullName())
-        else:
-            SystemMessages.pushI18nMessage('#system_messages:prebattle/invites/sendInvite', type=SystemMessages.SM_TYPE.Information)
-
 
 class AppealCMHandler(BaseUserCMHandler):
 
@@ -307,26 +306,17 @@ class AppealCMHandler(BaseUserCMHandler):
         super(AppealCMHandler, self).fini()
         return
 
-    def appealOffend(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.OFFEND)
-
-    def appealFlood(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.FLOOD)
-
-    def appealBlackmail(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.BLACKMAIL)
-
-    def appealSwindle(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.SWINDLE)
+    def appealIncorrectBehavior(self):
+        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.INCORRECT_BEHAVIOR, self._arenaUniqueID)
 
     def appealNotFairPlay(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.NOT_FAIR_PLAY)
+        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.NOT_FAIR_PLAY, self._arenaUniqueID)
 
     def appealForbiddenNick(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.FORBIDDEN_NICK)
+        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.FORBIDDEN_NICK, self._arenaUniqueID)
 
     def appealBot(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.BOT)
+        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.BOT, self._arenaUniqueID)
 
     def showVehicleInfo(self):
         shared_events.showVehicleInfo(self._vehicleCD)
@@ -335,15 +325,13 @@ class AppealCMHandler(BaseUserCMHandler):
         shared_events.showVehiclePreview(self._vehicleCD)
         shared_events.hideBattleResults()
 
-    def showMarkPreview(self):
-        shared_events.showMarkPreview()
-        shared_events.hideBattleResults()
-
     def _initFlashValues(self, ctx):
         self._vehicleCD = None
         vehicleCD = getattr(ctx, 'vehicleCD', None)
         if vehicleCD is not None and not math.isnan(vehicleCD):
             self._vehicleCD = int(vehicleCD)
+        clientArenaIdx = getattr(ctx, 'clientArenaIdx', 0)
+        self._arenaUniqueID = g_lobbyContext.getArenaUniqueIDByClientID(clientArenaIdx)
         super(AppealCMHandler, self)._initFlashValues(ctx)
         return
 
@@ -354,16 +342,12 @@ class AppealCMHandler(BaseUserCMHandler):
 
     def _getHandlers(self):
         handlers = super(AppealCMHandler, self)._getHandlers()
-        handlers.update({DENUNCIATIONS.OFFEND: 'appealOffend',
-         DENUNCIATIONS.FLOOD: 'appealFlood',
-         DENUNCIATIONS.BLACKMAIL: 'appealBlackmail',
-         DENUNCIATIONS.SWINDLE: 'appealSwindle',
+        handlers.update({DENUNCIATIONS.INCORRECT_BEHAVIOR: 'appealIncorrectBehavior',
          DENUNCIATIONS.NOT_FAIR_PLAY: 'appealNotFairPlay',
          DENUNCIATIONS.FORBIDDEN_NICK: 'appealForbiddenNick',
          DENUNCIATIONS.BOT: 'appealBot',
          USER.VEHICLE_INFO: 'showVehicleInfo',
-         USER.VEHICLE_PREVIEW: 'showVehiclePreview',
-         USER.MARK_PREVIEW: 'showMarkPreview'})
+         USER.VEHICLE_PREVIEW: 'showVehiclePreview'})
         return handlers
 
     def _addAppealInfo(self, options):
@@ -375,27 +359,49 @@ class AppealCMHandler(BaseUserCMHandler):
         if self._vehicleCD > 0:
             vehicle = g_itemsCache.items.getItemByCD(self._vehicleCD)
             if not vehicle.isSecret:
+                isEnabled = True
                 if vehicle.isPreviewAllowed():
+                    isEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
                     action = USER.VEHICLE_PREVIEW
                     label = MENU.contextmenu(USER.VEHICLE_PREVIEW)
                 else:
                     action = USER.VEHICLE_INFO
                     label = MENU.contextmenu(USER.VEHICLE_INFO)
-                options.append(self._makeItem(action, label))
+                options.append(self._makeItem(action, label, optInitData={'enabled': isEnabled}))
         return options
 
+    def _isAppealsForTopicEnabled(self, topic):
+        topicID = DENUNCIATIONS_MAP[topic]
+        return self._denunciator.isAppealsForTopicEnabled(self.databaseID, topicID, self._arenaUniqueID)
+
     def _getSubmenuData(self):
-        return [self._makeItem(DENUNCIATIONS.OFFEND, MENU.contextmenu(DENUNCIATIONS.OFFEND)),
-         self._makeItem(DENUNCIATIONS.FLOOD, MENU.contextmenu(DENUNCIATIONS.FLOOD)),
-         self._makeItem(DENUNCIATIONS.BLACKMAIL, MENU.contextmenu(DENUNCIATIONS.BLACKMAIL)),
-         self._makeItem(DENUNCIATIONS.SWINDLE, MENU.contextmenu(DENUNCIATIONS.SWINDLE)),
-         self._makeItem(DENUNCIATIONS.NOT_FAIR_PLAY, MENU.contextmenu(DENUNCIATIONS.NOT_FAIR_PLAY)),
-         self._makeItem(DENUNCIATIONS.FORBIDDEN_NICK, MENU.contextmenu(DENUNCIATIONS.FORBIDDEN_NICK)),
-         self._makeItem(DENUNCIATIONS.BOT, MENU.contextmenu(DENUNCIATIONS.BOT))]
+        make = self._makeItem
+        return [ make(denunciation, MENU.contextmenu(denunciation), optInitData={'enabled': self._isAppealsForTopicEnabled(denunciation)}) for denunciation in DENUNCIATIONS.ORDER ]
 
     def _createSubMenuItem(self):
-        labelStr = i18n.makeString(MENU.CONTEXTMENU_APPEAL) + ' (' + str(self._denunciator.getDenunciationsLeft()) + ')'
+        labelStr = '{} {}/{}'.format(i18n.makeString(MENU.CONTEXTMENU_APPEAL), self._denunciator.getDenunciationsLeft(), DENUNCIATIONS_PER_DAY)
         return self._makeItem(DENUNCIATIONS.APPEAL, labelStr, optInitData={'enabled': self._denunciator.isAppealsEnabled()}, optSubMenu=self._getSubmenuData())
+
+
+class UserVehicleCMHandler(AppealCMHandler):
+
+    def compareVehicle(self):
+        getVehicleComparisonBasketCtrl().addVehicle(self._vehicleCD)
+
+    def _getHandlers(self):
+        handlers = super(UserVehicleCMHandler, self)._getHandlers()
+        handlers.update({_EXTENDED_OPT_IDS.VEHICLE_COMPARE: 'compareVehicle'})
+        return handlers
+
+    def _generateOptions(self, ctx=None):
+        options = super(AppealCMHandler, self)._generateOptions(ctx)
+        self._manageVehCompareOptions(options)
+        return options
+
+    def _manageVehCompareOptions(self, options):
+        comparisonBasket = getVehicleComparisonBasketCtrl()
+        if comparisonBasket.isEnabled():
+            options.insert(2, self._makeItem(_EXTENDED_OPT_IDS.VEHICLE_COMPARE, MENU.contextmenu(_EXTENDED_OPT_IDS.VEHICLE_COMPARE), {'enabled': comparisonBasket.isReadyToAdd(g_itemsCache.items.getItemByCD(self._vehicleCD))}))
 
 
 class UserContextMenuInfo(object):
@@ -407,6 +413,7 @@ class UserContextMenuInfo(object):
         self.canDoDenunciations = True
         self.isFriend = False
         self.isIgnored = False
+        self.isTemporaryIgnored = False
         self.isMuted = False
         self.hasClan = False
         self.userName = userName
@@ -416,6 +423,7 @@ class UserContextMenuInfo(object):
         if self.user is not None:
             self.isFriend = self.user.isFriend()
             self.isIgnored = self.user.isIgnored()
+            self.isTemporaryIgnored = self.user.isTemporaryIgnored()
             self.isMuted = self.user.isMuted()
             self.displayName = self.user.getFullName()
             self.isOnline = self.user.isOnline()

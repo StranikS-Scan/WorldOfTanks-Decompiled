@@ -8,7 +8,6 @@ import math
 from AvatarInputHandler import mathUtils
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
-from AvatarInputHandler.Oscillator import Oscillator
 from gun_rotation_shared import calcPitchLimitsFromDesc
 from projectile_trajectory import getShotAngles
 from AvatarInputHandler.cameras import readFloat, readVec3, readVec2
@@ -94,7 +93,7 @@ class SniperAimingSystem(IAimingSystem):
         self.__vehicleMProv = None
         self.__vehiclePrevMat = None
         self.__yprDeviationConstraints = Vector3(math.pi * 2.1, math.pi / 2.0 * 0.95, 0.0)
-        self.__oscillator = Oscillator(1.0, Vector3(0.0, 0.0, 15.0), Vector3(0.0, 0.0, 3.5), self.__yprDeviationConstraints)
+        self.__oscillator = Math.PyOscillator(1.0, Vector3(0.0, 0.0, 15.0), Vector3(0.0, 0.0, 3.5), self.__yprDeviationConstraints)
         self.__pitchfilter = InputFilter()
         self.reloadConfig(dataSec)
         self.__pitchCompensating = 0.0
@@ -136,7 +135,7 @@ class SniperAimingSystem(IAimingSystem):
         SniperAimingSystem.__activeSystem = self
         vehicle = player.getVehicleAttached()
         if vehicle is not None:
-            if not vehicle.filter.placingOnGround:
+            if hasattr(vehicle.filter, 'placingOnGround') and not vehicle.filter.placingOnGround:
                 vehicle.filter.calcPlacedMatrix(True)
                 self.__baseMatrix = vehicle.filter.placingMatrix
             else:

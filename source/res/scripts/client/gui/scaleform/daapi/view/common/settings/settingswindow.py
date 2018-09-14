@@ -2,8 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsWindow.py
 import functools
 import VOIP
+from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from debug_utils import *
 from gui.GraphicsPresets import GraphicsPresets
+from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getNewSettings, invalidateSettings
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager
 from gui import DialogsInterface, g_guiResetters
@@ -20,7 +22,9 @@ _PAGES = (SETTINGS.GAMETITLE,
  SETTINGS.SOUNDTITLE,
  SETTINGS.KEYBOARDTITLE,
  SETTINGS.CURSORTITLE,
- SETTINGS.MARKERTITLE)
+ SETTINGS.MARKERTITLE,
+ SETTINGS.FEEDBACK,
+ SETTINGS.OTHERTITLE)
 _PAGES_INDICES = dict(((v, k) for k, v in enumerate(_PAGES)))
 _g_lastTabIdx = 0
 
@@ -52,23 +56,33 @@ class SettingsWindow(SettingsWindowMeta):
         """
         return None
 
+    def __getSettingsParam(self):
+        """Read settings from SettingsParam
+        """
+        settings = {SETTINGS_GROUP.GAME_SETTINGS: self.params.getGameSettings(),
+         SETTINGS_GROUP.GRAPHICS_SETTINGS: self.params.getGraphicsSettings(),
+         SETTINGS_GROUP.SOUND_SETTINGS: self.params.getSoundSettings(),
+         SETTINGS_GROUP.CONTROLS_SETTINGS: self.params.getControlsSettings(),
+         SETTINGS_GROUP.AIM_SETTINGS: self.params.getAimSettings(),
+         SETTINGS_GROUP.MARKERS_SETTINGS: self.params.getMarkersSettings(),
+         SETTINGS_GROUP.OTHER_SETTINGS: self.params.getOtherSettings(),
+         SETTINGS_GROUP.FEEDBACK_SETTINGS: self.params.getFeedbackSettings()}
+        return settings
+
     def __getSettings(self):
-        settings = {'GameSettings': self.params.getGameSettings(),
-         'GraphicSettings': self.params.getGraphicsSettings(),
-         'SoundSettings': self.params.getSoundSettings(),
-         'ControlsSettings': self.params.getControlsSettings(),
-         'AimSettings': self.params.getAimSettings(),
-         'MarkerSettings': self.params.getMarkersSettings(),
-         'OtherSettings': self.params.getOtherSettings()}
+        """Create dict of settings divided by groups
+        :return: dict { settingsGroup :  {keys: [settingsName], values: [settingsValues] }}
+        """
+        settings = self.__getSettingsParam()
         reformatted_settings = {}
         for key, value in settings.iteritems():
             reformatted_keys = []
             reformatted_values = []
             reformatted_settings[key] = {'keys': reformatted_keys,
              'values': reformatted_values}
-            for key, value in value.iteritems():
-                reformatted_keys.append(key)
-                reformatted_values.append(value)
+            for settingName, settingValue in value.iteritems():
+                reformatted_keys.append(settingName)
+                reformatted_values.append(settingValue)
 
         return reformatted_settings
 
@@ -119,6 +133,9 @@ class SettingsWindow(SettingsWindowMeta):
 
     def _update(self):
         self.as_setDataS(self.__getSettings())
+        newSettings = getNewSettings()
+        if len(newSettings):
+            self.as_setCountersDataS(newSettings)
         self.as_updateVideoSettingsS(self.__currentSettings)
         self.as_openTabS(_getLastTabIndex())
 
@@ -128,6 +145,7 @@ class SettingsWindow(SettingsWindowMeta):
         g_guiResetters.discard(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(None)
         self.stopVoicesPreview()
+        self.stopAltBulbPreview()
         VibroManager.g_instance.onConnect -= self.onVibroManagerConnect
         VibroManager.g_instance.onDisconnect -= self.onVibroManagerDisconnect
         super(SettingsWindow, self)._dispose()
@@ -146,6 +164,11 @@ class SettingsWindow(SettingsWindowMeta):
             _setLastTabIndex(_PAGES_INDICES[tabId])
         else:
             LOG_WARNING("Unknown settings window's page id", tabId)
+
+    def onCounterTargetVisited(self, tabName):
+        """Notify that user visited tab
+        """
+        invalidateSettings(tabName)
 
     def onSettingsChange(self, settingName, settingValue):
         settingValue = flashObject2Dict(settingValue)
@@ -209,19 +232,23 @@ class SettingsWindow(SettingsWindowMeta):
 
     def altVoicesPreview(self):
         setting = g_settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
-        if setting is not None:
-            setting.playPreviewSound()
-        return
+        setting.playPreviewSound()
+
+    def altBulbPreview(self, sampleID):
+        setting = g_settingsCore.options.getSetting(settings_constants.SOUND.DETECTION_ALERT_SOUND)
+        setting.playPreviewSound(sampleID)
 
     def stopVoicesPreview(self):
         setting = g_settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
-        if setting is not None:
-            setting.clearPreviewSound()
-        return
+        setting.clearPreviewSound()
+
+    def stopAltBulbPreview(self):
+        setting = g_settingsCore.options.getSetting(settings_constants.SOUND.DETECTION_ALERT_SOUND)
+        setting.clearPreviewSound()
 
     def isSoundModeValid(self):
         setting = g_settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
-        return setting.isSoundModeValid() if setting is not None else False
+        return setting.isSoundModeValid()
 
     def showWarningDialog(self, dialogID, settings, isCloseWnd):
 

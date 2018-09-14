@@ -342,17 +342,52 @@
   <radios>
     <C45>	shared	</C45>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Meteor_M120>
+          <smplEnginePower>	856.3977	</smplEnginePower>
+        </Rolls_Royse_Meteor_M120>
+      </engines>
+      <chassis>
+        <Chassis_GB31_Conqueror_Gun>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB31_Conqueror_Gun>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB31_Conqueror_Gun>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GB31_Conqueror_Gun>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Meteor_M120>
-        <bravo>	214.0994	</bravo>
-      </Rolls_Royse_Meteor_M120>
-    </engines>
     <armour>	0.826293121	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -787,23 +787,89 @@
     </ER_53>
     <ER_55>	shared	</ER_55>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Renault_T12>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Renault_T12>
+        <Renault_T14>
+          <smplEnginePower>	475.7765	</smplEnginePower>
+        </Renault_T14>
+      </engines>
+      <chassis>
+        <Chassis_BDR_G1B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_BDR_G1B>
+        <Chassis_BDR_G1B_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_BDR_G1B_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_BDR_G1B>
-        <alpha>	0.12075	</alpha>
-      </Chassis_BDR_G1B>
-      <Chassis_BDR_G1B_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_BDR_G1B_2>
-    </chassis>
-    <engines>
-      <Renault_T12>
-        <bravo>	92.5121	</bravo>
-      </Renault_T12>
-      <Renault_T14>
-        <bravo>	118.9441	</bravo>
-      </Renault_T14>
-    </engines>
     <armour>	1.124114042	</armour>
   </clientAdjustmentFactors>
   <effects>

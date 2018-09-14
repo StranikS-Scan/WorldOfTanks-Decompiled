@@ -571,28 +571,94 @@
     </_71-TK-3>
     <KRSTB>	shared	</KRSTB>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-3>
+          <smplEnginePower>	264.3203	</smplEnginePower>
+        </V-3>
+        <V-4>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </V-4>
+      </engines>
+      <chassis>
+        <Chassis_T-50>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T-50>
+        <Chassis_T-50_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T-50_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_37mm_automatic_SH-37>
         <delta>	2.209302	</delta>
       </_37mm_automatic_SH-37>
     </guns>
-    <chassis>
-      <Chassis_T-50>
-        <alpha>	0.0966	</alpha>
-      </Chassis_T-50>
-      <Chassis_T-50_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_T-50_2>
-    </chassis>
-    <engines>
-      <V-3>
-        <bravo>	66.08007	</bravo>
-      </V-3>
-      <V-4>
-        <bravo>	79.29608	</bravo>
-      </V-4>
-    </engines>
     <armour>	0.901857078	</armour>
   </clientAdjustmentFactors>
   <effects>

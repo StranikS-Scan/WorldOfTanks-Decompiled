@@ -3,7 +3,7 @@
 import weakref
 import BigWorld
 import Keys
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent, ChannelManagementEvent
 from messenger import g_settings
@@ -107,6 +107,8 @@ class BattleEntry(IGUIEntry):
             return False
         if event.isKeyDown() and not event.isAltDown() and key in (Keys.KEY_RETURN, Keys.KEY_NUMPADENTER):
             return self.__handleEnterPressed()
+        if key in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
+            self.__handleCTRLPressed(key == Keys.KEY_LCONTROL, event.isKeyDown())
         if isFocused:
             if event.isKeyDown():
                 if key == Keys.KEY_ESCAPE:
@@ -155,6 +157,20 @@ class BattleEntry(IGUIEntry):
         view = self.__view()
         if view is not None:
             result = view.handleEnterPressed()
+        return result
+
+    def __handleCTRLPressed(self, isLeftCtrl, isDown):
+        """
+        Handler of Ctrl button press event.
+        
+        :param isLeftCtrl: True if the event associated with the left Ctrl btn,
+                           False - if the right Ctrl btn.
+        :param isDown: True if the Ctrl btn is down, False if it is up.
+        """
+        result = False
+        view = self.__view()
+        if view is not None:
+            result = view.handleCTRLPressed(isLeftCtrl, isDown)
         return result
 
     def __showErrorMessage(self, message):

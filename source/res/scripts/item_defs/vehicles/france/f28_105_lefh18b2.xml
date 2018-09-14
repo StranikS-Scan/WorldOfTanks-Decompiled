@@ -344,7 +344,7 @@
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
-          <effects>	shot_mainext_mb	</effects>
+          <effects>	shot_large_mb	</effects>
           <models>
             <undamaged>	vehicles/french/F28_105_leFH18B2/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F28_105_leFH18B2/crash/lod0/Gun_01.model	</destroyed>
@@ -397,17 +397,52 @@
   <radios>
     <FuG8f>	shared	</FuG8f>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Renault_A>
+          <smplEnginePower>	324.5853	</smplEnginePower>
+        </Renault_A>
+      </engines>
+      <chassis>
+        <Chassis_105_leFH18B2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_105_leFH18B2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_105_leFH18B2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_105_leFH18B2>
-    </chassis>
-    <engines>
-      <Renault_A>
-        <bravo>	81.14632	</bravo>
-      </Renault_A>
-    </engines>
     <armour>	0.799230536	</armour>
   </clientAdjustmentFactors>
   <effects>

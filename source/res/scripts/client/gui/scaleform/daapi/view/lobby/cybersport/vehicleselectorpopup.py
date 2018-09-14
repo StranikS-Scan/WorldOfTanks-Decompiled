@@ -2,32 +2,29 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/VehicleSelectorPopup.py
 from account_helpers.AccountSettings import AccountSettings
 from constants import VEHICLE_CLASSES
-from gui.Scaleform.daapi.view.lobby.cyberSport.VehicleSelectorBase import VehicleSelectorBase
+from gui.Scaleform.daapi.view.lobby.vehicle_selector_base import VehicleSelectorBase
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.VehicleSelectorPopupMeta import VehicleSelectorPopupMeta
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.events import CSVehicleSelectEvent, HideWindowEvent
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared.utils.requesters import REQ_CRITERIA
 
 class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
 
     def __init__(self, ctx=None):
         super(VehicleSelectorPopup, self).__init__()
         assert 'section' in ctx, 'Section is required to show selector popup'
+        self._levelsRange = ctx.get('levelsRange', self._levelsRange)
         self.__isMultiSelect = ctx.get('isMultiSelect', False)
         self.__infoText = ctx.get('infoText', '')
         self.__componentsOffset = ctx.get('componentsOffset', 0)
         self.__section = ctx.get('section')
         self.__vehicles = ctx.get('vehicles')
         self.__selectedVehicles = ctx.get('selectedVehicles')
-        self.__levelsRange = ctx.get('levelsRange', (1, 10))
         self.__vehicleTypes = ctx.get('vehicleTypes', VEHICLE_CLASSES)
         self.showNotReadyVehicles = ctx.get('showNotReady', True)
-
-    def _getLevelsRange(self):
-        return [0] + self.__levelsRange
 
     def _populate(self):
         super(VehicleSelectorPopup, self)._populate()
@@ -72,9 +69,9 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
 
     def updateData(self):
         if not self.getFilters().get('compatibleOnly', True) or self.__vehicles is None:
-            vehicleVOs = self._updateData(g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY), self.__levelsRange, self.__vehicleTypes)
+            vehicleVOs = self._updateData(g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY))
         else:
-            vehicleVOs = self._updateData(self.__vehicles, self.__levelsRange, self.__vehicleTypes)
+            vehicleVOs = self._updateData(self.__vehicles)
         if self.__selectedVehicles is not None:
             vehicleGetter = g_itemsCache.items.getItemByCD
             selected = [ makeVehicleVO(vehicleGetter(int(item))) for item in self.__selectedVehicles ]
@@ -93,3 +90,6 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
 
     def selectClick(self):
         pass
+
+    def _makeVehicleVOAction(self, vehicle):
+        return makeVehicleVO(vehicle, self._levelsRange, self.__vehicleTypes)

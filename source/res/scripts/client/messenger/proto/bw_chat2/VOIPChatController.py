@@ -3,6 +3,7 @@
 import BigWorld
 import BattleReplay
 import VOIP
+import CommandMapping
 from VOIP.voip_constants import VOIP_SUPPORTED_API
 from debug_utils import LOG_WARNING
 from adisp import async, process
@@ -38,6 +39,7 @@ class VOIPChatController(IVOIPChatController):
         voipMgr.onCaptureDevicesUpdated += self.__captureDevicesResponse
         voipMgr.onPlayerSpeaking += self.__onPlayerSpeaking
         voipMgr.onStateToggled += self.__onStateToggled
+        voipMgr.onJoinedChannel += self.__onJoinedChannel
         self.__initialize()
 
     def stop(self):
@@ -51,6 +53,7 @@ class VOIPChatController(IVOIPChatController):
         voipMgr.onCaptureDevicesUpdated -= self.__captureDevicesResponse
         voipMgr.onPlayerSpeaking -= self.__onPlayerSpeaking
         voipMgr.onStateToggled -= self.__onStateToggled
+        voipMgr.onJoinedChannel -= self.__onJoinedChannel
         self.__callbacks = []
         self.__captureDevicesCallbacks = []
 
@@ -99,6 +102,26 @@ class VOIPChatController(IVOIPChatController):
         """
         if self.isVOIPEnabled() and not BattleReplay.isPlaying() and not self.isReady():
             g_messengerEvents.voip.onVoiceChatInitFailed()
+
+    def setMicrophoneMute(self, isMuted, force=False):
+        """ Sets local microphone mute.
+        :param isMuted: is muted.
+        :param force: is necessary to check whether EchoTest in progress and currentChannel exists
+        """
+        voipMgr = VOIP.getVOIPManager()
+        if voipMgr is not None:
+            if force or voipMgr.getCurrentChannel() and not voipMgr.isInTesting():
+                voipMgr.setMicMute(muted=isMuted)
+        return
+
+    def invalidateMicrophoneMute(self):
+        """
+        This method checks if CMD_VOICECHAT_MUTE is not pressed to disable a MIC.
+        Usually this method is called after switching from Hangar->Battle, Battle->Hangar, etc
+        """
+        keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
+        if not BigWorld.isKeyDown(keyCode):
+            self.setMicrophoneMute(isMuted=True, force=True)
 
     @async
     def requestCaptureDevices(self, firstTime=False, callback=None):
@@ -210,3 +233,15 @@ class VOIPChatController(IVOIPChatController):
         """
         if self.isVOIPEnabled():
             g_messengerEvents.voip.onStateToggled(isEnabled)
+
+    def __onJoinedChannel(self, data):
+        """
+        This is callback for VOIPManager's 'onJoinedChannel' event.
+        After joining at channel, check if user presses PTY button to enable a MIC.
+        For example, after echo-test, user can still pressing a button, enable mic in this case
+        @param data: channel data
+        """
+        if self.isVOIPEnabled():
+            keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
+            if BigWorld.isKeyDown(keyCode):
+                VOIP.getVOIPManager().setMicMute(False)

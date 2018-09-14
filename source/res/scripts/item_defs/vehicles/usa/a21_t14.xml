@@ -321,17 +321,52 @@
   <radios>
     <SCR_508_1>	shared	</SCR_508_1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAC_1>
+          <smplEnginePower>	761.2424	</smplEnginePower>
+        </Ford_GAC_1>
+      </engines>
+      <chassis>
+        <T-14>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.09177	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T-14>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <T-14>
-        <alpha>	0.09177	</alpha>
-      </T-14>
-    </chassis>
-    <engines>
-      <Ford_GAC_1>
-        <bravo>	190.3106	</bravo>
-      </Ford_GAC_1>
-    </engines>
     <armour>	1.260365913	</armour>
   </clientAdjustmentFactors>
   <effects>

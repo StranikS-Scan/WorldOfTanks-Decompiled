@@ -828,23 +828,89 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AV-1790-3>
+          <smplEnginePower>	845.8249	</smplEnginePower>
+        </Continental_AV-1790-3>
+        <Continental_AV-1790-5>
+          <smplEnginePower>	909.2618	</smplEnginePower>
+        </Continental_AV-1790-5>
+      </engines>
+      <chassis>
+        <T80E3A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T80E3A>
+        <T84E38>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T84E38>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <T80E3A>
-        <alpha>	0.1449	</alpha>
-      </T80E3A>
-      <T84E38>
-        <alpha>	0.1288	</alpha>
-      </T84E38>
-    </chassis>
-    <engines>
-      <Continental_AV-1790-3>
-        <bravo>	211.4562	</bravo>
-      </Continental_AV-1790-3>
-      <Continental_AV-1790-5>
-        <bravo>	227.3154	</bravo>
-      </Continental_AV-1790-5>
-    </engines>
     <armour>	0.97667163	</armour>
   </clientAdjustmentFactors>
   <effects>

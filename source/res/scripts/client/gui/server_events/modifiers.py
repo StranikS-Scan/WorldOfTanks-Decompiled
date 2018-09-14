@@ -511,7 +511,7 @@ class EconomicsSet(ActionModifier):
 
     def _handlerBerthsPrices(self, value):
         default, _ = g_itemsCache.items.shop.defaults.getTankmanBerthPrice(g_itemsCache.items.stats.tankmenBerthsCount)
-        return self.__pack('berthsPrices', value, default, _DT.PERCENT)
+        return self.__pack('berthsPrices', value, default.gold, _DT.PERCENT)
 
     def _handlerCreditsTankmanCost(self, value):
         tankmanCost = g_itemsCache.items.shop.defaults.tankmanCost

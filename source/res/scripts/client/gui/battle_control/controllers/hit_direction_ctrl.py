@@ -3,10 +3,25 @@
 from functools import partial
 import weakref
 import BigWorld
+from account_helpers.settings_core.settings_constants import DAMAGE_INDICATOR, GRAPHICS
+from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN, BATTLE_CTRL_ID
 from gui.battle_control.view_components import IViewComponentsController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
+from gui.battle_control.battle_constants import HIT_FLAGS
+from shared_utils import CONST_CONTAINER
+_AGGREGATED_HIT_BITS = HIT_FLAGS.IS_BLOCKED | HIT_FLAGS.HP_DAMAGE | HIT_FLAGS.IS_CRITICAL
+_VISUAL_DAMAGE_INDICATOR_SETTINGS = (DAMAGE_INDICATOR.TYPE,
+ DAMAGE_INDICATOR.VEHICLE_INFO,
+ DAMAGE_INDICATOR.DAMAGE_VALUE,
+ DAMAGE_INDICATOR.ANIMATION,
+ GRAPHICS.COLOR_BLIND)
+
+class DAMAGE_INDICATOR_PRESETS(CONST_CONTAINER):
+    ALL = (0,)
+    WITHOUT_CRITS = 1
+
 
 class IHitIndicator(object):
 
@@ -16,10 +31,13 @@ class IHitIndicator(object):
     def getDuration(self):
         raise NotImplementedError
 
+    def getBeginAnimationDuration(self):
+        raise NotImplementedError
+
     def setVisible(self, flag):
         raise NotImplementedError
 
-    def showHitDirection(self, idx, gYaw, timeLeft, isDamage):
+    def showHitDirection(self, idx, hitData, timeLeft):
         raise NotImplementedError
 
     def hideHitDirection(self, idx):
@@ -27,23 +45,22 @@ class IHitIndicator(object):
 
 
 class _HitDirection(object):
-    __slots__ = ('__idx', '__yaw', '__isDamage', '__startTime', '__isShown', '__isVisible', '__offset', '__indicator')
+    __slots__ = ('__idx', '__hitData', '__isDamage', '__startTime', '__isShown', '__isVisible', '__offset', '__indicator')
 
     def __init__(self, idx):
         super(_HitDirection, self).__init__()
         self.__idx = idx
-        self.__yaw = 0
-        self.__isDamage = False
+        self.__hitData = None
         self.__startTime = 0
         self.__isShown = False
         self.__indicator = None
         return
 
     def __repr__(self):
-        return '_HitDirection(idx={0}, yaw={1}, isDamage={2}, startTime={3}, isShown={4}, hasUI={5})'.format(self.__idx, self.__yaw, self.__isDamage, self.__startTime, self.__isShown, self.__indicator is not None)
+        return '_HitDirection(idx={0}, hitData={1}, startTime={2}, isShown={3}, hasUI={4})'.format(self.__idx, self.__hitData, self.__startTime, self.__isShown, self.__indicator is not None)
 
     def clear(self):
-        self.__isDamage = False
+        self.__hitData = None
         self.__startTime = 0
         self.__isShown = False
         self.__indicator = None
@@ -52,11 +69,8 @@ class _HitDirection(object):
     def getIndex(self):
         return self.__idx
 
-    def getYaw(self):
-        return self.__yaw
-
-    def isDamage(self):
-        return self.__isDamage
+    def getHitData(self):
+        return self.__hitData
 
     def isShown(self):
         return self.__isShown
@@ -76,25 +90,44 @@ class _HitDirection(object):
 
     def setIndicator(self, indicator):
         self.__indicator = indicator
+        return self.redraw()
+
+    def redraw(self):
+        """
+        Redraw indicator if it is visible.
+        
+        :return: Animation duration.
+        """
         duration = 0
-        if self.__isShown:
+        if self.__isShown and self.__hitData is not None and self.__indicator is not None:
             timeLeft = BigWorld.time() - self.__startTime
-            duration = indicator.getDuration()
+            duration = self.__indicator.getDuration()
             if timeLeft < duration:
-                indicator.showHitDirection(self.__idx, self.__yaw, timeLeft, self.__isDamage)
+                self.__indicator.showHitDirection(self.__idx, self.__hitData, timeLeft)
             else:
                 duration = 0
         return duration
 
-    def show(self, globalYaw, isDamage):
+    def show(self, hitData, extend=False):
+        """
+        Show indicator with the given hit data.
+        
+        :param hitData: An instance of HitData
+        :param extend: If True, current hit data will be extended with the given one.
+        :return: Animation duration
+        """
         self.__isShown = True
         self.__startTime = BigWorld.time()
-        self.__yaw = globalYaw
-        self.__isDamage = bool(isDamage)
+        extend = extend and self.__hitData is not None
+        if extend:
+            self.__hitData.extend(hitData)
+        else:
+            self.__hitData = hitData
         if self.__indicator:
             duration = self.__indicator.getDuration()
+            timeLeft = self.__indicator.getBeginAnimationDuration() if extend else 0
             assert duration, 'Duration should be more than 0'
-            self.__indicator.showHitDirection(self.__idx, self.__yaw, 0, self.__isDamage)
+            self.__indicator.showHitDirection(self.__idx, self.__hitData, timeLeft)
         else:
             duration = 0
         return duration
@@ -108,7 +141,7 @@ class _HitDirection(object):
 
 
 class HitDirectionController(IViewComponentsController):
-    __slots__ = ('__pull', '__ui', '__isVisible', '__callbackIDs', '__weakref__')
+    __slots__ = ('__pull', '__ui', '__isVisible', '__callbackIDs', '__damageIndicatorPreset', '__weakref__')
 
     def __init__(self):
         super(HitDirectionController, self).__init__()
@@ -117,6 +150,7 @@ class HitDirectionController(IViewComponentsController):
         self.__ui = None
         self.__isVisible = True
         self.__callbackIDs = {}
+        self.__damageIndicatorPreset = DAMAGE_INDICATOR_PRESETS.ALL
         return
 
     def getControllerID(self):
@@ -124,8 +158,11 @@ class HitDirectionController(IViewComponentsController):
 
     def startControl(self):
         g_eventBus.addListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.__damageIndicatorPreset = g_settingsCore.getSetting(DAMAGE_INDICATOR.PRESETS)
+        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def stopControl(self):
+        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
         g_eventBus.removeListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__clearHideCallbacks()
 
@@ -146,6 +183,7 @@ class HitDirectionController(IViewComponentsController):
 
     def setViewComponents(self, component):
         self.__ui = component
+        self.__ui.invalidateSettings()
         self.__ui.setVisible(self.__isVisible)
         proxy = weakref.proxy(self.__ui)
         for hit in self.__pull:
@@ -163,14 +201,41 @@ class HitDirectionController(IViewComponentsController):
         self.__ui = None
         return
 
-    def addHit(self, globalYaw, isDamage):
-        hit = self.__getNextHit()
-        idx = hit.getIndex()
-        self.__clearHideCallback(idx)
-        duration = hit.show(globalYaw, isDamage)
-        if duration:
-            self.__callbackIDs[idx] = BigWorld.callback(duration, partial(self.__tickToHideHit, idx))
-        return hit
+    def addHit(self, hitData):
+        """
+        Add a new hit to control.
+        
+        :param hitData: An instance of HitData
+        """
+        if not self._isValidHit(hitData):
+            return
+        else:
+            hit = self.__findHit(hitData)
+            if hit is None:
+                extendHitData = False
+                hit = self.__getNextHit()
+            else:
+                extendHitData = hit.isShown()
+            idx = hit.getIndex()
+            self.__clearHideCallback(idx)
+            duration = hit.show(hitData, extend=extendHitData)
+            if duration:
+                self.__callbackIDs[idx] = BigWorld.callback(duration, partial(self.__tickToHideHit, idx))
+            return hit
+
+    def _isValidHit(self, hitData):
+        """
+        Validates that hit with the given data should be displayed to the user.
+        Do not show damage indicator if:
+        1. it is caused by battle consumables.
+        2. it is critical hit without damage and crits are disabled in user's preferences
+        
+        :param hitData: An instance of HitData
+        :return: True if hit is valid and should be shown, otherwise False.
+        """
+        if hitData.isBattleConsumables():
+            return False
+        return False if self.__damageIndicatorPreset == DAMAGE_INDICATOR_PRESETS.WITHOUT_CRITS and hitData.isCritical() and hitData.getDamage() == 0 else True
 
     def __getNextHit(self):
         find = self.__pull[0]
@@ -181,6 +246,35 @@ class HitDirectionController(IViewComponentsController):
                 find = hit
 
         return find
+
+    def __findHit(self, hitData):
+        """
+        Finds an appropriate damage indicator according to the following aggregation rules:
+        1. Hits are aggregated by target ID.
+        2. Blocked hit can be aggregated only with another blocked hit (aggregated value - damage).
+        3. Critical hit without HP damage can be aggregated only with another critical hit
+           without HP damage (aggregated value - crits count).
+        4. Any not blocked hit with HP damage (including with crits) can be aggregated with
+           another not blocked hit with HP damage (aggregated value - damage and crits count)
+        
+        :param hitData: An instance of HitData
+        :return: _HitDirection instance corresponding to the rules listed above or None.
+        """
+        for hit in self.__pull:
+            data = hit.getHitData()
+            if data is not None:
+                if hitData.getAttackerID() == data.getAttackerID():
+                    currentMask = data.getHitFlags() & _AGGREGATED_HIT_BITS
+                    newMask = hitData.getHitFlags() & _AGGREGATED_HIT_BITS
+                    if currentMask > 0:
+                        if currentMask == newMask:
+                            return hit
+                        if currentMask == HIT_FLAGS.HP_DAMAGE and newMask == HIT_FLAGS.HP_DAMAGE | HIT_FLAGS.IS_CRITICAL:
+                            return hit
+                        if currentMask == HIT_FLAGS.HP_DAMAGE | HIT_FLAGS.IS_CRITICAL and newMask == HIT_FLAGS.HP_DAMAGE:
+                            return hit
+
+        return
 
     def __tickToHideHit(self, idx):
         self.__callbackIDs.pop(idx, None)
@@ -203,3 +297,17 @@ class HitDirectionController(IViewComponentsController):
 
     def __handleGUIVisibility(self, event):
         self.setVisible(event.ctx['visible'])
+
+    def __onSettingsChanged(self, diff):
+        if DAMAGE_INDICATOR.PRESETS in diff:
+            self.__damageIndicatorPreset = diff[DAMAGE_INDICATOR.PRESETS]
+        if self.__ui is not None:
+            for key in _VISUAL_DAMAGE_INDICATOR_SETTINGS:
+                if key in diff:
+                    self.__ui.invalidateSettings()
+                    for hit in self.__pull:
+                        hit.redraw()
+
+                    break
+
+        return

@@ -515,23 +515,89 @@
   <radios>
     <ER_52>	shared	</ER_52>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Hotchkiss_35>
+          <smplEnginePower>	79.29608	</smplEnginePower>
+        </Hotchkiss_35>
+        <Renault_V4>
+          <smplEnginePower>	86.69705	</smplEnginePower>
+        </Renault_V4>
+      </engines>
+      <chassis>
+        <Chassis_Hotchkiss_H35>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Hotchkiss_H35>
+        <Chassis_Hotchkiss_H35_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Hotchkiss_H35_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Hotchkiss_H35>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Hotchkiss_H35>
-      <Chassis_Hotchkiss_H35_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Hotchkiss_H35_2>
-    </chassis>
-    <engines>
-      <Hotchkiss_35>
-        <bravo>	19.82402	</bravo>
-      </Hotchkiss_35>
-      <Renault_V4>
-        <bravo>	21.67426	</bravo>
-      </Renault_V4>
-    </engines>
     <armour>	0.99358596	</armour>
   </clientAdjustmentFactors>
   <effects>

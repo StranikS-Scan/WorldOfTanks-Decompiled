@@ -489,7 +489,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <models>
             <undamaged>	vehicles/american/A84_M48A1/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A84_M48A1/crash/lod0/Gun_03.model	</destroyed>
@@ -572,17 +572,52 @@
   <radios>
     <AN-VRC-7_IGR>	shared	</AN-VRC-7_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AV-1790-7B_IGR>
+          <smplEnginePower>	856.3977	</smplEnginePower>
+        </Continental_AV-1790-7B_IGR>
+      </engines>
+      <chassis>
+        <Chassis_M48A1_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M48A1_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M48A1_IGR>
-        <alpha>	0.07245	</alpha>
-      </Chassis_M48A1_IGR>
-    </chassis>
-    <engines>
-      <Continental_AV-1790-7B_IGR>
-        <bravo>	214.0994	</bravo>
-      </Continental_AV-1790-7B_IGR>
-    </engines>
     <armour>	1.065747476	</armour>
   </clientAdjustmentFactors>
   <effects>

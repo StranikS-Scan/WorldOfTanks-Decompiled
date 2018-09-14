@@ -313,17 +313,52 @@
   <radios>
     <SCR_210A>	shared	</SCR_210A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_W-670-9A>
+          <smplEnginePower>	277.0077	</smplEnginePower>
+        </Continental_W-670-9A>
+      </engines>
+      <chassis>
+        <Chassis_T7_Combat_Car>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T7_Combat_Car>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T7_Combat_Car>
-        <alpha>	0.12075	</alpha>
-      </Chassis_T7_Combat_Car>
-    </chassis>
-    <engines>
-      <Continental_W-670-9A>
-        <bravo>	69.25191	</bravo>
-      </Continental_W-670-9A>
-    </engines>
     <armour>	0.877327986	</armour>
   </clientAdjustmentFactors>
   <effects>

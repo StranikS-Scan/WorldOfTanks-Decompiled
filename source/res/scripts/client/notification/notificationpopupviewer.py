@@ -6,7 +6,7 @@ from messenger import g_settings
 from messenger.formatters import TimeFormatter
 from notification.NotificationLayoutView import NotificationLayoutView
 from notification import NotificationMVC
-from notification.settings import NOTIFICATION_STATE
+from notification.settings import NOTIFICATION_STATE, NOTIFICATION_GROUP
 
 class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutView):
 
@@ -27,10 +27,11 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutVie
     def onClickAction(self, typeID, entityID, action):
         NotificationMVC.g_instance.handleAction(typeID, entityID, action)
 
-    def onMessageHided(self, byTimeout, wasNotified):
+    def onMessageHidden(self, byTimeout, wasNotified, typeID, entityID):
         if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
             if not byTimeout and wasNotified:
-                self._model.decrementNotifiedMessagesCount()
+                notification = self._model.getNotification(typeID, entityID)
+                self._model.decrementNotifiedMessagesCount(*notification.getCounterInfo())
 
     def setListClear(self):
         self.__noDisplayingPopups = True
@@ -66,11 +67,9 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutVie
         super(NotificationPopUpViewer, self)._dispose()
 
     def __onNotificationReceived(self, notification):
-        currentDisplayState = self._model.getDisplayState()
-        priorityLevel = notification.getPriorityLevel()
-        if currentDisplayState == NOTIFICATION_STATE.POPUPS:
-            if notification.isNotify():
-                self._model.incrementNotifiedMessagesCount()
+        if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
+            if notification.isNotify() and (notification.getGroup() != NOTIFICATION_GROUP.INFO or notification.getPriorityLevel() == NotificationPriorityLevel.LOW):
+                self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())
             if NotificationMVC.g_instance.getAlertController().isAlertShowing():
                 self.__pendingMessagesQueue.append(notification)
             elif len(self.__pendingMessagesQueue) > 0:
@@ -89,7 +88,8 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutVie
         elif isStateChanged:
             self.__onNotificationReceived(notification)
 
-    def __onNotificationRemoved(self, typeID, entityID):
+    def __onNotificationRemoved(self, typeID, entityID, groupID):
+        self._model.decrementNotifiedMessagesCount(groupID, typeID, entityID)
         self.as_removeMessageS(typeID, entityID)
 
     def __sendMessageForDisplay(self, notification):

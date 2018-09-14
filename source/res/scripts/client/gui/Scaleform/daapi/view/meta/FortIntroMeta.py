@@ -8,12 +8,10 @@ class FortIntroMeta(BaseRallyIntroView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseRallyIntroView
-    null
     """
 
     def as_setIntroDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by IntroViewVO (AS)
         """
         return self.flashObject.as_setIntroData(data) if self._isDAAPIInited() else None

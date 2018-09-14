@@ -684,23 +684,89 @@
   <radios>
     <FuG5>	shared	</FuG5>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Krupp_M305>
+          <smplEnginePower>	63.43687	</smplEnginePower>
+        </Krupp_M305>
+        <Maybach_NL38TR>
+          <smplEnginePower>	105.7281	</smplEnginePower>
+        </Maybach_NL38TR>
+      </engines>
+      <chassis>
+        <Chassis_PzI>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_PzI>
+        <Chassis_PzI_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_PzI_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_PzI>
-        <alpha>	0.1127	</alpha>
-      </Chassis_PzI>
-      <Chassis_PzI_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_PzI_2>
-    </chassis>
-    <engines>
-      <Krupp_M305>
-        <bravo>	15.85922	</bravo>
-      </Krupp_M305>
-      <Maybach_NL38TR>
-        <bravo>	26.43203	</bravo>
-      </Maybach_NL38TR>
-    </engines>
     <armour>	0.808382638	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -7,12 +7,11 @@ from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.Scaleform.daapi.view.meta.VehicleParametersMeta import VehicleParametersMeta
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.ItemsCache import g_itemsCache
-from gui.shared.items_parameters import params_helper, MAX_RELATIVE_VALUE, formatters, RELATIVE_PARAMS
+from gui.shared.items_parameters import params_helper, formatters, MAX_RELATIVE_VALUE
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.shared.formatters import text_styles
-from gui.shared.items_parameters.comparator import PARAM_STATE
-from gui.shared.items_parameters.formatters import PARAMS_GROUPS
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, getParameters, getCommonParam
 
 class VehicleParameters(VehicleParametersMeta):
 
@@ -20,7 +19,6 @@ class VehicleParameters(VehicleParametersMeta):
         super(VehicleParameters, self).__init__()
         self._vehParamsDP = None
         self._alreadyShowed = False
-        self._paramsProviderCls = _VehParamsDataProvider
         self._expandedGroups = {'relativePower': AccountSettings.getSettings('relativePower'),
          'relativeArmor': AccountSettings.getSettings('relativeArmor'),
          'relativeMobility': AccountSettings.getSettings('relativeMobility'),
@@ -45,10 +43,13 @@ class VehicleParameters(VehicleParametersMeta):
         self._vehParamsDP.setGroupsToShow(self._expandedGroups)
         self._setDPUseAnimAndRebuild(True)
 
+    def _createDataProvider(self):
+        return _VehParamsDataProvider(_VehParamsGenerator())
+
     def _populate(self):
         super(VehicleParameters, self)._populate()
         g_settingsCore.onSettingsChanged += self.__onSettingsChange
-        self._vehParamsDP = self._paramsProviderCls()
+        self._vehParamsDP = self._createDataProvider()
         self._vehParamsDP.setFlashObject(self.as_getDPS())
         self._updateProviderType()
         self.update()
@@ -88,7 +89,9 @@ class VehiclePreviewParameters(VehicleParameters):
 
     def __init__(self):
         super(VehiclePreviewParameters, self).__init__()
-        self._paramsProviderCls = _VehPreviewParamsDataProvider
+
+    def _createDataProvider(self):
+        return _VehPreviewParamsDataProvider()
 
     def _populate(self):
         super(VehiclePreviewParameters, self)._populate()
@@ -104,16 +107,91 @@ class VehiclePreviewParameters(VehicleParameters):
         return g_currentPreviewVehicle
 
 
-class _VehParamsDataProvider(SortableDAAPIDataProvider):
+class _VehParamsGenerator(VehParamsBaseGenerator):
+
+    def __init__(self, tooltipType=TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS):
+        super(_VehParamsGenerator, self).__init__()
+        self._tooltipType = tooltipType
+        self.useAnim = False
+
+    def _getBaseFormatters(self):
+        return formatters.NO_BONUS_BASE_FORMATTERS
+
+    def _getSimplifiedValue(self, param):
+        return formatters.colorizedFormatParameter(param, formatters.NO_BONUS_SIMPLIFIED_FORMATTERS)
+
+    def _makeSimpleParamBottomVO(self, param, vehIntCD=None):
+        stockParams = getParameters(g_itemsCache.items.getStockVehicle(vehIntCD))
+        data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM, param.name)
+        data.update({'isEnabled': True,
+         'tooltip': self._tooltipType,
+         'indicatorVO': {'value': param.value,
+                         'maxValue': MAX_RELATIVE_VALUE,
+                         'markerValue': stockParams[param.name],
+                         'minValue': 0,
+                         'useAnim': self.useAnim}})
+        return data
+
+    def _makeAdvancedParamVO(self, param):
+        if param.value is not None:
+            data = super(_VehParamsGenerator, self)._makeAdvancedParamVO(param)
+            data.update({'titleText': formatters.formatVehicleParamName(param.name, False),
+             'valueText': formatters.colorizedFormatParameter(param, self._getBaseFormatters()),
+             'iconSource': formatters.getParameterIconPath(param.name),
+             'isEnabled': False,
+             'tooltip': self._tooltipType})
+            return data
+        else:
+            return
+
+    def _makeSimpleParamHeaderVO(self, param, isOpen, comparator):
+        data = super(_VehParamsGenerator, self)._makeSimpleParamHeaderVO(param, isOpen, comparator)
+        data.update({'titleText': formatters.formatVehicleParamName(param.name),
+         'valueText': self._getSimplifiedValue(param),
+         'isEnabled': True,
+         'tooltip': self._tooltipType,
+         'isOpen': isOpen,
+         'buffIconSrc': params_helper.getBuffIcon(param, comparator)})
+        return data
+
+    def _makeSeparator(self):
+        return {'state': HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SEPARATOR,
+         'isEnabled': False,
+         'tooltip': ''}
+
+
+class _PreviewVehParamsGenerator(_VehParamsGenerator):
 
     def __init__(self):
+        super(_PreviewVehParamsGenerator, self).__init__(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_PARAMETERS)
+
+    def _getSimplifiedValue(self, param):
+        return formatters.simlifiedDeltaParameter(param)
+
+    def _getBaseFormatters(self):
+        return formatters.BASE_FORMATTERS
+
+    def _makeSimpleParamBottomVO(self, param, vehIntCD=None):
+        vo = super(_PreviewVehParamsGenerator, self)._makeSimpleParamBottomVO(param, vehIntCD)
+        delta = param.state[1]
+        value = param.value
+        if delta > 0:
+            value -= delta
+        vo['indicatorVO'].update({'value': value,
+         'delta': delta})
+        return vo
+
+
+class _VehParamsDataProvider(SortableDAAPIDataProvider):
+
+    def __init__(self, paramsGenerator):
         super(_VehParamsDataProvider, self).__init__()
         self._list = []
         self._useAnim = False
         self._cache = None
         self._expandedGroups = {}
         self._isSimplified = True
-        self._tooltipType = TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS
+        self._paramsGenerator = paramsGenerator
         return
 
     def setGroupsToShow(self, groups):
@@ -137,11 +215,11 @@ class _VehParamsDataProvider(SortableDAAPIDataProvider):
         self._dispose()
 
     def setUseAnim(self, useAnim):
-        self._useAnim = useAnim
+        self._paramsGenerator.useAnim = useAnim
 
     @property
     def useAnim(self):
-        return self._useAnim
+        return self._paramsGenerator.useAnim
 
     def rebuildList(self, cache):
         self.buildList(cache)
@@ -172,27 +250,8 @@ class _VehParamsDataProvider(SortableDAAPIDataProvider):
     def _getSimplifiedValue(self, param):
         return formatters.colorizedFormatParameter(param, formatters.NO_BONUS_SIMPLIFIED_FORMATTERS)
 
-    def _getBaseFormatters(self):
-        return formatters.NO_BONUS_BASE_FORMATTERS
-
     def _buildSimplifiedList(self):
-        comparator = self._getComparator()
-        stockParams = params_helper.getParameters(g_itemsCache.items.getStockVehicle(self._cache.item.intCD))
-        for groupIdx, groupName in enumerate(RELATIVE_PARAMS):
-            hasParams = False
-            relativeParam = comparator.getExtendedData(groupName)
-            self._list.extend([self._makeSimpleParamHeaderVO(relativeParam, self._expandedGroups[groupName]), self._makeSimpleParamBottomVO(relativeParam, stockParams[groupName])])
-            if self._expandedGroups[groupName]:
-                for paramName in PARAMS_GROUPS[groupName]:
-                    param = comparator.getExtendedData(paramName)
-                    if param.value is not None:
-                        self._list.append(self.__makeAdvancedParamVO(param))
-                        hasParams = True
-
-            if hasParams and groupIdx < len(RELATIVE_PARAMS) - 1:
-                self._list.append(self.__makeSeparator())
-
-        return
+        self._list = self._paramsGenerator.getFormattedParams(self._getComparator(), self._expandedGroups, self._cache.item.intCD)
 
     def __buildBaseList(self):
         parameters = params_helper.getParameters(self._cache.item)
@@ -206,69 +265,11 @@ class _VehParamsDataProvider(SortableDAAPIDataProvider):
 
         return
 
-    def _makeSimpleParamHeaderVO(self, param, isOpen):
-        return {'state': HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP,
-         'titleText': formatters.formatVehicleParamName(param.name),
-         'valueText': self._getSimplifiedValue(param),
-         'paramID': param.name,
-         'isEnabled': True,
-         'tooltip': self._tooltipType,
-         'isOpen': isOpen,
-         'showDecreaseArrow': self._showDecreaseArrow(param)}
-
-    def _showDecreaseArrow(self, param):
-        return param.state[0] == PARAM_STATE.WORSE
-
-    def _makeSimpleParamBottomVO(self, param, stockValue):
-        return {'state': HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM,
-         'paramID': param.name,
-         'isEnabled': True,
-         'tooltip': self._tooltipType,
-         'indicatorVO': {'value': param.value,
-                         'maxValue': MAX_RELATIVE_VALUE,
-                         'markerValue': stockValue,
-                         'minValue': 0,
-                         'useAnim': self._useAnim}}
-
-    def __makeAdvancedParamVO(self, param):
-        return {'state': HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED,
-         'titleText': formatters.formatVehicleParamName(param.name, False),
-         'valueText': formatters.colorizedFormatParameter(param, self._getBaseFormatters()),
-         'iconSource': formatters.getParameterIconPath(param.name),
-         'paramID': param.name,
-         'isEnabled': False,
-         'tooltip': self._tooltipType}
-
-    def __makeSeparator(self):
-        return {'state': HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SEPARATOR,
-         'isEnabled': False,
-         'tooltip': ''}
-
 
 class _VehPreviewParamsDataProvider(_VehParamsDataProvider):
 
     def __init__(self):
-        super(_VehPreviewParamsDataProvider, self).__init__()
-        self._tooltipType = TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_PARAMETERS
+        super(_VehPreviewParamsDataProvider, self).__init__(_PreviewVehParamsGenerator())
 
     def _getComparator(self):
         return params_helper.vehiclesComparator(self._cache.item, self._cache.defaultItem)
-
-    def _getSimplifiedValue(self, param):
-        return formatters.simlifiedDeltaParameter(param)
-
-    def _getBaseFormatters(self):
-        return formatters.BASE_FORMATTERS
-
-    def _makeSimpleParamBottomVO(self, param, stockValue):
-        vo = super(_VehPreviewParamsDataProvider, self)._makeSimpleParamBottomVO(param, stockValue)
-        delta = param.state[1]
-        value = param.value
-        if delta > 0:
-            value -= delta
-        vo['indicatorVO'].update({'value': value,
-         'delta': delta})
-        return vo
-
-    def _showDecreaseArrow(self, param):
-        return False

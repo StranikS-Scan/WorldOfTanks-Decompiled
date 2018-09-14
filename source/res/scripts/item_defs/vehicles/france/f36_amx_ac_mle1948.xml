@@ -1143,26 +1143,92 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230>
+          <smplEnginePower>	607.9366	</smplEnginePower>
+        </Maybach_HL_230>
+        <Maybach_HL_230P45>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Maybach_HL_230P45>
+        <Maybach_HL_295>
+          <smplEnginePower>	898.689	</smplEnginePower>
+        </Maybach_HL_295>
+      </engines>
+      <chassis>
+        <Chassis_AMX_AC_Mle1948>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_AC_Mle1948>
+        <Chassis_AMX_AC_Mle1948_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_AC_Mle1948_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_AC_Mle1948>
-        <alpha>	0.12075	</alpha>
-      </Chassis_AMX_AC_Mle1948>
-      <Chassis_AMX_AC_Mle1948_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_AMX_AC_Mle1948_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_230>
-        <bravo>	151.9842	</bravo>
-      </Maybach_HL_230>
-      <Maybach_HL_230P45>
-        <bravo>	198.2402	</bravo>
-      </Maybach_HL_230P45>
-      <Maybach_HL_295>
-        <bravo>	224.6722	</bravo>
-      </Maybach_HL_295>
-    </engines>
     <armour>	1.113870608	</armour>
   </clientAdjustmentFactors>
   <effects>

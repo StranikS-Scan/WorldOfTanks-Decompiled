@@ -84,13 +84,13 @@ class InboundSubscriptionsBatch(object):
                 if contact.isCurrentPlayer():
                     continue
                 itemType = contact.getItemType()
-                if itemType == XMPP_ITEM_TYPE.ROSTER_ITEM:
+                if itemType in XMPP_ITEM_TYPE.ROSTER_ITEMS:
                     isProcessed = self._approve(jid, contact)
                 elif ignoreSubRq:
                     isProcessed = self._cancel(jid, contact)
-                elif itemType in XMPP_ITEM_TYPE.BLOCKING_LIST:
+                elif itemType in XMPP_ITEM_TYPE.PERSISTENT_BLOCKING_LIST:
                     isProcessed = self._cancel(jid, contact)
-                elif itemType == XMPP_ITEM_TYPE.SUB_PENDING:
+                elif itemType in XMPP_ITEM_TYPE.SUB_PENDING_ITEMS:
                     isProcessed = self._ignore(contact)
                 else:
                     contact.update(item=SubPendingItem(jid))
@@ -159,12 +159,12 @@ class SubscriptionsRestrictions(object):
         tags = contact.getTags()
         if USER_TAG.SUB_APPROVED in tags:
             return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_APPROVED, contact.getFullName()))
-        if contact.getItemType() == XMPP_ITEM_TYPE.ROSTER_ITEM:
+        if contact.getItemType() in XMPP_ITEM_TYPE.ROSTER_ITEMS:
             if USER_TAG.SUB_FROM in contact.getTags():
                 return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_APPROVED, contact.getFullName()))
             else:
                 return (True, None)
-        if contact.getItemType() == XMPP_ITEM_TYPE.SUB_PENDING:
+        if contact.getItemType() in XMPP_ITEM_TYPE.SUB_PENDING_ITEMS:
             if USER_TAG.SUB_IN_PROCESS in tags:
                 return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_RQ_PROCESS, contact.getFullName()))
             if USER_TAG.SUB_CANCELED in tags:
@@ -189,7 +189,7 @@ class SubscriptionsRestrictions(object):
         elif USER_TAG.SUB_CANCELED in tags:
             return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_CANCELED, contact.getFullName()))
         else:
-            return (False, ClientContactError(CONTACT_ERROR_ID.ROSTER_ITEM_EXISTS, contact.getFullName())) if contact.getItemType() == XMPP_ITEM_TYPE.ROSTER_ITEM else (True, None)
+            return (False, ClientContactError(CONTACT_ERROR_ID.ROSTER_ITEM_EXISTS, contact.getFullName())) if contact.getItemType() in XMPP_ITEM_TYPE.ROSTER_ITEMS else (True, None)
 
     def _getRosterCount(self):
-        return self.usersStorage.getCount(ItemsFindCriteria((XMPP_ITEM_TYPE.ROSTER_ITEM,)))
+        return self.usersStorage.getCount(ItemsFindCriteria(XMPP_ITEM_TYPE.ROSTER_ITEMS))

@@ -7,7 +7,6 @@ class INTERFACE_STATES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     SHOW_ALL = 0
     HIDE_SERVER_STATS = 1

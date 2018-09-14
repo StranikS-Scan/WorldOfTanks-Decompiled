@@ -852,28 +852,94 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAF>
+          <smplEnginePower>	465.2037	</smplEnginePower>
+        </Ford_GAF>
+        <Ford_GAFM2>
+          <smplEnginePower>	539.2134	</smplEnginePower>
+        </Ford_GAFM2>
+      </engines>
+      <chassis>
+        <Chassis_T95>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T95>
+        <Chassis_T95_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T95_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_155mm_AT_Gun_T7>
         <delta>	1.03325415	</delta>
       </_155mm_AT_Gun_T7>
     </guns>
-    <chassis>
-      <Chassis_T95>
-        <alpha>	0.13685	</alpha>
-      </Chassis_T95>
-      <Chassis_T95_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_T95_2>
-    </chassis>
-    <engines>
-      <Ford_GAF>
-        <bravo>	116.3009	</bravo>
-      </Ford_GAF>
-      <Ford_GAFM2>
-        <bravo>	134.8033	</bravo>
-      </Ford_GAFM2>
-    </engines>
     <armour>	1.082695427	</armour>
   </clientAdjustmentFactors>
   <effects>

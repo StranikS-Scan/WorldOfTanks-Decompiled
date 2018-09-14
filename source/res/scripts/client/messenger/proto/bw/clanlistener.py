@@ -119,7 +119,7 @@ class ClanListener(object):
                 user = SharedUserEntity(dbID, name=name, clanInfo=ClanInfo(0, clanAbbrev, roleFlags), gos=gos, tags={USER_TAG.CLAN_MEMBER})
             members.append(user)
 
-        self.usersStorage._setClanMembersList(members)
+        self.usersStorage.setClanMembersList(members)
         if self.__initSteps & _INIT_STEPS.LIST_INITED != 0:
             g_messengerEvents.users.onClanMembersListChanged()
         return

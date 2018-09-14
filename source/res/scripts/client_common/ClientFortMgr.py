@@ -154,11 +154,16 @@ class ClientFortMgr(object):
     def changeVacation(self, timeVacationStart, timeVacationDuration):
         return self.__callFortMethod(FORT_CLIENT_METHOD.CHANGE_VACATION, timeVacationStart, timeVacationDuration, 0)
 
-    def setDevMode(self, isOn=True, fortBattleMgrDevMode=False):
-        return self.__callFortMethod(FORT_CLIENT_METHOD.SET_DEV_MODE, int(isOn), int(fortBattleMgrDevMode), 0)
+    def setDevMode(self, isOn=True, fortBattleMgrDevMode=False, applySettingsDevPatch=False):
+        return self.__callFortMethod(FORT_CLIENT_METHOD.SET_DEV_MODE, int(isOn), int(fortBattleMgrDevMode), int(applySettingsDevPatch))
 
     def addTimeShift(self, timeShiftSeconds=3600):
         return self.__callFortMethod(FORT_CLIENT_METHOD.ADD_TIME_SHIFT, timeShiftSeconds, 0, 0)
+
+    def addTimeShiftToNearestBattle(self, isAttacker, timeShiftMinutes=15):
+        battles = self._fort.attacks if isAttacker else self._fort.defences
+        minStartTime = min((key[0] for key in battles.iterkeys()))
+        return self.addTimeShift(minStartTime - time.time() - timeShiftMinutes * 60)
 
     def keepalive(self):
         return self.__callFortMethod(FORT_CLIENT_METHOD.KEEPALIVE, 0, 0, 0)

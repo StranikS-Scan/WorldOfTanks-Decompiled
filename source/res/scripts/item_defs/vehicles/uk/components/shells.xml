@@ -35,51 +35,6 @@
       <devices>	20	</devices>
     </damage>
   </_15mm_AP_W_Mk1>
-  <_37mm_Common_Shell>
-    <id>	129	</id>
-    <userString>	#gb_vehicles:_7.7mm_AP	</userString>
-    <icon>	ap	</icon>
-    <price>	1	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	7.7	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	autoMarkI	</effects>
-    <damage>
-      <armor>	30	</armor>
-      <devices>	1	</devices>
-    </damage>
-  </_37mm_Common_Shell>
-  <_37mm_Incendiary_Shell>
-    <id>	130	</id>
-    <userString>	#gb_vehicles:_7.7mm_INC	</userString>
-    <icon>	ap	</icon>
-    <price>	1	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	7.7	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallMarkI	</effects>
-    <damage>
-      <armor>	500	</armor>
-      <devices>	500	</devices>
-    </damage>
-  </_37mm_Incendiary_Shell>
-  <_37mm_Common_Shell_Auto>
-    <id>	131	</id>
-    <userString>	#gb_vehicles:_7.7mm_AP	</userString>
-    <icon>	ap	</icon>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	7.7	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	autoMarkI	</effects>
-    <damage>
-      <armor>	30	</armor>
-      <devices>	1	</devices>
-    </damage>
-  </_37mm_Common_Shell_Auto>
   <_37mm_AP_M74>
     <id>	18	</id>
     <userString>	#gb_vehicles:_37mm_AP_M74	</userString>
@@ -475,50 +430,6 @@
       <devices>	76	</devices>
     </damage>
   </_6pdr_HE_Common>
-  <_6pdr_AP_Steel_HSCT_A>
-    <id>	123	</id>
-    <userString>	#gb_vehicles:_6pdr_AP_Steel_HSCT_A	</userString>
-    <icon>	ap	</icon>
-    <price>	35	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	57	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumMarkI	</effects>
-    <damage>
-      <armor>	70	</armor>
-      <devices>	76	</devices>
-    </damage>
-  </_6pdr_AP_Steel_HSCT_A>
-  <_6pdr_AP_Steel_NF_A>
-    <id>	124	</id>
-    <userString>	#gb_vehicles:_6pdr_AP_Steel_NF_A	</userString>
-    <icon>	ap	</icon>
-    <price>	3	  <gold></gold>
-    </price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	57	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumMarkI	</effects>
-    <damage>
-      <armor>	70	</armor>
-      <devices>	76	</devices>
-    </damage>
-  </_6pdr_AP_Steel_NF_A>
-  <_6pdr_HE_Common_A>
-    <id>	125	</id>
-    <userString>	#gb_vehicles:_6pdr_HE_Common_A	</userString>
-    <icon>	he	</icon>
-    <price>	22	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	57	</caliber>
-    <explosionRadius>	0.66	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumMarkIHE	</effects>
-    <damage>
-      <armor>	95	</armor>
-      <devices>	76	</devices>
-    </damage>
-  </_6pdr_HE_Common_A>
   <_6pdr_HE_MK_10T>
     <id>	14	</id>
     <userString>	#gb_vehicles:_6pdr_HE_MK_10T	</userString>

@@ -13,15 +13,17 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE
 from gui.battle_control.battle_ctx import BattleContext
+from gui.battle_control.battle_cache import BattleClientCache
 from gui.battle_control import arena_visitor
 from gui.battle_control import controllers
 from gui.battle_control.requests import AvatarRequestsController
 from gui.battle_control.view_components import createComponentsBridge
+from gui.battle_control.hit_data import HitData
 BattleExitResult = namedtuple('BattleExitResult', 'isDeserter playerInfo')
 
 class BattleSessionProvider(object):
     """This class is backend of GUI for one battle session."""
-    __slots__ = ('__ctx', '__sharedRepo', '__dynamicRepo', '__requestsCtrl', '__arenaDP', '__arenaListeners', '__viewComponentsBridge', '__weakref__', '__arenaVisitor', '__invitations', '__isReplayPlaying')
+    __slots__ = ('__ctx', '__sharedRepo', '__dynamicRepo', '__requestsCtrl', '__arenaDP', '__arenaListeners', '__viewComponentsBridge', '__weakref__', '__arenaVisitor', '__invitations', '__isReplayPlaying', '__battleCache')
 
     def __init__(self):
         super(BattleSessionProvider, self).__init__()
@@ -35,6 +37,7 @@ class BattleSessionProvider(object):
         self.__viewComponentsBridge = None
         self.__invitations = None
         self.__isReplayPlaying = False
+        self.__battleCache = BattleClientCache()
         return
 
     @property
@@ -67,6 +70,16 @@ class BattleSessionProvider(object):
         """
         return self.__invitations
 
+    @property
+    def battleCache(self):
+        """
+        Returns reference to the battle cache that is stored on the server.
+        Note that the cache is created once per each battle and can be used to restore data
+        after re-login.
+        :return: instance of derived class BattleClientCache
+        """
+        return self.__battleCache
+
     def getCtx(self):
         """
         Gets instance of ammo controller.
@@ -98,10 +111,7 @@ class BattleSessionProvider(object):
         ctrl = self.__dynamicRepo.respawn
         if ctrl is not None:
             ctrl.spawnVehicle(vID)
-        if self.__arenaVisitor.gui.isEventBattle():
-            g_tankActiveCamouflage[vDesc.type.compactDescr] = self.__arenaDP.getNumberOfTeam()
-        else:
-            g_tankActiveCamouflage[vDesc.type.compactDescr] = self.__arenaVisitor.type.getVehicleCamouflageKind()
+        g_tankActiveCamouflage[vDesc.type.compactDescr] = self.__arenaVisitor.type.getVehicleCamouflageKind()
         return
 
     def getArenaDP(self):
@@ -177,7 +187,7 @@ class BattleSessionProvider(object):
             vInfo = self.__arenaDP.getVehicleInfo()
             vStats = self.__arenaDP.getVehicleStats()
             if self.__arenaVisitor.gui.isEventBattle():
-                isDeserter = True
+                isDeserter = False
             elif self.__arenaVisitor.hasRespawns():
                 isDeserter = not vStats.stopRespawn
             else:
@@ -203,7 +213,8 @@ class BattleSessionProvider(object):
         self.__arenaVisitor = arena_visitor.createByAvatar(avatar=setup.avatar)
         setup.sessionProvider = weakref.proxy(self)
         self.__arenaDP = ArenaDataProvider(setup)
-        self.__ctx.start(self.__arenaDP, setup.sessionProvider)
+        self.__ctx.start(self.__arenaDP)
+        self.__battleCache.load()
         self.__arenaListeners = ListenersCollection()
         self.__arenaListeners.start(setup)
         self.__viewComponentsBridge = createComponentsBridge()
@@ -236,6 +247,7 @@ class BattleSessionProvider(object):
         self.__dynamicRepo.destroy()
         self.__arenaVisitor.clear()
         self.__arenaVisitor = arena_visitor.createSkeleton()
+        self.__battleCache.clear()
         self.__ctx.stop()
         return
 
@@ -318,28 +330,26 @@ class BattleSessionProvider(object):
             ctrl.update(stats)
         return
 
-    def addHitDirection(self, hitDirYaw, isDamage):
-        ctrl = self.__sharedRepo.hitDirection
-        if ctrl is not None:
-            ctrl.addHit(hitDirYaw, isDamage)
+    def addHitDirection(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive):
+        hitDirectionCtrl = self.__sharedRepo.hitDirection
+        if hitDirectionCtrl is not None:
+            atackerVehInfo = self.__arenaDP.getVehicleInfo(attackerID)
+            atackerVehType = atackerVehInfo.vehicleType
+            isAlly = self.__arenaDP.isAllyTeam(atackerVehInfo.team)
+            playerVehType = self.__arenaDP.getVehicleInfo().vehicleType
+            hitDirectionCtrl.addHit(HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive))
         return
 
     def startVehicleVisual(self, vProxy, isImmediate=False):
         ctrl = self.__sharedRepo.feedback
         if ctrl is not None:
             ctrl.startVehicleVisual(vProxy, isImmediate)
-        ctrl = self.__dynamicRepo.debug
-        if ctrl is not None:
-            ctrl.startVehicleVisual(vProxy.id)
         return
 
     def stopVehicleVisual(self, vehicleID, isPlayerVehicle):
         ctrl = self.__sharedRepo.feedback
         if ctrl is not None:
             ctrl.stopVehicleVisual(vehicleID, isPlayerVehicle)
-        ctrl = self.__dynamicRepo.debug
-        if ctrl is not None:
-            ctrl.stopVehicleVisual(vehicleID)
         return
 
     def handleShortcutChatCommand(self, key):

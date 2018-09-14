@@ -954,23 +954,89 @@
   <radios>
     <ER_54>	shared	</ER_54>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Renault_S4B>
+          <smplEnginePower>	78.23881	</smplEnginePower>
+        </Renault_S4B>
+        <Renault_V4>
+          <smplEnginePower>	86.69705	</smplEnginePower>
+        </Renault_V4>
+      </engines>
+      <chassis>
+        <Chassis_RenaultR35>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RenaultR35>
+        <Chassis_RenaultR35_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RenaultR35_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_RenaultR35>
-        <alpha>	0.1127	</alpha>
-      </Chassis_RenaultR35>
-      <Chassis_RenaultR35_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_RenaultR35_2>
-    </chassis>
-    <engines>
-      <Renault_S4B>
-        <bravo>	19.5597	</bravo>
-      </Renault_S4B>
-      <Renault_V4>
-        <bravo>	21.67426	</bravo>
-      </Renault_V4>
-    </engines>
     <armour>	0.913338886	</armour>
   </clientAdjustmentFactors>
   <effects>

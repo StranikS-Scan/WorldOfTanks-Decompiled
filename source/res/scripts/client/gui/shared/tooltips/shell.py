@@ -44,7 +44,9 @@ class ShellBlockToolTipData(BlocksTooltipData):
         if len(priceBlock) > 0:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, padding=blockPadding, gap=textGap))
-        items.append(formatters.packBuildUpBlockData(CommonStatsBlockConstructor(shell, paramsConfig, 80, leftPadding, rightPadding).construct(), padding=blockPadding, gap=textGap))
+        statsBlock = CommonStatsBlockConstructor(shell, paramsConfig, 80, leftPadding, rightPadding).construct()
+        if len(statsBlock) > 0:
+            items.append(formatters.packBuildUpBlockData(statsBlock, padding=blockPadding, gap=textGap))
         statusBlock = StatusBlockConstructor(shell, statusConfig, leftPadding, rightPadding).construct()
         if len(statusBlock) > 0:
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=lrPaddings))
@@ -96,13 +98,20 @@ class PriceBlockConstructor(ShellTooltipBlockConstructor):
             need = ZERO_MONEY
             if buyPrice:
                 money = g_itemsCache.items.stats.money
-                price = shell.altPrice
+                price = shell.altPrice or shell.buyPrice
                 need = price - money
                 need = need.toNonNegative()
                 defPrice = shell.defaultAltPrice or shell.defaultPrice
-                block.append(makePriceBlock(price.credits, CURRENCY_SETTINGS.BUY_CREDITS_PRICE, need.credits if need.credits > 0 else None, defPrice.credits if defPrice.credits > 0 else None, percent=shell.actionPrc, valueWidth=self._valueWidth))
-                if price.gold > 0:
+                addCreditPrice = price.credits > 0
+                if price.isAllSet() and not g_itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits:
+                    addCreditPrice = False
+                addGoldPrice = price.gold > 0
+                addDelimeter = addCreditPrice and addGoldPrice
+                if addCreditPrice:
+                    block.append(makePriceBlock(price.credits, CURRENCY_SETTINGS.BUY_CREDITS_PRICE, need.credits if need.credits > 0 else None, defPrice.credits if defPrice.credits > 0 else None, percent=shell.actionPrc, valueWidth=self._valueWidth))
+                if addDelimeter:
                     block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=81 + self.leftPadding)))
+                if addGoldPrice:
                     block.append(makePriceBlock(price.gold, CURRENCY_SETTINGS.BUY_GOLD_PRICE, need.gold if need.gold > 0 else None, defPrice.gold if defPrice.gold > 0 else None, percent=shell.actionPrc, valueWidth=self._valueWidth))
             if sellPrice:
                 block.append(makePriceBlock(shell.sellPrice.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=shell.defaultSellPrice.credits, percent=shell.sellActionPrc, valueWidth=self._valueWidth))
@@ -122,39 +131,40 @@ class CommonStatsBlockConstructor(ShellTooltipBlockConstructor):
 
     def construct(self):
         block = []
-        shell = self.shell
-        vehicle = self.configuration.vehicle
-        vDescr = vehicle.descriptor if vehicle is not None else None
-        params = params_helper.getParameters(shell, vDescr)
-        piercingPower = params.pop('piercingPower')
-        piercingPowerTable = params.pop('piercingPowerTable')
-        maxShotDistance = params.pop('maxShotDistance') if 'maxShotDistance' in params else None
-        formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, params)
-        block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=formatters.packPadding(bottom=8)))
-        for paramName, paramValue in formattedParameters:
-            block.append(self.__packParameterBlock(_ms('#menu:moduleInfo/params/' + paramName), paramValue, params_formatters.measureUnitsForParameter(paramName)))
+        if self.configuration.params:
+            shell = self.shell
+            vehicle = self.configuration.vehicle
+            vDescr = vehicle.descriptor if vehicle is not None else None
+            params = params_helper.getParameters(shell, vDescr)
+            piercingPower = params.pop('piercingPower')
+            piercingPowerTable = params.pop('piercingPowerTable')
+            maxShotDistance = params.pop('maxShotDistance') if 'maxShotDistance' in params else None
+            formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, params)
+            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=formatters.packPadding(bottom=8)))
+            for paramName, paramValue in formattedParameters:
+                block.append(self.__packParameterBlock(_ms('#menu:moduleInfo/params/' + paramName), paramValue, params_formatters.measureUnitsForParameter(paramName)))
 
-        piercingUnits = _ms(params_formatters.measureUnitsForParameter('piercingPower'))
-        if isinstance(piercingPowerTable, list):
-            block.append(formatters.packTitleDescBlock(title=text_styles.standard(_ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCEHEADER)), padding=formatters.packPadding(bottom=8, top=8)))
-            for distance, value in piercingPowerTable:
-                if maxShotDistance is not None and distance == _AUTOCANNON_SHOT_DISTANCE:
-                    piercingUnits += '*'
-                block.append(self.__packParameterBlock(_ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCE, dist=distance), params_formatters.baseFormatParameter('piercingPower', value), piercingUnits))
+            piercingUnits = _ms(params_formatters.measureUnitsForParameter('piercingPower'))
+            if isinstance(piercingPowerTable, list):
+                block.append(formatters.packTitleDescBlock(title=text_styles.standard(_ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCEHEADER)), padding=formatters.packPadding(bottom=8, top=8)))
+                for distance, value in piercingPowerTable:
+                    if maxShotDistance is not None and distance == _AUTOCANNON_SHOT_DISTANCE:
+                        piercingUnits += '*'
+                    block.append(self.__packParameterBlock(_ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCE, dist=distance), params_formatters.baseFormatParameter('piercingPower', value), piercingUnits))
 
-            if maxShotDistance is not None:
-                block.append(formatters.packTitleDescBlock(title=text_styles.standard(_ms(MENU.MODULEINFO_PARAMS_MAXSHOTDISTANCE_FOOTNOTE)), padding=formatters.packPadding(top=8)))
-        else:
-            if piercingPowerTable != NO_DATA:
-                piercingUnits += '*'
-            block.append(self.__packParameterBlock(_ms(MENU.MODULEINFO_PARAMS_PIERCINGPOWER), params_formatters.baseFormatParameter('piercingPower', piercingPower), piercingUnits))
-            if piercingPowerTable != NO_DATA:
-                title = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE)
-                distanceNote = ''
                 if maxShotDistance is not None:
-                    distanceNote = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE)
-                title = title % distanceNote
-                block.append(formatters.packTitleDescBlock(title=text_styles.standard(title), padding=formatters.packPadding(top=8)))
+                    block.append(formatters.packTitleDescBlock(title=text_styles.standard(_ms(MENU.MODULEINFO_PARAMS_MAXSHOTDISTANCE_FOOTNOTE)), padding=formatters.packPadding(top=8)))
+            else:
+                if piercingPowerTable != NO_DATA:
+                    piercingUnits += '*'
+                block.append(self.__packParameterBlock(_ms(MENU.MODULEINFO_PARAMS_PIERCINGPOWER), params_formatters.baseFormatParameter('piercingPower', piercingPower), piercingUnits))
+                if piercingPowerTable != NO_DATA:
+                    title = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE)
+                    distanceNote = ''
+                    if maxShotDistance is not None:
+                        distanceNote = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE)
+                    title = title % distanceNote
+                    block.append(formatters.packTitleDescBlock(title=text_styles.standard(title), padding=formatters.packPadding(top=8)))
         return block
 
     def __packParameterBlock(self, name, value, measureUnits):

@@ -8,16 +8,16 @@ from gui.battle_control.controllers.flag_nots_ctrl import IFlagNotificationView
 
 class FlagNotification(FlagNotificationMeta, IFlagNotificationView):
 
-    def showFlagDelivered(self, flagType):
+    def showFlagDelivered(self):
         self.as_setStateS(FLAG_NOTIFICATION_CONSTS.STATE_FLAG_DELIVERED)
 
-    def showFlagDropped(self, flagType):
+    def showFlagDropped(self):
         self.as_setStateS(FLAG_NOTIFICATION_CONSTS.STATE_FLAG_DROPPED)
 
-    def showFlagAbsorbed(self, flagType):
+    def showFlagAbsorbed(self):
         self.as_setStateS(FLAG_NOTIFICATION_CONSTS.STATE_FLAG_ABSORBED)
 
-    def showFlagCaptured(self, flagType):
+    def showFlagCaptured(self):
         self.as_setStateS(FLAG_NOTIFICATION_CONSTS.STATE_FLAG_CAPTURED)
 
     def _populate(self):

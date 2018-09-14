@@ -434,17 +434,52 @@
   <radios>
     <FuG12A>	shared	</FuG12A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Porsche_16_Cyl_Y>
+          <smplEnginePower>	1057.281	</smplEnginePower>
+        </Porsche_16_Cyl_Y>
+      </engines>
+      <chassis>
+        <Chassis_G115_Typ_205_4_Jun>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G115_Typ_205_4_Jun>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G115_Typ_205_4_Jun>
-        <alpha>	0.07245	</alpha>
-      </Chassis_G115_Typ_205_4_Jun>
-    </chassis>
-    <engines>
-      <Porsche_16_Cyl_Y>
-        <bravo>	264.3203	</bravo>
-      </Porsche_16_Cyl_Y>
-    </engines>
     <armour>	1.115460878	</armour>
   </clientAdjustmentFactors>
   <effects>

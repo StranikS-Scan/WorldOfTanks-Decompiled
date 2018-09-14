@@ -49,6 +49,10 @@ def middleTitle(text):
     return _formatText('middleTitle', text)
 
 
+def middleBonusTitle(text):
+    return _formatText('middleBonusTitle', text)
+
+
 def highTitle(text):
     return _formatText('highTitle', text)
 
@@ -129,6 +133,14 @@ def counter(text):
     return _formatText('counterText', text)
 
 
+def counterLabelText(text):
+    return _formatText('counterLabelText', text)
+
+
+def counterLabelText(text):
+    return _formatText('counterLabelText', text)
+
+
 def titleFont(text):
     return _formatText('titleFont', text)
 
@@ -156,6 +168,14 @@ def vehicleStatusInfoText(text):
 
 def vehicleStatusCriticalText(text):
     return _formatText('vehicleStatusCriticalText', text)
+
+
+def vehicleName(text):
+    return _formatText('vehicleName', text)
+
+
+def premiumVehicleName(text):
+    return _formatText('premiumVehicleName', text)
 
 
 def getRawStyles(names):

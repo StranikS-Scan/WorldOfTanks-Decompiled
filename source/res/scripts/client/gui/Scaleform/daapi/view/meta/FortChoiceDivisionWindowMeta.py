@@ -8,26 +8,16 @@ class FortChoiceDivisionWindowMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def selectedDivision(self, divisionID):
-        """
-        :param divisionID:
-        :return :
-        """
         self._printOverrideError('selectedDivision')
 
     def changedDivision(self, divisionID):
-        """
-        :param divisionID:
-        :return :
-        """
         self._printOverrideError('changedDivision')
 
     def as_setDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by FortChoiceDivisionVO (AS)
         """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

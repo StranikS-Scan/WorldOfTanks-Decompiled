@@ -14,7 +14,7 @@ from post_processing import g_postProcessing
 from ConnectionManager import connectionManager
 import GUI
 from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler, GUI_SETTINGS
-from gui.Scaleform.GameLoading import GameLoading
+from gui.Scaleform.game_loading import GameLoading
 from gui.shared import personality as gui_personality
 from messenger import MessengerEntry
 import MusicControllerWWISE
@@ -180,6 +180,16 @@ def start():
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
 
+            elif sys.argv[1] == 'hangarOverride':
+                try:
+                    LOG_DEBUG(sys.argv)
+                    from tests.auto.HangarOverride import HangarOverride
+                    HangarOverride.setHangar('spaces/' + sys.argv[2])
+                except:
+                    LOG_DEBUG('Game start FAILED with:')
+                    LOG_CURRENT_EXCEPTION()
+
+                gui_personality.start()
             elif sys.argv[1] == 'replayTimeout':
                 try:
                     g_replayCtrl.replayTimeout = float(sys.argv[2])

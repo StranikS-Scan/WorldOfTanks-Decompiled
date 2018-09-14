@@ -335,18 +335,52 @@
   <radios>
     <Radio_FV4202>	shared	</Radio_FV4202>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB70_FV4202_105>
-        <alpha>	0.0644	</alpha>
-      </Chassis_GB70_FV4202_105>
-    </chassis>
-    <engines>
-      <Engine_FV4202>
-        <bravo>	214.0994	</bravo>
-      </Engine_FV4202>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Engine_FV4202>
+          <smplEnginePower>	856.3977	</smplEnginePower>
+        </Engine_FV4202>
+      </engines>
+      <chassis>
+        <Chassis_GB70_FV4202_105>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB70_FV4202_105>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

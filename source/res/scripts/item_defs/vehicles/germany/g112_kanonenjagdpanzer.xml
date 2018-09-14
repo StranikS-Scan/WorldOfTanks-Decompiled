@@ -481,17 +481,52 @@
   <radios>
     <SEM25_1>	shared	</SEM25_1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <MB-837-Aa_A>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </MB-837-Aa_A>
+      </engines>
+      <chassis>
+        <Chassis_G112_KanonenJagdPanzer>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G112_KanonenJagdPanzer>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G112_KanonenJagdPanzer>
-        <alpha>	0.0644	</alpha>
-      </Chassis_G112_KanonenJagdPanzer>
-    </chassis>
-    <engines>
-      <MB-837-Aa_A>
-        <bravo>	132.1601	</bravo>
-      </MB-837-Aa_A>
-    </engines>
     <armour>	0.701875139	</armour>
   </clientAdjustmentFactors>
   <effects>

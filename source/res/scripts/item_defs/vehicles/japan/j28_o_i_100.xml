@@ -678,7 +678,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
         </_105mm_Cannon_Type92>
         <_105mm_Experimental_Tank_Gun>	shared	  <maxAmmo>	100	</maxAmmo>
@@ -728,7 +728,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
         </_105mm_Experimental_Tank_Gun>
         <_150mm_Howitzer_Type96>	shared	  <maxAmmo>	60	</maxAmmo>
@@ -847,23 +847,89 @@
     </_Type96_Bo>
     <_Type3_Otsu>	shared	</_Type3_Otsu>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Type98_V12_x2_1100>
+          <smplEnginePower>	1163.009	</smplEnginePower>
+        </_Type98_V12_x2_1100>
+        <_Type98_V12_x2_1200>
+          <smplEnginePower>	1268.737	</smplEnginePower>
+        </_Type98_V12_x2_1200>
+      </engines>
+      <chassis>
+        <Chassis_J28_O_I_100>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_J28_O_I_100>
+        <Chassis_J28_O_I_100_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_J28_O_I_100_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_J28_O_I_100>
-        <alpha>	0.1127	</alpha>
-      </Chassis_J28_O_I_100>
-      <Chassis_J28_O_I_100_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_J28_O_I_100_2>
-    </chassis>
-    <engines>
-      <_Type98_V12_x2_1100>
-        <bravo>	290.7523	</bravo>
-      </_Type98_V12_x2_1100>
-      <_Type98_V12_x2_1200>
-        <bravo>	317.1843	</bravo>
-      </_Type98_V12_x2_1200>
-    </engines>
     <armour>	0.957480026	</armour>
   </clientAdjustmentFactors>
   <effects>

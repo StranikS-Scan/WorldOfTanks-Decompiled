@@ -1,12 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DialogsInterface.py
-from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
-from gui.app_loader import g_appLoader
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
 from gui.shared import events, g_eventBus
 from gui.shared.utils.decorators import dialog
-from gui.shared.utils.functions import showInformationDialog, showConfirmDialog
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DisconnectMeta
 
 @dialog
@@ -16,26 +12,12 @@ def showDialog(meta, callback):
 
 @dialog
 def showI18nInfoDialog(i18nKey, callback, meta=None):
-    if g_appLoader.getSpaceID() == GUI_GLOBAL_SPACE_ID.BATTLE and not GUI_SETTINGS.useAS3Battle:
-        customMsg = None
-        if meta is not None:
-            customMsg.getMessage()
-        showInformationDialog(i18nKey, callback, customMessage=customMsg, ns='battle')
-    else:
-        showDialog(I18nInfoDialogMeta(i18nKey, meta=meta), callback)
-    return
+    showDialog(I18nInfoDialogMeta(i18nKey, meta=meta), callback)
 
 
 @dialog
 def showI18nConfirmDialog(i18nKey, callback, meta=None, focusedID=None):
-    if g_appLoader.getSpaceID() == GUI_GLOBAL_SPACE_ID.BATTLE and not GUI_SETTINGS.useAS3Battle:
-        customMsg = None
-        if meta is not None:
-            customMsg.getMessage()
-        showConfirmDialog(i18nKey, callback, customMessage=customMsg, ns='battle')
-    else:
-        showDialog(I18nConfirmDialogMeta(i18nKey, meta=meta, focusedID=focusedID), callback)
-    return
+    showDialog(I18nConfirmDialogMeta(i18nKey, meta=meta, focusedID=focusedID), callback)
 
 
 __ifDisconnectDialogShown = False

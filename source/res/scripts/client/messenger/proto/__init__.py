@@ -86,7 +86,18 @@ class ServerSettings(object):
     def getSystemChannels(self, protoType):
         return self._getSystemChannels() if protoType is PROTO_TYPE.XMPP else None
 
+    def isXmppClansEnabled(self):
+        """Are clan channels over xmpp enabled
+        :return: True if clan channels're enabled
+        :rtype: bool
+        """
+        return self._isXmppMucChannelEnabled(XMPP_MUC_CHANNEL_TYPE.CLANS)
+
     def _isXmppEnabled(self):
+        """If xmpp generally enabled
+        :return: True if <xmpp><enabled>True</enabled>... in server config
+        :rtype: bool
+        """
         xmppName = PROTO_TYPE_NAMES[PROTO_TYPE.XMPP]
         if xmppName in self.__readonly__:
             result = self.__readonly__[xmppName].isEnabled()
@@ -94,13 +105,26 @@ class ServerSettings(object):
             result = False
         return result
 
-    def _isXmppUserRoomsEnabled(self):
+    def _isXmppMucChannelEnabled(self, channelType):
+        """Is MUC channel enabled
+        :param channelType: muc channel type
+        :type channelType: XMPP_MUC_CHANNEL_TYPE
+        :return: True if channel enabled
+        :rtype: bool
+        """
         xmppName = PROTO_TYPE_NAMES[PROTO_TYPE.XMPP]
         if xmppName in self.__readonly__:
-            result = self.__readonly__[xmppName].isMucServiceAllowed(XMPP_MUC_CHANNEL_TYPE.USERS)
+            result = self.__readonly__[xmppName].isMucServiceAllowed(channelType)
         else:
             result = False
         return result
+
+    def _isXmppUserRoomsEnabled(self):
+        """Are users rooms enabled
+        :return: True if users channels're enabled
+        :rtype: bool
+        """
+        return self._isXmppMucChannelEnabled(XMPP_MUC_CHANNEL_TYPE.USERS)
 
     def _getSystemChannels(self):
         xmppName = PROTO_TYPE_NAMES[PROTO_TYPE.XMPP]

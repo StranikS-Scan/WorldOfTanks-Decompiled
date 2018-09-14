@@ -263,6 +263,7 @@ class FittingItem(GUIItem, HasIntCD):
         self.isUnlocked = False
         self.isBoughtForCredits = isBoughtForCredits
         self.rentInfo = RentalInfoProvider()
+        self.restoreInfo = None
         if proxy is not None and proxy.isSynced():
             self.defaultPrice = proxy.shop.defaults.getItemPrice(self.intCompactDescr)
             if self.defaultPrice is None:
@@ -271,13 +272,13 @@ class FittingItem(GUIItem, HasIntCD):
             if self._buyPrice is None:
                 self._buyPrice = ZERO_MONEY
             self.defaultSellPrice = Money(*BigWorld.player().shop.getSellPrice(self.defaultPrice, proxy.shop.defaults.sellPriceModifiers(intCompactDescr), self.itemTypeID))
-            self.sellPrice = Money(*BigWorld.player().shop.getSellPrice(self.buyPrice, proxy.shop.sellPriceModifiers(intCompactDescr), self.itemTypeID))
+            self.sellPrice = Money(*BigWorld.player().shop.getSellPrice(self._buyPrice, proxy.shop.sellPriceModifiers(intCompactDescr), self.itemTypeID))
             self.inventoryCount = proxy.inventory.getItems(self.itemTypeID, self.intCompactDescr)
             if self.inventoryCount is None:
                 self.inventoryCount = 0
             self.isUnlocked = self.intCD in proxy.stats.unlocks
             self.isInitiallyUnlocked = self.intCD in proxy.stats.initialUnlocks
-            self.altPrice = self._getAltPrice(self.buyPrice, proxy.shop)
+            self.altPrice = self._getAltPrice(self._buyPrice, proxy.shop)
             self.defaultAltPrice = self._getAltPrice(self.defaultPrice, proxy.shop.defaults)
             self.sellActionPrc = -1 * getActionPrc(self.sellPrice, self.defaultSellPrice)
         return
@@ -288,12 +289,6 @@ class FittingItem(GUIItem, HasIntCD):
     @property
     def buyPrice(self):
         return self._buyPrice
-
-    @property
-    def rentOrBuyPrice(self):
-        price = self.altPrice or self.buyPrice
-        minRentPricePackage = self.getRentPackage()
-        return minRentPricePackage['rentPrice'] if minRentPricePackage else price
 
     @property
     def actionPrc(self):
@@ -437,19 +432,54 @@ class FittingItem(GUIItem, HasIntCD):
     def mayRent(self, money):
         return (False, '')
 
-    def mayRentOrBuy(self, money):
-        return self.mayPurchase(money)
+    def mayRestore(self, money):
+        return (False, '')
+
+    def mayRestoreWithExchange(self, money, exchangeRate):
+        return False
+
+    def mayObtainForMoney(self, money):
+        """
+        # Check if possible to buy or to restore or to rent item
+        @param money: <Money>
+        @return: <bool>
+        """
+        mayRent, rentReason = self.mayRent(money)
+        if self.isRestoreAvailable():
+            mayPurchase, reason = self.mayRestore(money)
+        else:
+            mayPurchase, reason = self.mayPurchase(money)
+        if mayRent or mayPurchase:
+            return (True, '')
+        elif self.isRentable and not mayRent:
+            return (mayRent, rentReason)
+        else:
+            return (mayPurchase, reason)
 
     def mayPurchaseWithExchange(self, money, exchangeRate):
-        price = self.altPrice or self.buyPrice
-        money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate)
-        return price <= money
+        canBuy, reason = self.mayPurchase(money)
+        if canBuy:
+            return canBuy
+        elif reason == 'credits_error':
+            price = self.altPrice or self.buyPrice
+            money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate)
+            return price <= money
+        else:
+            return False
 
-    def isPurchaseEnabled(self, money, exchangeRate):
-        canBuy, buyReason = self.mayPurchase(money)
-        canRentOrBuy, rentReason = self.mayRentOrBuy(money)
-        canBuyWithExchange = self.mayPurchaseWithExchange(money, exchangeRate)
-        return canRentOrBuy or canBuy or canBuyWithExchange and buyReason == 'credits_error'
+    def mayObtainWithMoneyExchange(self, money, exchangeRate):
+        """
+        Check if possible to buy or to restore or to rent item with gold exchange
+        @param money: <Money>
+        @param exchangeRate: <int>
+        @return: <bool>
+        """
+        canRent, rentReason = self.mayRent(money)
+        if self.isRestoreAvailable():
+            mayPurchase = self.mayRestoreWithExchange(money, exchangeRate)
+        else:
+            mayPurchase = self.mayPurchaseWithExchange(money, exchangeRate)
+        return canRent or mayPurchase
 
     def mayPurchase(self, money):
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
@@ -465,7 +495,11 @@ class FittingItem(GUIItem, HasIntCD):
             if money.get(c) >= price.get(c):
                 return (True, '')
 
-        return (False, '%s_error' % Currency.BY_WEIGHT[-1])
+        shortage = money.getShortage(price)
+        if shortage:
+            currency, _ = shortage.pop()
+            return (False, '%s_error' % currency)
+        return (True, '')
 
     def getTarget(self, vehicle):
         if self.isInstalled(vehicle):
@@ -477,6 +511,12 @@ class FittingItem(GUIItem, HasIntCD):
 
     def getInstalledVehicles(self, vehs):
         return set()
+
+    def isRestorePossible(self):
+        return False
+
+    def isRestoreAvailable(self):
+        return False
 
     def _sortByType(self, other):
         pass

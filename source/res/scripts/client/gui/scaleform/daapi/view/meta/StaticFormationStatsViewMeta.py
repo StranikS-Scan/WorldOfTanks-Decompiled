@@ -8,26 +8,19 @@ class StaticFormationStatsViewMeta(BaseDAAPIComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIComponent
-    null
     """
 
     def selectSeason(self, index):
-        """
-        :param index:
-        :return :
-        """
         self._printOverrideError('selectSeason')
 
     def as_setDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by StaticFormationStatsViewVO (AS)
         """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setStatsS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by StaticFormationStatsVO (AS)
         """
         return self.flashObject.as_setStats(data) if self._isDAAPIInited() else None

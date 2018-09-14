@@ -43,12 +43,14 @@ class _PopUpParser(SectionParser):
         topic = section.readString('topic', '')
         icon = section.readString('icon', '')
         bg = section.readString('bg', '')
+        group = section.readString('group', 'info')
+        isNotify = section.readBool('isNotify', True)
         sub = _ButtonsParser()
         if sub.getTagName() in section.keys():
             buttons = sub.parse(section[sub.getTagName()])
         else:
             buttons = None
-        return gui_items.PopUpItem(body, topic, priority, buttons, icon, bg)
+        return gui_items.PopUpItem(body, topic, priority, buttons, icon, bg, group, isNotify)
 
 
 class _WindowParser(SectionParser):

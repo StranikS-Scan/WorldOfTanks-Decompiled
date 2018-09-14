@@ -1737,8 +1737,8 @@ def __updateFromAccountDossier98(compDescr):
      'blocksLayout': blocksLayout}
     getHeader(updateCtx)
     addBlock(updateCtx, 'fallout')
-    addBlock(updateCtx, 'maxFallout')
     addBlock(updateCtx, 'falloutCut')
+    addBlock(updateCtx, 'maxFallout')
     setVersion(updateCtx, 99)
     return (99, updateCtx['dossierCompDescr'])
 
@@ -1792,8 +1792,8 @@ def __updateFromAccountDossier99(compDescr):
      'maxGlobalMapAbsolute',
      'globalMapCommonCut',
      'fallout',
-     'maxFallout',
-     'falloutCut']
+     'falloutCut',
+     'maxFallout']
     updateCtx = {'dossierCompDescr': compDescr,
      'blockSizeFormat': 'H',
      'versionFormat': 'H',
@@ -1853,8 +1853,8 @@ def __updateFromAccountDossier100(compDescr):
      'maxGlobalMapAbsolute',
      'globalMapCommonCut',
      'fallout',
-     'maxFallout',
      'falloutCut',
+     'maxFallout',
      'falloutAchievements']
     updateCtx = {'dossierCompDescr': compDescr,
      'blockSizeFormat': 'H',

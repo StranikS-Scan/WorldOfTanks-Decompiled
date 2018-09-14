@@ -7,7 +7,6 @@ class QUEST_TASK_FILTERS_TYPES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     ALL = 0
     COMPLETED = 1

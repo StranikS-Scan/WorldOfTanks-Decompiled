@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/doc_loaders/messages_panel_reader.py
 from helpers import html
 import resource_helper
+_EXPECTED_STYLES = {'entityStyle': ('fontSize', 'fontFace', 'fontColor')}
 
 def _getDefaultSettings():
     return {'direction': 'up',
@@ -26,6 +27,22 @@ def _readSettings(ctx, root):
     return settings
 
 
+def _readStyles(ctx, root):
+    ctx, section = resource_helper.getSubSection(ctx, root, 'styles', safe=True)
+    styles = {}
+    if section is not None:
+        for ctx, subSection in resource_helper.getIterator(ctx, section):
+            item = resource_helper.readItem(ctx, subSection, 'style')
+            assert item.name in _EXPECTED_STYLES, 'Style section %s is not expected!' % item.name
+            expectedKeys = _EXPECTED_STYLES[item.name]
+            for key in expectedKeys:
+                assert key in item.value, 'Style option %s is expected in section %s!' % (key, item.name)
+
+            styles[item.name] = item.value
+
+    return styles
+
+
 def _readMessages(ctx, root):
     ctx, section = resource_helper.getSubSection(ctx, root, 'messages')
     messages = {}
@@ -48,6 +65,7 @@ def readXML(path):
         return _cache[path]
     ctx, root = resource_helper.getRoot(path)
     settings = _readSettings(ctx, root)
+    styles = _readStyles(ctx, root)
     messages = _readMessages(ctx, root)
-    _cache[path] = (settings, messages)
-    return (settings, messages)
+    _cache[path] = (settings, styles, messages)
+    return (settings, styles, messages)

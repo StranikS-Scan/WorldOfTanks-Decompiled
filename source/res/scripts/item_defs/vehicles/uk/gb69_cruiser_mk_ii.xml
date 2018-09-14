@@ -1140,23 +1140,89 @@
     </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Phantom>
+          <smplEnginePower>	126.8737	</smplEnginePower>
+        </Rolls_Royse_Phantom>
+        <AEC_Type_179>
+          <smplEnginePower>	158.5922	</smplEnginePower>
+        </AEC_Type_179>
+      </engines>
+      <chassis>
+        <Chassis_GB69_Cruiser_Mk_II>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB69_Cruiser_Mk_II>
+        <Chassis_GB69_Cruiser_Mk_II_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB69_Cruiser_Mk_II_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB69_Cruiser_Mk_II>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB69_Cruiser_Mk_II>
-      <Chassis_GB69_Cruiser_Mk_II_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB69_Cruiser_Mk_II_2>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Phantom>
-        <bravo>	31.71843	</bravo>
-      </Rolls_Royse_Phantom>
-      <AEC_Type_179>
-        <bravo>	39.64804	</bravo>
-      </AEC_Type_179>
-    </engines>
     <armour>	0.774630772	</armour>
   </clientAdjustmentFactors>
   <effects>

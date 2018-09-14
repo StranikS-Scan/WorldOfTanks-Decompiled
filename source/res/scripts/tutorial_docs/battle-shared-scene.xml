@@ -42,10 +42,6 @@
     </gui-item>
   </gui-items>
   <post-effects>
-    <invoke-gui-cmd>	RemoveKeyHandlersInFlash	</invoke-gui-cmd>
-    <invoke-gui-cmd>	DisableRadialMenu	</invoke-gui-cmd>
-    <invoke-gui-cmd>	DisableMinimap	</invoke-gui-cmd>
-    <invoke-gui-cmd>	DisableGUIVisibleToggle	</invoke-gui-cmd>
     <disable-camera-zoom></disable-camera-zoom>
   </post-effects>
   <runtime-effects></runtime-effects>

@@ -350,18 +350,52 @@
   <radios>
     <Development_Radio>	shared	</Development_Radio>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <NVSS_T801>
-        <alpha>	0.08855	</alpha>
-      </NVSS_T801>
-    </chassis>
-    <engines>
-      <Development_Engine>
-        <bravo>	142.733	</bravo>
-      </Development_Engine>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Development_Engine>
+          <smplEnginePower>	570.9318	</smplEnginePower>
+        </Development_Engine>
+      </engines>
+      <chassis>
+        <NVSS_T801>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </NVSS_T801>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision>	collision	</collision>
     <damagedStateGroup>	small	</damagedStateGroup>

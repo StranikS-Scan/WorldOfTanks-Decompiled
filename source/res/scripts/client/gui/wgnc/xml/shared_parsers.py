@@ -35,6 +35,3 @@ class ParsersCollection(SectionParser):
                 parser = self._parsers[name]
                 yield parser.parse(sub)
             LOG_WARNING('Tag {0} is not supported. It is ignored.'.format(name))
-
-    def _createResult(self):
-        raise NotImplementedError

@@ -8,15 +8,10 @@ class EventLogManagerMeta(BaseDAAPIModule):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIModule
-    null
     """
 
     def logEvent(self, subSystemType, eventType, uiid, arg):
-        """
-        :param subSystemType:
-        :param eventType:
-        :param uiid:
-        :param arg:
-        :return :
-        """
         self._printOverrideError('logEvent')
+
+    def as_setSystemEnabledS(self, isEnabled):
+        return self.flashObject.as_setSystemEnabled(isEnabled) if self._isDAAPIInited() else None

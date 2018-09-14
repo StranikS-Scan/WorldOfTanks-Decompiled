@@ -516,17 +516,52 @@
   <radios>
     <AN_VRC-3>	shared	</AN_VRC-3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <AOI-1490>
+          <smplEnginePower>	925.121	</smplEnginePower>
+        </AOI-1490>
+      </engines>
+      <chassis>
+        <Chassis_T110>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T110>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T110>
-        <alpha>	0.10465	</alpha>
-      </Chassis_T110>
-    </chassis>
-    <engines>
-      <AOI-1490>
-        <bravo>	231.2802	</bravo>
-      </AOI-1490>
-    </engines>
     <armour>	1.190744623	</armour>
   </clientAdjustmentFactors>
   <effects>

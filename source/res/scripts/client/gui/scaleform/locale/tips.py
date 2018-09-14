@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/TIPS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class TIPS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     PAYATTENTION = '#tips:payAttention'
     USEFULFEATURES = '#tips:usefulFeatures'
     FOLLOWTHERULES = '#tips:followTheRules'
@@ -195,9 +192,12 @@ class TIPS(object):
     TIP177_FOLLOWTHERULES_RULES_100_INFINITY_EXCEPT_7_ALL_ALL_ALL = '#tips:tip177/followTheRules/rules/100_infinity/except_7/all/all/all'
     TIP178_FOLLOWTHERULES_RULES_100_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip178/followTheRules/rules/100_infinity/all/all/all/all'
     TIP179_BECAREFUL_SECURITY_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip179/beCareful/security/0_infinity/all/all/all/all'
+    TIP180_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip180/technicalAdvice/interface/0_infinity/all/all/all/all'
+    TIP181_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip181/technicalAdvice/interface/0_infinity/all/all/all/all'
+    TIP182_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip182/technicalAdvice/interface/0_infinity/all/all/all/all'
+    TIP183_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip183/technicalAdvice/interface/0_infinity/all/all/all/all'
+    TIP184_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip184/technicalAdvice/interface/0_infinity/all/all/all/all'
     SANDBOX0 = '#tips:sandbox0'
     SANDBOX1 = '#tips:sandbox1'
-    EVENTTITLEATTACK = '#tips:eventTitleAttack'
-    EVENTMESSAGEATTACK = '#tips:eventMessageAttack'
-    EVENTTITLEDEFENCE = '#tips:eventTitleDefence'
-    EVENTMESSAGEDEFENCE = '#tips:eventMessageDefence'
+    EVENTTITLE = '#tips:eventTitle'
+    EVENTMESSAGE = '#tips:eventMessage'

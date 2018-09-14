@@ -1054,26 +1054,92 @@
     </_9RM>
     <R113>	shared	</R113>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2K>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V-2K>
+        <V-2IS_R>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </V-2IS_R>
+        <V-16M>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </V-16M>
+      </engines>
+      <chassis>
+        <Chassis_R101_MT25>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R101_MT25>
+        <Chassis_R101_MT25_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R101_MT25_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R101_MT25>
-        <alpha>	0.0644	</alpha>
-      </Chassis_R101_MT25>
-      <Chassis_R101_MT25_2>
-        <alpha>	0.05635	</alpha>
-      </Chassis_R101_MT25_2>
-    </chassis>
-    <engines>
-      <V-2K>
-        <bravo>	132.1601	</bravo>
-      </V-2K>
-      <V-2IS_R>
-        <bravo>	137.4465	</bravo>
-      </V-2IS_R>
-      <V-16M>
-        <bravo>	185.0242	</bravo>
-      </V-16M>
-    </engines>
     <armour>	0.896480354	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -699,28 +699,94 @@
   <radios>
     <ER_52>	shared	</ER_52>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Renault_S4>
+          <smplEnginePower>	68.72327	</smplEnginePower>
+        </Renault_S4>
+        <Renault_S4B>
+          <smplEnginePower>	78.23881	</smplEnginePower>
+        </Renault_S4B>
+      </engines>
+      <chassis>
+        <Chassis_D1_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_D1_2>
+        <Chassis_D1_2_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_D1_2_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_47mm_SA34>
         <delta>	1.73333333	</delta>
       </_47mm_SA34>
     </guns>
-    <chassis>
-      <Chassis_D1_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_D1_2>
-      <Chassis_D1_2_2>
-        <alpha>	0.0805	</alpha>
-      </Chassis_D1_2_2>
-    </chassis>
-    <engines>
-      <Renault_S4>
-        <bravo>	17.18082	</bravo>
-      </Renault_S4>
-      <Renault_S4B>
-        <bravo>	19.5597	</bravo>
-      </Renault_S4B>
-    </engines>
     <armour>	0.927545675	</armour>
   </clientAdjustmentFactors>
   <effects>

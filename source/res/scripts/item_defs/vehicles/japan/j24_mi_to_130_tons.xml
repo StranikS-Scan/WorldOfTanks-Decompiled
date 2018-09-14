@@ -813,7 +813,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <camouflage>
             <tiling>	0.64 0.325 0.000000 0.000000	</tiling>
           </camouflage>
@@ -932,23 +932,89 @@
     </_Type94_Hei>
     <_Type96_Bo>	shared	</_Type96_Bo>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Type98_V12_x2_1100>
+          <smplEnginePower>	1163.009	</smplEnginePower>
+        </_Type98_V12_x2_1100>
+        <_Type98_V12_x2_1200>
+          <smplEnginePower>	1268.737	</smplEnginePower>
+        </_Type98_V12_x2_1200>
+      </engines>
+      <chassis>
+        <Chassis_J24_Mi_To_130_tons>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_J24_Mi_To_130_tons>
+        <Chassis_J24_Mi_To_130_tons_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_J24_Mi_To_130_tons_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_J24_Mi_To_130_tons>
-        <alpha>	0.1127	</alpha>
-      </Chassis_J24_Mi_To_130_tons>
-      <Chassis_J24_Mi_To_130_tons_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_J24_Mi_To_130_tons_2>
-    </chassis>
-    <engines>
-      <_Type98_V12_x2_1100>
-        <bravo>	290.7523	</bravo>
-      </_Type98_V12_x2_1100>
-      <_Type98_V12_x2_1200>
-        <bravo>	317.1843	</bravo>
-      </_Type98_V12_x2_1200>
-    </engines>
     <armour>	1.022502039	</armour>
   </clientAdjustmentFactors>
   <effects>

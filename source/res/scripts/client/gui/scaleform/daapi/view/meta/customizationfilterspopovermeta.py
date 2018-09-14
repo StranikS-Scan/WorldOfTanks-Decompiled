@@ -8,40 +8,25 @@ class CustomizationFiltersPopoverMeta(SmartPopOverView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends SmartPopOverView
-    null
     """
 
     def changeFilter(self, groupId, itemId):
-        """
-        :param groupId:
-        :param itemId:
-        :return :
-        """
         self._printOverrideError('changeFilter')
 
     def setDefaultFilter(self):
-        """
-        :return :
-        """
         self._printOverrideError('setDefaultFilter')
 
     def as_setInitDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by FiltersPopoverVO (AS)
         """
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_setStateS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by FiltersStateVO (AS)
         """
         return self.flashObject.as_setState(data) if self._isDAAPIInited() else None
 
     def as_enableDefBtnS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_enableDefBtn(value) if self._isDAAPIInited() else None

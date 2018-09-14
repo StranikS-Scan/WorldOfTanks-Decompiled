@@ -751,7 +751,7 @@
             <collisionModelServer>	vehicles/chinese/Ch05_T34_2/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch05_T34_2/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_main	</effects>
+          <effects>	shot_mainext	</effects>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	-0.00040368 -0.0481228 1.2	</rayStart>
@@ -840,30 +840,97 @@
     </A-220_1>
     <A-220B>	shared	</A-220B>
   </radios>
-  <clientAdjustmentFactors>	s	  <guns>
+  <physics>
+    <detailed>
+      <engines>
+        <_Type_102S1>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </_Type_102S1>
+        <_12150L>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </_12150L>
+        <_12150LS>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+        </_12150LS>
+      </engines>
+      <chassis>
+        <Chassis_Ch05_T34_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch05_T34_2>
+        <Chassis_Ch05_T34_2_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch05_T34_2_2>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <guns>
       <_122-mm_37-122JT>
         <delta>	1.358823	</delta>
       </_122-mm_37-122JT>
     </guns>
-    <chassis>
-      <Chassis_Ch05_T34_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Ch05_T34_2>
-      <Chassis_Ch05_T34_2_2>
-        <alpha>	0.07245	</alpha>
-      </Chassis_Ch05_T34_2_2>
-    </chassis>
-    <engines>
-      <_Type_102S1>
-        <bravo>	132.1601	</bravo>
-      </_Type_102S1>
-      <_12150L>
-        <bravo>	137.4465	</bravo>
-      </_12150L>
-      <_12150LS>
-        <bravo>	153.3058	</bravo>
-      </_12150LS>
-    </engines>
     <armour>	1.194460383	</armour>
   </clientAdjustmentFactors>
   <effects>

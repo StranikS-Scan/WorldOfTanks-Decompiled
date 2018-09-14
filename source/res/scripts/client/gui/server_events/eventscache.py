@@ -1,34 +1,34 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/EventsCache.py
+import cPickle as pickle
 import math
 import sys
 import zlib
-import cPickle as pickle
 from collections import defaultdict
 import BigWorld
-from PlayerEvents import g_playerEvents
 import clubs_quests
 import motivation_quests
+import nations
 from Event import Event, EventManager
+from PlayerEvents import g_playerEvents
 from adisp import async, process
 from constants import EVENT_TYPE, EVENT_CLIENT_DATA, QUEUE_TYPE, ARENA_BONUS_TYPE
-import nations
-from potapov_quests import _POTAPOV_QUEST_XML_PATH
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
+from gui.LobbyContext import g_lobbyContext
+from gui.server_events import caches as quests_caches
+from gui.server_events.CompanyBattleController import CompanyBattleController
+from gui.server_events.PQController import RandomPQController, FalloutPQController
+from gui.server_events.event_items import CompanyBattles, ClubsQuest
+from gui.server_events.event_items import EventBattles, createQuest, createAction, FalloutConfig, MotiveQuest
+from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
+from gui.shared import events
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
-from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from gui.LobbyContext import g_lobbyContext
-from gui.shared import events
-from gui.server_events import caches as quests_caches
-from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
-from gui.server_events.PQController import RandomPQController, FalloutPQController
-from gui.server_events.CompanyBattleController import CompanyBattleController
-from gui.server_events.event_items import EventBattles, createQuest, createAction, FalloutConfig, MotiveQuest
-from gui.server_events.event_items import CompanyBattles, ClubsQuest
-from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from potapov_quests import _POTAPOV_QUEST_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import makeTupleByDict
 QUEUE_TYPE_TO_ARENA_BONUS_TYPE = {QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_BONUS_TYPE.FALLOUT_CLASSIC,
@@ -226,6 +226,14 @@ class _EventsCache(object):
 
         def userFilterFunc(q):
             return q.getType() == EVENT_TYPE.MOTIVE_QUEST and filterFunc(q)
+
+        return self.getQuests(userFilterFunc)
+
+    def getBattleQuests(self, filterFunc=None):
+        filterFunc = filterFunc or (lambda a: True)
+
+        def userFilterFunc(q):
+            return q.getType() == EVENT_TYPE.BATTLE_QUEST and filterFunc(q)
 
         return self.getQuests(userFilterFunc)
 

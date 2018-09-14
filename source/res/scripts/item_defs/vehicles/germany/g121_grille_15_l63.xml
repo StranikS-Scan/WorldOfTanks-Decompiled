@@ -571,17 +571,52 @@
   <radios>
     <_10WSc>	shared	</_10WSc>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_234>
+          <smplEnginePower>	951.553	</smplEnginePower>
+        </Maybach_HL_234>
+      </engines>
+      <chassis>
+        <Chassis_G121_Grille_15_L63>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G121_Grille_15_L63>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G121_Grille_15_L63>
-        <alpha>	0.12	</alpha>
-      </Chassis_G121_Grille_15_L63>
-    </chassis>
-    <engines>
-      <Maybach_HL_234>
-        <bravo>	237.8882	</bravo>
-      </Maybach_HL_234>
-    </engines>
     <armour>	0.830065053	</armour>
   </clientAdjustmentFactors>
   <effects>

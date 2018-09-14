@@ -1158,26 +1158,92 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_116>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </Maybach_HL_116>
+        <Maybach_HL66Px2>
+          <smplEnginePower>	380.6212	</smplEnginePower>
+        </Maybach_HL66Px2>
+        <Daimler-Benz_MB-809>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Daimler-Benz_MB-809>
+      </engines>
+      <chassis>
+        <Chassis_VK2001DB>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_VK2001DB>
+        <Chassis_VK2001DB_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_VK2001DB_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_VK2001DB>
-        <alpha>	0.0966	</alpha>
-      </Chassis_VK2001DB>
-      <Chassis_VK2001DB_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_VK2001DB_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_116>
-        <bravo>	79.29608	</bravo>
-      </Maybach_HL_116>
-      <Maybach_HL66Px2>
-        <bravo>	95.1553	</bravo>
-      </Maybach_HL66Px2>
-      <Daimler-Benz_MB-809>
-        <bravo>	105.7281	</bravo>
-      </Daimler-Benz_MB-809>
-    </engines>
     <armour>	0.848430584	</armour>
   </clientAdjustmentFactors>
   <effects>

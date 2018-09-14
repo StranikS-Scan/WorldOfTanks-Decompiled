@@ -8,34 +8,31 @@ class QuestsCurrentTabMeta(QuestsTab):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends QuestsTab
-    null
     """
 
     def sort(self, type, hideDone):
-        """
-        :param type:
-        :param hideDone:
-        :return :
-        """
         self._printOverrideError('sort')
 
     def getSortedTableData(self, tableData):
-        """
-        :param tableData:
-        :return Array:
-        """
         self._printOverrideError('getSortedTableData')
 
     def getQuestInfo(self, questID):
-        """
-        :param questID:
-        :return :
-        """
         self._printOverrideError('getQuestInfo')
 
+    def collapse(self, id):
+        self._printOverrideError('collapse')
+
+    def as_showNoDataS(self):
+        return self.flashObject.as_showNoData() if self._isDAAPIInited() else None
+
+    def as_showWaitingS(self, value):
+        return self.flashObject.as_showWaiting(value) if self._isDAAPIInited() else None
+
+    def as_showNoSelectS(self):
+        return self.flashObject.as_showNoSelect() if self._isDAAPIInited() else None
+
     def as_updateQuestInfoS(self, data):
-        """
-        :param data:
-        :return :
-        """
         return self.flashObject.as_updateQuestInfo(data) if self._isDAAPIInited() else None
+
+    def as_setSelectedQuestS(self, questID):
+        return self.flashObject.as_setSelectedQuest(questID) if self._isDAAPIInited() else None

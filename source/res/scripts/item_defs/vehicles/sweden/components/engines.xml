@@ -1,9 +1,27 @@
 <engines.xml>
   <ids>
     <_2_st_Scania_Vabis_607_1>	0	</_2_st_Scania_Vabis_607_1>
+    <BNAG_L8V_36TR_A>	1	</BNAG_L8V_36TR_A>
     <Development_Engine>	65535	</Development_Engine>
   </ids>
   <shared>
+    <BNAG_L8V_36TR_A>
+      <userString>	#sweden_vehicles:BNAG_L8V_36TR_A	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4350	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	160	</power>
+      <weight>	600	</weight>
+      <maxHealth>	55	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	305	</rpm_min>
+      <rpm_max>	2623	</rpm_max>
+    </BNAG_L8V_36TR_A>
     <_2_st_Scania_Vabis_607_1>
       <userString>	#sweden_vehicles:_2_st_Scania_Vabis_607_1	</userString>
       <tags>	gasoline	</tags>

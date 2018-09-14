@@ -87,9 +87,6 @@ class RespawnsController(IArenaRespawnController, IViewComponentsController):
         self.__ui = None
         return
 
-    def setBattleCtx(self, battleCtx):
-        pass
-
     def chooseVehicleForRespawn(self, vehicleID):
         BigWorld.player().base.chooseVehicleForRespawn(vehicleID)
         self.__ui.setSelectedVehicle(vehicleID, self.__vehicles, self.__cooldowns)

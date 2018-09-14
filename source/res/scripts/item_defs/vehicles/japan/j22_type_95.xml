@@ -800,23 +800,89 @@
     </_Type94_Hei>
     <_Type96_Bo>	shared	</_Type96_Bo>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <BMW_IV_Kai>
+          <smplEnginePower>	264.3203	</smplEnginePower>
+        </BMW_IV_Kai>
+        <BMW_IV_Kai_Ni>
+          <smplEnginePower>	306.6115	</smplEnginePower>
+        </BMW_IV_Kai_Ni>
+      </engines>
+      <chassis>
+        <Chassis_J22_Type_95>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_J22_Type_95>
+        <Chassis_J22_Type_95_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_J22_Type_95_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_J22_Type_95>
-        <alpha>	0.10465	</alpha>
-      </Chassis_J22_Type_95>
-      <Chassis_J22_Type_95_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_J22_Type_95_2>
-    </chassis>
-    <engines>
-      <BMW_IV_Kai>
-        <bravo>	66.08007	</bravo>
-      </BMW_IV_Kai>
-      <BMW_IV_Kai_Ni>
-        <bravo>	76.65289	</bravo>
-      </BMW_IV_Kai_Ni>
-    </engines>
     <armour>	0.815169945	</armour>
   </clientAdjustmentFactors>
   <effects>

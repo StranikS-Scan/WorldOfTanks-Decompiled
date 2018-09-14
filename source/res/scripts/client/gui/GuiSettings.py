@@ -14,6 +14,7 @@ LoginRssFeedProps = namedtuple('LoginRssFeedProps', 'show url internalBrowser')
 EULAProps = namedtuple('EULAProps', 'full url')
 BrowserProps = namedtuple('BrowserProps', 'url params')
 PostBattleExchangeProps = namedtuple('PostBattleExchangeProps', 'enabled url')
+EncyclopediaProps = namedtuple('EncyclopediaProps', 'url enabled')
 _MacrosValue = namedtuple('MacrosValue', 'macros dictValue')
 
 def _readMacros(xmlCtx, section, valueName='value'):
@@ -51,13 +52,24 @@ def _convertEULASetting(settings, item):
     return settings._replace(**item.value)
 
 
+def _convertEncyclopedia(_, item):
+    value = item.value
+    if isinstance(value, _MacrosValue):
+        dictValue = value.dictValue
+        dictValue['enabled'] = getClientLanguage() in dictValue.pop('languages', [])
+    else:
+        value['enabled'] = getClientLanguage() in value.pop('languages', [])
+    return value
+
+
 _SETTING_CONVERTERS = {'loginRssFeed': _convertToNamedTuple,
  'movingText': _convertToNamedTuple,
  'eula': _convertEULASetting,
  'markerScaleSettings': _convertVector4ToTuple,
  'markerBgSettings': _convertVector4ToTuple,
  'browser': _convertToNamedTuple,
- 'postBattleExchange': _convertToNamedTuple}
+ 'postBattleExchange': _convertToNamedTuple,
+ 'encyclopedia': _convertEncyclopedia}
 _DEFAULT_SETTINGS = {'registrationURL': '',
  'registrationProxyURL': '',
  'recoveryPswdURL': '',
@@ -105,7 +117,6 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'imageCache': [],
  'postBattleExchange': PostBattleExchangeProps(False, ''),
  'actionComeToEnd': time_utils.QUARTER_HOUR,
- 'useAS3Battle': False,
  'goldFishActionShowCooldown': 86400,
  'guiScale': [],
  'playerFeedbackDelay': 0.75,
@@ -113,7 +124,7 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'userRoomsService': '',
  'cryptLoginInfo': True,
  'compulsoryIntroVideos': [],
- 'forumUrl': []}
+ 'encyclopedia': {}}
 
 class GuiSettings(object):
 

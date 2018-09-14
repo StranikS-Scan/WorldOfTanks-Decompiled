@@ -112,11 +112,11 @@ class MarkersManager(Flash, VehicleMarkersManagerMeta, plugins.IMarkersManager):
         return
 
     def __setMarkersScale(self, scale=None):
-        if self.__canvas is not None:
-            if scale is None:
-                self.__canvas.markerSetScale(g_settingsCore.interfaceScale.get())
-            else:
-                self.__canvas.markerSetScale(scale)
+        if scale is None:
+            scale = g_settingsCore.interfaceScale.get()
+        stage = self.movie.stage
+        stage.scaleX = scale
+        stage.scaleY = scale
         return
 
     def __setMarkerDuration(self):
@@ -180,7 +180,9 @@ class MarkersManager(Flash, VehicleMarkersManagerMeta, plugins.IMarkersManager):
             - vehicle level (extended and configure in settings);
             - vehicle icon (extended and configure in settings).
         """
-        self.as_setShowExInfoFlagS(event.ctx['isDown'])
+        if self.__parentUI is None or not self.__parentUI.isModalViewShown():
+            self.as_setShowExInfoFlagS(event.ctx['isDown'])
+        return
 
     def __handleGUIVisibility(self, event):
         self.component.visible = event.ctx['visible']

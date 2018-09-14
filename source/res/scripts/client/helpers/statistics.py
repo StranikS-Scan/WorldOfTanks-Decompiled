@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/statistics.py
-import math
 import BigWorld
 import ResMgr
 import Settings
@@ -59,8 +58,6 @@ _HANGAR_LOADING_STATES_IDS = [HANGAR_LOADING_STATE.FINISH_LOADING_VEHICLE,
  HANGAR_LOADING_STATE.HANGAR_READY]
 
 class StatisticsCollector:
-    avrPing = property(lambda self: 0 if self.__framesTotal is 0 else self.__avrPing / self.__framesTotal)
-    lagPercentage = property(lambda self: 0 if self.__framesTotal is 0 else self.__framesWithLags * 100 / self.__framesTotal)
     update = property(lambda self: self.__updateFunc)
 
     def __init__(self):
@@ -82,7 +79,7 @@ class StatisticsCollector:
     def stop(self):
         if self.__state != _STATISTICS_STATE.STOPPED:
             self.__state = _STATISTICS_STATE.STOPPED
-            BigWorld.enableBattleFPSCounter(False)
+            BigWorld.enableBattleStatisticCollector(False)
             SettingsCore.g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
             from gui.battle_control import g_sessionProvider
             ctrl = g_sessionProvider.shared.drrScale
@@ -92,19 +89,16 @@ class StatisticsCollector:
 
     def reset(self):
         self.__invalidStats = 0
-        self.__framesTotal = 0
-        self.__framesWithLags = 0
-        self.__avrPing = 0
         self.__updateFunc = self.__updateIdle
 
-    def __updateIdle(self, fpsInfo, ping, isLagging):
+    def __updateIdle(self):
         if BigWorld.player().arena.period > ARENA_PERIOD.IDLE:
             self.__updateFunc = self.__updatePrebattle
-            self.__updateFunc(fpsInfo, ping, isLagging)
+            self.__updateFunc()
 
-    def __updatePrebattle(self, fpsInfo, ping, isLagging):
+    def __updatePrebattle(self):
         if BigWorld.player().arena.period == ARENA_PERIOD.BATTLE and self.__state == _STATISTICS_STATE.STARTED:
-            BigWorld.enableBattleFPSCounter(True)
+            BigWorld.enableBattleStatisticCollector(True)
             SettingsCore.g_settingsCore.onSettingsChanged += self.__onSettingsChanged
             from gui.battle_control import g_sessionProvider
             ctrl = g_sessionProvider.shared.drrScale
@@ -112,14 +106,11 @@ class StatisticsCollector:
                 ctrl.onDRRChanged += self.__onDRRChanged
             self.__state = _STATISTICS_STATE.IN_PROGRESS
             self.__updateFunc = self.__updateBattle
-            self.__updateFunc(fpsInfo, ping, isLagging)
+            self.__updateFunc()
         return
 
-    def __updateBattle(self, fpsInfo, ping, isLagging):
-        if self.__state == _STATISTICS_STATE.IN_PROGRESS:
-            self.__avrPing += ping
-            self.__framesTotal += 1
-            self.__framesWithLags += 1 if isLagging else 0
+    def __updateBattle(self):
+        pass
 
     def subscribeToHangarSpaceCreate(self, event):
         event += self.__onHangarSpaceLoaded
@@ -133,8 +124,6 @@ class StatisticsCollector:
             if proceed:
                 ret['cpuScore'] = BigWorld.getAutoDetectGraphicsSettingsScore(_HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE)
                 ret['gpuScore'] = BigWorld.getAutoDetectGraphicsSettingsScore(_HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE)
-                ret['ping'] = int(math.ceil(self.avrPing))
-                ret['lag'] = self.lagPercentage
                 ret['graphicsEngine'] = SettingsCore.g_settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
                 if not self.__hangarLoaded:
                     self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_STRAIGHT_INTO_BATTLE

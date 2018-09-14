@@ -24,7 +24,6 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from helpers.i18n import makeString as _ms
 from shared import getDialogRemoveElement, getDialogReplaceElement
-from gui.Scaleform.daapi.view.lobby.shared.new_items_notification import CustomizationItemNotification
 from gui.customization.shared import checkInQuest, formatPriceCredits, formatPriceGold, getSalePriceString, DURATION, CUSTOMIZATION_TYPE, QUALIFIER_TYPE, QUALIFIER_TYPE_INDEX, FILTER_TYPE
 from gui.customization import g_customizationController
 _DURATION_TOOLTIPS = {DURATION.PERMANENT: (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_ALWAYS, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_LOWERCASE_ALWAYS),
@@ -46,8 +45,7 @@ def _getSlotsPanelDataVO(slotsData):
             selectorSlotsData.append(_getSlotVO(slotsData[cType][slotIdx], cType, slotIdx))
 
         slotsDataVO['data'].append({'header': header,
-         'data': selectorSlotsData,
-         'counter': CustomizationItemNotification.getFormattedItemCountByType(cType)})
+         'data': selectorSlotsData})
 
     return slotsDataVO
 
@@ -137,7 +135,6 @@ class MainView(CustomizationMainViewMeta):
         return
 
     def showGroup(self, cType, slotIdx):
-        CustomizationItemNotification.setItemVisitedByType(cType)
         self.__controller.slots.select(cType, slotIdx)
         if self.__isCarouselHidden:
             self.__isCarouselHidden = False
@@ -325,8 +322,7 @@ class MainView(CustomizationMainViewMeta):
              'selected': item['appliedToCurrentSlot'] or item['installedInCurrentSlot'] and not blData['hasAppliedItem'],
              'goToTaskBtnVisible': isInQuest,
              'goToTaskBtnText': _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMCAROUSEL_RENDERER_GOTOTASK),
-             'newElementIndicatorVisible': item['isNewElement'],
-             'eventElementIndicatorVisible': item['isEventElement']}
+             'newElementIndicatorVisible': item['isNewElement']}
             if data['selected']:
                 selectedIndex = blData['items'].index(item)
             if element.isOnSale(item['duration']) and not element.isInDossier and not item['installedInCurrentSlot'] and not isInQuest:

@@ -798,23 +798,89 @@
   <radios>
     <_Type94_Hei>	shared	</_Type94_Hei>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_A6120VDe>
+          <smplEnginePower>	126.8737	</smplEnginePower>
+        </_A6120VDe>
+        <_A6120VDe_S>
+          <smplEnginePower>	142.733	</smplEnginePower>
+        </_A6120VDe_S>
+      </engines>
+      <chassis>
+        <Chassis_Chi_Ni>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Chi_Ni>
+        <Chassis_Chi_Ni_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Chi_Ni_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Chi_Ni>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Chi_Ni>
-      <Chassis_Chi_Ni_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Chi_Ni_2>
-    </chassis>
-    <engines>
-      <_A6120VDe>
-        <bravo>	31.71843	</bravo>
-      </_A6120VDe>
-      <_A6120VDe_S>
-        <bravo>	35.68324	</bravo>
-      </_A6120VDe_S>
-    </engines>
     <armour>	0.697419655	</armour>
   </clientAdjustmentFactors>
   <effects>

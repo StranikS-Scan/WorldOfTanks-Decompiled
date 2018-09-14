@@ -8,46 +8,28 @@ class ProfileSummaryWindowMeta(ProfileSummary):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends ProfileSummary
-    null
     """
 
     def openClanStatistic(self):
-        """
-        :return :
-        """
         self._printOverrideError('openClanStatistic')
 
     def openClubProfile(self, clubDbID):
-        """
-        :param clubDbID:
-        :return :
-        """
         self._printOverrideError('openClubProfile')
 
     def as_setClanDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by ProfileGroupBlockVO (AS)
         """
         return self.flashObject.as_setClanData(data) if self._isDAAPIInited() else None
 
     def as_setClubDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by ProfileGroupBlockVO (AS)
         """
         return self.flashObject.as_setClubData(data) if self._isDAAPIInited() else None
 
     def as_setClanEmblemS(self, source):
-        """
-        :param source:
-        :return :
-        """
         return self.flashObject.as_setClanEmblem(source) if self._isDAAPIInited() else None
 
     def as_setClubEmblemS(self, source):
-        """
-        :param source:
-        :return :
-        """
         return self.flashObject.as_setClubEmblem(source) if self._isDAAPIInited() else None

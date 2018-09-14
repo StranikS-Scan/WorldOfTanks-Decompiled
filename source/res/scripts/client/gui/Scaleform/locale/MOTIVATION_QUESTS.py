@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/MOTIVATION_QUESTS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class MOTIVATION_QUESTS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     COMMON_REQUIREMENTS = '#motivation_quests:common/requirements'
     COMMON_CONGRATULATION = '#motivation_quests:common/congratulation'
     G1_NAME = '#motivation_quests:g1/name'

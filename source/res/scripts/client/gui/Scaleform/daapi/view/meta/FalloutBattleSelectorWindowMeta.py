@@ -8,51 +8,34 @@ class FalloutBattleSelectorWindowMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def onDominationBtnClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('onDominationBtnClick')
 
     def onMultiteamBtnClick(self):
-        """
-        :return :
-        """
         self._printOverrideError('onMultiteamBtnClick')
 
     def onSelectCheckBoxAutoSquad(self, isSelected):
-        """
-        :param isSelected:
-        :return :
-        """
         self._printOverrideError('onSelectCheckBoxAutoSquad')
 
     def getClientID(self):
-        """
-        :return Number:
-        """
         self._printOverrideError('getClientID')
 
     def as_setInitDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by SelectorWindowStaticDataVO (AS)
         """
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_setBtnStatesS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by SelectorWindowBtnStatesVO (AS)
         """
         return self.flashObject.as_setBtnStates(data) if self._isDAAPIInited() else None
 
     def as_setTooltipsS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by FalloutBattleSelectorTooltipVO (AS)
         """
         return self.flashObject.as_setTooltips(data) if self._isDAAPIInited() else None

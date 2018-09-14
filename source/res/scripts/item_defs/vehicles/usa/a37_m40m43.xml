@@ -629,31 +629,97 @@
     </SCR_610>
     <SCR_619>	shared	</SCR_619>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_Continental_R-975C1>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Wright_Continental_R-975C1>
+        <Wright_Continental_R-975C4>
+          <smplEnginePower>	486.3493	</smplEnginePower>
+        </Wright_Continental_R-975C4>
+        <Ford_GAA_R>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Ford_GAA_R>
+      </engines>
+      <chassis>
+        <Chassis_M40M43>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M40M43>
+        <Chassis_M40M43_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M40M43_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_203mm_Howitzer_M47>
         <delta>	1.104368	</delta>
       </_203mm_Howitzer_M47>
     </guns>
-    <chassis>
-      <Chassis_M40M43>
-        <alpha>	0.1288	</alpha>
-      </Chassis_M40M43>
-      <Chassis_M40M43_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_M40M43_2>
-    </chassis>
-    <engines>
-      <Wright_Continental_R-975C1>
-        <bravo>	105.7281	</bravo>
-      </Wright_Continental_R-975C1>
-      <Wright_Continental_R-975C4>
-        <bravo>	121.5873	</bravo>
-      </Wright_Continental_R-975C4>
-      <Ford_GAA_R>
-        <bravo>	132.1601	</bravo>
-      </Ford_GAA_R>
-    </engines>
     <armour>	0.519241842	</armour>
   </clientAdjustmentFactors>
   <effects>

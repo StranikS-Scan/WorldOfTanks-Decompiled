@@ -473,17 +473,52 @@
   <radios>
     <_10RK-26>	shared	</_10RK-26>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-11-IS-3>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </V-11-IS-3>
+      </engines>
+      <chassis>
+        <Chassis_R115_IS-3_auto>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R115_IS-3_auto>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R115_IS-3_auto>
-        <alpha>	0.0966	</alpha>
-      </Chassis_R115_IS-3_auto>
-    </chassis>
-    <engines>
-      <V-11-IS-3>
-        <bravo>	137.4465	</bravo>
-      </V-11-IS-3>
-    </engines>
     <armour>	1.0707518	</armour>
   </clientAdjustmentFactors>
   <effects>

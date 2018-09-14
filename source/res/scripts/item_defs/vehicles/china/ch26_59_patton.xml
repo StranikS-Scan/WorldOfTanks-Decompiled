@@ -564,17 +564,52 @@
   <radios>
     <_9RM_R>	shared	</_9RM_R>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <NORINCO_12150L7>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </NORINCO_12150L7>
+      </engines>
+      <chassis>
+        <Chassis_Ch26_59_Patton>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch26_59_Patton>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch26_59_Patton>
-        <alpha>	0.0805	</alpha>
-      </Chassis_Ch26_59_Patton>
-    </chassis>
-    <engines>
-      <NORINCO_12150L7>
-        <bravo>	137.4465	</bravo>
-      </NORINCO_12150L7>
-    </engines>
     <armour>	1.041892416	</armour>
   </clientAdjustmentFactors>
   <effects>

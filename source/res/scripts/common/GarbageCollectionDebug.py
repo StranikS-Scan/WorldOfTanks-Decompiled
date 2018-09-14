@@ -164,7 +164,7 @@ def gcDump():
         if len(gc_dump) > 0:
             garbage_ids = {id(x):x for x in gc_dump}
             garbage_list = []
-            gc_refs = get_refs(gc_dump, garbage_list, garbage_ids)
+            gc_refs, _ = get_refs(gc_dump, garbage_list, garbage_ids)
             del garbage_list[:]
             graph_info = get_graph_text_repr(gc_refs, garbage_ids, shortnames=False)
             for obj in graph_info['nodes'].values():
@@ -182,42 +182,44 @@ def gcDump():
     return leakCount
 
 
-def get_refs(obj, source_list, garbage_ids):
+def get_refs(obj, source_list, known_ids, get_unknown_referents=False):
     if id(obj) in source_list:
-        return []
+        return ([], [])
     source_list.append(id(obj))
     res = []
-    referents = [ i for i in gc.get_referents(obj) if id(i) in garbage_ids ]
-    res = [ {'target': id(obj),
-     'source': id(i)} for i in referents ]
-    for i in referents:
-        inner_res = get_refs(i, source_list, garbage_ids)
-        res.extend(inner_res)
-        del inner_res[:]
+    unknown_referents = []
+    for i in gc.get_referents(obj):
+        if id(i) in known_ids:
+            res.append({'target': id(i),
+             'source': id(obj)})
+        if get_unknown_referents:
+            unknown_referents.append(i)
+            res.append({'target': id(i),
+             'source': id(obj)})
 
-    return res
+    return (res, unknown_referents)
 
 
 def get_graph_text_repr(graph, garbage_ids, extra_info=False, refcounts=False, shortnames=True):
     node_names = {}
     for edge_data in graph:
-        if edge_data['source'] not in garbage_ids or edge_data['target'] not in garbage_ids:
+        if edge_data['target'] not in garbage_ids or edge_data['source'] not in garbage_ids:
             continue
-        obj_id = edge_data['target']
+        obj_id = edge_data['source']
         target = garbage_ids[obj_id]
-        for obj_id in (edge_data['target'], edge_data['source']):
+        for obj_id in (edge_data['source'], edge_data['target']):
             obj = garbage_ids[obj_id]
             node_names[obj_id] = {'id': obj_id,
              'label': objgraph._obj_label(obj, extra_info, refcounts, shortnames)}
 
-        source = garbage_ids[edge_data['source']]
+        source = garbage_ids[edge_data['target']]
         edge_data['label'] = objgraph._edge_label(target, source)
 
     return {'nodes': node_names,
      'edges': graph}
 
 
-def getGarbageGraph():
+def getGarbageGraph(depth=0):
     try:
         import gc
     except ImportError:
@@ -232,7 +234,18 @@ def getGarbageGraph():
     if len(gc_dump) > 0:
         garbage_ids = {id(x):x for x in gc_dump}
         garbage_list = []
-        gc_refs = get_refs(gc_dump, garbage_list, garbage_ids)
+        gc_refs = []
+        new_objects = gc_dump
+        for d in range(depth + 1):
+            added_objects = []
+            for obj in new_objects:
+                graph_part, new_objects = get_refs(obj, garbage_list, garbage_ids, get_unknown_referents=d < depth)
+                gc_refs.extend(graph_part)
+                garbage_ids.update({id(obj):obj for obj in new_objects})
+                added_objects.extend(new_objects)
+
+            new_objects = added_objects
+
         del garbage_list[:]
         graph_info = get_graph_text_repr(gc_refs, garbage_ids, shortnames=False)
         result = 'digraph ObjectGraph { node[shape=box, style=filled, fillcolor=white];  %s }'

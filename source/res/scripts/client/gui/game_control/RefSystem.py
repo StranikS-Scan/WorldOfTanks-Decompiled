@@ -11,7 +11,7 @@ from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward
+from gui.Scaleform.daapi.view.lobby.AwardWindow import ExplosionBackAward
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.game_control.controllers import Controller
 from gui.shared.formatters import icons, text_styles

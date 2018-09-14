@@ -8,26 +8,16 @@ class ExchangeXpWindowMeta(BaseExchangeWindow):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseExchangeWindow
-    null
     """
 
     def as_vehiclesDataChangedS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by ExchangeXPWindowVO (AS)
         """
         return self.flashObject.as_vehiclesDataChanged(data) if self._isDAAPIInited() else None
 
     def as_totalExperienceChangedS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_totalExperienceChanged(value) if self._isDAAPIInited() else None
 
     def as_setWalletStatusS(self, walletStatus):
-        """
-        :param walletStatus:
-        :return :
-        """
         return self.flashObject.as_setWalletStatus(walletStatus) if self._isDAAPIInited() else None

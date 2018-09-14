@@ -216,7 +216,10 @@ class ArenaVehiclesListener(_Listener):
         return
 
 
-_TAGS_TO_UPDATE = {USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.MUTED}
+_TAGS_TO_UPDATE = {USER_TAG.FRIEND,
+ USER_TAG.IGNORED,
+ USER_TAG.IGNORED_TMP,
+ USER_TAG.MUTED}
 
 class ContactsListener(_Listener):
     __slots__ = ()
@@ -240,6 +243,8 @@ class ContactsListener(_Listener):
          USER_ACTION_ID.FRIEND_REMOVED,
          USER_ACTION_ID.IGNORED_ADDED,
          USER_ACTION_ID.IGNORED_REMOVED,
+         USER_ACTION_ID.TMP_IGNORED_ADDED,
+         USER_ACTION_ID.TMP_IGNORED_REMOVED,
          USER_ACTION_ID.MUTE_SET,
          USER_ACTION_ID.MUTE_UNSET):
             self._invokeListenersMethod('invalidateUserTags', user)
@@ -581,6 +586,7 @@ class ListenersCollection(_Listener):
             result |= self.__loader.addController(controller)
         if scope & _SCOPE.VEHICLES > 0:
             result |= self.__vehicles.addController(controller)
+        if scope & _SCOPE.CONTACTS > 0:
             result |= self.__contacts.addController(controller)
         if scope & _SCOPE.PERIOD > 0:
             result |= self.__period.addController(controller)

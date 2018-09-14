@@ -54,6 +54,7 @@ except AttributeError:
 
 GUI_NATIONS_ORDER_INDEX = dict(((n, i) for i, n in enumerate(GUI_NATIONS)))
 GUI_NATIONS_ORDER_INDEX[NONE_NATION_NAME] = nations.NONE_INDEX
+GUI_NATIONS_ORDER_INDEX_REVERSED = dict(((n, i) for i, n in enumerate(reversed(GUI_NATIONS))))
 
 def nationCompareByName(first, second):
     if second is None:

@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/StoreTable.py
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.store.StoreTableDataProvider import StoreTableDataProvider
 from gui.Scaleform.daapi.view.meta.StoreTableMeta import StoreTableMeta
 

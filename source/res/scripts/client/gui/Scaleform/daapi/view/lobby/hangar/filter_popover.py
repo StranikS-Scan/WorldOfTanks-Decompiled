@@ -2,12 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/filter_popover.py
 import itertools
 import constants
-from gui import GUI_NATIONS
+from gui import makeHtmlString, GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath, getVehicleTypeAssetPath, getLevelsAssetPath
 from gui.Scaleform.daapi.view.meta.TankCarouselFilterPopoverMeta import TankCarouselFilterPopoverMeta
 from gui.prb_control.settings import VEHICLE_LEVELS
+from gui.shared import g_itemsCache
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
-from gui.shared.formatters import text_styles, icons
+from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER
@@ -22,7 +23,7 @@ class _SECTION(CONST_CONTAINER):
 
 _VEHICLE_LEVEL_FILTERS = [ 'level_{}'.format(level) for level in VEHICLE_LEVELS ]
 
-def _getInitialVO(filters, mapping):
+def _getInitialVO(filters, mapping, xpRateMultiplier):
     dataVO = {'nationsSectionId': _SECTION.NATIONS,
      'vehicleTypesSectionId': _SECTION.VEHICLE_TYPES,
      'levelsSectionId': _SECTION.LEVELS,
@@ -40,11 +41,11 @@ def _getInitialVO(filters, mapping):
      'levels': [],
      'specials': [],
      'hidden': [],
-     'defaultButtonTooltip': makeTooltip('#tank_carousel_filter:popover/tooltip/defaultButton/header', '#tank_carousel_filter:popover/tooltip/defaultButton/body'),
+     'defaultButtonTooltip': makeTooltip('#tank_carousel_filter:tooltip/defaultButton/header', '#tank_carousel_filter:tooltip/defaultButton/body'),
      'hiddenSectionVisible': True}
     for entry in mapping[_SECTION.NATIONS]:
         dataVO['nations'].append({'value': getNationsFilterAssetPath(entry),
-         'tooltip': makeTooltip('#nations:{}'.format(entry), '#tank_carousel_filter:popover/tooltip/nations/body'),
+         'tooltip': makeTooltip('#nations:{}'.format(entry), '#tank_carousel_filter:tooltip/nations/body'),
          'selected': filters[entry]})
 
     for entry in mapping[_SECTION.LEVELS]:
@@ -53,24 +54,23 @@ def _getInitialVO(filters, mapping):
 
     for entry in mapping[_SECTION.VEHICLE_TYPES]:
         dataVO['vehicleTypes'].append({'value': getVehicleTypeAssetPath(entry),
-         'tooltip': makeTooltip('#menu:carousel_tank_filter/{}'.format(entry), '#tank_carousel_filter:popover/tooltip/vehicleTypes/body'),
+         'tooltip': makeTooltip('#menu:carousel_tank_filter/{}'.format(entry), '#tank_carousel_filter:tooltip/vehicleTypes/body'),
          'selected': filters[entry]})
 
     for entry in mapping[_SECTION.HIDDEN]:
         dataVO['hidden'].append({'label': text_styles.standard('#tank_carousel_filter:popover/checkbox/{}'.format(entry)),
-         'tooltip': makeTooltip('#tank_carousel_filter:popover/tooltip/{}/header'.format(entry), '#tank_carousel_filter:popover/tooltip/{}/body'.format(entry)),
+         'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), '#tank_carousel_filter:tooltip/{}/body'.format(entry)),
          'selected': filters[entry]})
 
     for entry in mapping[_SECTION.SPECIALS]:
-        if entry == 'igr':
-            continue
-        dataVO['specials'].append({'label': text_styles.standard('#tank_carousel_filter:popover/checkbox/{}'.format(entry)),
-         'tooltip': makeTooltip('#tank_carousel_filter:popover/tooltip/{}/header'.format(entry), '#tank_carousel_filter:popover/tooltip/{}/body'.format(entry)),
+        if entry == 'bonus':
+            ctx = {'multiplier': xpRateMultiplier}
+        else:
+            ctx = {}
+        dataVO['specials'].append({'label': makeHtmlString('html_templates:lobby/carousel_filter/popover', entry, ctx),
+         'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), _ms('#tank_carousel_filter:tooltip/{}/body'.format(entry), **ctx)),
          'selected': filters[entry]})
 
-    if 'igr' in mapping[_SECTION.SPECIALS]:
-        dataVO['specials'].append({'label': icons.premiumIgrSmall(),
-         'selected': filters['igr']})
     if not dataVO['hidden']:
         dataVO['hiddenSectionVisible'] = False
     return dataVO
@@ -153,7 +153,10 @@ class FilterPopover(TankCarouselFilterPopoverMeta):
         self.__mapping = {_SECTION.NATIONS: GUI_NATIONS,
          _SECTION.VEHICLE_TYPES: VEHICLE_TYPES_ORDER,
          _SECTION.LEVELS: _VEHICLE_LEVEL_FILTERS,
-         _SECTION.SPECIALS: ['elite', 'premium'],
+         _SECTION.SPECIALS: ['elite',
+                             'premium',
+                             'favorite',
+                             'bonus'],
          _SECTION.HIDDEN: []}
         if hasRented:
             self.__mapping[_SECTION.HIDDEN].append('hideRented')
@@ -170,12 +173,14 @@ class FilterPopover(TankCarouselFilterPopoverMeta):
         """
         filters = self.__filter.getFilters(self.__usedFilters)
         isDefault = self.__filter.isDefault(self.__usedFilters)
+        xpRateMultiplier = g_itemsCache.items.shop.dailyXPFactor
         if isInitial:
-            self.as_setInitDataS(_getInitialVO(filters, self.__mapping))
+            self.as_setInitDataS(_getInitialVO(filters, self.__mapping, xpRateMultiplier))
         else:
             self.as_setStateS(_getUpdateVO(filters, self.__mapping))
         self.as_enableDefBtnS(not isDefault)
         self.__tankCarousel.applyFilter()
+        self.__tankCarousel.updateHotFilters()
 
     @property
     def __filter(self):

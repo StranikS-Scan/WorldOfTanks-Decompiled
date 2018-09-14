@@ -6,6 +6,7 @@ from ConnectionManager import connectionManager
 from adisp import process
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import game_control, makeHtmlString
+from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getNewSettings
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.dialogs.deserter_meta import IngameDeserterDialogMeta
@@ -45,6 +46,9 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     def cancelClick(self):
         self.destroy()
 
+    def onCounterNeedUpdate(self):
+        self.__updateNewSettingsCount()
+
     def _populate(self):
         super(IngameMenu, self)._populate()
         if self.app is not None:
@@ -52,6 +56,11 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
         self.__setServerSettings()
         self.__setServerStats()
         return
+
+    def __updateNewSettingsCount(self):
+        newSettingsCount = len(getNewSettings())
+        if newSettingsCount > 0:
+            self.as_setSettingsBtnCounterS(str(newSettingsCount))
 
     def _dispose(self):
         if self.app is not None:

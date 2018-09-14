@@ -1,6 +1,7 @@
 <arena.def>
   <Implements>
     <Interface>	ChatProvider_chat2	</Interface>
+    <Interface>	SyncObjectsHost	</Interface>
     <Interface>	IndirectVisibility	</Interface>
     <Interface>	TeamBase_Arena	</Interface>
     <Interface>	ArtilleryEquipment	</Interface>
@@ -239,7 +240,7 @@
       <Arg>	OBJECT_ID	</Arg>
     </requestRespawnInfo>
     <onVehicleDetectorEvent>
-      <Arg>	UINT64	</Arg>
+      <Arg>	UINT16	</Arg>
       <Arg>	UINT32	</Arg>
       <Arg>	BOOL	</Arg>
     </onVehicleDetectorEvent>
@@ -263,11 +264,5 @@
     <onDamageTakenByVehicleRP>
       <Arg>	OBJECT_ID	</Arg>
     </onDamageTakenByVehicleRP>
-    <onVehicleBonusUpdated>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT16	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	FLOAT	</Arg>
-    </onVehicleBonusUpdated>
   </BaseMethods>
 </arena.def>

@@ -7,7 +7,6 @@ class GE_ALIASES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     G_E_INSPECT_WINDOW_UI = 'development\\gEInspectWindow.swf'
     G_E_INSPECT_WINDOW_UI_ = 'development\\gEInspectWindow.swf'

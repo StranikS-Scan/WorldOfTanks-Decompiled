@@ -52,3 +52,7 @@ def getPlayerID():
 
 def getAccountDatabaseID():
     return getattr(BigWorld.player(), 'databaseID', 0)
+
+
+def isLongDisconnectedFromCenter():
+    return getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False)

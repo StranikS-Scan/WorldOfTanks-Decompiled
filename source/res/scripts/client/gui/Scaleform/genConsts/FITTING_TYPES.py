@@ -7,7 +7,6 @@ class FITTING_TYPES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     OPTIONAL_DEVICE = 'optionalDevice'
     EQUIPMENT = 'equipment'
@@ -50,7 +49,7 @@ class FITTING_TYPES(object):
     OPTIONAL_DEVICE_RENDERER_DATA_CLASS_NAME = 'net.wg.gui.lobby.modulesPanel.data.OptionalDeviceVO'
     MODULE_FITTING_RENDERER_DATA_CLASS_NAME = 'net.wg.gui.lobby.modulesPanel.data.ModuleVO'
     FITTING_RENDERER_DATA_NAMES = [OPTIONAL_DEVICE_RENDERER_DATA_CLASS_NAME, MODULE_FITTING_RENDERER_DATA_CLASS_NAME]
-    HANGAR_POPOVER_MIN_AVAILABLE_HEIGHT = 455
+    HANGAR_POPOVER_TOP_MARGIN = 80
     VEHPREVIEW_POPOVER_MIN_AVAILABLE_HEIGHT = 575
     LARGE_POPOVER_WIDTH = 540
     MEDUIM_POPOVER_WIDTH = 500

@@ -38,6 +38,7 @@ from gui.shared.gui_items.Vehicle import getUserName
 from gui.shared.money import Money, ZERO_MONEY, Currency
 from gui.shared.formatters.currency import getBWFormatter
 from gui.prb_control.formatters import getPrebattleFullDescription
+from gui.prb_control.prb_helpers import prbInvitesProperty
 from helpers import i18n, html, getClientLanguage, getLocalizedData
 from helpers import time_utils
 from items import getTypeInfoByIndex, getTypeInfoByName, vehicles as vehicles_core
@@ -1240,10 +1241,10 @@ class ConverterFormatter(ServiceChannelFormatter):
             text.append(i18n.makeString('#messenger:serviceChannelMessages/sysMsg/converter/camouflages'))
         vehicles = data.get('vehicles')
         if vehicles:
-            vehiclesReceived = [ self.__vehName(cd) for cd in vehicles if cd > 0 ]
+            vehiclesReceived = [ self.__vehName(cd) for cd in vehicles if cd > 0 and g_itemsCache.items.doesVehicleExist(cd) ]
             if len(vehiclesReceived):
                 text.append(self.__i18nValue('vehicles', True, vehicles=', '.join(vehiclesReceived)))
-            vehiclesWithdrawn = [ self.__vehName(cd) for cd in vehicles if cd < 0 ]
+            vehiclesWithdrawn = [ self.__vehName(cd) for cd in vehicles if cd < 0 and g_itemsCache.items.doesVehicleExist(abs(cd)) ]
             if len(vehiclesWithdrawn):
                 text.append(self.__i18nValue('vehicles', False, vehicles=', '.join(vehiclesWithdrawn)))
         slots = data.get('slots')
@@ -1638,7 +1639,8 @@ class FortMessageFormatter(ServiceChannelFormatter):
          SYS_MESSAGE_FORT_EVENT.SPECIAL_ORDER_EXPIRED: BoundMethodWeakref(self._specialReserveExpiredMessage),
          SYS_MESSAGE_FORT_EVENT.RESOURCE_SET: BoundMethodWeakref(self._resourceSetMessage),
          SYS_MESSAGE_FORT_EVENT.RESERVE_SET: BoundMethodWeakref(self._reserveSetMessage),
-         SYS_MESSAGE_FORT_EVENT.FORT_GOT_8_LEVEL: BoundMethodWeakref(self._fortGotLvlMessage)}
+         SYS_MESSAGE_FORT_EVENT.FORT_GOT_8_LEVEL: BoundMethodWeakref(self._fortGotLvlMessage),
+         SYS_MESSAGE_FORT_EVENT.BATTLE_DELETED_LEVEL: BoundMethodWeakref(self._battleDeletedLevelMessage)}
 
     def format(self, message, *args):
         LOG_DEBUG('Message has received from fort', message)
@@ -1747,6 +1749,11 @@ class FortMessageFormatter(ServiceChannelFormatter):
 
     def _battleDeletedMessage(self, data):
         return self._buildMessage(data['event'], {'clan': getClanAbbrevString(data['enemyClanAbbrev'])})
+
+    def _battleDeletedLevelMessage(self, data):
+        return self._buildMessage(data['event'], {'clan': getClanAbbrevString(data['enemyClanAbbrev']),
+         'date': BigWorld.wg_getShortDateFormat(data['timeAttack']),
+         'time': BigWorld.wg_getShortTimeFormat(data['timeAttack'])})
 
     def _specialReserveExpiredMessage(self, data):
         resInc, resDec = data['resBonus']
@@ -1868,7 +1875,12 @@ class FortBattleInviteFormatter(ServiceChannelFormatter):
     def isNotify(self):
         return True
 
+    @prbInvitesProperty
+    def prbInvites(self):
+        return None
+
     def format(self, message, *args):
+        from notification.settings import NOTIFICATION_BUTTON_STATE
         from gui.prb_control.formatters.invites import PrbFortBattleInviteHtmlTextFormatter
         battleData = message.data
         if battleData and g_lobbyContext.getServerSettings().isFortsEnabled():
@@ -1878,9 +1890,13 @@ class FortBattleInviteFormatter(ServiceChannelFormatter):
                 timestamp = time_utils.getTimestampFromUTC(message.createdAt.timetuple())
             else:
                 timestamp = time_utils.getCurrentTimestamp()
+            submitState = NOTIFICATION_BUTTON_STATE.VISIBLE
+            if self.prbInvites.canAcceptInvite(inviteWrapper):
+                submitState |= NOTIFICATION_BUTTON_STATE.ENABLED
             msgType = 'fortBattleInvite'
             battleID = battleData.get('battleID')
             formatted = g_settings.msgTemplates.format(msgType, ctx={'text': formatter.getText(inviteWrapper)}, data={'timestamp': timestamp,
+             'buttonsStates': {'submit': submitState},
              'savedData': {'battleID': battleID,
                            'peripheryID': battleData.get('peripheryID'),
                            'battleFinishTime': time_utils.getTimestampFromUTC(message.finishedAt.timetuple())},

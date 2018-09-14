@@ -560,23 +560,89 @@
     </ER_53>
     <ER_56>	shared	</ER_56>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Delahaye_103TT>
+          <smplEnginePower>	79.29608	</smplEnginePower>
+        </Delahaye_103TT>
+        <Delahaye_135>
+          <smplEnginePower>	95.1553	</smplEnginePower>
+        </Delahaye_135>
+      </engines>
+      <chassis>
+        <Chassis_Lorraine39_L_AM>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Lorraine39_L_AM>
+        <Chassis_Lorraine39_L_AM_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Lorraine39_L_AM_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Lorraine39_L_AM>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Lorraine39_L_AM>
-      <Chassis_Lorraine39_L_AM_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Lorraine39_L_AM_2>
-    </chassis>
-    <engines>
-      <Delahaye_103TT>
-        <bravo>	19.82402	</bravo>
-      </Delahaye_103TT>
-      <Delahaye_135>
-        <bravo>	23.78883	</bravo>
-      </Delahaye_135>
-    </engines>
     <armour>	0.880841191	</armour>
   </clientAdjustmentFactors>
   <effects>

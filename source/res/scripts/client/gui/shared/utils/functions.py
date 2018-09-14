@@ -4,14 +4,14 @@ import random
 import re
 import ArenaType
 from adisp import async, process
-from constants import CLAN_MEMBER_FLAGS
 from helpers import i18n
 from ids_generators import SequenceIDGenerator
 from helpers.i18n import makeString
-from gui import GUI_SETTINGS
+from gui import GUI_SETTINGS, SystemMessages
 from items import ITEM_TYPE_INDICES, vehicles
 from debug_utils import LOG_DEBUG
 from gui.shared.money import Currency
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 
 def rnd_choice(*args):
     args = list(args)
@@ -234,63 +234,6 @@ def getAbsoluteUrl(url):
     return url.replace('../', 'img://gui/')
 
 
-def showInformationDialog(infDialog, callback, customMessage='', ns='common'):
-    """
-    Show information dialog (1 button - Close) and wait when player closes
-            this dialog.
-    
-    @param infDialog: dialog name. Title, button labels, message builds as
-            #dialogs:' + dialog + '/title'.
-    @param callback: method is invoked when closing the dialog, without arguments.
-    @param customMessage: external message if #dialogs:' + dialog + '/message'
-            does not fit.
-    @param ns: 'common' or 'battle'.
-    """
-    from gui.app_loader import g_appLoader
-
-    def onInformationDialogClosed(_):
-        battle = g_appLoader.getDefBattleApp()
-        if battle:
-            battle.removeExternalCallbacks('informationDialog.onClose')
-        callback()
-
-    battle = g_appLoader.getDefBattleApp()
-    if battle:
-        battle.addExternalCallbacks({'informationDialog.onClose': onInformationDialogClosed})
-        battle.call('{0:>s}.showInformationDialog'.format(ns), [infDialog, customMessage, 'informationDialog.onClose'])
-
-
-def showConfirmDialog(confirmDialog, callback, customMessage='', ns='common'):
-    """
-    Show confirmation dialog (2 buttons - Submit, Close) and wait when player
-            closes this dialog.
-    
-    @param confirmDialog: dialog name. Title, button labels, message builds as
-            #dialogs:' + dialog + '/title'.
-    @param callback: method is invoked when closing the dialog with argument -
-            True if player confirmed actions, otherwise - False.
-    @param customMessage: external message if #dialogs:' + dialog + '/message'
-            does not fit.
-    @param ns: 'common' or 'battle'.
-    """
-    from gui.app_loader import g_appLoader
-
-    def onConfirmResponse(confirm):
-        battle = g_appLoader.getDefBattleApp()
-        if battle:
-            battle.removeExternalCallbacks('confirmDialog.onConfirm', 'confirmDialog.onClose')
-        callback(confirm)
-
-    battle = g_appLoader.getDefBattleApp()
-    if battle:
-        battle.addExternalCallbacks({'confirmDialog.onConfirm': lambda callBackId: onConfirmResponse(True),
-         'confirmDialog.onClose': lambda callBackId: onConfirmResponse(False)})
-        battle.call('{0:>s}.showConfirmDialog'.format(ns), [confirmDialog,
-         customMessage,
-         'confirmDialog.onConfirm',
-         'confirmDialog.onClose'])
-
-
 _viewIdsGen = None
 
 def getViewName(viewAlias, *args):
@@ -312,3 +255,16 @@ def getPostBattleUniqueSubUrl(svrPackedData, clientPackedData):
 
 def parsePostBattleUniqueSubUrl(uniqueSubUrl):
     return uniqueSubUrl.split('/')[1:]
+
+
+def showSentInviteMessage(user=None):
+    """
+    This method adds the invite(in squad) message to system channel.
+    @param user: user info
+    """
+    if user is not None:
+        if user is not None:
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PREBATTLE_INVITES_SENDINVITE_NAME, type=SystemMessages.SM_TYPE.Information, name=user.getFullName())
+        else:
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PREBATTLE_INVITES_SENDINVITE, type=SystemMessages.SM_TYPE.Information)
+    return

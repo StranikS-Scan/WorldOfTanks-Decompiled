@@ -489,17 +489,52 @@
   <radios>
     <AN_GRC_8>	shared	</AN_GRC_8>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AOS-895-3>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Continental_AOS-895-3>
+      </engines>
+      <chassis>
+        <Chassis_G120_M41_90>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G120_M41_90>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G120_M41_90>
-        <alpha>	0.05635	</alpha>
-      </Chassis_G120_M41_90>
-    </chassis>
-    <engines>
-      <Continental_AOS-895-3>
-        <bravo>	132.1601	</bravo>
-      </Continental_AOS-895-3>
-    </engines>
     <armour>	0.817789876	</armour>
   </clientAdjustmentFactors>
   <effects>

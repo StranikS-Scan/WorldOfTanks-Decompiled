@@ -365,6 +365,9 @@ class Tutorial(object):
     def setEffectTriggered(self, effectID):
         self._triggeredEffects.add(effectID)
 
+    def unlockState(self, targetID):
+        self._currentState.unlock(targetID)
+
     def __timeLoop(self):
         self.__callbackID = None
         if not self._stopped:

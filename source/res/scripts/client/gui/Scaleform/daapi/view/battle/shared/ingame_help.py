@@ -5,6 +5,7 @@ from account_helpers.settings_core import g_settingsCore
 from account_helpers.settings_core.settings_constants import CONTROLS
 from gui.Scaleform.daapi.view.meta.IngameHelpWindowMeta import IngameHelpWindowMeta
 from gui.Scaleform.genConsts.KEYBOARD_KEYS import KEYBOARD_KEYS
+from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.shared import event_dispatcher
 from gui.shared.utils.key_mapping import getScaleformKey
 _CHANGED_KEYS_IN_HELP = (KEYBOARD_KEYS.FORWARD,
@@ -38,10 +39,16 @@ def getFixedKeysInfo():
         yield (key, getScaleformKey(code))
 
 
-class IngameHelpWindow(IngameHelpWindowMeta):
+class IngameHelpWindow(IngameHelpWindowMeta, BattleGUIKeyHandler):
+
+    def onWindowClose(self):
+        self.destroy()
 
     def onWindowMinimize(self):
         self.destroy()
+
+    def handleEscKey(self, isDown):
+        return isDown
 
     def clickSettingWindow(self):
         self.destroy()
@@ -49,6 +56,15 @@ class IngameHelpWindow(IngameHelpWindowMeta):
 
     def _populate(self):
         super(IngameHelpWindow, self)._populate()
+        if self.app is not None:
+            self.app.registerGuiKeyHandler(self)
         vo = dict(((key, value) for key, value in getChangedKeysInfo()))
         vo.update(dict(((key, value) for key, value in getFixedKeysInfo())))
         self.as_setKeysS(vo)
+        return
+
+    def _dispose(self):
+        if self.app is not None:
+            self.app.unregisterGuiKeyHandler(self)
+        super(IngameHelpWindow, self)._dispose()
+        return

@@ -6,6 +6,7 @@ import Math
 import CommandMapping
 from account_helpers import AccountSettings
 from account_helpers.settings_core import g_settingsCore, settings_constants
+from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS, g_repeatKeyHandlers
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import component
@@ -62,6 +63,11 @@ class GlobalSettingsPlugin(common.SimplePlugin):
             value = int(diff[settings_constants.GAME.MINIMAP_ALPHA])
             self._parentObj.as_setAlphaS(1 - value / 100.0)
 
+    def applyNewSize(self, sizeIndex):
+        LOG_DEBUG('Size index of minimap is changed', sizeIndex)
+        self.__sizeIndex = sizeIndex
+        self.__saveSettings()
+
     def _changeSizeSettings(self, newSizeSettings):
         """
         we can have different settings for minimap size
@@ -80,10 +86,9 @@ class GlobalSettingsPlugin(common.SimplePlugin):
 
     def __setSizeByStep(self, step):
         newIndex = settings.clampMinimapSizeIndex(self.__sizeIndex + step)
-        if newIndex != self.__sizeIndex:
-            self.__sizeIndex = newIndex
+        if self.__sizeIndex != newIndex:
+            LOG_DEBUG('Try to change size index of minimap by step', newIndex)
             self._parentObj.as_setSizeS(newIndex)
-        self.__saveSettings()
 
     def __toogleVisible(self):
         self.__isVisible = not self.__isVisible

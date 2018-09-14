@@ -957,26 +957,92 @@
     </FuG5>
     <FuG8>	shared	</FuG8>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Praga_TNPS>
+          <smplEnginePower>	126.8737	</smplEnginePower>
+        </Praga_TNPS>
+        <Praga_EPA_2>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </Praga_EPA_2>
+        <Praga_EPA_3>
+          <smplEnginePower>	211.4562	</smplEnginePower>
+        </Praga_EPA_3>
+      </engines>
+      <chassis>
+        <Pz38t_Standardketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Pz38t_Standardketten>
+        <Pz38t_Vetstaerktketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Pz38t_Vetstaerktketten>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Pz38t_Standardketten>
-        <alpha>	0.12075	</alpha>
-      </Pz38t_Standardketten>
-      <Pz38t_Vetstaerktketten>
-        <alpha>	0.10465	</alpha>
-      </Pz38t_Vetstaerktketten>
-    </chassis>
-    <engines>
-      <Praga_TNPS>
-        <bravo>	31.71843	</bravo>
-      </Praga_TNPS>
-      <Praga_EPA_2>
-        <bravo>	37.00484	</bravo>
-      </Praga_EPA_2>
-      <Praga_EPA_3>
-        <bravo>	52.86406	</bravo>
-      </Praga_EPA_3>
-    </engines>
     <armour>	0.726633053	</armour>
   </clientAdjustmentFactors>
   <effects>

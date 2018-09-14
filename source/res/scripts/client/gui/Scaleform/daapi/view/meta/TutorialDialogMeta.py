@@ -8,31 +8,22 @@ class TutorialDialogMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def submit(self):
-        """
-        :return :
-        """
         self._printOverrideError('submit')
 
     def cancel(self):
-        """
-        :return :
-        """
         self._printOverrideError('cancel')
 
     def as_setContentS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by TutorialDialogVO (AS)
         """
         return self.flashObject.as_setContent(data) if self._isDAAPIInited() else None
 
     def as_updateContentS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by TutorialDialogVO (AS)
         """
         return self.flashObject.as_updateContent(data) if self._isDAAPIInited() else None

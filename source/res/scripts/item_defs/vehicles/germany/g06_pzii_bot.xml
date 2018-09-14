@@ -461,18 +461,52 @@
   <radios>
     <FuG2_bot>	shared	</FuG2_bot>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <PzII_ketten_Ausf_A_bot>
-        <alpha>	0.13685	</alpha>
-      </PzII_ketten_Ausf_A_bot>
-    </chassis>
-    <engines>
-      <Maybach_HL57TR_bot>
-        <bravo>	34.36164	</bravo>
-      </Maybach_HL57TR_bot>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL57TR_bot>
+          <smplEnginePower>	137.4465	</smplEnginePower>
+        </Maybach_HL57TR_bot>
+      </engines>
+      <chassis>
+        <PzII_ketten_Ausf_A_bot>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzII_ketten_Ausf_A_bot>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

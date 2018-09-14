@@ -8,19 +8,10 @@ class ProfileTechniquePageMeta(ProfileTechnique):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends ProfileTechnique
-    null
     """
 
     def setIsInHangarSelected(self, value):
-        """
-        :param value:
-        :return :
-        """
         self._printOverrideError('setIsInHangarSelected')
 
     def as_setSelectedVehicleIntCDS(self, index):
-        """
-        :param index:
-        :return :
-        """
         return self.flashObject.as_setSelectedVehicleIntCD(index) if self._isDAAPIInited() else None

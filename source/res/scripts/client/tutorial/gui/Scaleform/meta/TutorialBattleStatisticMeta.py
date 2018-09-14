@@ -8,24 +8,13 @@ class TutorialBattleStatisticMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def restart(self):
-        """
-        :return :
-        """
         self._printOverrideError('restart')
 
     def showVideoDialog(self):
-        """
-        :return :
-        """
         self._printOverrideError('showVideoDialog')
 
     def as_setDataS(self, data):
-        """
-        :param data:
-        :return :
-        """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

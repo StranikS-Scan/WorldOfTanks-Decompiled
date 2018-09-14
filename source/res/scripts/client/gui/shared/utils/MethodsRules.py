@@ -3,6 +3,7 @@
 from collections import defaultdict
 from types import MethodType
 from debug_utils import LOG_DEBUG
+from helpers.aop import copy
 
 class MethodsRules(object):
     __slots__ = ('__listenersToSkip', '__notificationToDelay', '__delayersProcessed')
@@ -40,6 +41,7 @@ class MethodsRules(object):
                 instance.processDelayer(listener.__name__)
                 return result
 
+            copy(wrapper, listener)
             return wrapper
 
         def __get__(self, obj, objtype=None):

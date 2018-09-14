@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/dyn_squad_functional.py
-import Event
 import BigWorld
 import CommandMapping
 import Keys
@@ -13,7 +12,7 @@ from gui.app_loader.decorators import sf_battle
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
-from gui.battle_control.battle_constants import PLAYER_GUI_PROPS, BATTLE_CTRL_ID
+from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.prb_control.prb_helpers import prbInvitesProperty
 from gui.shared.SoundEffectsId import SoundEffectsId
 from helpers.i18n import makeString
@@ -251,15 +250,14 @@ class _DynSquadSoundsController(DynSquadArenaController):
 
 
 class DynSquadFunctional(IArenaVehiclesController):
-    __slots__ = ('__soundCtrl', '__msgsCtrl', 'onPlayerBecomeSquadman')
+    __slots__ = ('__soundCtrl', '__msgsCtrl')
 
     def __init__(self, setup):
         super(DynSquadFunctional, self).__init__()
         self.__soundCtrl = _DynSquadSoundsController()
         self.__msgsCtrl = DynSquadMessagesController()
-        self.onPlayerBecomeSquadman = Event.Event()
         if setup.isReplayPlaying:
-            g_messengerEvents.users.onUsersListReceived({USER_TAG.FRIEND, USER_TAG.IGNORED})
+            g_messengerEvents.users.onUsersListReceived({USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.IGNORED_TMP})
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.DYN_SQUADS
@@ -274,18 +272,9 @@ class DynSquadFunctional(IArenaVehiclesController):
         return
 
     def updateVehiclesInfo(self, updated, arenaDP):
-        found = []
-        for flags, vo in updated:
-            if not flags & INVALIDATE_OP.PREBATTLE_CHANGED:
-                continue
-            if vo.squadIndex:
-                found.append(vo)
-            vehicleID = vo.vehicleID
-            props = arenaDP.getPlayerGuiProps(vehicleID, vo.team)
-            if props == PLAYER_GUI_PROPS.squadman:
-                self.onPlayerBecomeSquadman(vehicleID, props)
-
-        if found:
-            first = found[0]
+        """Vehicle has been updated on arena. Updates required player's panel, frags panel.
+        """
+        if updated:
+            first = updated[0][1]
             self.__soundCtrl.process(first, arenaDP)
             self.__msgsCtrl.process(first, arenaDP)

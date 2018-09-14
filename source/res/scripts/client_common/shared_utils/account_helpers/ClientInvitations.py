@@ -8,10 +8,10 @@ import AccountCommands
 from constants import INVITATION_STATUS
 from helpers.time_utils import getCurrentTimestamp
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
-_UniqueId = namedtuple('_UniqueId', ['id', 'senderDBID'])
+UniqueId = namedtuple('UniqueId', ['id', 'senderDBID'])
 
 def _getUniqueId(invite):
-    return _UniqueId(invite['id'], invite['senderDBID'])
+    return UniqueId(invite['id'], invite['senderDBID'])
 
 
 class ClientInvitations(object):
@@ -23,7 +23,7 @@ class ClientInvitations(object):
         self.__playerEvents = playerEvents
         return
 
-    def __del__(self):
+    def clear(self):
         self._clearExpiryCallback()
 
     def getInvites(self):
@@ -63,7 +63,7 @@ class ClientInvitations(object):
 
     def _onInvitationResponseReceived(self, newStatus, invitationId, senderDBID, callback, _, code, errStr):
         if AccountCommands.isCodeValid(code):
-            uniqueId = _UniqueId(invitationId, senderDBID)
+            uniqueId = UniqueId(invitationId, senderDBID)
             try:
                 self.__invitations[uniqueId]['status'] = newStatus
                 self.__playerEvents.onPrebattleInvitationsChanged(self.__invitations)

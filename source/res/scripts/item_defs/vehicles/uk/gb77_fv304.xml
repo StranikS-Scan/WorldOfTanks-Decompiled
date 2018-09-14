@@ -590,7 +590,7 @@
           <aimingTime>	4.8	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <turretYawLimits>	-14 17	</turretYawLimits>
-          <effects>	shot_large	</effects>
+          <effects>	shot_main	</effects>
           <models>
             <undamaged>	vehicles/british/GB77_FV304/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB77_FV304/crash/lod0/Gun_01.model	</destroyed>
@@ -767,23 +767,89 @@
     </N19Mk3>
     <N22>	shared	</N22>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royce_Meteorite_V8>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Rolls_Royce_Meteorite_V8>
+        <Rolls_Royce_Meteor_M300>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Rolls_Royce_Meteor_M300>
+      </engines>
+      <chassis>
+        <Chassis_GB77_FV304>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB77_FV304>
+        <Chassis_GB77_FV304_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB77_FV304_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB77_FV304>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GB77_FV304>
-      <Chassis_GB77_FV304_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB77_FV304_2>
-    </chassis>
-    <engines>
-      <Rolls_Royce_Meteorite_V8>
-        <bravo>	92.5121	</bravo>
-      </Rolls_Royce_Meteorite_V8>
-      <Rolls_Royce_Meteor_M300>
-        <bravo>	132.1601	</bravo>
-      </Rolls_Royce_Meteor_M300>
-    </engines>
     <armour>	0.410133015	</armour>
   </clientAdjustmentFactors>
   <effects>

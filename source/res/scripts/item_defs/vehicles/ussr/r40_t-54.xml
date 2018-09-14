@@ -1191,23 +1191,89 @@
     </_9RM>
     <R113>	shared	</R113>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2-54>
+          <smplEnginePower>	655.5143	</smplEnginePower>
+        </V-2-54>
+        <V-55U>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </V-55U>
+      </engines>
+      <chassis>
+        <Chassis_T-54_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T-54_2>
+        <Chassis_T-54_3>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T-54_3>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T-54_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_T-54_2>
-      <Chassis_T-54_3>
-        <alpha>	0.08855	</alpha>
-      </Chassis_T-54_3>
-    </chassis>
-    <engines>
-      <V-2-54>
-        <bravo>	163.8786	</bravo>
-      </V-2-54>
-      <V-55U>
-        <bravo>	185.0242	</bravo>
-      </V-55U>
-    </engines>
     <armour>	1.015639328	</armour>
   </clientAdjustmentFactors>
   <effects>

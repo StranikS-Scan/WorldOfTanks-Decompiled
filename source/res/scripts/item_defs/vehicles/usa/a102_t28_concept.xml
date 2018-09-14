@@ -462,7 +462,7 @@
               <hideIfDamaged>	true	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.85 0.445 0.000000 0.000000	</tiling>
@@ -497,17 +497,52 @@
   <radios>
     <SCR_508_1>	shared	</SCR_508_1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_G200_m_781C9GC5>
+          <smplEnginePower>	1014.99	</smplEnginePower>
+        </Wright_G200_m_781C9GC5>
+      </engines>
+      <chassis>
+        <Chassis_A102_T28_concept>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.16905	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.16905	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.16905	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.16905	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.16905	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.16905	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A102_T28_concept>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_A102_T28_concept>
-        <alpha>	0.16905	</alpha>
-      </Chassis_A102_T28_concept>
-    </chassis>
-    <engines>
-      <Wright_G200_m_781C9GC5>
-        <bravo>	253.7475	</bravo>
-      </Wright_G200_m_781C9GC5>
-    </engines>
     <armour>	0.959036248	</armour>
   </clientAdjustmentFactors>
   <effects>

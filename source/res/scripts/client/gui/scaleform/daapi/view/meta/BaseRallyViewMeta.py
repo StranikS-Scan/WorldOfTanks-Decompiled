@@ -8,13 +8,7 @@ class BaseRallyViewMeta(AbstractRallyView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractRallyView
-    null
     """
 
     def as_setCoolDownS(self, value, requestId):
-        """
-        :param value:
-        :param requestId:
-        :return :
-        """
         return self.flashObject.as_setCoolDown(value, requestId) if self._isDAAPIInited() else None

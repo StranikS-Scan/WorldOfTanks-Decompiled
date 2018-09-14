@@ -342,17 +342,52 @@
   <radios>
     <AN_GRR_5_Prem>	shared	</AN_GRR_5_Prem>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AOSI_895_5_Prem>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Continental_AOSI_895_5_Prem>
+      </engines>
+      <chassis>
+        <Chassis_Ch24_Type64>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch24_Type64>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch24_Type64>
-        <alpha>	0.0644	</alpha>
-      </Chassis_Ch24_Type64>
-    </chassis>
-    <engines>
-      <Continental_AOSI_895_5_Prem>
-        <bravo>	132.1601	</bravo>
-      </Continental_AOSI_895_5_Prem>
-    </engines>
     <armour>	0.768770195	</armour>
   </clientAdjustmentFactors>
   <effects>

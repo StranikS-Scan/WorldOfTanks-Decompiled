@@ -161,7 +161,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.423661	</radius>
-          <syncAngle>	37.8947	</syncAngle>
+          <syncAngle>	37.894	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -175,7 +175,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L7	</name>
           <radius>	0.34	</radius>
-          <syncAngle>	37.8947	</syncAngle>
+          <syncAngle>	37.894	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -189,7 +189,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.423661	</radius>
-          <syncAngle>	37.8947	</syncAngle>
+          <syncAngle>	37.894	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -203,7 +203,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R7	</name>
           <radius>	0.34	</radius>
-          <syncAngle>	37.8947	</syncAngle>
+          <syncAngle>	37.894	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -244,8 +244,8 @@
         <segmentModelRight>	vehicles/british/GB32_Tortoise/track/segment.model	</segmentModelRight>
         <left>	vehicles/british/GB32_Tortoise/track/left.track	</left>
         <right>	vehicles/british/GB32_Tortoise/track/right.track	</right>
-        <segmentLength>	0.241	</segmentLength>
-        <segmentOffset>	0.294	</segmentOffset>
+        <segmentLength>	0.231	</segmentLength>
+        <segmentOffset>	0.255	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -766,23 +766,89 @@
     </N22>
     <C42>	shared	</C42>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Meteor_MkV>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkV>
+        <Rolls_Royse_Meteor_M120>
+          <smplEnginePower>	856.3977	</smplEnginePower>
+        </Rolls_Royse_Meteor_M120>
+      </engines>
+      <chassis>
+        <Chassis_GB32_Tortoise>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB32_Tortoise>
+        <Chassis_GB32_Tortoise_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB32_Tortoise_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB32_Tortoise>
-        <alpha>	0.13685	</alpha>
-      </Chassis_GB32_Tortoise>
-      <Chassis_GB32_Tortoise_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GB32_Tortoise_2>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Meteor_MkV>
-        <bravo>	171.8082	</bravo>
-      </Rolls_Royse_Meteor_MkV>
-      <Rolls_Royse_Meteor_M120>
-        <bravo>	214.0994	</bravo>
-      </Rolls_Royse_Meteor_M120>
-    </engines>
     <armour>	0.920694667	</armour>
   </clientAdjustmentFactors>
   <effects>

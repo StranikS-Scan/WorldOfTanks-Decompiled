@@ -70,7 +70,7 @@ class LoaderManager(LoaderManagerMeta):
         if name in self.__nameToLoadingItem:
             self.__nameToLoadingItem.pop(name)
 
-    def viewInitializationError(self, config, alias, name):
+    def viewInitializationError(self, alias, name):
         msg = "View '{0}' does not implement net.wg.infrastructure.interfaces.IView"
         msg = msg.format(alias)
         LOG_ERROR(msg)
@@ -93,7 +93,11 @@ class LoaderManager(LoaderManagerMeta):
         viewTutorialID = self.__app.tutorialManager.getViewTutorialID(name)
         if name in self.__nameToLoadingItem:
             item = self.__nameToLoadingItem[name]
-            self.as_loadViewS(item.pyEntity.settings._asdict(), alias, name, viewTutorialID)
+            viewDict = {'config': item.pyEntity.settings.getDAAPIObject(),
+             'alias': alias,
+             'name': name,
+             'viewTutorialId': viewTutorialID}
+            self.as_loadViewS(viewDict)
             return item.pyEntity
         else:
             pyEntity, factoryIdx = g_entitiesFactories.factory(alias, *args, **kwargs)
@@ -102,7 +106,11 @@ class LoaderManager(LoaderManagerMeta):
                 pyEntity.setEnvironment(self.__app)
                 self.__nameToLoadingItem[name] = _LoadingItem(name, pyEntity, factoryIdx, args, kwargs)
                 self.onViewLoadInit(pyEntity)
-                self.as_loadViewS(pyEntity.settings._asdict(), alias, name, viewTutorialID)
+                viewDict = {'config': pyEntity.settings.getDAAPIObject(),
+                 'alias': alias,
+                 'name': name,
+                 'viewTutorialId': viewTutorialID}
+                self.as_loadViewS(viewDict)
                 return pyEntity
             LOG_WARNING('PyEntity for alias %s is None' % alias)
             return

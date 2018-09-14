@@ -947,26 +947,92 @@
     </SCR_210>
     <SCR_506>	shared	</SCR_506>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Guiberson_T-1020-4>
+          <smplEnginePower>	259.0339	</smplEnginePower>
+        </Guiberson_T-1020-4>
+        <Continental_W-670>
+          <smplEnginePower>	277.0077	</smplEnginePower>
+        </Continental_W-670>
+        <Continental_R-975-C1>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Continental_R-975-C1>
+      </engines>
+      <chassis>
+        <chassisE1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </chassisE1>
+        <chassisE2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </chassisE2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <chassisE1>
-        <alpha>	0.10465	</alpha>
-      </chassisE1>
-      <chassisE2>
-        <alpha>	0.08855	</alpha>
-      </chassisE2>
-    </chassis>
-    <engines>
-      <Guiberson_T-1020-4>
-        <bravo>	64.75847	</bravo>
-      </Guiberson_T-1020-4>
-      <Continental_W-670>
-        <bravo>	69.25191	</bravo>
-      </Continental_W-670>
-      <Continental_R-975-C1>
-        <bravo>	92.5121	</bravo>
-      </Continental_R-975-C1>
-    </engines>
     <armour>	0.813244384	</armour>
   </clientAdjustmentFactors>
   <effects>

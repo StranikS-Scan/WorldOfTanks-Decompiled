@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/INVITES.py
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 from debug_utils import LOG_WARNING
 
 class INVITES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     ERRORS_UNKNOWNUSER = '#invites:errors/unknownuser'
     ERRORS_USEROFFLINE = '#invites:errors/useroffline'
     ERRORS_SELFINVITE = '#invites:errors/selfinvite'
@@ -121,21 +119,6 @@ class INVITES(object):
     CLANS_STATE_INVITE_ACCEPTED = '#invites:clans/state/invite/accepted'
     CLANS_STATE_INVITE_DECLINED = '#invites:clans/state/invite/declined'
     CLANS_STATE_INVITE_ERROR_INCLANENTERCOOLDOWN = '#invites:clans/state/invite/error/inClanEnterCooldown'
-    INVITES_STATE_ENUM = (INVITES_STATE_PENDING,
-     INVITES_STATE_ACCEPTED,
-     INVITES_STATE_DECLINED,
-     INVITES_STATE_REVOKED,
-     INVITES_STATE_EXPIRED,
-     INVITES_STATE_ERROR)
-    INVITES_PREBATTLE_ALREADYJOINED_ENUM = (INVITES_PREBATTLE_ALREADYJOINED_SQUAD,
-     INVITES_PREBATTLE_ALREADYJOINED_FALLOUT,
-     INVITES_PREBATTLE_ALREADYJOINED_COMPANY,
-     INVITES_PREBATTLE_ALREADYJOINED_TRAINING,
-     INVITES_PREBATTLE_ALREADYJOINED_CLAN,
-     INVITES_PREBATTLE_ALREADYJOINED_TOURNAMENT,
-     INVITES_PREBATTLE_ALREADYJOINED_UNIT,
-     INVITES_PREBATTLE_ALREADYJOINED_SORTIE)
-    INVITES_PREBATTLE_ACCEPTNOTALLOWED_ENUM = (INVITES_PREBATTLE_ACCEPTNOTALLOWED_UNDEFINEDPERIPHERY, INVITES_PREBATTLE_ACCEPTNOTALLOWED_OTHERPERIPHERY)
     INVITES_TEXT_ENUM = (INVITES_TEXT_CREATORNAME,
      INVITES_TEXT_SQUAD,
      INVITES_TEXT_EVENT,
@@ -152,6 +135,25 @@ class INVITES(object):
      INVITES_TEXT_FORT_DEFENCE,
      INVITES_TEXT_FORT_DIRECTION,
      INVITES_TEXT_CLUB)
+    INVITES_STATE_ENUM = (INVITES_STATE_PENDING,
+     INVITES_STATE_ACCEPTED,
+     INVITES_STATE_DECLINED,
+     INVITES_STATE_REVOKED,
+     INVITES_STATE_EXPIRED,
+     INVITES_STATE_ERROR)
+    INVITES_NOTE_LEAVE_ENUM = (INVITES_NOTE_LEAVE_COMPANY,
+     INVITES_NOTE_LEAVE_SQUAD,
+     INVITES_NOTE_LEAVE_FALLOUT,
+     INVITES_NOTE_LEAVE_TRAINING,
+     INVITES_NOTE_LEAVE_UNIT,
+     INVITES_NOTE_LEAVE_CLAN,
+     INVITES_NOTE_LEAVE_TOURNAMENT,
+     INVITES_NOTE_LEAVE_SORTIE,
+     INVITES_NOTE_LEAVE_FORT_BATTLE,
+     INVITES_NOTE_LEAVE_CLUBS,
+     INVITES_NOTE_LEAVE_RANDOMS,
+     INVITES_NOTE_LEAVE_EVENT,
+     INVITES_NOTE_LEAVE_SANDBOX)
     INVITES_NOTE_CHANGE_AND_LEAVE_ENUM = (INVITES_NOTE_CHANGE_AND_LEAVE_COMPANY,
      INVITES_NOTE_CHANGE_AND_LEAVE_EVENT,
      INVITES_NOTE_CHANGE_AND_LEAVE_SQUAD,
@@ -166,94 +168,66 @@ class INVITES(object):
      INVITES_NOTE_CHANGE_AND_LEAVE_RANDOMS,
      INVITES_NOTE_CHANGE_AND_LEAVE_EVENT_BATTLES,
      INVITES_NOTE_CHANGE_AND_LEAVE_SANDBOX)
-    INVITES_NOTE_LEAVE_ENUM = (INVITES_NOTE_LEAVE_COMPANY,
-     INVITES_NOTE_LEAVE_SQUAD,
-     INVITES_NOTE_LEAVE_FALLOUT,
-     INVITES_NOTE_LEAVE_TRAINING,
-     INVITES_NOTE_LEAVE_UNIT,
-     INVITES_NOTE_LEAVE_CLAN,
-     INVITES_NOTE_LEAVE_TOURNAMENT,
-     INVITES_NOTE_LEAVE_SORTIE,
-     INVITES_NOTE_LEAVE_FORT_BATTLE,
-     INVITES_NOTE_LEAVE_CLUBS,
-     INVITES_NOTE_LEAVE_RANDOMS,
-     INVITES_NOTE_LEAVE_EVENT,
-     INVITES_NOTE_LEAVE_SANDBOX)
+    INVITES_PREBATTLE_ACCEPTNOTALLOWED_ENUM = (INVITES_PREBATTLE_ACCEPTNOTALLOWED_UNDEFINEDPERIPHERY, INVITES_PREBATTLE_ACCEPTNOTALLOWED_OTHERPERIPHERY)
+    INVITES_PREBATTLE_ALREADYJOINED_ENUM = (INVITES_PREBATTLE_ALREADYJOINED_SQUAD,
+     INVITES_PREBATTLE_ALREADYJOINED_FALLOUT,
+     INVITES_PREBATTLE_ALREADYJOINED_COMPANY,
+     INVITES_PREBATTLE_ALREADYJOINED_TRAINING,
+     INVITES_PREBATTLE_ALREADYJOINED_CLAN,
+     INVITES_PREBATTLE_ALREADYJOINED_TOURNAMENT,
+     INVITES_PREBATTLE_ALREADYJOINED_UNIT,
+     INVITES_PREBATTLE_ALREADYJOINED_SORTIE)
 
-    @staticmethod
-    def invites_state(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#invites:invites/state/%s' % key
-        if outcome not in INVITES.INVITES_STATE_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def invites_text(cls, key0):
+        outcome = '#invites:invites/text/{}'.format(key0)
+        if outcome not in cls.INVITES_TEXT_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def invites_prebattle_alreadyjoined(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#invites:invites/prebattle/alreadyJoined/%s' % key
-        if outcome not in INVITES.INVITES_PREBATTLE_ALREADYJOINED_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def invites_state(cls, key0):
+        outcome = '#invites:invites/state/{}'.format(key0)
+        if outcome not in cls.INVITES_STATE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def invites_prebattle_acceptnotallowed(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#invites:invites/prebattle/acceptNotAllowed/%s' % key
-        if outcome not in INVITES.INVITES_PREBATTLE_ACCEPTNOTALLOWED_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def invites_note_leave(cls, key0):
+        outcome = '#invites:invites/note/leave/{}'.format(key0)
+        if outcome not in cls.INVITES_NOTE_LEAVE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def invites_text(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#invites:invites/text/%s' % key
-        if outcome not in INVITES.INVITES_TEXT_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def invites_note_change_and_leave(cls, key0):
+        outcome = '#invites:invites/note/change_and_leave/{}'.format(key0)
+        if outcome not in cls.INVITES_NOTE_CHANGE_AND_LEAVE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def invites_note_change_and_leave(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#invites:invites/note/change_and_leave/%s' % key
-        if outcome not in INVITES.INVITES_NOTE_CHANGE_AND_LEAVE_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def invites_prebattle_acceptnotallowed(cls, key0):
+        outcome = '#invites:invites/prebattle/acceptNotAllowed/{}'.format(key0)
+        if outcome not in cls.INVITES_PREBATTLE_ACCEPTNOTALLOWED_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def invites_note_leave(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#invites:invites/note/leave/%s' % key
-        if outcome not in INVITES.INVITES_NOTE_LEAVE_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def invites_prebattle_alreadyjoined(cls, key0):
+        outcome = '#invites:invites/prebattle/alreadyJoined/{}'.format(key0)
+        if outcome not in cls.INVITES_PREBATTLE_ALREADYJOINED_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome

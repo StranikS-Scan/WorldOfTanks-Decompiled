@@ -34,7 +34,7 @@ class ClassicPage(SharedPage):
                 return
             if isShown:
                 radialMenu.show()
-                self.app.enterGuiControlMode(BATTLE_VIEW_ALIASES.RADIAL_MENU, cursorVisible=False)
+                self.app.enterGuiControlMode(BATTLE_VIEW_ALIASES.RADIAL_MENU, cursorVisible=False, enableAiming=False)
             else:
                 self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.RADIAL_MENU)
                 radialMenu.hide()
@@ -75,3 +75,8 @@ class ClassicPage(SharedPage):
     def _handleGUIToggled(self, event):
         if self._fullStatsAlias and not self.as_isComponentVisibleS(self._fullStatsAlias):
             self._toggleGuiVisible()
+
+    def _switchToPostmortem(self):
+        super(ClassicPage, self)._switchToPostmortem()
+        if self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.RADIAL_MENU):
+            self._toggleRadialMenu(False)

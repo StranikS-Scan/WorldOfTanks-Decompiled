@@ -10,7 +10,7 @@ import dossiers2
 from helpers import html
 from FortifiedRegionBase import NOT_ACTIVATED, FORT_ATTACK_RESULT
 from messenger.ext import passCensor
-from constants import FORT_SCOUTING_DATA_FILTER, FORT_MAX_ELECTED_CLANS, FORT_SCOUTING_DATA_ERROR
+from constants import FORT_SCOUTING_DATA_FILTER, FORT_FAVORITES_LIMIT, FORT_SCOUTING_DATA_ERROR, FORT_MIN_ATTACK_LEVEL, FORT_MAX_ATTACK_LEVEL
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 import fortified_regions
 from shared_utils import CONST_CONTAINER, isEmpty
@@ -919,6 +919,8 @@ class PublicInfoCache(object):
         self.__isFitlerApplied = True
         self.__lvlFrom = lvlFrom
         self.__lvlTo = lvlTo
+        self.__lvlFromTag = lvlFrom
+        self.__lvlToTag = lvlTo
         self.__extStartDefHour = extStartDefHour
         self.__attackDay = attackDay
 
@@ -950,9 +952,11 @@ class PublicInfoCache(object):
 
     def resetFilters(self):
         self.__isFitlerApplied = False
-        self.__limit = FORT_MAX_ELECTED_CLANS
-        self.__lvlFrom = 5
-        self.__lvlTo = 10
+        self.__limit = FORT_FAVORITES_LIMIT
+        self.__lvlFrom = self.__controller.getFort().getMinAttackLevel()
+        self.__lvlTo = self.__controller.getFort().getMaxAttackLevel()
+        self.__lvlFromTag = FORT_MIN_ATTACK_LEVEL
+        self.__lvlToTag = FORT_MAX_ATTACK_LEVEL
         self.__extStartDefHour = NOT_ACTIVATED
         self.__attackDay = NOT_ACTIVATED
 
@@ -960,16 +964,27 @@ class PublicInfoCache(object):
         self.__isFitlerApplied = False
         self.__filterType = FORT_SCOUTING_DATA_FILTER.DEFAULT
         self.__abbrevPattern = ''
-        self.__limit = FORT_MAX_ELECTED_CLANS
+        self.__limit = FORT_FAVORITES_LIMIT
         self.__lvlFrom = self.__controller.getFort().level
         self.__lvlTo = self.__controller.getFort().level
+        self.__lvlFromTag = FORT_MIN_ATTACK_LEVEL
+        self.__lvlToTag = FORT_MAX_ATTACK_LEVEL
         self.__extStartDefHour = NOT_ACTIVATED
         self.__attackDay = NOT_ACTIVATED
 
     def request(self):
         self.__isRequestInProcess = True
         defenceHourFrom, defenceHourTo, attackDay = self.__adjustTimeToGM()
-        self.__controller.request(FortPublicInfoCtx(self.__filterType, self.__abbrevPattern, self.__limit, self.__lvlFrom, self.__lvlTo, defenceHourFrom, defenceHourTo, attackDay, self.__firstDefaultQuery, waitingID='fort/publicInfo/get'), self.__requestCacheCallback)
+        if self.__filterType == FORT_SCOUTING_DATA_FILTER.FILTER:
+            lvlFrom = self.__lvlFromTag
+            lvlTo = self.__lvlToTag
+        elif self.__filterType == FORT_SCOUTING_DATA_FILTER.ELECT:
+            lvlFrom = FORT_MIN_ATTACK_LEVEL
+            lvlTo = FORT_MAX_ATTACK_LEVEL
+        else:
+            lvlFrom = self.__lvlFrom
+            lvlTo = self.__lvlTo
+        self.__controller.request(FortPublicInfoCtx(self.__filterType, self.__abbrevPattern, self.__limit, lvlFrom, lvlTo, defenceHourFrom, defenceHourTo, attackDay, self.__firstDefaultQuery, waitingID='fort/publicInfo/get'), self.__requestCacheCallback)
 
     @property
     def isRequestInProcess(self):

@@ -536,17 +536,52 @@
   <radios>
     <SCR_508_1>	shared	</SCR_508_1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAA_2>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Ford_GAA_2>
+      </engines>
+      <chassis>
+        <Chassis_A104_M4A3E8A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A104_M4A3E8A>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_A104_M4A3E8A>
-        <alpha>	0.0805	</alpha>
-      </Chassis_A104_M4A3E8A>
-    </chassis>
-    <engines>
-      <Ford_GAA_2>
-        <bravo>	132.1601	</bravo>
-      </Ford_GAA_2>
-    </engines>
     <armour>	0.983901358	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -1011,23 +1011,89 @@
     </SCR_610>
     <SCR_619>	shared	</SCR_619>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Buick_series_60>
+          <smplEnginePower>	348.9028	</smplEnginePower>
+        </Buick_series_60>
+        <Wright_Continental_R-975C4>
+          <smplEnginePower>	486.3493	</smplEnginePower>
+        </Wright_Continental_R-975C4>
+      </engines>
+      <chassis>
+        <Chassis_T49>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T49>
+        <Chassis_T49_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T49_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T49>
-        <alpha>	0.1127	</alpha>
-      </Chassis_T49>
-      <Chassis_T49_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_T49_2>
-    </chassis>
-    <engines>
-      <Buick_series_60>
-        <bravo>	87.22569	</bravo>
-      </Buick_series_60>
-      <Wright_Continental_R-975C4>
-        <bravo>	121.5873	</bravo>
-      </Wright_Continental_R-975C4>
-    </engines>
     <armour>	0.590817144	</armour>
   </clientAdjustmentFactors>
   <effects>

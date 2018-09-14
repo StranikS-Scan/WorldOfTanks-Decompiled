@@ -1,19 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/dumpers.py
-from debug_utils import LOG_ERROR
 import gui
+import nations
+from debug_utils import LOG_ERROR
+from gui.Scaleform.daapi.view.lobby.techtree import techtree_dp
+from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
+from gui.Scaleform.daapi.view.lobby.techtree.settings import VehicleClassInfo
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getTreeNodeCompareData, getBtnCompareData
+from gui.Scaleform.locale.MENU import MENU
+from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.tooltips.formatters import packItemRentActionTooltipData
+from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.utils import CLIP_ICON_PATH
-from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import i18n, html
-from gui.Scaleform.daapi.view.lobby.techtree import techtree_dp
-from gui.Scaleform.daapi.view.lobby.techtree.settings import VehicleClassInfo
-from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
-import nations
 __all__ = ('ResearchItemsObjDumper', 'ResearchItemsXMLDumper', 'NationObjDumper', 'NationXMLDumper')
 
 class _BaseDumper(object):
@@ -37,37 +41,32 @@ class _BaseDumper(object):
         if item.isRented and not item.isTelecom:
             if item.rentalIsOver:
                 if item.isPremiumIGR:
-                    status = i18n.makeString('#menu:currentVehicleStatus/igrRentalIsOver')
+                    status = i18n.makeString(MENU.CURRENTVEHICLESTATUS_IGRRENTALISOVER)
                 else:
-                    status = i18n.makeString('#menu:currentVehicleStatus/rentalIsOver')
+                    status = i18n.makeString(MENU.CURRENTVEHICLESTATUS_RENTALISOVER)
                 statusLevel = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
             elif not item.isPremiumIGR:
                 status = RentLeftFormatter(item.rentInfo).getRentLeftStr()
                 statusLevel = Vehicle.VEHICLE_STATE_LEVEL.RENTED
+        elif item.isRentable and item.isRentAvailable:
+            status = i18n.makeString(MENU.CURRENTVEHICLESTATUS_ISRENTABLE)
+            statusLevel = Vehicle.VEHICLE_STATE_LEVEL.RENTED
         return (status, statusLevel)
 
 
-class ResearchItemsObjDumper(_BaseDumper):
+class ResearchBaseDumper(_BaseDumper):
 
     def __init__(self, cache=None):
-        if cache is None:
-            cache = {'nodes': [],
-             'top': [],
-             'global': {'enableInstallItems': False,
-                        'statusString': None,
-                        'extraInfo': {},
-                        'freeXP': 0,
-                        'hasNationTree': False}}
-        super(ResearchItemsObjDumper, self).__init__(cache)
-        return
+        super(ResearchBaseDumper, self).__init__(cache or self._getDefaultCacheObj())
+
+    def _getDefaultCacheObj(self):
+        return {'nodes': []}
 
     def clear(self, full=False):
-        for key in ['nodes', 'top']:
-            nodes = self._cache[key]
-            while len(nodes):
-                nodes.pop().clear()
+        nodes = self._cache['nodes']
+        while len(nodes):
+            nodes.pop().clear()
 
-        self._cache['global']['extraInfo'].clear()
         if full:
             self._vClassInfo.clear()
 
@@ -75,10 +74,68 @@ class ResearchItemsObjDumper(_BaseDumper):
         self.clear()
         itemGetter = data.getItem
         rootItem = data.getRootItem()
-        self._cache['nodes'] = map(lambda node: self._getItemData(node, itemGetter(node['id']), rootItem), data._nodes)
-        self._cache['top'] = map(lambda node: self._getItemData(node, itemGetter(node['id']), rootItem), data._topLevel)
+        cachedNodes = self._cache['nodes']
+        for node in data._nodes:
+            renderer = node['displayInfo'].get('renderer')
+            if renderer and renderer != 'vehicle':
+                cachedNodes.append(self._getItemData(node, itemGetter(node['id']), rootItem))
+
+        return self._cache
+
+    def _getItemData(self, node, item, rootItem):
+        nodeCD = node['id']
+        vClass = {'name': ''}
+        extraInfo = None
+        if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+            vClass = self._vClassInfo.getInfoByTags(item.tags)
+        else:
+            if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun(rootItem.descriptor):
+                extraInfo = CLIP_ICON_PATH
+            vClass.update({'name': item.itemTypeName})
+        data = {'id': nodeCD,
+         'nameString': item.shortUserName,
+         'primaryClass': vClass,
+         'level': item.level,
+         'iconPath': item.icon,
+         'state': node['state'],
+         'displayInfo': node['displayInfo'],
+         'extraInfo': extraInfo}
+        return data
+
+
+class ResearchItemsObjDumper(ResearchBaseDumper):
+    """
+    Converts data of research items for given vehicle to list of objects.
+    """
+
+    def clear(self, full=False):
+        nodes = self._cache['top']
+        while len(nodes):
+            nodes.pop().clear()
+
+        self._cache['global']['extraInfo'].clear()
+
+    def dump(self, data):
+        self.clear()
+        self._fillCacheSection('nodes', data, data._nodes)
+        self._fillCacheSection('top', data, data._topLevel)
         self._getGlobalData(data)
         return self._cache
+
+    def _fillCacheSection(self, sectionName, data, items):
+        itemGetter = data.getItem
+        rootItem = data.getRootItem()
+        self._cache[sectionName] = map(lambda node: self._getItemData(node, itemGetter(node['id']), rootItem), items)
+
+    def _getDefaultCacheObj(self):
+        defCache = super(ResearchItemsObjDumper, self)._getDefaultCacheObj()
+        defCache['top'] = []
+        defCache['global'] = {'enableInstallItems': False,
+         'statusString': None,
+         'extraInfo': {},
+         'freeXP': 0,
+         'hasNationTree': False}
+        return defCache
 
     def _getGlobalData(self, data):
         try:
@@ -119,47 +176,32 @@ class ResearchItemsObjDumper(_BaseDumper):
     def _getItemData(self, node, item, rootItem):
         nodeCD = node['id']
         vClass = {'name': ''}
-        extraInfo = None
         status = statusLevel = ''
-        minRentPricePackage = None
         vehicleBtnLabel = ''
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-            vClass = self._vClassInfo.getInfoByTags(item.tags)
             status, statusLevel = self._getRentStatus(item)
-            minRentPricePackage = item.getRentPackage()
             if item.isInInventory:
-                vehicleBtnLabel = '#menu:research/labels/button/showInHangar'
+                vehicleBtnLabel = MENU.RESEARCH_LABELS_BUTTON_SHOWINHANGAR
             else:
-                vehicleBtnLabel = '#menu:research/showInPreviewBtn/label'
+                vehicleBtnLabel = MENU.RESEARCH_SHOWINPREVIEWBTN_LABEL
         else:
-            if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun(rootItem.descriptor):
-                extraInfo = CLIP_ICON_PATH
-            vClass.update({'name': item.getGUIEmblemID()})
-        credits, gold = item.minRentPrice or item.buyPrice
-        action = None
-        if item.buyPrice != item.defaultPrice and not minRentPricePackage:
-            action = packItemActionTooltipData(item)
-        elif minRentPricePackage:
-            if minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
-                action = packItemRentActionTooltipData(item, minRentPricePackage)
-        return {'id': nodeCD,
-         'nameString': item.shortUserName,
-         'primaryClass': vClass,
-         'level': item.level,
-         'longName': item.longUserName,
-         'iconPath': item.icon,
+            vClass.update({'name': item.itemTypeName})
+        credits, gold = node['GUIPrice']
+        data = {'longName': item.longUserName,
          'smallIconPath': item.iconSmall,
          'earnedXP': node['earnedXP'],
-         'state': node['state'],
-         'shopPrice': (credits, gold, action),
-         'displayInfo': node['displayInfo'],
+         'shopPrice': (credits, gold, getActionPriceData(item)),
          'unlockProps': node['unlockProps']._makeTuple(),
-         'extraInfo': extraInfo,
          'status': status,
          'statusLevel': statusLevel,
          'isPremiumIGR': item.isPremiumIGR,
          'showVehicleBtnLabel': i18n.makeString(vehicleBtnLabel),
-         'showVehicleBtnEnabled': item.isInInventory or item.isPreviewAllowed()}
+         'showVehicleBtnEnabled': item.isInInventory or item.isPreviewAllowed(),
+         'vehCompareRootData': getBtnCompareData(item) if nodeCD == rootItem.intCD else {},
+         'vehCompareTreeNodeData': getTreeNodeCompareData(item) if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE else {}}
+        commonData = super(ResearchItemsObjDumper, self)._getItemData(node, item, rootItem)
+        data.update(commonData)
+        return data
 
 
 class ResearchItemsXMLDumper(ResearchItemsObjDumper):
@@ -206,6 +248,9 @@ class ResearchItemsXMLDumper(ResearchItemsObjDumper):
 
 
 class NationObjDumper(_BaseDumper):
+    """
+    Converts data of nation tree to list of objects.
+    """
 
     def __init__(self, cache=None):
         if cache is None:
@@ -236,15 +281,8 @@ class NationObjDumper(_BaseDumper):
     def _getVehicleData(self, node, item):
         nodeCD = node['id']
         tags = item.tags
-        credits, gold = item.minRentPrice or item.buyPrice
+        credits, gold = node['GUIPrice']
         status, statusLevel = self._getRentStatus(item)
-        action = None
-        minRentPricePackage = item.getRentPackage()
-        if item.buyPrice != item.defaultPrice and not minRentPricePackage:
-            action = packItemActionTooltipData(item)
-        elif minRentPricePackage:
-            if minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
-                action = packItemRentActionTooltipData(item, minRentPricePackage)
         return {'id': nodeCD,
          'state': node['state'],
          'type': item.itemTypeName,
@@ -255,16 +293,20 @@ class NationObjDumper(_BaseDumper):
          'iconPath': item.icon,
          'smallIconPath': item.iconSmall,
          'earnedXP': node['earnedXP'],
-         'shopPrice': (credits, gold, action),
+         'shopPrice': (credits, gold, getActionPriceData(item)),
          'displayInfo': node['displayInfo'],
          'unlockProps': node['unlockProps']._makeTuple(),
          'status': status,
          'statusLevel': statusLevel,
          'isRemovable': item.isRented,
-         'isPremiumIGR': item.isPremiumIGR}
+         'isPremiumIGR': item.isPremiumIGR,
+         'vehCompareTreeNodeData': getTreeNodeCompareData(item)}
 
 
 class NationXMLDumper(NationObjDumper):
+    """
+    Converts data of given nation tree to xml string. Using in development version.
+    """
     __xmlBody = '<?xml version="1.0" encoding="utf-8"?><tree><nodes>{0:>s}</nodes><scrollIndex>{1:d}</scrollIndex></tree>'
     __nodeFormat = '<node><id>{id:d}</id><nameString>{nameString:>s}</nameString><class><name>{primaryClass[name]:>s}</name></class><level>{level:d}</level><earnedXP>{earnedXP:d}</earnedXP><state>{state:d}</state><unlockProps><parentID>{unlockProps[0]:d}</parentID><unlockIdx>{unlockProps[1]:d}</unlockIdx><xpCost>{unlockProps[2]:n}</xpCost><topIDs>{unlockProps[3]:>s}</topIDs></unlockProps><iconPath>{iconPath:>s}</iconPath><smallIconPath><![CDATA[{smallIconPath:>s}]]></smallIconPath><longName>{longName:>s}</longName><shopPrice><credits>{shopPrice[0]:n}</credits><gold>{shopPrice[1]:n}</gold></shopPrice><display>{displayInfo:>s}</display></node>'
     __displayInfoFormat = '<row>{row:d}</row><column>{column:d}</column><position><x>{position[0]:n}</x><y>{position[1]:n}</y></position><lines>{lines:>s}</lines>'

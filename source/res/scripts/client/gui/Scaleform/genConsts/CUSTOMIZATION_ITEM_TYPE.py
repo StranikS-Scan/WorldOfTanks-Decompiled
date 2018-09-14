@@ -7,7 +7,6 @@ class CUSTOMIZATION_ITEM_TYPE(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     CAMOUFLAGE = 0
     EMBLEM = 1

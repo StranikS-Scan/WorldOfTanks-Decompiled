@@ -702,23 +702,89 @@
     </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <GAZ-203>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </GAZ-203>
+        <M-80>
+          <smplEnginePower>	179.7378	</smplEnginePower>
+        </M-80>
+      </engines>
+      <chassis>
+        <Chassis_T-70>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T-70>
+        <Chassis_T-70_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T-70_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T-70>
-        <alpha>	0.10465	</alpha>
-      </Chassis_T-70>
-      <Chassis_T-70_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_T-70_2>
-    </chassis>
-    <engines>
-      <GAZ-203>
-        <bravo>	37.00484	</bravo>
-      </GAZ-203>
-      <M-80>
-        <bravo>	44.93445	</bravo>
-      </M-80>
-    </engines>
     <armour>	0.904594559	</armour>
   </clientAdjustmentFactors>
   <effects>

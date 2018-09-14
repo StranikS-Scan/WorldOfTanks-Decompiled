@@ -293,7 +293,7 @@ class UsersStorage(RevCachedStorage):
     def getOpenedGroups(self):
         return self.__openedGroups
 
-    def _setClanMembersList(self, members):
+    def setClanMembersList(self, members):
         membersIDs = set()
         tags = {USER_TAG.CLAN_MEMBER}
         for member in members:

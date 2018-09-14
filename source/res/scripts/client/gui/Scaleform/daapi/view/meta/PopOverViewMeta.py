@@ -8,19 +8,10 @@ class PopOverViewMeta(WrapperViewMeta):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends WrapperViewMeta
-    null
     """
 
     def as_setArrowDirectionS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_setArrowDirection(value) if self._isDAAPIInited() else None
 
     def as_setArrowPositionS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_setArrowPosition(value) if self._isDAAPIInited() else None

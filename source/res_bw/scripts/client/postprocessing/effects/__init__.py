@@ -53,21 +53,4 @@ def empty():
     return e
 
 
-from Bloom import *
-from ColourCorrect import *
-from DownSample import *
-from Sharpen import *
-from EdgeDetect import *
-from Emboss import *
-from Shimmer import *
-from Posterise import *
-from Rainbow import *
 from DepthOfField import *
-from PlayerFader import *
-from RegistrationTest import *
-from ScotopicVision import *
-from DistortionTransfer import *
-from FilmGrain import *
-from Hatching import *
-from MultiBlur import *
-from FXAA import *

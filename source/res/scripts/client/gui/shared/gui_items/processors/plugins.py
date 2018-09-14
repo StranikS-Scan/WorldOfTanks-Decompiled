@@ -3,14 +3,17 @@
 from collections import namedtuple
 from adisp import process, async
 from debug_utils import LOG_WARNING
+from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
 from gui import DialogsInterface
+from gui.game_control import restore_contoller
+from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
 from gui.server_events import g_eventsCache
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, DismissTankmanDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
 _SHELLS_MONEY_ERRORS = {Currency.CREDITS: 'SHELLS_NO_CREDITS',
  Currency.GOLD: 'SHELLS_NO_GOLD'}
 _EQS_MONEY_ERRORS = {Currency.CREDITS: 'EQS_NO_CREDITS',
@@ -317,7 +320,7 @@ class BarracksSlotsValidator(SyncValidator):
         self.berthsNeeded = berthsNeeded
 
     def _validate(self):
-        barracksTmen = g_itemsCache.items.getTankmen(~REQ_CRITERIA.TANKMAN.IN_TANK)
+        barracksTmen = g_itemsCache.items.getTankmen(~REQ_CRITERIA.TANKMAN.IN_TANK | REQ_CRITERIA.TANKMAN.ACTIVE)
         tmenBerthsCount = g_itemsCache.items.stats.tankmenBerthsCount
         return makeError('not_enough_space') if self.berthsNeeded > 0 and self.berthsNeeded > tmenBerthsCount - len(barracksTmen) else makeSuccess()
 
@@ -421,14 +424,48 @@ class HtmlMessageConfirmator(I18nMessageAbstractConfirmator):
         return I18nConfirmDialogMeta(self.localeKey, self.ctx, self.ctx, meta=HtmlMessageDialogMeta(self.metaPath, self.metaKey, self.ctx, sourceKey=self.sourceKey), focusedID=DIALOG_BUTTON_ID.SUBMIT)
 
 
-class DismissTankmanConfirmator(I18nMessageAbstractConfirmator):
+class TankmanOperationConfirmator(I18nMessageAbstractConfirmator):
 
     def __init__(self, localeKey, tankman):
-        super(DismissTankmanConfirmator, self).__init__(localeKey, tankman, None, True)
+        super(TankmanOperationConfirmator, self).__init__(localeKey, tankman, None, True)
+        self.__previousPrice, _ = restore_contoller.getTankmenRestoreInfo(tankman)
         return
 
+    @async
+    @process
+    def _confirm(self, callback):
+        if self._activeHandler():
+            isOk = yield DialogsInterface.showDialog(meta=self._makeMeta())
+            if isOk and self.__priceChanged():
+                isOk = yield DialogsInterface.showDialog(meta=self._makeMeta(True))
+            if not isOk:
+                callback(makeError())
+                return
+        callback(makeSuccess())
+
+    def _makeMeta(self, priceChanged=False):
+        return TankmanOperationDialogMeta(self.localeKey, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT, showPeriodEndWarning=priceChanged)
+
+    def __priceChanged(self):
+        price, _ = restore_contoller.getTankmenRestoreInfo(self.ctx)
+        return price != self.__previousPrice
+
+
+class BufferOverflowConfirmator(I18nMessageAbstractConfirmator):
+
+    def __init__(self, ctx, isEnabled=True):
+        if ctx.get('multiple'):
+            localeKey = 'dismissedBufferOverFlawMultiple'
+        else:
+            localeKey = 'dismissedBufferOverFlaw'
+        super(BufferOverflowConfirmator, self).__init__(localeKey, ctx, isEnabled=isEnabled)
+
     def _makeMeta(self):
-        return DismissTankmanDialogMeta(self.localeKey, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
+        msgContext = {'dismissedName': self.ctx['dismissed'].fullUserName,
+         'deletedStr': formatDeletedTankmanStr(self.ctx['deleted'])}
+        if self.ctx.get('multiple'):
+            msgContext['extraCount'] = self.ctx['extraCount']
+        return I18nConfirmDialogMeta(self.localeKey, messageCtx=msgContext, focusedID=DIALOG_BUTTON_ID.SUBMIT)
 
 
 class IconPriceMessageConfirmator(I18nMessageAbstractConfirmator):
@@ -659,3 +696,9 @@ class TankmanAddSkillValidator(SyncValidator):
         if self.tankmanDscr.roleLevel != MAX_SKILL_LEVEL:
             return makeError()
         return makeError() if self.tankmanDscr.skills and self.tankmanDscr.lastSkillLevel != MAX_SKILL_LEVEL else makeSuccess()
+
+
+class IsLongDisconnectedFromCenter(SyncValidator):
+
+    def _validate(self):
+        return makeError('disconnected_from_center') if isLongDisconnectedFromCenter() else makeSuccess()

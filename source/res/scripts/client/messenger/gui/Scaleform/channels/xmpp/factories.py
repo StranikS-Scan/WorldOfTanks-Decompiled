@@ -30,6 +30,8 @@ class LobbyControllersFactory(IControllerFactory):
         elif msgType == MESSAGE_TYPE.GROUPCHAT:
             if channel.isLazy():
                 controller = lobby_controllers.LazyUserRoomController(channel)
+            elif channel.isClan():
+                controller = lobby_controllers.ClanUserRoomController(channel)
             else:
                 controller = lobby_controllers.UserRoomController(channel)
         return controller

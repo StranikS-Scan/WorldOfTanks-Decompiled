@@ -44,6 +44,8 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
          USER_ACTION_ID.FRIEND_REMOVED,
          USER_ACTION_ID.IGNORED_REMOVED,
          USER_ACTION_ID.IGNORED_ADDED,
+         USER_ACTION_ID.TMP_IGNORED_REMOVED,
+         USER_ACTION_ID.TMP_IGNORED_ADDED,
          USER_ACTION_ID.SUBSCRIPTION_CHANGED):
             unitMgrID = self.unitFunctional.getID()
             if unitMgrID <= 0:

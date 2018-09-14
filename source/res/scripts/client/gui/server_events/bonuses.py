@@ -8,7 +8,7 @@ from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies import g_goodiesCache
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils
 from items import vehicles, tankmen
@@ -19,6 +19,8 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from shared_utils import makeTupleByDict
 from gui import makeHtmlString
 from gui.shared import g_itemsCache
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Vehicle import getSmallIconPath
 from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -50,12 +52,10 @@ class SimpleBonus(object):
         return str(self._value) if self._value else None
 
     def format(self):
-        formattedValue = self.formatValue()
-        if self._name is not None and formattedValue is not None:
-            text = makeHtmlString('html_templates:lobby/quests/bonuses', self._name, {'value': formattedValue})
-            if text != self._name:
-                return text
-        return formattedValue
+        return self._format(styleSubset='bonuses')
+
+    def carouselFormat(self):
+        return self._format(styleSubset='carouselBonuses')
 
     def formattedList(self):
         formattedObj = self.format()
@@ -70,20 +70,39 @@ class SimpleBonus(object):
     def getTooltipIcon(self):
         pass
 
+    def getTooltip(self):
+        """ Get award's tooltip for award carousel.
+        """
+        header = i18n.makeString(TOOLTIPS.getAwardHeader(self._name))
+        body = i18n.makeString(TOOLTIPS.getAwardBody(self._name))
+        if header or body:
+            return makeTooltip(header or None, body or None)
+        else:
+            return ''
+            return None
+
     def getDescription(self):
         return i18n.makeString('#quests:bonuses/%s/description' % self._name, value=self.formatValue())
 
     def getList(self):
         return None
 
+    def getCarouselList(self, isReceived=False):
+        """ Get list of VOs for award carousel.
+        """
+        return [{'label': self.carouselFormat(),
+          'tooltip': self.getTooltip()}]
+
     def hasIconFormat(self):
         return False
 
-
-class FakeTextBonus(SimpleBonus):
-
-    def __init__(self, value):
-        super(FakeTextBonus, self).__init__('fakeText', value)
+    def _format(self, styleSubset):
+        formattedValue = self.formatValue()
+        if self._name is not None and formattedValue is not None:
+            text = makeHtmlString('html_templates:lobby/quests/{}'.format(styleSubset), self._name, {'value': formattedValue})
+            if text != self._name:
+                return text
+        return formattedValue
 
 
 class IntegralBonus(SimpleBonus):
@@ -96,6 +115,14 @@ class FloatBonus(SimpleBonus):
 
     def formatValue(self):
         return BigWorld.wg_getNiceNumberFormat(self._value) if self._value else None
+
+
+class CountableIntegralBonus(IntegralBonus):
+
+    def getCarouselList(self, isReceived=False):
+        return [{'imgSource': RES_ICONS.getAwardsCarouselIcon(self._name),
+          'counter': text_styles.stats('x{}'.format(self._value)),
+          'tooltip': self.getTooltip()}]
 
 
 class CreditsBonus(IntegralBonus):
@@ -147,10 +174,14 @@ class PremiumDaysBonus(IntegralBonus):
 
     def getList(self):
         return [{'itemSource': RES_ICONS.MAPS_ICONS_LIBRARY_PREMDAYICONBIG,
-          'tooltip': TOOLTIPS.AWARDITEM_PREMDAYS}]
+          'tooltip': TOOLTIPS.AWARDITEM_PREMIUM}]
 
     def hasIconFormat(self):
         return True
+
+    def getCarouselList(self, isReceived=False):
+        return [{'imgSource': RES_ICONS.getPremiumCarouselIcon(self._value),
+          'tooltip': self.getTooltip()}]
 
 
 class MetaBonus(SimpleBonus):
@@ -199,6 +230,11 @@ class PotapovTokensBonus(TokensBonus):
     def format(self):
         return makeHtmlString('html_templates:lobby/quests/bonuses', 'pqTokens', {'value': self.formatValue()})
 
+    def getCarouselList(self, isReceived=False):
+        return [{'imgSource': RES_ICONS.getAwardsCarouselIcon(self._name),
+          'counter': text_styles.stats('x{}'.format(self.__count)),
+          'tooltip': self.getTooltip()}]
+
 
 class FalloutTokensBonus(PotapovTokensBonus):
 
@@ -236,6 +272,24 @@ class ItemsBonus(SimpleBonus):
 
     def hasIconFormat(self):
         return True
+
+    def getCarouselList(self, isReceived=False):
+        result = []
+        for item, count in self.getItems().iteritems():
+            if item is not None and count:
+                if item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT and 'avatar' in item.tags:
+                    alias = TOOLTIPS_CONSTANTS.BATTLE_CONSUMABLE
+                elif item.itemTypeID == GUI_ITEM_TYPE.SHELL:
+                    alias = TOOLTIPS_CONSTANTS.AWARD_SHELL
+                else:
+                    alias = TOOLTIPS_CONSTANTS.AWARD_MODULE
+                result.append({'imgSource': item.icon,
+                 'counter': text_styles.stats('x{}'.format(count)),
+                 'isSpecial': True,
+                 'specialAlias': alias,
+                 'specialArgs': [item.intCD]})
+
+        return result
 
 
 class BoosterBonus(SimpleBonus):
@@ -284,6 +338,18 @@ class BoosterBonus(SimpleBonus):
 
         return result
 
+    def getCarouselList(self, isReceived=False):
+        result = []
+        for booster, count in sorted(self.getBoosters().iteritems(), key=lambda (booster, count): booster.boosterType):
+            if booster is not None:
+                result.append({'imgSource': booster.icon,
+                 'counter': text_styles.stats('x{}'.format(count)),
+                 'isSpecial': True,
+                 'specialAlias': TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
+                 'specialArgs': [booster.boosterID]})
+
+        return result
+
 
 class VehiclesBonus(SimpleBonus):
     DEFAULT_CREW_LVL = 50
@@ -301,22 +367,12 @@ class VehiclesBonus(SimpleBonus):
     def formattedList(self):
         result = []
         for item, vehInfo in self.getVehicles():
-            if 'noCrew' not in vehInfo:
-                tmanRoleLevel = calculateRoleLevel(vehInfo.get('crewLvl', self.DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0))
-            else:
-                tmanRoleLevel = None
+            tmanRoleLevel = self.__getTmanRoleLevel(vehInfo)
+            rentDays = self.__getRentDays(vehInfo)
             vInfoLabels = []
-            if 'rent' in vehInfo:
-                time = vehInfo.get('rent', {}).get('time', None)
-                rentDays = None
-                if time:
-                    if time == float('inf'):
-                        pass
-                    elif time <= time_utils.DAYS_IN_YEAR:
-                        rentDays = int(time)
-                if rentDays:
-                    rentDaysStr = makeHtmlString('html_templates:lobby/quests/bonuses', 'rentDays', {'value': str(rentDays)})
-                    vInfoLabels.append(rentDaysStr)
+            if rentDays is not None:
+                rentDaysStr = makeHtmlString('html_templates:lobby/quests/bonuses', 'rentDays', {'value': str(rentDays)})
+                vInfoLabels.append(rentDaysStr)
             if tmanRoleLevel is not None:
                 crewLvl = i18n.makeString('#quests:bonuses/vehicles/crewLvl', tmanRoleLevel)
                 vInfoLabels.append(crewLvl)
@@ -342,6 +398,48 @@ class VehiclesBonus(SimpleBonus):
                     result.append((item, vehInfo))
 
         return result
+
+    def getCarouselList(self, isReceived=False):
+        result = []
+        for vehicle, vehInfo in self.getVehicles():
+            tmanRoleLevel = self.__getTmanRoleLevel(vehInfo)
+            rentDays = self.__getRentDays(vehInfo)
+            if rentDays:
+                image = RES_ICONS.MAPS_ICONS_LIBRARY_BONUSES_VEHICLES_RENT
+                rentExpiryTime = time_utils.getCurrentTimestamp()
+                rentExpiryTime += rentDays * time_utils.ONE_DAY
+            else:
+                image = RES_ICONS.MAPS_ICONS_LIBRARY_BONUSES_VEHICLES
+                rentExpiryTime = 0
+            result.append({'imgSource': image,
+             'isSpecial': True,
+             'specialAlias': TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
+             'specialArgs': [vehicle.intCD, tmanRoleLevel, rentExpiryTime]})
+
+        return result
+
+    @classmethod
+    def __getTmanRoleLevel(cls, vehInfo):
+        if 'noCrew' not in vehInfo:
+            return calculateRoleLevel(vehInfo.get('crewLvl', cls.DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0))
+        else:
+            return None
+            return None
+
+    @staticmethod
+    def __getRentDays(vehInfo):
+        if 'rent' not in vehInfo:
+            return None
+        else:
+            time = vehInfo.get('rent', {}).get('time')
+            if time:
+                if time == float('inf'):
+                    return None
+                elif time <= time_utils.DAYS_IN_YEAR:
+                    return int(time)
+                else:
+                    return None
+            return None
 
 
 class DossierBonus(SimpleBonus):
@@ -392,6 +490,24 @@ class DossierBonus(SimpleBonus):
 
         return result
 
+    def getCarouselList(self, isReceived=False):
+        result = []
+        for (block, record), value in self.getRecords().iteritems():
+            try:
+                if _isAchievement(block):
+                    if block == ACHIEVEMENT_BLOCK.RARE:
+                        continue
+                    achievement = _getAchievement(block, record, value)
+                    result.append({'imgSource': achievement.getSmallIcon(),
+                     'isSpecial': True,
+                     'specialAlias': TOOLTIPS_CONSTANTS.BATTLE_STATS_ACHIEVS,
+                     'specialArgs': [block, record, value]})
+            except Exception:
+                LOG_ERROR('There is error while getting bonus dossier record name')
+                LOG_CURRENT_EXCEPTION()
+
+        return result
+
 
 class PotapovDossierBonus(DossierBonus):
 
@@ -417,20 +533,8 @@ class TankmenBonus(SimpleBonus):
      'freeSkills'])
 
     def formatValue(self):
-        groups = {}
-        for tmanInfo in self.getTankmenData():
-            roleLevel = calculateRoleLevel(tmanInfo.roleLevel, tmanInfo.freeXP, typeID=(tmanInfo.nationID, tmanInfo.vehicleTypeID))
-            if tmanInfo.vehicleTypeID not in groups:
-                vehIntCD = vehicles.makeIntCompactDescrByID('vehicle', tmanInfo.nationID, tmanInfo.vehicleTypeID)
-                groups[tmanInfo.vehicleTypeID] = {'vehName': g_itemsCache.items.getItemByCD(vehIntCD).shortUserName,
-                 'skills': len(tmanInfo.skills),
-                 'roleLevel': roleLevel}
-            group = groups[tmanInfo.vehicleTypeID]
-            group['skills'] += len(tmanInfo.skills)
-            group['roleLevel'] = min(group['roleLevel'], roleLevel)
-
         result = []
-        for group in groups.itervalues():
+        for group in self.getTankmenGroups().itervalues():
             if group['skills']:
                 labelI18nKey = '#quests:bonuses/item/tankmen/with_skills'
             else:
@@ -449,6 +553,23 @@ class TankmenBonus(SimpleBonus):
 
         return result
 
+    def getTankmenGroups(self):
+        """ Create groups by vehicle.
+        """
+        groups = {}
+        for tmanInfo in self.getTankmenData():
+            roleLevel = calculateRoleLevel(tmanInfo.roleLevel, tmanInfo.freeXP, typeID=(tmanInfo.nationID, tmanInfo.vehicleTypeID))
+            if tmanInfo.vehicleTypeID not in groups:
+                vehIntCD = vehicles.makeIntCompactDescrByID('vehicle', tmanInfo.nationID, tmanInfo.vehicleTypeID)
+                groups[tmanInfo.vehicleTypeID] = {'vehName': g_itemsCache.items.getItemByCD(vehIntCD).shortUserName,
+                 'skills': len(tmanInfo.skills),
+                 'roleLevel': roleLevel}
+            group = groups[tmanInfo.vehicleTypeID]
+            group['skills'] += len(tmanInfo.skills)
+            group['roleLevel'] = min(group['roleLevel'], roleLevel)
+
+        return groups
+
     def getIcon(self):
         return RES_ICONS.MAPS_ICONS_LIBRARY_TANKMAN
 
@@ -458,6 +579,19 @@ class TankmenBonus(SimpleBonus):
                 return RES_ICONS.MAPS_ICONS_QUESTS_TANKMANFEMALEGRAY
 
         return RES_ICONS.MAPS_ICONS_REFERRAL_REFSYS_MEN_BW
+
+    def getCarouselList(self, isReceived=False):
+        result = []
+        for group in self.getTankmenGroups().itervalues():
+            if group['skills']:
+                key = '#quests:bonuses/item/tankmen/with_skills'
+            else:
+                key = '#quests:bonuses/item/tankmen/no_skills'
+            tooltip = makeTooltip(TOOLTIPS.getAwardHeader(self._name), i18n.makeString(key, **group))
+            result.append({'imgSource': RES_ICONS.MAPS_ICONS_LIBRARY_BONUSES_TANKMEN,
+             'tooltip': tooltip})
+
+        return result
 
     @classmethod
     def _makeTmanInfoByDescr(cls, td):
@@ -475,6 +609,18 @@ class PotapovTankmenBonus(TankmenBonus):
 
         return ', '.join(result)
 
+    def getCarouselList(self, isReceived=False):
+        result = []
+        for tmanInfo in self.getTankmenData():
+            if tmanInfo.isFemale:
+                tooltip = makeTooltip(TOOLTIPS.AWARDITEM_TANKWOMEN_HEADER, TOOLTIPS.AWARDITEM_TANKWOMEN_BODY)
+            else:
+                tooltip = makeTooltip(i18n.makeString(QUESTS.BONUSES_TANKMEN_DESCRIPTION, value=getRoleUserName(tmanInfo.role)))
+            result.append({'imgSource': RES_ICONS.MAPS_ICONS_LIBRARY_BONUSES_TANKWOMEN,
+             'tooltip': tooltip})
+
+        return result
+
 
 class RefSystemTankmenBonus(TankmenBonus):
 
@@ -489,6 +635,7 @@ class RefSystemTankmenBonus(TankmenBonus):
 
 
 class CustomizationsBonus(SimpleBonus):
+    INFOTIP_ARGS_ORDER = ('type', 'id', 'nationId', 'value', 'isPermanent', 'boundVehicle', 'boundToCurrentVehicle')
 
     def _makeTextureUrl(self, width, height, texture, colors, armorColor):
         if texture is None or len(texture) == 0:
@@ -497,7 +644,7 @@ class CustomizationsBonus(SimpleBonus):
             weights = Math.Vector4((colors[0] >> 24) / 255.0, (colors[1] >> 24) / 255.0, (colors[2] >> 24) / 255.0, (colors[3] >> 24) / 255.0)
             return 'img://camouflage,{0:d},{1:d},"{2:>s}",{3[0]:d},{3[1]:d},{3[2]:d},{3[3]:d},{4[0]:n},{4[1]:n},{4[2]:n},{4[3]:n},{5:d}'.format(width, height, texture, colors, weights, armorColor)
 
-    def getList(self):
+    def getList(self, defaultSize=67):
         result = []
         for item in self.getCustomizations():
             itemType = item.get('custType')
@@ -513,7 +660,7 @@ class CustomizationsBonus(SimpleBonus):
                 camouflage = camouflages.get(itemId[1], None)
                 if camouflage:
                     armorColor = customization.get('armorColor', 0)
-                    texture = self._makeTextureUrl(67, 67, camouflage.get('texture'), camouflage.get('colors', (0, 0, 0, 0)), armorColor)
+                    texture = self._makeTextureUrl(defaultSize, defaultSize, camouflage.get('texture'), camouflage.get('colors', (0, 0, 0, 0)), armorColor)
                     nationId, itemId = itemId
             elif itemType == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE:
                 _, emblems, _ = vehicles.g_cache.playerEmblems()
@@ -561,6 +708,18 @@ class CustomizationsBonus(SimpleBonus):
 
         return result
 
+    def getCarouselList(self, isReceived=False):
+        result = []
+        for item, data in zip(self.getCustomizations(), self.getList(defaultSize=128)):
+            result.append({'imgSource': data.get('texture'),
+             'scaleImg': _CUSTOMIZATIONS_SCALE,
+             'counter': text_styles.stats('x{}'.format(item.get('value'))),
+             'isSpecial': True,
+             'specialAlias': TOOLTIPS_CONSTANTS.CUSTOMIZATION_ITEM,
+             'specialArgs': [ data[o] for o in self.INFOTIP_ARGS_ORDER ] + [isReceived]})
+
+        return result
+
 
 _BONUSES = {'credits': CreditsBonus,
  'gold': GoldBonus,
@@ -573,8 +732,8 @@ _BONUSES = {'credits': CreditsBonus,
  'tankmenXPFactor': FloatBonus,
  'dailyXPFactor': FloatBonus,
  'items': ItemsBonus,
- 'slots': IntegralBonus,
- 'berths': IntegralBonus,
+ 'slots': CountableIntegralBonus,
+ 'berths': CountableIntegralBonus,
  'premium': PremiumDaysBonus,
  'vehicles': VehiclesBonus,
  'meta': MetaBonus,

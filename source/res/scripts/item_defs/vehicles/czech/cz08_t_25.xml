@@ -788,6 +788,7 @@
             <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	0.000060 -0.00891361 1.63298	</rayStart>
@@ -977,6 +978,7 @@
             <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	-0.000000 -0.042627 1.57533	</rayStart>
@@ -1065,23 +1067,89 @@
     </Radiostanice_Fu_7>
     <Radiostanice_Fu_12>	shared	</Radiostanice_Fu_12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Skoda_V12_19_8_liter_450>
+          <smplEnginePower>	475.7765	</smplEnginePower>
+        </Skoda_V12_19_8_liter_450>
+        <Skoda_V12_19_8_liter_500>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Skoda_V12_19_8_liter_500>
+      </engines>
+      <chassis>
+        <Chassis_Cz08_T_25>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz08_T_25>
+        <Chassis_Cz08_T_25_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz08_T_25_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Cz08_T_25>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Cz08_T_25>
-      <Chassis_Cz08_T_25_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Cz08_T_25_2>
-    </chassis>
-    <engines>
-      <Skoda_V12_19_8_liter_450>
-        <bravo>	118.9441	</bravo>
-      </Skoda_V12_19_8_liter_450>
-      <Skoda_V12_19_8_liter_500>
-        <bravo>	132.1601	</bravo>
-      </Skoda_V12_19_8_liter_500>
-    </engines>
     <armour>	0.846393724	</armour>
   </clientAdjustmentFactors>
   <effects>

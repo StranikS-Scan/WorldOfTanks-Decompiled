@@ -915,26 +915,92 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Porsche_Typ_100_1>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Porsche_Typ_100_1>
+        <Porsche_Typ_100_3>
+          <smplEnginePower>	708.3784	</smplEnginePower>
+        </Porsche_Typ_100_3>
+        <Porsche_Deutz_Typ180_2>
+          <smplEnginePower>	888.1161	</smplEnginePower>
+        </Porsche_Deutz_Typ180_2>
+      </engines>
+      <chassis>
+        <Ferdinandstandardketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.15295	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Ferdinandstandardketten>
+        <Ferdinandvetstaerktketten>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Ferdinandvetstaerktketten>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Ferdinandstandardketten>
-        <alpha>	0.15295	</alpha>
-      </Ferdinandstandardketten>
-      <Ferdinandvetstaerktketten>
-        <alpha>	0.13685	</alpha>
-      </Ferdinandvetstaerktketten>
-    </chassis>
-    <engines>
-      <Porsche_Typ_100_1>
-        <bravo>	158.5922	</bravo>
-      </Porsche_Typ_100_1>
-      <Porsche_Typ_100_3>
-        <bravo>	177.0946	</bravo>
-      </Porsche_Typ_100_3>
-      <Porsche_Deutz_Typ180_2>
-        <bravo>	222.029	</bravo>
-      </Porsche_Deutz_Typ180_2>
-    </engines>
     <armour>	0.804393468	</armour>
   </clientAdjustmentFactors>
   <effects>

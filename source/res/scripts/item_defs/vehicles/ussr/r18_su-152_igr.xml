@@ -470,17 +470,52 @@
   <radios>
     <_12RT_IGR>	shared	</_12RT_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2IS_IGR>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </V-2IS_IGR>
+      </engines>
+      <chassis>
+        <SU-152_mod_1944_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </SU-152_mod_1944_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <SU-152_mod_1944_IGR>
-        <alpha>	0.1127	</alpha>
-      </SU-152_mod_1944_IGR>
-    </chassis>
-    <engines>
-      <V-2IS_IGR>
-        <bravo>	158.5922	</bravo>
-      </V-2IS_IGR>
-    </engines>
     <armour>	1.040522556	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -1123,23 +1123,89 @@
     </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2>
+          <smplEnginePower>	507.4949	</smplEnginePower>
+        </V-2>
+        <V-2-34>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V-2-34>
+      </engines>
+      <chassis>
+        <SU-85_mod_1942>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </SU-85_mod_1942>
+        <SU-85_mod_1943>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </SU-85_mod_1943>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <SU-85_mod_1942>
-        <alpha>	0.1288	</alpha>
-      </SU-85_mod_1942>
-      <SU-85_mod_1943>
-        <alpha>	0.1127	</alpha>
-      </SU-85_mod_1943>
-    </chassis>
-    <engines>
-      <V-2>
-        <bravo>	126.8737	</bravo>
-      </V-2>
-      <V-2-34>
-        <bravo>	132.1601	</bravo>
-      </V-2-34>
-    </engines>
     <armour>	0.958158545	</armour>
   </clientAdjustmentFactors>
   <effects>

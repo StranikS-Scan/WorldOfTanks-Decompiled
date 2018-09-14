@@ -526,23 +526,89 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <SOFAM_8Gxb>
+          <smplEnginePower>	264.3203	</smplEnginePower>
+        </SOFAM_8Gxb>
+        <_6F11SRY>
+          <smplEnginePower>	296.0387	</smplEnginePower>
+        </_6F11SRY>
+      </engines>
+      <chassis>
+        <Chassis_AMX_13F3AM>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_13F3AM>
+        <Chassis_AMX_13F3AM_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_13F3AM_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_13F3AM>
-        <alpha>	0.1127	</alpha>
-      </Chassis_AMX_13F3AM>
-      <Chassis_AMX_13F3AM_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_AMX_13F3AM_2>
-    </chassis>
-    <engines>
-      <SOFAM_8Gxb>
-        <bravo>	66.08007	</bravo>
-      </SOFAM_8Gxb>
-      <_6F11SRY>
-        <bravo>	74.00968	</bravo>
-      </_6F11SRY>
-    </engines>
     <armour>	0.640331588	</armour>
   </clientAdjustmentFactors>
   <effects>

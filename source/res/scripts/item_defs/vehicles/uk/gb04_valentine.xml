@@ -713,34 +713,100 @@
     </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <AEC_A189>
+          <smplEnginePower>	142.733	</smplEnginePower>
+        </AEC_A189>
+        <AEC_A1909>
+          <smplEnginePower>	138.5038	</smplEnginePower>
+        </AEC_A1909>
+        <GMC_6-71_Mk10>
+          <smplEnginePower>	145.9048	</smplEnginePower>
+        </GMC_6-71_Mk10>
+        <GMC_6-71_Mk11>
+          <smplEnginePower>	174.4514	</smplEnginePower>
+        </GMC_6-71_Mk11>
+      </engines>
+      <chassis>
+        <Chassis_GB04_Valentine>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB04_Valentine>
+        <Chassis_GB04_Valentine_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB04_Valentine_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_2pdr_Gun_Mk_X>
         <delta>	0.602272	</delta>
       </_2pdr_Gun_Mk_X>
     </guns>
-    <chassis>
-      <Chassis_GB04_Valentine>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB04_Valentine>
-      <Chassis_GB04_Valentine_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_GB04_Valentine_2>
-    </chassis>
-    <engines>
-      <AEC_A189>
-        <bravo>	35.68324	</bravo>
-      </AEC_A189>
-      <AEC_A1909>
-        <bravo>	34.62596	</bravo>
-      </AEC_A1909>
-      <GMC_6-71_Mk10>
-        <bravo>	36.4762	</bravo>
-      </GMC_6-71_Mk10>
-      <GMC_6-71_Mk11>
-        <bravo>	43.61285	</bravo>
-      </GMC_6-71_Mk11>
-    </engines>
     <armour>	0.788942471	</armour>
   </clientAdjustmentFactors>
   <effects>

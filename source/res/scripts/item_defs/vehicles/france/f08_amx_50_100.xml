@@ -774,7 +774,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <camouflage>
             <tiling>	1.06 0.595 0.000000 0.000000	</tiling>
           </camouflage>
@@ -839,7 +839,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <camouflage>
             <tiling>	1.18 0.625 0.28 0.31	</tiling>
           </camouflage>
@@ -898,7 +898,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <camouflage>
             <tiling>	1.18 0.64 0.26 0.35	</tiling>
           </camouflage>
@@ -963,26 +963,92 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230>
+          <smplEnginePower>	607.9366	</smplEnginePower>
+        </Maybach_HL_230>
+        <Maybach_HL_230P45>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Maybach_HL_230P45>
+        <Maybach_HL_295>
+          <smplEnginePower>	898.689	</smplEnginePower>
+        </Maybach_HL_295>
+      </engines>
+      <chassis>
+        <Chassis_AMX_50_100>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_50_100>
+        <Chassis_AMX_50_100_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_50_100_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_50_100>
-        <alpha>	0.1127	</alpha>
-      </Chassis_AMX_50_100>
-      <Chassis_AMX_50_100_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_AMX_50_100_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_230>
-        <bravo>	151.9842	</bravo>
-      </Maybach_HL_230>
-      <Maybach_HL_230P45>
-        <bravo>	198.2402	</bravo>
-      </Maybach_HL_230P45>
-      <Maybach_HL_295>
-        <bravo>	224.6722	</bravo>
-      </Maybach_HL_295>
-    </engines>
     <armour>	1.34250162	</armour>
   </clientAdjustmentFactors>
   <effects>

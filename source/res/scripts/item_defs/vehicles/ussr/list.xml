@@ -5,7 +5,7 @@
     <description>	#ussr_vehicles:Observer_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	observer secret lightTank	</tags>
+    <tags>	observer secret lightTank unrecoverable	</tags>
     <level>	1	</level>
   </Observer>
   <R04_T-34>
@@ -53,7 +53,7 @@
     <userString>	#ussr_vehicles:KV	</userString>
     <description>	#ussr_vehicles:KV_descr	</description>
     <price>	410000	</price>
-    <tags>	heavyTank secret enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user	</tags>
+    <tags>	heavyTank secret enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user unrecoverable	</tags>
     <notInShop>	true	</notInShop>
     <level>	5	</level>
   </R05_KV>
@@ -70,7 +70,7 @@
     <userString>	#ussr_vehicles:S-51	</userString>
     <description>	#ussr_vehicles:S-51_descr	</description>
     <price>	1400000	</price>
-    <tags>	SPG heavySPG enhancedTorsions5t_user largeCaliberHowitzerRammer_user wetCombatPack_class2_user	</tags>
+    <tags>	SPG heavySPG enhancedTorsions5t_user largeCaliberHowitzerRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	7	</level>
   </R15_S-51>
   <R12_A-20>
@@ -158,7 +158,7 @@
     <userString>	#ussr_vehicles:T-26	</userString>
     <description>	#ussr_vehicles:T-26_descr	</description>
     <price>	3700	</price>
-    <tags>	lightTank enhancedSuspension_Vikkers_user	</tags>
+    <tags>	lightTank enhancedSuspension_Vikkers_user HD	</tags>
     <level>	2	</level>
   </R09_T-26>
   <R14_SU-5>
@@ -325,7 +325,7 @@
     <shortUserString>	#ussr_vehicles:T_50_2_short	</shortUserString>
     <price>	725000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank secret scout mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions1t_user	</tags>
+    <tags>	lightTank secret scout mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions1t_user unrecoverable	</tags>
     <level>	5	</level>
   </R70_T_50_2>
   <R58_SU-101>
@@ -407,7 +407,7 @@
     <userString>	#ussr_vehicles:A43	</userString>
     <description>	#ussr_vehicles:A43_descr	</description>
     <price>	925000	</price>
-    <tags>	mediumTank enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	6	</level>
   </R57_A43>
   <R59_A44>
@@ -565,7 +565,7 @@
     <tags>	heavyTank enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	6	</level>
   </R106_KV85>
-  <R38_KV-220>
+  <R38_KV-220_beta>
     <id>	200	</id>
     <userString>	#ussr_vehicles:KV-220_test	</userString>
     <description>	#ussr_vehicles:KV-220_descr	</description>
@@ -575,17 +575,14 @@
     <notInShop>	true	</notInShop>
     <tags>	heavyTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class2_user disabledInRoaming HD	</tags>
     <level>	5	</level>
-  </R38_KV-220>
+  </R38_KV-220_beta>
   <R32_Matilda_II_LL>
     <id>	201	</id>
     <userString>	#ussr_vehicles:Matilda_II_LL	</userString>
     <description>	#ussr_vehicles:Matilda_II_LL_descr	</description>
     <price>	1500	  <gold></gold>
     </price>
-    <tags>	mediumTank
-			lendLeaseVehicle
-			mediumCaliberTankRammer_user
-			wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank lendLeaseVehicle mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	5	</level>
   </R32_Matilda_II_LL>
   <R33_Churchill_LL>
@@ -668,7 +665,7 @@
     <tags>	AT-SPG mediumAT-SPG mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user grousers_user	</tags>
     <level>	5	</level>
   </R78_SU_85I>
-  <R38_KV-220_action>
+  <R38_KV-220>
     <id>	211	</id>
     <userString>	#ussr_vehicles:KV-220	</userString>
     <description>	#ussr_vehicles:KV-220_descr	</description>
@@ -677,7 +674,7 @@
     <notInShop>	true	</notInShop>
     <tags>	heavyTank enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	5	</level>
-  </R38_KV-220_action>
+  </R38_KV-220>
   <R50_SU76I>
     <id>	212	</id>
     <userString>	#ussr_vehicles:SU76I	</userString>
@@ -724,7 +721,7 @@
     <description>	#ussr_vehicles:T-34-85_descr	</description>
     <price>	5000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret enhancedSuspension_Christie_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank secret enhancedSuspension_Christie_user mediumCaliberTankRammer_user wetCombatPack_class1_user unrecoverable	</tags>
     <level>	1	</level>
   </R07_T-34-85_training>
   <R86_LTP>
@@ -859,7 +856,7 @@
     <price>	12190	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank sinai enhancedTorsions5t_user wetCombatPack_class2_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user HD secret inGame	</tags>
+    <tags>	heavyTank sinai enhancedTorsions5t_user wetCombatPack_class2_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user HD inGame	</tags>
     <level>	8	</level>
   </R115_IS-3_auto>
   <R95_Object_907A>
@@ -958,7 +955,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD secret telecom cannot_be_sold disabledInRoaming	</tags>
+    <tags>	mediumTank enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD telecom cannot_be_sold disabledInRoaming	</tags>
     <level>	8	</level>
   </R127_T44_100_P>
   <R128_KV4_Kreslavskiy>
@@ -1002,7 +999,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank special sinai largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD secret testTank	</tags>
+    <tags>	heavyTank special sinai largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD secret	</tags>
     <level>	10	</level>
   </R129_Object_257>
   <R87_T62A_fallout>
@@ -1104,7 +1101,7 @@
     <description>	#ussr_vehicles:MS-1_bot_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank secret HD	</tags>
+    <tags>	lightTank secret HD unrecoverable	</tags>
     <level>	1	</level>
   </R11_MS-1_bot>
   <R09_T-26_bot>
@@ -1113,7 +1110,7 @@
     <description>	#ussr_vehicles:T-26_bot_descr	</description>
     <price>	3700	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank enhancedSuspension_Vikkers_user secret	</tags>
+    <tags>	lightTank enhancedSuspension_Vikkers_user secret HD unrecoverable	</tags>
     <level>	2	</level>
   </R09_T-26_bot>
 </list.xml>

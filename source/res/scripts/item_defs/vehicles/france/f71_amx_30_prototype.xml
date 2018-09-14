@@ -235,14 +235,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.01	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	757	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -489,14 +486,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.01	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	757	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -820,7 +814,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.7 0.7 0.24 0.000000	</tiling>
@@ -1076,7 +1070,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.88 0.88 0.18 0.000000	</tiling>
@@ -1144,23 +1138,89 @@
     </TRVP_11_Banane>
     <TRVP_13>	shared	</TRVP_13>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <SOFAM_12GSds_A>
+          <smplEnginePower>	761.2424	</smplEnginePower>
+        </SOFAM_12GSds_A>
+        <Hispano-Suiza_HS110_A>
+          <smplEnginePower>	761.2424	</smplEnginePower>
+        </Hispano-Suiza_HS110_A>
+      </engines>
+      <chassis>
+        <Chassis_AMX_30_prototype>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_30_prototype>
+        <Chassis_AMX_30_prototype_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_30_prototype_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_30_prototype>
-        <alpha>	0.08855	</alpha>
-      </Chassis_AMX_30_prototype>
-      <Chassis_AMX_30_prototype_2>
-        <alpha>	0.0805	</alpha>
-      </Chassis_AMX_30_prototype_2>
-    </chassis>
-    <engines>
-      <SOFAM_12GSds_A>
-        <bravo>	190.3106	</bravo>
-      </SOFAM_12GSds_A>
-      <Hispano-Suiza_HS110_A>
-        <bravo>	190.3106	</bravo>
-      </Hispano-Suiza_HS110_A>
-    </engines>
     <armour>	0.713563545	</armour>
   </clientAdjustmentFactors>
   <effects>

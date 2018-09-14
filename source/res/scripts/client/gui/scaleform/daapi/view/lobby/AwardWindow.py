@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/AwardWindow.py
 from collections import namedtuple
+from gui.Scaleform.daapi.view.meta.MissionAwardWindowMeta import MissionAwardWindowMeta
 from helpers import i18n
 from gui.Scaleform.daapi.view.meta.AwardWindowMeta import AwardWindowMeta
 from gui.Scaleform.locale.MENU import MENU
@@ -85,6 +86,66 @@ class AwardAbstract(object):
         pass
 
 
+class MissionAwardAbstract(AwardAbstract):
+
+    def getRibbonImage(self):
+        pass
+
+    def getCurrentQuestHeader(self):
+        pass
+
+    def getCurrentQuestConditions(self):
+        return None
+
+    def getCurrentQuestConditionsText(self):
+        pass
+
+    def getNextQuestHeader(self):
+        pass
+
+    def getNextQuestConditions(self):
+        pass
+
+    def getAdditionalStatusText(self):
+        pass
+
+    def getMainStatusText(self):
+        pass
+
+    def getMainStatusIcon(self):
+        pass
+
+    def getAvalableText(self):
+        pass
+
+    def getAdditionalStatusIcon(self):
+        pass
+
+    def getNextButtonText(self):
+        pass
+
+    def getNextButtonTooltip(self):
+        pass
+
+    def isNextAvailable(self):
+        return False
+
+    def isLast(self):
+        return False
+
+    def isPersonal(self):
+        return False
+
+    def getAwards(self):
+        return []
+
+    def handleNextButton(self):
+        pass
+
+    def handleCurrentButton(self):
+        pass
+
+
 class ExplosionBackAward(AwardAbstract):
 
     def __init__(self, useAnimation=True):
@@ -157,4 +218,54 @@ class AwardWindow(AwardWindowMeta):
             self.__award.clear()
             self.__award = None
         super(AwardWindow, self)._dispose()
+        return
+
+
+class MissionAwardWindow(MissionAwardWindowMeta):
+
+    def __init__(self, ctx):
+        super(MissionAwardWindow, self).__init__()
+        assert 'award' in ctx and isinstance(ctx['award'], AwardAbstract)
+        self.__award = ctx['award']
+
+    def onWindowClose(self):
+        self.destroy()
+
+    def onCurrentQuestClick(self):
+        self.__award.handleNextButton()
+        self.onWindowClose()
+
+    def onNextQuestClick(self):
+        self.__award.handleCurrentButton()
+        self.onWindowClose()
+
+    def _populate(self):
+        super(MissionAwardWindow, self)._populate()
+        data = {'windowTitle': self.__award.getWindowTitle(),
+         'backImage': self.__award.getBackgroundImage(),
+         'ribbonImage': self.__award.getRibbonImage(),
+         'header': self.__award.getHeader(),
+         'description': self.__award.getDescription(),
+         'currentQuestHeader': self.__award.getCurrentQuestHeader(),
+         'currentQuestConditions': self.__award.getCurrentQuestConditionsText(),
+         'nextQuestHeader': self.__award.getNextQuestHeader(),
+         'nextQuestConditions': self.__award.getNextQuestConditions(),
+         'additionalStatusText': self.__award.getAdditionalStatusText(),
+         'mainStatusText': self.__award.getMainStatusText(),
+         'availableText': self.__award.getAvalableText(),
+         'additionalStatusIcon': self.__award.getAdditionalStatusIcon(),
+         'mainStatusIcon': self.__award.getMainStatusIcon(),
+         'nextButtonText': self.__award.getNextButtonText(),
+         'nextButtonTooltip': self.__award.getNextButtonTooltip(),
+         'awards': self.__award.getAwards(),
+         'conditions': self.__award.getCurrentQuestConditions(),
+         'isPersonalQuest': self.__award.isPersonal(),
+         'availableNextQuest': self.__award.isNextAvailable(),
+         'isLastQuest': self.__award.isLast()}
+        self.as_setDataS(data)
+
+    def _dispose(self):
+        self.__award.clear()
+        self.__award = None
+        super(MissionAwardWindow, self)._dispose()
         return

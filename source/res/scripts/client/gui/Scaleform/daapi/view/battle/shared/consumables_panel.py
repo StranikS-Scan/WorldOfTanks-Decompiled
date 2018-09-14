@@ -4,8 +4,10 @@ import math
 from functools import partial
 import BigWorld
 import CommandMapping
+import SoundGroups
 from constants import EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR
+from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control import g_sessionProvider
@@ -40,6 +42,7 @@ EMPTY_EQUIPMENTS_SLICE = [0] * (EQUIPMENT_END_IDX - EQUIPMENT_START_IDX + 1)
 EMPTY_ORDERS_SLICE = [0] * (ORDERS_START_IDX - ORDERS_END_IDX + 1)
 EMPTY_EQUIPMENT_TOOLTIP = i18n.makeString('#ingame_gui:consumables_panel/equipment/tooltip/empty')
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
+TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
 
 class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
 
@@ -159,8 +162,13 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     def __makeShellTooltip(self, descriptor, piercingPower):
         kind = descriptor['kind']
         header = i18n.makeString('#ingame_gui:shells_kinds/{0:>s}'.format(kind), caliber=BigWorld.wg_getNiceNumberFormat(descriptor['caliber']), userString=descriptor['userString'])
-        body = i18n.makeString('#ingame_gui:shells_kinds/params', damage=str(int(descriptor['damage'][0])), piercingPower=str(piercingPower))
-        return TOOLTIP_FORMAT.format(header, body)
+        if GUI_SETTINGS.technicalInfo:
+            body = i18n.makeString('#ingame_gui:shells_kinds/params', damage=str(int(descriptor['damage'][0])), piercingPower=str(piercingPower))
+            fmt = TOOLTIP_FORMAT
+        else:
+            body = ''
+            fmt = TOOLTIP_NO_BODY_FORMAT
+        return fmt.format(header, body)
 
     def __getKeysGenerator(self):
         getEquipment = g_sessionProvider.shared.equipments.getEquipment
@@ -300,7 +308,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             valueType = state.getValueType()
             if valueType == GUN_RELOADING_VALUE_TYPE.TIME:
                 self.as_setCoolDownTimeS(index, state.getActualValue())
-            elif valueType == GUN_RELOADING_VALUE_TYPE.TIME:
+            elif valueType == GUN_RELOADING_VALUE_TYPE.PERCENT:
                 self.as_setCoolDownPosAsPercentS(index, state.getActualValue())
         else:
             LOG_ERROR('Ammo is not found in panel', currShellCD, self.__cds)
@@ -334,6 +342,8 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                 self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
                 self.__updateOrderSlot(idx, item)
             else:
+                if not quantity:
+                    SoundGroups.g_instance.playSound2D('battle_equipment_%d' % intCD)
                 self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
                 self.onPopUpClosed()
         else:

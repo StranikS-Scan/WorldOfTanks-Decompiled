@@ -12,13 +12,12 @@ from messenger.proto.xmpp.decorators import xmpp_query, QUERY_SIGN
 from messenger.proto.xmpp.extensions import chat as chat_ext
 from messenger.proto.xmpp.gloox_constants import GLOOX_EVENT as _EVENT, MESSAGE_TYPE, MESSAGE_TYPE_TO_ATTR
 from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler
-from messenger.proto.xmpp.jid import makeSystemRoomJID
 from messenger.proto.xmpp.messages.chat_session import ChatSessionsProvider
 from messenger.proto.xmpp.messages.muc import MUCProvider, ACTION_RESULT
 from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_CHANNEL_TYPE
 from messenger.proto.xmpp.xmpp_limits import MessageLimits
 from messenger.storage import storage_getter
-_REQUIRED_USER_TAGS = {USER_TAG.FRIEND, USER_TAG.IGNORED}
+_REQUIRED_USER_TAGS = {USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.IGNORED_TMP}
 
 class MessagesManager(ClientEventsHandler):
     __slots__ = ('__msgFilters', '__limits', '__chatSessions', '__muc', '__receivedTags', '__pending', '__cooldown')
@@ -127,9 +126,7 @@ class MessagesManager(ClientEventsHandler):
     def _addCommonChannelToStorage(self):
         sysChannelConfig = g_settings.server.XMPP.getChannelByType(XMPP_MUC_CHANNEL_TYPE.STANDARD)
         if sysChannelConfig is not None and sysChannelConfig['enabled']:
-            channelJid = makeSystemRoomJID(channelType=XMPP_MUC_CHANNEL_TYPE.STANDARD)
-            channelName = sysChannelConfig['userString'] or channelJid.getDomain()
-            sysChannelEntity = entities.XMPPMucChannelEntity(channelJid, channelName, isSystem=True, isLazy=True, channelType=XMPP_MUC_CHANNEL_TYPE.STANDARD)
+            sysChannelEntity = entities.XmppSystemChannelEntity(mucChannelType=XMPP_MUC_CHANNEL_TYPE.STANDARD, name=sysChannelConfig['userString'])
             if self.channelsStorage.addChannel(sysChannelEntity):
                 g_messengerEvents.channels.onChannelInited(sysChannelEntity)
         return
@@ -137,9 +134,7 @@ class MessagesManager(ClientEventsHandler):
     def _addCompanyChannelToStorage(self):
         companyChannelConfig = g_settings.server.XMPP.getChannelByType(XMPP_MUC_CHANNEL_TYPE.COMPANY)
         if companyChannelConfig is not None and companyChannelConfig['enabled']:
-            channelJid = makeSystemRoomJID(channelType=XMPP_MUC_CHANNEL_TYPE.COMPANY)
-            channelName = companyChannelConfig['userString'] or channelJid.getDomain()
-            companyChannelEntity = entities.XMPPMucChannelEntity(channelJid, channelName, isSystem=True, isLazy=True, channelType=XMPP_MUC_CHANNEL_TYPE.COMPANY)
+            companyChannelEntity = entities.XmppSystemChannelEntity(mucChannelType=XMPP_MUC_CHANNEL_TYPE.COMPANY, name=companyChannelConfig['userString'])
             if self.channelsStorage.addChannel(companyChannelEntity):
                 g_messengerEvents.channels.onChannelInited(companyChannelEntity)
         return

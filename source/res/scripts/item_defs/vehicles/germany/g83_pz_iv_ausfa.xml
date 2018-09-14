@@ -625,23 +625,89 @@
     </FuG5>
     <FuG7>	shared	</FuG7>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_108TR>
+          <smplEnginePower>	338.33	</smplEnginePower>
+        </Maybach_HL_108TR>
+        <Maybach_HL_120_TR>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Maybach_HL_120_TR>
+      </engines>
+      <chassis>
+        <Chassis_Pz_IV_AusfA>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Pz_IV_AusfA>
+        <Chassis_Pz_IV_AusfA_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Pz_IV_AusfA_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Pz_IV_AusfA>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Pz_IV_AusfA>
-      <Chassis_Pz_IV_AusfA_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Pz_IV_AusfA_2>
-    </chassis>
-    <engines>
-      <Maybach_HL_108TR>
-        <bravo>	84.58249	</bravo>
-      </Maybach_HL_108TR>
-      <Maybach_HL_120_TR>
-        <bravo>	92.5121	</bravo>
-      </Maybach_HL_120_TR>
-    </engines>
     <armour>	0.831066775	</armour>
   </clientAdjustmentFactors>
   <effects>

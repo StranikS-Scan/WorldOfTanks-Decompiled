@@ -1,28 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsTileChainsView.py
-import weakref
 import operator
+import weakref
 from collections import namedtuple
-from adisp import async
-from gui.server_events.EventsCache import g_eventsCache
-from helpers import int2roman
-from helpers.i18n import makeString as _ms
-from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from CurrentVehicle import g_currentVehicle
+from adisp import async
+from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, makeHtmlString
-from gui.server_events import formatters, caches, events_dispatcher as quests_events
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
-from gui.shared.utils import decorators
-from gui.shared.gui_items import Vehicle
+from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+from gui.Scaleform.daapi.view.meta.QuestsTileChainsViewMeta import QuestsTileChainsViewMeta
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.Scaleform.genConsts.QUEST_TASK_FILTERS_TYPES import QUEST_TASK_FILTERS_TYPES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.genConsts.QUEST_TASK_FILTERS_TYPES import QUEST_TASK_FILTERS_TYPES
-from gui.Scaleform.daapi.view.meta.QuestsTileChainsViewMeta import QuestsTileChainsViewMeta
-from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+from gui.shared.formatters.vehicle_filters import packIntVehicleTypesFilter
+from gui.server_events import caches
+from gui.server_events.EventsCache import g_eventsCache
+from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from gui.shared.formatters import text_styles, icons
+from gui.shared.gui_items import Vehicle
+from gui.shared.utils import decorators
+from helpers import int2roman
+from helpers.i18n import makeString as _ms
 from potapov_quests import PQ_BRANCH
 
 class _QuestsFilter(object):
@@ -103,7 +104,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
     def selectTask(self, questID):
         quest = events_helpers.getPotapovQuestsCache().getQuests()[questID]
         if quest.needToGetReward():
-            result = yield self.__getAward(quest)
+            result = yield events_helpers.getPotapovQuestAward(quest)
         else:
             result = yield events_helpers.getPotapovQuestsSelectProcessor()(quest, events_helpers.getPotapovQuestsCache()).request()
         if result and len(result.userMsg):
@@ -143,7 +144,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
                     'tooltipType': self._tooltipType},
          'filters': {'filtersLabel': _ms(QUESTS.TILECHAINSVIEW_FILTERSLABEL_TEXT),
                      'showVehicleTypeFilterData': self._showVehicleFilter,
-                     'vehicleTypeFilterData': formatters._packVehicleTypesFilter(_QuestsFilter.VEH_TYPE_DEFAULT),
+                     'vehicleTypeFilterData': packIntVehicleTypesFilter(_QuestsFilter.VEH_TYPE_DEFAULT),
                      'taskTypeFilterData': self.__packQuestStatesFilter(),
                      'defVehicleType': vehTypeFilter,
                      'defTaskType': qStateFilter}})
@@ -218,23 +219,6 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
 
         questsByChains = map(lambda (chID, qs): (self.__tile.getChainSortKey(chID), chID, qs), questsByChains.iteritems())
         return self._sortChains(questsByChains)
-
-    @async
-    @decorators.process('updating')
-    def __getAward(self, quest, callback):
-        yield lambda callback: callback(True)
-        result = None
-        tankman, isMainBonus = quest.getTankmanBonus()
-        needToGetTankman = quest.needToGetAddReward() and not isMainBonus or quest.needToGetMainReward() and isMainBonus
-        if needToGetTankman and tankman is not None:
-            for tmanData in tankman.getTankmenData():
-                quests_events.showTankwomanAward(quest.getID(), tmanData)
-                break
-
-        else:
-            result = yield events_helpers.getPotapovQuestsRewardProcessor()(quest).request()
-        callback(result)
-        return
 
     def __getCurrentFilters(self):
         return self._navInfo.selectedPQ.filters or self.__getDefaultFilters()

@@ -819,23 +819,89 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Praga_EPA>
+          <smplEnginePower>	137.4465	</smplEnginePower>
+        </Praga_EPA>
+        <Praga_EPA_AC>
+          <smplEnginePower>	158.5922	</smplEnginePower>
+        </Praga_EPA_AC>
+      </engines>
+      <chassis>
+        <Grilleketten_ausf_A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Grilleketten_ausf_A>
+        <Grilleketten_ausf_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Grilleketten_ausf_B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Grilleketten_ausf_A>
-        <alpha>	0.12075	</alpha>
-      </Grilleketten_ausf_A>
-      <Grilleketten_ausf_B>
-        <alpha>	0.1127	</alpha>
-      </Grilleketten_ausf_B>
-    </chassis>
-    <engines>
-      <Praga_EPA>
-        <bravo>	34.36164	</bravo>
-      </Praga_EPA>
-      <Praga_EPA_AC>
-        <bravo>	39.64804	</bravo>
-      </Praga_EPA_AC>
-    </engines>
     <armour>	0.669349811	</armour>
   </clientAdjustmentFactors>
   <effects>

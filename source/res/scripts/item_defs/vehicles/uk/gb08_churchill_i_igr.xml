@@ -464,17 +464,52 @@
   <radios>
     <N19Mk3_IGR>	shared	</N19Mk3_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Vauxhall_Bedford_Twin_Six_IGR>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Vauxhall_Bedford_Twin_Six_IGR>
+      </engines>
+      <chassis>
+        <Chassis_GB08_Churchill_I_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB08_Churchill_I_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB08_Churchill_I_2_IGR>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB08_Churchill_I_2_IGR>
-    </chassis>
-    <engines>
-      <Vauxhall_Bedford_Twin_Six_IGR>
-        <bravo>	92.5121	</bravo>
-      </Vauxhall_Bedford_Twin_Six_IGR>
-    </engines>
     <armour>	0.762143905	</armour>
   </clientAdjustmentFactors>
   <effects>

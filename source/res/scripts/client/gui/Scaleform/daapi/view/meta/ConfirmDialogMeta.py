@@ -8,19 +8,13 @@ class ConfirmDialogMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def submit(self, selected):
-        """
-        :param selected:
-        :return :
-        """
         self._printOverrideError('submit')
 
     def as_setSettingsS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by ConfirmDialogVO (AS)
         """
         return self.flashObject.as_setSettings(data) if self._isDAAPIInited() else None

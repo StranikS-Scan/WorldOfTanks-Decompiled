@@ -27,6 +27,7 @@ KEY_GUI_NOTIFY_INFO = 'guiNotifyInfo'
 KEY_DYNAMIC_FOV = 'dynamicFov'
 KEY_DYNAMIC_FOV_ENABLED = 'dynamicFovEnabled'
 INTRO_VIDEO_VERSION = 'introVideoVersion'
+VIDEO_BUFFERING_TIME = 'videoBufferingTime'
 
 class Settings(object):
 

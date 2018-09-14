@@ -8,6 +8,13 @@ class NOTIFICATION_STATE(object):
     LIST = 1
 
 
+class NOTIFICATION_GROUP(object):
+    INFO = 'info'
+    INVITE = 'invite'
+    OFFER = 'offer'
+    ALL = (INFO, INVITE, OFFER)
+
+
 class NOTIFICATION_TYPE(object):
     UNDEFINED = 0
     MESSAGE = 1

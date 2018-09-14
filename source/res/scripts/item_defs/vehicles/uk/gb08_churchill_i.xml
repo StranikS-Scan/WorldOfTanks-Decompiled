@@ -1125,23 +1125,89 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Meadows_DAV>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </Meadows_DAV>
+        <Vauxhall_Bedford_Twin_Six>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Vauxhall_Bedford_Twin_Six>
+      </engines>
+      <chassis>
+        <Chassis_GB08_Churchill_I>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB08_Churchill_I>
+        <Chassis_GB08_Churchill_I_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB08_Churchill_I_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB08_Churchill_I>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB08_Churchill_I>
-      <Chassis_GB08_Churchill_I_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB08_Churchill_I_2>
-    </chassis>
-    <engines>
-      <Meadows_DAV>
-        <bravo>	79.29608	</bravo>
-      </Meadows_DAV>
-      <Vauxhall_Bedford_Twin_Six>
-        <bravo>	92.5121	</bravo>
-      </Vauxhall_Bedford_Twin_Six>
-    </engines>
     <armour>	0.762143905	</armour>
   </clientAdjustmentFactors>
   <effects>

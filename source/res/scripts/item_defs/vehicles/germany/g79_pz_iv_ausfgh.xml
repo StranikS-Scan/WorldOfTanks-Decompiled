@@ -324,17 +324,52 @@
   <radios>
     <Radio_PzIV>	shared	</Radio_PzIV>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Engine_PzIV>
+          <smplEnginePower>	338.33	</smplEnginePower>
+        </Engine_PzIV>
+      </engines>
+      <chassis>
+        <PzIV_Ausf_1940>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzIV_Ausf_1940>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <PzIV_Ausf_1940>
-        <alpha>	0.10465	</alpha>
-      </PzIV_Ausf_1940>
-    </chassis>
-    <engines>
-      <Engine_PzIV>
-        <bravo>	84.58249	</bravo>
-      </Engine_PzIV>
-    </engines>
     <armour>	1.137880682	</armour>
     <armour>	1.030547374	</armour>
   </clientAdjustmentFactors>

@@ -8,25 +8,13 @@ class PopoverManagerMeta(BaseDAAPIModule):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIModule
-    null
     """
 
     def requestShowPopover(self, alias, data):
-        """
-        :param alias:
-        :param data:
-        :return :
-        """
         self._printOverrideError('requestShowPopover')
 
     def requestHidePopover(self):
-        """
-        :return :
-        """
         self._printOverrideError('requestHidePopover')
 
     def as_onPopoverDestroyS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_onPopoverDestroy() if self._isDAAPIInited() else None

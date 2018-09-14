@@ -866,23 +866,89 @@
     </SCR_210>
     <SCR_506>	shared	</SCR_506>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_R-975EC2>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Wright_R-975EC2>
+        <Crysler_A57>
+          <smplEnginePower>	465.2037	</smplEnginePower>
+        </Crysler_A57>
+      </engines>
+      <chassis>
+        <Chassis_T40>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T40>
+        <Chassis_T40_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T40_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T40>
-        <alpha>	0.13685	</alpha>
-      </Chassis_T40>
-      <Chassis_T40_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_T40_2>
-    </chassis>
-    <engines>
-      <Wright_R-975EC2>
-        <bravo>	105.7281	</bravo>
-      </Wright_R-975EC2>
-      <Crysler_A57>
-        <bravo>	116.3009	</bravo>
-      </Crysler_A57>
-    </engines>
     <armour>	0.765479111	</armour>
   </clientAdjustmentFactors>
   <effects>

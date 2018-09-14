@@ -119,7 +119,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
     def __isNotEnoughSpaceInBarrack(self, crew):
         berthsNeeded = len(filter(lambda (role, t): t is not None, crew))
-        barracksTmen = g_itemsCache.items.getTankmen(~REQ_CRITERIA.TANKMAN.IN_TANK)
+        barracksTmen = g_itemsCache.items.getTankmen(~REQ_CRITERIA.TANKMAN.IN_TANK | REQ_CRITERIA.TANKMAN.ACTIVE)
         tmenBerthsCount = g_itemsCache.items.stats.tankmenBerthsCount
         return berthsNeeded > 0 and berthsNeeded > tmenBerthsCount - len(barracksTmen)
 

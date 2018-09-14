@@ -3,15 +3,21 @@
 import BigWorld
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
+from gui.shared.utils import backoff
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
 from messenger.gui.Scaleform.channels.layout import LobbyLayout
-from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE, CLIENT_ACTION_ID
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
+from messenger.proto.xmpp.gloox_constants import ERROR_TYPE
 from messenger.proto.xmpp.jid import makeContactJID
-from messenger.proto.xmpp.messages.formatters import XmppLobbyMessageBuilder
+from messenger.proto.xmpp.messages.formatters import XmppLobbyMessageBuilder, XmppLobbyUsersChatBuilder
 from messenger.proto.xmpp.xmpp_constants import MESSAGE_LIMIT
 _LAZY_EXIT_DELAY = 10.0
+_BACK_OFF_MIN_DELAY = 60
+_BACK_OFF_MAX_DELAY = 1200
+_BACK_OFF_MODIFIER = 30
+_BACK_OFF_EXP_RANDOM_FACTOR = 5
 
 class _ChannelController(LobbyLayout):
 
@@ -73,8 +79,8 @@ class _ChannelController(LobbyLayout):
 
 class ChatSessionController(_ChannelController):
 
-    def __init__(self, channel, mBuilder=None):
-        super(ChatSessionController, self).__init__(channel, mBuilder)
+    def __init__(self, channel):
+        super(ChatSessionController, self).__init__(channel, XmppLobbyUsersChatBuilder())
         self._isHistoryRqRequired = True
 
     def isJoined(self):
@@ -195,4 +201,79 @@ class LazyUserRoomController(_ChannelController):
         self.__exitCallbackID = None
         if self._channel and self._channel.isJoined():
             self.exit()
+        return
+
+
+class ClanUserRoomController(UserRoomController):
+    """Clan channel controller
+    """
+
+    def __init__(self, channel):
+        super(ClanUserRoomController, self).__init__(channel)
+        self.__reJoinCallbackID = None
+        self.__expBackOff = backoff.ExpBackoff(_BACK_OFF_MIN_DELAY, _BACK_OFF_MAX_DELAY, _BACK_OFF_MODIFIER, _BACK_OFF_EXP_RANDOM_FACTOR)
+        self.__doNextRejoin()
+        g_messengerEvents.onErrorReceived += self.__me_onErrorReceived
+        return
+
+    def clear(self):
+        """Clear resources used by controller
+        """
+        g_messengerEvents.onErrorReceived -= self.__me_onErrorReceived
+        self.__cancelRejoinCallback()
+        self.__expBackOff.reset()
+        self.exit()
+        super(ClanUserRoomController, self).clear()
+
+    def join(self):
+        """Join to muc clan channel
+        """
+        self.proto.messages.joinToMUC(self._channel.getID())
+
+    def exit(self):
+        """Exit from muc clan channel
+        """
+        if self._channel.isJoined():
+            self.proto.messages.leaveFromMUC(self._channel.getID())
+
+    def _onConnectStateChanged(self, channel):
+        """Channel state changed, check if we've been joined to clan channel,
+        then remove callback for further rejoin attempts
+        :param channel: channel entity
+        :type channel: XMPPMucChannelEntity
+        """
+        super(ClanUserRoomController, self)._onConnectStateChanged(channel)
+        if channel.isJoined():
+            self.__cancelRejoinCallback()
+
+    def __doNextRejoin(self):
+        """Try for rejoin to clan channel
+        """
+        self.__reJoinCallbackID = None
+        self.join()
+        return
+
+    def __cancelRejoinCallback(self):
+        """Clear rejoin callback
+        """
+        if self.__reJoinCallbackID is not None:
+            BigWorld.cancelCallback(self.__reJoinCallbackID)
+            self.__reJoinCallbackID = None
+        return
+
+    def __setRejoinCallback(self):
+        """Set next attempt for rejoin in 'delay' seconds
+        'delay' grows exponentially
+        """
+        delay = self.__expBackOff.next()
+        self.__reJoinCallbackID = BigWorld.callback(delay, self.__doNextRejoin)
+
+    def __me_onErrorReceived(self, error):
+        """check if it's JOIN_CLAN_ROOM action and got auth error, set rejoin callback
+        :param error: packed error info
+        :type error: ServerActionError
+        """
+        if error.getActionID() == CLIENT_ACTION_ID.JOIN_CLAN_ROOM and error.getErrorType() == ERROR_TYPE.AUTH and error.getCondition() == 'registration-required':
+            if self.__reJoinCallbackID is None:
+                self.__setRejoinCallback()
         return

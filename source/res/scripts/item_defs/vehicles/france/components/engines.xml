@@ -45,8 +45,8 @@
     <Somua_230_V8>	51	</Somua_230_V8>
     <Renault_ACL>	56	</Renault_ACL>
     <Sovam_de_150cv>	57	</Sovam_de_150cv>
-    <Maybach_HL_234P45A>	58	</Maybach_HL_234P45A>
     <Maybach_HL_210_TRM_P30>	59	</Maybach_HL_210_TRM_P30>
+    <Maybach_HL_234P45A>	58	</Maybach_HL_234P45A>
     <Maybach_HL_230_TRM_P30>	60	</Maybach_HL_230_TRM_P30>
     <Maybach_850CV>	61	</Maybach_850CV>
     <Ford_GAC_R>	62	</Ford_GAC_R>
@@ -62,6 +62,7 @@
     <Renault_bot>	75	</Renault_bot>
     <Moteur_moderne_3M_27_1_01>	76	</Moteur_moderne_3M_27_1_01>
     <Maybach_HL_230_F>	79	</Maybach_HL_230_F>
+    <Maybach_HL_295_003_Somua>	80	</Maybach_HL_295_003_Somua>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
@@ -1088,6 +1089,23 @@
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2801	</rpm_max>
     </Moteur_moderne_3M_27_1_01>
+    <Maybach_HL_295_003_Somua>
+      <userString>	#france_vehicles:Maybach_HL_295_003_Somua	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	96000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	960	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2972	</rpm_max>
+    </Maybach_HL_295_003_Somua>
     <Maybach_HL_295_IGR>
       <userString>	#igr_vehicles:Maybach_HL_295_IGR	</userString>
       <tags>	gasoline	</tags>

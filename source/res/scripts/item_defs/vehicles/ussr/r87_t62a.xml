@@ -567,17 +567,52 @@
   <radios>
     <R123>	shared	</R123>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-55>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+        </V-55>
+      </engines>
+      <chassis>
+        <Chassis_T62A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T62A>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T62A>
-        <alpha>	0.0483	</alpha>
-      </Chassis_T62A>
-    </chassis>
-    <engines>
-      <V-55>
-        <bravo>	153.3058	</bravo>
-      </V-55>
-    </engines>
     <armour>	1.253004391	</armour>
   </clientAdjustmentFactors>
   <effects>

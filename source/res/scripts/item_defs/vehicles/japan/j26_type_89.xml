@@ -954,23 +954,89 @@
   <radios>
     <_Type94_Otsu>	shared	</_Type94_Otsu>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Type_Da_100_HP>
+          <smplEnginePower>	124.7592	</smplEnginePower>
+        </_Type_Da_100_HP>
+        <_A6120VD>
+          <smplEnginePower>	126.8737	</smplEnginePower>
+        </_A6120VD>
+      </engines>
+      <chassis>
+        <Chassis_J26_Type_89>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_J26_Type_89>
+        <Chassis_J26_Type_89_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_J26_Type_89_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_J26_Type_89>
-        <alpha>	0.08855	</alpha>
-      </Chassis_J26_Type_89>
-      <Chassis_J26_Type_89_2>
-        <alpha>	0.07245	</alpha>
-      </Chassis_J26_Type_89_2>
-    </chassis>
-    <engines>
-      <_Type_Da_100_HP>
-        <bravo>	31.18979	</bravo>
-      </_Type_Da_100_HP>
-      <_A6120VD>
-        <bravo>	31.71843	</bravo>
-      </_A6120VD>
-    </engines>
     <armour>	0.855732706	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -42,6 +42,7 @@ class ClanSendInvitesWindow(SendInvitesWindow, UsersInfoHelper, ClanListener):
     def _populate(self):
         super(ClanSendInvitesWindow, self)._populate()
         self.as_setInvalidUserTagsS([USER_TAG.IGNORED,
+         USER_TAG.IGNORED_TMP,
          USER_TAG.CURRENT,
          USER_TAG.CLAN_MEMBER,
          USER_TAG.OTHER_CLAN_MEMBER])

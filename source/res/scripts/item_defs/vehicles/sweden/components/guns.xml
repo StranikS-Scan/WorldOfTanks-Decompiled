@@ -1,8 +1,75 @@
 <guns.xml>
   <ids>
     <_75mm_kan_strv_74>	0	</_75mm_kan_strv_74>
+    <_20mm_akan_m_Madsen_A>	1	</_20mm_akan_m_Madsen_A>
   </ids>
   <shared>
+    <_20mm_akan_m_Madsen_A>
+      <userString>	#sweden_vehicles:_20mm_akan_m_Madsen_A	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	2400	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.08	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.04	</amplitude>
+        <recoilEffect>	auto	</recoilEffect>
+      </recoil>
+      <effects>	shot_auto	</effects>
+      <reloadEffect>	reload12_25	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -30.0 1.0 -30.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	8	</reloadTime>
+      <maxAmmo>	320	</maxAmmo>
+      <aimingTime>	1.7	</aimingTime>
+      <clip>
+        <count>	20	</count>
+        <rate>	350	</rate>
+      </clip>
+      <burst>
+        <count>	2	</count>
+        <rate>	350	</rate>
+      </burst>
+      <weight>	53	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.5	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	1.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_20mm_slpprj_m_Madsen>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	805	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	27 17	</piercingPower>
+        </_20mm_slpprj_m_Madsen>
+        <_20mm_slpprj_m_40_M>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	775	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	38 24	</piercingPower>
+        </_20mm_slpprj_m_40_M>
+        <_20mm_slsgr_m_Madsen>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	890	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	10 10	</piercingPower>
+        </_20mm_slsgr_m_Madsen>
+      </shots>
+    </_20mm_akan_m_Madsen_A>
     <_75mm_kan_strv_74>
       <userString>	#sweden_vehicles:_75mm_kan_strv_74	</userString>
       <tags></tags>
@@ -16,7 +83,7 @@
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
       <effects>	shot_medium	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
@@ -50,7 +117,7 @@
           <speed>	1160	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	200 175	</piercingPower>
+          <piercingPower>	190 165	</piercingPower>
         </_75mm_slpprj_m_49>
         <_75mm_sgr_m_38>
           <defaultPortion>	0.0	</defaultPortion>

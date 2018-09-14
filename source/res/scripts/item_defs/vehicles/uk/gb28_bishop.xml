@@ -679,7 +679,7 @@
           <aimingTime>	4.5	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-4 4	</turretYawLimits>
-          <effects>	shot_large	</effects>
+          <effects>	shot_main	</effects>
           <models>
             <undamaged>	vehicles/british/GB28_Bishop/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB28_Bishop/crash/lod0/Gun_01.model	</destroyed>
@@ -740,7 +740,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_mainext_mb	</effects>
+          <effects>	shot_large_mb	</effects>
           <camouflage>
             <tiling>	0.43 0.25 0.000000 0.000000	</tiling>
           </camouflage>
@@ -798,29 +798,95 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <AEC_A189>
+          <smplEnginePower>	142.733	</smplEnginePower>
+        </AEC_A189>
+        <AEC_A1909>
+          <smplEnginePower>	138.5038	</smplEnginePower>
+        </AEC_A1909>
+        <GMC_6-71_Mk10>
+          <smplEnginePower>	145.9048	</smplEnginePower>
+        </GMC_6-71_Mk10>
+        <GMC_6-71_Mk11>
+          <smplEnginePower>	174.4514	</smplEnginePower>
+        </GMC_6-71_Mk11>
+      </engines>
+      <chassis>
+        <Chassis_GB28_Bishop>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB28_Bishop>
+        <Chassis_GB28_Bishop_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB28_Bishop_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB28_Bishop>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB28_Bishop>
-      <Chassis_GB28_Bishop_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB28_Bishop_2>
-    </chassis>
-    <engines>
-      <AEC_A189>
-        <bravo>	35.68324	</bravo>
-      </AEC_A189>
-      <AEC_A1909>
-        <bravo>	34.62596	</bravo>
-      </AEC_A1909>
-      <GMC_6-71_Mk10>
-        <bravo>	36.4762	</bravo>
-      </GMC_6-71_Mk10>
-      <GMC_6-71_Mk11>
-        <bravo>	43.61285	</bravo>
-      </GMC_6-71_Mk11>
-    </engines>
     <armour>	0.553997091	</armour>
   </clientAdjustmentFactors>
   <effects>

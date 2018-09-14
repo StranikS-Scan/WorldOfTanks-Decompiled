@@ -497,17 +497,52 @@
   <radios>
     <_10RB>	shared	</_10RB>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M_40_1200>
+          <smplEnginePower>	1268.737	</smplEnginePower>
+        </M_40_1200>
+      </engines>
+      <chassis>
+        <Chassis_R121_KV4_KTT>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R121_KV4_KTT>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R121_KV4_KTT>
-        <alpha>	0.13685	</alpha>
-      </Chassis_R121_KV4_KTT>
-    </chassis>
-    <engines>
-      <M_40_1200>
-        <bravo>	317.1843	</bravo>
-      </M_40_1200>
-    </engines>
     <armour>	0.836514413	</armour>
   </clientAdjustmentFactors>
   <effects>

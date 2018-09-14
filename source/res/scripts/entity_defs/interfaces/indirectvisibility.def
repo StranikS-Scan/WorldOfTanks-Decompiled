@@ -11,7 +11,6 @@
       <Arg>	UINT8	</Arg>
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
-      <Arg>	BOOL	</Arg>
     </indirectVisibility_onVehicleCreated>
     <indirectVisibility_onVehicleUpdated>
       <Arg>	OBJECT_ID	</Arg>
@@ -22,9 +21,6 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	OBJECT_ID	</Arg>
     </indirectVisibility_onVehiclePrebattleUpdated>
-    <indirectVisibility_makeVehicleAnObserver>
-      <Arg>	OBJECT_ID	</Arg>
-    </indirectVisibility_makeVehicleAnObserver>
     <indirectVisibility_assignAvatarToVehicle>
       <Arg>	MAILBOX	</Arg>
       <Arg>	OBJECT_ID	</Arg>
@@ -33,28 +29,25 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
     </indirectVisibility_receivePositionPushUpdate>
-    <indirectVisibility_receiveStatusUpdate>
+    <indirectVisibility_onVehicleStatusChanged>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	INT8	</Arg>
+    </indirectVisibility_onVehicleStatusChanged>
+    <indirectVisibility_receiveVisionMethods>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
-    </indirectVisibility_receiveStatusUpdate>
-    <indirectVisibility_receiveFirstDetectionEvents>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
-      </Arg>
-    </indirectVisibility_receiveFirstDetectionEvents>
-    <indirectVisibility_receiveTeamVisibilityEvents>
       <Arg>	UINT8	</Arg>
-      <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
-      </Arg>
-    </indirectVisibility_receiveTeamVisibilityEvents>
-    <indirectVisibility_receiveVehicleVisibilityEvents>
+    </indirectVisibility_receiveVisionMethods>
+    <indirectVisibility_receiveDirectVisibilityUpdate>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
-      </Arg>
-    </indirectVisibility_receiveVehicleVisibilityEvents>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+    </indirectVisibility_receiveDirectVisibilityUpdate>
+    <indirectVisibility_receiveFirstDetection>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </indirectVisibility_receiveFirstDetection>
     <indirectVisibility_setRetransmissionFactorForVehicle>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	FLOAT32	</Arg>

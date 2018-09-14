@@ -394,7 +394,7 @@
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-35 35	</turretYawLimits>
-          <effects>	shot_main_mb	</effects>
+          <effects>	shot_large_mb	</effects>
           <recoil>
             <lodDist>	MEDIUM	</lodDist>
             <amplitude>	0.24	</amplitude>
@@ -439,7 +439,7 @@
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-35 35	</turretYawLimits>
-          <effects>	shot_main_mb	</effects>
+          <effects>	shot_large_mb	</effects>
           <recoil>
             <lodDist>	MEDIUM	</lodDist>
             <amplitude>	0.32	</amplitude>
@@ -526,23 +526,89 @@
     </FuG7>
     <FuG_Spr.A>	shared	</FuG_Spr.A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL62TR>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </Maybach_HL62TR>
+        <Maybach_HL66P>
+          <smplEnginePower>	190.3106	</smplEnginePower>
+        </Maybach_HL66P>
+      </engines>
+      <chassis>
+        <Chassis_Pz_Sfl_IVb>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Pz_Sfl_IVb>
+        <Chassis_Pz_Sfl_IVb_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Pz_Sfl_IVb_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Pz_Sfl_IVb>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Pz_Sfl_IVb>
-      <Chassis_Pz_Sfl_IVb_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Pz_Sfl_IVb_2>
-    </chassis>
-    <engines>
-      <Maybach_HL62TR>
-        <bravo>	37.00484	</bravo>
-      </Maybach_HL62TR>
-      <Maybach_HL66P>
-        <bravo>	47.57765	</bravo>
-      </Maybach_HL66P>
-    </engines>
     <armour>	0.789172888	</armour>
   </clientAdjustmentFactors>
   <effects>

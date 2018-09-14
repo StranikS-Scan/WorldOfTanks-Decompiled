@@ -543,17 +543,52 @@
   <radios>
     <FuG6>	shared	</FuG6>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL62TRM_1>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </Maybach_HL62TRM_1>
+      </engines>
+      <chassis>
+        <Chassis_G108_PzKpfwII_AusfD>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G108_PzKpfwII_AusfD>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G108_PzKpfwII_AusfD>
-        <alpha>	0.0966	</alpha>
-      </Chassis_G108_PzKpfwII_AusfD>
-    </chassis>
-    <engines>
-      <Maybach_HL62TRM_1>
-        <bravo>	37.00484	</bravo>
-      </Maybach_HL62TRM_1>
-    </engines>
     <armour>	0.793317011	</armour>
   </clientAdjustmentFactors>
   <effects>

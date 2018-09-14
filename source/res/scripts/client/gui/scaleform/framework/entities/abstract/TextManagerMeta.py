@@ -8,12 +8,7 @@ class TextManagerMeta(BaseDAAPIModule):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIModule
-    null
     """
 
     def getTextStyle(self, style):
-        """
-        :param style:
-        :return String:
-        """
         self._printOverrideError('getTextStyle')

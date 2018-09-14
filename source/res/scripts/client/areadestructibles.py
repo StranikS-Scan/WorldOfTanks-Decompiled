@@ -202,7 +202,7 @@ def _printErrDescNotAvailable(spaceID, chunkID, destrIndex):
     objName = BigWorld.wg_getDestructibleFilename(spaceID, chunkID, destrIndex)
     if not objName:
         objName = 'unknown'
-    LOG_ERROR('Destructible descriptor is not available, space: %s, object: %s' % (spaceName, objName))
+    LOG_ERROR('Destructible descriptor is not available, space: %s, object: %s, id: %d' % (spaceName, objName, destrIndex))
 
 
 class DestructiblesManager():
@@ -839,7 +839,9 @@ class _DestructiblesAnimator():
             anglePen = pitch + body['springAngle'] - pitchConstr
             torque -= anglePen * body['springStiffnes'] * mp
             torque -= body['pitchSpeed'] * body['springResist'] * mp
-        body['pitchSpeed'] += dt * torque / body['inertiaMoment']
+        inertialMoment = body['inertiaMoment']
+        if inertialMoment != 0.0:
+            body['pitchSpeed'] += dt * torque / inertialMoment
         body['simulationTime'] += dt
         if abs(body['pitchSpeed']) + abs(torque) < self.__STOP_SIMULATION_EPSILON or body['simulationTime'] > self.__MAX_SIMULATION_DURATION:
             return False

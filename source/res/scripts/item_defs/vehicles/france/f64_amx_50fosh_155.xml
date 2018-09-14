@@ -599,22 +599,57 @@
   <radios>
     <SCR_619>	shared	</SCR_619>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Saurer>
+          <smplEnginePower>	1057.281	</smplEnginePower>
+        </Saurer>
+      </engines>
+      <chassis>
+        <Chassis_AMX_50Fosh_155_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1288	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_50Fosh_155_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_155mm_SA_58_AC>
         <delta>	1.164677	</delta>
       </_155mm_SA_58_AC>
     </guns>
-    <chassis>
-      <Chassis_AMX_50Fosh_155_2>
-        <alpha>	0.1288	</alpha>
-      </Chassis_AMX_50Fosh_155_2>
-    </chassis>
-    <engines>
-      <Saurer>
-        <bravo>	264.3203	</bravo>
-      </Saurer>
-    </engines>
     <armour>	1.16343034	</armour>
   </clientAdjustmentFactors>
   <effects>

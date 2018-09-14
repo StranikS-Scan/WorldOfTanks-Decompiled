@@ -44,15 +44,19 @@ def _updateStoredData(targetID, dataType, pyWindow):
         if geom:
             x, y, width, height = geom[:4]
             storedData.setGeometry(WindowGeometry(int(round(x)), int(round(y)), int(round(width)), int(round(height))))
-    return
+    return storedData
 
 
 class stored_window(object):
 
-    def __init__(self, dataType, targetID):
+    def __init__(self, dataType, targetID, sideEffect=None):
         super(stored_window, self).__init__()
         self.__dataType = dataType
         self.__targetID = targetID
+        if sideEffect is not None:
+            assert callable(sideEffect), 'Value of sideEffect is not callable'
+        self.__sideEffect = sideEffect
+        return
 
     def __call__(self, clazz):
         if not hasattr(clazz, '__mro__'):
@@ -73,8 +77,11 @@ class stored_window(object):
 
             @functools.wraps(func)
             def wrapper(window, *args, **kwargs):
-                _updateStoredData(self.__targetID, self.__dataType, window)
+                data = _updateStoredData(self.__targetID, self.__dataType, window)
+                if self.__sideEffect is not None and data is not None:
+                    self.__sideEffect(window, data)
                 func(window, *args, **kwargs)
+                return
 
             return wrapper
 
@@ -100,7 +107,7 @@ class WindowStoredData(object):
         return
 
     @classmethod
-    def _make(cls, window):
+    def make(cls, window):
         raise NotImplementedError
 
     @classmethod
@@ -144,7 +151,7 @@ class UniqueWindowStoredData(WindowStoredData):
         return 'UniqueWindowStoredData(uniqueName = {0:>s}, geometry = {1!r:s}, trusted = {2!r:s})'.format(self._uniqueName, self._geometry, self._trusted)
 
     @classmethod
-    def _make(cls, window):
+    def make(cls, window):
         return UniqueWindowStoredData(window.uniqueName)
 
     @classmethod
@@ -176,7 +183,7 @@ class CarouselWindowStoredData(WindowStoredData):
         return 'CarouselWindowStoredData(clientID = {0:n}, geometry = {1!r:s}, trusted = {2!r:s})'.format(self._clientID, self._geometry, self._trusted)
 
     @classmethod
-    def _make(cls, window):
+    def make(cls, window):
         getter = getattr(window, 'getClientID', None)
         if getter and callable(getter):
             clientID = getter()
@@ -219,7 +226,7 @@ class ChannelWindowStoredData(WindowStoredData):
         return 'ChannelWindowStoredData(protoType = {0:n}, channelID = {1!r:s}, geometry = {2!r:s}, trusted = {3!r:s})'.format(self._protoType, self._channelID, self._geometry, self._trusted)
 
     @classmethod
-    def _make(cls, window):
+    def make(cls, window):
         getter = getattr(window, 'getProtoType', None)
         if getter and callable(getter):
             protoType = getter()
@@ -269,10 +276,15 @@ class _WindowsStoredDataManager(object):
         self.__targetMask = DEF_TARGET_MASK
         self.__loader = None
         self.__supported = dict(((clazz.getDataType(), clazz) for clazz in supported))
+        self.__trustedCriteria = defaultdict(set)
         self.__isStarted = False
         return
 
     def start(self):
+        """ Starts to collect windows data. First invokes next operation:
+            - loads mask of stored targets.
+            - loads windows data.
+        """
         if self.__isStarted:
             return
         self.__isStarted = True
@@ -304,6 +316,10 @@ class _WindowsStoredDataManager(object):
                 LOG_ERROR('Invalid record', record)
 
     def stop(self):
+        """ Stops to collects windows data. Invokes next operations:
+                - store mask of stored targets to file.
+                - store windows data to file.
+        """
         if not self.__isStarted:
             return
         else:
@@ -325,12 +341,20 @@ class _WindowsStoredDataManager(object):
             self.__loader.flush(self.__targetMask, records)
             self.__loader = None
             self.__storedData.clear()
+            self.__trustedCriteria.clear()
             return
 
     def isTargetEnabled(self, targetID):
+        """ Is given target enabled to store.
+        :param targetID: one of TARGET_ID.*.
+        :return: bool.
+        """
         return self.__isStarted and self.__targetMask & targetID > 0
 
     def addTarget(self, targetID):
+        """ Adds target to stored data.
+        :param targetID: one of TARGET_ID.*.
+        """
         if self.__targetMask & targetID > 0:
             return
         if not targetID & TARGET_ID.ALL:
@@ -338,6 +362,9 @@ class _WindowsStoredDataManager(object):
         self.__targetMask |= targetID
 
     def removeTarget(self, targetID):
+        """ Removes target from stored data.
+        :param targetID: one of TARGET_ID.*.
+        """
         if not self.__targetMask & targetID:
             return
         elif not targetID & TARGET_ID.ALL:
@@ -348,6 +375,12 @@ class _WindowsStoredDataManager(object):
             return
 
     def addData(self, targetID, dataType, window):
+        """ Adds stored data for given window.
+        :param targetID: one of TARGET_ID.*.
+        :param dataType: one of DATA_TYPE.*.
+        :param window: instance of AbstractWindowView.
+        :return: instance of WindowStoredData or None.
+        """
         if not self.isTargetEnabled(targetID):
             return
         elif dataType not in self.__supported:
@@ -355,12 +388,19 @@ class _WindowsStoredDataManager(object):
             return
         else:
             clazz = self.__supported[dataType]
-            data = clazz._make(window)
+            data = clazz.make(window)
             if data is not None:
+                if data.getFindCriteria() in self.__trustedCriteria[targetID]:
+                    data.setTrusted(True)
                 self.__storedData[targetID].append(data)
             return data
 
     def getData(self, targetID, window):
+        """ Gets stored data for given window if it exists.
+        :param targetID: one of TARGET_ID.*.
+        :param window: instance of AbstractWindowView.
+        :return: instance of WindowStoredData or None.
+        """
         if not self.isTargetEnabled(targetID):
             return
         else:
@@ -373,12 +413,28 @@ class _WindowsStoredDataManager(object):
             return result
 
     def getMap(self, targetID, dataType):
+        """ Gets data mapping for required type.
+        :param targetID: one of TARGET_ID.*.
+        :param dataType: one of DATA_TYPE.*.
+        :return: dict( <criteria> : <instance of data>, ... ).
+        """
         result = {}
         for item in self.__storedData[targetID]:
             if item.getDataType() == dataType:
                 result[item.getFindCriteria()] = item
 
         return result
+
+    def setTrustedCriteria(self, targetID, criteria):
+        """ Sets criteria to set data as trusted if data is defined or
+        new data that will be created.
+        :param targetID: one of TARGET_ID.*.
+        :param criteria: object containing criteria to find.
+        """
+        self.__trustedCriteria[targetID].add(criteria)
+        for item in self.__storedData[targetID]:
+            if item.getFindCriteria() == criteria:
+                item.setTrusted(True)
 
 
 g_windowsStoredData = _WindowsStoredDataManager((UniqueWindowStoredData, CarouselWindowStoredData, ChannelWindowStoredData))

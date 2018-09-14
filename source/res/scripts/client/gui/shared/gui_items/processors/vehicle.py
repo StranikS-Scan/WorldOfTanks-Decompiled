@@ -6,6 +6,12 @@ from account_shared import LayoutIterator
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from AccountCommands import VEHICLE_SETTINGS_FLAG
+from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.game_control import getRestoreController
+from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
+from helpers import time_utils
+from helpers.i18n import makeString
 from shared_utils import findFirst
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
@@ -26,25 +32,143 @@ def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
     return result
 
 
-class VehicleRenter(ItemProcessor):
+class VehicleReceiveProcessor(ItemProcessor):
+    """
+    Base processor to receive Vehicle
+    """
 
-    def __init__(self, vehicle, rentPackage, buyShell=False, crewType=-1):
+    def __init__(self, vehicle, buyShell=False, crewType=-1):
+        """
+        :param vehicle:  <Vehicle>
+        :param buyShell: <bool> flag if need to buy shells
+        :param crewType: <int> int flag, mean crew skill type
+        """
+        self.item = vehicle
         self.buyShell = buyShell
         self.buyCrew = crewType != -1
         self.crewType = crewType
-        self.vehicle = vehicle
-        self.rentPackage = rentPackage
-        self.rentPrice = self.__getRentPrice(rentPackage, vehicle)
         self.price = self._getPrice()
-        super(VehicleRenter, self).__init__(vehicle, self._getPluginsList())
+        super(VehicleReceiveProcessor, self).__init__(vehicle, self._getPluginsList())
 
     def _getPluginsList(self):
-        return (plugins.MoneyValidator(self.price), plugins.VehicleFreeLimitConfirmator(self.vehicle, self.crewType))
+        """
+        Gets plugins collection
+        :return: <tuple(ProcessorPlugin, ...)>
+        """
+        raise NotImplementedError
 
     def _getPrice(self):
-        return getCrewAndShellsSumPrice(self.rentPrice, self.vehicle, self.crewType, self.buyShell)
+        """
+        Gets item price for operation
+        :return: <Money>
+        """
+        raise NotImplementedError
+
+    def _getSysMsgType(self):
+        """
+        :return: <str> system message type
+        """
+        raise NotImplementedError
+
+
+class VehicleBuyer(VehicleReceiveProcessor):
+
+    def __init__(self, vehicle, buySlot, buyShell=False, crewType=-1):
+        """
+        Processor for vehicle buying
+        :param vehicle: <Vehicle>
+        :param buySlot: <bool> flag if need to buy slot
+        :param buyShell: <bool> flag if need to buy shells
+        :param crewType: <int> int flag, mean crew skill type
+        """
+        self.buySlot = buySlot
+        super(VehicleBuyer, self).__init__(vehicle, buyShell=buyShell, crewType=crewType)
+
+    def _getPluginsList(self):
+        """
+        Gets plugins collection
+        :return: <tuple(ProcessorPlugin, ...)>
+        """
+        return (plugins.MoneyValidator(self.price), plugins.VehicleSlotsConfirmator(not self.buySlot), plugins.VehicleFreeLimitConfirmator(self.item, self.crewType))
+
+    def _getPrice(self):
+        """
+        Gets common buy price with shells, slot, crew
+        :return: <Money>
+        """
+        return getCrewAndShellsSumPrice(self.item.buyPrice, self.item, self.crewType, self.buyShell)
 
     def _errorHandler(self, code, errStr='', ctx=None):
+        """
+        :param code: <int> server response code
+        :param errStr: <str> string error reason
+        :param ctx: <obj> localization context
+        :return: <ResultMsg> error message
+        """
+        if not errStr:
+            msg = 'vehicle_buy/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_buy/server_error_centerDown'
+        else:
+            msg = 'vehicle_buy/%s' % errStr
+        return makeI18nError(msg, vehName=self.item.userName)
+
+    def _successHandler(self, code, ctx=None):
+        """
+        :param code: <int> server response code
+        :param ctx: <obj> localization context
+        :return: <ResultMsg> success message
+        """
+        return makeI18nSuccess('vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
+
+    def _getSysMsgType(self):
+        """
+        :return: <str> system message type
+        """
+        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrice.getCurrency(byWeight=False), SM_TYPE.Information)
+
+    def _request(self, callback):
+        """
+        Sends buy vehicle request to server
+        :param callback: <function>
+        """
+        LOG_DEBUG('Make request to buy vehicle', self.item, self.crewType, self.buyShell, self.price)
+        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
+
+
+class VehicleRenter(VehicleReceiveProcessor):
+
+    def __init__(self, vehicle, rentPackage, buyShell=False, crewType=-1):
+        """
+        Vehicle rent processor
+        :param vehicle: <Vehicle>
+        :param rentPackage: <int> rent period
+        :param buyShell: <bool> flag if need to buy shells
+        :param crewType: <int> int flag, mean crew skill type
+        """
+        self.rentPackage = rentPackage
+        self.rentPrice = self.__getRentPrice(rentPackage, vehicle)
+        super(VehicleRenter, self).__init__(vehicle, buyShell, crewType)
+
+    def _getPluginsList(self):
+        """
+        Gets plugins collection
+        :return: <tuple(ProcessorPlugin, ...)>
+        """
+        return (plugins.MoneyValidator(self.price), plugins.VehicleFreeLimitConfirmator(self.item, self.crewType))
+
+    def _getPrice(self):
+        """
+        Gets common rent price with shells, slot, crew
+        :return: <Money>
+        """
+        return getCrewAndShellsSumPrice(self.rentPrice, self.item, self.crewType, self.buyShell)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        """
+        :param code: <int> server response code
+        :param errStr: <str> string error reason
+        :param ctx: <obj> localization context
+        :return: <ResultMsg> error message
+        """
         if not len(errStr):
             msg = 'vehicle_rent/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_rent/server_error_centerDown'
         else:
@@ -52,19 +176,33 @@ class VehicleRenter(ItemProcessor):
         return makeI18nError(msg, vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
+        """
+        :param code: <int> server response code
+        :param ctx: <obj> localization context
+        :return: <ResultMsg> success message
+        """
         return makeI18nSuccess('vehicle_rent/success', vehName=self.item.userName, days=ctx.get('days', 0), price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _request(self, callback):
-        LOG_DEBUG('Make request to buy or rent vehicle', self.vehicle, self.crewType, self.buyShell, self.price)
-        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, self._getRentInfo(), lambda code: self._response(code, callback, ctx={'days': self._getRentInfo()}))
-
-    def _getRentInfo(self):
-        return self.rentPackage
+        """
+        Sends rent vehicle request to server
+        :param callback: <function>
+        """
+        LOG_DEBUG('Make request to rent vehicle', self.item, self.crewType, self.buyShell, self.price)
+        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, self.rentPackage, lambda code: self._response(code, callback, ctx={'days': self.rentPackage}))
 
     def _getSysMsgType(self):
-        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrice.getCurrency(byWeight=False), SM_TYPE.Information)
+        """
+        :return: <str> system message type
+        """
+        return CURRENCY_TO_SM_TYPE.get(self.rentPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def __getRentPrice(self, rentPackage, vehicle):
+        """
+        :param rentPackage: <int> rent period
+        :param vehicle: <Vehicle>
+        :return: <Money> rent package price
+        """
         for package in vehicle.rentPackages:
             if package['days'] == rentPackage:
                 return Money(*package['rentPrice'])
@@ -72,31 +210,52 @@ class VehicleRenter(ItemProcessor):
         return ZERO_MONEY
 
 
-class VehicleBuyer(VehicleRenter):
-
-    def __init__(self, vehicle, buySlot, buyShell=False, crewType=-1):
-        self.buySlot = buySlot
-        super(VehicleBuyer, self).__init__(vehicle, None, buyShell=buyShell, crewType=crewType)
-        return
-
-    def _getPluginsList(self):
-        return (plugins.MoneyValidator(self.price), plugins.VehicleSlotsConfirmator(not self.buySlot), plugins.VehicleFreeLimitConfirmator(self.vehicle, self.crewType))
+class VehicleRestoreProcessor(VehicleBuyer):
 
     def _getPrice(self):
-        return getCrewAndShellsSumPrice(self.vehicle.buyPrice, self.vehicle, self.crewType, self.buyShell)
+        """
+        Gets common restore price with shells, slot, crew
+        :return: <Money>
+        """
+        return getCrewAndShellsSumPrice(self.item.restorePrice, self.item, self.crewType, self.buyShell)
 
     def _errorHandler(self, code, errStr='', ctx=None):
+        """
+        :param code: <int> server response code
+        :param errStr: <str> string error reason
+        :param ctx: <obj> localization context
+        :return: <ResultMsg> error message
+        """
         if not len(errStr):
-            msg = 'vehicle_buy/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_buy/server_error_centerDown'
+            msg = 'vehicle_restore/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_restore/server_error_centerDown'
         else:
-            msg = 'vehicle_buy/%s' % errStr
+            msg = 'vehicle_restore/%s' % errStr
         return makeI18nError(msg, vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
+        """
+        :param code: <int> server response code
+        :param ctx: <obj> localization context
+        :return: <ResultMsg> success message
+        """
+        return makeI18nSuccess('vehicle_restore/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
 
-    def _getRentInfo(self):
-        pass
+    def _getSysMsgType(self):
+        """
+        :return: <str> system message type
+        """
+        return SM_TYPE.Restore
+
+    def _getPluginsList(self):
+        return (plugins.MoneyValidator(self.price), plugins.VehicleSlotsConfirmator(not self.buySlot), plugins.IsLongDisconnectedFromCenter())
+
+    def _request(self, callback):
+        """
+        Sends restore vehicle request to server
+        :param callback: <function>
+        """
+        LOG_DEBUG('Make request to restore vehicle', self.item, self.crewType, self.buyShell, self.price)
+        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
 
 
 class VehicleSlotBuyer(Processor):
@@ -144,13 +303,26 @@ class VehicleSeller(ItemProcessor):
     def __init__(self, vehicle, dismantlingGoldCost, shells=[], eqs=[], optDevs=[], inventory=[], isCrewDismiss=False):
         self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory, dismantlingGoldCost)
         barracksBerthsNeeded = len(filter(lambda (idx, item): item is not None, vehicle.crew))
+        bufferOverflowCtx = {}
+        isBufferOverflowed = False
+        if isCrewDismiss:
+            tankmenGoingToBuffer, deletedTankmen = getRestoreController().getTankmenDeletedBySelling(vehicle)
+            countOfDeleted = len(deletedTankmen)
+            if countOfDeleted > 0:
+                isBufferOverflowed = True
+                bufferOverflowCtx['deleted'] = deletedTankmen[-1]
+                bufferOverflowCtx['dismissed'] = tankmenGoingToBuffer[-1]
+                if countOfDeleted > 1:
+                    bufferOverflowCtx['multiple'] = True
+                    bufferOverflowCtx['extraCount'] = countOfDeleted - 1
         super(VehicleSeller, self).__init__(vehicle, (plugins.VehicleValidator(vehicle, False, prop={'isBroken': True,
           'isLocked': True}),
          plugins.VehicleSellValidator(vehicle),
          plugins.MoneyValidator(self.spendMoney),
          plugins.VehicleSellsLeftValidator(vehicle, not (vehicle.isRented and vehicle.rentalIsOver)),
          plugins.BarracksSlotsValidator(barracksBerthsNeeded, isEnabled=not isCrewDismiss),
-         plugins.MessageConfirmator('vehicleSell/unique', isEnabled=vehicle.isUnique)))
+         plugins.BufferOverflowConfirmator(bufferOverflowCtx, isEnabled=isBufferOverflowed),
+         _getUniqueVehicleSellConfirmator(vehicle)))
         self.vehicle = vehicle
         self.shells = shells
         self.eqs = eqs
@@ -172,20 +344,24 @@ class VehicleSeller(ItemProcessor):
         return makeI18nError(localKey, vehName=self.vehicle.userName)
 
     def _successHandler(self, code, ctx=None):
+        restoreInfo = ''
+        if self.vehicle.isPremium and not self.vehicle.isUnique and not self.vehicle.isUnrecoverable and g_lobbyContext.getServerSettings().isVehicleRestoreEnabled() and not self.vehicle.sellForGold:
+            timeKey, formattedTime = getTimeLeftInfo(g_itemsCache.items.shop.vehiclesRestoreConfig.restoreDuration)
+            restoreInfo = makeString('#system_messages:vehicle/restoreDuration/%s' % timeKey, time=formattedTime)
         if self.isDismantlingForGold:
             localKey = 'vehicle_sell/success_dismantling'
             smType = SM_TYPE.Selling
             if self.isRemovedAfterRent:
                 localKey = 'vehicle_remove/success_dismantling'
                 smType = SM_TYPE.Remove
-            return makeI18nSuccess(localKey, vehName=self.vehicle.userName, gainMoney=formatPrice(self.gainMoney), spendMoney=formatPrice(self.spendMoney), type=smType)
+            return makeI18nSuccess(localKey, vehName=self.vehicle.userName, gainMoney=formatPrice(self.gainMoney), spendMoney=formatPrice(self.spendMoney), restoreInfo=restoreInfo, type=smType)
         else:
             localKey = 'vehicle_sell/success'
             smType = SM_TYPE.Selling
             if self.isRemovedAfterRent:
                 localKey = 'vehicle_remove/success'
                 smType = SM_TYPE.Remove
-            return makeI18nSuccess(localKey, vehName=self.vehicle.userName, money=formatPrice(self.gainMoney), type=smType)
+            return makeI18nSuccess(localKey, vehName=self.vehicle.userName, money=formatPrice(self.gainMoney), restoreInfo=restoreInfo, type=smType)
 
     def _request(self, callback):
         itemsFromVehicle = list()
@@ -435,3 +611,17 @@ def tryToLoadDefaultShellsLayout(vehicle, callback=None):
     if callback is not None:
         callback(False)
     return
+
+
+def _getUniqueVehicleSellConfirmator(vehicle):
+    """
+    return confirmation plugin for unique vehicle
+    :param vehicle: <Vehicle>
+    :return: <MessageConfirmator>
+    """
+    if g_lobbyContext.getServerSettings().isVehicleRestoreEnabled():
+        if not vehicle.sellForGold and not vehicle.isUnrecoverable:
+            if vehicle.isRecentlyRestored():
+                return plugins.MessageConfirmator('vehicleSell/restoreCooldown', ctx={'cooldown': formatTime(vehicle.restoreInfo.getRestoreCooldownTimeLeft(), time_utils.ONE_DAY)}, isEnabled=vehicle.isUnique)
+            return vehicle.isPurchased and plugins.MessageConfirmator('vehicleSell/restoreUnlimited', isEnabled=vehicle.isUnique)
+    return plugins.MessageConfirmator('vehicleSell/unique', isEnabled=vehicle.isUnique)

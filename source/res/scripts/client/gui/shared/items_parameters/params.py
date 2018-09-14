@@ -7,6 +7,8 @@ import operator
 from collections import namedtuple
 from operator import itemgetter
 from constants import SHELL_TYPES
+from debug_utils import LOG_DEBUG
+from gui import GUI_SETTINGS
 from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
 from gui.shared.items_parameters.comparator import BACKWARD_QUALITY_PARAMS
 from gui.shared.items_parameters.params_cache import g_paramsCache
@@ -54,7 +56,8 @@ _AUTOCANNON_SHOT_DISTANCE = 400
 
 def _processExtraBonuses(vehicle):
     result = []
-    if any(map(itemgetter(0), vehicle.descriptor.camouflages)):
+    withRareCamouflage = vehicle.intCD in g_paramsCache.getVehiclesWithoutCamouflage()
+    if any(map(itemgetter(0), vehicle.descriptor.camouflages)) or withRareCamouflage:
         result.append(('camouflage', 'extra'))
     return result
 
@@ -104,7 +107,8 @@ class _ParameterBase(object):
         return self.precachedParams.avgParams
 
     def getAllDataDict(self):
-        return {'parameters': self.getParamsDict(),
+        params = self.getParamsDict() if GUI_SETTINGS.technicalInfo else {}
+        return {'parameters': params,
          'compatible': self._getCompatible()}
 
     def _getCompatible(self):
@@ -533,8 +537,8 @@ class VehicleParams(_ParameterBase):
     def __getRealSpeedLimit(self):
         engineName = self._itemDescr.engine.get('name', '')
         chassisName = self._itemDescr.chassis.get('name', '')
-        enginePower = self.__adjustmentCoefficient('engines')[engineName]['smplEnginePower'] * 4
-        rollingFriction = self.__adjustmentCoefficient('chassis')[chassisName]['rollingFriction']
+        enginePower = self._itemDescr.type.xphysics['engines'][engineName]['smplEnginePower']
+        rollingFriction = self._itemDescr.type.xphysics['chassis'][chassisName]['grounds']['ground']['rollingFriction']
         return enginePower / self.vehicleWeight.current * _METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR * self.__factors['engine/power'] / 12.25 / rollingFriction
 
     def __getInvisibilityValues(self):
@@ -614,6 +618,10 @@ class GunParams(WeightedParam):
     def clipVehiclesCD(self):
         return self.precachedParams.clipVehicles
 
+    @property
+    def avgDamagePerMinute(self):
+        return round(self.reloadTime[0] * self.avgDamage[0])
+
     def getAvgParams(self):
         if self._vehicleDescr is not None:
             descriptors = getGunDescriptors(self._itemDescr, self._vehicleDescr)
@@ -630,6 +638,7 @@ class GunParams(WeightedParam):
          'reloadTime': self.reloadTime,
          'avgPiercingPower': self.avgPiercingPower,
          'avgDamage': self.avgDamage,
+         'avgDamagePerMinute': self.avgDamagePerMinute,
          'dispertionRadius': self.dispertionRadius,
          'aimingTime': self.aimingTime,
          'weight': self.weight}

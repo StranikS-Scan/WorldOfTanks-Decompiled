@@ -829,23 +829,89 @@
     </FuG5>
     <FuG8>	shared	</FuG8>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL57TR>
+          <smplEnginePower>	137.4465	</smplEnginePower>
+        </Maybach_HL57TR>
+        <Maybach_HL62TR>
+          <smplEnginePower>	148.0194	</smplEnginePower>
+        </Maybach_HL62TR>
+      </engines>
+      <chassis>
+        <MarderII>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </MarderII>
+        <MarderIIketten_ausf_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </MarderIIketten_ausf_B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <MarderII>
-        <alpha>	0.1127	</alpha>
-      </MarderII>
-      <MarderIIketten_ausf_B>
-        <alpha>	0.10465	</alpha>
-      </MarderIIketten_ausf_B>
-    </chassis>
-    <engines>
-      <Maybach_HL57TR>
-        <bravo>	34.36164	</bravo>
-      </Maybach_HL57TR>
-      <Maybach_HL62TR>
-        <bravo>	37.00484	</bravo>
-      </Maybach_HL62TR>
-    </engines>
     <armour>	0.743159534	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -823,23 +823,89 @@
     </ER_51>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <AMX_B_270>
+          <smplEnginePower>	211.4562	</smplEnginePower>
+        </AMX_B_270>
+        <MATHIS>
+          <smplEnginePower>	264.3203	</smplEnginePower>
+        </MATHIS>
+      </engines>
+      <chassis>
+        <Chassis_AMX_12t>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_12t>
+        <Chassis_AMX_12t_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_12t_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_12t>
-        <alpha>	0.08855	</alpha>
-      </Chassis_AMX_12t>
-      <Chassis_AMX_12t_2>
-        <alpha>	0.0805	</alpha>
-      </Chassis_AMX_12t_2>
-    </chassis>
-    <engines>
-      <AMX_B_270>
-        <bravo>	52.86406	</bravo>
-      </AMX_B_270>
-      <MATHIS>
-        <bravo>	66.08007	</bravo>
-      </MATHIS>
-    </engines>
     <armour>	0.698877495	</armour>
   </clientAdjustmentFactors>
   <effects>

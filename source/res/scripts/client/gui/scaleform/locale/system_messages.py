@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/SYSTEM_MESSAGES.py
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 from debug_utils import LOG_WARNING
 
 class SYSTEM_MESSAGES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     REPAIR_SUCCESS = '#system_messages:repair/success'
     REPAIR_CREDITS_ERROR = '#system_messages:repair/credits_error'
     REPAIR_SERVER_ERROR = '#system_messages:repair/server_error'
@@ -112,7 +110,7 @@ class SYSTEM_MESSAGES(object):
     ARENA_START_ERRORS_KICK_CREATOR_LEFT = '#system_messages:arena_start_errors/kick/CREATOR_LEFT'
     ARENA_START_ERRORS_KICK_PLAYERKICK = '#system_messages:arena_start_errors/kick/PLAYERKICK'
     ARENA_START_ERRORS_KICK_TIMEOUT = '#system_messages:arena_start_errors/kick/TIMEOUT'
-    ARENA_START_ERRORS_KICK_TIMEOUT_ = '#system_messages:arena_start_errors/kick/timeout'
+    ARENA_START_ERRORS_KICK_TIMEOUT = '#system_messages:arena_start_errors/kick/timeout'
     PREBATTLE_START_FAILED_KICKEDFROMQUEUE_SQUAD = '#system_messages:prebattle_start_failed/kickedFromQueue/squad'
     PREBATTLE_START_FAILED_KICKEDFROMQUEUE_COMPANY = '#system_messages:prebattle_start_failed/kickedFromQueue/company'
     PREBATTLE_START_FAILED_KICKEDFROMQUEUE_DEAFULT = '#system_messages:prebattle_start_failed/kickedFromQueue/deafult'
@@ -296,6 +294,7 @@ class SYSTEM_MESSAGES(object):
     RECRUIT_WINDOW_WALLET_NOT_AVAILABLE = '#system_messages:recruit_window/wallet_not_available'
     RECRUIT_WINDOW_FREE_TANKMEN_LIMIT = '#system_messages:recruit_window/free_tankmen_limit'
     RECRUIT_WINDOW_NOT_ENOUGH_SPACE = '#system_messages:recruit_window/not_enough_space'
+    RECRUIT_WINDOW_DISCONNECTED_FROM_CENTER = '#system_messages:recruit_window/disconnected_from_center'
     EQUIP_TANKMAN_SUCCESS = '#system_messages:equip_tankman/success'
     EQUIP_TANKMAN_SERVER_ERROR = '#system_messages:equip_tankman/server_error'
     EQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:equip_tankman/invalid_vehicle'
@@ -410,6 +409,15 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_RENT_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_rent/not_enough_credits'
     VEHICLE_RENT_NOT_ENOUGH_GOLD = '#system_messages:vehicle_rent/not_enough_gold'
     VEHICLE_RENT_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_rent/wallet_not_available'
+    VEHICLE_RESTORE_SUCCESS = '#system_messages:vehicle_restore/success'
+    VEHICLE_RESTORE_SERVER_ERROR = '#system_messages:vehicle_restore/server_error'
+    VEHICLE_RESTORE_INVALID_VEHICLE = '#system_messages:vehicle_restore/invalid_vehicle'
+    VEHICLE_RESTORE_SERVER_ERROR_CENTERDOWN = '#system_messages:vehicle_restore/server_error_centerDown'
+    VEHICLE_RESTORE_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_restore/not_enough_credits'
+    VEHICLE_RESTORE_NOT_ENOUGH_GOLD = '#system_messages:vehicle_restore/not_enough_gold'
+    VEHICLE_RESTORE_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_restore/wallet_not_available'
+    VEHICLE_RESTORE_DISCONNECTED_FROM_CENTER = '#system_messages:vehicle_restore/disconnected_from_center'
+    VEHICLE_RESTORE_DISABLED = '#system_messages:vehicle_restore/DISABLED'
     VEHICLE_SLOT_BUY_SUCCESS = '#system_messages:vehicle_slot_buy/success'
     VEHICLE_SLOT_BUY_NOT_ENOUGH_GOLD = '#system_messages:vehicle_slot_buy/not_enough_gold'
     VEHICLE_SLOT_BUY_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_slot_buy/wallet_not_available'
@@ -438,6 +446,8 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_REMOVE_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_remove/wallet_not_available'
     VEHICLE_REMOVE_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_remove/vehicle_sell_limit'
     VEHICLE_REMOVE_NOT_ENOUGH_SPACE = '#system_messages:vehicle_remove/not_enough_space'
+    VEHICLE_RESTOREDURATION_HOURS = '#system_messages:vehicle/restoreDuration/hours'
+    VEHICLE_RESTOREDURATION_DAYS = '#system_messages:vehicle/restoreDuration/days'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE = '#system_messages:vehicle_tmenxp_accelerator/successFalse'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE = '#system_messages:vehicle_tmenxp_accelerator/successTrue'
     VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE = '#system_messages:vehicle_tmenxp_accelerator/invalid_vehicle'
@@ -452,6 +462,17 @@ class SYSTEM_MESSAGES(object):
     BUY_TANKMEN_BERTHS_NOT_ENOUGH_CREDITS = '#system_messages:buy_tankmen_berths/not_enough_credits'
     BUY_TANKMEN_BERTHS_NOT_ENOUGH_GOLD = '#system_messages:buy_tankmen_berths/not_enough_gold'
     BUY_TANKMEN_BERTHS_WALLET_NOT_AVAILABLE = '#system_messages:buy_tankmen_berths/wallet_not_available'
+    RESTORE_TANKMAN_SUCCESS = '#system_messages:restore_tankman/success'
+    RESTORE_TANKMAN_FINANCIAL_SUCCESS = '#system_messages:restore_tankman/financial_success'
+    RESTORE_TANKMAN_NOT_ENOUGH_SPACE = '#system_messages:restore_tankman/not_enough_space'
+    RESTORE_TANKMAN_DISCONNECTED_FROM_CENTER = '#system_messages:restore_tankman/disconnected_from_center'
+    RESTORE_TANKMAN_SERVER_ERROR = '#system_messages:restore_tankman/server_error'
+    RESTORE_TANKMAN_DISABLED = '#system_messages:restore_tankman/DISABLED'
+    RESTORE_TANKMAN_INVALID_TMAN_ID = '#system_messages:restore_tankman/INVALID_TMAN_ID'
+    RESTORE_TANKMAN_NO_BERTH = '#system_messages:restore_tankman/NO_BERTH'
+    RESTORE_TANKMAN_WRONG_ARGS_TYPE = '#system_messages:restore_tankman/WRONG_ARGS_TYPE'
+    RESTORE_TANKMAN_NO_GOLD = '#system_messages:restore_tankman/NO_GOLD'
+    RESTORE_TANKMAN_RESTORE_TIME_EXPIRED = '#system_messages:restore_tankman/RESTORE_TIME_EXPIRED'
     SHELL_BUY_SUCCESS = '#system_messages:shell_buy/success'
     SHELL_BUY_INVALID_MODULE = '#system_messages:shell_buy/invalid_module'
     SHELL_BUY_NOT_ENOUGH_CREDITS = '#system_messages:shell_buy/not_enough_credits'
@@ -752,7 +773,7 @@ class SYSTEM_MESSAGES(object):
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_BANNED = '#system_messages:clans/request/errors/Account is banned'
     CLANS_REQUEST_ERRORS_ACCOUNT_IN_UNKNOWN = '#system_messages:clans/request/errors/Account in unknown'
     CLANS_REQUEST_ERRORS_CLAN_DOES_NOT_EXIST = '#system_messages:clans/request/errors/Clan does not exist'
-    CLANS_REQUEST_ERRORS_CLAN_IS_FULL_ = '#system_messages:clans/request/errors/Clan is full'
+    CLANS_REQUEST_ERRORS_CLAN_IS_FULL = '#system_messages:clans/request/errors/Clan is full'
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY = '#system_messages:clans/request/errors/Account is in clan already'
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN = '#system_messages:clans/request/errors/Account is not in clan'
     CLANS_REQUEST_ERRORS_ACCOUNT_ALREADY_INVITED = '#system_messages:clans/request/errors/Account already invited'
@@ -1037,9 +1058,12 @@ class SYSTEM_MESSAGES(object):
     FORTIFICATION_ERRORS_TOO_MANY_DEFENCES = '#system_messages:fortification/errors/TOO_MANY_DEFENCES'
     FORTIFICATION_ERRORS_CURFEW_HOUR = '#system_messages:fortification/errors/CURFEW_HOUR'
     FORTIFICATION_ERRORS_JOIN_CTX_LOCKED = '#system_messages:fortification/errors/JOIN_CTX_LOCKED'
+    FORTIFICATION_ERRORS_TOO_MANY_FAVORITES = '#system_messages:fortification/errors/TOO_MANY_FAVORITES'
     FORTIFICATION_ERRORS_ATTACK_TOO_LATE = '#system_messages:fortification/errors/ATTACK_TOO_LATE'
     FORTIFICATION_ERRORS_FORBIDDEN_FORT_BATTLE_HOUR = '#system_messages:fortification/errors/FORBIDDEN_FORT_BATTLE_HOUR'
     FORTIFICATION_ERRORS_BAD_SORTIE_PERIPHERY_ID = '#system_messages:fortification/errors/BAD_SORTIE_PERIPHERY_ID'
+    FORTIFICATION_ERRORS_BAD_LEVEL_PLANNED_ATTACK = '#system_messages:fortification/errors/BAD_LEVEL_PLANNED_ATTACK'
+    FORTIFICATION_ERRORS_DISCONNECTED_FROM_CENTER = '#system_messages:fortification/errors/DISCONNECTED_FROM_CENTER'
     BUTTONS_GOTOPOLL = '#system_messages:buttons/goToPoll'
     INVITE_STATUS_WRONG_CLAN = '#system_messages:invite/status/WRONG_CLAN'
     INVITE_STATUS_LEGIONARIES_NOT_ALLOWED = '#system_messages:invite/status/LEGIONARIES_NOT_ALLOWED'
@@ -1059,46 +1083,10 @@ class SYSTEM_MESSAGES(object):
     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_TITLE = '#system_messages:telecom/notifications/vehicleRemoved/title'
     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_COMMENT = '#system_messages:telecom/notifications/vehicleRemoved/comment'
     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT = '#system_messages:telecom/notifications/vehicleRemoved/subcomment'
-    PREBATTLE_REQUEST_NAME_ENUM = (PREBATTLE_REQUEST_NAME_CHANGE_SETTINGS,
-     PREBATTLE_REQUEST_NAME_CHANGE_ARENA_VOIP,
-     PREBATTLE_REQUEST_NAME_CHANGE_USER_STATUS,
-     PREBATTLE_REQUEST_NAME_SWAP_TEAMS,
-     PREBATTLE_REQUEST_NAME_SET_TEAM_STATE,
-     PREBATTLE_REQUEST_NAME_SET_PLAYER_STATE,
-     PREBATTLE_REQUEST_NAME_SEND_INVITE,
-     PREBATTLE_REQUEST_NAME_PREBATTLES_LIST,
-     PREBATTLE_REQUEST_NAME_CHANGE_UNIT_STATE,
-     PREBATTLE_REQUEST_NAME_UNITS_LIST,
-     PREBATTLE_REQUEST_NAME_CLOSE_SLOT,
-     PREBATTLE_REQUEST_NAME_CHANGE_RATED,
-     PREBATTLE_REQUEST_NAME_CHANGE_DIVISION,
-     PREBATTLE_REQUEST_NAME_SET_VEHICLE_LIST,
-     PREBATTLE_REQUEST_NAME_CHANGE_FALLOUT_QUEUE_TYPE)
-    FORTIFICATION_REQUEST_NAME_ENUM = (FORTIFICATION_REQUEST_NAME_CREATE_FORT,
-     FORTIFICATION_REQUEST_NAME_DELETE_FORT,
-     FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION,
-     FORTIFICATION_REQUEST_NAME_CLOSE_DIRECTION,
-     FORTIFICATION_REQUEST_NAME_ADD_BUILDING,
-     FORTIFICATION_REQUEST_NAME_DELETE_BUILDING,
-     FORTIFICATION_REQUEST_NAME_TRANSPORTATION,
-     FORTIFICATION_REQUEST_NAME_ADD_ORDER,
-     FORTIFICATION_REQUEST_NAME_ACTIVATE_ORDER,
-     FORTIFICATION_REQUEST_NAME_ATTACH,
-     FORTIFICATION_REQUEST_NAME_UPGRADE,
-     FORTIFICATION_REQUEST_NAME_CREATE_SORTIE,
-     FORTIFICATION_REQUEST_NAME_REQUEST_SORTIE_UNIT,
-     FORTIFICATION_REQUEST_NAME_CHANGE_DEF_HOUR,
-     FORTIFICATION_REQUEST_NAME_CHANGE_OFF_DAY,
-     FORTIFICATION_REQUEST_NAME_CHANGE_PERIPHERY,
-     FORTIFICATION_REQUEST_NAME_CHANGE_VACATION,
-     FORTIFICATION_REQUEST_NAME_CHANGE_SETTINGS,
-     FORTIFICATION_REQUEST_NAME_SHUTDOWN_DEF_HOUR,
-     FORTIFICATION_REQUEST_NAME_CANCEL_SHUTDOWN_DEF_HOUR,
-     FORTIFICATION_REQUEST_NAME_REQUEST_PUBLIC_INFO,
-     FORTIFICATION_REQUEST_NAME_REQUEST_CLAN_CARD,
-     FORTIFICATION_REQUEST_NAME_ADD_FAVORITE,
-     FORTIFICATION_REQUEST_NAME_REMOVE_FAVORITE,
-     FORTIFICATION_REQUEST_NAME_PLAN_ATTACK)
+    VEHICLECOMPARE_DISABLED = '#system_messages:vehicleCompare/disabled'
+    PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION = '#system_messages:prmp/notification/newEncyclopediaRecommendation'
+    RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES = '#system_messages:restoreController/hasLimitedRestoreVehicles'
+    UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
      UNIT_ERRORS_SORTIES_FORBIDDEN,
@@ -1150,6 +1138,67 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_BAD_ROSTER_PACK,
      UNIT_ERRORS_CLUB_CHECKOUT_FAIL,
      UNIT_ERRORS_PREV_RATED_BATTLE_IN_PROGRESS)
+    UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
+     UNIT_WARNINGS_CANT_PICK_LEADER,
+     UNIT_WARNINGS_KICKED_CANDIDATE,
+     UNIT_WARNINGS_KICKED_PLAYER,
+     UNIT_WARNINGS_UNIT_ASSEMBLER_TIMEOUT,
+     UNIT_WARNINGS_KICKED_FROM_UNIT_ASSEMBLER,
+     UNIT_WARNINGS_INVITE_REMOVED,
+     UNIT_WARNINGS_ALREADY_INVITED,
+     UNIT_WARNINGS_WAITING_FOR_JOIN,
+     UNIT_WARNINGS_CLAN_CHANGED,
+     UNIT_WARNINGS_FORT_BATTLE_END)
+    UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYEROFFLINE,
+     UNIT_NOTIFICATION_PLAYERONLINE,
+     UNIT_NOTIFICATION_PLAYERADDED,
+     UNIT_NOTIFICATION_PLAYERREMOVED,
+     UNIT_NOTIFICATION_GIVELEADERSHIP,
+     UNIT_NOTIFICATION_CHANGEDIVISION,
+     UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE,
+     UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION,
+     UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
+    UNITBROWSER_ERRORS_ENUM = UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT
+    PREBATTLE_REQUEST_NAME_ENUM = (PREBATTLE_REQUEST_NAME_CHANGE_SETTINGS,
+     PREBATTLE_REQUEST_NAME_CHANGE_ARENA_VOIP,
+     PREBATTLE_REQUEST_NAME_CHANGE_USER_STATUS,
+     PREBATTLE_REQUEST_NAME_SWAP_TEAMS,
+     PREBATTLE_REQUEST_NAME_SET_TEAM_STATE,
+     PREBATTLE_REQUEST_NAME_SET_PLAYER_STATE,
+     PREBATTLE_REQUEST_NAME_SEND_INVITE,
+     PREBATTLE_REQUEST_NAME_PREBATTLES_LIST,
+     PREBATTLE_REQUEST_NAME_CHANGE_UNIT_STATE,
+     PREBATTLE_REQUEST_NAME_UNITS_LIST,
+     PREBATTLE_REQUEST_NAME_CLOSE_SLOT,
+     PREBATTLE_REQUEST_NAME_CHANGE_RATED,
+     PREBATTLE_REQUEST_NAME_CHANGE_DIVISION,
+     PREBATTLE_REQUEST_NAME_SET_VEHICLE_LIST,
+     PREBATTLE_REQUEST_NAME_CHANGE_FALLOUT_QUEUE_TYPE)
+    FORTIFICATION_REQUEST_NAME_ENUM = (FORTIFICATION_REQUEST_NAME_CREATE_FORT,
+     FORTIFICATION_REQUEST_NAME_DELETE_FORT,
+     FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION,
+     FORTIFICATION_REQUEST_NAME_CLOSE_DIRECTION,
+     FORTIFICATION_REQUEST_NAME_ADD_BUILDING,
+     FORTIFICATION_REQUEST_NAME_DELETE_BUILDING,
+     FORTIFICATION_REQUEST_NAME_TRANSPORTATION,
+     FORTIFICATION_REQUEST_NAME_ADD_ORDER,
+     FORTIFICATION_REQUEST_NAME_ACTIVATE_ORDER,
+     FORTIFICATION_REQUEST_NAME_ATTACH,
+     FORTIFICATION_REQUEST_NAME_UPGRADE,
+     FORTIFICATION_REQUEST_NAME_CREATE_SORTIE,
+     FORTIFICATION_REQUEST_NAME_REQUEST_SORTIE_UNIT,
+     FORTIFICATION_REQUEST_NAME_CHANGE_DEF_HOUR,
+     FORTIFICATION_REQUEST_NAME_CHANGE_OFF_DAY,
+     FORTIFICATION_REQUEST_NAME_CHANGE_PERIPHERY,
+     FORTIFICATION_REQUEST_NAME_CHANGE_VACATION,
+     FORTIFICATION_REQUEST_NAME_CHANGE_SETTINGS,
+     FORTIFICATION_REQUEST_NAME_SHUTDOWN_DEF_HOUR,
+     FORTIFICATION_REQUEST_NAME_CANCEL_SHUTDOWN_DEF_HOUR,
+     FORTIFICATION_REQUEST_NAME_REQUEST_PUBLIC_INFO,
+     FORTIFICATION_REQUEST_NAME_REQUEST_CLAN_CARD,
+     FORTIFICATION_REQUEST_NAME_ADD_FAVORITE,
+     FORTIFICATION_REQUEST_NAME_REMOVE_FAVORITE,
+     FORTIFICATION_REQUEST_NAME_PLAN_ATTACK)
     FORTIFICATION_ERRORS_ENUM = (FORTIFICATION_ERRORS_UNKNOWN,
      FORTIFICATION_ERRORS_BAD_METHOD,
      FORTIFICATION_ERRORS_BAD_SORTIE_TIME,
@@ -1251,33 +1300,17 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_TOO_MANY_DEFENCES,
      FORTIFICATION_ERRORS_CURFEW_HOUR,
      FORTIFICATION_ERRORS_JOIN_CTX_LOCKED,
+     FORTIFICATION_ERRORS_TOO_MANY_FAVORITES,
      FORTIFICATION_ERRORS_ATTACK_TOO_LATE,
      FORTIFICATION_ERRORS_FORBIDDEN_FORT_BATTLE_HOUR,
-     FORTIFICATION_ERRORS_BAD_SORTIE_PERIPHERY_ID)
-    UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
-    UNITBROWSER_ERRORS_ENUM = (UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT,)
-    UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYEROFFLINE,
-     UNIT_NOTIFICATION_PLAYERONLINE,
-     UNIT_NOTIFICATION_PLAYERADDED,
-     UNIT_NOTIFICATION_PLAYERREMOVED,
-     UNIT_NOTIFICATION_GIVELEADERSHIP,
-     UNIT_NOTIFICATION_CHANGEDIVISION)
-    UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
-     UNIT_WARNINGS_CANT_PICK_LEADER,
-     UNIT_WARNINGS_KICKED_CANDIDATE,
-     UNIT_WARNINGS_KICKED_PLAYER,
-     UNIT_WARNINGS_UNIT_ASSEMBLER_TIMEOUT,
-     UNIT_WARNINGS_KICKED_FROM_UNIT_ASSEMBLER,
-     UNIT_WARNINGS_INVITE_REMOVED,
-     UNIT_WARNINGS_ALREADY_INVITED,
-     UNIT_WARNINGS_WAITING_FOR_JOIN,
-     UNIT_WARNINGS_CLAN_CHANGED,
-     UNIT_WARNINGS_FORT_BATTLE_END)
+     FORTIFICATION_ERRORS_BAD_SORTIE_PERIPHERY_ID,
+     FORTIFICATION_ERRORS_BAD_LEVEL_PLANNED_ATTACK,
+     FORTIFICATION_ERRORS_DISCONNECTED_FROM_CENTER)
     CUSTOMIZATION_VEHICLE_ENUM = (CUSTOMIZATION_VEHICLE_LOCKED,
      CUSTOMIZATION_VEHICLE_DAMAGED,
      CUSTOMIZATION_VEHICLE_DESTROYED,
      CUSTOMIZATION_VEHICLE_EXPLODED)
-    all_ENUM = (REPAIR_SUCCESS,
+    ALL_ENUM = (REPAIR_SUCCESS,
      REPAIR_CREDITS_ERROR,
      REPAIR_SERVER_ERROR,
      CHARGE_CREDITS_ERROR_GOLD,
@@ -1380,7 +1413,7 @@ class SYSTEM_MESSAGES(object):
      ARENA_START_ERRORS_KICK_CREATOR_LEFT,
      ARENA_START_ERRORS_KICK_PLAYERKICK,
      ARENA_START_ERRORS_KICK_TIMEOUT,
-     ARENA_START_ERRORS_KICK_TIMEOUT_,
+     ARENA_START_ERRORS_KICK_TIMEOUT,
      PREBATTLE_START_FAILED_KICKEDFROMQUEUE_SQUAD,
      PREBATTLE_START_FAILED_KICKEDFROMQUEUE_COMPANY,
      PREBATTLE_START_FAILED_KICKEDFROMQUEUE_DEAFULT,
@@ -1477,6 +1510,10 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_CREDITS_NOT_ENOUGH,
      CUSTOMIZATION_GOLD_NOT_ENOUGH,
      CUSTOMIZATION_CREDITS_AND_GOLD_NOT_ENOUGH,
+     CUSTOMIZATION_VEHICLE_LOCKED,
+     CUSTOMIZATION_VEHICLE_DAMAGED,
+     CUSTOMIZATION_VEHICLE_DESTROYED,
+     CUSTOMIZATION_VEHICLE_EXPLODED,
      CUSTOMIZATION_CAMOUFLAGE_NOT_SELECTED,
      CUSTOMIZATION_CAMOUFLAGE_DAYS_NOT_SELECTED,
      CUSTOMIZATION_CAMOUFLAGE_COST_NOT_FOUND,
@@ -1560,6 +1597,7 @@ class SYSTEM_MESSAGES(object):
      RECRUIT_WINDOW_WALLET_NOT_AVAILABLE,
      RECRUIT_WINDOW_FREE_TANKMEN_LIMIT,
      RECRUIT_WINDOW_NOT_ENOUGH_SPACE,
+     RECRUIT_WINDOW_DISCONNECTED_FROM_CENTER,
      EQUIP_TANKMAN_SUCCESS,
      EQUIP_TANKMAN_SERVER_ERROR,
      EQUIP_TANKMAN_INVALID_VEHICLE,
@@ -1674,6 +1712,15 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_RENT_NOT_ENOUGH_CREDITS,
      VEHICLE_RENT_NOT_ENOUGH_GOLD,
      VEHICLE_RENT_WALLET_NOT_AVAILABLE,
+     VEHICLE_RESTORE_SUCCESS,
+     VEHICLE_RESTORE_SERVER_ERROR,
+     VEHICLE_RESTORE_INVALID_VEHICLE,
+     VEHICLE_RESTORE_SERVER_ERROR_CENTERDOWN,
+     VEHICLE_RESTORE_NOT_ENOUGH_CREDITS,
+     VEHICLE_RESTORE_NOT_ENOUGH_GOLD,
+     VEHICLE_RESTORE_WALLET_NOT_AVAILABLE,
+     VEHICLE_RESTORE_DISCONNECTED_FROM_CENTER,
+     VEHICLE_RESTORE_DISABLED,
      VEHICLE_SLOT_BUY_SUCCESS,
      VEHICLE_SLOT_BUY_NOT_ENOUGH_GOLD,
      VEHICLE_SLOT_BUY_WALLET_NOT_AVAILABLE,
@@ -1702,6 +1749,8 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_REMOVE_WALLET_NOT_AVAILABLE,
      VEHICLE_REMOVE_VEHICLE_SELL_LIMIT,
      VEHICLE_REMOVE_NOT_ENOUGH_SPACE,
+     VEHICLE_RESTOREDURATION_HOURS,
+     VEHICLE_RESTOREDURATION_DAYS,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE,
      VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE,
@@ -1716,6 +1765,17 @@ class SYSTEM_MESSAGES(object):
      BUY_TANKMEN_BERTHS_NOT_ENOUGH_CREDITS,
      BUY_TANKMEN_BERTHS_NOT_ENOUGH_GOLD,
      BUY_TANKMEN_BERTHS_WALLET_NOT_AVAILABLE,
+     RESTORE_TANKMAN_SUCCESS,
+     RESTORE_TANKMAN_FINANCIAL_SUCCESS,
+     RESTORE_TANKMAN_NOT_ENOUGH_SPACE,
+     RESTORE_TANKMAN_DISCONNECTED_FROM_CENTER,
+     RESTORE_TANKMAN_SERVER_ERROR,
+     RESTORE_TANKMAN_DISABLED,
+     RESTORE_TANKMAN_INVALID_TMAN_ID,
+     RESTORE_TANKMAN_NO_BERTH,
+     RESTORE_TANKMAN_WRONG_ARGS_TYPE,
+     RESTORE_TANKMAN_NO_GOLD,
+     RESTORE_TANKMAN_RESTORE_TIME_EXPIRED,
      SHELL_BUY_SUCCESS,
      SHELL_BUY_INVALID_MODULE,
      SHELL_BUY_NOT_ENOUGH_CREDITS,
@@ -2016,7 +2076,7 @@ class SYSTEM_MESSAGES(object):
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_BANNED,
      CLANS_REQUEST_ERRORS_ACCOUNT_IN_UNKNOWN,
      CLANS_REQUEST_ERRORS_CLAN_DOES_NOT_EXIST,
-     CLANS_REQUEST_ERRORS_CLAN_IS_FULL_,
+     CLANS_REQUEST_ERRORS_CLAN_IS_FULL,
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY,
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN,
      CLANS_REQUEST_ERRORS_ACCOUNT_ALREADY_INVITED,
@@ -2301,9 +2361,12 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_TOO_MANY_DEFENCES,
      FORTIFICATION_ERRORS_CURFEW_HOUR,
      FORTIFICATION_ERRORS_JOIN_CTX_LOCKED,
+     FORTIFICATION_ERRORS_TOO_MANY_FAVORITES,
      FORTIFICATION_ERRORS_ATTACK_TOO_LATE,
      FORTIFICATION_ERRORS_FORBIDDEN_FORT_BATTLE_HOUR,
      FORTIFICATION_ERRORS_BAD_SORTIE_PERIPHERY_ID,
+     FORTIFICATION_ERRORS_BAD_LEVEL_PLANNED_ATTACK,
+     FORTIFICATION_ERRORS_DISCONNECTED_FROM_CENTER,
      BUTTONS_GOTOPOLL,
      INVITE_STATUS_WRONG_CLAN,
      INVITE_STATUS_LEGIONARIES_NOT_ALLOWED,
@@ -2322,130 +2385,97 @@ class SYSTEM_MESSAGES(object):
      TELECOM_NOTIFICATIONS_VEHICLEUNBLOCKED_SUBCOMMENT,
      TELECOM_NOTIFICATIONS_VEHICLEREMOVED_TITLE,
      TELECOM_NOTIFICATIONS_VEHICLEREMOVED_COMMENT,
-     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT)
+     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT,
+     VEHICLECOMPARE_DISABLED,
+     PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION,
+     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES)
 
-    @staticmethod
-    def prebattle_request_name(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#system_messages:prebattle/request/name/%s' % key
-        if outcome not in SYSTEM_MESSAGES.PREBATTLE_REQUEST_NAME_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def unit_notification_divisiontype(cls, key0):
+        outcome = '#system_messages:unit/notification/divisionType/{}'.format(key0)
+        if outcome not in cls.UNIT_NOTIFICATION_DIVISIONTYPE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def fortification_request_name(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#system_messages:fortification/request/name/%s' % key
-        if outcome not in SYSTEM_MESSAGES.FORTIFICATION_REQUEST_NAME_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def unit_errors(cls, key0):
+        outcome = '#system_messages:unit/errors/{}'.format(key0)
+        if outcome not in cls.UNIT_ERRORS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def unit_errors(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#system_messages:unit/errors/%s' % key
-        if outcome not in SYSTEM_MESSAGES.UNIT_ERRORS_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def unit_warnings(cls, key0):
+        outcome = '#system_messages:unit/warnings/{}'.format(key0)
+        if outcome not in cls.UNIT_WARNINGS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def fortification_errors(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#system_messages:fortification/errors/%s' % key
-        if outcome not in SYSTEM_MESSAGES.FORTIFICATION_ERRORS_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def unit_notification(cls, key0):
+        outcome = '#system_messages:unit/notification/{}'.format(key0)
+        if outcome not in cls.UNIT_NOTIFICATION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def unit_notification_divisiontype(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#system_messages:unit/notification/divisionType/%s' % key
-        if outcome not in SYSTEM_MESSAGES.UNIT_NOTIFICATION_DIVISIONTYPE_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def unitbrowser_errors(cls, key0):
+        outcome = '#system_messages:unitBrowser/errors/{}'.format(key0)
+        if outcome not in cls.UNITBROWSER_ERRORS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def unitbrowser_errors(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#system_messages:unitBrowser/errors/%s' % key
-        if outcome not in SYSTEM_MESSAGES.UNITBROWSER_ERRORS_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def prebattle_request_name(cls, key0):
+        outcome = '#system_messages:prebattle/request/name/{}'.format(key0)
+        if outcome not in cls.PREBATTLE_REQUEST_NAME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def unit_notification(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#system_messages:unit/notification/%s' % key
-        if outcome not in SYSTEM_MESSAGES.UNIT_NOTIFICATION_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def fortification_request_name(cls, key0):
+        outcome = '#system_messages:fortification/request/name/{}'.format(key0)
+        if outcome not in cls.FORTIFICATION_REQUEST_NAME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def unit_warnings(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#system_messages:unit/warnings/%s' % key
-        if outcome not in SYSTEM_MESSAGES.UNIT_WARNINGS_ENUM:
-            LOG_WARNING('locale key "' + outcome + '" was not found')
+    @classmethod
+    def fortification_errors(cls, key0):
+        outcome = '#system_messages:fortification/errors/{}'.format(key0)
+        if outcome not in cls.FORTIFICATION_ERRORS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
             return outcome
 
-    @staticmethod
-    def customization_vehicle(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#system_messages:customization/vehicle_%s' % key
-        if outcome not in SYSTEM_MESSAGES.CUSTOMIZATION_VEHICLE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def customization_vehicle(cls, key0):
+        outcome = '#system_messages:customization/vehicle_{}'.format(key0)
+        if outcome not in cls.CUSTOMIZATION_VEHICLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def all(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#system_messages:%s' % key
-        if outcome not in SYSTEM_MESSAGES.all_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def all(cls, key0):
+        outcome = '#system_messages:{}'.format(key0)
+        if outcome not in cls.ALL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

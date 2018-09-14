@@ -848,7 +848,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_mainext	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.4 0.4 1 1	</tiling>
@@ -903,7 +903,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_mainext	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.4 0.4 1 1	</tiling>
@@ -1045,7 +1045,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_mainext	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.28 0.28 1 1	</tiling>
@@ -1100,7 +1100,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_mainext	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.295 0.295 1 1	</tiling>
@@ -1154,6 +1154,7 @@
             <collisionModelServer>	vehicles/czech/Cz02_TVP_T50/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz02_TVP_T50/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
               <rayStart>	-0.000852022 0.00601954 2.54559	</rayStart>
@@ -1163,7 +1164,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_mainext	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.265 0.265 1 1	</tiling>
@@ -1238,23 +1239,89 @@
     </Radiostanice_R_113>
     <Radiostanice_RM_31T>	shared	</Radiostanice_RM_31T>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Skoda_16_AH_145>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Skoda_16_AH_145>
+        <Skoda_AHK>
+          <smplEnginePower>	1057.281	</smplEnginePower>
+        </Skoda_AHK>
+      </engines>
+      <chassis>
+        <Chassis_Cz02_TVP_T50>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz02_TVP_T50>
+        <Chassis_Cz02_TVP_T50_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.108675	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.108675	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.108675	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.108675	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.108675	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.108675	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz02_TVP_T50_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Cz02_TVP_T50>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Cz02_TVP_T50>
-      <Chassis_Cz02_TVP_T50_2>
-        <alpha>	0.108675	</alpha>
-      </Chassis_Cz02_TVP_T50_2>
-    </chassis>
-    <engines>
-      <Skoda_16_AH_145>
-        <bravo>	198.2402	</bravo>
-      </Skoda_16_AH_145>
-      <Skoda_AHK>
-        <bravo>	264.3203	</bravo>
-      </Skoda_AHK>
-    </engines>
     <armour>	1.017972893	</armour>
   </clientAdjustmentFactors>
   <effects>

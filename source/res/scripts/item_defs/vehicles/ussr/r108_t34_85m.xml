@@ -602,17 +602,52 @@
   <radios>
     <_9RM_O>	shared	</_9RM_O>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2-34A>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V-2-34A>
+      </engines>
+      <chassis>
+        <Chassis_R108_T34_85M>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R108_T34_85M>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R108_T34_85M>
-        <alpha>	0.12075	</alpha>
-      </Chassis_R108_T34_85M>
-    </chassis>
-    <engines>
-      <V-2-34A>
-        <bravo>	132.1601	</bravo>
-      </V-2-34A>
-    </engines>
     <armour>	1.175767329	</armour>
   </clientAdjustmentFactors>
   <effects>

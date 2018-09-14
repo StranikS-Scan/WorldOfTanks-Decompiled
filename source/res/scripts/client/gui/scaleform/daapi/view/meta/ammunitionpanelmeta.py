@@ -8,45 +8,22 @@ class AmmunitionPanelMeta(ModulesPanelMeta):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends ModulesPanelMeta
-    null
     """
 
     def showTechnicalMaintenance(self):
-        """
-        :return :
-        """
         self._printOverrideError('showTechnicalMaintenance')
 
     def showCustomization(self):
-        """
-        :return :
-        """
         self._printOverrideError('showCustomization')
 
     def toRentContinue(self):
-        """
-        :return :
-        """
         self._printOverrideError('toRentContinue')
 
     def as_setAmmoS(self, shells, stateWarning):
-        """
-        :param shells:
-        :param stateWarning:
-        :return :
-        """
         return self.flashObject.as_setAmmo(shells, stateWarning) if self._isDAAPIInited() else None
 
     def as_updateVehicleStatusS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by VehicleMessageVO (AS)
         """
         return self.flashObject.as_updateVehicleStatus(data) if self._isDAAPIInited() else None
-
-    def as_showCounterS(self, count):
-        """
-        :param count:
-        :return :
-        """
-        return self.flashObject.as_showCounter(count) if self._isDAAPIInited() else None

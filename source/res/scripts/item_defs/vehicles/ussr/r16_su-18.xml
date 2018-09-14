@@ -676,23 +676,89 @@
     </_71-TK-3>
     <_9RK>	shared	</_9RK>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <MS-1>
+          <smplEnginePower>	45.46309	</smplEnginePower>
+        </MS-1>
+        <AMO-3>
+          <smplEnginePower>	74.00968	</smplEnginePower>
+        </AMO-3>
+      </engines>
+      <chassis>
+        <SU-18>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </SU-18>
+        <SU-18Bis>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </SU-18Bis>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <SU-18>
-        <alpha>	0.12075	</alpha>
-      </SU-18>
-      <SU-18Bis>
-        <alpha>	0.1127	</alpha>
-      </SU-18Bis>
-    </chassis>
-    <engines>
-      <MS-1>
-        <bravo>	11.36577	</bravo>
-      </MS-1>
-      <AMO-3>
-        <bravo>	18.50242	</bravo>
-      </AMO-3>
-    </engines>
     <armour>	0.995123557	</armour>
   </clientAdjustmentFactors>
   <effects>

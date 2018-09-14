@@ -8,11 +8,7 @@ class MinimapEntityMeta(BaseDAAPIComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIComponent
-    null
     """
 
     def as_updatePointsS(self):
-        """
-        :return :
-        """
         return self.flashObject.as_updatePoints() if self._isDAAPIInited() else None

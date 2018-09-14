@@ -14,6 +14,8 @@ from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter
 from messenger.gui.Scaleform.view.lobby.ContactsTreeComponent import ContactsTreeComponent
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import ISearchHandler
+from messenger.storage import storage_getter
+from gui.shared.utils.functions import showSentInviteMessage
 
 class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
 
@@ -42,6 +44,10 @@ class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
 
     def getAllAvailableContacts(self):
         return self.pyTree.getMainDP().getContactsList()
+
+    @storage_getter('users')
+    def usersStorage(self):
+        return None
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -74,6 +80,7 @@ class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
         functional = self.prbDispatcher.getFunctional(self._ctrlType)
         if functional:
             functional.request(SendInvitesCtx(accountsToInvite, comment))
+            self.__showSentInviteMessages(accountsToInvite)
         else:
             LOG_ERROR('Functional is not found', self._ctrlType)
 
@@ -123,3 +130,9 @@ class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
     def __onTreeListStateChanged(self, state, isEmpty):
         if state == ContactsTreeComponent.LIST_EMPTY_STATE:
             self.as_onListStateChangedS(isEmpty)
+
+    def __showSentInviteMessages(self, accountsToInvite):
+        getUser = self.usersStorage.getUser
+        for dbID in accountsToInvite:
+            user = getUser(dbID)
+            showSentInviteMessage(user)

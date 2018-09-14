@@ -10,7 +10,7 @@ from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.arena_info import team_overrides
 from gui.battle_control.arena_info import vos_collections
-from gui.battle_control.arena_info.interfaces import IPersonalInvitationsController
+from gui.battle_control.arena_info.interfaces import IVehiclesAndPersonalInvitationsController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.battle_control.arena_info.settings import PERSONAL_STATUS
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, BATTLE_CTRL_ID
@@ -44,7 +44,7 @@ def _createExchangeCtx(battleCtx):
     return broker.ExchangeCtx(battleCtx.createPlayerFullNameFormatter(showVehShortName=False))
 
 
-class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IPersonalInvitationsController):
+class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehiclesAndPersonalInvitationsController):
 
     def __init__(self):
         super(BattleStatisticsDataController, self).__init__()

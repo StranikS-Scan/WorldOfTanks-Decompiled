@@ -892,7 +892,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_large_mb	</effects>
+          <effects>	shot_largeext_mb	</effects>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1018,28 +1018,94 @@
     </FuG8>
     <FuG_Spr.A>	shared	</FuG_Spr.A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Praga_AusfIV>
+          <smplEnginePower>	190.3106	</smplEnginePower>
+        </Praga_AusfIV>
+        <Tatra_V-103_R>
+          <smplEnginePower>	218.8572	</smplEnginePower>
+        </Tatra_V-103_R>
+      </engines>
+      <chassis>
+        <Chassis_RhB_Waffentrager>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RhB_Waffentrager>
+        <Chassis_RhB_Waffentrager_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RhB_Waffentrager_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_150mm_Rohr_L29_5>
         <delta>	1.4	</delta>
       </_150mm_Rohr_L29_5>
     </guns>
-    <chassis>
-      <Chassis_RhB_Waffentrager>
-        <alpha>	0.0966	</alpha>
-      </Chassis_RhB_Waffentrager>
-      <Chassis_RhB_Waffentrager_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_RhB_Waffentrager_2>
-    </chassis>
-    <engines>
-      <Praga_AusfIV>
-        <bravo>	47.57765	</bravo>
-      </Praga_AusfIV>
-      <Tatra_V-103_R>
-        <bravo>	54.7143	</bravo>
-      </Tatra_V-103_R>
-    </engines>
     <armour>	1.073900038	</armour>
   </clientAdjustmentFactors>
   <effects>

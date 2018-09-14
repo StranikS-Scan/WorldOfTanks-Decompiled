@@ -521,17 +521,52 @@
   <radios>
     <SCR_528A1>	shared	</SCR_528A1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAN_T>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Ford_GAN_T>
+      </engines>
+      <chassis>
+        <Chassis_A111_T25_Pilot>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A111_T25_Pilot>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_A111_T25_Pilot>
-        <alpha>	0.05635	</alpha>
-      </Chassis_A111_T25_Pilot>
-    </chassis>
-    <engines>
-      <Ford_GAN_T>
-        <bravo>	132.1601	</bravo>
-      </Ford_GAN_T>
-    </engines>
     <armour>	0.976633324	</armour>
   </clientAdjustmentFactors>
   <effects>

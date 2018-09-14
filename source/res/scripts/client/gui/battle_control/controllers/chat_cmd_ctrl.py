@@ -118,8 +118,6 @@ class ChatCommandsController(IBattleController):
     def sendCommand(self, cmdName):
         if not avatar_getter.isVehicleAlive():
             return
-        if cmdName == CHAT_COMMANDS.POSITIVE:
-            avatar_getter.getSoundNotifications().play('gui_armored_car_horn')
         command = self.proto.battleCmd.createByName(cmdName)
         if command:
             self.__sendChatCommand(command)

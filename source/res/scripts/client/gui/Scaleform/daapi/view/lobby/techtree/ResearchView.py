@@ -3,12 +3,21 @@
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.view.meta.ResearchViewMeta import ResearchViewMeta
-from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
+from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getTreeNodeCompareData
 from gui.Scaleform.daapi.view.lobby.techtree.listeners import TTListenerDecorator
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
+from gui.Scaleform.daapi.view.meta.ResearchViewMeta import ResearchViewMeta
+from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
 
 class ResearchView(LobbySubView, ResearchViewMeta):
+    """
+    Common interface to items (vehicle, module) in window of research modules, nation tree:
+    - unlocks item;
+    - buy vehicles;
+    - shows messages in service channel.
+    - refreshes data by server diff.
+    """
     __background_alpha__ = 0.0
 
     def __init__(self, data):
@@ -18,9 +27,17 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         self._listener = TTListenerDecorator()
 
     def redraw(self):
+        """
+        Redraws all nodes in view.
+        """
         raise NotImplementedError('Must be overridden in subclass')
 
     def showSystemMessage(self, typeString, message):
+        """
+        Shows system message.
+        :param typeString: string containing 'Error', 'Warning' or 'Information'.
+        :param message: text of message.
+        """
         msgType = SystemMessages.SM_TYPE.lookup(typeString)
         if msgType is None:
             msgType = SystemMessages.SM_TYPE.Error
@@ -28,53 +45,85 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         return
 
     def invalidateCredits(self):
+        """
+        Value of credits updated.
+        """
         result = self._data.invalidateCredits()
         if len(result):
-            self.as_setNodesStatesS(NODE_STATE.ENOUGH_MONEY, result)
+            self.as_setNodesStatesS(NODE_STATE_FLAGS.ENOUGH_MONEY, result)
 
     def invalidateGold(self):
+        """
+        Value of gold updated.
+        """
         result = self._data.invalidateGold()
         if len(result):
-            self.as_setNodesStatesS(NODE_STATE.ENOUGH_MONEY, result)
+            self.as_setNodesStatesS(NODE_STATE_FLAGS.ENOUGH_MONEY, result)
         self.invalidateFreeXP()
         self.invalidateCredits()
 
     def invalidateFreeXP(self):
+        """
+        Value of free experience updated.
+        """
         result = self._data.invalidateFreeXP()
         if len(result):
-            self.as_setNodesStatesS(NODE_STATE.ENOUGH_XP, result)
+            self.as_setNodesStatesS(NODE_STATE_FLAGS.ENOUGH_XP, result)
 
     def invalidateElites(self, elites):
+        """
+        Set of elite vehicles updated.
+        :param elites: set([<compactDescr>, ...])
+        """
         result = self._data.invalidateElites(elites)
         if len(result):
-            self.as_setNodesStatesS(NODE_STATE.ELITE, result)
+            self.as_setNodesStatesS(NODE_STATE_FLAGS.ELITE, result)
 
     def invalidateVTypeXP(self, xps):
+        """
+        Dict of vehicles experience updated.
+        :param xps: dict(<int:vehicle compact descriptor> : <XP>, ...)
+        """
         self.as_setVehicleTypeXPS(xps.items())
         result = self._data.invalidateVTypeXP()
         if len(result):
-            self.as_setNodesStatesS(NODE_STATE.ENOUGH_XP, result)
+            self.as_setNodesStatesS(NODE_STATE_FLAGS.ENOUGH_XP, result)
 
     def invalidateUnlocks(self, unlocks):
+        """
+        Set of unlocks items updated.
+        :param unlocks: set([<int:compactDescr>, ...])
+        """
         next2Unlock, unlocked = self._data.invalidateUnlocks(unlocks)
         if len(unlocked):
             LOG_DEBUG('unlocked', unlocked)
-            self.as_setNodesStatesS(NODE_STATE.UNLOCKED, unlocked)
+            self.as_setNodesStatesS(NODE_STATE_FLAGS.UNLOCKED, unlocked)
         if len(next2Unlock):
             LOG_DEBUG('next2Unlock', next2Unlock)
             self.as_setNext2UnlockS(next2Unlock)
 
     def invalidateInventory(self, data):
+        """
+        Inventory items are updated, invalidate information about inventory on current page.
+        :param data: set of int-type compact descriptors for  modified items (vehicles/modules).
+        """
         result = self._data.invalidateInventory(data)
         if len(result):
             self.as_setInventoryItemsS(result)
 
     def invalidatePrbState(self):
+        """
+        Player's state has been changed in prebattle, unit, prequeue.
+        """
         result = self._data.invalidatePrbState()
         if len(result):
-            self.as_setNodesStatesS(NODE_STATE.VEHICLE_CAN_BE_CHANGED, result)
+            self.as_setNodesStatesS(NODE_STATE_FLAGS.VEHICLE_CAN_BE_CHANGED, result)
 
     def invalidateVehLocks(self, locks):
+        """
+        Updates lock status of vehicles (in inventory) that received new value.
+        :param locks: dict(<inventory ID> : <value of lock>, ...), see AccountCommands.LOCK_REASON.
+        """
         raise NotImplementedError('Must be overridden in subclass')
 
     def invalidateWalletStatus(self, status):
@@ -84,9 +133,20 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         raise NotImplementedError('Must be overridden in subclass')
 
     def request4Info(self, itemCD, rootCD):
+        """
+        Overridden method of the class ResearchViewMeta.request4Info
+        """
         vehicle = g_itemsCache.items.getItemByCD(int(rootCD))
         if vehicle:
             shared_events.showModuleInfo(int(itemCD), vehicle.descriptor)
+
+    def invalidateVehCompare(self):
+        """
+        Updates compare add icon status of nodes if change status of comparison basket fullness.
+        """
+        getVehicle = g_itemsCache.items.getItemByCD
+        getNodeData = lambda vehCD: getTreeNodeCompareData(getVehicle(vehCD))
+        self.as_setNodeVehCompareDataS([ (v, getNodeData(v)) for v in self._data.getVehicleCDs() ])
 
     def _populate(self):
         super(ResearchView, self)._populate()

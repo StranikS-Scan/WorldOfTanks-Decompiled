@@ -7,8 +7,6 @@ from gui.Scaleform.daapi.view.meta.SquadWindowMeta import SquadWindowMeta
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
-from CurrentVehicle import g_currentVehicle
-from gui.server_events import g_eventsCache
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.formatters import messages
 from gui.shared import events, EVENT_BUS_SCOPE
@@ -98,23 +96,6 @@ class FalloutSquadWindow(SquadWindow):
 
 
 class EventSquadWindow(SquadWindow):
-
-    def _populate(self):
-        self.__prevSelectedVeh = None
-        if g_currentVehicle.isPresent():
-            self.__prevSelectedVeh = g_currentVehicle.invID
-        super(EventSquadWindow, self)._populate()
-        if not g_currentVehicle.isEvent():
-            eventVehicles = g_eventsCache.getEventVehicles()
-            if eventVehicles:
-                g_currentVehicle.selectVehicle(eventVehicles[0].invID)
-        return
-
-    def _dispose(self):
-        super(EventSquadWindow, self)._dispose()
-        if self.__prevSelectedVeh is not None and self.__prevSelectedVeh != g_currentVehicle.invID:
-            g_currentVehicle.selectVehicle(self.__prevSelectedVeh)
-        return
 
     def _getTitle(self):
         return ''.join((i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD), i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_EVENT)))

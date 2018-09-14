@@ -276,9 +276,6 @@
         <gravity>	-9.7	</gravity>
         <elasticity>	1038	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -558,9 +555,6 @@
         <gravity>	-9.7	</gravity>
         <elasticity>	1038	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -1032,7 +1026,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.97 0.565 0.55 0.35	</tiling>
+            <tiling>	1.4 0.565 0.55 0.35	</tiling>
           </camouflage>
         </_76mm_Gun_M1A1>
         <_76mm_Gun_M1A2>	shared	  <maxAmmo>	92	</maxAmmo>
@@ -1080,7 +1074,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	1.36 0.55 0.55 0.27	</tiling>
+            <tiling>	1.4 0.565 0.55 0.35	</tiling>
           </camouflage>
         </_76mm_Gun_M1A2>
         <_90mm_Gun_M3>	shared	  <maxAmmo>	70	</maxAmmo>
@@ -1129,7 +1123,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	1.3 0.505 0.65 0.45	</tiling>
+            <tiling>	1.4 0.565 0.55 0.35	</tiling>
           </camouflage>
         </_90mm_Gun_M3>
         <_90mm_Gun_T15E2M2>	shared	  <maxAmmo>	70	</maxAmmo>
@@ -1178,7 +1172,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.955 0.52 0.26 0.43	</tiling>
+            <tiling>	1.4 0.565 0.55 0.35	</tiling>
           </camouflage>
         </_90mm_Gun_T15E2M2>
         <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	54	</maxAmmo>
@@ -1218,7 +1212,7 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0163961 0.0144493 1.06061	</rayStart>
+              <rayStart>	0.0163961 0.0144493 1.15	</rayStart>
               <rayEnd>	-0.108714 -0.0242118 1.05442	</rayEnd>
               <rayUp>	0.098 0.091 3	</rayUp>
               <size>	0.55	</size>
@@ -1227,7 +1221,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	1 0.565 0.23 0.23	</tiling>
+            <tiling>	1.4 0.565 0.55 0.35	</tiling>
           </camouflage>
         </_105mm_SPH_M4_L23>
       </guns>
@@ -1278,23 +1272,89 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAN>
+          <smplEnginePower>	592.0775	</smplEnginePower>
+        </Ford_GAN>
+        <Continental_AV-1790-1>
+          <smplEnginePower>	744.3259	</smplEnginePower>
+        </Continental_AV-1790-1>
+      </engines>
+      <chassis>
+        <Pershingchassis1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Pershingchassis1>
+        <Pershingchassis2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Pershingchassis2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Pershingchassis1>
-        <alpha>	0.12075	</alpha>
-      </Pershingchassis1>
-      <Pershingchassis2>
-        <alpha>	0.10465	</alpha>
-      </Pershingchassis2>
-    </chassis>
-    <engines>
-      <Ford_GAN>
-        <bravo>	148.0194	</bravo>
-      </Ford_GAN>
-      <Continental_AV-1790-1>
-        <bravo>	186.0815	</bravo>
-      </Continental_AV-1790-1>
-    </engines>
     <armour>	0.966014424	</armour>
   </clientAdjustmentFactors>
   <effects>

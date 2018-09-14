@@ -752,7 +752,7 @@
             <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_20_45	</reloadEffect>
           <camouflage>
             <tiling>	0.34 0.34 0.000000 0.000000	</tiling>
           </camouflage>
@@ -912,7 +912,7 @@
             <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_20_45	</reloadEffect>
           <camouflage>
             <tiling>	0.34 0.34 0.000000 0.000000	</tiling>
           </camouflage>
@@ -981,28 +981,94 @@
   <radios>
     <N11>	shared	</N11>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Phantom>
+          <smplEnginePower>	126.8737	</smplEnginePower>
+        </Rolls_Royse_Phantom>
+        <AEC_Type_179>
+          <smplEnginePower>	158.5922	</smplEnginePower>
+        </AEC_Type_179>
+      </engines>
+      <chassis>
+        <Chassis_GB03_Cruiser_Mk_I>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB03_Cruiser_Mk_I>
+        <Chassis_GB03_Cruiser_Mk_I_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB03_Cruiser_Mk_I_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_40mm_Pom_Pom>
         <delta>	1.7142857	</delta>
       </_40mm_Pom_Pom>
     </guns>
-    <chassis>
-      <Chassis_GB03_Cruiser_Mk_I>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB03_Cruiser_Mk_I>
-      <Chassis_GB03_Cruiser_Mk_I_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_GB03_Cruiser_Mk_I_2>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Phantom>
-        <bravo>	31.71843	</bravo>
-      </Rolls_Royse_Phantom>
-      <AEC_Type_179>
-        <bravo>	39.64804	</bravo>
-      </AEC_Type_179>
-    </engines>
     <armour>	0.776028923	</armour>
   </clientAdjustmentFactors>
   <effects>

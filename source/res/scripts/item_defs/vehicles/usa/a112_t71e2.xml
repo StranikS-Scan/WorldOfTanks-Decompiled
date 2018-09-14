@@ -501,17 +501,52 @@
   <radios>
     <AN_GRC_8>	shared	</AN_GRC_8>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AOI-628-1_A>
+          <smplEnginePower>	359.4756	</smplEnginePower>
+        </Continental_AOI-628-1_A>
+      </engines>
+      <chassis>
+        <Chassis_A112_T71E2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A112_T71E2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_A112_T71E2>
-        <alpha>	0.0322	</alpha>
-      </Chassis_A112_T71E2>
-    </chassis>
-    <engines>
-      <Continental_AOI-628-1_A>
-        <bravo>	89.8689	</bravo>
-      </Continental_AOI-628-1_A>
-    </engines>
     <armour>	0.831096254	</armour>
   </clientAdjustmentFactors>
   <effects>

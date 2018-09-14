@@ -1152,34 +1152,100 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Wright_Continental_R-975C1>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Wright_Continental_R-975C1>
+        <GMC_6046>
+          <smplEnginePower>	433.4853	</smplEnginePower>
+        </GMC_6046>
+        <Crysler_A57>
+          <smplEnginePower>	449.3445	</smplEnginePower>
+        </Crysler_A57>
+        <Wright_Continental_R-975C4>
+          <smplEnginePower>	486.3493	</smplEnginePower>
+        </Wright_Continental_R-975C4>
+      </engines>
+      <chassis>
+        <Chassis_GB50_Sherman_III>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB50_Sherman_III>
+        <Chassis_GB50_Sherman_III_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB50_Sherman_III_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_76mm_Gun_M1A1>
         <delta>	1.127819	</delta>
       </_76mm_Gun_M1A1>
     </guns>
-    <chassis>
-      <Chassis_GB50_Sherman_III>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GB50_Sherman_III>
-      <Chassis_GB50_Sherman_III_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_GB50_Sherman_III_2>
-    </chassis>
-    <engines>
-      <Wright_Continental_R-975C1>
-        <bravo>	105.7281	</bravo>
-      </Wright_Continental_R-975C1>
-      <GMC_6046>
-        <bravo>	108.3713	</bravo>
-      </GMC_6046>
-      <Crysler_A57>
-        <bravo>	112.3361	</bravo>
-      </Crysler_A57>
-      <Wright_Continental_R-975C4>
-        <bravo>	121.5873	</bravo>
-      </Wright_Continental_R-975C4>
-    </engines>
     <armour>	0.966105937	</armour>
   </clientAdjustmentFactors>
   <effects>

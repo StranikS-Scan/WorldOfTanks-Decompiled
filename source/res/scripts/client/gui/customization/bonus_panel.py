@@ -67,6 +67,7 @@ class BonusPanel(object):
     def __update(self, updatedSlotsData):
         for qTypeName in QUALIFIER_TYPE_NAMES.iterkeys():
             self.__bonusData[qTypeName]['bonusAppliedCount'] = 0
+            self.__bonusData[qTypeName]['oldBonusAppliedCount'] = 0
 
         self.__restoreInitialTooltipData()
         forEachSlotIn(updatedSlotsData, self.__initialSlotsData, self.__recalculateBonusData)

@@ -1,16 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ShopRequester.py
-import BigWorld
 import weakref
-from adisp import async
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from abc import ABCMeta, abstractmethod
+import BigWorld
+from adisp import async
 from constants import WIN_XP_FACTOR_MODE
 from debug_utils import LOG_DEBUG
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import NamedGoodieData, getPremiumCost, getPriceWithDiscount
-from gui.shared.money import Money, Currency
+from gui.shared.money import Money
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+_VehiclesRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'restoreDuration restoreCooldown restorePriceModif')
+_TankmenRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'freeDuration creditsDuration goldDuration cost limit')
 
 class ShopCommonStats(object):
     __metaclass__ = ABCMeta
@@ -88,6 +90,16 @@ class ShopCommonStats(object):
     def sellPriceModif(self):
         return self.getValue('sellPriceModif', 0.5)
 
+    @property
+    def vehiclesRestoreConfig(self):
+        config = self.__getRestoreConfig().get('vehicles', {})
+        return _VehiclesRestoreConfig(config.get('premiumDuration', 0), config.get('actionCooldown', 0), config.get('sellToRestoreFactor', 1.1))
+
+    @property
+    def tankmenRestoreConfig(self):
+        config = self.__getRestoreConfig().get('tankmen', {})
+        return _TankmenRestoreConfig(config.get('freeDuration', 0), config.get('creditsDuration', 0), config.get('goldDuration', 0), Money(credits=config.get('creditsCost', 0)), config.get('limit', 100))
+
     def sellPriceModifiers(self, compDescr):
         sellPriceModif = self.sellPriceModif
         sellPriceFactors = self.getVehiclesSellPriceFactors()
@@ -146,7 +158,8 @@ class ShopCommonStats(object):
         @return: (new berths pack price, pack berths count)
         """
         prices = self.berthsPrices
-        return (BigWorld.player().shop.getNextBerthPackPrice(berthsCount, prices), prices[1])
+        goldCost = BigWorld.player().shop.getNextBerthPackPrice(berthsCount, prices)
+        return (Money(gold=goldCost), prices[1])
 
     @property
     def isEnabledBuyingGoldShellsForCredits(self):
@@ -300,6 +313,9 @@ class ShopCommonStats(object):
     def refSystem(self):
         return self.getValue('refSystem', {})
 
+    def __getRestoreConfig(self):
+        return self.getValue('restore_config', {})
+
 
 class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
 
@@ -330,12 +346,13 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
 
     def _preprocessValidData(self, data):
         data = dict(data)
-        formattedGoodies = defaultdict(dict)
-        goodies = data.get('goodies', {}).get('goodies', {})
-        for goodieID, goodieData in goodies.iteritems():
-            formattedGoodies[goodieID] = NamedGoodieData(*goodieData)
+        if 'goodies' in data:
+            goodies = data['goodies'].get('goodies', {})
+            formattedGoodies = {}
+            for goodieID, goodieData in goodies.iteritems():
+                formattedGoodies[goodieID] = NamedGoodieData(*goodieData)
 
-        data['goodies']['goodies'] = formattedGoodies
+            data['goodies']['goodies'] = formattedGoodies
         return data
 
     def getPremiumCostWithDiscount(self, premiumPacketDiscounts=None):
@@ -423,7 +440,8 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
 
     @property
     def isXPConversionActionActive(self):
-        return self.freeXPConversion[0] > self.defaults.freeXPConversion[0]
+        goody = self.bestGoody(self.personalXPExchangeDiscounts)
+        return self.freeXPConversion[0] > self.defaults.freeXPConversion[0] or goody is not None
 
     @property
     def personalPremiumPacketsDiscounts(self):

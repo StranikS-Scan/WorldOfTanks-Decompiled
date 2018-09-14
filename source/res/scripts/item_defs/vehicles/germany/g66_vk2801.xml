@@ -935,23 +935,89 @@
     </FuG_Spr.A>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Argus_12LD330H>
+          <smplEnginePower>	581.5046	</smplEnginePower>
+        </Argus_12LD330H>
+        <Maybach_HL_210_TRM_P30>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Maybach_HL_210_TRM_P30>
+      </engines>
+      <chassis>
+        <Chassis_VK2801>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_VK2801>
+        <Chassis_VK2801_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_VK2801_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_VK2801>
-        <alpha>	0.07245	</alpha>
-      </Chassis_VK2801>
-      <Chassis_VK2801_2>
-        <alpha>	0.0644	</alpha>
-      </Chassis_VK2801_2>
-    </chassis>
-    <engines>
-      <Argus_12LD330H>
-        <bravo>	145.3762	</bravo>
-      </Argus_12LD330H>
-      <Maybach_HL_210_TRM_P30>
-        <bravo>	171.8082	</bravo>
-      </Maybach_HL_210_TRM_P30>
-    </engines>
     <armour>	0.913737201	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -727,7 +727,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_mainext	</effects>
+          <effects>	shot_large	</effects>
           <camouflage>
             <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
           </camouflage>
@@ -986,7 +986,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_mainext	</effects>
+          <effects>	shot_large	</effects>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1202,26 +1202,92 @@
     </_12RT>
     <R113>	shared	</R113>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-5>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </V-5>
+        <V-2IS>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </V-2IS>
+        <V-2SN>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </V-2SN>
+      </engines>
+      <chassis>
+        <KV-3>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </KV-3>
+        <KV-3bis>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </KV-3bis>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <KV-3>
-        <alpha>	0.13685	</alpha>
-      </KV-3>
-      <KV-3bis>
-        <alpha>	0.1127	</alpha>
-      </KV-3bis>
-    </chassis>
-    <engines>
-      <V-5>
-        <bravo>	158.5922	</bravo>
-      </V-5>
-      <V-2IS>
-        <bravo>	158.5922	</bravo>
-      </V-2IS>
-      <V-2SN>
-        <bravo>	198.2402	</bravo>
-      </V-2SN>
-    </engines>
     <armour>	1.124254562	</armour>
   </clientAdjustmentFactors>
   <effects>

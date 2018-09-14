@@ -68,7 +68,7 @@ class LobbyEntry(SFApplication):
         return ColorSchemeManager()
 
     def _createEventLogMgr(self):
-        return EventLogManager()
+        return EventLogManager(False)
 
     def _createContextMenuManager(self):
         return ContextMenuManager(self.proxy)

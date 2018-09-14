@@ -1006,23 +1006,89 @@
     </AN-GRC-4>
     <SEM25>	shared	</SEM25>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <MB-837A>
+          <smplEnginePower>	666.0871	</smplEnginePower>
+        </MB-837A>
+        <MB-838_CAM-500>
+          <smplEnginePower>	877.5433	</smplEnginePower>
+        </MB-838_CAM-500>
+      </engines>
+      <chassis>
+        <Chassis_Pro_Ag_A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Pro_Ag_A>
+        <Chassis_Pro_Ag_A_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Pro_Ag_A_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Pro_Ag_A>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Pro_Ag_A>
-      <Chassis_Pro_Ag_A_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Pro_Ag_A_2>
-    </chassis>
-    <engines>
-      <MB-837A>
-        <bravo>	166.5218	</bravo>
-      </MB-837A>
-      <MB-838_CAM-500>
-        <bravo>	219.3858	</bravo>
-      </MB-838_CAM-500>
-    </engines>
     <armour>	0.985738041	</armour>
   </clientAdjustmentFactors>
   <effects>

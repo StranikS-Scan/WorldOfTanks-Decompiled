@@ -447,7 +447,7 @@
           <aimingTime>	2.9	</aimingTime>
           <invisibilityFactorAtShot>	0.23	</invisibilityFactorAtShot>
           <turretYawLimits>	-10 10	</turretYawLimits>
-          <effects>	shot_large	</effects>
+          <effects>	shot_largeext	</effects>
           <models>
             <undamaged>	vehicles/russian/R49_SU100Y/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R49_SU100Y/crash/lod0/Gun_01.model	</destroyed>
@@ -500,17 +500,52 @@
   <radios>
     <_71-TK-3U>	shared	</_71-TK-3U>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <GAZ-34-BT>
+          <smplEnginePower>	940.9802	</smplEnginePower>
+        </GAZ-34-BT>
+      </engines>
+      <chassis>
+        <Chassis_SU100Y>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_SU100Y>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_SU100Y>
-        <alpha>	0.1127	</alpha>
-      </Chassis_SU100Y>
-    </chassis>
-    <engines>
-      <GAZ-34-BT>
-        <bravo>	235.2451	</bravo>
-      </GAZ-34-BT>
-    </engines>
     <armour>	0.915403844	</armour>
   </clientAdjustmentFactors>
   <effects>

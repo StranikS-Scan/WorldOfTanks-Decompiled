@@ -952,7 +952,7 @@
       </unlocks>
     </Maybach_HL57TR>
     <Maybach_HL62TRM>	shared	  <unlocks>
-        <vehicle>	G14_PzIII_A	  <cost>	1500	</cost>
+        <vehicle>	G102_Pz_III	  <cost>	1500	</cost>
         </vehicle>
       </unlocks>
     </Maybach_HL62TRM>
@@ -963,23 +963,89 @@
   <radios>
     <FuG5>	shared	</FuG5>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL57TR>
+          <smplEnginePower>	137.4465	</smplEnginePower>
+        </Maybach_HL57TR>
+        <Maybach_HL62TRM>
+          <smplEnginePower>	169.165	</smplEnginePower>
+        </Maybach_HL62TRM>
+      </engines>
+      <chassis>
+        <PzII_ketten_Ausf_A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzII_ketten_Ausf_A>
+        <PzII_ketten_Ausf_B>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </PzII_ketten_Ausf_B>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <PzII_ketten_Ausf_A>
-        <alpha>	0.13685	</alpha>
-      </PzII_ketten_Ausf_A>
-      <PzII_ketten_Ausf_B>
-        <alpha>	0.1127	</alpha>
-      </PzII_ketten_Ausf_B>
-    </chassis>
-    <engines>
-      <Maybach_HL57TR>
-        <bravo>	34.36164	</bravo>
-      </Maybach_HL57TR>
-      <Maybach_HL62TRM>
-        <bravo>	42.29124	</bravo>
-      </Maybach_HL62TRM>
-    </engines>
     <armour>	0.812760856	</armour>
   </clientAdjustmentFactors>
   <effects>

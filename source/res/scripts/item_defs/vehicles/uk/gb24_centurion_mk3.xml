@@ -931,31 +931,97 @@
     </N22>
     <C42>	shared	</C42>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Meteor_MkIV>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkIV>
+        <Rolls_Royse_Meteor_MkIVC>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkIVC>
+        <Rolls_Royce_Griffon>
+          <smplEnginePower>	1004.417	</smplEnginePower>
+        </Rolls_Royce_Griffon>
+      </engines>
+      <chassis>
+        <Chassis_GB24_Centurion_Mk3>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB24_Centurion_Mk3>
+        <Chassis_GB24_Centurion_Mk3_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB24_Centurion_Mk3_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_105mm_Gun_L7>
         <delta>	1.4005305	</delta>
       </_105mm_Gun_L7>
     </guns>
-    <chassis>
-      <Chassis_GB24_Centurion_Mk3>
-        <alpha>	0.10465	</alpha>
-      </Chassis_GB24_Centurion_Mk3>
-      <Chassis_GB24_Centurion_Mk3_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_GB24_Centurion_Mk3_2>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Meteor_MkIV>
-        <bravo>	171.8082	</bravo>
-      </Rolls_Royse_Meteor_MkIV>
-      <Rolls_Royse_Meteor_MkIVC>
-        <bravo>	198.2402	</bravo>
-      </Rolls_Royse_Meteor_MkIVC>
-      <Rolls_Royce_Griffon>
-        <bravo>	251.1043	</bravo>
-      </Rolls_Royce_Griffon>
-    </engines>
     <armour>	0.967555013	</armour>
   </clientAdjustmentFactors>
   <effects>

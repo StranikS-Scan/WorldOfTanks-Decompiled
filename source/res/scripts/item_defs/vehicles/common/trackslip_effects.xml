@@ -437,48 +437,6 @@
         <value>	6	</value>
       </constant>
     </constantsGroup>
-    <constantsGroup>
-      <name>	Lanchester	</name>
-      <constant>
-        <name>	_fileDescriptor	</name>
-        <value>	small	</value>
-      </constant>
-      <constant>
-        <name>	_hullAngle1	</name>
-        <value>	-2.9	</value>
-      </constant>
-      <constant>
-        <name>	_hullAngle2	</name>
-        <value>	-0.2	</value>
-      </constant>
-      <constant>
-        <name>	_hullAngle3	</name>
-        <value>	0.2	</value>
-      </constant>
-      <constant>
-        <name>	_hullAngle4	</name>
-        <value>	2.9	</value>
-      </constant>
-      <constant>
-        <name>	_sandSlipMinStart	</name>
-        <value>	0.5	</value>
-      </constant>
-      <constant>
-        <name>	_groundSlipMinStart	</name>
-        <value>	0.6	</value>
-      </constant>
-      <constant>
-        <name>	_stoneSlipMinStart	</name>
-        <value>	1	</value>
-      </constant>
-    </constantsGroup>
-    <constantsGroup>
-      <name>	markI	</name>
-      <constant>
-        <name>	_fileDescriptor	</name>
-        <value>	large	</value>
-      </constant>
-    </constantsGroup>
   </constants>
   <templates>
     <template>
@@ -2685,476 +2643,6 @@
       </selector>
     </template>
     <template>
-      <name>	DriftLanchester	</name>
-      <selector>
-        <type>	matkind	</type>
-        <variable>	_matkind	</variable>
-        <selector>
-          <key>	sand	</key>
-          <type>	range	</type>
-          <variable>	_hullAngle	</variable>
-          <selector>
-            <key>	_hullAngle1	</key>
-            <type>	union	</type>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/sand/drift_{0}_spd1.xml	</name>
-              <effectHP>	_TrackFront	</effectHP>
-            </selector>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/sand/drift_{0}_spd1.xml	</name>
-              <effectHP>	_TrackRear	</effectHP>
-            </selector>
-          </selector>
-          <selector>
-            <key>	_hullAngle2	</key>
-            <type>	union	</type>
-          </selector>
-          <selector>
-            <key>	_hullAngle3	</key>
-            <type>	union	</type>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/sand/drift_{0}_spd1.xml	</name>
-              <effectHP>	_TrackFront	</effectHP>
-            </selector>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/sand/drift_{0}_spd1.xml	</name>
-              <effectHP>	_TrackRear	</effectHP>
-            </selector>
-          </selector>
-          <selector>
-            <key>	_hullAngle4	</key>
-            <type>	union	</type>
-          </selector>
-        </selector>
-        <selector>
-          <key>	ground	</key>
-          <type>	range	</type>
-          <variable>	_hullAngle	</variable>
-          <selector>
-            <key>	_hullAngle1	</key>
-            <type>	union	</type>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/ground/drift_{0}_spd1.xml	</name>
-              <effectHP>	_TrackFront	</effectHP>
-            </selector>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/ground/drift_{0}_spd1.xml	</name>
-              <effectHP>	_TrackRear	</effectHP>
-            </selector>
-          </selector>
-          <selector>
-            <key>	_hullAngle2	</key>
-            <type>	union	</type>
-          </selector>
-          <selector>
-            <key>	_hullAngle3	</key>
-            <type>	union	</type>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/ground/drift_{0}_spd1.xml	</name>
-              <effectHP>	_TrackFront	</effectHP>
-            </selector>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/ground/drift_{0}_spd1.xml	</name>
-              <effectHP>	_TrackRear	</effectHP>
-            </selector>
-          </selector>
-          <selector>
-            <key>	_hullAngle4	</key>
-            <type>	union	</type>
-          </selector>
-        </selector>
-        <selector>
-          <key>	stone	</key>
-          <type>	range	</type>
-          <variable>	_hullAngle	</variable>
-          <selector>
-            <key>	_hullAngle1	</key>
-            <type>	union	</type>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/sand/trail_{0}.xml	</name>
-              <effectHP>	_TrackFront	</effectHP>
-            </selector>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/stone/drift_{0}_spd1.xml	</name>
-              <effectHP>	_TrackRear	</effectHP>
-            </selector>
-          </selector>
-          <selector>
-            <key>	_hullAngle2	</key>
-            <type>	union	</type>
-          </selector>
-          <selector>
-            <key>	_hullAngle3	</key>
-            <type>	union	</type>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/sand/trail_{0}.xml	</name>
-              <effectHP>	_TrackFront	</effectHP>
-            </selector>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/lanchester/movement/stone/drift_{0}_spd1.xml	</name>
-              <effectHP>	_TrackRear	</effectHP>
-            </selector>
-          </selector>
-          <selector>
-            <key>	_hullAngle4	</key>
-            <type>	union	</type>
-          </selector>
-        </selector>
-      </selector>
-    </template>
-    <template>
-      <name>	SlipLanchester	</name>
-      <selector>
-        <type>	matkind	</type>
-        <variable>	_matkind	</variable>
-        <selector>
-          <key>	sand	</key>
-          <type>	range	</type>
-          <variable>	_delta	</variable>
-          <selector>
-            <key>	0	</key>
-            <type>	range	</type>
-            <variable>	_speed	</variable>
-            <selector>
-              <key>	-500	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/sand/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/sand/trail_{0}.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-            <selector>
-              <key>	-4	</key>
-              <type>	union	</type>
-            </selector>
-            <selector>
-              <key>	4	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/sand/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/sand/trail_{0}.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-          </selector>
-          <selector>
-            <key>	_sandSlipMinStart	</key>
-            <type>	range	</type>
-            <variable>	_direction	</variable>
-            <selector>
-              <key>	-2	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/sand/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/sand/slip_back_{0}_spd1.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-            <selector>
-              <key>	0	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/sand/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/sand/slip_{0}_spd1.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-          </selector>
-        </selector>
-        <selector>
-          <key>	ground	</key>
-          <type>	range	</type>
-          <variable>	_delta	</variable>
-          <selector>
-            <key>	0	</key>
-            <type>	range	</type>
-            <variable>	_speed	</variable>
-            <selector>
-              <key>	-500	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/ground/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/ground/trail_{0}.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-            <selector>
-              <key>	-4	</key>
-              <type>	union	</type>
-            </selector>
-            <selector>
-              <key>	4	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/ground/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/ground/trail_{0}.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-          </selector>
-          <selector>
-            <key>	_groundSlipMinStart	</key>
-            <type>	range	</type>
-            <variable>	_direction	</variable>
-            <selector>
-              <key>	-2	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/ground/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/ground/slip_back_{0}_spd1.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-            <selector>
-              <key>	0	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/ground/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/ground/slip_{0}_spd1.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-          </selector>
-        </selector>
-        <selector>
-          <key>	stone	</key>
-          <type>	range	</type>
-          <variable>	_delta	</variable>
-          <selector>
-            <key>	0	</key>
-            <type>	range	</type>
-            <variable>	_speed	</variable>
-            <selector>
-              <key>	-500	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/stone/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/stone/trail_{0}.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-            <selector>
-              <key>	-4	</key>
-              <type>	union	</type>
-            </selector>
-            <selector>
-              <key>	4	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/stone/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/stone/trail_{0}.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-          </selector>
-          <selector>
-            <key>	_stoneSlipMinStart	</key>
-            <type>	range	</type>
-            <variable>	_direction	</variable>
-            <selector>
-              <key>	-2	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/stone/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/stone/slip_back_{0}_spd1.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-            <selector>
-              <key>	0	</key>
-              <type>	union	</type>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/stone/trail_{0}.xml	</name>
-                <effectHP>	_TrackFront	</effectHP>
-              </selector>
-              <selector>
-                <type>	effect	</type>
-                <name>	particles/Event/lanchester/movement/stone/slip_{0}_spd1.xml	</name>
-                <effectHP>	_TrackRear	</effectHP>
-              </selector>
-            </selector>
-          </selector>
-        </selector>
-        <selector>
-          <key>	water	</key>
-          <type>	discrete	</type>
-          <variable>	_isUnderWater	</variable>
-          <selector>
-            <key>	0	</key>
-            <type>	range	</type>
-            <variable>	_delta	</variable>
-            <selector>
-              <key>	0	</key>
-              <type>	range	</type>
-              <variable>	_speed	</variable>
-              <selector>
-                <key>	-500	</key>
-                <type>	union	</type>
-                <selector>
-                  <type>	effect	</type>
-                  <name>	particles/Event/lanchester/movement/water/trail_{0}.xml	</name>
-                  <effectHP>	_TrackRear	</effectHP>
-                </selector>
-                <selector>
-                  <type>	effect	</type>
-                  <name>	particles/Event/lanchester/movement/water/trail_{0}.xml	</name>
-                  <effectHP>	_TrackFront	</effectHP>
-                </selector>
-              </selector>
-              <selector>
-                <key>	-3	</key>
-                <type>	union	</type>
-              </selector>
-              <selector>
-                <key>	3	</key>
-                <type>	union	</type>
-                <selector>
-                  <type>	effect	</type>
-                  <name>	particles/Event/lanchester/movement/water/trail_{0}.xml	</name>
-                  <effectHP>	_TrackRear	</effectHP>
-                </selector>
-                <selector>
-                  <type>	effect	</type>
-                  <name>	particles/Event/lanchester/movement/water/trail_{0}.xml	</name>
-                  <effectHP>	_TrackFront	</effectHP>
-                </selector>
-              </selector>
-            </selector>
-          </selector>
-        </selector>
-      </selector>
-    </template>
-    <template>
-      <name>	Slip_MarkI	</name>
-      <selector>
-        <type>	matkind	</type>
-        <variable>	_matkind	</variable>
-        <selector>
-          <key>	sand	</key>
-          <type>	range	</type>
-          <variable>	_speed	</variable>
-          <selector>
-            <key>	-500	</key>
-            <type>	union	</type>
-          </selector>
-          <selector>
-            <key>	1	</key>
-            <type>	union	</type>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/markI_movement/trail_{0}_forw.xml	</name>
-              <effectHP>	_Track	</effectHP>
-            </selector>
-          </selector>
-        </selector>
-        <selector>
-          <key>	ground	</key>
-          <type>	range	</type>
-          <variable>	_speed	</variable>
-          <selector>
-            <key>	-500	</key>
-            <type>	union	</type>
-          </selector>
-          <selector>
-            <key>	1	</key>
-            <type>	union	</type>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/markI_movement/trail_{0}_forw.xml	</name>
-              <effectHP>	_Track	</effectHP>
-            </selector>
-          </selector>
-        </selector>
-        <selector>
-          <key>	stone	</key>
-          <type>	range	</type>
-          <variable>	_speed	</variable>
-          <selector>
-            <key>	-500	</key>
-            <type>	union	</type>
-          </selector>
-          <selector>
-            <key>	1	</key>
-            <type>	union	</type>
-            <selector>
-              <type>	effect	</type>
-              <name>	particles/Event/markI_movement/trail_{0}_forw.xml	</name>
-              <effectHP>	_Track	</effectHP>
-            </selector>
-          </selector>
-        </selector>
-      </selector>
-    </template>
-    <template>
       <name>	TrackEffect1	</name>
       <selector>
         <type>	union	</type>
@@ -3163,156 +2651,252 @@
           <type>	template	</type>
           <name>	Drift	</name>
           <parameters>	_matkind:matkindR;
+
 				_direction:directionR;
+
 				_const1:1;
+
 				_delta:deltaR;
+
 				_hullAngle:hullAngle;
+
 				_TrackFront:HP_Track_RFront;
+
 				_TrackRear:HP_Track_RRear;
+
 				_Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Drift	</name>
           <parameters>	_matkind:matkindL;
+
 				_direction:directionL;
+
 				_const1:1;
+
 				_delta:deltaL;
+
 				_hullAngle:hullAngle;
+
 				_TrackFront:HP_Track_LFront;
+
 				_TrackRear:HP_Track_LRear;
+
 				_Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Drift	</name>
           <parameters>	_matkind:matkindR;
+
 				_direction:directionR;
+
 				_const1:-1;
+
 				_delta:deltaR;
+
 				_hullAngle:hullAngle;
+
 				_TrackFront:HP_Track_RRear;
+
 				_TrackRear:HP_Track_RFront;
+
 				_Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Drift	</name>
           <parameters>	_matkind:matkindL;
+
 				_direction:directionL;
+
 				_const1:-1;
+
 				_delta:deltaL;
+
 				_hullAngle:hullAngle;
+
 				_TrackFront:HP_Track_LRear;
+
 				_TrackRear:HP_Track_LFront;
+
 				_Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Turn	</name>
           <parameters>	_matkind:matkindR;
+
 				_direction:directionR;
+
 				_speed:speed;
+
 				_const1:1;
+
 				_delta:deltaR;
+
 				_TrackFront:HP_Track_RFront;
+
 				_TrackRear:HP_Track_RRear;
+
 				_rotSpeed:rotSpeed	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Turn	</name>
           <parameters>	_matkind:matkindL;
+
 				_direction:directionL;
+
 				_speed:speed;
+
 				_const1:1;
+
 				_delta:deltaL;
+
 				_TrackFront:HP_Track_LFront;
+
 				_TrackRear:HP_Track_LRear;
+
 				_rotSpeed:rotSpeed	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Turn	</name>
           <parameters>	_matkind:matkindR;
+
 				_direction:directionR;
+
 				_speed:speed;
+
 				_const1:-1;
+
 				_delta:deltaR;
+
 				_TrackFront:HP_Track_LRear;
+
 				_TrackRear:HP_Track_LFront;
+
 				_rotSpeed:rotSpeed	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Turn	</name>
           <parameters>	_matkind:matkindL;
+
 				_direction:directionL;
+
 				_speed:speed;
+
 				_const1:-1;
+
 				_delta:deltaL;
+
 				_TrackFront:HP_Track_RRear;
+
 				_TrackRear:HP_Track_RFront;
+
 				_rotSpeed:rotSpeed	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip	</name>
           <parameters>	_matkind:matkindR;
+
 				_direction:directionR;
+
 				_const1:1;
+
 				_delta:deltaR;
+
 				_speed:speed;
+
 				_isUnderWater:isUnderWater;
+
 				_TrackRear:HP_Track_RRear;
+
 				_TrackFront:HP_Track_RFront;
+
 				_TrackUpRear:HP_TrackUp_RRear;
+
 				_TrackUpFront:HP_TrackUp_RFront;
+
 				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip	</name>
           <parameters>	_matkind:matkindL;
+
 				_direction:directionL;
+
 				_const1:1;
+
 				_delta:deltaL;
+
 				_speed:speed;
+
 				_isUnderWater:isUnderWater;
+
 				_TrackRear:HP_Track_LRear;
+
 				_TrackFront:HP_Track_LFront;
+
 				_TrackUpRear:HP_TrackUp_LRear;
+
 				_TrackUpFront:HP_TrackUp_LFront;
+
 				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip	</name>
           <parameters>	_matkind:matkindR;
+
 				_direction:directionR;
+
 				_const1:-1;
+
 				_delta:deltaR;
+
 				_speed:speed;
+
 				_isUnderWater:isUnderWater;
+
 				_TrackRear:HP_Track_RFront;
+
 				_TrackFront:HP_Track_RRear;
+
 				_TrackUpRear:HP_TrackUp_RFront;
+
 				_TrackUpFront:HP_TrackUp_RRear;
+
 				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip	</name>
           <parameters>	_matkind:matkindL;
+
 				_direction:directionL;
+
 				_const1:-1;
+
 				_delta:deltaL;
+
 				_speed:speed;
+
 				_isUnderWater:isUnderWater;
+
 				_TrackRear:HP_Track_LFront;
+
 				_TrackFront:HP_Track_LRear;
+
 				_TrackUpRear:HP_TrackUp_LFront;
+
 				_TrackUpFront:HP_TrackUp_LRear;
+
 				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
       </selector>
@@ -3326,177 +2910,77 @@
           <type>	template	</type>
           <name>	Slip_NPC	</name>
           <parameters>	_matkind:matkindR;
+
 				_direction:directionR;
+
 				_const1:1;
+
 				_delta:deltaR;
+
 				_speed:speed;
+
 				_isUnderWater:isUnderWater;
+
 				_TrackRear:HP_Track_RRear;
+
 				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip_NPC	</name>
           <parameters>	_matkind:matkindL;
+
 				_direction:directionL;
+
 				_const1:1;
+
 				_delta:deltaL;
+
 				_speed:speed;
+
 				_isUnderWater:isUnderWater;
+
 				_TrackRear:HP_Track_LRear;
+
 				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip_NPC	</name>
           <parameters>	_matkind:matkindR;
+
 				_direction:directionR;
+
 				_const1:-1;
+
 				_delta:deltaR;
+
 				_speed:speed;
+
 				_isUnderWater:isUnderWater;
+
 				_TrackRear:HP_Track_RFront;
+
 				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip_NPC	</name>
           <parameters>	_matkind:matkindL;
+
 				_direction:directionL;
+
 				_const1:-1;
+
 				_delta:deltaL;
+
 				_speed:speed;
+
 				_isUnderWater:isUnderWater;
+
 				_TrackRear:HP_Track_LFront;
+
 				_TankDust:DM_Mid_Trail	</parameters>
-        </selector>
-      </selector>
-    </template>
-    <template>
-      <name>	Lanchester	</name>
-      <selector>
-        <type>	union	</type>
-        <isPC>	true	</isPC>
-        <selector>
-          <type>	template	</type>
-          <name>	DriftLanchester	</name>
-          <parameters>	_matkind:matkindR;
-				_delta:deltaR;
-				_hullAngle:hullAngle;
-				_TrackFront:HP_Track_RFront;
-				_TrackRear:HP_Track_RRear;
-				_Turret:DM_Mid_Trail	</parameters>
-        </selector>
-        <selector>
-          <type>	template	</type>
-          <name>	DriftLanchester	</name>
-          <parameters>	_matkind:matkindL;
-				_delta:deltaL;
-				_hullAngle:hullAngle;
-				_TrackFront:HP_Track_LFront;
-				_TrackRear:HP_Track_LRear;
-				_Turret:DM_Mid_Trail	</parameters>
-        </selector>
-        <selector>
-          <type>	template	</type>
-          <name>	SlipLanchester	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_delta:deltaR;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackFront:HP_Track_RFront;
-				_TrackRear:HP_Track_RRear;
-				_TankDust:DM_Mid_Trail	</parameters>
-        </selector>
-        <selector>
-          <type>	template	</type>
-          <name>	SlipLanchester	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_delta:deltaL;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackFront:HP_Track_LFront;
-				_TrackRear:HP_Track_LRear;
-				_TankDust:DM_Mid_Trail	</parameters>
-        </selector>
-      </selector>
-    </template>
-    <template>
-      <name>	Lanchester_NPC	</name>
-      <selector>
-        <type>	union	</type>
-        <isPC>	false	</isPC>
-        <selector>
-          <type>	template	</type>
-          <name>	SlipLanchester	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_delta:deltaR;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackFront:HP_Track_RFront;
-				_TrackRear:HP_Track_RRear;
-				_TankDust:DM_Mid_Trail	</parameters>
-        </selector>
-        <selector>
-          <type>	template	</type>
-          <name>	SlipLanchester	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_delta:deltaL;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackFront:HP_Track_LFront;
-				_TrackRear:HP_Track_LRear;
-				_TankDust:DM_Mid_Trail	</parameters>
-        </selector>
-      </selector>
-    </template>
-    <template>
-      <name>	TrackEffectMarkI	</name>
-      <selector>
-        <type>	union	</type>
-        <isPC>	true	</isPC>
-        <selector>
-          <type>	template	</type>
-          <name>	Slip_MarkI	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_speed:speed;
-				_Track:HP_Track_RFront	</parameters>
-        </selector>
-        <selector>
-          <type>	template	</type>
-          <name>	Slip_MarkI	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_speed:speed;
-				_Track:HP_Track_LFront	</parameters>
-        </selector>
-      </selector>
-    </template>
-    <template>
-      <name>	TrackEffectMarkI_NPC	</name>
-      <selector>
-        <type>	union	</type>
-        <isPC>	false	</isPC>
-        <selector>
-          <type>	template	</type>
-          <name>	Slip_MarkI	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_speed:speed;
-				_Track:HP_Track_RFront	</parameters>
-        </selector>
-        <selector>
-          <type>	template	</type>
-          <name>	Slip_MarkI	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_speed:speed;
-				_Track:HP_Track_LFront	</parameters>
         </selector>
       </selector>
     </template>
@@ -3562,35 +3046,5 @@
         </selector>
       </selector>
     </largeTankMud>
-    <LanchesterMud>
-      <selector>
-        <type>	union	</type>
-        <selector>
-          <type>	template	</type>
-          <name>	Lanchester	</name>
-          <constantsGroup>	Lanchester	</constantsGroup>
-        </selector>
-        <selector>
-          <type>	template	</type>
-          <name>	Lanchester_NPC	</name>
-          <constantsGroup>	Lanchester	</constantsGroup>
-        </selector>
-      </selector>
-    </LanchesterMud>
-    <MarkIMud>
-      <selector>
-        <type>	union	</type>
-        <selector>
-          <type>	template	</type>
-          <name>	TrackEffectMarkI	</name>
-          <constantsGroup>	markI	</constantsGroup>
-        </selector>
-        <selector>
-          <type>	template	</type>
-          <name>	TrackEffectMarkI_NPC	</name>
-          <constantsGroup>	markI	</constantsGroup>
-        </selector>
-      </selector>
-    </MarkIMud>
   </effects>
 </trackslip_effects.xml>

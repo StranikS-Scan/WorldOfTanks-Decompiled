@@ -3,10 +3,11 @@
     <_vehicleAI></_vehicleAI>
   </TempProperties>
   <CellMethods>
-    <vehicleAI_receiveVisibilityEvents>
-      <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
-      </Arg>
-    </vehicleAI_receiveVisibilityEvents>
+    <vehicleAI_receiveVisibilityUpdate>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+    </vehicleAI_receiveVisibilityUpdate>
     <vehicleAI_autoBotScriptStep>
       <Arg>	UINT8	</Arg>
       <Arg>	PYTHON	</Arg>

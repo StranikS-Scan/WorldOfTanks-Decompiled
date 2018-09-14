@@ -585,23 +585,89 @@
     </SCR_508>
     <SCR_506>	shared	</SCR_506>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAN>
+          <smplEnginePower>	592.0775	</smplEnginePower>
+        </Ford_GAN>
+        <Continental_AV-1790-1>
+          <smplEnginePower>	744.3259	</smplEnginePower>
+        </Continental_AV-1790-1>
+      </engines>
+      <chassis>
+        <Chassis_T25_AT>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T25_AT>
+        <Chassis_T25_AT_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T25_AT_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T25_AT>
-        <alpha>	0.13685	</alpha>
-      </Chassis_T25_AT>
-      <Chassis_T25_AT_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_T25_AT_2>
-    </chassis>
-    <engines>
-      <Ford_GAN>
-        <bravo>	148.0194	</bravo>
-      </Ford_GAN>
-      <Continental_AV-1790-1>
-        <bravo>	186.0815	</bravo>
-      </Continental_AV-1790-1>
-    </engines>
     <armour>	1.008639078	</armour>
   </clientAdjustmentFactors>
   <effects>

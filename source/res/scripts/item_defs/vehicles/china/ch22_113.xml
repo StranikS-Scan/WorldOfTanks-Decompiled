@@ -32,7 +32,7 @@
       <armor_6>	30	</armor_6>
       <armor_7>	90	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	200	</armor_9>
+      <armor_9>	230	</armor_9>
       <armor_10>	40	</armor_10>
       <armor_11>	120	</armor_11>
       <armor_12>	30	</armor_12>
@@ -570,10 +570,10 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.140976 0.000289122 2.22755	</rayStart>
-              <rayEnd>	0.0698846 -0.113247 2.22308	</rayEnd>
-              <rayUp>	0.136 0.115 5	</rayUp>
-              <size>	0.686	</size>
+              <rayStart>	0.000007 0.000289122 1.38561	</rayStart>
+              <rayEnd>	-0.0533893 0.0459478 1.38555	</rayEnd>
+              <rayUp>	0.14 0.14 5	</rayUp>
+              <size>	0.694	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
@@ -592,7 +592,7 @@
         <collisionModelServer>	vehicles/chinese/Ch22_113/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch22_113/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.141594 0.276077 1.35959	</gunPosition>
+      <gunPosition>	0.000000 0.276083 1.35962	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-1.33334 0.407316 0.547426	</rayStart>
@@ -638,17 +638,52 @@
   <radios>
     <A-220B_1>	shared	</A-220B_1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_V-2-54SC>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </_V-2-54SC>
+      </engines>
+      <chassis>
+        <Chassis_Ch22_113>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch22_113>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch22_113>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Ch22_113>
-    </chassis>
-    <engines>
-      <_V-2-54SC>
-        <bravo>	198.2402	</bravo>
-      </_V-2-54SC>
-    </engines>
     <armour>	1.250992035	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -471,17 +471,52 @@
   <radios>
     <British_Wireless_set_N19>	shared	</British_Wireless_set_N19>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Meteor_MkXI>
+          <smplEnginePower>	845.8249	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkXI>
+      </engines>
+      <chassis>
+        <Chassis_GB52_A45>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB52_A45>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB52_A45>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB52_A45>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Meteor_MkXI>
-        <bravo>	211.4562	</bravo>
-      </Rolls_Royse_Meteor_MkXI>
-    </engines>
     <armour>	1.001662559	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -1,11 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
-import BigWorld
+import math
+from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
+from helpers import time_utils
 from helpers.i18n import makeString
 from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.formatters import text_styles, moneyWithIcon
+from shared_utils import findFirst
+TANKMAN_DISMISSED = 'dismissed'
+_TIME_FORMAT_UNITS = [('days', time_utils.ONE_DAY), ('hours', time_utils.ONE_HOUR), ('minutes', time_utils.ONE_MINUTE)]
 
 class TankmanRoleLevelField(ToolTipDataField):
 
@@ -63,13 +70,53 @@ class TankmanSkillListField(ToolTipDataField):
              'level': skill.level,
              'enabled': tankman.isInTank or skill.isEnable})
 
+        newSkillsCount, newSkillLevel = tankman.newSkillCount
+        if newSkillsCount > 0:
+            if newSkillsCount > 2:
+                newSkills = [str(newSkillsCount - 1) + 'x100']
+            elif newSkillsCount == 2:
+                newSkills = [100]
+            else:
+                newSkills = []
+            if newSkillLevel > 0:
+                newSkills.append(newSkillLevel)
+            newSkillStr = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_NEWSKILL)
+            for idx, skillLevel in enumerate(newSkills, start=len(skillsList)):
+                skillsList.append({'id': str(idx),
+                 'label': newSkillStr,
+                 'level': skillLevel,
+                 'enabled': False})
+
         return skillsList
 
 
 class TankmanNewSkillCountField(ToolTipDataField):
 
     def _getValue(self):
-        return self._tooltip.item.newSkillCount[0]
+        tankman = self._tooltip.item
+        return tankman.newSkillCount[0] if not tankman.isDismissed else 0
+
+
+def formatRecoveryLeftValue(secondsLeft):
+    closestUnit = findFirst(lambda (k, v): v < secondsLeft, _TIME_FORMAT_UNITS)
+    if closestUnit is not None:
+        name, factor = closestUnit
+        timeLeft = int(math.ceil(float(secondsLeft) / factor))
+        return makeString(TOOLTIPS.template_all_short(name), value=timeLeft)
+    else:
+        return makeString(TOOLTIPS.TEMPLATE_TIME_LESSTHENMINUTE)
+        return
+
+
+def getRecoveryStatusText(restoreInfo):
+    price, timeLeft = restoreInfo
+    if price.credits == 0:
+        restoreConfig = g_itemsCache.items.shop.tankmenRestoreConfig
+        creditsDuration = restoreConfig.creditsDuration - restoreConfig.freeDuration
+        text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_FREE_BODY, totalLeftValue=formatRecoveryLeftValue(timeLeft), freeLeftValue=formatRecoveryLeftValue(timeLeft - creditsDuration), price=moneyWithIcon(restoreConfig.cost), withMoneyLeftValue=formatRecoveryLeftValue(creditsDuration))
+    else:
+        text = makeString(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_GOLD_BODY, totalLeftValue=formatRecoveryLeftValue(timeLeft), price=moneyWithIcon(price))
+    return text_styles.main(text)
 
 
 class TankmanStatusField(ToolTipDataField):
@@ -83,31 +130,37 @@ class TankmanStatusField(ToolTipDataField):
         if tankman.isInTank:
             vehicle = g_itemsCache.items.getVehicle(tankman.vehicleInvID)
         nativeVehicle = g_itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
-        inactiveRoles = list()
-        if tankman.isInTank:
-            for skill in tankman.skills:
-                if not skill.isEnable:
-                    role = self.__getRoleBySkill(skill)
-                    if role not in inactiveRoles:
-                        inactiveRoles.append(role)
+        if tankman.isDismissed:
+            return {'header': text_styles.warning(TOOLTIPS.BARRACKS_TANKMEN_RECOVERY_HEADER),
+             'text': getRecoveryStatusText(getTankmenRestoreInfo(tankman)),
+             'level': TANKMAN_DISMISSED}
+        else:
+            inactiveRoles = list()
+            if tankman.isInTank:
+                for skill in tankman.skills:
+                    if not skill.isEnable:
+                        role = self.__getRoleBySkill(skill)
+                        if role not in inactiveRoles:
+                            inactiveRoles.append(role)
 
-        if vehicle is not None and nativeVehicle.innationID != vehicle.innationID:
-            if (vehicle.isPremium or vehicle.isPremiumIGR) and vehicle.type in nativeVehicle.tags:
-                header = makeString(statusTemplate % 'wrongPremiumVehicle/header')
-                text = makeString(statusTemplate % 'wrongPremiumVehicle/text') % {'vehicle': vehicle.shortUserName}
-            else:
-                header = makeString(statusTemplate % 'wrongVehicle/header') % {'vehicle': vehicle.shortUserName}
-                text = makeString(statusTemplate % 'wrongVehicle/text')
-        elif len(inactiveRoles):
+            if vehicle is not None and nativeVehicle.innationID != vehicle.innationID:
+                if (vehicle.isPremium or vehicle.isPremiumIGR) and vehicle.type in nativeVehicle.tags:
+                    header = makeString(statusTemplate % 'wrongPremiumVehicle/header')
+                    text = makeString(statusTemplate % 'wrongPremiumVehicle/text') % {'vehicle': vehicle.shortUserName}
+                else:
+                    header = makeString(statusTemplate % 'wrongVehicle/header') % {'vehicle': vehicle.shortUserName}
+                    text = makeString(statusTemplate % 'wrongVehicle/text')
+            elif len(inactiveRoles):
 
-            def roleFormat(role):
-                return makeString(statusTemplate % 'inactiveSkillsRoleFormat') % makeString(getSkillsConfig()[role]['userString'])
+                def roleFormat(role):
+                    return makeString(statusTemplate % 'inactiveSkillsRoleFormat') % makeString(getSkillsConfig()[role]['userString'])
 
-            header = makeString(statusTemplate % 'inactiveSkills/header')
-            text = makeString(statusTemplate % 'inactiveSkills/text') % {'skills': ', '.join([ roleFormat(role) for role in inactiveRoles ])}
-        return {'header': header,
-         'text': text,
-         'level': Vehicle.VEHICLE_STATE_LEVEL.WARNING}
+                header = makeString(statusTemplate % 'inactiveSkills/header')
+                text = makeString(statusTemplate % 'inactiveSkills/text') % {'skills': ', '.join([ roleFormat(role) for role in inactiveRoles ])}
+            return {'header': header,
+             'text': text,
+             'level': Vehicle.VEHICLE_STATE_LEVEL.WARNING}
+            return
 
     def __getRoleBySkill(self, skill):
         for role, skills in SKILLS_BY_ROLES.iteritems():

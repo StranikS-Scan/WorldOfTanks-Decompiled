@@ -670,7 +670,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
           <camouflage>
             <tiling>	0.655 0.655 0.22 0.36	</tiling>
           </camouflage>
@@ -789,23 +789,89 @@
     </AN-GRC-3>
     <AN-ARC-27>	shared	</AN-ARC-27>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AOI-628-1>
+          <smplEnginePower>	359.4756	</smplEnginePower>
+        </Continental_AOI-628-1>
+        <Continental_AOI-628-2>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </Continental_AOI-628-2>
+      </engines>
+      <chassis>
+        <Chassis_T71>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T71>
+        <Chassis_T71_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T71_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T71>
-        <alpha>	0.07245	</alpha>
-      </Chassis_T71>
-      <Chassis_T71_2>
-        <alpha>	0.0644	</alpha>
-      </Chassis_T71_2>
-    </chassis>
-    <engines>
-      <Continental_AOI-628-1>
-        <bravo>	89.8689	</bravo>
-      </Continental_AOI-628-1>
-      <Continental_AOI-628-2>
-        <bravo>	105.7281	</bravo>
-      </Continental_AOI-628-2>
-    </engines>
     <armour>	0.88113489	</armour>
   </clientAdjustmentFactors>
   <effects>

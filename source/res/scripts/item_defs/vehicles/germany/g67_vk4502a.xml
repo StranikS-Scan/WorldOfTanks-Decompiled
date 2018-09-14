@@ -836,31 +836,97 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Porsche_Typ_100_1>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Porsche_Typ_100_1>
+        <Porsche_Typ_100_3>
+          <smplEnginePower>	708.3784	</smplEnginePower>
+        </Porsche_Typ_100_3>
+        <Porsche_Deutz_Typ180_2>
+          <smplEnginePower>	888.1161	</smplEnginePower>
+        </Porsche_Deutz_Typ180_2>
+      </engines>
+      <chassis>
+        <Chassis_VK4502A>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_VK4502A>
+        <Chassis_VK4502A_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_VK4502A_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_105mm_KwK45_L52>
         <delta>	1.0855	</delta>
       </_105mm_KwK45_L52>
     </guns>
-    <chassis>
-      <Chassis_VK4502A>
-        <alpha>	0.13685	</alpha>
-      </Chassis_VK4502A>
-      <Chassis_VK4502A_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_VK4502A_2>
-    </chassis>
-    <engines>
-      <Porsche_Typ_100_1>
-        <bravo>	158.5922	</bravo>
-      </Porsche_Typ_100_1>
-      <Porsche_Typ_100_3>
-        <bravo>	177.0946	</bravo>
-      </Porsche_Typ_100_3>
-      <Porsche_Deutz_Typ180_2>
-        <bravo>	222.029	</bravo>
-      </Porsche_Deutz_Typ180_2>
-    </engines>
     <armour>	0.976783566	</armour>
   </clientAdjustmentFactors>
   <effects>

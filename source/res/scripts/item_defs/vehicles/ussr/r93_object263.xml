@@ -336,17 +336,52 @@
   <radios>
     <_10RK-26>	shared	</_10RK-26>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M-50T>
+          <smplEnginePower>	1110.145	</smplEnginePower>
+        </M-50T>
+      </engines>
+      <chassis>
+        <Chassis_Object263>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Object263>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Object263>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Object263>
-    </chassis>
-    <engines>
-      <M-50T>
-        <bravo>	277.5363	</bravo>
-      </M-50T>
-    </engines>
     <armour>	0.910918118	</armour>
   </clientAdjustmentFactors>
   <effects>

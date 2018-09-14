@@ -553,17 +553,52 @@
   <radios>
     <N19Mk3_IGR>	shared	</N19Mk3_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royse_Meteor_MkIV_IGR>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Rolls_Royse_Meteor_MkIV_IGR>
+      </engines>
+      <chassis>
+        <Chassis_GB21_Cromwell_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB21_Cromwell_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB21_Cromwell_2_IGR>
-        <alpha>	0.0805	</alpha>
-      </Chassis_GB21_Cromwell_2_IGR>
-    </chassis>
-    <engines>
-      <Rolls_Royse_Meteor_MkIV_IGR>
-        <bravo>	171.8082	</bravo>
-      </Rolls_Royse_Meteor_MkIV_IGR>
-    </engines>
     <armour>	0.896736835	</armour>
   </clientAdjustmentFactors>
   <effects>

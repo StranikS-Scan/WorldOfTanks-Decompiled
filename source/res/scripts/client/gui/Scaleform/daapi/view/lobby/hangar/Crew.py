@@ -82,6 +82,7 @@ class Crew(CrewMeta):
                 newSkillsCount, lastNewSkillLvl = tankman.newSkillCount
                 if newSkillsCount > 0:
                     skillsList.append({'buy': True,
+                     'buyCount': newSkillsCount - 1,
                      'tankmanID': tankman.invID,
                      'level': lastNewSkillLvl})
                 tankmanData = {'firstName': tankman.firstUserName,

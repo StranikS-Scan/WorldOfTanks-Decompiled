@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_constants.py
 from shared_utils import CONST_CONTAINER
+from collections import namedtuple
 VERSION = 'VERSION'
 
 class GRAPHICS(CONST_CONTAINER):
@@ -77,7 +78,6 @@ class GAME(CONST_CONTAINER):
     SNIPER_MODE_STABILIZATION = 'horStabilizationSnp'
     INCREASED_ZOOM = 'increasedZoom'
     SNIPER_MODE_BY_SHIFT = 'sniperModeByShift'
-    SHOW_BATTLE_EFFICIENCY_RIBBONS = 'showBattleEfficiencyRibbons'
     PLAYERS_PANELS_SHOW_LEVELS = 'ppShowLevels'
     PLAYERS_PANELS_SHOW_TYPES = 'ppShowTypes'
     PLAYERS_PANELS_STATE = 'ppState'
@@ -93,6 +93,7 @@ class GAME(CONST_CONTAINER):
     MINIMAP_MAX_VIEW_RANGE = 'minimapMaxViewRange'
     MINIMAP_DRAW_RANGE = 'minimapDrawRange'
     SNIPER_MODE_SWINGING_ENABLED = 'SNIPER_MODE_SWINGING_ENABLED'
+    CAROUSEL_TYPE = 'carouselType'
 
 
 class TUTORIAL(CONST_CONTAINER):
@@ -111,19 +112,27 @@ class TUTORIAL(CONST_CONTAINER):
 
 
 class SOUND(CONST_CONTAINER):
+    GAME_EVENT_AMBIENT = 'specialAmbientVolume'
+    GAME_EVENT_EFFECTS = 'specialEffectsVolume'
+    GAME_EVENT_GUI = 'specialGuiVolume'
+    GAME_EVENT_MUSIC = 'specialMusicVolume'
+    GAME_EVENT_VEHICLES = 'specialVehiclesVolume'
+    GAME_EVENT_VOICE = 'specialVoiceNotificationVolume'
     MASTER_TOGGLE = 'masterVolumeToggle'
     SOUND_QUALITY = 'soundQuality'
     SOUND_QUALITY_VISIBLE = 'soundQualityVisible'
     MASTER = 'masterVolume'
     MUSIC = 'musicVolume'
+    MUSIC_HANGAR = 'musicHangar'
     VEHICLES = 'vehiclesVolume'
     EFFECTS = 'effectsVolume'
     GUI = 'guiVolume'
     AMBIENT = 'ambientVolume'
     NATIONS_VOICES = 'nationalVoices'
     ALT_VOICES = 'alternativeVoices'
-    DYNAMIC_RANGE = 'dynamicRange'
     SOUND_DEVICE = 'soundDevice'
+    VOICE_NOTIFICATION = 'voiceNotificationVolume'
+    DETECTION_ALERT_SOUND = 'bulbVoices'
     CAPTURE_DEVICES = 'captureDevice'
     VOIP_ENABLE = 'enableVoIP'
     VOIP_MASTER = 'masterVivoxVolume'
@@ -131,6 +140,8 @@ class SOUND(CONST_CONTAINER):
     VOIP_MASTER_FADE = 'masterFadeVivoxVolume'
     VOIP_SUPPORTED = 'voiceChatSupported'
     BASS_BOOST = 'bassBoost'
+    NIGHT_MODE = 'nightMode'
+    LOW_QUALITY = 'lowQualitySound'
 
 
 class CONTROLS(CONST_CONTAINER):
@@ -167,6 +178,55 @@ class OTHER(CONST_CONTAINER):
     VIBRO_GUI = 'vibroGUI'
 
 
+class FEEDBACK(CONST_CONTAINER):
+    DAMAGE_INDICATOR = 'feedbackDamageIndicator'
+    DAMAGE_LOG = 'feedbackDamageLog'
+    BATTLE_EVENTS = 'feedbackBattleEvents'
+
+
+class DAMAGE_INDICATOR(CONST_CONTAINER):
+    TYPE = 'damageIndicatorType'
+    PRESETS = 'damageIndicatorPresets'
+    DAMAGE_VALUE = 'damageIndicatorDamageValue'
+    VEHICLE_INFO = 'damageIndicatorVehicleInfo'
+    ANIMATION = 'damageIndicatorAnimation'
+
+
+class DAMAGE_LOG(CONST_CONTAINER):
+    TOTAL_DAMAGE = 'damageLogTotalDamage'
+    BLOCKED_DAMAGE = 'damageLogBlockedDamage'
+    ASSIST_DAMAGE = 'damageLogAssistDamage'
+    SHOW_DETAILS = 'damageLogShowDetails'
+
+
+class BATTLE_EVENTS(CONST_CONTAINER):
+    SHOW_IN_BATTLE = 'battleEventsShowInBattle'
+    ENEMY_HP_DAMAGE = 'battleEventsEnemyHpDamage'
+    ENEMY_BURNING = 'battleEventsEnemyBurning'
+    ENEMY_RAM_ATTACK = 'battleEventsEnemyRamAttack'
+    BLOCKED_DAMAGE = 'battleEventsBlockedDamage'
+    ENEMY_DETECTION_DAMAGE = 'battleEventsEnemyDetectionDamage'
+    ENEMY_TRACK_DAMAGE = 'battleEventsEnemyTrackDamage'
+    ENEMY_DETECTION = 'battleEventsEnemyDetection'
+    ENEMY_KILL = 'battleEventsEnemyKill'
+    BASE_CAPTURE_DROP = 'battleEventsBaseCaptureDrop'
+    BASE_CAPTURE = 'battleEventsBaseCapture'
+    ENEMY_CRITICAL_HIT = 'battleEventsEnemyCriticalHit'
+    EVENT_NAME = 'battleEventsEventName'
+    VEHICLE_INFO = 'battleEventsVehicleInfo'
+
+
 class CONTACTS(CONST_CONTAINER):
     SHOW_OFFLINE_USERS = 'showOfflineUsers'
     SHOW_OTHERS_CATEGORY = 'showOthersCategory'
+
+
+class SETTINGS_GROUP(CONST_CONTAINER):
+    GAME_SETTINGS = 'GameSettings'
+    GRAPHICS_SETTINGS = 'GraphicSettings'
+    SOUND_SETTINGS = 'SoundSettings'
+    CONTROLS_SETTINGS = 'ControlsSettings'
+    AIM_SETTINGS = 'AimSettings'
+    MARKERS_SETTINGS = 'MarkerSettings'
+    OTHER_SETTINGS = 'OtherSettings'
+    FEEDBACK_SETTINGS = 'FeedbackSettings'

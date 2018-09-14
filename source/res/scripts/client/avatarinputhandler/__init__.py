@@ -316,11 +316,9 @@ class AvatarInputHandler(CallbackDelayer):
         arcadeMode.camera.reinitMatrix()
 
     def deactivatePostmortem(self):
+        self.onControlModeChanged('arcade')
         arcadeMode = self.__ctrls['arcade']
         arcadeMode.camera.setToVehicleDirection()
-        pos = self.getDesiredShotPoint()
-        self.onControlModeChanged('arcade', prevModeName='postmortem', preferredPos=pos, camMatrix=arcadeMode.camera.camera.matrix)
-        arcadeMode.camera.camera.resetCollider()
         self.__identifySPG()
         self.setReloading(-1)
 
@@ -414,9 +412,9 @@ class AvatarInputHandler(CallbackDelayer):
             if isObserverMode and self.ctrlModeName == _CTRL_MODE.POSTMORTEM:
                 player = BigWorld.player()
                 self.__observerVehicle = player.vehicle.id if player.vehicle else None
-            ctrl = BattleReplay.g_replayCtrl
-            if ctrl.isRecording:
-                ctrl.setControlMode(eMode)
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isRecording:
+                replayCtrl.setControlMode(eMode)
             ctrlState = self.__curCtrl.dumpState()
             self.__curCtrl.disable()
             prevCtrl = self.__curCtrl
@@ -449,8 +447,10 @@ class AvatarInputHandler(CallbackDelayer):
                 self.__curCtrl.enable(ctrlState=ctrlState, vehicleID=self.__observerVehicle, **args)
             else:
                 self.__curCtrl.enable(ctrlState=ctrlState, **args)
-            self.onCameraChanged(eMode, vehicle.id if isObserverMode else None)
-            self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
+            isReplayPlaying = replayCtrl.isPlaying
+            self.onCameraChanged(eMode, vehicle.id if isObserverMode or isReplayPlaying else None)
+            if not isReplayPlaying:
+                self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
             return
 
     def getTargeting(self):

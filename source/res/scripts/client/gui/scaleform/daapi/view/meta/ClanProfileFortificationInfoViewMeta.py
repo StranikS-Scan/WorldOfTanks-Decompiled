@@ -8,19 +8,16 @@ class ClanProfileFortificationInfoViewMeta(BaseDAAPIComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends BaseDAAPIComponent
-    null
     """
 
     def as_setFortDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by ClanProfileFortificationViewVO (AS)
         """
         return self.flashObject.as_setFortData(data) if self._isDAAPIInited() else None
 
     def as_setDataS(self, data):
         """
-        :param data:
-        :return :
+        :param data: Represented by ClanProfileFortificationViewInitVO (AS)
         """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

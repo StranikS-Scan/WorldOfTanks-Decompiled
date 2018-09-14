@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileFortificationView.py
-import weakref
 from adisp import process
+from debug_utils import LOG_DEBUG
 from gui.clans import formatters as clans_fmts
 from gui.Scaleform.daapi.view.lobby.clans.profile import fort_data_receivers
 from gui.Scaleform.daapi.view.meta.ClanProfileFortificationViewMeta import ClanProfileFortificationViewMeta
@@ -19,6 +19,15 @@ class ClanProfileFortificationView(ClanProfileFortificationViewMeta, FortListene
         super(ClanProfileFortificationView, self).__init__()
         self._fortDP = None
         return
+
+    @property
+    def fortDP(self):
+        """
+        Current fort data provider.
+        Expose it to dependant views (ClanProfileFortificationInfoView, ClanProfileFortificationPromoView),
+        since it can be changed if our belonging to clan changes and we can not set-and-forget it
+        """
+        return self._fortDP
 
     def setClanDossier(self, clanDossier):
         super(ClanProfileFortificationView, self).setClanDossier(clanDossier)
@@ -50,7 +59,7 @@ class ClanProfileFortificationView(ClanProfileFortificationViewMeta, FortListene
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias in (CLANS_ALIASES.CLAN_PROFILE_FORT_INFO_VIEW_ALIAS, CLANS_ALIASES.CLAN_PROFILE_FORT_PROMO_VIEW_ALIAS):
-            viewPy.setProxy(self, weakref.proxy(self._fortDP), self._clanDossier)
+            viewPy.setProxy(self, self._clanDossier)
 
     @process
     def __updateView(self):
@@ -61,25 +70,31 @@ class ClanProfileFortificationView(ClanProfileFortificationViewMeta, FortListene
             self._updateDummy()
             self._hideWaiting()
             return
-        if self._clanDossier.isMyClan():
-            self._fortDP = fort_data_receivers.OwnClanDataReceiver()
         else:
-            self._fortDP = fort_data_receivers.ClanDataReceiver()
-        hasFort = yield self._fortDP.hasFort(self._clanDossier)
-        if self.isDisposed():
-            return
-        self._updateClanInfo(clanInfo)
-        if hasFort:
-            self.__linkage = CLANS_ALIASES.CLAN_PROFILE_FORT_INFO_VIEW_LINKAGE
-        else:
-            self.__linkage = CLANS_ALIASES.CLAN_PROFILE_FORT_PROMO_VIEW_LINKAGE
-        if self.isShowDataBlocked():
-            self.__showDummyBody()
+            clsSelector = {True: fort_data_receivers.OwnClanDataReceiver,
+             False: fort_data_receivers.ClanDataReceiver}
+            isMyClan = self._clanDossier.isMyClan()
+            receiverCls = clsSelector[isMyClan]
+            if type(self._fortDP) != receiverCls:
+                if self._fortDP is not None:
+                    LOG_DEBUG('Replacing Fort DP', type(self._fortDP), receiverCls)
+                self._fortDP = receiverCls()
+            hasFort = yield self._fortDP.hasFort(self._clanDossier)
+            if self.isDisposed():
+                return
+            self._updateClanInfo(clanInfo)
+            if hasFort:
+                self.__linkage = CLANS_ALIASES.CLAN_PROFILE_FORT_INFO_VIEW_LINKAGE
+            else:
+                self.__linkage = CLANS_ALIASES.CLAN_PROFILE_FORT_PROMO_VIEW_LINKAGE
+            if self.isShowDataBlocked():
+                self.__showDummyBody()
+                self._hideWaiting()
+                return
+            self._updateHeaderState()
+            self.as_setDataS(self.__linkage)
             self._hideWaiting()
             return
-        self._updateHeaderState()
-        self.as_setDataS(self.__linkage)
-        self._hideWaiting()
 
     def __showDummyBody(self):
         self.as_showBodyDummyS({'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON,

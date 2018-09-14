@@ -5,7 +5,6 @@ import Math
 from Math import Vector3, Matrix
 import math
 from AvatarInputHandler import mathUtils
-from AvatarInputHandler.Oscillator import Oscillator, NoiseOscillator, RandomNoiseOscillatorFlat, RandomNoiseOscillatorSpherical
 from AvatarInputHandler.cameras import readVec3, readFloat, ImpulseReason
 
 def createCrosshairMatrix(offsetFromNearPlane):
@@ -17,38 +16,38 @@ def createOscillatorFromSection(oscillatorSection, constraintsAsAngle=True):
     constraints = readVec3(oscillatorSection, 'constraints', (0.0, 0.0, 0.0), (175.0, 175.0, 175.0), 10.0)
     if constraintsAsAngle:
         constraints = Vector3((math.radians(constraints.x), math.radians(constraints.y), math.radians(constraints.z)))
-    constructorParams = {'oscillator': __getOscillator3dParams,
-     'noiseOscillator': __getOscillator3dParams,
-     'randomNoiseOscillatorFlat': __getOscillator1dParams,
-     'randomNoiseOscillatorSpherical': __getRandomNoiseOscillatorSphericalParams}.get(oscillatorSection.name, __getOscillator3dParams)(oscillatorSection)
-    constructor = Oscillator
+    constructorParams = {'oscillator': __getOscillatorParams,
+     'noiseOscillator': __getNoiseOscillatorParams,
+     'randomNoiseOscillatorFlat': __getRandomNoiseOscillatorFlatParams,
+     'randomNoiseOscillatorSpherical': __getRandomNoiseOscillatorSphericalParams}.get(oscillatorSection.name, __getOscillatorParams)(oscillatorSection)
+    oscillator = None
     if oscillatorSection.name == 'noiseOscillator':
-        constructor = NoiseOscillator
+        oscillator = Math.PyNoiseOscillator(*constructorParams)
     elif oscillatorSection.name == 'randomNoiseOscillatorFlat':
-        constructor = RandomNoiseOscillatorFlat
+        oscillator = Math.PyRandomNoiseOscillatorFlat(*constructorParams)
     elif oscillatorSection.name == 'randomNoiseOscillatorSpherical':
-        constructor = RandomNoiseOscillatorSpherical
+        oscillator = Math.PyRandomNoiseOscillatorSpherical(*constructorParams)
     else:
-        constructorParams['constraints'] = constraints
-    oscillator = constructor(**constructorParams)
+        constructorParams.append(constraints)
+        oscillator = Math.PyOscillator(*constructorParams)
     return oscillator
 
 
-def __getOscillator3dParams(oscillatorSection):
-    return {'mass': readFloat(oscillatorSection, 'mass', 1e-05, 9000, 3.5),
-     'stiffness': readVec3(oscillatorSection, 'stiffness', (1e-05, 1e-05, 1e-05), (9000, 9000, 9000), 60.0),
-     'drag': readVec3(oscillatorSection, 'drag', (1e-05, 1e-05, 1e-05), (9000, 9000, 9000), 9.0)}
+def __getOscillatorParams(oscillatorSection):
+    return [readFloat(oscillatorSection, 'mass', 1e-05, 9000, 3.5), readVec3(oscillatorSection, 'stiffness', (1e-05, 1e-05, 1e-05), (9000, 9000, 9000), 60.0), readVec3(oscillatorSection, 'drag', (1e-05, 1e-05, 1e-05), (9000, 9000, 9000), 9.0)]
 
 
-def __getOscillator1dParams(oscillatorSection):
-    return {'mass': readFloat(oscillatorSection, 'mass', 1e-05, 9000, 3.5),
-     'stiffness': readFloat(oscillatorSection, 'stiffness', 1e-05, 9000, 3.5),
-     'drag': readFloat(oscillatorSection, 'drag', 1e-05, 9000, 3.5)}
+def __getNoiseOscillatorParams(oscillatorSection):
+    return [readFloat(oscillatorSection, 'mass', 1e-05, 9000, 3.5), readVec3(oscillatorSection, 'stiffness', (1e-05, 1e-05, 1e-05), (9000, 9000, 9000), 60.0), readVec3(oscillatorSection, 'drag', (1e-05, 1e-05, 1e-05), (9000, 9000, 9000), 9.0)]
+
+
+def __getRandomNoiseOscillatorFlatParams(oscillatorSection):
+    return [readFloat(oscillatorSection, 'mass', 1e-05, 9000, 3.5), readFloat(oscillatorSection, 'stiffness', 1e-05, 9000, 3.5), readFloat(oscillatorSection, 'drag', 1e-05, 9000, 3.5)]
 
 
 def __getRandomNoiseOscillatorSphericalParams(oscillatorSection):
-    oscillatorParams = __getOscillator1dParams(oscillatorSection)
-    oscillatorParams['scaleCoeff'] = readVec3(oscillatorSection, 'scaleCoeff', Vector3(0.0), Vector3(9000), Vector3(1.0))
+    oscillatorParams = __getRandomNoiseOscillatorFlatParams(oscillatorSection)
+    oscillatorParams.append(readVec3(oscillatorSection, 'scaleCoeff', Vector3(0.0), Vector3(9000), Vector3(1.0)))
     return oscillatorParams
 
 
@@ -124,23 +123,26 @@ class AccelerationSmoother(object):
         self.__hasChangedDirection = False
 
     def update(self, vehicle, deltaTime):
-        curVelocity = vehicle.filter.velocity
-        acceleration = vehicle.filter.acceleration
-        acceleration = self.__accelerationFilter.add(acceleration)
-        movementFlags = vehicle.engineMode[1]
-        moveMask = 3
-        self.__hasChangedDirection = movementFlags & moveMask ^ self.__prevMovementFlags & moveMask or curVelocity.dot(self.__prevVelocity) <= 0.01
-        self.__prevMovementFlags = movementFlags
-        self.__prevVelocity = curVelocity
-        self.__timeLapsedSinceDirChange += deltaTime
-        if self.__hasChangedDirection:
-            self.__timeLapsedSinceDirChange = 0.0
-        elif self.__timeLapsedSinceDirChange > self.__maxAccelerationDuration:
-            invVehMat = Matrix(vehicle.matrix)
-            invVehMat.invert()
-            accelerationRelativeToVehicle = invVehMat.applyVector(acceleration)
-            accelerationRelativeToVehicle.x = 0.0
-            accelerationRelativeToVehicle.z = 0.0
-            acceleration = Matrix(vehicle.matrix).applyVector(accelerationRelativeToVehicle)
-        self.__acceleration = acceleration
-        return acceleration
+        try:
+            curVelocity = vehicle.filter.velocity
+            acceleration = vehicle.filter.acceleration
+            acceleration = self.__accelerationFilter.add(acceleration)
+            movementFlags = vehicle.engineMode[1]
+            moveMask = 3
+            self.__hasChangedDirection = movementFlags & moveMask ^ self.__prevMovementFlags & moveMask or curVelocity.dot(self.__prevVelocity) <= 0.01
+            self.__prevMovementFlags = movementFlags
+            self.__prevVelocity = curVelocity
+            self.__timeLapsedSinceDirChange += deltaTime
+            if self.__hasChangedDirection:
+                self.__timeLapsedSinceDirChange = 0.0
+            elif self.__timeLapsedSinceDirChange > self.__maxAccelerationDuration:
+                invVehMat = Matrix(vehicle.matrix)
+                invVehMat.invert()
+                accelerationRelativeToVehicle = invVehMat.applyVector(acceleration)
+                accelerationRelativeToVehicle.x = 0.0
+                accelerationRelativeToVehicle.z = 0.0
+                acceleration = Matrix(vehicle.matrix).applyVector(accelerationRelativeToVehicle)
+            self.__acceleration = acceleration
+            return acceleration
+        except:
+            return Math.Vector3(0.0, 0.0, 0.0)

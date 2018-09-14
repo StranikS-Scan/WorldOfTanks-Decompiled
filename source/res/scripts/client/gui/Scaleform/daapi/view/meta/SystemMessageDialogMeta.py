@@ -8,19 +8,10 @@ class SystemMessageDialogMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def as_setInitDataS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_setInitData(value) if self._isDAAPIInited() else None
 
     def as_setMessageDataS(self, value):
-        """
-        :param value:
-        :return :
-        """
         return self.flashObject.as_setMessageData(value) if self._isDAAPIInited() else None

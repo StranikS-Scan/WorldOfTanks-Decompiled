@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G96_VK3002M/VK3002M_CM.dds	</exclusionMask>
+    <exclusionMask>	vehicles/german/G96_VK3002M\VK3002M_chassis_01_AM.dds	</exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -34,13 +34,8 @@
       <armor_6>	16	</armor_6>
       <armor_7>	16	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	60	</armor_9>
-      <armor_10>	10	</armor_10>
       <armor_11>	40	</armor_11>
       <armor_12>	30	</armor_12>
-      <armor_13>	16	</armor_13>
-      <armor_14>	30	</armor_14>
-      <armor_15>	16	</armor_15>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15950	</weight>
@@ -62,11 +57,11 @@
       <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_medium	</pixie>
+      <pixie>	gas_large	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.920332 -0.322218	</turret>
+      <turret>	0.000000 0.669444 -0.350021	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/german/G96_VK3002M/collision/Hull.model	</collisionModelServer>
@@ -74,14 +69,17 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.445802 0.569695 2.69085	</rayStart>
-        <rayEnd>	-0.445802 0.375461 2.54988	</rayEnd>
+        <rayStart>	-0.362326 0.310131 2.82786	</rayStart>
+        <rayEnd>	-0.362326 -0.0175705 2.59849	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/german/G96_VK3002M/VK3002M_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.8 1.8 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_VK3002M>
@@ -120,13 +118,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.44 0.6	</size>
+        <size>	0.44 0.65	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.62	</textureScale>
+        <textureScale>	-1.45	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -135,18 +133,14 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.406898	</radius>
+          <syncAngle>	21.1764	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
-          <radius>	0.126109	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R2	</name>
-          <radius>	0.303538	</radius>
+          <radius>	0.3435	</radius>
+          <syncAngle>	18.5837	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -160,18 +154,14 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.406898	</radius>
+          <syncAngle>	21.1764	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
-          <radius>	0.126109	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L2	</name>
-          <radius>	0.303538	</radius>
+          <radius>	0.3435	</radius>
+          <syncAngle>	18.5837	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -184,17 +174,17 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
-        <mud>	mediumTankMud	</mud>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.15435 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G96_VK3002M/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G96_VK3002M/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.31 1.98559	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.31125 1.95925	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -207,6 +197,215 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G96_VK3002M/track/VK1602_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G96_VK3002M/track/VK1602_track.model	</segmentModelRight>
+        <left>	vehicles/german/G96_VK3002M/track/left.track	</left>
+        <right>	vehicles/german/G96_VK3002M/track/right.track	</right>
+        <segmentLength>	0.147	</segmentLength>
+        <segmentOffset>	0.183	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.12	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	1	</startIndex>
+          <count>	7	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.12	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0148	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.15	</maxAmplitude>
+        <maxOffset>	0.15	</maxOffset>
+        <gravity>	-9	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.055	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.055	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.174	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.207	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.205	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.185	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.167	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.146	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.126	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.174	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.207	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.205	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.185	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.167	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.146	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.126	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+        </node>
+      </trackNodes>
     </Chassis_VK3002M>
     <Chassis_VK3002M_2>
       <userString>	#germany_vehicles:Chassis_VK3002M_2	</userString>
@@ -240,13 +439,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.44 0.6	</size>
+        <size>	0.44 0.65	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.62	</textureScale>
+        <textureScale>	-1.45	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -255,18 +454,14 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.406898	</radius>
+          <syncAngle>	21.1764	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
-          <radius>	0.126109	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R2	</name>
-          <radius>	0.303538	</radius>
+          <radius>	0.3435	</radius>
+          <syncAngle>	21.1764	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -280,18 +475,14 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.406898	</radius>
+          <syncAngle>	21.1764	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
-          <radius>	0.126109	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L2	</name>
-          <radius>	0.303538	</radius>
+          <radius>	0.3435	</radius>
+          <syncAngle>	18.5837	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -304,17 +495,17 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
-        <mud>	mediumTankMud	</mud>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.15435 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G96_VK3002M/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G96_VK3002M/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.31 1.98559	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.31125 1.95925	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -327,6 +518,215 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.12	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.12	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G96_VK3002M/track/VK1602_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G96_VK3002M/track/VK1602_track.model	</segmentModelRight>
+        <left>	vehicles/german/G96_VK3002M/track/left.track	</left>
+        <right>	vehicles/german/G96_VK3002M/track/right.track	</right>
+        <segmentLength>	0.147	</segmentLength>
+        <segmentOffset>	0.182	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0148	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.15	</maxAmplitude>
+        <maxOffset>	0.15	</maxOffset>
+        <gravity>	-8.9	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.055	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.055	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.19	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.19	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.186	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.185	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.16	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.142	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.126	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.093	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.19	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.19	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.186	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.185	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.16	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.142	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.126	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	2.08	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.093	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+        </node>
+      </trackNodes>
     </Chassis_VK3002M_2>
   </chassis>
   <turrets0>
@@ -341,18 +741,15 @@
       </unlocks>
       <armor>
         <armor_1>	80	</armor_1>
-        <armor_2>	50	</armor_2>
+        <armor_2>	80	</armor_2>
         <armor_3>	45	</armor_3>
         <armor_4>	45	</armor_4>
         <armor_5>	16	</armor_5>
         <armor_6>	16	</armor_6>
         <armor_7>	45	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	45	</armor_9>
-        <armor_10>	80	</armor_10>
-        <armor_11>	45	</armor_11>
-        <armor_12>	80	</armor_12>
-        <armor_13>	60	</armor_13>
+        <armor_9>	80	</armor_9>
+        <armor_10>	45	</armor_10>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6260	</weight>
@@ -378,11 +775,9 @@
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
             <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
             <gun>	20	</gun>
           </armor>
@@ -409,9 +804,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.00153088 0.000322015 2.84	</rayStart>
+              <rayStart>	-0.0359904 0.00900859 2.84	</rayStart>
               <rayEnd>	-0.205013 -0.274706 2.81351	</rayEnd>
-              <rayUp>	0.061 0.057 2	</rayUp>
+              <rayUp>	0.064 0.063 5	</rayUp>
               <size>	0.247	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -429,17 +824,15 @@
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
             <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
             <gun>	20	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0 -17.5 1 -17.5	</minPitch>
-            <maxPitch>	0 7.5 1 7.5	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
@@ -461,9 +854,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.00153121 -0.000738147 3.81229	</rayStart>
+              <rayStart>	-0.0357405 0.00881236 3.81229	</rayStart>
               <rayEnd>	-0.0973846 -0.327777 3.80643	</rayEnd>
-              <rayUp>	0.062 0.06 1	</rayUp>
+              <rayUp>	0.062 0.062 5	</rayUp>
               <size>	0.268	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -483,40 +876,40 @@
         <collisionModelServer>	vehicles/german/G96_VK3002M/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G96_VK3002M/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.409 1.07239	</gunPosition>
+      <gunPosition>	0.035997 0.414567 1.05364	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.959352 0.665692 0.102926	</rayStart>
-          <rayEnd>	-0.741981 0.565678 0.08431	</rayEnd>
+          <rayStart>	-0.948424 0.642378 0.205208	</rayStart>
+          <rayEnd>	-0.731498 0.542061 0.183321	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.959352 0.665692 0.102926	</rayStart>
-          <rayEnd>	0.741981 0.565678 0.08431	</rayEnd>
+          <rayStart>	0.980429 0.610123 -0.0986399	</rayStart>
+          <rayEnd>	0.762528 0.510298 -0.0862428	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	-1.15397 0.341849 0.501409	</rayStart>
-          <rayEnd>	-0.794237 0.170157 0.468047	</rayEnd>
+          <rayStart>	-1.144 0.334349 0.571639	</rayStart>
+          <rayEnd>	-0.783448 0.164378 0.538275	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.8	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <inscription>
-          <rayStart>	1.02731 0.387179 -0.691551	</rayStart>
-          <rayEnd>	0.684074 0.217424 -0.575913	</rayEnd>
+          <rayStart>	1.04894 0.350032 -0.630927	</rayStart>
+          <rayEnd>	0.703325 0.182589 -0.519073	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.8	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.954 -0.081 1.000 0.000 0.519 0.151 0.481 0.841 0.295 0.500 0.318 0.500 0.172 0.856 0.128	</physicsShape>
+      <physicsShape>	0.997 -0.047 1.020 0.000 0.504 0.154 0.798 0.470 0.322 0.500 0.327 0.500 0.168 0.887 0.157	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
         <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
@@ -529,18 +922,15 @@
       <price>	17200	</price>
       <armor>
         <armor_1>	100	</armor_1>
-        <armor_2>	50	</armor_2>
+        <armor_2>	100	</armor_2>
         <armor_3>	45	</armor_3>
         <armor_4>	45	</armor_4>
         <armor_5>	16	</armor_5>
         <armor_6>	16	</armor_6>
         <armor_7>	80	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	45	</armor_9>
+        <armor_9>	100	</armor_9>
         <armor_10>	45	</armor_10>
-        <armor_11>	45	</armor_11>
-        <armor_12>	80	</armor_12>
-        <armor_13>	60	</armor_13>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7760	</weight>
@@ -563,17 +953,15 @@
           <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
             <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
             <gun>	20	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0 -17.5 1 -17.5	</minPitch>
-            <maxPitch>	0 7.5 1 7.5	</maxPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <reloadTime>	3.6	</reloadTime>
@@ -594,33 +982,31 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.00153074 0.0101157 2.9	</rayStart>
+              <rayStart>	-0.0359901 0.00900859 2.9	</rayStart>
               <rayEnd>	-0.331421 -0.0780236 2.85613	</rayEnd>
-              <rayUp>	0.06 0.058 2	</rayUp>
+              <rayUp>	0.064 0.063 5	</rayUp>
               <size>	0.198	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+            <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
           </camouflage>
         </_75mm_KwK_40_L48>
         <_75mm_KwK_L70>	shared	  <maxAmmo>	79	</maxAmmo>
           <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
             <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
             <gun>	20	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0 -17.5 1 -17.5	</minPitch>
-            <maxPitch>	0 7.5 1 7.5	</maxPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
@@ -642,16 +1028,16 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000647121 0.00683376 3.83	</rayStart>
+              <rayStart>	-0.0361486 0.00895575 3.83	</rayStart>
               <rayEnd>	-0.327773 -0.0828152 3.78107	</rayEnd>
-              <rayUp>	0.066 0.062 2	</rayUp>
+              <rayUp>	0.069 0.068 5	</rayUp>
               <size>	0.219	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.865 0.865 0.000000 0.000000	</tiling>
+            <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
           </camouflage>
         </_75mm_KwK_L70>
       </guns>
@@ -664,43 +1050,43 @@
         <collisionModelServer>	vehicles/german/G96_VK3002M/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G96_VK3002M/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.000000 0.409 1.0728	</gunPosition>
+      <gunPosition>	0.035997 0.414583 1.05361	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.961482 0.67547 0.0101568	</rayStart>
-          <rayEnd>	-0.745188 0.573899 -0.0121917	</rayEnd>
+          <rayStart>	-0.957422 0.675981 -0.0407745	</rayStart>
+          <rayEnd>	-0.73991 0.576232 -0.0591573	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	-1.14043 0.369946 0.511587	</rayStart>
-          <rayEnd>	-0.782102 0.195259 0.47861	</rayEnd>
+          <rayStart>	-1.14636 0.355192 0.545805	</rayStart>
+          <rayEnd>	-0.783895 0.188412 0.517469	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.8	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <size>	0.672	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.961482 0.67547 0.0101568	</rayStart>
-          <rayEnd>	0.745188 0.573899 -0.0121917	</rayEnd>
+          <rayStart>	0.969678 0.649276 -0.0409042	</rayStart>
+          <rayEnd>	0.752166 0.549528 -0.0592871	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	1.21696 0.367042 -0.179242	</rayStart>
-          <rayEnd>	0.855001 0.200089 -0.212553	</rayEnd>
+          <rayStart>	1.19963 0.343246 -0.0525545	</rayStart>
+          <rayEnd>	0.837244 0.176603 -0.0826782	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.8	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <size>	0.716	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.975 -0.059 1.000 0.000 0.544 0.175 0.960 0.238 0.266 0.500 0.335 0.500 0.163 1.000 0.128	</physicsShape>
+      <physicsShape>	0.997 -0.047 1.002 0.000 0.504 0.154 0.798 0.279 0.322 0.500 0.297 0.500 0.168 0.887 0.157	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
+        <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_2_VK3002M>
   </turrets0>
@@ -733,36 +1119,102 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <MB-503>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+        </MB-503>
+        <Maybach_HL_210_TRM_P30>
+          <smplEnginePower>	687.2327	</smplEnginePower>
+        </Maybach_HL_210_TRM_P30>
+        <Maybach_HL_230_TRM_P30>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230_TRM_P30>
+      </engines>
+      <chassis>
+        <Chassis_VK3002M>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_VK3002M>
+        <Chassis_VK3002M_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_VK3002M_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_VK3002M>
-        <alpha>	0.10465	</alpha>
-      </Chassis_VK3002M>
-      <Chassis_VK3002M_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_VK3002M_2>
-    </chassis>
-    <engines>
-      <MB-503>
-        <bravo>	153.3058	</bravo>
-      </MB-503>
-      <Maybach_HL_210_TRM_P30>
-        <bravo>	171.8082	</bravo>
-      </Maybach_HL_210_TRM_P30>
-      <Maybach_HL_230_TRM_P30>
-        <bravo>	185.0242	</bravo>
-      </Maybach_HL_230_TRM_P30>
-    </engines>
     <armour>	0.856173036	</armour>
   </clientAdjustmentFactors>
   <effects>
     <collision></collision>
-    <damagedStateGroup>	medium	</damagedStateGroup>
+    <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
     <default>	germany_cross	</default>
     <lodDist>	MEDIUM	</lodDist>
-    <alpha>	0.96	</alpha>
+    <alpha>	1	</alpha>
   </emblems>
   <horns>
     <priceFactor>	1	</priceFactor>

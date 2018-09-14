@@ -70,7 +70,7 @@ class OpenInternalBrowser(_OpenBrowser):
         self._browserID = None
         return
 
-    def invoke(self, notID, actor=None):
+    def invoke(self, _, actor=None):
         ctrl = getBrowserCtrl()
         if ctrl:
             if actor:

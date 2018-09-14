@@ -8,35 +8,27 @@ import ResMgr
 from functools import partial
 from debug_utils import *
 from shared_utils import findFirst
-from constants import FLAG_STATE, RESOURCE_POINT_STATE, FLAG_TYPES
+from constants import FLAG_STATE, RESOURCE_POINT_STATE
 from Math import Vector2, Vector3
 from helpers.EffectsList import effectsFromSection, EffectsListPlayer
-from collections import namedtuple
 _DYNAMIC_OBJECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
-_FLAG_MODEL_NAME = 'box_explosive'
+_FLAG_MODEL_NAME = 'ctf_flag'
 _FLAG_CIRCLE_MODEL_NAME = 'ctf_flag_circle'
-_MARK_FLAGS = {FLAG_TYPES.AMMO1: 'box_shells',
- FLAG_TYPES.REPAIR_KIT: 'box_repair',
- FLAG_TYPES.EXPLOSIVE: 'box_explosive',
- FLAG_TYPES.OTHER: 'box_lanchester'}
-_FLAG_STATES = {FLAG_STATE.ON_SPAWN: 'spawn',
- FLAG_STATE.ABSORBED: 'absorbed'}
-_EFFECT_CONDITION_TEAM = 'team'
 
 class Flag(object):
     flagEntities = []
 
-    @property
-    def flagType(self):
-        return self.__flagType
-
-    def __init__(self, position, isVisible, flagID, flagType):
+    def __init__(self, position, isVisible, flagID):
         position = Vector3(0.0, 0.0, 0.0) if position is None else position
         self.__flagEntity = None
         self.__position = position
         self.__isVisible = isVisible
         self.__flagID = flagID
-        self.__flagType = flagType
+        spaceId = BigWorld.player().spaceID
+        if spaceId != 0:
+            self.create()
+        else:
+            g_ctfManager.addDelayedFlag(self)
         return
 
     def flagEnterWorld(self, entity):
@@ -73,87 +65,17 @@ class Flag(object):
             LOG_ERROR('Flags: Wrong usage of offline flags')
             return
         else:
-            g_ctfManager.showFlagEffect(FLAG_STATE.ON_SPAWN, self.__position, self.__flagID)
             self.__entityID = BigWorld.createEntity('OfflineFlag', BigWorld.player().spaceID, 0, self.__position, Vector3(0.0, 0.0, 0.0), dict({'flagID': self.__flagID}))
             return
 
 
 class _CTFConfigReader():
     name = property(lambda self: 'empty' if self.__configSection is None else self.__configSection.name)
-    ConditionedEffect = namedtuple('ConditionedEffect', ['effectList', 'condition'])
-    explosionEffect = property(lambda self: self.__explosionEffect)
-
-    @property
-    def models(self):
-        return self.__models
 
     def __init__(self):
         self.__configSection = ResMgr.openSection(_DYNAMIC_OBJECTS_CONFIG_FILE)
         assert self.__configSection is not None
-        self.__models = dict()
-        self.__pickupsEffects = dict()
-        self.__explosionEffect = None
-        self.readModels()
-        self.readEffects()
         return
-
-    def readEffects(self):
-        explosionEffectSection = self.__configSection['explosionEffect']
-        if explosionEffectSection is not None:
-            self.__explosionEffect = effectsFromSection(explosionEffectSection)
-        pickupsEffectsSection = self.__configSection['pickupsEffects']
-        if pickupsEffectsSection is not None:
-            for effect in pickupsEffectsSection.values():
-                boxName = effect.readString('model', '')
-                if boxName == '':
-                    continue
-                stateName = effect.readString('state', '')
-                if stateName == '':
-                    continue
-                effectSection = effect['effectList']
-                if effectSection is None:
-                    continue
-                condition = None
-                conditionSection = effect['condition']
-                if conditionSection is not None:
-                    condition = [conditionSection.items()[0][0], conditionSection.items()[0][1].asInt]
-                effectList = effectsFromSection(effectSection)
-                if effectList is not None:
-                    if boxName not in self.__pickupsEffects:
-                        self.__pickupsEffects[boxName] = dict()
-                    if stateName not in self.__pickupsEffects[boxName]:
-                        self.__pickupsEffects[boxName][stateName] = list()
-                    conditionedEffect = _CTFConfigReader.ConditionedEffect(effectList=effectList, condition=condition)
-                    self.__pickupsEffects[boxName][stateName].append(conditionedEffect)
-
-        return
-
-    def findEffectForBoxNameAndState(self, box, state):
-        if box not in _MARK_FLAGS or state not in _FLAG_STATES:
-            return
-        else:
-            boxName = _MARK_FLAGS[box]
-            stateName = _FLAG_STATES[state]
-            effects = self.__pickupsEffects.get(boxName, None)
-            if effects is None:
-                return
-            effect = effects.get(stateName, None)
-            return effect
-
-    def readModels(self):
-        models = self.__configSection['models']
-        if models is None:
-            return
-        else:
-            for model in models.values():
-                modelName = model.readString('name', '')
-                modelParams = {}
-                for k, v in model.items():
-                    modelParams[k] = v.asString
-
-                self.__models[modelName] = modelParams
-
-            return
 
     def readModelParams(self, name):
         if self.__configSection is None:
@@ -189,26 +111,23 @@ _g_ctfConfig = _CTFConfigReader()
 
 class _CTFManager():
     isNeedHideAll = property(lambda self: self.__needHideAll)
-    StatedEffect = namedtuple('StatedEffect', ['effectId', 'flagState'])
+
+    @property
+    def flagModelName(self):
+        return self.__flagModelFile
 
     @property
     def flagCircleModelName(self):
-        return self.getModelDesc(_FLAG_CIRCLE_MODEL_NAME).get('file', '')
+        return self.__flagCircleModelFile
 
-    def getModelDesc(self, name='ctf_flag'):
-        modelDesc = _g_ctfConfig.models.get(name, {})
-        return modelDesc
-
-    def flagModelName(self, type):
-        flagName = _MARK_FLAGS.get(type, FLAG_TYPES.BIG)
-        return self.getModelDesc(flagName).get('file', '')
-
-    def flagAnimAction(self, type):
-        flagName = _MARK_FLAGS.get(type, FLAG_TYPES.BIG)
-        return self.getModelDesc(flagName).get('action', '')
+    @property
+    def flagAnimAction(self):
+        return self.__flagAnimAction
 
     def __init__(self):
+        self.__flagModelFile = None
         self.__flagCircleModelFile = None
+        self.__flagAnimAction = None
         self.__flags = {}
         self.__flagTeams = []
         self.__resourcePoints = {}
@@ -234,9 +153,13 @@ class _CTFManager():
         self.onResPointAmountChanged = Event.Event(self.__evtManager)
         self.onHideAll = Event.Event(self.__evtManager)
         self.__needHideAll = False
-        self.__flagEffects = dict()
-        self.__explosionEffect = None
-        self.__isMark1Alive = True
+        flagModelParams = _g_ctfConfig.readModelParams(_FLAG_MODEL_NAME)
+        if flagModelParams is not None:
+            self.__flagModelFile = flagModelParams.get('file')
+            self.__flagAnimAction = flagModelParams.get('action')
+        flagCircleModelParams = _g_ctfConfig.readModelParams(_FLAG_CIRCLE_MODEL_NAME)
+        if flagCircleModelParams is not None:
+            self.__flagCircleModelFile = flagCircleModelParams.get('file')
         return
 
     def addDelayedFlag(self, flag):
@@ -253,17 +176,14 @@ class _CTFManager():
         self.__clear()
 
     def onFlagStateChanged(self, data):
-        if self.__isMark1Alive:
-            flagID = data[0]
-            prevState = data[1]
-            newState = data[2]
-            stateParams = data[3:]
-            self.__switchFlagToState(flagID, prevState, newState, stateParams)
+        flagID = data[0]
+        prevState = data[1]
+        newState = data[2]
+        stateParams = data[3:]
+        self.__switchFlagToState(flagID, prevState, newState, stateParams)
 
     def onFlagTeamsReceived(self, data):
         self.__flagTeams = data
-        for flagID, flag in self.__flags.iteritems():
-            flag['team'] = self.__flagTeams[flagID]
 
     def updateCarriedFlagPositions(self, flagIDs, positions):
         for i, flagID in enumerate(flagIDs):
@@ -285,9 +205,6 @@ class _CTFManager():
 
         return None
 
-    def getFlagType(self, flagID):
-        return self.__flags[flagID]['flagType']
-
     def getFlagMinimapPos(self, flagID):
         if flagID not in self.__flags:
             return
@@ -308,10 +225,6 @@ class _CTFManager():
         self.onHideAll()
 
     def __switchFlagToState(self, flagID, prevState, newState, stateParams):
-        if len(self.__flagTeams) > flagID:
-            team = self.__flagTeams[flagID]
-        else:
-            team = None
         if flagID not in self.__flags:
             self.__flags[flagID] = {'state': None,
              'prevState': None,
@@ -319,13 +232,10 @@ class _CTFManager():
              'vehicle': None,
              'respawnTime': 0.0,
              'flag': None,
-             'team': team,
-             'flagType': FLAG_TYPES.BIG}
+             'team': self.__flagTeams[flagID]}
         flag = self.__flags[flagID]
         flag['state'] = newState
         flag['prevState'] = prevState
-        flagType = stateParams[-1].get('flagType', FLAG_TYPES.BIG)
-        flag['flagType'] = flagType
         flagTeam = flag['team']
         if newState == FLAG_STATE.WAITING_FIRST_SPAWN:
             respawnTime = stateParams[0]
@@ -336,13 +246,16 @@ class _CTFManager():
             flag['vehicle'] = None
             flag['minimapPos'] = flagPos
             flag['respawnTime'] = 0.0
-            self.__flagModelSet(flagID, flagPos, True, flagType)
+            self.__flagModelSet(flagID, flagPos, True)
             self.onFlagSpawnedAtBase(flagID, flagTeam, flagPos)
         elif newState == FLAG_STATE.ON_VEHICLE:
             vehicleID = stateParams[0]
             flag['vehicle'] = vehicleID
             flag['respawnTime'] = 0.0
-            self.__flagModelSet(flagID, None, False, flagType)
+            self.__flagModelSet(flagID, None, False)
+            vehicle = self.__getVehicle(vehicleID)
+            if vehicle is not None:
+                flag['minimapPos'] = vehicle.position
             self.onFlagCapturedByVehicle(flagID, flagTeam, vehicleID)
         elif newState == FLAG_STATE.ON_GROUND:
             loserVehicleID = stateParams[0]
@@ -351,93 +264,31 @@ class _CTFManager():
             flag['vehicle'] = None
             flag['respawnTime'] = respawnTime
             flag['minimapPos'] = flagPos
-            self.__flagModelSet(flagID, flagPos, True, flagType)
+            self.__flagModelSet(flagID, flagPos, True)
             self.onFlagDroppedToGround(flagID, flagTeam, loserVehicleID, flagPos, respawnTime)
         elif newState == FLAG_STATE.ABSORBED:
             vehicleID = stateParams[0]
             respawnTime = stateParams[1]
             flag['vehicle'] = None
             flag['respawnTime'] = respawnTime
-            self.__flagModelSet(flagID, None, False, flagType)
+            self.__flagModelSet(flagID, None, False)
             self.onFlagAbsorbed(flagID, flagTeam, vehicleID, respawnTime)
         elif newState == FLAG_STATE.UNKNOWN:
             vehicleID = flag['vehicle']
-            self.__flagModelSet(flagID, None, False, flagType)
+            self.__flagModelSet(flagID, None, False)
             flag['vehicle'] = None
             flag['respawnTime'] = 0.0
             flag['minimapPos'] = None
             self.onFlagRemoved(flagID, flagTeam, vehicleID)
-        pos = flag['minimapPos']
-        self.showFlagEffect(newState, pos, flagID)
         return
 
-    def onBombExploded(self):
-        if self.__explosionEffect is not None:
-            self.__explosionEffect.stop()
-        effectStuff = _g_ctfConfig.explosionEffect
-        if effectStuff is not None:
-            arenaVehicles = BigWorld.player().arena.vehicles
-            for id in arenaVehicles.iterkeys():
-                vehicle = BigWorld.entities.get(id, None)
-                if vehicle is not None and 'markI' in vehicle.typeDescriptor.type.tags:
-                    self.__explosionEffect = EffectsListPlayer(effectStuff.effectsList, effectStuff.keyPoints)
-                    self.__explosionEffect.play(vehicle.model)
-                    return
-
-        return
-
-    def onMark1Killed(self):
-        if self.__flags:
-            self.__isMark1Alive = False
-
-    def showFlagEffect(self, state, flagPos, flagID):
-        if BigWorld.player().spaceID == 0:
-            return
-        else:
-            if state == FLAG_STATE.ON_GROUND:
-                state = FLAG_STATE.ON_SPAWN
-            if state == FLAG_STATE.ON_VEHICLE:
-                state = FLAG_STATE.ABSORBED
-            effectManager = BigWorld.player().terrainEffects
-            existingStatedEffect = self.__flagEffects.get(flagID, None)
-            if existingStatedEffect is not None:
-                if existingStatedEffect.flagState == state:
-                    currentEffectData = effectManager.findEffect(existingStatedEffect.effectId)
-                    if currentEffectData is not None:
-                        currentFakeModel = currentEffectData['model']
-                        if flagPos != currentFakeModel.position:
-                            currentFakeModel.position = flagPos
-                    return
-                self.__flagEffects.pop(flagID)
-                effectManager.stop(existingStatedEffect.effectId)
-            flagType = self.getFlagType(flagID)
-            conditionedEffects = _g_ctfConfig.findEffectForBoxNameAndState(flagType, state)
-            if conditionedEffects is not None:
-                for conditionedEffect in conditionedEffects:
-                    condition = conditionedEffect.condition
-                    if condition is not None:
-                        if condition[0] == _EFFECT_CONDITION_TEAM and condition[1] != BigWorld.player().team:
-                            continue
-                    effectStuff = conditionedEffect.effectList
-                    effectId = effectManager.addNew(flagPos, effectStuff.effectsList, effectStuff.keyPoints, None)
-                    self.__flagEffects[flagID] = _CTFManager.StatedEffect(effectId=effectId, flagState=state)
-                    return
-
-            return
-
-    def __flagModelSet(self, flagID, flagPos, isVisible, flagType):
+    def __flagModelSet(self, flagID, flagPos, isVisible):
         if flagID not in self.__flags:
             return
         else:
             flagEntity = self.__flags[flagID]['flag']
             if flagEntity is None:
-                flag = Flag(flagPos, isVisible, flagID, flagType)
-                self.__flags[flagID]['flag'] = flag
-                spaceId = BigWorld.player().spaceID
-                if spaceId != 0:
-                    flag.create()
-                else:
-                    g_ctfManager.addDelayedFlag(flag)
+                self.__flags[flagID]['flag'] = Flag(flagPos, isVisible, flagID)
             else:
                 flagEntity.setPosition(flagPos)
                 flagEntity.show(isVisible)
@@ -454,14 +305,6 @@ class _CTFManager():
         self.__evtManager.clear()
         self.__resourcePoints.clear()
         self.__rpGuids.clear()
-        effectManager = BigWorld.player().terrainEffects
-        for flagEffect in self.__flagEffects.itervalues():
-            effectManager.stop(flagEffect.effectId)
-
-        self.__flagEffects.clear()
-        if self.__explosionEffect is not None:
-            self.__explosionEffect.stop()
-        self.__isMark1Alive = True
         return
 
     def __getVehicle(self, vehicleID):

@@ -843,7 +843,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <camouflage>
             <tiling>	0.58 0.25 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1136,7 +1136,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <camouflage>
             <tiling>	0.55 0.43 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1215,6 +1215,91 @@
     </Radiostanice_Fu_7>
     <Radiostanice_RM_31T>	shared	</Radiostanice_RM_31T>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Skoda_V16_diesel_600>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </Skoda_V16_diesel_600>
+        <Skoda_V16_diesel_660>
+          <smplEnginePower>	697.8055	</smplEnginePower>
+        </Skoda_V16_diesel_660>
+        <Skoda_16_ADH_140_A>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Skoda_16_ADH_140_A>
+      </engines>
+      <chassis>
+        <Chassis_Cz07_TVP_46>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz07_TVP_46>
+        <Chassis_Cz07_TVP_46_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Cz07_TVP_46_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_88mm_Vz_37N>
@@ -1224,25 +1309,6 @@
         <delta>	0.9227799	</delta>
       </_100mm_vz_44S>
     </guns>
-    <chassis>
-      <Chassis_Cz07_TVP_46>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Cz07_TVP_46>
-      <Chassis_Cz07_TVP_46_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_Cz07_TVP_46_2>
-    </chassis>
-    <engines>
-      <Skoda_V16_diesel_600>
-        <bravo>	158.5922	</bravo>
-      </Skoda_V16_diesel_600>
-      <Skoda_V16_diesel_660>
-        <bravo>	174.4514	</bravo>
-      </Skoda_V16_diesel_660>
-      <Skoda_16_ADH_140_A>
-        <bravo>	185.0242	</bravo>
-      </Skoda_16_ADH_140_A>
-    </engines>
     <armour>	0.770052973	</armour>
   </clientAdjustmentFactors>
   <effects>

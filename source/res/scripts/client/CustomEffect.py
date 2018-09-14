@@ -38,6 +38,7 @@ class PixieNode(object):
 
     def __init__(self, node, waterY, drawOrder, effects):
         self.__node = node
+        self.__activated = False
         self.__nodeDefaultLocalTranslation = Math.Matrix(self.__node.local).translation
         self.__drawOrder = drawOrder
         self.__waterY = waterY
@@ -51,7 +52,7 @@ class PixieNode(object):
 
         return
 
-    def destroy(self):
+    def deactivate(self):
         for cbkId in self.__ttlCallbacks.values():
             if cbkId is not None:
                 BigWorld.cancelCallback(cbkId)
@@ -60,8 +61,14 @@ class PixieNode(object):
             if effectDesc[PixieNode._PIXIE_REF] is not None:
                 self.__detach(effectDesc)
 
+        self.__ttlCallbacks = dict()
+        self.__activated = False
+        return
+
+    def destroy(self):
+        self.deactivate()
         self.__effects = None
-        self.__ttlCallbacks = None
+        self.__node = None
         return
 
     def __attach(self, pixie):
@@ -82,13 +89,13 @@ class PixieNode(object):
         return
 
     def __detachTTL(self, effectID):
-        del self.__ttlCallbacks[effectID]
         effectDesc = self.__effects[effectID]
         self.__detach(effectDesc)
+        del self.__ttlCallbacks[effectID]
 
     def __detach(self, effectDesc):
         pixieRef = effectDesc[PixieNode._PIXIE_REF]
-        if not self.__node.isDangling:
+        if not self.__node.isDangling and pixieRef is not None and pixieRef.attached:
             self.__node.detach(pixieRef)
         PixieCache.pixiesCount -= 1
         effectDesc[PixieNode._PIXIE_REF] = None
@@ -101,6 +108,7 @@ class PixieNode(object):
         else:
             if effectDesc[PixieNode._PIXIE_ENABLED] != enable:
                 if enable:
+                    self.__activated = True
                     if effectDesc[PixieNode._PIXIE_TTL] > 0.0:
                         ttlCbk = self.__ttlCallbacks.get(effectID, None)
                         if ttlCbk is not None:
@@ -125,6 +133,8 @@ class PixieNode(object):
 
     def onLoadedCallback(self, pixie, effectID, clone):
         if self.__node.isDangling:
+            return False
+        elif not self.__activated:
             return False
         effectDesc = self.__effects[effectID]
         prevPixie = effectDesc[PixieNode._PIXIE_REF]
@@ -676,7 +686,13 @@ class MainSelectorBase(object):
         for effect in self._activeEffectId:
             self.enable(effect, False)
 
+        if self._effectNodes is not None:
+            for node in self._effectNodes.values():
+                if node is not None:
+                    node.deactivate()
+
         self._activeEffectId = set()
+        return
 
     def update(self, args):
         if not self._enabled:

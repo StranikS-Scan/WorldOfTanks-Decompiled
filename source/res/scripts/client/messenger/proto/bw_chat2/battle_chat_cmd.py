@@ -139,7 +139,7 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
         result = ''
         if not command:
             LOG_ERROR('Command is not found', self._commandID)
-        else:
+        elif command.vehMarker is not None:
             result = command.vehMarker
         return result
 

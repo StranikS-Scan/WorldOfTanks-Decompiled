@@ -442,17 +442,52 @@
   <radios>
     <R_5a>	shared	</R_5a>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ganz_VIII_VGT_107>
+          <smplEnginePower>	163.8786	</smplEnginePower>
+        </Ganz_VIII_VGT_107>
+      </engines>
+      <chassis>
+        <Chassis_G117_Toldi_III>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G117_Toldi_III>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G117_Toldi_III>
-        <alpha>	0.08855	</alpha>
-      </Chassis_G117_Toldi_III>
-    </chassis>
-    <engines>
-      <Ganz_VIII_VGT_107>
-        <bravo>	40.96964	</bravo>
-      </Ganz_VIII_VGT_107>
-    </engines>
     <armour>	0.592518163	</armour>
   </clientAdjustmentFactors>
   <effects>

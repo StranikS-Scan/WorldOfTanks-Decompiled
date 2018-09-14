@@ -5,7 +5,6 @@ from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG
 from gui import DialogsInterface, GUI_SETTINGS
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
-from gui.Scaleform.Battle import Battle
 from gui.Scaleform.battle_entry import BattleEntry
 from gui.Scaleform.lobby_entry import LobbyEntry
 from gui.Scaleform.daapi.settings import config as sf_config
@@ -33,11 +32,11 @@ class NoAppFactory(AlwaysValidObject, IAppFactory):
         LOG_DEBUG('NoAppFactory.destroyBattle')
 
 
-class AS3_AS2_AppFactory(IAppFactory):
+class AS3_AppFactory(IAppFactory):
     __slots__ = ('__apps', '__packages', '__importer')
 
     def __init__(self):
-        super(AS3_AS2_AppFactory, self).__init__()
+        super(AS3_AppFactory, self).__init__()
         self.__apps = dict.fromkeys(_SPACE.RANGE)
         self.__packages = dict.fromkeys(_SPACE.RANGE)
         self.__importer = PackageImporter()
@@ -106,8 +105,12 @@ class AS3_AS2_AppFactory(IAppFactory):
         self.createLogitech()
         battle = self.__apps[_SPACE.SF_BATTLE]
         if not battle:
-            battle = self._getBattleAppInstance()
-            packages = self._getBattlePackages(arenaGuiType)
+            battle = BattleEntry(_SPACE.SF_BATTLE)
+            packages = sf_config.BATTLE_PACKAGES
+            if arenaGuiType in sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE:
+                packages += sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE[arenaGuiType]
+            else:
+                packages += sf_config.BATTLE_PACKAGES_BY_DEFAULT
             self.__packages[_SPACE.SF_BATTLE] = packages
             self.__importer.load(battle.proxy, sf_config.COMMON_PACKAGES + packages)
             self.__apps[_SPACE.SF_BATTLE] = battle
@@ -216,21 +219,28 @@ class AS3_AS2_AppFactory(IAppFactory):
             return
         battle = self.__apps[_SPACE.SF_BATTLE]
         if battle:
-            self._loadBattlePage(arenaGuiType)
+            if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
+                event = events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_BATTLE_PAGE)
+            elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_CLASSIC:
+                event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE)
+            elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
+                event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE)
+            else:
+                event = events.LoadViewEvent(VIEW_ALIAS.CLASSIC_BATTLE_PAGE)
+            g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)
             battle.component.visible = True
 
     def showDisconnectDialog(self, appNS, description):
         if appNS == _SPACE.SF_LOBBY:
             DialogsInterface.showDisconnect(*description)
 
-    def _getBattleAppInstance(self):
-        return Battle(_SPACE.SF_BATTLE)
-
-    def _getBattlePackages(self, arenaGuiType):
-        pass
-
-    def _loadBattlePage(self, arenaGuiType):
-        pass
+    def handleKey(self, appNS, isDown, key, mods):
+        app = self.getApp(appNS=appNS)
+        if app is not None:
+            return app.handleKey(isDown, key, mods)
+        else:
+            return False
+            return
 
     def _setActive(self, appNS, isActive):
         app = self.__apps[appNS]
@@ -238,45 +248,9 @@ class AS3_AS2_AppFactory(IAppFactory):
             app.active(isActive)
 
 
-class AS3_AppFactory(AS3_AS2_AppFactory):
-
-    def handleKeyInBattle(self, isDown, key, mods):
-        battle = self.getApp(appNS=_SPACE.SF_BATTLE)
-        if battle is not None:
-            battle.handleKey(isDown, key, mods)
-        return
-
-    def _getBattleAppInstance(self):
-        return BattleEntry(_SPACE.SF_BATTLE)
-
-    def _getBattlePackages(self, arenaGuiType):
-        packages = sf_config.BATTLE_PACKAGES
-        if arenaGuiType in sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE:
-            packages += sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE[arenaGuiType]
-        else:
-            packages += sf_config.BATTLE_PACKAGES_BY_DEFAULT
-        return packages
-
-    def _loadBattlePage(self, arenaGuiType):
-        if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
-            event = events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_BATTLE_PAGE)
-        elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_CLASSIC:
-            event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE)
-        elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
-            event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE)
-        elif arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-            event = events.LoadViewEvent(VIEW_ALIAS.EVENT_BATTLE_PAGE)
-        else:
-            event = events.LoadViewEvent(VIEW_ALIAS.CLASSIC_BATTLE_PAGE)
-        g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)
-
-
 def createAppFactory():
     if GUI_SETTINGS.isGuiEnabled():
-        if GUI_SETTINGS.useAS3Battle:
-            factory = AS3_AppFactory()
-        else:
-            factory = AS3_AS2_AppFactory()
+        factory = AS3_AppFactory()
     else:
         factory = NoAppFactory()
     return factory

@@ -465,17 +465,52 @@
   <radios>
     <FuG7A>	shared	</FuG7A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_230_TRM_P30_A>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </Maybach_HL_230_TRM_P30_A>
+      </engines>
+      <chassis>
+        <Chassis_E-25>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_E-25>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_E-25>
-        <alpha>	0.10465	</alpha>
-      </Chassis_E-25>
-    </chassis>
-    <engines>
-      <Maybach_HL_230_TRM_P30_A>
-        <bravo>	185.0242	</bravo>
-      </Maybach_HL_230_TRM_P30_A>
-    </engines>
     <armour>	0.894766878	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -405,7 +405,7 @@
           </shotDispersionFactors>
           <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <effects>	shot_main	</effects>
+          <effects>	shot_large	</effects>
           <models>
             <undamaged>	vehicles/american/A92_M60/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A92_M60/crash/lod0/Gun_01.model	</destroyed>
@@ -488,17 +488,52 @@
   <radios>
     <AN-VRC-12>	shared	</AN-VRC-12>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AVDS-1790-2>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </Continental_AVDS-1790-2>
+      </engines>
+      <chassis>
+        <Chassis_M60>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M60>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M60>
-        <alpha>	0.0644	</alpha>
-      </Chassis_M60>
-    </chassis>
-    <engines>
-      <Continental_AVDS-1790-2>
-        <bravo>	198.2402	</bravo>
-      </Continental_AVDS-1790-2>
-    </engines>
     <armour>	1.117380288	</armour>
   </clientAdjustmentFactors>
   <effects>

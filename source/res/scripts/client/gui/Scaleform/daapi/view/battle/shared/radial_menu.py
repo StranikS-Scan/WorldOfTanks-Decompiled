@@ -6,6 +6,7 @@ import CommandMapping
 import GUI
 from gui.Scaleform.daapi.view.meta.RadialMenuMeta import RadialMenuMeta
 from gui.Scaleform.genConsts.BATTLE_ICONS_CONSTS import BATTLE_ICONS_CONSTS
+from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.controllers.chat_cmd_ctrl import CHAT_COMMANDS
 from gui.battle_control.controllers.chat_cmd_ctrl import DENIED_ACTIONS
@@ -54,13 +55,16 @@ def getKeyFromAction(action):
         return getScaleformKey(CommandMapping.g_instance.get(shortcut))
 
 
-class RadialMenu(RadialMenuMeta):
+class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler):
 
     def __init__(self):
         super(RadialMenu, self).__init__()
         self.__targetID = None
         self.__vehicleType = None
         return
+
+    def handleEscKey(self, isDown):
+        return True
 
     def onAction(self, action):
         chatCommands = g_sessionProvider.shared.chatCommands
@@ -87,11 +91,16 @@ class RadialMenu(RadialMenuMeta):
             position = ctrl.getPosition()
         else:
             position = (guiScreenWidth >> 1, guiScreenHeight >> 1)
+        if self.app is not None:
+            self.app.registerGuiKeyHandler(self)
         self.as_showS(crosshairType, position, ratio)
         return
 
     def hide(self):
+        if self.app is not None:
+            self.app.unregisterGuiKeyHandler(self)
         self.as_hideS()
+        return
 
     def _populate(self):
         super(RadialMenu, self)._populate()

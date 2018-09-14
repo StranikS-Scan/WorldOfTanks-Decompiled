@@ -942,31 +942,97 @@
     </_10R>
     <_10RK>	shared	</_10RK>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-2K>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V-2K>
+        <V-5>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </V-5>
+        <V-5F>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </V-5F>
+      </engines>
+      <chassis>
+        <Chassis_T150>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T150>
+        <Chassis_T150_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T150_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_107mm_ZiS-6>
         <delta>	1.135466	</delta>
       </_107mm_ZiS-6>
     </guns>
-    <chassis>
-      <Chassis_T150>
-        <alpha>	0.1449	</alpha>
-      </Chassis_T150>
-      <Chassis_T150_2>
-        <alpha>	0.12075	</alpha>
-      </Chassis_T150_2>
-    </chassis>
-    <engines>
-      <V-2K>
-        <bravo>	132.1601	</bravo>
-      </V-2K>
-      <V-5>
-        <bravo>	158.5922	</bravo>
-      </V-5>
-      <V-5F>
-        <bravo>	185.0242	</bravo>
-      </V-5F>
-    </engines>
     <armour>	1.041732662	</armour>
   </clientAdjustmentFactors>
   <effects>

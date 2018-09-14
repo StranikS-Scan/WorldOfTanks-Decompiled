@@ -510,17 +510,52 @@
   <radios>
     <C45A>	shared	</C45A>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royce_Meteorite_202B>
+          <smplEnginePower>	539.2134	</smplEnginePower>
+        </Rolls_Royce_Meteorite_202B>
+      </engines>
+      <chassis>
+        <Chassis_GB70_N_FV4202_105>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB70_N_FV4202_105>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB70_N_FV4202_105>
-        <alpha>	0.05635	</alpha>
-      </Chassis_GB70_N_FV4202_105>
-    </chassis>
-    <engines>
-      <Rolls_Royce_Meteorite_202B>
-        <bravo>	134.8033	</bravo>
-      </Rolls_Royce_Meteorite_202B>
-    </engines>
     <armour>	1.082765372	</armour>
   </clientAdjustmentFactors>
   <effects>

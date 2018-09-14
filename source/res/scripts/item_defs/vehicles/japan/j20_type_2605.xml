@@ -470,7 +470,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_large	</effects>
+          <effects>	shot_superhuge	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.535 0.25 0.000000 0.000000	</tiling>
@@ -535,17 +535,52 @@
   <radios>
     <_Type3_Ko_notInShop>	shared	</_Type3_Ko_notInShop>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Type98_V12_x2_1200_Kai>
+          <smplEnginePower>	1268.737	</smplEnginePower>
+        </_Type98_V12_x2_1200_Kai>
+      </engines>
+      <chassis>
+        <Chassis_J20_Type_2605>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_J20_Type_2605>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_J20_Type_2605>
-        <alpha>	0.0966	</alpha>
-      </Chassis_J20_Type_2605>
-    </chassis>
-    <engines>
-      <_Type98_V12_x2_1200_Kai>
-        <bravo>	317.1843	</bravo>
-      </_Type98_V12_x2_1200_Kai>
-    </engines>
     <armour>	0.9965	</armour>
   </clientAdjustmentFactors>
   <effects>

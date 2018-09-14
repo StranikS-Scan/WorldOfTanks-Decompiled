@@ -7,7 +7,6 @@ class BATTLE_ITEM_STATES(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     DESTROYED = 'destroyed'
     CRITICAL = 'critical'

@@ -295,7 +295,9 @@ class VehicleStickers(object):
                         LOG_WARNING('Adding %s damage sticker to occupied slot' % componentName)
                     damageSticker.handle = componentStickers.stickers.addDamageSticker(damageSticker.stickerID, damageSticker.rayStart, damageSticker.rayEnd)
 
-        if self.__animateGunInsignia:
+        if isDamaged:
+            gunNode = compoundModel.node(TankPartNames.GUN)
+        elif self.__animateGunInsignia:
             gunNode = compoundModel.node(TankNodeNames.GUN_INCLINATION) if isDamaged else compoundModel.node(VehicleStickers.__INSIGNIA_NODE_NAME)
         else:
             gunNode = compoundModel.node(TankNodeNames.GUN_INCLINATION)
@@ -303,9 +305,12 @@ class VehicleStickers(object):
             return
         else:
             gunGeometry = compoundModel.getPartGeometryLink(TankPartIndexes.GUN)
-            toPartRoot = Math.Matrix(gunNode)
-            toPartRoot.invert()
-            toPartRoot.preMultiply(compoundModel.node(TankNodeNames.GUN_INCLINATION))
+            if isDamaged:
+                toPartRoot = mathUtils.createIdentityMatrix()
+            else:
+                toPartRoot = Math.Matrix(gunNode)
+                toPartRoot.invert()
+                toPartRoot.preMultiply(compoundModel.node(TankNodeNames.GUN_INCLINATION))
             self.__stickers['gunInsignia'].stickers.attachStickers(gunGeometry, gunNode, isDamaged, toPartRoot)
             return
 

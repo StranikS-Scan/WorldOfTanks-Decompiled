@@ -355,22 +355,79 @@ class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
         return
 
 
-class PotapovQuestsAutoWindowHandler(ServiceChannelHandler):
+class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
+    """ Handler responsible for battle quests awards.
+    """
 
     def __init__(self, awardCtrl):
-        super(PotapovQuestsAutoWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        super(BattleQuestsAutoWindowHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
 
     def _showAward(self, ctx):
-        pqCompletedQuests = {}
-        completedQuestIDs = ctx[1].data.get('completedQuestIDs', set())
-        for qID in completedQuestIDs:
-            if potapov_quests.g_cache.isPotapovQuest(qID):
-                pqType = potapov_quests.g_cache.questByUniqueQuestID(qID)
-                if pqType.id not in pqCompletedQuests and not pqType.isFinal:
-                    pqCompletedQuests[pqType.id] = (pqType.mainQuestID in completedQuestIDs, pqType.addQuestID in completedQuestIDs)
+        _, message = ctx
+        completedQuests = {}
+        allQuests = g_eventsCache.getAllQuests(includePotapovQuests=True, filterFunc=lambda quest: self._isAppropriate(quest))
+        completedQuestUniqueIDs = message.data.get('completedQuestIDs', set())
+        for uniqueQuestID in completedQuestUniqueIDs:
+            questID, ctx = self._getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs)
+            if questID in allQuests:
+                quest = allQuests[questID]
+                ctx.update(eventsCache=g_eventsCache)
+                completedQuests[questID] = (quest, ctx)
 
-        for potapovQuestID, (isMain, isAdd) in pqCompletedQuests.iteritems():
-            quests_events.showRegularAward(g_eventsCache.potapov.getQuests()[potapovQuestID], isMain, isAdd)
+        for quest, context in completedQuests.itervalues():
+            self._showWindow(quest, context)
+
+    @staticmethod
+    def _showWindow(quest, context):
+        """Fire an actual show event to display an award window.
+        
+        :param quest: instance of event_items.Quest (or derived)
+        :param context: dict with required data
+        """
+        quests_events.showMissionAward(quest, context)
+
+    @staticmethod
+    def _isAppropriate(quest):
+        """ Check if quest is appropriate for the current handler's scope.
+        
+        :param quest: instance of event_items.Quest (or derived)
+        """
+        return quest.getType() == EVENT_TYPE.BATTLE_QUEST
+
+    @staticmethod
+    def _getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs):
+        """ Gather the data needed by award window and get real quest id.
+        
+        :param uniqueQuestID: unique id of the quest (considering its sub quests)
+        :param completedQuest: dict {questID: (quest, context)}
+        :param completedQuestIDs: list with ids of completed quests
+        
+        :return: tuple (quest id, context)
+        """
+        return (uniqueQuestID, {})
+
+
+class PotapovQuestsAutoWindowHandler(BattleQuestsAutoWindowHandler):
+    """ Handler responsible for personal quests awards.
+    """
+
+    @staticmethod
+    def _showWindow(quest, context):
+        quests_events.showPersonalMissionAward(quest, context)
+
+    @staticmethod
+    def _isAppropriate(quest):
+        return quest.getType() == EVENT_TYPE.POTAPOV_QUEST
+
+    @staticmethod
+    def _getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs):
+        if potapov_quests.g_cache.isPotapovQuest(uniqueQuestID):
+            pqType = potapov_quests.g_cache.questByUniqueQuestID(uniqueQuestID)
+            if pqType.id not in completedQuests:
+                ctx = {'isMainReward': pqType.mainQuestID in completedQuestUniqueIDs,
+                 'isAddReward': pqType.addQuestID in completedQuestUniqueIDs}
+                return (pqType.id, ctx)
+        return (None, {})
 
 
 class RefSysStatusWindowHandler(ServiceChannelHandler):

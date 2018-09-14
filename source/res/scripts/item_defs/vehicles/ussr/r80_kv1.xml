@@ -1158,31 +1158,97 @@
     </_10R>
     <_10RK>	shared	</_10RK>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M-17T>
+          <smplEnginePower>	475.7765	</smplEnginePower>
+        </M-17T>
+        <M-17F>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </M-17F>
+        <V-2K>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </V-2K>
+      </engines>
+      <chassis>
+        <Chassis_KV1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.13685	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_KV1>
+        <Chassis_KV1_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_KV1_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_85mm_F-30>
         <delta>	1.36	</delta>
       </_85mm_F-30>
     </guns>
-    <chassis>
-      <Chassis_KV1>
-        <alpha>	0.13685	</alpha>
-      </Chassis_KV1>
-      <Chassis_KV1_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_KV1_2>
-    </chassis>
-    <engines>
-      <M-17T>
-        <bravo>	118.9441	</bravo>
-      </M-17T>
-      <M-17F>
-        <bravo>	132.1601	</bravo>
-      </M-17F>
-      <V-2K>
-        <bravo>	132.1601	</bravo>
-      </V-2K>
-    </engines>
     <armour>	1.001280575	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -334,22 +334,57 @@
   <radios>
     <A-220B_IGR>	shared	</A-220B_IGR>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_8V135_IGR>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </_8V135_IGR>
+      </engines>
+      <chassis>
+        <Chassis_Ch17_WZ131_1_WZ132_2_IGR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0483	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch17_WZ131_1_WZ132_2_IGR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_100mm_60-100T_IGR>
         <delta>	1.17	</delta>
       </_100mm_60-100T_IGR>
     </guns>
-    <chassis>
-      <Chassis_Ch17_WZ131_1_WZ132_2_IGR>
-        <alpha>	0.0483	</alpha>
-      </Chassis_Ch17_WZ131_1_WZ132_2_IGR>
-    </chassis>
-    <engines>
-      <_8V135_IGR>
-        <bravo>	137.4465	</bravo>
-      </_8V135_IGR>
-    </engines>
     <armour>	0.900299889	</armour>
   </clientAdjustmentFactors>
   <effects>

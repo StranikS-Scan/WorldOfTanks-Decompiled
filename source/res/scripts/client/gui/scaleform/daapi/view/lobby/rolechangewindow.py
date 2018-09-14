@@ -83,7 +83,7 @@ class RoleChangeWindow(RoleChangeMeta):
             mainRole = selectedVehicle.descriptor.type.crewRoles[slotIdx][0]
             if mainRole not in mainRoles:
                 mainRoles.append(mainRole)
-                criteria = REQ_CRITERIA.TANKMAN.NATIVE_TANKS([self.__selectedVehicleCD]) | REQ_CRITERIA.TANKMAN.ROLES([mainRole])
+                criteria = REQ_CRITERIA.TANKMAN.NATIVE_TANKS([self.__selectedVehicleCD]) | REQ_CRITERIA.TANKMAN.ROLES([mainRole]) | REQ_CRITERIA.TANKMAN.ACTIVE
                 roleTankmen = self.__items.getTankmen(criteria).values()
                 sameTankmen = len(roleTankmen)
                 roleSlotIsTaken = _isRoleSlotTaken(roleTankmen, selectedVehicle, mainRole)

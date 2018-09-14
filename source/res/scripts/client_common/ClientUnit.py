@@ -55,28 +55,34 @@ _EXTRA_BY_PRB_TYPE = {PREBATTLE_TYPE.CLUBS: _ClubExtra,
 class ClientUnit(UnitBase):
 
     def __init__(self, limitsDefs={}, slotDefs={}, slotCount=0, packedRoster='', extrasInit=None, packedUnit=''):
-        self.__eManager = Event.EventManager()
-        self.onUnitFlagsChanged = Event.Event(self.__eManager)
-        self.onUnitReadyMaskChanged = Event.Event(self.__eManager)
-        self.onUnitVehicleChanged = Event.Event(self.__eManager)
-        self.onUnitVehiclesChanged = Event.Event(self.__eManager)
-        self.onUnitSettingChanged = Event.Event(self.__eManager)
-        self.onUnitPlayerRoleChanged = Event.Event(self.__eManager)
-        self.onUnitRosterChanged = Event.Event(self.__eManager)
-        self.onUnitMembersListChanged = Event.Event(self.__eManager)
-        self.onUnitPlayerAdded = Event.Event(self.__eManager)
-        self.onUnitPlayerRemoved = Event.Event(self.__eManager)
-        self.onUnitPlayersListChanged = Event.Event(self.__eManager)
-        self.onUnitPlayerVehDictChanged = Event.Event(self.__eManager)
-        self.onUnitPlayerInfoChanged = Event.Event(self.__eManager)
-        self.onUnitExtraChanged = Event.Event(self.__eManager)
-        self.onUnitUpdated = Event.Event(self.__eManager)
+        self.__eManager = Event.SuspendedEventManager()
+        self.onUnitFlagsChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitReadyMaskChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitVehicleChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitVehiclesChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitSettingChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitPlayerRoleChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitRosterChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitMembersListChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitPlayerAdded = Event.SuspendedEvent(self.__eManager)
+        self.onUnitPlayerRemoved = Event.SuspendedEvent(self.__eManager)
+        self.onUnitPlayersListChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitPlayerVehDictChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitPlayerInfoChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitExtraChanged = Event.SuspendedEvent(self.__eManager)
+        self.onUnitUpdated = Event.SuspendedEvent(self.__eManager)
         self._creatorDBID = 0
         UnitBase.__init__(self, limitsDefs, slotDefs, slotCount, packedRoster, extrasInit, packedUnit)
 
     def destroy(self):
         self.__eManager.clear()
         self._initClean()
+
+    def lock(self):
+        self.__eManager.suspend()
+
+    def unlock(self):
+        self.__eManager.resume()
 
     def getFlags(self):
         return self._flags

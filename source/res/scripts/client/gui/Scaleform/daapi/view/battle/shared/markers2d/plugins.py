@@ -26,10 +26,7 @@ def createPlugins(manager):
     assert isinstance(manager, IMarkersManager), 'Class of manager must extends IMarkersManager'
     visitor = g_sessionProvider.arenaVisitor
     setup = {'equipments': EquipmentsMarkerPlugin}
-    if visitor.gui.isEventBattle():
-        from gui.Scaleform.daapi.view.battle.event_mark1.markers2d import Mark1VehiclesFlagsBonusesMarkerPlugin
-        setup['vehicles_flags'] = Mark1VehiclesFlagsBonusesMarkerPlugin
-    elif visitor.hasFlags():
+    if visitor.hasFlags():
         setup['vehicles_flags'] = VehicleAndFlagsMarkerPlugin
         setup['absorption'] = AbsorptionMarkersPlugin
     elif visitor.hasRespawns():

@@ -1033,23 +1033,89 @@
     </SCR_610>
     <SCR_619>	shared	</SCR_619>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Twin_Cadillac_42series>
+          <smplEnginePower>	338.33	</smplEnginePower>
+        </Twin_Cadillac_42series>
+        <Continental_R-975-C1>
+          <smplEnginePower>	370.0484	</smplEnginePower>
+        </Continental_R-975-C1>
+      </engines>
+      <chassis>
+        <Chassis_M8A1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M8A1>
+        <Chassis_M8A1_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M8A1_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M8A1>
-        <alpha>	0.1127	</alpha>
-      </Chassis_M8A1>
-      <Chassis_M8A1_2>
-        <alpha>	0.0966	</alpha>
-      </Chassis_M8A1_2>
-    </chassis>
-    <engines>
-      <Twin_Cadillac_42series>
-        <bravo>	84.58249	</bravo>
-      </Twin_Cadillac_42series>
-      <Continental_R-975-C1>
-        <bravo>	92.5121	</bravo>
-      </Continental_R-975-C1>
-    </engines>
     <armour>	0.903760052	</armour>
   </clientAdjustmentFactors>
   <effects>

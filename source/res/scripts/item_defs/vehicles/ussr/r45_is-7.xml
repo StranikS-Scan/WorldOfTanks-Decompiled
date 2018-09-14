@@ -601,7 +601,7 @@
               <rayEnd>	0.320126 -0.0663582 1.79826	</rayEnd>
               <rayUp>	0.122 0.116 4	</rayUp>
               <size>	0.683	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
@@ -668,17 +668,52 @@
   <radios>
     <_10RK-26>	shared	</_10RK-26>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <M-50T>
+          <smplEnginePower>	1110.145	</smplEnginePower>
+        </M-50T>
+      </engines>
+      <chassis>
+        <IS-7>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1449	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </IS-7>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <IS-7>
-        <alpha>	0.1449	</alpha>
-      </IS-7>
-    </chassis>
-    <engines>
-      <M-50T>
-        <bravo>	277.5363	</bravo>
-      </M-50T>
-    </engines>
     <armour>	1.332818258	</armour>
   </clientAdjustmentFactors>
   <effects>

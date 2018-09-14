@@ -1052,26 +1052,92 @@
     </ER_26_ter>
     <ER_27>	shared	</ER_27>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Somua_190CV_V8>
+          <smplEnginePower>	200.8834	</smplEnginePower>
+        </Somua_190CV_V8>
+        <Hispano_219CV_V8>
+          <smplEnginePower>	231.5446	</smplEnginePower>
+        </Hispano_219CV_V8>
+        <Somua_230_V8>
+          <smplEnginePower>	243.1747	</smplEnginePower>
+        </Somua_230_V8>
+      </engines>
+      <chassis>
+        <Chassis_Somua_S35>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Somua_S35>
+        <Chassis_Somua_S35_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Somua_S35_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Somua_S35>
-        <alpha>	0.12075	</alpha>
-      </Chassis_Somua_S35>
-      <Chassis_Somua_S35_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_Somua_S35_2>
-    </chassis>
-    <engines>
-      <Somua_190CV_V8>
-        <bravo>	50.22086	</bravo>
-      </Somua_190CV_V8>
-      <Hispano_219CV_V8>
-        <bravo>	57.88614	</bravo>
-      </Hispano_219CV_V8>
-      <Somua_230_V8>
-        <bravo>	60.79367	</bravo>
-      </Somua_230_V8>
-    </engines>
     <armour>	0.861312906	</armour>
   </clientAdjustmentFactors>
   <effects>

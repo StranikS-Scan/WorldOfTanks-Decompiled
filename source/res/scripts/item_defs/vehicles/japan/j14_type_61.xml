@@ -687,28 +687,94 @@
     </JAN-GRC-3Z>
     <JAN-GRC-4Z>	shared	</JAN-GRC-4Z>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Mitsubishi_12HM20WT>
+          <smplEnginePower>	602.6503	</smplEnginePower>
+        </_Mitsubishi_12HM20WT>
+        <_Mitsubishi_12HM21WT>
+          <smplEnginePower>	638.5978	</smplEnginePower>
+        </_Mitsubishi_12HM21WT>
+      </engines>
+      <chassis>
+        <Chassis_Type_61>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Type_61>
+        <Chassis_Type_61_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Type_61_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
     <guns>
       <_105mm_Rifled_Gun>
         <delta>	1.07128309	</delta>
       </_105mm_Rifled_Gun>
     </guns>
-    <chassis>
-      <Chassis_Type_61>
-        <alpha>	0.0966	</alpha>
-      </Chassis_Type_61>
-      <Chassis_Type_61_2>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Type_61_2>
-    </chassis>
-    <engines>
-      <_Mitsubishi_12HM20WT>
-        <bravo>	150.6626	</bravo>
-      </_Mitsubishi_12HM20WT>
-      <_Mitsubishi_12HM21WT>
-        <bravo>	159.6494	</bravo>
-      </_Mitsubishi_12HM21WT>
-    </engines>
     <armour>	0.850861495	</armour>
   </clientAdjustmentFactors>
   <effects>

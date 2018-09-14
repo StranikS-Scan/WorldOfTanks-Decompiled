@@ -306,13 +306,13 @@ class ProfileFalloutStatisticsVO(ProfileDictStatisticsVO):
         return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser, FALLOUT_STATISTICS_LAYOUT), _getChartsData(targetData, PROFILE.SECTION_STATISTICS_CHART_LEVELDISABLEDFALLOUT_TOOLTIP))
 
     def __packAvgVictoryPointsData(self, avgVictoryPoints):
-        return PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(avgVictoryPoints), PROFILE.SECTION_STATISTICS_SCORES_AVGVICTORYPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGVICTORYPOINTS, 'avgVictoryPoints48x48.png')
+        return PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(avgVictoryPoints), PROFILE.SECTION_STATISTICS_SCORES_AVGVICTORYPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGVICTORYPOINTS, 'avgVictoryPoints40x32.png')
 
     def __packMaxVictoryPoints(self, maxVictoryPoints):
-        return PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(maxVictoryPoints), PROFILE.SECTION_STATISTICS_SCORES_MAXVICTORYPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXVICTORYPOINTS, 'maxVictoryPoints48x48.png')
+        return PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(maxVictoryPoints), PROFILE.SECTION_STATISTICS_SCORES_MAXVICTORYPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXVICTORYPOINTS, 'maxVictoryPoints40x32.png')
 
     def __packKDR(self, kdr, kills, consumablesKills, deaths):
-        return PUtils.packLditItemData(BigWorld.wg_getNiceNumberFormat(kdr) if kdr is not None else PUtils.UNAVAILABLE_VALUE, PROFILE.SECTION_STATISTICS_SCORES_KILLDEATHRATIO, PROFILE.PROFILE_PARAMS_TOOLTIP_KDR, 'kdr48x48.png', PUtils.createToolTipData([kills, consumablesKills, deaths]))
+        return PUtils.packLditItemData(BigWorld.wg_getNiceNumberFormat(kdr) if kdr is not None else PUtils.UNAVAILABLE_VALUE, PROFILE.SECTION_STATISTICS_SCORES_KILLDEATHRATIO, PROFILE.PROFILE_PARAMS_TOOLTIP_KDR, 'kdr40x32.png', PUtils.createToolTipData([kills, consumablesKills, deaths]))
 
     def __packAvgDmgData(self, avgDmg):
         return PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(avgDmg), PROFILE.SECTION_SUMMARY_SCORES_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_AVGDAMAGE, 'avgDamage40x32.png')

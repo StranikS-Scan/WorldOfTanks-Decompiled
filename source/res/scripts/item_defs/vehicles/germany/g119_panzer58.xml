@@ -500,17 +500,52 @@
   <radios>
     <Kdo_Funkstation_SE_407>	shared	</Kdo_Funkstation_SE_407>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <MB-837-Ba-600>
+          <smplEnginePower>	634.3687	</smplEnginePower>
+        </MB-837-Ba-600>
+      </engines>
+      <chassis>
+        <Chassis_G119_Panzer58>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G119_Panzer58>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G119_Panzer58>
-        <alpha>	0.05635	</alpha>
-      </Chassis_G119_Panzer58>
-    </chassis>
-    <engines>
-      <MB-837-Ba-600>
-        <bravo>	158.5922	</bravo>
-      </MB-837-Ba-600>
-    </engines>
     <armour>	0.919060182	</armour>
   </clientAdjustmentFactors>
   <effects>

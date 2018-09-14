@@ -565,17 +565,52 @@
   <radios>
     <_9RM>	shared	</_9RM>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <NORINCO_12150L7>
+          <smplEnginePower>	549.7862	</smplEnginePower>
+        </NORINCO_12150L7>
+      </engines>
+      <chassis>
+        <Chassis_Ch01_Type59_gold>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Ch01_Type59_gold>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Ch01_Type59_gold>
-        <alpha>	0.0805	</alpha>
-      </Chassis_Ch01_Type59_gold>
-    </chassis>
-    <engines>
-      <NORINCO_12150L7>
-        <bravo>	137.4465	</bravo>
-      </NORINCO_12150L7>
-    </engines>
     <armour>	1.203216407	</armour>
   </clientAdjustmentFactors>
   <effects>
@@ -592,4 +627,5 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
+  <customDefaultCamouflage>	true	</customDefaultCamouflage>
 </ch01_type59_gold.xml>

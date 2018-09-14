@@ -88,23 +88,32 @@ def int2roman(number):
 
 
 def getClientVersion():
+    """ Get client version including build number.
+    """
     sec = ResMgr.openSection(VERSION_FILE_PATH)
     return sec.readString('version')
 
 
+def getShortClientVersion():
+    """ Get client version excluding build number.
+    """
+    sec = ResMgr.openSection(VERSION_FILE_PATH)
+    return sec.readString('version').split('#')[0]
+
+
 def getFullClientVersion():
+    """ Get client version including app name and build number.
+    """
     sec = ResMgr.openSection(VERSION_FILE_PATH)
     version = i18n.makeString(sec.readString('appname')) + ' ' + sec.readString('version')
     return version
 
 
 def isShowStartupVideo():
-    if BigWorld.isLowProductivityPC():
+    from gui import GUI_SETTINGS
+    if not GUI_SETTINGS.guiEnabled:
         return False
     else:
-        from gui import GUI_SETTINGS
-        if not GUI_SETTINGS.guiEnabled:
-            return False
         p = Settings.g_instance.userPrefs
         if p is not None:
             if p.readInt(Settings.KEY_SHOW_STARTUP_MOVIE, 1) == 1:

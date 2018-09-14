@@ -2,20 +2,10 @@
 # Embedded file name: scripts/client/vehicle_systems/model_assembler.py
 from AvatarInputHandler import mathUtils
 import BigWorld
-from VehicleUtils import VehicleDamageState
+from VehicleAppearance import VehicleDamageState
 import constants
 from vehicle_systems.tankStructure import getPartModelsFromDesc, getSkeleton, TankNodeNames, TankPartNames
-MARK_NODES_POSTFIX = '_02'
-
-def _addMarkTurret(assembler, turretModel, gunModel, skeleton):
-    turretModel = turretModel.replace('01', '02')
-    gunModel = gunModel.replace('01', '02')
-    assembler.addPart(turretModel, 'HP_turretJoint_02', TankPartNames.TURRET, skeleton.turret, mathUtils.createIdentityMatrix())
-    assembler.addPart(gunModel, TankNodeNames.GUN_JOINT, TankPartNames.GUN, skeleton.gun, mathUtils.createIdentityMatrix())
-    renameNodes = [ x[0] for x in skeleton.turret ] + [TankPartNames.TURRET] + [ x[0] for x in skeleton.gun ] + [TankPartNames.GUN]
-    for nodeName in renameNodes:
-        assembler.renameNode(nodeName, nodeName + MARK_NODES_POSTFIX)
-
+import Vehicular
 
 def prepareCompoundAssembler(vehicleDesc, modelStateName, spaceID, isTurretDetached=False):
     if constants.IS_DEVELOPMENT and modelStateName not in VehicleDamageState.MODEL_STATE_NAMES:
@@ -23,10 +13,7 @@ def prepareCompoundAssembler(vehicleDesc, modelStateName, spaceID, isTurretDetac
     if spaceID is None:
         spaceID = BigWorld.player().spaceID
     partModels = getPartModelsFromDesc(vehicleDesc, modelStateName)
-    chassis, hull, turret, gun = (partModels.chassis,
-     partModels.hull,
-     partModels.turret,
-     partModels.gun)
+    chassis, hull, turret, gun = partModels
     assembler = BigWorld.CompoundAssembler()
     skeleton = getSkeleton(vehicleDesc, modelStateName)
     assembler.addRootPart(chassis, TankPartNames.CHASSIS, skeleton.chassis, mathUtils.createIdentityMatrix())
@@ -34,8 +21,6 @@ def prepareCompoundAssembler(vehicleDesc, modelStateName, spaceID, isTurretDetac
     turretJointName = vehicleDesc.hull['turretHardPoints'][0]
     assembler.renameNode(turretJointName, TankNodeNames.TURRET_JOINT)
     if not isTurretDetached:
-        if 'markI' in vehicleDesc.type.tags:
-            _addMarkTurret(assembler, turret, gun, skeleton)
         assembler.addPart(turret, TankNodeNames.TURRET_JOINT, TankPartNames.TURRET, skeleton.turret, mathUtils.createIdentityMatrix())
         assembler.addPart(gun, TankNodeNames.GUN_JOINT, TankPartNames.GUN, skeleton.gun, mathUtils.createIdentityMatrix())
     cornerPoint = vehicleDesc.chassis['topRightCarryingPoint']
@@ -49,7 +34,7 @@ def prepareCompoundAssembler(vehicleDesc, modelStateName, spaceID, isTurretDetac
 
 def createGunAnimator(vehicleDesc, basisMatrix=None, lodLink=None):
     recoilDescr = vehicleDesc.gun['recoil']
-    gunAnimator = BigWorld.RecoilAnimator(recoilDescr['backoffTime'], recoilDescr['returnTime'], recoilDescr['amplitude'], recoilDescr['lodDist'])
+    gunAnimator = Vehicular.RecoilAnimator(recoilDescr['backoffTime'], recoilDescr['returnTime'], recoilDescr['amplitude'], recoilDescr['lodDist'])
     if basisMatrix is not None:
         gunAnimator.basisMatrix = basisMatrix
     gunAnimator.lodLink = lodLink
@@ -57,7 +42,7 @@ def createGunAnimator(vehicleDesc, basisMatrix=None, lodLink=None):
 
 
 def createSwingingAnimator(vehicleDesc, basisMatrix=None, worldMProv=None, lodLink=None):
-    swingingAnimator = BigWorld.SwingingAnimator()
+    swingingAnimator = Vehicular.SwingingAnimator()
     swingingAnimator.basisMatrix = basisMatrix
     swingingCfg = vehicleDesc.hull['swinging']
     pp = tuple((p * m for p, m in zip(swingingCfg['pitchParams'], (0.9, 1.88, 0.3, 4.0, 1.0, 1.0))))

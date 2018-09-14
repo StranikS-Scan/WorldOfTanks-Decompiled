@@ -53,13 +53,13 @@ class PromoController(Controller):
 
     @process
     def showCurrentVersionPatchPromo(self, isAsync=False):
-        self.__currentVersionBrowserID = yield self.__showPromoBrowser(self.__currentVersionPromoUrl, i18n.makeString(MENU.PROMO_PATCH_TITLE), browserID=self.__currentVersionBrowserID, isAsync=isAsync)
+        self.__currentVersionBrowserID = yield self.__showPromoBrowser(self.__currentVersionPromoUrl, i18n.makeString(MENU.PROMO_PATCH_TITLE), browserID=self.__currentVersionBrowserID, isAsync=isAsync, showWaiting=not isAsync)
 
     @process
     def showVersionsPatchPromo(self):
         promoUrl = yield self.__urlMacros.parse(GUI_SETTINGS.promoscreens)
         promoTitle = i18n.makeString(MENU.PROMO_PATCH_TITLE)
-        self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, promoTitle, browserID=self.__currentVersionBrowserID, isAsync=False)
+        self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, promoTitle, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
 
     def isPatchPromoAvailable(self):
         return self.__currentVersionPromoUrl is not None and GUI_SETTINGS.isPatchPromoEnabled
@@ -142,8 +142,8 @@ class PromoController(Controller):
 
     @async
     @process
-    def __showPromoBrowser(self, promoUrl, promoTitle, browserID=None, isAsync=True, callback=None):
-        browserID = yield self._getBrowserController().load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, isDefault=False, showCloseBtn=True)
+    def __showPromoBrowser(self, promoUrl, promoTitle, browserID=None, isAsync=True, showWaiting=False, callback=None):
+        browserID = yield self._getBrowserController().load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, isDefault=False, showCloseBtn=True, showWaiting=showWaiting)
         callback(browserID)
 
     @classmethod

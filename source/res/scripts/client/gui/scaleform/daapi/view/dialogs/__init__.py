@@ -208,18 +208,26 @@ class I18nConfirmDialogMeta(I18nDialogMeta):
         super(I18nConfirmDialogMeta, self).__init__(key, buttons, titleCtx, messageCtx, meta, scope)
 
 
-class DismissTankmanDialogMeta(I18nConfirmDialogMeta):
+class TankmanOperationDialogMeta(I18nConfirmDialogMeta):
 
-    def __init__(self, key, tankman=None, focusedID=None):
-        super(DismissTankmanDialogMeta, self).__init__(key, None, None, None, focusedID)
+    def __init__(self, key, tankman=None, focusedID=None, showPeriodEndWarning=False):
+        super(TankmanOperationDialogMeta, self).__init__(key, None, None, None, focusedID)
         self.__tankman = tankman
+        self.__showPeriodEndWarning = showPeriodEndWarning
         return
 
     def getEventType(self):
-        return events.ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG
+        if self.__tankman.isDismissed:
+            return events.ShowDialogEvent.SHOW_RESTORE_TANKMAN_DIALOG
+        else:
+            return events.ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG
 
     def getTankman(self):
         return self.__tankman
+
+    @property
+    def showPeriodEndWarning(self):
+        return self.__showPeriodEndWarning
 
 
 class IconDialogMeta(I18nConfirmDialogMeta):

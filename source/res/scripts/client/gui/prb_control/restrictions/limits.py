@@ -305,7 +305,7 @@ class _UnitActionValidator(object):
         if not valid:
             return (valid, restriction)
         valid, restriction = self._validateLevels(stats, flags)
-        return (valid, restriction) if not valid else self._validateSlots(stats, flags, slots)
+        return (valid, restriction) if not valid else self._validateSlots(pInfo, stats, flags, slots)
 
     def canPlayerDoAction(self, pInfo, flags, vInfos):
         if not pInfo.isInSlot:
@@ -354,7 +354,7 @@ class _UnitActionValidator(object):
     def _areVehiclesSelected(self, stats):
         return not stats.freeSlotsCount and len(stats.levelsSeq) == stats.occupiedSlotsCount
 
-    def _validateSlots(self, stats, flags, slots):
+    def _validateSlots(self, pInfo, stats, flags, slots):
         return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS) if stats.readyCount != stats.occupiedSlotsCount else (True, UNIT_RESTRICTION.UNDEFINED)
 
     def _validateLevels(self, stats, flags):
@@ -438,7 +438,7 @@ class SortieActionValidator(_UnitActionValidator):
                         return (False, UNIT_RESTRICTION.CURFEW)
         return super(SortieActionValidator, self).canPlayerDoAction(pInfo, flags, vInfo)
 
-    def _validateSlots(self, stats, flags, slots):
+    def _validateSlots(self, pInfo, stats, flags, slots):
         if flags.isDevMode():
             return (True, UNIT_RESTRICTION.UNDEFINED)
         if self._rosterSettings.getMinSlots() > stats.occupiedSlotsCount:
@@ -458,7 +458,7 @@ class ClubsActionValidator(_UnitActionValidator):
         super(ClubsActionValidator, self).__init__(rosterSettings)
         self.__proxy = weakref.proxy(proxy)
 
-    def _validateSlots(self, stats, flags, slots):
+    def _validateSlots(self, pInfo, stats, flags, slots):
         if flags.isDevMode():
             return (True, UNIT_RESTRICTION.UNDEFINED)
         _, unit = self.__proxy.getUnit()
@@ -484,7 +484,7 @@ class SquadActionValidator(_UnitActionValidator):
         super(SquadActionValidator, self).__init__(rosterSettings, hasPlayersSearch, useEventVehicles)
 
     def validateVehicles(self, vInfo, flags):
-        return super(SquadActionValidator, self).validateVehicles(self._validateVehiclesInfo(vInfo), flags)
+        return super(SquadActionValidator, self).validateVehicles(self._getValidatedVehicles(vInfo), flags)
 
     def validateStateToStartBattle(self, flags):
         return (True, UNIT_RESTRICTION.UNDEFINED)
@@ -492,21 +492,20 @@ class SquadActionValidator(_UnitActionValidator):
     def _validateLevels(self, stats, flags):
         return (True, UNIT_RESTRICTION.UNDEFINED)
 
-    def _validateSlots(self, stats, flags, slots):
+    def _validateSlots(self, pInfo, stats, flags, slots):
         return (True, UNIT_RESTRICTION.UNDEFINED)
 
     @staticmethod
-    def _validateVehiclesInfo(vInfos):
-        if g_currentVehicle.isPresent():
-            vehicle = g_currentVehicle.item
-            vInfos = (unit_items.VehicleInfo(vehicle.invID, vehicle.intCD, vehicle.level),)
-        elif vInfos is None:
-            vInfos = (unit_items.VehicleInfo(),)
+    def _getValidatedVehicles(vInfos):
+        if not findFirst(lambda v: not v.isEmpty(), vInfos, False):
+            if g_currentVehicle.isPresent():
+                vehicle = g_currentVehicle.item
+                vInfos = (unit_items.VehicleInfo(vehicle.invID, vehicle.intCD, vehicle.level),)
+            else:
+                vInfos = (unit_items.VehicleInfo(),)
         return vInfos
 
     def _validateFlags(self, pInfo, flags, vInfos):
-        if flags.isInArena() and not pInfo.isInArena():
-            return (True, UNIT_RESTRICTION.UNDEFINED)
         if flags.isInArena():
             return (False, UNIT_RESTRICTION.IS_IN_ARENA)
         return (False, UNIT_RESTRICTION.IS_IN_IDLE) if flags.isInIdle() else (True, UNIT_RESTRICTION.UNDEFINED)
@@ -514,11 +513,18 @@ class SquadActionValidator(_UnitActionValidator):
 
 class BalancedSquadActionValidator(SquadActionValidator):
 
+    def _validateSlots(self, pInfo, stats, flags, slots):
+        valid, restriction = super(BalancedSquadActionValidator, self)._validateSlots(pInfo, stats, flags, slots)
+        if valid:
+            if stats.occupiedSlotsCount > 1 and not pInfo.isReady:
+                return (False, UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED)
+        return (valid, restriction)
+
     def validateVehicles(self, vInfos, flags):
         valid, restriction = super(BalancedSquadActionValidator, self).validateVehicles(vInfos, flags)
         if valid and g_eventsCache.isBalancedSquadEnabled():
             levelsRange = self._rosterSettings.getLevelsRange()
-            for vInfo in self._validateVehiclesInfo(vInfos):
+            for vInfo in self._getValidatedVehicles(vInfos):
                 if vInfo.vehLevel not in levelsRange:
                     return (False, UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL)
 
@@ -575,7 +581,7 @@ class FalloutSquadActionValidator(SquadActionValidator):
 
             return (True, UNIT_RESTRICTION.UNDEFINED)
 
-    def _validateSlots(self, stats, flags, slots):
+    def _validateSlots(self, pInfo, stats, flags, slots):
         if self.__falloutCtrl.getBattleType() == QUEUE_TYPE.FALLOUT_MULTITEAM:
             if stats.freeSlotsCount > self._rosterSettings.getMaxEmptySlots():
                 return (False, UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS)

@@ -8,18 +8,10 @@ class IngameHelpWindowMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def clickSettingWindow(self):
-        """
-        :return :
-        """
         self._printOverrideError('clickSettingWindow')
 
     def as_setKeysS(self, data):
-        """
-        :param data:
-        :return :
-        """
         return self.flashObject.as_setKeys(data) if self._isDAAPIInited() else None

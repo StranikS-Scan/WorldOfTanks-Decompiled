@@ -32,7 +32,6 @@
       <armor_5>	170	</armor_5>
       <armor_6>	80	</armor_6>
       <armor_7>	50	</armor_7>
-      <armor_8>	90	</armor_8>
       <armor_9>	30	</armor_9>
       <armor_10>	20	</armor_10>
       <armor_11>	20	</armor_11>
@@ -97,7 +96,7 @@
       <tags></tags>
       <level>	10	</level>
       <notInShop>	true	</notInShop>
-      <price>	82500.0	</price>
+      <price>	82500	</price>
       <armor>
         <leftTrack>	30	</leftTrack>
         <rightTrack>	30	</rightTrack>
@@ -411,7 +410,7 @@
       <tags></tags>
       <level>	10	</level>
       <notInShop>	true	</notInShop>
-      <price>	66000.0	</price>
+      <price>	66000	</price>
       <armor>
         <armor_1>	100	</armor_1>
         <armor_3>	50	</armor_3>
@@ -547,17 +546,52 @@
   <radios>
     <SCR_619>	shared	</SCR_619>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_295_F>
+          <smplEnginePower>	1268.737	</smplEnginePower>
+        </Maybach_HL_295_F>
+      </engines>
+      <chassis>
+        <Chassis_AMX_50_68t>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_AMX_50_68t>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_AMX_50_68t>
-        <alpha>	0.1127	</alpha>
-      </Chassis_AMX_50_68t>
-    </chassis>
-    <engines>
-      <Maybach_HL_295_F>
-        <bravo>	317.1843	</bravo>
-      </Maybach_HL_295_F>
-    </engines>
     <armour>	1.168942063	</armour>
   </clientAdjustmentFactors>
   <effects>

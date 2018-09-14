@@ -8,31 +8,16 @@ class EULAMeta(AbstractWindowView):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends AbstractWindowView
-    null
     """
 
     def requestEULAText(self):
-        """
-        :return :
-        """
         self._printOverrideError('requestEULAText')
 
     def onLinkClick(self, url):
-        """
-        :param url:
-        :return :
-        """
         self._printOverrideError('onLinkClick')
 
     def onApply(self):
-        """
-        :return :
-        """
         self._printOverrideError('onApply')
 
     def as_setEULATextS(self, text):
-        """
-        :param text:
-        :return :
-        """
         return self.flashObject.as_setEULAText(text) if self._isDAAPIInited() else None

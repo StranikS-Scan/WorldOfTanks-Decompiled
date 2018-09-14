@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/DIALOGS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
+from debug_utils import LOG_WARNING
 
 class DIALOGS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     GATHERINGXPFORM_SORTBY_VEHICLE = '#dialogs:gatheringXPForm/sortBy/vehicle'
     GATHERINGXPFORM_SORTBY_XP = '#dialogs:gatheringXPForm/sortBy/xp'
     GRAPHICSPRESETNOTINSTALLED = '#dialogs:graphicsPresetNotInstalled'
@@ -56,10 +54,9 @@ class DIALOGS(object):
     GRAPHICSPRESETRESTARTCONFIRMATION_SUBMIT = '#dialogs:graphicsPresetRestartConfirmation/submit'
     GRAPHICSPRESETRESTARTCONFIRMATION_DELAY = '#dialogs:graphicsPresetRestartConfirmation/delay'
     GRAPHICSPRESETRESTARTCONFIRMATION_CANCEL = '#dialogs:graphicsPresetRestartConfirmation/cancel'
-    GRAPHICSPRESETNOTINSTALLED_TITLE = GRAPHICSPRESETNOTINSTALLED + '/title'
-    GRAPHICSPRESETNOTINSTALLED_MESSAGE = GRAPHICSPRESETNOTINSTALLED + '/message'
-    GRAPHICSPRESETNOTINSTALLED_CANCEL = GRAPHICSPRESETNOTINSTALLED + '/cancel'
-    GRAPHICSPRESETNOTINSTALLED_SUBMIT = GRAPHICSPRESETNOTINSTALLED + '/submit'
+    GRAPHICSPRESETNOTINSTALLED_TITLE = '#dialogs:graphicsPresetNotInstalled/title'
+    GRAPHICSPRESETNOTINSTALLED_MESSAGE = '#dialogs:graphicsPresetNotInstalled/message'
+    GRAPHICSPRESETNOTINSTALLED_CANCEL = '#dialogs:graphicsPresetNotInstalled/cancel'
     GRAPHICSPRESETDELAYEDCONFIRMATION_TITLE = '#dialogs:graphicsPresetDelayedConfirmation/title'
     GRAPHICSPRESETDELAYEDCONFIRMATION_MESSAGE = '#dialogs:graphicsPresetDelayedConfirmation/message'
     GRAPHICSPRESETDELAYEDCONFIRMATION_SUBMIT = '#dialogs:graphicsPresetDelayedConfirmation/submit'
@@ -250,6 +247,11 @@ class DIALOGS(object):
     BUYVEHICLEDIALOG_ROLLUPBTNLABEL = '#dialogs:buyVehicleDialog/rollupBtnLabel'
     BUYVEHICLEDIALOG_SUBMITBTN = '#dialogs:buyVehicleDialog/submitBtn'
     BUYVEHICLEDIALOG_CANCELBTN = '#dialogs:buyVehicleDialog/cancelBtn'
+    RESTOREVEHICLEDIALOG_TITLE = '#dialogs:restoreVehicleDialog/title'
+    RESTOREVEHICLEDIALOG_PRICELABEL = '#dialogs:restoreVehicleDialog/priceLabel'
+    RESTOREVEHICLEDIALOG_TANKMENCHECKBOX = '#dialogs:restoreVehicleDialog/tankmenCheckbox'
+    RESTOREVEHICLEDIALOG_SUBMITBTN = '#dialogs:restoreVehicleDialog/submitBtn'
+    RESTOREVEHICLEDIALOG_WARNING = '#dialogs:restoreVehicleDialog/warning'
     BARRACKSEXPAND_TITLE = '#dialogs:barracksExpand/title'
     BARRACKSEXPAND_MESSAGE = '#dialogs:barracksExpand/message'
     BARRACKSEXPAND_SUBMIT = '#dialogs:barracksExpand/submit'
@@ -291,6 +293,23 @@ class DIALOGS(object):
     PROTECTEDDISMISSTANKMAN_ERRORMESSAGE = '#dialogs:protectedDismissTankman/errorMessage'
     PROTECTEDDISMISSTANKMAN_SUBMIT = '#dialogs:protectedDismissTankman/submit'
     PROTECTEDDISMISSTANKMAN_CANCEL = '#dialogs:protectedDismissTankman/cancel'
+    PROTECTEDDISMISSTANKMAN_ALERT = '#dialogs:protectedDismissTankman/alert'
+    RESTORETANKMAN_TITLE = '#dialogs:restoreTankman/title'
+    RESTORETANKMAN_MESSAGE = '#dialogs:restoreTankman/message'
+    RESTORETANKMAN_FORFREE = '#dialogs:restoreTankman/forFree'
+    RESTORETANKMAN_WARNING = '#dialogs:restoreTankman/warning'
+    RESTORETANKMAN_SUBMIT = '#dialogs:restoreTankman/submit'
+    RESTORETANKMAN_CANCEL = '#dialogs:restoreTankman/cancel'
+    RESTORETANKMAN_PRICE = '#dialogs:restoreTankman/price'
+    RESTORETANKMNAN_NEWPERIODWARNING = '#dialogs:restoreTankmnan/newPeriodWarning'
+    DISMISSEDBUFFEROVERFLAW_TITLE = '#dialogs:dismissedBufferOverFlaw/title'
+    DISMISSEDBUFFEROVERFLAW_MESSAGE = '#dialogs:dismissedBufferOverFlaw/message'
+    DISMISSEDBUFFEROVERFLAW_SUBMIT = '#dialogs:dismissedBufferOverFlaw/submit'
+    DISMISSEDBUFFEROVERFLAW_CANCEL = '#dialogs:dismissedBufferOverFlaw/cancel'
+    DISMISSEDBUFFEROVERFLAWMULTIPLE_TITLE = '#dialogs:dismissedBufferOverFlawMultiple/title'
+    DISMISSEDBUFFEROVERFLAWMULTIPLE_MESSAGE = '#dialogs:dismissedBufferOverFlawMultiple/message'
+    DISMISSEDBUFFEROVERFLAWMULTIPLE_SUBMIT = '#dialogs:dismissedBufferOverFlawMultiple/submit'
+    DISMISSEDBUFFEROVERFLAWMULTIPLE_CANCEL = '#dialogs:dismissedBufferOverFlawMultiple/cancel'
     DROPSKILL_TITLE = '#dialogs:dropSkill/title'
     DROPSKILL_MESSAGE = '#dialogs:dropSkill/message'
     DROPSKILL_SUBMIT = '#dialogs:dropSkill/submit'
@@ -370,12 +389,12 @@ class DIALOGS(object):
     GATHERINGXPFORM_TOTALLABEL = '#dialogs:gatheringXPForm/totalLabel'
     GATHERINGXPFORM_SELECTALLLABEL = '#dialogs:gatheringXPForm/selectAllLabel'
     GATHERINGXPFORM_TOTALXP = '#dialogs:gatheringXPForm/totalXP'
-    GATHERINGXPFORM_SORTBY_SELECTION_HEADER = GATHERINGXPFORM_SORTBY_SELECTION + '/header'
-    GATHERINGXPFORM_SORTBY_SELECTION_BODY = GATHERINGXPFORM_SORTBY_SELECTION + '/body'
-    GATHERINGXPFORM_SORTBY_VEHICLE_HEADER = GATHERINGXPFORM_SORTBY_VEHICLE + '/header'
-    GATHERINGXPFORM_SORTBY_VEHICLE_BODY = GATHERINGXPFORM_SORTBY_VEHICLE + '/body'
-    GATHERINGXPFORM_SORTBY_XP_HEADER = GATHERINGXPFORM_SORTBY_XP + '/header'
-    GATHERINGXPFORM_SORTBY_XP_BODY = GATHERINGXPFORM_SORTBY_XP + '/body'
+    GATHERINGXPFORM_SORTBY_SELECTION_HEADER = '#dialogs:gatheringXPForm/sortBy/selection/header'
+    GATHERINGXPFORM_SORTBY_SELECTION_BODY = '#dialogs:gatheringXPForm/sortBy/selection/body'
+    GATHERINGXPFORM_SORTBY_VEHICLE_HEADER = '#dialogs:gatheringXPForm/sortBy/vehicle/header'
+    GATHERINGXPFORM_SORTBY_VEHICLE_BODY = '#dialogs:gatheringXPForm/sortBy/vehicle/body'
+    GATHERINGXPFORM_SORTBY_XP_HEADER = '#dialogs:gatheringXPForm/sortBy/xp/header'
+    GATHERINGXPFORM_SORTBY_XP_BODY = '#dialogs:gatheringXPForm/sortBy/xp/body'
     EXCHANGEXPWINDOW_ERROR_NOELITEVEHICLEINHANGAR = '#dialogs:exchangeXpWindow/error/noEliteVehicleInHangar'
     EXCHANGEXPWINDOW_ERROR_NOVEHICLESWITHXP = '#dialogs:exchangeXpWindow/error/noVehiclesWithXp'
     GATHERINGXPFORM_TOOLTIPS_CHECKBOXCREWSELECTED = '#dialogs:gatheringXPForm/tooltips/checkboxCrewSelected'
@@ -471,33 +490,28 @@ class DIALOGS(object):
     VEHICLESELLDIALOG_VEHICLETYPE_AT_SPG = '#dialogs:vehicleSellDialog/vehicleType/AT-SPG'
     VEHICLESELLDIALOG_VEHICLE_LEVEL = '#dialogs:vehicleSellDialog/vehicle/level'
     VEHICLESELLDIALOG_VEHICLE_EMPTYSELLPRICE = '#dialogs:vehicleSellDialog/vehicle/emptySellPrice'
-    VEHICLESELLDIALOG_COMMONRESULT = '#dialogs:vehicleSellDialog/commonResult'
     VEHICLESELLDIALOG_PROFFIT = '#dialogs:vehicleSellDialog/proffit'
     VEHICLESELLDIALOG_LOSS = '#dialogs:vehicleSellDialog/loss'
+    VEHICLESELLDIALOG_CREW_LABEL = '#dialogs:vehicleSellDialog/crew/label'
     VEHICLESELLDIALOG_OPTIONALDEVICE = '#dialogs:vehicleSellDialog/optionalDevice'
     VEHICLESELLDIALOG_COMPLEXOPTIONALDEVICE = '#dialogs:vehicleSellDialog/complexOptionalDevice'
     VEHICLESELLDIALOG_EQUIPMENT = '#dialogs:vehicleSellDialog/equipment'
     VEHICLESELLDIALOG_AMMO_LABEL = '#dialogs:vehicleSellDialog/ammo/label'
-    VEHICLESELLDIALOG_UNLOAD = '#dialogs:vehicleSellDialog/unload'
+    VEHICLESELLDIALOG_COMMONRESULT = '#dialogs:vehicleSellDialog/commonResult'
     VEHICLESELLDIALOG_INVENTORY = '#dialogs:vehicleSellDialog/inventory'
+    VEHICLESELLDIALOG_UNLOAD = '#dialogs:vehicleSellDialog/unload'
     VEHICLESELLDIALOG_NOTINSTALLED_MODULES = '#dialogs:vehicleSellDialog/notInstalled/modules'
     VEHICLESELLDIALOG_COUNT = '#dialogs:vehicleSellDialog/count'
     VEHICLESELLDIALOG_REMOVE = '#dialogs:vehicleSellDialog/remove'
     VEHICLESELLDIALOG_SUBMIT = '#dialogs:vehicleSellDialog/submit'
     VEHICLESELLDIALOG_CANCEL = '#dialogs:vehicleSellDialog/cancel'
-    VEHICLESELLDIALOG_CONTENT_TANKMENFIELD = '#dialogs:vehicleSellDialog/content/tankmenField'
-    VEHICLESELLDIALOG_CONTENT_EQUIPMENTSFIELD = '#dialogs:vehicleSellDialog/content/equipmentsField'
-    VEHICLESELLDIALOG_CONTENT_SHELLSFIELD = '#dialogs:vehicleSellDialog/content/shellsField'
-    VEHICLESELLDIALOG_CONTENT_TANKMENBOX = '#dialogs:vehicleSellDialog/content/tankmenBox'
-    VEHICLESELLDIALOG_CONTENT_EQUIPMENTSBOX = '#dialogs:vehicleSellDialog/content/equipmentsBox'
-    VEHICLESELLDIALOG_CONTENT_TOTALFIELDGIVE = '#dialogs:vehicleSellDialog/content/totalFieldGive'
-    VEHICLESELLDIALOG_CONTENT_TOTALFIELDTAKE = '#dialogs:vehicleSellDialog/content/totalFieldTake'
     VEHICLESELLDIALOG_VEHICLE_ELITE = '#dialogs:vehicleSellDialog/vehicle/elite'
     VEHICLESELLDIALOG_CREW_UNLOAD = '#dialogs:vehicleSellDialog/crew/Unload'
     VEHICLESELLDIALOG_CREW_DISSMISS = '#dialogs:vehicleSellDialog/crew/Dissmiss'
     VEHICLESELLDIALOG_CTRLQUESTION_HEADER = '#dialogs:vehicleSellDialog/CtrlQuestion/Header'
     VEHICLESELLDIALOG_CTRLQUESTION_QUESTION = '#dialogs:vehicleSellDialog/CtrlQuestion/Question'
     VEHICLESELLDIALOG_CTRLQUESTION_ERRORMESSAGE = '#dialogs:vehicleSellDialog/CtrlQuestion/errorMessage'
+    VEHICLESELLDIALOG_PRICE_SIGN_ADD = '#dialogs:vehicleSellDialog/price/sign/add'
     CUSTOMIZATION_CAMOUFLAGEDROP_TITLE = '#dialogs:customization/camouflageDrop/title'
     CUSTOMIZATION_CAMOUFLAGEDROP_MESSAGE = '#dialogs:customization/camouflageDrop/message'
     CUSTOMIZATION_CAMOUFLAGEDROP_SUBMIT = '#dialogs:customization/camouflageDrop/submit'
@@ -566,6 +580,14 @@ class DIALOGS(object):
     VEHICLESELL_UNIQUE_MESSAGE = '#dialogs:vehicleSell/unique/message'
     VEHICLESELL_UNIQUE_SUBMIT = '#dialogs:vehicleSell/unique/submit'
     VEHICLESELL_UNIQUE_CANCEL = '#dialogs:vehicleSell/unique/cancel'
+    VEHICLESELL_RESTORECOOLDOWN_TITLE = '#dialogs:vehicleSell/restoreCooldown/title'
+    VEHICLESELL_RESTORECOOLDOWN_MESSAGE = '#dialogs:vehicleSell/restoreCooldown/message'
+    VEHICLESELL_RESTORECOOLDOWN_SUBMIT = '#dialogs:vehicleSell/restoreCooldown/submit'
+    VEHICLESELL_RESTORECOOLDOWN_CANCEL = '#dialogs:vehicleSell/restoreCooldown/cancel'
+    VEHICLESELL_RESTOREUNLIMITED_TITLE = '#dialogs:vehicleSell/restoreUnlimited/title'
+    VEHICLESELL_RESTOREUNLIMITED_MESSAGE = '#dialogs:vehicleSell/restoreUnlimited/message'
+    VEHICLESELL_RESTOREUNLIMITED_SUBMIT = '#dialogs:vehicleSell/restoreUnlimited/submit'
+    VEHICLESELL_RESTOREUNLIMITED_CANCEL = '#dialogs:vehicleSell/restoreUnlimited/cancel'
     UPDATENEEDED_TITLE = '#dialogs:updateNeeded/title'
     UPDATENEEDED_MESSAGE = '#dialogs:updateNeeded/message'
     UPDATENEEDED_SUBMIT = '#dialogs:updateNeeded/submit'
@@ -778,21 +800,29 @@ class DIALOGS(object):
     STATICFORMATION_STAFFVIEW_CLOSECLUB_SUBMIT = '#dialogs:staticFormation/staffView/closeClub/submit'
     STATICFORMATION_STAFFVIEW_CLOSECLUB_CANCEL = '#dialogs:staticFormation/staffView/closeClub/cancel'
     CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_TITLE = '#dialogs:confirmExchangeDialog/exchangeCredits/title'
+    CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_TITLE = '#dialogs:confirmExchangeDialog/restoreExchangeCredits/title'
     CONFIRMEXCHANGEDIALOG_EXCHANGEXP_TITLE = '#dialogs:confirmExchangeDialog/exchangeXp/title'
     CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_NEEDITEMSTEXT = '#dialogs:confirmExchangeDialog/exchangeCredits/needItemsText'
+    CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_NEEDITEMSTEXT = '#dialogs:confirmExchangeDialog/restoreExchangeCredits/needItemsText'
     CONFIRMEXCHANGEDIALOG_EXCHANGEXP_NEEDITEMSTEXT = '#dialogs:confirmExchangeDialog/exchangeXp/needItemsText'
     CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_NEEDGOLDTEXT = '#dialogs:confirmExchangeDialog/exchangeCredits/needGoldText'
+    CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_NEEDGOLDTEXT = '#dialogs:confirmExchangeDialog/restoreExchangeCredits/needGoldText'
     CONFIRMEXCHANGEDIALOG_EXCHANGEXP_NEEDGOLDTEXT = '#dialogs:confirmExchangeDialog/exchangeXp/needGoldText'
     CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_NEEDITEMSSTEPPERTITLE = '#dialogs:confirmExchangeDialog/exchangeCredits/needItemsStepperTitle'
+    CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_NEEDITEMSSTEPPERTITLE = '#dialogs:confirmExchangeDialog/restoreExchangeCredits/needItemsStepperTitle'
     CONFIRMEXCHANGEDIALOG_EXCHANGEXP_NEEDITEMSSTEPPERTITLE = '#dialogs:confirmExchangeDialog/exchangeXp/needItemsStepperTitle'
     CONFIRMEXCHANGEDIALOG_GOLDITEMSSTEPPERTITLE = '#dialogs:confirmExchangeDialog/goldItemsStepperTitle'
     CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_SUBMIT = '#dialogs:confirmExchangeDialog/exchangeCredits/submit'
+    CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_SUBMIT = '#dialogs:confirmExchangeDialog/restoreExchangeCredits/submit'
     CONFIRMEXCHANGEDIALOG_EXCHANGEXP_SUBMIT = '#dialogs:confirmExchangeDialog/exchangeXp/submit'
     CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_CANCEL = '#dialogs:confirmExchangeDialog/exchangeCredits/cancel'
+    CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_CANCEL = '#dialogs:confirmExchangeDialog/restoreExchangeCredits/cancel'
     CONFIRMEXCHANGEDIALOG_EXCHANGEXP_CANCEL = '#dialogs:confirmExchangeDialog/exchangeXp/cancel'
     CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_EXCHANGENONEEDTEXT = '#dialogs:confirmExchangeDialog/exchangeCredits/exchangeNoNeedText'
+    CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_EXCHANGENONEEDTEXT = '#dialogs:confirmExchangeDialog/restoreExchangeCredits/exchangeNoNeedText'
     CONFIRMEXCHANGEDIALOG_EXCHANGEXP_EXCHANGENONEEDTEXT = '#dialogs:confirmExchangeDialog/exchangeXp/exchangeNoNeedText'
     CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_GOLDNOTENOUGHTEXT = '#dialogs:confirmExchangeDialog/exchangeCredits/goldNotEnoughText'
+    CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_GOLDNOTENOUGHTEXT = '#dialogs:confirmExchangeDialog/restoreExchangeCredits/goldNotEnoughText'
     CONFIRMEXCHANGEDIALOG_EXCHANGEXP_GOLDNOTENOUGHTEXT = '#dialogs:confirmExchangeDialog/exchangeXp/goldNotEnoughText'
     CLUBS_APP_SEND_TITLE = '#dialogs:clubs/app/send/title'
     CLUBS_APP_SEND_MESSAGE = '#dialogs:clubs/app/send/message'
@@ -864,7 +894,7 @@ class DIALOGS(object):
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_SPG,
      VEHICLESELLDIALOG_VEHICLETYPE_AT_SPG)
-    all_ENUM = (INTERVIEWQUIT_TITLE,
+    ALL_ENUM = (INTERVIEWQUIT_TITLE,
      INTERVIEWQUIT_MESSAGE,
      INTERVIEWQUIT_SUBMIT,
      INTERVIEWQUIT_CANCEL,
@@ -910,7 +940,6 @@ class DIALOGS(object):
      GRAPHICSPRESETNOTINSTALLED_TITLE,
      GRAPHICSPRESETNOTINSTALLED_MESSAGE,
      GRAPHICSPRESETNOTINSTALLED_CANCEL,
-     GRAPHICSPRESETNOTINSTALLED_SUBMIT,
      GRAPHICSPRESETDELAYEDCONFIRMATION_TITLE,
      GRAPHICSPRESETDELAYEDCONFIRMATION_MESSAGE,
      GRAPHICSPRESETDELAYEDCONFIRMATION_SUBMIT,
@@ -1071,6 +1100,12 @@ class DIALOGS(object):
      RECRUITWINDOW_NATIONDROPDOWN_SWEDEN,
      RECRUITWINDOW_SPECIALIZATION,
      RECRUITWINDOW_VEHICLECLASS,
+     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
+     RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
+     RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
+     RECRUITWINDOW_VEHICLECLASSDROPDOWN_HEAVYTANK,
+     RECRUITWINDOW_VEHICLECLASSDROPDOWN_AT_SPG,
+     RECRUITWINDOW_VEHICLECLASSDROPDOWN_SPG,
      RECRUITWINDOW_VEHICLETYPE,
      RECRUITWINDOW_MENUEMPTYROW,
      RECRUITWINDOW_SUBMIT,
@@ -1095,6 +1130,11 @@ class DIALOGS(object):
      BUYVEHICLEDIALOG_ROLLUPBTNLABEL,
      BUYVEHICLEDIALOG_SUBMITBTN,
      BUYVEHICLEDIALOG_CANCELBTN,
+     RESTOREVEHICLEDIALOG_TITLE,
+     RESTOREVEHICLEDIALOG_PRICELABEL,
+     RESTOREVEHICLEDIALOG_TANKMENCHECKBOX,
+     RESTOREVEHICLEDIALOG_SUBMITBTN,
+     RESTOREVEHICLEDIALOG_WARNING,
      BARRACKSEXPAND_TITLE,
      BARRACKSEXPAND_MESSAGE,
      BARRACKSEXPAND_SUBMIT,
@@ -1136,6 +1176,23 @@ class DIALOGS(object):
      PROTECTEDDISMISSTANKMAN_ERRORMESSAGE,
      PROTECTEDDISMISSTANKMAN_SUBMIT,
      PROTECTEDDISMISSTANKMAN_CANCEL,
+     PROTECTEDDISMISSTANKMAN_ALERT,
+     RESTORETANKMAN_TITLE,
+     RESTORETANKMAN_MESSAGE,
+     RESTORETANKMAN_FORFREE,
+     RESTORETANKMAN_WARNING,
+     RESTORETANKMAN_SUBMIT,
+     RESTORETANKMAN_CANCEL,
+     RESTORETANKMAN_PRICE,
+     RESTORETANKMNAN_NEWPERIODWARNING,
+     DISMISSEDBUFFEROVERFLAW_TITLE,
+     DISMISSEDBUFFEROVERFLAW_MESSAGE,
+     DISMISSEDBUFFEROVERFLAW_SUBMIT,
+     DISMISSEDBUFFEROVERFLAW_CANCEL,
+     DISMISSEDBUFFEROVERFLAWMULTIPLE_TITLE,
+     DISMISSEDBUFFEROVERFLAWMULTIPLE_MESSAGE,
+     DISMISSEDBUFFEROVERFLAWMULTIPLE_SUBMIT,
+     DISMISSEDBUFFEROVERFLAWMULTIPLE_CANCEL,
      DROPSKILL_TITLE,
      DROPSKILL_MESSAGE,
      DROPSKILL_SUBMIT,
@@ -1309,35 +1366,35 @@ class DIALOGS(object):
      VEHICLEREMOVEDIALOG_TITLE,
      VEHICLESELLDIALOG_TITLE,
      VEHICLESELLDIALOG_MESSAGE,
+     VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK,
+     VEHICLESELLDIALOG_VEHICLETYPE_MEDIUMTANK,
+     VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
+     VEHICLESELLDIALOG_VEHICLETYPE_SPG,
+     VEHICLESELLDIALOG_VEHICLETYPE_AT_SPG,
      VEHICLESELLDIALOG_VEHICLE_LEVEL,
      VEHICLESELLDIALOG_VEHICLE_EMPTYSELLPRICE,
-     VEHICLESELLDIALOG_COMMONRESULT,
      VEHICLESELLDIALOG_PROFFIT,
      VEHICLESELLDIALOG_LOSS,
+     VEHICLESELLDIALOG_CREW_LABEL,
      VEHICLESELLDIALOG_OPTIONALDEVICE,
      VEHICLESELLDIALOG_COMPLEXOPTIONALDEVICE,
      VEHICLESELLDIALOG_EQUIPMENT,
      VEHICLESELLDIALOG_AMMO_LABEL,
-     VEHICLESELLDIALOG_UNLOAD,
+     VEHICLESELLDIALOG_COMMONRESULT,
      VEHICLESELLDIALOG_INVENTORY,
+     VEHICLESELLDIALOG_UNLOAD,
      VEHICLESELLDIALOG_NOTINSTALLED_MODULES,
      VEHICLESELLDIALOG_COUNT,
      VEHICLESELLDIALOG_REMOVE,
      VEHICLESELLDIALOG_SUBMIT,
      VEHICLESELLDIALOG_CANCEL,
-     VEHICLESELLDIALOG_CONTENT_TANKMENFIELD,
-     VEHICLESELLDIALOG_CONTENT_EQUIPMENTSFIELD,
-     VEHICLESELLDIALOG_CONTENT_SHELLSFIELD,
-     VEHICLESELLDIALOG_CONTENT_TANKMENBOX,
-     VEHICLESELLDIALOG_CONTENT_EQUIPMENTSBOX,
-     VEHICLESELLDIALOG_CONTENT_TOTALFIELDGIVE,
-     VEHICLESELLDIALOG_CONTENT_TOTALFIELDTAKE,
      VEHICLESELLDIALOG_VEHICLE_ELITE,
      VEHICLESELLDIALOG_CREW_UNLOAD,
      VEHICLESELLDIALOG_CREW_DISSMISS,
      VEHICLESELLDIALOG_CTRLQUESTION_HEADER,
      VEHICLESELLDIALOG_CTRLQUESTION_QUESTION,
      VEHICLESELLDIALOG_CTRLQUESTION_ERRORMESSAGE,
+     VEHICLESELLDIALOG_PRICE_SIGN_ADD,
      CUSTOMIZATION_CAMOUFLAGEDROP_TITLE,
      CUSTOMIZATION_CAMOUFLAGEDROP_MESSAGE,
      CUSTOMIZATION_CAMOUFLAGEDROP_SUBMIT,
@@ -1406,6 +1463,14 @@ class DIALOGS(object):
      VEHICLESELL_UNIQUE_MESSAGE,
      VEHICLESELL_UNIQUE_SUBMIT,
      VEHICLESELL_UNIQUE_CANCEL,
+     VEHICLESELL_RESTORECOOLDOWN_TITLE,
+     VEHICLESELL_RESTORECOOLDOWN_MESSAGE,
+     VEHICLESELL_RESTORECOOLDOWN_SUBMIT,
+     VEHICLESELL_RESTORECOOLDOWN_CANCEL,
+     VEHICLESELL_RESTOREUNLIMITED_TITLE,
+     VEHICLESELL_RESTOREUNLIMITED_MESSAGE,
+     VEHICLESELL_RESTOREUNLIMITED_SUBMIT,
+     VEHICLESELL_RESTOREUNLIMITED_CANCEL,
      UPDATENEEDED_TITLE,
      UPDATENEEDED_MESSAGE,
      UPDATENEEDED_SUBMIT,
@@ -1618,21 +1683,29 @@ class DIALOGS(object):
      STATICFORMATION_STAFFVIEW_CLOSECLUB_SUBMIT,
      STATICFORMATION_STAFFVIEW_CLOSECLUB_CANCEL,
      CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_TITLE,
+     CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_TITLE,
      CONFIRMEXCHANGEDIALOG_EXCHANGEXP_TITLE,
      CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_NEEDITEMSTEXT,
+     CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_NEEDITEMSTEXT,
      CONFIRMEXCHANGEDIALOG_EXCHANGEXP_NEEDITEMSTEXT,
      CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_NEEDGOLDTEXT,
+     CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_NEEDGOLDTEXT,
      CONFIRMEXCHANGEDIALOG_EXCHANGEXP_NEEDGOLDTEXT,
      CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_NEEDITEMSSTEPPERTITLE,
+     CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_NEEDITEMSSTEPPERTITLE,
      CONFIRMEXCHANGEDIALOG_EXCHANGEXP_NEEDITEMSSTEPPERTITLE,
      CONFIRMEXCHANGEDIALOG_GOLDITEMSSTEPPERTITLE,
      CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_SUBMIT,
+     CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_SUBMIT,
      CONFIRMEXCHANGEDIALOG_EXCHANGEXP_SUBMIT,
      CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_CANCEL,
+     CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_CANCEL,
      CONFIRMEXCHANGEDIALOG_EXCHANGEXP_CANCEL,
      CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_EXCHANGENONEEDTEXT,
+     CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_EXCHANGENONEEDTEXT,
      CONFIRMEXCHANGEDIALOG_EXCHANGEXP_EXCHANGENONEEDTEXT,
      CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_GOLDNOTENOUGHTEXT,
+     CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_GOLDNOTENOUGHTEXT,
      CONFIRMEXCHANGEDIALOG_EXCHANGEXP_GOLDNOTENOUGHTEXT,
      CLUBS_APP_SEND_TITLE,
      CLUBS_APP_SEND_MESSAGE,
@@ -1694,35 +1767,29 @@ class DIALOGS(object):
      FORTDISABLED_MESSAGE,
      FORTDISABLED_CANCEL)
 
-    @staticmethod
-    def recruitwindow_vehicleclassdropdown(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#dialogs:recruitWindow/vehicleClassDropdown/%s' % key
-        if outcome not in DIALOGS.RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def recruitwindow_vehicleclassdropdown(cls, key0):
+        outcome = '#dialogs:recruitWindow/vehicleClassDropdown/{}'.format(key0)
+        if outcome not in cls.RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def vehicleselldialog_vehicletype(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#dialogs:vehicleSellDialog/vehicleType/%s' % key
-        if outcome not in DIALOGS.VEHICLESELLDIALOG_VEHICLETYPE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def vehicleselldialog_vehicletype(cls, key0):
+        outcome = '#dialogs:vehicleSellDialog/vehicleType/{}'.format(key0)
+        if outcome not in cls.VEHICLESELLDIALOG_VEHICLETYPE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def all(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#dialogs:%s' % key
-        if outcome not in DIALOGS.all_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def all(cls, key0):
+        outcome = '#dialogs:{}'.format(key0)
+        if outcome not in cls.ALL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

@@ -7,3 +7,4 @@ def configure_pointcuts():
     _pointcuts.OnFortifiedRegionsOpen()
     _pointcuts.OnFortRequirementsUpdate()
     _pointcuts.OnViewPopulate()
+    _pointcuts.OnSetWarningText()

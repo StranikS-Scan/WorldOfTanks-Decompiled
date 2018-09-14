@@ -512,17 +512,52 @@
   <radios>
     <R_4_T>	shared	</R_4_T>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Weiss_Manfred_V_8H>
+          <smplEnginePower>	274.8931	</smplEnginePower>
+        </Weiss_Manfred_V_8H>
+      </engines>
+      <chassis>
+        <Chassis_G116_Turan_III_prot>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G116_Turan_III_prot>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G116_Turan_III_prot>
-        <alpha>	0.0966	</alpha>
-      </Chassis_G116_Turan_III_prot>
-    </chassis>
-    <engines>
-      <Weiss_Manfred_V_8H>
-        <bravo>	68.72327	</bravo>
-      </Weiss_Manfred_V_8H>
-    </engines>
     <armour>	0.817159088	</armour>
   </clientAdjustmentFactors>
   <effects>

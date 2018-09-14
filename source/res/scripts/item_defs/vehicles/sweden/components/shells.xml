@@ -7,6 +7,50 @@
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
   </icons>
+  <_20mm_slpprj_m_Madsen>
+    <id>	3	</id>
+    <userString>	#sweden_vehicles:_20mm_slpprj_m_Madsen	</userString>
+    <icon>	ap	</icon>
+    <price>	3	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	12	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_slpprj_m_Madsen>
+  <_20mm_slpprj_m_40_M>
+    <id>	4	</id>
+    <userString>	#sweden_vehicles:_20mm_slpprj_m_40_M	</userString>
+    <icon>	ap	</icon>
+    <price>	1	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	12	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_slpprj_m_40_M>
+  <_20mm_slsgr_m_Madsen>
+    <id>	5	</id>
+    <userString>	#sweden_vehicles:_20mm_slsgr_m_Madsen	</userString>
+    <icon>	he	</icon>
+    <price>	3	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	20	</caliber>
+    <explosionRadius>	0.1	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	16	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_slsgr_m_Madsen>
   <_75mm_slpgr_m_43>
     <id>	0	</id>
     <userString>	#sweden_vehicles:_75mm_slpgr_m_43	</userString>

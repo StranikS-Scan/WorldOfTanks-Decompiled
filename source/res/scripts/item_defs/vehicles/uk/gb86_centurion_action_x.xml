@@ -419,17 +419,52 @@
   <radios>
     <C45>	shared	</C45>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Rolls_Royce_Meteor_with_twin_turbo_supercharges>
+          <smplEnginePower>	1099.572	</smplEnginePower>
+        </Rolls_Royce_Meteor_with_twin_turbo_supercharges>
+      </engines>
+      <chassis>
+        <Chassis_GB86_Centurion_Action_X>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.05635	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB86_Centurion_Action_X>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB86_Centurion_Action_X>
-        <alpha>	0.05635	</alpha>
-      </Chassis_GB86_Centurion_Action_X>
-    </chassis>
-    <engines>
-      <Rolls_Royce_Meteor_with_twin_turbo_supercharges>
-        <bravo>	274.8931	</bravo>
-      </Rolls_Royce_Meteor_with_twin_turbo_supercharges>
-    </engines>
     <armour>	0.991207891	</armour>
   </clientAdjustmentFactors>
   <effects>

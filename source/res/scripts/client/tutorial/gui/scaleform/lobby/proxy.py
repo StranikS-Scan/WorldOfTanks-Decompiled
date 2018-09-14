@@ -243,7 +243,7 @@ class SfLobbyProxy(GUIProxy):
             LOG_ERROR('Key targetID is not defined in the event ON_COMPONENT_LOST')
             return
         itemID = event.targetID
-        for effect in self.effects.filterByName([GUI_EFFECT_NAME.SHOW_HINT]):
+        for effect in self.effects.filterByName(GUI_EFFECT_NAME.SHOW_HINT):
             effect.cancel(itemID)
 
         self.onItemLost(itemID)

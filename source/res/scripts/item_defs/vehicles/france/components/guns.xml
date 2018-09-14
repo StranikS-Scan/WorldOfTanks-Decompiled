@@ -787,7 +787,7 @@
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
       <effects>	shot_medium_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
@@ -951,7 +951,7 @@
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
       <effects>	shot_medium	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
@@ -1008,7 +1008,7 @@
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
       <effects>	shot_medium_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
@@ -1119,16 +1119,16 @@
       <impulse>	0.46	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.36	</amplitude>
+        <amplitude>	0.56	</amplitude>
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
       <effects>	shot_medium_mb	</effects>
       <reloadEffect>	reload50_75	</reloadEffect>
-      <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	35.0	</rotationSpeed>
       <reloadTime>	3.86285714285714	</reloadTime>
       <maxAmmo>	87	</maxAmmo>
@@ -1919,7 +1919,7 @@
         <amplitude>	0.65	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main_mb	</effects>
+      <effects>	shot_mainext_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
@@ -1977,7 +1977,7 @@
         <amplitude>	0.65	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main_mb	</effects>
+      <effects>	shot_mainext_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
@@ -2092,8 +2092,8 @@
         <amplitude>	0.65	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
@@ -2149,7 +2149,7 @@
         <amplitude>	0.65	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
@@ -2207,7 +2207,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
@@ -2321,7 +2321,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
@@ -2379,7 +2379,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
@@ -2437,7 +2437,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -2497,7 +2497,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -2550,7 +2550,7 @@
         <amplitude>	0.2	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -2603,7 +2603,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -2657,7 +2657,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -2709,7 +2709,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -2760,7 +2760,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
@@ -2814,7 +2814,7 @@
         <recoilEffect>	large	</recoilEffect>
       </recoil>
       <effects>	shot_large_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
@@ -2872,7 +2872,7 @@
         <recoilEffect>	large	</recoilEffect>
       </recoil>
       <effects>	shot_large_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
@@ -2987,7 +2987,7 @@
         <recoilEffect>	huge	</recoilEffect>
       </recoil>
       <effects>	shot_huge_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_155_170	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
@@ -3272,7 +3272,7 @@
         <recoilEffect>	huge	</recoilEffect>
       </recoil>
       <effects>	shot_huge	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_155_170	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -3391,7 +3391,7 @@
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
@@ -3448,8 +3448,8 @@
         <amplitude>	0.65	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <effects>	shot_mainext_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
@@ -3506,7 +3506,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -3684,8 +3684,8 @@
         <amplitude>	0.65	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>

@@ -1,11 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/diff_utils.py
+_KEY_DELIMITER = '.'
 
-
-def synchronizeDicts(diff, cache):
+def synchronizeDicts(diff, cache, parentKey='', changeList=None, defaultCacheType=dict):
     updates, replaces, deletes = (0, 0, 0)
+    if parentKey is not '':
+        parentKey = parentKey + _KEY_DELIMITER
     keys_r, keys_d, keys_u = [], [], []
     for k in diff.iterkeys():
+        if changeList is not None and isinstance(k, basestring):
+            changeList[parentKey + k] = diff[k]
         if isinstance(k, tuple):
             if k[1] == '_r':
                 keys_r.append(k)
@@ -31,7 +35,9 @@ def synchronizeDicts(diff, cache):
         if value is None:
             cache.pop(key_u, None)
         if isinstance(value, dict):
-            updates, replaces, deletes = [ i + j for i, j in zip((updates, replaces, deletes), synchronizeDicts(value, cache.setdefault(key_u, {}))) ]
+            newParentKey = parentKey + str(key_u) if changeList is not None else ''
+            result = synchronizeDicts(value, cache.setdefault(key_u, defaultCacheType()), newParentKey, changeList, defaultCacheType)
+            updates, replaces, deletes = [ i + j for i, j in zip((updates, replaces, deletes), result) ]
         if isinstance(value, set):
             cache.setdefault(key_u, set()).update(value)
         cache[key_u] = value

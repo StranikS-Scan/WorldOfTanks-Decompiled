@@ -49,6 +49,9 @@ class SimplePlugin(IPlugin):
     def setAttentionToCell(self, x, y, isRightClick):
         pass
 
+    def applyNewSize(self, sizeIndex):
+        pass
+
     def _addEntry(self, symbol, container, matrix=None, active=False, transformProps=settings.TRANSFORM_FLAG.DEFAULT):
         return self._parentObj.addEntry(symbol, container, matrix=matrix, active=active, transformProps=transformProps)
 

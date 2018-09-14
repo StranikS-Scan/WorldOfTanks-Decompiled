@@ -341,17 +341,52 @@
   <radios>
     <SCR_528R1>	shared	</SCR_528R1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAF_R1>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Ford_GAF_R1>
+      </engines>
+      <chassis>
+        <Chassis_T92>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_T92>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_T92>
-        <alpha>	0.0966	</alpha>
-      </Chassis_T92>
-    </chassis>
-    <engines>
-      <Ford_GAF_R1>
-        <bravo>	132.1601	</bravo>
-      </Ford_GAF_R1>
-    </engines>
     <armour>	0.663996121	</armour>
   </clientAdjustmentFactors>
   <effects>

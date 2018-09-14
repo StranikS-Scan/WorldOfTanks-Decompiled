@@ -7,7 +7,7 @@ import BigWorld
 import time
 from ClientUnit import ClientUnit
 from ConnectionManager import connectionManager
-from constants import FORT_BUILDING_TYPE, FORT_BUILDING_TYPE_NAMES, FORT_ORDER_TYPE
+from constants import FORT_BUILDING_TYPE, FORT_BUILDING_TYPE_NAMES, FORT_ORDER_TYPE, FORT_MAX_LEVEL_RANGE, FORT_MIN_ATTACK_LEVEL, FORT_MAX_ATTACK_LEVEL
 import Event
 from FortifiedRegionBase import FortifiedRegionBase, FORT_STATE, FORT_EVENT_TYPE, NOT_ACTIVATED, FORT_ATK_IDX
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -822,3 +822,12 @@ class ClientFortifiedRegion(FortifiedRegionBase):
 
     def getForbiddenSortiePeripheryIDs(self):
         return self.__account.getServerSettings()['forbiddenSortiePeripheryIDs']
+
+    def getMinAttackLevel(self):
+        return max(FORT_MIN_ATTACK_LEVEL, self.level - FORT_MAX_LEVEL_RANGE)
+
+    def getMaxAttackLevel(self):
+        return min(FORT_MAX_ATTACK_LEVEL, self.level + FORT_MAX_LEVEL_RANGE)
+
+    def isAttackAvaliableByLevel(self, level):
+        return self.getMinAttackLevel() <= level <= self.getMaxAttackLevel()

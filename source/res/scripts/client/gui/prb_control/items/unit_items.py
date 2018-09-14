@@ -355,13 +355,29 @@ class BalancedSquadDynamicRosterSettings(DynamicRosterSettings):
 
     def _extractSettings(self, unit):
         kwargs = super(BalancedSquadDynamicRosterSettings, self)._extractSettings(unit)
-        if kwargs and unit.getCommanderDBID() != getAccountDatabaseID():
+        accountDbID = getAccountDatabaseID()
+        if kwargs and unit.getCommanderDBID() != accountDbID:
             vehicles = unit.getMemberVehicles(unit.getCommanderDBID())
-            if vehicles:
-                levels = [ vehInfo.vehLevel for vehInfo in vehicles ]
-                kwargs['minLevel'] = max(MIN_VEHICLE_LEVEL, min(levels) + self._lowerBound)
-                kwargs['maxLevel'] = min(MAX_VEHICLE_LEVEL, max(levels) + self._upperBound)
+            if not vehicles:
+                unitVehicles = unit.getVehicles()
+                for accDbID, vInfos in unitVehicles.iteritems():
+                    if accDbID != accountDbID:
+                        vehicles.extend(vInfos)
+
+            minLevel, maxLevel = self._getVehicleLevels(vehicles)
+            kwargs['minLevel'] = minLevel
+            kwargs['maxLevel'] = maxLevel
         return kwargs
+
+    def _getVehicleLevels(self, vehicles):
+        if vehicles:
+            levels = set([ vehInfo.vehLevel for vehInfo in vehicles ])
+            minLevel = max(MIN_VEHICLE_LEVEL, min(levels) + self._lowerBound)
+            maxLevel = min(MAX_VEHICLE_LEVEL, max(levels) + self._upperBound)
+        else:
+            minLevel = MIN_VEHICLE_LEVEL
+            maxLevel = MAX_VEHICLE_LEVEL
+        return (minLevel, maxLevel)
 
 
 class PredefinedRosterSettings(UnitRosterSettings):

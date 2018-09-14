@@ -695,17 +695,52 @@
   <radios>
     <RTY_RCEHb>	shared	</RTY_RCEHb>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-7>
+          <smplEnginePower>	898.689	</smplEnginePower>
+        </V-7>
+      </engines>
+      <chassis>
+        <Chassis_R119_Object_777>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_R119_Object_777>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_R119_Object_777>
-        <alpha>	0.1127	</alpha>
-      </Chassis_R119_Object_777>
-    </chassis>
-    <engines>
-      <V-7>
-        <bravo>	224.6722	</bravo>
-      </V-7>
-    </engines>
     <armour>	1.151828432	</armour>
   </clientAdjustmentFactors>
   <effects>

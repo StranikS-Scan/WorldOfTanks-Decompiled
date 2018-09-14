@@ -133,7 +133,6 @@ class _GunControlMode(IControlMode):
         self._cam = None
         self._aimingMode = 0
         self._canShot = False
-        self._lockedDown = False
         return
 
     def prerequisites(self):
@@ -188,9 +187,9 @@ class _GunControlMode(IControlMode):
     def resetAimingMode(self):
         self._aimingMode = 0
 
-    def getDesiredShotPoint(self, FORCED=False):
+    def getDesiredShotPoint(self):
         assert self._isEnabled
-        return self._cam.aimingSystem.getDesiredShotPoint() if FORCED or self._aimingMode == 0 and self._cam is not None else None
+        return self._cam.aimingSystem.getDesiredShotPoint() if self._aimingMode == 0 and self._cam is not None else None
 
     def getAimingMode(self, mode):
         return self._aimingMode & mode == mode
@@ -213,57 +212,6 @@ class _GunControlMode(IControlMode):
         self._gunMarker = _SuperGunMarker(mode, isStrategic)
         self._aih.onSetReloading += self._gunMarker.setReloading
         self._aih.onSetReloadingPercents += self._gunMarker.setReloadingInPercent
-
-    def autoAimFindEnemy(self):
-        if self._lockedDown:
-            self._lockedDown = False
-            return
-        else:
-            maxDist = 100.0
-            minRadius = 2.0
-            maxRadius = 3.5
-            camPos = Math.Vector3(BigWorld.camera().position)
-            targetPt = Math.Vector3(self.getDesiredShotPoint(True))
-            vehicles = []
-            for vehicleID in BigWorld.player().arena.vehicles.iterkeys():
-                vehicle = BigWorld.entity(vehicleID)
-                if vehicle is None or not vehicle.isStarted or vehicle.publicInfo['team'] == BigWorld.player().team:
-                    continue
-                vehicles.append(vehicle)
-
-            collided = []
-            for veh in vehicles:
-                targetDist = camPos.distTo(veh.position)
-                if targetDist > maxDist:
-                    continue
-                scaleSphereFactor = targetDist / maxDist
-                dir = Math.Vector3(targetPt - camPos)
-                dist = dir.length
-                dir /= dist
-                center = veh.position
-                radius = minRadius + (maxRadius - minRadius) * scaleSphereFactor
-                sc = Math.Vector3(center - camPos)
-                dotProd = dir.dot(sc)
-                ort = Math.Vector3(sc - dir * dotProd)
-                if ort.lengthSquared > radius * radius:
-                    continue
-                if dotProd < -radius or dotProd > dist + radius:
-                    continue
-                collided.append(veh)
-
-            pickedVehicle = None
-            minDistance = 10000.0
-            for veh in collided:
-                if veh.publicInfo['team'] == BigWorld.player().team:
-                    continue
-                distance = camPos.distTo(veh.position)
-                if distance < minDistance:
-                    minDistance = distance
-                    pickedVehicle = veh
-
-            if pickedVehicle:
-                self._lockedDown = True
-            return pickedVehicle
 
 
 class CameraLocationPoint(object):
@@ -592,8 +540,6 @@ class ArcadeControlMode(_GunControlMode):
                 self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
             if isFiredLockTarget:
                 BigWorld.player().autoAim(BigWorld.target())
-                if BigWorld.target() is None and 'wheeledVehicle' in BigWorld.player().vehicle.typeDescriptor.type.tags:
-                    BigWorld.player().autoAim(self.autoAimFindEnemy())
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()
             return True
@@ -805,7 +751,7 @@ class StrategicControlMode(_GunControlMode):
     def __updateTrajectoryDrawer(self):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
-            self.__trajectoryDrawerClbk = BigWorld.callback(0.0, self.__updateTrajectoryDrawer)
+            self.__trajectoryDrawerClbk = BigWorld.callback(0.1, self.__updateTrajectoryDrawer)
         else:
             self.__trajectoryDrawerClbk = BigWorld.callback(self.__updateInterval, self.__updateTrajectoryDrawer)
         try:
@@ -878,8 +824,10 @@ class SniperControlMode(_GunControlMode):
         self._cam.enable(args['preferredPos'], args['saveZoom'])
         self.__binoculars.enabled = True
         self.__binoculars.setEnableLensEffects(SniperControlMode._LENS_EFFECTS_ENABLED)
+        BigWorld.wg_setLowDetailedMode(True)
         BigWorld.wg_enableTreeHiding(True)
         BigWorld.wg_setTreeHidingRadius(15.0, 10.0)
+        BigWorld.wg_havokSetSniperMode(True)
         TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.SNIPER_MODE)
         g_postProcessing.enable('sniper')
         desc = BigWorld.player().vehicleTypeDescriptor
@@ -890,8 +838,10 @@ class SniperControlMode(_GunControlMode):
     def disable(self, isDestroy=False):
         super(SniperControlMode, self).disable()
         self.__binoculars.enabled = False
+        BigWorld.wg_havokSetSniperMode(False)
         BigWorld.wg_enableTreeHiding(False)
         g_postProcessing.disable()
+        BigWorld.wg_setLowDetailedMode(False)
         if TriggersManager.g_manager is not None:
             TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.SNIPER_MODE)
         return
@@ -906,8 +856,6 @@ class SniperControlMode(_GunControlMode):
                 self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
             if isFiredLockTarget:
                 BigWorld.player().autoAim(BigWorld.target())
-                if BigWorld.target() is None and 'wheeledVehicle' in BigWorld.player().vehicle.typeDescriptor.type.tags:
-                    BigWorld.player().autoAim(self.autoAimFindEnemy())
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()
             return True
@@ -1563,7 +1511,7 @@ class _SPGFlashGunMarker(Flash):
 
     def __init__(self, gunInfoFunc, dispersionUpdateFunc, key, isDebug=False, enableSmoothFiltering=False):
         Flash.__init__(self, self._SWF_FILE_NAME, self._FLASH_CLASS, None, SCALEFORM_SWF_PATH_V3)
-        self._displayRoot = self.movie.root
+        self._displayRoot = self.movie.root.crosshairMC
         self.__curShotInfoFunc = gunInfoFunc
         self.__dispersionUpdateFunc = dispersionUpdateFunc
         self.key = key
@@ -1821,7 +1769,7 @@ class _FlashGunMarker(Flash):
             mode = 'color_blind' if diff['isColorBlind'] else 'default'
             self._curColors = self._colorsByPiercing[mode]
 
-    def setAimSettings(self, mode):
+    def setAimSettings(self, mode, skipReloading=False):
         settings = self._aim[mode]
         current = settings.get('gunTag', None)
         currentType = settings.get('gunTagType', None)
@@ -1834,7 +1782,7 @@ class _FlashGunMarker(Flash):
         if current is not None and currentType is not None:
             self._displayRoot.setReloadingType(current / 100.0, currentType)
         isReloading = self.__reload.get('isReloading', False)
-        if isReloading:
+        if isReloading and not skipReloading:
             startTime = self.__reload.get('startTime', 0.0)
             duration = self.__reload.get('duration', 0.0)
             self.setReloading(duration, startTime, isReloading, switched=True)
@@ -1849,7 +1797,7 @@ class _FlashGunMarker(Flash):
         return
 
     def enable(self, state):
-        self.setAimSettings(self.mode)
+        self.setAimSettings(self.mode, skipReloading=True)
         if state is not None:
             ammoCtrl = g_sessionProvider.shared.ammo
             reloading = ammoCtrl.getGunReloadingState()
@@ -1888,7 +1836,8 @@ class _FlashGunMarker(Flash):
             current = BigWorld.time()
             rs['correction'] = {'timeRemaining': duration,
              'startTime': current,
-             'startPosition': (current - _startTime) / _duration}
+             'startPosition': min(1.0, (current - _startTime) / _duration)}
+            rs['startTime'] = BigWorld.time()
             self._displayRoot.correctReloadingTime(duration)
         else:
             rs['startTime'] = BigWorld.time() if startTime is None else startTime
@@ -2012,6 +1961,9 @@ class _FlashGunMarker(Flash):
         else:
             delta = BigWorld.time() - cStartTime
             currentPosition = cStartPosition + delta / cTimeRemaining * (1 - cStartPosition)
+            if currentPosition > 1.0:
+                LOG_ERROR('Current position is invalid, position is set to 0.0', currentPosition, cStartPosition, delta, cTimeRemaining)
+                currentPosition = 0.0
             return [cTimeRemaining - delta,
              cStartTime,
              True,

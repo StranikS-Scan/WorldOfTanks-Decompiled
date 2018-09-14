@@ -8,13 +8,7 @@ class DeserterDialogMeta(SimpleDialog):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends SimpleDialog
-    null
     """
 
     def as_setDataS(self, path, messageYOffset):
-        """
-        :param path:
-        :param messageYOffset:
-        :return :
-        """
         return self.flashObject.as_setData(path, messageYOffset) if self._isDAAPIInited() else None

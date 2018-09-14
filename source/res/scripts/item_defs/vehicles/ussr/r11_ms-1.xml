@@ -506,17 +506,52 @@
   <radios>
     <_71-TK-1>	shared	</_71-TK-1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <GAZ-M1>
+          <smplEnginePower>	58.15046	</smplEnginePower>
+        </GAZ-M1>
+      </engines>
+      <chassis>
+        <T-18Bis>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0966	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </T-18Bis>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <T-18Bis>
-        <alpha>	0.0966	</alpha>
-      </T-18Bis>
-    </chassis>
-    <engines>
-      <GAZ-M1>
-        <bravo>	14.53762	</bravo>
-      </GAZ-M1>
-    </engines>
     <armour>	0.893480696	</armour>
   </clientAdjustmentFactors>
   <effects>

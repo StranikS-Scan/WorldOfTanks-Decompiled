@@ -16,6 +16,13 @@ def getLeagueString(league):
     return str(league + 1)
 
 
+def getLeagueLabel(league):
+    """ Returns localized league's name
+    :param league: league index (starts from 0)
+    """
+    return makeString('#cybersport:clubs/league/label', league=getLeagueString(league))
+
+
 def getRequestUserName(rqTypeID):
     return _sysMsg('club/request/name/%s' % _CRT.getKeyByValue(rqTypeID))
 

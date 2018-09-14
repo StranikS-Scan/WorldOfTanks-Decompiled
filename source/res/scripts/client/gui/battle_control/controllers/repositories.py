@@ -13,6 +13,7 @@ from gui.battle_control.controllers import debug_ctrl
 from gui.battle_control.controllers import drr_scale_ctrl
 from gui.battle_control.controllers import dyn_squad_functional
 from gui.battle_control.controllers import feedback_adaptor
+from gui.battle_control.controllers import finish_sound_ctrl
 from gui.battle_control.controllers import flag_nots_ctrl
 from gui.battle_control.controllers import gas_attack_ctrl
 from gui.battle_control.controllers import hit_direction_ctrl
@@ -22,8 +23,9 @@ from gui.battle_control.controllers import repair_ctrl
 from gui.battle_control.controllers import respawn_ctrl
 from gui.battle_control.controllers import team_bases_ctrl
 from gui.battle_control.controllers import vehicle_state_ctrl
+from gui.battle_control.controllers import personal_efficiency_ctrl
 from gui.battle_control.controllers import interfaces
-from gui.battle_control.controllers import event_mark1
+from gui.battle_control.controllers import tmp_ignore_list_ctrl
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -158,6 +160,14 @@ class SharedControllersLocator(_ControllersLocator):
     def crosshair(self):
         return self._repository.getController(BATTLE_CTRL_ID.CROSSHAIR)
 
+    @property
+    def personalEfficiencyCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.PERSONAL_EFFICIENCY)
+
+    @property
+    def battleCacheCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.TMP_IGNORE_LIST_CTRL)
+
 
 class DynamicControllersLocator(_ControllersLocator):
     __slots__ = ()
@@ -187,8 +197,8 @@ class DynamicControllersLocator(_ControllersLocator):
         return self._repository.getController(BATTLE_CTRL_ID.GAS_ATTACK)
 
     @property
-    def mark1Bonus(self):
-        return self._repository.getController(BATTLE_CTRL_ID.MARK1_BONUS)
+    def finishSound(self):
+        return self._repository.getController(BATTLE_CTRL_ID.FINISH_SOUND)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -278,6 +288,10 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addController(messages)
         repository.addController(chat_cmd_ctrl.ChatCommandsController(setup, feedback, ammo))
         repository.addController(drr_scale_ctrl.DRRScaleController(messages))
+        repository.addController(personal_efficiency_ctrl.createEfficiencyCtrl(setup, feedback))
+        tmpIgnoreListCtrl = tmp_ignore_list_ctrl.createTmpIgnoreListCtrl(setup)
+        if tmpIgnoreListCtrl is not None:
+            repository.addController(tmpIgnoreListCtrl)
         repository.addArenaController(arena_load_ctrl.ArenaLoadController(), setup)
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
         repository.addViewController(hit_direction_ctrl.HitDirectionController(), setup)
@@ -312,6 +326,7 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
+        repository.addArenaController(finish_sound_ctrl.FinishSoundController(), setup)
         return repository
 
 
@@ -322,17 +337,4 @@ class FalloutControllersRepository(_ControllersRepositoryByBonuses):
     def create(cls, setup):
         repository = super(FalloutControllersRepository, cls).create(setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
-        return repository
-
-
-class EventMark1ControllerRepository(_ControllersRepositoryByBonuses):
-    __slots__ = ()
-
-    @classmethod
-    def create(cls, setup):
-        repository = super(EventMark1ControllerRepository, cls).create(setup)
-        repository.addViewController(debug_ctrl.DebugController(), setup)
-        bonusCtrl = event_mark1.createBonusCtrl(setup)
-        repository.addViewController(bonusCtrl, setup)
-        repository.addViewController(event_mark1.createEventsCtrl(setup, bonusCtrl), setup)
         return repository

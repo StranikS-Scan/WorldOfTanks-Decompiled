@@ -526,17 +526,52 @@
   <radios>
     <R113>	shared	</R113>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <W-55>
+          <smplEnginePower>	613.2231	</smplEnginePower>
+        </W-55>
+      </engines>
+      <chassis>
+        <Chassis_G105_T-55_NVA_DDR>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0644	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_G105_T-55_NVA_DDR>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_G105_T-55_NVA_DDR>
-        <alpha>	0.0644	</alpha>
-      </Chassis_G105_T-55_NVA_DDR>
-    </chassis>
-    <engines>
-      <W-55>
-        <bravo>	153.3058	</bravo>
-      </W-55>
-    </engines>
     <armour>	0.997466558	</armour>
   </clientAdjustmentFactors>
   <effects>

@@ -1,22 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/__init__.py
 import ResMgr
-import shop as _shop
-import continue_download as _continue_download
 import contacts as _contacts
+import continue_download as _continue_download
 import dynamic_squads as _dynamic_squads
-import promo_controller as _promo_controller
-import fallout_controller as _fallout_controller
 import event as _event
+import fallout_controller as _fallout_controller
 import preview as _preview
+import promo_controller as _promo_controller
+import shop as _shop
+from constants import CONTENT_TYPE
+from fortified_regions import configure_pointcuts as _configure_fort_pointcuts
 from gui.miniclient.notifications import configure_pointcuts as _notifications_configure_pointcuts
+from invitations import configure_pointcuts as _configure_invitation_pointcuts
 from lobby import configure_pointcuts as _configure_lobby_pointcuts
 from login import configure_pointcuts as _configure_login_pointcuts
-from tech_tree import configure_pointcuts as _configure_tech_tree_pointcuts
-from invitations import configure_pointcuts as _configure_invitation_pointcuts
-from fortified_regions import configure_pointcuts as _configure_fort_pointcuts
 from personal_quests import configure_pointcuts as _configure_personal_quests_pointcuts
-from constants import CONTENT_TYPE
+from tech_tree import configure_pointcuts as _configure_tech_tree_pointcuts
+from vehicle_compare import configure_pointcuts as _configure_vehicle_compare_pointcuts
 
 def configure_state():
     content_type = ResMgr.activeContentType()
@@ -43,6 +44,7 @@ def configure_state():
         _fallout_controller.InitFalloutPointcut()
         _event.InitEventPointcut()
         _preview.ChangeVehicleIsPreviewAllowed(config)
+        _configure_vehicle_compare_pointcuts()
 
 
 def _get_config(content_type):

@@ -324,18 +324,52 @@
   <radios>
     <T23radio>	shared	</T23radio>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <VVSS_T51>
-        <alpha>	0.12075	</alpha>
-      </VVSS_T51>
-    </chassis>
-    <engines>
-      <Ford_GAN_T23>
-        <bravo>	132.1601	</bravo>
-      </Ford_GAN_T23>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAN_T23>
+          <smplEnginePower>	528.6406	</smplEnginePower>
+        </Ford_GAN_T23>
+      </engines>
+      <chassis>
+        <VVSS_T51>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </VVSS_T51>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

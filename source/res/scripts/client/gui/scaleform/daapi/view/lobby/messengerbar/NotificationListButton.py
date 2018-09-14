@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/NotificationListButton.py
 from gui.Scaleform.daapi.view.meta.NotificationListButtonMeta import NotificationListButtonMeta
 from notification import NotificationMVC
+from gui.shared.formatters import text_styles
 
 class NotificationListButton(NotificationListButtonMeta):
 
@@ -11,10 +12,7 @@ class NotificationListButton(NotificationListButtonMeta):
 
     def _populate(self):
         super(NotificationListButton, self)._populate()
-        self.as_setStateS(NotificationMVC.g_instance.getModel().getNotifiedMessagesCount() > 0)
-
-    def __notifiedMessagesCountChangeHandler(self, notifyMessagesCount):
-        self.as_setStateS(notifyMessagesCount > 0)
+        self.__setState(NotificationMVC.g_instance.getModel().getNotifiedMessagesCount())
 
     def handleClick(self):
         NotificationMVC.g_instance.getModel().setListDisplayState()
@@ -24,3 +22,12 @@ class NotificationListButton(NotificationListButtonMeta):
         if model:
             model.onNotifiedMessagesCountChanged -= self.__notifiedMessagesCountChangeHandler
         super(NotificationListButton, self)._dispose()
+
+    def __notifiedMessagesCountChangeHandler(self, notifyMessagesCount):
+        self.__setState(notifyMessagesCount)
+
+    def __setState(self, count):
+        counterValue = ''
+        if count > 0:
+            counterValue = text_styles.counterLabelText(str(count))
+        self.as_setStateS(count > 0, counterValue)

@@ -78,8 +78,8 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-0.967135 0.905708 0.654898	</rayStart>
-        <rayEnd>	-0.790249 0.546945 0.654898	</rayEnd>
+        <rayStart>	-0.922914 0.816017 0.654898	</rayStart>
+        <rayEnd>	-0.83447 0.636636 0.654898	</rayEnd>
         <rayUp>	0.896909 0.442215 0.000000	</rayUp>
         <size>	0.7	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -887,23 +887,89 @@
     </ER_52>
     <ER_53>	shared	</ER_53>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Renault_S6>
+          <smplEnginePower>	158.5922	</smplEnginePower>
+        </Renault_S6>
+        <Renault_S6Bis>
+          <smplEnginePower>	190.3106	</smplEnginePower>
+        </Renault_S6Bis>
+      </engines>
+      <chassis>
+        <Chassis_D2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_D2>
+        <Chassis_D2_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_D2_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_D2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_D2>
-      <Chassis_D2_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_D2_2>
-    </chassis>
-    <engines>
-      <Renault_S6>
-        <bravo>	39.64804	</bravo>
-      </Renault_S6>
-      <Renault_S6Bis>
-        <bravo>	47.57765	</bravo>
-      </Renault_S6Bis>
-    </engines>
     <armour>	0.921857812	</armour>
   </clientAdjustmentFactors>
   <effects>

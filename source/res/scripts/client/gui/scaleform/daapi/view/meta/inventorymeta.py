@@ -8,12 +8,7 @@ class InventoryMeta(StoreComponent):
     Generated with yaml.
     __author__ = 'yaml_processor'
     @extends StoreComponent
-    null
     """
 
-    def sellItem(self, data):
-        """
-        :param data:
-        :return :
-        """
+    def sellItem(self, itemCD):
         self._printOverrideError('sellItem')

@@ -735,7 +735,7 @@
           </shotDispersionFactors>
           <aimingTime>	5	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <effects>	shot_large	</effects>
+          <effects>	shot_main	</effects>
           <models>
             <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB26_Birch_Gun/crash/lod0/Gun_03.model	</destroyed>
@@ -801,23 +801,89 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Vickers-Armstrong>
+          <smplEnginePower>	95.1553	</smplEnginePower>
+        </Vickers-Armstrong>
+        <Vickers-Armstrong_MkII>
+          <smplEnginePower>	116.3009	</smplEnginePower>
+        </Vickers-Armstrong_MkII>
+      </engines>
+      <chassis>
+        <Chassis_GB26_Birch_Gun>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB26_Birch_Gun>
+        <Chassis_GB26_Birch_Gun_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_GB26_Birch_Gun_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_GB26_Birch_Gun>
-        <alpha>	0.12075	</alpha>
-      </Chassis_GB26_Birch_Gun>
-      <Chassis_GB26_Birch_Gun_2>
-        <alpha>	0.1127	</alpha>
-      </Chassis_GB26_Birch_Gun_2>
-    </chassis>
-    <engines>
-      <Vickers-Armstrong>
-        <bravo>	23.78883	</bravo>
-      </Vickers-Armstrong>
-      <Vickers-Armstrong_MkII>
-        <bravo>	29.07523	</bravo>
-      </Vickers-Armstrong_MkII>
-    </engines>
     <armour>	0.925068742	</armour>
   </clientAdjustmentFactors>
   <effects>

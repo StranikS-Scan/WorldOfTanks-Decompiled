@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/QUESTS.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
+from debug_utils import LOG_WARNING
 
 class QUESTS(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    null
-    """
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -54,6 +52,7 @@ class QUESTS(object):
     BONUSES_NOTAVAILABLE = '#quests:bonuses/notAvailable'
     QUESTS_TITLE = '#quests:quests/title'
     QUESTS_TITLE_MANEUVERSQUESTS = '#quests:quests/title/maneuversQuests'
+    QUESTS_TITLE_CURRENTLYAVAILABLE = '#quests:quests/title/currentlyAvailable'
     QUESTS_TITLE_UNGOUPEDQUESTS = '#quests:quests/title/ungoupedQuests'
     QUESTS_TITLE_LADDERQUESTS = '#quests:quests/title/ladderQuests'
     QUESTS_TITLE_UNGOUPEDACTIONS = '#quests:quests/title/ungoupedActions'
@@ -68,13 +67,10 @@ class QUESTS(object):
     QUESTS_TABS_BEGINNER = '#quests:quests/tabs/beginner'
     QUESTS_TABS_FUTURE = '#quests:quests/tabs/future'
     QUESTSCONTROL_TITLE = '#quests:questsControl/title'
-    QUESTSCONTROL_ADDITIONALTITLE_NEEDRECEIVEDAWARD = '#quests:questsControl/additionalTitle/needReceivedAward'
-    QUESTSCONTROL_ADDITIONALTITLE_FREESLOTSANDFREEQUESTS = '#quests:questsControl/additionalTitle/freeSlotsAndFreeQuests'
-    QUESTSCONTROL_ADDITIONALTITLE_FIRSTRUN = '#quests:questsControl/additionalTitle/firstRun'
-    QUESTSCONTROL_ADDITIONALTITLE_EMPTY = '#quests:questsControl/additionalTitle/empty'
     QUESTS_STATUS_DONE = '#quests:quests/status/done'
     QUESTS_STATUS_NOTAVAILABLE = '#quests:quests/status/notAvailable'
     QUESTS_STATUS_NOTDONE = '#quests:quests/status/notDone'
+    QUESTS_STATUS_ALLDONE = '#quests:quests/status/allDone'
     QUESTS_TABLE_NOVEHICLES = '#quests:quests/table/noVehicles'
     QUESTS_TABLE_AMOUNT = '#quests:quests/table/amount'
     QUESTS_TABLE_BATTLESLEFT = '#quests:quests/table/battlesLeft'
@@ -395,6 +391,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_POTENTIALDAMAGEDEALT = '#quests:details/conditions/cumulative/potentialDamageDealt'
     DETAILS_CONDITIONS_CUMULATIVE_SOLOHITSASSISTED = '#quests:details/conditions/cumulative/soloHitsAssisted'
     DETAILS_CONDITIONS_CUMULATIVE_ORIGINALXP = '#quests:details/conditions/cumulative/originalXP'
+    DETAILS_CONDITIONS_CUMULATIVE_ORIGINALCREDITS = '#quests:details/conditions/cumulative/originalCredits'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEASSISTEDTRACK = '#quests:details/conditions/cumulative/damageAssistedTrack'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEASSISTEDRADIO = '#quests:details/conditions/cumulative/damageAssistedRadio'
     DETAILS_CONDITIONS_CUMULATIVE_MARKOFMASTERY = '#quests:details/conditions/cumulative/markOfMastery'
@@ -766,42 +763,23 @@ class QUESTS(object):
     BEGINNERQUESTS_DETAILS_BUTTONSHOWVIDEOTIP = '#quests:beginnerQuests/details/buttonShowVideoTip'
     BEGINNERQUESTS_DETAILS_BUTTONSTARTQUEST = '#quests:beginnerQuests/details/buttonStartQuest'
     BEGINNERQUESTS_DETAILS_NOAWARD = '#quests:beginnerQuests/details/noAward'
-    QUESTSCONTROL_ADDITIONALTITLE_ENUM = (QUESTSCONTROL_ADDITIONALTITLE_NEEDRECEIVEDAWARD,
-     QUESTSCONTROL_ADDITIONALTITLE_FREESLOTSANDFREEQUESTS,
-     QUESTSCONTROL_ADDITIONALTITLE_FIRSTRUN,
-     QUESTSCONTROL_ADDITIONALTITLE_EMPTY)
-    QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK3)
     QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK3)
+    QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK3)
 
-    @staticmethod
-    def questscontrol_additionaltitle(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#quests:questsControl/additionalTitle/%s' % key
-        if outcome not in QUESTS.QUESTSCONTROL_ADDITIONALTITLE_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def questspersonalwelcomeview_textblock_header(cls, key0):
+        outcome = '#quests:QuestsPersonalWelcomeView/textBlock/header/{}'.format(key0)
+        if outcome not in cls.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
 
-    @staticmethod
-    def questspersonalwelcomeview_textblock_body(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#quests:QuestsPersonalWelcomeView/textBlock/body/%s' % key
-        if outcome not in QUESTS.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
-
-    @staticmethod
-    def questspersonalwelcomeview_textblock_header(key):
-        """
-        :param key:
-        :return String:
-        """
-        outcome = '#quests:QuestsPersonalWelcomeView/textBlock/header/%s' % key
-        if outcome not in QUESTS.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM:
-            raise Exception('locale key "' + outcome + '" was not found')
-        return outcome
+    @classmethod
+    def questspersonalwelcomeview_textblock_body(cls, key0):
+        outcome = '#quests:QuestsPersonalWelcomeView/textBlock/body/{}'.format(key0)
+        if outcome not in cls.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

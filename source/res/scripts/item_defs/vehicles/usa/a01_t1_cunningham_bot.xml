@@ -408,18 +408,52 @@
   <radios>
     <Alarm_flags_bot>	shared	</Alarm_flags_bot>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Cunningham_E1_bot>
-        <alpha>	0.1127	</alpha>
-      </Cunningham_E1_bot>
-    </chassis>
-    <engines>
-      <Cunningham_bot>
-        <bravo>	29.07523	</bravo>
-      </Cunningham_bot>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Cunningham_bot>
+          <smplEnginePower>	116.3009	</smplEnginePower>
+        </Cunningham_bot>
+      </engines>
+      <chassis>
+        <Cunningham_E1_bot>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Cunningham_E1_bot>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

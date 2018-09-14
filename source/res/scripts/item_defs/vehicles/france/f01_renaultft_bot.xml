@@ -379,18 +379,52 @@
   <radios>
     <Fanions_de_signaux_bot>	shared	</Fanions_de_signaux_bot>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_RenaultFT_bot>
-        <alpha>	0.12075	</alpha>
-      </Chassis_RenaultFT_bot>
-    </chassis>
-    <engines>
-      <Renault_bot>
-        <bravo>	10.30849	</bravo>
-      </Renault_bot>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Renault_bot>
+          <smplEnginePower>	41.23396	</smplEnginePower>
+        </Renault_bot>
+      </engines>
+      <chassis>
+        <Chassis_RenaultFT_bot>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_RenaultFT_bot>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

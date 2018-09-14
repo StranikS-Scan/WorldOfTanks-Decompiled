@@ -346,17 +346,52 @@
   <radios>
     <_Type67>	shared	</_Type67>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Mitsubishi_10ZF21WT>
+          <smplEnginePower>	792.9609	</smplEnginePower>
+        </_Mitsubishi_10ZF21WT>
+      </engines>
+      <chassis>
+        <Chassis_ST_B1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_ST_B1>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_ST_B1>
-        <alpha>	0.08855	</alpha>
-      </Chassis_ST_B1>
-    </chassis>
-    <engines>
-      <_Mitsubishi_10ZF21WT>
-        <bravo>	198.2402	</bravo>
-      </_Mitsubishi_10ZF21WT>
-    </engines>
     <armour>	1.020268623	</armour>
   </clientAdjustmentFactors>
   <effects>

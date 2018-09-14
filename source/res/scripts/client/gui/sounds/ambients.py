@@ -2,26 +2,25 @@
 # Embedded file name: scripts/client/gui/sounds/ambients.py
 import weakref
 from collections import defaultdict
-from Event import Event
 import MusicControllerWWISE as _MC
-from constants import FORT_BUILDING_TYPE as FBT, ARENA_PERIOD as _PERIOD
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON as _BUR
-from shared_utils import BoundMethodWeakref
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiable
-from gui.shared.fortifications.settings import CLIENT_FORT_STATE as _CFS
-from gui.sounds import filters as snd_filters
-from gui.sounds.sound_constants import SoundFilters, PLAYING_SOUND_CHECK_PERIOD
-from gui.sounds.sound_utils import SOUND_DEBUG
-from gui.battle_control import g_sessionProvider
-from gui.battle_control.battle_constants import WinStatus
-from gui.battle_control.arena_info.interfaces import IArenaPeriodController
-from gui.app_loader import g_appLoader
-from gui.app_loader.decorators import sf_lobby
-from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
+from Event import Event
+from constants import FORT_BUILDING_TYPE as FBT, ARENA_PERIOD as _PERIOD
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.Scaleform.framework import ViewTypes
+from gui.app_loader import g_appLoader
+from gui.app_loader.decorators import sf_lobby
+from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
+from gui.battle_control import g_sessionProvider
+from gui.battle_control.arena_info.interfaces import IArenaPeriodController
+from gui.battle_control.battle_constants import WinStatus
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE as _CFS
+from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiable
+from gui.sounds import filters as snd_filters
+from gui.sounds.sound_constants import SoundFilters, PLAYING_SOUND_CHECK_PERIOD
+from gui.sounds.sound_utils import SOUND_DEBUG
 
 def _getViewSoundEnv(view):
     """Check if view has '__sound_env__' attribute and return it.
@@ -46,6 +45,7 @@ class SoundEvent(Notifiable):
         self._soundEventID = soundEventID
         self._params = params or {}
         self._checkFinish = checkFinish
+        self._isStarted = False
         self.onStarted = Event()
         self.onFinished = Event()
 
@@ -72,7 +72,8 @@ class SoundEvent(Notifiable):
             SOUND_DEBUG('Start playing sound event', self._soundEventID, self._params)
             _MC.g_musicController.play(self._soundEventID, self._params)
             if self._checkFinish:
-                self.addNotificators(PeriodicNotifier(BoundMethodWeakref(self._getNotificationDelta), BoundMethodWeakref(self._onCheckAmbientNotification), (PLAYING_SOUND_CHECK_PERIOD,)))
+                self._isStarted = True
+                self.addNotificators(PeriodicNotifier(self._getNotificationDelta, self._onCheckAmbientNotification, (PLAYING_SOUND_CHECK_PERIOD,)))
                 self.startNotification()
                 self.onStarted()
         else:
@@ -83,6 +84,7 @@ class SoundEvent(Notifiable):
             SOUND_DEBUG('Stop sound event playing', self._soundEventID)
             _MC.g_musicController.stopEvent(self._soundEventID)
             if self._checkFinish:
+                self._isStarted = False
                 self.clearNotification()
                 self.onFinished()
         else:
@@ -106,7 +108,7 @@ class SoundEvent(Notifiable):
         """Is sound still playing or not, this helper is needed to check sound's ending
         :return: int, seconds to delay checking handler
         """
-        if self.isPlaying():
+        if self._isStarted:
             return PLAYING_SOUND_CHECK_PERIOD
         else:
             return 0
@@ -114,6 +116,8 @@ class SoundEvent(Notifiable):
     def _onCheckAmbientNotification(self):
         SOUND_DEBUG('Current ambient playing check: is playing now', self, self.isPlaying())
         if not self.isPlaying():
+            self._isStarted = False
+            self.clearNotification()
             self.onFinished(self.isCompleted())
 
     def __repr__(self):
@@ -244,7 +248,7 @@ class EmptySpaceEnv(SoundEnv):
 class LoginSpaceEnv(SoundEnv):
 
     def __init__(self, soundsCtrl):
-        super(LoginSpaceEnv, self).__init__(soundsCtrl, 'login', music=SoundEvent(_MC.MUSIC_EVENT_LOGIN), ambient=NoAmbient())
+        super(LoginSpaceEnv, self).__init__(soundsCtrl, 'login', music=NoMusic(), ambient=NoAmbient())
 
 
 class LobbySpaceEnv(SoundEnv):
@@ -387,24 +391,19 @@ class BattleResultsEnv(SoundEnv):
     Directly after music has finished music event should be cleared to EmptySound to
     avoid repeating of playing.
     """
-    _battleEndSounds = {WinStatus.WIN: SoundEvent(_MC.MUSIC_EVENT_COMBAT_VICTORY, checkFinish=True),
+    _sounds = {WinStatus.WIN: SoundEvent(_MC.MUSIC_EVENT_COMBAT_VICTORY, checkFinish=True),
      WinStatus.DRAW: SoundEvent(_MC.MUSIC_EVENT_COMBAT_DRAW, checkFinish=True),
      WinStatus.LOSE: SoundEvent(_MC.MUSIC_EVENT_COMBAT_LOSE, checkFinish=True)}
-    _eventBattleEndSounds = {WinStatus.WIN: SoundEvent(_MC.MUSIC_EVENT_COMBAT_EVENT_VICTORY, checkFinish=True),
-     WinStatus.DRAW: SoundEvent(_MC.MUSIC_EVENT_COMBAT_EVENT_DRAW, checkFinish=True),
-     WinStatus.LOSE: SoundEvent(_MC.MUSIC_EVENT_COMBAT_EVENT_LOSE, checkFinish=True)}
 
     def __init__(self, soundsCtrl):
         super(BattleResultsEnv, self).__init__(soundsCtrl, 'battleResults')
 
     def start(self):
         super(BattleResultsEnv, self).start()
-        ctx = g_sessionProvider.getCtx()
-        lastWinStatus = ctx.extractLastArenaWinStatus()
+        lastWinStatus = g_sessionProvider.getCtx().extractLastArenaWinStatus()
         if lastWinStatus is not None:
             SOUND_DEBUG('There is last arena win status need to be processed', lastWinStatus)
-            sounds = self._eventBattleEndSounds if ctx.isEventBattle() else self._battleEndSounds
-            self._music = sounds.get(lastWinStatus.getStatus(), EmptySound())
+            self._music = self._sounds.get(lastWinStatus.getStatus(), EmptySound())
             self._music.onFinished += self._onMusicFinished
         return
 
@@ -439,7 +438,8 @@ class GuiAmbientsCtrl(object):
     ambient events walking through all active environments from @__customEnvs in priority order.
     Any ambient can fire onChanged event and starts restart this algo.
     """
-    _spaces = {_SPACE_ID.LOBBY: LobbySpaceEnv,
+    _spaces = {_SPACE_ID.LOGIN: LoginSpaceEnv,
+     _SPACE_ID.LOBBY: LobbySpaceEnv,
      _SPACE_ID.BATTLE_LOADING: BattleLoadingSpaceEnv,
      _SPACE_ID.BATTLE: BattleSpaceEnv}
 

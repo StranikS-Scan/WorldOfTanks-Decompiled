@@ -15,7 +15,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.clubs import formatters as club_fmts, events_dispatcher as club_events, contexts as club_ctx
 from gui.clubs.club_helpers import MyClubListener, tryToConnectClubBattle
 from gui.clubs.settings import CLIENT_CLUB_STATE, getLadderChevron256x256, LADDER_CHEVRON_ICON_PATH, CLIENT_CLUB_RESTRICTIONS
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeIntroVehicleVO
 from gui.Scaleform.daapi.view.meta.CyberSportIntroMeta import CyberSportIntroMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -306,7 +306,7 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener):
                 warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE
             else:
                 warnTooltip, isReadyVehicle = '', vehicle.isReadyToPrebattle()
-            self.as_setSelectedVehicleS(makeVehicleVO(vehicle), isReadyVehicle, warnTooltip)
+            self.as_setSelectedVehicleS(makeIntroVehicleVO(vehicle, isReadyVehicle, warnTooltip))
         else:
             self.as_setNoVehiclesS(TOOLTIPS.CYBERSPORT_NOVEHICLESINHANGAR)
 

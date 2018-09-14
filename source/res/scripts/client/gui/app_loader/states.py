@@ -152,18 +152,23 @@ class LoginState(IGlobalState):
 
 
 class ConnectionState(IGlobalState):
+    __slots__ = ('_checkSpace',)
+
+    def __init__(self, checkSpace=True):
+        super(ConnectionState, self).__init__()
+        self._checkSpace = checkSpace
 
     def goNext(self, ctx):
         if not ctx.isConnected() and not _isBattleReplayPlaying():
             ctx.guiSpaceID = _SPACE_ID.LOGIN
         spaceID = ctx.guiSpaceID
         newState = None
-        if spaceID != self.getSpaceID():
+        if spaceID != self.getSpaceID() or not self._checkSpace:
             if spaceID == _SPACE_ID.LOGIN:
                 newState = LoginState()
             else:
                 newState = self._getNextState(ctx)
-                if not newState:
+                if not newState and self._checkSpace:
                     LOG_ERROR('State can not be switched', self, ctx)
         return newState
 
@@ -205,8 +210,8 @@ class LobbyState(ConnectionState):
 class BattleLoadingState(ConnectionState):
     __slots__ = ('_arenaGuiType', '_destroyLobby')
 
-    def __init__(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
-        super(BattleLoadingState, self).__init__()
+    def __init__(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN, checkSpace=True):
+        super(BattleLoadingState, self).__init__(checkSpace=checkSpace)
         self._arenaGuiType = arenaGuiType
         self._destroyLobby = True
 
@@ -238,6 +243,10 @@ class BattleLoadingState(ConnectionState):
 
 @ReprInjector.simple()
 class ReplayLoadingState(BattleLoadingState):
+    __slots__ = ()
+
+    def __init__(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
+        super(ReplayLoadingState, self).__init__(arenaGuiType=arenaGuiType, checkSpace=False)
 
     def hideGUI(self, appFactory):
         appFactory.hideLobby()

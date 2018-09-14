@@ -96,6 +96,7 @@
     <_90mm_Gun_M3A1>	115	</_90mm_Gun_M3A1>
     <_90mm_Gun_T7>	116	</_90mm_Gun_T7>
     <_76mm_Gun_T185_A>	117	</_76mm_Gun_T185_A>
+    <_76mm_Gun_T185E1>	118	</_76mm_Gun_T185E1>
     <_12.7mm_T23>	255	</_12.7mm_T23>
     <_76mm_Gun_T185_IGR>	60001	</_76mm_Gun_T185_IGR>
     <_90mm_Gun_T178_IGR>	60002	</_90mm_Gun_T178_IGR>
@@ -338,11 +339,11 @@
       </recoil>
       <effects>	shot_auto	</effects>
       <reloadEffect>	reload12_25	</reloadEffect>
-      <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -21.0 1.0 -21.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	43.75	</rotationSpeed>
       <reloadTime>	8	</reloadTime>
       <maxAmmo>	760	</maxAmmo>
@@ -2162,7 +2163,7 @@
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
       <effects>	shot_medium_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
         <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
@@ -2333,7 +2334,7 @@
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
       <effects>	shot_medium_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
         <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
@@ -2447,7 +2448,7 @@
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
       <effects>	shot_medium_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
         <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
@@ -2492,6 +2493,64 @@
         </_76mm_HE_M352>
       </shots>
     </_76mm_Gun_T185>
+    <_76mm_Gun_T185E1>
+      <userString>	#usa_vehicles:_76mm_Gun_T185E1	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	73000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.25	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	646	</weight>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_76mm_APDS_M331A2>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1219	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	175 173	</piercingPower>
+        </_76mm_APDS_M331A2>
+        <_76mm_HEAT_M496>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	975	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	210 210	</piercingPower>
+        </_76mm_HEAT_M496>
+        <_76mm_HE_M352>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	975	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </_76mm_HE_M352>
+      </shots>
+    </_76mm_Gun_T185E1>
     <_76mm_Gun_T185_A>
       <userString>	#usa_vehicles:_76mm_Gun_T185_A	</userString>
       <tags></tags>
@@ -2986,7 +3045,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_large_mb	</effects>
+      <effects>	shot_main_mb	</effects>
       <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -3564,7 +3623,7 @@
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -19.0 1.0 -19.0	</minPitch>
         <maxPitch>	0.0 9.0 1.0 9.0	</maxPitch>
@@ -3620,7 +3679,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
@@ -3899,7 +3958,7 @@
         <amplitude>	0.2	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -30.0 1.0 -30.0	</minPitch>
@@ -3949,7 +4008,7 @@
         <amplitude>	0.16	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
@@ -4007,7 +4066,7 @@
         <amplitude>	0.12	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
@@ -4065,7 +4124,7 @@
         <amplitude>	0.12	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
@@ -4122,7 +4181,7 @@
         <amplitude>	0.2	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
@@ -4179,7 +4238,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
@@ -4236,7 +4295,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -19.0 1.0 -19.0	</minPitch>
@@ -4294,7 +4353,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -19.0 1.0 -19.0	</minPitch>
@@ -4351,8 +4410,8 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
         <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
@@ -4401,7 +4460,7 @@
         <amplitude>	0.4	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -42.0 1.0 -42.0	</minPitch>
@@ -4453,7 +4512,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -4505,7 +4564,7 @@
         <amplitude>	0.1	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
@@ -4555,7 +4614,7 @@
         <amplitude>	0.35	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -42.0 1.0 -42.0	</minPitch>
@@ -4667,7 +4726,7 @@
         <recoilEffect>	large	</recoilEffect>
       </recoil>
       <effects>	shot_large	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
         <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
@@ -5567,7 +5626,7 @@
         <recoilEffect>	medium	</recoilEffect>
       </recoil>
       <effects>	shot_medium_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
         <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
@@ -5625,7 +5684,7 @@
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -19.0 1.0 -19.0	</minPitch>
         <maxPitch>	0.0 9.0 1.0 9.0	</maxPitch>
@@ -5914,7 +5973,7 @@
         <amplitude>	0.16	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
@@ -6030,7 +6089,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -19.0 1.0 -19.0	</minPitch>

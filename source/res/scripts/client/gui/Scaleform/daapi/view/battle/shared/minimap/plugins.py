@@ -160,19 +160,18 @@ class PersonalEntriesPlugin(common.SimplePlugin):
     def updateSettings(self, diff):
         if not self.__isAlive:
             return
-        entryID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
-        if settings_constants.GAME.SHOW_VECTOR_ON_MAP in diff and entryID and GUI_SETTINGS.showDirectionLine:
+        if settings_constants.GAME.SHOW_VECTOR_ON_MAP in diff and GUI_SETTINGS.showDirectionLine:
             value = diff[settings_constants.GAME.SHOW_VECTOR_ON_MAP]
             if value:
-                self._invoke(entryID, 'showDirectionLine')
+                self.__showDirectionLine()
             else:
-                self._invoke(entryID, 'hideDirectionLine')
-        if settings_constants.GAME.SHOW_SECTOR_ON_MAP in diff and self.__viewPointID and GUI_SETTINGS.showSectorLines:
+                self.__hideDirectionLine()
+        if settings_constants.GAME.SHOW_SECTOR_ON_MAP in diff and GUI_SETTINGS.showSectorLines:
             value = diff[settings_constants.GAME.SHOW_SECTOR_ON_MAP]
             if value:
-                self._invoke(self.__viewPointID, 'setYawLimit', *self.__yawLimits)
+                self.__setupYawLimit()
             else:
-                self._invoke(self.__viewPointID, 'clearYawLimit')
+                self.__clearYawLimit()
         if not self.__isObserver:
             if settings_constants.GAME.MINIMAP_DRAW_RANGE in diff:
                 value = diff[settings_constants.GAME.MINIMAP_DRAW_RANGE]
@@ -270,6 +269,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
     def __onPostMortemSwitched(self):
         self.__isAlive = False
         self.__hideDirectionLine()
+        self.__clearYawLimit()
         if not self.__isObserver:
             self.__circlesVisibilityState = 0
             self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_REMOVE_ALL_CIRCLES)
@@ -300,10 +300,25 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         vehicleAttrs = g_sessionProvider.shared.feedback.getVehicleAttrs()
         self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_DYN_CIRCLE, settings.CIRCLE_STYLE.COLOR.VIEW_RANGE, settings.CIRCLE_STYLE.ALPHA, min(vehicleAttrs.get('circularVisionRadius', VISIBILITY.MIN_RADIUS), VISIBILITY.MAX_RADIUS))
 
+    def __showDirectionLine(self):
+        entryID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
+        if entryID:
+            self._invoke(entryID, 'showDirectionLine')
+
     def __hideDirectionLine(self):
         entryID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
         if entryID:
             self._invoke(entryID, 'hideDirectionLine')
+
+    def __setupYawLimit(self):
+        if self.__viewPointID and self.__yawLimits is not None:
+            self._invoke(self.__viewPointID, 'setYawLimit', *self.__yawLimits)
+        return
+
+    def __clearYawLimit(self):
+        if self.__viewPointID and self.__yawLimits is not None:
+            self._invoke(self.__viewPointID, 'clearYawLimit')
+        return
 
 
 class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController):
@@ -396,7 +411,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             else:
                 model = self._entries[vehicleID]
             if model is not None:
-                self.__setVehicleInfo(vehicleID, model, vInfo, getProps(vehicleID, vInfo.team))
+                self.__setVehicleInfo(vehicleID, model, vInfo, getProps(vehicleID, vInfo.team), isSpotted=False)
                 if model.isActive():
                     self.__setInAoI(model, True)
                 self._notifyVehicleAdded(vehicleID)
@@ -415,7 +430,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 return
             model = self.__addEntryToPool(vehicleID, positions=self._arenaVisitor.getArenaPositions())
             if model is not None:
-                self.__setVehicleInfo(vehicleID, model, vInfo, arenaDP.getPlayerGuiProps(vehicleID, vInfo.team))
+                self.__setVehicleInfo(vehicleID, model, vInfo, arenaDP.getPlayerGuiProps(vehicleID, vInfo.team), isSpotted=False)
                 if model.isActive():
                     self.__setInAoI(model, True)
                 self._notifyVehicleAdded(vehicleID)
@@ -482,13 +497,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def _notifyVehicleRemoved(self, vehicleID):
         pass
 
-    def _notifyEntryAddedToPool(self, vehicleID, entryID):
-        """
-        This method notifies Mark1 plugin about creating an entry
-        Remove it after event finishing
-        """
-        pass
-
     def _getPlayerVehicleID(self):
         return self.__playerVehicleID
 
@@ -503,16 +511,15 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         model = self._addEntryEx(vehicleID, _S_NAME.VEHICLE, _C_NAME.ALIVE_VEHICLES, matrix=matrix, active=active)
         if model is not None:
             model.setLocation(location)
-            self._notifyEntryAddedToPool(vehicleID, model.getID())
         return model
 
-    def __setVehicleInfo(self, vehicleID, entry, vInfo, guiProps):
+    def __setVehicleInfo(self, vehicleID, entry, vInfo, guiProps, isSpotted=False):
         vehicleType = vInfo.vehicleType
         classTag = vehicleType.classTag
         name = vehicleType.shortNameWithPrefix
         if classTag is not None:
             entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
-            if not self.__isObserver:
+            if not self.__isObserver and isSpotted:
                 animation = entry.getSpottedAnimation(self._entries.itervalues())
             else:
                 animation = ''
@@ -651,7 +658,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             if vehicleID not in self._entries:
                 model = self.__addEntryToPool(vehicleID, VEHICLE_LOCATION.AOI)
                 if model is not None:
-                    self.__setVehicleInfo(vehicleID, model, vInfo, guiProps)
+                    self.__setVehicleInfo(vehicleID, model, vInfo, guiProps, isSpotted=True)
                     self.__setInAoI(model, True)
                     self._notifyVehicleAdded(vehicleID)
             else:
@@ -681,6 +688,8 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 self._invoke(entry.getID(), 'setAnimation', value)
 
     def __handleShowExtendedInfo(self, event):
+        if self._parentObj.isModalViewShown():
+            return
         isDown = event.ctx['isDown']
         if isDown:
             features = _FEATURES.addIfNot(self.__flags, _FEATURES.DO_REQUEST)

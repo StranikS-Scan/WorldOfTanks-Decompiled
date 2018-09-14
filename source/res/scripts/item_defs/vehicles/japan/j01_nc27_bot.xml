@@ -361,18 +361,52 @@
   <radios>
     <Alarm_flags_bot>	shared	</Alarm_flags_bot>
   </radios>
-  <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_NC27_bot>
-        <alpha>	0.1127	</alpha>
-      </Chassis_NC27_bot>
-    </chassis>
-    <engines>
-      <_62CV_bot>
-        <bravo>	15.85922	</bravo>
-      </_62CV_bot>
-    </engines>
-  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <_62CV_bot>
+          <smplEnginePower>	63.43687	</smplEnginePower>
+        </_62CV_bot>
+      </engines>
+      <chassis>
+        <Chassis_NC27_bot>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1127	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_NC27_bot>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

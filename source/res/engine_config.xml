@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -122,7 +122,7 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
+    <fullDump>	false	</fullDump>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
     <profilerBufferSize>	12582912	</profilerBufferSize>
@@ -148,20 +148,23 @@
   </log_console>
   <soundMgr>
     <enabled>	true	</enabled>
-    <errorLevel>	warning	</errorLevel>
+    <communication>	false	</communication>
     <wwmediaPath>	audioww	</wwmediaPath>
     <highPriorityBankThread>	true	</highPriorityBankThread>
     <WWISE_active_profile>	WWISE_adv_profile	</WWISE_active_profile>
     <WWISE_adv_profile>
       <memoryManager>
         <defaultPool>	12	</defaultPool>
-        <lowEnginePool>	8	</lowEnginePool>
+        <lowEnginePool>	10	</lowEnginePool>
         <preparedPool>	106	</preparedPool>
         <streamingPool>	2	</streamingPool>
         <IOPoolSize>	4	</IOPoolSize>
       </memoryManager>
-      <LQ_render>	false	</LQ_render>
-      <max_voices>	110	</max_voices>
+      <soundRender>
+        <use_config>	false	</use_config>
+        <HDR_lower_threshold>	-50	</HDR_lower_threshold>
+        <max_voices>	110	</max_voices>
+      </soundRender>
       <voice_soundbanks>
         <project>
           <name>	voiceover.bnk	</name>
@@ -224,6 +227,9 @@
         </project>
         <project>
           <name>	gun_reload.pck	</name>
+        </project>
+        <project>
+          <name>	wpn.pck	</name>
         </project>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_common>
@@ -355,5 +361,8 @@
     <logFile>	cef.log	</logFile>
     <logVerbosity>	warning	</logVerbosity>
     <enableFlash>	true	</enableFlash>
+    <debugPort>	-1	</debugPort>
+    <maxFrameRate>	0	</maxFrameRate>
+    <acceptLangList></acceptLangList>
   </webBrowser>
 </engine_config.xml>

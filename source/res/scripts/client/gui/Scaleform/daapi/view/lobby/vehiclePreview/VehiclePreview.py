@@ -2,30 +2,36 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview/VehiclePreview.py
 from collections import namedtuple
 import BigWorld
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from CurrentVehicle import g_currentPreviewVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PREVIEW_INFO_PANEL_IDX
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.meta.VehiclePreviewMeta import VehiclePreviewMeta
 from gui.Scaleform.framework import g_entitiesFactories
-from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
+from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.customization.shared import getBonusIcon42x42
-from gui.shared.ItemsCache import g_itemsCache
-from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import event_dispatcher
-from gui.shared.gui_items.Vehicle import getLobbyDescription
-from gui.shared.tooltips.formatters import getActionPriceData
-from helpers.i18n import makeString as _ms
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.economics import getGUIPrice
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
+from gui.shared.gui_items.Vehicle import getLobbyDescription
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.daapi import LobbySubView
+from gui.shared.tooltips.formatters import getActionPriceData
+from helpers.i18n import makeString as _ms
 CREW_INFO_TAB_ID = 'crewInfoTab'
 FACT_SHEET_TAB_ID = 'factSheetTab'
 TAB_ORDER = [FACT_SHEET_TAB_ID, CREW_INFO_TAB_ID]
@@ -35,7 +41,8 @@ _ButtonState = namedtuple('_ButtonState', 'enabled, price, label, isAction, curr
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
- VIEW_ALIAS.LOBBY_TECHTREE: 'researchTree'}
+ VIEW_ALIAS.LOBBY_TECHTREE: 'researchTree',
+ VIEW_ALIAS.VEHICLE_COMPARE: 'vehicleCompare'}
 
 class VehiclePreview(LobbySubView, VehiclePreviewMeta):
     __background_alpha__ = 0.0
@@ -57,8 +64,11 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         g_currentPreviewVehicle.onVehicleUnlocked += self.__updateBtnState
         g_currentPreviewVehicle.onVehicleInventoryChanged += self.__onInventoryChanged
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
+        comparisonBasket = getVehicleComparisonBasketCtrl()
+        comparisonBasket.onChange += self.__onCompareBasketChanged
+        comparisonBasket.onSwitchChange += self.__updateHeaderData
         if g_currentPreviewVehicle.isPresent():
-            self.as_setStaticDataS(self.__getStaticData())
+            self.__updateHeaderData()
             self.__fullUpdate()
         else:
             event_dispatcher.showHangar()
@@ -70,6 +80,9 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         g_currentPreviewVehicle.onVehicleUnlocked -= self.__updateBtnState
         g_currentPreviewVehicle.onVehicleInventoryChanged -= self.__onInventoryChanged
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
+        comparisonBasket = getVehicleComparisonBasketCtrl()
+        comparisonBasket.onChange -= self.__onCompareBasketChanged
+        comparisonBasket.onSwitchChange -= self.__updateHeaderData
         g_currentPreviewVehicle.selectNoVehicle()
 
     def closeView(self):
@@ -92,8 +105,15 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         else:
             ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.__vehicleCD)
 
+    def onCompareClick(self):
+        """
+        Add to compare button click handler
+        """
+        getVehicleComparisonBasketCtrl().addVehicle(self.__vehicleCD)
+
     def __fullUpdate(self):
         selectedTabInd = AccountSettings.getSettings(PREVIEW_INFO_PANEL_IDX)
+        self.__updateHeaderData()
         self.as_updateInfoDataS(self.__getInfoData(selectedTabInd))
         self.__updateBtnState()
         self.__updateStatus()
@@ -105,12 +125,26 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
 
     def __getVehiclePanelData(self):
         vehicle = g_currentPreviewVehicle.item
-        return {'name': vehicle.userName,
-         'type': vehicle.type,
-         'vDescription': getLobbyDescription(vehicle),
-         'isElite': vehicle.isElite,
-         'isPremiumIGR': vehicle.isPremiumIGR,
-         'info': text_styles.main(VEHICLE_PREVIEW.VEHICLEPANEL_INFO)}
+        data = {'info': text_styles.main(TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY),
+         'infoTooltip': TOOLTIPS.VEHICLEPREVIEW_VEHICLEPANEL_INFO,
+         'vehCompareData': self.__getVehCompareData(vehicle)}
+        return data
+
+    def __getVehCompareData(self, vehicle):
+        comparisonBasket = getVehicleComparisonBasketCtrl()
+        state, tooltip = resolveStateTooltip(comparisonBasket, vehicle, enabledTooltip=None, fullTooltip=VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
+        return {'modeAvailable': comparisonBasket.isEnabled(),
+         'btnEnabled': state,
+         'btnTooltip': tooltip,
+         'label': text_styles.main(VEH_COMPARE.VEHPREVIEW_COMPAREINFO_ADDTOCOMPARE)}
+
+    def __onCompareBasketChanged(self, changedData):
+        """
+        gui.game_control.VehComparisonBasket.onChange event handler
+        :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
+        """
+        if changedData.isFullChanged:
+            self.__updateHeaderData()
 
     def __onInventoryChanged(self, *arg):
         if not g_currentPreviewVehicle.isPresent():
@@ -138,22 +172,25 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
              'actionData': btnState.action})
         return
 
+    def __updateHeaderData(self):
+        self.as_setStaticDataS(self.__getStaticData())
+
     def __getBtnState(self):
         vehicle = g_currentPreviewVehicle.item
         if vehicle.isUnlocked:
             money = g_itemsCache.items.stats.money
             exchangeRate = g_itemsCache.items.shop.exchangeRate
-            price = vehicle.rentOrBuyPrice
+            price = getGUIPrice(vehicle, money, exchangeRate)
             currency = price.getCurrency(byWeight=True)
             action = getActionPriceData(vehicle)
-            isPurchaseEnabled = vehicle.isPurchaseEnabled(money, exchangeRate)
+            mayObtainForMoney = vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
             if currency == Currency.GOLD:
                 currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG
-                formatter = text_styles.goldTextBig if isPurchaseEnabled else text_styles.errCurrencyTextBig
+                formatter = text_styles.goldTextBig if mayObtainForMoney else text_styles.errCurrencyTextBig
             else:
                 currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG
-                formatter = text_styles.creditsTextBig if isPurchaseEnabled else text_styles.errCurrencyTextBig
-            return _ButtonState(isPurchaseEnabled, formatter(BigWorld.wg_getIntegralFormat(price.get(currency))), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY, action is not None, currencyIcon, ItemsActionsFactory.BUY_VEHICLE, action)
+                formatter = text_styles.creditsTextBig if mayObtainForMoney else text_styles.errCurrencyTextBig
+            return _ButtonState(mayObtainForMoney, formatter(BigWorld.wg_getIntegralFormat(price.get(currency))), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESTORE if vehicle.isRestorePossible() else VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY, action is not None, currencyIcon, ItemsActionsFactory.BUY_VEHICLE, action)
         else:
             nodeCD = vehicle.intCD
             currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICONBIG
@@ -169,17 +206,22 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
          'vehicleInfo': self.__getVehiclePanelData()}
 
     def __getHeaderData(self):
-        return {'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
+        vehicle = g_currentPreviewVehicle.item
+        return {'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
+         'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level))),
+         'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
          'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': self.__getBackBtnLabel(),
-         'titleText': text_styles.promoTitle(VEHICLE_PREVIEW.HEADER_TITLE)}
+         'titleText': text_styles.promoTitle(VEHICLE_PREVIEW.HEADER_TITLE),
+         'isPremiumIGR': vehicle.isPremiumIGR}
 
     def __getBackBtnLabel(self):
         key = _BACK_BTN_LABELS.get(self.__backAlias, 'hangar')
         return '#vehicle_preview:header/backBtn/descrLabel/%s' % key
 
     def __getBottomPanelData(self):
-        isBuyingAvailable = not g_currentPreviewVehicle.item.isHidden
+        item = g_currentPreviewVehicle.item
+        isBuyingAvailable = not item.isHidden or item.isRentable or item.isRestorePossible()
         if isBuyingAvailable:
             buyingLabel = text_styles.main(VEHICLE_PREVIEW.BUYINGPANEL_LABEL)
         else:

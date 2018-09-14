@@ -713,23 +713,89 @@
     </_Type3_Otsu>
     <_Type3_Ko>	shared	</_Type3_Ko>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <_Type100_V12_Kakyuu>
+          <smplEnginePower>	317.1843	</smplEnginePower>
+        </_Type100_V12_Kakyuu>
+        <_Type4_V12_Kuurei>
+          <smplEnginePower>	422.9124	</smplEnginePower>
+        </_Type4_V12_Kuurei>
+      </engines>
+      <chassis>
+        <Chassis_Chi_To>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Chi_To>
+        <Chassis_Chi_To_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Chi_To_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Chi_To>
-        <alpha>	0.08855	</alpha>
-      </Chassis_Chi_To>
-      <Chassis_Chi_To_2>
-        <alpha>	0.0805	</alpha>
-      </Chassis_Chi_To_2>
-    </chassis>
-    <engines>
-      <_Type100_V12_Kakyuu>
-        <bravo>	79.29608	</bravo>
-      </_Type100_V12_Kakyuu>
-      <_Type4_V12_Kuurei>
-        <bravo>	105.7281	</bravo>
-      </_Type4_V12_Kuurei>
-    </engines>
     <armour>	0.792419872	</armour>
   </clientAdjustmentFactors>
   <effects>

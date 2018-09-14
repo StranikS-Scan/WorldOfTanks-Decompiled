@@ -586,17 +586,52 @@
   <radios>
     <_10RKM>	shared	</_10RKM>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <V-12A>
+          <smplEnginePower>	740.0968	</smplEnginePower>
+        </V-12A>
+      </engines>
+      <chassis>
+        <Chassis_IS-6>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_IS-6>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_IS-6>
-        <alpha>	0.12075	</alpha>
-      </Chassis_IS-6>
-    </chassis>
-    <engines>
-      <V-12A>
-        <bravo>	185.0242	</bravo>
-      </V-12A>
-    </engines>
     <armour>	1.374734456	</armour>
   </clientAdjustmentFactors>
   <effects>

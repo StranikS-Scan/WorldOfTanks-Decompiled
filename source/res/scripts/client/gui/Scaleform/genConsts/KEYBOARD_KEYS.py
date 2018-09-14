@@ -7,7 +7,6 @@ class KEYBOARD_KEYS(object):
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    null
     """
     FORWARD = 'forward'
     BACKWARD = 'backward'

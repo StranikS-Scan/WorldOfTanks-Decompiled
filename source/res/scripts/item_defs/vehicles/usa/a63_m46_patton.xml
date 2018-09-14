@@ -1300,26 +1300,92 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Ford_GAN>
+          <smplEnginePower>	592.0775	</smplEnginePower>
+        </Ford_GAN>
+        <Continental_AV-1790-1>
+          <smplEnginePower>	744.3259	</smplEnginePower>
+        </Continental_AV-1790-1>
+        <Continental_AV-1790-1M2>
+          <smplEnginePower>	866.9705	</smplEnginePower>
+        </Continental_AV-1790-1M2>
+      </engines>
+      <chassis>
+        <Chassis_M46_Patton>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M46_Patton>
+        <Chassis_M46_Patton_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_M46_Patton_2>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_M46_Patton>
-        <alpha>	0.12075	</alpha>
-      </Chassis_M46_Patton>
-      <Chassis_M46_Patton_2>
-        <alpha>	0.10465	</alpha>
-      </Chassis_M46_Patton_2>
-    </chassis>
-    <engines>
-      <Ford_GAN>
-        <bravo>	148.0194	</bravo>
-      </Ford_GAN>
-      <Continental_AV-1790-1>
-        <bravo>	186.0815	</bravo>
-      </Continental_AV-1790-1>
-      <Continental_AV-1790-1M2>
-        <bravo>	216.7426	</bravo>
-      </Continental_AV-1790-1M2>
-    </engines>
     <armour>	1.052819822	</armour>
   </clientAdjustmentFactors>
   <effects>

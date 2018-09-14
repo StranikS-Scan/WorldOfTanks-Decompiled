@@ -16,6 +16,7 @@ from gui.LobbyContext import g_lobbyContext
 from helpers import i18n
 from FortifiedRegionBase import FORT_ERROR, FORT_ERROR_NAMES
 from PlayerEvents import g_playerEvents
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 
 class _ClientFortListeners(ListenersCollection):
 
@@ -192,42 +193,44 @@ class ClientFortProvider(object):
             LOG_DEBUG('Fort controller has been changed', controller)
         self.__listeners.notify('onClientStateChanged', state)
         self.__resolveSubscription()
+        g_eventBus.removeListener(events.FortEvent.SHOW_DISABLED_POPUP, self.__showPopupDlgIfDisabled, EVENT_BUS_SCOPE.FORT)
+        if stateID not in CLIENT_FORT_STATE.NO_NEED_DISABLED_DLG:
+            g_eventBus.addListener(events.FortEvent.SHOW_DISABLED_POPUP, self.__showPopupDlgIfDisabled, EVENT_BUS_SCOPE.FORT)
 
     @process
     def __resolveSubscription(self):
         if not self.isStarted() or self.__lock:
             return
-        else:
-            isSubscribed = self.isSubscribed()
-            if self.__listeners.isEmpty():
-                if isSubscribed:
-                    if self.__state is not None and self.__state.getStateID() != CLIENT_FORT_STATE.NO_CLAN:
-                        self.__lock = True
-                        unsubscribed = yield self.__requestUnsubscribe()
-                        self.__lock = False
-                    else:
-                        unsubscribed = True
-                        yield lambda callback: callback(True)
-                    if unsubscribed:
-                        self.__initial ^= FORT_PROVIDER_INITIAL_FLAGS.SUBSCRIBED
-                        if self.__keeper:
-                            self.__keeper.stop()
-                        self.resetState()
-            else:
-                if self.__state:
-                    stateID = self.__state.getStateID()
-                else:
-                    stateID = CLIENT_FORT_STATE.UNKNOWN
-                if not isSubscribed and stateID in CLIENT_FORT_STATE.NEED_SUBSCRIPTION:
+        is_subscribed = self.isSubscribed()
+        state_id = self.__state.getStateID() if self.__state else CLIENT_FORT_STATE.UNKNOWN
+        if self.__listeners.isEmpty():
+            if is_subscribed:
+                if state_id in CLIENT_FORT_STATE.NEED_SUBSCRIPTION:
                     self.__lock = True
-                    result = yield self.__requestSubscribe()
+                    unsubscribed = yield self.__requestUnsubscribe()
                     self.__lock = False
-                    if result:
-                        self.__keeper.start(stateID)
-                        self.__initial |= FORT_PROVIDER_INITIAL_FLAGS.SUBSCRIBED
                 else:
-                    self.__keeper.update(stateID)
-            return
+                    unsubscribed = True
+                if unsubscribed:
+                    self.__initial ^= FORT_PROVIDER_INITIAL_FLAGS.SUBSCRIBED
+                    if self.__keeper:
+                        self.__keeper.stop()
+                    self.resetState()
+        elif not is_subscribed:
+            if state_id in CLIENT_FORT_STATE.NEED_SUBSCRIPTION:
+                self.__lock = True
+                subscribed = yield self.__requestSubscribe()
+                self.__lock = False
+            else:
+                subscribed = True
+            if subscribed:
+                if self.__keeper:
+                    self.__keeper.start(state_id)
+                self.__initial |= FORT_PROVIDER_INITIAL_FLAGS.SUBSCRIBED
+                if state_id not in CLIENT_FORT_STATE.NEED_SUBSCRIPTION:
+                    self.resetState()
+        elif self.__keeper:
+            self.__keeper.update(state_id)
 
     @async
     def __requestSubscribe(self, callback=None):
@@ -239,7 +242,14 @@ class ClientFortProvider(object):
 
     def __onFortResponseReceived(self, _, resultCode, resultString):
         if resultCode != FORT_ERROR.OK:
-            SystemMessages.pushMessage(getFortErrorMessage(resultCode, resultString), type=SystemMessages.SM_TYPE.Error)
+            showMsg = True
+            if resultCode == FORT_ERROR.DISCONNECTED_FROM_CENTER:
+                oldState = self.__state.getStateID()
+                self.resetState()
+                newState = self.__state.getStateID()
+                showMsg = oldState != newState and newState == CLIENT_FORT_STATE.CENTER_UNAVAILABLE
+            if showMsg:
+                SystemMessages.pushMessage(getFortErrorMessage(resultCode, resultString), type=SystemMessages.SM_TYPE.Error)
 
     def __onFortUpdateReceived(self, isFullUpdate=False):
         self.updateState()
@@ -265,6 +275,8 @@ class ClientFortProvider(object):
                 SystemMessages.pushI18nMessage(I18N_SM.FORTIFICATION_NOTIFICATION_TURNEDON, priority=NotificationPriorityLevel.MEDIUM)
             else:
                 SystemMessages.pushI18nMessage(I18N_SM.FORTIFICATION_NOTIFICATION_TURNEDOFF, type=SystemMessages.SM_TYPE.Warning)
-                if self.__state.getStateID() != CLIENT_FORT_STATE.UNSUBSCRIBED:
-                    showFortDisabledDialog()
+                g_eventBus.handleEvent(events.FortEvent(events.FortEvent.SHOW_DISABLED_POPUP), scope=EVENT_BUS_SCOPE.FORT)
             self.resetState()
+
+    def __showPopupDlgIfDisabled(self, _):
+        showFortDisabledDialog()

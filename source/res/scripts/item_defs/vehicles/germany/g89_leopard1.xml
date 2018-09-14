@@ -505,17 +505,52 @@
   <radios>
     <SEM25_1>	shared	</SEM25_1>
   </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <MB-838_CAM-500_1>
+          <smplEnginePower>	877.5433	</smplEnginePower>
+        </MB-838_CAM-500_1>
+      </engines>
+      <chassis>
+        <Chassis_Leopard1>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_Leopard1>
+      </chassis>
+    </detailed>
+  </physics>
   <clientAdjustmentFactors>
-    <chassis>
-      <Chassis_Leopard1>
-        <alpha>	0.07245	</alpha>
-      </Chassis_Leopard1>
-    </chassis>
-    <engines>
-      <MB-838_CAM-500_1>
-        <bravo>	219.3858	</bravo>
-      </MB-838_CAM-500_1>
-    </engines>
     <armour>	1.00092121	</armour>
   </clientAdjustmentFactors>
   <effects>

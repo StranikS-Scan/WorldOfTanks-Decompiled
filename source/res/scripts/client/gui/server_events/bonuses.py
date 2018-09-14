@@ -578,11 +578,12 @@ class VehiclesBonus(SimpleBonus):
     def getVehicles(self):
         result = []
         if self._value is not None:
-            for intCD, vehInfo in self._value.iteritems():
-                item = g_itemsCache.items.getItemByCD(intCD)
-                if item is not None:
-                    result.append((item, vehInfo))
+            if isinstance(self._value, list):
+                for vehicleData in self._value:
+                    result.extend(self.__getVehiclesResult(vehicleData))
 
+            else:
+                result = self.__getVehiclesResult(self._value)
         return result
 
     def getCarouselList(self, isReceived=False, isChristmasFormat=False):
@@ -606,6 +607,15 @@ class VehiclesBonus(SimpleBonus):
              'isSpecial': True,
              'specialAlias': TOOLTIPS_CONSTANTS.AWARD_VEHICLE,
              'specialArgs': [vehicle.intCD, tmanRoleLevel, rentExpiryTime]})
+
+        return result
+
+    def __getVehiclesResult(self, value):
+        result = []
+        for intCD, vehInfo in value.iteritems():
+            item = g_itemsCache.items.getItemByCD(intCD)
+            if item is not None:
+                result.append((item, vehInfo))
 
         return result
 

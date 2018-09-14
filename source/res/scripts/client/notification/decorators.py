@@ -112,11 +112,14 @@ class _NotificationDecorator(object):
     def getVisibilityTime(self):
         return None
 
-    def getListVO(self):
-        return self._vo
+    def getListVO(self, newId=None):
+        vo = self._vo.copy()
+        if newId is not None:
+            vo['entityID'] = newId
+        return vo
 
-    def getPopUpVO(self):
-        vo = self.getListVO()
+    def getPopUpVO(self, newId=None):
+        vo = self.getListVO(newId)
         settings = g_settings.lobby.serviceChannel
         if self.getPriorityLevel() == NotificationPriorityLevel.HIGH:
             vo['lifeTime'] = settings.highPriorityMsgLifeTime

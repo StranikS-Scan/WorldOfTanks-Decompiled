@@ -43,6 +43,7 @@ class HangarVehicle(ClientSelectableCameraObject):
         self.isNewYearHangar = False
         self.typeDescriptor = None
         self.isRoot = True
+        self.icanDoHitTest = False
         return
 
     def readCameraSettings(self):
@@ -169,7 +170,7 @@ class HangarVehicle(ClientSelectableCameraObject):
         HangarSpace.g_hangarSpace.space.setDefaultCameraDistance()
 
     def __checkPosibilityToLocateCamera(self):
-        return self.isNewYearHangar and self.__pointToSee is not None and self.__heightMultiplier is not None
+        return self.isNewYearHangar and self.__pointToSee is not None and self.__heightMultiplier is not None and self.icanDoHitTest
 
     def __checkWaitToLocateCamera(self):
         clientSpace = HangarSpace.g_hangarSpace.space

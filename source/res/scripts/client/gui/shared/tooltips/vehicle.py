@@ -18,8 +18,9 @@ from gui.shared.gui_items import RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.shared.gui_items.Vehicle import Vehicle, getTypeBigIconPath
-from gui.shared.items_parameters import RELATIVE_PARAMS, MAX_RELATIVE_VALUE, formatters as param_formatter, params_helper
+from gui.shared.items_parameters import RELATIVE_PARAMS, formatters as param_formatter, params_helper
 from gui.shared.items_parameters.formatters import MEASURE_UNITS
+from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import Money, Currency
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
@@ -35,11 +36,13 @@ _ROLE_BONUS_TYPE = 'role'
 _EXTRA_BONUS_TYPE = 'extra'
 _TOOLTIP_MIN_WIDTH = 420
 _TOOLTIP_MAX_WIDTH = 460
-_CREW_TOOLTIP_PARAMS = {Tankman.ROLES.COMMANDER: (TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE, '10%', '1%'),
- Tankman.ROLES.GUNNER: (TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER,),
- Tankman.ROLES.DRIVER: (TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_MOBILITY,),
- Tankman.ROLES.RADIOMAN: (TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE,),
- Tankman.ROLES.LOADER: (TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER,)}
+_CREW_TOOLTIP_PARAMS = {Tankman.ROLES.COMMANDER: {'paramName': TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE,
+                           'commanderPercents': '10%',
+                           'crewPercents': '1%'},
+ Tankman.ROLES.GUNNER: {'paramName': TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER},
+ Tankman.ROLES.DRIVER: {'paramName': TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_MOBILITY},
+ Tankman.ROLES.RADIOMAN: {'paramName': TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE},
+ Tankman.ROLES.LOADER: {'paramName': TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER}}
 
 def _bonusCmp(x, y):
     return cmp(x[1], y[1]) or cmp(x[0], y[0])
@@ -203,8 +206,8 @@ class VehiclePreviewCrewMemberTooltipData(BlocksTooltipData):
     def _packBlocks(self, role):
         blocks = []
         bodyStr = '%s/%s' % (TOOLTIPS.VEHICLEPREVIEW_CREW, role)
-        crewParams = [ text_styles.neutral(param) for param in _CREW_TOOLTIP_PARAMS[role] ]
-        blocks.append(formatters.packTitleDescBlock(text_styles.highTitle(ITEM_TYPES.tankman_roles(role)), text_styles.main(_ms(bodyStr, *crewParams))))
+        crewParams = {k:text_styles.neutral(v) for k, v in _CREW_TOOLTIP_PARAMS[role].iteritems()}
+        blocks.append(formatters.packTitleDescBlock(text_styles.highTitle(ITEM_TYPES.tankman_roles(role)), text_styles.main(_ms(bodyStr, **crewParams))))
         vehicle = self.context.getVehicle()
         for idx, tankman in vehicle.crew:
             if tankman.role == role:
@@ -430,12 +433,7 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
                     buffIconSrc = ''
                     if self.vehicle.isInInventory:
                         buffIconSrc = params_helper.getBuffIcon(paramInfo, comparator)
-                    block.append(formatters.packStatusDeltaBlockData(title=param_formatter.formatVehicleParamName(paramName), valueStr=fmtValue, statusBarData={'value': paramInfo.value,
-                     'delta': 0,
-                     'minValue': 0,
-                     'markerValue': stockParams[paramName],
-                     'maxValue': MAX_RELATIVE_VALUE,
-                     'useAnim': False}, buffIconSrc=buffIconSrc, padding=formatters.packPadding(left=74, top=8)))
+                    block.append(formatters.packStatusDeltaBlockData(title=param_formatter.formatVehicleParamName(paramName), valueStr=fmtValue, statusBarData=SimplifiedBarVO(value=paramInfo.value, markerValue=stockParams[paramName]), buffIconSrc=buffIconSrc, padding=formatters.packPadding(left=74, top=8)))
 
         if len(block) > 0:
             block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(_ms(TOOLTIPS.VEHICLEPARAMS_SIMPLIFIED_TITLE)), padding=formatters.packPadding(top=-4)))

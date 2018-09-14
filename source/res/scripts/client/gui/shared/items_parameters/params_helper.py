@@ -8,7 +8,7 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.items_parameters import params, RELATIVE_PARAMS, formatters
+from gui.shared.items_parameters import params, RELATIVE_PARAMS, formatters, MAX_RELATIVE_VALUE
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
 from gui.shared.items_parameters.formatters import PARAMS_GROUPS
 from gui.shared.items_parameters.params_cache import g_paramsCache
@@ -186,6 +186,21 @@ def getBuffIcon(param, comparator):
 def getCommonParam(state, name):
     return {'state': state,
      'paramID': name}
+
+
+class SimplifiedBarVO(dict):
+    """
+        This class contains values for status bar and is used to send data to FE
+    """
+
+    def __init__(self, **kwargs):
+        super(SimplifiedBarVO, self).__init__(**kwargs)
+        if 'value' not in kwargs or 'markerValue' not in kwargs:
+            LOG_ERROR('value and markerValue should be specified for simplified parameter status bar')
+        self.setdefault('delta', 0)
+        self.setdefault('minValue', 0)
+        self.setdefault('useAnim', False)
+        self['maxValue'] = max(MAX_RELATIVE_VALUE, self['value'] + self['delta'])
 
 
 class VehParamsBaseGenerator(object):

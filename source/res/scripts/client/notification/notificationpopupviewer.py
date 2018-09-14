@@ -9,6 +9,10 @@ from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import NOTIFICATION_STATE, NOTIFICATION_GROUP
 
 class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView):
+    """
+    WARNING! This class uses ids mapping! It means that all ids coming outside should be maped with special method
+    from base class.
+    """
 
     def __init__(self):
         mvc = NotificationMVC.g_instance
@@ -22,12 +26,12 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self.setModel(mvc.getModel())
 
     def onClickAction(self, typeID, entityID, action):
-        NotificationMVC.g_instance.handleAction(typeID, entityID, action)
+        NotificationMVC.g_instance.handleAction(typeID, self._getNotificationID(entityID), action)
 
     def onMessageHidden(self, byTimeout, wasNotified, typeID, entityID):
         if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
             if not byTimeout and wasNotified:
-                notification = self._model.getNotification(typeID, entityID)
+                notification = self._model.getNotification(typeID, self._getNotificationID(entityID))
                 self._model.decrementNotifiedMessagesCount(*notification.getCounterInfo())
 
     def setListClear(self):
@@ -80,18 +84,19 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
                 self.__sendMessageForDisplay(notification)
 
     def __onNotificationUpdated(self, notification, isStateChanged):
-        if self.as_hasPopUpIndexS(notification.getType(), notification.getID()):
-            self.as_updateMessageS(notification.getPopUpVO())
+        flashID = self._getFlashID(notification.getID())
+        if self.as_hasPopUpIndexS(notification.getType(), flashID):
+            self.as_updateMessageS(self.__getPopUpVO(notification))
         elif isStateChanged:
             self.__onNotificationReceived(notification)
 
     def __onNotificationRemoved(self, typeID, entityID, groupID):
         self._model.decrementNotifiedMessagesCount(groupID, typeID, entityID)
-        self.as_removeMessageS(typeID, entityID)
+        self.as_removeMessageS(typeID, self._getFlashID(entityID))
 
     def __sendMessageForDisplay(self, notification):
         if notification.getPriorityLevel() != NotificationPriorityLevel.LOW:
-            self.as_appendMessageS(notification.getPopUpVO())
+            self.as_appendMessageS(self.__getPopUpVO(notification))
             self.__noDisplayingPopups = False
 
     def __showAlertMessage(self, notification):
@@ -117,3 +122,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         if newState == NOTIFICATION_STATE.LIST:
             self.as_removeAllMessagesS()
             self.__pendingMessagesQueue = []
+
+    def __getPopUpVO(self, notificaton):
+        flashId = self._getFlashID(notificaton.getID())
+        return notificaton.getPopUpVO(flashId)

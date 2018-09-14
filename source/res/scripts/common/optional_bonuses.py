@@ -54,10 +54,11 @@ class ProbabilityVisitor(object):
 
     def onValue(self, bonus, name, value):
         if name in self.__mergers:
-            self.__mergers[name](bonus, name, value, *self.__mergersArgs)
+            self.__mergers[name](bonus, name, value, True, *self.__mergersArgs)
 
     def onMerge(self, bonus, name, value):
-        self.onValue(bonus, name, value)
+        if name in self.__mergers:
+            self.__mergers[name](bonus, name, value, False, *self.__mergersArgs)
 
     @staticmethod
     def resultHolder(result):

@@ -6,11 +6,11 @@ from account_helpers.settings_core import settings_constants
 from gui.Scaleform.daapi.view.meta.VehicleParametersMeta import VehicleParametersMeta
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.items_parameters import params_helper, formatters, MAX_RELATIVE_VALUE
+from gui.shared.items_parameters import params_helper, formatters
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.shared.formatters import text_styles
 from gui.shared.ItemsCache import g_itemsCache
-from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, getParameters, getCommonParam
+from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, getParameters, getCommonParam, SimplifiedBarVO
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 
@@ -127,11 +127,7 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
         data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM, param.name)
         data.update({'isEnabled': True,
          'tooltip': self._tooltipType,
-         'indicatorVO': {'value': param.value,
-                         'maxValue': MAX_RELATIVE_VALUE,
-                         'markerValue': stockParams[param.name],
-                         'minValue': 0,
-                         'useAnim': self.useAnim}})
+         'indicatorVO': SimplifiedBarVO(value=param.value, markerValue=stockParams[param.name], useAnim=self.useAnim)})
         return data
 
     def _makeAdvancedParamVO(self, param):

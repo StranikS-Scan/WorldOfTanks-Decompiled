@@ -12,7 +12,8 @@ from gui.customization import g_customizationController as controller
 from gui.customization.shared import DURATION, CUSTOMIZATION_TYPE, PURCHASE_TYPE
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles, icons
-from gui.shared.items_parameters import params_helper, MAX_RELATIVE_VALUE, formatters as params_formatters
+from gui.shared.items_parameters import params_helper, formatters as params_formatters
+from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
@@ -53,12 +54,7 @@ class SimplifiedStatsBlockConstructor(object):
             value = parameter.value
             if delta > 0:
                 value -= delta
-            blocks.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData={'value': value,
-             'delta': delta,
-             'minValue': 0,
-             'markerValue': self.__stockParams[parameter.name],
-             'maxValue': MAX_RELATIVE_VALUE,
-             'useAnim': False}, padding=formatters.packPadding(left=72, top=8)))
+            blocks.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name]), padding=formatters.packPadding(left=72, top=8)))
 
         return blocks
 

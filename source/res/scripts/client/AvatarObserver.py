@@ -117,6 +117,7 @@ class AvatarObserver(object):
             if self.gunRotator is not None:
                 self.gunRotator.start()
             self.updateObservedVehicleData()
+            self.vehicle.filter.enableStabilisedMatrix(True)
             BigWorld.target.exclude = self.vehicle
             for v in BigWorld.entities.values():
                 if isinstance(v, Vehicle.Vehicle) and v.appearance is not None:
@@ -177,7 +178,10 @@ class AvatarObserver(object):
         if player.isObserver():
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
-                return vehicle.matrix
+                if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
+                    return vehicle.filter.stabilisedMatrix
+                else:
+                    return vehicle.matrix
         return
 
     def getVehicleAttached(self):

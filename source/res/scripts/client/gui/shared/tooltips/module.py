@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME
 from debug_utils import LOG_ERROR
@@ -13,7 +14,7 @@ from gui.shared import g_itemsCache
 from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.items_parameters import params_helper, MAX_RELATIVE_VALUE, formatters as params_formatters
+from gui.shared.items_parameters import params_helper, formatters as params_formatters
 from gui.shared.money import ZERO_MONEY
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
@@ -328,12 +329,7 @@ class SimplifiedStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 value = parameter.value
                 if delta > 0:
                     value -= delta
-                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData={'value': value,
-                 'delta': delta,
-                 'minValue': 0,
-                 'markerValue': self.__stockParams[parameter.name],
-                 'maxValue': MAX_RELATIVE_VALUE,
-                 'useAnim': False}, padding=formatters.packPadding(left=105, top=8)))
+                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name]), padding=formatters.packPadding(left=105, top=8)))
 
         return block
 

@@ -278,6 +278,8 @@ class ClientHangarSpace():
         entity = BigWorld.entity(self.__vEntityId)
         if entity is not None:
             entity.isNewYearHangar = spacePath.find('newyear') != -1
+        if self.__cam is not None:
+            self.__cam.setDynamicColliders([])
         self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
         self.__yawCameraFilter = HangarCameraYawFilter(math.radians(_CFG['cam_yaw_constr'][0]), math.radians(_CFG['cam_yaw_constr'][1]), _CFG['cam_sens'])
         self.__setupCamera()
@@ -327,6 +329,10 @@ class ClientHangarSpace():
             LOG_ERROR('ClientHangarSpace.recreateVehicle failed because hangar space has not been loaded correctly.')
             return
         else:
+            vehicle = BigWorld.entity(self.__vEntityId)
+            vehicle.canDoHitTest(False)
+            if self.__cam is not None:
+                self.__cam.setDynamicColliders([])
             self.__vAppearance.recreate(vDesc, vState, onVehicleLoadedCallback)
             hitTester = vDesc.hull['hitTester']
             hitTester.loadBspModel()
@@ -338,6 +344,8 @@ class ClientHangarSpace():
         self.__boundingRadius = None
         if self.__vAppearance is not None:
             self.__vAppearance.destroy()
+        if self.__cam is not None:
+            self.__cam.setDynamicColliders([])
         self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
         try:
             BigWorld.entities[self.__vEntityId].model = None
@@ -522,6 +530,8 @@ class ClientHangarSpace():
     def __destroy(self):
         LOG_DEBUG('Hangar successfully destroyed.')
         MusicControllerWWISE.unloadCustomSounds()
+        if self.__cam is not None:
+            self.__cam.setDynamicColliders([])
         if self.__cam == BigWorld.camera():
             self.__cam.spaceID = 0
             BigWorld.camera(None)

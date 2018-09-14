@@ -16,5 +16,8 @@ class ToolTipMgrMeta(BaseDAAPIModule):
     def onCreateTypedTooltip(self, tooltipType, args, stateType):
         self._printOverrideError('onCreateTypedTooltip')
 
+    def onHideTooltip(self, tooltipId):
+        self._printOverrideError('onHideTooltip')
+
     def as_showS(self, tooltipData, linkage):
         return self.flashObject.as_show(tooltipData, linkage) if self._isDAAPIInited() else None

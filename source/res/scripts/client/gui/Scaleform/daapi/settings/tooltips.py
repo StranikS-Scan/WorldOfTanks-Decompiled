@@ -5,6 +5,9 @@ from gui.Scaleform.daapi.view.lobby.customization.tooltips import BonusTooltip a
 from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip, QuestElementTooltip as CustomizationQuestElementTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.tooltips.filter import VehicleFilterTooltip
+from gui.shared.tooltips.wgm_currency import WGMGoldCurrencyTooltip, WGMCreditsCurrencyTooltip
+DYNAMIC_TOOLTIPS = {TOOLTIPS_CONSTANTS.GOLD_STATS: WGMGoldCurrencyTooltip(contexts.ToolTipContext(None)),
+ TOOLTIPS_CONSTANTS.CREDITS_STATS: WGMCreditsCurrencyTooltip(contexts.ToolTipContext(None))}
 TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_UI,
                               'method': lambda invID, isCurrentVehicle=None: tankman.TankmanTooltipData(contexts.TankmanHangarContext()).buildToolTip(invID),
                               'complex': None},
@@ -346,4 +349,10 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
              'complex': None},
  TOOLTIPS_CONSTANTS.SETTINGS_KEY_SWITCH_MODE: {'tooltip': TOOLTIPS_CONSTANTS.SETTINGS_KEY_SWITCH_MODE_UI,
                                                'method': common.SettingKeySwitchMode(contexts.ToolTipContext(None)).buildToolTip,
-                                               'complex': None}}
+                                               'complex': None},
+ TOOLTIPS_CONSTANTS.GOLD_STATS: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                 'method': DYNAMIC_TOOLTIPS[TOOLTIPS_CONSTANTS.GOLD_STATS].buildToolTip,
+                                 'complex': None},
+ TOOLTIPS_CONSTANTS.CREDITS_STATS: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                    'method': DYNAMIC_TOOLTIPS[TOOLTIPS_CONSTANTS.CREDITS_STATS].buildToolTip,
+                                    'complex': None}}

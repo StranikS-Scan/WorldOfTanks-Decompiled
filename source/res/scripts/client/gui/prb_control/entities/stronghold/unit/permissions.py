@@ -46,10 +46,6 @@ class StrongholdPermissions(UnitPermissions):
         canChange = self.isNotFreezed() or not self._isInSlot
         return super(StrongholdPermissions, self).canSetVehicle() and canChange
 
-    def canChangeVehicle(self):
-        canChange = self.isNotFreezed() or not self._isInSlot
-        return super(StrongholdPermissions, self).canChangeVehicle() and canChange
-
     def canChangeConsumables(self):
         if not self.isCommander(self._roles) or not self.isNotFreezed():
             return False

@@ -323,12 +323,10 @@ class _ReusableInfo(object):
         getAvatarInfo = self.__avatars.getAvatarInfo
         for dbID, player in self.__players.getPlayerInfoIterator():
             info = self.__vehicles.getVehicleSummarizeInfo(player, result)
-            if info is not None:
-                info.addAvatarInfo(weakref.proxy(getAvatarInfo(dbID)))
-                if playerTeam == player.team:
-                    allies.append(info)
-                else:
-                    enemies.append(info)
+            info.addAvatarInfo(weakref.proxy(getAvatarInfo(dbID)))
+            if playerTeam == player.team:
+                allies.append(info)
+            enemies.append(info)
 
         def __allies():
             for ally in sorted(allies, key=sort_keys.TeamItemSortKey):

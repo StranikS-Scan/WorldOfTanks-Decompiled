@@ -795,6 +795,7 @@ class SYSTEM_MESSAGES(object):
     CLANS_REQUEST_ERRORS_CLAN_DOES_NOT_EXIST = '#system_messages:clans/request/errors/Clan does not exist'
     CLANS_REQUEST_ERRORS_CLAN_IS_FULL = '#system_messages:clans/request/errors/Clan is full'
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY = '#system_messages:clans/request/errors/Account is in clan already'
+    CLANS_REQUEST_ERRORS_USER_IS_IN_CLAN_ALREADY = '#system_messages:clans/request/errors/user is in clan already'
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN = '#system_messages:clans/request/errors/Account is not in clan'
     CLANS_REQUEST_ERRORS_ACCOUNT_ALREADY_INVITED = '#system_messages:clans/request/errors/Account already invited'
     CLANS_REQUEST_ERRORS_ACCOUNT_IN_COOLDOWN = '#system_messages:clans/request/errors/Account in cooldown'
@@ -848,6 +849,12 @@ class SYSTEM_MESSAGES(object):
     WALLET_NOT_AVAILABLE = '#system_messages:wallet/not_available'
     WALLET_NOT_AVAILABLE_GOLD = '#system_messages:wallet/not_available_gold'
     WALLET_NOT_AVAILABLE_FREEXP = '#system_messages:wallet/not_available_freexp'
+    WALLET_AVAILABLE_ASIA = '#system_messages:wallet/available_asia'
+    WALLET_AVAILABLE_ASIA_GOLD = '#system_messages:wallet/available_asia_gold'
+    WALLET_AVAILABLE_ASIA_FREEXP = '#system_messages:wallet/available_asia_freexp'
+    WALLET_NOT_AVAILABLE_ASIA = '#system_messages:wallet/not_available_asia'
+    WALLET_NOT_AVAILABLE_ASIA_GOLD = '#system_messages:wallet/not_available_asia_gold'
+    WALLET_NOT_AVAILABLE_ASIA_FREEXP = '#system_messages:wallet/not_available_asia_freexp'
     POTAPOVQUESTS_SELECT_SUCCESS = '#system_messages:potapovQuests/select/success'
     POTAPOVQUESTS_SELECT_SERVER_ERROR = '#system_messages:potapovQuests/select/server_error'
     POTAPOVQUESTS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:potapovQuests/select/server_error/WRONG_ARGS_TYPE'
@@ -2124,6 +2131,7 @@ class SYSTEM_MESSAGES(object):
      CLANS_REQUEST_ERRORS_CLAN_DOES_NOT_EXIST,
      CLANS_REQUEST_ERRORS_CLAN_IS_FULL,
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY,
+     CLANS_REQUEST_ERRORS_USER_IS_IN_CLAN_ALREADY,
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN,
      CLANS_REQUEST_ERRORS_ACCOUNT_ALREADY_INVITED,
      CLANS_REQUEST_ERRORS_ACCOUNT_IN_COOLDOWN,
@@ -2177,6 +2185,12 @@ class SYSTEM_MESSAGES(object):
      WALLET_NOT_AVAILABLE,
      WALLET_NOT_AVAILABLE_GOLD,
      WALLET_NOT_AVAILABLE_FREEXP,
+     WALLET_AVAILABLE_ASIA,
+     WALLET_AVAILABLE_ASIA_GOLD,
+     WALLET_AVAILABLE_ASIA_FREEXP,
+     WALLET_NOT_AVAILABLE_ASIA,
+     WALLET_NOT_AVAILABLE_ASIA_GOLD,
+     WALLET_NOT_AVAILABLE_ASIA_FREEXP,
      POTAPOVQUESTS_SELECT_SUCCESS,
      POTAPOVQUESTS_SELECT_SERVER_ERROR,
      POTAPOVQUESTS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE,

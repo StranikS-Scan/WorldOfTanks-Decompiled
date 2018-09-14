@@ -437,10 +437,8 @@
     </receiveVisibilityUpdate>
     <receiveVisibilityLists>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
-      </Arg>
-      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
-      </Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	PYTHON	</Arg>
     </receiveVisibilityLists>
     <receivePositionsFromArena>
       <Arg>	BOOL	</Arg>

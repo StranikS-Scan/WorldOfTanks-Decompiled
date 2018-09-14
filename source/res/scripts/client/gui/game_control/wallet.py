@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wallet.py
 import BigWorld
+import constants
 import Event
 from adisp import process
 from debug_utils import LOG_DEBUG
@@ -63,7 +64,8 @@ class WalletController(IWalletController):
     @property
     def componentsStatuses(self):
         return {'gold': self.__currentStatus if self.__useGold else self.STATUS.AVAILABLE,
-         'freeXP': self.__currentStatus if self.__useFreeXP else self.STATUS.AVAILABLE}
+         'freeXP': self.__currentStatus if self.__useFreeXP else self.STATUS.AVAILABLE,
+         'credits': self.__currentStatus if constants.IS_SINGAPORE else self.STATUS.AVAILABLE}
 
     @property
     def isSyncing(self):
@@ -101,6 +103,8 @@ class WalletController(IWalletController):
         if self.isSyncing:
             self.__processStatus(self.STATUS.NOT_AVAILABLE)
             message = '#system_messages:wallet/not_available'
+            if constants.IS_SINGAPORE:
+                message += '_asia'
             if not self.__useFreeXP:
                 message += '_gold'
             elif not self.__useGold:
@@ -123,6 +127,8 @@ class WalletController(IWalletController):
                 self.__clearCallback()
                 if not initialize:
                     message = '#system_messages:wallet/available'
+                    if constants.IS_SINGAPORE:
+                        message += '_asia'
                     if not self.__useFreeXP:
                         message += '_gold'
                     elif not self.__useGold:

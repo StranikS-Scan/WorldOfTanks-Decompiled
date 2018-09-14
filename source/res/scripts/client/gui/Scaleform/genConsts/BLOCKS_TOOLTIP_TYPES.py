@@ -26,6 +26,7 @@ class BLOCKS_TOOLTIP_TYPES(object):
     TOOLTIP_TILE_LIST_BLOCK_LINKAGE = 'SimpleTileListBlockUI'
     TOOLTIP_BUILD_BLOCK_AWARD_BG_LINKAGE = 'TooltipBuildUpBlockAwardBgUI'
     TOOLTIP_CREW_SKILLS_BLOCK_LINKAGE = 'CrewSkillsBlockUI'
+    TOOLTIP_DASHLINE_ITEM_PRICE_BLOCK_LINKAGE = 'DashLineItemPriceBlockUI'
     ALIGN_LEFT = 'left'
     ALIGN_RIGHT = 'right'
     ALIGN_CENTER = 'center'

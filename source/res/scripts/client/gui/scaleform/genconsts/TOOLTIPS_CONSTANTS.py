@@ -117,6 +117,8 @@ class TOOLTIPS_CONSTANTS(object):
     TRADE_IN = 'tradeIn'
     TRADE_IN_PRICE = 'ToolTipTradeInPriceUI'
     SELECTED_VEHICLE_TRADEOFF = 'selectedVehicleTradeOff'
+    GOLD_STATS = 'goldStats'
+    CREDITS_STATS = 'creditsStats'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
     TANKMEN_SKILL_UI = 'ToolTipSkillUI'

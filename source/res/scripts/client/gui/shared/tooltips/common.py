@@ -173,6 +173,34 @@ class BlocksTooltipData(ToolTipBaseData):
          'width': self._getWidth()}
 
 
+class DynamicBlocksTooltipData(BlocksTooltipData):
+    """
+    This tooltip can be updated during its displaying.
+    """
+
+    def __init__(self, context, toolTipType):
+        super(DynamicBlocksTooltipData, self).__init__(context, toolTipType)
+        self.__isVisible = False
+
+    def stopUpdates(self):
+        """
+        The method is called when Tooltip manager is disposed.
+        But this tooltip will be alive during the whole app life cycle
+        """
+        self.__isVisible = False
+
+    def isVisible(self):
+        return self.__isVisible
+
+    def changeVisibility(self, isVisible):
+        self.__isVisible = isVisible
+
+    def updateData(self):
+        if self.isVisible() and self.app is not None:
+            self.app.updateTooltip(self.buildToolTip(), self.getType())
+        return
+
+
 class EfficiencyTooltipData(BlocksTooltipData):
     _packers = {BATTLE_EFFICIENCY_TYPES.ARMOR: efficiency.ArmorItemPacker,
      BATTLE_EFFICIENCY_TYPES.DAMAGE: efficiency.DamageItemPacker,

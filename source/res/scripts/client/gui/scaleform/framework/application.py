@@ -360,6 +360,16 @@ class SFApplication(Flash, ApplicationMeta):
         index = self.settingsCore.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)
         self.settingsCore.options.getSetting('interfaceScale').setSystemValue(index)
 
+    def updateTooltip(self, tooltipData, linkage):
+        """
+        Update contents of a dynamic tooltip
+        :param tooltipData: new data
+        :param linkage: one from TOOLTIPS_CONSTANTS
+        """
+        if self._toolTip is not None:
+            self._toolTip.as_showS(tooltipData, linkage)
+        return
+
     def updateStage(self, w, h, scale):
         self.as_updateStageS(w, h, scale)
 

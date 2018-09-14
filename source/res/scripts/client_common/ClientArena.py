@@ -40,7 +40,8 @@ class ClientArena(object):
      ARENA_UPDATE.RESOURCE_POINT_STATE_CHANGED: '_ClientArena__onResourcePointStateChanged',
      ARENA_UPDATE.OWN_VEHICLE_INSIDE_RP: '_ClientArena__onOwnVehicleInsideRP',
      ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
-     ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints'}
+     ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints',
+     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, weatherPresetID):
         self.__vehicles = {}
@@ -52,6 +53,7 @@ class ClientArena(object):
          0,
          None)
         self.__viewPoints = []
+        self.__hasFogOfWarHiddenVehicles = False
         self.__eventManager = Event.EventManager()
         em = self.__eventManager
         self.onNewVehicleListReceived = Event.Event(em)
@@ -94,6 +96,7 @@ class ClientArena(object):
     periodLength = property(lambda self: self.__periodInfo[2])
     periodAdditionalInfo = property(lambda self: self.__periodInfo[3])
     viewPoints = property(lambda self: self.__viewPoints)
+    hasFogOfWarHiddenVehicles = property(lambda self: self.__hasFogOfWarHiddenVehicles)
 
     def destroy(self):
         self.__eventManager.clear()
@@ -174,6 +177,9 @@ class ClientArena(object):
         self.__viewPoints = cPickle.loads(zlib.decompress(argStr))
         LOG_DEBUG('[VIEW POINTS] received view points', self.__viewPoints)
         self.onViewPoints(self.__viewPoints)
+
+    def __onFogOfWar(self, argStr):
+        self.__hasFogOfWarHiddenVehicles = cPickle.loads(argStr)
 
     def __onStatisticsUpdate(self, argStr):
         self.__statistics = {}

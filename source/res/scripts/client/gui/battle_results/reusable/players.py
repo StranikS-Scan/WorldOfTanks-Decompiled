@@ -99,7 +99,7 @@ class PlayersInfo(shared.UnpackedInfo):
         if dbID in self.__players:
             info = self.__players[dbID]
         else:
-            self.__players[dbID] = info = PlayerInfo(dbID=dbID, wasInBattle=False)
+            info = PlayerInfo(dbID=dbID, wasInBattle=False)
         return info
 
     @staticmethod

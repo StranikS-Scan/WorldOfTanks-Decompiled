@@ -334,11 +334,27 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onPremiumExpireTimeChanged(self, timestamp):
         self.updateAccountAttrs()
 
+    @staticmethod
+    def __getCreditsTooltipSettings():
+        if constants.IS_SINGAPORE:
+            tooltip = (TOOLTIPS_CONSTANTS.CREDITS_STATS, TOOLTIP_TYPES.SPECIAL)
+        else:
+            tooltip = (TOOLTIPS.HEADER_GOLD_EXCHANGE, TOOLTIP_TYPES.COMPLEX)
+        return tooltip
+
+    @staticmethod
+    def __getGoldTooltipSettings():
+        if constants.IS_SINGAPORE:
+            tooltip = (TOOLTIPS_CONSTANTS.GOLD_STATS, TOOLTIP_TYPES.SPECIAL)
+        else:
+            tooltip = (TOOLTIPS.HEADER_REFILL, TOOLTIP_TYPES.COMPLEX)
+        return tooltip
+
     def __setCredits(self, accCredits):
-        self.as_creditsResponseS(BigWorld.wg_getIntegralFormat(accCredits), MENU.HEADERBUTTONS_BTNLABEL_EXCHANGE_GOLD, TOOLTIPS.HEADER_GOLD_EXCHANGE, TOOLTIP_TYPES.COMPLEX)
+        self.as_creditsResponseS(BigWorld.wg_getIntegralFormat(accCredits), MENU.HEADERBUTTONS_BTNLABEL_EXCHANGE_GOLD, *self.__getCreditsTooltipSettings())
 
     def __setGold(self, gold):
-        self.as_goldResponseS(BigWorld.wg_getGoldFormat(gold), MENU.HEADERBUTTONS_BTNLABEL_BUY_GOLD, TOOLTIPS.HEADER_REFILL, TOOLTIP_TYPES.COMPLEX)
+        self.as_goldResponseS(BigWorld.wg_getGoldFormat(gold), MENU.HEADERBUTTONS_BTNLABEL_BUY_GOLD, *self.__getGoldTooltipSettings())
 
     def __setFreeXP(self, freeXP):
         isActionActive = g_itemsCache.items.shop.isXPConversionActionActive
@@ -393,8 +409,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.as_setScreenS(alias)
 
     def __onWalletChanged(self, status):
-        self.as_goldResponseS(BigWorld.wg_getGoldFormat(g_itemsCache.items.stats.actualGold), MENU.HEADERBUTTONS_BTNLABEL_BUY_GOLD, TOOLTIPS.HEADER_REFILL, TOOLTIP_TYPES.COMPLEX)
-        self.as_setFreeXPS(BigWorld.wg_getIntegralFormat(g_itemsCache.items.stats.actualFreeXP), MENU.HEADERBUTTONS_BTNLABEL_GATHERING_EXPERIENCE, g_itemsCache.items.shop.isXPConversionActionActive, TOOLTIPS.HEADER_XP_GATHERING, TOOLTIP_TYPES.COMPLEX)
+        self.__setGold(g_itemsCache.items.stats.actualGold)
+        if constants.IS_SINGAPORE:
+            self.__setCredits(g_itemsCache.items.stats.actualCredits)
+        self.__setFreeXP(g_itemsCache.items.stats.actualFreeXP)
         self.as_setWalletStatusS(status)
 
     def __onPremiumTimeChanged(self, isPremium, _, premiumExpiryTime):

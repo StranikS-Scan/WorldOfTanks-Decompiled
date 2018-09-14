@@ -98,6 +98,15 @@ def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=Non
         return
 
 
+def packDashLineItemPriceBlockData(title, value, icon, desc=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_DASHLINE_ITEM_PRICE_BLOCK_LINKAGE, padding=None):
+    data = {'name': title,
+     'value': value,
+     'icon': icon,
+     'gap': -1,
+     'valueWidth': -1}
+    return packBlockDataItem(linkage, data, padding)
+
+
 def packBuildUpBlockData(blocks, gap=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None, stretchBg=True):
     data = {'blocksData': blocks,
      'stretchBg': stretchBg}

@@ -141,6 +141,7 @@ class TOOLTIPS(object):
     QUESTS_VEHICLESEASONAWARD_ABOUTBTN = '#tooltips:quests/vehicleSeasonAward/aboutBtn'
     WALLET_NOT_AVAILABLE_GOLD = '#tooltips:wallet/not_available_gold'
     WALLET_NOT_AVAILABLE_FREEXP = '#tooltips:wallet/not_available_freexp'
+    WALLET_NOT_AVAILABLE_CREDITS = '#tooltips:wallet/not_available_credits'
     MEDALION_NOVEHICLE = '#tooltips:medalion/noVehicle'
     SETTINGSICON_FREEZED = '#tooltips:settingsIcon/freezed'
     SETTINGSICON_CONDITIONS = '#tooltips:settingsIcon/conditions'
@@ -608,6 +609,8 @@ class TOOLTIPS(object):
     WALLET_NOT_AVAILABLE_GOLD_BODY = '#tooltips:wallet/not_available_gold/body'
     WALLET_NOT_AVAILABLE_FREEXP_HEADER = '#tooltips:wallet/not_available_freexp/header'
     WALLET_NOT_AVAILABLE_FREEXP_BODY = '#tooltips:wallet/not_available_freexp/body'
+    WALLET_NOT_AVAILABLE_CREDITS_HEADER = '#tooltips:wallet/not_available_credits/header'
+    WALLET_NOT_AVAILABLE_CREDITS_BODY = '#tooltips:wallet/not_available_credits/body'
     CREDITS_HEADER = '#tooltips:credits/header'
     CREDITS_BODY = '#tooltips:credits/body'
     FREEXP_HEADER = '#tooltips:freeXP/header'
@@ -2308,6 +2311,11 @@ class TOOLTIPS(object):
     HANGAR_HEADER_PERSONALQUESTS_AWARD_BODY = '#tooltips:hangar/header/personalQuests/award/body'
     HANGAR_HEADER_PERSONALQUESTS_DONE_HEADER = '#tooltips:hangar/header/personalQuests/done/header'
     HANGAR_HEADER_PERSONALQUESTS_DONE_BODY = '#tooltips:hangar/header/personalQuests/done/body'
+    HANGAR_HEADER_WGMONEYTOOLTIP_GOLDNAME = '#tooltips:hangar/header/wgmoneyTooltip/goldName'
+    HANGAR_HEADER_WGMONEYTOOLTIP_CREDITSNAME = '#tooltips:hangar/header/wgmoneyTooltip/creditsName'
+    HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE = '#tooltips:hangar/header/wgmoneyTooltip/purchasedValue'
+    HANGAR_HEADER_WGMONEYTOOLTIP_EARNEDVALUE = '#tooltips:hangar/header/wgmoneyTooltip/earnedValue'
+    HANGAR_HEADER_WGMONEYTOOLTIP_TOTALVALUE = '#tooltips:hangar/header/wgmoneyTooltip/totalValue'
     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM = (TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK,
      TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK,
      TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_HEAVYTANK,

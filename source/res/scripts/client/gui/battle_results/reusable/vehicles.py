@@ -46,7 +46,7 @@ class VehiclesInfo(shared.UnpackedInfo):
         self.__accountToVehicleID = {}
         self.__details = {}
         for vehicleID, accountDBID, items in _getVehiclesGenerator(vehicles):
-            if not accountDBID or not items:
+            if not items:
                 self._addUnpackedItemID(vehicleID)
             getItemByCD = g_itemsCache.items.getItemByCD
 
@@ -101,18 +101,23 @@ class VehiclesInfo(shared.UnpackedInfo):
         :return: instance of VehicleSummarizeInfo.
         """
         dbID = player.dbID
-        if dbID not in self.__accountToVehicleID:
-            return None
-        else:
+        if dbID in self.__accountToVehicleID:
             vehicleID = self.__accountToVehicleID[dbID]
-            if vehicleID not in result:
-                return None
+        else:
+            vehicleID = 0
+        if vehicleID in result:
             result = result[vehicleID]
-            info = shared.VehicleSummarizeInfo(vehicleID, player)
-            getItemByCD = g_itemsCache.items.getItemByCD
-            for idx, item in enumerate(self.__vehicles[vehicleID]):
-                if idx >= len(result):
-                    continue
-                info.addVehicleInfo(shared.VehicleDetailedInfo.makeForVehicle(vehicleID, getItemByCD(item.intCD), weakref.proxy(player), result[idx]))
+        else:
+            result = {}
+        if vehicleID in self.__vehicles:
+            items = self.__vehicles[vehicleID]
+        else:
+            items = []
+        info = shared.VehicleSummarizeInfo(vehicleID, player)
+        getItemByCD = g_itemsCache.items.getItemByCD
+        for idx, item in enumerate(items):
+            if idx >= len(result):
+                continue
+            info.addVehicleInfo(shared.VehicleDetailedInfo.makeForVehicle(vehicleID, getItemByCD(item.intCD), weakref.proxy(player), result[idx]))
 
-            return info
+        return info

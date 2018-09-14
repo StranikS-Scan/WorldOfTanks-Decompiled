@@ -74,6 +74,10 @@ def getServerRegionalTime():
     return _g_instance.serverRegionalTime
 
 
+def getServerUTCTime():
+    return _g_instance.serverUTCTime
+
+
 def getServerRegionalTimeCurrentDay():
     ts = time.gmtime(_g_instance.serverRegionalTime)
     return ts.tm_hour * ONE_HOUR + ts.tm_min * ONE_MINUTE + ts.tm_sec

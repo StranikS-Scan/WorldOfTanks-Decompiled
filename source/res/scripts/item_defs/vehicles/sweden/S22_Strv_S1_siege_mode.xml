@@ -21,7 +21,7 @@
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	system/maps/null_exclusion_mask.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -40,6 +40,9 @@
       </armor_10>
       <armor_11>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_11>
+      <armor_12>	45	</armor_12>
+      <armor_13>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_13>
       <leftTrack>	20	</leftTrack>
       <rightTrack>	20	</rightTrack>
     </armor>
@@ -71,7 +74,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 1.05256 0.42974	</turret>
+      <turret>	0.000000 1.0279 0.360218	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/sweden/S22_Strv_S1/collision/Hull.model	</collisionModelServer>
@@ -79,10 +82,10 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.799239 0.954191 2.27288	</rayStart>
-        <rayEnd>	0.799241 0.758562 2.2313	</rayEnd>
+        <rayStart>	1.1586 0.789462 3.0615	</rayStart>
+        <rayEnd>	1.1586 0.593833 3.01992	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.4	</size>
+        <size>	0.37	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <player>
@@ -117,7 +120,7 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/sweden/S22_Strv_S1/Strv_S1_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	2 2 0.000000 0.000000	</tiling>
+      <tiling>	2.8 2.8 0.000000 0.000000	</tiling>
     </camouflage>
   </hull>
   <chassis>
@@ -152,7 +155,7 @@
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
-        <size>	0.5 0.45	</size>
+        <size>	0.5 0.75	</size>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_02	</textureSet>
       </traces>
@@ -215,7 +218,7 @@
         <collisionModelServer>	vehicles/sweden/S22_Strv_S1/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/sweden/S22_Strv_S1/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.31486 1.5202	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.31486 1.51225	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -390,7 +393,7 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.000045 0.00779548 3.18904	</rayStart>
+              <rayStart>	-0.000045 0.0250568 3.18904	</rayStart>
               <rayEnd>	-0.0233225 0.00292348 3.18904	</rayEnd>
               <rayUp>	0.078 0.078 5	</rayUp>
               <size>	0.5	</size>
@@ -399,7 +402,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+            <tiling>	1.5 0.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_kan_strv_103_L_51_1>
       </guns>
@@ -478,7 +481,7 @@
   </physics>
   <siege_mode>
     <switchOnTime>	2	</switchOnTime>
-    <switchOffTime>	1.5	</switchOffTime>
+    <switchOffTime>	1.25	</switchOffTime>
     <engineDamageCoeff>	2	</engineDamageCoeff>
     <soundStateChange>
       <on>	strv_siege_mode_on_PC	</on>

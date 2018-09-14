@@ -10,29 +10,7 @@ from adisp import async
 from debug_utils import LOG_ERROR
 from gui.shared.utils import code2str
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
-
-class RequestProcessor(object):
-
-    def __init__(self, delay, callback):
-        self.__callback = callback
-        self.__fired = False
-        self.__bwCallbackID = BigWorld.callback(delay, self.__cooldownCallback)
-
-    @property
-    def isFired(self):
-        return self.__fired
-
-    def cancel(self):
-        if self.__bwCallbackID is not None:
-            BigWorld.cancelCallback(self.__bwCallbackID)
-            self.__bwCallbackID = None
-        return
-
-    def __cooldownCallback(self):
-        self.cancel()
-        self.__fired = True
-        self.__callback()
-
+from gui.shared.utils.requesters.common import RequestProcessor
 
 class UserDossier(object):
     __queue = []

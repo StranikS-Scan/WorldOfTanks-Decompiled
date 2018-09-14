@@ -52,12 +52,14 @@ class RegularVehicleStatsBlock(base.StatsBlock):
             self._setVehicleState(result, reusable)
 
     def _setVehicleInfo(self, vehicle):
-        self._isObserver = vehicle.isObserver
-        self.intCD = vehicle.intCD
-        self.vehicleName = vehicle.userName
-        self.vehicleShortName = vehicle.shortUserName
-        self.vehicleIcon = getSmallIconPath(vehicle.name)
-        self.vehicles = [{'icon': getIconPath(vehicle.name)}]
+        if vehicle is not None:
+            self._isObserver = vehicle.isObserver
+            self.intCD = vehicle.intCD
+            self.vehicleName = vehicle.userName
+            self.vehicleShortName = vehicle.shortUserName
+            self.vehicleIcon = getSmallIconPath(vehicle.name)
+            self.vehicles = [{'icon': getIconPath(vehicle.name)}]
+        return
 
     def _setPlayerInfo(self, player):
         self.playerID = player.dbID
@@ -197,7 +199,7 @@ class TeamStatsBlock(base.StatsBlock):
         else:
             personalPrebattleID = 0
         for idx, item in enumerate(result):
-            if item.vehicle.isObserver:
+            if item.vehicle is not None and item.vehicle.isObserver:
                 continue
             player = item.player
             isPersonal = player.dbID == personalDBID
@@ -207,6 +209,8 @@ class TeamStatsBlock(base.StatsBlock):
             block.isPersonalSquad = personalPrebattleID != 0 and personalPrebattleID == player.prebattleID
             block.setRecord(item, reusable)
             self.addComponent(self.getNextComponentIndex(), block)
+
+        return
 
 
 class RegularTeamStatsBlock(TeamStatsBlock):

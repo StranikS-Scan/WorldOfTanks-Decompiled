@@ -878,6 +878,12 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdStr(AccountCommands.CMD_VERIFY_FIN_PSWD, finPassword, proxy)
         return
 
+    def requestWGMBalanceInfo(self, callback):
+        if events.isPlayerEntityChanging:
+            return
+        proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
+        self._doCmdStr(AccountCommands.CMD_QUERY_BALANCE_INFO, '', proxy)
+
     def messenger_onActionByServer_chat2(self, actionID, reqID, args):
         from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions
         LOG_DEBUG('messenger_onActionByServer', actions.getActionName(actionID), reqID, args)

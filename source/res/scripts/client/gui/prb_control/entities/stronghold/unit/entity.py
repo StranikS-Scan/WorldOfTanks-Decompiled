@@ -168,7 +168,6 @@ class StrongholdEntity(UnitEntity):
         self.__waitingManager = WaitingManager()
         self.__errorCount = 0
         self.__timerID = None
-        self.__preventInfinityLoopInMatchmakingTimer = False
         self.__isInactiveMatchingButton = True
         self.__showedBattleIdx = 0
         self.__listenersMapping = {'available_reserves': self.__onAvailableReservesChanged,
@@ -414,7 +413,6 @@ class StrongholdEntity(UnitEntity):
             return True
 
     def _updateMatchmakingTimer(self):
-        self.__preventInfinityLoopInMatchmakingTimer = False
         self.__cancelMatchmakingTimer()
         self.__updateMatchmakingData()
 
@@ -479,7 +477,7 @@ class StrongholdEntity(UnitEntity):
         return StrongholdUnitRequestProcessor()
 
     def _getCurrentUTCTime(self):
-        return datetime.datetime.utcnow()
+        return (time_utils.getDateTimeInUTC(time_utils.getServerUTCTime()), datetime.datetime.utcnow())
 
     def _convertUTCStructToLocalTimestamp(self, val):
         val = time_utils.utcToLocalDatetime(val).timetuple()
@@ -621,6 +619,18 @@ class StrongholdEntity(UnitEntity):
             self.__timerID = None
         return
 
+    def __calculatePeripheryTimeHelper(self, data, baseTimeUTC):
+        peripheryStartTimeUTC = time.strptime(data.getBattlesStartTime(), '%H:%M')
+        peripheryEndTimeUTC = time.strptime(data.getBattlesEndTime(), '%H:%M')
+        peripheryStartTimeUTC = baseTimeUTC.replace(hour=peripheryStartTimeUTC.tm_hour, minute=peripheryStartTimeUTC.tm_min, second=0, microsecond=0)
+        peripheryEndTimeUTC = baseTimeUTC.replace(hour=peripheryEndTimeUTC.tm_hour, minute=peripheryEndTimeUTC.tm_min, second=0, microsecond=0)
+        if peripheryStartTimeUTC > peripheryEndTimeUTC:
+            peripheryEndTimeUTC += datetime.timedelta(days=1)
+        if baseTimeUTC > peripheryEndTimeUTC and baseTimeUTC > peripheryStartTimeUTC:
+            peripheryEndTimeUTC += datetime.timedelta(days=1)
+            peripheryStartTimeUTC += datetime.timedelta(days=1)
+        return (peripheryStartTimeUTC, peripheryEndTimeUTC)
+
     def __updateMatchmakingData(self):
         self.__cancelMatchmakingTimer()
         data = self.getStrongholdData()
@@ -645,20 +655,12 @@ class StrongholdEntity(UnitEntity):
         matchmakerNextTick = None
         tempIsInactiveMatchingButton = self.__isInactiveMatchingButton
         self.__isInactiveMatchingButton = True
-        currentTimeUTC = self._getCurrentUTCTime()
+        currentTimeUTC, clientTimeUTC = self._getCurrentUTCTime()
         peripheryStartTimeUTC = currentTimeUTC.replace(hour=0, minute=0, second=0, microsecond=0)
         peripheryEndTimeUTC = currentTimeUTC.replace(hour=0, minute=0, second=0, microsecond=0)
         if data.getBattlesStartTime() and data.getBattlesEndTime():
             isInactivePeriphery = False
-            peripheryStartTimeUTC = time.strptime(data.getBattlesStartTime(), '%H:%M')
-            peripheryEndTimeUTC = time.strptime(data.getBattlesEndTime(), '%H:%M')
-            peripheryStartTimeUTC = currentTimeUTC.replace(hour=peripheryStartTimeUTC.tm_hour, minute=peripheryStartTimeUTC.tm_min, second=0, microsecond=0)
-            peripheryEndTimeUTC = currentTimeUTC.replace(hour=peripheryEndTimeUTC.tm_hour, minute=peripheryEndTimeUTC.tm_min, second=0, microsecond=0)
-            if peripheryStartTimeUTC > peripheryEndTimeUTC:
-                peripheryEndTimeUTC += datetime.timedelta(days=1)
-            if not self.__preventInfinityLoopInMatchmakingTimer and currentTimeUTC > peripheryEndTimeUTC and currentTimeUTC > peripheryStartTimeUTC:
-                peripheryEndTimeUTC += datetime.timedelta(days=1)
-                peripheryStartTimeUTC += datetime.timedelta(days=1)
+            peripheryStartTimeUTC, peripheryEndTimeUTC = self.__calculatePeripheryTimeHelper(data, currentTimeUTC)
             peripheryStartTimestampUTC = int(time_utils.getTimestampFromUTC(peripheryStartTimeUTC.timetuple()))
             currentTimestampUTC = int(time_utils.getTimestampFromUTC(currentTimeUTC.timetuple()))
         else:
@@ -671,19 +673,15 @@ class StrongholdEntity(UnitEntity):
             if isInBattle:
                 textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINBATTLE
             elif peripheryStartTimeUTC <= currentTimeUTC <= peripheryEndTimeUTC:
-                self.__preventInfinityLoopInMatchmakingTimer = True
                 dtime = int((peripheryEndTimeUTC - currentTimeUTC).total_seconds())
                 self.__isInactiveMatchingButton = False
                 if dtime <= data.getSortiesBeforeEndLag():
                     textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_ENDOFBATTLESOON
                 else:
                     textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_AVAILABLE
-            elif isInactivePeriphery or currentTimeUTC > peripheryEndTimeUTC:
+            elif isInactivePeriphery:
                 dtime = 0
             else:
-                currentTimestamp = self._convertUTCStructToLocalTimestamp(currentTimeUTC)
-                peripheryStartTimestamp = self._convertUTCStructToLocalTimestamp(peripheryStartTimeUTC)
-                currDayStart, currDayEnd = time_utils.getDayTimeBoundsForLocal(currentTimestamp)
                 dtime = peripheryStartTimestampUTC - currentTimestampUTC
                 if dtime <= data.getSortiesBeforeStartLag():
                     if dtime < 0:
@@ -691,10 +689,18 @@ class StrongholdEntity(UnitEntity):
                     textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON
                     if dtime <= MATCHMAKING_BATTLE_BUTTON_SORTIE:
                         self.__isInactiveMatchingButton = False
-                elif currDayStart <= peripheryStartTimestamp - time_utils.ONE_DAY <= currDayEnd:
-                    textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW
-                elif currDayStart <= peripheryStartTimestamp <= currDayEnd:
-                    textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY
+                else:
+                    peripheryStartTimeUTC, _ = self.__calculatePeripheryTimeHelper(data, clientTimeUTC)
+                    peripheryStartTimestampUTC = int(time_utils.getTimestampFromUTC(peripheryStartTimeUTC.timetuple()))
+                    currentTimestampUTC = int(time_utils.getTimestampFromUTC(clientTimeUTC.timetuple()))
+                    peripheryStartTimestamp = self._convertUTCStructToLocalTimestamp(peripheryStartTimeUTC)
+                    currentTimestamp = self._convertUTCStructToLocalTimestamp(clientTimeUTC)
+                    dtime = peripheryStartTimestampUTC - currentTimestampUTC
+                    currDayStart, currDayEnd = time_utils.getDayTimeBoundsForLocal(peripheryStartTimestamp)
+                    if currDayStart - time_utils.ONE_DAY <= currentTimestamp <= currDayEnd - time_utils.ONE_DAY:
+                        textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW
+                    elif currDayStart <= currentTimestamp <= currDayEnd:
+                        textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY
         else:
             textid = FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_UNAVAILABLE
             if not isInactivePeriphery:
@@ -711,7 +717,11 @@ class StrongholdEntity(UnitEntity):
                 elif dtime >= data.getFortBattlesBeforeStartLag():
                     textid = FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_UNAVAILABLE
                     if matchmakerNextTick is not None:
-                        currentTimestamp = self._convertUTCStructToLocalTimestamp(currentTimeUTC)
+                        peripheryStartTimeUTC, _ = self.__calculatePeripheryTimeHelper(data, clientTimeUTC)
+                        peripheryStartTimestampUTC = int(time_utils.getTimestampFromUTC(peripheryStartTimeUTC.timetuple()))
+                        currentTimestampUTC = int(time_utils.getTimestampFromUTC(clientTimeUTC.timetuple()))
+                        currentTimestamp = self._convertUTCStructToLocalTimestamp(clientTimeUTC)
+                        dtime = matchmakerNextTick - currentTimestampUTC
                         matchmakerNextTickLocal = time_utils.getDateTimeInUTC(matchmakerNextTick)
                         matchmakerNextTickLocal = self._convertUTCStructToLocalTimestamp(matchmakerNextTickLocal)
                         currDayStart, currDayEnd = time_utils.getDayTimeBoundsForLocal(matchmakerNextTickLocal)

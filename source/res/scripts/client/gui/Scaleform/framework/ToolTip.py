@@ -5,6 +5,7 @@ from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrM
 from gui.shared import events
 from helpers import i18n
 from gui.app_loader import g_appLoader
+from gui.Scaleform.daapi.settings.tooltips import TOOLTIPS, DYNAMIC_TOOLTIPS
 
 class ToolTip(ToolTipMgrMeta):
     TOOLTIP_KIND = ['header',
@@ -36,7 +37,6 @@ class ToolTip(ToolTipMgrMeta):
         elif not self._isAllowedTypedTooltip:
             return
         else:
-            from gui.Scaleform.daapi.settings.tooltips import TOOLTIPS
             if tooltipType in TOOLTIPS:
                 item = TOOLTIPS[tooltipType]
                 getDataMethod = item['method']
@@ -52,6 +52,7 @@ class ToolTip(ToolTipMgrMeta):
                                 self.__genComplexToolTipFromData(tooltipData['data'], stateType, self.__getDefaultTooltipType())
                         else:
                             self.as_showS(tooltipData, linkage)
+                            self.__changeDynamicTooltipVisibility(tooltipType, True)
                 elif linkage is not None:
                     self.as_showS(args, linkage)
             return
@@ -61,6 +62,10 @@ class ToolTip(ToolTipMgrMeta):
             return
         self.__genComplexToolTip(tooltipId, stateType, self.__getDefaultTooltipType())
 
+    def onHideTooltip(self, tooltipId):
+        if not self._areTooltipsDisabled:
+            self.__changeDynamicTooltipVisibility(tooltipId, False)
+
     def _populate(self):
         super(ToolTip, self)._populate()
         g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
@@ -69,7 +74,17 @@ class ToolTip(ToolTipMgrMeta):
     def _dispose(self):
         g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         self.removeListener(events.AppLifeCycleEvent.CREATING, self.__onAppCreating)
+        for tooltipId in DYNAMIC_TOOLTIPS:
+            item = DYNAMIC_TOOLTIPS[tooltipId]
+            item.stopUpdates()
+
         super(ToolTip, self)._dispose()
+
+    @staticmethod
+    def __changeDynamicTooltipVisibility(tooltipId, isVisible):
+        if tooltipId in DYNAMIC_TOOLTIPS:
+            item = DYNAMIC_TOOLTIPS[tooltipId]
+            item.changeVisibility(isVisible)
 
     def __onGUISpaceEntered(self, spaceID):
         self._isAllowedTypedTooltip = spaceID not in self._noTooltipSpaceIDs

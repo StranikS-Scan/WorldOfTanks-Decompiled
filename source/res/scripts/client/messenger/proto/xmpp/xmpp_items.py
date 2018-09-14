@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_items.py
 import time
 from messenger.m_constants import USER_TAG as _TAG

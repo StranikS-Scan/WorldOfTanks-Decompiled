@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/header.py
 """Header encoding and decoding functionality."""
 __all__ = ['Header', 'decode_header', 'make_header']
@@ -211,7 +212,7 @@ class Header():
                         pass
 
                 else:
-                    raise False or AssertionError('utf-8 conversion failed')
+                    assert False, 'utf-8 conversion failed'
 
         self._chunks.append((s, charset))
         return

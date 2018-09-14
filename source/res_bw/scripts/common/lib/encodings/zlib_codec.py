@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/zlib_codec.py
 """ Python 'zlib_codec' Codec - zlib compression encoding
 
@@ -19,7 +20,7 @@ def zlib_encode(input, errors = 'strict'):
         error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     output = zlib.compress(input)
     return (output, len(input))
 
@@ -37,7 +38,7 @@ def zlib_decode(input, errors = 'strict'):
         error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     output = zlib.decompress(input)
     return (output, len(input))
 
@@ -54,7 +55,7 @@ class Codec(codecs.Codec):
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
     def __init__(self, errors = 'strict'):
-        raise errors == 'strict' or AssertionError
+        assert errors == 'strict'
         self.errors = errors
         self.compressobj = zlib.compressobj()
 
@@ -72,7 +73,7 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
     def __init__(self, errors = 'strict'):
-        raise errors == 'strict' or AssertionError
+        assert errors == 'strict'
         self.errors = errors
         self.decompressobj = zlib.decompressobj()
 

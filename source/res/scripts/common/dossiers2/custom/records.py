@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/records.py
 RECORDS = (('total', 'creationTime', 'p', 'I', 4000000001L),
  ('total', 'lastBattleTime', 'p', 'I', 4000000001L),
@@ -1607,8 +1608,8 @@ RECORD_DB_IDS = {('total', 'creationTime'): 68,
  ('falloutAchievements', 'bannerman'): 860,
  ('falloutAchievements', 'sauronEye'): 861}
 DB_ID_TO_RECORD = dict([ (value, key) for key, value in RECORD_DB_IDS.iteritems() ])
-raise len(RECORD_DB_IDS) == len(DB_ID_TO_RECORD) or AssertionError
-raise len(RECORD_DB_IDS) == len(RECORDS) or AssertionError
+assert len(RECORD_DB_IDS) == len(DB_ID_TO_RECORD)
+assert len(RECORD_DB_IDS) == len(RECORDS)
 BIT_STORAGES = {}
 map(lambda rec: BIT_STORAGES.setdefault((rec[0], rec[3]), []).append(rec[1]), (rec for rec in RECORDS if rec[2] == 'b'))
 RECORD_MAX_VALUES = dict([ (rec[:2], rec[4]) for rec in RECORDS if rec[2] == 'p' ])

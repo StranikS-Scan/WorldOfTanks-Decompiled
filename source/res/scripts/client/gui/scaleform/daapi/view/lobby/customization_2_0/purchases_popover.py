@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization_2_0/purchases_popover.py
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
@@ -20,7 +21,7 @@ class PurchasesPopover(CustomizationPurchasesPopoverMeta):
         DialogsInterface.showDialog(I18nConfirmDialogMeta('customization/filter'), self.__confirmCloseWindow)
 
     def removePurchase(self, cType, slotIdx):
-        g_customizationController.carousel.slots.updateSlot({'id': -1}, cType=cType, slotIdx=slotIdx)
+        g_customizationController.carousel.slots.dropAppliedItem(cType, slotIdx)
 
     def _dispose(self):
         g_customizationController.carousel.slots.cart.itemsUpdated -= self.__onCartItemsUpdated

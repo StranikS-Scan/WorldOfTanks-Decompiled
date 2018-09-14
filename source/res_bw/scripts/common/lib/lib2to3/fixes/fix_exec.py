@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_exec.py
 """Fixer for exec.
 
@@ -15,15 +16,15 @@ class FixExec(fixer_base.BaseFix):
     PATTERN = "\n    exec_stmt< 'exec' a=any 'in' b=any [',' c=any] >\n    |\n    exec_stmt< 'exec' (not atom<'(' [any] ')'>) a=any >\n    "
 
     def transform(self, node, results):
-        if not results:
-            raise AssertionError
-            syms = self.syms
-            a = results['a']
-            b = results.get('b')
-            c = results.get('c')
-            args = [a.clone()]
-            args[0].prefix = ''
-            if b is not None:
-                args.extend([Comma(), b.clone()])
-            c is not None and args.extend([Comma(), c.clone()])
+        assert results
+        syms = self.syms
+        a = results['a']
+        b = results.get('b')
+        c = results.get('c')
+        args = [a.clone()]
+        args[0].prefix = ''
+        if b is not None:
+            args.extend([Comma(), b.clone()])
+        if c is not None:
+            args.extend([Comma(), c.clone()])
         return Call(Name(u'exec'), args, prefix=node.prefix)

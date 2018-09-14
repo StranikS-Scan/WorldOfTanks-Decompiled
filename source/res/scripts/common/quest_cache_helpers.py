@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_cache_helpers.py
 import time
 from constants import EVENT_TYPE, IS_CLIENT

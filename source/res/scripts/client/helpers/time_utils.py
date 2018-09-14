@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/time_utils.py
 import time
 import datetime
@@ -102,7 +103,6 @@ def getTimeDeltaFromNow(t):
     if t and datetime.datetime.utcfromtimestamp(t) > datetime.datetime.utcnow():
         delta = datetime.datetime.utcfromtimestamp(t) - datetime.datetime.utcnow()
         return delta.days * ONE_DAY + delta.seconds
-    return 0
 
 
 def getTimeDeltaFromNowInLocal(t):
@@ -111,20 +111,17 @@ def getTimeDeltaFromNowInLocal(t):
         nowDateTime = getDateTimeInLocal(getCurrentTimestamp())
         if givenDateTime > nowDateTime:
             return (givenDateTime - nowDateTime).total_seconds()
-    return 0
 
 
 def getTimestampFromNow(t):
     if t > 0 and t > getCurrentTimestamp():
         return t - getCurrentTimestamp()
-    return 0
 
 
 def getTimeDeltaTilNow(t):
     if t and datetime.datetime.utcnow() > datetime.datetime.utcfromtimestamp(t):
         delta = datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(t)
         return delta.days * ONE_DAY + delta.seconds
-    return 0
 
 
 def getTillTimeString(timeValue, keyNamespace, isRoundUp = False):

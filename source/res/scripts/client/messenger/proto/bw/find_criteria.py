@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/find_criteria.py
 import chat_shared
 from messenger.m_constants import PROTO_TYPE, LAZY_CHANNEL

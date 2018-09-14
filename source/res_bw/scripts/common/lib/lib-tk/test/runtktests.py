@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/test/runtktests.py
 """
 Use this module to get and run all tk tests.

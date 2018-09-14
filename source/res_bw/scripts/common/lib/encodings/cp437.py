@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/cp437.py
 """ Python Character Mapping Codec cp437 generated from 'VENDORS/MICSFT/PC/CP437.TXT' with gencodec.py.
 

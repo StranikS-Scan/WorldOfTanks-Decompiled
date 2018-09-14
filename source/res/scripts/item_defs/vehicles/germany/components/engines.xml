@@ -107,9 +107,9 @@
     <Hotchkiss_6_Zyl_Benzin_195_PS>	120	</Hotchkiss_6_Zyl_Benzin_195_PS>
     <Maybach_HL_210_TRM_P30_A>	121	</Maybach_HL_210_TRM_P30_A>
     <Weiss_Manfred_V_8H>	124	</Weiss_Manfred_V_8H>
+    <Porsche_16_Cyl_Y>	123	</Porsche_16_Cyl_Y>
     <Ganz_VIII_VGT_107>	125	</Ganz_VIII_VGT_107>
     <MB-837-Ba-600>	126	</MB-837-Ba-600>
-    <Porsche_16_Cyl_Y>	123	</Porsche_16_Cyl_Y>
     <Development_Engine>	65535	</Development_Engine>
     <Maybach_HL57TR_bot>	247	</Maybach_HL57TR_bot>
     <Krupp_M301_bot>	248	</Krupp_M301_bot>
@@ -265,6 +265,23 @@
       <rpm_min>	1100	</rpm_min>
       <rpm_max>	3000	</rpm_max>
     </Maybach_HL_120_TRM_A>
+    <Maybach_HL_120_TRM_C>
+      <userString>	#germany_vehicles:Maybach_HL_120_TRM_C	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	19900	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <power>	300	</power>
+      <weight>	920	</weight>
+      <maxHealth>	86	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_120_TRM_C>
     <Weiss_Manfred_V_8H>
       <userString>	#germany_vehicles:Weiss_Manfred_V_8H	</userString>
       <tags>	gasoline	</tags>
@@ -284,23 +301,6 @@
       <rpm_min>	1100	</rpm_min>
       <rpm_max>	2800	</rpm_max>
     </Weiss_Manfred_V_8H>
-    <Maybach_HL_120_TRM_C>
-      <userString>	#germany_vehicles:Maybach_HL_120_TRM_C	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	19900	</price>
-      <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
-      <power>	300	</power>
-      <weight>	920	</weight>
-      <maxHealth>	86	</maxHealth>
-      <maxRegenHealth>	42	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-    </Maybach_HL_120_TRM_C>
     <Praga_C9>
       <userString>	#germany_vehicles:Praga_C9	</userString>
       <tags>	gasoline	</tags>
@@ -440,15 +440,17 @@
       <price>	55000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	700	</power>
       <weight>	1400	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1100	</rpm_min>
+      <rpm_max>	3000	</rpm_max>
     </Maybach_HL_230P30A>
     <Maybach_HL_230P30_2500rpm>
       <userString>	#germany_vehicles:Maybach_HL_230P30_2500rpm	</userString>
@@ -571,22 +573,6 @@
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
     </Maybach_HL57TR>
-    <Maybach_HL62TR>
-      <userString>	#germany_vehicles:Maybach_HL62TR	</userString>
-      <tags>	gasoline	</tags>
-      <level>	3	</level>
-      <price>	4220	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	140	</power>
-      <weight>	550	</weight>
-      <maxHealth>	55	</maxHealth>
-      <maxRegenHealth>	27	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-    </Maybach_HL62TR>
     <Maybach_HL62TRM>
       <userString>	#germany_vehicles:Maybach_HL62TRM	</userString>
       <tags>	gasoline	</tags>
@@ -620,6 +606,24 @@
       <rpm_min>	1100	</rpm_min>
       <rpm_max>	3400	</rpm_max>
     </Maybach_HL57TR_bot>
+    <Maybach_HL62TR>
+      <userString>	#germany_vehicles:Maybach_HL62TR	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4220	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	140	</power>
+      <weight>	550	</weight>
+      <maxHealth>	55	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1000	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
+    </Maybach_HL62TR>
     <Maybach_HL62TRM_1>
       <userString>	#germany_vehicles:Maybach_HL62TRM_1	</userString>
       <tags>	gasoline	</tags>
@@ -743,13 +747,17 @@
       <level>	4	</level>
       <price>	8650	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	180	</power>
       <weight>	550	</weight>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1000	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </Maybach_HL66P>
     <Praga_EPA_3>
       <userString>	#germany_vehicles:Praga_EPA_3	</userString>
@@ -905,13 +913,17 @@
       <level>	5	</level>
       <price>	16400	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	360	</power>
       <weight>	550	</weight>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	40	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1000	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </Maybach_HL90>
     <Somua_S-40>
       <userString>	#germany_vehicles:Somua_S-40	</userString>
@@ -1605,25 +1617,6 @@
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
     </Maybach_HL_120_TRM_112_R>
-    <Ganz_VIII_VGT_107>
-      <userString>	#germany_vehicles:Ganz_VIII_VGT_107	</userString>
-      <tags>	gasoline	</tags>
-      <level>	3	</level>
-      <price>	4220	</price>
-      <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	155	</power>
-      <weight>	600	</weight>
-      <maxHealth>	55	</maxHealth>
-      <maxRegenHealth>	27	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	1100	</rpm_min>
-      <rpm_max>	2800	</rpm_max>
-    </Ganz_VIII_VGT_107>
     <Maybach_HL_120_TRM_R>
       <userString>	#germany_vehicles:Maybach_HL_120_TRM_R	</userString>
       <tags>	gasoline	</tags>
@@ -1670,6 +1663,25 @@
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
     </BNAG_L8V_GS36>
+    <Ganz_VIII_VGT_107>
+      <userString>	#germany_vehicles:Ganz_VIII_VGT_107	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4220	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	155	</power>
+      <weight>	600	</weight>
+      <maxHealth>	55	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1100	</rpm_min>
+      <rpm_max>	2800	</rpm_max>
+    </Ganz_VIII_VGT_107>
     <BNAG_L8V_GS39>
       <userString>	#germany_vehicles:BNAG_L8V_GS39	</userString>
       <tags>	gasoline	</tags>

@@ -16,7 +16,7 @@
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB03_Cruiser_Mk_I/Cruiser_Mk_I_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -55,15 +55,15 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.721946 0.468907	</turret>
+      <turret>	0.000000 0.714842 0.46278	</turret>
     </turretPositions>
     <hitTester>
       <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Hull.model	</collisionModel>
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	1.45327 0.0352021 2.6233	</rayStart>
-        <rayEnd>	1.05328 0.0331977 2.62316	</rayEnd>
+        <rayStart>	1.35461 0.0243129 2.65619	</rayStart>
+        <rayEnd>	1.15538 0.00764459 2.65068	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -106,22 +106,23 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	germany_01	</textureSet>
-        <size>	0.44 0.3	</size>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.25 0.3	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.1	</textureScale>
+        <textureScale>	-2.3	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.314683	</radius>
+          <syncAngle>	25.7142	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -132,9 +133,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.354484	</radius>
+          <syncAngle>	25.7142	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
@@ -157,9 +159,10 @@
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.314683	</radius>
+          <syncAngle>	25.7142	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -170,9 +173,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.354484	</radius>
+          <syncAngle>	25.7142	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -200,13 +204,15 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.886552 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Chassis.model	</collisionModel>
       </hitTester>
-      <topRightCarryingPoint>	1.0967 1.557	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.10307 1.48891	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -219,6 +225,130 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB03_Cruiser_Mk_I/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB03_Cruiser_Mk_I/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB03_Cruiser_Mk_I/track/left.track	</left>
+        <right>	vehicles/british/GB03_Cruiser_Mk_I/track/right.track	</right>
+        <segmentLength>	0.136	</segmentLength>
+        <segmentOffset>	0.127	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0042	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.02	</maxAmplitude>
+        <maxOffset>	0.02	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.75	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.75	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_GB03_Cruiser_Mk_I>
     <Chassis_GB03_Cruiser_Mk_I_2>
       <userString>	#gb_vehicles:Chassis_GB03_Cruiser_Mk_I_2	</userString>
@@ -255,22 +385,23 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	germany_01	</textureSet>
-        <size>	0.44 0.3	</size>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.25 0.3	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.1	</textureScale>
+        <textureScale>	-2.3	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.314683	</radius>
+          <syncAngle>	25.7142	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -281,9 +412,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.354484	</radius>
+          <syncAngle>	25.7142	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
@@ -306,9 +438,10 @@
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.314683	</radius>
+          <syncAngle>	25.7142	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -319,9 +452,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.354484	</radius>
+          <syncAngle>	25.7142	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -349,13 +483,15 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.886552 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Chassis.model	</collisionModel>
       </hitTester>
-      <topRightCarryingPoint>	1.0967 1.557	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.10307 1.48891	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -368,6 +504,130 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB03_Cruiser_Mk_I/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB03_Cruiser_Mk_I/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB03_Cruiser_Mk_I/track/left.track	</left>
+        <right>	vehicles/british/GB03_Cruiser_Mk_I/track/right.track	</right>
+        <segmentLength>	0.136	</segmentLength>
+        <segmentOffset>	0.127	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0042	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.02	</maxAmplitude>
+        <maxOffset>	0.02	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.75	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.75	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_GB03_Cruiser_Mk_I_2>
   </chassis>
   <turrets0>
@@ -437,6 +697,9 @@
           <hitTester>
             <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_01.model	</collisionModel>
           </hitTester>
+          <camouflage>
+            <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
+          </camouflage>
         </_2pdr_Gun_Mk_IX>
         <_40mm_Pom_Pom>	shared	  <maxAmmo>	160	</maxAmmo>
           <pitchLimits>
@@ -478,8 +741,9 @@
           <hitTester>
             <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_02.model	</collisionModel>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
           <camouflage>
-            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+            <tiling>	0.34 0.34 0.000000 0.000000	</tiling>
           </camouflage>
         </_40mm_Pom_Pom>
       </guns>
@@ -491,37 +755,45 @@
       <hitTester>
         <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Turret_01.model	</collisionModel>
       </hitTester>
-      <gunPosition>	0.000000 0.343723 0.476606	</gunPosition>
+      <gunPosition>	0.000000 0.359504 0.51262	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	0.865755 0.575166 -0.804458	</rayStart>
-          <rayEnd>	0.489331 0.439873 -0.804458	</rayEnd>
+          <rayStart>	0.819562 0.407006 -0.749894	</rayStart>
+          <rayEnd>	0.631387 0.339257 -0.749893	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	-0.892788 0.499944 0.0308585	</rayStart>
-          <rayEnd>	-0.516369 0.364652 0.0308584	</rayEnd>
+          <rayStart>	-0.831735 0.378297 0.0288361	</rayStart>
+          <rayEnd>	-0.643543 0.310594 0.0288727	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.64	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	-0.865755 0.575166 -0.804458	</rayStart>
-          <rayEnd>	-0.489331 0.439873 -0.804458	</rayEnd>
+          <rayStart>	-0.816912 0.41445 -0.751456	</rayStart>
+          <rayEnd>	-0.628736 0.3467 -0.751454	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
+        <inscription>
+          <rayStart>	0.831735 0.378297 0.0288361	</rayStart>
+          <rayEnd>	0.643543 0.310594 0.0288727	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.64	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.943 -0.070 1.010 0.000 0.507 0.182 1.000 1.000 0.000 0.500 0.306 0.500 0.057 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
-        <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+        <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_GB03_Cruiser_Mk_I>
     <Turret_2_GB03_Cruiser_Mk_I>
@@ -587,7 +859,7 @@
             <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_03.model	</collisionModel>
           </hitTester>
           <camouflage>
-            <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
+            <tiling>	0.325 0.325 0.000000 0.000000	</tiling>
           </camouflage>
         </_2pdr_Gun_Mk_IX>
         <_40mm_Pom_Pom>	shared	  <maxAmmo>	160	</maxAmmo>
@@ -626,8 +898,9 @@
           <hitTester>
             <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_04.model	</collisionModel>
           </hitTester>
+          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
           <camouflage>
-            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+            <tiling>	0.34 0.34 0.000000 0.000000	</tiling>
           </camouflage>
         </_40mm_Pom_Pom>
       </guns>
@@ -639,37 +912,45 @@
       <hitTester>
         <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Turret_02.model	</collisionModel>
       </hitTester>
-      <gunPosition>	0.000000 0.3625 0.4742	</gunPosition>
+      <gunPosition>	-0.016515 0.359549 0.520356	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	0.860573 0.589577 -0.767202	</rayStart>
-          <rayEnd>	0.484153 0.454285 -0.767202	</rayEnd>
+          <rayStart>	0.795017 0.489761 -0.779163	</rayStart>
+          <rayEnd>	0.60657 0.422774 -0.778576	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	-0.908902 0.449111 0.121067	</rayStart>
-          <rayEnd>	-0.533153 0.311954 0.121067	</rayEnd>
+          <rayStart>	-0.818218 0.416291 0.0373934	</rayStart>
+          <rayEnd>	-0.629691 0.349531 0.0380767	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.64	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	-0.860573 0.589577 -0.767202	</rayStart>
-          <rayEnd>	-0.484153 0.454285 -0.767202	</rayEnd>
+          <rayStart>	-0.795017 0.489761 -0.779163	</rayStart>
+          <rayEnd>	-0.60657 0.422774 -0.778576	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
+        <inscription>
+          <rayStart>	0.893247 0.219531 0.307593	</rayStart>
+          <rayEnd>	0.704665 0.152928 0.308193	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.58	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.981 -0.038 1.010 0.000 0.461 0.224 0.006 0.100 0.419 0.500 0.296 0.500 0.092 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
-        <tiling>	1.42 1.42 0.000000 0.000000	</tiling>
+        <tiling>	0.475 0.475 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_2_GB03_Cruiser_Mk_I>
   </turrets0>

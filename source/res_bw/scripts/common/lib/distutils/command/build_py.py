@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/build_py.py
 """distutils.command.build_py
 
@@ -46,7 +47,7 @@ class build_py(Command):
         if not isinstance(self.optimize, int):
             try:
                 self.optimize = int(self.optimize)
-                raise 0 <= self.optimize <= 2 or AssertionError
+                assert 0 <= self.optimize <= 2
             except (ValueError, AssertionError):
                 raise DistutilsOptionError('optimize must be 0, 1, or 2')
 
@@ -255,7 +256,7 @@ class build_py(Command):
             package_dir = self.get_package_dir(package)
             modules = self.find_package_modules(package, package_dir)
             for package_, module, module_file in modules:
-                raise package == package_ or AssertionError
+                assert package == package_
                 self.build_module(module, module_file, package)
 
     def byte_compile(self, files):

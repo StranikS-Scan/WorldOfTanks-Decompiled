@@ -7,14 +7,14 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleKills>
+            <vehicleDamage>
               <classes>	heavyTank	</classes>
-              <greaterOrEqual>	2	</greaterOrEqual>
-            </vehicleKills>
-            <vehicleKills>
-              <classes>	AT-SPG	</classes>
-              <greaterOrEqual>	2	</greaterOrEqual>
-            </vehicleKills>
+              <greaterOrEqual>	2500	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleDamage>
+              <classes>	mediumTank	</classes>
+              <greaterOrEqual>	2500	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>
@@ -29,18 +29,18 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleKills>
-              <classes>	heavyTank	</classes>
-              <greaterOrEqual>	2	</greaterOrEqual>
-            </vehicleKills>
-            <vehicleKills>
-              <classes>	AT-SPG	</classes>
-              <greaterOrEqual>	2	</greaterOrEqual>
-            </vehicleKills>
             <results>
               <key>	flagCapture	</key>
               <greaterOrEqual>	1	</greaterOrEqual>
             </results>
+            <vehicleDamage>
+              <classes>	heavyTank	</classes>
+              <greaterOrEqual>	2500	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleDamage>
+              <classes>	mediumTank	</classes>
+              <greaterOrEqual>	2500	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>

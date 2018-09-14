@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/contact_manage_note_views.py
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter

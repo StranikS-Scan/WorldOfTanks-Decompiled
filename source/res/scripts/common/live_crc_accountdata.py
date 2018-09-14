@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/live_crc_accountdata.py
 from live_crc import *
 accountPersistentCacheDataScheme = {INCLUDE: {'economics',

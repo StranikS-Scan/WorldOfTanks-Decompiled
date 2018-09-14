@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/functions.py
 import random
 import re
@@ -161,7 +162,7 @@ def findConflictedEquipments(itemCompactDescr, itemTypeID, vehicle):
     conflictEqs = []
     if itemTypeID != ITEM_TYPE_INDICES['vehicleEngine']:
         return conflictEqs
-    oldModule, = vehicle.descriptor.installComponent(itemCompactDescr)
+    oldModule = vehicle.descriptor.installComponent(itemCompactDescr)
     for equipmentDescr in vehicle.equipments:
         if equipmentDescr:
             equipment = vehicles.getDictDescr(equipmentDescr)
@@ -219,7 +220,6 @@ def getBattleSubTypeBaseNumder(arenaTypeID, team, baseID):
     if points:
         if len(points) > 1:
             return ' %d' % baseID
-    return ''
 
 
 def isBaseExists(arenaTypeID, team):

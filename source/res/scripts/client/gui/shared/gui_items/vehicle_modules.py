@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
 import BigWorld
 import nations
@@ -21,7 +22,7 @@ class VehicleModule(FittingItem):
 
     @property
     def icon(self):
-        return ''
+        pass
 
     @property
     def descriptor(self):

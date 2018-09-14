@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/fallout.py
 from CurrentVehicle import g_currentVehicle
 from constants import FALLOUT_BATTLE_TYPE, QUEUE_TYPE
@@ -67,7 +68,7 @@ class FalloutQueueFunctional(event_battles.EventBattlesQueueFunctional):
         return (canDo, '')
 
     def getPermissions(self, pID = None, **kwargs):
-        raise pID is None or AssertionError('Current player has no any player in that mode')
+        assert pID is None, 'Current player has no any player in that mode'
         return FalloutQueuePermissions(self.isInQueue())
 
     def _makeQueueCtxByAction(self, action = None):

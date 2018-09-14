@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/battle/dispatcher.py
 from gui.Scaleform.windows import UIInterface
 from gui.battle_control import avatar_getter

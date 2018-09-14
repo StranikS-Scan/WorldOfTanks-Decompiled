@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/goodie_helpers.py
 from collections import namedtuple
 from GoodieConditions import MaxVehicleLevel

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/__init__.py
 import weakref
 import itertools
@@ -108,7 +109,6 @@ class BitmaskHelper(object):
         if not mask & flag:
             mask |= flag
             return mask
-        return -1
 
     @classmethod
     def addIfNot(cls, mask, flag):
@@ -121,7 +121,6 @@ class BitmaskHelper(object):
         if mask & flag > 0:
             mask ^= flag
             return mask
-        return -1
 
     @classmethod
     def removeIfHas(cls, mask, flag):

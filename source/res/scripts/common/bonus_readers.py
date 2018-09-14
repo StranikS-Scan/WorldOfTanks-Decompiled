@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bonus_readers.py
 import time
 import items
@@ -91,8 +92,13 @@ def __readBonus_item(bonus, _name, section):
 
 
 def __readBonus_vehicle(bonus, _name, section):
-    nationID, innationID = vehicles.g_list.getIDsByName(section.asString)
-    vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, innationID)
+    vehCompDescr = None
+    if section.has_key('vehCompDescr'):
+        vehCompDescr = section['vehCompDescr'].asString.decode('base64')
+        vehTypeCompDescr = vehicles.VehicleDescr(vehCompDescr).type.compactDescr
+    else:
+        nationID, innationID = vehicles.g_list.getIDsByName(section.asString)
+        vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, innationID)
     extra = {}
     if section.has_key('tankmen'):
         __readBonus_tankmen(extra, vehTypeCompDescr, section['tankmen'])
@@ -109,7 +115,7 @@ def __readBonus_vehicle(bonus, _name, section):
         credits = section['customCompensation'].readInt('credits', 0)
         gold = section['customCompensation'].readInt('gold', 0)
         extra['customCompensation'] = (credits, gold)
-    bonus.setdefault('vehicles', {})[vehTypeCompDescr] = extra
+    bonus.setdefault('vehicles', {})[vehCompDescr if vehCompDescr else vehTypeCompDescr] = extra
     return
 
 
@@ -172,8 +178,10 @@ def __readBonus_rent(bonus, _name, section):
             rent['expires']['at'] = subsection['at'].asInt
         elif subsection.has_key('battles'):
             rent['expires']['battles'] = subsection['battles'].asInt
+        elif subsection.has_key('state'):
+            rent['expires']['state'] = subsection['state'].asBool
         else:
-            raise Exception, "'expires' section must contain 'at', 'after' or 'battles' sub-section"
+            raise Exception, "'expires' section must contain 'at', 'after', 'battles' or 'state' sub-section"
     if section.has_key('compensation'):
         credits = section['compensation'].readInt('credits', 0)
         gold = section['compensation'].readInt('gold', 0)

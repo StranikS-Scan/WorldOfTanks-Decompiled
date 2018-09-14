@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_methodattrs.py
 """Fix bound method attributes (method.im_? -> method.__?__).
 """

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/personal_quests/pointcuts.py
 import aspects
 from helpers import aop

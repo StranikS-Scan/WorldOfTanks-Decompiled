@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bw_site.py
 DEFAULT_ENCODING = 'utf-8'
 import BWLogging
@@ -26,7 +27,7 @@ class _Helper(object):
     """
 
     def __repr__(self):
-        return 'Type help() for interactive help, or help(object) for help about object.'
+        pass
 
     def __call__(self, *args, **kwds):
         return pydoc.help(*args, **kwds)

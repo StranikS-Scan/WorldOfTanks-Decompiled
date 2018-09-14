@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/staging.py
 """
 Created on Jul 1, 2015
@@ -80,10 +81,10 @@ def translate_field_names(response, field_mapping, requested_fields = None):
             elif their in response:
                 result[our] = response[their]
 
-        if key in response and sibling_mapping:
-            siblings = translate_field_names(response[key], sibling_mapping)
-            if not isinstance(siblings, dict):
-                raise AssertionError("something wrong with '%s' mapping" % key)
+        if key in response:
+            if sibling_mapping:
+                siblings = translate_field_names(response[key], sibling_mapping)
+                assert isinstance(siblings, dict), "something wrong with '%s' mapping" % key
                 result.update(siblings)
             if inner_mapping:
                 result.update({our.split('.')[0]: translate_field_names(response[key], inner_mapping)})

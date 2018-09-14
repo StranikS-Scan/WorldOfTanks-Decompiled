@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization_2_0/filter_popover.py
 from constants import IGR_TYPE
 from gui import GUI_SETTINGS

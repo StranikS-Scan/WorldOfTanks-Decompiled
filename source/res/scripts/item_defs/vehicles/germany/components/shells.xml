@@ -21,6 +21,20 @@
       <devices>	17	</devices>
     </damage>
   </_7.92mm_AP>
+  <_20mm_Pzgr39>
+    <id>	0	</id>
+    <userString>	#germany_vehicles:_20mm_Pzgr39	</userString>
+    <icon>	ap	</icon>
+    <price>	3	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	11	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_Pzgr39>
   <_20mm_Pzgr39_bot>
     <id>	147	</id>
     <userString>	#germany_vehicles:_20mm_Pzgr39_bot	</userString>
@@ -51,20 +65,6 @@
       <devices>	17	</devices>
     </damage>
   </_7.92mm_APCR>
-  <_20mm_Pzgr39>
-    <id>	0	</id>
-    <userString>	#germany_vehicles:_20mm_Pzgr39	</userString>
-    <icon>	ap	</icon>
-    <price>	3	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	20	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	autoArmorPiercing	</effects>
-    <damage>
-      <armor>	11	</armor>
-      <devices>	27	</devices>
-    </damage>
-  </_20mm_Pzgr39>
   <_20cm_Pzgr40>
     <id>	1	</id>
     <userString>	#germany_vehicles:_20cm_Pzgr40	</userString>
@@ -257,6 +257,21 @@
       <devices>	54	</devices>
     </damage>
   </_40mm_36_M_Pancelgranat>
+  <_37mm_Sprg.18t>
+    <id>	8	</id>
+    <userString>	#germany_vehicles:_37mm_Sprg.18t	</userString>
+    <icon>	he	</icon>
+    <price>	8	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	37	</caliber>
+    <explosionRadius>	0.31	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	45	</armor>
+      <devices>	50	</devices>
+    </damage>
+  </_37mm_Sprg.18t>
   <_40mm_43_M_Magvas_Panceltoro_Granat>
     <id>	152	</id>
     <userString>	#germany_vehicles:_40mm_43_M_Magvas_Panceltoro_Granat	</userString>
@@ -287,21 +302,6 @@
       <devices>	54	</devices>
     </damage>
   </_40mm_39_M_Repeszgranat>
-  <_37mm_Sprg.18t>
-    <id>	8	</id>
-    <userString>	#germany_vehicles:_37mm_Sprg.18t	</userString>
-    <icon>	he	</icon>
-    <price>	8	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	37	</caliber>
-    <explosionRadius>	0.31	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	smallHighExplosive	</effects>
-    <damage>
-      <armor>	45	</armor>
-      <devices>	50	</devices>
-    </damage>
-  </_37mm_Sprg.18t>
   <_47mm_Pzgr39t>
     <id>	9	</id>
     <userString>	#germany_vehicles:_47mm_Pzgr39t	</userString>
@@ -523,6 +523,50 @@
       <devices>	100	</devices>
     </damage>
   </_75mm_Sprg.18>
+  <_75mm_43_M_Pancelgranat>
+    <id>	148	</id>
+    <userString>	#germany_vehicles:_75mm_43_M_Pancelgranat	</userString>
+    <icon>	ap	</icon>
+    <price>	76	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_43_M_Pancelgranat>
+  <_75mm_40_M_Kulonleges_Nemet_Pancelgranat>
+    <id>	149	</id>
+    <userString>	#germany_vehicles:_75mm_40_M_Kulonleges_Nemet_Pancelgranat	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	7	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_40_M_Kulonleges_Nemet_Pancelgranat>
+  <_75mm_43_M_Repeszgranat>
+    <id>	150	</id>
+    <userString>	#germany_vehicles:_75mm_43_M_Repeszgranat	</userString>
+    <icon>	he	</icon>
+    <price>	60	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_43_M_Repeszgranat>
   <_75mm_Pzgr39L>
     <id>	24	</id>
     <userString>	#germany_vehicles:_75mm_Pzgr39L	</userString>
@@ -611,50 +655,6 @@
       <devices>	100	</devices>
     </damage>
   </APCNR.erz>
-  <_75mm_43_M_Pancelgranat>
-    <id>	148	</id>
-    <userString>	#germany_vehicles:_75mm_43_M_Pancelgranat	</userString>
-    <icon>	ap	</icon>
-    <price>	76	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	75	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumArmorPiercing	</effects>
-    <damage>
-      <armor>	110	</armor>
-      <devices>	100	</devices>
-    </damage>
-  </_75mm_43_M_Pancelgranat>
-  <_75mm_40_M_Kulonleges_Nemet_Pancelgranat>
-    <id>	149	</id>
-    <userString>	#germany_vehicles:_75mm_40_M_Kulonleges_Nemet_Pancelgranat	</userString>
-    <icon>	ap_cr	</icon>
-    <price>	7	  <gold></gold>
-    </price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	75	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumAPCR	</effects>
-    <damage>
-      <armor>	110	</armor>
-      <devices>	100	</devices>
-    </damage>
-  </_75mm_40_M_Kulonleges_Nemet_Pancelgranat>
-  <_75mm_43_M_Repeszgranat>
-    <id>	150	</id>
-    <userString>	#germany_vehicles:_75mm_43_M_Repeszgranat	</userString>
-    <icon>	he	</icon>
-    <price>	60	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	75	</caliber>
-    <explosionRadius>	1.06	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumHighExplosive	</effects>
-    <damage>
-      <armor>	175	</armor>
-      <devices>	100	</devices>
-    </damage>
-  </_75mm_43_M_Repeszgranat>
   <_76mm_Pzgr39r>
     <id>	29	</id>
     <userString>	#germany_vehicles:_76mm_Pzgr39r	</userString>
@@ -1429,6 +1429,7 @@
     <userString>	#germany_vehicles:_105mm_APCR_M68M2_fallout	</userString>
     <icon>	ap_cr	</icon>
     <price>	90	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
@@ -1444,6 +1445,7 @@
     <icon>	hc	</icon>
     <price>	1	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	105	</caliber>
     <isTracer>	true	</isTracer>
@@ -1459,6 +1461,7 @@
     <userString>	#germany_vehicles:_105mm_HE_M68M2_fallout	</userString>
     <icon>	he	</icon>
     <price>	81	</price>
+    <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>

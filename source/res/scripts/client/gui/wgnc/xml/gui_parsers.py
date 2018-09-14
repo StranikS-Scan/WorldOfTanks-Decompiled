@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/gui_parsers.py
 from debug_utils import LOG_WARNING
 from gui.wgnc.settings import WGNC_POP_UP_PRIORITIES
@@ -8,7 +9,7 @@ from gui.wgnc import gui_items
 class _ButtonsParser(SectionParser):
 
     def getTagName(self):
-        return 'buttons'
+        pass
 
     def parse(self, section):
         result = []
@@ -31,7 +32,7 @@ class _ButtonsParser(SectionParser):
 class _PopUpParser(SectionParser):
 
     def getTagName(self):
-        return 'popup'
+        pass
 
     def parse(self, section):
         body = formatText(self._readString('body', section))
@@ -58,7 +59,7 @@ class _WindowParser(SectionParser):
         self._itemClass = itemClass
 
     def getTagName(self):
-        return 'window'
+        pass
 
     def parse(self, section):
         name = self._readString('name', section)
@@ -77,7 +78,7 @@ class _WindowParser(SectionParser):
 class _ReferrerParser(SectionParser):
 
     def getTagName(self):
-        return 'referrer'
+        pass
 
     def parse(self, section):
         name = self._readString('name', section)
@@ -87,7 +88,7 @@ class _ReferrerParser(SectionParser):
 class _FenixParser(SectionParser):
 
     def getTagName(self):
-        return 'fenix'
+        pass
 
     def parse(self, section):
         name = self._readString('name', section)
@@ -98,7 +99,7 @@ class _FenixParser(SectionParser):
 class _RecruitParser(SectionParser):
 
     def getTagName(self):
-        return 'recruit'
+        pass
 
     def parse(self, section):
         name = self._readString('name', section)
@@ -112,13 +113,13 @@ class _PollParser(_WindowParser):
         super(_PollParser, self).__init__(itemClass)
 
     def getTagName(self):
-        return 'poll'
+        pass
 
 
 class _GUIItemsParser(ParsersCollection):
 
     def getTagName(self):
-        return 'gui'
+        pass
 
     def parse(self, section):
         items = []

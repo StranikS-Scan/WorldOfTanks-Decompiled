@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/unit_ext.py
 import time
 import weakref
@@ -159,9 +160,9 @@ _UNIT_GETTER_BY_PRB_TYPE = {PREBATTLE_TYPE.UNIT: _getUnitFromBrowser,
  PREBATTLE_TYPE.FORT_BATTLE: _getUnitFromFortBattleCache}
 
 def getUnitFromStorage(prbType, unitIdx):
-    getter = prbType in _UNIT_GETTER_BY_PRB_TYPE and _UNIT_GETTER_BY_PRB_TYPE[prbType]
-    if not (getter and callable(getter)):
-        raise AssertionError
+    if prbType in _UNIT_GETTER_BY_PRB_TYPE:
+        getter = _UNIT_GETTER_BY_PRB_TYPE[prbType]
+        assert getter and callable(getter)
         unitIdx, unit = getter(unitIdx)
     else:
         LOG_WARNING('Unit is not found by prebattle type', prbType)
@@ -229,7 +230,6 @@ class UnitAutoSearchHandler(object):
     def getAcceptDelta(self, acceptDeadlineUTC):
         if acceptDeadlineUTC:
             return max(0, int(time_utils.makeLocalServerTime(acceptDeadlineUTC) - time.time()))
-        return 0
 
     def start(self, vTypeDescrs = None):
         if self.__isInSearch:

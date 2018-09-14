@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/wgnc/__init__.py
 from debug_utils import LOG_WARNING
 from gui.Scaleform.framework import ScopeTemplates, ViewSettings, ViewTypes, GroupedViewSettings

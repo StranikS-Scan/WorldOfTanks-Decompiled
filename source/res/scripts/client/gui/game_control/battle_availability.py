@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/battle_availability.py
 import Event
 from debug_utils import LOG_DEBUG
@@ -19,7 +20,6 @@ def _getNextHour(hour):
     hour = hour + 1
     if hour < time_utils.HOURS_IN_DAY:
         return hour
-    return 0
 
 
 def getForbiddenPeriods(hours, formatter = None):

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/cp860.py
 """ Python Character Mapping Codec generated from 'VENDORS/MICSFT/PC/CP860.TXT' with gencodec.py.
 

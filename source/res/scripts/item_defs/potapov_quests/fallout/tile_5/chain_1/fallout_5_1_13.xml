@@ -7,8 +7,7 @@
       <conditions>
         <postBattle>
           <vehicleDamage>
-            <distance>	156	</distance>
-            <greaterOrEqual>	15000	</greaterOrEqual>
+            <greaterOrEqual>	12000	</greaterOrEqual>
           </vehicleDamage>
         </postBattle>
       </conditions>
@@ -35,8 +34,7 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <distance>	156	</distance>
-              <greaterOrEqual>	15000	</greaterOrEqual>
+              <greaterOrEqual>	12000	</greaterOrEqual>
             </vehicleDamage>
             <vehicleKills>
               <greaterOrEqual>	5	</greaterOrEqual>

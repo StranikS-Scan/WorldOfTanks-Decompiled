@@ -1,0 +1,1034 @@
+<cz09_t_24.xml>
+  <crew>
+    <commander></commander>
+    <gunner>	loader	</gunner>
+    <driver></driver>
+    <radioman></radioman>
+  </crew>
+  <speedLimits>
+    <forward>	58	</forward>
+    <backward>	18	</backward>
+  </speedLimits>
+  <repairCost>	5.3	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/czech/Cz09_T_24/T_24_turret_01_AO.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	30	</armor_4>
+      <armor_5>	15	</armor_5>
+      <armor_6>	10	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	30	</armor_9>
+      <armor_10>	60	</armor_10>
+      <armor_11>	8	</armor_11>
+      <armor_12>	40	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	10090	</weight>
+    <maxHealth>	336	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/czech/Cz09_T_24/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.913643 0.682232	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/czech/Cz09_T_24/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.0062809 0.409937 2.62286	</rayStart>
+        <rayEnd>	-0.0062809 0.262482 2.48774	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.23	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	1.5402 0.495233 -0.757873	</rayStart>
+        <rayEnd>	1.44023 0.492997 -0.757873	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.8	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_Cz09_T_24>
+      <userString>	#czech_vehicles:Chassis_Cz09_T_24	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4000	</price>
+      <unlocks>
+        <chassis>	Chassis_Cz09_T_24_2	  <cost>	2150	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	4000	</weight>
+      <maxLoad>	19000	</maxLoad>
+      <terrainResistance>	1.5 1.7 2.3	</terrainResistance>
+      <brakeForce>	19000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	35	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/czech/Cz09_T_24/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.42 0.42	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.9	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.334278	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.334278	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.35	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.334278	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.334278	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.35	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.826545 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/czech/Cz09_T_24/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.1016 1.96691	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.924750 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.640850 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.605630	</row2>
+            <row3>	0.000002 0.000000 0.000030	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/czech/Cz09_T_24/track/T25_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/czech/Cz09_T_24/track/T25_track.model	</segmentModelRight>
+        <left>	vehicles/czech/Cz09_T_24/track/left.track	</left>
+        <right>	vehicles/czech/Cz09_T_24/track/right.track	</right>
+        <segmentLength>	0.103	</segmentLength>
+        <segmentOffset>	0.053	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0093	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.106	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.106	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.106	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.106	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+        </node>
+      </trackNodes>
+    </Chassis_Cz09_T_24>
+    <Chassis_Cz09_T_24_2>
+      <userString>	#czech_vehicles:Chassis_Cz09_T_24_2	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8900	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	4000	</weight>
+      <maxLoad>	23000	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.1	</terrainResistance>
+      <brakeForce>	19000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/czech/Cz09_T_24/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.42 0.42	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.9	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.334278	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.334278	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.35	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.334278	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.334278	</radius>
+          <syncAngle>	21.1764	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.35	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.826545 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/czech/Cz09_T_24/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.1016 1.96691	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.853680 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.640850 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.655170	</row2>
+            <row3>	0.000004 0.000000 0.000031	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/czech/Cz09_T_24/track/T25_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/czech/Cz09_T_24/track/T25_track.model	</segmentModelRight>
+        <left>	vehicles/czech/Cz09_T_24/track/left.track	</left>
+        <right>	vehicles/czech/Cz09_T_24/track/right.track	</right>
+        <segmentLength>	0.103	</segmentLength>
+        <segmentOffset>	0.053	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0093	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.106	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.106	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.106	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.131	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.106	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+        </node>
+      </trackNodes>
+    </Chassis_Cz09_T_24_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Cz09_T_24>
+      <userString>	#czech_vehicles:Turret_1_Cz09_T_24	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4500	</price>
+      <armor>
+        <armor_1>	50	</armor_1>
+        <armor_2>	30	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	20	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	30	</armor_9>
+        <armor_10>	30	</armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3000	</weight>
+      <maxHealth>	84	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Skoda_A13>	shared	  <maxAmmo>	50	</maxAmmo>
+          <unlocks>
+            <gun>	_75mm_Skoda_A18	  <cost>	3600	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.4 10 0.402778 9.8 0.405556 9.5 0.408333 7 0.411111 6.6 0.422222 6.2 0.425 6 0.427778 5.7 0.436111 5.5 0.441667 5.3 0.444444 5 0.552778 5 0.555556 5.2 0.561111 5.4 0.563889 5.6 0.572222 5.8 0.575 6.2 0.577778 6.4 0.583333 7 0.586111 7.2 0.591667 7.7 0.594444 8 0.597222 8.6 0.605556 9 0.608333 9.7 0.611111 10 1 10	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	6.4	</reloadTime>
+          <aimingTime>	2.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/czech/Cz09_T_24/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000006 0.000459085 1.38017	</rayStart>
+              <rayEnd>	-0.0112188 -0.0207126 1.37886	</rayEnd>
+              <rayUp>	0.066 0.062 4	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.58 0.25 0.01 0.4	</tiling>
+          </camouflage>
+        </_75mm_Skoda_A13>
+        <_75mm_Skoda_A18>	shared	  <maxAmmo>	50	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_Cz09_T_24	  <cost>	2400	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.397222 10 0.4 9.8 0.402778 9.4 0.405556 9 0.408333 6.5 0.411111 6.2 0.422222 5.8 0.427778 5.4 0.572222 5.4 0.575 5.8 0.577778 6 0.583333 6.6 0.586111 6.8 0.591667 7.4 0.594444 7.6 0.597222 8.2 0.605556 8.6 0.608333 9.2 0.616667 9.8 0.619444 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	6	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <models>
+            <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/czech/Cz09_T_24/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000001 0.00224114 1.85695	</rayStart>
+              <rayEnd>	-0.0211327 -0.0469692 1.85624	</rayEnd>
+              <rayUp>	0.074 0.071 4	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.475 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Skoda_A18>
+      </guns>
+      <models>
+        <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/czech/Cz09_T_24/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/czech/Cz09_T_24/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.27636 0.674779	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.749573 0.332736 0.370523	</rayStart>
+          <rayEnd>	-0.582333 0.24602 0.303367	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.23	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.749573 0.332736 0.370523	</rayStart>
+          <rayEnd>	0.582333 0.24602 0.303367	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.23	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
+      <physicsShape>	1.036 -0.024 1.090 -0.000 0.515 0.210 0.415 0.021 0.370 0.500 0.339 0.500 0.191 0.742 0.000	</physicsShape>
+      <camouflage>
+        <tiling>	0.385 0.385 0.29 0.14	</tiling>
+      </camouflage>
+    </Turret_1_Cz09_T_24>
+    <Turret_2_Cz09_T_24>
+      <userString>	#czech_vehicles:Turret_2_Cz09_T_24	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	10300	</price>
+      <unlocks>
+        <vehicle>	Cz08_T_25	  <cost>	27040	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <armor_1>	50	</armor_1>
+        <armor_2>	30	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	20	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	30	</armor_9>
+        <armor_10>	30	</armor_10>
+        <armor_11>	95	</armor_11>
+        <armor_12>	8	</armor_12>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3300	</weight>
+      <maxHealth>	114	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Skoda_A13>	shared	  <maxAmmo>	50	</maxAmmo>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.4 10 0.402778 9.8 0.405556 9.5 0.408333 7 0.411111 6.6 0.422222 6.2 0.425 6 0.427778 5.7 0.436111 5.5 0.441667 5.3 0.444444 5 0.552778 5 0.555556 5.2 0.561111 5.4 0.563889 5.6 0.572222 5.8 0.575 6.2 0.577778 6.4 0.583333 7 0.586111 7.2 0.591667 7.7 0.594444 8 0.597222 8.6 0.605556 9 0.608333 9.7 0.611111 10 1 10	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	5.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.5	</aimingTime>
+          <models>
+            <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/czech/Cz09_T_24/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000006 -0.02656 1.24785	</rayStart>
+              <rayEnd>	-0.0106072 -0.0504969 1.24654	</rayEnd>
+              <rayUp>	0.065 0.061 4	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.505 0.25 0.09 0.5	</tiling>
+          </camouflage>
+        </_75mm_Skoda_A13>
+        <_75mm_Skoda_A18>	shared	  <maxAmmo>	50	</maxAmmo>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.397222 10 0.4 9.8 0.402778 9.4 0.405556 9 0.408333 6.5 0.411111 6.2 0.422222 5.8 0.427778 5.4 0.572222 5.4 0.575 5.8 0.577778 6 0.583333 6.6 0.586111 6.8 0.591667 7.4 0.594444 7.6 0.597222 8.2 0.605556 8.6 0.608333 9.2 0.616667 9.8 0.619444 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	5.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/czech/Cz09_T_24/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/czech/Cz09_T_24/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00222212 -0.0261649 1.8317	</rayStart>
+              <rayEnd>	-0.0209496 -0.0460649 1.83151	</rayEnd>
+              <rayUp>	0.074 0.071 4	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.505 0.25 0.04 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Skoda_A18>
+      </guns>
+      <models>
+        <undamaged>	vehicles/czech/Cz09_T_24/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz09_T_24/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/czech/Cz09_T_24/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/czech/Cz09_T_24/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.303379 0.829632	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.741277 0.33187 0.243413	</rayStart>
+          <rayEnd>	-0.657656 0.288511 0.209834	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.23	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-0.820064 0.35049 -0.512573	</rayStart>
+          <rayEnd>	-0.730194 0.306635 -0.512573	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.7	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.718668 0.27708 0.370458	</rayStart>
+          <rayEnd>	0.635046 0.233721 0.336879	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.23	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
+      <physicsShape>	1.036 -0.024 1.048 -0.000 0.442 0.122 0.415 0.021 0.370 0.500 0.327 0.500 0.191 0.742 0.000	</physicsShape>
+      <camouflage>
+        <tiling>	0.4 0.4 0.26 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_Cz09_T_24>
+  </turrets0>
+  <engines>
+    <Skoda_V12_16_2_liter>	shared	  <unlocks>
+        <engine>	Skoda_V12_19_8_liter_450	  <cost>	1700	</cost>
+        </engine>
+      </unlocks>
+    </Skoda_V12_16_2_liter>
+    <Skoda_V12_19_8_liter_450>	shared	</Skoda_V12_19_8_liter_450>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <Radiostanice_vz_37>	shared	  <unlocks>
+        <radio>	Radiostanice_Fu_7	  <cost>	1360	</cost>
+        </radio>
+      </unlocks>
+    </Radiostanice_vz_37>
+    <Radiostanice_Fu_7>	shared	  <unlocks>
+        <radio>	Radiostanice_Fu_12	  <cost>	7200	</cost>
+        </radio>
+      </unlocks>
+    </Radiostanice_Fu_7>
+    <Radiostanice_Fu_12>	shared	</Radiostanice_Fu_12>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	czech_round	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</cz09_t_24.xml>

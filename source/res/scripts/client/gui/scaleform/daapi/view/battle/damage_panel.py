@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/damage_panel.py
 import math
 import BigWorld
@@ -10,6 +11,7 @@ from gui.Scaleform.locale.FALLOUT import FALLOUT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_control import g_sessionProvider, vehicle_getter
 from gui.battle_control.arena_info import hasGasAttack
+from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 
 class _TankIndicatorCtrl(object):
@@ -41,7 +43,7 @@ class _TankIndicatorCtrl(object):
         tankIndicator.wg_turretMatProv = turretMat
 
 
-class DamagePanel(DamagePanelMeta):
+class DamagePanel(DamagePanelMeta, IArenaVehiclesController):
     __stateHandlers = {VEHICLE_VIEW_STATE.HEALTH: 'as_updateHealthS',
      VEHICLE_VIEW_STATE.SPEED: 'as_updateSpeedS',
      VEHICLE_VIEW_STATE.CRUISE_MODE: 'as_setCruiseModeS',
@@ -60,6 +62,7 @@ class DamagePanel(DamagePanelMeta):
         self.__tankIndicator = None
         self.__isShow = True
         self.__isHasGasAttack = False
+        self.__vehicleID = None
         return
 
     def __del__(self):
@@ -72,8 +75,10 @@ class DamagePanel(DamagePanelMeta):
             ctrl = g_sessionProvider.getVehicleStateCtrl()
             ctrl.onVehicleControlling += self.__onVehicleControlling
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            g_sessionProvider.addArenaCtrl(self)
             vehicle = ctrl.getControllingVehicle()
             if vehicle:
+                self.__vehicleID = vehicle.id
                 self._updatePlayerInfo(vehicle.id)
                 self.__onVehicleControlling(vehicle)
 
@@ -81,6 +86,7 @@ class DamagePanel(DamagePanelMeta):
         ctrl = g_sessionProvider.getVehicleStateCtrl()
         ctrl.onVehicleControlling -= self.__onVehicleControlling
         ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        g_sessionProvider.removeArenaCtrl(self)
         if self._flashObject:
             self.as_destroyS()
         self._dispose()
@@ -106,6 +112,10 @@ class DamagePanel(DamagePanelMeta):
     def clickToFireIcon(self):
         self.__changeVehicleSetting('extinguisher', None)
         return
+
+    def invalidateVehicleInfo(self, flags, vo, arenaDP):
+        if vo.vehicleID == self.__vehicleID:
+            self._updatePlayerInfo(self.__vehicleID)
 
     def _updatePlayerInfo(self, value):
         parts = g_sessionProvider.getCtx().getFullPlayerNameWithParts(vID=value, showVehShortName=False)
@@ -141,7 +151,6 @@ class DamagePanel(DamagePanelMeta):
         self.as_resetS()
         if self.__isHasGasAttack:
             self.as_hideGasAtackInfoS()
-            self.__ui.movie.falloutItems.as_hidePostmortemGasAtackInfoS()
 
     def __changeVehicleSetting(self, tag, entityName):
         result, error = g_sessionProvider.getEquipmentsCtrl().changeSettingByTag(tag, entityName=entityName, avatar=BigWorld.player())
@@ -151,6 +160,7 @@ class DamagePanel(DamagePanelMeta):
                 ctrl.onShowVehicleErrorByKey(error.key, error.ctx)
 
     def __onVehicleControlling(self, vehicle):
+        self.__vehicleID = vehicle.id
         vTypeDesc = vehicle.typeDescriptor
         vType = vTypeDesc.type
         yawLimits = vehicle_getter.getYawLimits(vTypeDesc)

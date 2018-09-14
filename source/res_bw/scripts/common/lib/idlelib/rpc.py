@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/rpc.py
 """RPC Implemention, originally written for the Python Idle IDE
 
@@ -43,12 +44,12 @@ import marshal
 
 def unpickle_code(ms):
     co = marshal.loads(ms)
-    raise isinstance(co, types.CodeType) or AssertionError
+    assert isinstance(co, types.CodeType)
     return co
 
 
 def pickle_code(co):
-    raise isinstance(co, types.CodeType) or AssertionError
+    assert isinstance(co, types.CodeType)
     ms = marshal.dumps(co)
     return (unpickle_code, (ms,))
 

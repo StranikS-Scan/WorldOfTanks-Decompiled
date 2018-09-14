@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/channel_num_gen.py
 import BigWorld
 from constants import PREBATTLE_TYPE, QUEUE_TYPE

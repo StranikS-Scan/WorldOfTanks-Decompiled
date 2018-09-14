@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/provider.py
 from collections import defaultdict, deque
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
@@ -18,7 +19,7 @@ class _ChatCooldownManager(RequestCooldownManager):
         return _ACTIONS.getActionName(rqTypeID)
 
     def getDefaultCoolDown(self):
-        return 5.0
+        pass
 
 
 class BWChatProvider(object):

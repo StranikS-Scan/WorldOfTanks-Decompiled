@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/shared_errors.py
 import BigWorld
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER

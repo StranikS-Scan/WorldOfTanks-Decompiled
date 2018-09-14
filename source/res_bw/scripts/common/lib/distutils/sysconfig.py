@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/sysconfig.py
 """Provide access to Python's configuration information.  The specific
 configuration variables available depend heavily on the platform and

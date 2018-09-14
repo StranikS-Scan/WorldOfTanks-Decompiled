@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/base64_codec.py
 """ Python 'base64_codec' Codec - base64 content transfer encoding
 
@@ -18,7 +19,7 @@ def base64_encode(input, errors = 'strict'):
         error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     output = base64.encodestring(input)
     return (output, len(input))
 
@@ -36,7 +37,7 @@ def base64_decode(input, errors = 'strict'):
         error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     output = base64.decodestring(input)
     return (output, len(input))
 
@@ -53,14 +54,14 @@ class Codec(codecs.Codec):
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
     def encode(self, input, final = False):
-        raise self.errors == 'strict' or AssertionError
+        assert self.errors == 'strict'
         return base64.encodestring(input)
 
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
     def decode(self, input, final = False):
-        raise self.errors == 'strict' or AssertionError
+        assert self.errors == 'strict'
         return base64.decodestring(input)
 
 

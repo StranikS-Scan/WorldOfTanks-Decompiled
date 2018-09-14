@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/offers.py
 import time
 from collections import namedtuple
@@ -139,7 +140,7 @@ class OutOffers(object):
         return
 
     def updateDestination(self, offerID, dstEntityType, dstEntityDBID, dstEntityName):
-        raise self.__data['out'][offerID][1] == dstEntityDBID or AssertionError
+        assert self.__data['out'][offerID][1] == dstEntityDBID
 
     def createOffer(self, flags, srcDBID, srcName, dstDBID, dstName, validSec, srcWares, srcFee, dstWares, dstFee, ext = None):
         currTime = int(time.time())
@@ -154,10 +155,10 @@ class OutOffers(object):
         data = self.__data
         offerID = ((currTime & 1048575) << 12) + (data['nextID'] & 4095)
         data['nextID'] += 1
-        if not (offerID not in data['out'] and offerID not in data['done']):
-            raise AssertionError
-            self.__outWriter()[offerID] = offer
-            data.setdefault('outExt', {})[offerID] = ext is not None and ext
+        assert offerID not in data['out'] and offerID not in data['done']
+        self.__outWriter()[offerID] = offer
+        if ext is not None:
+            data.setdefault('outExt', {})[offerID] = ext
         return (offerID, (offerID,
           flags,
           srcDBID,

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pytree.py
 """
 Python parse tree definitions.
@@ -42,7 +43,7 @@ class Base(object):
 
     def __new__(cls, *args, **kwds):
         """Constructor that prevents Base from being instantiated."""
-        raise cls is not Base or AssertionError('Cannot instantiate Base')
+        assert cls is not Base, 'Cannot instantiate Base'
         return object.__new__(cls)
 
     def __eq__(self, other):
@@ -122,22 +123,22 @@ class Base(object):
 
     def replace(self, new):
         """Replace this node with a new one in the parent."""
-        if not self.parent is not None:
-            raise AssertionError(str(self))
-            raise new is not None or AssertionError
-            new = isinstance(new, list) or [new]
+        assert self.parent is not None, str(self)
+        assert new is not None
+        if not isinstance(new, list):
+            new = [new]
         l_children = []
         found = False
         for ch in self.parent.children:
-            if not (ch is self and not found):
-                raise AssertionError((self.parent.children, self, new))
+            if ch is self:
+                assert not found, (self.parent.children, self, new)
                 if new is not None:
                     l_children.extend(new)
                 found = True
             else:
                 l_children.append(ch)
 
-        raise found or AssertionError((self.children, self, new))
+        assert found, (self.children, self, new)
         self.parent.changed()
         self.parent.children = l_children
         for x in new:
@@ -251,17 +252,17 @@ class Node(Base):
         
         As a side effect, the parent pointers of the children are updated.
         """
-        if not type >= 256:
-            raise AssertionError(type)
-            self.type = type
-            self.children = list(children)
-            for ch in self.children:
-                raise ch.parent is None or AssertionError(repr(ch))
-                ch.parent = self
+        assert type >= 256, type
+        self.type = type
+        self.children = list(children)
+        for ch in self.children:
+            assert ch.parent is None, repr(ch)
+            ch.parent = self
 
-            if prefix is not None:
-                self.prefix = prefix
-            self.fixers_applied = fixers_applied and fixers_applied[:]
+        if prefix is not None:
+            self.prefix = prefix
+        if fixers_applied:
+            self.fixers_applied = fixers_applied[:]
         else:
             self.fixers_applied = None
         return
@@ -361,13 +362,13 @@ class Leaf(Base):
         Takes a type constant (a token number < 256), a string value, and an
         optional context keyword argument.
         """
-        if not 0 <= type < 256:
-            raise AssertionError(type)
-            if context is not None:
-                self._prefix, (self.lineno, self.column) = context
-            self.type = type
-            self.value = value
-            self._prefix = prefix is not None and prefix
+        assert 0 <= type < 256, type
+        if context is not None:
+            self._prefix, (self.lineno, self.column) = context
+        self.type = type
+        self.value = value
+        if prefix is not None:
+            self._prefix = prefix
         self.fixers_applied = fixers_applied[:]
         return
 
@@ -455,7 +456,7 @@ class BasePattern(object):
 
     def __new__(cls, *args, **kwds):
         """Constructor that prevents BasePattern from being instantiated."""
-        raise cls is not BasePattern or AssertionError('Cannot instantiate BasePattern')
+        assert cls is not BasePattern, 'Cannot instantiate BasePattern'
         return object.__new__(cls)
 
     def __repr__(self):
@@ -535,9 +536,9 @@ class LeafPattern(BasePattern):
         dict under that key.
         """
         if type is not None:
-            if not 0 <= type < 256:
-                raise AssertionError(type)
-            raise content is not None and (isinstance(content, basestring) or AssertionError(repr(content)))
+            assert 0 <= type < 256, type
+        if content is not None:
+            assert isinstance(content, basestring), repr(content)
         self.type = type
         self.content = content
         self.name = name
@@ -585,14 +586,14 @@ class NodePattern(BasePattern):
         dict under that key.
         """
         if type is not None:
-            if not type >= 256:
-                raise AssertionError(type)
-            raise content is not None and (not isinstance(content, basestring) or AssertionError(repr(content)))
+            assert type >= 256, type
+        if content is not None:
+            assert not isinstance(content, basestring), repr(content)
             content = list(content)
             for i, item in enumerate(content):
-                if not isinstance(item, BasePattern):
-                    raise AssertionError((i, item))
-                    self.wildcards = isinstance(item, WildcardPattern) and True
+                assert isinstance(item, BasePattern), (i, item)
+                if isinstance(item, WildcardPattern):
+                    self.wildcards = True
 
         self.type = type
         self.content = content
@@ -666,12 +667,12 @@ class WildcardPattern(BasePattern):
             If content is not None, replace the dot with the parenthesized
             list of alternatives, e.g. (a b c | d e | f g h)*
         """
-        if not 0 <= min <= max <= HUGE:
-            raise AssertionError((min, max))
-            content = content is not None and tuple(map(tuple, content))
-            raise len(content) or AssertionError(repr(content))
+        assert 0 <= min <= max <= HUGE, (min, max)
+        if content is not None:
+            content = tuple(map(tuple, content))
+            assert len(content), repr(content)
             for alt in content:
-                raise len(alt) or AssertionError(repr(alt))
+                assert len(alt), repr(alt)
 
         self.content = content
         self.min = min
@@ -798,9 +799,9 @@ class WildcardPattern(BasePattern):
 
     def _recursive_matches(self, nodes, count):
         """Helper to recursively yield the matches."""
-        if not self.content is not None:
-            raise AssertionError
-            count >= self.min and (yield (0, {}))
+        assert self.content is not None
+        if count >= self.min:
+            yield (0, {})
         if count < self.max:
             for alt in self.content:
                 for c0, r0 in generate_matches(alt, nodes):
@@ -824,8 +825,8 @@ class NegatedPattern(BasePattern):
         lingo).  If it is not None, this matches whenever the argument
         pattern doesn't have any matches.
         """
-        if not (content is not None and isinstance(content, BasePattern)):
-            raise AssertionError(repr(content))
+        if content is not None:
+            assert isinstance(content, BasePattern), repr(content)
         self.content = content
         return
 

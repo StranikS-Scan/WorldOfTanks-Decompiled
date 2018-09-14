@@ -8,11 +8,7 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <limittedTime>	60	</limittedTime>
-              <greaterOrEqual>	1	</greaterOrEqual>
-            </vehicleKills>
-            <vehicleKills>
-              <whileInvisible></whileInvisible>
+              <limittedTime>	120	</limittedTime>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
           </and>
@@ -29,18 +25,14 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleKills>
-              <limittedTime>	60	</limittedTime>
-              <greaterOrEqual>	1	</greaterOrEqual>
-            </vehicleKills>
-            <vehicleKills>
-              <whileInvisible></whileInvisible>
-              <greaterOrEqual>	1	</greaterOrEqual>
-            </vehicleKills>
             <results>
               <key>	winPoints	</key>
               <greaterOrEqual>	200	</greaterOrEqual>
             </results>
+            <vehicleKills>
+              <limittedTime>	120	</limittedTime>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
           </and>
         </postBattle>
       </conditions>

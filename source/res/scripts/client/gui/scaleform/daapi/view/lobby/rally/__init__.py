@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/__init__.py
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.managers.context_menu import ContextMenuManager
@@ -23,7 +24,6 @@ class NavigationStack(object):
     def hasHistory(cls, key):
         if key in cls.__stacks:
             return len(cls.__stacks[key])
-        return 0
 
     @classmethod
     def current(cls, key):

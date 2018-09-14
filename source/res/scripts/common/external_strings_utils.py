@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/external_strings_utils.py
 import re
 import unicodedata
@@ -72,7 +73,7 @@ elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.CHINESE:
 elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.KOREA:
     textRestrictions = TextRestrictionsKorea()
 else:
-    raise False or AssertionError('Unknown credential restrictions set')
+    assert False, 'Unknown credential restrictions set'
 _ACCOUNT_NAME_RE = textRestrictions.ACCOUNT_NAME_RE
 _ACCOUNT_NAME_MIN_LENGTH = textRestrictions.ACCOUNT_NAME_MIN_LENGTH
 _ACCOUNT_NAME_MAX_LENGTH = textRestrictions.ACCOUNT_NAME_MAX_LENGTH
@@ -269,4 +270,3 @@ def _decode_utf8_len_byte(byte):
         return 2
     if v < 127:
         return 1
-    return 0

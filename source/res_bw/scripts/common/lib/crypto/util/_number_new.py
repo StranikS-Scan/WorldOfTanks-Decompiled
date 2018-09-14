@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Util/_number_new.py
 __revision__ = '$Id$'
 __all__ = ['ceil_shift',
@@ -17,10 +18,10 @@ def ceil_shift(n, b):
     """
     if not isinstance(n, (int, long)) or not isinstance(b, (int, long)):
         raise TypeError('unsupported operand type(s): %r and %r' % (type(n).__name__, type(b).__name__))
-    if not (n >= 0 and b >= 0):
-        raise AssertionError
-        mask = (1L << b) - 1
-        return n & mask and (n >> b) + 1
+    assert n >= 0 and b >= 0
+    mask = (1L << b) - 1
+    if n & mask:
+        return (n >> b) + 1
     else:
         return n >> b
 
@@ -61,7 +62,7 @@ def exact_log2(num):
         n >>= 1
 
     i -= 1
-    raise num == 1L << i or AssertionError
+    assert num == 1L << i
     return i
 
 
@@ -85,5 +86,5 @@ def exact_div(p, d, allow_divzero = False):
         n, r = divmod(p, d)
         if r != 0:
             raise ValueError('No solution could be found')
-    raise p == n * d or AssertionError
+    assert p == n * d
     return n

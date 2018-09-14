@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/settings.py
 from collections import namedtuple
 from club_shared import CLUB_SUBSCRIPTION_TYPE as _CST, CLIENT_CLUB_COMMANDS, CLUB_INVITE_STATE_NAMES

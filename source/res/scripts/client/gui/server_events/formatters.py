@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/formatters.py
 import types
 import BigWorld
@@ -329,7 +330,7 @@ def packDiscount(label, value = None, discountType = None):
 
 
 def getNationName(nation):
-    raise nation is not None or AssertionError('nation must be specified')
+    assert nation is not None, 'nation must be specified'
     return i18n.makeString(MENU.nations(nation))
 
 
@@ -394,7 +395,7 @@ def packTextBlock(label, value = None, relation = None, questID = None, isAvaila
         value = _formatRelation(value, relation, relationI18nType)
     if counterDescr is None:
         counterDescr = i18n.makeString('#quests:quests/table/amount')
-    raise not (not isAvailable and showDone) or AssertionError
+    assert not (not isAvailable and showDone)
     blockData = {'linkage': 'CounterTextElement_UI',
      'label': label,
      'fullLabel': fullLabel,

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/gui_config.py
 from collections import namedtuple
 import resource_helper
@@ -6,8 +7,8 @@ _cache = {}
 
 def readConfig(path, forced = False):
     global _cache
-    if not forced and path in _cache:
-        return _cache[path]
+    if not forced:
+        return path in _cache and _cache[path]
     else:
         scenes, items, commands = (None, None, None)
         with resource_helper.root_generator(path) as ctx, root:
@@ -85,10 +86,10 @@ def _readConfig(ctx, root, parentTag, childTag, itemClass):
     config = {}
     for ctx, subSection in resource_helper.getIterator(ctx, section):
         item = resource_helper.readItem(ctx, subSection, childTag)
-        if not item.type == _ITEM_TYPE.DICT:
-            raise AssertionError('Type of value should be dict')
-            name = item.name
-            raise name in config and resource_helper.ResourceError(ctx, 'Item {0} is duplicated.'.format(name))
+        assert item.type == _ITEM_TYPE.DICT, 'Type of value should be dict'
+        name = item.name
+        if name in config:
+            raise resource_helper.ResourceError(ctx, 'Item {0} is duplicated.'.format(name))
         config[name] = itemClass(**item.value)
 
     return config

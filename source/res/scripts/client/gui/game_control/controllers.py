@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/controllers.py
 import weakref
 import operator
@@ -64,7 +65,7 @@ class ControllersCollection(_IController):
         self._invoke('onLobbyInited', event)
 
     def _addController(self, controllerName, controller):
-        raise issubclass(controller, Controller) or AssertionError('Controller should be child class of Controller')
+        assert issubclass(controller, Controller), 'Controller should be child class of Controller'
         controllerInstance = controller(self)
         self._controllers[controllerName] = controllerInstance
         setattr(self, controllerName, weakref.proxy(controllerInstance))

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_team_bases_ctrl.py
 from collections import defaultdict
 import weakref
@@ -150,7 +151,7 @@ class BattleTeamsBasesController(ITeamsBasesController):
         self.__stopCaptureSounds()
 
     def _getProgressRate(self):
-        return 1
+        pass
 
     def __hasBaseID(self, team, exclude = -1):
         return len(filter(lambda i: i & team != 0 and i != exclude, self.__clientIDs)) > 0

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_metaclass.py
 """Fixer for __metaclass__ = X -> (metaclass=X) methods.
 
@@ -171,13 +172,13 @@ class FixMetaclass(fixer_base.BaseFix):
             else:
                 meta_txt.prefix = u''
             expr_stmt = last_metaclass.children[0]
-            if not expr_stmt.type == syms.expr_stmt:
-                raise AssertionError
-                expr_stmt.children[1].prefix = u''
-                expr_stmt.children[2].prefix = u''
-                arglist.append_child(last_metaclass)
-                fixup_indent(suite)
-                suite.children or suite.remove()
+            assert expr_stmt.type == syms.expr_stmt
+            expr_stmt.children[1].prefix = u''
+            expr_stmt.children[2].prefix = u''
+            arglist.append_child(last_metaclass)
+            fixup_indent(suite)
+            if not suite.children:
+                suite.remove()
                 pass_leaf = Leaf(text_type, u'pass')
                 pass_leaf.prefix = orig_meta_prefix
                 node.append_child(pass_leaf)

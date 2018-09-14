@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/fort_provider.py
 import weakref
 from FortifiedRegionBase import FORT_ERROR, FORT_ERROR_NAMES

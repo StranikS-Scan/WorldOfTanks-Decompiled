@@ -10,16 +10,16 @@
             <or>
               <results>
                 <key>	flagCapture	</key>
-                <greaterOrEqual>	3	</greaterOrEqual>
+                <greaterOrEqual>	2	</greaterOrEqual>
               </results>
               <results>
                 <key>	soloFlagCapture	</key>
-                <greaterOrEqual>	3	</greaterOrEqual>
+                <greaterOrEqual>	2	</greaterOrEqual>
               </results>
             </or>
             <results>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	10000	</greaterOrEqual>
+              <greaterOrEqual>	8000	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -49,16 +49,16 @@
             <or>
               <results>
                 <key>	flagCapture	</key>
-                <greaterOrEqual>	3	</greaterOrEqual>
+                <greaterOrEqual>	2	</greaterOrEqual>
               </results>
               <results>
                 <key>	soloFlagCapture	</key>
-                <greaterOrEqual>	3	</greaterOrEqual>
+                <greaterOrEqual>	2	</greaterOrEqual>
               </results>
             </or>
             <results>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	10000	</greaterOrEqual>
+              <greaterOrEqual>	8000	</greaterOrEqual>
             </results>
             <vehicleKills>
               <greaterOrEqual>	5	</greaterOrEqual>

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/personality.py
 import SoundGroups
 import BigWorld
@@ -10,7 +11,6 @@ from CurrentVehicle import g_currentVehicle
 from ConnectionManager import connectionManager
 from gui.app_loader import g_appLoader
 from helpers import isPlayerAccount, time_utils
-from predefined_hosts import g_preDefinedHosts
 from gui import SystemMessages, g_guiResetters, game_control, miniclient
 from gui import GUI_SETTINGS
 from gui.wgnc import g_wgncProvider
@@ -266,9 +266,6 @@ def onConnected():
 
 
 def onDisconnected():
-    serverSettings = g_lobbyContext.getServerSettings()
-    if serverSettings is not None and serverSettings.roaming.isInRoaming():
-        g_preDefinedHosts.savePeripheryTL(connectionManager.peripheryID)
     g_prbLoader.onDisconnected()
     g_clanCache.onDisconnected()
     game_control.g_instance.onDisconnected()
@@ -284,7 +281,6 @@ def onDisconnected():
     Waiting.rollback()
     Waiting.cancelCallback()
     g_appLoader.goToLoginByEvent()
-    return
 
 
 def onKickedFromServer(reason, isBan, expiryTime):

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/gold_fish.py
 from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
 import constants

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/errors.py
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from helpers import i18n

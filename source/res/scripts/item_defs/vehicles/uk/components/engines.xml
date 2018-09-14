@@ -67,6 +67,24 @@
     <Rolls_Royce_Griffon_IGR>	60007	</Rolls_Royce_Griffon_IGR>
   </ids>
   <shared>
+    <Vickers-Armstrong>
+      <userString>	#gb_vehicles:Vickers-Armstrong	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	90	</power>
+      <weight>	200	</weight>
+      <maxHealth>	32	</maxHealth>
+      <maxRegenHealth>	15	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	800	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+    </Vickers-Armstrong>
     <Vickers-Armstrong_bot>
       <userString>	#gb_vehicles:Vickers-Armstrong_bot	</userString>
       <tags>	gasoline	</tags>
@@ -86,33 +104,23 @@
       <rpm_min>	800	</rpm_min>
       <rpm_max>	2000	</rpm_max>
     </Vickers-Armstrong_bot>
-    <Vickers-Armstrong>
-      <userString>	#gb_vehicles:Vickers-Armstrong	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <power>	90	</power>
-      <weight>	200	</weight>
-      <maxHealth>	32	</maxHealth>
-      <maxRegenHealth>	15	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-    </Vickers-Armstrong>
     <Vickers-Armstrong_MkII>
       <userString>	#gb_vehicles:Vickers-Armstrong_MkII	</userString>
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	350	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	110	</power>
       <weight>	200	</weight>
       <maxHealth>	32	</maxHealth>
       <maxRegenHealth>	15	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	800	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </Vickers-Armstrong_MkII>
     <Rolls_Royse_Meteor_MkV>
       <userString>	#gb_vehicles:Rolls_Royse_Meteor_MkV	</userString>
@@ -145,6 +153,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1100	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
     </Rolls_Royse_Meteor>
     <Rolls_Royse_Meteor_A>
       <userString>	#gb_vehicles:Rolls_Royse_Meteor	</userString>
@@ -167,15 +177,17 @@
       <level>	5	</level>
       <price>	16000	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	650	</power>
       <weight>	744	</weight>
       <maxHealth>	247	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1100	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
     </Rolls_Royse_Meteor_MkIV>
     <Rolls_Royse_Meteor_MkIV_A>
       <userString>	#gb_vehicles:Rolls_Royse_Meteor_MkIV	</userString>
@@ -184,15 +196,17 @@
       <price>	21300	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	650	</power>
       <weight>	744	</weight>
       <maxHealth>	247	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1100	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
     </Rolls_Royse_Meteor_MkIV_A>
     <Rolls_Royse_Meteor_MkIV_B>
       <userString>	#gb_vehicles:Rolls_Royse_Meteor_MkIV_B	</userString>
@@ -219,6 +233,8 @@
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	330	</power>
       <weight>	1000	</weight>
       <maxHealth>	104	</maxHealth>
@@ -386,13 +402,17 @@
       <level>	4	</level>
       <price>	11500	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	395	</power>
       <weight>	383	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1000	</rpm_min>
+      <rpm_max>	1500	</rpm_max>
     </Nuffield_liberty_MKIV>
     <Nuffield_liberty_MKV>
       <userString>	#gb_vehicles:Nuffield_liberty_MKV	</userString>
@@ -601,13 +621,17 @@
       <level>	1	</level>
       <price>	300	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	120	</power>
       <weight>	340	</weight>
       <maxHealth>	32	</maxHealth>
       <maxRegenHealth>	15	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1000	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
     </Rolls_Royse_Phantom>
     <AEC_Type_179>
       <userString>	#gb_vehicles:AEC_Type_179	</userString>
@@ -615,13 +639,17 @@
       <level>	2	</level>
       <price>	1200	</price>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	150	</power>
       <weight>	360	</weight>
       <maxHealth>	66	</maxHealth>
       <maxRegenHealth>	33	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	1900	</rpm_max>
     </AEC_Type_179>
     <AEC_A189>
       <userString>	#gb_vehicles:AEC_A189	</userString>
@@ -705,13 +733,17 @@
       <level>	3	</level>
       <price>	500	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	340	</power>
       <weight>	383	</weight>
       <maxHealth>	86	</maxHealth>
       <maxRegenHealth>	42	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1000	</rpm_min>
+      <rpm_max>	1500	</rpm_max>
     </Nuffield_liberty_MKII>
     <Ford_V8-221>
       <userString>	#gb_vehicles:Ford_V8-221	</userString>

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/package_layout.py
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA

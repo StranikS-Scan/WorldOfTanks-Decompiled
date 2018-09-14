@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/utf_8_sig.py
 """ Python 'utf-8-sig' Codec
 This work similar to UTF-8 with the following changes:

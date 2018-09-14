@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/quests.py
 from tutorial.control.quests import triggers
 from tutorial.doc_loader import sub_parsers

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/unit_roster_config.py
 import fortified_regions, clubs_settings
 from UnitBase import BaseUnitRosterSlot
@@ -29,6 +30,18 @@ class RosterSlot10(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (1, 10)
 
 
+class SortieSlot6(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (4, 6)
+
+
+class SortieSlot8(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (6, 8)
+
+
+class SortieSlot10(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (8, 10)
+
+
 class BaseSortieRoster(BaseUnitRoster):
 
     def getLegionariesMaxCount(self):
@@ -38,24 +51,24 @@ class BaseSortieRoster(BaseUnitRoster):
 class SortieRoster6(BaseSortieRoster):
     MAX_SLOTS = 7
     MAX_EMPTY_SLOTS = 1
-    SLOT_TYPE = RosterSlot6
-    DEFAULT_SLOT_PACK = RosterSlot6().pack()
+    SLOT_TYPE = SortieSlot6
+    DEFAULT_SLOT_PACK = SortieSlot6().pack()
     MAX_UNIT_POINTS_SUM = 42
 
 
 class SortieRoster8(BaseSortieRoster):
     MAX_SLOTS = 10
     MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot8
-    DEFAULT_SLOT_PACK = RosterSlot8().pack()
+    SLOT_TYPE = SortieSlot8
+    DEFAULT_SLOT_PACK = SortieSlot8().pack()
     MAX_UNIT_POINTS_SUM = 80
 
 
 class SortieRoster10(BaseSortieRoster):
     MAX_SLOTS = 15
     MAX_EMPTY_SLOTS = 3
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = SortieSlot10
+    DEFAULT_SLOT_PACK = SortieSlot10().pack()
     MAX_UNIT_POINTS_SUM = 150
 
 

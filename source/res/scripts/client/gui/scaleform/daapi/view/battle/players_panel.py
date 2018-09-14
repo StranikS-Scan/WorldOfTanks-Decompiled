@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/players_panel.py
 from weakref import proxy
 from gui.Scaleform.windows import UIInterface
@@ -8,10 +9,10 @@ class _EmptyPlayersPanel(UIInterface):
         pass
 
     def getPlayerNameLength(self):
-        return 31
+        pass
 
     def getVehicleNameLength(self):
-        return 31
+        pass
 
 
 class _GeneralPlayersPanel(_EmptyPlayersPanel):
@@ -54,19 +55,19 @@ class _GeneralPlayersPanel(_EmptyPlayersPanel):
 class _FalloutPlayersPanel(_EmptyPlayersPanel):
 
     def getPlayerNameLength(self):
-        return 9
+        pass
 
     def getVehicleNameLength(self):
-        return 9
+        pass
 
 
 class _MultiTeamsPlayersPanel(_EmptyPlayersPanel):
 
     def getPlayerNameLength(self):
-        return 16
+        pass
 
     def getVehicleNameLength(self):
-        return 16
+        pass
 
 
 def playersPanelFactory(parentUI, isLeft, isColorBlind = False, isEvent = False, isMutlipleTeams = False):

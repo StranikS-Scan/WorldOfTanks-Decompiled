@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/main.py
 """
 Main program for 2to3.
@@ -213,7 +214,7 @@ def main(fixer_pkg, args = None):
             try:
                 rt.refactor(args, options.write, options.doctests_only, options.processes)
             except refactor.MultiprocessingUnsupported:
-                raise options.processes > 1 or AssertionError
+                assert options.processes > 1
                 print >> sys.stderr, "Sorry, -j isn't supported on this platform."
                 return 1
 

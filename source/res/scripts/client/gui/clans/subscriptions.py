@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/subscriptions.py
 from gui.clans.interfaces import IClanListener
 from gui.shared.utils.ListenersCollection import ListenersCollection

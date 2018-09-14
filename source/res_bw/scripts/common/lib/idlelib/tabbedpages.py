@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/tabbedpages.py
 """An implementation of tabbed pages using only standard Tkinter.
 

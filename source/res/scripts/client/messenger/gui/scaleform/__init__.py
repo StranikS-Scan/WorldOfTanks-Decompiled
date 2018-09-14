@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/__init__.py
 MESSENGER_BATTLE_SWF_FILE = 'battle_messenger.swf'
 import enumerations

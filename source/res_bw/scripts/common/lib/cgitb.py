@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/cgitb.py
 """More comprehensive traceback formatting for Python scripts.
 
@@ -36,7 +37,7 @@ import types
 
 def reset():
     """Return a string that resets the CGI and browser to a known state."""
-    return '<!--: spam\nContent-Type: text/html\n\n<body bgcolor="#f0f0f8"><font color="#f0f0f8" size="-5"> -->\n<body bgcolor="#f0f0f8"><font color="#f0f0f8" size="-5"> --> -->\n</font> </font> </font> </script> </object> </blockquote> </pre>\n</table> </table> </table> </table> </table> </font> </font> </font>'
+    pass
 
 
 __UNDEF__ = []

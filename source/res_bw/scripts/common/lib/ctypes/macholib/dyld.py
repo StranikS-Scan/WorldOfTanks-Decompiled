@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/macholib/dyld.py
 """
 dyld emulation
@@ -157,8 +158,8 @@ def framework_find(fn, executable_path = None, env = None):
 
 def test_dyld_find():
     env = {}
-    raise dyld_find('libSystem.dylib') == '/usr/lib/libSystem.dylib' or AssertionError
-    raise dyld_find('System.framework/System') == '/System/Library/Frameworks/System.framework/System' or AssertionError
+    assert dyld_find('libSystem.dylib') == '/usr/lib/libSystem.dylib'
+    assert dyld_find('System.framework/System') == '/System/Library/Frameworks/System.framework/System'
 
 
 if __name__ == '__main__':

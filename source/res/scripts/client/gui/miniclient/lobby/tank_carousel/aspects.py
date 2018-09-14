@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/tank_carousel/aspects.py
 from helpers import aop
 from helpers.i18n import makeString as _ms

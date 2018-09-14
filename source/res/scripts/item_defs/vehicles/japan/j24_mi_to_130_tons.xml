@@ -76,15 +76,15 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-2.51549 0.768615 -0.636247	</rayStart>
-        <rayEnd>	-2.31549 0.768615 -0.636247	</rayEnd>
+        <rayStart>	-2.51549 0.748503 -0.568497	</rayStart>
+        <rayEnd>	-2.31549 0.748503 -0.568497	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	2.51549 0.768615 -0.636247	</rayStart>
-        <rayEnd>	2.31549 0.768615 -0.636247	</rayEnd>
+        <rayStart>	2.51549 0.748503 -0.568497	</rayStart>
+        <rayEnd>	2.31549 0.748503 -0.568497	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.8	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -261,7 +261,7 @@
         <linkBones>	false	</linkBones>
         <maxAmplitude>	0.09	</maxAmplitude>
         <maxOffset>	0.1	</maxOffset>
-        <gravity>	248	</gravity>
+        <gravity>	-8	</gravity>
         <elasticity>	630	</elasticity>
         <damping>	2	</damping>
         <forwardElastK>	1	</forwardElastK>
@@ -572,7 +572,7 @@
         <linkBones>	false	</linkBones>
         <maxAmplitude>	0.09	</maxAmplitude>
         <maxOffset>	0.1	</maxOffset>
-        <gravity>	248	</gravity>
+        <gravity>	-8	</gravity>
         <elasticity>	630	</elasticity>
         <damping>	2	</damping>
         <forwardElastK>	1	</forwardElastK>
@@ -880,8 +880,8 @@
           <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	1.29038 0.439974 -0.0351031	</rayStart>
-          <rayEnd>	1.09038 0.439974 -0.0351031	</rayEnd>
+          <rayStart>	1.29038 0.432858 -0.00387596	</rayStart>
+          <rayEnd>	1.09038 0.432858 -0.00387596	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -892,6 +892,7 @@
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 0.997 0.000 0.749 -0.016 0.500 0.500 0.500 0.500 0.000 0.500 0.000 0.500 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
         <tiling>	0.79 0.415 0.000000 0.000000	</tiling>
       </camouflage>

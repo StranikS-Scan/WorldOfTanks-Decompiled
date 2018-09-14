@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/message.py
 """Basic message object for the email package object model."""
 __all__ = ['Message']

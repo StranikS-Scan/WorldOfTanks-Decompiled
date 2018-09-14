@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/cp720.py
 """Python Character Mapping Codec cp720 generated on Windows:
 Vista 6.0.6002 SP2 Multiprocessor Free with the command:

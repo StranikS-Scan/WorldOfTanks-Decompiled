@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/events.py
 from tutorial.data.has_id import HasTargetID
 

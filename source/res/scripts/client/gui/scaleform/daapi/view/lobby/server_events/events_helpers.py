@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/events_helpers.py
 from functools import partial
 import time
@@ -210,7 +211,7 @@ class _EventInfo(object):
         return i18n.makeString('#quests:details/conditions/label')
 
     def _getConditionsDescription(self):
-        return ''
+        pass
 
     def _getTopConditions(self, svrEvents):
         return []
@@ -236,7 +237,6 @@ class _EventInfo(object):
              'min': time.strftime('%M', gmtime),
              'days': str(gmtime.tm_mday)}
             return makeHtmlString('html_templates:lobby/quests', 'timerTillFinish', {'time': fmt})
-        return ''
 
     def _getActiveDateTimeString(self):
         i18nKey, args = None, {}
@@ -524,7 +524,6 @@ class _ActionInfo(_EventInfo):
         descr = self.event.getDescription()
         if descr:
             return formatters.formatBright(descr)
-        return ''
 
     def _getConditions(self, svrEvents):
         modifiers = defaultdict(list)
@@ -583,7 +582,6 @@ class _PotapovQuestInfo(_QuestInfo):
         def _packStatus(completed):
             if completed:
                 return 'done'
-            return 'notDone'
 
         return {'title': self.event.getUserName(),
          'questInfo': self.getInfo(svrEvents),

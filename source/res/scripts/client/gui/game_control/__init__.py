@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/__init__.py
 import constants
 from gui.game_control.BoostersController import BoostersController
@@ -84,7 +85,7 @@ def getBrowserCtrl():
 
 
 def getChinaCtrl():
-    raise constants.IS_CHINA or AssertionError('China controller only available if IS_CHINA = True')
+    assert constants.IS_CHINA, 'China controller only available if IS_CHINA = True'
     return _getController(CONTROLLER.CHINA)
 
 

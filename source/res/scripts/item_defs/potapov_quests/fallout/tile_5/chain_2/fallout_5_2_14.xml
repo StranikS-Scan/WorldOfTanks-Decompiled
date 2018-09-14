@@ -9,11 +9,11 @@
           <and>
             <results>
               <key>	innerModuleCritCount	</key>
-              <greaterOrEqual>	12	</greaterOrEqual>
+              <greaterOrEqual>	10	</greaterOrEqual>
             </results>
             <vehicleDamage>
               <distance>	0	</distance>
-              <greaterOrEqual>	12000	</greaterOrEqual>
+              <greaterOrEqual>	10000	</greaterOrEqual>
             </vehicleDamage>
           </and>
         </postBattle>
@@ -41,17 +41,17 @@
         <postBattle>
           <and>
             <results>
-              <key>	innerModuleCritCount	</key>
-              <greaterOrEqual>	12	</greaterOrEqual>
-            </results>
-            <vehicleDamage>
-              <distance>	0	</distance>
-              <greaterOrEqual>	12000	</greaterOrEqual>
-            </vehicleDamage>
-            <results>
               <key>	flagCapture	</key>
               <greaterOrEqual>	2	</greaterOrEqual>
             </results>
+            <results>
+              <key>	innerModuleCritCount	</key>
+              <greaterOrEqual>	10	</greaterOrEqual>
+            </results>
+            <vehicleDamage>
+              <distance>	0	</distance>
+              <greaterOrEqual>	10000	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>

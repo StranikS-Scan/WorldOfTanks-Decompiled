@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/stats.py
 from collections import namedtuple
 from constants import FINISH_REASON, ARENA_GUI_TYPE, ARENA_BONUS_TYPE

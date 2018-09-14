@@ -1,0 +1,959 @@
+<j03_ha_go.xml>
+  <crew>
+    <commander>	gunner
+			loader	</commander>
+    <driver></driver>
+    <radioman></radioman>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	15	</backward>
+  </speedLimits>
+  <repairCost>	3.00	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/japan/J03_Ha_Go/Ha_Go_chassis_01_AM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	12	</armor_1>
+      <armor_2>	9	</armor_2>
+      <armor_3>	10	</armor_3>
+      <armor_4>	10	</armor_4>
+      <armor_5>	6	</armor_5>
+      <armor_6>	9	</armor_6>
+      <armor_7>	9	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	12	</armor_9>
+      <armor_10>	9	</armor_10>
+      <armor_11>	9	</armor_11>
+      <armor_12>	6	</armor_12>
+      <armor_13>	10	</armor_13>
+      <armor_14>	12	</armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_9 armor_4	</primaryArmor>
+    <weight>	3188	</weight>
+    <maxHealth>	128	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.34 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.34 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.74	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.129174 0.576724 0.057301	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.34496 0.283552 1.11275	</rayStart>
+        <rayEnd>	0.34496 0.0903251 1.06115	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.2	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	0.918068 0.387153 0.142937	</rayStart>
+        <rayEnd>	0.750072 0.278964 0.134454	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.6	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_Ha_Go>
+      <userString>	#japan_vehicles:Chassis_Ha_Go	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	600	</price>
+      <unlocks>
+        <chassis>	Chassis_Ha_Go_2	  <cost>	110	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	2500	</weight>
+      <maxLoad>	7400	</maxLoad>
+      <terrainResistance>	0.9 1.1 2.1	</terrainResistance>
+      <brakeForce>	7400	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.34 0.25	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.5	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.308947	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.125164	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.279389	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.288725	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.308947	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.125164	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.279389	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.288725	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.968797 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.899746 1.12284	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.945040 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.282330 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.336560	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0820569	</minOffset>
+          <maxOffset>	0.0842451	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0820569	</minOffset>
+          <maxOffset>	0.0820569	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/japan/J03_Ha_Go/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/japan/J03_Ha_Go/track/segment.model	</segmentModelRight>
+        <left>	vehicles/japan/J03_Ha_Go/track/left.track	</left>
+        <right>	vehicles/japan/J03_Ha_Go/track/right.track	</right>
+        <segmentLength>	0.092	</segmentLength>
+        <segmentOffset>	0.036	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0142	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1124	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.86	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.86	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+      </trackNodes>
+    </Chassis_Ha_Go>
+    <Chassis_Ha_Go_2>
+      <userString>	#japan_vehicles:Chassis_Ha_Go_2	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	810	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	2500	</weight>
+      <maxLoad>	10100	</maxLoad>
+      <terrainResistance>	0.8 1 1.9	</terrainResistance>
+      <brakeForce>	8200	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	44	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.34 0.25	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.5	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.308947	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.125164	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.279389	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.288725	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.308947	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.125164	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.279389	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.288725	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.968797 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.899746 1.12284	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.949450 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.282330 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.336560	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0820569	</minOffset>
+          <maxOffset>	0.0842451	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0820569	</minOffset>
+          <maxOffset>	0.0820569	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/japan/J03_Ha_Go/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/japan/J03_Ha_Go/track/segment.model	</segmentModelRight>
+        <left>	vehicles/japan/J03_Ha_Go/track/left.track	</left>
+        <right>	vehicles/japan/J03_Ha_Go/track/right.track	</right>
+        <segmentLength>	0.092	</segmentLength>
+        <segmentOffset>	0.036	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0142	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1124	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.86	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.86	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.029	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+      </trackNodes>
+    </Chassis_Ha_Go_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Ha_Go>
+      <userString>	#japan_vehicles:Turret_1_Ha_Go	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	600	</price>
+      <unlocks>
+        <turret>	Turret_2_Ha_Go	  <cost>	115	</cost>
+        </turret>
+      </unlocks>
+      <armor>
+        <armor_1>	12	</armor_1>
+        <armor_2>	12	</armor_2>
+        <armor_3>	12	</armor_3>
+        <armor_4>	12	</armor_4>
+        <armor_5>	9	</armor_5>
+        <armor_6>	9	</armor_6>
+        <armor_7>	12	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	12	</armor_9>
+        <armor_10>	6	</armor_10>
+        <armor_11>	6	</armor_11>
+        <armor_12>	12	</armor_12>
+        <armor_13>	6	</armor_13>
+        <armor_14>	18	</armor_14>
+        <armor_15>	15	</armor_15>
+        <armor_16>	12	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	600	</weight>
+      <maxHealth>	32	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_Type_94>	shared	  <maxAmmo>	120	</maxAmmo>
+          <unlocks>
+            <gun>	_37mm_Type_98	  <cost>	105	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	12	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 15 1 15	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.535 0.37 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_Type_94>
+        <_37mm_Type_98>	shared	  <maxAmmo>	120	</maxAmmo>
+          <unlocks>
+            <gun>	_57mm_Gun_Type97	  <cost>	140	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	12	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 15 1 15	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.55 0.37 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_Type_98>
+        <_57mm_Gun_Type97>	shared	  <maxAmmo>	93	</maxAmmo>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	12	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 15 1 15	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <reloadTime>	3.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.625 0.43 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_57mm_Gun_Type97>
+      </guns>
+      <models>
+        <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.061182 0.245479 0.652885	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.625877 0.308675 0.0512373	</rayStart>
+          <rayEnd>	-0.236532 0.234436 -0.0025715	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	0.529579 0.278113 -0.0950924	</rayStart>
+          <rayEnd>	0.336838 0.239977 -0.0577271	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.36	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.555396 0.288997 0.354103	</rayStart>
+          <rayEnd>	0.189093 0.208128 0.215254	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.916 0.024 1.011 0.000 0.376 0.210 0.652 0.467 0.365 0.550 0.251 0.500 0.230 0.638 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.475 0.25 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_Ha_Go>
+    <Turret_2_Ha_Go>
+      <userString>	#japan_vehicles:Turret_2_Ha_Go	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	840	</price>
+      <unlocks>
+        <vehicle>	J04_Ke_Ni	  <cost>	1300	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <armor_1>	35	</armor_1>
+        <armor_2>	25	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	25	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	25	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	25	</armor_9>
+        <armor_10>	10	</armor_10>
+        <armor_11>	10	</armor_11>
+        <armor_12>	10	</armor_12>
+        <armor_13>	25	</armor_13>
+        <armor_14>	20	</armor_14>
+        <armor_15>	25	</armor_15>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1300	</weight>
+      <maxHealth>	47	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	1.01	</invisibilityFactor>
+      <guns>
+        <_37mm_Type_94>	shared	  <maxAmmo>	120	</maxAmmo>
+          <armor>
+            <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	12	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 15 1 15	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.61 0.43 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_Type_94>
+        <_37mm_Type_98>	shared	  <maxAmmo>	120	</maxAmmo>
+          <armor>
+            <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	12	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 15 1 15	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.625 0.43 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_Type_98>
+        <_57mm_Gun_Type97>	shared	  <maxAmmo>	93	</maxAmmo>
+          <armor>
+            <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	12	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 15 1 15	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <reloadTime>	3.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.67 0.43 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_57mm_Gun_Type97>
+      </guns>
+      <models>
+        <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.048904 0.225779 0.64212	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.638523 0.264095 0.174646	</rayStart>
+          <rayEnd>	-0.443953 0.227421 0.146408	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-0.549341 0.256216 -0.426132	</rayStart>
+          <rayEnd>	-0.358266 0.219938 -0.379503	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.42	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.743811 0.252175 0.238027	</rayStart>
+          <rayEnd>	0.556773 0.216589 0.176789	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.050 -0.011 1.000 0.000 0.348 0.264 0.669 0.628 0.603 0.232 0.132 0.500 0.098 0.527 0.066	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.55 0.37 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_Ha_Go>
+  </turrets0>
+  <engines>
+    <_A6120VDe>	shared	  <unlocks>
+        <engine>	_A6120VDe_S	  <cost>	230	</cost>
+        </engine>
+      </unlocks>
+    </_A6120VDe>
+    <_A6120VDe_S>	shared	</_A6120VDe_S>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <_Type94_Otsu>	shared	  <unlocks>
+        <radio>	_Type94_Hei	  <cost>	430	</cost>
+        </radio>
+      </unlocks>
+    </_Type94_Otsu>
+    <_Type94_Hei>	shared	  <unlocks>
+        <radio>	_Type96_Bo	  <cost>	1400	</cost>
+        </radio>
+      </unlocks>
+    </_Type94_Hei>
+    <_Type96_Bo>	shared	</_Type96_Bo>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	japanese_sun	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</j03_ha_go.xml>

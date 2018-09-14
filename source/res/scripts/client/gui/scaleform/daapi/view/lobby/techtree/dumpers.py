@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/dumpers.py
 from debug_utils import LOG_ERROR
 import gui
@@ -33,7 +34,7 @@ class _BaseDumper(object):
     def _getRentStatus(item):
         status = ''
         statusLevel = ''
-        if item.isRented:
+        if item.isRented and not item.isTelecom:
             if item.rentalIsOver:
                 if item.isPremiumIGR:
                     status = i18n.makeString('#menu:currentVehicleStatus/igrRentalIsOver')
@@ -153,7 +154,6 @@ class ResearchItemsObjDumper(_BaseDumper):
          'extraInfo': extraInfo,
          'status': status,
          'statusLevel': statusLevel,
-         'isRemovable': item.isRented,
          'isPremiumIGR': item.isPremiumIGR}
 
 

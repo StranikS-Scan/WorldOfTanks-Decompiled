@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/task_scheduler.py
 import BigWorld
 from helpers import time_utils

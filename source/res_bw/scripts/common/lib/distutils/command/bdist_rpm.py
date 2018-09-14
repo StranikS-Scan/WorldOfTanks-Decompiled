@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist_rpm.py
 """distutils.command.bdist_rpm
 
@@ -231,10 +232,10 @@ class bdist_rpm(Command):
                     if not line:
                         break
                     l = string.split(string.strip(line))
-                    if not len(l) == 2:
-                        raise AssertionError
-                        binary_rpms.append(l[1])
-                        source_rpm = source_rpm is None and l[0]
+                    assert len(l) == 2
+                    binary_rpms.append(l[1])
+                    if source_rpm is None:
+                        source_rpm = l[0]
 
                 status = out.close()
                 if status:
@@ -244,13 +245,13 @@ class bdist_rpm(Command):
 
             self.spawn(rpm_cmd)
             if not self.dry_run:
-                pyversion = self.distribution.has_ext_modules() and get_python_version()
-            else:
-                pyversion = 'any'
-            if not self.binary_only:
-                srpm = os.path.join(rpm_dir['SRPMS'], source_rpm)
-                if not os.path.exists(srpm):
-                    raise AssertionError
+                if self.distribution.has_ext_modules():
+                    pyversion = get_python_version()
+                else:
+                    pyversion = 'any'
+                if not self.binary_only:
+                    srpm = os.path.join(rpm_dir['SRPMS'], source_rpm)
+                    assert os.path.exists(srpm)
                     self.move_file(srpm, self.dist_dir)
                     filename = os.path.join(self.dist_dir, source_rpm)
                     self.distribution.dist_files.append(('bdist_rpm', pyversion, filename))

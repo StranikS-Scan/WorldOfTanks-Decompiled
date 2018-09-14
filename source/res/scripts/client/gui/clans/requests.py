@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/requests.py
 from functools import partial
 import types
@@ -48,10 +49,10 @@ class ClanRequester(ClientRequestsByIDProcessor):
         requestID = self._idsGenerator.next()
 
         def _callback(data, statusCode, responseCode):
-            if not requestID in self._requests:
-                raise AssertionError('There is no context has been registered for given request. Probably you call callback at the same frame as request')
-                ctx = self._requests[requestID]
-                response = responseCode == ResponseCodes.NO_ERRORS and self._makeResponse(responseCode, '', data, ctx, extraCode=statusCode)
+            assert requestID in self._requests, 'There is no context has been registered for given request. Probably you call callback at the same frame as request'
+            ctx = self._requests[requestID]
+            if responseCode == ResponseCodes.NO_ERRORS:
+                response = self._makeResponse(responseCode, '', data, ctx, extraCode=statusCode)
             else:
                 errStr = data.pop('description', '')
                 data = None

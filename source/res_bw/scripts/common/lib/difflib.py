@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/difflib.py
 """
 Module difflib -- helpers for computing deltas between objects.
@@ -45,7 +46,6 @@ Match = _namedtuple('Match', 'a b size')
 def _calculate_ratio(matches, length):
     if length:
         return 2.0 * matches / length
-    return 1.0
 
 
 class SequenceMatcher():
@@ -816,9 +816,9 @@ class Differ():
             yield '%s %s' % (tag, x[i])
 
     def _plain_replace(self, a, alo, ahi, b, blo, bhi):
-        if not (alo < ahi and blo < bhi):
-            raise AssertionError
-            first = bhi - blo < ahi - alo and self._dump('+', b, blo, bhi)
+        assert alo < ahi and blo < bhi
+        if bhi - blo < ahi - alo:
+            first = self._dump('+', b, blo, bhi)
             second = self._dump('-', a, alo, ahi)
         else:
             first = self._dump('-', a, alo, ahi)

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/interfaces.py
 from debug_utils import LOG_DEBUG
 from gui.prb_control.items import prb_items, unit_items, SelectResult
@@ -18,6 +19,9 @@ class IPrbEntry(object):
         pass
 
     def select(self, ctx, callback = None):
+        pass
+
+    def setAccountsToInvite(self, accountsToInvite):
         pass
 
 
@@ -69,16 +73,16 @@ class IClientFunctional(object):
         return None
 
     def getID(self):
-        return 0
+        pass
 
     def getCtrlType(self):
         return CTRL_ENTITY_TYPE.UNKNOWN
 
     def getEntityType(self):
-        return 0
+        pass
 
     def getEntityTypeName(self):
-        return 'N/A'
+        pass
 
     def hasEntity(self):
         return False
@@ -147,7 +151,7 @@ class IPrbFunctional(IClientFunctional, IListenersCollection):
         return prb_items.PlayerPrbInfo(-1L)
 
     def getPlayerTeam(self, pID = None):
-        return 0
+        pass
 
     def getTeamState(self, team = None):
         return prb_items.TeamStateInfo(0)
@@ -156,7 +160,7 @@ class IPrbFunctional(IClientFunctional, IListenersCollection):
         return prb_items.PlayersStateStats(0, False, 0, 0)
 
     def getRoles(self, pDatabaseID = None, clanDBID = None, team = None):
-        return 0
+        pass
 
     def getPermissions(self, pID = None):
         return IPrbPermissions()
@@ -295,7 +299,7 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
         pass
 
     def getUnitIdx(self):
-        return 0
+        pass
 
     def setLastError(self, errorCode):
         pass
@@ -343,10 +347,10 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
         return unit_items.UnitStats(0, 0, 0, 0, [], 0, 0)
 
     def getComment(self, unitIdx = None):
-        return ''
+        pass
 
     def getCensoredComment(self, unitIdx = None):
-        return ''
+        pass
 
     def getShowLeadershipNotification(self):
         return False

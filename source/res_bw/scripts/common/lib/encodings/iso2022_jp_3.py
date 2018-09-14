@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/iso2022_jp_3.py
 import _codecs_iso2022, codecs
 import _multibytecodec as mbc

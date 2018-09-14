@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/settings.py
 LIST_SCROLL_STEP_FACTOR = 10
 DEF_ICON_PATH = '../maps/icons/library/{0:>s}-1.png'

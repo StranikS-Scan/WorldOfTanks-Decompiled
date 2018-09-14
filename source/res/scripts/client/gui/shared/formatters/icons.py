@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/icons.py
 from gui import makeHtmlString
 from gui.shared.utils.functions import getAbsoluteUrl

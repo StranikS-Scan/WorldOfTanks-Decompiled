@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_get_none.py
 """
 TestCases for checking set_get_returns_none.

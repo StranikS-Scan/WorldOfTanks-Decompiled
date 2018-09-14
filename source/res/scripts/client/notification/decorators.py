@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/decorators.py
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -323,18 +324,18 @@ class WGNCPopUpDecorator(_NotificationDecorator):
         self._make(item)
 
     def _make(self, item = None, settings = None):
-        if not item:
-            raise AssertionError('Item is not defined')
-            self._itemName = item.getName()
-            if settings:
-                self._settings = settings
-            layout, states = self._makeButtonsLayout(item)
-            topic = i18n.encodeUtf8(item.getTopic())
-            if len(topic):
-                topic = g_settings.htmlTemplates.format('notificationsCenterTopic', ctx={'topic': topic})
-            body = i18n.encodeUtf8(item.getBody())
-            note = item.getNote()
-            len(note) and body += g_settings.htmlTemplates.format('notificationsCenterNote', ctx={'note': note})
+        assert item, 'Item is not defined'
+        self._itemName = item.getName()
+        if settings:
+            self._settings = settings
+        layout, states = self._makeButtonsLayout(item)
+        topic = i18n.encodeUtf8(item.getTopic())
+        if len(topic):
+            topic = g_settings.htmlTemplates.format('notificationsCenterTopic', ctx={'topic': topic})
+        body = i18n.encodeUtf8(item.getBody())
+        note = item.getNote()
+        if len(note):
+            body += g_settings.htmlTemplates.format('notificationsCenterNote', ctx={'note': note})
         bgSource, (_, bgHeight) = item.getLocalBG()
         message = g_settings.msgTemplates.format('wgncNotification_v2', ctx={'topic': topic,
          'body': body}, data={'icon': makePathToIcon(item.getLocalIcon()),
@@ -569,7 +570,7 @@ class ClanSingleAppDecorator(_ClanSingleDecorator):
         return self._entity.getApplicationID()
 
     def _getTemplateId(self):
-        return 'clanApp'
+        pass
 
     def _getDefState(self):
         return CLAN_APPLICATION_STATES.ACTIVE
@@ -603,11 +604,14 @@ class ClanSingleInviteDecorator(_ClanSingleDecorator):
     def getClanID(self):
         return self._entity.getClanId()
 
+    def getClanAbbrev(self):
+        return self._entity.getClanTag()
+
     def getType(self):
         return NOTIFICATION_TYPE.CLAN_INVITE
 
     def _getTemplateId(self):
-        return 'clanInvite'
+        pass
 
     def _getDefState(self):
         return CLAN_INVITE_STATES.ACTIVE
@@ -657,7 +661,7 @@ class ClanAppsDecorator(_ClanMultiDecorator):
         return NOTIFICATION_TYPE.CLAN_APPS
 
     def _getTemplateId(self):
-        return 'clanApps'
+        pass
 
     def _getFormatter(self):
         return ClanMultiNotificationsHtmlTextFormatter('appsTitle', 'multiAppsCommon', 'showClanSettingsAction')
@@ -669,7 +673,7 @@ class ClanInvitesDecorator(_ClanMultiDecorator):
         return NOTIFICATION_TYPE.CLAN_INVITES
 
     def _getTemplateId(self):
-        return 'clanPersonalInvites'
+        pass
 
     def _getFormatter(self):
         return ClanMultiNotificationsHtmlTextFormatter('invitesTitle', 'multiAppsCommon', 'showClanSettingsAction')

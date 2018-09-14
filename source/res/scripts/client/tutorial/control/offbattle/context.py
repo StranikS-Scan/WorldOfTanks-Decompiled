@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/offbattle/context.py
 from constants import FINISH_REASON, IS_TUTORIAL_ENABLED
 from tutorial import doc_loader

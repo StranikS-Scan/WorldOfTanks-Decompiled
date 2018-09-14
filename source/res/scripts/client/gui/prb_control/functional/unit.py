@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/unit.py
 import cgi
 import time
@@ -99,14 +100,14 @@ class UnitEntry(interfaces.IPrbEntry):
     def select(self, ctx, callback = None):
         LOG_ERROR('Routine "select" can not be invoked for UnitEntry')
 
+    def setAccountsToInvite(self, accountsToInvite):
+        self._accountsToInvite = accountsToInvite
+
     def _doCreate(self, unitMgr, ctx):
         unitMgr.create()
 
 
 class SquadEntry(UnitEntry):
-
-    def __init__(self, accountsToInvite = None):
-        super(SquadEntry, self).__init__(accountsToInvite=accountsToInvite)
 
     def makeDefCtx(self):
         return unit_ctx.SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=self._accountsToInvite)
@@ -393,7 +394,6 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
         _, unit = self.getUnit(unitIdx=unitIdx)
         if unit:
             return unit.getComment()
-        return ''
 
     def getCensoredComment(self, unitIdx = None):
         _, unit = self.getUnit(unitIdx=unitIdx)
@@ -403,7 +403,6 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
                 return passCensor(unit.getComment())
             else:
                 return unit.getComment()
-        return ''
 
     def getExtra(self, unitIdx = None):
         _, unit = self.getUnit(unitIdx=unitIdx)

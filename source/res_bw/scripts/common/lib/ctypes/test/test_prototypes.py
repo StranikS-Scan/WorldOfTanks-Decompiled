@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_prototypes.py
 from ctypes import *
 import unittest
@@ -10,7 +11,7 @@ def positive_address(a):
     import struct
     num_bits = struct.calcsize('P') * 8
     a += 1L << num_bits
-    raise a >= 0 or AssertionError
+    assert a >= 0
     return a
 
 

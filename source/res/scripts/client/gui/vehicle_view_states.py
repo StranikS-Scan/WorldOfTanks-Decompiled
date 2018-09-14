@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/vehicle_view_states.py
 from gui.prb_control.prb_helpers import prbDispatcherProperty
 
@@ -63,7 +64,7 @@ class SelectedViewState(IVehicleViewState):
         return None
 
     def getCustomizationTooltip(self):
-        return ''
+        pass
 
     def _resolveVehicleState(self, vehicle):
         self._isInHangar = vehicle.isInHangar()

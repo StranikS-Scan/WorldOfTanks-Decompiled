@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/message_formatters.py
 from gui.battle_control.dyn_squad_functional import DYN_SQUAD_TYPE
 from messenger import g_settings

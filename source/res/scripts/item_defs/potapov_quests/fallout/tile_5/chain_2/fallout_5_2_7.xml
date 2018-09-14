@@ -9,10 +9,10 @@
           <and>
             <results>
               <plus>
-                <key>	damageReceived	</key>
+                <key>	damageDealt	</key>
                 <key>	damageBlockedByArmor	</key>
               </plus>
-              <greaterOrEqual>	10000	</greaterOrEqual>
+              <greaterOrEqual>	8000	</greaterOrEqual>
             </results>
             <vehicleDamage>
               <attackReason>	0	</attackReason>
@@ -46,10 +46,10 @@
           <and>
             <results>
               <plus>
-                <key>	damageReceived	</key>
+                <key>	damageDealt	</key>
                 <key>	damageBlockedByArmor	</key>
               </plus>
-              <greaterOrEqual>	10000	</greaterOrEqual>
+              <greaterOrEqual>	8000	</greaterOrEqual>
             </results>
             <vehicleDamage>
               <attackReason>	0	</attackReason>

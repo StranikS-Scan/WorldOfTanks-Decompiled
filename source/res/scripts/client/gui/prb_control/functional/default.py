@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/default.py
 import BigWorld
 from PlayerEvents import g_playerEvents
@@ -326,7 +327,6 @@ class PrbDispatcher(_PrbFunctional):
     def getEntityType(self):
         if self._settings:
             return self._settings['type']
-        return 0
 
     def getEntityTypeName(self):
         return prb_getters.getPrebattleTypeName(self.getEntityType())

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/dynamic_squads.py
 from account_helpers.settings_core.settings_constants import GAME
 from helpers import aop

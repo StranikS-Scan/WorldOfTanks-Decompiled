@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/enumerations.py
 from debug_utils import deprecated, LOG_DEBUG
 import types, exceptions
@@ -60,7 +61,7 @@ class Enumeration:
 
         def appendEnumItem(idx, enumItem):
             if type(enumItem) == types.TupleType:
-                x, = enumItem[0:1]
+                x = enumItem[0:1]
             else:
                 x = enumItem
             if type(x) != types.StringType:

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/sandbox_queue.py
 import BigWorld
 from CurrentVehicle import g_currentVehicle
@@ -141,7 +142,7 @@ class SandboxQueueFunctional(prequeue.AccountQueueFunctional):
 
     def _makeQueueCtxByAction(self, action = None):
         invID = g_currentVehicle.invID
-        raise invID or AssertionError('Inventory ID of vehicle can not be zero')
+        assert invID, 'Inventory ID of vehicle can not be zero'
         return pre_queue_ctx.SandboxQueueCtx(invID, waitingID='prebattle/join')
 
     def _goToQueueUI(self):

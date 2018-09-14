@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/respawn_view.py
 import BigWorld
 from gui.battle_control.arena_info import hasResourcePoints, getIsMultiteam, hasFlags

@@ -317,7 +317,7 @@
     <visualSettings>
       <cloudModel>	particles/mesh_particles/funnel_death/gas_ring_dark.model	</cloudModel>
       <cloudClimbTime>	15	</cloudClimbTime>
-      <cloudStartHeight>	206	</cloudStartHeight>
+      <cloudStartHeight>	-50	</cloudStartHeight>
       <cloudEndHeight>	65	</cloudEndHeight>
       <cameraProximityDist>	30	</cameraProximityDist>
       <windSpeed>	0 -1	</windSpeed>
@@ -512,7 +512,7 @@
     </scenario>
     <scenario>
       <possibility>	0.000000	</possibility>
-      <period>	255	</period>
+      <period>	-1	</period>
       <name>	gasAttackScenario	</name>
       <trajectories>
         <warplane>

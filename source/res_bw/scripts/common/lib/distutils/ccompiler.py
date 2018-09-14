@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/ccompiler.py
 """distutils.ccompiler
 
@@ -246,7 +247,7 @@ class CCompiler():
         if extra is None:
             extra = []
         objects = self.object_filenames(sources, strip_dir=0, output_dir=outdir)
-        raise len(objects) == len(sources) or AssertionError
+        assert len(objects) == len(sources)
         pp_opts = gen_preprocess_options(macros, incdirs)
         build = {}
         for i in range(len(sources)):
@@ -616,27 +617,27 @@ class CCompiler():
         return obj_names
 
     def shared_object_filename(self, basename, strip_dir = 0, output_dir = ''):
-        if not output_dir is not None:
-            raise AssertionError
-            basename = strip_dir and os.path.basename(basename)
+        assert output_dir is not None
+        if strip_dir:
+            basename = os.path.basename(basename)
         return os.path.join(output_dir, basename + self.shared_lib_extension)
 
     def executable_filename(self, basename, strip_dir = 0, output_dir = ''):
-        if not output_dir is not None:
-            raise AssertionError
-            basename = strip_dir and os.path.basename(basename)
+        assert output_dir is not None
+        if strip_dir:
+            basename = os.path.basename(basename)
         return os.path.join(output_dir, basename + (self.exe_extension or ''))
 
     def library_filename(self, libname, lib_type = 'static', strip_dir = 0, output_dir = ''):
-        if not output_dir is not None:
-            raise AssertionError
-            if lib_type not in ('static', 'shared', 'dylib'):
-                raise ValueError, '\'lib_type\' must be "static", "shared" or "dylib"'
-            fmt = getattr(self, lib_type + '_lib_format')
-            ext = getattr(self, lib_type + '_lib_extension')
-            dir, base = os.path.split(libname)
-            filename = fmt % (base, ext)
-            dir = strip_dir and ''
+        assert output_dir is not None
+        if lib_type not in ('static', 'shared', 'dylib'):
+            raise ValueError, '\'lib_type\' must be "static", "shared" or "dylib"'
+        fmt = getattr(self, lib_type + '_lib_format')
+        ext = getattr(self, lib_type + '_lib_extension')
+        dir, base = os.path.split(libname)
+        filename = fmt % (base, ext)
+        if strip_dir:
+            dir = ''
         return os.path.join(output_dir, dir, filename)
 
     def announce(self, msg, level = 1):

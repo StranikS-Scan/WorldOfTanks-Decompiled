@@ -1,8 +1,10 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
+import BigWorld
 import constants
 from debug_utils import LOG_ERROR
 from gui.goodies.Booster import _BOOSTER_DESCRIPTION_LOCALE
-from gui.shared import event_dispatcher
+from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from helpers import i18n, int2roman
@@ -85,10 +87,10 @@ class PvEBattleAward(BattleAward):
         return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/pveBattle/description', battlesCount=self.battlesCount))
 
     def handleOkButton(self):
-        event_dispatcher.runTutorialChain('PvE_Chain')
+        shared_events.runTutorialChain('PvE_Chain')
 
     def handleCloseButton(self):
-        event_dispatcher.runTutorialChain('PvE_Chain')
+        shared_events.runTutorialChain('PvE_Chain')
 
 
 class PremiumDiscountAward(AwardAbstract):
@@ -165,7 +167,7 @@ class BoosterAward(AwardAbstract):
         return (False, True, True)
 
     def handleBodyButton(self):
-        event_dispatcher.showBoostersWindow()
+        shared_events.showBoostersWindow()
 
     def clear(self):
         self._booster = None
@@ -240,3 +242,65 @@ class FalloutAwardWindow(AwardAbstract):
             from gui.server_events.events_dispatcher import showEventsWindow
             showEventsWindow(eventType=constants.EVENT_TYPE.BATTLE_QUEST)
         return
+
+
+class TelecomAward(AwardAbstract):
+
+    def __init__(self, vehicleDesrs, hasCrew, hasBrotherhood):
+        super(TelecomAward, self).__init__()
+        self.__vehicleDesrs = vehicleDesrs
+        self.__hasCrew = hasCrew
+        self.__hasBrotherhood = hasBrotherhood
+
+    def __getVehicleDetails(self, vehicleCD):
+        details = {}
+        item = g_itemsCache.items.getItemByCD(vehicleCD)
+        details['type'] = item.typeUserName
+        details['nation'] = i18n.makeString(MENU.nations(item.nationName))
+        details['vehicle'] = item.userName
+        return details
+
+    def getWindowTitle(self):
+        return i18n.makeString(MENU.AWARDWINDOW_TITLE_SPECIALACHIEVEMENT)
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
+
+    def getAwardImage(self):
+        return RES_ICONS.MAPS_ICONS_AWARDS_USSR_R127_T44_100_P
+
+    def getHeader(self):
+        return text_styles.highTitle(MENU.AWARDWINDOW_TELECOMAWARD_HEADER)
+
+    def getDescription(self):
+        vehicleNames = []
+        for vehCD in self.__vehicleDesrs:
+            details = self.__getVehicleDetails(vehCD)
+            vehicleNames.append(i18n.makeString(MENU.AWARDWINDOW_TELECOMAWARD_VEHICLES, **details))
+
+        vehicles = '\n'.join(vehicleNames)
+        if self.__hasCrew:
+            if self.__hasBrotherhood:
+                descriptionKey = MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION_WITHBROTHERHOOD
+            else:
+                descriptionKey = MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION
+        else:
+            descriptionKey = MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION_WITHOUTCREW
+        description = i18n.makeString(descriptionKey, vehicles=vehicles)
+        return text_styles.main(description)
+
+    def getAdditionalText(self):
+        return text_styles.standard(MENU.AWARDWINDOW_TELECOMAWARD_SUBDESCRIPTION)
+
+    def getButtonStates(self):
+        return (False, True, True)
+
+    def getBodyButtonText(self):
+        return i18n.makeString(MENU.AWARDWINDOW_TELECOMAWARD_BUTTON_LABEL)
+
+    def handleBodyButton(self):
+        from CurrentVehicle import g_currentVehicle
+        item = g_itemsCache.items.getItemByCD(self.__vehicleDesrs[0])
+        if hasattr(item, 'invID'):
+            g_currentVehicle.selectVehicle(item.invID)
+        shared_events.showHangar()

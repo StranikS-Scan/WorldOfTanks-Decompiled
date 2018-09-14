@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
 from account_helpers.settings_core.SettingsCache import g_settingsCache
 import constants

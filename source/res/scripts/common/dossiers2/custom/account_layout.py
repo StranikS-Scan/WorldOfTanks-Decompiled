@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/account_layout.py
 from dossiers2.common.DossierBlockBuilders import *
 from dossiers2.custom.dependencies import ACHIEVEMENT15X15_DEPENDENCIES

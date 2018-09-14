@@ -40,32 +40,31 @@
         <resource_bonus>	100	</resource_bonus>
         <influence_points>	24	</influence_points>
         <maps>	01_karelia
-                    04_himmelsdorf
-                    05_prohorovka
-                    06_ensk
-                    07_lakeville
-                    08_ruinberg
-                    10_hills
-                    11_murovanka
-                    13_erlenberg
-                    14_siegfried_line
-                    18_cliff
-                    19_monastery
-                    22_slough
-                    28_desert
-                    29_el_hallouf
-                    31_airfield
-                    33_fjord
-                    34_redshire
-                    35_steppes
-                    36_fishing_bay
-                    37_caucasus
-                    38_mannerheim_line
-                    45_north_america
-                    47_canada_a
-                    63_tundra
-                    84_winter
-                    86_himmelsdorf_winter	</maps>
+					04_himmelsdorf
+					05_prohorovka
+					06_ensk
+					07_lakeville
+					08_ruinberg
+					10_hills
+					11_murovanka
+					13_erlenberg
+					14_siegfried_line
+					18_cliff
+					19_monastery
+					22_slough
+					28_desert
+					29_el_hallouf
+					31_airfield
+					34_redshire
+					35_steppes
+					36_fishing_bay
+					37_caucasus
+					38_mannerheim_line
+					45_north_america
+					47_canada_a
+					63_tundra
+					84_winter
+					86_himmelsdorf_winter	</maps>
       </MIDDLE>
       <CHAMPION>
         <is_consumables>	False	</is_consumables>
@@ -74,36 +73,35 @@
         <resource_bonus>	150	</resource_bonus>
         <influence_points>	64	</influence_points>
         <maps>	01_karelia
-                    02_malinovka
-                    04_himmelsdorf
-                    05_prohorovka
-                    06_ensk
-                    07_lakeville
-                    08_ruinberg
-                    10_hills
-                    11_murovanka
-                    13_erlenberg
-                    14_siegfried_line
-                    18_cliff
-                    19_monastery
-                    22_slough
-                    23_westfeld
-                    28_desert
-                    29_el_hallouf
-                    31_airfield
-                    33_fjord
-                    34_redshire
-                    35_steppes
-                    36_fishing_bay
-                    37_caucasus
-                    38_mannerheim_line
-                    44_north_america
-                    45_north_america
-                    47_canada_a
-                    83_kharkiv
-                    63_tundra
-                    84_winter
-                    86_himmelsdorf_winter	</maps>
+					02_malinovka
+					04_himmelsdorf
+					05_prohorovka
+					06_ensk
+					07_lakeville
+					08_ruinberg
+					10_hills
+					11_murovanka
+					13_erlenberg
+					14_siegfried_line
+					18_cliff
+					19_monastery
+					22_slough
+					23_westfeld
+					28_desert
+					29_el_hallouf
+					31_airfield
+					34_redshire
+					35_steppes
+					36_fishing_bay
+					37_caucasus
+					38_mannerheim_line
+					44_north_america
+					45_north_america
+					47_canada_a
+					83_kharkiv
+					63_tundra
+					84_winter
+					86_himmelsdorf_winter	</maps>
       </CHAMPION>
       <ABSOLUTE>
         <is_consumables>	True	</is_consumables>
@@ -112,36 +110,35 @@
         <resource_bonus>	400	</resource_bonus>
         <influence_points>	140	</influence_points>
         <maps>	01_karelia
-                    02_malinovka
-                    04_himmelsdorf
-                    05_prohorovka
-                    06_ensk
-                    07_lakeville
-                    08_ruinberg
-                    10_hills
-                    11_murovanka
-                    13_erlenberg
-                    14_siegfried_line
-                    18_cliff
-                    19_monastery
-                    22_slough
-                    23_westfeld
-                    28_desert
-                    29_el_hallouf
-                    31_airfield
-                    33_fjord
-                    34_redshire
-                    35_steppes
-                    36_fishing_bay
-                    37_caucasus
-                    38_mannerheim_line
-                    44_north_america
-                    45_north_america
-                    47_canada_a
-                    83_kharkiv
-                    63_tundra
-                    84_winter
-                    86_himmelsdorf_winter	</maps>
+					02_malinovka
+					04_himmelsdorf
+					05_prohorovka
+					06_ensk
+					07_lakeville
+					08_ruinberg
+					10_hills
+					11_murovanka
+					13_erlenberg
+					14_siegfried_line
+					18_cliff
+					19_monastery
+					22_slough
+					23_westfeld
+					28_desert
+					29_el_hallouf
+					31_airfield
+					34_redshire
+					35_steppes
+					36_fishing_bay
+					37_caucasus
+					38_mannerheim_line
+					44_north_america
+					45_north_america
+					47_canada_a
+					83_kharkiv
+					63_tundra
+					84_winter
+					86_himmelsdorf_winter	</maps>
       </ABSOLUTE>
     </sortie>
     <fort_battle>
@@ -168,7 +165,6 @@
 		28_desert
 		29_el_hallouf
 		31_airfield
-		33_fjord
 		34_redshire
 		35_steppes
 		36_fishing_bay
@@ -1156,52 +1152,52 @@
     </SPECIAL_MISSION>
     <EVACUATION>
       <levels>
-        <level>	1	  <effect_value>	254	</effect_value>
+        <level>	1	  <effect_value>	-2	</effect_value>
           <effect_time>	157680000	</effect_time>
           <production_cost>	25	</production_cost>
           <production_time>	3600	</production_time>
         </level>
-        <level>	2	  <effect_value>	252	</effect_value>
+        <level>	2	  <effect_value>	-4	</effect_value>
           <effect_time>	157680000	</effect_time>
           <production_cost>	45	</production_cost>
           <production_time>	3600	</production_time>
         </level>
-        <level>	3	  <effect_value>	250	</effect_value>
+        <level>	3	  <effect_value>	-6	</effect_value>
           <effect_time>	157680000	</effect_time>
           <production_cost>	65	</production_cost>
           <production_time>	3600	</production_time>
         </level>
-        <level>	4	  <effect_value>	248	</effect_value>
+        <level>	4	  <effect_value>	-8	</effect_value>
           <effect_time>	157680000	</effect_time>
           <production_cost>	80	</production_cost>
           <production_time>	7200	</production_time>
         </level>
-        <level>	5	  <effect_value>	246	</effect_value>
+        <level>	5	  <effect_value>	-10	</effect_value>
           <effect_time>	157680000	</effect_time>
           <production_cost>	125	</production_cost>
           <production_time>	10800	</production_time>
         </level>
-        <level>	6	  <effect_value>	236	</effect_value>
+        <level>	6	  <effect_value>	-20	</effect_value>
           <effect_time>	157680000	</effect_time>
           <production_cost>	200	</production_cost>
           <production_time>	14400	</production_time>
         </level>
-        <level>	7	  <effect_value>	231	</effect_value>
+        <level>	7	  <effect_value>	-25	</effect_value>
           <effect_time>	157680000	</effect_time>
           <production_cost>	315	</production_cost>
           <production_time>	18000	</production_time>
         </level>
-        <level>	8	  <effect_value>	226	</effect_value>
+        <level>	8	  <effect_value>	-30	</effect_value>
           <effect_time>	157680000	</effect_time>
           <production_cost>	500	</production_cost>
           <production_time>	21600	</production_time>
         </level>
-        <level>	9	  <effect_value>	221	</effect_value>
+        <level>	9	  <effect_value>	-35	</effect_value>
           <effect_time>	157680000	</effect_time>
           <production_cost>	750	</production_cost>
           <production_time>	25200	</production_time>
         </level>
-        <level>	10	  <effect_value>	206	</effect_value>
+        <level>	10	  <effect_value>	-50	</effect_value>
           <effect_time>	157680000	</effect_time>
           <production_cost>	1125	</production_cost>
           <production_time>	28800	</production_time>

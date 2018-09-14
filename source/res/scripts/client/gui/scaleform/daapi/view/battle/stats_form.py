@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/stats_form.py
 import BigWorld
 from constants import FLAG_ACTION, IGR_TYPE

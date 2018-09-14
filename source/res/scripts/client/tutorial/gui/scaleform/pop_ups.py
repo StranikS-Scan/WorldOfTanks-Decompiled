@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/pop_ups.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from tutorial.control import TutorialProxyHolder

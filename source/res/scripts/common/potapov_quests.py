@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/potapov_quests.py
 import time
 import ResMgr
@@ -385,7 +386,7 @@ class PQStorage(object):
             self.__compDescr = None
             self.__quests = storage
         else:
-            raise False or AssertionError
+            assert False
         return
 
     def keys(self):

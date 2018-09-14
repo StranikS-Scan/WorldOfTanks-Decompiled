@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_vos.py
 import operator
 from debug_utils import LOG_ERROR
@@ -232,7 +233,6 @@ class VehicleArenaInfoVO(object):
     def getSquadID(self):
         if self.isSquadMan():
             return self.prebattleID
-        return 0
 
     def isSquadMan(self, prebattleID = None, playerTeam = None):
         if playerTeam and self.team != playerTeam:

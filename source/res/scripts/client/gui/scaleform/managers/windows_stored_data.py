@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/windows_stored_data.py
 from collections import namedtuple, defaultdict
 import functools

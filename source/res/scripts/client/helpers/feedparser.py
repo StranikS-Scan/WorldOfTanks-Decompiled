@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/feedparser.py
 """Universal feed parser
 
@@ -922,7 +923,6 @@ class _FeedParserMixin():
             return
         if filter(lambda e: e not in entitydefs.keys(), re.findall('&(\\w+);', s)):
             return
-        return 1
 
     def _mapToStandardPrefix(self, name):
         colonpos = name.find(':')
@@ -945,7 +945,6 @@ class _FeedParserMixin():
             return 0
         if self.contentparams['type'].endswith(u'/xml'):
             return 0
-        return 1
 
     def _itsAnHrefDamnIt(self, attrsD):
         href = attrsD.get('url', attrsD.get('uri', attrsD.get('href', None)))

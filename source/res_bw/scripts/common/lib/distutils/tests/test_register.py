@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_register.py
 """Tests for distutils.command.register."""
 import os
@@ -46,7 +47,7 @@ class FakeOpener(object):
         return self
 
     def read(self):
-        return 'xxx'
+        pass
 
 
 class RegisterTestCase(PyPIRCCommandTestCase):
@@ -56,7 +57,7 @@ class RegisterTestCase(PyPIRCCommandTestCase):
         self._old_getpass = getpass.getpass
 
         def _getpass(prompt):
-            return 'password'
+            pass
 
         getpass.getpass = _getpass
         self.old_opener = urllib2.build_opener

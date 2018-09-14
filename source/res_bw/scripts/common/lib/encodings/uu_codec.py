@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/uu_codec.py
 """ Python 'uu_codec' Codec - UU content transfer encoding
 
@@ -20,7 +21,7 @@ def uu_encode(input, errors = 'strict', filename = '<data>', mode = 438):
         error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     from cStringIO import StringIO
     from binascii import b2a_uu
     infile = StringIO(str(input))
@@ -53,34 +54,34 @@ def uu_decode(input, errors = 'strict'):
         ignored.
     
     """
-    if not errors == 'strict':
-        raise AssertionError
-        from cStringIO import StringIO
-        from binascii import a2b_uu
-        infile = StringIO(str(input))
-        outfile = StringIO()
-        readline = infile.readline
-        write = outfile.write
-        while 1:
-            s = readline()
-            if not s:
-                raise ValueError, 'Missing "begin" line in input data'
-            if s[:5] == 'begin':
-                break
+    assert errors == 'strict'
+    from cStringIO import StringIO
+    from binascii import a2b_uu
+    infile = StringIO(str(input))
+    outfile = StringIO()
+    readline = infile.readline
+    write = outfile.write
+    while 1:
+        s = readline()
+        if not s:
+            raise ValueError, 'Missing "begin" line in input data'
+        if s[:5] == 'begin':
+            break
 
-        while 1:
-            s = readline()
-            if not s or s == 'end\n':
-                break
-            try:
-                data = a2b_uu(s)
-            except binascii.Error as v:
-                nbytes = ((ord(s[0]) - 32 & 63) * 4 + 5) / 3
-                data = a2b_uu(s[:nbytes])
+    while 1:
+        s = readline()
+        if not s or s == 'end\n':
+            break
+        try:
+            data = a2b_uu(s)
+        except binascii.Error as v:
+            nbytes = ((ord(s[0]) - 32 & 63) * 4 + 5) / 3
+            data = a2b_uu(s[:nbytes])
 
-            write(data)
+        write(data)
 
-        raise s or ValueError, 'Truncated input data'
+    if not s:
+        raise ValueError, 'Truncated input data'
     return (outfile.getvalue(), len(input))
 
 

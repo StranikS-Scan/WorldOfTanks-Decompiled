@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pgen2/driver.py
 """Parser driver.
 
@@ -34,34 +35,34 @@ class Driver(object):
         for quintuple in tokens:
             type, value, start, end, line_text = quintuple
             if start != (lineno, column):
-                if not (lineno, column) <= start:
-                    raise AssertionError(((lineno, column), start))
-                    s_lineno, s_column = start
-                    if lineno < s_lineno:
-                        prefix += '\n' * (s_lineno - lineno)
-                        lineno = s_lineno
-                        column = 0
-                    if column < s_column:
-                        prefix += line_text[column:s_column]
-                        column = s_column
-                if type in (tokenize.COMMENT, tokenize.NL):
-                    prefix += value
-                    lineno, column = end
-                    if value.endswith('\n'):
-                        lineno += 1
-                        column = 0
-                    continue
-                if type == token.OP:
-                    type = grammar.opmap[value]
-                if debug:
-                    self.logger.debug('%s %r (prefix=%r)', token.tok_name[type], value, prefix)
-                if p.addtoken(type, value, (prefix, start)):
-                    if debug:
-                        self.logger.debug('Stop.')
-                    break
-                prefix = ''
+                assert (lineno, column) <= start, ((lineno, column), start)
+                s_lineno, s_column = start
+                if lineno < s_lineno:
+                    prefix += '\n' * (s_lineno - lineno)
+                    lineno = s_lineno
+                    column = 0
+                if column < s_column:
+                    prefix += line_text[column:s_column]
+                    column = s_column
+            if type in (tokenize.COMMENT, tokenize.NL):
+                prefix += value
                 lineno, column = end
-                value.endswith('\n') and lineno += 1
+                if value.endswith('\n'):
+                    lineno += 1
+                    column = 0
+                continue
+            if type == token.OP:
+                type = grammar.opmap[value]
+            if debug:
+                self.logger.debug('%s %r (prefix=%r)', token.tok_name[type], value, prefix)
+            if p.addtoken(type, value, (prefix, start)):
+                if debug:
+                    self.logger.debug('Stop.')
+                break
+            prefix = ''
+            lineno, column = end
+            if value.endswith('\n'):
+                lineno += 1
                 column = 0
         else:
             raise parse.ParseError('incomplete input', type, value, (prefix, start))

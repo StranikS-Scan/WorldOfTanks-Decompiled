@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/tasks.py
 from collections import defaultdict
 import Event
@@ -130,9 +131,9 @@ class SeqTaskQueue(object):
         self.__wait = []
         if len(self.__queue):
             for index, task in enumerate(self.__queue):
-                if not isinstance(task, SeqTask):
-                    raise AssertionError('Task must be SeqTask')
-                    task.isRequired() and self.__wait.append(index)
+                assert isinstance(task, SeqTask), 'Task must be SeqTask'
+                if task.isRequired():
+                    self.__wait.append(index)
                 else:
                     self.__others.append(index)
 
@@ -160,7 +161,7 @@ class SeqTaskQueue(object):
             self.onInited()
 
     def addMultiRq(self, task):
-        raise isinstance(task, SeqTask) or AssertionError('Task must be SeqTask')
+        assert isinstance(task, SeqTask), 'Task must be SeqTask'
         self.__multi.append(task)
         task.run()
 
@@ -215,7 +216,7 @@ class ContactTask(IQTask):
         return self._jid
 
     def getContext(self):
-        return -1
+        pass
 
     def clone(self):
         return []
@@ -279,8 +280,8 @@ class ContactTaskQueue(object):
         if tasks:
             return False
         for task in args:
-            raise jid == task.getJID() or AssertionError
-            raise isinstance(task, ContactTask) or AssertionError('Task must be ContactTask')
+            assert jid == task.getJID()
+            assert isinstance(task, ContactTask), 'Task must be ContactTask'
             tasks.append(task)
 
         return True

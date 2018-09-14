@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tutorial.py
 from gui.Scaleform.locale.RES_COMMON import RES_COMMON
 from gui.shared.tooltips.common import BlocksTooltipData

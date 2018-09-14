@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/json/tests/test_separators.py
 import textwrap
 from json.tests import PyTest, CTest

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/quopri_codec.py
 """Codec for quoted-printable encoding.
 
@@ -17,7 +18,7 @@ def quopri_encode(input, errors = 'strict'):
     error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     f = StringIO(str(input))
     g = StringIO()
     quopri.encode(f, g, 1)
@@ -33,7 +34,7 @@ def quopri_decode(input, errors = 'strict'):
     error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     f = StringIO(str(input))
     g = StringIO()
     quopri.decode(f, g)

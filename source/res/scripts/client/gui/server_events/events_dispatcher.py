@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_dispatcher.py
 import constants
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE

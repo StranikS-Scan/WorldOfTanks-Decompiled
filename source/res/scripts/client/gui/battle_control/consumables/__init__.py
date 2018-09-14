@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/consumables/__init__.py
 from gui.battle_control.consumables.OptionalDevicesController import OptionalDevicesController
 from gui.battle_control.consumables import ammo_ctrl

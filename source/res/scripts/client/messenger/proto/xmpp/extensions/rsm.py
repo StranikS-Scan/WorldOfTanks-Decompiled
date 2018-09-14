@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/rsm.py
 from shared_utils import findFirst
 from messenger.proto.xmpp.extensions import PyExtension, SimpleExtension
@@ -46,8 +47,8 @@ class RqResultSet(ResultSet):
         super(RqResultSet, self).__init__()
         if max:
             self.setChild(SimpleExtension('max', max))
-            if not (not after or not before):
-                raise AssertionError('Can be defined after or before only')
+            if not not after:
+                assert not before, 'Can be defined after or before only'
                 if after:
                     self.setChild(SimpleExtension('after', after))
                 before and self.setChild(SimpleExtension('before', before))

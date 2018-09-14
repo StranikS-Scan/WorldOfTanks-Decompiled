@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/__init__.py
 from PyGUIBase import PyGUIBase
 from Button import Button, ButtonVisualState

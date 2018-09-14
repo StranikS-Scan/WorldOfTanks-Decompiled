@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/config.py
 from constants import IS_DEVELOPMENT
 COMMON_PACKAGES = ('gui.Scaleform.daapi.view.common',)

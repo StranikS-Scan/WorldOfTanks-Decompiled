@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/m_constants.py
 from collections import namedtuple
 from helpers import i18n

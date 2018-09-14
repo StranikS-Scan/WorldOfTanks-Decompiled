@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/clan_helpers.py
 from datetime import datetime
 from adisp import async, process
@@ -154,6 +155,7 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
         self.__cacheMapping = {}
         self.__accountNameMapping = {}
         self.__senderNameMapping = {}
+        self.__changerNameMapping = {}
         self.__lastStatus = True
         self.__lastResult = []
         self.__totalCount = None
@@ -259,6 +261,12 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
                     invite.setSenderName(name)
                     updatedInvites.add(inviteID)
 
+            for inviteID in self.__changerNameMapping.get(userID, tuple()):
+                invite = self.getInviteByDbID(inviteID)
+                if invite is not None:
+                    invite.setChangerName(name)
+                    updatedInvites.add(inviteID)
+
         if len(updatedInvites):
             self.onListItemsUpdated(self, [ self.__invitesCache[self.__cacheMapping[invID]] for invID in updatedInvites ])
         return
@@ -313,6 +321,10 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
                 temp = self.__accountNameMapping.get(item.getAccountDbID(), set())
                 temp.add(item.getDbID())
                 self.__accountNameMapping[item.getAccountDbID()] = temp
+                usrIDs.add(item.getChangedBy())
+                temp = self.__changerNameMapping.get(item.getChangedBy(), set())
+                temp.add(item.getDbID())
+                self.__changerNameMapping[item.getChangedBy()] = temp
                 usrIDs.add(item.getSenderDbID())
                 temp = self.__senderNameMapping.get(item.getSenderDbID(), set())
                 temp.add(item.getDbID())
@@ -320,7 +332,7 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
 
             self.__lastStatus, users = yield self._requester.requestUsers(usrIDs)
             if self.__lastStatus:
-                self.__invitesCache = [ ClanInviteWrapper(invite, users.get(invite.getAccountDbID(), items.AccountClanRatingsData(invite.getAccountDbID())), self.getUserName(invite.getAccountDbID()), users.get(invite.getSenderDbID(), items.AccountClanRatingsData(invite.getSenderDbID())), self.getUserName(invite.getSenderDbID())) for invite in invites ]
+                self.__invitesCache = [ ClanInviteWrapper(invite, users.get(invite.getAccountDbID(), items.AccountClanRatingsData(invite.getAccountDbID())), self.getUserName(invite.getAccountDbID()), users.get(invite.getChangedBy(), items.AccountClanRatingsData(invite.getChangedBy())), senderName=self.getUserName(invite.getSenderDbID()), changerName=self.getUserName(invite.getChangedBy())) for invite in invites ]
             else:
                 self.__invitesCache = []
                 self.revertOffset()
@@ -357,7 +369,7 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
 
     def __updateInvite(self, inviteWrapper, status, sender, senderName):
         utc = datetime.utcnow()
-        invite = inviteWrapper.invite.update(status=status, sender_id=sender.getAccountDbID(), created_at=utc, updated_at=utc)
+        invite = inviteWrapper.invite.update(status=status, status_changer_id=sender.getAccountDbID(), updated_at=utc)
         inviteWrapper.setInvite(invite)
         inviteWrapper.setSender(sender)
         inviteWrapper.setSenderName(senderName)
@@ -532,12 +544,19 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
                 for item in clanInfo.itervalues():
                     self.getUserName(item.getLeaderDbID())
 
-                for item in invites:
-                    temp = self.__senderNameMapping.get(item.getSenderDbID(), set())
-                    temp.add(item.getDbID())
-                    self.__senderNameMapping[item.getSenderDbID()] = temp
+                def getSenderID(inviteItem):
+                    changerDbID = inviteItem.getChangerDbID()
+                    if changerDbID == 0:
+                        return inviteItem.getSenderDbID()
+                    return changerDbID
 
-                self.__invitesCache = [ ClanPersonalInviteWrapper(invite, clanInfo.get(invite.getClanDbID(), items.ClanExtInfoData()), clanRatings.get(invite.getClanDbID(), items.ClanRatingsData()), self.getUserName(invite.getSenderDbID())) for invite in invites ]
+                for item in invites:
+                    senderID = getSenderID(item)
+                    temp = self.__senderNameMapping.get(senderID, set())
+                    temp.add(item.getDbID())
+                    self.__senderNameMapping[senderID] = temp
+
+                self.__invitesCache = [ ClanPersonalInviteWrapper(invite, clanInfo.get(invite.getClanDbID(), items.ClanExtInfoData()), clanRatings.get(invite.getClanDbID(), items.ClanRatingsData()), self.getUserName(getSenderID(invite))) for invite in invites ]
             else:
                 self.__invitesCache = []
         else:

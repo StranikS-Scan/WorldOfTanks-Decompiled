@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/elements/installed.py
 import time
 from helpers import time_utils

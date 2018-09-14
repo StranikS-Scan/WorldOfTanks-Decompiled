@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/awards/event_dispatcher.py
 import gui.awards.special_achievement_awards as specialAwards
 from gui.shared.event_dispatcher import showAwardWindow, showPremiumCongratulationWindow
@@ -28,3 +29,7 @@ def showBoosterAward(booster):
 
 def showFalloutAward(lvls, isRequiredVehicle = False):
     showAwardWindow(specialAwards.FalloutAwardWindow(lvls, isRequiredVehicle))
+
+
+def showTelecomAward(vehicleDesrs, hasCrew, hasBrotherhood):
+    showAwardWindow(specialAwards.TelecomAward(vehicleDesrs, hasCrew, hasBrotherhood))

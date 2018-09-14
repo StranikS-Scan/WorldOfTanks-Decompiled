@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/shared_handlers.py
 from messenger.proto.xmpp.extensions import PyHandler
 

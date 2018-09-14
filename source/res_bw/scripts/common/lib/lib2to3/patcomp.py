@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/patcomp.py
 """Pattern compiler.
 
@@ -77,48 +78,47 @@ class PatternCompiler(object):
             p = pytree.NegatedPattern(pattern)
             return p.optimize()
         else:
-            if not node.type == self.syms.Unit:
-                raise AssertionError
-                name = None
-                nodes = node.children
-                if len(nodes) >= 3 and nodes[1].type == token.EQUAL:
-                    name = nodes[0].value
-                    nodes = nodes[2:]
-                repeat = None
-                repeat = len(nodes) >= 2 and nodes[-1].type == self.syms.Repeater and nodes[-1]
+            assert node.type == self.syms.Unit
+            name = None
+            nodes = node.children
+            if len(nodes) >= 3 and nodes[1].type == token.EQUAL:
+                name = nodes[0].value
+                nodes = nodes[2:]
+            repeat = None
+            if len(nodes) >= 2 and nodes[-1].type == self.syms.Repeater:
+                repeat = nodes[-1]
                 nodes = nodes[:-1]
             pattern = self.compile_basic(nodes, repeat)
             if repeat is not None:
-                if not repeat.type == self.syms.Repeater:
-                    raise AssertionError
-                    children = repeat.children
-                    child = children[0]
-                    if child.type == token.STAR:
-                        min = 0
-                        max = pytree.HUGE
-                    elif child.type == token.PLUS:
-                        min = 1
-                        max = pytree.HUGE
-                    else:
-                        raise child.type == token.LBRACE and (children[-1].type == token.RBRACE or AssertionError)
-                        if not len(children) in (3, 5):
-                            raise AssertionError
-                            min = max = self.get_int(children[1])
-                            if len(children) == 5:
-                                max = self.get_int(children[3])
-                        else:
-                            raise False or AssertionError
-                    if min != 1 or max != 1:
-                        pattern = pattern.optimize()
-                        pattern = pytree.WildcardPattern([[pattern]], min=min, max=max)
-                pattern.name = name is not None and name
+                assert repeat.type == self.syms.Repeater
+                children = repeat.children
+                child = children[0]
+                if child.type == token.STAR:
+                    min = 0
+                    max = pytree.HUGE
+                elif child.type == token.PLUS:
+                    min = 1
+                    max = pytree.HUGE
+                elif child.type == token.LBRACE:
+                    assert children[-1].type == token.RBRACE
+                    assert len(children) in (3, 5)
+                    min = max = self.get_int(children[1])
+                    if len(children) == 5:
+                        max = self.get_int(children[3])
+                else:
+                    assert False
+                if min != 1 or max != 1:
+                    pattern = pattern.optimize()
+                    pattern = pytree.WildcardPattern([[pattern]], min=min, max=max)
+            if name is not None:
+                pattern.name = name
             return pattern.optimize()
 
     def compile_basic(self, nodes, repeat = None):
-        if not len(nodes) >= 1:
-            raise AssertionError
-            node = nodes[0]
-            value = node.type == token.STRING and unicode(literals.evalString(node.value))
+        assert len(nodes) >= 1
+        node = nodes[0]
+        if node.type == token.STRING:
+            value = unicode(literals.evalString(node.value))
             return pytree.LeafPattern(_type_of_literal(value), value)
         else:
             if node.type == token.NAME:
@@ -144,15 +144,15 @@ class PatternCompiler(object):
             else:
                 if node.value == '(':
                     return self.compile_node(nodes[1])
-                if not (node.value == '[' and repeat is None):
-                    raise AssertionError
+                if node.value == '[':
+                    assert repeat is None
                     subpattern = self.compile_node(nodes[1])
                     return pytree.WildcardPattern([[subpattern]], min=0, max=1)
-            raise False or AssertionError(node)
+            assert False, node
             return
 
     def get_int(self, node):
-        raise node.type == token.NUMBER or AssertionError
+        assert node.type == token.NUMBER
         return int(node.value)
 
 

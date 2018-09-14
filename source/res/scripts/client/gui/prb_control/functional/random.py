@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/random.py
 import BigWorld
 import ArenaType
@@ -69,9 +70,9 @@ class RandomQueueFunctional(prequeue.AccountQueueFunctional):
 
     def _makeQueueCtxByAction(self, action = None):
         invID = g_currentVehicle.invID
-        if not invID:
-            raise AssertionError('Inventory ID of vehicle can not be zero')
-            arenaTypeID = action is not None and action.mapID
+        assert invID, 'Inventory ID of vehicle can not be zero'
+        if action is not None:
+            arenaTypeID = action.mapID
         else:
             arenaTypeID = 0
         return pre_queue_ctx.RandomQueueCtx(invID, arenaTypeID=arenaTypeID, gamePlayMask=gameplay_ctx.getMask(), waitingID='prebattle/join')

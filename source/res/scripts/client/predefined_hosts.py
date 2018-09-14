@@ -1,7 +1,6 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/predefined_hosts.py
 import operator
-import cPickle as pickle
-import base64
 import random
 import time
 import threading
@@ -10,7 +9,6 @@ from urllib import urlencode
 from collections import namedtuple
 import BigWorld
 import ResMgr
-import Settings
 import constants
 from Event import Event, EventManager
 from shared_utils import BitmaskHelper
@@ -19,7 +17,6 @@ from helpers import i18n
 AUTO_LOGIN_QUERY_ENABLED = not (constants.IS_DEVELOPMENT or constants.IS_CHINA)
 AUTO_LOGIN_QUERY_URL = 'auto.login.app:0000'
 AUTO_LOGIN_QUERY_TIMEOUT = 5
-STORED_AS_RECOMMEND_DELTA = 15 * 60
 CSIS_REQUEST_TIMEOUT = 10
 CSIS_REQUEST_TIMER = 10 * 60
 
@@ -254,21 +251,13 @@ class _PreDefinedHostList(object):
         elif len(self._hosts) < 2:
             callback(self.first())
             return
+        elif len(self.__recommended):
+            LOG_DEBUG('Gets recommended from previous query', self.__recommended)
+            host = self.__choiceFromRecommended()
+            LOG_DEBUG('Recommended host', host)
+            callback(host)
+            return
         else:
-            peripheryID, expired = self.readPeripheryTL()
-            if peripheryID > 0 and expired > 0:
-                if expired > time.time():
-                    host = self.periphery(peripheryID, False)
-                    if host is not None:
-                        LOG_DEBUG('Recommended host taken from cache', host)
-                        callback(host)
-                        return
-            if len(self.__recommended):
-                LOG_DEBUG('Gets recommended from previous query', self.__recommended)
-                host = self.__choiceFromRecommended()
-                LOG_DEBUG('Recommended host', host)
-                callback(host)
-                return
             self.__autoLoginQueryState = AUTO_LOGIN_QUERY_STATE.START
             self.__queryCallback = callback
             self.__ping()
@@ -279,54 +268,6 @@ class _PreDefinedHostList(object):
     def resetQueryResult(self):
         self.__recommended = []
         self.__pingResult.clear()
-
-    def savePeripheryTL(self, peripheryID, delta = STORED_AS_RECOMMEND_DELTA):
-        if not AUTO_LOGIN_QUERY_ENABLED or not peripheryID:
-            return
-        else:
-            try:
-                loginSec = Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO]
-                if loginSec is not None:
-                    value = base64.b64encode(pickle.dumps((peripheryID, time.time() + delta)))
-                    loginSec.writeString('peripheryLifeTime', value)
-                    Settings.g_instance.save()
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
-
-            return
-
-    def readPeripheryTL(self):
-        if not AUTO_LOGIN_QUERY_ENABLED:
-            return (0, 0)
-        else:
-            result = (0, 0)
-            try:
-                loginSec = Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO]
-                if loginSec is not None:
-                    value = loginSec.readString('peripheryLifeTime')
-                    if len(value):
-                        value = pickle.loads(base64.b64decode(value))
-                        if len(value) > 1:
-                            result = value
-            except Exception:
-                result = ('', 0)
-                LOG_CURRENT_EXCEPTION()
-
-            return result
-
-    def clearPeripheryTL(self):
-        if not AUTO_LOGIN_QUERY_ENABLED:
-            return
-        else:
-            try:
-                loginSec = Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO]
-                if loginSec is not None:
-                    loginSec.writeString('peripheryLifeTime', '')
-                    Settings.g_instance.save()
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
-
-            return
 
     def readScriptConfig(self, dataSection):
         if self._isDataLoaded or dataSection is None:

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/pycodegen.py
 import imp
 import os
@@ -166,7 +167,6 @@ def is_constant_false(node):
     if isinstance(node, ast.Const):
         if not node.value:
             return 1
-    return 0
 
 
 class CodeGenerator():
@@ -217,10 +217,10 @@ class CodeGenerator():
     def checkClass(self):
         """Verify that class is constructed correctly"""
         try:
-            raise hasattr(self, 'graph') or AssertionError
-            raise getattr(self, 'NameFinder') or AssertionError
-            raise getattr(self, 'FunctionGen') or AssertionError
-            raise getattr(self, 'ClassGen') or AssertionError
+            assert hasattr(self, 'graph')
+            assert getattr(self, 'NameFinder')
+            assert getattr(self, 'FunctionGen')
+            assert getattr(self, 'ClassGen')
         except AssertionError as msg:
             intro = 'Bad class construction for %s' % self.__class__.__name__
             raise AssertionError, intro
@@ -879,11 +879,11 @@ class CodeGenerator():
             self.emit('LOAD_CONST', fromlist)
         self.emit('IMPORT_NAME', node.modname)
         for name, alias in node.names:
-            if VERSION > 1 and name == '*':
-                self.namespace = 0
-                self.emit('IMPORT_STAR')
-                if not len(node.names) == 1:
-                    raise AssertionError
+            if VERSION > 1:
+                if name == '*':
+                    self.namespace = 0
+                    self.emit('IMPORT_STAR')
+                    assert len(node.names) == 1
                     return
                 self.emit('IMPORT_FROM', name)
                 self._resolveDots(name)

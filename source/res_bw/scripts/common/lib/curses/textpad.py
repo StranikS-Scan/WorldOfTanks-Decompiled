@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/curses/textpad.py
 """Simple textbox editing widget with Emacs-like keybindings."""
 import curses
@@ -148,7 +149,6 @@ class Textbox:
                     self.win.move(y - 1, x)
                     if x > self._end_of_line(y - 1):
                         self.win.move(y - 1, self._end_of_line(y - 1))
-        return 1
 
     def gather(self):
         """Collect and return the contents of the window."""

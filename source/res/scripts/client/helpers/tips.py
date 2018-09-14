@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/tips.py
 import re
 import sys
@@ -41,7 +42,7 @@ class _TipsCriteria(object):
         return self._classTag
 
     def setClassTag(self, tag):
-        raise tag in VEHICLE_CLASS_TAGS or AssertionError
+        assert tag in VEHICLE_CLASS_TAGS
         self._classTag = tag
         return self
 
@@ -49,7 +50,7 @@ class _TipsCriteria(object):
         return self._nation
 
     def setNation(self, nation):
-        raise nation in nations.NAMES or AssertionError
+        assert nation in nations.NAMES
         self._nation = nation
         return self
 
@@ -57,7 +58,7 @@ class _TipsCriteria(object):
         return self._level
 
     def setLevel(self, level):
-        raise 0 < level < 11 or AssertionError
+        assert 0 < level < 11
         self._level = level
         return self
 

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/btm_utils.py
 """Utility functions used by the btm_matcher module"""
 from . import pytree

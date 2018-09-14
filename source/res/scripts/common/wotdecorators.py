@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/wotdecorators.py
 from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, CRITICAL_ERROR
 from time_tracking import LOG_TIME_WARNING

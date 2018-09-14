@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/__init__.py
 import BigWorld
 from gui.shared.formatters import icons
@@ -9,7 +10,6 @@ __all__ = ('icons', 'text_styles', 'time_formatters')
 def getGlobalRatingFmt(globalRating):
     if globalRating >= 0:
         return BigWorld.wg_getIntegralFormat(globalRating)
-    return '--'
 
 
 def formatPrice(price, reverse = False):

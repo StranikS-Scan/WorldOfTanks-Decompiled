@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/restrictions.py
 import operator
 from itertools import chain
@@ -174,7 +175,7 @@ class DefaultAccountClubLimits(_AccountClubLimits):
         super(DefaultAccountClubLimits, self).__init__([])
 
     def __repr__(self):
-        return 'DefaultAccountClubLimits'
+        pass
 
 
 class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
@@ -364,4 +365,4 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
         return self._isAccountRequestValid(requestTypeID)
 
     def __repr__(self):
-        return 'AccountClubLimits'
+        pass

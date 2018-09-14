@@ -662,10 +662,10 @@
           </armor>
           <shotDispersionRadius>	0.48	</shotDispersionRadius>
           <reloadTime>	15	</reloadTime>
-          <aimingTime>	3.4	</aimingTime>
+          <aimingTime>	3.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
-            <maxPitch>	0.0 3.0 1.0 3.0	</maxPitch>
+            <maxPitch>	0 5 0.394671 5 0.430556 3 0.438889 2.5 0.561111 2.5 0.569444 3 0.605329 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -717,7 +717,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <models>
             <undamaged>	vehicles/chinese/Ch05_T34_2/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch05_T34_2/crash/lod0/Gun_07.model	</destroyed>

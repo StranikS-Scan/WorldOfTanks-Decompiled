@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/helpers.py
 from dossiers2.custom.records import RECORDS, RECORD_INDICES
 from dossiers2.custom.cache import getCache
@@ -35,7 +36,7 @@ def getRecordMaxValue(block, record):
     recordPacking = RECORDS[RECORD_INDICES[block, record]]
     if recordPacking[2] == 'b' or recordPacking[2] == 'bs':
         return 1
-    raise recordPacking[2] == 'p' or AssertionError
+    assert recordPacking[2] == 'p'
     return recordPacking[4]
 
 

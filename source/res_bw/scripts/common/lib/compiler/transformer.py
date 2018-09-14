@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/transformer.py
 """Parse tree transformation module.
 
@@ -167,25 +168,25 @@ class Transformer():
 
     def decorator_name(self, nodelist):
         listlen = len(nodelist)
-        raise listlen >= 1 and listlen % 2 == 1 or AssertionError
+        assert listlen >= 1 and listlen % 2 == 1
         item = self.atom_name(nodelist)
         i = 1
-        while not (i < listlen and nodelist[i][0] == token.DOT):
-            raise AssertionError
-            raise nodelist[i + 1][0] == token.NAME or AssertionError
+        while i < listlen:
+            assert nodelist[i][0] == token.DOT
+            assert nodelist[i + 1][0] == token.NAME
             item = Getattr(item, nodelist[i + 1][1])
             i += 2
 
         return item
 
     def decorator(self, nodelist):
-        if not len(nodelist) in (3, 5, 6):
-            raise AssertionError
-            raise nodelist[0][0] == token.AT or AssertionError
-            raise nodelist[-1][0] == token.NEWLINE or AssertionError
-            raise nodelist[1][0] == symbol.dotted_name or AssertionError
-            funcname = self.decorator_name(nodelist[1][1:])
-            raise len(nodelist) > 3 and (nodelist[2][0] == token.LPAR or AssertionError)
+        assert len(nodelist) in (3, 5, 6)
+        assert nodelist[0][0] == token.AT
+        assert nodelist[-1][0] == token.NEWLINE
+        assert nodelist[1][0] == symbol.dotted_name
+        funcname = self.decorator_name(nodelist[1][1:])
+        if len(nodelist) > 3:
+            assert nodelist[2][0] == token.LPAR
             expr = self.com_call_function(funcname, nodelist[3])
         else:
             expr = funcname
@@ -194,18 +195,18 @@ class Transformer():
     def decorators(self, nodelist):
         items = []
         for dec_nodelist in nodelist:
-            raise dec_nodelist[0] == symbol.decorator or AssertionError
+            assert dec_nodelist[0] == symbol.decorator
             items.append(self.decorator(dec_nodelist[1:]))
 
         return Decorators(items)
 
     def decorated(self, nodelist):
-        if not nodelist[0][0] == symbol.decorators:
-            raise AssertionError
-            if nodelist[1][0] == symbol.funcdef:
-                n = [nodelist[0]] + list(nodelist[1][1:])
-                return self.funcdef(n)
-            decorators = nodelist[1][0] == symbol.classdef and self.decorators(nodelist[0][1:])
+        assert nodelist[0][0] == symbol.decorators
+        if nodelist[1][0] == symbol.funcdef:
+            n = [nodelist[0]] + list(nodelist[1][1:])
+            return self.funcdef(n)
+        if nodelist[1][0] == symbol.classdef:
+            decorators = self.decorators(nodelist[0][1:])
             cls = self.classdef(nodelist[1][1:])
             cls.decorators = decorators
             return cls
@@ -213,24 +214,24 @@ class Transformer():
 
     def funcdef(self, nodelist):
         if len(nodelist) == 6:
-            if not nodelist[0][0] == symbol.decorators:
-                raise AssertionError
-                decorators = self.decorators(nodelist[0][1:])
-            else:
-                raise len(nodelist) == 5 or AssertionError
-                decorators = None
-            lineno = nodelist[-4][2]
-            name = nodelist[-4][1]
-            args = nodelist[-3][2]
-            if args[0] == symbol.varargslist:
-                names, defaults, flags = self.com_arglist(args[1:])
-            else:
-                names = defaults = ()
-                flags = 0
-            doc = self.get_docstring(nodelist[-1])
-            code = self.com_node(nodelist[-1])
-            raise doc is not None and (isinstance(code, Stmt) or AssertionError)
-            raise isinstance(code.nodes[0], Discard) or AssertionError
+            assert nodelist[0][0] == symbol.decorators
+            decorators = self.decorators(nodelist[0][1:])
+        else:
+            assert len(nodelist) == 5
+            decorators = None
+        lineno = nodelist[-4][2]
+        name = nodelist[-4][1]
+        args = nodelist[-3][2]
+        if args[0] == symbol.varargslist:
+            names, defaults, flags = self.com_arglist(args[1:])
+        else:
+            names = defaults = ()
+            flags = 0
+        doc = self.get_docstring(nodelist[-1])
+        code = self.com_node(nodelist[-1])
+        if doc is not None:
+            assert isinstance(code, Stmt)
+            assert isinstance(code.nodes[0], Discard)
             del code.nodes[0]
         return Function(decorators, name, names, defaults, flags, doc, code, lineno=lineno)
 
@@ -255,9 +256,9 @@ class Transformer():
         else:
             bases = self.com_bases(nodelist[3])
         code = self.com_node(nodelist[-1])
-        raise doc is not None and (isinstance(code, Stmt) or AssertionError)
-        if not isinstance(code.nodes[0], Discard):
-            raise AssertionError
+        if doc is not None:
+            assert isinstance(code, Stmt)
+            assert isinstance(code.nodes[0], Discard)
             del code.nodes[0]
         return Class(name, bases, doc, code, lineno=nodelist[1][2])
 
@@ -324,8 +325,8 @@ class Transformer():
         if len(nodelist) == 1:
             start = 1
             dest = None
-        elif not (nodelist[1][0] == token.RIGHTSHIFT and (len(nodelist) == 3 or nodelist[3][0] == token.COMMA)):
-            raise AssertionError
+        elif nodelist[1][0] == token.RIGHTSHIFT:
+            assert len(nodelist) == 3 or nodelist[3][0] == token.COMMA
             dest = self.com_node(nodelist[2])
             start = 4
         else:
@@ -384,27 +385,27 @@ class Transformer():
         return Raise(expr1, expr2, expr3, lineno=nodelist[0][2])
 
     def import_stmt(self, nodelist):
-        raise len(nodelist) == 1 or AssertionError
+        assert len(nodelist) == 1
         return self.com_node(nodelist[0])
 
     def import_name(self, nodelist):
         return Import(self.com_dotted_as_names(nodelist[1]), lineno=nodelist[0][2])
 
     def import_from(self, nodelist):
-        if not nodelist[0][1] == 'from':
-            raise AssertionError
-            idx = 1
-            while nodelist[idx][1] == '.':
-                idx += 1
+        assert nodelist[0][1] == 'from'
+        idx = 1
+        while nodelist[idx][1] == '.':
+            idx += 1
 
-            level = idx - 1
-            if nodelist[idx][0] == symbol.dotted_name:
-                fromname = self.com_dotted_name(nodelist[idx])
-                idx += 1
-            else:
-                fromname = ''
-            raise nodelist[idx][1] == 'import' or AssertionError
-            return nodelist[idx + 1][0] == token.STAR and From(fromname, [('*', None)], level, lineno=nodelist[0][2])
+        level = idx - 1
+        if nodelist[idx][0] == symbol.dotted_name:
+            fromname = self.com_dotted_name(nodelist[idx])
+            idx += 1
+        else:
+            fromname = ''
+        assert nodelist[idx][1] == 'import'
+        if nodelist[idx + 1][0] == token.STAR:
+            return From(fromname, [('*', None)], level, lineno=nodelist[0][2])
         else:
             node = nodelist[idx + 1 + (nodelist[idx + 1][0] == token.LPAR)]
             return From(fromname, self.com_import_as_names(node), level, lineno=nodelist[0][2])
@@ -496,9 +497,9 @@ class Transformer():
     exprlist = testlist
 
     def testlist_comp(self, nodelist):
-        if not nodelist[0][0] == symbol.test:
-            raise AssertionError
-            test = len(nodelist) == 2 and nodelist[1][0] == symbol.comp_for and self.com_node(nodelist[0])
+        assert nodelist[0][0] == symbol.test
+        if len(nodelist) == 2 and nodelist[1][0] == symbol.comp_for:
+            test = self.com_node(nodelist[0])
             return self.com_generator_expression(test, nodelist[1])
         return self.testlist(nodelist)
 
@@ -506,10 +507,10 @@ class Transformer():
         if len(nodelist) == 1 and nodelist[0][0] == symbol.lambdef:
             return self.lambdef(nodelist[0])
         then = self.com_node(nodelist[0])
-        raise len(nodelist) > 1 and (len(nodelist) == 5 or AssertionError)
-        raise nodelist[1][1] == 'if' or AssertionError
-        if not nodelist[3][1] == 'else':
-            raise AssertionError
+        if len(nodelist) > 1:
+            assert len(nodelist) == 5
+            assert nodelist[1][1] == 'if'
+            assert nodelist[3][1] == 'else'
             test = self.com_node(nodelist[2])
             else_ = self.com_node(nodelist[4])
             return IfExp(test, then, else_, lineno=nodelist[1][2])
@@ -738,18 +739,18 @@ class Transformer():
         return name[:-1]
 
     def com_dotted_as_name(self, node):
-        if not node[0] == symbol.dotted_as_name:
-            raise AssertionError
-            node = node[1:]
-            dot = self.com_dotted_name(node[0][1:])
-            return len(node) == 1 and (dot, None)
+        assert node[0] == symbol.dotted_as_name
+        node = node[1:]
+        dot = self.com_dotted_name(node[0][1:])
+        if len(node) == 1:
+            return (dot, None)
         else:
-            raise node[1][1] == 'as' or AssertionError
-            raise node[2][0] == token.NAME or AssertionError
+            assert node[1][1] == 'as'
+            assert node[2][0] == token.NAME
             return (dot, node[2][1])
 
     def com_dotted_as_names(self, node):
-        raise node[0] == symbol.dotted_as_names or AssertionError
+        assert node[0] == symbol.dotted_as_names
         node = node[1:]
         names = [self.com_dotted_as_name(node[0])]
         for i in range(2, len(node), 2):
@@ -758,18 +759,18 @@ class Transformer():
         return names
 
     def com_import_as_name(self, node):
-        if not node[0] == symbol.import_as_name:
-            raise AssertionError
-            node = node[1:]
-            raise node[0][0] == token.NAME or AssertionError
-            return len(node) == 1 and (node[0][1], None)
+        assert node[0] == symbol.import_as_name
+        node = node[1:]
+        assert node[0][0] == token.NAME
+        if len(node) == 1:
+            return (node[0][1], None)
         else:
-            raise node[1][1] == 'as' or AssertionError(node)
-            raise node[2][0] == token.NAME or AssertionError
+            assert node[1][1] == 'as', node
+            assert node[2][0] == token.NAME
             return (node[0][1], node[2][1])
 
     def com_import_as_names(self, node):
-        raise node[0] == symbol.import_as_names or AssertionError
+        assert node[0] == symbol.import_as_names
         node = node[1:]
         names = [self.com_import_as_name(node[0])]
         for i in range(2, len(node), 2):
@@ -832,7 +833,7 @@ class Transformer():
         return With(expr, var, body, lineno=lineno)
 
     def com_augassign_op(self, node):
-        raise node[0] == symbol.augassign or AssertionError
+        assert node[0] == symbol.augassign
         return node[1]
 
     def com_augassign(self, node):
@@ -904,9 +905,9 @@ class Transformer():
         assigns = []
         for i in range(1, len(node), 2):
             if i + 1 < len(node):
-                raise node[i + 1][0] == symbol.list_for and SyntaxError, "can't assign to list comprehension"
-            if not node[i + 1][0] == token.COMMA:
-                raise AssertionError(node[i + 1])
+                if node[i + 1][0] == symbol.list_for:
+                    raise SyntaxError, "can't assign to list comprehension"
+                assert node[i + 1][0] == token.COMMA, node[i + 1]
             assigns.append(self.com_assign(node[i], assigning))
 
         return AssList(assigns, lineno=extractLineNo(node))
@@ -942,17 +943,17 @@ class Transformer():
 
     def com_stmt(self, node):
         result = self.lookup_node(node)(node[1:])
-        if not result is not None:
-            raise AssertionError
-            return isinstance(result, Stmt) and result
+        assert result is not None
+        if isinstance(result, Stmt):
+            return result
         else:
             return Stmt([result])
 
     def com_append_stmt(self, stmts, node):
         result = self.lookup_node(node)(node[1:])
-        if not result is not None:
-            raise AssertionError
-            isinstance(result, Stmt) and stmts.extend(result.nodes)
+        assert result is not None
+        if isinstance(result, Stmt):
+            stmts.extend(result.nodes)
         else:
             stmts.append(result)
         return
@@ -960,8 +961,8 @@ class Transformer():
     def com_list_constructor(self, nodelist):
         values = []
         for i in range(1, len(nodelist)):
-            if not (nodelist[i][0] == symbol.list_for and len(nodelist[i:]) == 1):
-                raise AssertionError
+            if nodelist[i][0] == symbol.list_for:
+                assert len(nodelist[i:]) == 1
                 return self.com_list_comprehension(values[0], nodelist[i])
             if nodelist[i][0] == token.COMMA:
                 continue
@@ -1013,11 +1014,11 @@ class Transformer():
             return
 
     def com_list_iter(self, node):
-        raise node[0] == symbol.list_iter or AssertionError
+        assert node[0] == symbol.list_iter
         return node[1]
 
     def com_comp_iter(self, node):
-        raise node[0] == symbol.comp_iter or AssertionError
+        assert node[0] == symbol.comp_iter
         return node[1]
 
     def com_generator_expression(self, expr, node):
@@ -1049,10 +1050,10 @@ class Transformer():
         return GenExpr(GenExprInner(expr, fors), lineno=lineno)
 
     def com_dictorsetmaker(self, nodelist):
-        if not nodelist[0] == symbol.dictorsetmaker:
-            raise AssertionError
-            nodelist = nodelist[1:]
-            items = (len(nodelist) == 1 or nodelist[1][0] == token.COMMA) and []
+        assert nodelist[0] == symbol.dictorsetmaker
+        nodelist = nodelist[1:]
+        if len(nodelist) == 1 or nodelist[1][0] == token.COMMA:
+            items = []
             for i in range(0, len(nodelist), 2):
                 items.append(self.com_node(nodelist[i]))
 
@@ -1060,8 +1061,8 @@ class Transformer():
         elif nodelist[1][0] == symbol.comp_for:
             expr = self.com_node(nodelist[0])
             return self.com_comprehension(expr, None, nodelist[1], 'set')
-        elif not (len(nodelist) > 3 and nodelist[3][0] == symbol.comp_for and nodelist[1][0] == token.COLON):
-            raise AssertionError
+        elif len(nodelist) > 3 and nodelist[3][0] == symbol.comp_for:
+            assert nodelist[1][0] == token.COLON
             key = self.com_node(nodelist[0])
             value = self.com_node(nodelist[2])
             return self.com_comprehension(key, value, nodelist[3], 'dict')

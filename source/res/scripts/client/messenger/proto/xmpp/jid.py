@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/jid.py
 import types
 from messenger import g_settings
@@ -49,11 +50,11 @@ class BareJID(object):
         return self._domain
 
     def setDomain(self, domain):
-        raise domain or AssertionError('Domain no empty')
+        assert domain, 'Domain no empty'
         self._domain = domain.lower()
 
     def getResource(self):
-        return ''
+        pass
 
     def setResource(self, resource):
         pass

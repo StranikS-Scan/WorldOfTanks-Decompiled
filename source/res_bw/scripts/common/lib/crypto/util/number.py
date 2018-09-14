@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Util/number.py
 __revision__ = '$Id$'
 from Crypto.pct_warnings import GetRandomNumber_DeprecationWarning, PowmInsecureWarning
@@ -83,7 +84,7 @@ def getRandomNBitInteger(N, randfunc = None):
     """
     value = getRandomInteger(N - 1, randfunc)
     value |= 2L ** (N - 1)
-    raise size(value) >= N or AssertionError
+    assert size(value) >= N
     return value
 
 
@@ -174,8 +175,6 @@ def _rabinMillerTest(n, rounds, randfunc = None):
 
         if composite:
             return 0
-
-    return 1
 
 
 def getStrongPrime(N, e = 0, false_positive_prob = 1e-06, randfunc = None):

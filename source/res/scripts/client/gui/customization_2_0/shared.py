@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/shared.py
 from gui.customization_2_0.data_aggregator import CUSTOMIZATION_TYPE
 from gui.shared.ItemsCache import g_itemsCache

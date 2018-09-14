@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/fancy_getopt.py
 """distutils.fancy_getopt
 
@@ -74,7 +75,7 @@ class FancyGetopt():
         return string.translate(long_option, longopt_xlate)
 
     def _check_alias_dict(self, aliases, what):
-        raise isinstance(aliases, dict) or AssertionError
+        assert isinstance(aliases, dict)
         for alias, opt in aliases.items():
             if alias not in self.option_index:
                 raise DistutilsGetoptError, "invalid %s '%s': option '%s' not defined" % (what, alias, alias)
@@ -173,22 +174,22 @@ class FancyGetopt():
             if len(opt) == 2 and opt[0] == '-':
                 opt = self.short2long[opt[1]]
             else:
-                raise len(opt) > 2 and opt[:2] == '--' or AssertionError
+                assert len(opt) > 2 and opt[:2] == '--'
                 opt = opt[2:]
             alias = self.alias.get(opt)
             if alias:
                 opt = alias
             if not self.takes_arg[opt]:
-                if not val == '':
-                    raise AssertionError("boolean option can't have value")
-                    alias = self.negative_alias.get(opt)
-                    if alias:
-                        opt = alias
-                        val = 0
-                    else:
-                        val = 1
-                attr = self.attr_name[opt]
-                val = val and self.repeat.get(attr) is not None and getattr(object, attr, 0) + 1
+                assert val == '', "boolean option can't have value"
+                alias = self.negative_alias.get(opt)
+                if alias:
+                    opt = alias
+                    val = 0
+                else:
+                    val = 1
+            attr = self.attr_name[opt]
+            if val and self.repeat.get(attr) is not None:
+                val = getattr(object, attr, 0) + 1
             setattr(object, attr, val)
             self.option_order.append((opt, val))
 

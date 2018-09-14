@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/hex_codec.py
 """ Python 'hex_codec' Codec - 2-digit hex content transfer encoding
 
@@ -18,7 +19,7 @@ def hex_encode(input, errors = 'strict'):
         error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     output = binascii.b2a_hex(input)
     return (output, len(input))
 
@@ -36,7 +37,7 @@ def hex_decode(input, errors = 'strict'):
         error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     output = binascii.a2b_hex(input)
     return (output, len(input))
 
@@ -53,14 +54,14 @@ class Codec(codecs.Codec):
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
     def encode(self, input, final = False):
-        raise self.errors == 'strict' or AssertionError
+        assert self.errors == 'strict'
         return binascii.b2a_hex(input)
 
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
     def decode(self, input, final = False):
-        raise self.errors == 'strict' or AssertionError
+        assert self.errors == 'strict'
         return binascii.a2b_hex(input)
 
 

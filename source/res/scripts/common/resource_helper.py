@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/resource_helper.py
 from contextlib import contextmanager
 import ResMgr
@@ -229,9 +230,9 @@ def readItem(ctx, section, name = 'item'):
     keys = section.keys()
     itemType = _readItemType(ctx, section, keys=keys)
     name = _readItemName(ctx, section, keys=keys)
-    reader = itemType in _ITEM_VALUE_READERS and _ITEM_VALUE_READERS[itemType]
-    if not reader:
-        raise AssertionError('Reader of type {0} must be defined'.format(itemType))
+    if itemType in _ITEM_VALUE_READERS:
+        reader = _ITEM_VALUE_READERS[itemType]
+        assert reader, 'Reader of type {0} must be defined'.format(itemType)
         item = reader(ctx, section)
     else:
         raise ResourceError(ctx, '"{0}: type {1} is invalid.'.format(name, itemType))

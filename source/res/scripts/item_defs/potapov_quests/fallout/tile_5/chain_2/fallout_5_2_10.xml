@@ -8,11 +8,11 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <distance>	156	</distance>
+              <distance>	-150	</distance>
               <greaterOrEqual>	3000	</greaterOrEqual>
             </vehicleDamage>
             <vehicleDamage>
-              <distance>	300	</distance>
+              <distance>	200	</distance>
               <greaterOrEqual>	3000	</greaterOrEqual>
             </vehicleDamage>
           </and>
@@ -40,18 +40,18 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <distance>	156	</distance>
-              <greaterOrEqual>	3000	</greaterOrEqual>
-            </vehicleDamage>
-            <vehicleDamage>
-              <distance>	300	</distance>
-              <greaterOrEqual>	3000	</greaterOrEqual>
-            </vehicleDamage>
             <results>
               <key>	avatarDamageDealt	</key>
               <greaterOrEqual>	500	</greaterOrEqual>
             </results>
+            <vehicleDamage>
+              <distance>	-150	</distance>
+              <greaterOrEqual>	3000	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleDamage>
+              <distance>	200	</distance>
+              <greaterOrEqual>	3000	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>

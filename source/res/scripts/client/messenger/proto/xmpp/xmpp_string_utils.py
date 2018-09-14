@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_string_utils.py
 from external_strings_utils import unicode_from_utf8
 from messenger.proto.xmpp.errors import ClientContactError, ClientIntLimitError

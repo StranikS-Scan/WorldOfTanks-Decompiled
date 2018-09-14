@@ -8,8 +8,8 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <greaterOrEqual>	3	</greaterOrEqual>
               <whileEnemyWithFlag></whileEnemyWithFlag>
+              <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
           </and>
         </postBattle>
@@ -26,8 +26,8 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <greaterOrEqual>	3	</greaterOrEqual>
               <whileEnemyWithFlag></whileEnemyWithFlag>
+              <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
             <results>
               <key>	xp	</key>

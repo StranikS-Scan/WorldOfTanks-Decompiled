@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_arena_ctrl.py
 from collections import defaultdict
 import weakref
@@ -85,7 +86,7 @@ class PlayerTeamCtx(EnemyTeamCtx):
         return vo.isTeamKiller(playerTeam=self.team)
 
     def getAction(self, vo):
-        return 0
+        pass
 
 
 class PostmortemTeamCtx(PlayerTeamCtx):

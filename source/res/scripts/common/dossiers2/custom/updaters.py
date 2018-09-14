@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/updaters.py
 import struct
 import constants
@@ -2017,17 +2018,17 @@ def __updateFromVehicleDossier69(compDescr):
         updateCtx['header'][12] = 0
         updateCtx['header'][17] = 0
         compDescr = struct.pack(updateCtx['headerFormat'], *updateCtx['header']) + compDescr[updateCtx['headerLength']:]
-        compDescr = achievements7x7Size != 0 and compDescr[:-achievements7x7Size]
-    updateCtx = {'dossierCompDescr': compDescr,
-     'blockSizeFormat': 'H',
-     'versionFormat': 'H',
-     'blocksLayout': blocksLayout}
-    getHeader(updateCtx)
-    headerValues = updateCtx['header'][1:]
-    sumAllValues = sum(headerValues)
-    vehDossierCompDescrLen = len(compDescr) - updateCtx['headerLength']
-    if not vehDossierCompDescrLen == sumAllValues:
-        raise AssertionError
+        if achievements7x7Size != 0:
+            compDescr = compDescr[:-achievements7x7Size]
+        updateCtx = {'dossierCompDescr': compDescr,
+         'blockSizeFormat': 'H',
+         'versionFormat': 'H',
+         'blocksLayout': blocksLayout}
+        getHeader(updateCtx)
+        headerValues = updateCtx['header'][1:]
+        sumAllValues = sum(headerValues)
+        vehDossierCompDescrLen = len(compDescr) - updateCtx['headerLength']
+        assert vehDossierCompDescrLen == sumAllValues
     setVersion(updateCtx, 70)
     return (70, compDescr)
 

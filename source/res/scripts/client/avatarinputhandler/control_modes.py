@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/control_modes.py
 import math
 import weakref
@@ -186,11 +187,11 @@ class _GunControlMode(IControlMode):
         self._gunMarker.show2(flag)
 
     def updateGunMarker(self, pos, dir, size, relaxTime, collData):
-        raise self._isEnabled or AssertionError
+        assert self._isEnabled
         self._gunMarker.update(pos, dir, size, relaxTime, collData)
 
     def updateGunMarker2(self, pos, dir, size, relaxTime, collData):
-        raise self._isEnabled or AssertionError
+        assert self._isEnabled
         self._gunMarker.update2(pos, dir, size, relaxTime, collData)
 
     def setAimingMode(self, enable, mode):
@@ -203,11 +204,11 @@ class _GunControlMode(IControlMode):
         self._aimingMode = 0
 
     def getDesiredShotPoint(self):
-        if not self._isEnabled:
-            raise AssertionError
-            return self._aimingMode == 0 and self._cam is not None and self._aim is not None and self._cam.aimingSystem.getDesiredShotPoint()
+        assert self._isEnabled
+        if self._aimingMode == 0 and self._cam is not None and self._aim is not None:
+            return self._cam.aimingSystem.getDesiredShotPoint()
         else:
-            return None
+            return
 
     def getAimingMode(self, mode):
         return self._aimingMode & mode == mode
@@ -223,7 +224,7 @@ class _GunControlMode(IControlMode):
         return {'gunMarker': self._gunMarker.dumpState()}
 
     def updateShootingStatus(self, canShot):
-        raise self._isEnabled or AssertionError
+        assert self._isEnabled
         self._canShot = canShot
 
     def __createGunMarker(self, mode, isStrategic):
@@ -304,7 +305,7 @@ class VideoCameraControlMode(_GunControlMode):
             return False
 
     def teleport(self, index):
-        raise index > 0 and index <= len(self.__locationPoints) or AssertionError('Out of range')
+        assert index > 0 and index <= len(self.__locationPoints), 'Out of range'
         self._cam.setViewMatrix(self.__locationPoints[index - 1].matrix)
 
     def teleportByName(self, name):
@@ -313,7 +314,7 @@ class VideoCameraControlMode(_GunControlMode):
                 self._cam.setViewMatrix(point.matrix)
                 return
 
-        raise False or AssertionError('Location with name %s not found' % name)
+        assert False, 'Location with name %s not found' % name
 
     def handleMouseEvent(self, dx, dy, dz):
         self._cam.handleMouseEvent(dx, dy, dz)
@@ -356,7 +357,7 @@ class DebugControlMode(IControlMode):
         self.__cam.enable(camMatrix)
         BigWorld.setWatcher('Client Settings/Strafe Rate', 50)
         BigWorld.setWatcher('Client Settings/Camera Mass', 1)
-        raise constants.IS_DEVELOPMENT or AssertionError
+        assert constants.IS_DEVELOPMENT
         import Cat
         Cat.Tasks.VideoEngineer.SetEnable(True)
         self.__videoControl = Cat.Tasks.VideoEngineer.VideoControl(self.__cam)
@@ -375,27 +376,27 @@ class DebugControlMode(IControlMode):
         return
 
     def handleKeyEvent(self, isDown, key, mods, event = None):
-        if not self.__isEnabled:
-            raise AssertionError
-            if key == Keys.KEY_SYSRQ:
-                return False
-            if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.IS_DEVELOPMENT and isDown and key == Keys.KEY_F1:
-                self.__aih.onControlModeChanged(self.__prevModeName)
-                return True
-            return self.__videoControl.handleKeyEvent(isDown, key, mods, event) and True
+        assert self.__isEnabled
+        if key == Keys.KEY_SYSRQ:
+            return False
+        if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.IS_DEVELOPMENT and isDown and key == Keys.KEY_F1:
+            self.__aih.onControlModeChanged(self.__prevModeName)
+            return True
+        if self.__videoControl.handleKeyEvent(isDown, key, mods, event):
+            return True
         return self.__cam.handleKey(event)
 
     def handleMouseEvent(self, dx, dy, dz):
-        raise self.__isEnabled or AssertionError
+        assert self.__isEnabled
         GUI.mcursor().position = (0, 0)
         return self.__videoControl.handleMouseEvent(dx, dy, dz)
 
     def getDesiredShotPoint(self):
-        raise self.__isEnabled or AssertionError
+        assert self.__isEnabled
         return None
 
     def updateShootingStatus(self, canShot):
-        raise self.__isEnabled or AssertionError
+        assert self.__isEnabled
         return None
 
     def setCameraPosition(self, x, y, z):
@@ -461,14 +462,14 @@ class CatControlMode(IControlMode):
         self.__isEnabled = False
 
     def handleKeyEvent(self, isDown, key, mods, event = None):
-        if not self.__isEnabled:
-            raise AssertionError
-            BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.IS_DEVELOPMENT and isDown and key == Keys.KEY_F2 and self.__aih.onControlModeChanged('arcade')
+        assert self.__isEnabled
+        if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.IS_DEVELOPMENT and isDown and key == Keys.KEY_F2:
+            self.__aih.onControlModeChanged('arcade')
         self.__shellingControl.handleKeyEvent(isDown, key, mods, event)
         return self.__cam.handleKey(event)
 
     def handleMouseEvent(self, dx, dy, dz):
-        raise self.__isEnabled or AssertionError
+        assert self.__isEnabled
         GUI.mcursor().position = (0, 0)
         return self.__cam.handleMouse(int(self.__sens[0] * dx), int(self.__sens[1] * dy), int(self.__sens[2] * dz))
 
@@ -521,6 +522,7 @@ class ArcadeControlMode(_GunControlMode):
         self.disable()
         self.__mouseVehicleRotator.destroy()
         self.__mouseVehicleRotator = None
+        self._cam.writeUserPreferences()
         super(ArcadeControlMode, self).destroy()
         return
 
@@ -544,10 +546,10 @@ class ArcadeControlMode(_GunControlMode):
         return
 
     def handleKeyEvent(self, isDown, key, mods, event = None):
-        if not self._isEnabled:
-            raise AssertionError
-            cmdMap = CommandMapping.g_instance
-            return self._cam.handleKeyEvent(isDown, key, mods, event) and True
+        assert self._isEnabled
+        cmdMap = CommandMapping.g_instance
+        if self._cam.handleKeyEvent(isDown, key, mods, event):
+            return True
         elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.IS_DEVELOPMENT and isDown and key == Keys.KEY_F1:
             self._aih.onControlModeChanged('debug', prevModeName='arcade', camMatrix=self._cam.camera.matrix)
             return True
@@ -604,7 +606,7 @@ class ArcadeControlMode(_GunControlMode):
             return False
 
     def handleMouseEvent(self, dx, dy, dz):
-        raise self._isEnabled or AssertionError
+        assert self._isEnabled
         GUI.mcursor().position = self._aim.offset()
         self._cam.update(dx, dy, mathUtils.clamp(-1, 1, dz))
         self.__mouseVehicleRotator.handleMouse(dx)
@@ -680,6 +682,7 @@ class StrategicControlMode(_GunControlMode):
     def destroy(self):
         self.disable()
         self.__delTrajectoryDrawer()
+        self._cam.writeUserPreferences()
         super(StrategicControlMode, self).destroy()
 
     def enable(self, **args):
@@ -704,10 +707,10 @@ class StrategicControlMode(_GunControlMode):
         return
 
     def handleKeyEvent(self, isDown, key, mods, event = None):
-        if not self._isEnabled:
-            raise AssertionError
-            cmdMap = CommandMapping.g_instance
-            cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown and BigWorld.player().shoot()
+        assert self._isEnabled
+        cmdMap = CommandMapping.g_instance
+        if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
+            BigWorld.player().shoot()
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, key) and isDown:
             self._aih.switchAutorotation()
@@ -752,7 +755,7 @@ class StrategicControlMode(_GunControlMode):
             return False
 
     def handleMouseEvent(self, dx, dy, dz):
-        raise self._isEnabled or AssertionError
+        assert self._isEnabled
         GUI.mcursor().position = self._aim.offset()
         self._cam.update(dx, dy, dz)
         return True
@@ -839,6 +842,7 @@ class SniperControlMode(_GunControlMode):
         self.disable(True)
         self.__binoculars.enabled = False
         self.__binoculars.resetTextures()
+        self._cam.writeUserPreferences()
         super(SniperControlMode, self).destroy()
 
     def enable(self, **args):
@@ -866,17 +870,17 @@ class SniperControlMode(_GunControlMode):
         return
 
     def handleKeyEvent(self, isDown, key, mods, event = None):
-        if not self._isEnabled:
-            raise AssertionError
-            cmdMap = CommandMapping.g_instance
-            isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
-            isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
-            if isFiredFreeCamera or isFiredLockTarget:
-                if isFiredFreeCamera:
-                    self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
-                if isFiredLockTarget:
-                    BigWorld.player().autoAim(BigWorld.target())
-            cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown and BigWorld.player().shoot()
+        assert self._isEnabled
+        cmdMap = CommandMapping.g_instance
+        isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
+        isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
+        if isFiredFreeCamera or isFiredLockTarget:
+            if isFiredFreeCamera:
+                self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
+            if isFiredLockTarget:
+                BigWorld.player().autoAim(BigWorld.target())
+        if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
+            BigWorld.player().shoot()
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET_OFF, key) and isDown:
             BigWorld.player().autoAim(None)
@@ -915,7 +919,7 @@ class SniperControlMode(_GunControlMode):
             return False
 
     def handleMouseEvent(self, dx, dy, dz):
-        raise self._isEnabled or AssertionError
+        assert self._isEnabled
         GUI.mcursor().position = self._aim.offset()
         self._cam.update(dx, dy, dz)
         return True
@@ -942,7 +946,7 @@ class SniperControlMode(_GunControlMode):
         return self.getPreferredAutorotationMode() != False
 
     def onChangeControlModeByScroll(self, switchToClosestDist = True):
-        raise self._isEnabled or AssertionError
+        assert self._isEnabled
         self._aih.onControlModeChanged('arcade', preferredPos=self.camera.aimingSystem.getDesiredShotPoint(), turretYaw=self._cam.aimingSystem.turretYaw, gunPitch=self._cam.aimingSystem.gunPitch, aimingMode=self._aimingMode, closesDist=switchToClosestDist)
 
     def recreateCamera(self):
@@ -1052,47 +1056,47 @@ class PostMortemControlMode(IControlMode):
         return
 
     def handleKeyEvent(self, isDown, key, mods, event = None):
-        if not self.__isEnabled:
-            raise AssertionError
-            cmdMap = CommandMapping.g_instance
-            if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.IS_DEVELOPMENT and isDown and key == Keys.KEY_F1:
-                self.__aih.onControlModeChanged('debug', prevModeName='postmortem', camMatrix=self.__cam.camera.matrix)
-                return True
-            if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and (self.__videoControlModeAvailable or g_sessionProvider.getCtx().isPlayerObserver()):
-                self.__aih.onControlModeChanged('video', prevModeName='postmortem', camMatrix=self.__cam.camera.matrix, curVehicleID=self.__curVehicleID)
-                return True
-            if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown:
-                self.__switchViewpoint(True)
-                return True
-            if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE, key) and isDown:
-                self.__switchViewpoint(False)
-                return True
-            if cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
-             CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
-             CommandMapping.CMD_CM_CAMERA_ROTATE_UP,
-             CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
-             CommandMapping.CMD_CM_INCREASE_ZOOM,
-             CommandMapping.CMD_CM_DECREASE_ZOOM), key):
-                dx = dy = dz = 0.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
-                    dx = -1.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT):
-                    dx = 1.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_UP):
-                    dy = -1.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN):
-                    dy = 1.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_INCREASE_ZOOM):
-                    dz = 1.0
-                dz = cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM) and -1.0
+        assert self.__isEnabled
+        cmdMap = CommandMapping.g_instance
+        if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.IS_DEVELOPMENT and isDown and key == Keys.KEY_F1:
+            self.__aih.onControlModeChanged('debug', prevModeName='postmortem', camMatrix=self.__cam.camera.matrix)
+            return True
+        if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and (self.__videoControlModeAvailable or g_sessionProvider.getCtx().isPlayerObserver()):
+            self.__aih.onControlModeChanged('video', prevModeName='postmortem', camMatrix=self.__cam.camera.matrix, curVehicleID=self.__curVehicleID)
+            return True
+        if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown:
+            self.__switchViewpoint(True)
+            return True
+        if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE, key) and isDown:
+            self.__switchViewpoint(False)
+            return True
+        if cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
+         CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
+         CommandMapping.CMD_CM_CAMERA_ROTATE_UP,
+         CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
+         CommandMapping.CMD_CM_INCREASE_ZOOM,
+         CommandMapping.CMD_CM_DECREASE_ZOOM), key):
+            dx = dy = dz = 0.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
+                dx = -1.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT):
+                dx = 1.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_UP):
+                dy = -1.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN):
+                dy = 1.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_INCREASE_ZOOM):
+                dz = 1.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
+                dz = -1.0
             self.__cam.update(dx, dy, dz, True, True, False if dx == dy == dz == 0.0 else True)
             return True
         return False
 
     def handleMouseEvent(self, dx, dy, dz):
-        if not self.__isEnabled:
-            raise AssertionError
-            return self.__postmortemDelay is not None and True
+        assert self.__isEnabled
+        if self.__postmortemDelay is not None:
+            return True
         else:
             GUI.mcursor().position = self.__aim.offset()
             self.__cam.update(dx, dy, _clamp(-1, 1, dz))
@@ -1131,9 +1135,9 @@ class PostMortemControlMode(IControlMode):
             return
 
     def __switchViewpoint(self, toPrevious, vehicleID = None):
-        if not isinstance(toPrevious, bool):
-            raise AssertionError
-            return self.__postmortemDelay is not None and None
+        assert isinstance(toPrevious, bool)
+        if self.__postmortemDelay is not None:
+            return
         else:
             self.__doPreBind()
             if vehicleID is None:
@@ -1146,7 +1150,7 @@ class PostMortemControlMode(IControlMode):
         if self.__postmortemDelay is not None:
             return
         else:
-            raise not toId or isinstance(toId, int) and toId >= 0 or AssertionError
+            assert not toId or isinstance(toId, int) and toId >= 0
             self.__doPreBind()
             BigWorld.player().positionControl.bindToVehicle(vehicleID=toId)
             return
@@ -1184,6 +1188,10 @@ class PostMortemControlMode(IControlMode):
 
     def __onVehicleLeaveWorld(self, vehicle):
         if vehicle.id == self.__curVehicleID:
+            vehicleID = BigWorld.player().playerVehicleID
+            vehicle = BigWorld.entities.get(vehicleID)
+            if vehicle is not None and 'observer' in vehicle.typeDescriptor.type.tags:
+                return
             self.__switchToVehicle(None)
         return
 

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/backoff.py
 import random
 
@@ -70,7 +71,7 @@ class ExpBackoff(AbstractBackoff):
 class RandomBackoff(AbstractBackoff):
 
     def calcDelay(self):
-        return 0
+        pass
 
     def addRandom(self, delay):
         return random.uniform(self._minTime, self._maxTime)

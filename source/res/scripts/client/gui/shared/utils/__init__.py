@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/__init__.py
 import imghdr
 import itertools
@@ -62,7 +63,6 @@ def code2str(code):
         return 'Player dossier is hidden'
     if code == AccountCommands.RES_CENTER_DISCONNECTED:
         return 'Dossiers are unavailable'
-    return 'Unknown error code'
 
 
 def isVehicleObserver(vehTypeCompDescr):
@@ -94,8 +94,6 @@ def sortByFields(fields, sequence, valueGetter = dict.get):
                 if order:
                     return cmp(fieldValueX, fieldValueY)
                 return cmp(fieldValueY, fieldValueX)
-
-        return 0
 
     return sorted(sequence, cmp=comparator)
 
@@ -233,8 +231,7 @@ def getPlayerName():
 
 def avg(devidend, devider):
     if devider > 0:
-        return devidend / devider
-    return 0
+        return float(devidend) / devider
 
 
 def weightedAvg(*args):

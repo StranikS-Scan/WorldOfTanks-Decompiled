@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/action_handlers.py
 import weakref
 from CurrentVehicle import g_currentVehicle

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/fileinput.py
 """Helper class to quickly write a loop over all standard input files.
 

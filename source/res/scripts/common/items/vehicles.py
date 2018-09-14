@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicles.py
 import types
 from collections import namedtuple
@@ -152,7 +153,7 @@ class VehicleDescr(object):
             if typeID is not None:
                 nationID, vehicleTypeID = typeID
             else:
-                raise typeName is not None or AssertionError
+                assert typeName is not None
                 nationID, vehicleTypeID = g_list.getIDsByName(typeName)
             type = g_cache.vehicle(nationID, vehicleTypeID)
             turretDescr = type.turrets[0][0]
@@ -303,7 +304,7 @@ class VehicleDescr(object):
         if itemTypeName == 'vehicleGun':
             turretDescr, gunDescr = self.turrets[positionIndex]
             return (gunDescr, turretDescr['guns'])
-        raise False or AssertionError
+        assert False
 
     def mayInstallTurret(self, turretCompactDescr, gunCompactDescr, positionIndex = 0):
         selfType = self.type
@@ -448,7 +449,7 @@ class VehicleDescr(object):
             attrName = 'fuelTank'
             compList = self.type.fuelTanks
         else:
-            raise False or AssertionError
+            assert False
         prevDescr = getattr(self, attrName)
         newDescr = _descrByID(compList, compID)
         setattr(self, attrName, newDescr)
@@ -534,7 +535,7 @@ class VehicleDescr(object):
 
         optionalDevices = ''
         optionalDeviceSlots = 0
-        raise len(self.optionalDevices) == NUM_OPTIONAL_DEVICE_SLOTS or AssertionError
+        assert len(self.optionalDevices) == NUM_OPTIONAL_DEVICE_SLOTS
         for device in self.optionalDevices:
             optionalDeviceSlots <<= 1
             if device is not None:
@@ -1622,7 +1623,7 @@ def getVehicleClass(compactDescr):
     for vehClass in VEHICLE_CLASS_TAGS & getVehicleType(compactDescr).tags:
         return vehClass
 
-    raise False or AssertionError
+    assert False
 
 
 def stripCustomizationFromVehicleCompactDescr(compactDescr, stripEmblems = True, stripInscriptions = True, stripCamouflages = True, keepInfinite = False):
@@ -1678,7 +1679,7 @@ def stripCustomizationFromVehicleCompactDescr(compactDescr, stripEmblems = True,
 
 def isShellSuitableForGun(shellCompactDescr, gunDescr):
     itemTypeID, nationID, shellTypeID = parseIntCompactDescr(shellCompactDescr)
-    raise itemTypeID == items.ITEM_TYPES.shell or AssertionError
+    assert itemTypeID == items.ITEM_TYPES.shell
     shellID = (nationID, shellTypeID)
     for shotDescr in gunDescr['shots']:
         if shotDescr['shell']['id'] == shellID:
@@ -1902,7 +1903,7 @@ def __readTurretHardPoints(section, numTurrets):
     else:
         resultSeq = (intern(node.asString) for node in thpSection.values())
     result = tuple(resultSeq)
-    raise len(result) == numTurrets or AssertionError
+    assert len(result) == numTurrets
     return result
 
 
@@ -4197,7 +4198,7 @@ def _summPriceDiff(price, priceAdd, priceSub):
 
 def _splitVehicleCompactDescr(compactDescr):
     header = ord(compactDescr[0])
-    raise header & 15 == items.ITEM_TYPES.vehicle or AssertionError
+    assert header & 15 == items.ITEM_TYPES.vehicle
     vehicleTypeID = ord(compactDescr[1])
     nationID = header >> 4 & 15
     type = g_cache.vehicle(nationID, vehicleTypeID)
@@ -4213,19 +4214,19 @@ def _splitVehicleCompactDescr(compactDescr):
             optionalDeviceSlots |= 1 << i
 
     optionalDevices = compactDescr[idx:idx + count * 2]
-    raise len(optionalDevices) % 2 == 0 or AssertionError
+    assert len(optionalDevices) % 2 == 0
     idx += count * 2
-    emblemPositions = flags & 32 and ord(compactDescr[idx])
-    raise emblemPositions or AssertionError
-    idx += 1
-    count = 0
-    for i in _RANGE_4:
-        if emblemPositions & 1 << i:
-            count += 1
+    if flags & 32:
+        emblemPositions = ord(compactDescr[idx])
+        assert emblemPositions
+        idx += 1
+        count = 0
+        for i in _RANGE_4:
+            if emblemPositions & 1 << i:
+                count += 1
 
-    emblems = compactDescr[idx:idx + count * 6]
-    if not len(emblems) % 6 == 0:
-        raise AssertionError
+        emblems = compactDescr[idx:idx + count * 6]
+        assert len(emblems) % 6 == 0
         idx += count * 6
         count = 0
         for i in _RANGE_4:
@@ -4233,20 +4234,20 @@ def _splitVehicleCompactDescr(compactDescr):
                 count += 1
 
         inscriptions = compactDescr[idx:idx + count * 7]
-        if not len(inscriptions) % 7 == 0:
-            raise AssertionError
-            idx += count * 7
-        else:
-            emblemPositions = 0
-            emblems = ''
-            inscriptions = ''
-        horn = flags & 64 and ord(compactDescr[idx])
+        assert len(inscriptions) % 7 == 0
+        idx += count * 7
+    else:
+        emblemPositions = 0
+        emblems = ''
+        inscriptions = ''
+    if flags & 64:
+        horn = ord(compactDescr[idx])
         idx += 1
     else:
         horn = None
-    camouflages = flags & 128 and compactDescr[idx:]
-    if not len(camouflages) % 6 == 0:
-        raise AssertionError
+    if flags & 128:
+        camouflages = compactDescr[idx:]
+        assert len(camouflages) % 6 == 0
     else:
         camouflages = ''
     return (type,
@@ -4265,19 +4266,19 @@ def _combineVehicleCompactDescr(type, components, optionalDeviceSlots, optionalD
     vehicleTypeID = type.id[1]
     flags = optionalDeviceSlots
     if emblems or inscriptions:
-        if not emblemPositions:
-            raise AssertionError
-            flags |= 32
-        if camouflages:
-            flags |= 128
-        if horn is not None:
-            flags |= 64
-        cd = chr(header) + chr(vehicleTypeID) + components + chr(flags) + optionalDevices
-        if emblems or inscriptions:
-            cd += chr(emblemPositions) + emblems + inscriptions
-        if horn is not None:
-            cd += chr(horn)
-        camouflages and cd += camouflages
+        assert emblemPositions
+        flags |= 32
+    if camouflages:
+        flags |= 128
+    if horn is not None:
+        flags |= 64
+    cd = chr(header) + chr(vehicleTypeID) + components + chr(flags) + optionalDevices
+    if emblems or inscriptions:
+        cd += chr(emblemPositions) + emblems + inscriptions
+    if horn is not None:
+        cd += chr(horn)
+    if camouflages:
+        cd += camouflages
     return cd
 
 

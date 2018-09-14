@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/storage/fallout_storage.py
 from UnitBase import INV_ID_CLEAR_VEHICLE
 from account_helpers import AccountSettings
@@ -50,7 +51,7 @@ class FalloutLocalStorage(LocalStorage):
         return self.__settings['falloutBattleType']
 
     def setBattleType(self, value):
-        raise value in FALLOUT_BATTLE_TYPE.ALL or AssertionError('Unsupported battle type {} given!'.format(value))
+        assert value in FALLOUT_BATTLE_TYPE.ALL, 'Unsupported battle type {} given!'.format(value)
         self.__settings['falloutBattleType'] = value
         g_settingsCore.serverSettings.setSection(SETTINGS_SECTIONS.FALLOUT, self.__settings)
 

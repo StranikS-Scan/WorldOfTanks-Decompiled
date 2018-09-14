@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/functional.py
 import re
 import BigWorld
@@ -192,9 +193,9 @@ class FunctionalConditions(TutorialProxyHolder):
 
     def _isConditionActive(self, condition):
         condType = condition.getType()
-        functional = condType in _SUPPORTED_CONDITIONS and _SUPPORTED_CONDITIONS[condType]
-        if not functional:
-            raise AssertionError('Function condition can not be empty')
+        if condType in _SUPPORTED_CONDITIONS:
+            functional = _SUPPORTED_CONDITIONS[condType]
+            assert functional, 'Function condition can not be empty'
         else:
             LOG_ERROR('Condition is not found', condType)
             functional = FunctionalCondition()
@@ -236,7 +237,7 @@ class FunctionalEffect(TutorialProxyHolder):
 
     def getTarget(self):
         targetID = self.getTargetID()
-        raise targetID or AssertionError('TargetID must be defined to find entity')
+        assert targetID, 'TargetID must be defined to find entity'
         return self._data.getHasIDEntity(targetID)
 
     def isInstantaneous(self):

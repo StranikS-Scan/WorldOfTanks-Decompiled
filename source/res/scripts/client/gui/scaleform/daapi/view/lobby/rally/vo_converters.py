@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/vo_converters.py
 import BigWorld
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES, FALLOUT_BATTLE_TYPE

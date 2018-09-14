@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/entities.py
 from messenger.m_constants import PROTO_TYPE, USER_TAG, GAME_ONLINE_STATUS
 from messenger.proto.entities import UserEntity, ChannelEntity, MemberEntity

@@ -85,9 +85,9 @@
     <V-11-IS-3>	114	</V-11-IS-3>
     <M-17L_R>	115	</M-17L_R>
     <V-7>	116	</V-7>
+    <M_40_1200>	117	</M_40_1200>
     <Engine_01_KV>	200	</Engine_01_KV>
     <V-54K_T>	201	</V-54K_T>
-    <M_40_1200>	117	</M_40_1200>
     <Engine_T-50-2>	202	</Engine_T-50-2>
     <Observer>	203	</Observer>
     <M-50T_fallout>	206	</M-50T_fallout>
@@ -254,17 +254,17 @@
       <level>	7	</level>
       <price>	36000	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	750	</weight>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	550	</rpm_min>
+      <rpm_max>	1800	</rpm_max>
     </V-2IS>
     <V-2IS_B>
       <userString>	#ussr_vehicles:V-2IS_B	</userString>
@@ -353,13 +353,17 @@
       <level>	6	</level>
       <price>	27860	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	750	</weight>
       <maxHealth>	120	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	600	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </V-5>
     <V-5F>
       <userString>	#ussr_vehicles:V-5F	</userString>
@@ -381,13 +385,17 @@
       <level>	8	</level>
       <price>	34000	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	750	</power>
       <weight>	750	</weight>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </V-2SN>
     <M-17T>
       <userString>	#ussr_vehicles:M-17T	</userString>
@@ -460,15 +468,17 @@
       <level>	6	</level>
       <price>	23050	</price>
       <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
-      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </V-2K>
     <V-4>
       <userString>	#ussr_vehicles:V-4	</userString>
@@ -522,13 +532,17 @@
       <level>	1	</level>
       <price>	0	</price>
       <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	43	</power>
       <weight>	266	</weight>
       <maxHealth>	25	</maxHealth>
       <maxRegenHealth>	17	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	800	</rpm_min>
+      <rpm_max>	1800	</rpm_max>
     </MS-1>
     <GAZ-M1>
       <userString>	#ussr_vehicles:GAZ-M1	</userString>
@@ -550,13 +564,17 @@
       <level>	1	</level>
       <price>	340	</price>
       <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	70	</power>
       <weight>	920	</weight>
       <maxHealth>	35	</maxHealth>
       <maxRegenHealth>	27	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	800	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
     </AMO-3>
     <V-2-44>
       <userString>	#ussr_vehicles:V-2-44	</userString>
@@ -798,13 +816,17 @@
       <price>	84000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	700	</power>
       <weight>	750	</weight>
       <maxHealth>	370	</maxHealth>
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	600	</rpm_min>
+      <rpm_max>	2100	</rpm_max>
     </V-12A>
     <V-12-5>
       <userString>	#ussr_vehicles:V-12-5	</userString>
@@ -1206,14 +1228,32 @@
       <notInShop>	true	</notInShop>
       <price>	85000	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	1200	</power>
       <weight>	700	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	1850	</rpm_max>
     </M500>
+    <M_40>
+      <userString>	#ussr_vehicles:M_40	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	85000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <power>	1000	</power>
+      <weight>	1250	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </M_40>
     <M_40_1200>
       <userString>	#ussr_vehicles:M_40_1200	</userString>
       <tags>	diesel	</tags>
@@ -1233,20 +1273,6 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	1800	</rpm_max>
     </M_40_1200>
-    <M_40>
-      <userString>	#ussr_vehicles:M_40	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	85000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <power>	1000	</power>
-      <weight>	1250	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-    </M_40>
     <V-2SNx2>
       <userString>	#ussr_vehicles:V-2SNx2	</userString>
       <tags>	diesel	</tags>
@@ -1420,17 +1446,17 @@
       <price>	29000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	520	</power>
       <weight>	750	</weight>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	680	</rpm_min>
+      <rpm_max>	2039	</rpm_max>
     </V-44>
     <V-44A>
       <userString>	#ussr_vehicles:V-44A	</userString>
@@ -1516,13 +1542,17 @@
       <price>	4130	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	170	</power>
       <weight>	550	</weight>
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	30	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1000	</rpm_min>
+      <rpm_max>	3400	</rpm_max>
     </M-80_prem>
     <V-2IS_R1>
       <userString>	#ussr_vehicles:V-2IS_R	</userString>
@@ -1677,17 +1707,17 @@
       <price>	36000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	750	</weight>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	550	</rpm_min>
+      <rpm_max>	1800	</rpm_max>
     </V-2IS_IGR>
     <V-54-6_IGR>
       <userString>	#igr_vehicles:V-54-6_IGR	</userString>
@@ -1730,13 +1760,17 @@
       <notInShop>	true	</notInShop>
       <price>	85000	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
       <power>	1200	</power>
       <weight>	700	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	1850	</rpm_max>
     </M500_IGR>
     <AEC_A190_IGR>
       <userString>	#igr_vehicles:AEC_A190_IGR	</userString>

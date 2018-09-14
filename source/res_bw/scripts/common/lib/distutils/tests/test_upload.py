@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_upload.py
 """Tests for distutils.command.upload."""
 import os
@@ -22,7 +23,7 @@ class FakeOpen(object):
         return
 
     def getcode(self):
-        return 200
+        pass
 
 
 class uploadTestCase(PyPIRCCommandTestCase):

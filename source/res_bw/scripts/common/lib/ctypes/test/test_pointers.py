@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_pointers.py
 import unittest, sys
 from ctypes import *
@@ -71,8 +72,6 @@ class PointersTestCase(unittest.TestCase):
             for i in range(10):
                 self.result.append(arg[i])
 
-            return 0
-
         callback = PROTOTYPE(func)
         dll = CDLL(_ctypes_test.__file__)
         doit = dll._testfunc_callback_with_pointer
@@ -126,7 +125,7 @@ class PointersTestCase(unittest.TestCase):
         argv[0] = 'hello'
         argv[1] = 'world'
         result = func(byref(argc), argv)
-        raise result == 'world' or AssertionError(result)
+        assert result == 'world', result
 
     def test_bug_1467852(self):
         x = c_int(5)

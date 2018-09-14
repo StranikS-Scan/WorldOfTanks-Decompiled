@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/charset.py
 __all__ = ['Charset',
  'add_alias',
@@ -205,9 +206,9 @@ class Charset:
         Returns "base64" if self.body_encoding is BASE64.
         Returns "7bit" otherwise.
         """
-        if not self.body_encoding != SHORTEST:
-            raise AssertionError
-            return self.body_encoding == QP and 'quoted-printable'
+        assert self.body_encoding != SHORTEST
+        if self.body_encoding == QP:
+            return 'quoted-printable'
         elif self.body_encoding == BASE64:
             return 'base64'
         else:

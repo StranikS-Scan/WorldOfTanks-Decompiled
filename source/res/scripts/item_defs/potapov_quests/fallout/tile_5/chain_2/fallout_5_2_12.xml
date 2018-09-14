@@ -12,9 +12,10 @@
               <max>	1	</max>
               <total></total>
             </results>
-            <vehicleKills>
-              <greaterOrEqual>	10	</greaterOrEqual>
-            </vehicleKills>
+            <results>
+              <key>	winPoints	</key>
+              <greaterOrEqual>	350	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -45,9 +46,10 @@
               <max>	1	</max>
               <total></total>
             </results>
-            <vehicleKills>
-              <greaterOrEqual>	10	</greaterOrEqual>
-            </vehicleKills>
+            <results>
+              <key>	winPoints	</key>
+              <greaterOrEqual>	350	</greaterOrEqual>
+            </results>
             <results>
               <key>	flagCapture	</key>
               <greaterOrEqual>	1	</greaterOrEqual>

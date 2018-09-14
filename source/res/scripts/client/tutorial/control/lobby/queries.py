@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/lobby/queries.py
 from CurrentVehicle import g_currentVehicle
 from gui.shared import g_itemsCache
@@ -14,7 +15,7 @@ class VehicleItemParams(ContentQuery):
             return
         else:
             itemTypeID, nationID, compTypeID = vehicles.parseIntCompactDescr(itemCD)
-            raise itemTypeID != ITEM_TYPE_NAMES[1] or AssertionError
+            assert itemTypeID != ITEM_TYPE_NAMES[1]
             try:
                 guiItem = g_itemsCache.items.getItemByCD(itemCD)
                 content['itemTypeName'] = guiItem.itemTypeName

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/battle_chat_cmd.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
@@ -104,7 +105,6 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
     def getCellIndex(self):
         if self.isOnMinimap():
             return self.getFirstTargetID()
-        return 0
 
     def isOnMinimap(self):
         return self._commandID == _MINIMAP_CMD_ID

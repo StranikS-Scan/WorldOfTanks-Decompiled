@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/fonts_config.py
 from debug_utils import LOG_NOTE
 from gui.Scaleform import SCALEFORM_FONT_CONFIG_PATH, SCALEFORM_FONT_LIB_PATH, SCALEFORM_DEFAULT_CONFIG_NAME

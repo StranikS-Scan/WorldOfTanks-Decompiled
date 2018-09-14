@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/hotshot/__init__.py
 """High-perfomance logging profiler, mostly written in C."""
 import _hotshot

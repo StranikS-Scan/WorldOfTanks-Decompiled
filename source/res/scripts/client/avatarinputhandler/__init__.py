@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/__init__.py
 import functools
 import math
@@ -217,12 +218,12 @@ class AvatarInputHandler(CallbackDelayer):
         if not self.__isStarted:
             return
         self.__detachCount += -1 if isDetached else 1
-        if not self.__detachCount <= 0:
-            raise AssertionError
-            if self.__detachCount == -1 and isDetached:
-                self.__targeting.enable(False)
-                g_cursorDelegator.activateCursor()
-                enableAiming and self.setAimingMode(False, AIMING_MODE.USER_DISABLED)
+        assert self.__detachCount <= 0
+        if self.__detachCount == -1 and isDetached:
+            self.__targeting.enable(False)
+            g_cursorDelegator.activateCursor()
+            if enableAiming:
+                self.setAimingMode(False, AIMING_MODE.USER_DISABLED)
         elif not self.__detachCount:
             self.__targeting.enable(True)
             g_cursorDelegator.detachCursor()

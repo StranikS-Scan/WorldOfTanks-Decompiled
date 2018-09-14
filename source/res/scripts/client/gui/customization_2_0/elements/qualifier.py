@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/elements/qualifier.py
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers.i18n import makeString as _ms
@@ -90,7 +91,7 @@ class CamouflageQualifier(QualifierBase):
         return self.__value
 
     def getType(self):
-        return 'camouflage'
+        pass
 
     def getName(self):
         return _ms('#customization:bonusName/camouflage')

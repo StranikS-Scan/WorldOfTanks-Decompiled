@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/clan_cm_handlers.py
 from gui.clans import formatters as clans_fmts
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
@@ -21,7 +22,7 @@ class BaseClanCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         self.__clanAbbrev = ctx.clanAbbrev
 
     def showClanProfile(self):
-        event_dispatcher.showClanProfileWindow(self.__clanDbID)
+        event_dispatcher.showClanProfileWindow(self.__clanDbID, self.__clanAbbrev)
 
     def copyToClipboard(self):
         utils.copyToClipboard(clans_fmts.getClanFullName(self.__clanName, self.__clanAbbrev))

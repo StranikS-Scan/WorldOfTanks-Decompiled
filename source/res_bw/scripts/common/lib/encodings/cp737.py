@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/cp737.py
 """ Python Character Mapping Codec cp737 generated from 'VENDORS/MICSFT/PC/CP737.TXT' with gencodec.py.
 

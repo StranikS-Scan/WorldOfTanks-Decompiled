@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/httplib.py
 r"""HTTP/1.1 client library
 
@@ -472,7 +473,7 @@ class HTTPResponse():
             return s
 
     def _read_chunked(self, amt):
-        raise self.chunked != _UNKNOWN or AssertionError
+        assert self.chunked != _UNKNOWN
         chunk_left = self.chunk_left
         value = []
         while True:
@@ -844,10 +845,10 @@ class HTTPConnection():
             kwds['buffering'] = True
         response = self.response_class(*args, **kwds)
         response.begin()
-        if not response.will_close != _UNKNOWN:
-            raise AssertionError
-            self.__state = _CS_IDLE
-            response.will_close and self.close()
+        assert response.will_close != _UNKNOWN
+        self.__state = _CS_IDLE
+        if response.will_close:
+            self.close()
         else:
             self.__response = response
         return response
@@ -1069,30 +1070,30 @@ class LineAndFileWrapper():
         if self._line_consumed:
             return self._file.read(amt)
         else:
-            if not self._line_left:
-                raise AssertionError
-                if amt is None or amt > self._line_left:
-                    s = self._line[self._line_offset:]
-                    self._done()
-                    return amt is None and s + self._file.read()
+            assert self._line_left
+            if amt is None or amt > self._line_left:
+                s = self._line[self._line_offset:]
+                self._done()
+                if amt is None:
+                    return s + self._file.read()
                 else:
                     return s + self._file.read(amt - len(s))
             else:
-                if not amt <= self._line_left:
-                    raise AssertionError
-                    i = self._line_offset
-                    j = i + amt
-                    s = self._line[i:j]
-                    self._line_offset = j
-                    self._line_left -= amt
-                    self._line_left == 0 and self._done()
+                assert amt <= self._line_left
+                i = self._line_offset
+                j = i + amt
+                s = self._line[i:j]
+                self._line_offset = j
+                self._line_left -= amt
+                if self._line_left == 0:
+                    self._done()
                 return s
             return
 
     def readline(self):
         if self._line_consumed:
             return self._file.readline()
-        raise self._line_left or AssertionError
+        assert self._line_left
         s = self._line[self._line_offset:]
         self._done()
         return s
@@ -1100,11 +1101,11 @@ class LineAndFileWrapper():
     def readlines(self, size = None):
         if self._line_consumed:
             return self._file.readlines(size)
-        elif not self._line_left:
-            raise AssertionError
+        else:
+            assert self._line_left
             L = [self._line[self._line_offset:]]
             self._done()
-            return size is None and L + self._file.readlines()
-        else:
+            if size is None:
+                return L + self._file.readlines()
             return L + self._file.readlines(size)
-            return None
+            return

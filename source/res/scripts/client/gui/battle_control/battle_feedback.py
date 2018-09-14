@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_feedback.py
 from collections import defaultdict
 import weakref
@@ -220,7 +221,6 @@ class BattleFeedbackAdaptor(object):
     def __getSeries(self, vehiclesIDs):
         if hasattr(vehiclesIDs, '__len__'):
             return len(vehiclesIDs)
-        return 1
 
     def __firePlayerEvents(self):
         LOG_DEBUG('Fires events to show ribbons', self.__queue, self.__series)

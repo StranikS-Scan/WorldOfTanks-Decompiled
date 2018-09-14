@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/fallout_controller.py
 import weakref
 import Event
@@ -56,7 +57,7 @@ class _BaseDataStorage(object):
         pass
 
     def getSelectedSlots(self):
-        return ()
+        pass
 
     def canChangeBattleType(self):
         return False

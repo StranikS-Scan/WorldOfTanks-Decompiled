@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/settings.py
 import time
 from gui.shared import utils, events, g_eventBus
@@ -39,7 +40,7 @@ class _QuestSettings(utils.SettingRootRecord):
 
     @classmethod
     def _getSettingName(cls):
-        return 'quests'
+        pass
 
 
 def get():

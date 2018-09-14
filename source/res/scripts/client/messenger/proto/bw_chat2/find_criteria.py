@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/find_criteria.py
 from constants import PREBATTLE_TYPE
 from messenger.ext import channel_num_gen

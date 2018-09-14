@@ -12,11 +12,11 @@
     <Interface>	BattleResultProcessor	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_100000>
+    <requiredVersion_91300>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_0.10.00_3	</Default>
-    </requiredVersion_100000>
+      <Default>	ru_0.9.13_2	</Default>
+    </requiredVersion_91300>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -71,19 +71,19 @@
       <Type>	DB_ID	</Type>
       <Flags>	BASE	</Flags>
       <Persistent>	true	</Persistent>
-      <Default>	255	</Default>
+      <Default>	-1	</Default>
     </lastUserMessageID>
     <lastSystemMessageID>
       <Type>	DB_ID	</Type>
       <Flags>	BASE	</Flags>
       <Persistent>	true	</Persistent>
-      <Default>	255	</Default>
+      <Default>	-1	</Default>
     </lastSystemMessageID>
     <lastInternalSystemMessageID>
       <Type>	DB_ID	</Type>
       <Flags>	BASE	</Flags>
       <Persistent>	true	</Persistent>
-      <Default>	255	</Default>
+      <Default>	-1	</Default>
     </lastInternalSystemMessageID>
     <vivoxCredentials>
       <Type>	STRING	</Type>

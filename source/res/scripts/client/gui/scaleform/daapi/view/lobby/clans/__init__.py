@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/__init__.py
 from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileFortificationInfoView import ClanProfileFortificationInfoView
 from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileFortificationPromoView import ClanProfileFortificationPromoView

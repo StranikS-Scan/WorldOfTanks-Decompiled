@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/__init__.py
 import time
 import BigWorld
@@ -25,21 +26,18 @@ def getPrebattleEventName(extraData = None, escapeHtml = False):
     led = prb_getters.getPrebattleLocalizedData(extraData)
     if led:
         return getPrebattleLocalizedString('event_name', led, escapeHtml)
-    return ''
 
 
 def getPrebattleSessionName(extraData = None, escapeHtml = False):
     led = prb_getters.getPrebattleLocalizedData(extraData)
     if led:
         return getPrebattleLocalizedString('session_name', led, escapeHtml)
-    return ''
 
 
 def getPrebattleDescription(extraData = None, escapeHtml = False):
     led = prb_getters.getPrebattleLocalizedData(extraData)
     if led:
         return getPrebattleLocalizedString('desc', led, escapeHtml)
-    return ''
 
 
 def getPrebattleFullDescription(extraData = None, escapeHtml = False):
@@ -100,4 +98,3 @@ def getStartTimeLeft(startTime):
         startTime = makeLocalServerTime(startTime)
         if datetime.utcfromtimestamp(startTime) > datetime.utcnow():
             return (datetime.utcfromtimestamp(startTime) - datetime.utcnow()).seconds
-    return 0

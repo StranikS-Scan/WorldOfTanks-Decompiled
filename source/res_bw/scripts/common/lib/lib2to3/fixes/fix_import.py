@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_import.py
 """Fixer for import statements.
 If spam is being imported from the local directory, this import:

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/binhex.py
 """Macintosh binhex compression/decompression.
 
@@ -83,7 +84,7 @@ except ImportError:
             pass
 
         def read(self, *args):
-            return ''
+            pass
 
         def write(self, *args):
             pass

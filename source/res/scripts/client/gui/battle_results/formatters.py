@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/formatters.py
 from helpers import i18n
 from gui.clubs.formatters import getDivisionString, getLeagueString, getDivisionWithinLeague

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/battle/triggers.py
 from gui.battle_control import g_sessionProvider
 from tutorial.control.triggers import TriggerWithValidateVar

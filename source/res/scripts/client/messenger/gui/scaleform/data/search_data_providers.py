@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/search_data_providers.py
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_map.py
 """Fixer that changes map(F, ...) into list(map(F, ...)) unless there
 exists a 'from future_builtins import map' statement in the top-level

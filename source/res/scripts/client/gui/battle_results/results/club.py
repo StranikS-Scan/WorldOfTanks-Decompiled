@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/results/club.py
 from collections import namedtuple
 from functools import partial
@@ -13,7 +14,6 @@ from gui.clubs.settings import getLadderChevron128x128
 def _getClubWinString(isWin):
     if isWin:
         return 'win'
-    return 'lose'
 
 
 def _getClubWinStatus(isWin):

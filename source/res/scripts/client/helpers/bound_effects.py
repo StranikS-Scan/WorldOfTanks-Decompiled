@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/bound_effects.py
 import helpers
 from debug_utils import *

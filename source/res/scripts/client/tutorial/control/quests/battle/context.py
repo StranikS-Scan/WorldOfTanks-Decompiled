@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/battle/context.py
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.settings_constants import TUTORIAL

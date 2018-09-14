@@ -1,9 +1,11 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/vehicle.py
 import BigWorld
 import constants
 from debug_utils import LOG_ERROR
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from helpers import i18n
+from gui.shared.formatters import text_styles
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 from gui.shared import g_itemsCache
@@ -11,6 +13,7 @@ from gui.shared.tooltips import ToolTipDataField, ToolTipParameterField, ToolTip
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils import ItemsParameters, ParametersCache
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 
 class VehicleStatusField(ToolTipDataField):
 
@@ -138,7 +141,7 @@ class VehicleStatsField(ToolTipDataField):
                     unlockPriceStat.append(need)
                 if cost > 0:
                     result.append(('unlock_price', unlockPriceStat))
-            if buyPrice and not (vehicle.isDisabledForBuy or vehicle.isPremiumIGR):
+            if buyPrice and not (vehicle.isDisabledForBuy or vehicle.isPremiumIGR or vehicle.isTelecom):
                 price = vehicle.buyPrice
                 needed = (0, 0)
                 if not isInInventory and (isNextToUnlock or isUnlocked) or isRented:
@@ -149,7 +152,7 @@ class VehicleStatsField(ToolTipDataField):
                 result.append(('buy_price', (price, needed)))
                 result.append(('def_buy_price', vehicle.defaultPrice))
                 result.append(('action_prc', vehicle.actionPrc))
-            if sellPrice:
+            if sellPrice and not vehicle.isTelecom:
                 result.append(('sell_price', vehicle.sellPrice))
                 result.append(('def_sell_price', vehicle.defaultSellPrice))
                 result.append(('action_prc', vehicle.sellActionPrc))
@@ -243,6 +246,16 @@ class VehicleLocksField(ToolTipParameterField):
          'ROAMING': vehicle.isDisabledInRoaming}
 
 
+class VehicleDealField(ToolTipAttrField):
+
+    def _getValue(self):
+        result = None
+        isTelecom = super(VehicleDealField, self)._getValue()
+        if isTelecom:
+            result = text_styles.main(i18n.makeString('#tooltips:vehicle/deal/telecom/main'))
+        return result
+
+
 class VehicleTooltipData(ToolTipData):
 
     def __init__(self, context):
@@ -254,6 +267,7 @@ class VehicleTooltipData(ToolTipData):
          ToolTipAttrField(self, 'level'),
          ToolTipAttrField(self, 'isFavorite'),
          VehicleStatusField(self, 'status'),
+         VehicleDealField(self, 'dealText', 'isTelecom'),
          VehicleStatsField(self, 'stats'),
          VehicleParamsField(self, 'params'),
          VehicleLocksField(self, 'locks'))

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/asynchat.py
 r"""A class supporting chat-style (command/response) protocols.
 
@@ -124,7 +125,7 @@ class async_chat(asyncore.dispatcher):
 
     def readable(self):
         """predicate for inclusion in the readable for select()"""
-        return 1
+        pass
 
     def writable(self):
         """predicate for inclusion in the writable for select()"""

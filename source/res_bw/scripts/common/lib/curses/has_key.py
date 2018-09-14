@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/curses/has_key.py
 import _curses
 _capability_names = {_curses.KEY_A1: 'ka1',

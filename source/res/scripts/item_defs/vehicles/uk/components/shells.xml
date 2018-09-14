@@ -974,50 +974,6 @@
       <devices>	110	</devices>
     </damage>
   </_18pdr_AP_Mk_1T>
-  <_90mm_AP_M318>
-    <id>	119	</id>
-    <userString>	#gb_vehicles:_90mm_AP_M318	</userString>
-    <icon>	ap	</icon>
-    <price>	350	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	90	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
-    <damage>
-      <armor>	240	</armor>
-      <devices>	122	</devices>
-    </damage>
-  </_90mm_AP_M318>
-  <_90mm_APFSDS_T320>
-    <id>	120	</id>
-    <userString>	#gb_vehicles:_90mm_APFSDS_T320	</userString>
-    <icon>	ap_cr	</icon>
-    <price>	10	  <gold></gold>
-    </price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	90	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	240	</armor>
-      <devices>	122	</devices>
-    </damage>
-  </_90mm_APFSDS_T320>
-  <_90mm_HE_T340>
-    <id>	121	</id>
-    <userString>	#gb_vehicles:_90mm_HE_T340	</userString>
-    <icon>	he	</icon>
-    <price>	210	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	90	</caliber>
-    <explosionRadius>	1.46	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	320	</armor>
-      <devices>	122	</devices>
-    </damage>
-  </_90mm_HE_T340>
   <_25pdr_HE_Mk_1D>
     <id>	43	</id>
     <userString>	#gb_vehicles:_25pdr_HE_Mk_1D	</userString>
@@ -1062,6 +1018,50 @@
       <devices>	115	</devices>
     </damage>
   </_25pdr_AP_Mk_1T_SC>
+  <_90mm_AP_M318>
+    <id>	119	</id>
+    <userString>	#gb_vehicles:_90mm_AP_M318	</userString>
+    <icon>	ap	</icon>
+    <price>	350	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_AP_M318>
+  <_90mm_APFSDS_T320>
+    <id>	120	</id>
+    <userString>	#gb_vehicles:_90mm_APFSDS_T320	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	10	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_APFSDS_T320>
+  <_90mm_HE_T340>
+    <id>	121	</id>
+    <userString>	#gb_vehicles:_90mm_HE_T340	</userString>
+    <icon>	he	</icon>
+    <price>	210	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_HE_T340>
   <_3.7inch_AP>
     <id>	88	</id>
     <userString>	#gb_vehicles:_3.7inch_AP	</userString>
@@ -1317,6 +1317,21 @@
       <devices>	165	</devices>
     </damage>
   </_120mm_APDS_L1A1>
+  <_120mm_HE_L1A1>
+    <id>	59	</id>
+    <userString>	#gb_vehicles:_120mm_HE_L1A1	</userString>
+    <icon>	he	</icon>
+    <price>	1200	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_HE_L1A1>
   <_120mm_APDS_L15A4>
     <id>	116	</id>
     <userString>	#gb_vehicles:_120mm_APDS_L15A4	</userString>
@@ -1346,21 +1361,6 @@
       <devices>	165	</devices>
     </damage>
   </_120mm_APDS_L15A4_DU>
-  <_120mm_HE_L1A1>
-    <id>	59	</id>
-    <userString>	#gb_vehicles:_120mm_HE_L1A1	</userString>
-    <icon>	he	</icon>
-    <price>	1200	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	120	</caliber>
-    <explosionRadius>	2.42	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	largeHighExplosive	</effects>
-    <damage>
-      <armor>	515	</armor>
-      <devices>	165	</devices>
-    </damage>
-  </_120mm_HE_L1A1>
   <_120mm_HESH_L31>
     <id>	118	</id>
     <userString>	#gb_vehicles:_120mm_HESH_L31	</userString>

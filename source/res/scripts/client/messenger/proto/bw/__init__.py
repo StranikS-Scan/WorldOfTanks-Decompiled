@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/__init__.py
 from chat_shared import CHAT_RESPONSES
 from debug_utils import LOG_ERROR, LOG_DEBUG

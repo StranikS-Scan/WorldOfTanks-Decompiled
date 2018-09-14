@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/scheduled_notifications.py
 import operator
 import BigWorld
@@ -99,7 +100,6 @@ class DeltaNotifier(_Notifier):
     def _getNextNotificationDelta(self, delta):
         if delta >= self.__delta:
             return delta - self.__delta
-        return 0
 
 
 class SimpleNotifier(_Notifier):

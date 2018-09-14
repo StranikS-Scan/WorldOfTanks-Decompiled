@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/symbols.py
 """Module symbol-table generator"""
 from compiler import ast
@@ -261,13 +262,13 @@ class SymbolVisitor:
         self.visit(node.test, scope)
 
     def visitLambda(self, node, parent, assign = 0):
-        if not not assign:
-            raise AssertionError
-            for n in node.defaults:
-                self.visit(n, parent)
+        assert not assign
+        for n in node.defaults:
+            self.visit(n, parent)
 
-            scope = LambdaScope(self.module, self.klass)
-            scope.nested = (parent.nested or isinstance(parent, FunctionScope)) and 1
+        scope = LambdaScope(self.module, self.klass)
+        if parent.nested or isinstance(parent, FunctionScope):
+            scope.nested = 1
         self.scopes[node] = scope
         self._do_args(scope, node.argnames)
         self.visit(node.code, scope)

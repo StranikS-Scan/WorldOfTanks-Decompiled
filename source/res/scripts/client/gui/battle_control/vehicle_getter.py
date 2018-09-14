@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/vehicle_getter.py
 from collections import defaultdict
 from gui import TANKMEN_ROLES_ORDER_DICT

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/debug_utils.py
 import sys
 import BigWorld
@@ -452,7 +453,7 @@ def dump_garbage_2(verbose = True, generation = 2):
 
 def verify(expression):
     try:
-        raise expression or AssertionError
+        assert expression
     except AssertionError:
         LOG_CURRENT_EXCEPTION()
 

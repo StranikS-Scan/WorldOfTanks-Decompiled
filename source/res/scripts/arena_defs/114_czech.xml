@@ -1,0 +1,114 @@
+<114_czech.xml>
+  <name>	#arenas:114_czech/name	</name>
+  <description>	#arenas:114_czech/description	</description>
+  <geometry>	spaces/114_czech	</geometry>
+  <boundingBox>
+    <bottomLeft>	-400.000000 -400.000000	</bottomLeft>
+    <upperRight>	400.000000 400.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/114_czech/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <loadingMusic>	/music/intro/euro_city	</loadingMusic>
+  <wwloadingMusic>	music_euro_city	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_summer_01	</ambientSound>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-1.631470 339.893005	</position1>
+        </team1>
+        <team2>
+          <position1>	-10.210922 -345.489014	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <fallout6>
+      <winPoints>	MANY_FLAGS_10x10	</winPoints>
+      <maxPlayersInTeam>	10	</maxPlayersInTeam>
+      <teamSpawnPoints>
+        <team1>
+          <position>	0 356	</position>
+        </team1>
+        <team2>
+          <position>	0 -356	</position>
+        </team2>
+      </teamSpawnPoints>
+      <flagSpawnPoint>
+        <position>	24.921942 13.146006 278.404846	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	25.030397 13.039022 -290.289764	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-57.157860 12.773548 277.592529	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-57.013866 13.037355 -291.087189	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	351.830994 12.976900 -254.458618	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	3A64AB42.432D02CB.AAE7C4B1.9B0BC7C1	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	-305.815582 3.780262 -242.629089	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	381A148D.4B42176B.2DB3EB91.54B049A0	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	347.217072 16.866976 257.362549	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	BB2869DE.40D9CB5B.3BCD1293.BC5BF4A2	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	-274.557343 5.893362 258.251709	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	B5B7EB0F.4C6FA0A0.CBDB24BE.EA6462CF	</guid>
+      </flagAbsorptionPoint>
+      <repairPoint>
+        <cooldown>	180.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	10.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	317.022491 13.615773 -7.075882	</position>
+        <guid>	CC3DAB28.4A6298DA.81C5FAB5.9CA203E1	</guid>
+      </repairPoint>
+      <repairPoint>
+        <cooldown>	180.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	10.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-183.523071 5.001052 -9.374870	</position>
+        <guid>	33A53B7C.43E5690E.20E651A5.DE05D5A3	</guid>
+      </repairPoint>
+    </fallout6>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
+</114_czech.xml>

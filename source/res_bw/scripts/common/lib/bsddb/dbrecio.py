@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/dbrecio.py
 """
 File-like objects that read from or write to a bsddb record.
@@ -51,7 +52,6 @@ class DBRecIO:
     def isatty(self):
         if self.closed:
             raise ValueError, 'I/O operation on closed file'
-        return 0
 
     def seek(self, pos, mode = 0):
         if self.closed:

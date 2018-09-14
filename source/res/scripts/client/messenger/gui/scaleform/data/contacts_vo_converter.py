@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/contacts_vo_converter.py
 from constants import WG_GAMES
 from gui import makeHtmlString
@@ -224,7 +225,7 @@ class _GroupCondition(object):
         return self._htmlString
 
     def _makeHtmlString(self):
-        return ''
+        pass
 
 
 class TotalCondition(_GroupCondition):

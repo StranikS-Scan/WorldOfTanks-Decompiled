@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/logging/__init__.py
 """
 Logging package for Python. Based on PEP 282 and comments thereto in
@@ -437,13 +438,13 @@ class BufferingFormatter(object):
         """
         Return the header string for the specified records.
         """
-        return ''
+        pass
 
     def formatFooter(self, records):
         """
         Return the footer string for the specified records.
         """
-        return ''
+        pass
 
     def format(self, records):
         """
@@ -993,7 +994,7 @@ class Manager(object):
                 if isinstance(obj, Logger):
                     rv = obj
                 else:
-                    raise isinstance(obj, PlaceHolder) or AssertionError
+                    assert isinstance(obj, PlaceHolder)
                     obj.append(alogger)
             i = name.rfind('.', 0, i - 1)
 

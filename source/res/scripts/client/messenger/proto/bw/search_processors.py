@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/search_processors.py
 import chat_shared
 from constants import CHANNEL_SEARCH_RESULTS_LIMIT

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/cp874.py
 """ Python Character Mapping Codec cp874 generated from 'MAPPINGS/VENDORS/MICSFT/WINDOWS/CP874.TXT' with gencodec.py.
 

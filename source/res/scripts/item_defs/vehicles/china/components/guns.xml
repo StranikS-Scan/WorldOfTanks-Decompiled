@@ -379,11 +379,12 @@
         <returnTime>	0.36	</returnTime>
       </recoil>
       <effects>	shot_small	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
+      <reloadEffect>	reload20_45	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	43.75	</rotationSpeed>
       <reloadTime>	2.28571428571429	</reloadTime>
       <maxAmmo>	84	</maxAmmo>
@@ -491,11 +492,12 @@
         <returnTime>	0.36	</returnTime>
       </recoil>
       <effects>	shot_small	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
+      <reloadEffect>	reload20_45	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	43.75	</rotationSpeed>
       <reloadTime>	2.1	</reloadTime>
       <maxAmmo>	84	</maxAmmo>
@@ -548,11 +550,12 @@
         <returnTime>	0.4	</returnTime>
       </recoil>
       <effects>	shot_medium	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
+      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -26.0 1.0 -26.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	39.375	</rotationSpeed>
       <reloadTime>	4	</reloadTime>
       <maxAmmo>	52	</maxAmmo>
@@ -604,11 +607,12 @@
         <returnTime>	0.3	</returnTime>
       </recoil>
       <effects>	shot_medium	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
+      <reloadEffect>	reload50_75	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	43.75	</rotationSpeed>
       <reloadTime>	2.28571428571429	</reloadTime>
       <maxAmmo>	92	</maxAmmo>
@@ -998,11 +1002,12 @@
         <returnTime>	0.28	</returnTime>
       </recoil>
       <effects>	shot_main	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
+      <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -22.0 1.0 -22.0	</minPitch>
         <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	39.375	</rotationSpeed>
       <reloadTime>	5.71428571428571	</reloadTime>
       <maxAmmo>	59	</maxAmmo>
@@ -1054,11 +1059,12 @@
         <returnTime>	0.28	</returnTime>
       </recoil>
       <effects>	shot_main	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
+      <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -22.0 1.0 -22.0	</minPitch>
         <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	39.375	</rotationSpeed>
       <reloadTime>	5.1	</reloadTime>
       <maxAmmo>	59	</maxAmmo>
@@ -1110,11 +1116,12 @@
         <returnTime>	0.28	</returnTime>
       </recoil>
       <effects>	shot_main_mb	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
+      <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -22.0 1.0 -22.0	</minPitch>
         <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	39.375	</rotationSpeed>
       <reloadTime>	5.1	</reloadTime>
       <maxAmmo>	59	</maxAmmo>
@@ -1248,7 +1255,7 @@
           <speed>	914	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	173 162	</piercingPower>
+          <piercingPower>	190 170	</piercingPower>
         </_90mm_AP_M318>
         <_90mm_HEAT_M348>
           <defaultPortion>	0.0	</defaultPortion>
@@ -1393,11 +1400,12 @@
         <returnTime>	0.54	</returnTime>
       </recoil>
       <effects>	shot_main_mb	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
+      <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
         <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	33.25	</rotationSpeed>
       <reloadTime>	8.0	</reloadTime>
       <maxAmmo>	34	</maxAmmo>
@@ -1619,11 +1627,12 @@
         <returnTime>	0.58	</returnTime>
       </recoil>
       <effects>	shot_large_mb	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
+      <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	26.25	</rotationSpeed>
       <reloadTime>	12.34285714285710	</reloadTime>
       <maxAmmo>	24	</maxAmmo>

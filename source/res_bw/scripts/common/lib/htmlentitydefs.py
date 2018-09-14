@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/htmlentitydefs.py
 """HTML character entity references."""
 name2codepoint = {'AElig': 198,

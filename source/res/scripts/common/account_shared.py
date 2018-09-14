@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/account_shared.py
 import time
 import collections
@@ -93,7 +94,7 @@ def getCustomizedComponentInIGR(igrCustomizationLayout, vehInvID, custType, acco
          0,
          0)
     else:
-        raise False or AssertionError
+        assert False
     vehInfo = igrCustomizationLayout.get(vehInvID, None)
     if vehInfo is None:
         return default

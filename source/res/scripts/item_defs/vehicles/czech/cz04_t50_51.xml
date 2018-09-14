@@ -1,0 +1,495 @@
+<cz04_t50_51.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	12.5	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	2.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	65	</armor_1>
+      <armor_2>	65	</armor_2>
+      <armor_3>	40	</armor_3>
+      <armor_4>	30	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	80	</armor_7>
+      <armor_8>	8	</armor_8>
+      <armor_9>	40	</armor_9>
+      <armor_10>	100	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	14838	</weight>
+    <maxHealth>	1440	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/czech/Cz04_T50_51/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/czech/Cz04_T50_51/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/czech/Cz04_T50_51/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 34.00 0.40 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.24 34.00 0.40 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.2	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.67696 0.372903	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/czech/Cz04_T50_51/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.638161 0.552487 2.02577	</rayStart>
+        <rayEnd>	0.638161 0.461866 1.98348	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.51556 0.436622 0.191844	</rayStart>
+        <rayEnd>	-1.32812 0.366864 0.191829	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.7	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.51556 0.436622 0.191844	</rayStart>
+        <rayEnd>	1.32812 0.366864 0.191829	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.7	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	0.565 0.565 0.26 0.48	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_Cz04_T50_51>
+      <userString>	#czech_vehicles:Chassis_Cz04_T50_51	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	82500	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11500	</weight>
+      <maxLoad>	43000	</maxLoad>
+      <terrainResistance>	0.8 1.1 1.8	</terrainResistance>
+      <brakeForce>	40000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	54	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/czech/Cz04_T50_51/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz04_T50_51/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/czech/Cz04_T50_51/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.8	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.228819	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.0978993	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.416389	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.377326	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.228819	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.0978993	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.416389	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.377326	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.0078 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/czech/Cz04_T50_51/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.244 2.13367	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.471290 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.622860	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/czech/Cz04_T50_51/track/TVP_T50.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/czech/Cz04_T50_51/track/TVP_T50.model	</segmentModelRight>
+        <left>	vehicles/czech/Cz04_T50_51/track/left.track	</left>
+        <right>	vehicles/czech/Cz04_T50_51/track/right.track	</right>
+        <segmentLength>	0.121	</segmentLength>
+        <segmentOffset>	0.17	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.0014	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+      </trackNodes>
+    </Chassis_Cz04_T50_51>
+  </chassis>
+  <turrets0>
+    <Turret_1_Cz04_T50_51>
+      <userString>	#czech_vehicles:Turret_1_Cz04_T50_51	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	66000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	120	</armor_1>
+        <armor_2>	100	</armor_2>
+        <armor_3>	80	</armor_3>
+        <armor_4>	50	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_6>	50	</armor_6>
+        <armor_7>	60	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_7	</primaryArmor>
+      <weight>	9000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	410	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_100mm_AK1>	shared	  <maxAmmo>	48	</maxAmmo>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	40	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 0.430556 8 0.433333 4 0.436111 1.8 0.563889 1.8 0.566667 4 0.569444 8 1 8	</maxPitch>
+          </pitchLimits>
+          <clip>
+            <count>	4	</count>
+            <rate>	40	</rate>
+          </clip>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	25	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/czech/Cz04_T50_51/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz04_T50_51/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz04_T50_51/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/czech/Cz04_T50_51/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0939178 0.000000 2.54004	</rayStart>
+              <rayEnd>	0.0821858 -0.0222622 2.53929	</rayEnd>
+              <rayUp>	0.091 0.089 4	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <effects>	shot_main	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_100mm_AK1>
+      </guns>
+      <models>
+        <undamaged>	vehicles/czech/Cz04_T50_51/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz04_T50_51/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/czech/Cz04_T50_51/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/czech/Cz04_T50_51/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.095539 0.343337 1.18711	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.09822 0.604728 -0.0876518	</rayStart>
+          <rayEnd>	-0.931975 0.493854 -0.0793567	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.09822 0.604728 -0.0876518	</rayStart>
+          <rayEnd>	0.931975 0.493854 -0.0793567	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.573 0.122 0.500 0.500 0.500 0.500 0.226 0.500 0.143 0.500 0.000	</physicsShape>
+      <camouflage>
+        <tiling>	0.415 0.415 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_Cz04_T50_51>
+  </turrets0>
+  <engines>
+    <Praga_AXK>	shared	</Praga_AXK>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <Radiostanice_RM_31T_A>	shared	</Radiostanice_RM_31T_A>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	czech_round	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</cz04_t50_51.xml>

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/__init__.py
 from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ViewSettings
 from gui.Scaleform.framework import ScopeTemplates

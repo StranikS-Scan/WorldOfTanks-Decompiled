@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Util/py3compat.py
 """Compatibility code for handling string/bytes changes from Python 2.x to Py3k
 

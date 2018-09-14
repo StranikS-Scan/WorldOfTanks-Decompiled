@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/importlib/__init__.py
 """Backport of importlib.import_module from 3.x."""
 import sys

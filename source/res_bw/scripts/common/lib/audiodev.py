@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/audiodev.py
 """Classes for manipulating audio devices (currently only for Sun and SGI)"""
 from warnings import warnpy3k

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/formatters.py
 import BigWorld
 from client_request_lib.exceptions import ResponseCodes
@@ -78,13 +79,11 @@ def getRequestUserName(rqTypeID):
 def getClanRoleString(position):
     if position in CLAN_MEMBERS:
         return makeString('#menu:profile/header/clan/position/%s' % CLAN_MEMBERS[position])
-    return ''
 
 
 def getClanRoleIcon(role):
     if role in CLAN_MEMBERS:
         return '../maps/icons/clans/roles/%s.png' % CLAN_MEMBERS[role]
-    return ''
 
 
 def getClanAbbrevString(clanAbbrev):
@@ -197,7 +196,7 @@ class ClanAppActionHtmlTextFormatter(object):
         self.__actType = actType
 
     def getTitle(self):
-        return ''
+        pass
 
     def getComment(self, clanName):
         return makeHtmlString('html_templates:lobby/clans/', self.__actType, ctx={'name': clanName})

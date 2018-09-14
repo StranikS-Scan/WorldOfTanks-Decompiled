@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/storage/__init__.py
 from constants import PREBATTLE_TYPE as _P_TYPE
 from constants import QUEUE_TYPE as _Q_TYPE

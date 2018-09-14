@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/RenderTargets/__init__.py
 """RenderTargets python module
 This module manages the render targets used by the post-processing chain.

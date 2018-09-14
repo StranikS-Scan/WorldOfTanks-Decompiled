@@ -1,9 +1,10 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/common.py
 import cPickle
 import types
 import math
-import ResMgr
 from operator import methodcaller, itemgetter
+import ResMgr
 import BigWorld
 import constants
 import ArenaType
@@ -34,12 +35,10 @@ from helpers import i18n, time_utils, html, int2roman
 from helpers.i18n import makeString as ms, makeString
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as FORT
-from CurrentVehicle import g_currentVehicle
 from UnitBase import SORTIE_DIVISION
 from gui import g_htmlTemplates, makeHtmlString, game_control
 from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import makeDivisionData
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
-from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as I18N_FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeBuildingIndicatorsVO
 from gui.prb_control.items.unit_items import SupportedRosterSettings
@@ -301,12 +300,10 @@ class ContactTooltipData(ToolTipBaseData):
     def __addBR(self, currentUnit):
         if currentUnit != '':
             return '<br/>'
-        return ''
 
     def __addComma(self, currStr):
         if currStr != '':
             return ', '
-        return ''
 
 
 class SortieDivisionTooltipData(ToolTipBaseData):
@@ -316,10 +313,11 @@ class SortieDivisionTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self):
         divisionsData = []
-        divisions = makeDivisionData(I18N_FORTIFICATIONS.sortie_division_name)
+        divisions = makeDivisionData()
         for division in divisions:
+            minLvl, maxLvl = division['vehLvls']
             divisionsData.append({'divisName': division['label'],
-             'divisLevels': self.__getLevelsStr(division['level']),
+             'divisLevels': text_styles.main(fort_formatters.getTextLevel(minLvl) + ' - ' + fort_formatters.getTextLevel(maxLvl)),
              'divisBonus': self.__getBonusStr(division['profit']),
              'divisPlayers': self.__getPlayerLimitsStr(*self.__getPlayerLimits(division['level']))})
 
@@ -332,12 +330,6 @@ class SortieDivisionTooltipData(ToolTipBaseData):
 
     def __getPlayerLimitsStr(self, minCount, maxCount):
         return text_styles.main(str(minCount) + ' - ' + str(maxCount))
-
-    def __getLevelsStr(self, maxlvl):
-        minLevel = 1
-        minLevelStr = fort_formatters.getTextLevel(minLevel)
-        maxLevelStr = fort_formatters.getTextLevel(maxlvl)
-        return text_styles.main(minLevelStr + ' - ' + maxLevelStr)
 
     def __getBonusStr(self, bonus):
         return ''.join((text_styles.defRes(BigWorld.wg_getIntegralFormat(bonus) + ' '), icons.nut()))

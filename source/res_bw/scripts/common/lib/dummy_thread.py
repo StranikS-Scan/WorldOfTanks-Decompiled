@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/dummy_thread.py
 """Drop-in replacement for the thread module.
 
@@ -73,7 +74,7 @@ def get_ident():
     available, it is safe to assume that the current process is the
     only thread.  Thus a constant can be safely returned.
     """
-    return -1
+    pass
 
 
 def allocate_lock():

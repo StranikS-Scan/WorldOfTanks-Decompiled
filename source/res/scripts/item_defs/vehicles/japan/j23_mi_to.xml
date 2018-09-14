@@ -75,15 +75,15 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-2.32166 0.70341 -0.607125	</rayStart>
-        <rayEnd>	-2.12166 0.70341 -0.607125	</rayEnd>
+        <rayStart>	-2.32166 0.70531 -0.541977	</rayStart>
+        <rayEnd>	-2.12166 0.70531 -0.541977	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.809	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	2.32166 0.70341 -0.607125	</rayStart>
-        <rayEnd>	2.12166 0.70341 -0.607125	</rayEnd>
+        <rayStart>	2.32166 0.70531 -0.541977	</rayStart>
+        <rayEnd>	2.12166 0.70531 -0.541977	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.809	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
@@ -240,7 +240,7 @@
         <linkBones>	false	</linkBones>
         <maxAmplitude>	0.09	</maxAmplitude>
         <maxOffset>	0.1	</maxOffset>
-        <gravity>	248	</gravity>
+        <gravity>	-8	</gravity>
         <elasticity>	630	</elasticity>
         <damping>	2	</damping>
         <forwardElastK>	1	</forwardElastK>
@@ -551,7 +551,7 @@
         <linkBones>	false	</linkBones>
         <maxAmplitude>	0.09	</maxAmplitude>
         <maxOffset>	0.1	</maxOffset>
-        <gravity>	248	</gravity>
+        <gravity>	-8	</gravity>
         <elasticity>	630	</elasticity>
         <damping>	2	</damping>
         <forwardElastK>	1	</forwardElastK>
@@ -976,15 +976,15 @@
       <gunPosition>	-0.005965 0.531833 1.02871	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.18252 0.539992 0.326077	</rayStart>
-          <rayEnd>	-0.98252 0.539992 0.326077	</rayEnd>
+          <rayStart>	-1.19558 0.554603 0.361603	</rayStart>
+          <rayEnd>	-0.995576 0.554603 0.361603	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	1.20221 0.416105 -0.088284	</rayStart>
-          <rayEnd>	1.00221 0.416105 -0.088284	</rayEnd>
+          <rayStart>	1.18916 0.405521 -0.0194552	</rayStart>
+          <rayEnd>	0.989156 0.405521 -0.0194552	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -995,6 +995,7 @@
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <physicsShape>	1.000 0.036 1.000 0.000 0.766 -0.025 0.500 0.500 0.787 0.500 0.000 0.500 0.000 0.500 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
         <tiling>	0.73 0.385 0.000000 0.000000	</tiling>
       </camouflage>

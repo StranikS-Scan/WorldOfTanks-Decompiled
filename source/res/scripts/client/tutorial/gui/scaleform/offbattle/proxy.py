@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/offbattle/proxy.py
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.gui.Scaleform import effects_player

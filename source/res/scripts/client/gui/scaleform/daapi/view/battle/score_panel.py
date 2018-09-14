@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/score_panel.py
 import itertools
 import win_points
@@ -26,7 +27,6 @@ def _markerComparator(x1, x2):
     res = x1Index - x2Index
     if res:
         return res
-    return 0
 
 
 class _IScorePanel(object):

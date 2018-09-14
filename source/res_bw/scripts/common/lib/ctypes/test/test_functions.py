@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_functions.py
 """
 Here is probably the place to write the docs, since the test-cases
@@ -442,7 +443,7 @@ class FunctionTestCase(unittest.TestCase):
         proto = CFUNCTYPE(c_int, RECT, POINT)
 
         def callback(*args):
-            return 0
+            pass
 
         callback = proto(callback)
         self.assertRaises(ArgumentError, lambda : callback((1, 2, 3, 4), POINT()))

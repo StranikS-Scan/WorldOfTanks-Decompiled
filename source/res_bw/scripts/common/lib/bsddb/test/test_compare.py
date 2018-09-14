@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_compare.py
 """
 TestCases for python DB duplicate and Btree key comparison function.
@@ -13,7 +14,6 @@ def cmp(a, b):
         return 0
     if a < b:
         return -1
-    return 1
 
 
 lexical_cmp = cmp
@@ -170,7 +170,7 @@ class BtreeKeyCompareTestCase(AbstractBtreeKeyCompareTestCase):
         self.startTest()
 
         def socialist_comparator(l, r):
-            return 0
+            pass
 
         self.createDB(socialist_comparator)
         self.addDataToDB(['b', 'a', 'd'])
@@ -198,7 +198,7 @@ class BtreeExceptionsTestCase(AbstractBtreeKeyCompareTestCase):
         self.startTest()
 
         def bad_comparator(l, r):
-            return 1
+            pass
 
         self.assertRaises(TypeError, self.createDB, bad_comparator)
         self.finishTest()
@@ -257,7 +257,7 @@ class BtreeExceptionsTestCase(AbstractBtreeKeyCompareTestCase):
     def test_cannot_assign_twice(self):
 
         def my_compare(a, b):
-            return 0
+            pass
 
         self.startTest()
         self.createDB(my_compare)
@@ -370,7 +370,7 @@ class DuplicateExceptionsTestCase(AbstractDuplicateCompareTestCase):
         self.startTest()
 
         def bad_comparator(l, r):
-            return 1
+            pass
 
         self.assertRaises(TypeError, self.createDB, bad_comparator)
         self.finishTest()
@@ -379,7 +379,7 @@ class DuplicateExceptionsTestCase(AbstractDuplicateCompareTestCase):
         self.startTest()
 
         def socialist_comparator(l, r):
-            return 0
+            pass
 
         self.createDB(socialist_comparator)
         self.assertRaises(db.DBKeyExistError, self.addDataToDB, ['b', 'a', 'd'])
@@ -439,7 +439,7 @@ class DuplicateExceptionsTestCase(AbstractDuplicateCompareTestCase):
     def test_cannot_assign_twice(self):
 
         def my_compare(a, b):
-            return 0
+            pass
 
         self.startTest()
         self.createDB(my_compare)

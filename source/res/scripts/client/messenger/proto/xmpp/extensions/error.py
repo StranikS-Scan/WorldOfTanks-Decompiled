@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/error.py
 from messenger.proto.xmpp.extensions import PyExtension
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG
@@ -32,14 +33,14 @@ class StanzaErrorExtension(PyExtension):
     def __init__(self, errorCondition = None, errorType = None):
         super(StanzaErrorExtension, self).__init__(_TAG.ERROR)
         if errorCondition:
-            if not errorCondition in STANZA_ERRORS:
-                raise AssertionError
-                codeExt = PyExtension(errorCondition)
-                codeExt.setXmlNs(_NS.STANZA_ERROR)
-                self.setChild(codeExt)
-                if not errorType:
-                    errorType = STANZA_ERRORS[errorCondition]
-            errorType and self.setAttribute('type', errorType)
+            assert errorCondition in STANZA_ERRORS
+            codeExt = PyExtension(errorCondition)
+            codeExt.setXmlNs(_NS.STANZA_ERROR)
+            self.setChild(codeExt)
+            if not errorType:
+                errorType = STANZA_ERRORS[errorCondition]
+        if errorType:
+            self.setAttribute('type', errorType)
 
     def parseTag(self, pyGlooxTag):
         errorType = pyGlooxTag.findAttribute('type')

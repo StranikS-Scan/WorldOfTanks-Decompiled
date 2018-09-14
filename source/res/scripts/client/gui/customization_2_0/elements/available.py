@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/elements/available.py
 import Math
 from constants import IGR_TYPE
@@ -7,20 +8,21 @@ from helpers.i18n import makeString as _ms
 from CurrentVehicle import g_currentVehicle
 
 class Item(object):
-    __slots__ = ('_qualifier', '_rawData', '_price', '__isInDossier', '__itemID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__igrReplaced', 'numberOfItems', 'numberOfDays')
+    __slots__ = ('_qualifier', '_rawData', '_price', '__isInDossier', '__isInQuests', '__isInShop', '__itemID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays')
 
-    def __init__(self, itemID, rawData, qualifier, isInDossier, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced):
+    def __init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays):
         self.__isInDossier = isInDossier
+        self.__isInQuests = isInQuests
+        self.__isInShop = isInShop
         self.__itemID = itemID
         self.__allowedVehicles = allowedVehicles
         self.__notAllowedVehicles = notAllowedVehicles
         self.__allowedNations = allowedNations
         self.__igrReplaced = igrReplaced
-        self.numberOfItems = None
-        self.numberOfDays = None
+        self.__numberOfItems = numberOfItems
+        self.__numberOfDays = numberOfDays
         self._qualifier = qualifier
         self._rawData = rawData
-        return
 
     def getID(self):
         return self.__itemID
@@ -39,6 +41,14 @@ class Item(object):
 
     def getIgrType(self):
         raise NotImplementedError
+
+    @property
+    def numberOfDays(self):
+        return self.__numberOfDays
+
+    @property
+    def numberOfItems(self):
+        return self.__numberOfItems
 
     @property
     def isReplacedByIGRItem(self):
@@ -63,6 +73,18 @@ class Item(object):
         return self.__isInDossier or self.getIgrType() == getIGRCtrl().getRoomType() and getIGRCtrl().getRoomType() != IGR_TYPE.NONE
 
     @property
+    def isInQuests(self):
+        return self.__isInQuests
+
+    @property
+    def isInShop(self):
+        return self.__isInShop
+
+    @property
+    def isFeatured(self):
+        return False
+
+    @property
     def qualifier(self):
         return self._qualifier
 
@@ -72,14 +94,17 @@ class Item(object):
     def markIsInDossier(self):
         self.__isInDossier = True
 
+    def markIsInShop(self):
+        self.__isInShop = True
+
     def setAllowedVehicles(self, allowedVehicles):
         self.__allowedVehicles = allowedVehicles
 
 
 class Emblem(Item):
 
-    def __init__(self, itemID, rawData, qualifier, isInDossier, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced):
-        Item.__init__(self, itemID, rawData, qualifier, isInDossier, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced)
+    def __init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays):
+        Item.__init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays)
         self._price = g_itemsCache.items.shop.playerEmblemCost
 
     def getTexturePath(self):
@@ -103,8 +128,8 @@ class Emblem(Item):
 
 class Inscription(Item):
 
-    def __init__(self, itemID, rawData, qualifier, isInDossier, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced):
-        Item.__init__(self, itemID, rawData, qualifier, isInDossier, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced)
+    def __init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays):
+        Item.__init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays)
         self._price = g_itemsCache.items.shop.playerInscriptionCost
 
     def getTexturePath(self):
@@ -131,8 +156,8 @@ class Inscription(Item):
 
 class Camouflage(Item):
 
-    def __init__(self, itemID, rawData, qualifier, isInDossier, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced):
-        Item.__init__(self, itemID, rawData, qualifier, isInDossier, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced)
+    def __init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays):
+        Item.__init__(self, itemID, rawData, qualifier, isInDossier, isInQuests, isInShop, allowedVehicles, notAllowedVehicles, allowedNations, igrReplaced, numberOfItems, numberOfDays)
         self._price = g_itemsCache.items.shop.camouflageCost
 
     def getTexturePath(self):

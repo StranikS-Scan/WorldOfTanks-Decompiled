@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/interfaces.py
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 

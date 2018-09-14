@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/__init__.py
 """Support for Berkeley DB 4.3 through 5.3 with a simple interface.
 

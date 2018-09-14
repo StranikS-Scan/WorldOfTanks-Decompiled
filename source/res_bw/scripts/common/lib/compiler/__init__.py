@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/__init__.py
 """Package for parsing and compiling Python source code
 

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/local_cache.py
 import base64
 import shelve
@@ -177,12 +178,10 @@ class _AsyncIO(RedirectIO):
     def read(self, src):
         t = Thread(target=_readWorker, args=(self._uniqueID, self._redirect, self.onRead))
         t.start()
-        return ''
 
     def write(self, dst):
         t = Thread(target=_writeWorker, args=(self._uniqueID, self._redirect, dst))
         t.start()
-        return ''
 
 
 class PickleIO(RedirectIO):

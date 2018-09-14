@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/settings.py
 from UnitBase import UNIT_ERROR, UNIT_BROWSER_ERROR, LEADER_SLOT
 from constants import PREBATTLE_TYPE, PREBATTLE_INVITE_STATE

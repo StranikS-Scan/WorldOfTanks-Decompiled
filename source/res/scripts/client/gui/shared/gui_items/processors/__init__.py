@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/__init__.py
 from collections import namedtuple
 from debug_utils import *
@@ -55,7 +56,7 @@ class Processor(object):
         
         @param plugin: <ProcessorPlugin> new plugin
         """
-        raise plugin is not None or AssertionError('Invalid plugin')
+        assert plugin is not None, 'Invalid plugin'
         self.plugins.append(plugin)
         return
 

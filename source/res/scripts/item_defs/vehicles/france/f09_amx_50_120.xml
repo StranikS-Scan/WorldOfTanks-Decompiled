@@ -30,6 +30,7 @@
       <armor_11>	80	</armor_11>
       <armor_12>	0	</armor_12>
       <armor_13>	50	</armor_13>
+      <armor_16>	100	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	29000	</weight>
@@ -55,23 +56,23 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.751741 0.143437	</turret>
+      <turret>	0.000000 0.757634 0.141277	</turret>
     </turretPositions>
     <hitTester>
       <collisionModel>	vehicles/french/F09_AMX_50_120/collision/Hull.model	</collisionModel>
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.522588 0.66235 2.51806	</rayStart>
-        <rayEnd>	0.430549 0.357091 2.27652	</rayEnd>
-        <rayUp>	-0.557799 0.0331246 -0.829315	</rayUp>
+        <rayStart>	0.484141 0.494064 2.54648	</rayStart>
+        <rayEnd>	0.405081 0.175316 2.31813	</rayEnd>
+        <rayUp>	-0.477478 0.0310943 -0.878093	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-0.507118 0.593965 2.41893	</rayStart>
-        <rayEnd>	-0.426418 0.266462 2.20393	</rayEnd>
-        <rayUp>	0.489236 0.0361297 -0.871403	</rayUp>
+        <rayStart>	-0.482788 0.501766 2.5356	</rayStart>
+        <rayEnd>	-0.404094 0.183536 2.30641	</rayEnd>
+        <rayUp>	0.373477 0.03963 -0.926793	</rayUp>
         <size>	0.75	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
@@ -123,7 +124,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.35	</textureScale>
+        <textureScale>	-1.6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -220,11 +221,11 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <hullPosition>	0.000000 1.01074 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.00485 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/french/F09_AMX_50_120/collision/Chassis.model	</collisionModel>
       </hitTester>
-      <topRightCarryingPoint>	1.35409 2.22458	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.35457 2.21679	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -267,13 +268,55 @@
         <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.049	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.049	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
           <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
         </node>
@@ -290,76 +333,46 @@
           <backwardElastK>	0.75	</backwardElastK>
         </node>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	1.3	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	1.9	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L4	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	2.2	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L5	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	2.5	</backwardElastK>
-        </node>
-        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.049	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.084	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.084	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.084	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.084	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R5	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.049	</offset>
         </node>
       </trackNodes>
       <groundNodes>
@@ -419,7 +432,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.35	</textureScale>
+        <textureScale>	-1.6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -516,11 +529,11 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <hullPosition>	0.000000 1.01074 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.00485 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/french/F09_AMX_50_120/collision/Chassis.model	</collisionModel>
       </hitTester>
-      <topRightCarryingPoint>	1.35409 2.22458	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.35457 2.21679	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -563,13 +576,55 @@
         <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.049	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.049	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
           <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
         </node>
@@ -586,76 +641,46 @@
           <backwardElastK>	0.75	</backwardElastK>
         </node>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	1.3	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	1.9	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L4	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	2.2	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L5	</name>
-          <forwardElastK>	0.7	</forwardElastK>
-          <backwardElastK>	2.5	</backwardElastK>
-        </node>
-        <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.049	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.084	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.084	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.084	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.084	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R5	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.049	</offset>
         </node>
       </trackNodes>
       <groundNodes>

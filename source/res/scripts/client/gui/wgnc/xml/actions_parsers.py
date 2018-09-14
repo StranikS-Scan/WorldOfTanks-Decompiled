@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/actions_parsers.py
 from gui.wgnc import actions
 from gui.wgnc.errors import ParseError
@@ -6,7 +7,7 @@ from gui.wgnc.xml.shared_parsers import SectionParser, ParsersCollection
 class _CallbackActionParser(SectionParser):
 
     def getTagName(self):
-        return 'callback'
+        pass
 
     def parse(self, section):
         return actions.Callback(self._readString('name', section), section.readBool('purge', True))
@@ -15,7 +16,7 @@ class _CallbackActionParser(SectionParser):
 class _BrowseActionParser(SectionParser):
 
     def getTagName(self):
-        return 'browse'
+        pass
 
     def parse(self, section):
         name = self._readString('name', section)
@@ -33,7 +34,7 @@ class _BrowseActionParser(SectionParser):
 class _OpenWindowParser(SectionParser):
 
     def getTagName(self):
-        return 'openwindow'
+        pass
 
     def parse(self, section):
         return actions.OpenWindow(self._readString('name', section), self._readString('target', section))
@@ -42,7 +43,7 @@ class _OpenWindowParser(SectionParser):
 class _ReplaceButtonsAction(SectionParser):
 
     def getTagName(self):
-        return 'replace_buttons'
+        pass
 
     def parse(self, section):
         text = section.asString
@@ -54,7 +55,7 @@ class _ReplaceButtonsAction(SectionParser):
 class _ActionsParser(ParsersCollection):
 
     def getTagName(self):
-        return 'actions'
+        pass
 
     def parse(self, section):
         items = []

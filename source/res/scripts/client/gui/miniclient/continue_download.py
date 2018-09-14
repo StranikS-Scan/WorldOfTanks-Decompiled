@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/continue_download.py
 import BigWorld
 from gui import GUI_SETTINGS

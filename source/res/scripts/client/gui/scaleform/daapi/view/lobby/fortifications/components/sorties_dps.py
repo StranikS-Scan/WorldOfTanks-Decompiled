@@ -1,6 +1,8 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/sorties_dps.py
+import random
 import BigWorld
-from UnitBase import UNIT_FLAGS
+from UnitBase import UNIT_FLAGS, SORTIE_DIVISION
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getIconLevel
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getUnitMaxLevel, makeFortBattleShortVO
@@ -12,26 +14,31 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.items.sortie_items import getDivisionsOrderData
 from gui.prb_control.prb_helpers import unitFunctionalProperty
 from gui.shared.formatters import icons, text_styles
-from gui.shared.fortifications.fort_seqs import getDivisionSettings, BATTLE_ITEM_TYPE
+from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE, getDivisionSettings
 from gui.shared.utils import sortByFields
 from helpers import i18n, time_utils
 from shared_utils import CONST_CONTAINER
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
+from unit_roster_config import SortieSlot6, SortieSlot8, SortieSlot10
+MIN_MAX_VEH_LVLS_MAPPING = {SORTIE_DIVISION.MIDDLE: SortieSlot6,
+ SORTIE_DIVISION.CHAMPION: SortieSlot8,
+ SORTIE_DIVISION.ABSOLUTE: SortieSlot10}
 
-def makeDivisionData(nameGenerator):
+def makeDivisionData(nameGenerator = None):
     result = []
-    for name, level, rosterTypeID in getDivisionsOrderData():
+    for name, divisionID, rosterTypeID in getDivisionsOrderData():
         settings = getDivisionSettings(name)
         if settings:
             profit = settings.resourceBonus
         else:
             profit = 0
         result.append({'profit': profit,
-         'level': level,
-         'label': nameGenerator(name),
-         'data': rosterTypeID})
+         'level': divisionID,
+         'label': nameGenerator or I18N_FORTIFICATIONS.sortie_division_name(name),
+         'data': rosterTypeID,
+         'vehLvls': MIN_MAX_VEH_LVLS_MAPPING[divisionID].DEFAULT_LEVELS})
 
     return result
 
@@ -64,7 +71,7 @@ class DivisionsDataProvider(DAAPIDataProvider):
     def buildList(self):
         self.__list = [{'label': I18N_FORTIFICATIONS.sortie_division_name('ALL'),
           'data': 0}]
-        self.__list.extend(makeDivisionData(I18N_FORTIFICATIONS.sortie_division_name))
+        self.__list.extend(makeDivisionData())
 
     def getTypeIDByIndex(self, index):
         rosterTypeID = 0
@@ -117,7 +124,6 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
     def getSelectedIdx(self):
         if self._selectedID in self._mapping:
             return self._mapping[self._selectedID]
-        return -1
 
     def setSelectedID(self, id):
         self._selectedID = id
@@ -247,7 +253,6 @@ class IntelligenceDataProvider(SortableDAAPIDataProvider):
     def getSelectedIdx(self):
         if self.__selectedID in self.__mapping:
             return self.__mapping[self.__selectedID]
-        return -1
 
     def setSelectedID(self, id):
         self.__selectedID = id
@@ -361,7 +366,6 @@ class FortBattlesDataProvider(SortableDAAPIDataProvider):
     def getSelectedIdx(self):
         if self._selectedID in self._mapping:
             return self._mapping[self._selectedID]
-        return -1
 
     def setSelectedID(self, id):
         self._selectedID = id

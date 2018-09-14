@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_numbers.py
 from ctypes import *
 import unittest
@@ -99,7 +100,7 @@ class NumberTestCase(unittest.TestCase):
         class FloatLike(object):
 
             def __float__(self):
-                return 2.0
+                pass
 
         f = FloatLike()
         for t in float_types:
@@ -113,14 +114,14 @@ class NumberTestCase(unittest.TestCase):
         class FloatLike(object):
 
             def __float__(self):
-                return 2.0
+                pass
 
         f = FloatLike()
 
         class IntLike(object):
 
             def __int__(self):
-                return 2
+                pass
 
         i = IntLike()
         for t in signed_types + unsigned_types:

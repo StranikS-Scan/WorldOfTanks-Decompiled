@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/time_formatters.py
 import math
 from gui.Scaleform.locale.MENU import MENU
@@ -43,7 +44,7 @@ class RentLeftFormatter(object):
         self.__localizationRootKey = '#menu:vehicle/rentLeft/%s'
 
     def getRentLeftStr(self, localization = None, timeStyle = None, ctx = None, formatter = None):
-        if self.__rentInfo.timeLeft > 0:
+        if self.__rentInfo.getTimeLeft() > 0:
             resultStr = self.getRentTimeLeftStr(localization, timeStyle, ctx, formatter)
         else:
             resultStr = self.getRentBattlesLeftStr(localization, formatter)
@@ -55,7 +56,7 @@ class RentLeftFormatter(object):
         else:
             if localization is None:
                 localization = self.__localizationRootKey
-            return getTimeLeftStr(localization, self.__rentInfo.timeLeft, timeStyle, ctx, formatter)
+            return getTimeLeftStr(localization, self.__rentInfo.getTimeLeft(), timeStyle, ctx, formatter)
 
     def getRentBattlesLeftStr(self, localization = None, formatter = None):
         if localization is None:

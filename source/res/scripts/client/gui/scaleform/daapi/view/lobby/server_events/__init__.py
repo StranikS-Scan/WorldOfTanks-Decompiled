@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/__init__.py
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader.settings import APP_NAME_SPACE

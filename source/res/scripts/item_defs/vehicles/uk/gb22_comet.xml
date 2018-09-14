@@ -15,26 +15,50 @@
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB22_Comet/Comet_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
+    <variants>
+      <hull2>
+        <turret0>	Turret_2_GB22_Comet	</turret0>
+        <turretPositions>
+          <turret>	-0.00283 0.512548 0.47047	</turret>
+        </turretPositions>
+        <turretHardPoints>
+          <hardPoint>	HP_turretJoint_2	</hardPoint>
+        </turretHardPoints>
+        <camouflage>
+          <tiling>	2.2 2.2 0.06 0.000000	</tiling>
+        </camouflage>
+        <emblemSlots>
+          <clan>
+            <rayStart>	1.63491 0.0729774 2.49829	</rayStart>
+            <rayEnd>	1.43581 0.070291 2.51706	</rayEnd>
+            <rayUp>	0.000000 1 0.000000	</rayUp>
+            <size>	0.28	</size>
+            <hideIfDamaged>	true	</hideIfDamaged>
+          </clan>
+        </emblemSlots>
+      </hull2>
+    </variants>
     <armor>
-      <armor_1>	76	</armor_1>
-      <armor_2>	32	</armor_2>
-      <armor_3>	43	</armor_3>
-      <armor_4>	32	</armor_4>
+      <armor_1>	76.2	</armor_1>
+      <armor_2>	63.5	</armor_2>
+      <armor_3>	44.5	</armor_3>
+      <armor_4>	31.8	</armor_4>
       <armor_5>	25	</armor_5>
-      <armor_6>	32	</armor_6>
-      <armor_7>	14	</armor_7>
+      <armor_6>	14	</armor_6>
+      <armor_7>	42.9	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	76	</armor_9>
-      <armor_10>	63	</armor_10>
-      <armor_11>	12.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_11>
-      <armor_12>	12.7	</armor_12>
-      <armor_13>	20	</armor_13>
+      <armor_9>	42.9	</armor_9>
+      <armor_10>	31.8	</armor_10>
+      <armor_11>	20	</armor_11>
+      <armor_12>	25	</armor_12>
+      <armor_13>	8	</armor_13>
+      <armor_14>	31.8	</armor_14>
+      <armor_15>	39.3	</armor_15>
     </armor>
-    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	16960	</weight>
     <maxHealth>	840	</maxHealth>
     <ammoBayHealth>
@@ -47,6 +71,12 @@
       <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB22_Comet/crash/lod0/Hull.model	</exploded>
     </models>
+    <turretHardPoints>
+      <hardPoint>	HP_turretJoint_1	</hardPoint>
+    </turretHardPoints>
+    <turretPositions>
+      <turret>	-0.0024 0.514094 0.604276	</turret>
+    </turretPositions>
     <swinging>
       <lodDist>	FAR	</lodDist>
       <pitchParams>	0.26 36.00 0.48 1.00 0.05 0.33	</pitchParams>
@@ -58,20 +88,23 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.606466 0.429237	</turret>
+      <turret>	-0.0024 0.512718 0.486481	</turret>
     </turretPositions>
     <hitTester>
       <collisionModel>	vehicles/british/GB22_Comet/collision/Hull.model	</collisionModel>
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	1.72217 0.140098 2.40051	</rayStart>
-        <rayEnd>	1.32217 0.140098 2.40051	</rayEnd>
+        <rayStart>	1.63434 0.0747892 2.49193	</rayStart>
+        <rayEnd>	1.43524 0.0721028 2.5107	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <camouflage>
+      <tiling>	1.84 1.84 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_GB22_Comet>
@@ -110,13 +143,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	ussr_01	</textureSet>
-        <size>	0.46 0.44	</size>
+        <size>	0.46 0.5	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	255	</textureScale>
+        <textureScale>	-2.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -125,6 +158,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.308162	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -138,6 +172,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.301326	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -151,6 +186,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.308162	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -164,6 +200,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.301326	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -180,12 +217,14 @@
         <mud>	mediumTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <hullPosition>	0.000000 1.00643 0.000000	</hullPosition>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.07131 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB22_Comet/collision/Chassis.model	</collisionModel>
       </hitTester>
-      <topRightCarryingPoint>	1.27104 1.85501	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.27382 1.92609	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -198,6 +237,144 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.041	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.041	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB22_Comet/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB22_Comet/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB22_Comet/track/left.track	</left>
+        <right>	vehicles/british/GB22_Comet/track/right.track	</right>
+        <segmentLength>	0.118	</segmentLength>
+        <segmentOffset>	0.076	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.006	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.14	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.14	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.52	</forwardElastK>
+          <backwardElastK>	0.91	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.52	</forwardElastK>
+          <backwardElastK>	0.91	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.26	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+      </trackNodes>
     </Chassis_GB22_Comet>
     <Chassis_GB22_Comet_2>
       <userString>	#gb_vehicles:Chassis_GB22_Comet_2	</userString>
@@ -231,13 +408,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	ussr_01	</textureSet>
-        <size>	0.46 0.42	</size>
+        <size>	0.46 0.5	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	255	</textureScale>
+        <textureScale>	-2.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -246,6 +423,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.308162	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -259,6 +437,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.301326	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -272,6 +451,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.308162	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -285,6 +465,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.301326	</radius>
+          <syncAngle>	20	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -301,12 +482,14 @@
         <mud>	mediumTankMud	</mud>
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <hullPosition>	0.000000 1.00643 0.000000	</hullPosition>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.07131 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB22_Comet/collision/Chassis.model	</collisionModel>
       </hitTester>
-      <topRightCarryingPoint>	1.27104 1.85501	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.27382 1.92609	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -319,6 +502,144 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.041	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.041	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB22_Comet/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB22_Comet/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB22_Comet/track/left.track	</left>
+        <right>	vehicles/british/GB22_Comet/track/right.track	</right>
+        <segmentLength>	0.118	</segmentLength>
+        <segmentOffset>	0.076	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.006	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.14	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.14	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.52	</forwardElastK>
+          <backwardElastK>	0.91	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.52	</forwardElastK>
+          <backwardElastK>	0.91	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.26	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.68	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+      </trackNodes>
     </Chassis_GB22_Comet_2>
   </chassis>
   <turrets0>
@@ -333,15 +654,16 @@
       </unlocks>
       <armor>
         <armor_1>	76.2	</armor_1>
-        <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_2>
+        <armor_2>	76.2	</armor_2>
         <armor_3>	63.5	</armor_3>
         <armor_4>	57.2	</armor_4>
         <armor_5>	20	</armor_5>
-        <armor_6>	63.5	</armor_6>
-        <armor_7>	19.1	</armor_7>
+        <armor_6>	19.1	</armor_6>
+        <armor_7>	76.2	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	20	</armor_9>
+        <armor_9>	63.5	</armor_9>
+        <armor_10>	20	</armor_10>
+        <armor_11>	20	</armor_11>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
@@ -367,15 +689,11 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	30	</gun>
+            <gun>	20	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
-            <maxPitch>	0 10 0.083333 10 0.146995 13 0.380783 13 0.444444 0 0.555556 0 0.619218 13 0.853005 13 0.916667 10 1 10	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 13 0.411111 13 0.430556 6 0.563889 6 0.583333 13 1 13	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	3	</reloadTime>
@@ -395,9 +713,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.118055 -0.0125322 1.39181	</rayStart>
+              <rayStart>	0.073769 -0.0344761 1.39181	</rayStart>
               <rayEnd>	0.184439 -0.210101 1.38966	</rayEnd>
-              <rayUp>	0.051 0.05 3	</rayUp>
+              <rayUp>	0.056 0.056 3	</rayUp>
               <size>	0.334	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -406,15 +724,11 @@
         </_75mm_Gun_Mk_V>
         <_3.7inch_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
           <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	30	</gun>
+            <gun>	40	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
-            <maxPitch>	0 9 0.083333 9 0.146995 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 0.853005 10 0.916667 9 1 9	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.405556 10 0.425 4 0.563889 4 0.583333 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.53	</shotDispersionRadius>
           <reloadTime>	7	</reloadTime>
@@ -429,9 +743,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.119001 -0.0123388 0.833534	</rayStart>
-              <rayEnd>	0.108285 -0.0294914 0.833408	</rayEnd>
-              <rayUp>	0.087 0.086 2	</rayUp>
+              <rayStart>	0.0735673 -0.0350909 0.667755	</rayStart>
+              <rayEnd>	0.0136589 -0.00965118 0.667755	</rayEnd>
+              <rayUp>	0.077 0.077 4	</rayUp>
               <size>	0.279	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -443,15 +757,11 @@
         </_3.7inch_Howitzer>
         <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	61	</maxAmmo>
           <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
             <gun>	20	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
-            <maxPitch>	0 8 0.380783 8 0.444444 0 0.555556 0 0.619218 8 1 8	</maxPitch>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.411111 8 0.430556 5 0.563889 5 0.583333 8 1 8	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	3.9	</reloadTime>
@@ -462,19 +772,19 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
-            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_07.model	</exploded>
+            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB22_Comet/collision/Gun_07.model	</collisionModel>
+            <collisionModel>	vehicles/british/GB22_Comet/collision/Gun_03.model	</collisionModel>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.1184 -0.0104054 2.01548	</rayStart>
-              <rayEnd>	0.315301 -0.0651352 2.01352	</rayEnd>
-              <rayUp>	0.053 0.051 2	</rayUp>
-              <size>	0.416	</size>
+              <rayStart>	0.0737653 -0.035178 1.19347	</rayStart>
+              <rayEnd>	0.0551393 -0.06716 1.19343	</rayEnd>
+              <rayUp>	0.068 0.068 4	</rayUp>
+              <size>	0.4	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
@@ -492,27 +802,28 @@
       <hitTester>
         <collisionModel>	vehicles/british/GB22_Comet/collision/Turret_01.model	</collisionModel>
       </hitTester>
-      <gunPosition>	-0.06904 0.309542 0.605131	</gunPosition>
+      <gunPosition>	0.0024 0.421234 0.705259	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	1.08845 0.567705 0.0636119	</rayStart>
-          <rayEnd>	0.694085 0.567705 -0.00329502	</rayEnd>
+          <rayStart>	1.00711 0.455455 0.263213	</rayStart>
+          <rayEnd>	0.617357 0.455422 0.173245	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	-1.03108 0.390506 0.39656	</rayStart>
-          <rayEnd>	-0.636724 0.390506 0.329654	</rayEnd>
+          <rayStart>	-0.992395 0.452435 0.299741	</rayStart>
+          <rayEnd>	-0.602652 0.452401 0.209776	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.64	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.629 0.123 1.000 0.377 0.201 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	1.011 -0.005 1.000 0.000 0.578 0.233 1.000 0.377 0.201 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
     </Turret_1_GB22_Comet>
     <Turret_2_GB22_Comet>
@@ -525,16 +836,16 @@
         </gun>
       </unlocks>
       <armor>
-        <armor_1>	111	</armor_1>
-        <armor_2>	111	</armor_2>
-        <armor_3>	63	</armor_3>
-        <armor_4>	57	</armor_4>
-        <armor_5>	25	</armor_5>
-        <armor_6>	51	</armor_6>
-        <armor_7>	25	</armor_7>
+        <armor_1>	101.6	</armor_1>
+        <armor_2>	76.2	</armor_2>
+        <armor_3>	63.5	</armor_3>
+        <armor_4>	57.2	</armor_4>
+        <armor_5>	20	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_7>	44.5	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	30	</armor_9>
-        <armor_10>	30	</armor_10>
+        <armor_9>	25.4	</armor_9>
+        <armor_10>	44.5	</armor_10>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
@@ -555,15 +866,23 @@
       <guns>
         <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	61	</maxAmmo>
           <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <gun>	30	</gun>
+            <armor_3>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	20	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
-            <maxPitch>	0 12 0.380783 12 0.444444 0 0.555556 0 0.619218 12 1 12	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 12 0.416667 12 0.427778 7.5 0.572222 7.5 0.583333 12 1 12	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <reloadTime>	3	</reloadTime>
@@ -574,18 +893,18 @@
           </shotDispersionFactors>
           <aimingTime>	1.5	</aimingTime>
           <models>
-            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB22_Comet/collision/Gun_03.model	</collisionModel>
+            <collisionModel>	vehicles/british/GB22_Comet/collision/Gun_04.model	</collisionModel>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.000021 -0.000095 1.20552	</rayStart>
-              <rayEnd>	0.185782 -0.0968682 1.20338	</rayEnd>
-              <rayUp>	0.051 0.05 3	</rayUp>
+              <rayStart>	-0.0184689 0.011345 1.46024	</rayStart>
+              <rayEnd>	-0.0706349 0.0101069 1.46024	</rayEnd>
+              <rayUp>	0.055 0.055 4	</rayUp>
               <size>	0.334	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -597,108 +916,28 @@
         </_75mm_Gun_Mk_V>
         <_3.7inch_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
           <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <gun>	30	</gun>
+            <armor_3>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	40	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
-            <maxPitch>	0 8 0.380783 8 0.444444 0 0.555556 0 0.619218 8 1 8	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 0.416667 8 0.427778 6.5 0.572222 6.5 0.583333 8 1 8	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.51	</shotDispersionRadius>
           <reloadTime>	7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <models>
-            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/british/GB22_Comet/collision/Gun_04.model	</collisionModel>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000000 0.00975548 0.711684	</rayStart>
-              <rayEnd>	0.02038 -0.0029203 0.711531	</rayEnd>
-              <rayUp>	0.086 0.086 2	</rayUp>
-              <size>	0.312	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_3.7inch_Howitzer>
-        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	61	</maxAmmo>
-          <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
-            <maxPitch>	0 12 0.380783 12 0.444444 0 0.555556 0 0.619218 12 1 12	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	3.9	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_08.model	</undamaged>
-            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_08.model	</destroyed>
-            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_08.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModel>	vehicles/british/GB22_Comet/collision/Gun_08.model	</collisionModel>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000999904 0.00675293 1.72061	</rayStart>
-              <rayEnd>	0.052193 -0.0388175 1.71891	</rayEnd>
-              <rayUp>	0.058 0.054 2	</rayUp>
-              <size>	0.443	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.76 0.76 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_75mm_Gun_Vickers_HV>
-        <OQF_77mm_Gun_MkII>	shared	  <maxAmmo>	61	</maxAmmo>
-          <unlocks>
-            <vehicle>	GB23_Centurion	  <cost>	100000	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	30	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
-            <maxPitch>	0 12 0.380783 12 0.444444 0 0.555556 0 0.619218 12 1 12	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	3.9	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -713,9 +952,113 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.000000 0.0093976 1.90784	</rayStart>
+              <rayStart>	-0.0186705 0.0107303 0.777435	</rayStart>
+              <rayEnd>	0.0426454 -0.0111177 0.777435	</rayEnd>
+              <rayUp>	0.077 0.077 4	</rayUp>
+              <size>	0.32	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_3.7inch_Howitzer>
+        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	61	</maxAmmo>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 12 0.416667 12 0.427778 7 0.572222 7 0.583333 12 1 12	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	3.9	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB22_Comet/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0182987 0.0112904 1.311	</rayStart>
+              <rayEnd>	0.0106655 -0.0337011 1.31101	</rayEnd>
+              <rayUp>	0.068 0.068 4	</rayUp>
+              <size>	0.4	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.76 0.76 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Gun_Vickers_HV>
+        <OQF_77mm_Gun_MkII>	shared	  <maxAmmo>	61	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB23_Centurion	  <cost>	100000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 12 0.416667 12 0.427778 6 0.572222 6 0.583333 12 1 12	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	3.9	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB22_Comet/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/british/GB22_Comet/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/british/GB22_Comet/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB22_Comet/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0182986 0.0107904 1.90784	</rayStart>
               <rayEnd>	0.0439644 -0.0373841 1.90698	</rayEnd>
-              <rayUp>	0.065 0.063 2	</rayUp>
+              <rayUp>	0.068 0.068 4	</rayUp>
               <size>	0.487	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -734,26 +1077,27 @@
       <hitTester>
         <collisionModel>	vehicles/british/GB22_Comet/collision/Turret_02.model	</collisionModel>
       </hitTester>
-      <gunPosition>	-0.00784 0.296584 0.677513	</gunPosition>
+      <gunPosition>	0.00283 0.427813 0.590312	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.61214 0.381431 0.463229	</rayStart>
-          <rayEnd>	-0.565933 0.381431 0.123464	</rayEnd>
+          <rayStart>	-1.62046 0.454902 0.44279	</rayStart>
+          <rayEnd>	-0.60638 0.454621 0.0166215	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	1.31561 0.330679 -0.0404818	</rayStart>
-          <rayEnd>	0.915612 0.330679 -0.0404818	</rayEnd>
+          <rayStart>	1.22767 0.445942 0.0836528	</rayStart>
+          <rayEnd>	1.02767 0.445898 0.0818748	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.74	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <size>	0.56	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.138 -0.255 1.024 0.000 0.520 0.168 0.780 0.659 0.347 0.500 0.024 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	1.138 -0.322 1.024 -0.000 0.520 0.168 0.780 0.659 0.347 0.500 0.024 0.500 0.000 0.100 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
     </Turret_2_GB22_Comet>
   </turrets0>

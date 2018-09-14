@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/cookielib.py
 r"""HTTP cookie handling for web clients.
 
@@ -358,7 +359,7 @@ def split_header_words(header_values):
     [[('Basic', None), ('realm', '"foobar"')]]
     
     """
-    raise not isinstance(header_values, basestring) or AssertionError
+    assert not isinstance(header_values, basestring)
     result = []
     for text in header_values:
         orig_text = text
@@ -389,7 +390,7 @@ def split_header_words(header_values):
                 pairs = []
             else:
                 non_junk, nr_junk_chars = re.subn('^[=\\s;]*', '', text)
-                raise nr_junk_chars > 0 or AssertionError("split_header_words bug: '%s', '%s', %s" % (orig_text, text, pairs))
+                assert nr_junk_chars > 0, "split_header_words bug: '%s', '%s', %s" % (orig_text, text, pairs)
                 text = non_junk
 
         if pairs:
@@ -880,7 +881,7 @@ class DefaultCookiePolicy(CookiePolicy):
         
         """
         _debug(' - checking cookie %s=%s', cookie.name, cookie.value)
-        raise cookie.name is not None or AssertionError
+        assert cookie.name is not None
         for n in ('version', 'verifiability', 'name', 'path', 'domain', 'port'):
             fn_name = 'set_ok_' + n
             fn = getattr(self, fn_name)

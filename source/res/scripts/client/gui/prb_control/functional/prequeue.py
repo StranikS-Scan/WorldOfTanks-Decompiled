@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/prequeue.py
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -21,7 +22,7 @@ class PreQueueEntry(interfaces.IPrbEntry):
 
     def __init__(self, queueType, flags):
         super(PreQueueEntry, self).__init__()
-        raise queueType in QUEUE_TYPE.ALL or AssertionError
+        assert queueType in QUEUE_TYPE.ALL
         self.__queueType = queueType
         self.__flags = flags
 
@@ -111,7 +112,7 @@ class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
         return self._queueType
 
     def getPermissions(self, pID = None, **kwargs):
-        raise pID is None or AssertionError('Current player has no any player in that mode')
+        assert pID is None, 'Current player has no any player in that mode'
         return PreQueuePermissions(self.isInQueue())
 
     def getConfirmDialogMeta(self, ctx):

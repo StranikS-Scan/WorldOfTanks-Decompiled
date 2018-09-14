@@ -1,19 +1,23 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/service_channel.py
+import time
 import types
 import operator
+import constants
+import account_helpers
+import ArenaType
+import BigWorld
+import potapov_quests
 from FortifiedRegionBase import FORT_ATTACK_RESULT, NOT_ACTIVATED
 from adisp import async, process
 from chat_shared import decompressSysMessage
 from club_shared import ladderRating
-import constants
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-import account_helpers
-import ArenaType
-import BigWorld
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from shared_utils import BoundMethodWeakref
 from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.shared.formatters import text_styles
-import potapov_quests
 from gui import GUI_SETTINGS
 from gui.LobbyContext import g_lobbyContext
 from gui.clubs.formatters import getLeagueString, getDivisionString
@@ -34,8 +38,7 @@ import offers
 from gui.prb_control.formatters import getPrebattleFullDescription
 from helpers import i18n, html, getClientLanguage, getLocalizedData
 from helpers import time_utils
-from items import getTypeInfoByIndex, getTypeInfoByName
-from items import vehicles as vehicles_core
+from items import getTypeInfoByIndex, getTypeInfoByName, vehicles as vehicles_core
 from account_helpers import rare_achievements
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
@@ -46,7 +49,6 @@ from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, PREBATTLE_INVITE_STA
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
 
 def _getTimeStamp(message):
-    import time
     if message.createdAt is not None:
         result = time.mktime(message.createdAt.timetuple())
     else:
@@ -288,7 +290,6 @@ class BattleResultsFormatter(ServiceChannelFormatter):
                 exStrings.append(', '.join(xpFactorStrings))
         if len(exStrings):
             return ' ({0:s})'.format('; '.join(exStrings))
-        return ''
 
     def __makeCreditsExString(self, accCredits, creditsPenalty, creditsContributionIn, creditsContributionOut):
         if not accCredits:
@@ -301,7 +302,6 @@ class BattleResultsFormatter(ServiceChannelFormatter):
             exStrings.append(self.__i18n_contribution % BigWorld.wg_getIntegralFormat(creditsContributionIn))
         if len(exStrings):
             return ' ({0:s})'.format('; '.join(exStrings))
-        return ''
 
     def __makeGoldString(self, gold):
         if not gold:
@@ -506,11 +506,11 @@ class GiftReceivedFormatter(ServiceChannelFormatter):
 
 
 class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
-    __assetHandlers = {INVOICE_ASSET.GOLD: '_InvoiceReceivedFormatter__formatAmount',
-     INVOICE_ASSET.CREDITS: '_InvoiceReceivedFormatter__formatAmount',
-     INVOICE_ASSET.PREMIUM: '_InvoiceReceivedFormatter__formatAmount',
-     INVOICE_ASSET.FREE_XP: '_InvoiceReceivedFormatter__formatAmount',
-     INVOICE_ASSET.DATA: '_InvoiceReceivedFormatter__formatData'}
+    __assetHandlers = {INVOICE_ASSET.GOLD: '_formatAmount',
+     INVOICE_ASSET.CREDITS: '_formatAmount',
+     INVOICE_ASSET.PREMIUM: '_formatAmount',
+     INVOICE_ASSET.FREE_XP: '_formatAmount',
+     INVOICE_ASSET.DATA: '_formatData'}
     __operationTemplateKeys = {INVOICE_ASSET.GOLD: 'goldAccruedInvoiceReceived',
      INVOICE_ASSET.CREDITS: 'creditsAccruedInvoiceReceived',
      INVOICE_ASSET.PREMIUM: 'premiumAccruedInvoiceReceived',
@@ -530,7 +530,10 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     __i18nCrewDroppedString = i18n.makeString('#{0:s}:serviceChannelMessages/invoiceReceived/droppedCrewsToBarracks'.format(MESSENGER_I18N_FILE))
     __i18nCrewWithdrawnString = i18n.makeString('#{0:s}:serviceChannelMessages/invoiceReceived/vehicleCrewWithdrawn'.format(MESSENGER_I18N_FILE))
 
-    def __getOperationTimeString(self, data):
+    def _getMessageTemplateKey(self, assetType):
+        return self.__messageTemplateKeys[assetType]
+
+    def _getOperationTimeString(self, data):
         operationTime = data.get('at', None)
         if operationTime:
             fDatetime = TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(operationTime))
@@ -603,7 +606,9 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     def __getVehicleName(cls, vehCompDescr):
         vehicleName = None
         try:
-            vehicleName = getUserName(vehicles_core.getVehicleType(abs(vehCompDescr)))
+            if vehCompDescr < 0:
+                vehCompDescr = abs(vehCompDescr)
+            vehicleName = getUserName(vehicles_core.getVehicleType(vehCompDescr))
         except:
             LOG_ERROR('Wrong vehicle compact descriptor', vehCompDescr)
             LOG_CURRENT_EXCEPTION()
@@ -764,64 +769,69 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 del data['credits']
         return
 
-    def __formatAmount(self, assetType, data):
+    def _formatAmount(self, assetType, data):
         amount = data.get('amount', None)
         if amount is None:
             return
         else:
-            return g_settings.msgTemplates.format(self.__messageTemplateKeys[assetType], ctx={'at': self.__getOperationTimeString(data),
+            return g_settings.msgTemplates.format(self._getMessageTemplateKey(assetType), ctx={'at': self._getOperationTimeString(data),
              'desc': self.__getL10nDescription(data),
              'op': self.__getFinOperationString(assetType, amount)})
 
-    def __formatData(self, assetType, data):
+    def _composeOperations(self, data):
         dataEx = data.get('data', {})
         if dataEx is None or not len(dataEx):
             return
-        operations = []
-        self._processCompensations(dataEx)
-        gold = dataEx.get('gold')
-        if gold is not None:
-            operations.append(self.__getFinOperationString(INVOICE_ASSET.GOLD, gold))
-        accCredtis = dataEx.get('credits')
-        if accCredtis is not None:
-            operations.append(self.__getFinOperationString(INVOICE_ASSET.CREDITS, accCredtis))
-        freeXp = dataEx.get('freeXP')
-        if freeXp is not None:
-            operations.append(self.__getFinOperationString(INVOICE_ASSET.FREE_XP, freeXp))
-        premium = dataEx.get('premium')
-        if premium is not None:
-            operations.append(self.__getFinOperationString(INVOICE_ASSET.PREMIUM, premium))
-        items = dataEx.get('items', {})
-        if items is not None and len(items) > 0:
-            operations.append(self.__getItemsString(items))
-        tmen = dataEx.get('tankmen', [])
-        vehicles = dataEx.get('vehicles', {})
-        if vehicles is not None and len(vehicles) > 0:
-            result = self._getVehiclesString(vehicles)
-            if len(result):
-                operations.append(result)
-            comptnStr = self._getComptnString(vehicles)
-            if len(comptnStr):
-                operations.append(comptnStr)
-            for v in vehicles.itervalues():
-                tmen.extend(v.get('tankmen', []))
-
-        if tmen is not None and len(tmen) > 0:
-            operations.append(self._getTankmenString(tmen))
-        slots = dataEx.get('slots')
-        if slots:
-            operations.append(self.__getSlotsString(slots))
-        berths = dataEx.get('berths')
-        if berths:
-            operations.append(self.__getBerthsString(berths))
-        goodies = data.get('goodies', {})
-        if goodies is not None and len(goodies) > 0:
-            operations.append(self._getGoodiesString(goodies))
-        _extendCustomizationData(dataEx, operations)
-        if not operations:
-            return
         else:
-            return g_settings.msgTemplates.format(self.__messageTemplateKeys[assetType], ctx={'at': self.__getOperationTimeString(data),
+            operations = []
+            self._processCompensations(dataEx)
+            gold = dataEx.get('gold')
+            if gold is not None:
+                operations.append(self.__getFinOperationString(INVOICE_ASSET.GOLD, gold))
+            accCredtis = dataEx.get('credits')
+            if accCredtis is not None:
+                operations.append(self.__getFinOperationString(INVOICE_ASSET.CREDITS, accCredtis))
+            freeXp = dataEx.get('freeXP')
+            if freeXp is not None:
+                operations.append(self.__getFinOperationString(INVOICE_ASSET.FREE_XP, freeXp))
+            premium = dataEx.get('premium')
+            if premium is not None:
+                operations.append(self.__getFinOperationString(INVOICE_ASSET.PREMIUM, premium))
+            items = dataEx.get('items', {})
+            if items is not None and len(items) > 0:
+                operations.append(self.__getItemsString(items))
+            tmen = dataEx.get('tankmen', [])
+            vehicles = dataEx.get('vehicles', {})
+            if vehicles is not None and len(vehicles) > 0:
+                result = self._getVehiclesString(vehicles)
+                if len(result):
+                    operations.append(result)
+                comptnStr = self._getComptnString(vehicles)
+                if len(comptnStr):
+                    operations.append(comptnStr)
+                for v in vehicles.itervalues():
+                    tmen.extend(v.get('tankmen', []))
+
+            if tmen is not None and len(tmen) > 0:
+                operations.append(self._getTankmenString(tmen))
+            slots = dataEx.get('slots')
+            if slots:
+                operations.append(self.__getSlotsString(slots))
+            berths = dataEx.get('berths')
+            if berths:
+                operations.append(self.__getBerthsString(berths))
+            goodies = data.get('goodies', {})
+            if goodies is not None and len(goodies) > 0:
+                operations.append(self._getGoodiesString(goodies))
+            _extendCustomizationData(dataEx, operations)
+            return operations
+
+    def _formatData(self, assetType, data):
+        operations = self._composeOperations(data)
+        if not operations:
+            return None
+        else:
+            return g_settings.msgTemplates.format(self._getMessageTemplateKey(assetType), ctx={'at': self._getOperationTimeString(data),
              'desc': self.__getL10nDescription(data),
              'op': '<br/>'.join(operations)})
 
@@ -838,7 +848,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             if handler is not None:
                 formatted = getattr(self, handler)(assetType, data)
             if formatted is not None:
-                settings = self._getGuiSettings(message, self.__messageTemplateKeys[assetType])
+                settings = self._getGuiSettings(message, self._getMessageTemplateKey(assetType))
         callback((formatted, settings))
         return
 
@@ -1369,7 +1379,6 @@ class BattleTutorialResultsFormatter(ClientSysMessageFormatter):
                 key = self.__resultKeyWoBonuses
             else:
                 key = self.__resultKeyWithBonuses
-            import time
             startedAtTime = data.get('startedAt', time.time())
             formatted = g_settings.msgTemplates.format(key, ctx=ctx, data={'timestamp': startedAtTime,
              'savedData': data.get('arenaUniqueID', 0)})
@@ -1405,8 +1414,6 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             for qID in completedQuestIDs:
                 if potapov_quests.g_cache.isPotapovQuest(qID):
                     return 'potapovQuests'
-
-        return 'tokenQuests'
 
     def _formatQuestAchieves(self, message):
         data = message.data
@@ -1929,13 +1936,13 @@ class RefSystemReferralContributedXPFormatter(ServiceChannelFormatter):
 class RefSystemQuestsFormatter(TokenQuestsFormatter):
 
     def _getTemplateName(self, completedQuestIDs = set()):
-        return 'refSystemQuests'
+        pass
 
 
 class PotapovQuestsFormatter(TokenQuestsFormatter):
 
     def _getTemplateName(self, completedQuestIDs = set()):
-        return 'potapovQuests'
+        pass
 
 
 class GoodieRemovedFormatter(WaitItemsSyncFormatter):
@@ -1957,3 +1964,119 @@ class GoodieRemovedFormatter(WaitItemsSyncFormatter):
         else:
             callback((None, None))
         return
+
+
+class TelecomStatusFormatter(ServiceChannelFormatter):
+
+    @staticmethod
+    def __getVehicleNames(vehTypeCompDescrs):
+        itemGetter = g_itemsCache.items.getItemByCD
+        return ', '.join((itemGetter(vehicleCD).userName for vehicleCD in vehTypeCompDescrs))
+
+    def format(self, message, *args):
+        formatted, settings = (None, None)
+        try:
+            template = 'telecomVehicleStatus'
+            ctx = self.__getMessageContext(message.data)
+            settings = self._getGuiSettings(message, template)
+            formatted = g_settings.msgTemplates.format(template, ctx, data={'timestamp': time.time()})
+        except:
+            LOG_ERROR("Can't format telecom status message ", message)
+            LOG_CURRENT_EXCEPTION()
+
+        return (formatted, settings)
+
+    def __getMessageContext(self, data):
+        key = 'vehicleUnblocked' if data['orderStatus'] else 'vehicleBlocked'
+        msgctx = {'vehicles': self.__getVehicleNames(data['vehTypeCompDescrs'])}
+        ctx = {}
+        for txtBlock in ('title', 'comment', 'subcomment'):
+            ctx[txtBlock] = i18n.makeString('#system_messages:telecom/notifications/{0:s}/{1:s}'.format(key, txtBlock), **msgctx)
+
+        return ctx
+
+
+class TelecomReceivedInvoiceFormatter(InvoiceReceivedFormatter):
+
+    @staticmethod
+    def invoiceHasCrew(data):
+        dataEx = data.get('data', {})
+        hasCrew = False
+        vehicles = dataEx.get('vehicles', {})
+        for vehicle in vehicles:
+            if vehicles[vehicle].get('tankmen', None):
+                hasCrew = True
+
+        return hasCrew
+
+    @staticmethod
+    def invoiceHasBrotherhood(data):
+        dataEx = data.get('data', {})
+        hasBrotherhood = False
+        vehicles = dataEx.get('vehicles', {})
+        for vehicle in vehicles:
+            tankmens = vehicles[vehicle].get('tankmen', [])
+            if tankmens:
+                for tankmen in tankmens:
+                    skills = tankmen.get('freeSkills', [])
+                    if 'brotherhood' in skills:
+                        hasBrotherhood = True
+
+        return hasBrotherhood
+
+    def _getVehicles(self, data):
+        dataEx = data.get('data', {})
+        if not dataEx:
+            return
+        else:
+            vehicles = dataEx.get('vehicles', {})
+            rentedVehNames = None
+            if vehicles is not None and len(vehicles) > 0:
+                _, _, rentedVehNames = self._getVehicleNames(vehicles)
+            return rentedVehNames
+
+    def _getMessageTemplateKey(self, data):
+        pass
+
+    def _getMessageContext(self, data, vehicleNames):
+        ctx = {}
+        hasCrew = self.invoiceHasCrew(data)
+        if hasCrew:
+            if self.invoiceHasBrotherhood(data):
+                skills = ' (%s)' % i18n.makeString(ITEM_TYPES.TANKMAN_SKILLS_BROTHERHOOD)
+            else:
+                skills = ''
+            ctx['crew'] = i18n.makeString(SYSTEM_MESSAGES.TELECOM_NOTIFICATIONS_VEHICLERECEIVED_CREW, skills=skills)
+        else:
+            ctx['crew'] = ''
+        ctx['vehicles'] = ', '.join(vehicleNames)
+        ctx['datetime'] = self._getOperationTimeString(data)
+        return ctx
+
+    def _formatData(self, assetType, data):
+        vehicleNames = self._getVehicles(data)
+        if not vehicleNames:
+            return None
+        else:
+            return g_settings.msgTemplates.format(self._getMessageTemplateKey(None), ctx=self._getMessageContext(data, vehicleNames), data={'timestamp': time.time()})
+
+
+class TelecomRemovedInvoiceFormatter(TelecomReceivedInvoiceFormatter):
+
+    def _getMessageTemplateKey(self, data):
+        pass
+
+    def _getVehicles(self, data):
+        dataEx = data.get('data', {})
+        if not dataEx:
+            return
+        else:
+            vehicles = dataEx.get('vehicles', {})
+            removedVehNames = None
+            if vehicles:
+                _, removedVehNames, _ = self._getVehicleNames(vehicles)
+            return removedVehNames
+
+    def _getMessageContext(self, data, vehicleNames):
+        return {'vehicles': ', '.join(vehicleNames),
+         'datetime': self._getOperationTimeString(data)}

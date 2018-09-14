@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/setuptools_build_ext.py
 from distutils.command.build_ext import build_ext as _du_build_ext
 try:
@@ -30,7 +31,6 @@ elif os.name != 'nt':
 def if_dl(s):
     if have_rtld:
         return s
-    return ''
 
 
 class build_ext(_build_ext):
@@ -225,10 +225,10 @@ else:
     libtype = 'static'
 
     def link_shared_object(self, objects, output_libname, output_dir = None, libraries = None, library_dirs = None, runtime_library_dirs = None, export_symbols = None, debug = 0, extra_preargs = None, extra_postargs = None, build_temp = None, target_lang = None):
-        if not output_dir is None:
-            raise AssertionError
-            output_dir, filename = os.path.split(output_libname)
-            basename, ext = os.path.splitext(filename)
-            basename = self.library_filename('x').startswith('lib') and basename[3:]
+        assert output_dir is None
+        output_dir, filename = os.path.split(output_libname)
+        basename, ext = os.path.splitext(filename)
+        if self.library_filename('x').startswith('lib'):
+            basename = basename[3:]
         self.create_static_lib(objects, basename, output_dir, debug, target_lang)
         return

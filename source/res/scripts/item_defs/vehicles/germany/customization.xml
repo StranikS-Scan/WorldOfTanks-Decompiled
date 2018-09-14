@@ -528,6 +528,20 @@
 				</inscription>
 			</inscriptions>
 		</clan_content>
+		<VK7201>
+			<userString> #vehicle_customization:inscription/special </userString>
+			<notInShop> true </notInShop>
+			<priceFactor> 0.0 </priceFactor>
+			<allow> germany:VK7201 </allow>
+			<inscriptions>
+				<inscription>
+					<id> 801 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/special/inscription_52.dds </texName>
+					<userString> #vehicle_customization:inscription/special/special_52</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+			</inscriptions>
+		</VK7201>
 	</inscriptions>
 	<insigniaOnGun>
 		<!-- Properties for each insignia:
@@ -604,7 +618,7 @@
 			<id> 3 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 100 54 31 214 </c0>
 				<c1> 21 26 30 0 </c1>
@@ -636,7 +650,7 @@
 				<G22_Sturmpanzer_II> 3.1 3.1 0.34 0.25 </G22_Sturmpanzer_II>
 				<G23_Grille> 2.7 2.9 0.3 0.27 </G23_Grille>
 				<VK3002DB> 2.5 2.6 0.87 0.59 </VK3002DB>
-				<PzII_Luchs> 3.5 3.6 0.11 0.2 </PzII_Luchs>
+				<G25_PzII_Luchs> 2.8 2.8 0.11 0.2 </G25_PzII_Luchs>
 				<G26_VK1602> 2.4 3.2 0.39 0.04 </G26_VK1602>
 				<VK3001P> 3 3.1 0.28 0.000000 </VK3001P>
 				<PzIII_IV> 2.5 2.5 0.53 0.38 </PzIII_IV>
@@ -737,7 +751,7 @@
 			<id> 4 </id>
 			<kind> winter </kind>
 			<group> winter </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 7 38 54 0 </c0>
 				<c1> 21 26 30 187 </c1>
@@ -769,7 +783,7 @@
 				<G22_Sturmpanzer_II> 4.7 4.7 0.3 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 4.6 4.8 0.62 0.3 </G23_Grille>
 				<VK3002DB> 4.9 4.2 0.65 0.97 </VK3002DB>
-				<PzII_Luchs> 3.7 3 0.19 0.42 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.8 3.8 0.13 0.92 </G25_PzII_Luchs>
 				<G26_VK1602> 3.3 3.3 0.35 0.78 </G26_VK1602>
 				<VK3001P> 4.1 3.3 0.32 1 </VK3001P>
 				<PzIII_IV> 4.3 4.8 0.52 0.16 </PzIII_IV>
@@ -870,7 +884,7 @@
 			<id> 5 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 198 108 66 0 </c0>
 				<c1> 161 148 69 204 </c1>
@@ -902,7 +916,7 @@
 				<G22_Sturmpanzer_II> 5.3 5.3 0.37 0.51 </G22_Sturmpanzer_II>
 				<G23_Grille> 3.7 3.8 0.1 0.97 </G23_Grille>
 				<VK3002DB> 3 2.6 0.9 0.33 </VK3002DB>
-				<PzII_Luchs> 3 2.2 0.000000 0.08 </PzII_Luchs>
+				<G25_PzII_Luchs> 2.8 2.8 0.000000 0.34 </G25_PzII_Luchs>
 				<G26_VK1602> 2.8 2.8 0.52 0.87 </G26_VK1602>
 				<VK3001P> 2.9 2.8 0.44 0.58 </VK3001P>
 				<PzIII_IV> 2.7 2.8 0.12 0.06 </PzIII_IV>
@@ -1001,7 +1015,7 @@
 			<id> 6 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 51 26 19 220 </c0>
 				<c1> 44 59 38 216 </c1>
@@ -1033,7 +1047,7 @@
 				<G22_Sturmpanzer_II> 5.3 5.3 0.66 0.46 </G22_Sturmpanzer_II>
 				<G23_Grille> 4.1 4.1 0.62 0.34 </G23_Grille>
 				<VK3002DB> 3.3 3.6 0.16 0.63 </VK3002DB>
-				<PzII_Luchs> 3.3 2.2 0.23 0.96 </PzII_Luchs>
+				<G25_PzII_Luchs> 4.5 4 0.45 0.15 </G25_PzII_Luchs>
 				<G26_VK1602> 4.4 3.6 0.36 0.18 </G26_VK1602>
 				<VK3001P> 3.2 3 0.74 0.98 </VK3001P>
 				<PzIII_IV> 3 3 0.18 0.56 </PzIII_IV>
@@ -1133,7 +1147,7 @@
 			<id> 7 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 51 26 19 193 </c0>
 				<c1> 44 59 38 217 </c1>
@@ -1165,7 +1179,7 @@
 				<G22_Sturmpanzer_II> 5.5 5.5 0.12 0.05 </G22_Sturmpanzer_II>
 				<G23_Grille> 4.3 4.4 0.64 0.02 </G23_Grille>
 				<VK3002DB> 4.6 3.6 0.21 0.44 </VK3002DB>
-				<PzII_Luchs> 3.1 3.4 0.000000 0.39 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.8 3.8 0.000000 0.39 </G25_PzII_Luchs>
 				<G26_VK1602> 3.6 3.6 0.000000 0.69 </G26_VK1602>
 				<VK3001P> 3 3 0.16 0.71 </VK3001P>
 				<PzIII_IV> 3.2 3.8 0.39 0.44 </PzIII_IV>
@@ -1265,7 +1279,7 @@
 			<id> 8 </id>
 			<kind> desert </kind>
 			<group> desert </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 193 228 247 0 </c0>
 				<c1> 85 21 22 187 </c1>
@@ -1297,7 +1311,7 @@
 				<G22_Sturmpanzer_II> 4.6 4.6 0.18 0.28 </G22_Sturmpanzer_II>
 				<G23_Grille> 4.1 4.1 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 3.6 3.8 0.88 0.67 </VK3002DB>
-				<PzII_Luchs> 3.7 3.7 0.5 0.01 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.7 3.7 0.52 0.15 </G25_PzII_Luchs>
 				<G26_VK1602> 2.6 2.6 1 0.3 </G26_VK1602>
 				<VK3001P> 3.7 3.7 0.92 0.11 </VK3001P>
 				<PzIII_IV> 3.7 3.7 0.000000 0.000000 </PzIII_IV>
@@ -1396,7 +1410,7 @@
 			<id> 9 </id>
 			<kind> desert </kind>
 			<group> desert </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 21 26 30 220 </c0>
 				<c1> 207 175 128 190 </c1>
@@ -1428,7 +1442,7 @@
 				<G22_Sturmpanzer_II> 5.6 5.6 0.33 0.4 </G22_Sturmpanzer_II>
 				<G23_Grille> 3 3 0.02 0.05 </G23_Grille>
 				<VK3002DB> 2.5 2.5 0.45 0.1 </VK3002DB>
-				<PzII_Luchs> 2.8 2.7 0.35 0.31 </PzII_Luchs>
+				<G25_PzII_Luchs> 4.3 4.3 0.37 0.73 </G25_PzII_Luchs>
 				<G26_VK1602> 3.4 3.4 0.08 0.67 </G26_VK1602>
 				<VK3001P> 3 2.8 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 2.3 2.3 0.04 0.000000 </PzIII_IV>
@@ -1527,7 +1541,7 @@
 			<id> 10 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 161 148 69 199 </c0>
 				<c1> 51 26 19 225 </c1>
@@ -1559,7 +1573,7 @@
 				<G22_Sturmpanzer_II> 3.4 3.4 0.01 0.6 </G22_Sturmpanzer_II>
 				<G23_Grille> 2.8 2.9 0.14 0.09 </G23_Grille>
 				<VK3002DB> 3 3 0.21 0.06 </VK3002DB>
-				<PzII_Luchs> 2.7 3.6 0.03 0.16 </PzII_Luchs>
+				<G25_PzII_Luchs> 2.7 2.4 0.03 0.26 </G25_PzII_Luchs>
 				<G26_VK1602> 2.2 2 0.73 0.84 </G26_VK1602>
 				<VK3001P> 2.7 3 0.95 0.67 </VK3001P>
 				<PzIII_IV> 3 3.1 0.24 0.04 </PzIII_IV>
@@ -1659,7 +1673,7 @@
 			<id> 25 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 0 0 0 201 </c0>
 				<c1> 32 32 32 176 </c1>
@@ -1697,7 +1711,7 @@
 				<G22_Sturmpanzer_II> 3 3 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 2.3 2.3 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 2.5 2.6 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 2.6 2.7 0.14 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.3 3.3 0.14 0.000000 </G25_PzII_Luchs>
 				<G26_VK1602> 3 3 0.1 0.000000 </G26_VK1602>
 				<VK3001P> 2.8 3 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 2.4 2.5 0.11 0.000000 </PzIII_IV>
@@ -1789,7 +1803,7 @@
 			<id> 26 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 238 218 72 157 </c0>
 				<c1> 218 188 16 123 </c1>
@@ -1827,7 +1841,7 @@
 				<G22_Sturmpanzer_II> 3 3 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 2.8 2.5 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 2.9 3 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 2.7 3 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.8 3.8 0.000000 0.14 </G25_PzII_Luchs>
 				<G26_VK1602> 3 3 0.12 0.000000 </G26_VK1602>
 				<VK3001P> 3 3.3 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 2.5 2.5 0.34 0.000000 </PzIII_IV>
@@ -1920,7 +1934,7 @@
 			<id> 27 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 91 0 0 218 </c0>
 				<c1> 115 13 13 142 </c1>
@@ -1958,7 +1972,7 @@
 				<G22_Sturmpanzer_II> 3 3 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 2.5 3 0.16 0.18 </G23_Grille>
 				<VK3002DB> 2.7 2.8 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 2.5 2.5 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.7 3.7 0.000000 0.000000 </G25_PzII_Luchs>
 				<G26_VK1602> 3 3 0.11 0.000000 </G26_VK1602>
 				<VK3001P> 3.3 2.6 0.47 0.000000 </VK3001P>
 				<PzIII_IV> 3 3 0.000000 0.000000 </PzIII_IV>
@@ -2051,7 +2065,7 @@
 			<id> 28 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 58 58 58 235 </c0>
 				<c1> 144 144 144 179 </c1>
@@ -2089,7 +2103,7 @@
 				<G22_Sturmpanzer_II> 3 3 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 2.7 3 0.28 0.36 </G23_Grille>
 				<VK3002DB> 2.9 2.8 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 2.8 2.6 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.6 3.6 0.000000 0.28 </G25_PzII_Luchs>
 				<G26_VK1602> 3 3 0.12 0.000000 </G26_VK1602>
 				<VK3001P> 3 3.2 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 3 3 0.42 0.000000 </PzIII_IV>
@@ -2182,7 +2196,7 @@
 			<id> 29 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 44 59 38 232 </c0>
 				<c1> 85 21 22 177 </c1>
@@ -2215,7 +2229,7 @@
 				<G22_Sturmpanzer_II> 3.8 3.8 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 6.8 6.8 0.000000 0.37 </G23_Grille>
 				<VK3002DB> 5 4.9 0.000000 0.6 </VK3002DB>
-				<PzII_Luchs> 6.1 6.1 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.1 3.1 0.02 0.000000 </G25_PzII_Luchs>
 				<VK3001P> 5 5 0.000000 0.31 </VK3001P>
 				<PzIII_IV> 4.5 4.5 0.000000 0.39 </PzIII_IV>
 				<G26_VK1602> 2.2 2.2 0.94 0.38 </G26_VK1602>
@@ -2314,7 +2328,7 @@
 			<id> 40 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 161 148 69 149 </c0>
 				<c1> 85 21 22 219 </c1>
@@ -2352,7 +2366,7 @@
 				<G22_Sturmpanzer_II> 4.1 4.1 0.07 0.12 </G22_Sturmpanzer_II>
 				<G23_Grille> 3.2 3.1 0.94 0.08 </G23_Grille>
 				<VK3002DB> 2.9 3 0.2 0.94 </VK3002DB>
-				<PzII_Luchs> 2.8 2.8 0.48 0.46 </PzII_Luchs>
+				<G25_PzII_Luchs> 3 3 0.3 0.46 </G25_PzII_Luchs>
 				<G26_VK1602> 2.4 2.4 0.54 0.43 </G26_VK1602>
 				<VK3001P> 2.5 2.7 0.28 0.000000 </VK3001P>
 				<PzIII_IV> 2.9 3 0.56 0.000000 </PzIII_IV>
@@ -2447,7 +2461,7 @@
 			<id> 43 </id>
 			<kind> desert </kind>
 			<group> desert </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 44 59 38 236 </c0>
 				<c1> 51 26 19 243 </c1>
@@ -2481,7 +2495,7 @@
 				<G22_Sturmpanzer_II> 3.7 3.7 0.1 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 3.1 3.2 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 3.2 3.4 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 2.9 2.9 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 2.9 2.9 0.000000 0.14 </G25_PzII_Luchs>
 				<G26_VK1602> 2.5 2.5 0.14 0.26 </G26_VK1602>
 				<VK3001P> 3.3 3.2 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 2.8 2.9 0.000000 0.000000 </PzIII_IV>
@@ -2580,7 +2594,7 @@
 			<id> 44 </id>
 			<kind> winter </kind>
 			<group> winter </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 255 255 255 199 </c0>
 				<c1> 72 72 72 85 </c1>
@@ -2612,7 +2626,7 @@
 				<G22_Sturmpanzer_II> 2.9 3 0.1 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 3.2 3.1 0.17 0.1 </G23_Grille>
 				<VK3002DB> 2.8 2.8 0.28 0.13 </VK3002DB>
-				<PzII_Luchs> 3.5 3.4 0.58 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.5 3.4 0.58 0.000000 </G25_PzII_Luchs>
 				<G26_VK1602> 5.8 5.8 0.25 0.000000 </G26_VK1602>
 				<VK3001P> 3.6 4 0.36 0.15 </VK3001P>
 				<PzIII_IV> 3 3.2 0.27 0.000000 </PzIII_IV>
@@ -2705,7 +2719,7 @@
 			<id> 59 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 55 63 67 144 </c0>
 				<c1> 21 26 30 188 </c1>
@@ -2736,7 +2750,7 @@
 				<G22_Sturmpanzer_II> 5.5 5.5 0.12 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 5.6 5.7 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 3.9 4 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 5.2 5.3 0.26 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 4.3 4.3 0.2 0.42 </G25_PzII_Luchs>
 				<G26_VK1602> 4.3 4.3 0.3 0.32 </G26_VK1602>
 				<VK3001P> 4.8 4.8 0.24 0.04 </VK3001P>
 				<PzIII_IV> 4.7 4.7 0.000000 0.000000 </PzIII_IV>
@@ -2838,7 +2852,7 @@
 			<id> 58 </id>
 			<kind> desert </kind>
 			<group> desert </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 207 175 128 187 </c0>
 				<c1> 102 55 48 223 </c1>
@@ -2870,7 +2884,7 @@
 				<G22_Sturmpanzer_II> 6.5 6.5 0.06 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 5 5.6 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 6.2 6.4 0.15 0.000000 </VK3002DB>
-				<PzII_Luchs> 5.7 5.6 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 5.7 5.6 0.000000 0.000000 </G25_PzII_Luchs>
 				<G26_VK1602> 4.2 4.2 0.44 0.000000 </G26_VK1602>
 				<VK3001P> 5.9 5.8 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 5.5 5.7 0.000000 0.000000 </PzIII_IV>
@@ -2971,7 +2985,7 @@
 			<id> 60 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 44 59 38 162 </c0>
 				<c1> 161 148 69 157 </c1>
@@ -3003,7 +3017,7 @@
 				<G22_Sturmpanzer_II> 4 4 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 3 3.1 0.000000 0.28 </G23_Grille>
 				<VK3002DB> 2 2.3 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 2.5 2.5 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.7 3.7 0.68 0.26 </G25_PzII_Luchs>
 				<G26_VK1602> 2.7 2.7 0.68 0.4 </G26_VK1602>
 				<VK3001P> 2.3 2.3 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 2 2.1 0.12 0.28 </PzIII_IV>
@@ -3135,7 +3149,7 @@
 				<G22_Sturmpanzer_II> 4.1 4.1 0.16 0.04 </G22_Sturmpanzer_II>
 				<G23_Grille> 4.1 4.2 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 3.3 3.5 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 3 3 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3 3 0.1 0.000000 </G25_PzII_Luchs>
 				<G26_VK1602> 3 3 0.6 0.24 </G26_VK1602>
 				<VK3001P> 3 3 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 3 3 0.44 0.04 </PzIII_IV>
@@ -3227,6 +3241,7 @@
 				<G116_Turan_III_prot> 1.1 1.1 0.3 0.34 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 3 3 0.000000 0.000000 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 			<notInShop> false </notInShop>
 		</IGR_Winter>
 		<IGR_Summer>
@@ -3267,7 +3282,7 @@
 				<G22_Sturmpanzer_II> 4.1 4.1 0.18 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 3 3 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 2.4 2.6 0.2 0.23 </VK3002DB>
-				<PzII_Luchs> 3 3 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.8 3.8 0.42 0.000000 </G25_PzII_Luchs>
 				<G26_VK1602> 3.4 3.4 0.28 0.16 </G26_VK1602>
 				<VK3001P> 3 3.2 0.24 0.000000 </VK3001P>
 				<PzIII_IV> 3 3.1 0.000000 0.000000 </PzIII_IV>
@@ -3358,6 +3373,7 @@
 				<G116_Turan_III_prot> 1.2 1.2 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 4.4 4.4 0.3 0.000000 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 			<notInShop> false </notInShop>
 		</IGR_Summer>
 		<IGR_Desert>
@@ -3398,7 +3414,7 @@
 				<G22_Sturmpanzer_II> 3.6 3.6 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 3 3 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 3 3 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 3 3 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 4.2 4.2 0.26 0.16 </G25_PzII_Luchs>
 				<G26_VK1602> 3.5 3.5 0.5 0.14 </G26_VK1602>
 				<VK3001P> 3 3 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 2.7 2.8 0.16 0.000000 </PzIII_IV>
@@ -3487,6 +3503,7 @@
 				<G119_Panzer58> 1.9 1.9 0.000000 0.000000 </G119_Panzer58>
 				<PzIII_AusfJ> 3.8 3.8 0.000000 0.000000 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 			<notInShop> false </notInShop>
 		</IGR_Desert>
 		<IGR_K_Winter>
@@ -3527,7 +3544,7 @@
 				<G22_Sturmpanzer_II> 6 6 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 5 5 0.42 0.000000 </G23_Grille>
 				<VK3002DB> 5 5 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 5 5 0.38 0.2 </PzII_Luchs>
+				<G25_PzII_Luchs> 4.2 4.2 0.52 0.22 </G25_PzII_Luchs>
 				<G26_VK1602> 3.2 3.2 0.38 0.08 </G26_VK1602>
 				<VK3001P> 5 5 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 5 5 0.28 0.000000 </PzIII_IV>
@@ -3620,6 +3637,7 @@
 				<G116_Turan_III_prot> 1.1 1.1 0.05 0.22 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 5 5 0.000000 0.000000 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 			<notInShop> false </notInShop>
 		</IGR_K_Winter>
 		<IGR_K_Desert>
@@ -3659,7 +3677,7 @@
 				<G22_Sturmpanzer_II> 3.6 3.6 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 5 5 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 5 5 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 5 5 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.2 4.4 0.22 0.32 </G25_PzII_Luchs>
 				<G26_VK1602> 2.8 3.2 1 0.42 </G26_VK1602>
 				<VK3001P> 5 5 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 5 5 0.000000 0.000000 </PzIII_IV>
@@ -3748,6 +3766,7 @@
 				<G119_Panzer58> 3.1 3.1 0.000000 0.000000 </G119_Panzer58>
 				<PzIII_AusfJ> 3.8 3.8 0.000000 0.000000 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 			<notInShop> false </notInShop>
 		</IGR_K_Desert>
 		<!-- -->
@@ -3792,7 +3811,7 @@
 				<G22_Sturmpanzer_II> 4 4 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 2.3 2.3 0.24 0.22 </G23_Grille>
 				<VK3002DB> 2.4 2.3 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 2.2 2.2 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.4 3.4 0.000000 0.26 </G25_PzII_Luchs>
 				<G26_VK1602> 2.3 2.3 0.26 0.000000 </G26_VK1602>
 				<VK3001P> 2.3 2.4 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 2.2 2.2 0.000000 0.000000 </PzIII_IV>
@@ -3883,6 +3902,7 @@
 				<G119_Panzer58> 1.9 1.9 0.000000 0.000000 </G119_Panzer58>
 				<PzIII_AusfJ> 3.8 3.8 0.000000 0.000000 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 			<notInShop> false </notInShop>
 		</IGR_Ch_Winter>
 		<IGR_Ch_Summer>
@@ -3923,7 +3943,7 @@
 				<G22_Sturmpanzer_II> 4.4 4.4 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 3 3 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 3 3 0.2 0.2 </VK3002DB>
-				<PzII_Luchs> 3 3 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3 3 0.000000 0.000000 </G25_PzII_Luchs>
 				<G26_VK1602> 2.8 2.8 0.38 0.000000 </G26_VK1602>
 				<VK3001P> 2.3 2.5 0.34 0.000000 </VK3001P>
 				<PzIII_IV> 2.5 2.5 0.2 0.000000 </PzIII_IV>
@@ -4013,6 +4033,7 @@
 				<G119_Panzer58> 2.2 2.2 0.000000 0.000000 </G119_Panzer58>
 				<PzIII_AusfJ> 3.8 3.8 0.000000 0.000000 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 			<notInShop> false </notInShop>
 		</IGR_Ch_Summer>
 		<IGR_Ch_Desert>
@@ -4053,7 +4074,7 @@
 				<G22_Sturmpanzer_II> 3.3 3.3 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 4 4 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 4.2 4 0.000000 0.000000 </VK3002DB>
-				<PzII_Luchs> 4.1 4.1 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.1 3.1 0.000000 0.000000 </G25_PzII_Luchs>
 				<G26_VK1602> 2.4 2.4 0.000000 0.000000 </G26_VK1602>
 				<VK3001P> 4.2 4.3 0.000000 0.000000 </VK3001P>
 				<PzIII_IV> 4.1 4 0.000000 0.000000 </PzIII_IV>
@@ -4143,6 +4164,7 @@
 				<G119_Panzer58> 2.3 2.3 0.000000 0.000000 </G119_Panzer58>
 				<PzIII_AusfJ> 3.2 3.2 0.000000 0.000000 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 			<notInShop> false </notInShop>
 		</IGR_Ch_Desert>
 		<!-- -->
@@ -4156,7 +4178,7 @@
 			<kind> desert </kind>
 			<group> desert </group>
 			<allow> PzVI </allow>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 0 0 0 9 </c0>
 				<c1> 159 132 60 179 </c1>
@@ -4200,6 +4222,7 @@
 				<G19_Wespe> 3 3 0.000000 0.000000 </G19_Wespe>
 				<G71_JagdPantherII> 1.8 1.8 0.000000 0.000000 </G71_JagdPantherII>
 				<PzIII_AusfJ> 2 2 0.000000 0.000000 </PzIII_AusfJ>
+				<G25_PzII_Luchs> 3.8 3.8 0.000000 0.000000 </G25_PzII_Luchs>
 			</tiling>
 			<notInShop> true </notInShop>
 		</DesertTiger>
@@ -4211,7 +4234,7 @@
 			<id> 99 </id>
 			<group> summer </group>
 			<kind> summer </kind>
-			<deny> G04_PzVI_Tiger_IA </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
 			<colors>
 				<c0> 100 13 0 174 </c0>
 				<c1> 201 136 48 113 </c1>
@@ -4247,7 +4270,7 @@
 				<G22_Sturmpanzer_II> 5.4 5.4 0.41 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 6.3 6.3 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 5.8 4.8 0.44 0.000000 </VK3002DB>
-				<PzII_Luchs> 5.5 5.4 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 4.2 4.2 0.3 0.000000 </G25_PzII_Luchs>
 				<G26_VK1602> 3.4 3.4 0.16 0.000000 </G26_VK1602>
 				<VK3001P> 6.1 6 0.37 0.000000 </VK3001P>
 				<PzIII_IV> 4.5 4.4 0.48 0.000000 </PzIII_IV>
@@ -4379,7 +4402,7 @@
 				<G22_Sturmpanzer_II> 2.4 2.4 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 3 3 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 3.2 3.1 0.23 0.000000 </VK3002DB>
-				<PzII_Luchs> 2.9 2.9 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 2.9 2.9 0.000000 0.1 </G25_PzII_Luchs>
 				<G26_VK1602> 2.8 2.8 0.000000 0.000000 </G26_VK1602>
 				<VK3001P> 3.6 3.5 0.36 0.000000 </VK3001P>
 				<PzIII_IV> 2.8 2.9 0.000000 0.44 </PzIII_IV>
@@ -4462,6 +4485,7 @@
 				<G118_VK4503> 1.3 1.3 0.000000 0.000000 </G118_VK4503>
 				<PzIII_AusfJ> 3 3 0.000000 0.16 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 		</Clan_camuflage_02>
 		<Clan_camuflage_03>
 			<texture> vehicles/french/Camouflage/Clan_camuflage_03.DDS </texture>
@@ -4506,7 +4530,7 @@
 				<G22_Sturmpanzer_II> 3.9 3.9 0.35 0.22 </G22_Sturmpanzer_II>
 				<G23_Grille> 2.9 2.8 0.94 0.000000 </G23_Grille>
 				<VK3002DB> 2.1 2.1 0.08 0.07 </VK3002DB>
-				<PzII_Luchs> 2.1 2.1 0.000000 0.52 </PzII_Luchs>
+				<G25_PzII_Luchs> 2.4 2.4 0.28 0.52 </G25_PzII_Luchs>
 				<G26_VK1602> 2.4 2.3 0.14 0.21 </G26_VK1602>
 				<VK3001P> 2.3 2.2 0.31 0.16 </VK3001P>
 				<PzIII_IV> 2.2 2.2 0.32 0.31 </PzIII_IV>
@@ -4589,6 +4613,7 @@
 				<G116_Turan_III_prot> 1.1 1.1 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 2.6 2.6 0.000000 0.000000 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 		</Clan_camuflage_03>
 		<Clan_camuflage_04>
 			<texture> vehicles/french/Camouflage/Clan_camuflage_04.DDS </texture>
@@ -4635,7 +4660,7 @@
 				<G22_Sturmpanzer_II> 3.6 3.6 0.000000 0.000000 </G22_Sturmpanzer_II>
 				<G23_Grille> 3.1 3 0.000000 0.000000 </G23_Grille>
 				<VK3002DB> 2.6 2 0.24 0.000000 </VK3002DB>
-				<PzII_Luchs> 2.5 2.4 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.4 3.4 0.000000 0.000000 </G25_PzII_Luchs>
 				<G26_VK1602> 2.5 2.5 0.14 0.000000 </G26_VK1602>
 				<VK3001P> 3 3 0.12 0.000000 </VK3001P>
 				<PzIII_IV> 2.6 2.6 0.000000 0.000000 </PzIII_IV>
@@ -4687,7 +4712,7 @@
 				<G89_Leopard1> 3 2.1 0.11 0.000000 </G89_Leopard1>
 				<DW_II> 2.5 2.5 0.35 0.000000 </DW_II>
 				<G91_Pro_Ag_A> 2.8 2.7 0.000000 0.000000 </G91_Pro_Ag_A>
-				<VK7201> 2.9 2.9 0.000000 0.22 </VK7201>
+				<VK7201> 1.8 1.8 0.000000 0.22 </VK7201>
 				<G93_GW_Mk_VIe> 2.3 2.3 0.000000 0.000000 </G93_GW_Mk_VIe>
 				<Pz_Sfl_IVb> 3.5 3.4 0.61 0.22 </Pz_Sfl_IVb>
 				<VK3002M> 2.7 2.7 0.43 0.000000 </VK3002M>
@@ -4719,6 +4744,7 @@
 				<G116_Turan_III_prot> 1.1 1.1 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 2.8 2.8 0.000000 0.000000 </PzIII_AusfJ>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 		</Clan_camuflage_04>
 		<Cracked_ice>
 			<texture> vehicles/american/Camouflage/Cracked_ice.dds </texture>
@@ -4842,14 +4868,15 @@
 				<G118_VK4503> 1.3 1.3 0.23 0.11 </G118_VK4503>
 				<G16_PzVIB_Tiger_II_IGR> 3.1 3.1 0.000000 0.000000 </G16_PzVIB_Tiger_II_IGR>
 				<G16_PzVIB_Tiger_II> 4.1 4.1 0.000000 0.000000 </G16_PzVIB_Tiger_II>
-				<PzII_Luchs> 3.1 3.1 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.1 3.1 0.000000 0.000000 </G25_PzII_Luchs>
 				<G52_Pz38_NA> 4 4 0.000000 0.000000 </G52_Pz38_NA>
 				<G_Tiger> 5.3 5.3 0.000000 0.000000 </G_Tiger>
 				<G65_JagdTiger_SdKfz_185_IGR> 3 3 0.000000 0.000000 </G65_JagdTiger_SdKfz_185_IGR>
-				<VK7201> 3.1 3.1 0.000000 0.000000 </VK7201>
 				<G117_Toldi_III> 1.3 1.3 0.000000 0.000000 </G117_Toldi_III>
 				<G119_Panzer58> 2.4 2.4 0.000000 0.000000 </G119_Panzer58>
+				<VK7201> 3.1 3.1 0.000000 0.000000 </VK7201>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 		</Cracked_ice>
 		<Desert_camou>
 			<texture> vehicles/german/Camouflage/Desert_camo-05-3.dds </texture>
@@ -4975,9 +5002,9 @@
 				<G65_JagdTiger_SdKfz_185> 6.9 6.9 0.000000 0.000000 </G65_JagdTiger_SdKfz_185>
 				<G16_PzVIB_Tiger_II_training> 5.3 5.3 0.34 0.000000 </G16_PzVIB_Tiger_II_training>
 				<G16_PzVIB_Tiger_II_IGR> 5 5 0.46 0.24 </G16_PzVIB_Tiger_II_IGR>
-				<PzII_Luchs> 5.7 5.7 0.14 0.44 </PzII_Luchs>
 				<G_Tiger> 8 8 0.000000 0.000000 </G_Tiger>
 				<G26_VK1602> 5.6 5.6 0.4 0.14 </G26_VK1602>
+				<G25_PzII_Luchs> 5.7 5.7 0.14 0.44 </G25_PzII_Luchs>
 				<G65_JagdTiger_SdKfz_185_IGR> 6.7 6.7 0.000000 0.000000 </G65_JagdTiger_SdKfz_185_IGR>
 				<G16_PzVIB_Tiger_II> 4.5 4.5 0.000000 0.000000 </G16_PzVIB_Tiger_II>
 				<G119_Panzer58> 4.6 4.6 0.000000 0.000000 </G119_Panzer58>
@@ -4985,6 +5012,7 @@
 				<G116_Turan_III_prot> 1.6 1.6 0.000000 0.000000 </G116_Turan_III_prot>
 				<G117_Toldi_III> 1.8 1.8 0.000000 0.000000 </G117_Toldi_III>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 		</Desert_camou>
 		<summer_camo>
 			<texture> vehicles/american/Camouflage/Cracked_ice.dds </texture>
@@ -5101,7 +5129,7 @@
 				<Ltraktor_bot> 1.9 1.9 0.000000 0.000000 </Ltraktor_bot>
 				<G16_PzVIB_Tiger_II> 2.2 2.2 0.000000 0.000000 </G16_PzVIB_Tiger_II>
 				<G16_PzVIB_Tiger_II_IGR> 1.9 1.9 0.000000 0.000000 </G16_PzVIB_Tiger_II_IGR>
-				<PzII_Luchs> 3.1 3.1 0.000000 0.000000 </PzII_Luchs>
+				<G25_PzII_Luchs> 3.1 3.1 0.000000 0.000000 </G25_PzII_Luchs>
 				<Ferdinand_IGR> 2.3 2.3 0.22 0.34 </Ferdinand_IGR>
 				<Maus_IGR> 2 2 0.26 0.84 </Maus_IGR>
 				<G_Tiger> 2.3 2.3 0.25 0.59 </G_Tiger>
@@ -5114,6 +5142,67 @@
 				<G04_PzVI_Tiger_IA> 2.1 2.1 0.000000 0.000000 </G04_PzVI_Tiger_IA>
 				<G119_Panzer58> 2.5 2.5 0.000000 0.000000 </G119_Panzer58>
 			</tiling>
+			<deny> G119_Pz58_Mutz </deny>
 		</summer_camo>
+		<Clan_damaged_G92_VK7201>
+			<texture> vehicles/german/Camouflage/Clan_damaged.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_damaged </description>
+			<id> 127 </id>
+			<group> winter </group>
+			<kind> winter </kind>
+			<colors>
+				<c0> 7 7 7 255 </c0>
+				<c1> 194 203 207 255 </c1>
+				<c2> 81 86 80 255 </c2>
+				<c3> 165 155 146 122 </c3>
+			</colors>
+			<allow> germany:VK7201 </allow>
+			<notInShop> true </notInShop>
+			<tiling>
+				<VK7201> 5 5 0.28 0.38 </VK7201>
+			</tiling>
+		</Clan_damaged_G92_VK7201>
+		<Clan_damaged_G92_VK7201>
+			<texture> vehicles/german/Camouflage/Clan_damaged.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_damaged </description>
+			<id> 128 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 7 7 7 255 </c0>
+				<c1> 194 203 207 255 </c1>
+				<c2> 81 86 80 255 </c2>
+				<c3> 165 155 146 122 </c3>
+			</colors>
+			<allow> germany:VK7201 </allow>
+			<notInShop> true </notInShop>
+			<tiling>
+				<VK7201> 5 5 0.28 0.38 </VK7201>
+			</tiling>
+		</Clan_damaged_G92_VK7201>
+		<Clan_damaged_G92_VK7201>
+			<texture> vehicles/german/Camouflage/Clan_damaged.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_damaged </description>
+			<id> 129 </id>
+			<group> desert </group>
+			<kind> desert </kind>
+			<colors>
+				<c0> 7 7 7 255 </c0>
+				<c1> 194 203 207 255 </c1>
+				<c2> 81 86 80 255 </c2>
+				<c3> 165 155 146 122 </c3>
+			</colors>
+			<allow> germany:VK7201 </allow>
+			<notInShop> true </notInShop>
+			<tiling>
+				<VK7201> 5 5 0.28 0.38 </VK7201>
+			</tiling>
+		</Clan_damaged_G92_VK7201>
 	</camouflages>
 </root>

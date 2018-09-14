@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/shift_jisx0213.py
 import _codecs_jp, codecs
 import _multibytecodec as mbc

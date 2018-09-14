@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/json/tests/test_fail.py
 from json.tests import PyTest, CTest
 JSONDOCS = ['"A JSON payload should be an object or array, not a string."',

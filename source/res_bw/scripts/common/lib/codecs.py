@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/codecs.py
 """ codecs -- Python Codec Registry, API and helpers.
 
@@ -173,7 +174,7 @@ class IncrementalEncoder(object):
         """
         Return the current state of the encoder.
         """
-        return 0
+        pass
 
     def setstate(self, state):
         """
@@ -255,7 +256,7 @@ class IncrementalDecoder(object):
         processed the contents of buffered_input.  In the initial state
         and after reset(), getstate() must return (b"", 0).
         """
-        return ('', 0)
+        pass
 
     def setstate(self, state):
         """

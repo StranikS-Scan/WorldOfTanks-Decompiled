@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/quests.py
 import operator
 import BigWorld
@@ -51,7 +52,7 @@ class PotapovQuestSelect(_PotapovQuestsSelect):
         return
 
     def _getMessagePrefix(self):
-        return 'potapovQuests/select'
+        pass
 
     def _removeFromSameChain(self, quests, newQuest):
         result = [newQuest]
@@ -94,7 +95,7 @@ class _PotapovQuestRefuse(_PotapovQuestsSelect):
         return
 
     def _getMessagePrefix(self):
-        return 'potapovQuests/refuse'
+        pass
 
 
 class RandomQuestRefuse(_PotapovQuestRefuse):
@@ -128,7 +129,7 @@ class _PotapovQuestsGetReward(Processor):
         self.__needTankman = needTankman
 
     def _getMessagePrefix(self):
-        return 'potapovQuests/reward/regular'
+        pass
 
     def _errorHandler(self, code, errStr = '', ctx = None):
         if len(errStr):
@@ -149,7 +150,7 @@ class PotapovQuestsGetTankwomanReward(_PotapovQuestsGetReward):
         super(PotapovQuestsGetTankwomanReward, self).__init__(potapovQuestItem, True, nationID, inNationID, role)
 
     def _getMessagePrefix(self):
-        return 'potapovQuests/reward/tankwoman'
+        pass
 
 
 class PotapovQuestsGetRegularReward(_PotapovQuestsGetReward):

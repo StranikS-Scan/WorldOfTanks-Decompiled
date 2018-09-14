@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/prb_seqs.py
 import time
 from constants import PREBATTLE_CACHE_KEY, PREBATTLE_COMPANY_DIVISION_NAMES
@@ -76,7 +77,6 @@ class PrbListItem(object):
     def getCensoredComment(self):
         if self.comment:
             return passCensor(self.comment)
-        return ''
 
     def getDivisionName(self):
         name = None

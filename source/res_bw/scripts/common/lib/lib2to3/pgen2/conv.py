@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pgen2/conv.py
 """Convert graminit.[ch] spit out by pgen to Python code.
 
@@ -68,8 +69,8 @@ class Converter(grammar.Grammar):
             else:
                 symbol, number = mo.groups()
                 number = int(number)
-                raise symbol not in self.symbol2number or AssertionError
-                raise number not in self.number2symbol or AssertionError
+                assert symbol not in self.symbol2number
+                assert number not in self.number2symbol
                 self.symbol2number[symbol] = number
                 self.number2symbol[number] = symbol
 
@@ -111,68 +112,68 @@ class Converter(grammar.Grammar):
 
         lineno = 0
         lineno, line = lineno + 1, f.next()
-        raise line == '#include "pgenheaders.h"\n' or AssertionError((lineno, line))
+        assert line == '#include "pgenheaders.h"\n', (lineno, line)
         lineno, line = lineno + 1, f.next()
-        raise line == '#include "grammar.h"\n' or AssertionError((lineno, line))
+        assert line == '#include "grammar.h"\n', (lineno, line)
         lineno, line = lineno + 1, f.next()
         allarcs = {}
         states = []
         while line.startswith('static arc '):
             while line.startswith('static arc '):
                 mo = re.match('static arc arcs_(\\d+)_(\\d+)\\[(\\d+)\\] = {$', line)
-                raise mo or AssertionError((lineno, line))
+                assert mo, (lineno, line)
                 n, m, k = map(int, mo.groups())
                 arcs = []
                 for _ in range(k):
                     lineno, line = lineno + 1, f.next()
                     mo = re.match('\\s+{(\\d+), (\\d+)},$', line)
-                    raise mo or AssertionError((lineno, line))
+                    assert mo, (lineno, line)
                     i, j = map(int, mo.groups())
                     arcs.append((i, j))
 
                 lineno, line = lineno + 1, f.next()
-                raise line == '};\n' or AssertionError((lineno, line))
+                assert line == '};\n', (lineno, line)
                 allarcs[n, m] = arcs
                 lineno, line = lineno + 1, f.next()
 
             mo = re.match('static state states_(\\d+)\\[(\\d+)\\] = {$', line)
-            raise mo or AssertionError((lineno, line))
+            assert mo, (lineno, line)
             s, t = map(int, mo.groups())
-            raise s == len(states) or AssertionError((lineno, line))
+            assert s == len(states), (lineno, line)
             state = []
             for _ in range(t):
                 lineno, line = lineno + 1, f.next()
                 mo = re.match('\\s+{(\\d+), arcs_(\\d+)_(\\d+)},$', line)
-                raise mo or AssertionError((lineno, line))
+                assert mo, (lineno, line)
                 k, n, m = map(int, mo.groups())
                 arcs = allarcs[n, m]
-                raise k == len(arcs) or AssertionError((lineno, line))
+                assert k == len(arcs), (lineno, line)
                 state.append(arcs)
 
             states.append(state)
             lineno, line = lineno + 1, f.next()
-            raise line == '};\n' or AssertionError((lineno, line))
+            assert line == '};\n', (lineno, line)
             lineno, line = lineno + 1, f.next()
 
         self.states = states
         dfas = {}
         mo = re.match('static dfa dfas\\[(\\d+)\\] = {$', line)
-        raise mo or AssertionError((lineno, line))
+        assert mo, (lineno, line)
         ndfas = int(mo.group(1))
         for i in range(ndfas):
             lineno, line = lineno + 1, f.next()
             mo = re.match('\\s+{(\\d+), "(\\w+)", (\\d+), (\\d+), states_(\\d+),$', line)
-            raise mo or AssertionError((lineno, line))
+            assert mo, (lineno, line)
             symbol = mo.group(2)
             number, x, y, z = map(int, mo.group(1, 3, 4, 5))
-            raise self.symbol2number[symbol] == number or AssertionError((lineno, line))
-            raise self.number2symbol[number] == symbol or AssertionError((lineno, line))
-            raise x == 0 or AssertionError((lineno, line))
+            assert self.symbol2number[symbol] == number, (lineno, line)
+            assert self.number2symbol[number] == symbol, (lineno, line)
+            assert x == 0, (lineno, line)
             state = states[z]
-            raise y == len(state) or AssertionError((lineno, line))
+            assert y == len(state), (lineno, line)
             lineno, line = lineno + 1, f.next()
             mo = re.match('\\s+("(?:\\\\\\d\\d\\d)*")},$', line)
-            raise mo or AssertionError((lineno, line))
+            assert mo, (lineno, line)
             first = {}
             rawbitset = eval(mo.group(1))
             for i, c in enumerate(rawbitset):
@@ -184,56 +185,56 @@ class Converter(grammar.Grammar):
             dfas[number] = (state, first)
 
         lineno, line = lineno + 1, f.next()
-        raise line == '};\n' or AssertionError((lineno, line))
+        assert line == '};\n', (lineno, line)
         self.dfas = dfas
         labels = []
         lineno, line = lineno + 1, f.next()
         mo = re.match('static label labels\\[(\\d+)\\] = {$', line)
-        raise mo or AssertionError((lineno, line))
+        assert mo, (lineno, line)
         nlabels = int(mo.group(1))
         for i in range(nlabels):
             lineno, line = lineno + 1, f.next()
             mo = re.match('\\s+{(\\d+), (0|"\\w+")},$', line)
-            if not mo:
-                raise AssertionError((lineno, line))
-                x, y = mo.groups()
-                x = int(x)
-                y = y == '0' and None
+            assert mo, (lineno, line)
+            x, y = mo.groups()
+            x = int(x)
+            if y == '0':
+                y = None
             else:
                 y = eval(y)
             labels.append((x, y))
 
         lineno, line = lineno + 1, f.next()
-        raise line == '};\n' or AssertionError((lineno, line))
+        assert line == '};\n', (lineno, line)
         self.labels = labels
         lineno, line = lineno + 1, f.next()
-        raise line == 'grammar _PyParser_Grammar = {\n' or AssertionError((lineno, line))
+        assert line == 'grammar _PyParser_Grammar = {\n', (lineno, line)
         lineno, line = lineno + 1, f.next()
         mo = re.match('\\s+(\\d+),$', line)
-        raise mo or AssertionError((lineno, line))
+        assert mo, (lineno, line)
         ndfas = int(mo.group(1))
-        raise ndfas == len(self.dfas) or AssertionError
+        assert ndfas == len(self.dfas)
         lineno, line = lineno + 1, f.next()
-        raise line == '\tdfas,\n' or AssertionError((lineno, line))
+        assert line == '\tdfas,\n', (lineno, line)
         lineno, line = lineno + 1, f.next()
         mo = re.match('\\s+{(\\d+), labels},$', line)
-        raise mo or AssertionError((lineno, line))
+        assert mo, (lineno, line)
         nlabels = int(mo.group(1))
-        raise nlabels == len(self.labels) or AssertionError((lineno, line))
+        assert nlabels == len(self.labels), (lineno, line)
         lineno, line = lineno + 1, f.next()
         mo = re.match('\\s+(\\d+)$', line)
-        raise mo or AssertionError((lineno, line))
+        assert mo, (lineno, line)
         start = int(mo.group(1))
-        raise start in self.number2symbol or AssertionError((lineno, line))
+        assert start in self.number2symbol, (lineno, line)
         self.start = start
         lineno, line = lineno + 1, f.next()
-        raise line == '};\n' or AssertionError((lineno, line))
+        assert line == '};\n', (lineno, line)
         try:
             lineno, line = lineno + 1, f.next()
         except StopIteration:
             pass
         else:
-            raise 0 or AssertionError((lineno, line))
+            assert 0, (lineno, line)
 
         return
 

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from messenger.formatters import service_channel as _sc
@@ -39,7 +40,10 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.refSystemReferralBoughtVehicle.index(): _sc.RefSystemReferralBoughtVehicleFormatter(),
  _SM_TYPE.refSystemReferralContributedXP.index(): _sc.RefSystemReferralContributedXPFormatter(),
  _SM_TYPE.potapovQuestBonus.index(): _sc.PotapovQuestsFormatter(),
- _SM_TYPE.goodieRemoved.index(): _sc.GoodieRemovedFormatter()}
+ _SM_TYPE.goodieRemoved.index(): _sc.GoodieRemovedFormatter(),
+ _SM_TYPE.telecomOrderCreated.index(): _sc.TelecomReceivedInvoiceFormatter(),
+ _SM_TYPE.telecomOrderUpdated.index(): _sc.TelecomStatusFormatter(),
+ _SM_TYPE.telecomOrderDeleted.index(): _sc.TelecomRemovedInvoiceFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),

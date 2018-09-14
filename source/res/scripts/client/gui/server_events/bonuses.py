@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
 from collections import namedtuple
 import BigWorld
@@ -58,10 +59,10 @@ class SimpleBonus(object):
         return True
 
     def getIcon(self):
-        return ''
+        pass
 
     def getTooltipIcon(self):
-        return ''
+        pass
 
     def getDescription(self):
         return i18n.makeString('#quests:bonuses/%s/description' % self._name, value=self.formatValue())

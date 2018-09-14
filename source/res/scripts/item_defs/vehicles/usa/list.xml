@@ -87,14 +87,14 @@
     <tags>	mediumTank secret aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user	</tags>
     <level>	8	</level>
   </T23>
-  <T30>
+  <A14_T30>
     <id>	10	</id>
     <userString>	#usa_vehicles:T30	</userString>
     <description>	#usa_vehicles:T30_descr	</description>
     <price>	3550000	</price>
-    <tags>	AT-SPG heavyAT-SPG largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user	</tags>
+    <tags>	AT-SPG heavyAT-SPG largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	9	</level>
-  </T30>
+  </A14_T30>
   <A13_T34_hvy>
     <id>	11	</id>
     <userString>	#usa_vehicles:T34_hvy	</userString>
@@ -121,22 +121,22 @@
     <tags>	heavyTank mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class3_user	</tags>
     <level>	5	</level>
   </T1_hvy>
-  <M7_Priest>
+  <A16_M7_Priest>
     <id>	14	</id>
     <userString>	#usa_vehicles:M7_Priest	</userString>
     <description>	#usa_vehicles:M7_Priest_descr	</description>
     <price>	47000	</price>
-    <tags>	SPG mediumSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user	</tags>
+    <tags>	SPG mediumSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD	</tags>
     <level>	3	</level>
-  </M7_Priest>
-  <T29>
+  </A16_M7_Priest>
+  <A11_T29>
     <id>	15	</id>
     <userString>	#usa_vehicles:T29	</userString>
     <description>	#usa_vehicles:T29_descr	</description>
     <price>	1450300	</price>
-    <tags>	heavyTank aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user	</tags>
+    <tags>	heavyTank aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	7	</level>
-  </T29>
+  </A11_T29>
   <A18_M41>
     <id>	16	</id>
     <userString>	#usa_vehicles:M41	</userString>
@@ -462,14 +462,14 @@
     <tags>	lightTank scout wetCombatPack_class1_user mediumCaliberTankRammer_user aimingStabilizer_Mk1_user enhancedTorsions1t_user	</tags>
     <level>	6	</level>
   </T21>
-  <T54E1>
+  <A89_T54E1>
     <id>	60	</id>
     <userString>	#usa_vehicles:T54E1	</userString>
     <description>	#usa_vehicles:T54E1_descr	</description>
     <price>	3600000	</price>
-    <tags>	mediumTank aimingStabilizer_Mk1_user wetCombatPack_class1_user enhancedTorsions3t_user	</tags>
+    <tags>	mediumTank aimingStabilizer_Mk1_user wetCombatPack_class1_user enhancedTorsions3t_user HD	</tags>
     <level>	9	</level>
-  </T54E1>
+  </A89_T54E1>
   <A103_T71E1>
     <id>	61	</id>
     <userString>	#usa_vehicles:T71	</userString>
@@ -597,7 +597,7 @@
     <price>	1250	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank enhancedVertical_springs_user	</tags>
+    <tags>	lightTank enhancedVertical_springs_user secret	</tags>
     <level>	3	</level>
   </MTLS-1G14>
   <M4A2E4>
@@ -656,8 +656,7 @@
     <id>	211	</id>
     <userString>	#usa_vehicles:Sexton_I	</userString>
     <description>	#usa_vehicles:Sexton_I_descr	</description>
-    <price>	1250	  <gold></gold>
-    </price>
+    <price>	0	</price>
     <notInShop>	true	</notInShop>
     <tags>	SPG mediumSPG secret mediumCaliberHowitzerRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user	</tags>
     <level>	3	</level>
@@ -683,16 +682,16 @@
     <tags>	lightTank	</tags>
     <level>	2	</level>
   </T7_Combat_Car>
-  <T95_E6>
+  <A95_T95_E6>
     <id>	218	</id>
     <userString>	#usa_vehicles:T95_E6	</userString>
     <description>	#usa_vehicles:T95_E6_descr	</description>
     <price>	22500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret special aimingStabilizer_Mk1_user largeCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user	</tags>
+    <tags>	mediumTank secret special aimingStabilizer_Mk1_user largeCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user HD inGame	</tags>
     <level>	10	</level>
-  </T95_E6>
+  </A95_T95_E6>
   <A104_M4A3E8A>
     <id>	219	</id>
     <userString>	#usa_vehicles:A104_M4A3E8A	</userString>
@@ -734,9 +733,20 @@
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret aimingStabilizer_Mk1_user largeCaliberTankRammer_user wetCombatPack_class1_user patton HD	</tags>
+    <tags>	mediumTank secret aimingStabilizer_Mk1_user largeCaliberTankRammer_user wetCombatPack_class1_user patton HD inGame	</tags>
     <level>	10	</level>
   </A106_M48A2_120>
+  <A63_M46_Patton_KR>
+    <id>	223	</id>
+    <userString>	#usa_vehicles:A63_M46_Patton_KR	</userString>
+    <description>	#usa_vehicles:A63_M46_Patton_KR_descr	</description>
+    <shortUserString>	#usa_vehicles:A63_M46_Patton_KR_short	</shortUserString>
+    <price>	8700	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank secret aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user patton HD	</tags>
+    <level>	8	</level>
+  </A63_M46_Patton_KR>
   <A103_T71E1_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:T71_IGR	</userString>
@@ -792,14 +802,14 @@
     <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user premiumIGR secret HD	</tags>
     <level>	8	</level>
   </A35_Pershing_IGR>
-  <T29_IGR>
+  <A11_T29_IGR>
     <id>	157	</id>
     <userString>	#igr_vehicles:T29_IGR	</userString>
     <description>	#igr_vehicles:T29_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	heavyTank aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user premiumIGR secret	</tags>
+    <tags>	heavyTank aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user premiumIGR secret HD	</tags>
     <level>	7	</level>
-  </T29_IGR>
+  </A11_T29_IGR>
   <M4_Sherman_IGR>
     <id>	158	</id>
     <userString>	#igr_vehicles:M4_Sherman_IGR	</userString>

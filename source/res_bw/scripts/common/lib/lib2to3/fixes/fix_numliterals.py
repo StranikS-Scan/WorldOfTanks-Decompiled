@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_numliterals.py
 """Fixer that turns 1L into 1, 0755 into 0o755.
 """

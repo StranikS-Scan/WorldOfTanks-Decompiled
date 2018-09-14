@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/app_factory.py
 import BattleReplay
 from debug_utils import LOG_DEBUG

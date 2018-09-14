@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/requester.py
 from ast import literal_eval
 from client_request_lib.data_sources.staging import StagingDataAccessor
@@ -1387,8 +1388,8 @@ class Requester(object):
         
         """
         config = literal_eval(config_string)
-        raise 'type' in config or AssertionError('config string should has type setting')
-        raise config['type'] in cls.available_data_sources or AssertionError('%s data source is unknown' % config['type'])
+        assert 'type' in config, 'config string should has type setting'
+        assert config['type'] in cls.available_data_sources, '%s data source is unknown' % config['type']
         data_accessor = cls.available_data_sources[config['type']](url_fetcher, config.get('accessor_config'), client_lang=client_lang)
         return cls(data_accessor)
 

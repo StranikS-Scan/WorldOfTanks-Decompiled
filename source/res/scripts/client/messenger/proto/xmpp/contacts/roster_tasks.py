@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/roster_tasks.py
 from messenger.m_constants import USER_ACTION_ID, USER_TAG, PROTO_TYPE, CLIENT_ACTION_ID
 from messenger.proto.events import g_messengerEvents
@@ -175,10 +176,10 @@ class ChangeRosterItemGroupsTask(RosterItemTask):
 class _RosterItemsGroupsChain(object):
 
     def next(self, chain):
-        if not chain:
-            raise AssertionError('Chain can not be empty.')
-            self._chain = chain
-            raise self._chain and (len(self._chain[0]) == 3 or AssertionError)
+        assert chain, 'Chain can not be empty.'
+        self._chain = chain
+        if self._chain:
+            assert len(self._chain[0]) == 3
         return self._chain.pop(0)
 
 

@@ -7,12 +7,12 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <greaterOrEqual>	10000	</greaterOrEqual>
-            </vehicleDamage>
             <results>
-              <key>	damageBlockedByArmor	</key>
-              <greaterOrEqual>	7500	</greaterOrEqual>
+              <plus>
+                <key>	damageDealt	</key>
+                <key>	damageBlockedByArmor	</key>
+              </plus>
+              <greaterOrEqual>	10000	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -39,12 +39,12 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <greaterOrEqual>	10000	</greaterOrEqual>
-            </vehicleDamage>
             <results>
-              <key>	damageBlockedByArmor	</key>
-              <greaterOrEqual>	7500	</greaterOrEqual>
+              <plus>
+                <key>	damageDealt	</key>
+                <key>	damageBlockedByArmor	</key>
+              </plus>
+              <greaterOrEqual>	10000	</greaterOrEqual>
             </results>
             <results>
               <key>	deathCount	</key>

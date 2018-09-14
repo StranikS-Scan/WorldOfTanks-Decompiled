@@ -122,9 +122,31 @@
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.342305	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.418655	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.342305	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.418655	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -133,13 +155,6 @@
           <startIndex>	1	</startIndex>
           <count>	3	</count>
         </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R4	</name>
-          <radius>	0.418655	</radius>
-          <syncAngle>	22.5	</syncAngle>
-        </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	W_R	</template>
@@ -147,12 +162,6 @@
           <startIndex>	0	</startIndex>
           <count>	6	</count>
         </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L0	</name>
-          <radius>	0.342305	</radius>
-        </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
@@ -160,13 +169,6 @@
           <startIndex>	1	</startIndex>
           <count>	3	</count>
         </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L4	</name>
-          <radius>	0.418655	</radius>
-          <syncAngle>	22.5	</syncAngle>
-        </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
@@ -199,7 +201,7 @@
         <linkBones>	true	</linkBones>
         <maxAmplitude>	0.015	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
-        <gravity>	252	</gravity>
+        <gravity>	-4	</gravity>
         <elasticity>	1500	</elasticity>
         <damping>	8	</damping>
         <forwardElastK>	1	</forwardElastK>
@@ -296,8 +298,8 @@
         <segmentModelRight>	vehicles/russian/R106_KV85/track/segment.model	</segmentModelRight>
         <left>	vehicles/russian/R106_KV85/track/left.track	</left>
         <right>	vehicles/russian/R106_KV85/track/right.track	</right>
-        <segmentLength>	0.156	</segmentLength>
-        <segmentOffset>	0.037	</segmentOffset>
+        <segmentLength>	0.135	</segmentLength>
+        <segmentOffset>	0.13	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -311,6 +313,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.09869 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R106_KV85/collision/Chassis.model	</collisionModel>
@@ -321,7 +325,7 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	4.599320 0.000000 0.000000	</row0>
+            <row0>	4.576190 0.000000 0.000000	</row0>
             <row1>	0.000000 1.648030 0.000000	</row1>
             <row2>	0.000000 0.000000 8.153320	</row2>
             <row3>	0.000000 0.000000 0.000001	</row3>
@@ -406,9 +410,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000005 -0.0261133 1.17375	</rayStart>
+              <rayStart>	-0.000001 -0.025439 1.17375	</rayStart>
               <rayEnd>	-0.0286951 -0.141008 1.17224	</rayEnd>
-              <rayUp>	0.102 0.099 4	</rayUp>
+              <rayUp>	0.101 0.1 4	</rayUp>
               <size>	0.52	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -461,7 +465,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_05	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <physicsShape>	1.044 -0.053 1.000 0.000 0.655 -0.053 0.491 0.221 0.350 0.500 0.142 0.500 0.230 0.704 0.000	</physicsShape>
     </Turret_2_R106_KV85_IGR>

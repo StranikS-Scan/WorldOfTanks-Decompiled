@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/battle_results_shared.py
 import struct
 from itertools import izip
@@ -983,7 +984,7 @@ COMMON_RESULTS = Meta(('arenaTypeID',
  {},
  None,
  'skip'))
-raise not set(VEH_FULL_RESULTS.names()) & set(COMMON_RESULTS.names()) or AssertionError
+assert not set(VEH_FULL_RESULTS.names()) & set(COMMON_RESULTS.names())
 VEH_INTERACTIVE_STATS = ('xp', 'damageDealt', 'capturePts', 'flagActions', 'winPoints', 'deathCount', 'resourceAbsorbed', 'stopRespawn', 'equipmentDamage', 'equipmentKills')
 VEH_INTERACTIVE_STATS_INDICES = dict(((x[1], x[0]) for x in enumerate(VEH_INTERACTIVE_STATS)))
 AVATAR_PRIVATE_STATS = ('ragePoints',)
@@ -1052,17 +1053,17 @@ class VehicleInteractionDetails(object):
         return VehicleInteractionDetails(uniqueVehIDs, values)
 
     def __getitem__(self, uniqueVehID):
-        if not type(uniqueVehID) == tuple:
-            raise AssertionError
-            offset = self.__offsets.get(uniqueVehID, None)
-            offset is None and self.__uniqueVehIDs.append(uniqueVehID)
+        assert type(uniqueVehID) == tuple
+        offset = self.__offsets.get(uniqueVehID, None)
+        if offset is None:
+            self.__uniqueVehIDs.append(uniqueVehID)
             offset = len(self.__values)
             self.__values += VEH_INTERACTION_DETAILS_INIT_VALUES
             self.__offsets[uniqueVehID] = offset
         return _VehicleInteractionDetailsItem(self.__values, offset)
 
     def __contains__(self, uniqueVehID):
-        raise type(uniqueVehID) == tuple or AssertionError
+        assert type(uniqueVehID) == tuple
         return uniqueVehID in self.__offsets
 
     def __str__(self):

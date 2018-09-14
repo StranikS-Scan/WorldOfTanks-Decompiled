@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/consumables/ammo_ctrl.py
 import weakref
 from collections import namedtuple

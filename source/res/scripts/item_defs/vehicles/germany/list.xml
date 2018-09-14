@@ -216,15 +216,15 @@
     <tags>	SPG lightSPG enhancedSprings_user mediumCaliberHowitzerRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	3	</level>
   </G19_Wespe>
-  <PzII_Luchs>
+  <G25_PzII_Luchs>
     <id>	24	</id>
     <userString>	#germany_vehicles:PzII_Luchs	</userString>
     <shortUserString>	#germany_vehicles:PzII_Luchs_short	</shortUserString>
     <description>	#germany_vehicles:PzII_Luchs_descr	</description>
     <price>	155000	</price>
-    <tags>	lightTank scout enhancedTorsions1t_user	</tags>
+    <tags>	lightTank scout enhancedTorsions1t_user HD	</tags>
     <level>	4	</level>
-  </PzII_Luchs>
+  </G25_PzII_Luchs>
   <PzIII_IV>
     <id>	25	</id>
     <userString>	#germany_vehicles:PzIII_IV	</userString>
@@ -914,8 +914,7 @@
     <userString>	#germany_vehicles:G04_PzVI_Tiger_IA	</userString>
     <shortUserString>	#germany_vehicles:G04_PzVI_Tiger_IA_short	</shortUserString>
     <description>	#germany_vehicles:G04_PzVI_Tiger_IA_descr	</description>
-    <price>	7000	  <gold></gold>
-    </price>
+    <price>	0	</price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank secret beast enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	7	</level>
@@ -939,7 +938,7 @@
     <price>	5500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG secret mediumAT-SPG noImprovedVentilation enhancedSprings_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	AT-SPG secret mediumAT-SPG noImprovedVentilation enhancedSprings_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD inGame	</tags>
     <level>	7	</level>
   </G109_Steyr_WT>
   <G112_KanonenJagdPanzer>
@@ -961,7 +960,7 @@
     <price>	5000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG mediumAT-SPG noImprovedVentilation enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class1_user HD secret	</tags>
+    <tags>	AT-SPG mediumAT-SPG noImprovedVentilation enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class1_user HD secret inGame	</tags>
     <level>	8	</level>
   </G114_Skorpian>
   <G115_Typ_205_4_Jun>
@@ -972,14 +971,14 @@
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank secret antifragmentationLining_superheavy_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
+    <tags>	heavyTank secret antifragmentationLining_superheavy_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD inGame	</tags>
     <level>	8	</level>
   </G115_Typ_205_4_Jun>
   <G118_VK4503>
     <id>	246	</id>
     <userString>	#germany_vehicles:G118_VK4503	</userString>
     <description>	#germany_vehicles:G118_VK4503_descr	</description>
-    <price>	100	  <gold></gold>
+    <price>	4700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank beast enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD secret	</tags>
@@ -990,10 +989,10 @@
     <userString>	#germany_vehicles:G116_Turan_III_prot	</userString>
     <shortUserString>	#germany_vehicles:G116_Turan_III_prot_short	</shortUserString>
     <description>	#germany_vehicles:G116_Turan_III_prot_descr	</description>
-    <price>	100	  <gold></gold>
+    <price>	1700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user HD secret	</tags>
+    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	5	</level>
   </G116_Turan_III_prot>
   <G117_Toldi_III>
@@ -1001,10 +1000,10 @@
     <userString>	#germany_vehicles:G117_Toldi_III	</userString>
     <shortUserString>	#germany_vehicles:G117_Toldi_III_short	</shortUserString>
     <description>	#germany_vehicles:G117_Toldi_III_descr	</description>
-    <price>	100	  <gold></gold>
+    <price>	500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank wetCombatPack_class1_user HD secret	</tags>
+    <tags>	lightTank wetCombatPack_class1_user HD	</tags>
     <level>	3	</level>
   </G117_Toldi_III>
   <G119_Panzer58>
@@ -1012,12 +1011,23 @@
     <userString>	#germany_vehicles:G119_Panzer58	</userString>
     <shortUserString>	#germany_vehicles:G119_Panzer58_short	</shortUserString>
     <description>	#germany_vehicles:G119_Panzer58_descr	</description>
-    <price>	100	  <gold></gold>
+    <price>	7700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD secret	</tags>
+    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </G119_Panzer58>
+  <G119_Pz58_Mutz>
+    <id>	251	</id>
+    <userString>	#germany_vehicles:G119_Pz58_Mutz	</userString>
+    <shortUserString>	#germany_vehicles:G119_Pz58_Mutz_short	</shortUserString>
+    <description>	#germany_vehicles:G119_Pz58_Mutz_descr	</description>
+    <price>	7700	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
+    <level>	8	</level>
+  </G119_Pz58_Mutz>
   <Env_Artillery>
     <id>	254	</id>
     <userString>	#germany_vehicles:Env_Artillery	</userString>

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/fake.py
 """
 Created on Jul 1, 2015
@@ -232,10 +233,10 @@ class FakeDataAccessor(base.BaseDataAccessor):
                 - strongholds_statistics
         
         """
-        if not section in EXAMPLES:
-            raise AssertionError
-            example = EXAMPLES[section]
-            isinstance(data, exceptions.BaseRequestError) or self._compare_keys(example, data)
+        assert section in EXAMPLES
+        example = EXAMPLES[section]
+        if not isinstance(data, exceptions.BaseRequestError):
+            self._compare_keys(example, data)
         self._storage.setdefault(section, {})[entity_id] = data
 
     @fake_method(example=lambda clan_id: {'clan_id': clan_id,

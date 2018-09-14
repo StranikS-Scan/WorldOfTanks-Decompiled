@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compileall.py
 """Module/script to byte-compile all .py files to .pyc (or .pyo) files.
 

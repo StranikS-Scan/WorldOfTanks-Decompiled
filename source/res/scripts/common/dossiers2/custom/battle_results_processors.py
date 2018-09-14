@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/battle_results_processors.py
 import time
 from constants import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS, DESTR_CODES_BY_TAGS, FORT_BATTLE_RESULT, GLOBAL_MAP_DIVISION, DOSSIER_TYPE
@@ -170,7 +171,7 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
                 blockName = 'globalMapAbsolute'
                 blockNameMax = 'maxGlobalMapAbsolute'
             else:
-                raise False or AssertionError
+                assert False
             __updateAggregatedValues(dossierDescr.expand(blockName), dossierDescr.expand(blockName), battleResults, dossierXP, frags8p)
             for record in __updateMaxValues(dossierDescr.expand(blockNameMax), battleResults, dossierXP):
                 dossierDescr[blockNameMax][record] = maxVehResults[record]
@@ -287,7 +288,7 @@ def updatePotapovQuestAchievements(accDossierDescr, progress, curQuest, bonusCou
                 continue
             tilesCount += 1
             questList = potapov_quests.g_cache.questListByTileIDChainID(tileID, chainID)
-            raise len(questList) == chainSize or AssertionError
+            assert len(questList) == chainSize
             for potapovQuestID in questList:
                 flags, state = progress.get(potapovQuestID)
                 if state is None:
@@ -519,49 +520,49 @@ def _updateInBattleSeries(achievements, seriesName, results):
 
 
 def __updateAccountDossierCuts(dossierDescr, results, dossierXP, vehTypeCompDescr, vehDossierDescr):
-    if not vehDossierDescr is not None:
-        raise AssertionError
-        bonusCaps = BONUS_CAPS.get(results['bonusType'])
-        if bool(bonusCaps & BONUS_CAPS.DOSSIER_15X15):
-            a15x15Cut = dossierDescr['a15x15Cut']
-            vehA15x15 = vehDossierDescr['a15x15']
-            a15x15Cut[vehTypeCompDescr] = (vehA15x15['battlesCount'],
-             vehA15x15['wins'],
-             vehDossierDescr['achievements']['markOfMastery'],
-             vehA15x15['xp'])
-        if bool(bonusCaps & BONUS_CAPS.DOSSIER_7X7):
-            a7x7Cut = dossierDescr['a7x7Cut']
-            vehA7x7 = vehDossierDescr['a7x7']
-            a7x7Cut[vehTypeCompDescr] = (vehA7x7['battlesCount'],
-             vehA7x7['wins'],
-             vehA7x7['xp'],
-             vehA7x7['originalXP'],
-             vehA7x7['damageDealt'],
-             vehA7x7['damageAssistedRadio'],
-             vehA7x7['damageAssistedTrack'])
-        if bool(bonusCaps & BONUS_CAPS.DOSSIER_SORTIE):
-            sortieCut = dossierDescr['fortSortiesCut']
-            vehSortie = vehDossierDescr['fortSorties']
-            sortieCut[vehTypeCompDescr] = (vehSortie['battlesCount'], vehSortie['wins'], vehSortie['xp'])
-        if bool(bonusCaps & BONUS_CAPS.DOSSIER_FORT_BATTLE):
-            battleCut = dossierDescr['fortBattlesCut']
-            vehBattles = vehDossierDescr['fortBattles']
-            battleCut[vehTypeCompDescr] = (vehBattles['battlesCount'], vehBattles['wins'], vehBattles['xp'])
-        if bool(bonusCaps & BONUS_CAPS.DOSSIER_RATED7X7):
-            rated7x7Cut = dossierDescr['rated7x7Cut']
-            vehRated7x7 = vehDossierDescr['rated7x7']
-            rated7x7Cut[vehTypeCompDescr] = (vehRated7x7['battlesCount'],
-             vehRated7x7['wins'],
-             vehRated7x7['xp'],
-             vehRated7x7['originalXP'],
-             vehRated7x7['damageDealt'],
-             vehRated7x7['damageAssistedRadio'],
-             vehRated7x7['damageAssistedTrack'])
-        if bool(bonusCaps & BONUS_CAPS.DOSSIER_GLOBAL_MAP):
-            globalMapCommonCut = dossierDescr['globalMapCommonCut']
-            vehGlobalMapCommon = vehDossierDescr['globalMapCommon']
-            globalMapCommonCut[vehTypeCompDescr] = (vehGlobalMapCommon['battlesCount'], vehGlobalMapCommon['wins'], vehGlobalMapCommon['xp'])
-        falloutAccountDossierCut = bool(bonusCaps & BONUS_CAPS.DOSSIER_FALLOUT) and dossierDescr['falloutCut']
+    assert vehDossierDescr is not None
+    bonusCaps = BONUS_CAPS.get(results['bonusType'])
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_15X15):
+        a15x15Cut = dossierDescr['a15x15Cut']
+        vehA15x15 = vehDossierDescr['a15x15']
+        a15x15Cut[vehTypeCompDescr] = (vehA15x15['battlesCount'],
+         vehA15x15['wins'],
+         vehDossierDescr['achievements']['markOfMastery'],
+         vehA15x15['xp'])
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_7X7):
+        a7x7Cut = dossierDescr['a7x7Cut']
+        vehA7x7 = vehDossierDescr['a7x7']
+        a7x7Cut[vehTypeCompDescr] = (vehA7x7['battlesCount'],
+         vehA7x7['wins'],
+         vehA7x7['xp'],
+         vehA7x7['originalXP'],
+         vehA7x7['damageDealt'],
+         vehA7x7['damageAssistedRadio'],
+         vehA7x7['damageAssistedTrack'])
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_SORTIE):
+        sortieCut = dossierDescr['fortSortiesCut']
+        vehSortie = vehDossierDescr['fortSorties']
+        sortieCut[vehTypeCompDescr] = (vehSortie['battlesCount'], vehSortie['wins'], vehSortie['xp'])
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_FORT_BATTLE):
+        battleCut = dossierDescr['fortBattlesCut']
+        vehBattles = vehDossierDescr['fortBattles']
+        battleCut[vehTypeCompDescr] = (vehBattles['battlesCount'], vehBattles['wins'], vehBattles['xp'])
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_RATED7X7):
+        rated7x7Cut = dossierDescr['rated7x7Cut']
+        vehRated7x7 = vehDossierDescr['rated7x7']
+        rated7x7Cut[vehTypeCompDescr] = (vehRated7x7['battlesCount'],
+         vehRated7x7['wins'],
+         vehRated7x7['xp'],
+         vehRated7x7['originalXP'],
+         vehRated7x7['damageDealt'],
+         vehRated7x7['damageAssistedRadio'],
+         vehRated7x7['damageAssistedTrack'])
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_GLOBAL_MAP):
+        globalMapCommonCut = dossierDescr['globalMapCommonCut']
+        vehGlobalMapCommon = vehDossierDescr['globalMapCommon']
+        globalMapCommonCut[vehTypeCompDescr] = (vehGlobalMapCommon['battlesCount'], vehGlobalMapCommon['wins'], vehGlobalMapCommon['xp'])
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_FALLOUT):
+        falloutAccountDossierCut = dossierDescr['falloutCut']
         falloutVehicleDossier = vehDossierDescr['fallout']
         falloutAccountDossierCut[vehTypeCompDescr] = (falloutVehicleDossier['battlesCount'],
          falloutVehicleDossier['wins'],

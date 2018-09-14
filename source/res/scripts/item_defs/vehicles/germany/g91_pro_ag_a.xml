@@ -95,8 +95,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	230	</maxHealth>
@@ -228,7 +228,7 @@
         <linkBones>	false	</linkBones>
         <maxAmplitude>	0.015	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
-        <gravity>	247	</gravity>
+        <gravity>	-9	</gravity>
         <elasticity>	1372	</elasticity>
         <damping>	2	</damping>
         <forwardElastK>	1	</forwardElastK>
@@ -349,8 +349,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -482,7 +482,7 @@
         <linkBones>	false	</linkBones>
         <maxAmplitude>	0.015	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
-        <gravity>	247	</gravity>
+        <gravity>	-9	</gravity>
         <elasticity>	1372	</elasticity>
         <damping>	2	</damping>
         <forwardElastK>	1	</forwardElastK>
@@ -809,8 +809,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7218	</weight>
-      <maxHealth>	410	</maxHealth>
-      <rotationSpeed>	36	</rotationSpeed>
+      <maxHealth>	460	</maxHealth>
+      <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
@@ -874,9 +874,9 @@
           </camouflage>
         </_9cm_KwK_51_L71>
         <_105mm_L7A1>	shared	  <maxAmmo>	58	</maxAmmo>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -900,7 +900,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <reloadTime>	11.1	</reloadTime>
+          <reloadTime>	10.3	</reloadTime>
           <models>
             <undamaged>	vehicles/german/G91_Pro_Ag_A/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Gun_06.model	</destroyed>

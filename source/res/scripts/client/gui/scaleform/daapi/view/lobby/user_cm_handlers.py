@@ -1,6 +1,8 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/user_cm_handlers.py
+import BigWorld
 from adisp import process
-from constants import PREBATTLE_TYPE
+import constants
 from debug_utils import LOG_DEBUG
 from gui.clans.contexts import CreateInviteCtx
 from gui.clans import formatters as clans_fmts
@@ -12,6 +14,7 @@ from gui.LobbyContext import g_lobbyContext
 from gui.prb_control.context import SendInvitesCtx, PrebattleAction
 from gui.prb_control.prb_helpers import prbDispatcherProperty, prbFunctionalProperty
 from gui.shared import g_itemsCache, event_dispatcher as shared_events, utils
+from gui.shared.ClanCache import ClanInfo
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
@@ -77,7 +80,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return self.prbDispatcher.getFunctionalCollection().canSendInvite(self.databaseID)
 
     def isSquadCreator(self):
-        return self.prbFunctional.getEntityType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.isCreator()
+        return self.prbFunctional.getEntityType() == constants.PREBATTLE_TYPE.SQUAD and self.prbFunctional.isCreator()
 
     def showUserInfo(self):
 
@@ -92,9 +95,10 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             return
 
         def onDossierReceived(databaseID, _):
-            clanID, _ = g_itemsCache.items.getClanInfo(databaseID)
+            clanID, clanInfo = g_itemsCache.items.getClanInfo(databaseID)
             if clanID != 0:
-                shared_events.showClanProfileWindow(clanID)
+                clanInfo = ClanInfo(*clanInfo)
+                shared_events.showClanProfileWindow(clanID, clanInfo.getClanAbbrev())
             else:
                 from gui import DialogsInterface
                 key = 'clan data is not available'
@@ -176,6 +180,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         self.databaseID = long(ctx.dbID)
         self.userName = ctx.userName
         self.wasInBattle = getattr(ctx, 'wasInBattle', True)
+        self.showClanProfile = getattr(ctx, 'showClanProfile', True)
 
     def _clearFlashValues(self):
         self.databaseID = None
@@ -266,15 +271,22 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return options
 
     def _addClanProfileInfo(self, options, userCMInfo):
-        if g_lobbyContext.getServerSettings().clanProfile.isEnabled() and userCMInfo.hasClan:
+        if g_lobbyContext.getServerSettings().clanProfile.isEnabled() and userCMInfo.hasClan and self.showClanProfile:
             options.append(self._makeItem(USER.CLAN_INFO, MENU.contextmenu(USER.CLAN_INFO), optInitData={'enabled': g_clanCtrl.isAvailable()}))
         return options
 
     def _addInviteClanInfo(self, options, userCMInfo):
         if g_lobbyContext.getServerSettings().clanProfile.isEnabled() and not userCMInfo.hasClan:
             profile = g_clanCtrl.getAccountProfile()
-            if profile.isInClan() and profile.getMyClanPermissions().canHandleClanInvites():
-                options.append(self._makeItem(USER.SEND_CLAN_INVITE, MENU.contextmenu(USER.SEND_CLAN_INVITE), optInitData={'enabled': g_clanCtrl.isAvailable()}))
+            canHandleClanInvites = profile.getMyClanPermissions().canHandleClanInvites()
+            if profile.isInClan() and canHandleClanInvites:
+                isEnabled = g_clanCtrl.isAvailable()
+                canHandleClanInvites = profile.getMyClanPermissions().canHandleClanInvites()
+                if isEnabled:
+                    profile = g_clanCtrl.getAccountProfile()
+                    dossier = profile.getClanDossier()
+                    isEnabled = canHandleClanInvites and not dossier.isClanInviteSent(userCMInfo.databaseID) and not dossier.hasClanApplication(userCMInfo.databaseID)
+                options.append(self._makeItem(USER.SEND_CLAN_INVITE, MENU.contextmenu(USER.SEND_CLAN_INVITE), optInitData={'enabled': isEnabled}))
         return options
 
     @classmethod

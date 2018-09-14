@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_period_ctrl.py
 import weakref
 import BattleReplay
@@ -19,7 +20,6 @@ def getTimeLevel(value):
         criticalTime = 120.0
     if value <= criticalTime:
         return 1
-    return 0
 
 
 class ITimersBar(object):
@@ -110,7 +110,6 @@ class ArenaPeriodController(IArenaPeriodController):
     def _getTickInterval(self, floatLength):
         if floatLength > 1:
             return 1
-        return 0
 
     def _getHideSpeed(self):
         return _COUNTDOWN_HIDE_SPEED
@@ -283,7 +282,6 @@ class ArenaPeriodPlayer(ArenaPeriodController):
     def _getTickInterval(self, floatLength):
         if self._period == _PERIOD.IDLE:
             return 1
-        return 0
 
     def _getHideSpeed(self):
         if self._playingTime > _COUNTDOWN_HIDE_SPEED:

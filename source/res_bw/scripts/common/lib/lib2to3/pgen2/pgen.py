@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pgen2/pgen.py
 from . import grammar, token, tokenize
 
@@ -73,30 +74,31 @@ class ParserGenerator(object):
                     return ilabel
             else:
                 itoken = getattr(token, label, None)
-                raise isinstance(itoken, int) or AssertionError(label)
-                if not itoken in token.tok_name:
-                    raise AssertionError(label)
-                    return itoken in c.tokens and c.tokens[itoken]
+                assert isinstance(itoken, int), label
+                assert itoken in token.tok_name, label
+                if itoken in c.tokens:
+                    return c.tokens[itoken]
                 else:
                     c.labels.append((itoken, None))
                     c.tokens[itoken] = ilabel
                     return ilabel
-        elif not label[0] in ('"', "'"):
-            raise AssertionError(label)
+        else:
+            assert label[0] in ('"', "'"), label
             value = eval(label)
             if value[0].isalpha():
-                return value in c.keywords and c.keywords[value]
+                if value in c.keywords:
+                    return c.keywords[value]
+                else:
+                    c.labels.append((token.NAME, value))
+                    c.keywords[value] = ilabel
+                    return ilabel
             else:
-                c.labels.append((token.NAME, value))
-                c.keywords[value] = ilabel
+                itoken = grammar.opmap[value]
+                if itoken in c.tokens:
+                    return c.tokens[itoken]
+                c.labels.append((itoken, None))
+                c.tokens[itoken] = ilabel
                 return ilabel
-        else:
-            itoken = grammar.opmap[value]
-            if itoken in c.tokens:
-                return c.tokens[itoken]
-            c.labels.append((itoken, None))
-            c.tokens[itoken] = ilabel
-            return ilabel
         return
 
     def addfirstsets(self):
@@ -162,8 +164,8 @@ class ParserGenerator(object):
         return (dfas, startsymbol)
 
     def make_dfa(self, start, finish):
-        raise isinstance(start, NFAState) or AssertionError
-        raise isinstance(finish, NFAState) or AssertionError
+        assert isinstance(start, NFAState)
+        assert isinstance(finish, NFAState)
 
         def closure(state):
             base = {}
@@ -171,9 +173,9 @@ class ParserGenerator(object):
             return base
 
         def addclosure(state, base):
-            if not isinstance(state, NFAState):
-                raise AssertionError
-                return state in base and None
+            assert isinstance(state, NFAState)
+            if state in base:
+                return
             else:
                 base[state] = 1
                 for label, next in state.arcs:
@@ -333,8 +335,8 @@ class NFAState(object):
         self.arcs = []
 
     def addarc(self, next, label = None):
-        raise label is None or isinstance(label, str) or AssertionError
-        raise isinstance(next, NFAState) or AssertionError
+        assert label is None or isinstance(label, str)
+        assert isinstance(next, NFAState)
         self.arcs.append((label, next))
         return
 
@@ -342,17 +344,17 @@ class NFAState(object):
 class DFAState(object):
 
     def __init__(self, nfaset, final):
-        raise isinstance(nfaset, dict) or AssertionError
-        raise isinstance(iter(nfaset).next(), NFAState) or AssertionError
-        raise isinstance(final, NFAState) or AssertionError
+        assert isinstance(nfaset, dict)
+        assert isinstance(iter(nfaset).next(), NFAState)
+        assert isinstance(final, NFAState)
         self.nfaset = nfaset
         self.isfinal = final in nfaset
         self.arcs = {}
 
     def addarc(self, next, label):
-        raise isinstance(label, str) or AssertionError
-        raise label not in self.arcs or AssertionError
-        raise isinstance(next, DFAState) or AssertionError
+        assert isinstance(label, str)
+        assert label not in self.arcs
+        assert isinstance(next, DFAState)
         self.arcs[label] = next
 
     def unifystate(self, old, new):
@@ -361,11 +363,11 @@ class DFAState(object):
                 self.arcs[label] = new
 
     def __eq__(self, other):
-        if not isinstance(other, DFAState):
-            raise AssertionError
-            if self.isfinal != other.isfinal:
-                return False
-            return len(self.arcs) != len(other.arcs) and False
+        assert isinstance(other, DFAState)
+        if self.isfinal != other.isfinal:
+            return False
+        if len(self.arcs) != len(other.arcs):
+            return False
         for label, next in self.arcs.iteritems():
             if next is not other.arcs.get(label):
                 return False

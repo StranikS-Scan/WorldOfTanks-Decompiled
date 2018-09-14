@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/migration/contacts.py
 from messenger.m_constants import CLIENT_ERROR_ID, CLIENT_ACTION_ID
 from messenger.proto.events import g_messengerEvents

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/formatters/invites.py
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
 from constants import QUEUE_TYPE_NAMES
@@ -102,10 +103,10 @@ class InviteFormatter(object):
          'receiver': invite.receiverFullName}
 
     def getNote(self, invite):
-        return ''
+        pass
 
     def getText(self, invite):
-        return ''
+        pass
 
 
 class PrbInviteHtmlTextFormatter(InviteFormatter):
@@ -188,7 +189,6 @@ class PrbFortBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
     def getIconName(self, invite):
         if invite.getExtraData('isDefence'):
             return 'fortBattleDefenceInviteIcon'
-        return 'fortBattleOffenceInviteIcon'
 
 
 class FalloutInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/cart.py
 import functools
 import BigWorld
@@ -119,18 +120,21 @@ class Cart(object):
 
     def __recalculatePurchaseData(self, newSlotItem, oldSlotItem, cType, slotIdx):
         if newSlotItem['itemID'] != oldSlotItem['itemID'] and newSlotItem['itemID'] > 0:
-            if newSlotItem['purchaseTypeIcon'] == RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2:
-                self.__totalPriceCredits += newSlotItem['price']
-            else:
-                self.__totalPriceGold += newSlotItem['price']
             cItem = self.__aData.available[cType][newSlotItem['itemID']]
+            purchaseTypeIcon = newSlotItem['purchaseTypeIcon']
+            if purchaseTypeIcon == RES_ICONS.MAPS_ICONS_LIBRARY_QUEST_ICON:
+                return
+            if purchaseTypeIcon == RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2:
+                self.__totalPriceGold += newSlotItem['price']
+            else:
+                self.__totalPriceCredits += newSlotItem['price']
             self.__purchaseData.append({'type': cType,
              'idx': slotIdx,
              'object': cItem,
              'itemID': newSlotItem['itemID'],
              'price': newSlotItem['price'],
              'bonus': newSlotItem['bonus'],
-             'currencyIcon': newSlotItem['purchaseTypeIcon'],
+             'currencyIcon': purchaseTypeIcon,
              'name': cItem.getName(),
              'bonusValue': cItem.qualifier.getValue(),
              'bonusIcon': cItem.qualifier.getIcon16x16(),

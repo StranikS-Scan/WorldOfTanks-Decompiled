@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_xml_source.py
 from pprint import pformat
 import time

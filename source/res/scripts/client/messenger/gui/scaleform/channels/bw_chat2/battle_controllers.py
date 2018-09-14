@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/battle_controllers.py
 from gui.battle_control import g_sessionProvider
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE

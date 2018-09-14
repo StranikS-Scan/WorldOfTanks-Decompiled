@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/test/test_email.py
 import os
 import sys
@@ -2084,11 +2085,11 @@ class TestQuopri(unittest.TestCase):
          '/',
          ' ']
         self.hnon = [ chr(x) for x in range(256) if chr(x) not in self.hlit ]
-        raise len(self.hlit) + len(self.hnon) == 256 or AssertionError
+        assert len(self.hlit) + len(self.hnon) == 256
         self.blit = [ chr(x) for x in range(ord(' '), ord('~') + 1) ] + ['\t']
         self.blit.remove('=')
         self.bnon = [ chr(x) for x in range(256) if chr(x) not in self.blit ]
-        raise len(self.blit) + len(self.bnon) == 256 or AssertionError
+        assert len(self.blit) + len(self.bnon) == 256
 
     def test_header_quopri_check(self):
         for c in self.hlit:

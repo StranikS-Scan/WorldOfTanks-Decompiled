@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/formatters.py
 import BigWorld
 from helpers.i18n import makeString, doesTextExist
@@ -121,7 +122,6 @@ def getRequestErrorMsg(result, ctx):
     key = ERROR_SYS_MSG_TPL % errorMsg
     if doesTextExist(key):
         return makeString(key)
-    return ''
 
 
 def getAppSentSysMsg(club = None):

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/test_idlehistory.py
 import unittest
 from test.test_support import requires

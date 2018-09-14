@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/run.py
 import sys
 import io
@@ -78,7 +79,7 @@ def main(del_exitfunc = False):
     global quitting
     no_exitfunc = del_exitfunc
     try:
-        raise len(sys.argv) > 1 or AssertionError
+        assert len(sys.argv) > 1
         port = int(sys.argv[-1])
     except:
         print >> sys.stderr, 'IDLE Subprocess: no IP port passed in sys.argv.'

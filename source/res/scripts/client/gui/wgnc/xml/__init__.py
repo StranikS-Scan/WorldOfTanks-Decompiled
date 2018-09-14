@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/__init__.py
 import ResMgr
 from gui.wgnc.errors import ParseError
@@ -13,7 +14,7 @@ class _NotificationParser(shared_parsers.SectionParser):
         self._proxyDataParser = proxyDataParser
 
     def getTagName(self):
-        return 'notification'
+        pass
 
     def parse(self, section):
         if section.name != self.getTagName():

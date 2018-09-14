@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/cameras.py
 import BigWorld, Math, ResMgr, Keys
 import math
@@ -50,7 +51,7 @@ class ICamera(object):
         pass
 
     def getReasonsAffectCameraDirectly(self):
-        return ()
+        pass
 
 
 class FreeCamera:

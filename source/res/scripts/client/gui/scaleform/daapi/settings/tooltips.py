@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/tooltips.py
 from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, potapovquests, tutorial, fortifications, clans
 from gui.shared.tooltips.CustomizationBonus import CustomizationBonusTooltip

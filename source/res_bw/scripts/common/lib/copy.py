@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/copy.py
 """Generic (shallow and deep) copying operations.
 
@@ -340,26 +341,26 @@ def _reconstruct(x, info, deep, memo = None):
     if isinstance(info, str):
         return x
     else:
-        if not isinstance(info, tuple):
-            raise AssertionError
-            if memo is None:
-                memo = {}
-            n = len(info)
-            if not n in (2, 3, 4, 5):
-                raise AssertionError
-                callable, args = info[:2]
-                if n > 2:
-                    state = info[2]
-                else:
-                    state = {}
-                if n > 3:
-                    listiter = info[3]
-                else:
-                    listiter = None
-                dictiter = n > 4 and info[4]
-            else:
-                dictiter = None
-            args = deep and deepcopy(args, memo)
+        assert isinstance(info, tuple)
+        if memo is None:
+            memo = {}
+        n = len(info)
+        assert n in (2, 3, 4, 5)
+        callable, args = info[:2]
+        if n > 2:
+            state = info[2]
+        else:
+            state = {}
+        if n > 3:
+            listiter = info[3]
+        else:
+            listiter = None
+        if n > 4:
+            dictiter = info[4]
+        else:
+            dictiter = None
+        if deep:
+            args = deepcopy(args, memo)
         y = callable(*args)
         memo[id(x)] = y
         if state:

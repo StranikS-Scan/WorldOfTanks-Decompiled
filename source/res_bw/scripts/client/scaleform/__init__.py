@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Scaleform/__init__.py
 """Scaleform python module"""
 AVAILABLE = False

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/pyassem.py
 """A flow graph representation for Python bytecode"""
 import dis
@@ -94,8 +95,8 @@ def order_blocks(start_block, exit_block):
 
     dominators = {}
     for b in remaining:
-        if not (__debug__ and b.next and b is b.next[0].prev[0]):
-            raise AssertionError((b, b.next))
+        if __debug__ and b.next:
+            assert b is b.next[0].prev[0], (b, b.next)
         dominators.setdefault(b, set())
         for c in b.get_followers():
             while 1:
@@ -113,7 +114,7 @@ def order_blocks(start_block, exit_block):
             else:
                 return b
 
-        raise 0 or AssertionError('circular dependency, cannot find next block')
+        assert 0, 'circular dependency, cannot find next block'
 
     b = start_block
     while 1:
@@ -165,9 +166,9 @@ class Block():
 
     def addNext(self, block):
         self.next.append(block)
-        raise len(self.next) == 1 or AssertionError(map(str, self.next))
+        assert len(self.next) == 1, map(str, self.next)
         block.prev.append(self)
-        raise len(block.prev) == 1 or AssertionError(map(str, block.prev))
+        assert len(block.prev) == 1, map(str, block.prev)
 
     _uncond_transfer = ('RETURN_VALUE', 'RAISE_VARARGS', 'JUMP_ABSOLUTE', 'JUMP_FORWARD', 'CONTINUE_LOOP')
 
@@ -265,14 +266,14 @@ class PyFlowGraph(FlowGraph):
 
     def getCode(self):
         """Get a Python code object"""
-        raise self.stage == RAW or AssertionError
+        assert self.stage == RAW
         self.computeStackDepth()
         self.flattenGraph()
-        raise self.stage == FLAT or AssertionError
+        assert self.stage == FLAT
         self.convertArgs()
-        raise self.stage == CONV or AssertionError
+        assert self.stage == CONV
         self.makeByteCode()
-        raise self.stage == DONE or AssertionError
+        assert self.stage == DONE
         return self.newCodeObject()
 
     def dump(self, io = None):
@@ -326,7 +327,7 @@ class PyFlowGraph(FlowGraph):
 
     def flattenGraph(self):
         """Arrange the blocks in order and resolve jumps"""
-        raise self.stage == RAW or AssertionError
+        assert self.stage == RAW
         self.insts = insts = []
         pc = 0
         begin = {}
@@ -369,7 +370,7 @@ class PyFlowGraph(FlowGraph):
 
     def convertArgs(self):
         """Convert arguments from symbolic to concrete form"""
-        raise self.stage == FLAT or AssertionError
+        assert self.stage == FLAT
         self.consts.insert(0, self.docstring)
         self.sort_cellvars()
         for i in range(len(self.insts)):
@@ -477,7 +478,7 @@ class PyFlowGraph(FlowGraph):
     del opname
 
     def makeByteCode(self):
-        raise self.stage == CONV or AssertionError
+        assert self.stage == CONV
         self.lnotab = lnotab = LineAddrTable()
         for t in self.insts:
             opname = t[0]
@@ -505,14 +506,14 @@ class PyFlowGraph(FlowGraph):
     del num
 
     def newCodeObject(self):
-        if not self.stage == DONE:
-            raise AssertionError
-            if self.flags & CO_NEWLOCALS == 0:
-                nlocals = 0
-            else:
-                nlocals = len(self.varnames)
-            argcount = self.argcount
-            argcount = self.flags & CO_VARKEYWORDS and argcount - 1
+        assert self.stage == DONE
+        if self.flags & CO_NEWLOCALS == 0:
+            nlocals = 0
+        else:
+            nlocals = len(self.varnames)
+        argcount = self.argcount
+        if self.flags & CO_VARKEYWORDS:
+            argcount = argcount - 1
         return types.CodeType(argcount, nlocals, self.stacksize, self.flags, self.lnotab.getCode(), self.getConsts(), tuple(self.names), tuple(self.varnames), self.filename, self.name, self.lnotab.firstline, self.lnotab.getTable(), tuple(self.freevars), tuple(self.cellvars))
 
     def getConsts(self):
@@ -562,7 +563,7 @@ def getArgCount(args):
 
 def twobyte(val):
     """Convert an int argument into high and low bytes"""
-    raise isinstance(val, int) or AssertionError
+    assert isinstance(val, int)
     return divmod(val, 256)
 
 

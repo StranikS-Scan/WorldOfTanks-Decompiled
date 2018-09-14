@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Effects/__init__.py
 """PostProcessing.Effects python module
 This module imports all Effects for ease-of-use by script programmers.

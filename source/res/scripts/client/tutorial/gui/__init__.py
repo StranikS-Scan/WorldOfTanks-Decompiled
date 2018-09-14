@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/__init__.py
 import Event
 from debug_utils import LOG_ERROR
@@ -71,7 +72,7 @@ class GUIProxy(object):
         pass
 
     def showServiceMessage(self, data, msgTypeName):
-        return 0
+        pass
 
     def getItemsOnScene(self):
         return set()

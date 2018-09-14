@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/stats.py
 import itertools
 from abc import ABCMeta, abstractmethod
@@ -149,7 +150,6 @@ class _MapStatsBlock(_StatsBlockAbstract):
         def winsEfficiency(self):
             if self.battlesCount:
                 return float(self.wins) / self.battlesCount
-            return 0
 
     def __init__(self, dossier):
         self._mapsList = {}
@@ -903,7 +903,7 @@ class AccountTeam7x7StatsBlock(Team7x7StatsBlock, _MaxVehicleStatsBlock, _Vehicl
         _MaxVehicleStatsBlock.__init__(self, dossier)
 
     def getMarksOfMastery(self):
-        return (-1, -1, -1, -1)
+        pass
 
     def getBattlesStats(self):
         return self._getBattlesStats(availableRange=_7X7_AVAILABLE_RANGE)
@@ -950,7 +950,7 @@ class AccountHistoricalStatsBlock(HistoricalStatsBlock, _VehiclesStatsBlock, _Ma
         _MaxVehicleStatsBlock.__init__(self, dossier)
 
     def getMarksOfMastery(self):
-        return (-1, -1, -1, -1)
+        pass
 
     def _getVehDossiersCut(self, dossier):
         return dossier.getDossierDescr()['historicalCut']
@@ -989,7 +989,7 @@ class AccountFortBattlesStatsBlock(FortBattlesStatsBlock, _VehiclesStatsBlock):
         _VehiclesStatsBlock.__init__(self, dossier)
 
     def getMarksOfMastery(self):
-        return (-1, -1, -1, -1)
+        pass
 
     def _getVehDossiersCut(self, dossier):
         return dossier.getDossierDescr()['fortBattlesCut']
@@ -1043,7 +1043,7 @@ class AccountFortSortiesStatsBlock(FortSortiesStatsBlock, _VehiclesStatsBlock):
         _VehiclesStatsBlock.__init__(self, dossier)
 
     def getMarksOfMastery(self):
-        return (-1, -1, -1, -1)
+        pass
 
     def _getVehDossiersCut(self, dossier):
         return dossier.getDossierDescr()['fortSortiesCut']
@@ -1144,7 +1144,6 @@ class FortRegionBattlesStats(_CommonStatsBlock):
     def getProfitFactor(self):
         if self.getResourceLossCount():
             return float(self.getResourceCaptureCount()) / self.getResourceLossCount()
-        return 0
 
     def _getStatsBlock(self, dossier):
         return dossier.getDossierDescr()['fortBattles']
@@ -1441,7 +1440,7 @@ class AccountRated7x7StatsBlock(Rated7x7Stats, _MaxVehicleStatsBlock, _VehiclesS
         _MaxVehicleStatsBlock.__init__(self, dossier)
 
     def getMarksOfMastery(self):
-        return (-1, -1, -1, -1)
+        pass
 
     def getBattlesStats(self):
         return self._getBattlesStats(availableRange=_7X7_AVAILABLE_RANGE)
@@ -1535,7 +1534,7 @@ class AccountFalloutStatsBlock(FalloutStatsBlock, _VehiclesStatsBlock, _MaxAvata
         return self.getMaxFragsWithAvatar()
 
     def getMarksOfMastery(self):
-        return (-1, -1, -1, -1)
+        pass
 
     def getBattlesStats(self):
         return self._getBattlesStats(availableRange=_FALLOUT_AVAILABLE_RANGE)

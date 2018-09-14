@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/settings_set.py
 from collections import namedtuple
 from messenger.doc_loaders import _xml_helpers

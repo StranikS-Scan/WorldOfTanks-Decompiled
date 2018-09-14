@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/clan_account_profile.py
 import weakref
 from collections import namedtuple, defaultdict

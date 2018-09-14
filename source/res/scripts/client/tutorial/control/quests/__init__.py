@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/__init__.py
 from tutorial.control.lobby.context import LobbyBonusesRequester
 from tutorial.control.quests import queries

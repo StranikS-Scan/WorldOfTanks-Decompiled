@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/queries.py
 from helpers import i18n
 from tutorial.control import ContentQuery

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/offbattle.py
 from helpers.html import translation
 from items import _xml

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/post_processing/__init__.py
 import BigWorld, Math, ResMgr, weakref
 import PostProcessing
@@ -70,61 +71,61 @@ class _Effect:
 
     def __isSupported--- This code section failed: ---
 
-0	LOAD_FAST         'self'
-3	LOAD_ATTR         '__optional'
-6	LOAD_CONST        ''
-9	COMPARE_OP        '=='
-12	POP_JUMP_IF_FALSE '21'
-15	LOAD_GLOBAL       'True'
-18	JUMP_FORWARD      '31'
-21	LOAD_FAST         'settings'
-24	LOAD_FAST         'self'
-27	LOAD_ATTR         '__optional'
-30	BINARY_SUBSCR     None
-31_0	COME_FROM         '18'
-31	STORE_FAST        'isEnabled'
+ 111       0	LOAD_FAST         'self'
+           3	LOAD_ATTR         '__optional'
+           6	LOAD_CONST        ''
+           9	COMPARE_OP        '=='
+          12	POP_JUMP_IF_FALSE '21'
+          15	LOAD_GLOBAL       'True'
+          18	JUMP_FORWARD      '31'
+          21	LOAD_FAST         'settings'
+          24	LOAD_FAST         'self'
+          27	LOAD_ATTR         '__optional'
+          30	BINARY_SUBSCR     ''
+        31_0	COME_FROM         '18'
+          31	STORE_FAST        'isEnabled'
 
-34	LOAD_GLOBAL       'BigWorld'
-37	LOAD_ATTR         'getGraphicsSetting'
-40	LOAD_CONST        'RENDER_PIPELINE'
-43	CALL_FUNCTION_1   None
-46	LOAD_CONST        0
-49	COMPARE_OP        '=='
-52	JUMP_IF_FALSE_OR_POP '65'
+ 113      34	LOAD_GLOBAL       'BigWorld'
+          37	LOAD_ATTR         'getGraphicsSetting'
+          40	LOAD_CONST        'RENDER_PIPELINE'
+          43	CALL_FUNCTION_1   ''
+          46	LOAD_CONST        0
+          49	COMPARE_OP        '=='
+          52	JUMP_IF_FALSE_OR_POP '65'
 
-55	LOAD_GLOBAL       'BigWorld'
-58	LOAD_ATTR         'graphicsSettingsNeedRestart'
-61	CALL_FUNCTION_0   None
-64	UNARY_NOT         None
-65_0	COME_FROM         '52'
-65	STORE_FAST        'mrtEnabled'
+ 114      55	LOAD_GLOBAL       'BigWorld'
+          58	LOAD_ATTR         'graphicsSettingsNeedRestart'
+          61	CALL_FUNCTION_0   ''
+          64	UNARY_NOT         ''
+        65_0	COME_FROM         '52'
+          65	STORE_FAST        'mrtEnabled'
 
-68	LOAD_FAST         'self'
-71	LOAD_ATTR         '__curQuality'
-74	LOAD_FAST         'self'
-77	LOAD_ATTR         '__effectType'
-80	BINARY_SUBSCR     None
-81	LOAD_FAST         'self'
-84	LOAD_ATTR         '__qualityRange'
-87	COMPARE_OP        'in'
-90	JUMP_IF_FALSE_OR_POP '124'
-93	LOAD_FAST         'isEnabled'
-96	JUMP_IF_FALSE_OR_POP '124'
+ 116      68	LOAD_FAST         'self'
+          71	LOAD_ATTR         '__curQuality'
+          74	LOAD_FAST         'self'
+          77	LOAD_ATTR         '__effectType'
+          80	BINARY_SUBSCR     ''
+          81	LOAD_FAST         'self'
+          84	LOAD_ATTR         '__qualityRange'
+          87	COMPARE_OP        'in'
+          90	JUMP_IF_FALSE_OR_POP '124'
+          93	LOAD_FAST         'isEnabled'
+          96	JUMP_IF_FALSE_OR_POP '124'
 
-99	LOAD_FAST         'self'
-102	LOAD_ATTR         '__isAdvanced'
-105	POP_JUMP_IF_FALSE '121'
-108	LOAD_FAST         'self'
-111	LOAD_ATTR         '__isAdvanced'
-114	JUMP_IF_FALSE_OR_POP '124'
-117	LOAD_FAST         'mrtEnabled'
-120	RETURN_END_IF     None
-121_0	COME_FROM         '114'
-121	LOAD_GLOBAL       'True'
-124_0	COME_FROM         '90'
-124_1	COME_FROM         '96'
-124	RETURN_VALUE      None
--1	RETURN_LAST       None
+ 117      99	LOAD_FAST         'self'
+         102	LOAD_ATTR         '__isAdvanced'
+         105	POP_JUMP_IF_FALSE '121'
+         108	LOAD_FAST         'self'
+         111	LOAD_ATTR         '__isAdvanced'
+         114	JUMP_IF_FALSE_OR_POP '124'
+         117	LOAD_FAST         'mrtEnabled'
+         120	RETURN_END_IF     ''
+       121_0	COME_FROM         '114'
+         121	LOAD_GLOBAL       'True'
+       124_0	COME_FROM         '90'
+       124_1	COME_FROM         '96'
+         124	RETURN_VALUE      ''
+          -1	RETURN_LAST       ''
 
 Syntax error at or near `RETURN_END_IF' token at offset 120
 

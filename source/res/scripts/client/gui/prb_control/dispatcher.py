@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/dispatcher.py
 import types
 import weakref
@@ -313,7 +314,7 @@ class _PrebattleDispatcher(object):
                 self.__doSelect(result.newEntry)
             return True
         else:
-            entry = self.__factories.createEntryByAction(action.actionName)
+            entry = self.__factories.createEntryByAction(action)
             if entry is not None:
                 self.__doSelect(entry)
                 return True

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/projectiles.py
 """This module handles different projectiles."""
 import BigWorld

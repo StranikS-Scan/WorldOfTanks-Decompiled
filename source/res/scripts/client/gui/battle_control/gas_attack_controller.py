@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/gas_attack_controller.py
 from collections import namedtuple
 import BigWorld

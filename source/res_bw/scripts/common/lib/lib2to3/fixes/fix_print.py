@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_print.py
 """Fixer for print.
 
@@ -22,34 +23,34 @@ class FixPrint(fixer_base.BaseFix):
     PATTERN = "\n              simple_stmt< any* bare='print' any* > | print_stmt\n              "
 
     def transform(self, node, results):
-        if not results:
-            raise AssertionError
-            bare_print = results.get('bare')
-            bare_print and bare_print.replace(Call(Name(u'print'), [], prefix=bare_print.prefix))
+        assert results
+        bare_print = results.get('bare')
+        if bare_print:
+            bare_print.replace(Call(Name(u'print'), [], prefix=bare_print.prefix))
             return
         else:
-            if not node.children[0] == Name(u'print'):
-                raise AssertionError
-                args = node.children[1:]
-                if len(args) == 1 and parend_expr.match(args[0]):
-                    return
-                sep = end = file = None
-                if args and args[-1] == Comma():
-                    args = args[:-1]
-                    end = ' '
-                if args and args[0] == pytree.Leaf(token.RIGHTSHIFT, u'>>'):
-                    if not len(args) >= 2:
-                        raise AssertionError
-                        file = args[1].clone()
-                        args = args[3:]
-                    l_args = [ arg.clone() for arg in args ]
-                    if l_args:
-                        l_args[0].prefix = u''
-                    if sep is not None or end is not None or file is not None:
-                        if sep is not None:
-                            self.add_kwarg(l_args, u'sep', String(repr(sep)))
-                        end is not None and self.add_kwarg(l_args, u'end', String(repr(end)))
-                    file is not None and self.add_kwarg(l_args, u'file', file)
+            assert node.children[0] == Name(u'print')
+            args = node.children[1:]
+            if len(args) == 1 and parend_expr.match(args[0]):
+                return
+            sep = end = file = None
+            if args and args[-1] == Comma():
+                args = args[:-1]
+                end = ' '
+            if args and args[0] == pytree.Leaf(token.RIGHTSHIFT, u'>>'):
+                assert len(args) >= 2
+                file = args[1].clone()
+                args = args[3:]
+            l_args = [ arg.clone() for arg in args ]
+            if l_args:
+                l_args[0].prefix = u''
+            if sep is not None or end is not None or file is not None:
+                if sep is not None:
+                    self.add_kwarg(l_args, u'sep', String(repr(sep)))
+                if end is not None:
+                    self.add_kwarg(l_args, u'end', String(repr(end)))
+                if file is not None:
+                    self.add_kwarg(l_args, u'file', file)
             n_stmt = Call(Name(u'print'), l_args)
             n_stmt.prefix = node.prefix
             return n_stmt

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/decorators.py
 from debug_utils import LOG_WARNING
 from messenger.ext import validateAccountName

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/descriptor.py
 from tutorial.data.chapter import ChapterProgress
 from tutorial.settings import TUTORIAL_STOP_REASON_NAMES

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/copy_reg.py
 """Helper to provide extensibility for pickle/cPickle.
 
@@ -53,35 +54,35 @@ def _reconstructor(cls, base, state):
 _HEAPTYPE = 512
 
 def _reduce_ex(self, proto):
-    if not proto < 2:
-        raise AssertionError
-        for base in self.__class__.__mro__:
-            if hasattr(base, '__flags__') and not base.__flags__ & _HEAPTYPE:
-                break
-        else:
-            base = object
+    assert proto < 2
+    for base in self.__class__.__mro__:
+        if hasattr(base, '__flags__') and not base.__flags__ & _HEAPTYPE:
+            break
+    else:
+        base = object
 
-        if base is object:
-            state = None
-        else:
-            if base is self.__class__:
-                raise TypeError, "can't pickle %s objects" % base.__name__
-            state = base(self)
-        args = (self.__class__, base, state)
+    if base is object:
+        state = None
+    else:
+        if base is self.__class__:
+            raise TypeError, "can't pickle %s objects" % base.__name__
+        state = base(self)
+    args = (self.__class__, base, state)
+    try:
+        getstate = self.__getstate__
+    except AttributeError:
+        if getattr(self, '__slots__', None):
+            raise TypeError('a class that defines __slots__ without defining __getstate__ cannot be pickled')
         try:
-            getstate = self.__getstate__
+            dict = self.__dict__
         except AttributeError:
-            if getattr(self, '__slots__', None):
-                raise TypeError('a class that defines __slots__ without defining __getstate__ cannot be pickled')
-            try:
-                dict = self.__dict__
-            except AttributeError:
-                dict = None
+            dict = None
 
-        else:
-            dict = getstate()
+    else:
+        dict = getstate()
 
-        return dict and (_reconstructor, args, dict)
+    if dict:
+        return (_reconstructor, args, dict)
     else:
         return (_reconstructor, args)
         return

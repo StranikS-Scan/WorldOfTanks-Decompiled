@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/__init__.py
 """The PostProcessing Module.  This imports all of the c++ _PostProcessing module
 into the PostProcessing namespace.  It allows code to be written in script to

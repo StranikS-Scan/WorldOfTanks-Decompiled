@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
 import BigWorld
 import AccountCommands
@@ -99,7 +100,7 @@ class VehicleBuyer(VehicleRenter):
         return makeI18nSuccess('vehicle_buy/success', vehName=self.item.userName, price=formatPrice(self.price), type=self._getSysMsgType())
 
     def _getRentInfo(self):
-        return -1
+        pass
 
 
 class VehicleSlotBuyer(Processor):

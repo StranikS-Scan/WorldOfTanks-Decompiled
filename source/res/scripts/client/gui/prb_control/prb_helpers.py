@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/prb_helpers.py
 from gui.prb_control.functional.interfaces import IPrbListener, IUnitListener, IPreQueueListener
 from gui.prb_control.functional.interfaces import IGlobalListener

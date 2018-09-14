@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/persistent_caches.py
 import BigWorld
 import cPickle
@@ -29,7 +30,7 @@ class SimpleCache(object):
         return self.__accountName
 
     def getFileName(self):
-        raise self.__accountName is not None or AssertionError
+        assert self.__accountName is not None
         return cacheFileName(self.__accountName, self.__cacheType, self.__cacheName)
 
     def get(self):
@@ -56,9 +57,9 @@ class SimpleCache(object):
         return (None, None)
 
     def save(self, descr, data):
-        if not self.__accountName is not None:
-            raise AssertionError
-            return self.__accountName is None and None
+        assert self.__accountName is not None
+        if self.__accountName is None:
+            return
         else:
             try:
                 with open(self.getFileName(), 'wb') as f:

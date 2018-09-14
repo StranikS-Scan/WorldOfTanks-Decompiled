@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/ast.py
 """Python abstract syntax node definitions
 
@@ -144,7 +145,7 @@ class AssName(Node):
         return (self.name, self.flags)
 
     def getChildNodes(self):
-        return ()
+        pass
 
     def __repr__(self):
         return 'AssName(%s, %s)' % (repr(self.name), repr(self.flags))
@@ -309,13 +310,13 @@ class Break(Node):
         self.lineno = lineno
 
     def getChildren(self):
-        return ()
+        pass
 
     def getChildNodes(self):
-        return ()
+        pass
 
     def __repr__(self):
-        return 'Break()'
+        pass
 
 
 class CallFunc(Node):
@@ -420,7 +421,7 @@ class Const(Node):
         return (self.value,)
 
     def getChildNodes(self):
-        return ()
+        pass
 
     def __repr__(self):
         return 'Const(%s)' % (repr(self.value),)
@@ -432,13 +433,13 @@ class Continue(Node):
         self.lineno = lineno
 
     def getChildren(self):
-        return ()
+        pass
 
     def getChildNodes(self):
-        return ()
+        pass
 
     def __repr__(self):
-        return 'Continue()'
+        pass
 
 
 class Decorators(Node):
@@ -516,13 +517,13 @@ class Ellipsis(Node):
         self.lineno = lineno
 
     def getChildren(self):
-        return ()
+        pass
 
     def getChildNodes(self):
-        return ()
+        pass
 
     def __repr__(self):
-        return 'Ellipsis()'
+        pass
 
 
 class Exec(Node):
@@ -615,7 +616,7 @@ class From(Node):
         return (self.modname, self.names, self.level)
 
     def getChildNodes(self):
-        return ()
+        pass
 
     def __repr__(self):
         return 'From(%s, %s, %s)' % (repr(self.modname), repr(self.names), repr(self.level))
@@ -780,7 +781,7 @@ class Global(Node):
         return (self.names,)
 
     def getChildNodes(self):
-        return ()
+        pass
 
     def __repr__(self):
         return 'Global(%s)' % (repr(self.names),)
@@ -838,7 +839,7 @@ class Import(Node):
         return (self.names,)
 
     def getChildNodes(self):
-        return ()
+        pass
 
     def __repr__(self):
         return 'Import(%s)' % (repr(self.names),)
@@ -1123,7 +1124,7 @@ class Name(Node):
         return (self.name,)
 
     def getChildNodes(self):
-        return ()
+        pass
 
     def __repr__(self):
         return 'Name(%s)' % (repr(self.name),)
@@ -1169,13 +1170,13 @@ class Pass(Node):
         self.lineno = lineno
 
     def getChildren(self):
-        return ()
+        pass
 
     def getChildNodes(self):
-        return ()
+        pass
 
     def __repr__(self):
-        return 'Pass()'
+        pass
 
 
 class Power(Node):

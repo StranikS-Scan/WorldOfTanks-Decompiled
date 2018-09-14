@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/offbattle/settings.py
 from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ScopeTemplates
 from tutorial.gui.Scaleform.pop_ups import TutorialGreetingDialog, TutorialQueueDialog

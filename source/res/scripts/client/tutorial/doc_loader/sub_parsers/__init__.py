@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/__init__.py
 from collections import namedtuple
 from items import _xml, vehicles

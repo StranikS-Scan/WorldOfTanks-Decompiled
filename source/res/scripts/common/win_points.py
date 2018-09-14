@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/win_points.py
 import ResMgr
 from constants import FLAG_TYPES

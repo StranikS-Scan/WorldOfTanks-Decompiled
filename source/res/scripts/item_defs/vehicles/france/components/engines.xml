@@ -590,6 +590,8 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1100	</rpm_min>
+      <rpm_max>	3000	</rpm_max>
     </Maybach_HL_230P45>
     <Maybach_HL_230>
       <userString>	#france_vehicles:Maybach_HL_230	</userString>
@@ -597,15 +599,17 @@
       <level>	6	</level>
       <price>	26000	</price>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	575	</power>
       <weight>	700	</weight>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1100	</rpm_min>
+      <rpm_max>	3000	</rpm_max>
     </Maybach_HL_230>
     <Maybach_HL_234P45>
       <userString>	#france_vehicles:Maybach_HL_234P45	</userString>
@@ -630,15 +634,17 @@
       <price>	98730	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	1000	</power>
       <weight>	750	</weight>
       <maxHealth>	320	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1100	</rpm_min>
+      <rpm_max>	3000	</rpm_max>
     </Maybach_HL_234P45A>
     <Maybach_HL_234P50>
       <userString>	#france_vehicles:Maybach_HL_234P50	</userString>
@@ -745,6 +751,8 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1300	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
     </Maybach_HL_295>
     <Saurer>
       <userString>	#france_vehicles:Saurer	</userString>
@@ -1017,15 +1025,17 @@
       <price>	78000	</price>
       <notInShop>	true	</notInShop>
       <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
-      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	850	</power>
       <weight>	750	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1300	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
     </Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>
       <userString>	#igr_vehicles:Detroit_Diesel_6V53T-S_IGR	</userString>

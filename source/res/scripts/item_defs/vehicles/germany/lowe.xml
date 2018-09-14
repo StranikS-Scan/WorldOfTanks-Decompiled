@@ -113,7 +113,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	255	</textureScale>
+        <textureScale>	-1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -215,7 +215,7 @@
         <linkBones>	true	</linkBones>
         <maxAmplitude>	0.09	</maxAmplitude>
         <maxOffset>	0.08	</maxOffset>
-        <gravity>	248	</gravity>
+        <gravity>	-8	</gravity>
         <elasticity>	1060	</elasticity>
         <damping>	2	</damping>
         <forwardElastK>	1	</forwardElastK>

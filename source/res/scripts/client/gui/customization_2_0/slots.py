@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/slots.py
 import copy
 import time
@@ -89,37 +90,43 @@ class Slots(object):
         self.__currentType = cType
         self.__currentIdx = slotIdx
         self.selected(cType, slotIdx)
-        g_hangarSpace.space.updateVehicleSticker(self.__aData.viewModel[1:3])
+        slotItem = self.__data['data'][cType]['data'][slotIdx]
+        if cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
+            self.__aData.viewModel[0] = slotItem['itemID']
+        self.__applyViewModel()
         if cType != CUSTOMIZATION_TYPE.CAMOUFLAGE:
-            slotItem = self.__data['data'][cType]['data'][slotIdx]
-            g_hangarSpace.space.locateCameraOnEmblem(slotItem['spot'] == 0, SLOT_TYPE[cType], self.calculateVehicleIndex(slotIdx, cType), 0.2)
+            g_hangarSpace.space.locateCameraOnEmblem(slotItem['spot'] == 0, SLOT_TYPE[cType], self.__getAdjustedIndex(slotIdx, cType), 0.2)
         else:
             g_hangarSpace.space.locateCameraToPreview()
 
-    def updateSlot(self, item, cType = None, slotIdx = None, duration = 0):
-        slotIdx = self.__currentIdx if slotIdx is None else slotIdx
-        cType = self.__currentType if cType is None else cType
-        if item['id'] < 0:
-            if cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
-                img = _EMPTY_SLOTS_MAP[cType][slotIdx]
-            else:
-                img = _EMPTY_SLOTS_MAP[cType]
-            price = 0
-            bonus = ''
-            isInDossier = False
+    def clearSlot(self, cType, slotIdx):
+        initialSlotItem = self.__initialData['data'][cType]['data'][slotIdx]
+        if initialSlotItem['itemID'] < 0:
+            self.dropAppliedItem(cType, slotIdx)
         else:
-            img = item['object'].getTexturePath()
-            price = item['object'].getPrice(duration)
-            isInDossier = item['object'].isInDossier
-            bonus = self.__getSlotBonusString(item['object'].qualifier, isInDossier)
+            self.cart.buyItem(cType, initialSlotItem['spot'], self.__getAdjustedIndex(slotIdx, cType), initialSlotItem['itemID'], 0, price=-1)
+
+    def dropAppliedItem(self, cType, slotIdx):
         typedData = self.__data['data'][cType]['data']
         if len(typedData) == 2:
             thisItemSlotIdx = slotIdx
             anotherSlotIdx = 1 - slotIdx
-            if item['id'] < 0:
-                if typedData[thisItemSlotIdx]['itemID'] == typedData[anotherSlotIdx]['itemID']:
-                    typedData[anotherSlotIdx]['price'] = self.getSlotItem(cType=cType, slotIdx=anotherSlotIdx).getPrice(typedData[anotherSlotIdx]['duration'])
-            elif item['id'] == typedData[anotherSlotIdx]['itemID']:
+            if typedData[thisItemSlotIdx]['itemID'] == typedData[anotherSlotIdx]['itemID']:
+                typedData[anotherSlotIdx]['price'] = self.getSlotItem(cType=cType, slotIdx=anotherSlotIdx).getPrice(typedData[anotherSlotIdx]['duration'])
+        initialSlotItem = self.__initialData['data'][cType]['data'][slotIdx]
+        self.__setSlotAndUpdateView(cType, slotIdx, copy.deepcopy(initialSlotItem))
+
+    def applyItem(self, item, duration = 0):
+        cType = self.__currentType
+        slotIdx = self.__currentIdx
+        img = item['object'].getTexturePath()
+        price = item['object'].getPrice(duration)
+        isInDossier = item['object'].isInDossier
+        bonus = self.__getSlotBonusString(item['object'].qualifier, isInDossier)
+        typedData = self.__data['data'][cType]['data']
+        if len(typedData) == 2:
+            anotherSlotIdx = 1 - slotIdx
+            if item['id'] == typedData[anotherSlotIdx]['itemID']:
                 if duration == 0:
                     typedData[anotherSlotIdx]['price'] = 0
                 elif typedData[anotherSlotIdx]['duration'] == 0:
@@ -128,25 +135,31 @@ class Slots(object):
                 itemInAnotherSlot = self.getSlotItem(cType=cType, slotIdx=anotherSlotIdx)
                 if itemInAnotherSlot is not None:
                     typedData[anotherSlotIdx]['price'] = itemInAnotherSlot.getPrice(typedData[anotherSlotIdx]['duration'])
+        initialSlotItem = self.__initialData['data'][cType]['data'][slotIdx]
         currentSlotItem = self.__data['data'][cType]['data'][slotIdx]
+        if item['isInQuests']:
+            purchaseTypeIcon = RES_ICONS.MAPS_ICONS_LIBRARY_QUEST_ICON
+        elif duration == 0:
+            purchaseTypeIcon = RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2
+        else:
+            purchaseTypeIcon = RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2
         newSlotItem = {'itemID': item['id'],
          'img': img,
-         'purchaseTypeIcon': RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2 if duration == 0 else RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2,
+         'purchaseTypeIcon': purchaseTypeIcon,
          'bonus': bonus,
          'duration': duration,
          'spot': currentSlotItem['spot'],
          'price': price,
          'isInDossier': isInDossier,
          'slotTooltip': makeTooltip(_ms(TOOLTIPS.CUSTOMIZATION_SLOT_HEADER, groupName=_ms(_SLOT_TOOLTIP_MAPPING[self.__currentType])), TOOLTIPS.CUSTOMIZATION_SLOT_BODY),
-         'removeBtnTooltip': makeTooltip(TOOLTIPS.CUSTOMIZATION_SLOTREMOVE_HEADER, TOOLTIPS.CUSTOMIZATION_SLOTREMOVE_BODY)}
-        self.__updateViewModel(cType, slotIdx, newSlotItem)
-        initialSlotItem = self.__initialData['data'][cType]['data'][slotIdx]
-        if newSlotItem['itemID'] < 0 or initialSlotItem['itemID'] == newSlotItem['itemID']:
+         'removeBtnTooltip': makeTooltip(TOOLTIPS.CUSTOMIZATION_SLOTREMOVE_HEADER, TOOLTIPS.CUSTOMIZATION_SLOTREMOVE_BODY),
+         'revertBtnVisible': initialSlotItem['itemID'] >= 0,
+         'revertBtnTooltip': makeTooltip(TOOLTIPS.CUSTOMIZATION_SLOTREVERT_HEADER, TOOLTIPS.CUSTOMIZATION_SLOTREVERT_BODY)}
+        if initialSlotItem['itemID'] == newSlotItem['itemID']:
             if currentSlotItem['isInDossier']:
-                self.cart.buyItem(cType, newSlotItem['spot'], self.calculateVehicleIndex(slotIdx, cType), currentSlotItem['itemID'], 0, price=-1)
+                self.cart.buyItem(cType, newSlotItem['spot'], self.__getAdjustedIndex(slotIdx, cType), currentSlotItem['itemID'], 0, price=-1)
             else:
-                initialSlotItem = copy.deepcopy(initialSlotItem)
-                self.__setSlotAndUpdateView(cType, slotIdx, initialSlotItem)
+                self.__setSlotAndUpdateView(cType, slotIdx, copy.deepcopy(initialSlotItem))
         elif newSlotItem['isInDossier']:
             numberOfDays = item['object'].numberOfDays
             if numberOfDays is not None:
@@ -155,12 +168,12 @@ class Slots(object):
             else:
                 itemDuration = 0
                 price = 0
-            self.cart.buyItem(cType, newSlotItem['spot'], self.calculateVehicleIndex(slotIdx, cType), newSlotItem['itemID'], itemDuration, price=price)
+            self.cart.buyItem(cType, newSlotItem['spot'], self.__getAdjustedIndex(slotIdx, cType), newSlotItem['itemID'], itemDuration, price=price)
         else:
             self.__setSlotAndUpdateView(cType, slotIdx, newSlotItem)
         return
 
-    def calculateVehicleIndex(self, initialIndex, cType):
+    def __getAdjustedIndex(self, initialIndex, cType):
         if initialIndex == 1:
             slotItem = self.__data['data'][cType]['data'][initialIndex]
             adjacentSlotItem = self.__data['data'][cType]['data'][0]
@@ -177,15 +190,20 @@ class Slots(object):
         self.updated({'type': cType,
          'idx': slotIdx,
          'data': itemToSet})
-
-    def __updateViewModel(self, cType, slotIdx, newSlotItem):
-        if cType != CUSTOMIZATION_TYPE.CAMOUFLAGE:
-            viewModelItem = [None if newSlotItem['itemID'] < 0 else newSlotItem['itemID'], time.time(), 0]
+        if cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
+            if slotIdx == self.__currentIdx:
+                self.__aData.viewModel[0] = itemToSet['itemID']
+        else:
+            viewModelItem = [None if itemToSet['itemID'] < 0 else itemToSet['itemID'], time.time(), 0]
             if cType == CUSTOMIZATION_TYPE.INSCRIPTION:
                 viewModelItem.append(0)
-            self.__aData.viewModel[cType][newSlotItem['spot'] + self.calculateVehicleIndex(slotIdx, cType)] = viewModelItem
-            g_hangarSpace.space.updateVehicleSticker(self.__aData.viewModel[1:3])
+            self.__aData.viewModel[cType][itemToSet['spot'] + self.__getAdjustedIndex(slotIdx, cType)] = viewModelItem
+        self.__applyViewModel()
         return
+
+    def __applyViewModel(self):
+        g_hangarSpace.space.updateVehicleCamouflage(camouflageID=self.__aData.viewModel[0])
+        g_hangarSpace.space.updateVehicleSticker(self.__aData.viewModel[1:3])
 
     def __updateSlotsData(self, resetSlots):
         newSlotsData = {'data': [{'header': self.__setSlotsHeader(CUSTOMIZATION_TYPE.CAMOUFLAGE),
@@ -216,6 +234,8 @@ class Slots(object):
             slotData = {'itemID': itemID,
              'slotTooltip': makeTooltip(_ms(TOOLTIPS.CUSTOMIZATION_SLOT_HEADER, groupName=_ms(_SLOT_TOOLTIP_MAPPING[cType])), TOOLTIPS.CUSTOMIZATION_SLOT_BODY),
              'removeBtnTooltip': makeTooltip(TOOLTIPS.CUSTOMIZATION_SLOTREMOVE_HEADER, TOOLTIPS.CUSTOMIZATION_SLOTREMOVE_BODY),
+             'revertBtnVisible': False,
+             'revertBtnTooltip': makeTooltip(TOOLTIPS.CUSTOMIZATION_SLOTREVERT_HEADER, TOOLTIPS.CUSTOMIZATION_SLOTREVERT_BODY),
              'spot': installedItem.getSpot(),
              'isInDossier': itemID >= 0}
             if itemID < 0:

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/chains/__init__.py
 from tutorial.data.effects import EFFECT_TYPE
 from tutorial.control import ControlsFactory

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/battle/layout.py
 import weakref
 from account_helpers.AccountSettings import AccountSettings
@@ -171,7 +172,7 @@ class BattleLayout(ScaleformLayout):
         return
 
     def getSceneID(self):
-        return 'Battle'
+        pass
 
     def showMessage(self, text, lookupType = None):
         self.uiHolder.call('battle.VehicleMessagesPanel.ShowMessage', [lookupType, text, 'green'])

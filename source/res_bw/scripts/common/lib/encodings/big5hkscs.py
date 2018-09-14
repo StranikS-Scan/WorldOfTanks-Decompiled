@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/big5hkscs.py
 import _codecs_hk, codecs
 import _multibytecodec as mbc

@@ -1714,6 +1714,7 @@
         <returnTime>	0.36	</returnTime>
       </recoil>
       <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
@@ -1814,64 +1815,6 @@
         </_90mm_OE_mle_1924>
       </shots>
     </_90mm_canon_DCA_45A>
-    <_100mm_SA_47_A>
-      <userString>	#france_vehicles:_100mm_SA_47_A	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	127550	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.46	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.65	</amplitude>
-        <backoffTime>	0.1	</backoffTime>
-        <returnTime>	0.44	</returnTime>
-      </recoil>
-      <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload85_107	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	21.875	</rotationSpeed>
-      <reloadTime>	4.04	</reloadTime>
-      <maxAmmo>	50	</maxAmmo>
-      <aimingTime>	4.04	</aimingTime>
-      <weight>	3000	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <shotDispersionRadius>	0.35	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	3.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_100mm_Prf1940>
-          <defaultPortion>	0.95	</defaultPortion>
-          <speed>	1000	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	232 205	</piercingPower>
-        </_100mm_Prf1940>
-        <_100mm_FrtPrf1945>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1250	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	263 253	</piercingPower>
-        </_100mm_FrtPrf1945>
-        <_100mm_OE_mle_1930>
-          <defaultPortion>	0.05	</defaultPortion>
-          <speed>	1000	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	50 50	</piercingPower>
-        </_100mm_OE_mle_1930>
-      </shots>
-    </_100mm_SA_47_A>
     <_90mm_canon_DCA_45_AC_A>
       <userString>	#france_vehicles:_90mm_canon_DCA_45_AC_A	</userString>
       <tags></tags>
@@ -1985,6 +1928,64 @@
         </_100mm_OE_mle_1930>
       </shots>
     </_100mm_SA_47>
+    <_100mm_SA_47_A>
+      <userString>	#france_vehicles:_100mm_SA_47_A	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	127550	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.65	</amplitude>
+        <backoffTime>	0.1	</backoffTime>
+        <returnTime>	0.44	</returnTime>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	21.875	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	3000	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <shotDispersionRadius>	0.35	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_100mm_Prf1940>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	232 205	</piercingPower>
+        </_100mm_Prf1940>
+        <_100mm_FrtPrf1945>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1250	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	263 253	</piercingPower>
+        </_100mm_FrtPrf1945>
+        <_100mm_OE_mle_1930>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	50 50	</piercingPower>
+        </_100mm_OE_mle_1930>
+      </shots>
+    </_100mm_SA_47_A>
     <_105mm_CN_105_57>
       <userString>	#france_vehicles:_105mm_CN_105_57	</userString>
       <tags></tags>
@@ -2168,11 +2169,12 @@
         <returnTime>	0.44	</returnTime>
       </recoil>
       <effects>	shot_main_mb	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
+      <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	21.875	</rotationSpeed>
       <reloadTime>	9.14285714285714	</reloadTime>
       <maxAmmo>	50	</maxAmmo>
@@ -2811,6 +2813,7 @@
         <returnTime>	0.6	</returnTime>
       </recoil>
       <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
@@ -3195,6 +3198,7 @@
         <returnTime>	0.6	</returnTime>
       </recoil>
       <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
         <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>

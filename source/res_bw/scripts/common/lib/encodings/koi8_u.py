@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/koi8_u.py
 """ Python Character Mapping Codec koi8_u generated from 'python-mappings/KOI8-U.TXT' with gencodec.py.
 

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pgen2/tokenize.py
 """Tokenization help for Python programs.
 
@@ -181,10 +182,10 @@ class Untokenizer:
 
     def add_whitespace(self, start):
         row, col = start
-        if not row <= self.prev_row:
-            raise AssertionError
-            col_offset = col - self.prev_col
-            col_offset and self.tokens.append(' ' * col_offset)
+        assert row <= self.prev_row
+        col_offset = col - self.prev_col
+        if col_offset:
+            self.tokens.append(' ' * col_offset)
 
     def untokenize(self, iterable):
         for t in iterable:
@@ -470,8 +471,8 @@ def generate_tokens(readline):
                      spos,
                      epos,
                      line)
-                elif not (initial == '#' and not token.endswith('\n')):
-                    raise AssertionError
+                elif initial == '#':
+                    assert not token.endswith('\n')
                     yield (COMMENT,
                      token,
                      spos,

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_next.py
 """Fixer for it.next() -> next(it), per PEP 3114."""
 from ..pgen2 import token
@@ -21,13 +22,13 @@ class FixNext(fixer_base.BaseFix):
             self.shadowed_next = False
 
     def transform(self, node, results):
-        if not results:
-            raise AssertionError
-            base = results.get('base')
-            attr = results.get('attr')
-            name = results.get('name')
-            if base:
-                self.shadowed_next and attr.replace(Name(u'__next__', prefix=attr.prefix))
+        assert results
+        base = results.get('base')
+        attr = results.get('attr')
+        name = results.get('name')
+        if base:
+            if self.shadowed_next:
+                attr.replace(Name(u'__next__', prefix=attr.prefix))
             else:
                 base = [ n.clone() for n in base ]
                 base[0].prefix = u''

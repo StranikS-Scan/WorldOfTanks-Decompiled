@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization_2_0/filter.py
 from Event import Event
 from constants import IGR_TYPE
@@ -35,9 +36,9 @@ class Filter(object):
         self.__currentGroup = 'all_groups'
         self.__showInDossier = True
         self.__purchaseType = PURCHASE_TYPE.PURCHASE
-        self.__rules = [self.__hasSelectedBonus,
+        self.__rules = [self.__isInDossier,
+         self.__hasSelectedBonus,
          self.__isInSelectedGroup,
-         self.__isInDossier,
          self.__hasPurchaseType]
         self.__selectedBonuses = {QUALIFIER_TYPE.ALL: False,
          QUALIFIER_TYPE.COMMANDER: False,
@@ -107,16 +108,19 @@ class Filter(object):
         elif filterGroup == FILTER_TYPE.PURCHASE_TYPE:
             self.__purchaseType = filterGroupValue
 
-    def setTypeAndIdx(self, cType, slotIdx, customizationId, oldCustomizationId):
+    def setTypeAndIdx(self, cType, slotIdx):
         self.__currentSlotIdx = slotIdx
-        self.__customizationId = customizationId
-        self.__oldCustomizationId = oldCustomizationId
         if self.__currentType != cType:
             self.__currentType = cType
             self.setDefaultFilter()
 
     def apply(self):
         self.changed()
+
+    def __isInDossier(self, item):
+        if not self.__showInDossier:
+            return not item.isInDossier
+        return True
 
     def __hasSelectedBonus(self, item):
         if not self.__bonusSelected():
@@ -131,13 +135,6 @@ class Filter(object):
         else:
             return item.getGroup() == self.__currentGroup
 
-    def __isInDossier(self, item):
-        if self.__showInDossier:
-            return True
-        else:
-            needShow = self.__customizationId == item.getID() or self.__oldCustomizationId == item.getID()
-            return not item.isInDossier or needShow
-
     def __bonusSelected(self):
         for key in QUALIFIER_TYPE_INDEX:
             if self.__selectedBonuses[key]:
@@ -147,8 +144,8 @@ class Filter(object):
 
     def __hasPurchaseType(self, item):
         if self.__purchaseType == PURCHASE_TYPE.PURCHASE:
-            return item.getIgrType() == IGR_TYPE.NONE
+            return item.getIgrType() == IGR_TYPE.NONE and (item.isInDossier or item.isInShop)
         if self.__purchaseType == PURCHASE_TYPE.QUEST:
-            return False
+            return item.isInQuests and not item.isInDossier
         if self.__purchaseType == PURCHASE_TYPE.IGR:
-            return item.getIgrType() == IGR_TYPE.PREMIUM
+            return item.getIgrType() == IGR_TYPE.PREMIUM and (item.isInDossier or item.isInShop)

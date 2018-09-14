@@ -80,7 +80,7 @@
       </armor>
       <weight>	7700	</weight>
       <maxLoad>	42000	</maxLoad>
-      <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
+      <terrainResistance>	0.7 0.8 1.6	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
@@ -228,11 +228,11 @@
           <aimingTime>	2.7	</aimingTime>
           <pitchLimits>
             <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
-            <maxPitch>	0 3 0.366894 3 0.430556 1 0.569444 1 0.633106 3 1 3	</maxPitch>
+            <maxPitch>	0 3.5 0.366894 3.5 0.430556 1 0.569444 1 0.633106 3.5 1 3.5	</maxPitch>
           </pitchLimits>
           <reloadTime>	9.6	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

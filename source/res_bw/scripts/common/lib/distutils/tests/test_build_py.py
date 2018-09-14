@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_build_py.py
 """Tests for distutils.command.build_py."""
 import os

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/options.py
 import base64
 import cPickle
@@ -501,7 +502,7 @@ class UserPrefsStringSetting(UserPrefsSetting):
             return False
 
     def getDefaultValue(self):
-        return ''
+        pass
 
 
 class UserPrefsFloatSetting(UserPrefsSetting):
@@ -521,7 +522,7 @@ class UserPrefsFloatSetting(UserPrefsSetting):
             return False
 
     def getDefaultValue(self):
-        return 0.0
+        pass
 
 
 class PreferencesSetting(SettingAbstract):
@@ -633,7 +634,6 @@ class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
         options = self._getRawOptions()
         if deviceName in options:
             return options.index(deviceName)
-        return -1
 
 
 class VOIPSupportSetting(ReadOnlySetting):
@@ -764,7 +764,6 @@ class CustomAASetting(SettingAbstract):
     def __getModeIndex(self, mode):
         if mode in self.__customAAModes:
             return self.__customAAModes.index(mode)
-        return -1
 
     def __getModeByIndex(self, modeIndex):
         if len(self.__customAAModes) > modeIndex > -1:
@@ -798,7 +797,6 @@ class MultisamplingSetting(SettingAbstract):
     def __getMSTypeIndex(self, msType):
         if msType in self.__multisamplingTypes:
             return self.__multisamplingTypes.index(msType)
-        return -1
 
     def __getMSTypeByIndex(self, msTypeIndex):
         if len(self.__multisamplingTypes) > msTypeIndex > -1:
@@ -1128,8 +1126,6 @@ class WindowSizeSetting(SettingAbstract):
             if w == width and h == height:
                 return index
 
-        return 0
-
     def __getWindowSizes(self):
         sizes = self.__getSuitableWindowSizes()[self._storage.monitor]
         current = g_monitorSettings.currentWindowSize
@@ -1206,8 +1202,6 @@ class ResolutionSetting(PreferencesSetting):
         for idx, (w, h) in enumerate(self.__getResolutions()):
             if w == width and h == height:
                 return idx
-
-        return 0
 
     def _get(self):
         resolution = self._storage.resolution
@@ -1305,7 +1299,7 @@ class VehicleMarkerSetting(StorageAccountSetting):
 
         @classmethod
         def getOptionName(cls, mType, mOption):
-            raise mType in cls.TYPES.ALL() and mOption in cls.PARAMS.ALL() or AssertionError
+            assert mType in cls.TYPES.ALL() and mOption in cls.PARAMS.ALL()
             return 'marker%s%s' % (mType, mOption)
 
         @classmethod
@@ -1436,7 +1430,7 @@ class MinimapVehModelsSetting(StorageDumpSetting):
         return [ settingsKey % (self.settingName, type) for type in self.VEHICLE_MODELS_TYPES ]
 
     def getDefaultValue(self):
-        return 0
+        pass
 
 
 class ShowMarksOnGunSetting(StorageAccountSetting):
@@ -1514,7 +1508,7 @@ class MouseSetting(ControlSetting):
         else:
             camera.setUserConfigValue(self.setting, value)
             if not self.__isControlModeAccessible():
-                camera._writeUserPreferences()
+                camera.writeUserPreferences()
             return
 
 

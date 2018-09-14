@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/decimal.py
 """
 This is a Py2.3 implementation of decimal floating point arithmetic based on
@@ -664,7 +665,6 @@ class Decimal(object):
                 return 1
             if exp == 'N':
                 return 2
-        return 0
 
     def _isinfinity(self):
         """Returns whether the number is infinite
@@ -677,7 +677,6 @@ class Decimal(object):
             if self._sign:
                 return -1
             return 1
-        return 0
 
     def _check_nans(self, other = None, context = None):
         """Returns whether the number is not actually one.

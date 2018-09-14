@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/club_shared.py
 from itertools import chain
 SUBSCRIPTION_EXPIRY_TIME = 300
@@ -12,8 +13,8 @@ class CLUB_SUBSCRIPTION_TYPE:
 def _makeID(start = None, range = None):
     global _g_id
     id = _g_id = _g_id + 1 if start is None else start
-    if not (range is not None and range > 0):
-        raise AssertionError
+    if range is not None:
+        assert range > 0
         _g_id += range
     return id
 

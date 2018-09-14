@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/messages.py
 import time
 import operator
@@ -110,11 +111,11 @@ class _ChatHistoryRequester(ClientHolder):
         return result
 
     def addHistory(self, message):
-        if not self.__state == _HISTORY_RQ_STATE.RESULT:
-            raise AssertionError
-            if message.body:
-                self.__history.append(message)
-            message.isFinalInHistory and self.__setChannelAvailable(self.__pool.pop(0))
+        assert self.__state == _HISTORY_RQ_STATE.RESULT
+        if message.body:
+            self.__history.append(message)
+        if message.isFinalInHistory:
+            self.__setChannelAvailable(self.__pool.pop(0))
             self.__history = []
             self.__state = _HISTORY_RQ_STATE.FREE
             self.__doNextRequest()

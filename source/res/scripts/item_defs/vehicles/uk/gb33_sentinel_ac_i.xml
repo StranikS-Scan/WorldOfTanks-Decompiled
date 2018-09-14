@@ -16,7 +16,7 @@
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB33_Sentinel_AC_I/Sentinel_AC_I_CM.dds	</exclusionMask>
+    <exclusionMask>	vehicles/british/GB33_Sentinel_AC_I/Sentinel_AC_I_chassis_01_AM.dds	</exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -28,11 +28,12 @@
       <armor_6>	15.9	</armor_6>
       <armor_7>	25.4	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	45	</armor_9>
-      <armor_10>	55	</armor_10>
+      <armor_9>	60	</armor_9>
+      <armor_10>	38.1	</armor_10>
       <armor_11>	38.1	</armor_11>
       <armor_12>	55	</armor_12>
       <armor_13>	38.1	</armor_13>
+      <armor_14>	50	</armor_14>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	17521	</weight>
@@ -55,30 +56,33 @@
     </swinging>
     <exhaust>
       <pixie>	gas_medium	</pixie>
-      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.731323 0.147557	</turret>
+      <turret>	-0.000000 0.644289 0.021	</turret>
     </turretPositions>
     <hitTester>
       <collisionModel>	vehicles/british/GB33_Sentinel_AC_I/collision/Hull.model	</collisionModel>
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.295043 0.236267 2.99613	</rayStart>
-        <rayEnd>	-0.295043 -0.141847 2.53028	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <rayStart>	-0.390521 0.237344 2.42955	</rayStart>
+        <rayEnd>	-0.390521 0.0575187 2.34202	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-0.0276729 0.502281 2.65828	</rayStart>
-        <rayEnd>	-0.0276729 -0.0221836 2.36685	</rayEnd>
-        <rayUp>	0.121653 -0.00413189 -0.992564	</rayUp>
+        <rayStart>	0.172174 0.462936 2.41656	</rayStart>
+        <rayEnd>	0.172174 -0.10089 2.21139	</rayEnd>
+        <rayUp>	0.195378 -0.00702206 -0.980703	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <camouflage>
+      <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_GB33_Sentinel_AC_I>
@@ -114,65 +118,69 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.46 0.48	</size>
+        <size>	0.36 0.48	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.78	</textureScale>
+        <textureScale>	-0.6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
-          <radius>	0.352835	</radius>
+          <radius>	0.34588	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	WD_R	</template>
-          <radius>	0.120424	</radius>
+          <radius>	0.108	</radius>
           <startIndex>	1	</startIndex>
           <count>	3	</count>
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
-          <radius>	0.302514	</radius>
+          <radius>	0.277229	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	W_R	</template>
-          <radius>	0.270284	</radius>
+          <radius>	0.228143	</radius>
           <startIndex>	0	</startIndex>
           <count>	6	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.352835	</radius>
+          <radius>	0.34588	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
-          <radius>	0.120424	</radius>
+          <radius>	0.108	</radius>
           <startIndex>	1	</startIndex>
           <count>	3	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
-          <radius>	0.302514	</radius>
+          <radius>	0.277229	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.270284	</radius>
+          <radius>	0.228143	</radius>
           <startIndex>	0	</startIndex>
           <count>	6	</count>
         </group>
@@ -185,11 +193,11 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.00221 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/british/GB33_Sentinel_AC_I/collision/Chassis.model	</collisionModel>
       </hitTester>
-      <topRightCarryingPoint>	1.13809 1.79622	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.14117 1.7788	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -202,6 +210,127 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0607477	</minOffset>
+          <maxOffset>	0.0607477	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0607477	</minOffset>
+          <maxOffset>	0.0607477	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB33_Sentinel_AC_I/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB33_Sentinel_AC_I/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/british/GB33_Sentinel_AC_I/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/british/GB33_Sentinel_AC_I/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/british/GB33_Sentinel_AC_I/track/left.track	</left>
+        <right>	vehicles/british/GB33_Sentinel_AC_I/track/right.track	</right>
+        <segmentLength>	0.149	</segmentLength>
+        <segmentOffset>	0.04	</segmentOffset>
+        <segment2Offset>	0.074	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.0109	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1149	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1.99	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.011	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.89	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.011	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.011	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.011	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1.99	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.011	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.89	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.011	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.011	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.011	</offset>
+        </node>
+      </trackNodes>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
     </Chassis_GB33_Sentinel_AC_I>
   </chassis>
   <turrets0>
@@ -222,6 +351,9 @@
         <armor_8>	0	</armor_8>
         <armor_9>	65	</armor_9>
         <armor_10>	38.1	</armor_10>
+        <armor_11>	55	</armor_11>
+        <armor_12>	45	</armor_12>
+        <armor_13>	50	</armor_13>
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_4	</primaryArmor>
       <weight>	4000	</weight>
@@ -243,16 +375,18 @@
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
             <armor_6>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_6>
+            <armor_7>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
             <gun>	10	</gun>
           </armor>
           <pitchLimits>
@@ -270,6 +404,9 @@
           <hitTester>
             <collisionModel>	vehicles/british/GB33_Sentinel_AC_I/collision/Gun_01.model	</collisionModel>
           </hitTester>
+          <camouflage>
+            <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
         </_2pdr_Gun_Mk_X_A>
       </guns>
       <models>
@@ -280,27 +417,39 @@
       <hitTester>
         <collisionModel>	vehicles/british/GB33_Sentinel_AC_I/collision/Turret_01.model	</collisionModel>
       </hitTester>
-      <gunPosition>	0.000000 0.393711 0.708066	</gunPosition>
+      <gunPosition>	0.000017 0.452513 0.727547	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.987607 0.70433 -0.504111	</rayStart>
-          <rayEnd>	-0.812315 0.700836 -0.407879	</rayEnd>
+          <rayStart>	-1.02156 0.544025 0.0554984	</rayStart>
+          <rayEnd>	-0.848538 0.444961 0.0396743	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	1.04803 0.837625 -0.161584	</rayStart>
-          <rayEnd>	0.67859 0.36486 -0.161584	</rayEnd>
-          <rayUp>	-0.78795 0.615739 -0.000000	</rayUp>
-          <size>	0.74	</size>
+          <rayStart>	0.945642 0.614328 -0.352232	</rayStart>
+          <rayEnd>	0.790941 0.490781 -0.323877	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.62	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
+        <player>
+          <rayStart>	0.973072 0.606133 0.234172	</rayStart>
+          <rayEnd>	0.821415 0.476611 0.219207	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.148 -0.230 0.928 -0.000 0.565 0.145 0.247 0.632 0.456 0.500 0.015 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
+      <physicsShape>	0.919 -0.081 0.928 -0.000 0.565 0.108 0.247 0.632 0.456 0.500 0.015 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.655 0.655 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_1_GB33_Sentinel_AC_I>
   </turrets0>
   <engines>

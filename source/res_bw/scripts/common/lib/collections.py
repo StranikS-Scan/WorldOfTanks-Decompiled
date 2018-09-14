@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/collections.py
 __all__ = ['Counter',
  'deque',
@@ -340,7 +341,7 @@ class Counter(dict):
 
     def __missing__(self, key):
         """The count of elements not in the Counter is zero."""
-        return 0
+        pass
 
     def most_common(self, n = None):
         """List the n most common elements and their counts from the most
@@ -546,7 +547,7 @@ if __name__ == '__main__':
     from cPickle import loads, dumps
     Point = namedtuple('Point', 'x, y', True)
     p = Point(x=10, y=20)
-    raise p == loads(dumps(p)) or AssertionError
+    assert p == loads(dumps(p))
 
     class Point(namedtuple('Point', 'x y')):
         __slots__ = ()

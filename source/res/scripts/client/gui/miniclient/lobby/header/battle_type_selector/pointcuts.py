@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/header/battle_type_selector/pointcuts.py
 from helpers import aop
 import aspects

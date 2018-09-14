@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/event_logging.py
 from constants import REQUEST_COOLDOWN
 from debug_utils import LOG_DEBUG, LOG_WARNING

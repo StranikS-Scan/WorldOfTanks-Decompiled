@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/setuptools_extension.py
 from distutils.core import Extension as _Extension
 from distutils.core import Distribution as _Distribution
@@ -9,7 +10,7 @@ def _get_unpatched(cls):
     first.
     """
     while cls.__module__.startswith('setuptools'):
-        cls, = cls.__bases__
+        cls = cls.__bases__
 
     if not cls.__module__.startswith('distutils'):
         raise AssertionError('distutils has already been patched by %r' % cls)

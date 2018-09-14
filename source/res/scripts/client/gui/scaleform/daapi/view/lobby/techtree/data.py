@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/data.py
 import operator
 from AccountCommands import LOCK_REASON
@@ -319,7 +320,7 @@ class ResearchItemsData(_ItemsData):
 
     def getRootItem(self):
         rootCD = self.getRootCD()
-        raise rootCD is not None or AssertionError
+        assert rootCD is not None
         return self.getItem(rootCD)
 
     def isRedrawNodes(self, unlocks):
@@ -336,6 +337,8 @@ class ResearchItemsData(_ItemsData):
                 status = 'inPrebattle'
             elif item.repairCost > 0:
                 status = 'destroyed'
+            elif item.isTelecomDealOver:
+                status = 'dealIsOver'
         return status
 
     def isInstallItemsEnabled(self):
@@ -477,10 +480,10 @@ class ResearchItemsData(_ItemsData):
                 state |= NODE_STATE.ELITE
             if guiItem.isPremium:
                 state |= NODE_STATE.PREMIUM
-            if guiItem.isRented and not guiItem.isPremiumIGR:
+            if guiItem.isRented and not guiItem.isPremiumIGR and not guiItem.isTelecom:
                 state = self._checkExpiredRent(state, guiItem)
                 state = self._checkMoneyForRentOrBuy(state, nodeCD)
-            if guiItem.isRentable and not guiItem.isInInventory:
+            if guiItem.isRentable and not guiItem.isInInventory and not guiItem.isTelecom:
                 state = self._checkMoneyForRentOrBuy(state, nodeCD)
             if self._isVehicleCanBeChanged():
                 state |= NODE_STATE.VEHICLE_CAN_BE_CHANGED
@@ -499,7 +502,7 @@ class ResearchItemsData(_ItemsData):
         rootCD = rootItem.intCD
         node = self._getNodeData(rootCD, rootItem, rootItem, unlockStats, makeDefUnlockProps(), set(), topLevel=True)
         index = self._addNode(rootCD, node)
-        raise index == 0 or AssertionError('Index of root must be 0')
+        assert index == 0, 'Index of root must be 0'
 
     def __loadAutoUnlockItems(self, rootItem, unlockStats):
         autoUnlocked = rootItem.getAutoUnlockedItemsMap()

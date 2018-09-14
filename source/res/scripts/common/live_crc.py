@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/live_crc.py
 from types import *
 import zlib, cPickle
@@ -89,7 +90,7 @@ class EnterTagType:
         return EnterTagType.__hash
 
     def __repr__(self):
-        return 'ENTER'
+        pass
 
 
 class LeaveTagType:
@@ -99,7 +100,7 @@ class LeaveTagType:
         return LeaveTagType.__hash
 
     def __repr__(self):
-        return 'LEAVE'
+        pass
 
 
 ENTER = EnterTagType()
@@ -272,7 +273,7 @@ EXCLUDE = ExcludeType()
 def __split_use(use):
     includeThisLevel = set(use.get(INCLUDE, set()))
     excludeThisLevel = set(use.get(EXCLUDE, set()))
-    raise not (bool(includeThisLevel) and bool(excludeThisLevel)) or AssertionError
+    assert not (bool(includeThisLevel) and bool(excludeThisLevel))
     useNextLevel = []
     for x in sorted(use.items()):
         if isinstance(x[0], SelectorType):

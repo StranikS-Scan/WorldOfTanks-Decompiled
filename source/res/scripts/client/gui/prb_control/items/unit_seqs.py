@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/unit_seqs.py
 from messenger.ext import passCensor
 from gui.prb_control.items.unit_items import PlayerUnitInfo, UnitFlags

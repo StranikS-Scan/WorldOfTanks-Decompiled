@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/shared_find_criteria.py
 from debug_utils import LOG_WARNING
 from messenger.m_constants import USER_TAG

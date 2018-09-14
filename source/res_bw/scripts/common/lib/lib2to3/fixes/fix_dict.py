@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_dict.py
 """Fixer for dict methods.
 
@@ -46,17 +47,17 @@ class FixDict(fixer_base.BaseFix):
         isview = method_name.startswith(u'view')
         if isiter or isview:
             method_name = method_name[4:]
-        if not method_name in (u'keys', u'items', u'values'):
-            raise AssertionError(repr(method))
-            head = [ n.clone() for n in head ]
-            tail = [ n.clone() for n in tail ]
-            special = not tail and self.in_special_context(node, isiter)
-            args = head + [pytree.Node(syms.trailer, [Dot(), Name(method_name, prefix=method.prefix)]), results['parens'].clone()]
-            new = pytree.Node(syms.power, args)
-            if not (special or isview):
-                new.prefix = u''
-                new = Call(Name(u'iter' if isiter else u'list'), [new])
-            new = tail and pytree.Node(syms.power, [new] + tail)
+        assert method_name in (u'keys', u'items', u'values'), repr(method)
+        head = [ n.clone() for n in head ]
+        tail = [ n.clone() for n in tail ]
+        special = not tail and self.in_special_context(node, isiter)
+        args = head + [pytree.Node(syms.trailer, [Dot(), Name(method_name, prefix=method.prefix)]), results['parens'].clone()]
+        new = pytree.Node(syms.power, args)
+        if not (special or isview):
+            new.prefix = u''
+            new = Call(Name(u'iter' if isiter else u'list'), [new])
+        if tail:
+            new = pytree.Node(syms.power, [new] + tail)
         new.prefix = node.prefix
         return new
 

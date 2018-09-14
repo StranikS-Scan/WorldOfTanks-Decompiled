@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/contact_item.py
 from messenger.proto.xmpp.extensions import PyExtension
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG

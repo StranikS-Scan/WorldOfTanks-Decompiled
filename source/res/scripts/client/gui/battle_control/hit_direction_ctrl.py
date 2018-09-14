@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/hit_direction_ctrl.py
 from functools import partial
 import weakref
@@ -92,9 +93,9 @@ class _HitDirection(object):
         self.__startTime = BigWorld.time()
         self.__yaw = globalYaw
         self.__isDamage = bool(isDamage)
-        duration = self.__indicator and self.__indicator.getDuration()
-        if not duration:
-            raise AssertionError('Duration should be more than 0')
+        if self.__indicator:
+            duration = self.__indicator.getDuration()
+            assert duration, 'Duration should be more than 0'
             self.__indicator.showHitDirection(self.__idx, self.__yaw, 0, self.__isDamage)
         else:
             duration = 0
@@ -113,7 +114,7 @@ class HitDirectionController(object):
 
     def __init__(self):
         super(HitDirectionController, self).__init__()
-        raise _HIT_INDICATOR_MAX_ON_SCREEN or AssertionError('Can not be zero')
+        assert _HIT_INDICATOR_MAX_ON_SCREEN, 'Can not be zero'
         self.__pull = [ _HitDirection(idx) for idx in xrange(_HIT_INDICATOR_MAX_ON_SCREEN) ]
         self.__ui = None
         self.__isVisible = True

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/chat_message.py
 from gui.LobbyContext import g_lobbyContext
 from gui.battle_control import g_sessionProvider

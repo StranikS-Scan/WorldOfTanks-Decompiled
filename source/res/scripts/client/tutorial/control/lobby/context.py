@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/lobby/context.py
 import BigWorld
 from AccountCommands import RES_TUTORIAL_DISABLED

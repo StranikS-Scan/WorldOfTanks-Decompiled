@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/notifications/clan_applications.py
 from gui import makeHtmlString
 from helpers import aop

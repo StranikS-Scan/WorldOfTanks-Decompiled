@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/interfaces.py
 
 
@@ -92,19 +93,19 @@ class ISearchProcessor(object):
         pass
 
     def getSearchResultLimit(self):
-        return 0
+        pass
 
 
 class IChatMessage(object):
 
     def getMessage(self):
-        return ''
+        pass
 
 
 class IChatError(IChatMessage):
 
     def getTitle(self):
-        return ''
+        pass
 
     def isModal(self):
         return False
@@ -113,7 +114,7 @@ class IChatError(IChatMessage):
 class IVOIPChatProvider(object):
 
     def getChannelParams(self):
-        return ('', '')
+        pass
 
     def requestCredentials(self, reset = 0):
         pass

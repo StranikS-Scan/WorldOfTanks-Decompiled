@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/__init__.py
 from FX import ClientCompatibility
 import AddDecal

@@ -175,6 +175,18 @@
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
     <model>
+      <modelName>	particles/Environment/interior/114_czech_firesmoke.xml	</modelName>
+      <offset>	0 1 0	</offset>
+      <event>	/burn/burn/burn_mid	</event>
+      <wwsound>	ambient_burn_static_mid	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/Environment/interior/114_czech_fires_small.xml	</modelName>
+      <offset>	0 0.5 0	</offset>
+      <event>	/burn/burn/burn_small	</event>
+      <wwsound>	ambient_burn_static_small	</wwsound>
+    </model>
+    <model>
       <modelName>	content/Environment/envAM_004_WaterTower/normal/lod0/envAM_004_WaterTower_big.model	</modelName>
       <offset>	0 25 0	</offset>
       <event>	/ambient/industry/water_tower	</event>
@@ -185,24 +197,6 @@
       <offset>	0 17 0	</offset>
       <event>	/ambient/industry/impeller	</event>
       <wwsound>	ambient_static_objects_impeller	</wwsound>
-    </model>
-    <model>
-      <modelName>	content/Environment/envAS_001_SmallWatermill/normal/lod0/envAS_001_SmallWatermill.model	</modelName>
-      <offset>	0 6 0	</offset>
-      <event>	/ambient/industry/water_mill	</event>
-      <wwsound>	ambient_static_objects_water_mill	</wwsound>
-    </model>
-    <model>
-      <modelName>	content/Environment/envAS_001_SmallWatermill/normal/lod0/envAS_001_SmallWatermill01.model	</modelName>
-      <offset>	0 6 0	</offset>
-      <event>	/ambient/industry/water_mill	</event>
-      <wwsound>	ambient_static_objects_water_mill	</wwsound>
-    </model>
-    <model>
-      <modelName>	content/Environment/envAS_001_SmallWatermill/normal/lod0/envAS_001_SmallWatermill03.model	</modelName>
-      <offset>	0 6 0	</offset>
-      <event>	/ambient/industry/water_mill	</event>
-      <wwsound>	ambient_static_objects_water_mill	</wwsound>
     </model>
     <model>
       <modelName>	content/Environment/envAF_011_Windcone/normal/lod0/envAF_011_Windcone_01.model	</modelName>
@@ -1891,78 +1885,6 @@
       <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
     </model>
     <model>
-      <modelName>	speedtree/39_Crimea/Acacia_02.spt	</modelName>
-      <offset>	0 12 0	</offset>
-      <event>	/trees/trees_close/yellow_trees/yellow_soft_mid_01	</event>
-      <event>	/trees/trees_far/yellow_trees/yellow_mid_01	</event>
-      <wwsound>	ambient_trees_yellow_soft_comb_mid_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/39_Crimea/Bush_1.spt	</modelName>
-      <offset>	0 1.2 0	</offset>
-      <event>	/trees/trees_close/yellow_trees/yellow_dry_small_01	</event>
-      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/39_Crimea/Cypress_1.spt	</modelName>
-      <offset>	0 13 0	</offset>
-      <event>	/trees/trees_close/coniferous/coniferous_big_01	</event>
-      <wwsound>	ambient_trees_coniferous_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/39_Crimea/Grapes_1.spt	</modelName>
-      <offset>	0 0.5 0	</offset>
-      <event>	/trees/trees_close/grapes/grapes_01	</event>
-      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/39_Crimea/ItalianStonePine.spt	</modelName>
-      <offset>	0 15 0	</offset>
-      <event>	/trees/trees_close/coniferous/coniferous_big_01	</event>
-      <event>	/trees/trees_far/coniferous/coniferous_big	</event>
-      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/39_Crimea/LindenDecor.spt	</modelName>
-      <offset>	0 9 0	</offset>
-      <event>	/trees/trees_close/yellow_trees/yellow_soft_mid_01	</event>
-      <event>	/trees/trees_far/yellow_trees/yellow_mid_01	</event>
-      <wwsound>	ambient_trees_yellow_soft_comb_mid_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/39_Crimea/Maple.spt	</modelName>
-      <offset>	0 11.5 0	</offset>
-      <event>	/trees/trees_close/yellow_trees/yellow_soft_big_01	</event>
-      <event>	/trees/trees_far/yellow_trees/yellow_big_01	</event>
-      <wwsound>	ambient_trees_yellow_soft_comb_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/39_Crimea/Poplar.spt	</modelName>
-      <offset>	0 13 0	</offset>
-      <event>	/trees/trees_close/green_trees/green_mid_02	</event>
-      <event>	/trees/trees_far/green_trees/green_mid_01	</event>
-      <wwsound>	ambient_trees_green_comb_mid_02	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/39_Crimea/Shrub.spt	</modelName>
-      <offset>	0 1 0	</offset>
-      <event>	/trees/trees_close/yellow_trees/yellow_dry_small_01	</event>
-      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/39_Crimea/ShrubSouth.spt	</modelName>
-      <offset>	0 1 0	</offset>
-      <event>	/trees/trees_close/yellow_trees/yellow_dry_small_01	</event>
-      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/39_Crimea/Spruce.spt	</modelName>
-      <offset>	0 6 0	</offset>
-      <event>	/trees/trees_close/coniferous/coniferous_big_01	</event>
-      <event>	/trees/trees_far/coniferous/coniferous_big	</event>
-      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
-    </model>
-    <model>
       <modelName>	speedtree/44_North_America/BaldCypress02.spt	</modelName>
       <offset>	0 20 0	</offset>
       <event>	/trees/trees_close/coniferous/coniferous_big_01	</event>
@@ -2256,75 +2178,6 @@
       <event>	/trees/trees_close/yellow_trees/yellow_dry_big_01	</event>
       <event>	/trees/trees_far/yellow_trees/yellow_mid_01	</event>
       <wwsound>	ambient_trees_yellow_dry_comb_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/60_Asia_miao/BambooCluster.spt	</modelName>
-      <offset>	0 11 0	</offset>
-      <event>	/trees/trees_close/green_trees/green_big_01	</event>
-      <event>	/trees/trees_far/green_trees/green_big_01	</event>
-      <wwsound>	ambient_trees_green_comb_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/60_Asia_miao/BambooClusterShrub.spt	</modelName>
-      <offset>	0 1.5 0	</offset>
-      <event>	/trees/trees_close/green_trees/green_mid_01	</event>
-      <event>	/trees/trees_far/green_trees/green_small_01	</event>
-      <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/60_Asia_miao/DouglasFir.spt	</modelName>
-      <offset>	0 10 0	</offset>
-      <event>	/trees/trees_close/coniferous/coniferous_big_01	</event>
-      <event>	/trees/trees_far/coniferous/coniferous_big	</event>
-      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/60_Asia_miao/Fir.spt	</modelName>
-      <offset>	0 9 0	</offset>
-      <event>	/trees/trees_close/coniferous/coniferous_big_01	</event>
-      <event>	/trees/trees_far/coniferous/coniferous_big	</event>
-      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/60_Asia_miao/Linden02.spt	</modelName>
-      <offset>	0 8.5 0	</offset>
-      <event>	/trees/trees_close/green_trees/green_mid_02	</event>
-      <event>	/trees/trees_far/green_trees/green_mid_01	</event>
-      <wwsound>	ambient_trees_green_comb_mid_02	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/60_Asia_miao/NorthernRata.spt	</modelName>
-      <offset>	0 11 0	</offset>
-      <event>	/trees/trees_close/green_trees/green_mid_02	</event>
-      <event>	/trees/trees_far/green_trees/green_mid_01	</event>
-      <wwsound>	ambient_trees_green_comb_mid_02	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/60_Asia_miao/NorthernRataCluster.spt	</modelName>
-      <offset>	0 11 0	</offset>
-      <event>	/trees/trees_close/green_trees/green_mid_02	</event>
-      <event>	/trees/trees_far/green_trees/green_mid_01	</event>
-      <wwsound>	ambient_trees_green_comb_mid_02	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/60_Asia_miao/Spruce_1.spt	</modelName>
-      <offset>	0 7 0	</offset>
-      <event>	/trees/trees_close/coniferous/coniferous_big_01	</event>
-      <event>	/trees/trees_far/coniferous/coniferous_big	</event>
-      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/60_Asia_miao/Spruce_2.spt	</modelName>
-      <offset>	0 12 0	</offset>
-      <event>	/trees/trees_close/without_foliage/without_foliage_tree_big_01	</event>
-      <wwsound>	ambient_trees_without_foliage_tree_big_01	</wwsound>
-    </model>
-    <model>
-      <modelName>	speedtree/60_Asia_miao/WillowOak.spt	</modelName>
-      <offset>	0 14.5 0	</offset>
-      <event>	/trees/trees_close/green_trees/green_mid_01	</event>
-      <event>	/trees/trees_far/green_trees/green_mid_01	</event>
-      <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
     </model>
     <model>
       <modelName>	speedtree/63_tundra/BirchFall_1.spt	</modelName>
@@ -3158,6 +3011,74 @@
       <event>	/trees/trees_far/green_trees/green_mid_01	</event>
       <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
     </model>
+    <model>
+      <modelName>	speedtree/114_czech/Bush.spt	</modelName>
+      <offset>	0 1 0	</offset>
+      <event>	/trees/trees_close/green_trees/green_small_01	</event>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/114_czech/DryTree.spt	</modelName>
+      <offset>	0 8 0	</offset>
+      <event>	/trees/trees_close/yellow_trees/yellow_dry_small_01	</event>
+      <event>	/trees/trees_far/yellow_trees/yellow_small_01	</event>
+      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/114_czech/Fir.spt	</modelName>
+      <offset>	0 18 0	</offset>
+      <event>	/trees/trees_close/coniferous/coniferous_big_01	</event>
+      <event>	/trees/trees_far/coniferous/coniferous_big	</event>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/114_czech/Linden.spt	</modelName>
+      <offset>	0 8 0	</offset>
+      <event>	/trees/trees_close/green_trees/green_mid_01	</event>
+      <event>	/trees/trees_far/green_trees/green_mid_01	</event>
+      <wwsound>	ambient_trees_green_comb_mid_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/114_czech/Maple.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <event>	/trees/trees_close/green_trees/green_big_01	</event>
+      <event>	/trees/trees_far/green_trees/green_big_01	</event>
+      <wwsound>	ambient_trees_green_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/114_czech/PoplarDry.spt	</modelName>
+      <offset>	0 11 0	</offset>
+      <event>	/trees/trees_close/without_foliage/without_foliage_tree_big_01	</event>
+      <wwsound>	ambient_trees_without_foliage_tree_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/114_czech/NorthernRataCluster.spt	</modelName>
+      <offset>	0 2 0	</offset>
+      <event>	/trees/trees_close/green_trees/green_small_01	</event>
+      <event>	/trees/trees_far/green_trees/green_small_01	</event>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/114_czech/Paulownia.spt	</modelName>
+      <offset>	0 10 0	</offset>
+      <event>	/trees/trees_close/green_trees/green_mid_02	</event>
+      <event>	/trees/trees_far/green_trees/green_mid_01	</event>
+      <wwsound>	ambient_trees_green_comb_mid_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/114_czech/Poplar.spt	</modelName>
+      <offset>	0 15 0	</offset>
+      <event>	/trees/trees_close/yellow_trees/yellow_soft_mid_01	</event>
+      <event>	/trees/trees_far/yellow_trees/yellow_mid_01	</event>
+      <wwsound>	ambient_trees_yellow_soft_comb_mid_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/114_czech/Spruce.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <event>	/trees/trees_close/coniferous/coniferous_big_01	</event>
+      <event>	/trees/trees_far/coniferous/coniferous_big	</event>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
   </lightSounds>
   <birds>
     <seagull>
@@ -3510,6 +3431,104 @@
         <animAction></animAction>
       </point>
     </eiffel_tower_FAU_explosion_sound_4>
+    <h07_newyear_2015_Hummel_flying>
+      <channel0>
+        <modelName>	content/Hangars/han07_Newyear_2015/background/lod0/hummel.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 40.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_ny_v2/hangar_ny_santa	</soundName>
+        <effectName>	particles/Environment/scenarios/h07_newyear_2015_hummel_sparks.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+      </channel0>
+      <point>
+        <position>	-209.146927 65.139359 -17.787991	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	-95.263573 33.445934 57.402935	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	-52.939938 15.453074 67.391472	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	-32.970238 3.707250 162.397339	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	30.999119 1.044350 169.771347	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	53.723434 0.915263 127.773674	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	25.664890 3.757700 89.706161	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	-21.336691 9.378860 95.000465	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	-35.451881 14.563195 134.160919	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	9.184085 31.712690 193.676926	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	56.372379 42.605579 198.419922	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	172.096344 62.198235 223.527344	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	256.754852 59.550781 201.294922	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+      <point>
+        <position>	261.307678 26.923618 149.556351	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	animation	</animAction>
+      </point>
+    </h07_newyear_2015_Hummel_flying>
     <airfield_curve>
       <channel0>
         <modelName>	content/Environment/env712_BF109G/normal/lod0/BF109G.model	</modelName>
@@ -4591,6 +4610,220 @@
         <animAction></animAction>
       </point>
     </stalingrad_4_explosion_3>
+    <feb_23_tank_moving>
+      <channel0>
+        <modelName>	content/Environment/hangar_premium_23feb_v3/environment/cars/normal/lod0/car6.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_premium_23feb_v3/scenario/car	</soundName>
+        <wwsoundName>	hangar_23feb_v3_car	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-183.321060 -5.044662 -89.267105	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-139.644394 -5.276889 -103.912735	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-51.115398 -4.885279 -106.201042	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	29.121885 -4.693333 -107.758751	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	80.839119 -4.495118 -108.201851	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	132.556351 -4.296902 -103.498001	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	162.750778 -4.354760 -98.487938	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	190.491714 -4.387670 -97.663033	</position>
+        <speed0>	6.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	218.125717 -4.004241 -106.283264	</position>
+        <speed0>	6.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	257.323975 -3.141510 -159.234985	</position>
+        <speed0>	6.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </feb_23_tank_moving>
+    <feb_23_truck_leaving>
+      <channel0>
+        <modelName>	content/Environment/hangar_premium_23feb_v3/environment/cars/normal/lod0/car4.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 100.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_premium_23feb_v3/scenario/truck	</soundName>
+        <wwsoundName>	hangar_23feb_v3_truck	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+      </channel0>
+      <point>
+        <position>	26.623091 -5.187960 -61.113880	</position>
+        <speed0>	3.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	26.294794 -5.346498 -82.598976	</position>
+        <speed0>	4.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	7.821970 -4.949419 -101.073975	</position>
+        <speed0>	6.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-22.889595 -4.866570 -105.505974	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-70.101936 -5.216772 -100.609779	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-117.314941 -5.456170 -100.626938	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-178.946884 -5.469646 -93.879036	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-229.053848 -6.231964 -77.156921	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </feb_23_truck_leaving>
+    <feb_23_car_moving>
+      <channel0>
+        <modelName>	content/Environment/hangar_premium_23feb_v3/environment/cars/normal/lod0/car6.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	15.000000 15.000000	</alphaFadeDistances>
+        <soundName>	/hangar/ambient/hangar_premium_23feb_v3/scenario/car	</soundName>
+        <wwsoundName>	hangar_23feb_v3_car	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	245.426270 -3.383572 -143.543411	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	227.885803 -3.886244 -112.950722	</position>
+        <speed0>	10.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	197.493942 -4.344100 -95.431572	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	158.421936 -4.313044 -93.674072	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	119.349968 -4.457591 -100.426338	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	55.668385 -4.786662 -103.201973	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-8.013726 -4.882697 -102.204971	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-59.550983 -5.202689 -101.738968	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-106.731972 -5.177619 -101.289841	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-143.893936 -5.266676 -99.490723	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-175.448395 -4.974494 -94.190636	</position>
+        <speed0>	12.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </feb_23_car_moving>
     <Dday_paratrooper_airplane>
       <channel0>
         <modelName>	content/MilitaryEnvironment/mle206_C47/normal/lod0/mle206_C47.model	</modelName>
@@ -4669,274 +4902,6 @@
         <animAction></animAction>
       </point>
     </Dday_air_defence>
-    <h04_remday_volley>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/hangar/h04_remday_2015_volley.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName></soundName>
-        <wwsoundName>	TEST_EVENT	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-108.758575 6.347349 247.047638	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-76.353783 5.692511 247.525436	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-    </h04_remday_volley>
-    <h04_remday_volley_sound>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName></effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName>	/hangar/ambient/hangar_08_nov/cannonade	</soundName>
-        <wwsoundName>	hangar_h04_remday_cannonade	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-149.415619 6.347349 247.047638	</position>
-        <speed0>	3.8	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-50.688725 5.692511 247.525436	</position>
-        <speed0>	3.8	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-    </h04_remday_volley_sound>
-    <h04_remday_storm>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/hangar/h04_remday_2015_storm.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName></soundName>
-        <wwsoundName>	TEST_EVENT	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-225.348114 30.118494 109.598930	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-225.571396 30.275610 138.585434	</position>
-        <speed0>	60.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-    </h04_remday_storm>
-    <h04_remday_storm_sound>
-      <channel0>
-        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
-        <rollMagnitude>	1.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
-        <effectName></effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName>	/hangar/ambient/hangar_08_nov/thunder	</soundName>
-        <wwsoundName>	hangar_h04_remday_thunder	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-229.106201 28.631384 79.017097	</position>
-        <speed0>	3.8	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-227.220795 28.100998 175.909348	</position>
-        <speed0>	3.8	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-    </h04_remday_storm_sound>
-    <hangar_halloween_v2_skull_flying_1>
-      <channel0>
-        <modelName>	content/Environment/hangar_v2_hall/environment/normal/lod0/s_skull_flying.model	</modelName>
-        <rollMagnitude>	2.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	10.000000 10.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/hangar/halloween_v2_sparks.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName>	/hangar/ambient/hangar_halloween/gost	</soundName>
-        <wwsoundName>	hangar_halloween_gost	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	45.702789 -0.919968 48.605957	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	11.433475 -0.235730 51.665600	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	7.228230 1.373222 49.419250	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	3.483747 2.693992 43.292667	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	4.639388 3.380373 31.143427	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	19.996311 5.821226 17.782581	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	27.591047 1.324647 5.518445	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	14.614244 5.208436 -21.447435	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	7.590205 4.442739 -29.358040	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	3.261448 2.325481 -44.145611	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-1.622201 4.612988 -51.310791	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-6.505852 3.393247 -52.413513	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </hangar_halloween_v2_skull_flying_1>
-    <hangar_halloween_v2_ghost_3>
-      <channel0>
-        <modelName>	particles/mesh_particles/environment/Hangar_halloween_v2/ghost.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	2	</tesselationFactor>
-        <alphaFadeDistances>	10.000000 10.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/hangar/halloween_ghost_smoke.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <soundName>	/hangar/ambient/hangar_halloween/gost2	</soundName>
-        <wwsoundName>	hangar_halloween_gost2	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-23.481297 0.866160 -58.039093	</position>
-        <speed0>	3.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-22.654097 1.268240 -52.360592	</position>
-        <speed0>	3.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-25.296276 0.878493 -46.682167	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-23.025990 1.229528 -25.509390	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-25.481857 2.251624 -15.784400	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-27.036726 1.676709 11.707571	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-27.531250 0.772197 19.846298	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-23.258171 0.954695 27.441231	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-18.927744 1.137192 28.823332	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-26.413506 -3.171484 35.080116	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-33.899261 -7.480161 41.336906	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </hangar_halloween_v2_ghost_3>
     <show_waypoint_Plane_1>
       <channel0>
         <modelName>	content/Environment/env713_BF109G/normal/lod0/env713_BF109G.model	</modelName>

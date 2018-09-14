@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/limits.py
 from messenger.proto.interfaces import IProtoLimits
 from messenger_common_chat2 import MESSENGER_LIMITS

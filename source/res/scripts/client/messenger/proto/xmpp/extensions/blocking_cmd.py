@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/blocking_cmd.py
 from messenger.proto.xmpp.extensions import PyExtension, PyQuery
 from messenger.proto.xmpp.extensions.contact_item import ContactItemExtension

@@ -49,9 +49,9 @@
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
-      <pitchParams>	0.26 38.00 0.34 1.00 0.04 0.27	</pitchParams>
+      <pitchParams>	0.10 38.00 0.34 1.00 0.04 0.27	</pitchParams>
       <rollParams>	1.00 0.26 38.00 0.34 1.00 0.04 0.27	</rollParams>
-      <sensitivityToImpulse>	0.3	</sensitivityToImpulse>
+      <sensitivityToImpulse>	0.2	</sensitivityToImpulse>
     </swinging>
     <exhaust>
       <pixie>	gas_large	</pixie>
@@ -116,7 +116,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	254	</textureScale>
+        <textureScale>	-2	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/crewOperations/__init__.py
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared import EVENT_BUS_SCOPE

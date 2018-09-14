@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/companies_dps.py
 from constants import PREBATTLE_COMPANY_DIVISION, PREBATTLE_COMPANY_DIVISION_NAMES
 from gui.LobbyContext import g_lobbyContext

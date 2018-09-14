@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/restrictions/limits.py
 from collections import defaultdict
 import weakref
@@ -331,8 +332,7 @@ class _UnitActionValidator(object):
         if vInfo.isEmpty():
             return (False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
         vehicle = vInfo.getVehicle()
-        isReadyToBattle = vehicle.isReadyToPrebattle(checkForRent=not flags.isInPreArena())
-        if vehicle and not isReadyToBattle:
+        if vehicle and not vehicle.isReadyToPrebattle(checkForRent=not flags.isInPreArena()):
             if vehicle.isBroken:
                 return (False, UNIT_RESTRICTION.VEHICLE_BROKEN)
             if not vehicle.isCrewFull:

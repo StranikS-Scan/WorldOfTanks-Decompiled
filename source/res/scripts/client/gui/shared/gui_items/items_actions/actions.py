@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
 import BigWorld
 from items import vehicles
@@ -51,8 +52,6 @@ def getGunCD(item, vehicle):
                     mayInstall = item.mayInstall(vehicle, slotIdx=0, gunCD=gun['compactDescr'])
                     if mayInstall[0]:
                         return gun['compactDescr']
-
-    return 0
 
 
 def processMsg(result):
@@ -229,18 +228,18 @@ class InstallItemAction(BuyAction):
     @process
     def installItem(self, itemCD, rootCD, state):
         itemTypeID, nationID, itemID = vehicles.parseIntCompactDescr(itemCD)
-        raise itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES or AssertionError
+        assert itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
         vehicle = g_itemsCache.items.getItemByCD(rootCD)
-        if not vehicle.isInInventory:
-            raise AssertionError('Vehicle must be in inventory')
-            item = g_itemsCache.items.getItemByCD(itemCD)
-            conflictedEqs = item.getConflictedEquipments(vehicle)
-            RequestState.sent(state)
-            if item.isInInventory:
-                Waiting.show('applyModule')
-                result = yield getInstallerProcessor(vehicle, item, conflictedEqs=conflictedEqs).request()
-                processMsg(result)
-                vehicle = result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN) and g_itemsCache.items.getItemByCD(vehicle.intCD)
+        assert vehicle.isInInventory, 'Vehicle must be in inventory'
+        item = g_itemsCache.items.getItemByCD(itemCD)
+        conflictedEqs = item.getConflictedEquipments(vehicle)
+        RequestState.sent(state)
+        if item.isInInventory:
+            Waiting.show('applyModule')
+            result = yield getInstallerProcessor(vehicle, item, conflictedEqs=conflictedEqs).request()
+            processMsg(result)
+            if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
+                vehicle = g_itemsCache.items.getItemByCD(vehicle.intCD)
                 yield tryToLoadDefaultShellsLayout(vehicle)
             Waiting.hide('applyModule')
         RequestState.received(state)
@@ -258,26 +257,26 @@ class BuyAndInstallItemAction(InstallItemAction):
     @process
     def buyAndInstallItem(self, itemCD, rootCD, state):
         itemTypeID, nationID, itemID = vehicles.parseIntCompactDescr(itemCD)
-        raise itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES or AssertionError
+        assert itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
         vehicle = g_itemsCache.items.getItemByCD(rootCD)
-        if not vehicle.isInInventory:
-            raise AssertionError('Vehicle must be in inventory')
-            item = g_itemsCache.items.getItemByCD(itemCD)
-            conflictedEqs = item.getConflictedEquipments(vehicle)
-            if not self._canBuy(item) and self._canBuyWithExchange(item):
-                isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(itemCD, vehicle.intCD))
-                if not isOk:
-                    return
-            if self._canBuy(item):
-                Waiting.show('buyAndInstall')
+        assert vehicle.isInInventory, 'Vehicle must be in inventory'
+        item = g_itemsCache.items.getItemByCD(itemCD)
+        conflictedEqs = item.getConflictedEquipments(vehicle)
+        if not self._canBuy(item) and self._canBuyWithExchange(item):
+            isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(itemCD, vehicle.intCD))
+            if not isOk:
+                return
+        if self._canBuy(item):
+            Waiting.show('buyAndInstall')
+            vehicle = g_itemsCache.items.getItemByCD(rootCD)
+            gunCD = getGunCD(item, vehicle)
+            result = yield BuyAndInstallItemProcessor(vehicle, item, 0, gunCD, conflictedEqs=conflictedEqs).request()
+            processMsg(result)
+            if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
+                item = g_itemsCache.items.getItemByCD(itemCD)
                 vehicle = g_itemsCache.items.getItemByCD(rootCD)
-                gunCD = getGunCD(item, vehicle)
-                result = yield BuyAndInstallItemProcessor(vehicle, item, 0, gunCD, conflictedEqs=conflictedEqs).request()
-                processMsg(result)
-                if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
-                    item = g_itemsCache.items.getItemByCD(itemCD)
-                    vehicle = g_itemsCache.items.getItemByCD(rootCD)
-                    item.isInstalled(vehicle) and (yield tryToLoadDefaultShellsLayout(vehicle))
+                if item.isInstalled(vehicle):
+                    yield tryToLoadDefaultShellsLayout(vehicle)
             Waiting.hide('buyAndInstall')
         RequestState.received(state)
         yield lambda callback = None: callback

@@ -1,6 +1,7 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization_2_0/main_view.py
 from gui import DialogsInterface
-from constants import IGR_TYPE
+from constants import IGR_TYPE, EVENT_TYPE
 from adisp import process
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -13,6 +14,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.game_control import getIGRCtrl
+from gui.server_events import events_dispatcher
 from gui.shared import events
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -50,33 +52,25 @@ class MainView(CustomizationMainViewMeta):
         self.__animationTestIndex = -1
         g_customizationController.init()
 
-    def showGroup(self, type_, idx):
-        g_customizationController.carousel.slots.select(type_, idx)
+    def showGroup(self, cType, slotIdx):
+        g_customizationController.carousel.slots.select(cType, slotIdx)
         if self.__carouselHidden:
             self.as_setBottomPanelHeaderS(g_customizationController.carousel.slots.getCurrentTypeLabel())
-            self.as_showSelectorItemS(type_)
+            self.as_showSelectorItemS(cType)
             self.__carouselHidden = False
 
     @process
     def removeSlot(self, cType, slotIdx):
         isContinue = True
         installedItem = g_customizationController.carousel.slots.getInstalledItem(slotIdx, cType)
-        slotItem = g_customizationController.carousel.slots.getSlotItem(slotIdx, cType)
-        if installedItem.getID() == slotItem.getID() and installedItem.duration > 0:
+        if installedItem.duration > 0:
+            slotItem = g_customizationController.carousel.slots.getItemById(cType, installedItem.getID())
             isContinue = yield DialogsInterface.showDialog(getDialogRemoveElement(slotItem.getName(), cType))
         if isContinue:
-            g_customizationController.carousel.slots.updateSlot({'id': -1}, cType=cType, slotIdx=slotIdx)
+            g_customizationController.carousel.slots.clearSlot(cType, slotIdx)
 
-    @process
-    def uninstallCustomizationElement(self, idx):
-        isContinue = True
-        installedItem = g_customizationController.carousel.slots.getInstalledItem()
-        slotItem = g_customizationController.carousel.slots.getSlotItem()
-        cType = g_customizationController.carousel.currentType
-        if installedItem.getID() == slotItem.getID() and installedItem.duration > 0:
-            isContinue = yield DialogsInterface.showDialog(getDialogRemoveElement(slotItem.getName(), cType))
-        if isContinue:
-            g_customizationController.carousel.slots.updateSlot({'id': -1})
+    def revertSlot(self, cType, slotIdx):
+        g_customizationController.carousel.slots.dropAppliedItem(cType, slotIdx)
 
     def backToSelectorGroup(self):
         self.as_setBottomPanelHeaderS(g_customizationController.carousel.slots.getSummaryString())
@@ -103,9 +97,6 @@ class MainView(CustomizationMainViewMeta):
         if isContinue:
             g_customizationController.carousel.applyItem(idx)
         return
-
-    def selectCustomizationElement(self, idx):
-        g_customizationController.carousel.previewItem(idx)
 
     def setDurationType(self, durationIdx):
         g_customizationController.carousel.changeDuration(_DURATION_MAPPING[durationIdx])
@@ -234,7 +225,6 @@ class MainView(CustomizationMainViewMeta):
     def __setCarouselData(self, blData):
         itemVOs = []
         for item in blData['items']:
-            enable = True
             if item['installedInSlot']:
                 label = text_styles.main(CUSTOMIZATION.CAROUSEL_ITEMLABEL_APPLIED)
             elif item['isInDossier']:
@@ -244,7 +234,8 @@ class MainView(CustomizationMainViewMeta):
                     label = text_styles.main(CUSTOMIZATION.CAROUSEL_ITEMLABEL_PURCHASED)
                 else:
                     label = icons.premiumIgrSmall()
-                    enable = False
+            elif item['isInQuests']:
+                label = icons.quest()
             else:
                 if item['priceIsGold']:
                     priceFormatter = text_styles.gold
@@ -258,13 +249,9 @@ class MainView(CustomizationMainViewMeta):
              'bonusType': item['object'].qualifier.getIcon16x16(),
              'bonusPower': text_styles.stats('+{0}%{1}'.format(item['object'].qualifier.getValue(), '*' if item['object'].qualifier.getDescription() is not None else '')),
              'label': label,
-             'installed': item['appliedToCurrentSlot'],
-             'btnSelect': self.__getLabelOfSelectBtn(item),
-             'btnShoot': VEHICLE_CUSTOMIZATION.CUSTOMIZATIONITEMCAROUSEL_RENDERER_SHOOT,
-             'btnTooltip': item['buttonTooltip'],
-             'btnSelectEnable': enable,
-             'doubleclickEnable': enable,
-             'btnShootEnable': True}
+             'selected': item['appliedToCurrentSlot'],
+             'goToTaskBtnVisible': item['isInQuests'],
+             'goToTaskBtnText': _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMCAROUSEL_RENDERER_GOTOTASK)}
             cType = g_customizationController.carousel.currentType
             if isSale(cType, item['duration']) and not item['isInDossier'] and not item['installedInSlot']:
                 isGold = item['priceIsGold']
@@ -291,3 +278,18 @@ class MainView(CustomizationMainViewMeta):
          'itemName': carouselItem.getName()}
         l10nParams.update(l10nExtraParams)
         return I18nConfirmDialogMeta('customization/install_invoice_item/' + dialogType, messageCtx=l10nParams, focusedID=DIALOG_BUTTON_ID.CLOSE)
+
+    def __onPurchaseProcessStarted(self):
+        self.__isPurchaseProcess = True
+
+    def __onPurchaseProcessed(self):
+        if self.__isPurchaseProcess:
+            self.__isPurchaseProcess = False
+            self.backToSelectorGroup()
+
+    def goToTask(self, idx):
+        item = g_customizationController.carousel.items[idx]['object']
+        quests = g_customizationController.associatedQuests
+        cType = g_customizationController.carousel.currentType
+        questData = quests[cType][item.getID()]
+        events_dispatcher.showEventsWindow(eventID=questData.id, eventType=EVENT_TYPE.BATTLE_QUEST)

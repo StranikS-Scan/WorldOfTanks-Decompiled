@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bwdeprecations.py
 """
 This module is imported by the BigWorld engine before BWAutoImport, and handles

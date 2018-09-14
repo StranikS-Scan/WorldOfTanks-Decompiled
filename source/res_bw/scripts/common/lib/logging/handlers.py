@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/logging/handlers.py
 """
 Additional handlers for the logging package for Python. The core package is
@@ -232,7 +233,6 @@ class TimedRotatingFileHandler(BaseRotatingHandler):
         t = int(time.time())
         if t >= self.rolloverAt:
             return 1
-        return 0
 
     def getFilesToDelete(self):
         """
@@ -893,7 +893,7 @@ class NTEventLogHandler(logging.Handler):
         you could use a dictionary lookup to get the message ID. This
         version returns 1, which is the base message ID in win32service.pyd.
         """
-        return 1
+        pass
 
     def getEventCategory(self, record):
         """
@@ -902,7 +902,7 @@ class NTEventLogHandler(logging.Handler):
         Override this if you want to specify your own categories. This version
         returns 0.
         """
-        return 0
+        pass
 
     def getEventType(self, record):
         """

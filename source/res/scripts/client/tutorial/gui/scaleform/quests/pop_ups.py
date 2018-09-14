@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/quests/pop_ups.py
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardWindow
 from gui.server_events.awards import FormattedAward

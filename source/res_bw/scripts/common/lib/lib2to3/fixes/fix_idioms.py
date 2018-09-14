@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_idioms.py
 """Adjust some old Python 2 idioms to their modern counterparts.
 
@@ -92,10 +93,10 @@ class FixIdioms(fixer_base.BaseFix):
                 prefix_lines = (btwn.rpartition(u'\n')[0], next_stmt[0].prefix)
                 next_stmt[0].prefix = u'\n'.join(prefix_lines)
             else:
-                raise list_call.parent or AssertionError
-                raise list_call.next_sibling is None or AssertionError
+                assert list_call.parent
+                assert list_call.next_sibling is None
                 end_line = BlankLine()
                 list_call.parent.append_child(end_line)
-                raise list_call.next_sibling is end_line or AssertionError
+                assert list_call.next_sibling is end_line
                 end_line.prefix = btwn.rpartition(u'\n')[0]
         return

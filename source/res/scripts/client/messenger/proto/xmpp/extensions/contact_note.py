@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/contact_note.py
 import types
 from helpers import html
@@ -17,7 +18,7 @@ class NoteID(PyExtension):
 
     @classmethod
     def getDefaultData(cls):
-        return 0
+        pass
 
     def parseTag(self, pyGlooxTag):
         data = pyGlooxTag.getCData()
@@ -30,7 +31,6 @@ class NoteID(PyExtension):
     def _makeChildrenString(self):
         if self._dbID:
             return str(self._dbID)
-        return ''
 
 
 class NoteText(PyExtension):
@@ -42,7 +42,7 @@ class NoteText(PyExtension):
 
     @classmethod
     def getDefaultData(cls):
-        return ''
+        pass
 
     def getTag(self):
         if self._text:
@@ -100,7 +100,7 @@ class NoteList(PyExtension):
         return (items, padding)
 
     def _getXPathAttr(self):
-        return ('name', 'contact-notes')
+        pass
 
 
 class NoteQuery(PyExtension):
@@ -141,11 +141,11 @@ class SetNotesQuery(PyQuery):
     def __init__(self, items):
         converted = []
         for item in items:
-            raise len(item) == 2 or AssertionError
+            assert len(item) == 2
             dbID = item[0]
-            raise type(dbID) is types.LongType or AssertionError
+            assert type(dbID) is types.LongType
             text = item[1]
-            raise type(text) in types.StringTypes or AssertionError
+            assert type(text) in types.StringTypes
             converted.append(NoteItem(dbID, text))
 
         super(SetNotesQuery, self).__init__(IQ_TYPE.SET, NoteQuery(items=converted))
@@ -162,7 +162,7 @@ class RemoveNotesQuery(PyQuery):
     def __init__(self, dbIDs):
         converted = []
         for dbID in dbIDs:
-            raise type(dbID) is types.LongType or AssertionError
+            assert type(dbID) is types.LongType
             converted.append(NoteItem(dbID))
 
         super(RemoveNotesQuery, self).__init__(IQ_TYPE.SET, NoteQuery(items=converted))

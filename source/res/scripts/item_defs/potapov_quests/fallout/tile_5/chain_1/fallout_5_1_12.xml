@@ -8,8 +8,11 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <greaterOrEqual>	12	</greaterOrEqual>
+              <greaterOrEqual>	8	</greaterOrEqual>
             </vehicleKills>
+            <vehicleDamage>
+              <greaterOrEqual>	6000	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>
@@ -36,8 +39,11 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <greaterOrEqual>	12	</greaterOrEqual>
+              <greaterOrEqual>	8	</greaterOrEqual>
             </vehicleKills>
+            <vehicleDamage>
+              <greaterOrEqual>	6000	</greaterOrEqual>
+            </vehicleDamage>
             <results>
               <key>	deathCount	</key>
               <lessOrEqual>	2	</lessOrEqual>

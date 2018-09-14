@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/__init__.py
 import os, sys, unittest, getopt, time
 use_resources = []
@@ -86,7 +87,6 @@ def get_tests(package, mask, verbosity, exclude = ()):
 
 def usage():
     print __doc__
-    return 1
 
 
 def test_with_refcounts(runner, verbosity, testcase):

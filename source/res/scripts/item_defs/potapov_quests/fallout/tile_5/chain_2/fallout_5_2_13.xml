@@ -8,12 +8,8 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <classes>	mediumTank	</classes>
-              <greaterOrEqual>	5	</greaterOrEqual>
-            </vehicleKills>
-            <vehicleKills>
-              <classes>	heavyTank	</classes>
-              <greaterOrEqual>	5	</greaterOrEqual>
+              <classesDiversity>	2	</classesDiversity>
+              <greaterOrEqual>	10	</greaterOrEqual>
             </vehicleKills>
           </and>
         </postBattle>
@@ -41,12 +37,8 @@
         <postBattle>
           <and>
             <vehicleKills>
-              <classes>	mediumTank	</classes>
-              <greaterOrEqual>	5	</greaterOrEqual>
-            </vehicleKills>
-            <vehicleKills>
-              <classes>	heavyTank	</classes>
-              <greaterOrEqual>	5	</greaterOrEqual>
+              <classesDiversity>	2	</classesDiversity>
+              <greaterOrEqual>	10	</greaterOrEqual>
             </vehicleKills>
             <isAlive></isAlive>
           </and>

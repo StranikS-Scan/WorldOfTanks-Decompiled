@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/aop.py
 import re
 import sys
@@ -324,8 +325,6 @@ class Weaver(object):
         for idx, item in enumerate(self.__pointcuts):
             if item.__class__ == clazz:
                 return idx
-
-        return -1
 
     def avoid(self, idx):
         self.addAspect(idx, DummyAspect)

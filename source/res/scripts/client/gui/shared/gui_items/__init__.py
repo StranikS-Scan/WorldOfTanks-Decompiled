@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/__init__.py
 import nations
 from collections import namedtuple
@@ -203,7 +204,6 @@ class HasIntCD(object):
         res = nationCompareByIndex(self.nationID, other.nationID)
         if res:
             return res
-        return 0
 
 
 class HasStrCD(object):
@@ -219,17 +219,27 @@ class HasStrCD(object):
 _RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime',
  'compensations',
  'battlesLeft',
+ 'expiryState',
  'isRented'))
 _RentalInfoProvider.__new__.__defaults__ = (0,
  (0, 0),
  0,
+ True,
  False)
 
 class RentalInfoProvider(_RentalInfoProvider):
 
-    @property
-    def timeLeft(self):
+    def getTimeLeft(self):
         return float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.rentExpiryTime)))
+
+    def getBattlesLeft(self):
+        return self.battlesLeft or 0
+
+    def getExpiryState(self):
+        if self.expiryState is not None:
+            return self.expiryState
+        else:
+            return True
 
 
 class FittingItem(GUIItem, HasIntCD):
@@ -318,7 +328,7 @@ class FittingItem(GUIItem, HasIntCD):
 
     @property
     def rentLeftTime(self):
-        return 0
+        pass
 
     @property
     def userType(self):
@@ -381,7 +391,7 @@ class FittingItem(GUIItem, HasIntCD):
         return None
 
     def getGUIEmblemID(self):
-        return 'notFound'
+        pass
 
     @property
     def icon(self):
@@ -406,7 +416,6 @@ class FittingItem(GUIItem, HasIntCD):
     def getSellPriceCurrency(self):
         if self.sellPrice[1]:
             return 'gold'
-        return 'credits'
 
     def isInstalled(self, vehicle, slotIdx = None):
         return False
@@ -459,13 +468,13 @@ class FittingItem(GUIItem, HasIntCD):
         return self.TARGETS.OTHER
 
     def getConflictedEquipments(self, vehicle):
-        return ()
+        pass
 
     def getInstalledVehicles(self, vehs):
         return set()
 
     def _sortByType(self, other):
-        return 0
+        pass
 
     def __cmp__(self, other):
         if other is None:

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/cp1252.py
 """ Python Character Mapping Codec cp1252 generated from 'MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT' with gencodec.py.
 

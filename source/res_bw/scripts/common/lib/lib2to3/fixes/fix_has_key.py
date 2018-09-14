@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_has_key.py
 """Fixer for has_key().
 
@@ -36,10 +37,10 @@ class FixHasKey(fixer_base.BaseFix):
     PATTERN = "\n    anchor=power<\n        before=any+\n        trailer< '.' 'has_key' >\n        trailer<\n            '('\n            ( not(arglist | argument<any '=' any>) arg=any\n            | arglist<(not argument<any '=' any>) arg=any ','>\n            )\n            ')'\n        >\n        after=any*\n    >\n    |\n    negation=not_test<\n        'not'\n        anchor=power<\n            before=any+\n            trailer< '.' 'has_key' >\n            trailer<\n                '('\n                ( not(arglist | argument<any '=' any>) arg=any\n                | arglist<(not argument<any '=' any>) arg=any ','>\n                )\n                ')'\n            >\n        >\n    >\n    "
 
     def transform(self, node, results):
-        if not results:
-            raise AssertionError
-            syms = self.syms
-            return node.parent.type == syms.not_test and self.pattern.match(node.parent) and None
+        assert results
+        syms = self.syms
+        if node.parent.type == syms.not_test and self.pattern.match(node.parent):
+            return None
         else:
             negation = results.get('negation')
             anchor = results['anchor']

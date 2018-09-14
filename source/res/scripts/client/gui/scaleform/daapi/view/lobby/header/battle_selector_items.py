@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
 import BigWorld
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -407,5 +408,5 @@ def clear():
 
 
 def getItems():
-    raise _g_items or AssertionError('Items is empty')
+    assert _g_items, 'Items is empty'
     return _g_items

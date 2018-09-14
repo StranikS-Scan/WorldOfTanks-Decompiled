@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/__init__.py
 import BigWorld
 import Event
@@ -40,16 +41,16 @@ class ISimpleDialogButtonsMeta(object):
 class ISimpleDialogMeta(IDialogMeta):
 
     def getTitle(self):
-        return ''
+        pass
 
     def getMessage(self):
-        return ''
+        pass
 
     def getButtonLabels(self):
         return []
 
     def getTimer(self):
-        return 0
+        pass
 
 
 class InfoDialogButtons(ISimpleDialogButtonsMeta):

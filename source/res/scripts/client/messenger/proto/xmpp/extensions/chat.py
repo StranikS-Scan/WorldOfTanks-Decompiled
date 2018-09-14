@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/chat.py
 import calendar
 from datetime import datetime
@@ -83,7 +84,7 @@ class MessageIDExtension(PyExtension):
 
     @classmethod
     def getDefaultData(cls):
-        return ''
+        pass
 
     def parseTag(self, pyGlooxTag):
         return pyGlooxTag.findAttribute('uuid')

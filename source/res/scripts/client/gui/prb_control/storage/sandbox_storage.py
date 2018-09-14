@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/storage/sandbox_storage.py
 from account_helpers.AccountSettings import AccountSettings, DEFAULT_QUEUE
 from constants import QUEUE_TYPE

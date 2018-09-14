@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from adisp import process
@@ -75,9 +76,10 @@ def showProfileWindow(databaseID, userName):
      'databaseID': databaseID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showClanProfileWindow(clanDbID):
+def showClanProfileWindow(clanDbID, clanAbbrev):
     alias = CLANS_ALIASES.CLAN_PROFILE_MAIN_WINDOW_PY
-    g_eventBus.handleEvent(events.LoadViewEvent(alias, getViewName(alias, clanDbID), ctx={'clanDbID': clanDbID}), EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(alias, getViewName(alias, clanDbID), ctx={'clanDbID': clanDbID,
+     'clanAbbrev': clanAbbrev}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showClanSearchWindow():
@@ -99,7 +101,7 @@ def showClanSendInviteWindow(clanDbID):
 def selectVehicleInHangar(itemCD):
     from CurrentVehicle import g_currentVehicle
     veh = g_itemsCache.items.getItemByCD(int(itemCD))
-    raise veh.isInInventory or AssertionError('Vehicle must be in inventory.')
+    assert veh.isInInventory, 'Vehicle must be in inventory.'
     g_currentVehicle.selectVehicle(veh.invID)
     showHangar()
 
@@ -113,8 +115,9 @@ def showPremiumCongratulationWindow(award):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_CONGRATULATION_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_CONGRATULATION_WINDOW), ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showPremiumWindow(arenaUniqueID = 0):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_WINDOW), ctx={'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
+def showPremiumWindow(arenaUniqueID = 0, premiumBonusesDiff = None):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_WINDOW), ctx={'arenaUniqueID': arenaUniqueID,
+     'premiumBonusesDiff': premiumBonusesDiff}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBoostersWindow():

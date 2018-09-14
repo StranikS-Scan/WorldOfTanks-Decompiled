@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/parsers.py
 import weakref
 from collections import defaultdict
@@ -28,7 +29,7 @@ class ConditionsParser(object):
         return
 
     def forEachNodeInTree(self, handler):
-        raise handler is not None or AssertionError
+        assert handler is not None
         self.__forEachNode(self.getConditions(), handler)
         return
 

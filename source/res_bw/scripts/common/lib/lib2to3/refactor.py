@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/refactor.py
 """Refactoring framework.
 
@@ -572,10 +573,10 @@ class RefactoringTool(object):
             self.log_error("Can't parse docstring in %s line %s: %s: %s", filename, lineno, err.__class__.__name__, err)
             return block
 
-        new = self.refactor_tree(tree, filename) and unicode(tree).splitlines(True)
-        clipped, new = new[:lineno - 1], new[lineno - 1:]
-        if not clipped == [u'\n'] * (lineno - 1):
-            raise AssertionError(clipped)
+        if self.refactor_tree(tree, filename):
+            new = unicode(tree).splitlines(True)
+            clipped, new = new[:lineno - 1], new[lineno - 1:]
+            assert clipped == [u'\n'] * (lineno - 1), clipped
             if not new[-1].endswith(u'\n'):
                 new[-1] += u'\n'
             block = [indent + self.PS1 + new.pop(0)]

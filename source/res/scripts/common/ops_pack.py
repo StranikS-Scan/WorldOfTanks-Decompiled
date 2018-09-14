@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ops_pack.py
 import struct
 from external_strings_utils import truncate_utf8
@@ -139,7 +140,7 @@ class OpsPacker:
                         pack += struct.pack(elemFormat, key, *vals)
 
                 else:
-                    raise 0 or AssertionError
+                    assert 0
 
         return pack
 

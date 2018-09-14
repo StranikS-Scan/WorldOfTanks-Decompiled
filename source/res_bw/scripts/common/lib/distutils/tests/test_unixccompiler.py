@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_unixccompiler.py
 """Tests for distutils.unixccompiler."""
 import os
@@ -32,19 +33,19 @@ class UnixCCompilerTestCase(unittest.TestCase):
         old_gcv = sysconfig.get_config_var
 
         def gcv(v):
-            return 'xxx'
+            pass
 
         sysconfig.get_config_var = gcv
         self.assertEqual(self.cc.rpath_foo(), ['+s', '-L/foo'])
 
         def gcv(v):
-            return 'gcc'
+            pass
 
         sysconfig.get_config_var = gcv
         self.assertEqual(self.cc.rpath_foo(), ['-Wl,+s', '-L/foo'])
 
         def gcv(v):
-            return 'g++'
+            pass
 
         sysconfig.get_config_var = gcv
         self.assertEqual(self.cc.rpath_foo(), ['-Wl,+s', '-L/foo'])
@@ -106,7 +107,7 @@ class UnixCCompilerTestCase(unittest.TestCase):
         sys.platform = 'aix'
 
         def gcv(v):
-            return 'xxx'
+            pass
 
         sysconfig.get_config_var = gcv
         self.assertEqual(self.cc.rpath_foo(), '-R/foo')
@@ -117,7 +118,6 @@ class UnixCCompilerTestCase(unittest.TestCase):
         def gcv(v):
             if v == 'LDSHARED':
                 return 'gcc-4.2 -bundle -undefined dynamic_lookup '
-            return 'gcc-4.2'
 
         sysconfig.get_config_var = gcv
         with EnvironmentVarGuard() as env:
@@ -132,7 +132,6 @@ class UnixCCompilerTestCase(unittest.TestCase):
         def gcv(v):
             if v == 'LDSHARED':
                 return 'gcc-4.2 -bundle -undefined dynamic_lookup '
-            return 'gcc-4.2'
 
         sysconfig.get_config_var = gcv
         with EnvironmentVarGuard() as env:

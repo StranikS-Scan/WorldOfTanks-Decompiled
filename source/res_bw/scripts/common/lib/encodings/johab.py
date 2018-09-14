@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/johab.py
 import _codecs_kr, codecs
 import _multibytecodec as mbc

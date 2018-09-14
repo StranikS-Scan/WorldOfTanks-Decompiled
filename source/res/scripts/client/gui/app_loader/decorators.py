@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/app_loader/decorators.py
 from gui.app_loader.loader import g_appLoader
 from gui.app_loader.settings import APP_NAME_SPACE as _SPACE

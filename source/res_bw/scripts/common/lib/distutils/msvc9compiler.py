@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/msvc9compiler.py
 """distutils.msvc9compiler
 
@@ -318,73 +319,73 @@ class MSVCCompiler(CCompiler):
         return
 
     def initialize(self, plat_name = None):
-        if not not self.initialized:
-            raise AssertionError("don't init multiple times")
-            if plat_name is None:
-                plat_name = get_platform()
-            ok_plats = ('win32', 'win-amd64', 'win-ia64')
-            if plat_name not in ok_plats:
-                raise DistutilsPlatformError('--plat-name must be one of %s' % (ok_plats,))
-            if 'DISTUTILS_USE_SDK' in os.environ and 'MSSdk' in os.environ and self.find_exe('cl.exe'):
-                self.cc = 'cl.exe'
-                self.linker = 'link.exe'
-                self.lib = 'lib.exe'
-                self.rc = 'rc.exe'
-                self.mc = 'mc.exe'
+        assert not self.initialized, "don't init multiple times"
+        if plat_name is None:
+            plat_name = get_platform()
+        ok_plats = ('win32', 'win-amd64', 'win-ia64')
+        if plat_name not in ok_plats:
+            raise DistutilsPlatformError('--plat-name must be one of %s' % (ok_plats,))
+        if 'DISTUTILS_USE_SDK' in os.environ and 'MSSdk' in os.environ and self.find_exe('cl.exe'):
+            self.cc = 'cl.exe'
+            self.linker = 'link.exe'
+            self.lib = 'lib.exe'
+            self.rc = 'rc.exe'
+            self.mc = 'mc.exe'
+        else:
+            if plat_name == get_platform() or plat_name == 'win32':
+                plat_spec = PLAT_TO_VCVARS[plat_name]
             else:
-                if plat_name == get_platform() or plat_name == 'win32':
-                    plat_spec = PLAT_TO_VCVARS[plat_name]
-                else:
-                    plat_spec = PLAT_TO_VCVARS[get_platform()] + '_' + PLAT_TO_VCVARS[plat_name]
-                vc_env = query_vcvarsall(VERSION, plat_spec)
-                self.__paths = vc_env['path'].encode('mbcs').split(os.pathsep)
-                os.environ['lib'] = vc_env['lib'].encode('mbcs')
-                os.environ['include'] = vc_env['include'].encode('mbcs')
-                if len(self.__paths) == 0:
-                    raise DistutilsPlatformError("Python was built with %s, and extensions need to be built with the same version of the compiler, but it isn't installed." % self.__product)
-                self.cc = self.find_exe('cl.exe')
-                self.linker = self.find_exe('link.exe')
-                self.lib = self.find_exe('lib.exe')
-                self.rc = self.find_exe('rc.exe')
-                self.mc = self.find_exe('mc.exe')
-            try:
-                for p in os.environ['path'].split(';'):
-                    self.__paths.append(p)
+                plat_spec = PLAT_TO_VCVARS[get_platform()] + '_' + PLAT_TO_VCVARS[plat_name]
+            vc_env = query_vcvarsall(VERSION, plat_spec)
+            self.__paths = vc_env['path'].encode('mbcs').split(os.pathsep)
+            os.environ['lib'] = vc_env['lib'].encode('mbcs')
+            os.environ['include'] = vc_env['include'].encode('mbcs')
+            if len(self.__paths) == 0:
+                raise DistutilsPlatformError("Python was built with %s, and extensions need to be built with the same version of the compiler, but it isn't installed." % self.__product)
+            self.cc = self.find_exe('cl.exe')
+            self.linker = self.find_exe('link.exe')
+            self.lib = self.find_exe('lib.exe')
+            self.rc = self.find_exe('rc.exe')
+            self.mc = self.find_exe('mc.exe')
+        try:
+            for p in os.environ['path'].split(';'):
+                self.__paths.append(p)
 
-            except KeyError:
-                pass
+        except KeyError:
+            pass
 
-            self.__paths = normalize_and_reduce_paths(self.__paths)
-            os.environ['path'] = ';'.join(self.__paths)
-            self.preprocess_options = None
-            if self.__arch == 'x86':
-                self.compile_options = ['/nologo',
-                 '/Ox',
-                 '/MD',
-                 '/W3',
-                 '/DNDEBUG']
-                self.compile_options_debug = ['/nologo',
-                 '/Od',
-                 '/MDd',
-                 '/W3',
-                 '/Z7',
-                 '/D_DEBUG']
-            else:
-                self.compile_options = ['/nologo',
-                 '/Ox',
-                 '/MD',
-                 '/W3',
-                 '/GS-',
-                 '/DNDEBUG']
-                self.compile_options_debug = ['/nologo',
-                 '/Od',
-                 '/MDd',
-                 '/W3',
-                 '/GS-',
-                 '/Z7',
-                 '/D_DEBUG']
-            self.ldflags_shared = ['/DLL', '/nologo', '/INCREMENTAL:NO']
-            self.ldflags_shared_debug = self.__version >= 7 and ['/DLL',
+        self.__paths = normalize_and_reduce_paths(self.__paths)
+        os.environ['path'] = ';'.join(self.__paths)
+        self.preprocess_options = None
+        if self.__arch == 'x86':
+            self.compile_options = ['/nologo',
+             '/Ox',
+             '/MD',
+             '/W3',
+             '/DNDEBUG']
+            self.compile_options_debug = ['/nologo',
+             '/Od',
+             '/MDd',
+             '/W3',
+             '/Z7',
+             '/D_DEBUG']
+        else:
+            self.compile_options = ['/nologo',
+             '/Ox',
+             '/MD',
+             '/W3',
+             '/GS-',
+             '/DNDEBUG']
+            self.compile_options_debug = ['/nologo',
+             '/Od',
+             '/MDd',
+             '/W3',
+             '/GS-',
+             '/Z7',
+             '/D_DEBUG']
+        self.ldflags_shared = ['/DLL', '/nologo', '/INCREMENTAL:NO']
+        if self.__version >= 7:
+            self.ldflags_shared_debug = ['/DLL',
              '/nologo',
              '/INCREMENTAL:no',
              '/DEBUG',

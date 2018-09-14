@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_itertools.py
 """ Fixer for itertools.(imap|ifilter|izip) --> (map|filter|zip) and
 itertools.ifilterfalse --> itertools.filterfalse (bugs 2360-2363)

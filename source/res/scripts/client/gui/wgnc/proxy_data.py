@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE

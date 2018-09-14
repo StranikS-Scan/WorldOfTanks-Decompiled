@@ -1079,7 +1079,7 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_fuel_barrel_mid	</wwsound>
+            <wwsound>	obj_pole_metall_crack	</wwsound>
             <sound>	/objects/fuel_barrel/fuel_barrel_mid	</sound>
           </sound>
         </effects>
@@ -1391,6 +1391,25 @@
         </effects>
       </variant1>
     </inf_env_112_22_F2_rocket_001>
+    <inf_mle031_Aeroplane>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mle031_Aeroplane.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_box_mid	</wwsound>
+            <sound>	/objects/wood_box_mid/wood_box_mid	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_mle031_Aeroplane>
     <inf_gaf_101_01_StoneFenceBig_Door>
       <variant1>
         <stages>
@@ -1467,63 +1486,6 @@
         </effects>
       </variant1>
     </inf_gaf_112_01_IronFence_002>
-    <inf_gaf_112_02_RichIronFence_004>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf_112_02_RichIronFence_004.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_pole_metall_touch	</wwsound>
-            <sound>	/objects/telegraph_pole/pole_metall_touch	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_gaf_112_02_RichIronFence_004>
-    <inf_gaf_112_02_RichIronFence_002>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf_112_02_RichIronFence_002.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_pole_metall_touch	</wwsound>
-            <sound>	/objects/telegraph_pole/pole_metall_touch	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_gaf_112_02_RichIronFence_002>
-    <inf_gaf_112_01_IronFence_001>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gaf_112_01_IronFence_001.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_fence_stone_metall_mid	</wwsound>
-            <sound>	/objects/fence/fence_stone_metall_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_gaf_112_01_IronFence_001>
     <inf_env_112_10_AdvertisingPosters_01_02>
       <variant1>
         <stages>
@@ -1544,6 +1506,25 @@
         </effects>
       </variant1>
     </inf_env_112_10_AdvertisingPosters_01_02>
+    <inf_mle_101_02_Bedford_QL_1>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mle_101_02_Bedford_QL_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_car_corps	</wwsound>
+            <sound>	/objects/structures/car_corps	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_mle_101_02_Bedford_QL_1>
     <inf_mle_101_04_Dodge_WC54>
       <variant1>
         <stages>
@@ -1631,25 +1612,6 @@
         </effects>
       </variant1>
     </inf_envSU_83_03_OldFurniture_group_04>
-    <inf_envSU_83_03_OldFurniture_group_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_03_OldFurniture_group_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_box_mid	</wwsound>
-            <sound>	/objects/wood_box_mid/wood_box_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_03_OldFurniture_group_02>
     <inf_envSU_83_03_OldFurniture_group_01>
       <variant1>
         <stages>
@@ -1688,44 +1650,6 @@
         </effects>
       </variant1>
     </inf_envSU_83_03_OldFurniture_0>
-    <inf_envSU_83_03_OldFurniture_1>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_03_OldFurniture_1.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_box_mid	</wwsound>
-            <sound>	/objects/wood_box_mid/wood_box_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_03_OldFurniture_1>
-    <inf_envSU_83_03_OldFurniture_2>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_03_OldFurniture_2.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_box_mid	</wwsound>
-            <sound>	/objects/wood_box_mid/wood_box_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_03_OldFurniture_2>
     <inf_envSU_83_03_OldFurniture_4>
       <variant1>
         <stages>
@@ -1745,25 +1669,6 @@
         </effects>
       </variant1>
     </inf_envSU_83_03_OldFurniture_4>
-    <inf_envSU_83_03_OldFurniture_5>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_03_OldFurniture_5.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_box_mid	</wwsound>
-            <sound>	/objects/wood_box_mid/wood_box_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_03_OldFurniture_5>
     <inf_envSU_83_03_OldFurniture_6>
       <variant1>
         <stages>
@@ -2158,6 +2063,25 @@
         </effects>
       </variant1>
     </inf_bldSU_92_31_MillPipe_1>
+    <inf_mle_101_02_Bedford_QL_2>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mle_101_02_Bedford_QL_2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_car_corps	</wwsound>
+            <sound>	/objects/structures/car_corps	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_mle_101_02_Bedford_QL_2>
     <inf_gafSU_83_01_SandBags_heap>
       <variant1>
         <stages>
@@ -2785,6 +2709,66 @@
         </effects>
       </variant1>
     </inf_gafSU_83_02_Barricades>
+    <inf_bld_114_03_WorkshopIndoor_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	True	</hasHavokVersion>
+            <file>	particles/Environment/buildings/inf_bld_114_03_WorkshopIndoor_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_house	</wwsound>
+            <sound>	/objects/buildings/wood_house	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_114_03_WorkshopIndoor_02>
+    <inf_bld_114_03_WorkshopIndoor_05>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	True	</hasHavokVersion>
+            <file>	particles/Environment/buildings/inf_bld_114_03_WorkshopIndoor_05.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_114_03_WorkshopIndoor_05>
+    <inf_bld_114_03_WorkshopIndoor_fireStairs02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	True	</hasHavokVersion>
+            <file>	particles/Environment/buildings/inf_bld_114_03_WorkshopIndoor_fireStairs02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_114_03_WorkshopIndoor_fireStairs02>
     <inf_bldSU_92_03_Mill_2>
       <variant1>
         <stages>
@@ -6199,6 +6183,44 @@
         </effects>
       </variant1>
     </inf_gafKR_003_village_clayWall01_corner_02>
+    <inf_env_114_18_ConcreteSlab_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_18_ConcreteSlab_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_fence_stone_mid	</wwsound>
+            <sound>	/objects/fence/fence_stone_mid	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_18_ConcreteSlab_02>
+    <inf_env_114_18_ConcreteSlab_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_18_ConcreteSlab_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_fence_stone_mid	</wwsound>
+            <sound>	/objects/fence/fence_stone_mid	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_18_ConcreteSlab_03>
     <inf_env_112_08_Tunnel_block_02>
       <variant1>
         <stages>
@@ -6332,25 +6354,6 @@
         </effects>
       </variant1>
     </inf_env_112_15_MetalRoadPoles3>
-    <inf_env_112_15_MetalRoadPoles2>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_15_MetalRoadPoles2.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_fuel_barrel_mid	</wwsound>
-            <sound>	/objects/fuel_barrel/fuel_barrel_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_env_112_15_MetalRoadPoles2>
     <inf_env_112_15_MetalRoadPoles1>
       <variant1>
         <stages>
@@ -8175,44 +8178,6 @@
         </effects>
       </variant1>
     </inf_envAS_003_ObservationPavilion>
-    <inf_envAS_004_Pavilion>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envAS_004_Pavilion.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
-            <sound>	/objects/buildings/toilet	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envAS_004_Pavilion>
-    <inf_envAS_005_WoodDryer_end>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envAS_005_WoodDryer_end.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
-            <sound>	/objects/buildings/toilet	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envAS_005_WoodDryer_end>
     <inf_envAS_005_WoodDryer_tile>
       <variant1>
         <stages>
@@ -9102,44 +9067,6 @@
         </effects>
       </variant1>
     </inf_gafAF_002_WattledFence>
-    <inf_gafSC_001_SeafrontFence_end>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gafSC_001_SeafrontFence_end.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-            <sound>	/objects/fence/stone_crash_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_gafSC_001_SeafrontFence_end>
-    <inf_gafSC_001_SeafrontFence_tile>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gafSC_001_SeafrontFence_tile.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-            <sound>	/objects/fence/stone_crash_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_gafSC_001_SeafrontFence_tile>
     <inf_mleAF_003_WestlandLysander>
       <variant1>
         <stages>
@@ -9311,25 +9238,6 @@
         </effects>
       </variant1>
     </inf_env605_Dovecote>
-    <inf_envIT_005_ConcretePole1>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envIT_005_ConcretePole.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-            <sound>	/objects/fence/stone_crash_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envIT_005_ConcretePole1>
     <inf_envNE_003_Snowman>
       <variant1>
         <stages>
@@ -9974,25 +9882,6 @@
         </effects>
       </variant1>
     </inf_envAF_005_ClayJug_1>
-    <inf_blrSC_003_DestroyedHouses_06>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_blrSC_003_DestroyedHouses_06.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-            <sound>	/objects/fence/stone_crash_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_blrSC_003_DestroyedHouses_06>
     <inf_blrSC_004_Ruins_column_1_fragile>
       <variant1>
         <stages>
@@ -10453,17 +10342,17 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	EMPTY_EVENT	</wwsound>
+            <wwsound>	inf_fuel_envAM_011_Truck	</wwsound>
             <sound>	/explosive_objects/expls_obj/fuel_small/inf_fuel_envAM_011_Truck	</sound>
           </sound>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	EMPTY_EVENT	</wwsound>
+            <wwsound>	explosive_objects	</wwsound>
             <sound>	/burn/expls_obj_burn/expls_obj_burn_mid/burn_mid_12sec	</sound>
           </sound>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	EMPTY_EVENT	</wwsound>
+            <wwsound>	explosive_objects	</wwsound>
             <sound>	/explosive_objects/expls_obj/fuel_small/inf_fuel_envAM_011_Truck_debris	</sound>
           </sound>
         </effects>
@@ -10602,44 +10491,6 @@
         </effects>
       </variant1>
     </inf_envAF_004_ColorTent_3>
-    <inf_env_112_14_TableCaffe_011>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_14_TableCaffe_011.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
-            <sound>	/objects/buildings/toilet	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_env_112_14_TableCaffe_011>
-    <inf_env_112_14_TableCaffe_010>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_14_TableCaffe_010.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
-            <sound>	/objects/buildings/toilet	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_env_112_14_TableCaffe_010>
     <inf_env_112_14_TableCaffe_009>
       <variant1>
         <stages>
@@ -10678,25 +10529,6 @@
         </effects>
       </variant1>
     </inf_env_112_14_TableCaffe_008>
-    <inf_env_112_14_TableCaffe_007>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_14_TableCaffe_007.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
-            <sound>	/objects/buildings/toilet	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_env_112_14_TableCaffe_007>
     <inf_env_112_14_TableCaffe_005>
       <variant1>
         <stages>
@@ -10754,44 +10586,6 @@
         </effects>
       </variant1>
     </inf_env_112_16_LostStuff>
-    <inf_env_112_14_TableCaffe_001>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_14_TableCaffe_001.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
-            <sound>	/objects/buildings/toilet	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_env_112_14_TableCaffe_001>
-    <inf_env_112_09_StreetLamp_03_Wall>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_09_StreetLamp_03_Wall.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_fuel_barrel_mid	</wwsound>
-            <sound>	/objects/fuel_barrel/fuel_barrel_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_env_112_09_StreetLamp_03_Wall>
     <inf_envAF_009_tent>
       <variant1>
         <stages>
@@ -10925,25 +10719,6 @@
         </effects>
       </variant1>
     </inf_env_112_12_BiCycle_04>
-    <inf_env_112_12_BiCycle_03>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_12_BiCycle_03.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_bicycle	</wwsound>
-            <sound>	/objects/structures/bicycle	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_env_112_12_BiCycle_03>
     <inf_env_112_12_BiCycle_02>
       <variant1>
         <stages>
@@ -10963,7 +10738,7 @@
         </effects>
       </variant1>
     </inf_env_112_12_BiCycle_02>
-    <inf_env_112_12_BiCycle_01>
+    <inf_env_114_14_JunctionBox_06>
       <variant1>
         <stages>
           <base>	4.0	</base>
@@ -10971,17 +10746,17 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_12_BiCycle_01.xml	</file>
+            <file>	particles/Environment/objects/inf_env_114_14_JunctionBox_06.xml	</file>
             <force>	1	</force>
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_bicycle	</wwsound>
-            <sound>	/objects/structures/bicycle	</sound>
+            <wwsound>	car_corps	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
           </sound>
         </effects>
       </variant1>
-    </inf_env_112_12_BiCycle_01>
+    </inf_env_114_14_JunctionBox_06>
     <inf_env427_ParkSculpture1>
       <variant1>
         <stages>
@@ -11571,44 +11346,6 @@
         </effects>
       </variant1>
     </inf_envAM_035_Scarecrow>
-    <inf_envAS_001_SmallWatermill_channel_tile>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envAS_001_SmallWatermill_channel_tile.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
-            <sound>	/objects/buildings/toilet	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envAS_001_SmallWatermill_channel_tile>
-    <inf_envAS_002_TerraceBalkon01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envAS_002_TerraceBalkon01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
-            <sound>	/objects/buildings/toilet	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envAS_002_TerraceBalkon01>
     <inf_envAS_002_TerraceBalkon02>
       <variant1>
         <stages>
@@ -11951,25 +11688,6 @@
         </effects>
       </variant1>
     </inf_gafAF_001_ClayFence_high_07>
-    <inf_envJA_007_JapaneseBoot_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envJA_007_JapaneseBoot_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_toilet	</wwsound>
-            <sound>	/objects/buildings/toilet	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envJA_007_JapaneseBoot_02>
     <inf_bld4502_fountainsmall>
       <variant1>
         <stages>
@@ -12616,44 +12334,6 @@
         </effects>
       </variant1>
     </inf_env601_BunchLogs5>
-    <inf_envSC_002_ChaiseLongue>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSC_002_ChaiseLongue.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_fence_light_wood	</wwsound>
-            <sound>	/objects/fence/fence_light_wood	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envSC_002_ChaiseLongue>
-    <inf_envSC_006__hangingBooth>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSC_006__hangingBooth.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_fence_light_wood	</wwsound>
-            <sound>	/objects/fence/fence_light_wood	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envSC_006__hangingBooth>
     <inf_envSC_003_BeachUmbrella>
       <variant1>
         <stages>
@@ -12673,25 +12353,6 @@
         </effects>
       </variant1>
     </inf_envSC_003_BeachUmbrella>
-    <inf_envSC_004_RescueTower>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSC_004_RescueTower.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_fence_light_wood	</wwsound>
-            <sound>	/objects/fence/fence_light_wood	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_envSC_004_RescueTower>
     <inf_gafEU_002_SmallBrickFence_end>
       <variant1>
         <stages>
@@ -13002,22 +12663,22 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	EMPTY_EVENT	</wwsound>
+            <wwsound>	inf_fuel_rw004_carriage3	</wwsound>
             <sound>	/explosive_objects/expls_obj/fuel_big/inf_fuel_rw004_Carriage3	</sound>
           </sound>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	EMPTY_EVENT	</wwsound>
+            <wwsound>	explosive_objects	</wwsound>
             <sound>	/burn/expls_obj_burn/expls_obj_burn_big/burn_big_12sec	</sound>
           </sound>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	EMPTY_EVENT	</wwsound>
+            <wwsound>	explosive_objects	</wwsound>
             <sound>	/explosive_objects/expls_obj/fuel_big/inf_fuel_rw004_Carriage3_debris_01	</sound>
           </sound>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	EMPTY_EVENT	</wwsound>
+            <wwsound>	explosive_objects	</wwsound>
             <sound>	/explosive_objects/expls_obj/fuel_big/inf_fuel_rw004_Carriage3_debris_02	</sound>
           </sound>
         </effects>
@@ -13197,6 +12858,329 @@
         </effects>
       </variant1>
     </inf_shells_detonation_small>
+    <inf_env_114_09_VentilationSys_outdoor_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/Objects/inf_env_114_09_VentilationSys_outdoor_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_09_VentilationSys_outdoor_01>
+    <inf_env_114_09_VentilationSys_outdoor_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/Objects/inf_env_114_09_VentilationSys_outdoor_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_09_VentilationSys_outdoor_02>
+    <inf_env_114_09_VentilationSys_outdoor_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/Objects/inf_env_114_09_VentilationSys_outdoor_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_09_VentilationSys_outdoor_03>
+    <inf_env_114_09_VentilationSys_outdoor_04>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/Objects/inf_env_114_09_VentilationSys_outdoor_04.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_09_VentilationSys_outdoor_04>
+    <inf_bld_114_01_Workshop_new_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_114_01_Workshop_new_01>
+    <inf_bld_114_01_Workshop_new_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_structure	</wwsound>
+            <sound>	/objects/structures/wood_structure	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_114_01_Workshop_new_02>
+    <inf_bld_114_01_Workshop_new_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_structure	</wwsound>
+            <sound>	/objects/structures/wood_structure	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_114_01_Workshop_new_03>
+    <inf_env_114_08_FactoryFurniture_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_08_FactoryFurniture_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_crash_light	</wwsound>
+            <sound>	/objects/new_objects/wood_crash_light	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_08_FactoryFurniture_01>
+    <inf_env_114_08_FactoryFurniture_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_08_FactoryFurniture_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_crash_light	</wwsound>
+            <sound>	/objects/new_objects/wood_crash_light	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_08_FactoryFurniture_02>
+    <inf_env_114_08_FactoryFurniture_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_08_FactoryFurniture_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_crash_light	</wwsound>
+            <sound>	/objects/new_objects/wood_crash_light	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_08_FactoryFurniture_03>
+    <inf_env_114_08_FactoryFurniture_04>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_08_FactoryFurniture_04.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_crash_light	</wwsound>
+            <sound>	/objects/new_objects/wood_crash_light	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_08_FactoryFurniture_04>
+    <inf_env_114_08_FactoryFurniture_07>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_08_FactoryFurniture_07.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_crash_light	</wwsound>
+            <sound>	/objects/new_objects/wood_crash_light	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_08_FactoryFurniture_07>
+    <inf_env_114_03_LatheMachine>
+      <variant1>
+        <stages>
+          <base>	8.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_03_LatheMachine.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_car_corps	</wwsound>
+            <sound>	/objects/structures/car_corps	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_03_LatheMachine>
+    <inf_env_114_06_Grinder>
+      <variant1>
+        <stages>
+          <base>	8.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_06_Grinder.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_06_Grinder>
+    <inf_env_114_05_MillingMachine_small>
+      <variant1>
+        <stages>
+          <base>	8.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_05_MillingMachine_small.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_05_MillingMachine_small>
+    <inf_env_114_14_JunctionBox_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_14_JunctionBox_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	car_corps	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_14_JunctionBox_02>
+    <inf_env_114_14_JunctionBox_04>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_114_14_JunctionBox_04.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	car_corps	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env_114_14_JunctionBox_04>
   </fragiles>
   <structures>
     <inf_env_112_19_MetroEnterance_1>
@@ -13293,8 +13277,8 @@
           </pixie>
           <sound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_light	</wwsound>
-            <sound>	/objects/buildings/stone_building_mid	</sound>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
           </sound>
         </effects>
       </variant1>
@@ -14044,25 +14028,6 @@
         </effects>
       </variant1>
     </inf_blr021_CaucasusRuins_06_structure>
-    <inf_blrSC_003_DestroyedHouses_06_structure>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_blrSC_003_DestroyedHouses_06.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-            <sound>	/objects/fence/stone_crash_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_blrSC_003_DestroyedHouses_06_structure>
     <inf_blrAF_002_barracs>
       <variant1>
         <stages>
@@ -14782,6 +14747,25 @@
         </effects>
       </variant1>
     </inf_bldKR_008_village_house01>
+    <inf_bldSU_003_Sawmill_shed>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_bldSU_003_Sawmill_shed.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_house	</wwsound>
+            <sound>	/objects/buildings/wood_house	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bldSU_003_Sawmill_shed>
     <inf_bldSU_003_Sawmill_saw1>
       <variant1>
         <stages>
@@ -16595,25 +16579,6 @@
         </effects>
       </variant1>
     </inf_blrSC_002_Colonade_1>
-    <inf_blrSC_002_Colonade_2>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_blrSC_002_Colonade_2.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_fence_stone_mid	</wwsound>
-            <sound>	/objects/fence/fence_stone_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_blrSC_002_Colonade_2>
     <inf_wall_wooden_ram>
       <variant1>
         <stages>
@@ -17070,25 +17035,6 @@
         </effects>
       </variant1>
     </inf_mle_101_11_CamouflageTent_cover_01>
-    <inf_mle_101_11_CamouflageTent_cover_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_mle_101_11_CamouflageTent_cover_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_linen	</wwsound>
-            <sound>	/objects/structures/linen	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_mle_101_11_CamouflageTent_cover_02>
     <inf_mle_101_11_CamouflageTent_cover_03>
       <variant1>
         <stages>
@@ -17317,82 +17263,6 @@
         </effects>
       </variant1>
     </inf_blr021_CaucasusRuins_05>
-    <inf_blrSC_003_DestroyedHouses_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_blrSC_003_DestroyedHouses_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-            <sound>	/objects/fence/stone_crash_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_blrSC_003_DestroyedHouses_02>
-    <inf_blrSC_003_DestroyedHouses_03>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_blrSC_003_DestroyedHouses_03.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-            <sound>	/objects/fence/stone_crash_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_blrSC_003_DestroyedHouses_03>
-    <inf_blrSC_003_DestroyedHouses_04>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_blrSC_003_DestroyedHouses_04.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-            <sound>	/objects/fence/stone_crash_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_blrSC_003_DestroyedHouses_04>
-    <inf_blrSC_003_DestroyedHouses_05>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_blrSC_003_DestroyedHouses_05.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <sound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-            <sound>	/objects/fence/stone_crash_mid	</sound>
-          </sound>
-        </effects>
-      </variant1>
-    </inf_blrSC_003_DestroyedHouses_05>
     <inf_blrSC_004_Ruins_wall_1>
       <variant1>
         <stages>
@@ -17603,5 +17473,43 @@
         </effects>
       </variant1>
     </inf_bldAS_005_VHouseShop>
+    <inf_bld_114_01_Workshop_new_04_1>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_04_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_114_01_Workshop_new_04_1>
+    <inf_bld_114_01_Workshop_new_04_2>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_04_2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_metal_wood	</wwsound>
+            <sound>	/objects/structures/metal_wood	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_bld_114_01_Workshop_new_04_2>
   </structures>
 </destructibles_effects.xml>

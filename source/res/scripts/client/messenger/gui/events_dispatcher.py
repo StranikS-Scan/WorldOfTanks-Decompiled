@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/events_dispatcher.py
 from debug_utils import LOG_ERROR
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/abc.py
 """Abstract Base Classes (ABCs) according to PEP 3119."""
 import types
@@ -137,14 +138,14 @@ class ABCMeta(type):
             return False
         ok = cls.__subclasshook__(subclass)
         if ok is not NotImplemented:
-            if not isinstance(ok, bool):
-                raise AssertionError
-                if ok:
-                    cls._abc_cache.add(subclass)
-                else:
-                    cls._abc_negative_cache.add(subclass)
-                return ok
-            cls in getattr(subclass, '__mro__', ()) and cls._abc_cache.add(subclass)
+            assert isinstance(ok, bool)
+            if ok:
+                cls._abc_cache.add(subclass)
+            else:
+                cls._abc_negative_cache.add(subclass)
+            return ok
+        if cls in getattr(subclass, '__mro__', ()):
+            cls._abc_cache.add(subclass)
             return True
         for rcls in cls._abc_registry:
             if issubclass(subclass, rcls):

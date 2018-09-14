@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/settings.py
 from collections import namedtuple, defaultdict
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
@@ -40,7 +41,6 @@ class NODE_STATE:
         if not state & flag:
             state |= flag
             return state
-        return -1
 
     @classmethod
     def addIfNot(cls, state, flag):
@@ -53,7 +53,6 @@ class NODE_STATE:
         if state & flag > 0:
             state ^= flag
             return state
-        return -1
 
     @classmethod
     def removeIfHas(cls, state, flag):

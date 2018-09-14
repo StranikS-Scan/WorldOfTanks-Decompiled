@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/sub_tasks.py
 from messenger.m_constants import USER_TAG, USER_ACTION_ID, CLIENT_ACTION_ID
 from messenger.proto.xmpp import errors

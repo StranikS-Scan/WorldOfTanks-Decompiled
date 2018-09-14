@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/find_criteria.py
 from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto.interfaces import IEntityFindCriteria

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/version.py
 """Provides classes to represent module version numbers (one class for
 each style of version numbering).  There are currently two such classes

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/drr_scale.py
 import BigWorld
 DRR_MIN_SCALE_VALUE = 0.6

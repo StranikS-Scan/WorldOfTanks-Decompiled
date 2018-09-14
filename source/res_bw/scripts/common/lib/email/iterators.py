@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/iterators.py
 """Various types of useful iterators and generators."""
 __all__ = ['body_line_iterator', 'typed_subpart_iterator', 'walk']

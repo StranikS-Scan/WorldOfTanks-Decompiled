@@ -7,13 +7,12 @@
       <conditions>
         <postBattle>
           <and>
-            <results>
-              <key>	xp	</key>
-              <greaterOrEqual>	3000	</greaterOrEqual>
-            </results>
+            <vehicleDamage>
+              <greaterOrEqual>	10000	</greaterOrEqual>
+            </vehicleDamage>
             <results>
               <key>	deathCount	</key>
-              <lessOrEqual>	1	</lessOrEqual>
+              <lessOrEqual>	0	</lessOrEqual>
             </results>
           </and>
         </postBattle>
@@ -40,17 +39,16 @@
       <conditions>
         <postBattle>
           <and>
-            <results>
-              <key>	xp	</key>
-              <greaterOrEqual>	3000	</greaterOrEqual>
-            </results>
+            <vehicleDamage>
+              <greaterOrEqual>	10000	</greaterOrEqual>
+            </vehicleDamage>
             <results>
               <key>	deathCount	</key>
-              <lessOrEqual>	1	</lessOrEqual>
+              <lessOrEqual>	0	</lessOrEqual>
             </results>
             <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	8000	</greaterOrEqual>
+              <key>	avatarDamageDealt	</key>
+              <greaterOrEqual>	1500	</greaterOrEqual>
             </results>
           </and>
         </postBattle>

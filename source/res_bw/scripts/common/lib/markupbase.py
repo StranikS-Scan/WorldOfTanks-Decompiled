@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/markupbase.py
 """Shared support for scanning document type declarations in HTML and XHTML.
 
@@ -51,21 +52,21 @@ class ParserBase:
     def parse_declaration(self, i):
         rawdata = self.rawdata
         j = i + 2
-        if not rawdata[i:j] == '<!':
-            raise AssertionError('unexpected call to parse_declaration')
-            if rawdata[j:j + 1] == '>':
-                return j + 1
-            if rawdata[j:j + 1] in ('-', ''):
-                return -1
-            n = len(rawdata)
-            if rawdata[j:j + 2] == '--':
-                return self.parse_comment(i)
-            if rawdata[j] == '[':
-                return self.parse_marked_section(i)
-            decltype, j = self._scan_name(j, i)
-            if j < 0:
-                return j
-            self._decl_otherchars = decltype == 'doctype' and ''
+        assert rawdata[i:j] == '<!', 'unexpected call to parse_declaration'
+        if rawdata[j:j + 1] == '>':
+            return j + 1
+        if rawdata[j:j + 1] in ('-', ''):
+            return -1
+        n = len(rawdata)
+        if rawdata[j:j + 2] == '--':
+            return self.parse_comment(i)
+        if rawdata[j] == '[':
+            return self.parse_marked_section(i)
+        decltype, j = self._scan_name(j, i)
+        if j < 0:
+            return j
+        if decltype == 'doctype':
+            self._decl_otherchars = ''
         while j < n:
             c = rawdata[j]
             if c == '>':
@@ -96,24 +97,22 @@ class ParserBase:
             if j < 0:
                 return j
 
-        return -1
-
     def parse_marked_section(self, i, report = 1):
         rawdata = self.rawdata
-        if not rawdata[i:i + 3] == '<![':
-            raise AssertionError('unexpected call to parse_marked_section()')
-            sectName, j = self._scan_name(i + 3, i)
-            if j < 0:
-                return j
-            if sectName in ('temp', 'cdata', 'ignore', 'include', 'rcdata'):
-                match = _markedsectionclose.search(rawdata, i + 3)
-            elif sectName in ('if', 'else', 'endif'):
-                match = _msmarkedsectionclose.search(rawdata, i + 3)
-            else:
-                self.error('unknown status keyword %r in marked section' % rawdata[i + 3:j])
-            if not match:
-                return -1
-            j = report and match.start(0)
+        assert rawdata[i:i + 3] == '<![', 'unexpected call to parse_marked_section()'
+        sectName, j = self._scan_name(i + 3, i)
+        if j < 0:
+            return j
+        if sectName in ('temp', 'cdata', 'ignore', 'include', 'rcdata'):
+            match = _markedsectionclose.search(rawdata, i + 3)
+        elif sectName in ('if', 'else', 'endif'):
+            match = _msmarkedsectionclose.search(rawdata, i + 3)
+        else:
+            self.error('unknown status keyword %r in marked section' % rawdata[i + 3:j])
+        if not match:
+            return -1
+        if report:
+            j = match.start(0)
             self.unknown_decl(rawdata[i + 3:j])
         return match.end(0)
 
@@ -187,8 +186,6 @@ class ParserBase:
                 self.updatepos(declstartpos, j)
                 self.error('unexpected char %r in internal subset' % c)
 
-        return -1
-
     def _parse_doctype_element(self, i, declstartpos):
         name, j = self._scan_name(i, declstartpos)
         if j == -1:
@@ -196,7 +193,6 @@ class ParserBase:
         rawdata = self.rawdata
         if '>' in rawdata[j:]:
             return rawdata.find('>', j) + 1
-        return -1
 
     def _parse_doctype_attlist(self, i, declstartpos):
         rawdata = self.rawdata

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/ui/achievements.py
 import resource_helper
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -142,7 +143,7 @@ def init(achievesMappingXmlPath):
     global BATTLE_ACHIEVES_WITH_RIBBON
     global BATTLE_ACHIEVES_RIGHT
     global FORT_BATTLE_ACHIEVES_RIGHT
-    raise achievesMappingXmlPath or AssertionError('Invalid achievements mapping file')
+    assert achievesMappingXmlPath, 'Invalid achievements mapping file'
     ctx, section = resource_helper.getRoot(achievesMappingXmlPath)
     for ctx, subSection in resource_helper.getIterator(ctx, section['achievements']):
         try:

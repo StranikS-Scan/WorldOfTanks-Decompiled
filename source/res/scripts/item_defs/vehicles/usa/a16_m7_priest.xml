@@ -1,0 +1,811 @@
+<a16_m7_priest.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	38.6	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	6.86	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	12.7	</armor_1>
+      <armor_2>	101.6	</armor_2>
+      <armor_3>	12.7	</armor_3>
+      <armor_4>	12.7	</armor_4>
+      <armor_5>	38.1	</armor_5>
+      <armor_6>	12.7	</armor_6>
+      <armor_7>	19.05	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_16>	17.7	</armor_16>
+    </armor>
+    <primaryArmor>	armor_2 armor_5 armor_4	</primaryArmor>
+    <weight>	10646	</weight>
+    <maxHealth>	112	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	35	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A16_M7_Priest/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A16_M7_Priest/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A16_M7_Priest/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 36.00 0.38 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.30 36.00 0.38 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.83	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.2521 0.647966 0.77389	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A16_M7_Priest/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.0145704 0.367045 2.54233	</rayStart>
+        <rayEnd>	-0.0145704 0.0598864 2.2861	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	1.68382 1.13919 0.673895	</rayStart>
+        <rayEnd>	1.48459 1.13919 0.656463	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.25	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	1.44567 0.521603 -1.49774	</rayStart>
+        <rayEnd>	1.32567 0.521603 -1.49774	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.72	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	0.546655 0.530323 1.94769	</rayStart>
+        <rayEnd>	0.546655 0.3734 1.91645	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.64	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	-1.42567 0.900039 0.858065	</rayStart>
+        <rayEnd>	-1.34567 0.900039 0.858065	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <VVSST49>
+      <userString>	#usa_vehicles:VVSST49	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	590	</price>
+      <unlocks>
+        <chassis>	VVSST51	  <cost>	330	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	23100	</maxLoad>
+      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
+      <brakeForce>	21000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.48	</vehicleMovement>
+        <vehicleRotation>	0.48	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A16_M7_Priest/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A16_M7_Priest/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A16_M7_Priest/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.38 0.44	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.63	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.282747	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.282747	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.356389	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.133758	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.309749	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.356389	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.133758	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.309749	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.993734 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles//american/A16_M7_Priest/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.08701 1.87203	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.671870 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.433340 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.402780	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A16_M7_Priest/track/t51_track2.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A16_M7_Priest/track/t51_track2.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A16_M7_Priest/track/t51_track1.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A16_M7_Priest/track/t51_track1.model	</segment2ModelRight>
+        <left>	vehicles/american/A16_M7_Priest/track/left.track	</left>
+        <right>	vehicles/american/A16_M7_Priest/track/right.track	</right>
+        <segmentLength>	0.123	</segmentLength>
+        <segmentOffset>	0.115	</segmentOffset>
+        <segment2Offset>	0.07	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-5	</gravity>
+        <elasticity>	1218	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1.6	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.151	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.082	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.082	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.151	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.151	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.082	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.082	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.151	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+        </node>
+      </trackNodes>
+      <trackThickness>	-0.0229	</trackThickness>
+    </VVSST49>
+    <VVSST51>
+      <userString>	#usa_vehicles:VVSST51	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1650	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	25500	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	23000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.44	</vehicleMovement>
+        <vehicleRotation>	0.44	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A16_M7_Priest/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A16_M7_Priest/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A16_M7_Priest/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.38 0.44	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.63	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.282747	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.282747	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.356389	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.133758	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.309749	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.356389	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.133758	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.309749	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.993734 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles//american/A16_M7_Priest/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.08701 1.87203	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.682580 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.433340 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.402780	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A16_M7_Priest/track/t51_track2.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A16_M7_Priest/track/t51_track2.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A16_M7_Priest/track/t51_track1.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A16_M7_Priest/track/t51_track1.model	</segment2ModelRight>
+        <left>	vehicles/american/A16_M7_Priest/track/left.track	</left>
+        <right>	vehicles/american/A16_M7_Priest/track/right.track	</right>
+        <segmentLength>	0.123	</segmentLength>
+        <segmentOffset>	0.115	</segmentOffset>
+        <segment2Offset>	0.07	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-5	</gravity>
+        <elasticity>	1218	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1.6	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.151	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.082	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.082	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.151	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.151	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.082	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.082	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.151	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+        </node>
+      </trackNodes>
+      <trackThickness>	-0.0229	</trackThickness>
+    </VVSST51>
+  </chassis>
+  <turrets0>
+    <M7D1>
+      <ceilless>	true	</ceilless>
+      <userString>	#usa_vehicles:M7D1	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	3	</level>
+      <price>	200	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	12.7	</armor_1>
+        <armor_2>	12.7	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	28	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	290	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	45	</maxHealth>
+        <maxRegenHealth>	22.5	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_Howitzer_M3>	shared	  <pitchLimits>
+            <minPitch>	0 -45 1 -45	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	69	</maxAmmo>
+          <reloadTime>	20	</reloadTime>
+          <unlocks>
+            <gun>	_105mm_Howitzer_M2A1	  <cost>	2550	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <aimingTime>	5.5	</aimingTime>
+          <shotDispersionRadius>	0.84	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.56	</turretRotation>
+            <afterShot>	6	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-12 26	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A16_M7_Priest/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A16_M7_Priest/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A16_M7_Priest/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A16_M7_Priest/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_Howitzer_M3>
+        <_105mm_Howitzer_M2A1>	shared	  <pitchLimits>
+            <minPitch>	0 -45 1 -45	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	69	</maxAmmo>
+          <reloadTime>	20	</reloadTime>
+          <unlocks>
+            <vehicle>	M37	  <cost>	3150	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.82	</shotDispersionRadius>
+          <aimingTime>	5.5	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.52	</turretRotation>
+            <afterShot>	6	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-12 26	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A16_M7_Priest/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A16_M7_Priest/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A16_M7_Priest/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A16_M7_Priest/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_Howitzer_M2A1>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A16_M7_Priest/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A16_M7_Priest/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A16_M7_Priest/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A16_M7_Priest/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.2521 0.197 -0.30291	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.858 0.088 0.500 0.100 0.577 0.500 0.294 0.500 0.600 0.470 0.000	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
+      </camouflage>
+    </M7D1>
+  </turrets0>
+  <engines>
+    <Wright_Continental_R-975C1>	shared	  <unlocks>
+        <engine>	Wright_Continental_R-975C4	  <cost>	1500	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975C1>
+    <Wright_Continental_R-975C4>	shared	  <unlocks>
+        <engine>	Ford_GAA_R	  <cost>	5100	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975C4>
+    <Ford_GAA_R>	shared	</Ford_GAA_R>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_506	  <cost>	5600	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_506>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </SCR_506>
+    <SCR_528>	shared	</SCR_528>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a16_m7_priest.xml>

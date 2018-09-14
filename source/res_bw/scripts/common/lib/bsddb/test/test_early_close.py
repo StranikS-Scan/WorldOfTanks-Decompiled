@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_early_close.py
 """TestCases for checking that it does not segfault when a DBEnv object
 is closed before its DB objects.

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/graphics.py
 import BigWorld
 import math
@@ -228,7 +229,7 @@ class MonitorSettings(object):
 
     def setGlyphCache(self, scale = 1):
         textureSize = 1024 * math.ceil(scale)
-        raise hasattr(GUI, 'wg_setGlyphCacheParams') or AssertionError('GUI.wg_setGlyphCacheParams() is not defined')
+        assert hasattr(GUI, 'wg_setGlyphCacheParams'), 'GUI.wg_setGlyphCacheParams() is not defined'
         GUI.wg_setGlyphCacheParams(1, textureSize, textureSize)
 
     @property

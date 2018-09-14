@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/cooldown.py
 from chat_shared import isOperationInCooldown, CHAT_COMMANDS, getOperationCooldownPeriod
 import chat_shared

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/__init__.py
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents

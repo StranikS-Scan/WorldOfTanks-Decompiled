@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/generator.py
 """Classes to generate plain text from a message object tree."""
 __all__ = ['Generator', 'DecodedGenerator']

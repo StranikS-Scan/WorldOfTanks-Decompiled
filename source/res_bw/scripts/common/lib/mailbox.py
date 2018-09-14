@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mailbox.py
 """Read/write support for Maildir, mbox, MH, Babyl, and MMDF mailboxes."""
 import sys
@@ -627,54 +628,54 @@ class _singlefileMailbox(Mailbox):
                 self._pending_sync = False
             return
         else:
-            if not self._toc is not None:
-                raise AssertionError
-                self._file.seek(0, 2)
-                cur_len = self._file.tell()
-                if cur_len != self._file_length:
-                    raise ExternalClashError('Size of mailbox file changed (expected %i, found %i)' % (self._file_length, cur_len))
-                new_file = _create_temporary(self._path)
-                try:
-                    new_toc = {}
-                    self._pre_mailbox_hook(new_file)
-                    for key in sorted(self._toc.keys()):
-                        start, stop = self._toc[key]
-                        self._file.seek(start)
-                        self._pre_message_hook(new_file)
-                        new_start = new_file.tell()
-                        while True:
-                            buffer = self._file.read(min(4096, stop - self._file.tell()))
-                            if buffer == '':
-                                break
-                            new_file.write(buffer)
+            assert self._toc is not None
+            self._file.seek(0, 2)
+            cur_len = self._file.tell()
+            if cur_len != self._file_length:
+                raise ExternalClashError('Size of mailbox file changed (expected %i, found %i)' % (self._file_length, cur_len))
+            new_file = _create_temporary(self._path)
+            try:
+                new_toc = {}
+                self._pre_mailbox_hook(new_file)
+                for key in sorted(self._toc.keys()):
+                    start, stop = self._toc[key]
+                    self._file.seek(start)
+                    self._pre_message_hook(new_file)
+                    new_start = new_file.tell()
+                    while True:
+                        buffer = self._file.read(min(4096, stop - self._file.tell()))
+                        if buffer == '':
+                            break
+                        new_file.write(buffer)
 
-                        new_toc[key] = (new_start, new_file.tell())
-                        self._post_message_hook(new_file)
+                    new_toc[key] = (new_start, new_file.tell())
+                    self._post_message_hook(new_file)
 
-                    self._file_length = new_file.tell()
-                except:
-                    new_file.close()
-                    os.remove(new_file.name)
+                self._file_length = new_file.tell()
+            except:
+                new_file.close()
+                os.remove(new_file.name)
+                raise
+
+            _sync_close(new_file)
+            self._file.close()
+            mode = os.stat(self._path).st_mode
+            os.chmod(new_file.name, mode)
+            try:
+                os.rename(new_file.name, self._path)
+            except OSError as e:
+                if e.errno == errno.EEXIST or os.name == 'os2' and e.errno == errno.EACCES:
+                    os.remove(self._path)
+                    os.rename(new_file.name, self._path)
+                else:
                     raise
 
-                _sync_close(new_file)
-                self._file.close()
-                mode = os.stat(self._path).st_mode
-                os.chmod(new_file.name, mode)
-                try:
-                    os.rename(new_file.name, self._path)
-                except OSError as e:
-                    if e.errno == errno.EEXIST or os.name == 'os2' and e.errno == errno.EACCES:
-                        os.remove(self._path)
-                        os.rename(new_file.name, self._path)
-                    else:
-                        raise
-
-                self._file = open(self._path, 'rb+')
-                self._toc = new_toc
-                self._pending = False
-                self._pending_sync = False
-                self._locked and _lock_file(self._file, dotlock=False)
+            self._file = open(self._path, 'rb+')
+            self._toc = new_toc
+            self._pending = False
+            self._pending_sync = False
+            if self._locked:
+                _lock_file(self._file, dotlock=False)
             return
 
     def _pre_mailbox_hook(self, f):

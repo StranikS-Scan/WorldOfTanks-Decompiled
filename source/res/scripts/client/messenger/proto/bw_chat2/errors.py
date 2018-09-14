@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/errors.py
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
@@ -146,9 +147,9 @@ def createCoolDownError(actionID):
 
 def createBroadcastError(args, broadcastID):
     errorID = args['int32Arg1']
-    if not _ACTIONS.isRateLimitedBroadcastFromClient(broadcastID):
-        raise AssertionError
-        error = errorID == _ERRORS.IN_CHAT_BAN and ChatBanError(makeLocalServerTime(args['floatArg1']), args['strArg1'])
+    assert _ACTIONS.isRateLimitedBroadcastFromClient(broadcastID)
+    if errorID == _ERRORS.IN_CHAT_BAN:
+        error = ChatBanError(makeLocalServerTime(args['floatArg1']), args['strArg1'])
     elif errorID == _ERRORS.IN_COOLDOWN:
         error = _ActionCoolDownError(broadcastID, _LIMITS.BROADCASTS_FROM_CLIENT_COOLDOWN_SEC)
     else:

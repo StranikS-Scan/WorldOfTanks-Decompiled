@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_cm_handlers.py
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler

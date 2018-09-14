@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_ccompiler.py
 """Tests for distutils.ccompiler."""
 import os
@@ -17,7 +18,7 @@ class FakeCompiler(object):
         return ['-cool', '-R' + dir]
 
     def find_library_file(self, dirs, lib, debug = 0):
-        return 'found'
+        pass
 
     def library_option(self, lib):
         return '-l' + lib

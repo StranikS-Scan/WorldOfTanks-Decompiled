@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/doctest.py
 """Module doctest -- a framework for running examples in docstrings.
 
@@ -198,24 +199,24 @@ def _ellipsis_match(want, got):
     if ELLIPSIS_MARKER not in want:
         return want == got
     ws = want.split(ELLIPSIS_MARKER)
-    if not len(ws) >= 2:
-        raise AssertionError
-        startpos, endpos = 0, len(got)
-        w = ws[0]
-        if w:
-            if got.startswith(w):
-                startpos = len(w)
-                del ws[0]
-            else:
-                return False
-        w = ws[-1]
-        if w:
-            if got.endswith(w):
-                endpos -= len(w)
-                del ws[-1]
-            else:
-                return False
-        return startpos > endpos and False
+    assert len(ws) >= 2
+    startpos, endpos = 0, len(got)
+    w = ws[0]
+    if w:
+        if got.startswith(w):
+            startpos = len(w)
+            del ws[0]
+        else:
+            return False
+    w = ws[-1]
+    if w:
+        if got.endswith(w):
+            endpos -= len(w)
+            del ws[-1]
+        else:
+            return False
+    if startpos > endpos:
+        return False
     for w in ws:
         startpos = got.find(w, startpos, endpos)
         if startpos < 0:
@@ -397,7 +398,7 @@ class DocTest():
         Create a new DocTest containing the given examples.  The
         DocTest's globals are initialized with a copy of `globs`.
         """
-        raise not isinstance(examples, basestring) or AssertionError('DocTest no longer accepts str; use DocTestParser instead')
+        assert not isinstance(examples, basestring), 'DocTest no longer accepts str; use DocTestParser instead'
         self.examples = examples
         self.docstring = docstring
         self.globs = globs.copy()
@@ -1024,7 +1025,7 @@ class DocTestRunner():
                     self.report_unexpected_exception(out, test, example, exc_info)
                 failures += 1
             else:
-                raise False or AssertionError(('unknown outcome', outcome))
+                assert False, ('unknown outcome', outcome)
 
         self.optionflags = original_optionflags
         self.__record_outcome(test, failures, tries)
@@ -1119,11 +1120,11 @@ class DocTestRunner():
         totalt = totalf = 0
         for x in self._name2ft.items():
             name, (f, t) = x
-            if not f <= t:
-                raise AssertionError
-                totalt += t
-                totalf += f
-                t == 0 and notests.append(name)
+            assert f <= t
+            totalt += t
+            totalf += f
+            if t == 0:
+                notests.append(name)
             elif f == 0:
                 passed.append((name, t))
             else:
@@ -1242,7 +1243,7 @@ class OutputChecker():
                 diff = list(engine.compare(want_lines, got_lines))
                 kind = 'ndiff with -expected +actual'
             else:
-                raise 0 or AssertionError('Bad diff option')
+                assert 0, 'Bad diff option'
             diff = [ line.rstrip() + '\n' for line in diff ]
             return 'Differences (%s):\n' % kind + _indent(''.join(diff))
         elif want and got:
@@ -2246,8 +2247,6 @@ def _test():
             failures, _ = testfile(filename, module_relative=False)
         if failures:
             return 1
-
-    return 0
 
 
 if __name__ == '__main__':

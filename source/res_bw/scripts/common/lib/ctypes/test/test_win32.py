@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_win32.py
 from ctypes import *
 from ctypes.test import is_resource_enabled

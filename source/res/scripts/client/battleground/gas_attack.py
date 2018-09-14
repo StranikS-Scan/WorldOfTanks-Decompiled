@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/gas_attack.py
 from collections import namedtuple
 import math
@@ -23,7 +24,7 @@ class GasAttackMapSettings(namedtuple('GasAttackMapSettings', ('cloudModel', 'cl
 
     @staticmethod
     def fromSection(dataSection):
-        raise isinstance(dataSection, ResMgr.DataSection) or AssertionError
+        assert isinstance(dataSection, ResMgr.DataSection)
         it = iter(GasAttackMapSettings._fields)
         return GasAttackMapSettings(dataSection.readString(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readFloat(next(it)), dataSection.readVector2(next(it)), dataSection.readFloat(next(it)), tuple(dataSection.readString(next(it)).split()), dataSection[next(it)], dataSection[next(it)], dataSection[next(it)])
 
@@ -69,7 +70,7 @@ class GasCloud(object):
             mapSettings = _getDefaultMapSettings()
         if gasAttackSettings is None or startTime is None:
             startTime, gasAttackSettings = _getDefaultScenario()
-        raise isinstance(mapSettings, GasAttackMapSettings) or AssertionError
+        assert isinstance(mapSettings, GasAttackMapSettings)
         gasCloudSettings = (gasAttackSettings.position,
          startTime,
          mapSettings.cameraProximityDist,
@@ -279,9 +280,9 @@ def gasAttackManager():
 
 def initAttackManager(arena):
     global _g_instance
-    visual = caps.get(arena.bonusType) & caps.GAS_ATTACK_MECHANICS > 0 and arena.arenaType.gameplayName in ('fallout', 'fallout2', 'fallout3') and getattr(arena.arenaType, 'gasAttackVisual', None)
-    if not visual is not None:
-        raise AssertionError('Gas attack visual should be defined for arena bonus type: %d' % arena.bonusType)
+    if caps.get(arena.bonusType) & caps.GAS_ATTACK_MECHANICS > 0 and arena.arenaType.gameplayName in ('fallout', 'fallout2', 'fallout3'):
+        visual = getattr(arena.arenaType, 'gasAttackVisual', None)
+        assert visual is not None, 'Gas attack visual should be defined for arena bonus type: %d' % arena.bonusType
         _g_instance = GasAttackManager(visual)
     return
 

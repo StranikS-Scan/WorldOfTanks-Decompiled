@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/calendar.py
 """Calendar printing functions
 
@@ -77,7 +78,7 @@ class _localized_month:
             return funcs(self.format)
 
     def __len__(self):
-        return 13
+        pass
 
 
 class _localized_day:
@@ -94,7 +95,7 @@ class _localized_day:
             return funcs(self.format)
 
     def __len__(self):
-        return 7
+        pass
 
 
 day_name = _localized_day('%A')

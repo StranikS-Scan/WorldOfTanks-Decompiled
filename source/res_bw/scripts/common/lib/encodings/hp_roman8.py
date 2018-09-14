@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/hp_roman8.py
 """ Python Character Mapping Codec generated from 'hp_roman8.txt' with gencodec.py.
 

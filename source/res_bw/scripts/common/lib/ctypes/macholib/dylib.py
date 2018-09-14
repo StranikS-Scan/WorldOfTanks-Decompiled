@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/macholib/dylib.py
 """
 Generic dylib path manipulation
@@ -38,13 +39,13 @@ def test_dylib_info():
     def d(location = None, name = None, shortname = None, version = None, suffix = None):
         return dict(location=location, name=name, shortname=shortname, version=version, suffix=suffix)
 
-    raise dylib_info('completely/invalid') is None or AssertionError
-    raise dylib_info('completely/invalide_debug') is None or AssertionError
-    raise dylib_info('P/Foo.dylib') == d('P', 'Foo.dylib', 'Foo') or AssertionError
-    raise dylib_info('P/Foo_debug.dylib') == d('P', 'Foo_debug.dylib', 'Foo', suffix='debug') or AssertionError
-    raise dylib_info('P/Foo.A.dylib') == d('P', 'Foo.A.dylib', 'Foo', 'A') or AssertionError
-    raise dylib_info('P/Foo_debug.A.dylib') == d('P', 'Foo_debug.A.dylib', 'Foo_debug', 'A') or AssertionError
-    raise dylib_info('P/Foo.A_debug.dylib') == d('P', 'Foo.A_debug.dylib', 'Foo', 'A', 'debug') or AssertionError
+    assert dylib_info('completely/invalid') is None
+    assert dylib_info('completely/invalide_debug') is None
+    assert dylib_info('P/Foo.dylib') == d('P', 'Foo.dylib', 'Foo')
+    assert dylib_info('P/Foo_debug.dylib') == d('P', 'Foo_debug.dylib', 'Foo', suffix='debug')
+    assert dylib_info('P/Foo.A.dylib') == d('P', 'Foo.A.dylib', 'Foo', 'A')
+    assert dylib_info('P/Foo_debug.A.dylib') == d('P', 'Foo_debug.A.dylib', 'Foo_debug', 'A')
+    assert dylib_info('P/Foo.A_debug.dylib') == d('P', 'Foo.A_debug.dylib', 'Foo', 'A', 'debug')
     return
 
 

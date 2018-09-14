@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/argparse.py
 """Command-line parsing library
 
@@ -164,7 +165,7 @@ class HelpFormatter(object):
 
     def _dedent(self):
         self._current_indent -= self._indent_increment
-        raise self._current_indent >= 0 or AssertionError('Indent decreased below 0.')
+        assert self._current_indent >= 0, 'Indent decreased below 0.'
         self._level -= 1
 
     class _Section(object):
@@ -257,8 +258,8 @@ class HelpFormatter(object):
             usage = usage % dict(prog=self._prog)
         elif usage is None and not actions:
             usage = '%(prog)s' % dict(prog=self._prog)
-        else:
-            prog = usage is None and '%(prog)s' % dict(prog=self._prog)
+        elif usage is None:
+            prog = '%(prog)s' % dict(prog=self._prog)
             optionals = []
             positionals = []
             for action in actions:
@@ -271,56 +272,55 @@ class HelpFormatter(object):
             action_usage = format(optionals + positionals, groups)
             usage = ' '.join([ s for s in [prog, action_usage] if s ])
             text_width = self._width - self._current_indent
-            part_regexp = len(prefix) + len(usage) > text_width and '\\(.*?\\)+|\\[.*?\\]+|\\S+'
-            opt_usage = format(optionals, groups)
-            pos_usage = format(positionals, groups)
-            opt_parts = _re.findall(part_regexp, opt_usage)
-            pos_parts = _re.findall(part_regexp, pos_usage)
-            if not ' '.join(opt_parts) == opt_usage:
-                raise AssertionError
-                if not ' '.join(pos_parts) == pos_usage:
-                    raise AssertionError
+            if len(prefix) + len(usage) > text_width:
+                part_regexp = '\\(.*?\\)+|\\[.*?\\]+|\\S+'
+                opt_usage = format(optionals, groups)
+                pos_usage = format(positionals, groups)
+                opt_parts = _re.findall(part_regexp, opt_usage)
+                pos_parts = _re.findall(part_regexp, pos_usage)
+                assert ' '.join(opt_parts) == opt_usage
+                assert ' '.join(pos_parts) == pos_usage
 
-                    def get_lines(parts, indent, prefix = None):
-                        lines = []
-                        line = []
-                        if prefix is not None:
-                            line_len = len(prefix) - 1
-                        else:
-                            line_len = len(indent) - 1
-                        for part in parts:
-                            if line_len + 1 + len(part) > text_width and line:
-                                lines.append(indent + ' '.join(line))
-                                line = []
-                                line_len = len(indent) - 1
-                            line.append(part)
-                            line_len += len(part) + 1
-
-                        if line:
-                            lines.append(indent + ' '.join(line))
-                        if prefix is not None:
-                            lines[0] = lines[0][len(indent):]
-                        return lines
-
-                    if len(prefix) + len(prog) <= 0.75 * text_width:
-                        indent = ' ' * (len(prefix) + len(prog) + 1)
-                        if opt_parts:
-                            lines = get_lines([prog] + opt_parts, indent, prefix)
-                            lines.extend(get_lines(pos_parts, indent))
-                        elif pos_parts:
-                            lines = get_lines([prog] + pos_parts, indent, prefix)
-                        else:
-                            lines = [prog]
+                def get_lines(parts, indent, prefix = None):
+                    lines = []
+                    line = []
+                    if prefix is not None:
+                        line_len = len(prefix) - 1
                     else:
-                        indent = ' ' * len(prefix)
-                        parts = opt_parts + pos_parts
-                        lines = get_lines(parts, indent)
-                        if len(lines) > 1:
-                            lines = []
-                            lines.extend(get_lines(opt_parts, indent))
-                            lines.extend(get_lines(pos_parts, indent))
-                        lines = [prog] + lines
-                    usage = '\n'.join(lines)
+                        line_len = len(indent) - 1
+                    for part in parts:
+                        if line_len + 1 + len(part) > text_width and line:
+                            lines.append(indent + ' '.join(line))
+                            line = []
+                            line_len = len(indent) - 1
+                        line.append(part)
+                        line_len += len(part) + 1
+
+                    if line:
+                        lines.append(indent + ' '.join(line))
+                    if prefix is not None:
+                        lines[0] = lines[0][len(indent):]
+                    return lines
+
+                if len(prefix) + len(prog) <= 0.75 * text_width:
+                    indent = ' ' * (len(prefix) + len(prog) + 1)
+                    if opt_parts:
+                        lines = get_lines([prog] + opt_parts, indent, prefix)
+                        lines.extend(get_lines(pos_parts, indent))
+                    elif pos_parts:
+                        lines = get_lines([prog] + pos_parts, indent, prefix)
+                    else:
+                        lines = [prog]
+                else:
+                    indent = ' ' * len(prefix)
+                    parts = opt_parts + pos_parts
+                    lines = get_lines(parts, indent)
+                    if len(lines) > 1:
+                        lines = []
+                        lines.extend(get_lines(opt_parts, indent))
+                        lines.extend(get_lines(pos_parts, indent))
+                    lines = [prog] + lines
+                usage = '\n'.join(lines)
         return '%s%s\n\n' % (prefix, usage)
 
     def _format_actions_usage(self, actions, groups):
@@ -434,7 +434,7 @@ class HelpFormatter(object):
 
     def _format_action_invocation(self, action):
         if not action.option_strings:
-            metavar, = self._metavar_formatter(action, action.dest)(1)
+            metavar = self._metavar_formatter(action, action.dest)(1)
             return metavar
         else:
             parts = []
@@ -1366,7 +1366,7 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
                     action_tuples.append((action, args, option_string))
                     break
 
-            raise action_tuples or AssertionError
+            assert action_tuples
             for action, args, option_string in action_tuples:
                 take_action(action, args, option_string)
 
@@ -1504,7 +1504,7 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
             tup = (arg_string, options)
             self.error(_('ambiguous option: %s could match %s') % tup)
         elif len(option_tuples) == 1:
-            option_tuple, = option_tuples
+            option_tuple = option_tuples
             return option_tuple
         if self._negative_number_matcher.match(arg_string):
             if not self._has_negative_number_optionals:
@@ -1591,7 +1591,7 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
                 value = arg_strings
             self._check_value(action, value)
         elif len(arg_strings) == 1 and action.nargs in [None, OPTIONAL]:
-            arg_string, = arg_strings
+            arg_string = arg_strings
             value = self._get_value(action, arg_string)
             self._check_value(action, value)
         elif action.nargs == REMAINDER:

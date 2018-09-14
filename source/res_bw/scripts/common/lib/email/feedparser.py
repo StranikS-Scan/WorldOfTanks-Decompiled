@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/feedparser.py
 """FeedParser - An email feed parser.
 
@@ -68,7 +69,7 @@ class BufferedSubFile(object):
         return line
 
     def unreadline(self, line):
-        raise line is not NeedMoreData or AssertionError
+        assert line is not NeedMoreData
         self._lines.append(line)
 
     def push(self, data):
@@ -133,9 +134,9 @@ class FeedParser:
         self._input.close()
         self._call_parse()
         root = self._pop_message()
-        if not not self._msgstack:
-            raise AssertionError
-            root.get_content_maintype() == 'multipart' and not root.is_multipart() and root.defects.append(errors.MultipartInvariantViolationDefect())
+        assert not self._msgstack
+        if root.get_content_maintype() == 'multipart' and not root.is_multipart():
+            root.defects.append(errors.MultipartInvariantViolationDefect())
         return root
 
     def _new_message(self):
@@ -299,7 +300,7 @@ class FeedParser:
                     self._pop_message()
                     self._last = self._cur
                 else:
-                    raise capturing_preamble or AssertionError
+                    assert capturing_preamble
                     preamble.append(line)
 
             if capturing_preamble:

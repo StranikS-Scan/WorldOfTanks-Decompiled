@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/chains/functional.py
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EVENT_STATUS

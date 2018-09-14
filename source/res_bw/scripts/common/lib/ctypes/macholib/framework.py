@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/macholib/framework.py
 """
 Generic framework path manipulation
@@ -38,16 +39,16 @@ def test_framework_info():
     def d(location = None, name = None, shortname = None, version = None, suffix = None):
         return dict(location=location, name=name, shortname=shortname, version=version, suffix=suffix)
 
-    raise framework_info('completely/invalid') is None or AssertionError
-    raise framework_info('completely/invalid/_debug') is None or AssertionError
-    raise framework_info('P/F.framework') is None or AssertionError
-    raise framework_info('P/F.framework/_debug') is None or AssertionError
-    raise framework_info('P/F.framework/F') == d('P', 'F.framework/F', 'F') or AssertionError
-    raise framework_info('P/F.framework/F_debug') == d('P', 'F.framework/F_debug', 'F', suffix='debug') or AssertionError
-    raise framework_info('P/F.framework/Versions') is None or AssertionError
-    raise framework_info('P/F.framework/Versions/A') is None or AssertionError
-    raise framework_info('P/F.framework/Versions/A/F') == d('P', 'F.framework/Versions/A/F', 'F', 'A') or AssertionError
-    raise framework_info('P/F.framework/Versions/A/F_debug') == d('P', 'F.framework/Versions/A/F_debug', 'F', 'A', 'debug') or AssertionError
+    assert framework_info('completely/invalid') is None
+    assert framework_info('completely/invalid/_debug') is None
+    assert framework_info('P/F.framework') is None
+    assert framework_info('P/F.framework/_debug') is None
+    assert framework_info('P/F.framework/F') == d('P', 'F.framework/F', 'F')
+    assert framework_info('P/F.framework/F_debug') == d('P', 'F.framework/F_debug', 'F', suffix='debug')
+    assert framework_info('P/F.framework/Versions') is None
+    assert framework_info('P/F.framework/Versions/A') is None
+    assert framework_info('P/F.framework/Versions/A/F') == d('P', 'F.framework/Versions/A/F', 'F', 'A')
+    assert framework_info('P/F.framework/Versions/A/F_debug') == d('P', 'F.framework/Versions/A/F_debug', 'F', 'A', 'debug')
     return
 
 

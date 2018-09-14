@@ -96,13 +96,13 @@
       </armor>
       <weight>	3200	</weight>
       <maxLoad>	12350	</maxLoad>
-      <terrainResistance>	1.1 1.2 2	</terrainResistance>
+      <terrainResistance>	1 1.1 2	</terrainResistance>
       <brakeForce>	46500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	120	</maxHealth>
@@ -123,7 +123,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	250	</textureScale>
+        <textureScale>	-6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -351,13 +351,13 @@
       </armor>
       <weight>	3200	</weight>
       <maxLoad>	13500	</maxLoad>
-      <terrainResistance>	1 1.1 1.8	</terrainResistance>
+      <terrainResistance>	0.9 1 1.8	</terrainResistance>
       <brakeForce>	46500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.23	</vehicleMovement>
-        <vehicleRotation>	0.23	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	135	</maxHealth>
@@ -378,7 +378,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	250	</textureScale>
+        <textureScale>	-6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -661,7 +661,7 @@
             <rate>	33	</rate>
           </clip>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
+            <turretRotation>	0.19	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -723,7 +723,7 @@
           </clip>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
+            <turretRotation>	0.18	</turretRotation>
             <afterShot>	4.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

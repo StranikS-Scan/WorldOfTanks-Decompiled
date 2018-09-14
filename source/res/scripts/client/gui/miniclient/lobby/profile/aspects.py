@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/profile/aspects.py
 from gui.Scaleform.locale.MINICLIENT import MINICLIENT
 from gui.shared.utils.functions import makeTooltip

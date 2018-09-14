@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/tankman.py
 import BigWorld
 from constants import EQUIP_TMAN_CODE
@@ -17,7 +18,7 @@ class TankmanDismiss(ItemProcessor):
         if tankman.vehicleInvID > 0:
             vehicle = g_itemsCache.items.getVehicle(tankman.vehicleInvID)
         confirmatorType = plugins.DismissTankmanConfirmator('protectedDismissTankman', tankman)
-        raise confirmatorType or AssertionError
+        assert confirmatorType
         super(TankmanDismiss, self).__init__(tankman, [confirmatorType, plugins.VehicleValidator(vehicle, isEnabled=tankman.vehicleInvID > 0)])
         return
 
@@ -64,7 +65,6 @@ class TankmanRecruit(Processor):
             return (upgradeCost['credits'], 0)
         if tmanCostTypeIdx == 2:
             return (0, upgradeCost['gold'])
-        return (0, 0)
 
     def __getSysMsgType(self):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
@@ -109,7 +109,6 @@ class TankmanEquip(Processor):
     def __getSysMsgPrefix(self):
         if not self.isReequip:
             return 'equip_tankman'
-        return 'reequip_tankman'
 
 
 class TankmanRecruitAndEquip(Processor):
@@ -149,7 +148,6 @@ class TankmanRecruitAndEquip(Processor):
             return (upgradeCost['credits'], 0)
         if tmanCostTypeIdx == 2:
             return (0, upgradeCost['gold'])
-        return (0, 0)
 
     def __getSysMsgType(self):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
@@ -162,7 +160,6 @@ class TankmanRecruitAndEquip(Processor):
     def __getSysMsgPrefix(self):
         if not self.isReplace:
             return 'buy_and_equip_tankman'
-        return 'buy_and_reequip_tankman'
 
 
 class TankmanUnload(Processor):
@@ -242,7 +239,6 @@ class TankmanRetraining(ItemProcessor):
             return (upgradeCost['credits'], 0)
         if tmanCostTypeIdx == 2:
             return (0, upgradeCost['gold'])
-        return (0, 0)
 
     def _getSysMsgType(self):
         tmanCost = self._getRecruitPrice(self.tmanCostTypeIdx)

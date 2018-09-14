@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/config.py
 """distutils.command.config
 
@@ -100,7 +101,7 @@ class config(Command):
         src = self._gen_temp_sourcefile(body, headers, lang)
         if self.dump_source:
             dump_file(src, "compiling '%s':" % src)
-        obj, = self.compiler.object_filenames([src])
+        obj = self.compiler.object_filenames([src])
         self.temp_files.extend([src, obj])
         self.compiler.compile([src], include_dirs=include_dirs)
         return (src, obj)

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/chat_handlers.py
 from collections import namedtuple
 import weakref
@@ -206,7 +207,6 @@ class ArenaChatHandler(_EntityChatHandler):
     def _getClientIDForCommand(self):
         if self.__teamChannel:
             return self.__teamChannel.getClientID()
-        return 0
 
     def __doRemoveChannels(self):
         self.__teamChannel = self._removeChannel(self.__teamChannel)
@@ -257,7 +257,6 @@ class UnitChatHandler(_EntityChatHandler):
     def _getClientIDForCommand(self):
         if self.__channel:
             return self.__channel.getClientID()
-        return 0
 
     def _onMessageBroadcast(self, _, args):
         self.addHistory()
@@ -314,7 +313,6 @@ class ClubChatHandler(_EntityChatHandler):
     def _getClientIDForCommand(self):
         if self.__channel:
             return self.__channel.getClientID()
-        return 0
 
     def _onMembersListUpdated(self, _, args):
         if not self.__channel:

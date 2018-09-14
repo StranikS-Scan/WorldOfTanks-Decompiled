@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/rally_dialog_meta.py
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_WARNING

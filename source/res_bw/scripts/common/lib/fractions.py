@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/fractions.py
 """Rational, infinite-precision, real numbers."""
 from __future__ import division

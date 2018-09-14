@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/__init__.py
 """A package for parsing, handling, and generating email messages."""
 __version__ = '4.0.3'

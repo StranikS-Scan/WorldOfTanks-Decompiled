@@ -1,9 +1,11 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/conditions.py
 import weakref
 import operator
 from abc import ABCMeta, abstractmethod
 import BigWorld
 import constants
+from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 import nations
 import account_helpers
 from debug_utils import LOG_WARNING
@@ -253,7 +255,7 @@ class _VehsListParser(object):
         if fTypes is not None:
             criteria = REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(fTypes)
         else:
-            criteria = ~REQ_CRITERIA.SECRET
+            criteria = self._getDefaultCriteria()
             if fNations is not None:
                 criteria |= REQ_CRITERIA.NATIONS(fNations)
             if fLevels is not None:
@@ -261,6 +263,9 @@ class _VehsListParser(object):
             if fClasses is not None:
                 criteria |= REQ_CRITERIA.VEHICLE.CLASSES(fClasses)
         return self._preProcessCriteria(criteria)
+
+    def _getDefaultCriteria(self):
+        return ~REQ_CRITERIA.SECRET
 
     def _getVehiclesList(self, data):
         if self.__vehsCache is None:
@@ -306,7 +311,7 @@ class _VehsListCondition(_Condition, _VehsListParser):
         return []
 
     def _getLabelKey(self):
-        return ''
+        pass
 
     def _formatData(self, svrEvents, current = None, total = None, event = None):
         if self._isAnyVehicleAcceptable(self._data):
@@ -663,7 +668,10 @@ class VehiclesUnlocked(_VehsListRequirement):
         return vehicle.isUnlocked
 
     def _getLabelKey(self):
-        return '#quests:details/requirements/vehiclesUnlocked'
+        pass
+
+    def _getDefaultCriteria(self):
+        return RESEARCH_CRITERIA.VEHICLE_TO_UNLOCK
 
     def _formatVehsTable(self, event = None):
         return formatters.packVehiclesBlock(self._makeUniqueTableID(event), formatters.VEH_UNLOCKS_HEADER, disableChecker=lambda v: not v.isUnlocked, vehs=_prepareVehData(self._getVehiclesList(self._data)))
@@ -678,7 +686,7 @@ class VehiclesOwned(_VehsListRequirement):
         return vehicle.isInInventory
 
     def _getLabelKey(self):
-        return '#quests:details/requirements/vehiclesOwned'
+        pass
 
     def _formatVehsTable(self, event = None):
         return formatters.packVehiclesBlock(self._makeUniqueTableID(event), formatters.VEH_OWNED_HEADER, disableChecker=lambda v: not v.isInInventory, vehs=_prepareVehData(self._getVehiclesList(self._data)), showInHangarCB=True, isShowInHangarCBChecked=False)
@@ -827,7 +835,6 @@ class _DossierValue(_Requirement):
             return 'historical'
         if block in ('achievements',):
             return 'achievements'
-        return 'random'
 
     def __repr__(self):
         return '%s<record=%s; average=%r; %s=%.2f>' % (self.__class__.__name__,
@@ -1118,7 +1125,7 @@ class _Cumulativable(_Condition):
         return self._formatByGroup(svrEvents, groupByKey, event)
 
     def getUserString(self):
-        return ''
+        pass
 
     def _formatByGroup(self, svrEvents, groupByKey, event = None):
         return []
@@ -1195,7 +1202,7 @@ class BattlesCount(_Cumulativable):
         return i18n.makeString('#quests:details/dossier/random/battlesCount')
 
     def _getKey(self):
-        return 'battlesCount'
+        pass
 
     def _getTotalValue(self):
         return _getNodeValue(self._data, 'count', 0)
@@ -1394,7 +1401,7 @@ class VehicleKills(_VehsListCondition):
         super(VehicleKills, self).__init__('vehicleKills', dict(data), path)
 
     def _getLabelKey(self):
-        return '#quests:details/conditions/vehiclesKills'
+        pass
 
     def _formatVehsTable(self, event = None):
         return formatters.packVehiclesBlock(self._makeUniqueTableID(event), formatters.VEH_KILLS_HEADER, vehs=_prepareVehData(self._getVehiclesList(self._data)))
@@ -1413,7 +1420,7 @@ class VehicleKillsCumulative(_Cumulativable, VehicleKills):
         return i18n.makeString(self._getLabelKey())
 
     def _getKey(self):
-        return 'vehicleKills'
+        pass
 
     def _getTotalValue(self):
         return self._relationValue
@@ -1530,4 +1537,4 @@ class HasClub(_Requirement):
             return []
 
     def __repr__(self):
-        return 'HasClub'
+        pass

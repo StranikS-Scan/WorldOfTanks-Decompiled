@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/ingame_help.py
 from account_helpers.AccountSettings import AccountSettings
 import BigWorld, ResMgr

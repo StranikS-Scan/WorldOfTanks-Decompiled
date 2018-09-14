@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/post_processing/post_effect_controllers.py
 import BigWorld, Math
 import Event

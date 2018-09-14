@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/event_items.py
 import operator
 import time
@@ -113,7 +114,7 @@ class ServerEventAbstract(object):
         return self.getFinishTimeLeft() <= 0
 
     def getUserType(self):
-        return ''
+        pass
 
     def isIGR(self):
         return self._data.get('isIGR', False)

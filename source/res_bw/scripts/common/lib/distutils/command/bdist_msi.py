@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist_msi.py
 """
 Implements the bdist_msi command.
@@ -164,55 +165,55 @@ class bdist_msi(Command):
         if self.distribution.has_ext_modules():
             target_version = self.target_version
             if not target_version:
-                if not self.skip_build:
-                    raise AssertionError('Should have already checked this')
-                    target_version = sys.version[0:3]
-                plat_specifier = '.%s-%s' % (self.plat_name, target_version)
-                build = self.get_finalized_command('build')
-                build.build_lib = os.path.join(build.build_base, 'lib' + plat_specifier)
-            log.info('installing to %s', self.bdist_dir)
-            install.ensure_finalized()
-            sys.path.insert(0, os.path.join(self.bdist_dir, 'PURELIB'))
-            install.run()
-            del sys.path[0]
-            self.mkpath(self.dist_dir)
-            fullname = self.distribution.get_fullname()
-            installer_name = self.get_installer_filename(fullname)
-            installer_name = os.path.abspath(installer_name)
-            if os.path.exists(installer_name):
-                os.unlink(installer_name)
-            metadata = self.distribution.metadata
-            author = metadata.author
-            if not author:
-                author = metadata.maintainer
-            if not author:
-                author = 'UNKNOWN'
-            version = metadata.get_version()
-            sversion = '%d.%d.%d' % StrictVersion(version).version
-            fullname = self.distribution.get_fullname()
-            if self.target_version:
-                product_name = 'Python %s %s' % (self.target_version, fullname)
-            else:
-                product_name = 'Python %s' % fullname
-            self.db = msilib.init_database(installer_name, schema, product_name, msilib.gen_uuid(), sversion, author)
-            msilib.add_tables(self.db, sequence)
-            props = [('DistVersion', version)]
-            email = metadata.author_email or metadata.maintainer_email
-            if email:
-                props.append(('ARPCONTACT', email))
-            if metadata.url:
-                props.append(('ARPURLINFOABOUT', metadata.url))
-            if props:
-                add_data(self.db, 'Property', props)
-            self.add_find_python()
-            self.add_files()
-            self.add_scripts()
-            self.add_ui()
-            self.db.Commit()
-            if hasattr(self.distribution, 'dist_files'):
-                tup = ('bdist_msi', self.target_version or 'any', fullname)
-                self.distribution.dist_files.append(tup)
-            self.keep_temp or remove_tree(self.bdist_dir, dry_run=self.dry_run)
+                assert self.skip_build, 'Should have already checked this'
+                target_version = sys.version[0:3]
+            plat_specifier = '.%s-%s' % (self.plat_name, target_version)
+            build = self.get_finalized_command('build')
+            build.build_lib = os.path.join(build.build_base, 'lib' + plat_specifier)
+        log.info('installing to %s', self.bdist_dir)
+        install.ensure_finalized()
+        sys.path.insert(0, os.path.join(self.bdist_dir, 'PURELIB'))
+        install.run()
+        del sys.path[0]
+        self.mkpath(self.dist_dir)
+        fullname = self.distribution.get_fullname()
+        installer_name = self.get_installer_filename(fullname)
+        installer_name = os.path.abspath(installer_name)
+        if os.path.exists(installer_name):
+            os.unlink(installer_name)
+        metadata = self.distribution.metadata
+        author = metadata.author
+        if not author:
+            author = metadata.maintainer
+        if not author:
+            author = 'UNKNOWN'
+        version = metadata.get_version()
+        sversion = '%d.%d.%d' % StrictVersion(version).version
+        fullname = self.distribution.get_fullname()
+        if self.target_version:
+            product_name = 'Python %s %s' % (self.target_version, fullname)
+        else:
+            product_name = 'Python %s' % fullname
+        self.db = msilib.init_database(installer_name, schema, product_name, msilib.gen_uuid(), sversion, author)
+        msilib.add_tables(self.db, sequence)
+        props = [('DistVersion', version)]
+        email = metadata.author_email or metadata.maintainer_email
+        if email:
+            props.append(('ARPCONTACT', email))
+        if metadata.url:
+            props.append(('ARPURLINFOABOUT', metadata.url))
+        if props:
+            add_data(self.db, 'Property', props)
+        self.add_find_python()
+        self.add_files()
+        self.add_scripts()
+        self.add_ui()
+        self.db.Commit()
+        if hasattr(self.distribution, 'dist_files'):
+            tup = ('bdist_msi', self.target_version or 'any', fullname)
+            self.distribution.dist_files.append(tup)
+        if not self.keep_temp:
+            remove_tree(self.bdist_dir, dry_run=self.dry_run)
 
     def add_files(self):
         db = self.db
@@ -320,7 +321,7 @@ class bdist_msi(Command):
             add_data(self.db, 'InstallUISequence', [(machine_action, machine_prop, start), (user_action, user_prop, start + 1), (exe_action, None, start + 2)])
             add_data(self.db, 'Condition', [('Python' + ver, 0, 'NOT TARGETDIR' + ver)])
             start += 4
-            raise start < 500 or AssertionError
+            assert start < 500
 
         return
 

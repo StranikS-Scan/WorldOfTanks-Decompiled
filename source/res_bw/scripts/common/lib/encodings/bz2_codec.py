@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/bz2_codec.py
 """ Python 'bz2_codec' Codec - bz2 compression encoding
 
@@ -20,7 +21,7 @@ def bz2_encode(input, errors = 'strict'):
         error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     output = bz2.compress(input)
     return (output, len(input))
 
@@ -38,7 +39,7 @@ def bz2_decode(input, errors = 'strict'):
         error handling for this codec.
     
     """
-    raise errors == 'strict' or AssertionError
+    assert errors == 'strict'
     output = bz2.decompress(input)
     return (output, len(input))
 
@@ -55,7 +56,7 @@ class Codec(codecs.Codec):
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
     def __init__(self, errors = 'strict'):
-        raise errors == 'strict' or AssertionError
+        assert errors == 'strict'
         self.errors = errors
         self.compressobj = bz2.BZ2Compressor()
 
@@ -73,7 +74,7 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
     def __init__(self, errors = 'strict'):
-        raise errors == 'strict' or AssertionError
+        assert errors == 'strict'
         self.errors = errors
         self.decompressobj = bz2.BZ2Decompressor()
 

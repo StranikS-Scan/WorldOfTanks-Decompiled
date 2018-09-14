@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/entities.py
 from constants import PREBATTLE_TYPE_NAMES
 from messenger.ext import channel_num_gen
@@ -68,7 +69,7 @@ class BWClubChannelEntity(_BWChannelEntity):
         return channel_num_gen.getClientID4SpecialWindow(channel_num_gen.SPECIAL_CLIENT_WINDOWS.CLUB_CHAT)
 
     def getName(self):
-        return '#chat:channels/club'
+        pass
 
     def getFullName(self):
         return self.getName()

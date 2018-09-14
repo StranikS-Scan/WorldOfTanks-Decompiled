@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/cache.py
 from helpers.local_cache import FileLocalCache
 from tutorial.settings import TUTORIAL_VERSION, PLAYER_XP_LEVEL
@@ -127,5 +128,5 @@ class TutorialCache(FileLocalCache):
             self.__cache = cache
 
     def __current(self):
-        raise self.__space is not None or AssertionError('Space must be set')
+        assert self.__space is not None, 'Space must be set'
         return self.__cache[self.__space]

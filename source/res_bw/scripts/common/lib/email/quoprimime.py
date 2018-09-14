@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/quoprimime.py
 """Quoted-printable content transfer encoding per RFCs 2045-2047.
 

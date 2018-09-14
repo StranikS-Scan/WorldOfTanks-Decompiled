@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mailcap.py
 """Mailcap file handling.  See RFC 1524."""
 import os
@@ -210,8 +211,6 @@ def findparam(name, plist):
     for p in plist:
         if p[:n].lower() == name:
             return p[n:]
-
-    return ''
 
 
 def test():

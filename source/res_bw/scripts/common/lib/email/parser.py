@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/parser.py
 """A parser of RFC 2822 and MIME email messages."""
 __all__ = ['Parser', 'HeaderParser']

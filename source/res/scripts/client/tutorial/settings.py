@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/settings.py
 from collections import namedtuple
 TUTORIAL_VERSION = '0.3.7'
@@ -41,7 +42,7 @@ class _SettingsCollection(dict):
         for name, settings in clazz.__dict__.iteritems():
             if name.startswith('_'):
                 continue
-            raise settings.id not in self or AssertionError('Settings ID must be unique')
+            assert settings.id not in self, 'Settings ID must be unique'
             self[settings.id] = settings
 
     def getSettings(self, settingsID):

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization_2_0/purchase_window.py
 import copy
 from Event import Event
@@ -156,7 +157,6 @@ class PurchaseDataProvider(SortableDAAPIDataProvider):
     def getSelectedIdx(self):
         if self.__selectedID in self.__mapping:
             return self.__mapping[self.__selectedID]
-        return -1
 
     def setSelectedID(self, idx):
         self.__selectedID = idx

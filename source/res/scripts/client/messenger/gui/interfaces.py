@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/interfaces.py
 
 
@@ -134,7 +135,7 @@ class IChannelController(IEntityController):
         return False
 
     def addCommand(self, command):
-        return ''
+        pass
 
     def isEnabled(self):
         return True

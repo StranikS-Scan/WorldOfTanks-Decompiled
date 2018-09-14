@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/getopt.py
 """Parser for command line options.
 
@@ -153,11 +154,11 @@ def long_has_args(opt, longopts):
         return (True, opt)
     if len(possibilities) > 1:
         raise GetoptError('option --%s not a unique prefix' % opt, opt)
-    if not len(possibilities) == 1:
-        raise AssertionError
-        unique_match = possibilities[0]
-        has_arg = unique_match.endswith('=')
-        unique_match = has_arg and unique_match[:-1]
+    assert len(possibilities) == 1
+    unique_match = possibilities[0]
+    has_arg = unique_match.endswith('=')
+    if has_arg:
+        unique_match = unique_match[:-1]
     return (has_arg, unique_match)
 
 

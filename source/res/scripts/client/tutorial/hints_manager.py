@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/hints_manager.py
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from tutorial import settings

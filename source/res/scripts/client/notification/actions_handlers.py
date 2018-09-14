@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/actions_handlers.py
 from collections import defaultdict
 import BigWorld
@@ -36,10 +37,10 @@ class _ActionHandler(object):
 
     @classmethod
     def getActions(self):
-        return ()
+        pass
 
     def handleAction(self, model, entityID, action):
-        raise action in self.getActions() or AssertionError('Handler does not handle action {0}'.format(action))
+        assert action in self.getActions(), 'Handler does not handle action {0}'.format(action)
 
 
 class _ShowArenaResultHandler(_ActionHandler):
@@ -87,7 +88,7 @@ class _ShowClanSettingsHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('showClanSettingsAction',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(_ShowClanSettingsHandler, self).handleAction(model, entityID, action)
@@ -117,7 +118,7 @@ class _ShowClanAppsHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('showClanStaffProfile',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(_ShowClanAppsHandler, self).handleAction(model, entityID, action)
@@ -132,7 +133,7 @@ class _ShowClanInvitesHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('showClanPersonalInvites',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(_ShowClanInvitesHandler, self).handleAction(model, entityID, action)
@@ -156,7 +157,7 @@ class _AcceptClanAppHandler(_ClanAppHandler):
 
     @classmethod
     def getActions(self):
-        return ('acceptClanAppAction',)
+        pass
 
     @process
     def handleAction(self, model, entityID, action):
@@ -172,7 +173,7 @@ class _DeclineClanAppHandler(_ClanAppHandler):
 
     @classmethod
     def getActions(self):
-        return ('declineClanAppAction',)
+        pass
 
     @process
     def handleAction(self, model, entityID, action):
@@ -188,7 +189,7 @@ class _ShowClanAppUserInfoHandler(_ClanAppHandler):
 
     @classmethod
     def getActions(self):
-        return ('showUserProfileAction',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(_ShowClanAppUserInfoHandler, self).handleAction(model, entityID, action)
@@ -218,7 +219,7 @@ class _AcceptClanInviteHandler(_ClanInviteHandler):
 
     @classmethod
     def getActions(self):
-        return ('acceptClanInviteAction',)
+        pass
 
     @process
     def handleAction(self, model, entityID, action):
@@ -237,7 +238,7 @@ class _DeclineClanInviteHandler(_ClanInviteHandler):
 
     @classmethod
     def getActions(self):
-        return ('declineClanInviteAction',)
+        pass
 
     @process
     def handleAction(self, model, entityID, action):
@@ -253,11 +254,12 @@ class _ShowClanProfileHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('showClanProfileAction',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(_ShowClanProfileHandler, self).handleAction(model, entityID, action)
-        shared_events.showClanProfileWindow(model.getNotification(self.getNotType(), entityID).getClanID())
+        clan = model.getNotification(self.getNotType(), entityID)
+        shared_events.showClanProfileWindow(clan.getClanID(), clan.getClanAbbrev())
 
 
 class ShowBattleResultsHandler(_ShowArenaResultHandler):
@@ -268,7 +270,7 @@ class ShowBattleResultsHandler(_ShowArenaResultHandler):
 
     @classmethod
     def getActions(self):
-        return ('showBattleResults',)
+        pass
 
     @decorators.process('loadStats')
     def _showWindow(self, notification, arenaUniqueID):
@@ -284,7 +286,7 @@ class ShowFortBattleResultsHandler(_ShowArenaResultHandler):
 
     @classmethod
     def getActions(self):
-        return ('showFortBattleResults',)
+        pass
 
     def _updateNotification(self, notification):
         super(ShowFortBattleResultsHandler, self)._updateNotification(notification)
@@ -304,7 +306,7 @@ class ShowTutorialBattleHistoryHandler(_ShowArenaResultHandler):
 
     @classmethod
     def getActions(self):
-        return ('showTutorialBattleHistory',)
+        pass
 
     def _triggerEvent(self, _, arenaUniqueID):
         g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.SHOW_TUTORIAL_BATTLE_HISTORY, targetID=arenaUniqueID))
@@ -328,7 +330,7 @@ class OpenPollHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('openPollInBrowser',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(OpenPollHandler, self).handleAction(model, entityID, action)
@@ -363,7 +365,7 @@ class AcceptPrbInviteHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('acceptInvite',)
+        pass
 
     @process
     def handleAction(self, model, entityID, action):
@@ -398,7 +400,7 @@ class DeclinePrbInviteHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('declineInvite',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(DeclinePrbInviteHandler, self).handleAction(model, entityID, action)
@@ -424,7 +426,7 @@ class AcceptPrbFortInviteHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('acceptFortInvite',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(AcceptPrbFortInviteHandler, self).handleAction(model, entityID, action)
@@ -458,7 +460,7 @@ class ApproveFriendshipHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('approveFriendship',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(ApproveFriendshipHandler, self).handleAction(model, entityID, action)
@@ -477,7 +479,7 @@ class CancelFriendshipHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('cancelFriendship',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(CancelFriendshipHandler, self).handleAction(model, entityID, action)
@@ -507,7 +509,7 @@ class SecurityLinkHandler(_ActionHandler):
 
     @classmethod
     def getActions(self):
-        return ('securityLink',)
+        pass
 
     def handleAction(self, model, entityID, action):
         g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SECURITY_SETTINGS))
@@ -521,7 +523,7 @@ class AcceptClubInviteHandler(_ActionHandler, ClubListener):
 
     @classmethod
     def getActions(self):
-        return ('acceptClubInvite',)
+        pass
 
     @process
     def handleAction(self, model, entityID, action):
@@ -542,7 +544,7 @@ class DeclineClubInviteHandler(_ActionHandler, ClubListener):
 
     @classmethod
     def getActions(self):
-        return ('declineClubInvite',)
+        pass
 
     @process
     def handleAction(self, model, entityID, action):
@@ -562,7 +564,7 @@ class ShowClubInviteHandler(_ActionHandler, ClubListener):
 
     @classmethod
     def getActions(self):
-        return ('showClubProfile',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(ShowClubInviteHandler, self).handleAction(model, entityID, action)
@@ -579,7 +581,7 @@ class ShowClubAppsHandler(_ActionHandler, ClubListener):
 
     @classmethod
     def getActions(self):
-        return ('showClubStaffProfile',)
+        pass
 
     def handleAction(self, model, entityID, action):
         super(ShowClubAppsHandler, self).handleAction(model, entityID, action)

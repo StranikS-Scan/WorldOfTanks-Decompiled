@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist_wininst.py
 """distutils.command.bdist_wininst
 
@@ -91,36 +92,36 @@ class bdist_wininst(Command):
         if self.distribution.has_ext_modules():
             target_version = self.target_version
             if not target_version:
-                if not self.skip_build:
-                    raise AssertionError('Should have already checked this')
-                    target_version = sys.version[0:3]
-                plat_specifier = '.%s-%s' % (self.plat_name, target_version)
-                build = self.get_finalized_command('build')
-                build.build_lib = os.path.join(build.build_base, 'lib' + plat_specifier)
-            for key in ('purelib', 'platlib', 'headers', 'scripts', 'data'):
-                value = string.upper(key)
-                if key == 'headers':
-                    value = value + '/Include/$dist_name'
-                setattr(install, 'install_' + key, value)
+                assert self.skip_build, 'Should have already checked this'
+                target_version = sys.version[0:3]
+            plat_specifier = '.%s-%s' % (self.plat_name, target_version)
+            build = self.get_finalized_command('build')
+            build.build_lib = os.path.join(build.build_base, 'lib' + plat_specifier)
+        for key in ('purelib', 'platlib', 'headers', 'scripts', 'data'):
+            value = string.upper(key)
+            if key == 'headers':
+                value = value + '/Include/$dist_name'
+            setattr(install, 'install_' + key, value)
 
-            log.info('installing to %s', self.bdist_dir)
-            install.ensure_finalized()
-            sys.path.insert(0, os.path.join(self.bdist_dir, 'PURELIB'))
-            install.run()
-            del sys.path[0]
-            from tempfile import mktemp
-            archive_basename = mktemp()
-            fullname = self.distribution.get_fullname()
-            arcname = self.make_archive(archive_basename, 'zip', root_dir=self.bdist_dir)
-            self.create_exe(arcname, fullname, self.bitmap)
-            if self.distribution.has_ext_modules():
-                pyversion = get_python_version()
-            else:
-                pyversion = 'any'
-            self.distribution.dist_files.append(('bdist_wininst', pyversion, self.get_installer_filename(fullname)))
-            log.debug("removing temporary file '%s'", arcname)
-            os.remove(arcname)
-            self.keep_temp or remove_tree(self.bdist_dir, dry_run=self.dry_run)
+        log.info('installing to %s', self.bdist_dir)
+        install.ensure_finalized()
+        sys.path.insert(0, os.path.join(self.bdist_dir, 'PURELIB'))
+        install.run()
+        del sys.path[0]
+        from tempfile import mktemp
+        archive_basename = mktemp()
+        fullname = self.distribution.get_fullname()
+        arcname = self.make_archive(archive_basename, 'zip', root_dir=self.bdist_dir)
+        self.create_exe(arcname, fullname, self.bitmap)
+        if self.distribution.has_ext_modules():
+            pyversion = get_python_version()
+        else:
+            pyversion = 'any'
+        self.distribution.dist_files.append(('bdist_wininst', pyversion, self.get_installer_filename(fullname)))
+        log.debug("removing temporary file '%s'", arcname)
+        os.remove(arcname)
+        if not self.keep_temp:
+            remove_tree(self.bdist_dir, dry_run=self.dry_run)
 
     def get_inidata(self):
         lines = []

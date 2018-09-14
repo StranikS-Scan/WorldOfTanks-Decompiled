@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/imputil.py
 """
 Import utilities
@@ -38,7 +39,7 @@ class ImportManager:
         self.namespace['__import__'] = self.previous_importer
 
     def add_suffix(self, suffix, importFunc):
-        raise hasattr(importFunc, '__call__') or AssertionError
+        assert hasattr(importFunc, '__call__')
         self.fs_imp.add_suffix(suffix, importFunc)
 
     clsFilesystemImporter = None
@@ -102,14 +103,14 @@ class ImportManager:
             parent_fqname = globals['__name__']
             if globals['__ispkg__']:
                 parent = sys.modules[parent_fqname]
-                if not globals is parent.__dict__:
-                    raise AssertionError
-                    return parent
-                i = parent_fqname.rfind('.')
-                return i == -1 and None
+                assert globals is parent.__dict__
+                return parent
+            i = parent_fqname.rfind('.')
+            if i == -1:
+                return None
             parent_fqname = parent_fqname[:i]
             parent = sys.modules[parent_fqname]
-            raise parent.__name__ == parent_fqname or AssertionError
+            assert parent.__name__ == parent_fqname
             return parent
 
     def _import_top_module(self, name):
@@ -369,7 +370,7 @@ class _FilesystemImporter(Importer):
         self.suffixes = []
 
     def add_suffix(self, suffix, importFunc):
-        raise hasattr(importFunc, '__call__') or AssertionError
+        assert hasattr(importFunc, '__call__')
         self.suffixes.append((suffix, importFunc))
 
     def import_from_dir(self, dir, fqname):
@@ -380,7 +381,7 @@ class _FilesystemImporter(Importer):
             return None
 
     def get_code(self, parent, modname, fqname):
-        raise parent or AssertionError
+        assert parent
         for submodule_path in parent.__path__:
             code = self._import_pathname(_os_path_join(submodule_path, modname), fqname)
             if code is not None:

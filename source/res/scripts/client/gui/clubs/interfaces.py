@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/interfaces.py
 from gui.clubs.settings import CLIENT_CLUB_RESTRICTIONS, error
 

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/chat_shared.py
 import time
 import constants
@@ -476,7 +477,6 @@ def getChannelsIDFromKey(key):
     if key.startswith(ChatChannelKeyPrefix):
         strID = key.replace(ChatChannelKeyPrefix, '')
         return int(strID)
-    return 0
 
 
 def isChannelSecured(channelInfo):
@@ -1026,7 +1026,7 @@ class IncorrectCharacter(ChatError):
         ChatError.__init__(self, CHAT_RESPONSES.incorrectCharacter)
 
     def _getMessage(self):
-        return 'String contains incorrect character(s)'
+        pass
 
 
 class AddFriendError(ChatError):
@@ -1275,7 +1275,10 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'rentCompensation',
  'potapovQuestBonus',
  'premiumPersonalDiscount',
- 'goodieRemoved'])
+ 'goodieRemoved',
+ 'telecomOrderCreated',
+ 'telecomOrderUpdated',
+ 'telecomOrderDeleted'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2

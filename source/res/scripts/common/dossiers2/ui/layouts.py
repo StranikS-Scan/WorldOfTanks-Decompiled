@@ -1,5 +1,7 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/ui/layouts.py
 from collections import defaultdict
+from dossiers2.custom.vehicle_layout import FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT
 import nations
 from constants import DOSSIER_TYPE
 from dossiers2.ui import achievements
@@ -22,14 +24,16 @@ def _single7x7(achieveName):
     return (_AB.SINGLE_7X7, achieveName)
 
 
+def _fallout(achieveName):
+    return (_AB.FALLOUT, achieveName)
+
+
 _TANK_EXPERT_PREFIX = 'tankExpert'
 _MECH_ENGINEER_PREFIX = 'mechanicEngineer'
 _HIST_BATTLEFIELD_POSTFIX = 'battlefield'
 TANK_EXPERT_GROUP = [_total(_TANK_EXPERT_PREFIX)]
 MECH_ENGINEER_GROUP = [_total(_MECH_ENGINEER_PREFIX)]
 for _nID, name in enumerate(nations.AVAILABLE_NAMES):
-    if name == 'czech':
-        continue
     TANK_EXPERT_GROUP.append(_total('%s%d' % (_TANK_EXPERT_PREFIX, _nID)))
     MECH_ENGINEER_GROUP.append(_total('%s%d' % (_MECH_ENGINEER_PREFIX, _nID)))
 
@@ -116,6 +120,11 @@ NEAREST_ACHIEVEMENTS = TANK_EXPERT_GROUP + MECH_ENGINEER_GROUP + [_total('mouseb
  _total('medalEkins'),
  _total('medalLeClerc'),
  _total('medalLavrinenko'),
+ _total('readyForBattleLT'),
+ _total('readyForBattleMT'),
+ _total('readyForBattleHT'),
+ _total('readyForBattleSPG'),
+ _total('readyForBattleATSPG'),
  _7x7('geniusForWarMedal'),
  _7x7('wolfAmongSheepMedal'),
  _7x7('fightingReconnaissanceMedal'),
@@ -140,7 +149,7 @@ def init():
                             _7x7('infiltratorMedal'),
                             _7x7('sentinelMedal'),
                             _7x7('prematureDetonationMedal'),
-                            _7x7('bruteForceMedal'))})
+                            _7x7('bruteForceMedal')) + tuple(map(_fallout, FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT))})
     for _r in achievements.ACHIEVEMENTS.iterkeys():
         name = str(_r[1])
         if name.startswith(_TANK_EXPERT_PREFIX) and _r not in TANK_EXPERT_GROUP or name.startswith(_MECH_ENGINEER_PREFIX) and _r not in MECH_ENGINEER_GROUP:

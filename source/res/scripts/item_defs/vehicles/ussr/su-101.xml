@@ -454,6 +454,8 @@
             <maxPitch>	0 2.3 1 2.3	</maxPitch>
           </pitchLimits>
           <unlocks>
+            <gun>	_122mm_M62-T2S	  <cost>	64000	</cost>
+            </gun>
             <vehicle>	SU122_54	  <cost>	150000	</cost>
             </vehicle>
           </unlocks>
@@ -499,6 +501,53 @@
             <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
           </camouflage>
         </_100mm_D54S>
+        <_122mm_M62-T2S>	shared	  <maxAmmo>	28	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -18.3 1 -18.3	</minPitch>
+            <maxPitch>	0 2.2 1 2.2	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	115	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	50	</gun>
+          </armor>
+          <reloadTime>	12	</reloadTime>
+          <aimingTime>	3.1	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-7.3 7.3	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R58_SU-101/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R58_SU-101/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R58_SU-101/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R58_SU-101/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00306681 -0.0242255 1.29889	</rayStart>
+              <rayEnd>	-0.0495405 -0.0612342 1.29749	</rayEnd>
+              <rayUp>	0.115 0.108 4	</rayUp>
+              <size>	0.569	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_122mm_M62-T2S>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R58_SU-101/normal/lod0/Turret_01.model	</undamaged>
